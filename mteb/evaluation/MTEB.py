@@ -1,5 +1,7 @@
 from ..abstasks import *
 from ..tasks import *
+import random
+import numpy as np
 
 class MTEB():
     def __init__(self, tasks_types=None, tasks_categories=None, version=None):
@@ -34,7 +36,7 @@ class MTEB():
         """
         tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
         tasks_cls = [cls for cat_cls in tasks_categories_cls for cls in cat_cls.__subclasses__()]
-        
+
         # Define filter functions
         filter_task_type = lambda x: (self._tasks_types is None) or (x.description["type"] in self.tasks_types)
         filter_task_category = lambda x: (self._tasks_types is None) or (x.description["category"] in self.tasks_categories)
@@ -49,7 +51,9 @@ class MTEB():
         # Create tasks
         self.tasks = [cls() for cls in filtered_tasks_cls]
 
-    def run(self, model):
+    def run(self, model, seed=28042000):
+        random.seed(seed)
+        np.random.seed(seed)
         for task in self.tasks:
             for split in task.description['available_splits']:
                 print(task.description['name'], split)

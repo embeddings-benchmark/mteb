@@ -36,8 +36,7 @@ class AbsTaskClustering(AbsTask):
 
     def eval_clustering(self, model, sentences, labels):
         corpus_embeddings = np.asarray(model.encode(sentences))
-        clustering_model = sklearn.cluster.MiniBatchKMeans(n_clusters=len(set(labels)), batch_size=2000)
-
+        clustering_model = sklearn.cluster.MiniBatchKMeans(n_clusters=len(set(labels)), batch_size=500)
         clustering_model.fit(corpus_embeddings)
         cluster_assignment = clustering_model.labels_
 
