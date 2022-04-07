@@ -9,8 +9,8 @@ class MTEB():
         Create an Evaluation pipeline. The tasks selected
         depends on the parameters. One can specify the tasks types
         they want to evaluate (e.g. Clustering, Retrieval, etc.)
-        the categories of tasks they (e.g. Sentence2Sentence, 
-        Sentence2Paragraph, etc.) and the version of the benchmark
+        the categories of tasks they want (e.g. Sentence2Sentence, 
+        Sentence2Paragraph, etc.) and the version of the benchmark.
         The selected tasks will be the tasks satisfying conditions
         from the 3 arguments
 
