@@ -35,7 +35,7 @@ class MTEB():
         Select the tasks to be evaluated.
         """
         tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
-        tasks_cls = [cls for cat_cls in tasks_categories_cls for cls in cat_cls.__subclasses__()]
+        tasks_cls = [cls() for cat_cls in tasks_categories_cls for cls in cat_cls.__subclasses__()]
 
         # Define filter functions
         filter_task_type = lambda x: (self._tasks_types is None) or (x.description["type"] in self.tasks_types)
@@ -46,14 +46,11 @@ class MTEB():
         tasks_cls = filter(filter_task_type, tasks_cls)
         tasks_cls = filter(filter_task_category, tasks_cls)
         tasks_cls = filter(filter_version, tasks_cls)
-        filtered_tasks_cls = list(tasks_cls)
 
-        # Create tasks
-        self.tasks = [cls() for cls in filtered_tasks_cls]
+        # Get final list of tasks
+        self.tasks = list(tasks_cls)
 
-    def run(self, model, seed=28042000):
-        random.seed(seed)
-        np.random.seed(seed)
+    def run(self, model):
         for task in self.tasks:
             for split in task.description['available_splits']:
                 print(task.description['name'], split)
