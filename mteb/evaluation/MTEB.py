@@ -1,7 +1,8 @@
 from ..abstasks import *
 from ..tasks import *
-import random
-import numpy as np
+import pathlib
+import os
+import json
 
 class MTEB():
     def __init__(self, task_types=None, task_categories=None, version=None, task_list=None):
@@ -78,10 +79,16 @@ class MTEB():
         # Get final list of tasks
         self.tasks = list(filtered_tasks)
 
-    def run(self, model):
+    def run(self, model, output_folder='results/result'):
+        # Create output folder
+        pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
+
+        # Run selected tasks
         for task in self.tasks:
+            task_results = {}
             for split in task.description['available_splits']:
                 print(task.description['name'], split)
-                task.load_data()
                 results = task.evaluate(model, split)
-                print(results)
+                task_results[split] = results
+            with open(os.path.join(output_folder,f"{task.description['name']}.json"), 'w') as f_out:
+                json.dump(task_results, f_out, indent=2, sort_keys=True)
