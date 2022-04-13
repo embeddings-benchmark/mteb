@@ -5,7 +5,7 @@ class TwentyNewsgroupsClustering(AbsTaskClustering):
     def description(self):
         return {
             "name": "TwentyNewsgroupsClustering",
-            "hf_hub_name": "mteb/reddit-clustering",
+            "hf_hub_name": "mteb/twentynewsgroups-clustering",
             "description": "Clustering of the 20 Newsgroups dataset (subject only).",
             "reference": "https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html",
             "type": "Clustering",

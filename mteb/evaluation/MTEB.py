@@ -3,6 +3,8 @@ from ..tasks import *
 import pathlib
 import os
 import json
+import logging
+import datasets
 
 class MTEB():
     def __init__(self, task_types=None, task_categories=None, version=None, task_list=None):
@@ -79,7 +81,27 @@ class MTEB():
         # Get final list of tasks
         self.tasks = list(filtered_tasks)
 
-    def run(self, model, output_folder='results/result'):
+    def run(self, model, verbosity=1., output_folder='results/result'):
+        """
+        Run the evaluation pipeline on the selected tasks.
+
+        Parameters
+        ----------
+        model:
+            Model to be used for evaluation
+        verbosity: int
+            Verbosity level. Default is 1.
+            0: print tasks tqdm progress bar
+            1: print tasks tqdm progress bar and scores
+            2: print everything (including datasets loading)
+        output_folder: str
+            Folder where the results will be saved
+        """
+        # Set logging
+        if verbosity < 2:
+            datasets.logging.set_verbosity(40)
+            datasets.logging.disable_progress_bar()
+
         # Create output folder
         pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
 
@@ -87,8 +109,10 @@ class MTEB():
         for task in self.tasks:
             task_results = {}
             for split in task.description['available_splits']:
-                print(task.description['name'], split)
+                print(f"Task: {task.description['name']}, split: {split}. Running...")
                 results = task.evaluate(model, split)
                 task_results[split] = results
+                if verbosity >= 1:
+                    print(f"Scores: {results}")
             with open(os.path.join(output_folder,f"{task.description['name']}.json"), 'w') as f_out:
                 json.dump(task_results, f_out, indent=2, sort_keys=True)
