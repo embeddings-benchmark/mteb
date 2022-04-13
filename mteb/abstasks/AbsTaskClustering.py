@@ -2,6 +2,7 @@ from .AbsTask import AbsTask
 import datasets
 import numpy as np
 import sklearn
+import sklearn.cluster
 import tqdm
 import random
 import numpy as np
