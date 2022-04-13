@@ -30,7 +30,6 @@ class AbsTaskRetrieval(AbsTask):
 
         split = self.dataset[split][0]
 
-        print()
         corpus = dict(zip(split['corpus']['ids'] , split['corpus']['sentences'])) #qid => query
         queries = dict(zip(split['queries']['ids'] , split['queries']['sentences'])) #cid => doc
         relevant_docs = dict(zip(split['relevant_docs']['ids'] , split['relevant_docs']['relevant_docs'])) #qid => Set[cid]
