@@ -1,11 +1,8 @@
 from .AbsTask import AbsTask
+from ..evaluation.evaluators import STSEvaluator
 import datasets
-from sentence_transformers import evaluation
 import numpy as np
 import logging
-from sklearn.metrics.pairwise import paired_cosine_distances, paired_euclidean_distances, paired_manhattan_distances
-from scipy.stats import pearsonr, spearmanr
-import numpy as np
 
 class AbsTaskSTS(AbsTask):
     """
@@ -40,30 +37,8 @@ class AbsTaskSTS(AbsTask):
             self.load_data()
 
         data_split = self.dataset[split]
+        normalized_scores = (data_split['score'] - self.description['min_score']) / (self.description['max_score'] - self.description['min_score'] + 1e-8)
+        evaluator = STSEvaluator(data_split['sentence1'], data_split['sentence2'], normalized_scores)
+        metrics = evaluator(model)
 
-        embeddings1 = np.asarray(model.encode(data_split['sentence1']))
-        embeddings2 = np.asarray(model.encode(data_split['sentence2']))
-
-        gold_scores = data_split['score']
-
-        cosine_scores = 1 - (paired_cosine_distances(embeddings1, embeddings2))
-        manhattan_distances = -paired_manhattan_distances(embeddings1, embeddings2)
-        euclidean_distances = -paired_euclidean_distances(embeddings1, embeddings2)
-
-        cosine_pearson, _ = pearsonr(gold_scores, cosine_scores)
-        cosine_spearman, _ = spearmanr(gold_scores, cosine_scores)
-
-        manhatten_pearson, _ = pearsonr(gold_scores, manhattan_distances)
-        manhatten_spearman, _ = spearmanr(gold_scores, manhattan_distances)
-
-        euclidean_pearson, _ = pearsonr(gold_scores, euclidean_distances)
-        euclidean_spearman, _ = spearmanr(gold_scores, euclidean_distances)
-
-        return {
-            'cosine_pearson': cosine_pearson,
-            'cosine_spearman': cosine_spearman,
-            'manhatten_pearson': manhatten_pearson,
-            'manhatten_spearman': manhatten_spearman,
-            'euclidean_pearson': euclidean_pearson,
-            'euclidean_spearman': euclidean_spearman,
-        }
+        return metrics

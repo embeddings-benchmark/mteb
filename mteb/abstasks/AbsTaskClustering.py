@@ -1,8 +1,7 @@
 from .AbsTask import AbsTask
+from ..evaluation.evaluators import ClusteringEvaluator
 import datasets
 import numpy as np
-import sklearn
-import sklearn.cluster
 import tqdm
 import random
 import numpy as np
@@ -26,20 +25,10 @@ class AbsTaskClustering(AbsTask):
 
         v_measures = []
         for cluster_set in tqdm.tqdm(self.dataset[split], desc='Clustering'):
-            v_measures.append(self.eval_clustering(model, cluster_set['sentences'], cluster_set['labels']))
+            evaluator = ClusteringEvaluator(cluster_set['sentences'], cluster_set['labels'])
+            metrics = evaluator(model)
+            v_measures.append(metrics['v_measure'])
 
         v_mean = np.mean(v_measures)
         v_std = np.std(v_measures)
         return {'v_measure': v_mean, 'v_measure_std': v_std}
-
-    def eval_clustering(self, model, sentences, labels):
-        # Set seed since we are using KMeans
-        random.seed(self.seed)
-        np.random.seed(self.seed)
-        
-        corpus_embeddings = np.asarray(model.encode(sentences))
-        clustering_model = sklearn.cluster.MiniBatchKMeans(n_clusters=len(set(labels)), batch_size=500)
-        clustering_model.fit(corpus_embeddings)
-        cluster_assignment = clustering_model.labels_
-
-        return sklearn.metrics.cluster.v_measure_score(labels, cluster_assignment)
