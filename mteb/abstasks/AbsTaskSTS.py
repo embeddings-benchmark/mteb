@@ -37,7 +37,8 @@ class AbsTaskSTS(AbsTask):
             self.load_data()
 
         data_split = self.dataset[split]
-        normalized_scores = (data_split['score'] - self.description['min_score']) / (self.description['max_score'] - self.description['min_score'] + 1e-8)
+        normalize = lambda x : (x - self.min_score) / (self.max_score - self.min_score)
+        normalized_scores = list(map(normalize, data_split['score']))
         evaluator = STSEvaluator(data_split['sentence1'], data_split['sentence2'], normalized_scores)
         metrics = evaluator(model)
 

@@ -1,9 +1,10 @@
+from .Evaluator import Evaluator
 import random
 import numpy as np
 import sklearn
 import sklearn.cluster
 
-class ClusteringEvaluator():
+class ClusteringEvaluator(Evaluator):
     def __init__(self, sentences, labels):
         self.sentences = sentences
         self.labels = labels

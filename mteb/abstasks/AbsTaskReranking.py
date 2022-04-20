@@ -1,9 +1,7 @@
 from .AbsTask import AbsTask
+from ..evaluation.evaluators import RerankingEvaluator
 import datasets
-from sentence_transformers import evaluation
 import numpy as np
-import logging
-from collections import defaultdict
 
 class AbsTaskReranking(AbsTask):
     """
@@ -31,7 +29,7 @@ class AbsTaskReranking(AbsTask):
 
         data_split = self.dataset[split]
 
-        rr_evaluator = evaluation.RerankingEvaluator(data_split, show_progress_bar=False)
-        scores = rr_evaluator.compute_metrices(model)
+        evaluator = RerankingEvaluator(data_split)
+        scores = evaluator(model)
 
         return dict(scores)

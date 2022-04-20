@@ -1,8 +1,9 @@
+from .Evaluator import Evaluator
 import numpy as np
 from sklearn.metrics.pairwise import paired_cosine_distances, paired_euclidean_distances, paired_manhattan_distances
 from scipy.stats import pearsonr, spearmanr
 
-class STSEvaluator():
+class STSEvaluator(Evaluator):
     def __init__(self, sentences1, sentences2, gold_scores):
         self.sentences1 = sentences1
         self.sentences2 = sentences2
