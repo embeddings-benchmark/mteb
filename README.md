@@ -1,6 +1,10 @@
 # Massive Text Embedding Benchmark
 Massive Text Embedding Benchmark - Internal Development Git
 
+## Installation
+
+TODO: pip installable package
+
 ## Minimal use
 
 ````python
