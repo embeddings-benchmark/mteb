@@ -1,4 +1,4 @@
-from Evaluator import Evaluator
+from .Evaluator import Evaluator
 from sklearn.metrics.pairwise import paired_cosine_distances, paired_euclidean_distances, paired_manhattan_distances
 from sklearn.metrics import average_precision_score
 import numpy as np

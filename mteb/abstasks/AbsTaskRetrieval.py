@@ -1,6 +1,6 @@
 from .AbsTask import AbsTask
 import datasets
-from sentence_transformers import evaluation
+from ..evaluation.evaluators import RetrievalEvaluator
 import numpy as np
 import logging
 
@@ -38,7 +38,6 @@ class AbsTaskRetrieval(AbsTask):
         for doc_id in relevant_docs:
             relevant_docs[doc_id] = set(relevant_docs[doc_id])
 
-        logging.getLogger("sentence_transformers.evaluation.InformationRetrievalEvaluator").setLevel(logging.WARN)
-        evaluator = evaluation.InformationRetrievalEvaluator(queries, corpus, relevant_docs)
-        scores = evaluator.compute_metrices(model)
+        evaluator = RetrievalEvaluator(queries, corpus, relevant_docs)
+        scores = evaluator(model)
         return scores
