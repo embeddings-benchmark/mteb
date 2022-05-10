@@ -14,8 +14,11 @@ cursor = 0
 count = 0
 while True:
     if (count % 10 == 0):
-        print(count) 
-    r = requests.get(f'{api}{cursor}')
+        print(count)
+    try:
+        r = requests.get(f'{api}{cursor}')
+    except Exception as e:
+        print(e)
     if r.status_code == 200:
         data = r.json()
         tmp = data['collection']
