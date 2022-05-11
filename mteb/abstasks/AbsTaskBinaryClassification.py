@@ -31,9 +31,7 @@ class AbsTaskBinaryClassification(AbsTask):
 
         data_split = self.dataset[split][0]
 
-        logging.getLogger(
-            "sentence_transformers.evaluation.BinaryClassificationEvaluator"
-        ).setLevel(logging.WARN)
+        logging.getLogger("sentence_transformers.evaluation.BinaryClassificationEvaluator").setLevel(logging.WARN)
         evaluator = evaluation.BinaryClassificationEvaluator(
             data_split["sent1"], data_split["sent2"], data_split["labels"]
         )

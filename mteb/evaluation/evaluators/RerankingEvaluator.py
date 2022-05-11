@@ -36,9 +36,7 @@ class RerankingEvaluator(Evaluator):
 
         ### Remove sample with empty positive / negative set
         self.samples = [
-            sample
-            for sample in self.samples
-            if len(sample["positive"]) > 0 and len(sample["negative"]) > 0
+            sample for sample in self.samples if len(sample["positive"]) > 0 and len(sample["negative"]) > 0
         ]
 
     def __call__(self, model):
@@ -72,9 +70,7 @@ class RerankingEvaluator(Evaluator):
             all_docs.extend(sample["positive"])
             all_docs.extend(sample["negative"])
 
-        all_docs_embs = model.encode(
-            all_docs, convert_to_tensor=True, batch_size=self.batch_size
-        )
+        all_docs_embs = model.encode(all_docs, convert_to_tensor=True, batch_size=self.batch_size)
 
         # Compute scores
         query_idx, docs_idx = 0, 0
@@ -94,9 +90,7 @@ class RerankingEvaluator(Evaluator):
             if len(pred_scores.shape) > 1:
                 pred_scores = pred_scores[0]
 
-            pred_scores_argsort = torch.argsort(
-                -pred_scores
-            )  # Sort in decreasing order
+            pred_scores_argsort = torch.argsort(-pred_scores)  # Sort in decreasing order
 
             # Compute MRR score
             is_relevant = [True] * num_pos + [False] * num_neg
@@ -108,9 +102,7 @@ class RerankingEvaluator(Evaluator):
             all_mrr_scores.append(mrr_score)
 
             # Compute AP
-            all_ap_scores.append(
-                average_precision_score(is_relevant, pred_scores.cpu().tolist())
-            )
+            all_ap_scores.append(average_precision_score(is_relevant, pred_scores.cpu().tolist()))
 
         mean_ap = np.mean(all_ap_scores)
         mean_mrr = np.mean(all_mrr_scores)
@@ -138,20 +130,14 @@ class RerankingEvaluator(Evaluator):
             docs = positive + negative
             is_relevant = [True] * len(positive) + [False] * len(negative)
 
-            query_emb = model.encode(
-                [query], convert_to_tensor=True, batch_size=self.batch_size
-            )
-            docs_emb = model.encode(
-                docs, convert_to_tensor=True, batch_size=self.batch_size
-            )
+            query_emb = model.encode([query], convert_to_tensor=True, batch_size=self.batch_size)
+            docs_emb = model.encode(docs, convert_to_tensor=True, batch_size=self.batch_size)
 
             pred_scores = self.similarity_fct(query_emb, docs_emb)
             if len(pred_scores.shape) > 1:
                 pred_scores = pred_scores[0]
 
-            pred_scores_argsort = torch.argsort(
-                -pred_scores
-            )  # Sort in decreasing order
+            pred_scores_argsort = torch.argsort(-pred_scores)  # Sort in decreasing order
 
             # Compute MRR score
             mrr_score = 0
@@ -162,9 +148,7 @@ class RerankingEvaluator(Evaluator):
             all_mrr_scores.append(mrr_score)
 
             # Compute AP
-            all_ap_scores.append(
-                average_precision_score(is_relevant, pred_scores.cpu().tolist())
-            )
+            all_ap_scores.append(average_precision_score(is_relevant, pred_scores.cpu().tolist()))
 
         mean_ap = np.mean(all_ap_scores)
         mean_mrr = np.mean(all_mrr_scores)
