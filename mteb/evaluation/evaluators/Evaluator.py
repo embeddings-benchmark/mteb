@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class Evaluator(ABC):
     """
     Base class for all evaluators
@@ -11,10 +12,10 @@ class Evaluator(ABC):
         """
         This is called during training to evaluate the model.
         It returns scores.
-        
+
         Parameters
         ----------
-        model: 
+        model:
             the model to evaluate
         """
         pass

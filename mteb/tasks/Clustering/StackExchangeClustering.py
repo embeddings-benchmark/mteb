@@ -1,5 +1,6 @@
 from ...abstasks.AbsTaskClustering import AbsTaskClustering
 
+
 class StackExchangeClustering(AbsTaskClustering):
     @property
     def description(self):

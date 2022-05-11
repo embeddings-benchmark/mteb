@@ -1,5 +1,6 @@
 from ...abstasks.AbsTaskClustering import AbsTaskClustering
 
+
 class MedrxivClusteringP2P(AbsTaskClustering):
     @property
     def description(self):

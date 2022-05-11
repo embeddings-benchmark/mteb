@@ -1,7 +1,12 @@
 from .Evaluator import Evaluator
-from sklearn.metrics.pairwise import paired_cosine_distances, paired_euclidean_distances, paired_manhattan_distances
+from sklearn.metrics.pairwise import (
+    paired_cosine_distances,
+    paired_euclidean_distances,
+    paired_manhattan_distances,
+)
 from sklearn.metrics import average_precision_score
 import numpy as np
+
 
 class BinaryClassificationEvaluator(Evaluator):
     """
@@ -20,7 +25,9 @@ class BinaryClassificationEvaluator(Evaluator):
     :param write_csv: Write results to a CSV file
     """
 
-    def __init__(self, sentences1, sentences2, labels, batch_size = 32, show_progress_bar = False):
+    def __init__(
+        self, sentences1, sentences2, labels, batch_size=32, show_progress_bar=False
+    ):
         self.sentences1 = sentences1
         self.sentences2 = sentences2
         self.labels = labels
@@ -28,19 +35,24 @@ class BinaryClassificationEvaluator(Evaluator):
         assert len(self.sentences1) == len(self.sentences2)
         assert len(self.sentences1) == len(self.labels)
         for label in labels:
-            assert (label == 0 or label == 1)
+            assert label == 0 or label == 1
 
     def __call__(self, model):
         scores = self.compute_metrics(model)
 
-        #Main score is the max of Average Precision (AP)
-        main_score = max(scores[short_name]['ap'] for short_name in scores)
-        scores['main_score'] = main_score
+        # Main score is the max of Average Precision (AP)
+        main_score = max(scores[short_name]["ap"] for short_name in scores)
+        scores["main_score"] = main_score
         return scores
 
     def compute_metrics(self, model):
         sentences = list(set(self.sentences1 + self.sentences2))
-        embeddings = model.encode(sentences, batch_size=self.batch_size, show_progress_bar=self.show_progress_bar, convert_to_numpy=True)
+        embeddings = model.encode(
+            sentences,
+            batch_size=self.batch_size,
+            show_progress_bar=self.show_progress_bar,
+            convert_to_numpy=True,
+        )
         emb_dict = {sent: emb for sent, emb in zip(sentences, embeddings)}
         embeddings1 = [emb_dict[sent] for sent in self.sentences1]
         embeddings2 = [emb_dict[sent] for sent in self.sentences2]
@@ -51,24 +63,35 @@ class BinaryClassificationEvaluator(Evaluator):
 
         embeddings1_np = np.asarray(embeddings1)
         embeddings2_np = np.asarray(embeddings2)
-        dot_scores = [np.dot(embeddings1_np[i], embeddings2_np[i]) for i in range(len(embeddings1_np))]
-
+        dot_scores = [
+            np.dot(embeddings1_np[i], embeddings2_np[i])
+            for i in range(len(embeddings1_np))
+        ]
 
         labels = np.asarray(self.labels)
         output_scores = {}
-        for short_name, name, scores, reverse in [['cossim', 'Cosine-Similarity', cosine_scores, True], ['manhattan', 'Manhattan-Distance', manhattan_distances, False], ['euclidean', 'Euclidean-Distance', euclidean_distances, False], ['dot', 'Dot-Product', dot_scores, True]]:
-            acc, acc_threshold = self.find_best_acc_and_threshold(scores, labels, reverse)
-            f1, precision, recall, f1_threshold = self.find_best_f1_and_threshold(scores, labels, reverse)
+        for short_name, name, scores, reverse in [
+            ["cossim", "Cosine-Similarity", cosine_scores, True],
+            ["manhattan", "Manhattan-Distance", manhattan_distances, False],
+            ["euclidean", "Euclidean-Distance", euclidean_distances, False],
+            ["dot", "Dot-Product", dot_scores, True],
+        ]:
+            acc, acc_threshold = self.find_best_acc_and_threshold(
+                scores, labels, reverse
+            )
+            f1, precision, recall, f1_threshold = self.find_best_f1_and_threshold(
+                scores, labels, reverse
+            )
             ap = average_precision_score(labels, scores * (1 if reverse else -1))
 
             output_scores[short_name] = {
-                'accuracy' : acc,
-                'accuracy_threshold': acc_threshold,
-                'f1': f1,
-                'f1_threshold': f1_threshold,
-                'precision': precision,
-                'recall': recall,
-                'ap': ap
+                "accuracy": acc,
+                "accuracy_threshold": acc_threshold,
+                "f1": f1,
+                "f1_threshold": f1_threshold,
+                "precision": precision,
+                "recall": recall,
+                "ap": ap,
             }
 
         return output_scores
@@ -86,7 +109,7 @@ class BinaryClassificationEvaluator(Evaluator):
         positive_so_far = 0
         remaining_negatives = sum(labels == 0)
 
-        for i in range(len(rows)-1):
+        for i in range(len(rows) - 1):
             score, label = rows[i]
             if label == 1:
                 positive_so_far += 1
@@ -96,7 +119,7 @@ class BinaryClassificationEvaluator(Evaluator):
             acc = (positive_so_far + remaining_negatives) / len(labels)
             if acc > max_acc:
                 max_acc = acc
-                best_threshold = (rows[i][0] + rows[i+1][0]) / 2
+                best_threshold = (rows[i][0] + rows[i + 1][0]) / 2
 
         return max_acc, best_threshold
 
@@ -117,7 +140,7 @@ class BinaryClassificationEvaluator(Evaluator):
         ncorrect = 0
         total_num_duplicates = sum(labels)
 
-        for i in range(len(rows)-1):
+        for i in range(len(rows) - 1):
             score, label = rows[i]
             nextract += 1
 

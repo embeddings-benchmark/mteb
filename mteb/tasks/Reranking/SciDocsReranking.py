@@ -1,5 +1,6 @@
 from ...abstasks.AbsTaskReranking import AbsTaskReranking
 
+
 class SciDocsReranking(AbsTaskReranking):
     @property
     def description(self):

@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
+
 class AbsTask(ABC):
-    
     @abstractmethod
     def description(self):
         """
@@ -15,7 +15,7 @@ class AbsTask(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def evaluate(self, model, split='test'):
+    def evaluate(self, model, split="test"):
         """
         Evaluates a Sentence Embedding Model on the task.
         Returns a dict (that can be serialized to json).

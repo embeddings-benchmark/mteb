@@ -1,5 +1,6 @@
 from ...abstasks.AbsTaskClustering import AbsTaskClustering
 
+
 class RedditClustering(AbsTaskClustering):
     @property
     def description(self):

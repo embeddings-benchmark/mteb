@@ -1,5 +1,6 @@
 import torch
 
+
 def cos_sim(a, b):
     """
     Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.

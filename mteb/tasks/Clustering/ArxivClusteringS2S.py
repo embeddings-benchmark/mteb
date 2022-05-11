@@ -1,5 +1,6 @@
 from ...abstasks.AbsTaskClustering import AbsTaskClustering
 
+
 class ArxivClusteringS2S(AbsTaskClustering):
     @property
     def description(self):

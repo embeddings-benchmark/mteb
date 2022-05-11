@@ -1,5 +1,6 @@
 from ...abstasks.AbsTaskReranking import AbsTaskReranking
 
+
 class StackOverflowDupQuestions(AbsTaskReranking):
     @property
     def description(self):
