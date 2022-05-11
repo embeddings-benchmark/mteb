@@ -17,15 +17,15 @@ class MTEB:
         Sentence2Paragraph, etc.) and the version of the benchmark.
         The selected tasks will be the tasks satisfying conditions
         from the 3 arguments. Alternatively, one can specify a list
-        of tasks to be evaluated with the tasks_list argument. If
-        tasks_list is specified, the other arguments are ignored.
+        of tasks to be evaluated with the `task_list` argument. If
+        `task_list` is specified, the other arguments are ignored.
 
         Parameters
         ----------
         task_types: list of str / None
-            List of  types to be evaluated. If None, all tasks will be evaluated
+            List of task types (Clustering, Retrieval..) to be evaluated. If None, all tasks will be evaluated
         task_categories: list of str / None
-            List of task types to be evaluated. If None, all tasks will be evaluated
+            List of task categories (s2s, p2p..) to be evaluated. If None, all tasks will be evaluated
         version: int / None
             Version of the benchmark to use. If None, latest is used
         task_list: list of AbsTask / None
@@ -63,7 +63,7 @@ class MTEB:
         tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
         self.tasks_cls = [cls() for cat_cls in tasks_categories_cls for cls in cat_cls.__subclasses__()]
 
-        # If tasks_list is specified, select list of tasks
+        # If `task_list` is specified, select list of tasks
         if self._task_list is not None:
             filter_task_list = lambda x: (x.description["name"] in self._task_list)
             self.tasks = list(filter(filter_task_list, self.tasks_cls))
@@ -112,7 +112,7 @@ class MTEB:
         for task in self.tasks:
             task_results = {}
             for split in task.description["available_splits"]:
-                print(f"Task: {task.description['name']}, split: {split}. Running...")
+                print(f"\nTask: {task.description['name']}, split: {split}. Running...")
                 results = task.evaluate(model, split)
                 task_results[split] = results
                 if verbosity >= 1:
