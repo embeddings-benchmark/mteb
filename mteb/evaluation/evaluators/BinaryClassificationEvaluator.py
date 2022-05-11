@@ -25,9 +25,7 @@ class BinaryClassificationEvaluator(Evaluator):
     :param write_csv: Write results to a CSV file
     """
 
-    def __init__(
-        self, sentences1, sentences2, labels, batch_size=32, show_progress_bar=False
-    ):
+    def __init__(self, sentences1, sentences2, labels, batch_size=32, show_progress_bar=False):
         self.sentences1 = sentences1
         self.sentences2 = sentences2
         self.labels = labels
@@ -63,10 +61,7 @@ class BinaryClassificationEvaluator(Evaluator):
 
         embeddings1_np = np.asarray(embeddings1)
         embeddings2_np = np.asarray(embeddings2)
-        dot_scores = [
-            np.dot(embeddings1_np[i], embeddings2_np[i])
-            for i in range(len(embeddings1_np))
-        ]
+        dot_scores = [np.dot(embeddings1_np[i], embeddings2_np[i]) for i in range(len(embeddings1_np))]
 
         labels = np.asarray(self.labels)
         output_scores = {}
@@ -76,12 +71,8 @@ class BinaryClassificationEvaluator(Evaluator):
             ["euclidean", "Euclidean-Distance", euclidean_distances, False],
             ["dot", "Dot-Product", dot_scores, True],
         ]:
-            acc, acc_threshold = self.find_best_acc_and_threshold(
-                scores, labels, reverse
-            )
-            f1, precision, recall, f1_threshold = self.find_best_f1_and_threshold(
-                scores, labels, reverse
-            )
+            acc, acc_threshold = self.find_best_acc_and_threshold(scores, labels, reverse)
+            f1, precision, recall, f1_threshold = self.find_best_f1_and_threshold(scores, labels, reverse)
             ap = average_precision_score(labels, scores * (1 if reverse else -1))
 
             output_scores[short_name] = {

@@ -8,9 +8,7 @@ import datasets
 
 
 class MTEB:
-    def __init__(
-        self, task_types=None, task_categories=None, version=None, task_list=None
-    ):
+    def __init__(self, task_types=None, task_categories=None, version=None, task_list=None):
         """
         Create an Evaluation pipeline. The tasks selected
         depends on the parameters. One can specify the tasks types
@@ -63,11 +61,7 @@ class MTEB:
         """
         # Get all existing tasks
         tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
-        self.tasks_cls = [
-            cls()
-            for cat_cls in tasks_categories_cls
-            for cls in cat_cls.__subclasses__()
-        ]
+        self.tasks_cls = [cls() for cat_cls in tasks_categories_cls for cls in cat_cls.__subclasses__()]
 
         # If tasks_list is specified, select list of tasks
         if self._task_list is not None:
@@ -76,15 +70,11 @@ class MTEB:
             return
 
         # Otherwise use filters to select tasks
-        filter_task_type = lambda x: (self._task_types is None) or (
-            x.description["type"] in self._task_types
-        )
+        filter_task_type = lambda x: (self._task_types is None) or (x.description["type"] in self._task_types)
         filter_task_category = lambda x: (self._task_categories is None) or (
             x.description["category"] in self._task_categories
         )
-        filter_version = lambda x: (self._version is None) or (
-            x.description["version"] >= self._version
-        )
+        filter_version = lambda x: (self._version is None) or (x.description["version"] >= self._version)
 
         # Filter tasks
         filtered_tasks = filter(filter_task_type, self.tasks_cls)
@@ -127,7 +117,5 @@ class MTEB:
                 task_results[split] = results
                 if verbosity >= 1:
                     print(f"Scores: {results}")
-            with open(
-                os.path.join(output_folder, f"{task.description['name']}.json"), "w"
-            ) as f_out:
+            with open(os.path.join(output_folder, f"{task.description['name']}.json"), "w") as f_out:
                 json.dump(task_results, f_out, indent=2, sort_keys=True)

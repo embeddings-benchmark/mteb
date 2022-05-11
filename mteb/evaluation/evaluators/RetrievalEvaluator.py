@@ -64,20 +64,13 @@ class RetrievalEvaluator(Evaluator):
 
         if self.main_score_function is None:
             scores["main_score"] = max(
-                [
-                    scores[name]["map@k"][max(self.map_at_k)]
-                    for name in self.score_function_names
-                ]
+                [scores[name]["map@k"][max(self.map_at_k)] for name in self.score_function_names]
             )
         else:
-            scores["main_score"] = scores[self.main_score_function]["map@k"][
-                max(self.map_at_k)
-            ]
+            scores["main_score"] = scores[self.main_score_function]["map@k"][max(self.map_at_k)]
         return scores
 
-    def compute_metrics(
-        self, model, corpus_model=None, corpus_embeddings: torch.Tensor = None
-    ) -> Dict[str, float]:
+    def compute_metrics(self, model, corpus_model=None, corpus_embeddings: torch.Tensor = None) -> Dict[str, float]:
         if corpus_model is None:
             corpus_model = model
 
@@ -109,9 +102,7 @@ class RetrievalEvaluator(Evaluator):
             desc="Corpus Chunks",
             disable=not self.show_progress_bar,
         ):
-            corpus_end_idx = min(
-                corpus_start_idx + self.corpus_chunk_size, len(self.corpus)
-            )
+            corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(self.corpus))
 
             # Encode chunk of corpus
             if corpus_embeddings is None:
@@ -122,9 +113,7 @@ class RetrievalEvaluator(Evaluator):
                     convert_to_tensor=True,
                 )
             else:
-                sub_corpus_embeddings = corpus_embeddings[
-                    corpus_start_idx:corpus_end_idx
-                ]
+                sub_corpus_embeddings = corpus_embeddings[corpus_start_idx:corpus_end_idx]
 
             # Compute cosine similarites
             for name, score_function in self.score_functions.items():
@@ -147,15 +136,10 @@ class RetrievalEvaluator(Evaluator):
                         pair_scores_top_k_values[query_itr],
                     ):
                         corpus_id = self.corpus_ids[corpus_start_idx + sub_corpus_id]
-                        queries_result_list[name][query_itr].append(
-                            {"corpus_id": corpus_id, "score": score}
-                        )
+                        queries_result_list[name][query_itr].append({"corpus_id": corpus_id, "score": score})
 
         # Compute scores
-        scores = {
-            name: self._compute_metrics(queries_result_list[name])
-            for name in self.score_functions
-        }
+        scores = {name: self._compute_metrics(queries_result_list[name]) for name in self.score_functions}
 
         return scores
 
@@ -173,9 +157,7 @@ class RetrievalEvaluator(Evaluator):
             query_id = self.queries_ids[query_itr]
 
             # Sort scores
-            top_hits = sorted(
-                queries_result_list[query_itr], key=lambda x: x["score"], reverse=True
-            )
+            top_hits = sorted(queries_result_list[query_itr], key=lambda x: x["score"], reverse=True)
             query_relevant_docs = self.relevant_docs[query_id]
 
             # Accuracy@k - We count the result correct, if at least one relevant doc is accross the top-k documents
@@ -205,14 +187,13 @@ class RetrievalEvaluator(Evaluator):
             # NDCG@k
             for k_val in self.ndcg_at_k:
                 predicted_relevance = [
-                    1 if top_hit["corpus_id"] in query_relevant_docs else 0
-                    for top_hit in top_hits[0:k_val]
+                    1 if top_hit["corpus_id"] in query_relevant_docs else 0 for top_hit in top_hits[0:k_val]
                 ]
                 true_relevances = [1] * len(query_relevant_docs)
 
-                ndcg_value = self.compute_dcg_at_k(
-                    predicted_relevance, k_val
-                ) / self.compute_dcg_at_k(true_relevances, k_val)
+                ndcg_value = self.compute_dcg_at_k(predicted_relevance, k_val) / self.compute_dcg_at_k(
+                    true_relevances, k_val
+                )
                 ndcg[k_val].append(ndcg_value)
 
             # MAP@k
