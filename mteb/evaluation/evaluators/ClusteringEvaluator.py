@@ -6,7 +6,7 @@ import sklearn.cluster
 
 
 class ClusteringEvaluator(Evaluator):
-    def __init__(self, sentences, labels):
+    def __init__(self, sentences, labels, batch_size=500):
         self.sentences = sentences
         self.labels = labels
 
@@ -15,10 +15,12 @@ class ClusteringEvaluator(Evaluator):
         random.seed(seed)
         np.random.seed(seed)
 
+        self.batch_size = batch_size
+
     def __call__(self, model):
         corpus_embeddings = np.asarray(model.encode(self.sentences))
 
-        clustering_model = sklearn.cluster.MiniBatchKMeans(n_clusters=len(set(self.labels)), batch_size=500)
+        clustering_model = sklearn.cluster.MiniBatchKMeans(n_clusters=len(set(self.labels)), batch_size=self.batch_size)
         clustering_model.fit(corpus_embeddings)
         cluster_assignment = clustering_model.labels_
         v_measure = sklearn.metrics.cluster.v_measure_score(self.labels, cluster_assignment)
