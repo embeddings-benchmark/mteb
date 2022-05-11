@@ -1,5 +1,6 @@
 from ...abstasks.AbsTaskClustering import AbsTaskClustering
 
+
 class BiorxivClusteringS2S(AbsTaskClustering):
     @property
     def description(self):

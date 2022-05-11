@@ -1,5 +1,6 @@
 from ...abstasks.AbsTaskBinaryClassification import AbsTaskBinaryClassification
 
+
 class SprintDuplicateQuestionsBC(AbsTaskBinaryClassification):
     @property
     def description(self):

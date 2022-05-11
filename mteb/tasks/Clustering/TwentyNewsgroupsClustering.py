@@ -1,5 +1,6 @@
 from ...abstasks.AbsTaskClustering import AbsTaskClustering
 
+
 class TwentyNewsgroupsClustering(AbsTaskClustering):
     @property
     def description(self):
@@ -11,5 +12,5 @@ class TwentyNewsgroupsClustering(AbsTaskClustering):
             "type": "Clustering",
             "category": "s2s",
             "available_splits": ["test"],
-            "main_score": "v_measure"
+            "main_score": "v_measure",
         }

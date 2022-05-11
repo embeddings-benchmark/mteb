@@ -1,5 +1,6 @@
 from ...abstasks.AbsTaskReranking import AbsTaskReranking
 
+
 class AskUbuntuDupQuestions(AbsTaskReranking):
     @property
     def description(self):

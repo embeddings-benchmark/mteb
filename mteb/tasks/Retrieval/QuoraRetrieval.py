@@ -1,5 +1,6 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
+
 class QuoraRetrieval(AbsTaskRetrieval):
     @property
     def description(self):

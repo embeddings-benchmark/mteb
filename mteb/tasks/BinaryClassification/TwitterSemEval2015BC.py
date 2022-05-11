@@ -1,5 +1,6 @@
 from ...abstasks.AbsTaskBinaryClassification import AbsTaskBinaryClassification
 
+
 class TwitterSemEval2015BC(AbsTaskBinaryClassification):
     @property
     def description(self):

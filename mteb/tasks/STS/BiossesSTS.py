@@ -1,5 +1,6 @@
 from ...abstasks.AbsTaskSTS import AbsTaskSTS
 
+
 class BiossesSTS(AbsTaskSTS):
     @property
     def description(self):

@@ -1,5 +1,6 @@
 from ...abstasks.AbsTaskSTS import AbsTaskSTS
 
+
 class SickrSTS(AbsTaskSTS):
     @property
     def description(self):
