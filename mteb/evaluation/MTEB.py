@@ -67,6 +67,8 @@ class MTEB:
         if self._task_list is not None:
             filter_task_list = lambda x: (x.description["name"] in self._task_list)
             self.tasks = list(filter(filter_task_list, self.tasks_cls))
+            # add task if subclass of mteb.tasks
+            self.tasks.extend([x for x in self._task_list if isinstance(x, AbsTask)])
             return
 
         # Otherwise use filters to select tasks
@@ -111,11 +113,13 @@ class MTEB:
         # Run selected tasks
         for task in self.tasks:
             task_results = {}
-            for split in task.description["available_splits"]:
-                print(f"\nTask: {task.description['name']}, split: {split}. Running...")
-                results = task.evaluate(model, split)
-                task_results[split] = results
-                if verbosity >= 1:
-                    print(f"Scores: {results}")
+            for lang in task.description.get("available_langs", [""]):
+                for split in task.description["available_splits"]:
+                    if lang:  # for multi-language tasks
+                        print(f"\nTask: {task.description['name']}, split: {split}, language: {lang}. Running...")
+                        results = task.evaluate(model, split)
+                        task_results[split] = results
+                        if verbosity >= 1:
+                            print(f"Scores: {results}")
             with open(os.path.join(output_folder, f"{task.description['name']}.json"), "w") as f_out:
                 json.dump(task_results, f_out, indent=2, sort_keys=True)
