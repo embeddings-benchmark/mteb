@@ -1,5 +1,6 @@
 from ...abstasks.AbsTaskClustering import AbsTaskClustering
 
+
 class StackExchangeClusteringP2P(AbsTaskClustering):
     @property
     def description(self):
@@ -11,5 +12,6 @@ class StackExchangeClusteringP2P(AbsTaskClustering):
             "type": "Clustering",
             "category": "p2p",
             "available_splits": ["test"],
+            "available_langs": ["en"],
             "main_score": "v_measure",
         }

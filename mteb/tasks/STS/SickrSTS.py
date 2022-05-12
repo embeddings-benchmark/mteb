@@ -12,6 +12,7 @@ class SickrSTS(AbsTaskSTS):
             "type": "STS",
             "category": "s2s",
             "available_splits": ["train", "validation", "test"],
+            "available_langs": ["en"],
             "main_score": "cosine_spearman",
             "min_score": 1,
             "max_score": 5,

@@ -12,5 +12,6 @@ class BiorxivClusteringS2S(AbsTaskClustering):
             "type": "Clustering",
             "category": "s2s",
             "available_splits": ["test"],
+            "available_langs": ["en"],
             "main_score": "v_measure",
         }
