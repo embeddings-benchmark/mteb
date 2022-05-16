@@ -1,4 +1,5 @@
 from ...abstasks.AbsTaskKNNClassification import AbsTaskKNNClassification
+import datasets
 
 _LANGUAGES = [
     "af-ZA",
@@ -59,6 +60,19 @@ class MassiveIntentClassification(AbsTaskKNNClassification):
     def __init__(self, available_langs=None):
         super().__init__()
         self.available_langs = available_langs if available_langs else _LANGUAGES
+        self.is_multilingual = True
+
+    def load_data(self):
+        """
+        Load dataset from HuggingFace hub
+        """
+        if self.data_loaded:
+            return
+        self.dataset = {}
+        for lang in self.available_langs:
+            self.dataset[lang] = datasets.load_dataset(self.description["hf_hub_name"], lang)
+
+        self.data_loaded = True
 
     @property
     def description(self):

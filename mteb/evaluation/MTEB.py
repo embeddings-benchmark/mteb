@@ -118,16 +118,13 @@ class MTEB:
                 continue
             task_results = {}
             for split in task.description["available_splits"]:
-                task_results[split] = {}
-                for lang in task.description["available_langs"]:
-                    print(f"\nTask: {task.description['name']}, split: {split}, language: {lang}. Running...")
-                    results = task.evaluate(model, split)
-                    if task.description["main_score"] in results:
-                        results["main_score"] = results[task.description["main_score"]]
-                    else:
-                        print(f"WARNING: main score {task.description['main_score']} not found in results {results.keys()}")
-                    task_results[split][lang] = results
-                    if verbosity >= 1:
-                        print(f"Scores: {results}")
+                results = task.evaluate(model, split)
+                if task.description["main_score"] in results:
+                    results["main_score"] = results[task.description["main_score"]]
+                else:
+                    print(f"WARNING: main score {task.description['main_score']} not found in results {results.keys()}")
+                task_results[split] = results
+                if verbosity >= 1:
+                    print(f"Scores: {results}")
             with open(os.path.join(output_folder, f"{task.description['name']}.json"), "w") as f_out:
                 json.dump(task_results, f_out, indent=2, sort_keys=True)

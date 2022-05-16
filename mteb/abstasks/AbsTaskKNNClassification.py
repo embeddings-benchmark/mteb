@@ -20,8 +20,19 @@ class AbsTaskKNNClassification(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
-        train_split = self.dataset[train_split]
-        eval_split = self.dataset[eval_split]
+        if self.is_multilingual:
+            scores = {}
+            for lang in self.description["available_langs"]:
+                print(f"\nTask: {self.description['name']}, split: {eval_split}, language: {lang}. Running...")
+                scores[lang] = self._evaluate_monolingual(model, self.dataset[lang], eval_split, train_split)
+        else:
+            scores = self._evaluate_monolingual(model, self.dataset, eval_split, train_split)
+        
+        return scores
+
+    def _evaluate_monolingual(self, model, dataset, eval_split="test", train_split="train"):
+        train_split = dataset[train_split]
+        eval_split = dataset[eval_split]
 
         logging.getLogger("sentence_transformers.evaluation.kNNClassificationEvaluator").setLevel(logging.WARN)
         evaluator = kNNClassificationEvaluator(
