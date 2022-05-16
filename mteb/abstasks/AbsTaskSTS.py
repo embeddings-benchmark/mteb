@@ -16,8 +16,6 @@ class AbsTaskSTS(AbsTask):
 
     def __init__(self, **kwargs):
         super(AbsTaskSTS, self).__init__(**kwargs)
-        self.dataset = None
-        self.data_loaded = False
 
     @property
     def min_score(self):
@@ -26,13 +24,6 @@ class AbsTaskSTS(AbsTask):
     @property
     def max_score(self):
         return self.description["max_score"]
-
-    def load_data(self):
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(self.description["hf_hub_name"])
-        self.data_loaded = True
 
     def evaluate(self, model, split):
         if not self.data_loaded:

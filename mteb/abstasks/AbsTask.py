@@ -1,7 +1,22 @@
 from abc import ABC, abstractmethod
+import datasets
 
 
 class AbsTask(ABC):
+    def __init__(self, **kwargs):
+        self.dataset = None
+        self.data_loaded = False
+
+    def load_data(self):
+        """
+        Load dataset from HuggingFace hub
+        """
+        if self.data_loaded:
+            return
+
+        self.dataset = datasets.load_dataset(self.description["hf_hub_name"])
+        self.data_loaded = True
+
     @abstractmethod
     def description(self):
         """

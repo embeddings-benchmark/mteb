@@ -10,15 +10,7 @@ import numpy as np
 class AbsTaskClustering(AbsTask):
     def __init__(self):
         super(AbsTaskClustering, self).__init__()
-        self.dataset = None
-        self.data_loaded = False
         self.seed = 42
-
-    def load_data(self):
-        if self.data_loaded:
-            return
-        self.dataset = datasets.load_dataset(self.description["hf_hub_name"])
-        self.data_loaded = True
 
     def evaluate(self, model, split="test"):
         if not self.data_loaded:

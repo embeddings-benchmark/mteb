@@ -15,15 +15,6 @@ class AbsTaskKNNClassification(AbsTask):
 
     def __init__(self, **kwargs):
         super(AbsTaskKNNClassification, self).__init__(**kwargs)
-        self.dataset = None
-        self.data_loaded = False
-
-    def load_data(self):
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(self.description["hf_hub_name"])
-        self.data_loaded = True
 
     def evaluate(self, model, eval_split="test", train_split="train"):
         if not self.data_loaded:
