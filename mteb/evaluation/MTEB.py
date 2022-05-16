@@ -5,6 +5,7 @@ import os
 import json
 import logging
 import datasets
+from datetime import datetime
 
 
 class MTEB:
@@ -113,13 +114,19 @@ class MTEB:
         # Run selected tasks
         for task in self.tasks:
             task_results = {}
-            for lang in task.description.get("available_langs", [""]):
-                for split in task.description["available_splits"]:
-                    if lang:  # for multi-language tasks
-                        print(f"\nTask: {task.description['name']}, split: {split}, language: {lang}. Running...")
-                        results = task.evaluate(model, split)
-                        task_results[split] = results
-                        if verbosity >= 1:
-                            print(f"Scores: {results}")
-            with open(os.path.join(output_folder, f"{task.description['name']}.json"), "w") as f_out:
+            for split in task.description["available_splits"]:
+                task_results[split] = {}
+                for lang in task.description["available_langs"]:
+                    print(f"\nTask: {task.description['name']}, split: {split}, language: {lang}. Running...")
+                    results = task.evaluate(model, split)
+                    task_results[split][lang] = results
+                    if verbosity >= 1:
+                        print(f"Scores: {results}")
+            with open(
+                os.path.join(
+                    output_folder,
+                    f"{task.description['name']}_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.json",
+                ),
+                "w",
+            ) as f_out:
                 json.dump(task_results, f_out, indent=2, sort_keys=True)
