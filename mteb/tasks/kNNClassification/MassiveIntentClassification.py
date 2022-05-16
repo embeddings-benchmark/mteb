@@ -64,7 +64,7 @@ class MassiveIntentClassification(AbsTaskKNNClassification):
     def description(self):
         return {
             "name": "MassiveIntentClassification",
-            "hf_hub_name": "AmazonScience/massive",
+            "hf_hub_name": "mteb/amazon_massive_intent",
             "description": "MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages",
             "reference": "https://arxiv.org/abs/2204.08582#:~:text=MASSIVE%20contains%201M%20realistic%2C%20parallel,diverse%20languages%20from%2029%20genera.",
             "category": "s2s",

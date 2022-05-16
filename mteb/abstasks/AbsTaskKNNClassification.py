@@ -1,6 +1,6 @@
 from .AbsTask import AbsTask
 import datasets
-from ..evaluation.evaluators import kNNClassificationEvaluator
+from ..evaluation.evaluators import kNNClassificationEvaluator, logRegClassificationEvaluator, kNNClassificationEvaluatorPytorch
 import numpy as np
 import logging
 from collections import defaultdict
@@ -24,8 +24,14 @@ class AbsTaskKNNClassification(AbsTask):
         eval_split = self.dataset[eval_split]
 
         logging.getLogger("sentence_transformers.evaluation.kNNClassificationEvaluator").setLevel(logging.WARN)
-        evaluator = kNNClassificationEvaluator(
+        # evaluator = kNNClassificationEvaluator(
+        #     train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
+        # )
+        evaluator = kNNClassificationEvaluatorPytorch(
             train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
         )
+        # evaluator = logRegClassificationEvaluator(
+        #     train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
+        # )
         scores = evaluator(model)
         return scores
