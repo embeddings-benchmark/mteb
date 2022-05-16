@@ -113,6 +113,9 @@ class MTEB:
 
         # Run selected tasks
         for task in self.tasks:
+            if os.path.exists(os.path.join(output_folder, f"{task.description['name']}.json")):
+                print(f"WARNING: {task.description['name']} already exists. Skipping.")
+                continue
             task_results = {}
             for split in task.description["available_splits"]:
                 task_results[split] = {}
@@ -126,11 +129,5 @@ class MTEB:
                     task_results[split][lang] = results
                     if verbosity >= 1:
                         print(f"Scores: {results}")
-            with open(
-                os.path.join(
-                    output_folder,
-                    f"{task.description['name']}_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.json",
-                ),
-                "w",
-            ) as f_out:
+            with open(os.path.join(output_folder, f"{task.description['name']}.json"), "w") as f_out:
                 json.dump(task_results, f_out, indent=2, sort_keys=True)
