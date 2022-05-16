@@ -27,11 +27,11 @@ class AbsTaskKNNClassification(AbsTask):
         # evaluator = kNNClassificationEvaluator(
         #     train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
         # )
-        evaluator = kNNClassificationEvaluatorPytorch(
-            train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
-        )
-        # evaluator = logRegClassificationEvaluator(
+        # evaluator = kNNClassificationEvaluatorPytorch(
         #     train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
         # )
+        evaluator = logRegClassificationEvaluator(
+            train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
+        )
         scores = evaluator(model)
         return scores

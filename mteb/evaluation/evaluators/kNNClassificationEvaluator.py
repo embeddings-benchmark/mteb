@@ -1,8 +1,13 @@
-from .Evaluator import Evaluator
 import random
+
 import numpy as np
-from sklearn.neighbors import KNeighborsClassifier
+import torch
 from sklearn.metrics import accuracy_score, f1_score
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import LogisticRegression
+from torch import Tensor
+
+from .Evaluator import Evaluator
 
 
 class kNNClassificationEvaluator(Evaluator):
@@ -38,8 +43,6 @@ class kNNClassificationEvaluator(Evaluator):
         scores["f1"] = max_f1
         return scores
 
-import torch
-from torch import Tensor
 class kNNClassificationEvaluatorPytorch(Evaluator):
     def __init__(self, sentences_train, y_train, sentences_test, y_test, k=3):
         self.sentences_train = sentences_train
@@ -142,35 +145,27 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 
         return torch.mm(a, b.transpose(0, 1))
 
-# class logRegClassificationEvaluator(Evaluator):
-#     def __init__(self, sentences_train, y_train, sentences_test, y_test, k=3):
-#         self.sentences_train = sentences_train
-#         self.y_train = y_train
-#         self.sentences_test = sentences_test
-#         self.y_test = y_test
+class logRegClassificationEvaluator(Evaluator):
+    def __init__(self, sentences_train, y_train, sentences_test, y_test, k=3):
+        self.sentences_train = sentences_train
+        self.y_train = y_train
+        self.sentences_test = sentences_test
+        self.y_test = y_test
 
-#         seed = 28042000
-#         random.seed(seed)
-#         np.random.seed(seed)
+        self.seed = 28042000
+        random.seed(self.seed)
+        np.random.seed(self.seed)
+        self.max_iter = 100
 
-#         self.k = k
-
-#     def __call__(self, model):
-#         scores = {}
-#         max_accuracy = 0
-#         max_f1 = 0
-#         for metric in ["cosine", "euclidean"]: #TODO: "dot"
-#             knn = KNeighborsClassifier(n_neighbors=self.k, n_jobs=-1, metric=metric)
-#             X_train = np.asarray(model.encode(self.sentences_train))
-#             X_test = np.asarray(model.encode(self.sentences_test))
-#             knn.fit(X_train, self.y_train)
-#             y_pred = knn.predict(X_test)
-#             accuracy = accuracy_score(self.y_test, y_pred)
-#             f1 = f1_score(self.y_test, y_pred, average="macro")
-#             scores["accuracy_" + metric] = accuracy
-#             scores["f1_" + metric] = f1
-#             max_accuracy = max(max_accuracy, accuracy)
-#             max_f1 = max(max_f1, f1)
-#         scores["accuracy"] = max_accuracy
-#         scores["f1"] = max_f1
-#         return scores
+    def __call__(self, model):
+        scores = {}
+        clf = LogisticRegression(random_state=self.seed, n_jobs=-1, max_iter=1000)
+        X_train = np.asarray(model.encode(self.sentences_train))
+        X_test = np.asarray(model.encode(self.sentences_test))
+        clf.fit(X_train, self.y_train)
+        y_pred = clf.predict(X_test)
+        accuracy = accuracy_score(self.y_test, y_pred)
+        f1 = f1_score(self.y_test, y_pred, average="macro")
+        scores["accuracy"] = accuracy
+        scores["f1"] = f1
+        return scores
