@@ -119,6 +119,10 @@ class MTEB:
                 for lang in task.description["available_langs"]:
                     print(f"\nTask: {task.description['name']}, split: {split}, language: {lang}. Running...")
                     results = task.evaluate(model, split)
+                    if task.description["main_score"] in results:
+                        results["main_score"] = results[task.description["main_score"]]
+                    else:
+                        print(f"WARNING: main score {task.description['main_score']} not found in results {results.keys()}")
                     task_results[split][lang] = results
                     if verbosity >= 1:
                         print(f"Scores: {results}")
