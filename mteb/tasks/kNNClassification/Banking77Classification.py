@@ -1,13 +1,5 @@
-from ...abstasks.AbsTaskKNNClassification import AbsTaskKNNClassification
-
-_LANGUAGES = []
-
-
+from ...abstasks import AbsTaskKNNClassification
 class Banking77Classification(AbsTaskKNNClassification):
-    def __init__(self, available_langs=None):
-        super().__init__()
-        self.available_langs = available_langs if available_langs else _LANGUAGES
-
     @property
     def description(self):
         return {
@@ -18,6 +10,6 @@ class Banking77Classification(AbsTaskKNNClassification):
             "category": "s2s",
             "type": "kNNClassification",
             "available_splits": ["train", "test"],
-            "available_langs": self.available_langs,
+            "available_langs": ["en"],
             "main_score": "accuracy",
         }

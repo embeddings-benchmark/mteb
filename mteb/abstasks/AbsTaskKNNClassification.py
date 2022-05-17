@@ -27,6 +27,11 @@ class AbsTaskKNNClassification(AbsTask):
                 scores[lang] = self._evaluate_monolingual(model, self.dataset[lang], eval_split, train_split)
         else:
             scores = self._evaluate_monolingual(model, self.dataset, eval_split, train_split)
+
+        if self.description["main_score"] in scores:
+            scores["main_score"] = scores[self.description["main_score"]]
+        else:
+            print(f"WARNING: main score {self.description['main_score']} not found in scores {scores.keys()}")
         
         return scores
 

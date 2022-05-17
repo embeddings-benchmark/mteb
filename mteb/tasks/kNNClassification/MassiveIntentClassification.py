@@ -1,79 +1,9 @@
-from ...abstasks.AbsTaskKNNClassification import AbsTaskKNNClassification
-import datasets
+from ...abstasks import AbsTaskKNNClassification, MultilingualTask
 
-_LANGUAGES = [
-    "af-ZA",
-    "am-ET",
-    "ar-SA",
-    "az-AZ",
-    "bn-BD",
-    "cy-GB",
-    "da-DK",
-    "de-DE",
-    "el-GR",
-    "en-US",
-    "es-ES",
-    "fa-IR",
-    "fi-FI",
-    "fr-FR",
-    "he-IL",
-    "hi-IN",
-    "hu-HU",
-    "hy-AM",
-    "id-ID",
-    "is-IS",
-    "it-IT",
-    "ja-JP",
-    "jv-ID",
-    "ka-GE",
-    "km-KH",
-    "kn-IN",
-    "ko-KR",
-    "lv-LV",
-    "ml-IN",
-    "mn-MN",
-    "ms-MY",
-    "my-MM",
-    "nb-NO",
-    "nl-NL",
-    "pl-PL",
-    "pt-PT",
-    "ro-RO",
-    "ru-RU",
-    "sl-SL",
-    "sq-AL",
-    "sv-SE",
-    "sw-KE",
-    "ta-IN",
-    "te-IN",
-    "th-TH",
-    "tl-PH",
-    "tr-TR",
-    "ur-PK",
-    "vi-VN",
-    "zh-CN",
-    "zh-TW",
-]
+_LANGUAGES = ['af', 'am', 'ar', 'az', 'bn', 'cy', 'da', 'de', 'el', 'en', 'es', 'fa', 'fi', 'fr', 'he', 'hi', 'hu', 'hy', 'id', 'is', 'it', 'ja', 'jv', 'ka', 'km', 'kn', 'ko', 'lv', 'ml', 'mn', 'ms', 'my', 'nb', 'nl', 'pl', 'pt', 'ro', 'ru', 'sl', 'sq', 'sv', 'sw', 'ta', 'te', 'th', 'tl', 'tr', 'ur', 'vi', 'zh-CN', 'zh-TW']
 
 
-class MassiveIntentClassification(AbsTaskKNNClassification):
-    def __init__(self, available_langs=None):
-        super().__init__()
-        self.available_langs = available_langs if available_langs else _LANGUAGES
-        self.is_multilingual = True
-
-    def load_data(self):
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-        self.dataset = {}
-        for lang in self.available_langs:
-            self.dataset[lang] = datasets.load_dataset(self.description["hf_hub_name"], lang)
-
-        self.data_loaded = True
-
+class MassiveIntentClassification(MultilingualTask, AbsTaskKNNClassification):
     @property
     def description(self):
         return {
@@ -84,6 +14,6 @@ class MassiveIntentClassification(AbsTaskKNNClassification):
             "category": "s2s",
             "type": "kNNClassification",
             "available_splits": ["train", "validation", "test"],
-            "available_langs": self.available_langs,
+            "available_langs": _LANGUAGES,
             "main_score": "accuracy",
         }

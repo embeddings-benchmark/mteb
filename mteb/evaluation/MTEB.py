@@ -39,6 +39,7 @@ class MTEB:
         self._task_list = task_list
 
         self.select_tasks()
+        self.load_tasks_data()
 
     @property
     def available_tasks(self):
@@ -87,6 +88,13 @@ class MTEB:
         # Get final list of tasks
         self.tasks = list(filtered_tasks)
 
+    def load_tasks_data(self):
+        """
+        Load datasets for the selected tasks.
+        """
+        for task in self.tasks:
+            task.load_data()
+
     def run(self, model, verbosity=1.0, output_folder="results/result"):
         """
         Run the evaluation pipeline on the selected tasks.
@@ -119,10 +127,6 @@ class MTEB:
             task_results = {}
             for split in task.description["available_splits"]:
                 results = task.evaluate(model, split)
-                if task.description["main_score"] in results:
-                    results["main_score"] = results[task.description["main_score"]]
-                else:
-                    print(f"WARNING: main score {task.description['main_score']} not found in results {results.keys()}")
                 task_results[split] = results
                 if verbosity >= 1:
                     print(f"Scores: {results}")
