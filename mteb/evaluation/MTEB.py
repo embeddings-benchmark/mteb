@@ -5,6 +5,7 @@ import os
 import json
 import logging
 import datasets
+from datetime import datetime
 
 
 class MTEB:
@@ -38,6 +39,7 @@ class MTEB:
         self._task_list = task_list
 
         self.select_tasks()
+        self.load_tasks_data()
 
     @property
     def available_tasks(self):
@@ -86,6 +88,13 @@ class MTEB:
         # Get final list of tasks
         self.tasks = list(filtered_tasks)
 
+    def load_tasks_data(self):
+        """
+        Load datasets for the selected tasks.
+        """
+        for task in self.tasks:
+            task.load_data()
+
     def run(self, model, verbosity=1.0, output_folder="results/result"):
         """
         Run the evaluation pipeline on the selected tasks.
@@ -112,14 +121,14 @@ class MTEB:
 
         # Run selected tasks
         for task in self.tasks:
+            if os.path.exists(os.path.join(output_folder, f"{task.description['name']}.json")):
+                print(f"WARNING: {task.description['name']} already exists. Skipping.")
+                continue
             task_results = {}
-            for lang in task.description.get("available_langs", [""]):
-                for split in task.description["available_splits"]:
-                    if lang:  # for multi-language tasks
-                        print(f"\nTask: {task.description['name']}, split: {split}, language: {lang}. Running...")
-                        results = task.evaluate(model, split)
-                        task_results[split] = results
-                        if verbosity >= 1:
-                            print(f"Scores: {results}")
+            for split in task.description["available_splits"]:
+                results = task.evaluate(model, split)
+                task_results[split] = results
+                if verbosity >= 1:
+                    print(f"Scores: {results}")
             with open(os.path.join(output_folder, f"{task.description['name']}.json"), "w") as f_out:
                 json.dump(task_results, f_out, indent=2, sort_keys=True)

@@ -1,6 +1,6 @@
 from .AbsTask import AbsTask
 import datasets
-from ..evaluation.evaluators import kNNClassificationEvaluator
+from ..evaluation.evaluators import kNNClassificationEvaluator, logRegClassificationEvaluator, kNNClassificationEvaluatorPytorch
 import numpy as np
 import logging
 from collections import defaultdict
@@ -20,12 +20,34 @@ class AbsTaskKNNClassification(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
-        train_split = self.dataset[train_split]
-        eval_split = self.dataset[eval_split]
+        if self.is_multilingual:
+            scores = {}
+            for lang in self.description["available_langs"]:
+                print(f"\nTask: {self.description['name']}, split: {eval_split}, language: {lang}. Running...")
+                scores[lang] = self._evaluate_monolingual(model, self.dataset[lang], eval_split, train_split)
+        else:
+            scores = self._evaluate_monolingual(model, self.dataset, eval_split, train_split)
+
+        if self.description["main_score"] in scores:
+            scores["main_score"] = scores[self.description["main_score"]]
+        else:
+            print(f"WARNING: main score {self.description['main_score']} not found in scores {scores.keys()}")
+        
+        return scores
+
+    def _evaluate_monolingual(self, model, dataset, eval_split="test", train_split="train"):
+        train_split = dataset[train_split]
+        eval_split = dataset[eval_split]
 
         logging.getLogger("sentence_transformers.evaluation.kNNClassificationEvaluator").setLevel(logging.WARN)
         evaluator = kNNClassificationEvaluator(
             train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
         )
+        # evaluator = kNNClassificationEvaluatorPytorch(
+        #     train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
+        # )
+        # evaluator = logRegClassificationEvaluator(
+        #     train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
+        # )
         scores = evaluator(model)
         return scores

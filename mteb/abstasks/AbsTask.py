@@ -6,6 +6,7 @@ class AbsTask(ABC):
     def __init__(self, **kwargs):
         self.dataset = None
         self.data_loaded = False
+        self.is_multilingual = False
 
     def load_data(self):
         """
