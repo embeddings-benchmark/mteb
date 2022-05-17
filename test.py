@@ -2,7 +2,7 @@ from sentence_transformers import SentenceTransformer
 from mteb import MTEB
 from mteb.tasks.kNNClassification import MassiveIntentClassification
 
-model = SentenceTransformer("average_word_embeddings_komninos") 
+model = SentenceTransformer("average_word_embeddings_komninos")
 task = MassiveIntentClassification(langs=["en", "de"])
 task = "MassiveIntentClassification"
 task = "Banking77Classification"

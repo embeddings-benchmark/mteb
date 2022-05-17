@@ -1,6 +1,10 @@
 from .AbsTask import AbsTask
 import datasets
-from ..evaluation.evaluators import kNNClassificationEvaluator, logRegClassificationEvaluator, kNNClassificationEvaluatorPytorch
+from ..evaluation.evaluators import (
+    kNNClassificationEvaluator,
+    logRegClassificationEvaluator,
+    kNNClassificationEvaluatorPytorch,
+)
 import numpy as np
 import logging
 from collections import defaultdict
@@ -32,7 +36,7 @@ class AbsTaskKNNClassification(AbsTask):
             scores["main_score"] = scores[self.description["main_score"]]
         else:
             print(f"WARNING: main score {self.description['main_score']} not found in scores {scores.keys()}")
-        
+
         return scores
 
     def _evaluate_monolingual(self, model, dataset, eval_split="test", train_split="train"):

@@ -27,7 +27,7 @@ class kNNClassificationEvaluator(Evaluator):
         scores = {}
         max_accuracy = 0
         max_f1 = 0
-        for metric in ["cosine", "euclidean"]: #TODO: "dot"
+        for metric in ["cosine", "euclidean"]:  # TODO: "dot"
             knn = KNeighborsClassifier(n_neighbors=self.k, n_jobs=-1, metric=metric)
             X_train = np.asarray(model.encode(self.sentences_train))
             X_test = np.asarray(model.encode(self.sentences_test))
@@ -42,6 +42,7 @@ class kNNClassificationEvaluator(Evaluator):
         scores["accuracy"] = max_accuracy
         scores["f1"] = max_f1
         return scores
+
 
 class kNNClassificationEvaluatorPytorch(Evaluator):
     def __init__(self, sentences_train, y_train, sentences_test, y_test, k=3):
@@ -60,7 +61,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         scores = {}
         max_accuracy = 0
         max_f1 = 0
-        for metric in ["cosine", "euclidean", "dot"]: #TODO: "dot"
+        for metric in ["cosine", "euclidean", "dot"]:  # TODO: "dot"
             X_train = np.asarray(model.encode(self.sentences_train))
             X_test = np.asarray(model.encode(self.sentences_test))
             if metric == "cosine":
@@ -68,7 +69,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
             elif metric == "euclidean":
                 distances = self._euclidean_dist(X_test, X_train)
             elif metric == "dot":
-                distances = - self._dot_score(X_test, X_train)
+                distances = -self._dot_score(X_test, X_train)
             neigh_indices = torch.topk(distances, k=self.k, dim=1, largest=False).indices
             y_train = torch.tensor(self.y_train)
             y_pred = torch.mode(y_train[neigh_indices], dim=1).values  # TODO: case where there is no majority
@@ -111,6 +112,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         :return: Matrix with res[i][j]  = euclidean_dist(a[i], b[j])
         """
         from sklearn.metrics.pairwise import euclidean_distances
+
         if not isinstance(a, torch.Tensor):
             a = torch.tensor(a)
 
@@ -144,6 +146,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
             b = b.unsqueeze(0)
 
         return torch.mm(a, b.transpose(0, 1))
+
 
 class logRegClassificationEvaluator(Evaluator):
     def __init__(self, sentences_train, y_train, sentences_test, y_test, k=3):

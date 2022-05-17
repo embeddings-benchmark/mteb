@@ -1,4 +1,6 @@
 from ...abstasks import AbsTaskKNNClassification
+
+
 class Banking77Classification(AbsTaskKNNClassification):
     @property
     def description(self):

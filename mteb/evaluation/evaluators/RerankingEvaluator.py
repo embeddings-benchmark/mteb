@@ -59,9 +59,7 @@ class RerankingEvaluator(Evaluator):
         all_ap_scores = []
 
         all_query_embs = model.encode(
-            [sample["query"] for sample in self.samples],
-            convert_to_tensor=True,
-            batch_size=self.batch_size,
+            [sample["query"] for sample in self.samples], convert_to_tensor=True, batch_size=self.batch_size,
         )
 
         all_docs = []

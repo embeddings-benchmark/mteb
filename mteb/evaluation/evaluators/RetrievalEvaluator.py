@@ -84,10 +84,7 @@ class RetrievalEvaluator(Evaluator):
 
         # Compute embedding for the queries
         query_embeddings = model.encode(
-            self.queries,
-            show_progress_bar=self.show_progress_bar,
-            batch_size=self.batch_size,
-            convert_to_tensor=True,
+            self.queries, show_progress_bar=self.show_progress_bar, batch_size=self.batch_size, convert_to_tensor=True,
         )
 
         queries_result_list = {}
@@ -96,11 +93,7 @@ class RetrievalEvaluator(Evaluator):
 
         # Iterate over chunks of the corpus
         for corpus_start_idx in trange(
-            0,
-            len(self.corpus),
-            self.corpus_chunk_size,
-            desc="Corpus Chunks",
-            disable=not self.show_progress_bar,
+            0, len(self.corpus), self.corpus_chunk_size, desc="Corpus Chunks", disable=not self.show_progress_bar,
         ):
             corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(self.corpus))
 
@@ -121,19 +114,14 @@ class RetrievalEvaluator(Evaluator):
 
                 # Get top-k values
                 pair_scores_top_k_values, pair_scores_top_k_idx = torch.topk(
-                    pair_scores,
-                    min(max_k, len(pair_scores[0])),
-                    dim=1,
-                    largest=True,
-                    sorted=False,
+                    pair_scores, min(max_k, len(pair_scores[0])), dim=1, largest=True, sorted=False,
                 )
                 pair_scores_top_k_values = pair_scores_top_k_values.cpu().tolist()
                 pair_scores_top_k_idx = pair_scores_top_k_idx.cpu().tolist()
 
                 for query_itr in range(len(query_embeddings)):
                     for sub_corpus_id, score in zip(
-                        pair_scores_top_k_idx[query_itr],
-                        pair_scores_top_k_values[query_itr],
+                        pair_scores_top_k_idx[query_itr], pair_scores_top_k_values[query_itr],
                     ):
                         corpus_id = self.corpus_ids[corpus_start_idx + sub_corpus_id]
                         queries_result_list[name][query_itr].append({"corpus_id": corpus_id, "score": score})
