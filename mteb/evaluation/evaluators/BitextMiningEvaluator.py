@@ -6,9 +6,12 @@ from .Evaluator import Evaluator
 
 
 class BitextMiningEvaluator(Evaluator):
-    def __init__(self, sentences1, sentences2, batch_size=32):
-        self.sentences1 = sentences1
+    def __init__(self, sentences1, sentences2, gold, batch_size=32):
+        self.gold = gold
+        self.sentences1 = [sentences1[i] for (i,j) in self.gold]
         self.sentences2 = sentences2
+
+        
         self.batch_size = batch_size
     def __call__(self, model):
         scores = self.compute_metrics(model)
@@ -19,8 +22,8 @@ class BitextMiningEvaluator(Evaluator):
         sentences = list(set(self.sentences1 + self.sentences2))
         embeddings = model.encode(sentences, batch_size=self.batch_size)
         emb_dict = {sent: emb for sent, emb in zip(sentences, embeddings)}
-        embeddings1 = [emb_dict[sent] for sent in self.sentences1]
-        embeddings2 = [emb_dict[sent] for sent in self.sentences2]
+        embeddings1 = np.asarray([emb_dict[sent] for sent in self.sentences1])
+        embeddings2 = np.asarray([emb_dict[sent] for sent in self.sentences2])
         
         # Find nearest neighbors
         nearest_neighbors = self._similarity_search(embeddings1, embeddings2, top_k = 1)
@@ -29,8 +32,9 @@ class BitextMiningEvaluator(Evaluator):
         errors = 0
         for i, x in enumerate(nearest_neighbors):
             j = x[0]['corpus_id']
-            if (i != j):
+            if (self.gold[i][1] != j):
                 errors += 1
+
         error_rate = errors / len(embeddings1)
         return {"error": error_rate}
 
@@ -47,19 +51,13 @@ class BitextMiningEvaluator(Evaluator):
         :param score_function: Function for computing scores. By default, cosine similarity.
         :return: Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by decreasing cosine similarity scores.
         """
-
-        if isinstance(query_embeddings, (np.ndarray, np.generic)):
-            query_embeddings = torch.from_numpy(query_embeddings)
-        elif isinstance(query_embeddings, list):
-            query_embeddings = torch.stack(query_embeddings)
-
+        query_embeddings = torch.from_numpy(query_embeddings)
+        corpus_embeddings = torch.from_numpy(corpus_embeddings)
         if len(query_embeddings.shape) == 1:
             query_embeddings = query_embeddings.unsqueeze(0)
+        if len(corpus_embeddings.shape) == 1:
+            corpus_embeddings = corpus_embeddings.unsqueeze(0)
 
-        if isinstance(corpus_embeddings, (np.ndarray, np.generic)):
-            corpus_embeddings = torch.from_numpy(corpus_embeddings)
-        elif isinstance(corpus_embeddings, list):
-            corpus_embeddings = torch.stack(corpus_embeddings)
 
 
         #Check that corpus and queries are on the same device

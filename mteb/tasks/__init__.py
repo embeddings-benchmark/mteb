@@ -4,3 +4,4 @@ from .Reranking import *
 from .BinaryClassification import *
 from .kNNClassification import *
 from .STS import *
+from .BitextMining import *
