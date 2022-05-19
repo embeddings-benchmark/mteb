@@ -1,17 +1,7 @@
 from ...abstasks import AbsTaskSTS, CrosslingualTask
 
-_LANGUAGES = [
-  'ar-ar',
-  'en-ar',
-  'en-de',
-  'en-en',
-  'en-tr',
-  'es-en',
-  'es-es',
-  'fr-en',
-  'it-en',
-  'nl-en'
-]
+_LANGUAGES = ["ar-ar", "en-ar", "en-de", "en-en", "en-tr", "es-en", "es-es", "fr-en", "it-en", "nl-en"]
+
 
 class STS17Crosslingual(AbsTaskSTS, CrosslingualTask):
     @property

@@ -1,11 +1,7 @@
 from ...abstasks import AbsTaskBitextMining, CrosslingualTask
 
-_LANGUAGES = [
-  'de-en',
-  'fr-en',
-  'ru-en',
-  'zh-en'
-]
+_LANGUAGES = ["de-en", "fr-en", "ru-en", "zh-en"]
+
 
 class BUCCBitextMining(AbsTaskBitextMining, CrosslingualTask):
     @property
