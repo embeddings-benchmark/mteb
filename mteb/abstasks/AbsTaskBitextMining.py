@@ -28,6 +28,26 @@ class AbsTaskBitextMining(AbsTask):
         return scores
 
     def _evaluate_split(self, model, data_split):
-        evaluator = BitextMiningEvaluator(data_split["sentence1"], data_split["sentence2"])
+        if len(data_split["sentence1"]) == 1:
+            sentence1 = data_split["sentence1"][0]
+        else:
+            sentence1 = data_split["sentence1"]
+        if len(data_split["sentence2"]) == 1:
+            sentence2 = data_split["sentence2"][0]
+        else:
+            sentence2 = data_split["sentence2"]
+
+        if not("gold" in data_split):
+            assert len(data_split["sentence1"]) == len(data_split["sentence2"]), 'Wrong dataset format'
+            n = len(data_split["sentence1"])
+            gold = list(zip(range(n),range(n)))
+        else:
+            gold = data_split["gold"]
+        if len(gold) == 1:
+            gold = gold[0]
+        if max([i for (i,j) in gold]) == len(sentence1):
+            gold = [(i-1,j-1) for (i,j) in gold]
+
+        evaluator = BitextMiningEvaluator(sentence1, sentence2, gold)
         metrics = evaluator(model)
         return metrics
