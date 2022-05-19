@@ -19,6 +19,7 @@ class AbsTaskKNNClassification(AbsTask):
 
     def __init__(self, **kwargs):
         super(AbsTaskKNNClassification, self).__init__(**kwargs)
+        self.method = kwargs.get("method", "kNN")
 
     def evaluate(self, model, eval_split="test", train_split="train"):
         if not self.data_loaded:
@@ -26,7 +27,7 @@ class AbsTaskKNNClassification(AbsTask):
 
         if self.is_multilingual:
             scores = {}
-            for lang in self.description["available_langs"]:
+            for lang in self.langs:
                 print(f"\nTask: {self.description['name']}, split: {eval_split}, language: {lang}. Running...")
                 scores[lang] = self._evaluate_monolingual(model, self.dataset[lang], eval_split, train_split)
         else:
@@ -44,14 +45,19 @@ class AbsTaskKNNClassification(AbsTask):
         eval_split = dataset[eval_split]
 
         logging.getLogger("sentence_transformers.evaluation.kNNClassificationEvaluator").setLevel(logging.WARN)
-        evaluator = kNNClassificationEvaluator(
-            train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
-        )
-        # evaluator = kNNClassificationEvaluatorPytorch(
-        #     train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
-        # )
-        # evaluator = logRegClassificationEvaluator(
-        #     train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
-        # )
+        if self.method == "kNN":
+            evaluator = kNNClassificationEvaluator(
+                train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
+            )
+        elif self.method == "kNN-pytorch":
+            evaluator = kNNClassificationEvaluatorPytorch(
+                train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
+            )
+        elif self.method == "logReg":
+            evaluator = logRegClassificationEvaluator(
+                train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
+            )
+        else:
+            raise ValueError(f"Method {self.method} not supported")
         scores = evaluator(model)
         return scores
