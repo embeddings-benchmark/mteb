@@ -7,6 +7,7 @@ class AbsTask(ABC):
         self.dataset = None
         self.data_loaded = False
         self.is_multilingual = False
+        self.is_crosslingual = False
 
     def load_data(self):
         """
