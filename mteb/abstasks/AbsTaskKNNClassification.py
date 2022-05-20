@@ -19,7 +19,7 @@ class AbsTaskKNNClassification(AbsTask):
 
     def __init__(self, **kwargs):
         super(AbsTaskKNNClassification, self).__init__(**kwargs)
-        self.method = kwargs.get("method", "kNN")
+        self.method = kwargs.get("method", "logReg-10-splits-5-intents")
         self.k = kwargs.get("k", 3)
 
     def evaluate(self, model, eval_split="test", train_split="train"):
@@ -58,7 +58,37 @@ class AbsTaskKNNClassification(AbsTask):
             evaluator = logRegClassificationEvaluator(
                 train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
             )
+        elif self.method == "logReg-10-splits-5-intents":
+            n_splits = 10
+            samples_per_label = 5
+
+            # we only keep 5 samples for n_splits iterations
+            avg_scores = defaultdict(float)
+            for _ in range(n_splits):
+                X_sampled, y_sampled = self._undersample_data(
+                    train_split["text"], train_split["label"], samples_per_label
+                )
+                evaluator = logRegClassificationEvaluator(X_sampled, y_sampled, eval_split["text"], eval_split["label"])
+                scores = evaluator(model)
+                avg_scores = {k: avg_scores[k] + scores[k] / n_splits for k in scores}
+
+            return avg_scores
+
         else:
             raise ValueError(f"Method {self.method} not supported")
         scores = evaluator(model)
         return scores
+
+    def _undersample_data(self, X, y, samples_per_label):
+        """ Undersample data to have samples_per_label samples of each label """
+        X_sampled = []
+        y_sampled = []
+        idxs = np.arange(len(y))
+        np.random.shuffle(idxs)
+        label_counter = defaultdict(int)
+        for i in idxs:
+            if label_counter[y[i]] < samples_per_label:
+                X_sampled.append(X[i])
+                y_sampled.append(y[i])
+                label_counter[y[i]] += 1
+        return X_sampled, y_sampled
