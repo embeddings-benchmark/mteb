@@ -20,6 +20,7 @@ class AbsTaskKNNClassification(AbsTask):
     def __init__(self, **kwargs):
         super(AbsTaskKNNClassification, self).__init__(**kwargs)
         self.method = kwargs.get("method", "kNN")
+        self.k = kwargs.get("k", 3)
 
     def evaluate(self, model, eval_split="test", train_split="train"):
         if not self.data_loaded:
@@ -47,11 +48,11 @@ class AbsTaskKNNClassification(AbsTask):
         logging.getLogger("sentence_transformers.evaluation.kNNClassificationEvaluator").setLevel(logging.WARN)
         if self.method == "kNN":
             evaluator = kNNClassificationEvaluator(
-                train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
+                train_split["text"], train_split["label"], eval_split["text"], eval_split["label"], k=self.k
             )
         elif self.method == "kNN-pytorch":
             evaluator = kNNClassificationEvaluatorPytorch(
-                train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
+                train_split["text"], train_split["label"], eval_split["text"], eval_split["label"], k=self.k
             )
         elif self.method == "logReg":
             evaluator = logRegClassificationEvaluator(

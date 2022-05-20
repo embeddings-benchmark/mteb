@@ -8,6 +8,7 @@ class AbsTask(ABC):
         self.data_loaded = False
         self.is_multilingual = False
         self.is_crosslingual = False
+        self.save_suffix = kwargs.get("save_suffix", "")
 
     def load_data(self):
         """

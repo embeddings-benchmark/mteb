@@ -121,7 +121,8 @@ class MTEB:
 
         # Run selected tasks
         for task in self.tasks:
-            if os.path.exists(os.path.join(output_folder, f"{task.description['name']}.json")):
+            save_path = os.path.join(output_folder, f"{task.description['name']}{task.save_suffix}.json")
+            if os.path.exists(save_path):
                 print(f"WARNING: {task.description['name']} already exists. Skipping.")
                 continue
             task_results = {}
@@ -130,5 +131,5 @@ class MTEB:
                 task_results[split] = results
                 if verbosity >= 1:
                     print(f"Scores: {results}")
-            with open(os.path.join(output_folder, f"{task.description['name']}.json"), "w") as f_out:
+            with open(save_path, "w") as f_out:
                 json.dump(task_results, f_out, indent=2, sort_keys=True)

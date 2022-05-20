@@ -11,7 +11,7 @@ from .Evaluator import Evaluator
 
 
 class kNNClassificationEvaluator(Evaluator):
-    def __init__(self, sentences_train, y_train, sentences_test, y_test, k=3):
+    def __init__(self, sentences_train, y_train, sentences_test, y_test, k=1):
         self.sentences_train = sentences_train
         self.y_train = y_train
         self.sentences_test = sentences_test
@@ -46,7 +46,7 @@ class kNNClassificationEvaluator(Evaluator):
 
 
 class kNNClassificationEvaluatorPytorch(Evaluator):
-    def __init__(self, sentences_train, y_train, sentences_test, y_test, k=3):
+    def __init__(self, sentences_train, y_train, sentences_test, y_test, k=1):
         self.sentences_train = sentences_train
         self.y_train = y_train
         self.sentences_test = sentences_test
@@ -150,7 +150,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 
 
 class logRegClassificationEvaluator(Evaluator):
-    def __init__(self, sentences_train, y_train, sentences_test, y_test, k=3):
+    def __init__(self, sentences_train, y_train, sentences_test, y_test, max_iter=1000):
         self.sentences_train = sentences_train
         self.y_train = y_train
         self.sentences_test = sentences_test
@@ -159,7 +159,7 @@ class logRegClassificationEvaluator(Evaluator):
         self.seed = 28042000
         random.seed(self.seed)
         np.random.seed(self.seed)
-        self.max_iter = 100
+        self.max_iter = max_iter
 
     def __call__(self, model):
         scores = {}
