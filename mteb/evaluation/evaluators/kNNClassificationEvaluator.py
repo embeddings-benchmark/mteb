@@ -20,6 +20,7 @@ class kNNClassificationEvaluator(Evaluator):
         seed = 28042000
         random.seed(seed)
         np.random.seed(seed)
+        self.batch_size = 128
 
         self.k = k
 
@@ -29,8 +30,8 @@ class kNNClassificationEvaluator(Evaluator):
         max_f1 = 0
         for metric in ["cosine", "euclidean"]:  # TODO: "dot"
             knn = KNeighborsClassifier(n_neighbors=self.k, n_jobs=-1, metric=metric)
-            X_train = np.asarray(model.encode(self.sentences_train))
-            X_test = np.asarray(model.encode(self.sentences_test))
+            X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
+            X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
             knn.fit(X_train, self.y_train)
             y_pred = knn.predict(X_test)
             accuracy = accuracy_score(self.y_test, y_pred)
@@ -62,8 +63,8 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         for metric in ["cosine", "euclidean", "dot"]:  # TODO: "dot"
-            X_train = np.asarray(model.encode(self.sentences_train))
-            X_test = np.asarray(model.encode(self.sentences_test))
+            X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
+            X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
             if metric == "cosine":
                 distances = 1 - self._cos_sim(X_test, X_train)
             elif metric == "euclidean":
@@ -162,9 +163,9 @@ class logRegClassificationEvaluator(Evaluator):
 
     def __call__(self, model):
         scores = {}
-        clf = LogisticRegression(random_state=self.seed, n_jobs=-1, max_iter=1000)
-        X_train = np.asarray(model.encode(self.sentences_train))
-        X_test = np.asarray(model.encode(self.sentences_test))
+        clf = LogisticRegression(random_state=self.seed, n_jobs=-1, max_iter=self.max_iter)
+        X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
+        X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
         clf.fit(X_train, self.y_train)
         y_pred = clf.predict(X_test)
         accuracy = accuracy_score(self.y_test, y_pred)
