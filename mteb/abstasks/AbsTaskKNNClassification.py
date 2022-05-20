@@ -64,9 +64,10 @@ class AbsTaskKNNClassification(AbsTask):
 
             # we only keep 5 samples for n_splits iterations
             avg_scores = defaultdict(float)
+            idxs = None  # we store idxs to make the shuffling reproducible
             for _ in range(n_splits):
-                X_sampled, y_sampled = self._undersample_data(
-                    train_split["text"], train_split["label"], samples_per_label
+                X_sampled, y_sampled, idxs = self._undersample_data(
+                    train_split["text"], train_split["label"], samples_per_label, idxs
                 )
                 evaluator = logRegClassificationEvaluator(X_sampled, y_sampled, eval_split["text"], eval_split["label"])
                 scores = evaluator(model)
@@ -79,11 +80,12 @@ class AbsTaskKNNClassification(AbsTask):
         scores = evaluator(model)
         return scores
 
-    def _undersample_data(self, X, y, samples_per_label):
+    def _undersample_data(self, X, y, samples_per_label, idxs=None):
         """ Undersample data to have samples_per_label samples of each label """
         X_sampled = []
         y_sampled = []
-        idxs = np.arange(len(y))
+        if idxs is None:
+            idxs = np.arange(len(y))
         np.random.shuffle(idxs)
         label_counter = defaultdict(int)
         for i in idxs:
@@ -91,4 +93,4 @@ class AbsTaskKNNClassification(AbsTask):
                 X_sampled.append(X[i])
                 y_sampled.append(y[i])
                 label_counter[y[i]] += 1
-        return X_sampled, y_sampled
+        return X_sampled, y_sampled, idxs
