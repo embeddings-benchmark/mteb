@@ -55,6 +55,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         seed = 28042000
         random.seed(seed)
         np.random.seed(seed)
+        self.batch_size = 128
 
         self.k = k
 
@@ -160,6 +161,7 @@ class logRegClassificationEvaluator(Evaluator):
         random.seed(self.seed)
         np.random.seed(self.seed)
         self.max_iter = max_iter
+        self.batch_size = 128
 
     def __call__(self, model):
         scores = {}
