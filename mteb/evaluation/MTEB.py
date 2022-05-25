@@ -63,7 +63,12 @@ class MTEB:
         """
         # Get all existing tasks
         tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
-        self.tasks_cls = [cls() for cat_cls in tasks_categories_cls for cls in cat_cls.__subclasses__()]
+        self.tasks_cls = [
+            cls()
+            for cat_cls in tasks_categories_cls
+            for cls in cat_cls.__subclasses__()
+            if cat_cls.__name__.startswith("AbsTask")
+        ]
 
         # If `task_list` is specified, select list of tasks
         if self._task_list is not None:
@@ -120,6 +125,7 @@ class MTEB:
         pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
 
         # Run selected tasks
+        print(f"Evaluating {len(self.tasks)} tasks: {self.selected_tasks}")
         for task in self.tasks:
             save_path = os.path.join(output_folder, f"{task.description['name']}{task.save_suffix}.json")
             if os.path.exists(save_path):
