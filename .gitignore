@@ -1,3 +1,6 @@
+.vscode
+.DS_Store
+
 # Result folder
 results/
 

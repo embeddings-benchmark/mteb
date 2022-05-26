@@ -97,7 +97,9 @@ class MTEB:
         """
         Load datasets for the selected tasks.
         """
+        print(f"\n\n## Loading datasets for {len(self.tasks)} tasks")
         for task in self.tasks:
+            print(f"\n# Loading dataset for {task.description['name']}")
             task.load_data()
 
     def run(self, model, verbosity=1.0, output_folder="results/result"):
@@ -125,11 +127,11 @@ class MTEB:
         pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
 
         # Run selected tasks
-        print(f"Evaluating {len(self.tasks)} tasks: {self.selected_tasks}")
+        print(f"\n\n## Evaluating {len(self.tasks)} tasks: {self.selected_tasks}")
         for task in self.tasks:
             save_path = os.path.join(output_folder, f"{task.description['name']}{task.save_suffix}.json")
             if os.path.exists(save_path):
-                print(f"WARNING: {task.description['name']} already exists. Skipping.")
+                print(f"WARNING: {task.description['name']} results already exists. Skipping.")
                 continue
             task_results = {}
             for split in task.description["available_splits"]:
