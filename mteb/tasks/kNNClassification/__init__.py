@@ -9,3 +9,4 @@ from .ImdbClassification import *
 from .AmazonCounterfactualClassification import *
 from .ToxicConversationsClassification import *
 from .TweetSentimentExtractionClassification import *
+from .EmotionClassification import *
