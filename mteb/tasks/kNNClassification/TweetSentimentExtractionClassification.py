@@ -14,4 +14,6 @@ class TweetSentimentExtractionClassification(AbsTaskKNNClassification):
             "available_splits": ["train", "test"],
             "available_langs": ["en"],
             "main_score": "accuracy",
+            "n_splits": 10,
+            "samples_per_label": 32,
         }

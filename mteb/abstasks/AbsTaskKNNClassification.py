@@ -19,7 +19,15 @@ class AbsTaskKNNClassification(AbsTask):
 
     def __init__(self, **kwargs):
         super(AbsTaskKNNClassification, self).__init__(**kwargs)
-        self.method = kwargs.get("method", "logReg-10-splits-5-intents")
+        self.method = kwargs.get("method", "logReg")
+
+        # Bootstrap parameters
+        self.n_splits = kwargs.get("n_splits", self.description.get("n_splits", 1))
+        self.samples_per_label = kwargs.get(
+            "samples_per_label", self.description.get("samples_per_label", float("inf"))
+        )
+
+        # kNN parameters
         self.k = kwargs.get("k", 3)
 
     def evaluate(self, model, eval_split="test", train_split="train"):
@@ -47,41 +55,34 @@ class AbsTaskKNNClassification(AbsTask):
         eval_split = dataset[eval_split]
 
         logging.getLogger("sentence_transformers.evaluation.kNNClassificationEvaluator").setLevel(logging.WARN)
-        if self.method == "kNN":
-            evaluator = kNNClassificationEvaluator(
-                train_split["text"], train_split["label"], eval_split["text"], eval_split["label"], k=self.k
-            )
-        elif self.method == "kNN-pytorch":
-            evaluator = kNNClassificationEvaluatorPytorch(
-                train_split["text"], train_split["label"], eval_split["text"], eval_split["label"], k=self.k
-            )
-        elif self.method == "logReg":
-            evaluator = logRegClassificationEvaluator(
-                train_split["text"], train_split["label"], eval_split["text"], eval_split["label"]
-            )
-        elif self.method == "logReg-10-splits-5-intents":
-            n_splits = 10
-            samples_per_label = 5
 
-            # we only keep 5 samples for n_splits iterations
-            avg_scores = defaultdict(float)
-            idxs = None  # we store idxs to make the shuffling reproducible
-            for _ in range(n_splits):
-                X_sampled, y_sampled, idxs = self._undersample_data(
-                    train_split["text"], train_split["label"], samples_per_label, idxs
+        avg_scores = defaultdict(float)
+        idxs = None  # we store idxs to make the shuffling reproducible
+        for _ in range(self.n_splits):
+            # Bootstrap `self.samples_per_label` samples per label for each split
+            X_sampled, y_sampled, idxs = self._undersample_data(
+                train_split["text"], train_split["label"], self.samples_per_label, idxs
+            )
+
+            if self.method == "kNN":
+                evaluator = kNNClassificationEvaluator(
+                    X_sampled, y_sampled, eval_split["text"], eval_split["label"], k=self.k
                 )
+            elif self.method == "kNN-pytorch":
+                evaluator = kNNClassificationEvaluatorPytorch(
+                    X_sampled, y_sampled, eval_split["text"], eval_split["label"], k=self.k
+                )
+            elif self.method == "logReg":
                 evaluator = logRegClassificationEvaluator(
                     X_sampled, y_sampled, eval_split["text"], eval_split["label"]
                 )
-                scores = evaluator(model)
-                avg_scores = {k: avg_scores[k] + scores[k] / n_splits for k in scores}
+            else:
+                raise ValueError(f"Method {self.method} not supported")
 
-            return avg_scores
+            scores = evaluator(model)
+            avg_scores = {k: avg_scores[k] + scores[k] / self.n_splits for k in scores}
 
-        else:
-            raise ValueError(f"Method {self.method} not supported")
-        scores = evaluator(model)
-        return scores
+        return avg_scores
 
     def _undersample_data(self, X, y, samples_per_label, idxs=None):
         """Undersample data to have samples_per_label samples of each label"""
@@ -89,7 +90,7 @@ class AbsTaskKNNClassification(AbsTask):
         y_sampled = []
         if idxs is None:
             idxs = np.arange(len(y))
-        np.random.shuffle(idxs)
+        np.random.shuffle(idxs)  # TODO: fix reproducibility
         label_counter = defaultdict(int)
         for i in idxs:
             if label_counter[y[i]] < samples_per_label:

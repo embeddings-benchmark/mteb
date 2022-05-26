@@ -7,11 +7,13 @@ class ToxicConversationsClassification(AbsTaskKNNClassification):
         return {
             "name": "ToxicConversationsClassification",
             "hf_hub_name": "mteb/toxic_conversations_50k",
-            "description": "Amazon Polarity Classification Dataset.",
+            "description": "Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not.",
             "reference": "https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/overview",
             "category": "s2s",
             "type": "kNNClassification",
             "available_splits": ["train", "test"],
             "available_langs": ["en"],
             "main_score": "accuracy",
+            "n_splits": 10,
+            "samples_per_label": 32,
         }
