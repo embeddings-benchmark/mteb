@@ -15,7 +15,7 @@ class AbsTaskSTS(AbsTask):
     """
 
     def __init__(self, **kwargs):
-        super(AbsTaskSTS, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     @property
     def min_score(self):

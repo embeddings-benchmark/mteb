@@ -5,7 +5,7 @@ from .AbsTask import AbsTask
 
 class MultilingualTask(AbsTask):
     def __init__(self, langs=None, **kwargs):
-        super(MultilingualTask, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         self.langs = langs if langs else self.description["available_langs"]
         self.is_multilingual = True
 

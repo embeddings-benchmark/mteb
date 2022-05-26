@@ -9,7 +9,7 @@ from datetime import datetime
 
 
 class MTEB:
-    def __init__(self, task_types=None, task_categories=None, version=None, task_list=None):
+    def __init__(self, task_types=None, task_categories=None, version=None, tasks=None, **kwargs):
         """
         Create an Evaluation pipeline. The tasks selected
         depends on the parameters. One can specify the tasks types
@@ -18,8 +18,8 @@ class MTEB:
         Sentence2Paragraph, etc.) and the version of the benchmark.
         The selected tasks will be the tasks satisfying conditions
         from the 3 arguments. Alternatively, one can specify a list
-        of tasks to be evaluated with the `task_list` argument. If
-        `task_list` is specified, the other arguments are ignored.
+        of tasks to be evaluated with the `tasks` argument. If
+        `tasks` is specified, the other arguments are ignored.
 
         Parameters
         ----------
@@ -29,16 +29,16 @@ class MTEB:
             List of task categories (s2s, p2p..) to be evaluated. If None, all tasks will be evaluated
         version: int / None
             Version of the benchmark to use. If None, latest is used
-        task_list: list of AbsTask / None
+        tasks: list of AbsTask / None
             List of tasks to be evaluated. If specified, the other arguments are ignored.
         """
         self._task_types = task_types
         self._task_categories = task_categories
         self._version = version
 
-        self._task_list = task_list
+        self._tasks = tasks
 
-        self.select_tasks()
+        self.select_tasks(**kwargs)
         self.load_tasks_data()
 
     @property
@@ -57,25 +57,25 @@ class MTEB:
     def selected_tasks(self):
         return [x.description["name"] for x in self.tasks]
 
-    def select_tasks(self):
+    def select_tasks(self, **kwargs):
         """
         Select the tasks to be evaluated.
         """
         # Get all existing tasks
         tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
         self.tasks_cls = [
-            cls()
+            cls(**kwargs)
             for cat_cls in tasks_categories_cls
             for cls in cat_cls.__subclasses__()
             if cat_cls.__name__.startswith("AbsTask")
         ]
 
         # If `task_list` is specified, select list of tasks
-        if self._task_list is not None:
-            filter_task_list = lambda x: (x.description["name"] in self._task_list)
+        if self._tasks is not None:
+            filter_task_list = lambda x: (x.description["name"] in self._tasks)
             self.tasks = list(filter(filter_task_list, self.tasks_cls))
             # add task if subclass of mteb.tasks
-            self.tasks.extend([x for x in self._task_list if isinstance(x, AbsTask)])
+            self.tasks.extend([x for x in self._tasks if isinstance(x, AbsTask)])
             return
 
         # Otherwise use filters to select tasks

@@ -14,7 +14,7 @@ class AbsTaskReranking(AbsTask):
     """
 
     def __init__(self, **kwargs):
-        super(AbsTaskReranking, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def evaluate(self, model, split="test"):
         if not self.data_loaded:
