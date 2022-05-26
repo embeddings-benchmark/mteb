@@ -6,3 +6,4 @@ from .MTOPDomainClassification import *
 from .AmazonReviewsClassification import *
 from .AmazonPolarityClassification import *
 from .ImdbClassification import *
+from .AmazonCounterfactualClassification import *
