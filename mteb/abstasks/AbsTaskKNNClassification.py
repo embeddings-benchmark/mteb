@@ -32,6 +32,7 @@ class AbsTaskKNNClassification(AbsTask):
                 print(f"\nTask: {self.description['name']}, split: {eval_split}, language: {lang}. Running...")
                 scores[lang] = self._evaluate_monolingual(model, self.dataset[lang], eval_split, train_split)
         else:
+            print(f"\nTask: {self.description['name']}, split: {eval_split}. Running...")
             scores = self._evaluate_monolingual(model, self.dataset, eval_split, train_split)
 
         if self.description["main_score"] in scores:
@@ -69,7 +70,9 @@ class AbsTaskKNNClassification(AbsTask):
                 X_sampled, y_sampled, idxs = self._undersample_data(
                     train_split["text"], train_split["label"], samples_per_label, idxs
                 )
-                evaluator = logRegClassificationEvaluator(X_sampled, y_sampled, eval_split["text"], eval_split["label"])
+                evaluator = logRegClassificationEvaluator(
+                    X_sampled, y_sampled, eval_split["text"], eval_split["label"]
+                )
                 scores = evaluator(model)
                 avg_scores = {k: avg_scores[k] + scores[k] / n_splits for k in scores}
 
@@ -81,7 +84,7 @@ class AbsTaskKNNClassification(AbsTask):
         return scores
 
     def _undersample_data(self, X, y, samples_per_label, idxs=None):
-        """ Undersample data to have samples_per_label samples of each label """
+        """Undersample data to have samples_per_label samples of each label"""
         X_sampled = []
         y_sampled = []
         if idxs is None:
