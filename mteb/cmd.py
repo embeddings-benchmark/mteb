@@ -1,6 +1,17 @@
 # entry point for the library
 # example call:
-#   mteb --model average_word_embeddings_komninos --tasks Banking77Classification EmotionClassification  --k 5 --device 0 --batch_size 32 --seed 42 --output_folder /tmp/mteb_output --n_splits 5 --samples_per_label 8 --verbosity 3
+#   pip install git+https://github.com/embeddings-benchmark/mteb-draft.git@packaging
+#   mteb --model average_word_embeddings_komninos \
+#        --tasks Banking77Classification EmotionClassification \
+#        --k 5 \
+#        --device 0 \
+#        --batch_size 32 \
+#        --seed 42 \
+#        --output_folder /tmp/mteb_output \
+#        --n_splits 5 \
+#        --samples_per_label 8 \
+#        --verbosity 3
+
 
 import argparse
 import logging
