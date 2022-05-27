@@ -1,9 +1,9 @@
-from ...abstasks import AbsTaskKNNClassification, MultilingualTask
+from ...abstasks import AbsTaskClassification, MultilingualTask
 
 _LANGUAGES = ["en", "de", "es", "fr", "ja", "zh"]
 
 
-class AmazonReviewsClassification(MultilingualTask, AbsTaskKNNClassification):
+class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
     @property
     def description(self):
         return {
@@ -12,7 +12,7 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskKNNClassification):
             "description": "A collection of Amazon reviews specifically designed to aid research in multilingual text classification.",
             "reference": "https://arxiv.org/abs/2010.02573",
             "category": "s2s",
-            "type": "kNNClassification",
+            "type": "Classification",
             "available_splits": ["train", "validation", "test"],
             "available_langs": _LANGUAGES,
             "main_score": "accuracy",

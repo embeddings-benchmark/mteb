@@ -1,7 +1,7 @@
-from ...abstasks import AbsTaskKNNClassification
+from ...abstasks import AbsTaskClassification
 
 
-class Banking77Classification(AbsTaskKNNClassification):
+class Banking77Classification(AbsTaskClassification):
     @property
     def description(self):
         return {
@@ -10,7 +10,7 @@ class Banking77Classification(AbsTaskKNNClassification):
             "description": "Dataset composed of online banking queries annotated with their corresponding intents.",
             "reference": "https://arxiv.org/abs/2003.04807",
             "category": "s2s",
-            "type": "kNNClassification",
+            "type": "Classification",
             "available_splits": ["train", "test"],
             "available_langs": ["en"],
             "main_score": "accuracy",

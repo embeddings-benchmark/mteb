@@ -1,9 +1,9 @@
-from ...abstasks import AbsTaskKNNClassification, MultilingualTask
+from ...abstasks import AbsTaskClassification, MultilingualTask
 
 _LANGUAGES = ["en", "de", "en-ext", "ja"]
 
 
-class AmazonCounterfactualClassification(MultilingualTask, AbsTaskKNNClassification):
+class AmazonCounterfactualClassification(MultilingualTask, AbsTaskClassification):
     @property
     def description(self):
         return {
@@ -12,7 +12,7 @@ class AmazonCounterfactualClassification(MultilingualTask, AbsTaskKNNClassificat
             "description": "A collection of Amazon customer reviews annotated for counterfactual detection binary classification.",
             "reference": "https://arxiv.org/abs/2104.06893",
             "category": "s2s",
-            "type": "kNNClassification",
+            "type": "Classification",
             "available_splits": ["train", "validation", "test"],
             "available_langs": _LANGUAGES,
             "main_score": "accuracy",

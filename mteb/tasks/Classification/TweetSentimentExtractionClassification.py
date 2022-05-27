@@ -1,7 +1,7 @@
-from ...abstasks import AbsTaskKNNClassification
+from ...abstasks import AbsTaskClassification
 
 
-class TweetSentimentExtractionClassification(AbsTaskKNNClassification):
+class TweetSentimentExtractionClassification(AbsTaskClassification):
     @property
     def description(self):
         return {
@@ -10,7 +10,7 @@ class TweetSentimentExtractionClassification(AbsTaskKNNClassification):
             "description": "",
             "reference": "https://www.kaggle.com/competitions/tweet-sentiment-extraction/overview",
             "category": "s2s",
-            "type": "kNNClassification",
+            "type": "Classification",
             "available_splits": ["train", "test"],
             "available_langs": ["en"],
             "main_score": "accuracy",

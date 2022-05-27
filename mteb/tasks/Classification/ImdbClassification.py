@@ -1,7 +1,7 @@
-from ...abstasks import AbsTaskKNNClassification
+from ...abstasks import AbsTaskClassification
 
 
-class ImdbClassification(AbsTaskKNNClassification):
+class ImdbClassification(AbsTaskClassification):
     @property
     def description(self):
         return {
@@ -10,7 +10,7 @@ class ImdbClassification(AbsTaskKNNClassification):
             "description": "Large Movie Review Dataset",
             "reference": "http://www.aclweb.org/anthology/P11-1015",
             "category": "p2p",
-            "type": "kNNClassification",
+            "type": "Classification",
             "available_splits": ["train", "test"],
             "available_langs": ["en"],
             "main_score": "accuracy",

@@ -10,7 +10,7 @@ import logging
 from collections import defaultdict
 
 
-class AbsTaskKNNClassification(AbsTask):
+class AbsTaskClassification(AbsTask):
     """
     Abstract class for kNN classification tasks
     The similarity is computed between pairs and the results are ranked. Average precision
@@ -18,7 +18,7 @@ class AbsTaskKNNClassification(AbsTask):
     """
 
     def __init__(self, **kwargs):
-        super(AbsTaskKNNClassification, self).__init__(**kwargs)
+        super(AbsTaskClassification, self).__init__(**kwargs)
         self.method = kwargs.get("method", "logReg")
 
         # Bootstrap parameters
@@ -54,7 +54,7 @@ class AbsTaskKNNClassification(AbsTask):
         train_split = dataset[train_split]
         eval_split = dataset[eval_split]
 
-        logging.getLogger("sentence_transformers.evaluation.kNNClassificationEvaluator").setLevel(logging.WARN)
+        logging.getLogger("sentence_transformers.evaluation.ClassificationEvaluator").setLevel(logging.WARN)
 
         avg_scores = defaultdict(float)
         idxs = None  # we store idxs to make the shuffling reproducible

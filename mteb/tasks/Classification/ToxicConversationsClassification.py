@@ -1,7 +1,7 @@
-from ...abstasks import AbsTaskKNNClassification
+from ...abstasks import AbsTaskClassification
 
 
-class ToxicConversationsClassification(AbsTaskKNNClassification):
+class ToxicConversationsClassification(AbsTaskClassification):
     @property
     def description(self):
         return {
@@ -10,7 +10,7 @@ class ToxicConversationsClassification(AbsTaskKNNClassification):
             "description": "Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not.",
             "reference": "https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/overview",
             "category": "s2s",
-            "type": "kNNClassification",
+            "type": "Classification",
             "available_splits": ["train", "test"],
             "available_langs": ["en"],
             "main_score": "accuracy",

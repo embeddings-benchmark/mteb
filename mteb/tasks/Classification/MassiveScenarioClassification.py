@@ -1,4 +1,4 @@
-from ...abstasks import AbsTaskKNNClassification, MultilingualTask
+from ...abstasks import AbsTaskClassification, MultilingualTask
 
 _LANGUAGES = [
     "af",
@@ -55,7 +55,7 @@ _LANGUAGES = [
 ]
 
 
-class MassiveScenarioClassification(MultilingualTask, AbsTaskKNNClassification):
+class MassiveScenarioClassification(MultilingualTask, AbsTaskClassification):
     @property
     def description(self):
         return {
@@ -64,7 +64,7 @@ class MassiveScenarioClassification(MultilingualTask, AbsTaskKNNClassification):
             "description": "MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages",
             "reference": "https://arxiv.org/abs/2204.08582#:~:text=MASSIVE%20contains%201M%20realistic%2C%20parallel,diverse%20languages%20from%2029%20genera.",
             "category": "s2s",
-            "type": "kNNClassification",
+            "type": "Classification",
             "available_splits": ["train", "validation", "test"],
             "available_langs": _LANGUAGES,
             "main_score": "accuracy",

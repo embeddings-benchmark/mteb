@@ -1,7 +1,7 @@
-from ...abstasks import AbsTaskKNNClassification
+from ...abstasks import AbsTaskClassification
 
 
-class EmotionClassification(AbsTaskKNNClassification):
+class EmotionClassification(AbsTaskClassification):
     @property
     def description(self):
         return {
@@ -10,7 +10,7 @@ class EmotionClassification(AbsTaskKNNClassification):
             "description": "Emotion is a dataset of English Twitter messages with six basic emotions: anger, fear, joy, love, sadness, and surprise. For more detailed information please refer to the paper.",
             "reference": "https://www.aclweb.org/anthology/D18-1404",
             "category": "s2s",
-            "type": "kNNClassification",
+            "type": "Classification",
             "available_splits": ["train", "validation", "test"],
             "available_langs": ["en"],
             "main_score": "accuracy",
