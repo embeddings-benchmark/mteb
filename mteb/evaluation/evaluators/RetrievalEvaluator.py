@@ -102,10 +102,10 @@ class RetrievalEvaluator(Evaluator):
             desc="Corpus Chunks",
             disable=not self.show_progress_bar,
         ):
-            corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(self.corpus))
 
             # Encode chunk of corpus
             if corpus_embeddings is None:
+                corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(self.corpus))
                 sub_corpus_embeddings = corpus_model.encode(
                     self.corpus[corpus_start_idx:corpus_end_idx],
                     show_progress_bar=False,
@@ -113,6 +113,7 @@ class RetrievalEvaluator(Evaluator):
                     convert_to_tensor=True,
                 )
             else:
+                corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus_embeddings))
                 sub_corpus_embeddings = corpus_embeddings[corpus_start_idx:corpus_end_idx]
 
             # Compute cosine similarites
