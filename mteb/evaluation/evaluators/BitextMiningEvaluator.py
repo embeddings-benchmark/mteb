@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 from .utils import cos_sim
 
 from .Evaluator import Evaluator
@@ -30,13 +31,20 @@ class BitextMiningEvaluator(Evaluator):
 
         # Compute errors
         errors = 0
+        labels = []
+        predictions = []
         for i, x in enumerate(nearest_neighbors):
             j = x[0]["corpus_id"]
-            if self.gold[i][1] != j:
-                errors += 1
-
-        error_rate = errors / len(embeddings1)
-        return {"error": error_rate}
+            labels.append(j)
+            predictions.append(self.gold[i][1])
+        
+        scores = {
+            "precision": precision_score(labels, predictions, average='weighted'),
+            "recall": recall_score(labels, predictions, average='weighted'),
+            "f1": f1_score(labels, predictions, average='weighted'),
+            "accuracy": accuracy_score(labels, predictions),
+        }
+        return scores
 
     def _similarity_search(
         self,
