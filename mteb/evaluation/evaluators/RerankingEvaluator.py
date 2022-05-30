@@ -11,8 +11,11 @@ class RerankingEvaluator(Evaluator):
     This class evaluates a SentenceTransformer model for the task of re-ranking.
     Given a query and a list of documents, it computes the score [query, doc_i] for all possible
     documents and sorts them in decreasing order. Then, MRR@10 and MAP is compute to measure the quality of the ranking.
-    :param samples: Must be a list and each element is of the form: {'query': '', 'positive': [], 'negative': []}. Query is the search query,
-     positive is a list of positive (relevant) documents, negative is a list of negative (irrelevant) documents.
+    :param samples: Must be a list and each element is of the form:
+        - {'query': '', 'positive': [], 'negative': []}. Query is the search query, positive is a list of positive
+        (relevant) documents, negative is a list of negative (irrelevant) documents.
+        - {'query': [], 'positive': [], 'negative': []}. Where query is a list of strings, which embeddings we average
+        to get the query embedding.
     """
 
     def __init__(
@@ -58,11 +61,26 @@ class RerankingEvaluator(Evaluator):
         all_mrr_scores = []
         all_ap_scores = []
 
-        all_query_embs = model.encode(
-            [sample["query"] for sample in self.samples],
-            convert_to_tensor=True,
-            batch_size=self.batch_size,
-        )
+        if isinstance(self.samples[0]["query"], str):
+            all_query_embs = model.encode(
+                [sample["query"] for sample in self.samples],
+                convert_to_tensor=True,
+                batch_size=self.batch_size,
+            )
+        elif isinstance(self.samples[0]["query"], list):
+            # In case the query is a list of strings, we average the embeddings of all strings
+            all_query_flattened = [q for sample in self.samples for q in sample["query"]]
+            all_query_flattened_embs = model.encode(
+                all_query_flattened, convert_to_tensor=True, batch_size=self.batch_size
+            )
+            all_query_embs = []
+            for i, sample in enumerate(self.samples):
+                query_emb = all_query_flattened_embs[i : i + len(sample["query"])]
+                query_emb = torch.mean(query_emb, dim=0)
+                all_query_embs.append(query_emb)
+            all_query_embs = torch.stack(all_query_embs)
+        else:
+            raise ValueError(f"Query must be a string or a list of strings but is {type(self.samples[0]['query'])}")
 
         all_docs = []
 
