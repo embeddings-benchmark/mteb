@@ -7,3 +7,4 @@ from .STS14STS import *
 from .STS15STS import *
 from .STS16STS import *
 from .STS17CrossLingualSTS import *
+from .STS22CrosslingualSTS import *
