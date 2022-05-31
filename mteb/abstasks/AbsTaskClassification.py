@@ -56,7 +56,7 @@ class AbsTaskClassification(AbsTask):
 
         logging.getLogger("sentence_transformers.evaluation.ClassificationEvaluator").setLevel(logging.WARN)
 
-        avg_scores = defaultdict(float)
+        scores = []
         idxs = None  # we store idxs to make the shuffling reproducible
         for _ in range(self.n_splits):
             # Bootstrap `self.samples_per_label` samples per label for each split
@@ -79,10 +79,14 @@ class AbsTaskClassification(AbsTask):
             else:
                 raise ValueError(f"Method {self.method} not supported")
 
-            scores = evaluator(model)
-            avg_scores = {k: avg_scores[k] + scores[k] / self.n_splits for k in scores}
+            scores.append(evaluator(model))
 
-        return avg_scores
+        if self.n_splits == 1:
+            return scores[0]
+        else:
+            avg_scores = {k: np.mean([s[k] for s in scores]) for k in scores[0].keys()}
+            std_errors = {k + "_stderr": np.std([s[k] for s in scores]) for k in scores[0].keys()}
+            return {**avg_scores, **std_errors}
 
     def _undersample_data(self, X, y, samples_per_label, idxs=None):
         """Undersample data to have samples_per_label samples of each label"""
