@@ -8,8 +8,8 @@ import numpy as np
 
 
 class AbsTaskClustering(AbsTask):
-    def __init__(self):
-        super(AbsTaskClustering, self).__init__()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.seed = 42
 
     def evaluate(self, model, split="test"):

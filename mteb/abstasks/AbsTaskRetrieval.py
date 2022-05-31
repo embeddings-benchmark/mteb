@@ -15,7 +15,7 @@ class AbsTaskRetrieval(AbsTask):
     """
 
     def __init__(self, **kwargs):
-        super(AbsTaskRetrieval, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
     def evaluate(self, model, split="test"):
         if not self.data_loaded:

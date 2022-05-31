@@ -1,11 +1,16 @@
 # Massive Text Embedding Benchmark
+
 Massive Text Embedding Benchmark - Internal Development Git
 
 ## Installation
 
-TODO: pip installable package
+```bash
+pip install git+https://github.com/embeddings-benchmark/mteb-draft.git
+```
 
 ## Minimal use
+
+* Using a python script:
 
 ````python
 from mteb import MTEB
@@ -14,6 +19,14 @@ model = ...
 eval = MTEB()
 eval.run(model)
 ````
+
+* Using CLI
+
+```bash
+mteb --model average_word_embeddings_komninos \
+    --tasks ToxicConversationsClassification EmotionClassification \
+    --output_folder results
+```
 
 ## Details
 

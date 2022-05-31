@@ -11,16 +11,15 @@ from .Evaluator import Evaluator
 
 
 class kNNClassificationEvaluator(Evaluator):
-    def __init__(self, sentences_train, y_train, sentences_test, y_test, k=1):
+    def __init__(self, sentences_train, y_train, sentences_test, y_test, k=1, batch_size=32, seed=42, **kwargs):
         self.sentences_train = sentences_train
         self.y_train = y_train
         self.sentences_test = sentences_test
         self.y_test = y_test
 
-        seed = 28042000
         random.seed(seed)
         np.random.seed(seed)
-        self.batch_size = 128
+        self.batch_size = batch_size
 
         self.k = k
 
@@ -46,7 +45,7 @@ class kNNClassificationEvaluator(Evaluator):
 
 
 class kNNClassificationEvaluatorPytorch(Evaluator):
-    def __init__(self, sentences_train, y_train, sentences_test, y_test, k=1):
+    def __init__(self, sentences_train, y_train, sentences_test, y_test, k=1, batch_size=32, seed=42, **kwargs):
         self.sentences_train = sentences_train
         self.y_train = y_train
         self.sentences_test = sentences_test
@@ -55,7 +54,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         seed = 28042000
         random.seed(seed)
         np.random.seed(seed)
-        self.batch_size = 128
+        self.batch_size = batch_size
 
         self.k = k
 
@@ -151,7 +150,9 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 
 
 class logRegClassificationEvaluator(Evaluator):
-    def __init__(self, sentences_train, y_train, sentences_test, y_test, max_iter=1000):
+    def __init__(
+        self, sentences_train, y_train, sentences_test, y_test, max_iter=1000, batch_size=32, seed=42, **kwargs
+    ):
         self.sentences_train = sentences_train
         self.y_train = y_train
         self.sentences_test = sentences_test
@@ -161,7 +162,7 @@ class logRegClassificationEvaluator(Evaluator):
         random.seed(self.seed)
         np.random.seed(self.seed)
         self.max_iter = max_iter
-        self.batch_size = 128
+        self.batch_size = batch_size
 
     def __call__(self, model):
         scores = {}

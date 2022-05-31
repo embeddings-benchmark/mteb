@@ -29,6 +29,7 @@ class BinaryClassificationEvaluator(Evaluator):
         self.sentences1 = sentences1
         self.sentences2 = sentences2
         self.labels = labels
+        self.batch_size = batch_size
 
         assert len(self.sentences1) == len(self.sentences2)
         assert len(self.sentences1) == len(self.labels)

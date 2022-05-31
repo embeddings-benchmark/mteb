@@ -17,18 +17,22 @@ class AbsTaskClassification(AbsTask):
     is computed to measure how well the methods can be used for classification. #TODO:
     """
 
-    def __init__(self, **kwargs):
-        super(AbsTaskClassification, self).__init__(**kwargs)
-        self.method = kwargs.get("method", "logReg")
+    def __init__(self, method="logReg", n_splits=None, samples_per_label=None, k=3, batch_size=32, seed=42, **kwargs):
+        super().__init__(**kwargs)
+        self.batch_size = batch_size
+        self.seed = 42
+        self.method = method
 
         # Bootstrap parameters
-        self.n_splits = kwargs.get("n_splits", self.description.get("n_splits", 1))
-        self.samples_per_label = kwargs.get(
-            "samples_per_label", self.description.get("samples_per_label", float("inf"))
+        self.n_splits = n_splits if n_splits is not None else self.description.get("n_splits", 1)
+        self.samples_per_label = (
+            samples_per_label
+            if samples_per_label is not None
+            else self.description.get("samples_per_label", float("inf"))
         )
 
         # kNN parameters
-        self.k = kwargs.get("k", 3)
+        self.k = k
 
     def evaluate(self, model, eval_split="test", train_split="train"):
         if not self.data_loaded:
@@ -53,6 +57,7 @@ class AbsTaskClassification(AbsTask):
     def _evaluate_monolingual(self, model, dataset, eval_split="test", train_split="train"):
         train_split = dataset[train_split]
         eval_split = dataset[eval_split]
+        params = {"k": self.k, "batch_size": self.batch_size, "seed": self.seed}
 
         logging.getLogger("sentence_transformers.evaluation.ClassificationEvaluator").setLevel(logging.WARN)
 
@@ -66,15 +71,15 @@ class AbsTaskClassification(AbsTask):
 
             if self.method == "kNN":
                 evaluator = kNNClassificationEvaluator(
-                    X_sampled, y_sampled, eval_split["text"], eval_split["label"], k=self.k
+                    X_sampled, y_sampled, eval_split["text"], eval_split["label"], **params
                 )
             elif self.method == "kNN-pytorch":
                 evaluator = kNNClassificationEvaluatorPytorch(
-                    X_sampled, y_sampled, eval_split["text"], eval_split["label"], k=self.k
+                    X_sampled, y_sampled, eval_split["text"], eval_split["label"], **params
                 )
             elif self.method == "logReg":
                 evaluator = logRegClassificationEvaluator(
-                    X_sampled, y_sampled, eval_split["text"], eval_split["label"]
+                    X_sampled, y_sampled, eval_split["text"], eval_split["label"], **params
                 )
             else:
                 raise ValueError(f"Method {self.method} not supported")
