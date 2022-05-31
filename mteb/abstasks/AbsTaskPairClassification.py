@@ -23,7 +23,7 @@ class AbsTaskPairClassification(AbsTask):
         data_split = self.dataset[split][0]
 
         logging.getLogger("sentence_transformers.evaluation.PairClassificationEvaluator").setLevel(logging.WARN)
-        evaluator = evaluation.PairClassificationEvaluator(
+        evaluator = evaluation.BinaryClassificationEvaluator(
             data_split["sent1"], data_split["sent2"], data_split["labels"]
         )
         scores = evaluator.compute_metrices(model)
