@@ -9,7 +9,7 @@ class AmazonCounterfactualClassification(MultilingualTask, AbsTaskClassification
         return {
             "name": "AmazonCounterfactualClassification",
             "hf_hub_name": "mteb/amazon_counterfactual",
-            "description": "A collection of Amazon customer reviews annotated for counterfactual detection binary classification.",
+            "description": "A collection of Amazon customer reviews annotated for counterfactual detection pair classification.",
             "reference": "https://arxiv.org/abs/2104.06893",
             "category": "s2s",
             "type": "Classification",

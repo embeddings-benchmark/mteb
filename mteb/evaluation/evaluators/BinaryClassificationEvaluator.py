@@ -8,7 +8,7 @@ from sklearn.metrics import average_precision_score
 import numpy as np
 
 
-class BinaryClassificationEvaluator(Evaluator):
+class PairClassificationEvaluator(Evaluator):
     """
     Evaluate a model based on the similarity of the embeddings by calculating the accuracy of identifying similar and
     dissimilar sentences.

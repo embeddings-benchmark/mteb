@@ -1,6 +1,6 @@
 from .AbsTask import *
 from .AbsTaskClustering import *
-from .AbsTaskBinaryClassification import *
+from .AbsTaskPairClassification import *
 from .AbsTaskBitextMining import *
 from .AbsTaskClassification import *
 from .AbsTaskRetrieval import *

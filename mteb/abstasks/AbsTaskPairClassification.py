@@ -6,11 +6,11 @@ import logging
 from collections import defaultdict
 
 
-class AbsTaskBinaryClassification(AbsTask):
+class AbsTaskPairClassification(AbsTask):
     """
-    Abstract class for BinaryClassificationTasks
+    Abstract class for PairClassificationTasks
     The similarity is computed between pairs and the results are ranked. Average precision
-    is computed to measure how well the methods can be used for pairwise binary classification.
+    is computed to measure how well the methods can be used for pairwise pair classification.
     """
 
     def __init__(self, **kwargs):
@@ -22,8 +22,8 @@ class AbsTaskBinaryClassification(AbsTask):
 
         data_split = self.dataset[split][0]
 
-        logging.getLogger("sentence_transformers.evaluation.BinaryClassificationEvaluator").setLevel(logging.WARN)
-        evaluator = evaluation.BinaryClassificationEvaluator(
+        logging.getLogger("sentence_transformers.evaluation.PairClassificationEvaluator").setLevel(logging.WARN)
+        evaluator = evaluation.PairClassificationEvaluator(
             data_split["sent1"], data_split["sent2"], data_split["labels"]
         )
         scores = evaluator.compute_metrices(model)
