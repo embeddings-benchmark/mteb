@@ -24,9 +24,12 @@ class RerankingEvaluator(Evaluator):
         mrr_at_k: int = 10,
         name: str = "",
         similarity_fct=cos_sim,
-        batch_size: int = 64,
+        batch_size: int = 512,
         use_batched_encoding: bool = True,
+        limit: int = None,
     ):
+        if limit:
+            samples = samples.train_test_split(limit)["test"]
         self.samples = samples
         self.name = name
         self.mrr_at_k = mrr_at_k
@@ -68,17 +71,9 @@ class RerankingEvaluator(Evaluator):
                 batch_size=self.batch_size,
             )
         elif isinstance(self.samples[0]["query"], list):
-            # In case the query is a list of strings, we average the embeddings of all strings
+            # In case the query is a list of strings, we get the most similar embedding to any of the queries
             all_query_flattened = [q for sample in self.samples for q in sample["query"]]
-            all_query_flattened_embs = model.encode(
-                all_query_flattened, convert_to_tensor=True, batch_size=self.batch_size
-            )
-            all_query_embs = []
-            for i, sample in enumerate(self.samples):
-                query_emb = all_query_flattened_embs[i : i + len(sample["query"])]
-                query_emb = torch.mean(query_emb, dim=0)
-                all_query_embs.append(query_emb)
-            all_query_embs = torch.stack(all_query_embs)
+            all_query_embs = model.encode(all_query_flattened, convert_to_tensor=True, batch_size=self.batch_size)
         else:
             raise ValueError(f"Query must be a string or a list of strings but is {type(self.samples[0]['query'])}")
 
@@ -93,8 +88,9 @@ class RerankingEvaluator(Evaluator):
         # Compute scores
         query_idx, docs_idx = 0, 0
         for instance in self.samples:
-            query_emb = all_query_embs[query_idx]
-            query_idx += 1
+            num_subqueries = len(instance["query"]) if isinstance(instance["query"], list) else 1
+            query_emb = all_query_embs[query_idx : query_idx + num_subqueries]
+            query_idx += num_subqueries
 
             num_pos = len(instance["positive"])
             num_neg = len(instance["negative"])
@@ -106,7 +102,7 @@ class RerankingEvaluator(Evaluator):
 
             pred_scores = self.similarity_fct(query_emb, docs_emb)
             if len(pred_scores.shape) > 1:
-                pred_scores = pred_scores[0]
+                pred_scores = torch.amax(pred_scores, dim=0)
 
             pred_scores_argsort = torch.argsort(-pred_scores)  # Sort in decreasing order
 
