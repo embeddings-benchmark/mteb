@@ -2,7 +2,7 @@ import random
 
 import numpy as np
 import torch
-from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import accuracy_score, f1_score, average_precision_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from torch import Tensor
@@ -27,6 +27,7 @@ class kNNClassificationEvaluator(Evaluator):
         scores = {}
         max_accuracy = 0
         max_f1 = 0
+        max_ap = 0
         for metric in ["cosine", "euclidean"]:  # TODO: "dot"
             knn = KNeighborsClassifier(n_neighbors=self.k, n_jobs=-1, metric=metric)
             X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
@@ -35,12 +36,16 @@ class kNNClassificationEvaluator(Evaluator):
             y_pred = knn.predict(X_test)
             accuracy = accuracy_score(self.y_test, y_pred)
             f1 = f1_score(self.y_test, y_pred, average="macro")
+            ap = average_precision_score(self.y_test, y_pred)
             scores["accuracy_" + metric] = accuracy
             scores["f1_" + metric] = f1
+            scores["ap_" + metric] = ap
             max_accuracy = max(max_accuracy, accuracy)
             max_f1 = max(max_f1, f1)
+            max_ap = max(max_ap, ap)
         scores["accuracy"] = max_accuracy
         scores["f1"] = max_f1
+        scores["ap"] = max_ap
         return scores
 
 
@@ -62,6 +67,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         scores = {}
         max_accuracy = 0
         max_f1 = 0
+        max_ap = 0
         for metric in ["cosine", "euclidean", "dot"]:  # TODO: "dot"
             X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
             X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
@@ -76,12 +82,16 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
             y_pred = torch.mode(y_train[neigh_indices], dim=1).values  # TODO: case where there is no majority
             accuracy = accuracy_score(self.y_test, y_pred)
             f1 = f1_score(self.y_test, y_pred, average="macro")
+            ap = average_precision_score(self.y_test, y_pred)
             scores["accuracy_" + metric] = accuracy
             scores["f1_" + metric] = f1
+            scores["ap_" + metric] = ap
             max_accuracy = max(max_accuracy, accuracy)
             max_f1 = max(max_f1, f1)
+            max_ap = max(max_ap, ap)
         scores["accuracy"] = max_accuracy
         scores["f1"] = max_f1
+        scores["ap"] = max_ap
         return scores
 
     @staticmethod
@@ -173,6 +183,8 @@ class logRegClassificationEvaluator(Evaluator):
         y_pred = clf.predict(X_test)
         accuracy = accuracy_score(self.y_test, y_pred)
         f1 = f1_score(self.y_test, y_pred, average="macro")
+        ap = average_precision_score(self.y_test, y_pred)
         scores["accuracy"] = accuracy
         scores["f1"] = f1
+        scores["ap"] = ap
         return scores
