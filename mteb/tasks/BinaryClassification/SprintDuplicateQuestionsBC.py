@@ -11,7 +11,7 @@ class SprintDuplicateQuestionsBC(AbsTaskBinaryClassification):
             "reference": "https://www.aclweb.org/anthology/D18-1131/",
             "category": "s2s",
             "type": "BinaryClassification",
-            "available_splits": ["validation", "test"],
+            "eval_splits": ["validation", "test"],
             "eval_langs": ["en"],
             "main_score": "ap",
         }

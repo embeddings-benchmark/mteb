@@ -11,7 +11,7 @@ class TwitterURLCorpusBC(AbsTaskBinaryClassification):
             "reference": "https://languagenet.github.io/",
             "category": "s2s",
             "type": "BinaryClassification",
-            "available_splits": ["test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ap",
         }

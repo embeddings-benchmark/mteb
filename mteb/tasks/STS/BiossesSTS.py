@@ -11,7 +11,7 @@ class BiossesSTS(AbsTaskSTS):
             "reference": "https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html",
             "type": "STS",
             "category": "s2s",
-            "available_splits": ["test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "cosine_spearman",
             "min_score": 0,

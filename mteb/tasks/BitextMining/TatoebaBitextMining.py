@@ -126,7 +126,7 @@ class TatoebaBitextMining(AbsTaskBitextMining, CrosslingualTask):
             "reference": "https://github.com/facebookresearch/LASER/tree/main/data/tatoeba/v1",
             "type": "BitextMining",
             "category": "s2s",
-            "available_splits": ["test"],
+            "eval_splits": ["test"],
             "eval_langs": _LANGUAGES,
             "main_score": "error",
         }

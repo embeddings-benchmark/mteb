@@ -11,7 +11,7 @@ class QuoraRetrieval(AbsTaskRetrieval):
             "reference": "https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs",
             "type": "Retrieval",
             "category": "s2s",
-            "available_splits": ["test", "validation"],
+            "eval_splits": ["test", "validation"],
             "eval_langs": ["en"],
             "main_score": "map",
         }

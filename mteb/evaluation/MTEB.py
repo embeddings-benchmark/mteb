@@ -134,7 +134,7 @@ class MTEB:
                 print(f"WARNING: {task.description['name']} results already exists. Skipping.")
                 continue
             task_results = {}
-            for split in task.description["available_splits"]:
+            for split in task.description["eval_splits"]:
                 results = task.evaluate(model, split)
                 task_results[split] = results
                 if verbosity >= 1:

@@ -11,7 +11,7 @@ class ImdbClassification(AbsTaskClassification):
             "reference": "http://www.aclweb.org/anthology/P11-1015",
             "category": "p2p",
             "type": "Classification",
-            "available_splits": ["train", "test"],
+            "eval_splits": ["train", "test"],
             "eval_langs": ["en"],
             "main_score": "accuracy",
         }

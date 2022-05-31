@@ -32,7 +32,7 @@ class STS22CrosslingualSTS(AbsTaskSTS, CrosslingualTask):
             "reference": "https://competitions.codalab.org/competitions/33835",
             "type": "STS",
             "category": "s2s",
-            "available_splits": ["test"],
+            "eval_splits": ["test"],
             "eval_langs": _LANGUAGES,
             "main_score": "cosine_spearman",
             "min_score": 0,

@@ -13,7 +13,7 @@ class BUCCBitextMining(AbsTaskBitextMining, CrosslingualTask):
             "reference": "https://comparable.limsi.fr/bucc2018/bucc2018-task.html",
             "type": "BitextMining",
             "category": "s2s",
-            "available_splits": ["test"],
+            "eval_splits": ["test"],
             "eval_langs": _LANGUAGES,
             "main_score": "error",
         }

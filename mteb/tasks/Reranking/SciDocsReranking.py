@@ -11,7 +11,7 @@ class SciDocsReranking(AbsTaskReranking):
             "reference": "https://allenai.org/data/scidocs",
             "type": "Reranking",
             "category": "s2s",
-            "available_splits": ["test", "validation"],
+            "eval_splits": ["test", "validation"],
             "eval_langs": ["en"],
             "main_score": "map",
         }

@@ -27,7 +27,7 @@ class AbsTask(ABC):
         name: Name of the task (usually equal to the class name. Should be a valid name for a path on disc)
         description: Longer description & references for the task
         type: Of the set: [sts]
-        available_splits: Available splits as list, e.g. ['dev', 'test']
+        eval_splits: Splits used for evaluation as list, e.g. ['dev', 'test']
         main_score: Main score value for task
         """
         raise NotImplementedError

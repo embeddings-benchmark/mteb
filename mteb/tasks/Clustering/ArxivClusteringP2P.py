@@ -11,7 +11,7 @@ class ArxivClusteringP2P(AbsTaskClustering):
             "reference": "https://www.kaggle.com/Cornell-University/arxiv",
             "type": "Clustering",
             "category": "p2p",
-            "available_splits": ["test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "v_measure",
         }

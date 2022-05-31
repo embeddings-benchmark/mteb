@@ -13,7 +13,7 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
             "reference": "https://arxiv.org/abs/2010.02573",
             "category": "s2s",
             "type": "Classification",
-            "available_splits": ["train", "validation", "test"],
+            "eval_splits": ["train", "validation", "test"],
             "eval_langs": _LANGUAGES,
             "main_score": "accuracy",
         }

@@ -11,7 +11,7 @@ class RedditClusteringP2P(AbsTaskClustering):
             "reference": "https://huggingface.co/datasets/sentence-transformers/reddit-title-body",
             "type": "Clustering",
             "category": "p2p",
-            "available_splits": ["test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "v_measure",
         }

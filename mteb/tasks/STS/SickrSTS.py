@@ -11,7 +11,7 @@ class SickrSTS(AbsTaskSTS):
             "reference": "https://www.aclweb.org/anthology/S14-2001.pdf",
             "type": "STS",
             "category": "s2s",
-            "available_splits": ["train", "validation", "test"],
+            "eval_splits": ["train", "validation", "test"],
             "eval_langs": ["en"],
             "main_score": "cosine_spearman",
             "min_score": 1,

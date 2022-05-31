@@ -13,7 +13,7 @@ class STS17Crosslingual(AbsTaskSTS, CrosslingualTask):
             "reference": "http://alt.qcri.org/semeval2016/task1/",
             "type": "STS",
             "category": "s2s",
-            "available_splits": ["test"],
+            "eval_splits": ["test"],
             "eval_langs": _LANGUAGES,
             "main_score": "cosine_spearman",
             "min_score": 0,

@@ -11,7 +11,7 @@ class TwitterSemEval2015BC(AbsTaskBinaryClassification):
             "reference": "https://alt.qcri.org/semeval2015/task1/",
             "category": "s2s",
             "type": "BinaryClassification",
-            "available_splits": ["test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ap",
         }

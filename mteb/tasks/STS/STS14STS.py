@@ -11,7 +11,7 @@ class STS14STS(AbsTaskSTS):
             "reference": "http://alt.qcri.org/semeval2014/task10/",
             "type": "STS",
             "category": "s2s",
-            "available_splits": ["test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "cosine_spearman",
             "min_score": 0,

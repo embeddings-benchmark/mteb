@@ -11,7 +11,7 @@ class STS12STS(AbsTaskSTS):
             "reference": "https://www.aclweb.org/anthology/S12-1051.pdf",
             "type": "STS",
             "category": "s2s",
-            "available_splits": ["train", "test"],
+            "eval_splits": ["train", "test"],
             "eval_langs": ["en"],
             "main_score": "cosine_spearman",
             "min_score": 0,

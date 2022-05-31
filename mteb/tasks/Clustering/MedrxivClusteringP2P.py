@@ -11,7 +11,7 @@ class MedrxivClusteringP2P(AbsTaskClustering):
             "reference": "https://api.biorxiv.org/",
             "type": "Clustering",
             "category": "p2p",
-            "available_splits": ["test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "v_measure",
         }

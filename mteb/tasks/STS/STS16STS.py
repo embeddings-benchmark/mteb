@@ -11,7 +11,7 @@ class STS16STS(AbsTaskSTS):
             "reference": "http://alt.qcri.org/semeval2016/task1/",
             "type": "STS",
             "category": "s2s",
-            "available_splits": ["test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "cosine_spearman",
             "min_score": 0,

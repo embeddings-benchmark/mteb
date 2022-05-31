@@ -11,7 +11,7 @@ class AskUbuntuDupQuestions(AbsTaskReranking):
             "reference": "https://github.com/taolei87/askubuntu",
             "type": "Reranking",
             "category": "s2s",
-            "available_splits": ["test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "map",
         }

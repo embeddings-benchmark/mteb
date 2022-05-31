@@ -11,7 +11,7 @@ class STS13STS(AbsTaskSTS):
             "reference": "https://www.aclweb.org/anthology/S13-1004/",
             "type": "STS",
             "category": "s2s",
-            "available_splits": ["test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "cosine_spearman",
             "min_score": 0,

@@ -11,7 +11,7 @@ class StackExchangeClustering(AbsTaskClustering):
             "reference": "https://arxiv.org/abs/2104.07081",
             "type": "Clustering",
             "category": "s2s",
-            "available_splits": ["validation", "test"],
+            "eval_splits": ["validation", "test"],
             "eval_langs": ["en"],
             "main_score": "v_measure",
         }
