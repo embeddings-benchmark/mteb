@@ -12,6 +12,6 @@ class StackOverflowDupQuestions(AbsTaskReranking):
             "type": "Reranking",
             "category": "s2s",
             "available_splits": ["train", "test", "validation"],
-            "available_langs": ["en"],
+            "eval_langs": ["en"],
             "main_score": "map",
         }

@@ -12,6 +12,6 @@ class AmazonPolarityClassification(AbsTaskClassification):
             "category": "s2s",
             "type": "Classification",
             "available_splits": ["train", "test"],
-            "available_langs": ["en"],
+            "eval_langs": ["en"],
             "main_score": "accuracy",
         }

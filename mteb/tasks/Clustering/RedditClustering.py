@@ -12,6 +12,6 @@ class RedditClustering(AbsTaskClustering):
             "type": "Clustering",
             "category": "s2s",
             "available_splits": ["test", "validation"],
-            "available_langs": ["en"],
+            "eval_langs": ["en"],
             "main_score": "v_measure",
         }

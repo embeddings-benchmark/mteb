@@ -14,6 +14,6 @@ class BUCCBitextMining(AbsTaskBitextMining, CrosslingualTask):
             "type": "BitextMining",
             "category": "s2s",
             "available_splits": ["test"],
-            "available_langs": _LANGUAGES,
+            "eval_langs": _LANGUAGES,
             "main_score": "error",
         }

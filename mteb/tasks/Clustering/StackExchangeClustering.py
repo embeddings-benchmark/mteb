@@ -12,6 +12,6 @@ class StackExchangeClustering(AbsTaskClustering):
             "type": "Clustering",
             "category": "s2s",
             "available_splits": ["validation", "test"],
-            "available_langs": ["en"],
+            "eval_langs": ["en"],
             "main_score": "v_measure",
         }

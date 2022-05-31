@@ -12,7 +12,7 @@ class STS13STS(AbsTaskSTS):
             "type": "STS",
             "category": "s2s",
             "available_splits": ["test"],
-            "available_langs": ["en"],
+            "eval_langs": ["en"],
             "main_score": "cosine_spearman",
             "min_score": 0,
             "max_score": 5,

@@ -14,6 +14,6 @@ class MTOPDomainClassification(MultilingualTask, AbsTaskClassification):
             "category": "s2s",
             "type": "Classification",
             "available_splits": ["train", "validation", "test"],
-            "available_langs": _LANGUAGES,
+            "eval_langs": _LANGUAGES,
             "main_score": "accuracy",
         }

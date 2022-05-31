@@ -12,6 +12,6 @@ class MindSmallReranking(AbsTaskReranking):
             "type": "Reranking",
             "category": "s2s",
             "available_splits": ["train", "validation"],
-            "available_langs": ["en"],
+            "eval_langs": ["en"],
             "main_score": "mrr",
         }

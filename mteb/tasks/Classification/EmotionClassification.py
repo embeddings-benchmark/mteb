@@ -12,7 +12,7 @@ class EmotionClassification(AbsTaskClassification):
             "category": "s2s",
             "type": "Classification",
             "available_splits": ["train", "validation", "test"],
-            "available_langs": ["en"],
+            "eval_langs": ["en"],
             "main_score": "accuracy",
             "n_splits": 10,
             "samples_per_label": 16,

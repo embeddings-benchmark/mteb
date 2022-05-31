@@ -12,6 +12,6 @@ class ImdbClassification(AbsTaskClassification):
             "category": "p2p",
             "type": "Classification",
             "available_splits": ["train", "test"],
-            "available_langs": ["en"],
+            "eval_langs": ["en"],
             "main_score": "accuracy",
         }

@@ -12,6 +12,6 @@ class TwitterURLCorpusBC(AbsTaskBinaryClassification):
             "category": "s2s",
             "type": "BinaryClassification",
             "available_splits": ["test"],
-            "available_langs": ["en"],
+            "eval_langs": ["en"],
             "main_score": "ap",
         }

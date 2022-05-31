@@ -31,7 +31,7 @@ class AbsTaskSTS(AbsTask):
 
         if self.is_crosslingual:
             scores = {}
-            for lang in self.description["available_langs"]:
+            for lang in self.description["eval_langs"]:
                 data_split = self.dataset[lang][split]
                 scores[lang] = self._evaluate_split(model, data_split)
         else:
