@@ -1,17 +1,6 @@
 from ...abstasks import AbsTaskSTS, CrosslingualTask
 
-
-_LANGUAGES_TRAIN = {
-    "en": "en",
-    "de": "de",
-    "es": "es",
-    "pl": "pl",
-    "tr": "tr",
-    "fr": "fr",
-    "ar": "ar",
-    "de-en": "de-en",
-}
-_LANGUAGES_TEST = {
+_LANGUAGES = {
     "en": "en",
     "de": "de",
     "es": "es",
@@ -31,7 +20,6 @@ _LANGUAGES_TEST = {
     "de-pl": "de-pl",
     "fr-pl": "fr-pl",
 }
-_LANGUAGES = {**_LANGUAGES_TRAIN, **_LANGUAGES_TEST}
 
 
 class STS22CrosslingualSTS(AbsTaskSTS, CrosslingualTask):
@@ -44,7 +32,7 @@ class STS22CrosslingualSTS(AbsTaskSTS, CrosslingualTask):
             "reference": "https://competitions.codalab.org/competitions/33835",
             "type": "STS",
             "category": "s2s",
-            "available_splits": ["train", "test"],
+            "available_splits": ["test"],
             "available_langs": _LANGUAGES,
             "main_score": "cosine_spearman",
             "min_score": 0,
