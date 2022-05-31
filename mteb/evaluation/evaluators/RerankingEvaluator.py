@@ -26,7 +26,7 @@ class RerankingEvaluator(Evaluator):
         similarity_fct=cos_sim,
         batch_size: int = 512,
         use_batched_encoding: bool = True,
-        limit: int = None,
+        limit: int = 10,
     ):
         if limit:
             samples = samples.train_test_split(limit)["test"]
