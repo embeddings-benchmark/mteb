@@ -11,7 +11,7 @@ class MindSmallReranking(AbsTaskReranking):
             "reference": "https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf",
             "type": "Reranking",
             "category": "s2s",
-            "eval_splits": ["train", "validation"],
+            "eval_splits": ["validation"],
             "eval_langs": ["en"],
-            "main_score": "mrr",
+            "main_score": "map",
         }
