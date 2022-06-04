@@ -145,6 +145,16 @@ class RetrievalEvaluator(Evaluator):
         return scores
 
     def _compute_metrics(self, queries_result_list: List[object]):
+        """
+        Compute metrics for a list of queries
+
+        Args:
+            queries_result_list (`List[List[Dict]]`): List of lists of dictionaries with keys "corpus_id" and "score"
+
+        Returns:
+            `Dict[str, Dict[str, float]]`: Dictionary with keys "mrr@k", "ndcg@k", "accuracy@k", "precision_recall@k", "map@k"
+                which values are dictionaries with scores for different k values
+        """
         # Init score computation values
         num_hits_at_k = {k: 0 for k in self.accuracy_at_k}
         precisions_at_k = {k: [] for k in self.precision_recall_at_k}
