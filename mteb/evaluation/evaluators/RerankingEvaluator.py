@@ -26,7 +26,7 @@ class RerankingEvaluator(Evaluator):
         similarity_fct=cos_sim,
         batch_size: int = 512,
         use_batched_encoding: bool = True,
-        limit: int = 10,
+        limit: int = None,
     ):
         if limit:
             samples = samples.train_test_split(limit)["test"]
@@ -100,23 +100,11 @@ class RerankingEvaluator(Evaluator):
             if num_pos == 0 or num_neg == 0:
                 continue
 
-            pred_scores = self.similarity_fct(query_emb, docs_emb)
-            if len(pred_scores.shape) > 1:
-                pred_scores = torch.amax(pred_scores, dim=0)
-
-            pred_scores_argsort = torch.argsort(-pred_scores)  # Sort in decreasing order
-
-            # Compute MRR score
             is_relevant = [True] * num_pos + [False] * num_neg
-            mrr_score = 0
-            for rank, index in enumerate(pred_scores_argsort[0 : self.mrr_at_k]):
-                if is_relevant[index]:
-                    mrr_score = 1 / (rank + 1)
-                    break
-            all_mrr_scores.append(mrr_score)
 
-            # Compute AP
-            all_ap_scores.append(average_precision_score(is_relevant, pred_scores.cpu().tolist()))
+            scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
+            all_mrr_scores.append(scores["mrr"])
+            all_ap_scores.append(scores["ap"])
 
         mean_ap = np.mean(all_ap_scores)
         mean_mrr = np.mean(all_mrr_scores)
@@ -147,24 +135,76 @@ class RerankingEvaluator(Evaluator):
             query_emb = model.encode([query], convert_to_tensor=True, batch_size=self.batch_size)
             docs_emb = model.encode(docs, convert_to_tensor=True, batch_size=self.batch_size)
 
-            pred_scores = self.similarity_fct(query_emb, docs_emb)
-            if len(pred_scores.shape) > 1:
-                pred_scores = pred_scores[0]
-
-            pred_scores_argsort = torch.argsort(-pred_scores)  # Sort in decreasing order
-
-            # Compute MRR score
-            mrr_score = 0
-            for rank, index in enumerate(pred_scores_argsort[0 : self.mrr_at_k]):
-                if is_relevant[index]:
-                    mrr_score = 1 / (rank + 1)
-                    break
-            all_mrr_scores.append(mrr_score)
-
-            # Compute AP
-            all_ap_scores.append(average_precision_score(is_relevant, pred_scores.cpu().tolist()))
+            scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
+            all_mrr_scores.append(scores["mrr"])
+            all_ap_scores.append(scores["ap"])
 
         mean_ap = np.mean(all_ap_scores)
         mean_mrr = np.mean(all_mrr_scores)
 
         return {"map": mean_ap, "mrr": mean_mrr}
+
+    def _compute_metrics_instance(self, query_emb, docs_emb, is_relevant):
+        """
+        Computes metrics for a single instance = (query, positives, negatives)
+
+        Args:
+            query_emb (`torch.Tensor` of shape `(num_queries, hidden_size)`): Query embedding
+                if `num_queries` > 0: we take the closest document to any of the queries
+            docs_emb (`torch.Tensor` of shape `(num_pos+num_neg, hidden_size)`): Candidates documents embeddings
+            is_relevant (`List[bool]` of length `num_pos+num_neg`): True if the document is relevant
+
+        Returns:
+            scores (`Dict[str, float]`):
+                - `mrr`: Mean Reciprocal Rank @ `self.mrr_at_k`
+                - `ap`: Average Precision
+        """
+
+        pred_scores = self.similarity_fct(query_emb, docs_emb)
+        if len(pred_scores.shape) > 1:
+            pred_scores = torch.amax(pred_scores, dim=0)
+
+        pred_scores_argsort = torch.argsort(-pred_scores)  # Sort in decreasing order
+
+        mrr = self.mrr_at_k_score(is_relevant, pred_scores_argsort, self.mrr_at_k)
+        ap = self.ap_score(is_relevant, pred_scores.cpu().tolist())
+        return {"mrr": mrr, "ap": ap}
+
+    @staticmethod
+    def mrr_at_k_score(is_relevant, pred_ranking, k):
+        """
+        Computes MRR@k score
+
+        Args:
+            is_relevant (`List[bool]` of length `num_pos+num_neg`): True if the document is relevant
+            pred_ranking (`List[int]` of length `num_pos+num_neg`): Indices of the documents sorted in decreasing order
+                of the similarity score
+
+        Returns:
+            mrr_score (`float`): MRR@k score
+        """
+        mrr_score = 0
+        for rank, index in enumerate(pred_ranking[:k]):
+            if is_relevant[index]:
+                mrr_score = 1 / (rank + 1)
+                break
+
+        return mrr_score
+
+    @staticmethod
+    def ap_score(is_relevant, pred_scores):
+        """
+        Computes AP score
+
+        Args:
+            is_relevant (`List[bool]` of length `num_pos+num_neg`): True if the document is relevant
+            pred_scores (`List[float]` of length `num_pos+num_neg`): Predicted similarity scores
+
+        Returns:
+            ap_score (`float`): AP score
+        """
+        # preds = np.array(is_relevant)[pred_scores_argsort]
+        # precision_at_k = np.mean(preds[:k])
+        # ap = np.mean([np.mean(preds[: k + 1]) for k in range(len(preds)) if preds[k]])
+        ap = average_precision_score(is_relevant, pred_scores)
+        return ap
