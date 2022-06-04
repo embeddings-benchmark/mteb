@@ -23,7 +23,6 @@ class TestRetrievalEvaluator:
             precision_recall_at_k=[],
             map_at_k=[],
         )
-        print("HHAHAHAHAHA")
 
     def test_accuracy_at_k(self):
         queries_result_list = [
