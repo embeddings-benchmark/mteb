@@ -16,14 +16,14 @@ class AbsTaskPairClassification(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def evaluate(self, model, split="test"):
+    def evaluate(self, model, split="test", **kwargs):
         if not self.data_loaded:
             self.load_data()
 
         data_split = self.dataset[split][0]
 
         logging.getLogger("sentence_transformers.evaluation.PairClassificationEvaluator").setLevel(logging.WARN)
-        evaluator = PairClassificationEvaluator(data_split["sent1"], data_split["sent2"], data_split["labels"])
+        evaluator = PairClassificationEvaluator(data_split["sent1"], data_split["sent2"], data_split["labels"], **kwargs)
         scores = evaluator.compute_metrics(model)
 
         # Compute max

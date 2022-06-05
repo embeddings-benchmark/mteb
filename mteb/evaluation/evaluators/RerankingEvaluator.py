@@ -27,6 +27,7 @@ class RerankingEvaluator(Evaluator):
         batch_size: int = 512,
         use_batched_encoding: bool = True,
         limit: int = None,
+        **kwargs,
     ):
         if limit:
             samples = samples.train_test_split(limit)["test"]

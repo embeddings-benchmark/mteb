@@ -17,7 +17,7 @@ class AbsTaskRetrieval(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def evaluate(self, model, split="test"):
+    def evaluate(self, model, split="test", **kwargs):
         if not self.data_loaded:
             self.load_data()
 
@@ -33,6 +33,6 @@ class AbsTaskRetrieval(AbsTask):
         for doc_id in relevant_docs:
             relevant_docs[doc_id] = set(relevant_docs[doc_id])
 
-        evaluator = RetrievalEvaluator(queries, corpus, relevant_docs)
+        evaluator = RetrievalEvaluator(queries, corpus, relevant_docs, **kwargs)
         scores = evaluator(model)
         return scores

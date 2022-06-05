@@ -25,7 +25,7 @@ class AbsTaskSTS(AbsTask):
     def max_score(self):
         return self.description["max_score"]
 
-    def evaluate(self, model, split):
+    def evaluate(self, model, split, **kwargs):
         if not self.data_loaded:
             self.load_data()
 
@@ -33,16 +33,16 @@ class AbsTaskSTS(AbsTask):
             scores = {}
             for lang in self.description["eval_langs"]:
                 data_split = self.dataset[lang][split]
-                scores[lang] = self._evaluate_split(model, data_split)
+                scores[lang] = self._evaluate_split(model, data_split, **kwargs)
         else:
             data_split = self.dataset[split]
-            scores = self._evaluate_split(model, data_split)
+            scores = self._evaluate_split(model, data_split, **kwargs)
 
         return scores
 
-    def _evaluate_split(self, model, data_split):
+    def _evaluate_split(self, model, data_split, **kwargs):
         normalize = lambda x: (x - self.min_score) / (self.max_score - self.min_score)
         normalized_scores = list(map(normalize, data_split["score"]))
-        evaluator = STSEvaluator(data_split["sentence1"], data_split["sentence2"], normalized_scores)
+        evaluator = STSEvaluator(data_split["sentence1"], data_split["sentence2"], normalized_scores, **kwargs)
         metrics = evaluator(model)
         return metrics

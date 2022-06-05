@@ -25,7 +25,7 @@ class PairClassificationEvaluator(Evaluator):
     :param write_csv: Write results to a CSV file
     """
 
-    def __init__(self, sentences1, sentences2, labels, batch_size=32, show_progress_bar=False, limit=None):
+    def __init__(self, sentences1, sentences2, labels, batch_size=32, show_progress_bar=False, limit=None, **kwargs):
         if limit:
             sentences1 = sentences1[:limit]
             sentences2 = sentences2[:limit]

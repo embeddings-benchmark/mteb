@@ -9,7 +9,7 @@ from scipy.stats import pearsonr, spearmanr
 
 
 class STSEvaluator(Evaluator):
-    def __init__(self, sentences1, sentences2, gold_scores, limit=None):
+    def __init__(self, sentences1, sentences2, gold_scores, batch_size=64, limit=None, **kwargs):
         if limit is not None:
             sentences1 = sentences1[:limit]
             sentences2 = sentences2[:limit]
@@ -17,10 +17,12 @@ class STSEvaluator(Evaluator):
         self.sentences1 = sentences1
         self.sentences2 = sentences2
         self.gold_scores = gold_scores
+        self.batch_size = batch_size
+
 
     def __call__(self, model):
-        embeddings1 = np.asarray(model.encode(self.sentences1))
-        embeddings2 = np.asarray(model.encode(self.sentences2))
+        embeddings1 = np.asarray(model.encode(self.sentences1, batch_size=self.batch_size))
+        embeddings2 = np.asarray(model.encode(self.sentences2, batch_size=self.batch_size))
 
         cosine_scores = 1 - (paired_cosine_distances(embeddings1, embeddings2))
         manhattan_distances = -paired_manhattan_distances(embeddings1, embeddings2)

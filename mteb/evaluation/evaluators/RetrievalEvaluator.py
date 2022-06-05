@@ -32,7 +32,7 @@ class RetrievalEvaluator(Evaluator):
             "dot_score": dot_score,
         },  # Score function, higher=more similar
         main_score_function: str = None,
-        limit: int = None,
+        limit: int = None, **kwargs
     ):
 
         self.queries_ids = []
