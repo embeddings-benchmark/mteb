@@ -1,0 +1,7 @@
+{
+    "task_classname": "{{cookiecutter.task_classname}}",
+    "name": "{{cookiecutter.name}}",
+    "hf_hub_name": "{{cookiecutter.hf_hub_name}}",
+    "category": "{{cookiecutter.category}}",
+    "type": "{{cookiecutter.type}}"
+}
