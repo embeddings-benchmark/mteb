@@ -9,7 +9,11 @@ from scipy.stats import pearsonr, spearmanr
 
 
 class STSEvaluator(Evaluator):
-    def __init__(self, sentences1, sentences2, gold_scores):
+    def __init__(self, sentences1, sentences2, gold_scores, limit=None):
+        if limit is not None:
+            sentences1 = sentences1[:limit]
+            sentences2 = sentences2[:limit]
+            gold_scores = gold_scores[:limit]
         self.sentences1 = sentences1
         self.sentences2 = sentences2
         self.gold_scores = gold_scores

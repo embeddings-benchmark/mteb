@@ -7,7 +7,7 @@ from .Evaluator import Evaluator
 
 
 class BitextMiningEvaluator(Evaluator):
-    def __init__(self, sentences1, sentences2, gold, batch_size=32):
+    def __init__(self, sentences1, sentences2, gold, batch_size=32, limit=None):
         self.gold = gold
         self.sentences1 = [sentences1[i] for (i, j) in self.gold]
         self.sentences2 = sentences2
@@ -37,11 +37,11 @@ class BitextMiningEvaluator(Evaluator):
             j = x[0]["corpus_id"]
             labels.append(j)
             predictions.append(self.gold[i][1])
-        
+
         scores = {
-            "precision": precision_score(labels, predictions, average='weighted'),
-            "recall": recall_score(labels, predictions, average='weighted'),
-            "f1": f1_score(labels, predictions, average='weighted'),
+            "precision": precision_score(labels, predictions, average="weighted"),
+            "recall": recall_score(labels, predictions, average="weighted"),
+            "f1": f1_score(labels, predictions, average="weighted"),
             "accuracy": accuracy_score(labels, predictions),
         }
         return scores

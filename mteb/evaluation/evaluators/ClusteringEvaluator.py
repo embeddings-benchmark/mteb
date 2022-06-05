@@ -6,7 +6,10 @@ import sklearn.cluster
 
 
 class ClusteringEvaluator(Evaluator):
-    def __init__(self, sentences, labels, batch_size=500):
+    def __init__(self, sentences, labels, batch_size=500, limit=None):
+        if limit is not None:
+            sentences = sentences[:limit]
+            labels = labels[:limit]
         self.sentences = sentences
         self.labels = labels
 
