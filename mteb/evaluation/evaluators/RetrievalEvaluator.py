@@ -32,12 +32,15 @@ class RetrievalEvaluator(Evaluator):
             "dot_score": dot_score,
         },  # Score function, higher=more similar
         main_score_function: str = None,
+        limit: int = None,
     ):
 
         self.queries_ids = []
         for qid in queries:
             if qid in relevant_docs and len(relevant_docs[qid]) > 0:
                 self.queries_ids.append(qid)
+                if len(self.queries_ids) >= limit:
+                    break
 
         self.queries = [queries[qid] for qid in self.queries_ids]
 

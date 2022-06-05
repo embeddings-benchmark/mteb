@@ -25,11 +25,16 @@ class PairClassificationEvaluator(Evaluator):
     :param write_csv: Write results to a CSV file
     """
 
-    def __init__(self, sentences1, sentences2, labels, batch_size=32, show_progress_bar=False):
+    def __init__(self, sentences1, sentences2, labels, batch_size=32, show_progress_bar=False, limit=None):
+        if limit:
+            sentences1 = sentences1[:limit]
+            sentences2 = sentences2[:limit]
+            labels = labels[:limit]
         self.sentences1 = sentences1
         self.sentences2 = sentences2
         self.labels = labels
         self.batch_size = batch_size
+        self.show_progress_bar = show_progress_bar
 
         assert len(self.sentences1) == len(self.sentences2)
         assert len(self.sentences1) == len(self.labels)
@@ -72,21 +77,40 @@ class PairClassificationEvaluator(Evaluator):
             ["euclidean", "Euclidean-Distance", euclidean_distances, False],
             ["dot", "Dot-Product", dot_scores, True],
         ]:
-            acc, acc_threshold = self.find_best_acc_and_threshold(scores, labels, reverse)
-            f1, precision, recall, f1_threshold = self.find_best_f1_and_threshold(scores, labels, reverse)
-            ap = average_precision_score(labels, scores * (1 if reverse else -1))
-
-            output_scores[short_name] = {
-                "accuracy": acc,
-                "accuracy_threshold": acc_threshold,
-                "f1": f1,
-                "f1_threshold": f1_threshold,
-                "precision": precision,
-                "recall": recall,
-                "ap": ap,
-            }
+            output_scores[short_name] = self._compute_metrics(scores, labels, reverse)
 
         return output_scores
+
+    @staticmethod
+    def _compute_metrics(scores, labels, high_score_more_similar):
+        """
+        Compute the metrics for the given scores and labels.
+
+        Args:
+            scores (`np.ndarray` of shape (n_pairs, )): The similarity/dissimilarity scores for the pairs.
+            labels (`np.ndarray` of shape (n_pairs, )): The labels for the pairs.
+            high_score_more_similar (`bool`): If true, then the higher the score, the more similar the pairs are.
+
+        Returns:
+            `dict`: The metrics for the given scores and labels.
+        """
+        acc, acc_threshold = PairClassificationEvaluator.find_best_acc_and_threshold(
+            scores, labels, high_score_more_similar
+        )
+        f1, precision, recall, f1_threshold = PairClassificationEvaluator.find_best_f1_and_threshold(
+            scores, labels, high_score_more_similar
+        )
+        ap = PairClassificationEvaluator.ap_score(scores, labels, high_score_more_similar)
+
+        return {
+            "accuracy": acc,
+            "accuracy_threshold": acc_threshold,
+            "f1": f1,
+            "f1_threshold": f1_threshold,
+            "precision": precision,
+            "recall": recall,
+            "ap": ap,
+        }
 
     @staticmethod
     def find_best_acc_and_threshold(scores, labels, high_score_more_similar: bool):
@@ -99,7 +123,7 @@ class PairClassificationEvaluator(Evaluator):
         best_threshold = -1
 
         positive_so_far = 0
-        remaining_negatives = sum(labels == 0)
+        remaining_negatives = sum(np.array(labels) == 0)
 
         for i in range(len(rows) - 1):
             score, label = rows[i]
@@ -150,3 +174,7 @@ class PairClassificationEvaluator(Evaluator):
                     threshold = (rows[i][0] + rows[i + 1][0]) / 2
 
         return best_f1, best_precision, best_recall, threshold
+
+    @staticmethod
+    def ap_score(scores, labels, high_score_more_similar: bool):
+        return average_precision_score(labels, scores * (1 if high_score_more_similar else -1))
