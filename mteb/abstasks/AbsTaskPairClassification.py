@@ -1,9 +1,9 @@
 from .AbsTask import AbsTask
 import datasets
-from sentence_transformers import evaluation
 import numpy as np
 import logging
 from collections import defaultdict
+from ..evaluation.evaluators import PairClassificationEvaluator
 
 
 class AbsTaskPairClassification(AbsTask):
@@ -23,10 +23,8 @@ class AbsTaskPairClassification(AbsTask):
         data_split = self.dataset[split][0]
 
         logging.getLogger("sentence_transformers.evaluation.PairClassificationEvaluator").setLevel(logging.WARN)
-        evaluator = evaluation.BinaryClassificationEvaluator(
-            data_split["sent1"], data_split["sent2"], data_split["labels"]
-        )
-        scores = evaluator.compute_metrices(model)
+        evaluator = PairClassificationEvaluator(data_split["sent1"], data_split["sent2"], data_split["labels"])
+        scores = evaluator.compute_metrics(model)
 
         # Compute max
         max_scores = defaultdict(list)
