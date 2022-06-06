@@ -11,7 +11,7 @@ class STSBenchmarkSTS(AbsTaskSTS):
             "reference": "http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark",
             "type": "STS",
             "category": "s2s",
-            "eval_splits": ["train", "validation", "test"],
+            "eval_splits": ["validation", "test"],
             "eval_langs": ["en"],
             "main_score": "cosine_spearman",
             "min_score": 0,

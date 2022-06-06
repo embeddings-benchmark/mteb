@@ -11,7 +11,7 @@ class TweetSentimentExtractionClassification(AbsTaskClassification):
             "reference": "https://www.kaggle.com/competitions/tweet-sentiment-extraction/overview",
             "category": "s2s",
             "type": "Classification",
-            "eval_splits": ["train", "test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "accuracy",
             "n_splits": 10,

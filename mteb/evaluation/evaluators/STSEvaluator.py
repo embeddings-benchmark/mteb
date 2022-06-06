@@ -9,14 +9,19 @@ from scipy.stats import pearsonr, spearmanr
 
 
 class STSEvaluator(Evaluator):
-    def __init__(self, sentences1, sentences2, gold_scores):
+    def __init__(self, sentences1, sentences2, gold_scores, batch_size=64, limit=None, **kwargs):
+        if limit is not None:
+            sentences1 = sentences1[:limit]
+            sentences2 = sentences2[:limit]
+            gold_scores = gold_scores[:limit]
         self.sentences1 = sentences1
         self.sentences2 = sentences2
         self.gold_scores = gold_scores
+        self.batch_size = batch_size
 
     def __call__(self, model):
-        embeddings1 = np.asarray(model.encode(self.sentences1))
-        embeddings2 = np.asarray(model.encode(self.sentences2))
+        embeddings1 = np.asarray(model.encode(self.sentences1, batch_size=self.batch_size))
+        embeddings2 = np.asarray(model.encode(self.sentences2, batch_size=self.batch_size))
 
         cosine_scores = 1 - (paired_cosine_distances(embeddings1, embeddings2))
         manhattan_distances = -paired_manhattan_distances(embeddings1, embeddings2)
@@ -32,10 +37,16 @@ class STSEvaluator(Evaluator):
         euclidean_spearman, _ = spearmanr(self.gold_scores, euclidean_distances)
 
         return {
-            "cosine_pearson": cosine_pearson,
-            "cosine_spearman": cosine_spearman,
-            "manhatten_pearson": manhatten_pearson,
-            "manhatten_spearman": manhatten_spearman,
-            "euclidean_pearson": euclidean_pearson,
-            "euclidean_spearman": euclidean_spearman,
+            "cos_sim": {
+                "pearson": cosine_pearson,
+                "spearman": cosine_spearman,
+            },
+            "manhattan": {
+                "pearson": manhatten_pearson,
+                "spearman": manhatten_spearman,
+            },
+            "euclidean": {
+                "pearson": euclidean_pearson,
+                "spearman": euclidean_spearman,
+            },
         }

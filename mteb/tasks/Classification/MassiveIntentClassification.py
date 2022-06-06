@@ -65,7 +65,7 @@ class MassiveIntentClassification(MultilingualTask, AbsTaskClassification):
             "reference": "https://arxiv.org/abs/2204.08582#:~:text=MASSIVE%20contains%201M%20realistic%2C%20parallel,diverse%20languages%20from%2029%20genera.",
             "category": "s2s",
             "type": "Classification",
-            "eval_splits": ["train", "validation", "test"],
+            "eval_splits": ["validation", "test"],
             "eval_langs": _LANGUAGES,
             "main_score": "accuracy",
         }

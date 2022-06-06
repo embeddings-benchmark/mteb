@@ -11,7 +11,7 @@ class StackOverflowDupQuestions(AbsTaskReranking):
             "reference": "https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf",
             "type": "Reranking",
             "category": "s2s",
-            "eval_splits": ["train", "test", "validation"],
+            "eval_splits": ["test", "validation"],
             "eval_langs": ["en"],
             "main_score": "map",
         }

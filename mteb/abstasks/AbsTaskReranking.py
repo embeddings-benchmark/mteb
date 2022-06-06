@@ -16,13 +16,13 @@ class AbsTaskReranking(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def evaluate(self, model, split="test"):
+    def evaluate(self, model, split="test", **kwargs):
         if not self.data_loaded:
             self.load_data()
 
         data_split = self.dataset[split]
 
-        evaluator = RerankingEvaluator(data_split)
+        evaluator = RerankingEvaluator(data_split, **kwargs)
         scores = evaluator(model)
 
         return dict(scores)

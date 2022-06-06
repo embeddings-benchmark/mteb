@@ -102,7 +102,7 @@ class MTEB:
             print(f"\n# Loading dataset for {task.description['name']}")
             task.load_data()
 
-    def run(self, model, verbosity=1.0, output_folder="results/result"):
+    def run(self, model, verbosity=1.0, output_folder="results/result", **kwargs):
         """
         Run the evaluation pipeline on the selected tasks.
 
@@ -135,7 +135,7 @@ class MTEB:
                 continue
             task_results = {}
             for split in task.description["eval_splits"]:
-                results = task.evaluate(model, split)
+                results = task.evaluate(model, split, **kwargs)
                 task_results[split] = results
                 if verbosity >= 1:
                     print(f"Scores: {results}")

@@ -29,15 +29,18 @@ class RetrievalEvaluator(Evaluator):
         name: str = "",
         score_functions: List[Callable[[torch.Tensor, torch.Tensor], torch.Tensor]] = {
             "cos_sim": cos_sim,
-            "dot_score": dot_score,
+            "dot": dot_score,
         },  # Score function, higher=more similar
         main_score_function: str = None,
+        limit: int = None, **kwargs
     ):
 
         self.queries_ids = []
         for qid in queries:
             if qid in relevant_docs and len(relevant_docs[qid]) > 0:
                 self.queries_ids.append(qid)
+                if limit and len(self.queries_ids) >= limit:
+                    break
 
         self.queries = [queries[qid] for qid in self.queries_ids]
 
@@ -64,10 +67,10 @@ class RetrievalEvaluator(Evaluator):
 
         if self.main_score_function is None:
             scores["main_score"] = max(
-                [scores[name]["map@k"][max(self.map_at_k)] for name in self.score_function_names]
+                [scores[name]["map_at_" + str(max(self.map_at_k))] for name in self.score_function_names]
             )
         else:
-            scores["main_score"] = scores[self.main_score_function]["map@k"][max(self.map_at_k)]
+            scores["main_score"] = scores[self.main_score_function]["map_at_" + str(max(self.map_at_k))]
         return scores
 
     def compute_metrics(self, model, corpus_model=None, corpus_embeddings: torch.Tensor = None) -> Dict[str, float]:
@@ -156,12 +159,12 @@ class RetrievalEvaluator(Evaluator):
                 which values are dictionaries with scores for different k values
         """
         # Init score computation values
-        num_hits_at_k = {k: 0 for k in self.accuracy_at_k}
-        precisions_at_k = {k: [] for k in self.precision_recall_at_k}
-        recall_at_k = {k: [] for k in self.precision_recall_at_k}
-        MRR = {k: 0 for k in self.mrr_at_k}
-        ndcg = {k: [] for k in self.ndcg_at_k}
-        AveP_at_k = {k: [] for k in self.map_at_k}
+        num_hits_at_k = {"accuracy_at_"+str(k): 0 for k in self.accuracy_at_k}
+        precisions_at_k = {"precision_at_"+str(k): [] for k in self.precision_recall_at_k}
+        recall_at_k = {"recall_at_"+str(k): [] for k in self.precision_recall_at_k}
+        MRR = {"mrr_at_"+str(k): 0 for k in self.mrr_at_k}
+        ndcg = {"ndcg_at_"+str(k): [] for k in self.ndcg_at_k}
+        AveP_at_k = {"map_at_"+str(k): [] for k in self.map_at_k}
 
         # Compute scores on results
         for query_itr in range(len(queries_result_list)):
@@ -175,7 +178,7 @@ class RetrievalEvaluator(Evaluator):
             for k_val in self.accuracy_at_k:
                 for hit in top_hits[0:k_val]:
                     if hit["corpus_id"] in query_relevant_docs:
-                        num_hits_at_k[k_val] += 1
+                        num_hits_at_k["accuracy_at_"+str(k_val)] += 1
                         break
 
             # Precision and Recall@k
@@ -185,14 +188,14 @@ class RetrievalEvaluator(Evaluator):
                     if hit["corpus_id"] in query_relevant_docs:
                         num_correct += 1
 
-                precisions_at_k[k_val].append(num_correct / k_val)
-                recall_at_k[k_val].append(num_correct / len(query_relevant_docs))
+                precisions_at_k["precision_at_"+str(k_val)].append(num_correct / k_val)
+                recall_at_k["recall_at_"+str(k_val)].append(num_correct / len(query_relevant_docs))
 
             # MRR@k
             for k_val in self.mrr_at_k:
                 for rank, hit in enumerate(top_hits[0:k_val]):
                     if hit["corpus_id"] in query_relevant_docs:
-                        MRR[k_val] += 1.0 / (rank + 1)
+                        MRR["mrr_at_"+str(k_val)] += 1.0 / (rank + 1)
                         break
 
             # NDCG@k
@@ -205,7 +208,7 @@ class RetrievalEvaluator(Evaluator):
                 ndcg_value = self.compute_dcg_at_k(predicted_relevance, k_val) / self.compute_dcg_at_k(
                     true_relevances, k_val
                 )
-                ndcg[k_val].append(ndcg_value)
+                ndcg["ndcg_at_"+str(k_val)].append(ndcg_value)
 
             # MAP@k
             for k_val in self.map_at_k:
@@ -218,7 +221,7 @@ class RetrievalEvaluator(Evaluator):
                         sum_precisions += num_correct / (rank + 1)
 
                 avg_precision = sum_precisions / min(k_val, len(query_relevant_docs))
-                AveP_at_k[k_val].append(avg_precision)
+                AveP_at_k["map_at_"+str(k_val)].append(avg_precision)
 
         # Compute averages
         for k in num_hits_at_k:
@@ -239,14 +242,7 @@ class RetrievalEvaluator(Evaluator):
         for k in AveP_at_k:
             AveP_at_k[k] = np.mean(AveP_at_k[k])
 
-        return {
-            "accuracy@k": num_hits_at_k,
-            "precision@k": precisions_at_k,
-            "recall@k": recall_at_k,
-            "ndcg@k": ndcg,
-            "mrr@k": MRR,
-            "map@k": AveP_at_k,
-        }
+        return {**num_hits_at_k, **precisions_at_k, **recall_at_k, **MRR, **ndcg, **AveP_at_k}
 
     @staticmethod
     def compute_dcg_at_k(relevances, k):

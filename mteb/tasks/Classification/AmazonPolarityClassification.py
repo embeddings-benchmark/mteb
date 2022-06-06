@@ -11,7 +11,7 @@ class AmazonPolarityClassification(AbsTaskClassification):
             "reference": "https://dl.acm.org/doi/10.1145/2507157.2507163",
             "category": "s2s",
             "type": "Classification",
-            "eval_splits": ["train", "test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "accuracy",
         }

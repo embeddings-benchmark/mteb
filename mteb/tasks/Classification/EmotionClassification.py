@@ -11,7 +11,7 @@ class EmotionClassification(AbsTaskClassification):
             "reference": "https://www.aclweb.org/anthology/D18-1404",
             "category": "s2s",
             "type": "Classification",
-            "eval_splits": ["train", "validation", "test"],
+            "eval_splits": ["validation", "test"],
             "eval_langs": ["en"],
             "main_score": "accuracy",
             "n_splits": 10,

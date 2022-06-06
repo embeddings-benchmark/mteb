@@ -34,7 +34,7 @@ class AbsTaskClassification(AbsTask):
         # kNN parameters
         self.k = k
 
-    def evaluate(self, model, eval_split="test", train_split="train"):
+    def evaluate(self, model, eval_split="test", train_split="train", **kwargs):
         if not self.data_loaded:
             self.load_data()
 
@@ -42,10 +42,10 @@ class AbsTaskClassification(AbsTask):
             scores = {}
             for lang in self.langs:
                 print(f"\nTask: {self.description['name']}, split: {eval_split}, language: {lang}. Running...")
-                scores[lang] = self._evaluate_monolingual(model, self.dataset[lang], eval_split, train_split)
+                scores[lang] = self._evaluate_monolingual(model, self.dataset[lang], eval_split, train_split, **kwargs)
         else:
             print(f"\nTask: {self.description['name']}, split: {eval_split}. Running...")
-            scores = self._evaluate_monolingual(model, self.dataset, eval_split, train_split)
+            scores = self._evaluate_monolingual(model, self.dataset, eval_split, train_split, **kwargs)
 
         if self.description["main_score"] in scores:
             scores["main_score"] = scores[self.description["main_score"]]
@@ -54,10 +54,11 @@ class AbsTaskClassification(AbsTask):
 
         return scores
 
-    def _evaluate_monolingual(self, model, dataset, eval_split="test", train_split="train"):
+    def _evaluate_monolingual(self, model, dataset, eval_split="test", train_split="train", **kwargs):
         train_split = dataset[train_split]
         eval_split = dataset[eval_split]
         params = {"k": self.k, "batch_size": self.batch_size, "seed": self.seed}
+        params.update(kwargs)
 
         logging.getLogger("sentence_transformers.evaluation.ClassificationEvaluator").setLevel(logging.WARN)
 

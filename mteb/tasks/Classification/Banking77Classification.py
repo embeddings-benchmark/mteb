@@ -11,7 +11,7 @@ class Banking77Classification(AbsTaskClassification):
             "reference": "https://arxiv.org/abs/2003.04807",
             "category": "s2s",
             "type": "Classification",
-            "eval_splits": ["train", "test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "accuracy",
         }
