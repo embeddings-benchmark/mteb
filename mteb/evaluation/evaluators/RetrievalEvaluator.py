@@ -39,7 +39,7 @@ class RetrievalEvaluator(Evaluator):
         for qid in queries:
             if qid in relevant_docs and len(relevant_docs[qid]) > 0:
                 self.queries_ids.append(qid)
-                if len(self.queries_ids) >= limit:
+                if limit and len(self.queries_ids) >= limit:
                     break
 
         self.queries = [queries[qid] for qid in self.queries_ids]
