@@ -13,7 +13,7 @@ class MTOPDomainClassification(MultilingualTask, AbsTaskClassification):
             "reference": "https://arxiv.org/pdf/2008.09335.pdf",
             "category": "s2s",
             "type": "Classification",
-            "eval_splits": ["train", "validation", "test"],
+            "eval_splits": ["validation", "test"],
             "eval_langs": _LANGUAGES,
             "main_score": "accuracy",
         }
