@@ -13,7 +13,7 @@ class ToxicConversationsClassification(AbsTaskClassification):
             "type": "Classification",
             "eval_splits": ["test"],
             "eval_langs": ["en"],
-            "main_score": "accuracy",
+            "main_score": "ap",
             "n_splits": 10,
             "samples_per_label": 32,
         }
