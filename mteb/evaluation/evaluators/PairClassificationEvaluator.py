@@ -72,7 +72,7 @@ class PairClassificationEvaluator(Evaluator):
         labels = np.asarray(self.labels)
         output_scores = {}
         for short_name, name, scores, reverse in [
-            ["cossim", "Cosine-Similarity", cosine_scores, True],
+            ["cos_sim", "Cosine-Similarity", cosine_scores, True],
             ["manhattan", "Manhattan-Distance", manhattan_distances, False],
             ["euclidean", "Euclidean-Distance", euclidean_distances, False],
             ["dot", "Dot-Product", dot_scores, True],

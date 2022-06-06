@@ -29,7 +29,7 @@ class RetrievalEvaluator(Evaluator):
         name: str = "",
         score_functions: List[Callable[[torch.Tensor, torch.Tensor], torch.Tensor]] = {
             "cos_sim": cos_sim,
-            "dot_score": dot_score,
+            "dot": dot_score,
         },  # Score function, higher=more similar
         main_score_function: str = None,
         limit: int = None, **kwargs
@@ -67,10 +67,10 @@ class RetrievalEvaluator(Evaluator):
 
         if self.main_score_function is None:
             scores["main_score"] = max(
-                [scores[name]["map@k"][max(self.map_at_k)] for name in self.score_function_names]
+                [scores[name]["map_at_" + str(max(self.map_at_k))] for name in self.score_function_names]
             )
         else:
-            scores["main_score"] = scores[self.main_score_function]["map@k"][max(self.map_at_k)]
+            scores["main_score"] = scores[self.main_score_function]["map_at_" + str(max(self.map_at_k))]
         return scores
 
     def compute_metrics(self, model, corpus_model=None, corpus_embeddings: torch.Tensor = None) -> Dict[str, float]:
