@@ -19,7 +19,6 @@ class STSEvaluator(Evaluator):
         self.gold_scores = gold_scores
         self.batch_size = batch_size
 
-
     def __call__(self, model):
         embeddings1 = np.asarray(model.encode(self.sentences1, batch_size=self.batch_size))
         embeddings2 = np.asarray(model.encode(self.sentences2, batch_size=self.batch_size))
@@ -38,10 +37,16 @@ class STSEvaluator(Evaluator):
         euclidean_spearman, _ = spearmanr(self.gold_scores, euclidean_distances)
 
         return {
-            "cosine_pearson": cosine_pearson,
-            "cosine_spearman": cosine_spearman,
-            "manhatten_pearson": manhatten_pearson,
-            "manhatten_spearman": manhatten_spearman,
-            "euclidean_pearson": euclidean_pearson,
-            "euclidean_spearman": euclidean_spearman,
+            "cos_sim": {
+                "pearson": cosine_pearson,
+                "spearman": cosine_spearman,
+            },
+            "manhattan": {
+                "pearson": manhatten_pearson,
+                "spearman": manhatten_spearman,
+            },
+            "euclidean": {
+                "pearson": euclidean_pearson,
+                "spearman": euclidean_spearman,
+            },
         }
