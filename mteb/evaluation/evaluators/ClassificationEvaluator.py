@@ -212,8 +212,12 @@ class logRegClassificationEvaluator(Evaluator):
         y_pred = clf.predict(X_test)
         accuracy = accuracy_score(self.y_test, y_pred)
         f1 = f1_score(self.y_test, y_pred, average="macro")
-        ap = average_precision_score(self.y_test, y_pred)
         scores["accuracy"] = accuracy
         scores["f1"] = f1
-        scores["ap"] = ap
+
+        # if binary classification
+        if len(np.unique(self.y_train)) == 2:
+            ap = average_precision_score(self.y_test, y_pred)
+            scores["ap"] = ap
+            
         return scores
