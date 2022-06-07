@@ -32,10 +32,10 @@ class TestRetrievalEvaluator:
         ]
         self.evaluator.accuracy_at_k = [1, 2, 3]
 
-        assert self.evaluator._compute_metrics(queries_result_list)["accuracy@k"] == {
-            1: pytest.approx(0.66666, TOL),
-            2: pytest.approx(0.66666, TOL),
-            3: pytest.approx(0.66666, TOL),
+        assert self.evaluator._compute_metrics(queries_result_list) == {
+            "accuracy_at_1": pytest.approx(0.66666, TOL),
+            "accuracy_at_2": pytest.approx(0.66666, TOL),
+            "accuracy_at_3": pytest.approx(0.66666, TOL),
         }
 
     def test_ndcg_at_k(self):
@@ -46,10 +46,10 @@ class TestRetrievalEvaluator:
         ]
         self.evaluator.ndcg_at_k = [1, 2, 3]
 
-        assert self.evaluator._compute_metrics(queries_result_list)["ndcg@k"] == {
-            1: pytest.approx(0.66666, TOL),
-            2: pytest.approx(0.53771, TOL),
-            3: pytest.approx(0.41154, TOL),
+        assert self.evaluator._compute_metrics(queries_result_list) == {
+            "ndcg_at_1": pytest.approx(0.66666, TOL),
+            "ndcg_at_2": pytest.approx(0.53771, TOL),
+            "ndcg_at_3": pytest.approx(0.41154, TOL),
         }
 
     def test_mrr_at_k(self):
@@ -60,10 +60,10 @@ class TestRetrievalEvaluator:
         ]
         self.evaluator.mrr_at_k = [1, 2, 3]
 
-        assert self.evaluator._compute_metrics(queries_result_list)["mrr@k"] == {
-            1: pytest.approx(0.66666, TOL),
-            2: pytest.approx(0.66666, TOL),
-            3: pytest.approx(0.66666, TOL),
+        assert self.evaluator._compute_metrics(queries_result_list) == {
+            "mrr_at_1": pytest.approx(0.66666, TOL),
+            "mrr_at_2": pytest.approx(0.66666, TOL),
+            "mrr_at_3": pytest.approx(0.66666, TOL),
         }
 
     def test_map_at_k(self):
@@ -74,36 +74,25 @@ class TestRetrievalEvaluator:
         ]
         self.evaluator.map_at_k = [1, 2, 3]
 
-        assert self.evaluator._compute_metrics(queries_result_list)["map@k"] == {
-            1: pytest.approx(0.66666, TOL),
-            2: pytest.approx(0.66666, TOL),
-            3: pytest.approx(0.66666, TOL),
+        assert self.evaluator._compute_metrics(queries_result_list) == {
+            "map_at_1": pytest.approx(0.66666, TOL),
+            "map_at_2": pytest.approx(0.5, TOL),
+            "map_at_3": pytest.approx(0.33333, TOL),
         }
 
-    def test_precision_at_k(self):
+    def test_precision_recall_at_k(self):
         queries_result_list = [
             [{"corpus_id": "0", "score": 0.9}, {"corpus_id": "1", "score": 0.7}],
             [{"corpus_id": "5", "score": 0.5}, {"corpus_id": "7", "score": 0.5}, {"corpus_id": "8", "score": 0.5}],
             [{"corpus_id": "4", "score": 0.9}],
         ]
-        self.evaluator.precision_at_k = [1, 2, 3]
+        self.evaluator.precision_recall_at_k = [1, 2, 3]
 
-        assert self.evaluator._compute_metrics(queries_result_list)["precision@k"] == {
-            1: pytest.approx(0.66666, TOL),
-            2: pytest.approx(0.66666, TOL),
-            3: pytest.approx(0.66666, TOL),
-        }
-
-    def test_recall_at_k(self):
-        queries_result_list = [
-            [{"corpus_id": "0", "score": 0.9}, {"corpus_id": "1", "score": 0.7}],
-            [{"corpus_id": "5", "score": 0.5}, {"corpus_id": "7", "score": 0.5}, {"corpus_id": "8", "score": 0.5}],
-            [{"corpus_id": "4", "score": 0.9}],
-        ]
-        self.evaluator.recall_at_k = [1, 2, 3]
-
-        assert self.evaluator._compute_metrics(queries_result_list)["recall@k"] == {
-            1: pytest.approx(0.66666, TOL),
-            2: pytest.approx(0.66666, TOL),
-            3: pytest.approx(0.66666, TOL),
+        assert self.evaluator._compute_metrics(queries_result_list) == {
+            "precision_at_1": pytest.approx(0.66666, TOL),
+            "precision_at_2": pytest.approx(0.5, TOL),
+            "precision_at_3": pytest.approx(0.33333, TOL),
+            "recall_at_1": pytest.approx(0.22222, TOL),
+            "recall_at_2": pytest.approx(0.33333, TOL),
+            "recall_at_3": pytest.approx(0.33333, TOL),
         }
