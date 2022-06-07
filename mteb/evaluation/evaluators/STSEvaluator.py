@@ -2,6 +2,9 @@ import numpy as np
 from sklearn.metrics.pairwise import paired_cosine_distances, paired_euclidean_distances, paired_manhattan_distances
 
 from scipy.stats import pearsonr, spearmanr
+import logging
+
+logger = logging.getLogger(__name__)
 
 from .Evaluator import Evaluator
 
@@ -18,9 +21,12 @@ class STSEvaluator(Evaluator):
         self.batch_size = batch_size
 
     def __call__(self, model):
+        logger.info(f"Encoding {len(self.sentences1)} sentences1...")
         embeddings1 = np.asarray(model.encode(self.sentences1, batch_size=self.batch_size))
+        logger.info(f"Encoding {len(self.sentences2)} sentences2...")
         embeddings2 = np.asarray(model.encode(self.sentences2, batch_size=self.batch_size))
 
+        logger.info("Evaluating...")
         cosine_scores = 1 - (paired_cosine_distances(embeddings1, embeddings2))
         manhattan_distances = -paired_manhattan_distances(embeddings1, embeddings2)
         euclidean_distances = -paired_euclidean_distances(embeddings1, embeddings2)

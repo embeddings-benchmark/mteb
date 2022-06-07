@@ -1,9 +1,12 @@
 import numpy as np
 import torch
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+import logging
 
 from .Evaluator import Evaluator
 from .utils import cos_sim
+
+logger = logging.getLogger(__name__)
 
 
 class BitextMiningEvaluator(Evaluator):
@@ -21,15 +24,18 @@ class BitextMiningEvaluator(Evaluator):
     def compute_metrics(self, model):
         # Compute embeddings
         sentences = list(set(self.sentences1 + self.sentences2))
+        logger.info(f"Encoding {len(sentences)} sentences...")
         embeddings = model.encode(sentences, batch_size=self.batch_size)
         emb_dict = {sent: emb for sent, emb in zip(sentences, embeddings)}
         embeddings1 = np.asarray([emb_dict[sent] for sent in self.sentences1])
         embeddings2 = np.asarray([emb_dict[sent] for sent in self.sentences2])
 
         # Find nearest neighbors
+        logger.info("Finding nearest neighbors...")
         nearest_neighbors = self._similarity_search(embeddings1, embeddings2, top_k=1)
 
         # Compute errors
+        logger.info("Computing metrics...")
         errors = 0
         labels = []
         predictions = []
