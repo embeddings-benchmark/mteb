@@ -124,20 +124,23 @@ class MTEB:
             datasets.logging.disable_progress_bar()
 
         # Create output folder
-        pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
+        if output_folder is not None:
+            pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
 
         # Run selected tasks
         print(f"\n\n## Evaluating {len(self.tasks)} tasks: {self.selected_tasks}")
         for task in self.tasks:
-            save_path = os.path.join(output_folder, f"{task.description['name']}{task.save_suffix}.json")
-            if os.path.exists(save_path):
-                print(f"WARNING: {task.description['name']} results already exists. Skipping.")
-                continue
+            if output_folder is not None:
+                save_path = os.path.join(output_folder, f"{task.description['name']}{task.save_suffix}.json")
+                if os.path.exists(save_path):
+                    print(f"WARNING: {task.description['name']} results already exists. Skipping.")
+                    continue
             task_results = {}
             for split in task.description["eval_splits"]:
                 results = task.evaluate(model, split, **kwargs)
                 task_results[split] = results
                 if verbosity >= 1:
                     print(f"Scores: {results}")
-            with open(save_path, "w") as f_out:
-                json.dump(task_results, f_out, indent=2, sort_keys=True)
+            if output_folder is not None:
+                with open(save_path, "w") as f_out:
+                    json.dump(task_results, f_out, indent=2, sort_keys=True)
