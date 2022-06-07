@@ -183,7 +183,7 @@ class logRegClassificationEvaluator(Evaluator):
         y_train,
         sentences_test,
         y_test,
-        max_iter=1000,
+        max_iter=100,
         batch_size=32,
         seed=42,
         limit=None,
