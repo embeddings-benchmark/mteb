@@ -36,13 +36,12 @@ class BitextMiningEvaluator(Evaluator):
 
         # Compute errors
         logger.info("Computing metrics...")
-        errors = 0
         labels = []
         predictions = []
         for i, x in enumerate(nearest_neighbors):
             j = x[0]["corpus_id"]
-            labels.append(j)
-            predictions.append(self.gold[i][1])
+            predictions.append(j)
+            labels.append(self.gold[i][1])
 
         scores = {
             "precision": precision_score(labels, predictions, average="weighted"),
