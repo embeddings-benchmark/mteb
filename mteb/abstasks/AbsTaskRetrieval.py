@@ -10,12 +10,12 @@ from beir.retrieval.evaluation import EvaluateRetrieval
 from beir.retrieval.search.dense import DenseRetrievalExactSearch as DRES
 
 
-"""
-BeIR requires to have an encode_queries and encode_corpus method.
-This class converts a MTEB model (with just an .encode method) into
-BeIR format model
-"""
 class BeIRModel():
+    """
+    BeIR requires to have an encode_queries and encode_corpus method.
+    This class converts a MTEB model (with just an .encode method) into
+    BeIR format model
+    """
     def __init__(self, model, **kwargs):
         self.model = model
     
