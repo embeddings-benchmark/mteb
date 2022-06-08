@@ -7,4 +7,5 @@ scipy
 sentence_transformers==2.2.0
 torch
 tqdm
+beir
 rich

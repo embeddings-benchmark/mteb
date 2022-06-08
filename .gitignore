@@ -4,6 +4,10 @@
 # Result folder
 results/
 
+# BeIR datasets folder
+
+datasets/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
