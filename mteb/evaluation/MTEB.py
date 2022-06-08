@@ -6,6 +6,7 @@ import json
 import logging
 import datasets
 from datetime import datetime
+from rich.console import Console
 
 
 class MTEB:
@@ -53,9 +54,39 @@ class MTEB:
     def available_task_categories(self):
         return set([x.description["category"] for x in self.tasks_cls])
 
-    @property
+    def display_tasks(self, task_list, name=None):
+        console = Console()
+        if name:
+            console.rule(f"[bold]{name}\n", style="grey15")
+        for task_type in self.available_task_types:
+            current_type_tasks = list(filter(lambda x: x.description["type"] == task_type, task_list))
+            if len(current_type_tasks) == 0:
+                continue
+            else:
+                console.print(f"[bold]{task_type}[/]")
+                for task in current_type_tasks:
+                    prefix = f"    - "
+                    name = f"{task.description['name']}"
+                    category = f", [italic grey39]{task.description['category']}[/]"
+                    multilingual = (
+                        f", [italic red]multilingual {len(task.description['eval_langs'])} langs[/]"
+                        if task.is_multilingual
+                        else ""
+                    )
+                    crosslingual = (
+                        f", [italic cyan]crosslingual {len(task.description['eval_langs'])} pairs[/]"
+                        if task.is_crosslingual
+                        else ""
+                    )
+                    beir = f", [italic yellow]beir[/]" if task.description.get("beir_name", False) else ""
+                    console.print(f"{prefix}{name}{beir}{category}{multilingual}{crosslingual}")
+                console.print("\n")
+
+    def mteb_tasks(self):
+        self.display_tasks(self.tasks_cls, name="MTEB tasks")
+
     def selected_tasks(self):
-        return [x.description["name"] for x in self.tasks]
+        self.display_tasks(self.tasks, name="Selected tasks")
 
     def select_tasks(self, **kwargs):
         """
@@ -124,20 +155,23 @@ class MTEB:
             datasets.logging.disable_progress_bar()
 
         # Create output folder
-        pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
+        if output_folder is not None:
+            pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
 
         # Run selected tasks
         print(f"\n\n## Evaluating {len(self.tasks)} tasks: {self.selected_tasks}")
         for task in self.tasks:
-            save_path = os.path.join(output_folder, f"{task.description['name']}{task.save_suffix}.json")
-            if os.path.exists(save_path):
-                print(f"WARNING: {task.description['name']} results already exists. Skipping.")
-                continue
+            if output_folder is not None:
+                save_path = os.path.join(output_folder, f"{task.description['name']}{task.save_suffix}.json")
+                if os.path.exists(save_path):
+                    print(f"WARNING: {task.description['name']} results already exists. Skipping.")
+                    continue
             task_results = {}
             for split in task.description["eval_splits"]:
                 results = task.evaluate(model, split, **kwargs)
                 task_results[split] = results
                 if verbosity >= 1:
                     print(f"Scores: {results}")
-            with open(save_path, "w") as f_out:
-                json.dump(task_results, f_out, indent=2, sort_keys=True)
+            if output_folder is not None:
+                with open(save_path, "w") as f_out:
+                    json.dump(task_results, f_out, indent=2, sort_keys=True)

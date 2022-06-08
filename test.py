@@ -3,7 +3,6 @@ from mteb import MTEB
 from mteb.tasks.Reranking import MindSmallReranking
 
 model = SentenceTransformer("average_word_embeddings_komninos")
-eval = MTEB(tasks=['Touche2020', 'SCIDOCS', 'SciFact'])
-print(eval.selected_tasks)
-
-eval.run(model)
+eval = MTEB(task_types=["Retrieval", "Classification"])
+eval.mteb_tasks()
+eval.selected_tasks()
