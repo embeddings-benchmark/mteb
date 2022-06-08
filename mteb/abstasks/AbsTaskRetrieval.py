@@ -23,7 +23,7 @@ class BeIRModel():
         return self.model.encode(queries, batch_size=batch_size, **kwargs)
     
     def encode_corpus(self, corpus: List[Dict[str, str]], batch_size: int, **kwargs):
-        sentences = [(doc["title"] + "  " + doc["text"]).strip() for doc in corpus]
+        sentences = [(doc["title"] + "\n" + doc["text"]).strip() for doc in corpus]
         return self.model.encode(sentences, batch_size=batch_size, **kwargs)
 
 class AbsTaskRetrieval(AbsTask):
@@ -44,7 +44,7 @@ class AbsTaskRetrieval(AbsTask):
 
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
         
-        model = DRES(BeIRModel(model), batch_size=16)
+        model = DRES(BeIRModel(model), batch_size=kwargs.get("batch_size", 16), **kwargs)
         retriever = EvaluateRetrieval(model, score_function="cos_sim") # or "dot" for dot-product
         results = retriever.retrieve(corpus, queries)
 
