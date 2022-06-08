@@ -1,4 +1,3 @@
-from click import style
 from ..abstasks import *
 from ..tasks import *
 import pathlib
@@ -41,7 +40,7 @@ class MTEB:
         self._tasks = tasks
 
         self.select_tasks(**kwargs)
-        # self.load_tasks_data()
+        self.load_tasks_data()
 
     @property
     def available_tasks(self):
@@ -69,12 +68,19 @@ class MTEB:
                     prefix = f"    - "
                     name = f"{task.description['name']}"
                     category = f", [italic grey39]{task.description['category']}[/]"
-                    multilingual = f", [italic red]multilingual {len(task.description['eval_langs'])} langs[/]" if task.is_multilingual else ""
-                    crosslingual = f", [italic cyan]crosslingual {len(task.description['eval_langs'])} pairs[/]" if task.is_crosslingual else ""
-                    beir = f", [italic yellow]beir[/]" if task.description.get('beir_name', False) else ""
+                    multilingual = (
+                        f", [italic red]multilingual {len(task.description['eval_langs'])} langs[/]"
+                        if task.is_multilingual
+                        else ""
+                    )
+                    crosslingual = (
+                        f", [italic cyan]crosslingual {len(task.description['eval_langs'])} pairs[/]"
+                        if task.is_crosslingual
+                        else ""
+                    )
+                    beir = f", [italic yellow]beir[/]" if task.description.get("beir_name", False) else ""
                     console.print(f"{prefix}{name}{beir}{category}{multilingual}{crosslingual}")
                 console.print("\n")
-
 
     def mteb_tasks(self):
         self.display_tasks(self.tasks_cls, name="MTEB tasks")
