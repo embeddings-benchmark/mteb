@@ -40,7 +40,6 @@ class MTEB:
         self._tasks = tasks
 
         self.select_tasks(**kwargs)
-        self.load_tasks_data()
 
     @property
     def available_tasks(self):
@@ -157,6 +156,9 @@ class MTEB:
         # Create output folder
         if output_folder is not None:
             pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
+
+        # Load datasets
+        self.load_tasks_data()
 
         # Run selected tasks
         print(f"\n\n## Evaluating {len(self.tasks)} tasks: {self.selected_tasks}")
