@@ -7,8 +7,13 @@ class ToxicConversationsClassification(AbsTaskClassification):
         return {
             "name": "ToxicConversationsClassification",
             "hf_hub_name": "mteb/toxic_conversations_50k",
-            "description": "Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not.",
-            "reference": "https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/overview",
+            "description": (
+                "Collection of comments from the Civil Comments platform together with annotations if the comment is"
+                " toxic or not."
+            ),
+            "reference": (
+                "https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/overview"
+            ),
             "category": "s2s",
             "type": "Classification",
             "eval_splits": ["test"],

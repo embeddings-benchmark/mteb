@@ -12,7 +12,7 @@ class NFCorpus(AbsTaskRetrieval, BeIRTask):
             "reference": "https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/",
             "type": "Retrieval",
             "category": "s2s",
-            "eval_splits": ["train","dev","test"],
+            "eval_splits": ["train", "dev", "test"],
             "eval_langs": ["en"],
             "main_score": "map",
         }

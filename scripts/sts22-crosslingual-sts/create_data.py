@@ -1,9 +1,12 @@
-import pandas as pd
-import json
 import glob
+import json
 import os
-from huggingface_hub import create_repo, upload_file
+
 import matplotlib.pyplot as plt
+import pandas as pd
+
+from huggingface_hub import create_repo, upload_file
+
 
 # First, we scrape the data from the original CSV file
 # python3 -m semeval_8_2022_ia_downloader.cli --links_file=semeval-2022_task8_train-data_batch.csv --dump_dir=train

@@ -8,7 +8,10 @@ class ClimateFEVER(AbsTaskRetrieval, BeIRTask):
         return {
             "name": "ClimateFEVER",
             "beir_name": "climate-fever",
-            "description": "CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change.",
+            "description": (
+                "CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims"
+                " regarding climate-change."
+            ),
             "reference": "https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html",
             "type": "Retrieval",
             "category": "s2s",

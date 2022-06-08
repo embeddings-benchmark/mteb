@@ -7,7 +7,9 @@ class BiorxivClusteringP2P(AbsTaskClustering):
         return {
             "name": "BiorxivClusteringP2P",
             "hf_hub_name": "mteb/biorxiv-clustering-p2p",
-            "description": "Clustering of titles+abstract from biorxiv. Clustering of 10 sets, based on the main category.",
+            "description": (
+                "Clustering of titles+abstract from biorxiv. Clustering of 10 sets, based on the main category."
+            ),
             "reference": "https://api.biorxiv.org/",
             "type": "Clustering",
             "category": "p2p",

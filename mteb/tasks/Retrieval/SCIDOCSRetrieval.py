@@ -8,7 +8,10 @@ class SCIDOCS(AbsTaskRetrieval, BeIRTask):
         return {
             "name": "SCIDOCS",
             "beir_name": "scidocs",
-            "description": "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation.",
+            "description": (
+                "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation"
+                " prediction, to document classification and recommendation."
+            ),
             "reference": "https://allenai.org/data/scidocs",
             "type": "Retrieval",
             "category": "s2s",

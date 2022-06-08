@@ -1,2 +1,2 @@
-from .TatoebaBitextMining import *
 from .BUCCBitextMining import *
+from .TatoebaBitextMining import *

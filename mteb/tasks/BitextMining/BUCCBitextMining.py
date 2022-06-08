@@ -1,5 +1,6 @@
 from ...abstasks import AbsTaskBitextMining, CrosslingualTask
 
+
 _LANGUAGES = ["de-en", "fr-en", "ru-en", "zh-en"]
 
 

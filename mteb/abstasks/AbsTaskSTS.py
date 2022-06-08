@@ -1,8 +1,10 @@
-from .AbsTask import AbsTask
-from ..evaluation.evaluators import STSEvaluator
+import logging
+
 import datasets
 import numpy as np
-import logging
+
+from ..evaluation.evaluators import STSEvaluator
+from .AbsTask import AbsTask
 
 
 class AbsTaskSTS(AbsTask):

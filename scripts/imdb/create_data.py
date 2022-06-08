@@ -1,6 +1,9 @@
-from datasets import load_dataset
-from huggingface_hub import create_repo, upload_file
 import os
+
+from datasets import load_dataset
+
+from huggingface_hub import create_repo, upload_file
+
 
 repo_name = "imdb"
 create_repo(repo_name, organization="mteb", repo_type="dataset")

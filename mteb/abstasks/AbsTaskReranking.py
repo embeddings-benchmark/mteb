@@ -1,7 +1,8 @@
-from .AbsTask import AbsTask
-from ..evaluation.evaluators import RerankingEvaluator
 import datasets
 import numpy as np
+
+from ..evaluation.evaluators import RerankingEvaluator
+from .AbsTask import AbsTask
 
 
 class AbsTaskReranking(AbsTask):

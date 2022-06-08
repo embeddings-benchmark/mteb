@@ -1,10 +1,11 @@
-from .AbsTask import AbsTask
-from ..evaluation.evaluators import BitextMiningEvaluator
+import random
+
 import datasets
 import numpy as np
 import tqdm
-import random
-import numpy as np
+
+from ..evaluation.evaluators import BitextMiningEvaluator
+from .AbsTask import AbsTask
 
 
 class AbsTaskBitextMining(AbsTask):

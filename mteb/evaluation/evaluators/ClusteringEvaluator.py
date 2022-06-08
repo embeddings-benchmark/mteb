@@ -1,8 +1,10 @@
-from .Evaluator import Evaluator
 import random
+
 import numpy as np
 import sklearn
 import sklearn.cluster
+
+from .Evaluator import Evaluator
 
 
 class ClusteringEvaluator(Evaluator):

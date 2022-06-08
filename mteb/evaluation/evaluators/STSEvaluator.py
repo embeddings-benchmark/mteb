@@ -1,11 +1,9 @@
-from .Evaluator import Evaluator
 import numpy as np
-from sklearn.metrics.pairwise import (
-    paired_cosine_distances,
-    paired_euclidean_distances,
-    paired_manhattan_distances,
-)
+from sklearn.metrics.pairwise import paired_cosine_distances, paired_euclidean_distances, paired_manhattan_distances
+
 from scipy.stats import pearsonr, spearmanr
+
+from .Evaluator import Evaluator
 
 
 class STSEvaluator(Evaluator):

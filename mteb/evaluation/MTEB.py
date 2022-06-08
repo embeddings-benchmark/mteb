@@ -1,12 +1,15 @@
-from ..abstasks import *
-from ..tasks import *
-import pathlib
-import os
 import json
 import logging
-import datasets
+import os
+import pathlib
 from datetime import datetime
+
+import datasets
+
 from rich.console import Console
+
+from ..abstasks import *
+from ..tasks import *
 
 
 class MTEB:

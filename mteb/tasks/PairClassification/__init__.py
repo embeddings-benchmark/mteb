@@ -1,3 +1,3 @@
-from .TwitterURLCorpusBC import *
-from .TwitterSemEval2015BC import *
 from .SprintDuplicateQuestionsBC import *
+from .TwitterSemEval2015BC import *
+from .TwitterURLCorpusBC import *

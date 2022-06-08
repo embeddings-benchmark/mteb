@@ -7,7 +7,10 @@ class ArxivClusteringP2P(AbsTaskClustering):
         return {
             "name": "ArxivClusteringP2P",
             "hf_hub_name": "mteb/arxiv-clustering-p2p",
-            "description": "Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
+            "description": (
+                "Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary"
+                " category"
+            ),
             "reference": "https://www.kaggle.com/Cornell-University/arxiv",
             "type": "Clustering",
             "category": "p2p",

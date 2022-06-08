@@ -1,10 +1,11 @@
-from .AbsTask import AbsTask
-from ..evaluation.evaluators import ClusteringEvaluator
+import random
+
 import datasets
 import numpy as np
 import tqdm
-import random
-import numpy as np
+
+from ..evaluation.evaluators import ClusteringEvaluator
+from .AbsTask import AbsTask
 
 
 class AbsTaskClustering(AbsTask):

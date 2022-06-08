@@ -1,5 +1,7 @@
-import pandas as pd
 import os
+
+import pandas as pd
+
 
 df_news = pd.read_csv("scripts/mind/data/MINDsmall_train/news.tsv", sep="\t", header=None)
 df_news = df_news[[0, 3]]

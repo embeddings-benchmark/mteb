@@ -3,10 +3,12 @@ Fetch data from https://api.biorxiv.org/ and keep useful information
 """
 
 import gzip
-import json
+
+from tqdm import tqdm
+
 import jsonlines
 import requests
-from tqdm import tqdm
+
 
 api = "https://api.biorxiv.org/details/medrxiv/2021-01-01/2022-05-10/"
 

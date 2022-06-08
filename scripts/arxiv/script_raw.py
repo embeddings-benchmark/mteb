@@ -5,8 +5,11 @@ only keep useful information
 
 import gzip
 import json
-import jsonlines
+
 from tqdm import tqdm
+
+import jsonlines
+
 
 with open("archive/arxiv-metadata-oai-snapshot.json", "r") as file:
     old_lines = file.readlines()

@@ -1,9 +1,9 @@
 import numpy as np
 import torch
-from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
-from .utils import cos_sim
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from .Evaluator import Evaluator
+from .utils import cos_sim
 
 
 class BitextMiningEvaluator(Evaluator):

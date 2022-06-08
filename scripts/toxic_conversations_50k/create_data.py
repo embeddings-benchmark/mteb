@@ -1,7 +1,8 @@
-import pandas as pd
-from collections import Counter
 import json
 import random
+from collections import Counter
+
+import pandas as pd
 
 
 df = pd.read_csv("original.csv")

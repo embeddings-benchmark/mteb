@@ -7,7 +7,10 @@ class AskUbuntuDupQuestions(AbsTaskReranking):
         return {
             "name": "AskUbuntuDupQuestions",
             "hf_hub_name": "mteb/askubuntudupquestions-reranking",
-            "description": "AskUbuntu Question Dataset - Questions from AskUbuntu with manual annotations marking pairs of questions as similar or non-similar",
+            "description": (
+                "AskUbuntu Question Dataset - Questions from AskUbuntu with manual annotations marking pairs of"
+                " questions as similar or non-similar"
+            ),
             "reference": "https://github.com/taolei87/askubuntu",
             "type": "Reranking",
             "category": "s2s",
