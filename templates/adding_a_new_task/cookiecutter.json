@@ -1,0 +1,27 @@
+{
+    "task_classname": "MTOPIntentClassification",
+    "name": "MTOPIntentClassification",
+    "hf_hub_name": "mteb/mtop_intent",
+    "description": "MTOP: Multilingual Task-Oriented Semantic Parsing",
+    "reference": "https://arxiv.org/pdf/2008.09335.pdf",
+    "category": "s2s",
+    "type": "Classification2",
+    "eval_splits": {
+        "l": [
+            "train",
+            "validation",
+            "test"
+        ]
+    },
+    "eval_langs": {
+        "l": [
+            "en",
+            "de",
+            "es",
+            "fr",
+            "hi",
+            "th"
+        ]
+    },
+    "main_score": "accuracy"
+}
