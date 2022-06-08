@@ -8,3 +8,4 @@ from .AbsTaskReranking import *
 from .AbsTaskSTS import *
 from .MultilingualTask import *
 from .CrosslingualTask import *
+from .BeIRTask import *
