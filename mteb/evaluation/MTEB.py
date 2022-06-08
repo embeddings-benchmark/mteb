@@ -6,6 +6,7 @@ import json
 import logging
 import datasets
 from datetime import datetime
+from rich.console import Console
 
 
 class MTEB:
@@ -53,9 +54,39 @@ class MTEB:
     def available_task_categories(self):
         return set([x.description["category"] for x in self.tasks_cls])
 
-    @property
+    def display_tasks(self, task_list, name=None):
+        console = Console()
+        if name:
+            console.rule(f"[bold]{name}\n", style="grey15")
+        for task_type in self.available_task_types:
+            current_type_tasks = list(filter(lambda x: x.description["type"] == task_type, task_list))
+            if len(current_type_tasks) == 0:
+                continue
+            else:
+                console.print(f"[bold]{task_type}[/]")
+                for task in current_type_tasks:
+                    prefix = f"    - "
+                    name = f"{task.description['name']}"
+                    category = f", [italic grey39]{task.description['category']}[/]"
+                    multilingual = (
+                        f", [italic red]multilingual {len(task.description['eval_langs'])} langs[/]"
+                        if task.is_multilingual
+                        else ""
+                    )
+                    crosslingual = (
+                        f", [italic cyan]crosslingual {len(task.description['eval_langs'])} pairs[/]"
+                        if task.is_crosslingual
+                        else ""
+                    )
+                    beir = f", [italic yellow]beir[/]" if task.description.get("beir_name", False) else ""
+                    console.print(f"{prefix}{name}{beir}{category}{multilingual}{crosslingual}")
+                console.print("\n")
+
+    def mteb_tasks(self):
+        self.display_tasks(self.tasks_cls, name="MTEB tasks")
+
     def selected_tasks(self):
-        return [x.description["name"] for x in self.tasks]
+        self.display_tasks(self.tasks, name="Selected tasks")
 
     def select_tasks(self, **kwargs):
         """
