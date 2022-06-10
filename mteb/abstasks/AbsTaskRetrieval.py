@@ -110,7 +110,7 @@ class BeIRModel:
 
         output_queue = pool['output']
         results_list = sorted([output_queue.get() for _ in range(last_chunk_id)], key=lambda x: x[0])
-        cos_scores_top_k_values = torch.cat([result[1] for result in results_list], dim=1)  # (num_queries, (top_k + 1) * num_sentences / chunk_size) = (num_queries, top_k * num_batches)
-        cos_scores_top_k_idx = torch.cat([result[2] for result in results_list], dim=1)
+        cos_scores_top_k_values = torch.cat([result[1].cpu() for result in results_list], dim=1)  # (num_queries, (top_k + 1) * num_sentences / chunk_size) = (num_queries, top_k * num_batches)
+        cos_scores_top_k_idx = torch.cat([result[2].cpu() for result in results_list], dim=1)
         return cos_scores_top_k_values, cos_scores_top_k_idx
         
