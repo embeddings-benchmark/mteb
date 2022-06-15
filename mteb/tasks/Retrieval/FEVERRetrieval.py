@@ -16,7 +16,7 @@ class FEVER(AbsTaskRetrieval, BeIRTask):
             "reference": "https://fever.ai/",
             "type": "Retrieval",
             "category": "s2s",
-            "eval_splits": ["train", "dev", "test"],
+            "eval_splits": ["dev", "test"],
             "eval_langs": ["en"],
             "main_score": "map",
         }

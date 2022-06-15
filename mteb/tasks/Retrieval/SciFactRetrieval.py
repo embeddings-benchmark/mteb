@@ -11,7 +11,7 @@ class SciFact(AbsTaskRetrieval, BeIRTask):
             "reference": "https://github.com/allenai/scifact",
             "type": "Retrieval",
             "category": "s2s",
-            "eval_splits": ["train", "test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "map",
         }

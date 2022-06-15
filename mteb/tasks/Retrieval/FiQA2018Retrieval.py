@@ -12,7 +12,7 @@ class FiQA2018(AbsTaskRetrieval, BeIRTask):
             "reference": "https://sites.google.com/view/fiqa/",
             "type": "Retrieval",
             "category": "s2s",
-            "eval_splits": ["train", "dev", "test"],
+            "eval_splits": ["dev", "test"],
             "eval_langs": ["en"],
             "main_score": "map",
         }
