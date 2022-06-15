@@ -1,4 +1,5 @@
 import logging
+from time import time
 from typing import Dict, List
 
 import torch
@@ -12,6 +13,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class AbsTaskRetrieval(AbsTask):
     """
     Abstract class for re-ranking experiments.
@@ -24,15 +26,24 @@ class AbsTaskRetrieval(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def evaluate(self, model, split="test", **kwargs):
+    def evaluate(self, model, split="test", batch_size=128, corpus_chunk_size=None, target_devices=None, **kwargs):
         if not self.data_loaded:
             self.load_data()
 
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
 
-        model = DRPES(BeIRModel(model), batch_size=kwargs.get("batch_size", 16), **kwargs)
-        retriever = EvaluateRetrieval(model, score_function="cos_sim")  # or "dot" for dot-product
+        model = DRPES(
+            BeIRModel(model),
+            batch_size=batch_size,
+            target_devices=target_devices,
+            corpus_chunk_size=corpus_chunk_size,
+            **kwargs,
+        )
+        retriever = EvaluateRetrieval(model, score_function="dot")  # or "dot" for dot-product
+        start_time = time()
         results = retriever.retrieve(corpus, queries)
+        end_time = time()
+        print("Time taken to retrieve: {:.2f} seconds".format(end_time - start_time))
 
         ndcg, _map, recall, precision = retriever.evaluate(relevant_docs, results, retriever.k_values)
 
@@ -53,64 +64,55 @@ class BeIRModel:
     BeIR format model
     """
 
-    def __init__(self, model, **kwargs):
+    def __init__(self, model, sep=" ", **kwargs):
         self.model = model
-    
+        self.sep = sep
+
     def start_multi_process_pool(self, target_devices: List[str] = None) -> Dict[str, object]:
         return self.model.start_multi_process_pool(target_devices=target_devices)
+
+    def stop_multi_process_pool(self, pool: Dict[str, object]):
+        output_queue = pool["output"]
+        [output_queue.get() for _ in range(len(pool["processes"]))]
+        return self.model.stop_multi_process_pool(pool)
 
     def encode_queries(self, queries: List[str], batch_size: int, **kwargs):
         return self.model.encode(queries, batch_size=batch_size, **kwargs)
 
     def encode_corpus(self, corpus: List[Dict[str, str]], batch_size: int, **kwargs):
-        sentences = [(doc["title"] + "\n" + doc["text"]).strip() for doc in corpus]
+        if type(corpus) is dict:
+            sentences = [
+                (corpus["title"][i] + self.sep + corpus["text"][i]).strip()
+                if "title" in corpus
+                else corpus["text"][i].strip()
+                for i in range(len(corpus["text"]))
+            ]
+        else:
+            sentences = [
+                (doc["title"] + self.sep + doc["text"]).strip() if "title" in doc else doc["text"].strip()
+                for doc in corpus
+            ]
         return self.model.encode(sentences, batch_size=batch_size, **kwargs)
 
     def encode_corpus_parallel(
-        self, corpus: List[Dict[str, str]], pool: Dict[str, object], batch_size: int, chunk_size: int, **kwargs
+        self, corpus: List[Dict[str, str]], pool: Dict[str, object], batch_size: int, chunk_id: int, **kwargs
     ):
-        sentences = [(doc["title"] + "\n" + doc["text"]).strip() for doc in corpus]
-        return self.encode_multi_process(sentences, pool, batch_size=batch_size, chunk_size=chunk_size)
+        if type(corpus) is dict:
+            sentences = [
+                (corpus["title"][i] + self.sep + corpus["text"][i]).strip()
+                if "title" in corpus
+                else corpus["text"][i].strip()
+                for i in range(len(corpus["text"]))
+            ]
+        else:
+            sentences = [
+                (doc["title"] + self.sep + doc["text"]).strip() if "title" in doc else doc["text"].strip()
+                for doc in corpus
+            ]
 
-    @staticmethod
-    def encode_multi_process(sentences: List[str], pool: Dict[str, object], batch_size: int = 32, chunk_size: int = None):
-        """
-        (taken from UKPLab/sentence-transformers/sentence_transformers/SentenceTransformer.py)
-        This method allows to run encode() on multiple GPUs. The sentences are chunked into smaller packages
-        and sent to individual processes, which encode these on the different GPUs. This method is only suitable
-        for encoding large sets of sentences
+        if chunk_id is not None and chunk_id >= len(pool["processes"]):
+            output_queue = pool["output"]
+            output_queue.get()
 
-        Note: Updated the output of the processes to only return the similarity scores of the top k sentences.
-
-        :param sentences: List of sentences
-        :param pool: A pool of workers started with SentenceTransformer.start_multi_process_pool
-        :param batch_size: Encode sentences with batch size
-        :param chunk_size: Sentences are chunked and sent to the individual processes. If none, it determine a sensible size.
-        :return: Numpy matrix with all embeddings
-        """
-        if chunk_size is None:
-            chunk_size = min(math.ceil(len(sentences) / len(pool["processes"]) / 10), 5000)
-
-        logger.info(f"Chunk data into {math.ceil(len(sentences)/chunk_size)} packages of size {chunk_size}")
-
-        input_queue = pool['input']
-        last_chunk_id = 0
-        chunk = []
-
-        for sentence in sentences:
-            chunk.append(sentence)
-            if len(chunk) >= chunk_size:
-                input_queue.put([last_chunk_id, batch_size, chunk])
-                last_chunk_id += 1
-                chunk = []
-
-        if len(chunk) > 0:
-            input_queue.put([last_chunk_id, batch_size, chunk])
-            last_chunk_id += 1
-
-        output_queue = pool['output']
-        results_list = sorted([output_queue.get() for _ in range(last_chunk_id)], key=lambda x: x[0])
-        cos_scores_top_k_values = torch.cat([result[1].cpu() for result in results_list], dim=1)  # (num_queries, (top_k + 1) * num_sentences / chunk_size) = (num_queries, top_k * num_batches)
-        cos_scores_top_k_idx = torch.cat([result[2].cpu() for result in results_list], dim=1)
-        return cos_scores_top_k_values, cos_scores_top_k_idx
-        
+        input_queue = pool["input"]
+        input_queue.put([chunk_id, batch_size, sentences])
