@@ -129,5 +129,5 @@ class TatoebaBitextMining(AbsTaskBitextMining, CrosslingualTask):
             "category": "s2s",
             "eval_splits": ["test"],
             "eval_langs": _LANGUAGES,
-            "main_score": "error",
+            "main_score": "f1",
         }
