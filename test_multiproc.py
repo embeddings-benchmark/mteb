@@ -9,10 +9,10 @@ logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
 
-    # model = SentenceTransformer("average_word_embeddings_komninos")
-    model = SentenceTransformer("msmarco-distilbert-base-tas-b")
+    model = SentenceTransformer("average_word_embeddings_komninos")
+    # model = SentenceTransformer("msmarco-distilbert-base-tas-b")
 
-    eval = MTEB(tasks=["NFCorpus"])
+    eval = MTEB(tasks=["SprintDuplicateQuestions"])
     # eval = MTEB(tasks=["FiQA2018"])
     # eval = MTEB(tasks=["MSMARCO"])
     start_time = time.time()
