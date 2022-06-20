@@ -12,7 +12,7 @@ class MSMARCO(AbsTaskRetrieval, BeIRTask):
             "reference": "https://microsoft.github.io/msmarco/",
             "type": "Retrieval",
             "category": "s2s",
-            "eval_splits": ["train", "dev", "test"],
+            "eval_splits": ["dev", "test"],
             "eval_langs": ["en"],
             "main_score": "map",
         }

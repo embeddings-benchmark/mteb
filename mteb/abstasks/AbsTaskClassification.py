@@ -62,8 +62,6 @@ class AbsTaskClassification(AbsTask):
         params = {"k": self.k, "batch_size": self.batch_size, "seed": self.seed}
         params.update(kwargs)
 
-        logging.getLogger("sentence_transformers.evaluation.ClassificationEvaluator").setLevel(logging.WARN)
-
         scores = []
         idxs = None  # we store idxs to make the shuffling reproducible
         for _ in range(self.n_splits):

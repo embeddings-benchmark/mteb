@@ -5,6 +5,9 @@ from sklearn.metrics import average_precision_score
 
 from .Evaluator import Evaluator
 from .utils import cos_sim
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class RerankingEvaluator(Evaluator):
@@ -66,6 +69,7 @@ class RerankingEvaluator(Evaluator):
         all_mrr_scores = []
         all_ap_scores = []
 
+        logger.info("Encoding queries...")
         if isinstance(self.samples[0]["query"], str):
             all_query_embs = model.encode(
                 [sample["query"] for sample in self.samples],
@@ -79,8 +83,8 @@ class RerankingEvaluator(Evaluator):
         else:
             raise ValueError(f"Query must be a string or a list of strings but is {type(self.samples[0]['query'])}")
 
+        logger.info("Encoding candidates...")
         all_docs = []
-
         for sample in self.samples:
             all_docs.extend(sample["positive"])
             all_docs.extend(sample["negative"])
@@ -88,6 +92,7 @@ class RerankingEvaluator(Evaluator):
         all_docs_embs = model.encode(all_docs, convert_to_tensor=True, batch_size=self.batch_size)
 
         # Compute scores
+        logger.info("Evaluating...")
         query_idx, docs_idx = 0, 0
         for instance in self.samples:
             num_subqueries = len(instance["query"]) if isinstance(instance["query"], list) else 1

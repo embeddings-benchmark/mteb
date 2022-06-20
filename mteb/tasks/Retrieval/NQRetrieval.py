@@ -12,7 +12,7 @@ class NQ(AbsTaskRetrieval, BeIRTask):
             "reference": "https://ai.google.com/research/NaturalQuestions/",
             "type": "Retrieval",
             "category": "s2s",
-            "eval_splits": ["train", "test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "map",
         }

@@ -1,5 +1,5 @@
 import random
-
+import logging
 import numpy as np
 import torch
 from sklearn.linear_model import LogisticRegression
@@ -8,6 +8,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from torch import Tensor
 
 from .Evaluator import Evaluator
+
+logger = logging.getLogger(__name__)
 
 
 class kNNClassificationEvaluator(Evaluator):
@@ -35,10 +37,10 @@ class kNNClassificationEvaluator(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
+        X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
+        X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
         for metric in ["cosine", "euclidean"]:  # TODO: "dot"
             knn = KNeighborsClassifier(n_neighbors=self.k, n_jobs=-1, metric=metric)
-            X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
-            X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
             knn.fit(X_train, self.y_train)
             y_pred = knn.predict(X_test)
             accuracy = accuracy_score(self.y_test, y_pred)
@@ -83,9 +85,9 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
+        X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
+        X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
         for metric in ["cosine", "euclidean", "dot"]:  # TODO: "dot"
-            X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
-            X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
             if metric == "cosine":
                 distances = 1 - self._cos_sim(X_test, X_train)
             elif metric == "euclidean":
@@ -181,7 +183,7 @@ class logRegClassificationEvaluator(Evaluator):
         y_train,
         sentences_test,
         y_test,
-        max_iter=1000,
+        max_iter=100,
         batch_size=32,
         seed=42,
         limit=None,
@@ -205,10 +207,19 @@ class logRegClassificationEvaluator(Evaluator):
 
     def __call__(self, model):
         scores = {}
-        clf = LogisticRegression(random_state=self.seed, n_jobs=-1, max_iter=self.max_iter)
+        clf = LogisticRegression(
+            random_state=self.seed,
+            n_jobs=-1,
+            max_iter=self.max_iter,
+            verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
+        )
+        logger.info(f"Encoding {len(self.sentences_train)} training sentences...")
         X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
+        logger.info(f"Encoding {len(self.sentences_test)} test sentences...")
         X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
+        logger.info("Fitting logistic regression classifier...")
         clf.fit(X_train, self.y_train)
+        logger.info("Evaluating...")
         y_pred = clf.predict(X_test)
         accuracy = accuracy_score(self.y_test, y_pred)
         f1 = f1_score(self.y_test, y_pred, average="macro")

@@ -6,6 +6,9 @@ from tqdm import tqdm, trange
 
 from .Evaluator import Evaluator
 from .utils import cos_sim, dot_score
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class RetrievalEvaluator(Evaluator):
@@ -89,6 +92,7 @@ class RetrievalEvaluator(Evaluator):
         )
 
         # Compute embedding for the queries
+        logger.info("Encoding the queries...")
         query_embeddings = model.encode(
             self.queries,
             show_progress_bar=self.show_progress_bar,
@@ -101,6 +105,7 @@ class RetrievalEvaluator(Evaluator):
             queries_result_list[name] = [[] for _ in range(len(query_embeddings))]
 
         # Iterate over chunks of the corpus
+        logger.info("Encoding chunks of corpus, and computing similarity scores with queries...")
         for corpus_start_idx in trange(
             0,
             len(self.corpus),
@@ -146,6 +151,7 @@ class RetrievalEvaluator(Evaluator):
                         queries_result_list[name][query_itr].append({"corpus_id": corpus_id, "score": score})
 
         # Compute scores
+        logger.info("Computing metrics...")
         scores = {name: self._compute_metrics(queries_result_list[name]) for name in self.score_functions}
 
         return scores

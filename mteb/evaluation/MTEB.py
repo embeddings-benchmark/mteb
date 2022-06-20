@@ -135,7 +135,7 @@ class MTEB:
             print(f"\n# Loading dataset for {task.description['name']}")
             task.load_data()
 
-    def run(self, model, verbosity=1.0, output_folder="results/result", **kwargs):
+    def run(self, model, verbosity=1.0, output_folder="results/result", eval_splits=None, **kwargs):
         """
         Run the evaluation pipeline on the selected tasks.
 
@@ -172,7 +172,8 @@ class MTEB:
                     print(f"WARNING: {task.description['name']} results already exists. Skipping.")
                     continue
             task_results = {}
-            for split in task.description["eval_splits"]:
+            eval_splits = eval_splits if eval_splits is not None else task.description.get("eval_splits", [])
+            for split in eval_splits:
                 results = task.evaluate(model, split, **kwargs)
                 task_results[split] = results
                 if verbosity >= 1:

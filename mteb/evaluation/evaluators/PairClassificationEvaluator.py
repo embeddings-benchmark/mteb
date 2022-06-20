@@ -3,6 +3,9 @@ from sklearn.metrics import average_precision_score
 from sklearn.metrics.pairwise import paired_cosine_distances, paired_euclidean_distances, paired_manhattan_distances
 
 from .Evaluator import Evaluator
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class PairClassificationEvaluator(Evaluator):
@@ -18,11 +21,10 @@ class PairClassificationEvaluator(Evaluator):
     :param labels: labels[i] is the label for the pair (sentences1[i], sentences2[i]). Must be 0 or 1
     :param name: Name for the output
     :param batch_size: Batch size used to compute embeddings
-    :param show_progress_bar: If true, prints a progress bar
     :param write_csv: Write results to a CSV file
     """
 
-    def __init__(self, sentences1, sentences2, labels, batch_size=32, show_progress_bar=False, limit=None, **kwargs):
+    def __init__(self, sentences1, sentences2, labels, batch_size=32, limit=None, **kwargs):
         if limit:
             sentences1 = sentences1[:limit]
             sentences2 = sentences2[:limit]
@@ -31,7 +33,6 @@ class PairClassificationEvaluator(Evaluator):
         self.sentences2 = sentences2
         self.labels = labels
         self.batch_size = batch_size
-        self.show_progress_bar = show_progress_bar
 
         assert len(self.sentences1) == len(self.sentences2)
         assert len(self.sentences1) == len(self.labels)
@@ -48,16 +49,17 @@ class PairClassificationEvaluator(Evaluator):
 
     def compute_metrics(self, model):
         sentences = list(set(self.sentences1 + self.sentences2))
+        logger.info(f"Encoding {len(sentences)} sentences...")
         embeddings = model.encode(
             sentences,
             batch_size=self.batch_size,
-            show_progress_bar=self.show_progress_bar,
             convert_to_numpy=True,
         )
         emb_dict = {sent: emb for sent, emb in zip(sentences, embeddings)}
         embeddings1 = [emb_dict[sent] for sent in self.sentences1]
         embeddings2 = [emb_dict[sent] for sent in self.sentences2]
 
+        logger.info("Computing similarity distances...")
         cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)
         manhattan_distances = paired_manhattan_distances(embeddings1, embeddings2)
         euclidean_distances = paired_euclidean_distances(embeddings1, embeddings2)
@@ -66,6 +68,7 @@ class PairClassificationEvaluator(Evaluator):
         embeddings2_np = np.asarray(embeddings2)
         dot_scores = [np.dot(embeddings1_np[i], embeddings2_np[i]) for i in range(len(embeddings1_np))]
 
+        logger.info("Computing metrics...")
         labels = np.asarray(self.labels)
         output_scores = {}
         for short_name, name, scores, reverse in [

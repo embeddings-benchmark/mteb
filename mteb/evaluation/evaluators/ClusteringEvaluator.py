@@ -3,6 +3,9 @@ import random
 import numpy as np
 import sklearn
 import sklearn.cluster
+import logging
+
+logger = logging.getLogger(__name__)
 
 from .Evaluator import Evaluator
 
@@ -23,13 +26,17 @@ class ClusteringEvaluator(Evaluator):
         self.batch_size = batch_size
 
     def __call__(self, model):
+        logger.info(f"Encoding {len(self.sentences)} sentences...")
         corpus_embeddings = np.asarray(model.encode(self.sentences))
 
+        logger.info("Fitting Mini-Batch K-Means model...")
         clustering_model = sklearn.cluster.MiniBatchKMeans(
             n_clusters=len(set(self.labels)), batch_size=self.batch_size
         )
         clustering_model.fit(corpus_embeddings)
         cluster_assignment = clustering_model.labels_
+
+        logger.info("Evaluating...")
         v_measure = sklearn.metrics.cluster.v_measure_score(self.labels, cluster_assignment)
 
         return {"v_measure": v_measure}
