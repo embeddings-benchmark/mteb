@@ -3,6 +3,7 @@ import logging
 import os
 import pathlib
 from datetime import datetime
+import traceback
 
 import datasets
 from tqdm import trange
@@ -177,23 +178,31 @@ class MTEB:
                     del self.tasks[0]
                     continue
 
-            # load data
-            logger.info(f"\n# Loading dataset for {task.description['name']}")
-            task.load_data()
+            try:
+                # load data
+                logger.info(f"\n# Loading dataset for {task.description['name']}")
+                task.load_data()
 
-            # run evaluation
-            task_results = {}
-            eval_splits = eval_splits if eval_splits is not None else task.description.get("eval_splits", [])
-            for split in eval_splits:
-                results = task.evaluate(model, split, **kwargs)
-                task_results[split] = results
-                if verbosity >= 1:
-                    logger.info(f"Scores: {results}")
+                # run evaluation
+                task_results = {}
+                eval_splits = eval_splits if eval_splits is not None else task.description.get("eval_splits", [])
+                for split in eval_splits:
+                    results = task.evaluate(model, split, **kwargs)
+                    task_results[split] = results
+                    if verbosity >= 1:
+                        logger.info(f"Scores: {results}")
 
-            # save results
-            if output_folder is not None:
-                with open(save_path, "w") as f_out:
-                    json.dump(task_results, f_out, indent=2, sort_keys=True)
+                # save results
+                if output_folder is not None:
+                    with open(save_path, "w") as f_out:
+                        json.dump(task_results, f_out, indent=2, sort_keys=True)
+
+            except Exception as e:
+                logger.error(f"Error while evaluating {task.description['name']}: {e}")
+                with open("error_logs.txt", "a") as f_out:
+                    f_out.write(f"{datetime.now()} >>> {task.description['name']}\n")
+                    f_out.write(traceback.format_exc())
+                    f_out.write("\n\n")
 
             # empty memory
             del self.tasks[0]
