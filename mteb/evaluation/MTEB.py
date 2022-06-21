@@ -179,13 +179,14 @@ class MTEB:
                     continue
 
             try:
+                eval_splits = eval_splits if eval_splits is not None else task.description.get("eval_splits", [])
+
                 # load data
                 logger.info(f"\n# Loading dataset for {task.description['name']}")
-                task.load_data()
+                task.load_data(eval_splits=eval_splits)
 
                 # run evaluation
                 task_results = {}
-                eval_splits = eval_splits if eval_splits is not None else task.description.get("eval_splits", [])
                 for split in eval_splits:
                     results = task.evaluate(model, split, **kwargs)
                     task_results[split] = results
