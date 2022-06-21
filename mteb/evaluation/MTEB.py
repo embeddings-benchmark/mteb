@@ -5,11 +5,15 @@ import pathlib
 from datetime import datetime
 
 import datasets
+from tqdm import trange
 
 from rich.console import Console
 
 from ..abstasks import *
 from ..tasks import *
+
+
+logger = logging.getLogger(__name__)
 
 
 class MTEB:
@@ -130,9 +134,9 @@ class MTEB:
         """
         Load datasets for the selected tasks.
         """
-        print(f"\n\n## Loading datasets for {len(self.tasks)} tasks")
+        logger.info(f"\n\n## Loading datasets for {len(self.tasks)} tasks")
         for task in self.tasks:
-            print(f"\n# Loading dataset for {task.description['name']}")
+            logger.info(f"\n# Loading dataset for {task.description['name']}")
             task.load_data()
 
     def run(self, model, verbosity=1.0, output_folder="results/result", eval_splits=None, **kwargs):
@@ -160,24 +164,34 @@ class MTEB:
         if output_folder is not None:
             pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
 
-        # Load datasets
-        self.load_tasks_data()
-
         # Run selected tasks
-        print(f"\n\n## Evaluating {len(self.tasks)} tasks: {self.selected_tasks}")
-        for task in self.tasks:
+        logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks: {self.selected_tasks}")
+        while len(self.tasks) > 0:
+            task = self.tasks[0]
+            # load data
+            logger.info(f"\n# Loading dataset for {task.description['name']}")
+            task.load_data()
+
+            # skip evaluation if results folder exists
             if output_folder is not None:
                 save_path = os.path.join(output_folder, f"{task.description['name']}{task.save_suffix}.json")
                 if os.path.exists(save_path):
-                    print(f"WARNING: {task.description['name']} results already exists. Skipping.")
+                    logger.warn(f"WARNING: {task.description['name']} results already exists. Skipping.")
                     continue
+
+            # run evaluation
             task_results = {}
             eval_splits = eval_splits if eval_splits is not None else task.description.get("eval_splits", [])
             for split in eval_splits:
                 results = task.evaluate(model, split, **kwargs)
                 task_results[split] = results
                 if verbosity >= 1:
-                    print(f"Scores: {results}")
+                    logger.info(f"Scores: {results}")
+
+            # save results
             if output_folder is not None:
                 with open(save_path, "w") as f_out:
                     json.dump(task_results, f_out, indent=2, sort_keys=True)
+
+            # empty memory
+            del self.tasks[0]
