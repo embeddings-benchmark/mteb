@@ -2,9 +2,13 @@ import logging
 from time import time
 from typing import Dict, List
 
+import torch.multiprocessing as mp
+
 from beir.retrieval.evaluation import EvaluateRetrieval
+from sentence_transformers import SentenceTransformer
 
 from .AbsTask import AbsTask
+
 
 logger = logging.getLogger(__name__)
 
@@ -91,7 +95,23 @@ class BeIRModel:
         self.sep = sep
 
     def start_multi_process_pool(self, target_devices: List[str] = None) -> Dict[str, object]:
-        return self.model.start_multi_process_pool(target_devices=target_devices)
+        logger.info("Start multi-process pool on devices: {}".format(", ".join(map(str, target_devices))))
+
+        ctx = mp.get_context("spawn")
+        input_queue = ctx.Queue()
+        output_queue = ctx.Queue()
+        processes = []
+
+        for process_id, device_name in enumerate(target_devices):
+            p = ctx.Process(
+                target=SentenceTransformer._encode_multi_process_worker,
+                args=(process_id, device_name, self.model, input_queue, output_queue),
+                daemon=True,
+            )
+            p.start()
+            processes.append(p)
+
+        return {"input": input_queue, "output": output_queue, "processes": processes}
 
     def stop_multi_process_pool(self, pool: Dict[str, object]):
         output_queue = pool["output"]
