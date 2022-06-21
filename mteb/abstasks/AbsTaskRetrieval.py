@@ -2,14 +2,9 @@ import logging
 from time import time
 from typing import Dict, List
 
-import torch
-
 from beir.retrieval.evaluation import EvaluateRetrieval
-from beir.retrieval.search.dense import DenseRetrievalParallelExactSearch as DRPES
 
 from .AbsTask import AbsTask
-import math
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -26,20 +21,47 @@ class AbsTaskRetrieval(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def evaluate(self, model, split="test", batch_size=128, corpus_chunk_size=None, target_devices=None, **kwargs):
+    def evaluate(
+        self,
+        model,
+        split="test",
+        batch_size=128,
+        corpus_chunk_size=None,
+        target_devices=None,
+        score_function="cos_sim",
+        **kwargs
+    ):
         if not self.data_loaded:
             self.load_data()
 
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
 
-        model = DRPES(
-            BeIRModel(model),
-            batch_size=batch_size,
-            target_devices=target_devices,
-            corpus_chunk_size=corpus_chunk_size,
-            **kwargs,
-        )
-        retriever = EvaluateRetrieval(model, score_function="dot")  # or "dot" for dot-product
+        try:
+            from beir.retrieval.search.dense import DenseRetrievalParallelExactSearch as DRPES
+
+            model = DRPES(
+                BeIRModel(model),
+                batch_size=batch_size,
+                target_devices=target_devices,
+                corpus_chunk_size=corpus_chunk_size,
+                **kwargs,
+            )
+        except ImportError:
+            if target_devices is not None:
+                logger.warning(
+                    "DenseRetrievalParallelExactSearch could not be imported from beir. Using DenseRetrievalExactSearch instead."
+                )
+                logger.warning("The parameter target_devices is ignored.")
+            from beir.retrieval.search.dense import DenseRetrievalExactSearch as DRES
+
+            model = DRES(
+                BeIRModel(model),
+                batch_size=batch_size,
+                corpus_chunk_size=corpus_chunk_size,
+                **kwargs,
+            )
+
+        retriever = EvaluateRetrieval(model, score_function=score_function)  # or "cos_sim" or "dot"
         start_time = time()
         results = retriever.retrieve(corpus, queries)
         end_time = time()

@@ -3,8 +3,10 @@ import os
 import datasets
 
 from beir import util
-from beir.datasets.data_loader import GenericDataLoader
-from beir.datasets.data_loader_hf import HFDataLoader
+try:
+    from beir.datasets.data_loader_hf import HFDataLoader as BeirDataLoader
+except ImportError:
+    from beir.datasets.data_loader import GenericDataLoader as BeirDataLoader
 
 from .AbsTask import AbsTask
 
@@ -25,7 +27,7 @@ class BeIRTask(AbsTask):
         data_path = util.download_and_unzip(url, download_path)
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         for split in self.description["eval_splits"]:
-            self.corpus[split], self.queries[split], self.relevant_docs[split] = HFDataLoader(
+            self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
                 data_folder=data_path
             ).load(split=split)
         self.data_loaded = True
