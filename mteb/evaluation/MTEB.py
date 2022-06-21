@@ -168,16 +168,18 @@ class MTEB:
         logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks: {self.selected_tasks}")
         while len(self.tasks) > 0:
             task = self.tasks[0]
-            # load data
-            logger.info(f"\n# Loading dataset for {task.description['name']}")
-            task.load_data()
 
             # skip evaluation if results folder exists
             if output_folder is not None:
                 save_path = os.path.join(output_folder, f"{task.description['name']}{task.save_suffix}.json")
                 if os.path.exists(save_path):
                     logger.warn(f"WARNING: {task.description['name']} results already exists. Skipping.")
+                    del self.tasks[0]
                     continue
+
+            # load data
+            logger.info(f"\n# Loading dataset for {task.description['name']}")
+            task.load_data()
 
             # run evaluation
             task_results = {}
