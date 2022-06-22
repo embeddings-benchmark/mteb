@@ -1,9 +1,10 @@
+import logging
 import random
 
 import numpy as np
 import sklearn
 import sklearn.cluster
-import logging
+
 
 logger = logging.getLogger(__name__)
 

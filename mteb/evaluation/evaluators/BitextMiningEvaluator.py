@@ -1,10 +1,12 @@
+import logging
+
 import numpy as np
 import torch
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
-import logging
 
 from .Evaluator import Evaluator
 from .utils import cos_sim
+
 
 logger = logging.getLogger(__name__)
 
