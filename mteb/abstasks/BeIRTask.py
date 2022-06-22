@@ -3,8 +3,10 @@ import os
 import datasets
 
 from beir import util
+USE_BEIR_DEVELOPMENT = False
 try:
     from beir.datasets.data_loader_hf import HFDataLoader as BeirDataLoader
+    USE_BEIR_DEVELOPMENT = True
 except ImportError:
     from beir.datasets.data_loader import GenericDataLoader as BeirDataLoader
 
@@ -29,8 +31,13 @@ class BeIRTask(AbsTask):
         data_path = util.download_and_unzip(url, download_path)
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         for split in eval_splits:
-            self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
-                hf_repo=f'BeIR/{dataset}',
-                data_folder=data_path
-            ).load(split=split)
+            if USE_BEIR_DEVELOPMENT:
+                self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
+                    hf_repo=f'BeIR/{dataset}',
+                    data_folder=data_path
+                ).load(split=split)
+            else:
+                self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
+                    data_folder=data_path
+                ).load(split=split)
         self.data_loaded = True
