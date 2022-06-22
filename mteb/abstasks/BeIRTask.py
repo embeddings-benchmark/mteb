@@ -3,6 +3,8 @@ import os
 import datasets
 
 from beir import util
+
+
 try:
     from beir.datasets.data_loader_hf import HFDataLoader as BeirDataLoader
 except ImportError:

@@ -1,3 +1,5 @@
+import logging
+
 import numpy as np
 import torch
 import tqdm
@@ -5,7 +7,7 @@ from sklearn.metrics import average_precision_score
 
 from .Evaluator import Evaluator
 from .utils import cos_sim
-import logging
+
 
 logger = logging.getLogger(__name__)
 

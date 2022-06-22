@@ -1,5 +1,6 @@
-import random
 import logging
+import random
+
 import numpy as np
 import torch
 from sklearn.linear_model import LogisticRegression
@@ -8,6 +9,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from torch import Tensor
 
 from .Evaluator import Evaluator
+
 
 logger = logging.getLogger(__name__)
 

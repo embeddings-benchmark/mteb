@@ -1,3 +1,4 @@
+import logging
 from typing import Callable, Dict, List, Set, Tuple
 
 import numpy as np
@@ -6,7 +7,7 @@ from tqdm import tqdm, trange
 
 from .Evaluator import Evaluator
 from .utils import cos_sim, dot_score
-import logging
+
 
 logger = logging.getLogger(__name__)
 
