@@ -1,14 +1,20 @@
-from sentence_transformers import SentenceTransformer
-from mteb import MTEB
-
-# set logging INFO
 import logging
 
-if __name__ == "__main__":
+from mteb import MTEB
+from sentence_transformers import SentenceTransformer
 
-    logging.basicConfig(level=logging.INFO)
-    # model = SentenceTransformer("average_word_embeddings_komninos")
-    model = SentenceTransformer("msmarco-distilbert-base-tas-b")
 
-    eval = MTEB(tasks=["MSMARCOv2"])
-    eval.run(model, corpus_chunk_size=50000)
+logging.basicConfig(level=logging.INFO)
+
+model = SentenceTransformer("average_word_embeddings_komninos")
+eval = MTEB(
+    tasks=[
+        "Banking77Classification",
+        "TwentyNewsgroupsClustering",
+        "SciDocs",
+        "SprintDuplicateQuestions",
+        "NFCorpus",
+        "STS12",
+    ]
+)  # "BUCC",
+eval.run(model)

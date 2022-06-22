@@ -78,12 +78,11 @@ def main():
         help="Number of sentences to use for each corpus chunk. If None, a convenient number is suggested",
     )
 
-
     # TODO: check what prams are useful to add
     args = parser.parse_args()
 
     logger.info("Running with parameters: %s", args)
-    
+
     # set logging based on verbosity level
     if args.verbosity == 0:
         logging.getLogger("mteb").setLevel(logging.CRITICAL)
@@ -97,7 +96,7 @@ def main():
     # delete None values
     for key in [k for k in args.__dict__ if args.__dict__[k] is None]:
         del args.__dict__[key]
-    
+
     model = SentenceTransformer(args.model, device=args.device if "device" in args else None)
     eval = MTEB(**vars(args))
     del args.model

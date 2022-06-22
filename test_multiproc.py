@@ -1,7 +1,9 @@
-from sentence_transformers import SentenceTransformer
-from mteb import MTEB
 import logging
 import time
+
+from mteb import MTEB
+from sentence_transformers import SentenceTransformer
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

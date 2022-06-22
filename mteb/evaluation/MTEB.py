@@ -2,8 +2,8 @@ import json
 import logging
 import os
 import pathlib
-from datetime import datetime
 import traceback
+from datetime import datetime
 
 import datasets
 from tqdm import trange
@@ -169,6 +169,7 @@ class MTEB:
         logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks: {self.selected_tasks}")
         while len(self.tasks) > 0:
             task = self.tasks[0]
+            logger.info(f"\n\n********************** Evaluating {task.description['name']} **********************")
 
             # skip evaluation if results folder exists
             if output_folder is not None:
@@ -182,7 +183,7 @@ class MTEB:
                 eval_splits = eval_splits if eval_splits is not None else task.description.get("eval_splits", [])
 
                 # load data
-                logger.info(f"\n# Loading dataset for {task.description['name']}")
+                logger.info(f"Loading dataset for {task.description['name']}")
                 task.load_data(eval_splits=eval_splits)
 
                 # run evaluation
