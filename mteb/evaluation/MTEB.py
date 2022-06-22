@@ -61,7 +61,7 @@ class MTEB:
     def available_task_categories(self):
         return set([x.description["category"] for x in self.tasks_cls])
 
-    def display_tasks(self, task_list, name=None):
+    def _display_tasks(self, task_list, name=None):
         console = Console()
         if name:
             console.rule(f"[bold]{name}\n", style="grey15")
@@ -89,11 +89,16 @@ class MTEB:
                     console.print(f"{prefix}{name}{beir}{category}{multilingual}{crosslingual}")
                 console.print("\n")
 
-    def mteb_tasks(self):
-        self.display_tasks(self.tasks_cls, name="MTEB tasks")
+    @classmethod
+    def mteb_tasks(cls):
+        """
+        Get all tasks available in the MTEB.
+        """
+        instance = cls()
+        instance._display_tasks(instance.tasks_cls, name="MTEB tasks")
 
     def selected_tasks(self):
-        self.display_tasks(self.tasks, name="Selected tasks")
+        self._display_tasks(self.tasks, name="Selected tasks")
 
     def select_tasks(self, **kwargs):
         """

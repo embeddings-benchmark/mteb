@@ -22,11 +22,12 @@ logger = logging.getLogger(__name__)
 
 def main():
     parser = argparse.ArgumentParser()
+
     parser.add_argument(
         "-m",
         "--model",
         type=str,
-        required=True,
+        default=None,
         help="Model to use. Use pre-trained model name from https://huggingface.co/models",
     )
     parser.add_argument(
@@ -78,10 +79,16 @@ def main():
         help="Number of sentences to use for each corpus chunk. If None, a convenient number is suggested",
     )
 
+    ## display tasks
+    parser.add_argument(
+        "--available_tasks",
+        action="store_true",
+        default=False,
+        help="Display the available tasks",
+    )
+
     # TODO: check what prams are useful to add
     args = parser.parse_args()
-
-    logger.info("Running with parameters: %s", args)
 
     # set logging based on verbosity level
     if args.verbosity == 0:
@@ -93,6 +100,15 @@ def main():
     elif args.verbosity == 3:
         logging.getLogger("mteb").setLevel(logging.DEBUG)
 
+    logger.info("Running with parameters: %s", args)
+
+    if args.available_tasks:
+        MTEB.mteb_tasks()
+        return
+    del args.available_tasks
+
+    if args.model is None:
+        raise ValueError("Please specify a model using the -m or --model argument")
     # delete None values
     for key in [k for k in args.__dict__ if args.__dict__[k] is None]:
         del args.__dict__[key]
