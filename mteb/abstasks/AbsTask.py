@@ -11,7 +11,7 @@ class AbsTask(ABC):
         self.is_crosslingual = False
         self.save_suffix = kwargs.get("save_suffix", "")
 
-    def load_data(self):
+    def load_data(self, **kwargs):
         """
         Load dataset from HuggingFace hub
         """

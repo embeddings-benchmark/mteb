@@ -19,7 +19,7 @@ class BeIRTask(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def load_data(self, eval_splits=None):
+    def load_data(self, eval_splits=None, **kwargs):
         """
         Load dataset from BeIR benchmark. TODO: replace with HF hub once datasets are moved there
         """

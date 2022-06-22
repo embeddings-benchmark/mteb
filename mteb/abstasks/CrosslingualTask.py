@@ -11,7 +11,7 @@ class CrosslingualTask(AbsTask):
         self.langs = langs if langs else self.description["eval_langs"]
         self.is_crosslingual = True
 
-    def load_data(self):
+    def load_data(self, **kwargs):
         """
         Load dataset from HuggingFace hub
         """
