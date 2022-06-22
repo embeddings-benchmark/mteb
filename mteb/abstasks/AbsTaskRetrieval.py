@@ -61,7 +61,7 @@ class AbsTaskRetrieval(AbsTask):
             model = DRES(
                 BeIRModel(model),
                 batch_size=batch_size,
-                corpus_chunk_size=corpus_chunk_size,
+                corpus_chunk_size=corpus_chunk_size if corpus_chunk_size is not None else 50000,
                 **kwargs,
             )
 

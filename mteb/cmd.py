@@ -1,16 +1,12 @@
-# entry point for the library
-# example call:
-#   pip install git+https://github.com/embeddings-benchmark/mteb-draft.git@packaging
-#   mteb --model average_word_embeddings_komninos \
-#        --tasks Banking77Classification EmotionClassification \
-#        --k 5 \
-#        --device 0 \
-#        --batch_size 32 \
-#        --seed 42 \
-#        --output_folder /tmp/mteb_output \
-#        --n_splits 5 \
-#        --samples_per_label 8 \
-#        --verbosity 3
+"""
+entry point for the library
+example call:
+  pip install git+https://github.com/embeddings-benchmark/mteb-draft.git
+  mteb -m average_word_embeddings_komninos \
+       -t Banking77Classification EmotionClassification \
+       --output_folder mteb_output \
+       --verbosity 3
+"""
 
 
 import argparse
@@ -27,6 +23,7 @@ logger = logging.getLogger(__name__)
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
+        "-m",
         "--model",
         type=str,
         required=True,
@@ -57,26 +54,54 @@ def main():
     parser.add_argument("--device", type=int, default=None, help="Device to use for computation")
     parser.add_argument("--batch_size", type=int, default=32, help="Batch size for computation")
     parser.add_argument("--seed", type=int, default=42, help="Random seed for computation")
-    parser.add_argument("--output_folder", type=str, default="results/res", help="Output directory for results")
-    parser.add_argument(
-        "--method",
-        type=str,
-        default=None,
-        help="Method to use for evaluation. Can be 'kNN' or 'logReg'",
-    )
+    parser.add_argument("--output_folder", type=str, default="results", help="Output directory for results")
+    parser.add_argument("-v", "--verbosity", type=int, default=2, help="Verbosity level")
+
+    ## classification params
+    # parser.add_argument(
+    #     "--method",
+    #     type=str,
+    #     default=None,
+    #     help="Method to use for evaluation. Can be 'kNN' or 'logReg'",
+    # )
     parser.add_argument("--k", type=int, default=None, help="Number of nearest neighbors to use for classification")
     parser.add_argument("--n_splits", type=int, default=None, help="Number of splits for bootstrapping")
     parser.add_argument(
         "--samples_per_label", type=int, default=None, help="Number of samples per label for bootstrapping"
     )
-    parser.add_argument("-v", "--verbosity", type=int, default=1, help="Verbosity level")
+
+    ## retrieval params
+    parser.add_argument(
+        "--corpus_chunk_size",
+        type=int,
+        default=None,
+        help="Number of sentences to use for each corpus chunk. If None, a convenient number is suggested",
+    )
+
+
+    # TODO: check what prams are useful to add
     args = parser.parse_args()
 
     logger.info("Running with parameters: %s", args)
+    
+    # set logging based on verbosity level
+    if args.verbosity == 0:
+        logging.getLogger("mteb").setLevel(logging.CRITICAL)
+    elif args.verbosity == 1:
+        logging.getLogger("mteb").setLevel(logging.WARNING)
+    elif args.verbosity == 2:
+        logging.getLogger("mteb").setLevel(logging.INFO)
+    elif args.verbosity == 3:
+        logging.getLogger("mteb").setLevel(logging.DEBUG)
 
-    model = SentenceTransformer(args.model, device=args.device)
+    # delete None values
+    for key in [k for k in args.__dict__ if args.__dict__[k] is None]:
+        del args.__dict__[key]
+    
+    model = SentenceTransformer(args.model, device=args.device if "device" in args else None)
     eval = MTEB(**vars(args))
-    eval.run(model, verbosity=args.verbosity, output_folder=args.output_folder)
+    del args.model
+    eval.run(model, **vars(args))
 
 
 if __name__ == "__main__":
