@@ -71,3 +71,37 @@ model = MyModel()
 evaluation = MTEB(tasks=["Banking77Classification"])
 evaluation.run(model)
 ```
+
+### Evaluating on a custom task
+
+To add a new task, you need to implement a new class that inherits from the `AbsTask` associated with the task type (e.g. `AbsTaskReranking` for reranking tasks). You can find the supported task types in [here](https://github.com/embeddings-benchmark/mteb-draft/tree/main/mteb/abstasks).
+
+```python
+from mteb import MTEB
+from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
+from sentence_transformers import SentenceTransformer
+
+
+class MindSmallReranking(AbsTaskReranking):
+    @property
+    def description(self):
+        return {
+            "name": "MindSmallReranking",
+            "hf_hub_name": "mteb/mind_small",
+            "description": "Microsoft News Dataset: A Large-Scale English Dataset for News Recommendation Research",
+            "reference": "https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf",
+            "type": "Reranking",
+            "category": "s2s",
+            "eval_splits": ["validation"],
+            "eval_langs": ["en"],
+            "main_score": "map",
+        }
+
+model = SentenceTransformer("average_word_embeddings_komninos")
+evaluation = MTEB(tasks=[MindSmallReranking()])
+evaluation.run(model)
+```
+
+> **Note:** for multilingual tasks, make sure your class also inherits from the `MultilingualTask` class as in [this](https://github.com/embeddings-benchmark/mteb-draft/blob/main/mteb/tasks/Classification/MTOPIntentClassification.py) example.
+
+## Available tasks
