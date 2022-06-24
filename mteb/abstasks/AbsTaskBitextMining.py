@@ -19,7 +19,7 @@ class AbsTaskBitextMining(AbsTask):
 
         if self.is_crosslingual:
             scores = {}
-            for lang in self.description["eval_langs"]:
+            for lang in self.dataset:
                 data_split = self.dataset[lang][split]
                 scores[lang] = self._evaluate_split(model, data_split, **kwargs)
         else:

@@ -28,7 +28,7 @@ mteb --available_tasks
 
 mteb -m average_word_embeddings_komninos \
     -t Banking77Classification NFCorpus \
-    --output_folder mteb_output \
+    --output_folder results \
     --verbosity 3
 ```
 
@@ -48,6 +48,17 @@ evaluation = MTEB(task_types=['Clustering', 'Retrieval']) # Only select clusteri
 
 ````python
 evaluation = MTEB(task_categories=['S2S']) # Only select sentence2sentence tasks
+````
+
+You can also specify which languages to load for multilingual/crosslingual tasks like this:
+
+````python
+from mteb.tasks.BitextMining import BUCCBitextMining
+
+evaluation = MTEB(tasks=[
+        BUCCBitextMining(langs=["de-en"]), # Only load "de-en" and fr-en" subsets of BUCC
+        AmazonReviewsClassification(langs=["en", "fr"]) # Only load "en" and "fr" subsets of Amazon Reviews
+])
 ````
 
 ### Using a custom model
@@ -102,6 +113,6 @@ evaluation = MTEB(tasks=[MindSmallReranking()])
 evaluation.run(model)
 ```
 
-> **Note:** for multilingual tasks, make sure your class also inherits from the `MultilingualTask` class as in [this](https://github.com/embeddings-benchmark/mteb-draft/blob/main/mteb/tasks/Classification/MTOPIntentClassification.py) example.
+> **Note:** for multilingual tasks, make sure your class also inherits from the `MultilingualTask` class like in [this](https://github.com/embeddings-benchmark/mteb-draft/blob/main/mteb/tasks/Classification/MTOPIntentClassification.py) example.
 
 ## Available tasks
