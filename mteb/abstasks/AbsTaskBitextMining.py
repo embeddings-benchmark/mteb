@@ -38,9 +38,9 @@ class AbsTaskBitextMining(AbsTask):
         else:
             sentence2 = data_split["sentence2"]
 
-        if not ("gold" in data_split):
-            assert len(data_split["sentence1"]) == len(data_split["sentence2"]), "Wrong dataset format"
-            n = len(data_split["sentence1"])
+        if not ("gold" in data_split.features):
+            assert len(sentence1) == len(sentence2), "Wrong dataset format"
+            n = len(sentence1)
             gold = list(zip(range(n), range(n)))
         else:
             gold = data_split["gold"]

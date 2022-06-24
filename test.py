@@ -14,7 +14,8 @@ eval = MTEB(
         "SciDocs",
         "SprintDuplicateQuestions",
         "NFCorpus",
+        "BUCC",
         "STS12",
     ]
-)  # "BUCC",
+)
 eval.run(model)
