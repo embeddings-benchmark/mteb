@@ -1,11 +1,13 @@
 import logging
+from sys import prefix
 
 import numpy as np
 import torch
 
 from scipy.stats import pearsonr, spearmanr
+from tqdm import trange
 
-from .utils import cos_sim
+from .utils import cos_sim, dot_score
 
 
 logger = logging.getLogger(__name__)
@@ -34,28 +36,47 @@ class SummarizationEvaluator(Evaluator):
 
     def __call__(self, model):
 
-        all_spearman_corr_scores = []
+        cosine_spearman_scores = []
+        cosine_pearson_scores = []
+        dot_spearman_scores = []
+        dot_pearson_scores = []
 
-        for i in range(len(self.texts)):  # iterate over all original texts
+        for i in trange(len(self.texts), desc="Texts"): # iterate over all original texts
             human_summaries = self.human_summaries[i]  # Get the human summaries for the text
             embs_human_summaries = model.encode(human_summaries)
-            pred_scores = []  # Our predict quality score for a summary
+            cosine_pred_scores = []  # Our predict quality score for a summary
+            dot_pred_scores = []  # Our predict quality score for a summary
             human_scores = []  # Our human score for a summary
             for machine_summary, human_eval_score in zip(
                 self.machine_summaries[i], self.gold_scores[i]
             ):  # Get all machine summaries + scores for this text
-                emb_machine_summary = model.encode(machine_summary)  # 1 embedding for the summary
-                scores = cos_sim(emb_machine_summary, embs_human_summaries)
-                max_score = torch.max(scores).item()
-                pred_scores.append(max_score)
+                emb_machine_summary = model.encode(machine_summary, show_progress_bar=False)  # 1 embedding for the summary
+                cosine_scores = cos_sim(emb_machine_summary, embs_human_summaries)
+                dot_scores = dot_score(emb_machine_summary, embs_human_summaries)
+
+                cosine_max_score = torch.max(cosine_scores).item()
+                cosine_pred_scores.append(cosine_max_score)
+                dot_max_score = torch.max(dot_scores).item()
+                dot_pred_scores.append(dot_max_score)
                 human_scores.append(human_eval_score)
 
-            all_spearman_corr_scores.append(spearmanr(human_scores, pred_scores))
+            cosine_spearman_scores.append(spearmanr(human_scores, cosine_pred_scores))
+            cosine_pearson_scores.append(pearsonr(human_scores, cosine_pred_scores))
+            dot_spearman_scores.append(spearmanr(human_scores, dot_pred_scores))
+            dot_pearson_scores.append(pearsonr(human_scores, dot_pred_scores))
 
-        cosine_spearman = np.mean(all_spearman_corr_scores)
+        cosine_spearman = np.mean(cosine_spearman_scores)
+        dot_spearman = np.mean(dot_spearman_scores)
+        cosine_pearson = np.mean(cosine_pearson_scores)
+        dot_pearson = np.mean(dot_pearson_scores)
 
         return {
             "cos_sim": {
                 "spearman": cosine_spearman,
+                "pearson": cosine_pearson,
+            },
+            "dot": {
+                "spearman": dot_spearman,
+                "pearson": dot_pearson,
             },
         }
