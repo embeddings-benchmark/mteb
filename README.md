@@ -116,3 +116,65 @@ evaluation.run(model)
 > **Note:** for multilingual tasks, make sure your class also inherits from the `MultilingualTask` class like in [this](https://github.com/embeddings-benchmark/mteb-draft/blob/main/mteb/tasks/Classification/MTOPIntentClassification.py) example.
 
 ## Available tasks
+
+| Name                                   | Task                | Category   | Language                 |
+|:---------------------------------------|:--------------------|:-----------|:-------------------------|
+| ArxivClusterings2s                     | Clustering          | s2s        | English                  |
+| ArxivClusteringp2p                     | Clustering          | p2p        | English                  |
+| BiorxivClusterings2s                   | Clustering          | s2s        | English                  |
+| BiorxivClusteringp2p                   | Clustering          | p2p        | English                  |
+| MedrxivClusterings2s                   | Clustering          | s2s        | English                  |
+| MedrxivClusteringp2p                   | Clustering          | p2p        | English                  |
+| StackExchangeClustering                | Clustering          | s2s        | English                  |
+| StackExchangeClusteringp2p             | Clustering          | p2p        | English                  |
+| RedditClustering                       | Clustering          | s2s        | English                  |
+| RedditClusteringp2p                    | Clustering          | p2p        | English                  |
+| TwentyNewsgroupsClustering             | Clustering          | s2s        | English                  |
+| AskUbuntuDupQuestions                  | Reranking           | s2s        | English                  |
+| SciDocsReranking                       | Reranking           | s2s        | English                  |
+| StackOverflowDupQuestions              | Reranking           | s2s        | English                  |
+| MindSmallReranking                     | Reranking           | s2s        | English                  |
+| BiossesSTS                             | STS                 | s2s        | English                  |
+| SickrSTS                               | STS                 | s2s        | English                  |
+| STS12STS                               | STS                 | s2s        | English                  |
+| STS13STS                               | STS                 | s2s        | English                  |
+| STS14STS                               | STS                 | s2s        | English                  |
+| STS15STS                               | STS                 | s2s        | English                  |
+| STS16STS                               | STS                 | s2s        | English                  |
+| STS17CrossLingualSTS                   | STS                 | s2s        | Crosslingual (10 pairs)  |
+| STS22CrossLingualSTS                   | STS                 | s2s        | Crosslingual (18 pairs)  |
+| STSBenchmarkSTS                        | STS                 | s2s        | English                  |
+| BUCCBitextMining                       | BitextMining        | s2s        | Crosslingual (4 pairs)   |
+| TatoebaBitextMining                    | BitextMining        | s2s        | Crosslingual (112 pairs) |
+| SprintDuplicateQuestionsBC             | Pair Classification | s2s        | English                  |
+| TwitterSemEval2015BC                   | Pair Classification | s2s        | English                  |
+| TwitterURLCorpusBC                     | Pair Classification | s2s        | English                  |
+| AmazonCounterfactualClassification     | Classification      | s2s        | Multilingual (4 langs)   |
+| AmazonPolarityClassification           | Classification      | s2s        | English                  |
+| AmazonReviewsClassification            | Classification      | s2s        | Multilingual (6 langs)   |
+| Banking77Classification                | Classification      | s2s        | English                  |
+| EmotionClassification                  | Classification      | s2s        | English                  |
+| ImdbClassification                     | Classification      | p2p        | English                  |
+| MassiveIntentClassification            | Classification      | s2s        | Multilingual (51 langs)  |
+| MassiveScenarioClassification          | Classification      | s2s        | Multilingual (51 langs)  |
+| MTOPDomainClassification               | Classification      | s2s        | Multilingual (6 langs)   |
+| MTOPIntentClassification               | Classification      | s2s        | Multilingual (6 langs)   |
+| ToxicConversationsClassification       | Classification      | s2s        | English                  |
+| TweetSentimentExtractionClassification | Classification      | s2s        | English                  |
+| ArguAna                                | Retrieval           | s2s        | English                  |
+| ClimateFEVER                           | Retrieval           | s2s        | English                  |
+| CQADupstackRetrieval                   | Retrieval           | s2s        | English                  |
+| DBPedia                                | Retrieval           | s2s        | English                  |
+| FEVER                                  | Retrieval           | s2s        | English                  |
+| FiQA2018                               | Retrieval           | s2s        | English                  |
+| HotpotQA                               | Retrieval           | s2s        | English                  |
+| MSMARCO                                | Retrieval           | s2s        | English                  |
+| MSMARCOv2                              | Retrieval           | s2s        | English                  |
+| NFCorpus                               | Retrieval           | s2s        | English                  |
+| NQ                                     | Retrieval           | s2s        | English                  |
+| QuoraRetrieval                         | Retrieval           | s2s        | English                  |
+| SCIDOCS                                | Retrieval           | s2s        | English                  |
+| SciFact                                | Retrieval           | s2s        | English                  |
+| Touche2020                             | Retrieval           | s2s        | English                  |
+| TRECCOVID                              | Retrieval           | s2s        | English                  |
+| SummEval                               | Summarization       | s2s        | English                  |
