@@ -29,16 +29,16 @@ class BeIRTask(AbsTask):
         if eval_splits is None:
             eval_splits = self.description["eval_splits"]
         dataset = self.description["beir_name"]
-        url = f"https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/{dataset}.zip"
-        download_path = os.path.join(datasets.config.HF_DATASETS_CACHE, "BeIR")
-        data_path = util.download_and_unzip(url, download_path)
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         for split in eval_splits:
             if USE_BEIR_DEVELOPMENT:
                 self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
-                    hf_repo=f"BeIR/{dataset}", data_folder=data_path
+                    hf_repo=f"BeIR/{dataset}"
                 ).load(split=split)
             else:
+                url = f"https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/{dataset}.zip"
+                download_path = os.path.join(datasets.config.HF_DATASETS_CACHE, "BeIR")
+                data_path = util.download_and_unzip(url, download_path)
                 self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
                     data_folder=data_path
                 ).load(split=split)
