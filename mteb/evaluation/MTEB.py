@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import pathlib
+from time import time
 import traceback
 from datetime import datetime
 
@@ -194,7 +195,11 @@ class MTEB:
                 # run evaluation
                 task_results = {}
                 for split in eval_splits:
+                    tick = time()
                     results = task.evaluate(model, split, **kwargs)
+                    tock = time()
+                    logger.info(f"Evaluation for {task.description['name']} on {split} took {tock - tick:.2f} seconds")
+                    results["evluation_time"] = round(tock - tick, 2)
                     task_results[split] = results
                     if verbosity >= 1:
                         logger.info(f"Scores: {results}")
