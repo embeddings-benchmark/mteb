@@ -1,18 +1,5 @@
 import os
-
 import datasets
-
-from beir import util
-
-
-USE_BEIR_DEVELOPMENT = False
-try:
-    from beir.datasets.data_loader_hf import HFDataLoader as BeirDataLoader
-
-    USE_BEIR_DEVELOPMENT = True
-except ImportError:
-    from beir.datasets.data_loader import GenericDataLoader as BeirDataLoader
-
 from .AbsTask import AbsTask
 
 
@@ -24,6 +11,16 @@ class BeIRTask(AbsTask):
         """
         Load dataset from BeIR benchmark. TODO: replace with HF hub once datasets are moved there
         """
+        from beir import util
+
+        USE_BEIR_DEVELOPMENT = False
+        try:
+            from beir.datasets.data_loader_hf import HFDataLoader as BeirDataLoader
+
+            USE_BEIR_DEVELOPMENT = True
+        except ImportError:
+            from beir.datasets.data_loader import GenericDataLoader as BeirDataLoader
+
         if self.data_loaded:
             return
         if eval_splits is None:

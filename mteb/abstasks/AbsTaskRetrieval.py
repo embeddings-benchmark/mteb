@@ -1,12 +1,8 @@
 import logging
 from time import time
 from typing import Dict, List
-
 import torch.multiprocessing as mp
-
-from beir.retrieval.evaluation import EvaluateRetrieval
 from sentence_transformers import SentenceTransformer
-
 from .AbsTask import AbsTask
 
 
@@ -35,6 +31,7 @@ class AbsTaskRetrieval(AbsTask):
         score_function="cos_sim",
         **kwargs
     ):
+        from beir.retrieval.evaluation import EvaluateRetrieval
         if not self.data_loaded:
             self.load_data()
 
