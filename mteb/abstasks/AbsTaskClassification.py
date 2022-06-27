@@ -1,4 +1,5 @@
 from collections import defaultdict
+
 import numpy as np
 
 from ..evaluation.evaluators import (
@@ -16,7 +17,9 @@ class AbsTaskClassification(AbsTask):
     is computed to measure how well the methods can be used for classification. #TODO:
     """
 
-    def __init__(self, method="logReg", n_experiments=None, samples_per_label=None, k=3, batch_size=32, seed=42, **kwargs):
+    def __init__(
+        self, method="logReg", n_experiments=None, samples_per_label=None, k=3, batch_size=32, seed=42, **kwargs
+    ):
         super().__init__(**kwargs)
         self.batch_size = batch_size
         self.seed = 42

@@ -1,8 +1,11 @@
 import logging
 from time import time
 from typing import Dict, List
+
 import torch.multiprocessing as mp
+
 from sentence_transformers import SentenceTransformer
+
 from .AbsTask import AbsTask
 
 
@@ -57,7 +60,7 @@ class AbsTaskRetrieval(AbsTask):
                     "DenseRetrievalParallelExactSearch could not be imported from beir. Using DenseRetrievalExactSearch instead."
                 )
                 logger.warning("The parameter target_devices is ignored.")
-                
+
             from beir.retrieval.search.dense import DenseRetrievalExactSearch as DRES
 
             model = DRES(

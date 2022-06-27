@@ -3,9 +3,9 @@ from sys import prefix
 
 import numpy as np
 import torch
+from tqdm import trange
 
 from scipy.stats import pearsonr, spearmanr
-from tqdm import trange
 
 from .utils import cos_sim, dot_score
 
@@ -41,7 +41,7 @@ class SummarizationEvaluator(Evaluator):
         dot_spearman_scores = []
         dot_pearson_scores = []
 
-        for i in trange(len(self.texts), desc="Texts"): # iterate over all original texts
+        for i in trange(len(self.texts), desc="Texts"):  # iterate over all original texts
             human_summaries = self.human_summaries[i]  # Get the human summaries for the text
             embs_human_summaries = model.encode(human_summaries)
             cosine_pred_scores = []  # Our predict quality score for a summary
@@ -50,7 +50,9 @@ class SummarizationEvaluator(Evaluator):
             for machine_summary, human_eval_score in zip(
                 self.machine_summaries[i], self.gold_scores[i]
             ):  # Get all machine summaries + scores for this text
-                emb_machine_summary = model.encode(machine_summary, show_progress_bar=False)  # 1 embedding for the summary
+                emb_machine_summary = model.encode(
+                    machine_summary, show_progress_bar=False
+                )  # 1 embedding for the summary
                 cosine_scores = cos_sim(emb_machine_summary, embs_human_summaries)
                 dot_scores = dot_score(emb_machine_summary, embs_human_summaries)
 

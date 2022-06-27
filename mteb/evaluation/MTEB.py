@@ -2,9 +2,9 @@ import json
 import logging
 import os
 import pathlib
-from time import time
 import traceback
 from datetime import datetime
+from time import time
 
 import datasets
 from tqdm import trange
