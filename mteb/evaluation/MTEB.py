@@ -199,7 +199,7 @@ class MTEB:
                     results = task.evaluate(model, split, **kwargs)
                     tock = time()
                     logger.info(f"Evaluation for {task.description['name']} on {split} took {tock - tick:.2f} seconds")
-                    results["evluation_time"] = round(tock - tick, 2)
+                    results["evaluation_time"] = round(tock - tick, 2)
                     task_results[split] = results
                     if verbosity >= 1:
                         logger.info(f"Scores: {results}")

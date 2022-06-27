@@ -14,6 +14,6 @@ class TweetSentimentExtractionClassification(AbsTaskClassification):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "accuracy",
-            "n_splits": 10,
+            "n_experiments": 10,
             "samples_per_label": 32,
         }

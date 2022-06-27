@@ -16,14 +16,14 @@ class AbsTaskClassification(AbsTask):
     is computed to measure how well the methods can be used for classification. #TODO:
     """
 
-    def __init__(self, method="logReg", n_splits=None, samples_per_label=None, k=3, batch_size=32, seed=42, **kwargs):
+    def __init__(self, method="logReg", n_experiments=None, samples_per_label=None, k=3, batch_size=32, seed=42, **kwargs):
         super().__init__(**kwargs)
         self.batch_size = batch_size
         self.seed = 42
         self.method = method
 
         # Bootstrap parameters
-        self.n_splits = n_splits if n_splits is not None else self.description.get("n_splits", 1)
+        self.n_experiments = n_experiments if n_experiments is not None else self.description.get("n_experiments", 1)
         self.samples_per_label = (
             samples_per_label
             if samples_per_label is not None
@@ -61,7 +61,7 @@ class AbsTaskClassification(AbsTask):
 
         scores = []
         idxs = None  # we store idxs to make the shuffling reproducible
-        for _ in range(self.n_splits):
+        for _ in range(self.n_experiments):
             # Bootstrap `self.samples_per_label` samples per label for each split
             X_sampled, y_sampled, idxs = self._undersample_data(
                 train_split["text"], train_split["label"], self.samples_per_label, idxs
@@ -84,7 +84,7 @@ class AbsTaskClassification(AbsTask):
 
             scores.append(evaluator(model))
 
-        if self.n_splits == 1:
+        if self.n_experiments == 1:
             return scores[0]
         else:
             avg_scores = {k: np.mean([s[k] for s in scores]) for k in scores[0].keys()}

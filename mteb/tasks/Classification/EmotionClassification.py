@@ -17,6 +17,6 @@ class EmotionClassification(AbsTaskClassification):
             "eval_splits": ["validation", "test"],
             "eval_langs": ["en"],
             "main_score": "accuracy",
-            "n_splits": 10,
+            "n_experiments": 10,
             "samples_per_label": 16,
         }
