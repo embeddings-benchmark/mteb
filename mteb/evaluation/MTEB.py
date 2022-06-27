@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class MTEB:
-    def __init__(self, task_types=None, task_categories=None, version=None, tasks=None, **kwargs):
+    def __init__(self, task_types=None, task_categories=None, version=None, tasks=None, err_logs_path=None, **kwargs):
         """
         Create an Evaluation pipeline. The tasks selected
         depends on the parameters. One can specify the tasks types
@@ -47,6 +47,8 @@ class MTEB:
         self._version = version
 
         self._tasks = tasks
+
+        self.err_logs_path = err_logs_path if err_logs_path is not None else "error_logs.txt"
 
         self.select_tasks(**kwargs)
 
@@ -211,7 +213,8 @@ class MTEB:
 
             except Exception as e:
                 logger.error(f"Error while evaluating {task.description['name']}: {e}")
-                with open("error_logs.txt", "a") as f_out:
+                logger.error(f"Please check all the error logs at: {self.err_logs_path}")
+                with open(self.err_logs_path, "a") as f_out:
                     f_out.write(f"{datetime.now()} >>> {task.description['name']}\n")
                     f_out.write(traceback.format_exc())
                     f_out.write("\n\n")
