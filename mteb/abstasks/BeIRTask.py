@@ -11,7 +11,10 @@ class BeIRTask(AbsTask):
         """
         Load dataset from BeIR benchmark. TODO: replace with HF hub once datasets are moved there
         """
-        from beir import util
+        try:
+            from beir import util
+        except ImportError:
+            raise Exception("Retrieval tasks require beir package. Please install it with `pip install mteb[beir]`")
 
         USE_BEIR_DEVELOPMENT = False
         try:

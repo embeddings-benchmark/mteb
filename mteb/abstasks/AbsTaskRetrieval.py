@@ -31,7 +31,11 @@ class AbsTaskRetrieval(AbsTask):
         score_function="cos_sim",
         **kwargs
     ):
-        from beir.retrieval.evaluation import EvaluateRetrieval
+        try:
+            from beir.retrieval.evaluation import EvaluateRetrieval
+        except ImportError:
+            raise Exception("Retrieval tasks require beir package. Please install it with `pip install mteb[beir]`")
+
         if not self.data_loaded:
             self.load_data()
 
@@ -53,6 +57,7 @@ class AbsTaskRetrieval(AbsTask):
                     "DenseRetrievalParallelExactSearch could not be imported from beir. Using DenseRetrievalExactSearch instead."
                 )
                 logger.warning("The parameter target_devices is ignored.")
+                
             from beir.retrieval.search.dense import DenseRetrievalExactSearch as DRES
 
             model = DRES(
