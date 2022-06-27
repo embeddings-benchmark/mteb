@@ -22,7 +22,7 @@ class AbsTaskClassification(AbsTask):
     ):
         super().__init__(**kwargs)
         self.batch_size = batch_size
-        self.seed = 42
+        self.seed = seed
         self.method = method
 
         # Bootstrap parameters
