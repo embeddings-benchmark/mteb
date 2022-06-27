@@ -5,7 +5,7 @@ Massive Text Embedding Benchmark - Internal Development Git
 ## Installation
 
 ```bash
-pip install git+https://github.com/embeddings-benchmark/mteb-draft.git
+pip install git+https://github.com/embeddings-benchmark/mteb.git
 ```
 
 ## Minimal use

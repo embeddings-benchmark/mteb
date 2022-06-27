@@ -7,7 +7,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, average_precision_score, f1_score
 from sklearn.neighbors import KNeighborsClassifier
 from torch import Tensor
-
 from .Evaluator import Evaluator
 
 
@@ -75,7 +74,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         self.sentences_test = sentences_test
         self.y_test = y_test
 
-        seed = 28042000
+        seed = seed
         random.seed(seed)
         np.random.seed(seed)
         self.batch_size = batch_size
@@ -89,7 +88,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         max_ap = 0
         X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
         X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
-        for metric in ["cosine", "euclidean", "dot"]:  # TODO: "dot"
+        for metric in ["cosine", "euclidean", "dot"]:
             if metric == "cosine":
                 distances = 1 - self._cos_sim(X_test, X_train)
             elif metric == "euclidean":
@@ -201,7 +200,7 @@ class logRegClassificationEvaluator(Evaluator):
         self.sentences_test = sentences_test
         self.y_test = y_test
 
-        self.seed = 28042000
+        self.seed = seed
         random.seed(self.seed)
         np.random.seed(self.seed)
         self.max_iter = max_iter
