@@ -66,7 +66,7 @@ def main():
     #     help="Method to use for evaluation. Can be 'kNN' or 'logReg'",
     # )
     parser.add_argument("--k", type=int, default=None, help="Number of nearest neighbors to use for classification")
-    parser.add_argument("--n_splits", type=int, default=None, help="Number of splits for bootstrapping")
+    parser.add_argument("--n_experiments", type=int, default=None, help="Number of splits for bootstrapping")
     parser.add_argument(
         "--samples_per_label", type=int, default=None, help="Number of samples per label for bootstrapping"
     )
