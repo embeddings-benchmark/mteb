@@ -26,11 +26,11 @@ class AbsTaskClassification(AbsTask):
         self.method = method
 
         # Bootstrap parameters
-        self.n_experiments = n_experiments if n_experiments is not None else self.description.get("n_experiments", 1)
+        self.n_experiments = n_experiments if n_experiments is not None else self.description.get("n_experiments", 10)
         self.samples_per_label = (
             samples_per_label
             if samples_per_label is not None
-            else self.description.get("samples_per_label", float("inf"))
+            else self.description.get("samples_per_label", 8)
         )
 
         # kNN parameters
