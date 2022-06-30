@@ -12,7 +12,7 @@ setup(
     name="mteb",
     version="0.0.2",
     description="Massive Text Embedding Benchmark",
-    long_description=open("README.md", "r", encoding="utf-8").read(),
+    long_description=readme,
     long_description_content_type="text/markdown",
     keywords="deep learning, text embeddings, benchmark",
     license="Apache",
