@@ -1,11 +1,11 @@
 # Massive Text Embedding Benchmark
 
-Massive Text Embedding Benchmark - Internal Development Git
+Massive Text Embedding Benchmark 
 
 ## Installation
 
 ```bash
-pip install git+https://github.com/embeddings-benchmark/mteb.git
+pip install mteb
 ```
 
 ## Minimal use
@@ -16,9 +16,14 @@ pip install git+https://github.com/embeddings-benchmark/mteb.git
 from mteb import MTEB
 from sentence_transformers import SentenceTransformer
 
-model = SentenceTransformer("average_word_embeddings_komninos")
+# Define the sentence-transformers model name
+model_name = "average_word_embeddings_komninos"
+
+model = SentenceTransformer(model_name)
 evaluation = MTEB(tasks=["Banking77Classification"])
-evaluation.run(model)
+evaluation.run(model, output_folder=f"results/{model_name}")
+
+
 ````
 
 * Using CLI
@@ -27,8 +32,8 @@ evaluation.run(model)
 mteb --available_tasks
 
 mteb -m average_word_embeddings_komninos \
-    -t Banking77Classification NFCorpus \
-    --output_folder results \
+    -t Banking77Classification  \
+    --output_folder results/average_word_embeddings_komninos \
     --verbosity 3
 ```
 

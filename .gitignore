@@ -1,5 +1,6 @@
 .vscode
 .DS_Store
+.idea
 
 # Result folder
 results/
