@@ -8,7 +8,12 @@ from .AbsTask import AbsTask
 class CrosslingualTask(AbsTask):
     def __init__(self, langs=None, **kwargs):
         super().__init__(**kwargs)
-        self.langs = langs if langs else self.description["eval_langs"]
+        if type(langs) is list:
+            langs = [lang for lang in langs if lang in self.description["eval_langs"]]
+        if langs is not None and len(langs) > 0:
+            self.langs = langs
+        else:   
+            self.langs = self.description["eval_langs"]
         self.is_crosslingual = True
 
     def load_data(self, **kwargs):
