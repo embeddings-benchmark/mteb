@@ -3,6 +3,8 @@ import logging
 from mteb import MTEB
 from sentence_transformers import SentenceTransformer
 
+from mteb.tasks.BitextMining import BUCCBitextMining
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -14,7 +16,7 @@ eval = MTEB(
         "SciDocs",
         "SprintDuplicateQuestions",
         "NFCorpus",
-        "BUCC",
+        BUCCBitextMining(langs=["de-en"]),
         "STS12",
         "SummEval",
     ]
