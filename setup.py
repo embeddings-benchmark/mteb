@@ -19,6 +19,10 @@ setup(
     author="MTEB",
     author_email="info@nils-reimers.de",
     url="https://github.com/embeddings-benchmark/mteb",
+    project_urls={
+        'Huggingface Organization': 'https://huggingface.co/mteb',
+        'Source Code': 'https://github.com/embeddings-benchmark/mteb',
+    },
     packages=find_packages(),
     entry_points={
         "console_scripts": [
