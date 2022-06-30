@@ -1,4 +1,5 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
+
 
 with open("README.md", mode="r", encoding="utf-8") as readme_file:
     readme = readme_file.read()
@@ -20,8 +21,8 @@ setup(
     author_email="info@nils-reimers.de",
     url="https://github.com/embeddings-benchmark/mteb",
     project_urls={
-        'Huggingface Organization': 'https://huggingface.co/mteb',
-        'Source Code': 'https://github.com/embeddings-benchmark/mteb',
+        "Huggingface Organization": "https://huggingface.co/mteb",
+        "Source Code": "https://github.com/embeddings-benchmark/mteb",
     },
     packages=find_packages(),
     entry_points={
@@ -30,7 +31,18 @@ setup(
         ]
     },
     python_requires=">=3.7.0",
-    install_requires=["datasets>=2.2.0", "jsonlines", "numpy", "requests>=2.26.0", "scikit_learn>=1.0.2", "scipy", "sentence_transformers>=2.2.0", "torch", "tqdm", "rich"],
+    install_requires=[
+        "datasets>=2.2.0",
+        "jsonlines",
+        "numpy",
+        "requests>=2.26.0",
+        "scikit_learn>=1.0.2",
+        "scipy",
+        "sentence_transformers>=2.2.0",
+        "torch",
+        "tqdm",
+        "rich",
+    ],
     extras_require=extras,
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -42,5 +54,3 @@ setup(
         "Programming Language :: Python",
     ],
 )
-
-
