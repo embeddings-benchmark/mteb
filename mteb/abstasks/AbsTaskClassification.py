@@ -40,7 +40,7 @@ class AbsTaskClassification(AbsTask):
 
         if self.is_multilingual:
             scores = {}
-            for lang in self.langs:
+            for lang in self.dataset:
                 print(f"\nTask: {self.description['name']}, split: {eval_split}, language: {lang}. Running...")
                 scores[lang] = self._evaluate_monolingual(model, self.dataset[lang], eval_split, train_split, **kwargs)
         else:

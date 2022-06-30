@@ -30,10 +30,12 @@ class AbsTaskSummarization(AbsTask):
 
         if self.is_crosslingual:
             scores = {}
-            for lang in self.description["eval_langs"]:
+            for lang in self.dataset:
+                print(f"\nTask: {self.description['name']}, split: {split}, language: {lang}. Running...")
                 data_split = self.dataset[lang][split]
                 scores[lang] = self._evaluate_split(model, data_split, **kwargs)
         else:
+            print(f"\nTask: {self.description['name']}, split: {split}. Running...")
             data_split = self.dataset[split]
             scores = self._evaluate_split(model, data_split, **kwargs)
 
