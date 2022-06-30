@@ -16,7 +16,7 @@ eval = MTEB(
         "NFCorpus",
         "BUCC",
         "STS12",
-        "SummEval"
+        "SummEval",
     ]
 )
 eval.run(model)
