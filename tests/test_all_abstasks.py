@@ -1,9 +1,8 @@
 import logging
 
 from mteb import MTEB
-from sentence_transformers import SentenceTransformer
-
 from mteb.tasks.BitextMining import BUCCBitextMining
+from sentence_transformers import SentenceTransformer
 
 
 logging.basicConfig(level=logging.INFO)

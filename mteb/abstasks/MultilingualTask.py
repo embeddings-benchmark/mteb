@@ -11,8 +11,8 @@ class MultilingualTask(AbsTask):
         if type(langs) is list:
             langs = [lang for lang in langs if lang in self.description["eval_langs"]]
         if langs is not None and len(langs) > 0:
-            self.langs = langs #TODO: case where user provides langs not in the dataset
-        else:   
+            self.langs = langs  # TODO: case where user provides langs not in the dataset
+        else:
             self.langs = self.description["eval_langs"]
         self.is_multilingual = True
 

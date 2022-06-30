@@ -19,7 +19,16 @@ logger = logging.getLogger(__name__)
 
 
 class MTEB:
-    def __init__(self, task_types=None, task_categories=None, tasks=None, task_langs=None, version=None, err_logs_path=None, **kwargs):
+    def __init__(
+        self,
+        task_types=None,
+        task_categories=None,
+        tasks=None,
+        task_langs=None,
+        version=None,
+        err_logs_path=None,
+        **kwargs
+    ):
         """
         Create an Evaluation pipeline. The tasks selected
         depends on the parameters. One can specify the tasks types
@@ -48,7 +57,9 @@ class MTEB:
         self._task_langs = task_langs if task_langs is not None else []
         if type(self._task_langs) is str:
             self._task_langs = [self._task_langs]
-        self._task_langs.extend([f"{x}-{y}" for x in self._task_langs for y in self._task_langs]) # add all possible pairs
+        self._task_langs.extend(
+            [f"{x}-{y}" for x in self._task_langs for y in self._task_langs]
+        )  # add all possible pairs
 
         self._tasks = tasks
 
@@ -128,15 +139,22 @@ class MTEB:
             return
 
         # Otherwise use filters to select tasks
-        filtered_tasks = filter(lambda x: (self._task_types is None) or (x.description["type"] in self._task_types), self.tasks_cls)
-        filtered_tasks = filter(lambda x: (self._task_categories is None) or (
-            x.description["category"] in self._task_categories
-        ), filtered_tasks)
-        filtered_tasks = filter(lambda x: (self._version is None) or (x.description["version"] >= self._version), filtered_tasks)
+        filtered_tasks = filter(
+            lambda x: (self._task_types is None) or (x.description["type"] in self._task_types), self.tasks_cls
+        )
+        filtered_tasks = filter(
+            lambda x: (self._task_categories is None) or (x.description["category"] in self._task_categories),
+            filtered_tasks,
+        )
+        filtered_tasks = filter(
+            lambda x: (self._version is None) or (x.description["version"] >= self._version), filtered_tasks
+        )
         # keep only tasks with at least one language in the filter
-        filtered_tasks = filter(lambda x: (self._task_langs is None) or (
-            len(set(x.description["eval_langs"]) & set(self._task_langs)) > 0
-        ), filtered_tasks)
+        filtered_tasks = filter(
+            lambda x: (self._task_langs is None)
+            or (len(set(x.description["eval_langs"]) & set(self._task_langs)) > 0),
+            filtered_tasks,
+        )
 
         # Get final list of tasks
         self.tasks = list(filtered_tasks)

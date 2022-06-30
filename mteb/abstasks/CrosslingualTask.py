@@ -12,7 +12,7 @@ class CrosslingualTask(AbsTask):
             langs = [lang for lang in langs if lang in self.description["eval_langs"]]
         if langs is not None and len(langs) > 0:
             self.langs = langs
-        else:   
+        else:
             self.langs = self.description["eval_langs"]
         self.is_crosslingual = True
 
