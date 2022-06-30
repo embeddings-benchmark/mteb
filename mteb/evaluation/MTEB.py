@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 class MTEB:
-    def __init__(self, task_types=None, task_categories=None, version=None, tasks=None, err_logs_path=None, **kwargs):
+    def __init__(self, task_types=None, task_categories=None, tasks=None, task_langs=None, version=None, err_logs_path=None, **kwargs):
         """
         Create an Evaluation pipeline. The tasks selected
         depends on the parameters. One can specify the tasks types
@@ -45,6 +45,10 @@ class MTEB:
         self._task_types = task_types
         self._task_categories = task_categories
         self._version = version
+        self._task_langs = task_langs if task_langs is not None else []
+        if type(self._task_langs) is str:
+            self._task_langs = [self._task_langs]
+        self._task_langs.extend([f"{x}-{y}" for x in self._task_langs for y in self._task_langs]) # add all possible pairs
 
         self._tasks = tasks
 
@@ -110,7 +114,7 @@ class MTEB:
         # Get all existing tasks
         tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
         self.tasks_cls = [
-            cls(**kwargs)
+            cls(langs=self._task_langs, **kwargs)
             for cat_cls in tasks_categories_cls
             for cls in cat_cls.__subclasses__()
             if cat_cls.__name__.startswith("AbsTask")
@@ -118,23 +122,21 @@ class MTEB:
 
         # If `task_list` is specified, select list of tasks
         if self._tasks is not None:
-            filter_task_list = lambda x: (x.description["name"] in self._tasks)
-            self.tasks = list(filter(filter_task_list, self.tasks_cls))
+            self.tasks = list(filter(lambda x: (x.description["name"] in self._tasks), self.tasks_cls))
             # add task if subclass of mteb.tasks
             self.tasks.extend([x for x in self._tasks if isinstance(x, AbsTask)])
             return
 
         # Otherwise use filters to select tasks
-        filter_task_type = lambda x: (self._task_types is None) or (x.description["type"] in self._task_types)
-        filter_task_category = lambda x: (self._task_categories is None) or (
+        filtered_tasks = filter(lambda x: (self._task_types is None) or (x.description["type"] in self._task_types), self.tasks_cls)
+        filtered_tasks = filter(lambda x: (self._task_categories is None) or (
             x.description["category"] in self._task_categories
-        )
-        filter_version = lambda x: (self._version is None) or (x.description["version"] >= self._version)
-
-        # Filter tasks
-        filtered_tasks = filter(filter_task_type, self.tasks_cls)
-        filtered_tasks = filter(filter_task_category, filtered_tasks)
-        filtered_tasks = filter(filter_version, filtered_tasks)
+        ), filtered_tasks)
+        filtered_tasks = filter(lambda x: (self._version is None) or (x.description["version"] >= self._version), filtered_tasks)
+        # keep only tasks with at least one language in the filter
+        filtered_tasks = filter(lambda x: (self._task_langs is None) or (
+            len(set(x.description["eval_langs"]) & set(self._task_langs)) > 0
+        ), filtered_tasks)
 
         # Get final list of tasks
         self.tasks = list(filtered_tasks)

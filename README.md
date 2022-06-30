@@ -55,6 +55,12 @@ evaluation = MTEB(task_types=['Clustering', 'Retrieval']) # Only select clusteri
 evaluation = MTEB(task_categories=['S2S']) # Only select sentence2sentence tasks
 ````
 
+* by their languages
+
+````python
+evaluation = MTEB(task_langs=["en", "de"]) # Only select tasks which support "en", "de" or "en-de"
+````
+
 You can also specify which languages to load for multilingual/crosslingual tasks like this:
 
 ````python
@@ -64,6 +70,13 @@ evaluation = MTEB(tasks=[
         BUCCBitextMining(langs=["de-en"]), # Only load "de-en" and fr-en" subsets of BUCC
         AmazonReviewsClassification(langs=["en", "fr"]) # Only load "en" and "fr" subsets of Amazon Reviews
 ])
+````
+
+### Evaluation split
+We can choose to evaluate only on `test` splits of all tasks by doing the following:
+
+````python
+evaluation.run(model, eval_splits=["test"])
 ````
 
 ### Using a custom model
