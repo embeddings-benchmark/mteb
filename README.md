@@ -64,11 +64,11 @@ evaluation = MTEB(task_langs=["en", "de"]) # Only select tasks which support "en
 You can also specify which languages to load for multilingual/crosslingual tasks like this:
 
 ````python
-from mteb.tasks.BitextMining import BUCCBitextMining
+from mteb.tasks import AmazonReviewsClassification, BUCCBitextMining
 
 evaluation = MTEB(tasks=[
-        BUCCBitextMining(langs=["de-en"]), # Only load "de-en" and fr-en" subsets of BUCC
         AmazonReviewsClassification(langs=["en", "fr"]) # Only load "en" and "fr" subsets of Amazon Reviews
+        BUCCBitextMining(langs=["de-en"]), # Only load "de-en" subset of BUCC
 ])
 ````
 
