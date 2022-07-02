@@ -53,7 +53,7 @@ class AbsTaskClassification(AbsTask):
         else:
             print(f"\nTask: {self.description['name']}, split: {eval_split}. Running...")
             scores = self._evaluate_monolingual(model, self.dataset, eval_split, train_split, **kwargs)
-            self._add_main_score(scores[lang])
+            self._add_main_score(scores)
 
         return scores
 
