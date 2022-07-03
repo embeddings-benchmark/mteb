@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import os
 
 import datasets
 
@@ -18,7 +19,12 @@ class AbsTask(ABC):
         if self.data_loaded:
             return
 
-        self.dataset = datasets.load_dataset(self.description["hf_hub_name"])  # TODO: add split argument
+        is_offline = int(os.environ["HF_DATASETS_OFFLINE"])
+        if is_offline:
+            path = "/gpfsscratch/rech/six/commun/commun/experiments/muennighoff/"
+            self.dataset = datasets.load_dataset(path + self.description["hf_hub_name"])  # TODO: add split argument
+        else:
+            self.dataset = datasets.load_dataset(self.description["hf_hub_name"])
         self.data_loaded = True
 
     @abstractmethod
