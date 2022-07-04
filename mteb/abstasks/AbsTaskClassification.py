@@ -34,6 +34,12 @@ class AbsTaskClassification(AbsTask):
         # kNN parameters
         self.k = k
 
+    def _add_main_score(self, scores):
+        if self.description["main_score"] in scores:
+            scores["main_score"] = scores[self.description["main_score"]]
+        else:
+            print(f"WARNING: main score {self.description['main_score']} not found in scores {scores.keys()}")
+
     def evaluate(self, model, eval_split="test", train_split="train", **kwargs):
         if not self.data_loaded:
             self.load_data()
@@ -43,14 +49,11 @@ class AbsTaskClassification(AbsTask):
             for lang in self.dataset:
                 print(f"\nTask: {self.description['name']}, split: {eval_split}, language: {lang}. Running...")
                 scores[lang] = self._evaluate_monolingual(model, self.dataset[lang], eval_split, train_split, **kwargs)
+                self._add_main_score(scores[lang])
         else:
             print(f"\nTask: {self.description['name']}, split: {eval_split}. Running...")
             scores = self._evaluate_monolingual(model, self.dataset, eval_split, train_split, **kwargs)
-
-        if self.description["main_score"] in scores:
-            scores["main_score"] = scores[self.description["main_score"]]
-        else:
-            print(f"WARNING: main score {self.description['main_score']} not found in scores {scores.keys()}")
+            self._add_main_score(scores)
 
         return scores
 
