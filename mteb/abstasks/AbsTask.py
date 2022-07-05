@@ -26,7 +26,7 @@ class AbsTask(ABC):
         else:
             from git import Repo
             Repo.clone_from("https://huggingface.co/datasets/" + self.description["hf_hub_name"], path)
-            #self.dataset = datasets.load_dataset(  self.description["hf_hub_name"])
+            self.dataset = datasets.load_dataset(path)
         self.data_loaded = True
 
     @abstractmethod
