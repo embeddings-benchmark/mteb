@@ -33,13 +33,14 @@ class BeIRTask(AbsTask):
         dataset = self.description["beir_name"]
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         for split in eval_splits:
-            if USE_BEIR_DEVELOPMENT:
+            if False:
                 self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
                     hf_repo=f"BeIR/{dataset}"
                 ).load(split=split)
             else:
                 url = f"https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/{dataset}.zip"
-                download_path = os.path.join(datasets.config.HF_DATASETS_CACHE, "BeIR")
+                #download_path = os.path.join(datasets.config.HF_DATASETS_CACHE, "BeIR")
+                download_path = "/gpfsscratch/rech/six/commun/commun/experiments/muennighoff/mteb/"
                 data_path = util.download_and_unzip(url, download_path)
                 self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
                     data_folder=data_path
