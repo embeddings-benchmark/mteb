@@ -13,5 +13,5 @@ class MSMARCOv2(AbsTaskRetrieval, BeIRTask):
             "category": "s2s",
             "eval_splits": ["dev1", "dev2"],
             "eval_langs": ["en"],
-            "main_score": "map",
+            "main_score": "ndcg_at_10",
         }

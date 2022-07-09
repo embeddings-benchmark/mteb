@@ -14,5 +14,5 @@ class FiQA2018(AbsTaskRetrieval, BeIRTask):
             "category": "s2s",
             "eval_splits": ["dev", "test"],
             "eval_langs": ["en"],
-            "main_score": "map",
+            "main_score": "ndcg_at_10",
         }
