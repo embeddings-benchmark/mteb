@@ -44,31 +44,31 @@ class AbsTaskRetrieval(AbsTask):
 
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
 
-        try:
-            from beir.retrieval.search.dense import DenseRetrievalParallelExactSearch as DRPES
+        #try:
+        #    from beir.retrieval.search.dense import DenseRetrievalParallelExactSearch as DRPES
 
-            model = DRPES(
-                BeIRModel(model),
-                batch_size=batch_size,
-                target_devices=target_devices,
-                corpus_chunk_size=corpus_chunk_size,
-                **kwargs,
+        #    model = DRPES(
+        #        BeIRModel(model),
+        #        batch_size=batch_size,
+        #        target_devices=target_devices,
+        #        corpus_chunk_size=corpus_chunk_size,
+        #        **kwargs,
+        #    )
+        #except ImportError:
+        if target_devices is not None:
+            logger.warning(
+                "DenseRetrievalParallelExactSearch could not be imported from beir. Using DenseRetrievalExactSearch instead."
             )
-        except ImportError:
-            if target_devices is not None:
-                logger.warning(
-                    "DenseRetrievalParallelExactSearch could not be imported from beir. Using DenseRetrievalExactSearch instead."
-                )
-                logger.warning("The parameter target_devices is ignored.")
+            logger.warning("The parameter target_devices is ignored.")
 
-            from beir.retrieval.search.dense import DenseRetrievalExactSearch as DRES
+        from beir.retrieval.search.dense import DenseRetrievalExactSearch as DRES
 
-            model = DRES(
-                BeIRModel(model),
-                batch_size=batch_size,
-                corpus_chunk_size=corpus_chunk_size if corpus_chunk_size is not None else 50000,
-                **kwargs,
-            )
+        model = DRES(
+            BeIRModel(model),
+            batch_size=batch_size,
+            corpus_chunk_size=corpus_chunk_size if corpus_chunk_size is not None else 50000,
+            **kwargs,
+        )
 
         retriever = EvaluateRetrieval(model, score_function=score_function)  # or "cos_sim" or "dot"
         start_time = time()
