@@ -135,6 +135,11 @@ class MTEB:
         if self._tasks is not None:
             self.tasks = list(filter(lambda x: (x.description["name"] in self._tasks), self.tasks_cls))
             # add task if subclass of mteb.tasks
+            filtered_tasks = filter(
+                lambda x: (self._task_langs is None)
+                or (len(set(x.description["eval_langs"]) & set(self._task_langs)) > 0),
+                self.tasks,
+            )
             self.tasks.extend([x for x in self._tasks if isinstance(x, AbsTask)])
             return
 
@@ -208,15 +213,15 @@ class MTEB:
                     continue
 
             try:
-                eval_splits = eval_splits if eval_splits is not None else task.description.get("eval_splits", [])
+                task_eval_splits = eval_splits if eval_splits is not None else task.description.get("eval_splits", [])
 
                 # load data
                 logger.info(f"Loading dataset for {task.description['name']}")
-                task.load_data(eval_splits=eval_splits)
+                task.load_data(eval_splits=task_eval_splits)
 
                 # run evaluation
                 task_results = {}
-                for split in eval_splits:
+                for split in task_eval_splits:
                     tick = time()
                     results = task.evaluate(model, split, **kwargs)
                     tock = time()
