@@ -85,7 +85,7 @@ Models should implement the following interface, implementing an `encode` functi
 
 ```python
 class MyModel():
-    def encode(self, sentences, batch_size=32):
+    def encode(self, sentences, batch_size=32, **kwargs):
         """ Returns a list of embeddings for the given sentences.
         Args:
             sentences (`List[str]`): List of sentences to encode
