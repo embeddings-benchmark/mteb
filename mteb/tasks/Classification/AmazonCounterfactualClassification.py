@@ -18,7 +18,7 @@ class AmazonCounterfactualClassification(MultilingualTask, AbsTaskClassification
             "type": "Classification",
             "eval_splits": ["validation", "test"],
             "eval_langs": _LANGUAGES,
-            "main_score": "ap",
+            "main_score": "accuracy",
             "n_experiments": 10,
             "samples_per_label": 32,
         }
