@@ -245,5 +245,5 @@ class MTEB:
             # empty memory
             del self.tasks[0]
 
-        if return_resutls:
+        if return_results:
             return evaluation_results
