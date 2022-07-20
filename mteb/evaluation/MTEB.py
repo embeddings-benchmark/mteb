@@ -168,7 +168,7 @@ class MTEB:
             logger.info(f"\n# Loading dataset for {task.description['name']}")
             task.load_data()
 
-    def run(self, model, verbosity=1, output_folder="results/result", eval_splits=None, **kwargs):
+    def run(self, model, verbosity=1, output_folder="results/result", eval_splits=None, return_resutls=False, **kwargs):
         """
         Run the evaluation pipeline on the selected tasks.
 
@@ -195,6 +195,7 @@ class MTEB:
 
         # Run selected tasks
         logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks: {self.selected_tasks}")
+        evaluation_results = {}
         while len(self.tasks) > 0:
             task = self.tasks[0]
             logger.info(f"\n\n********************** Evaluating {task.description['name']} **********************")
@@ -231,6 +232,8 @@ class MTEB:
                     with open(save_path, "w") as f_out:
                         json.dump(task_results, f_out, indent=2, sort_keys=True)
 
+                evaluation_results[task.description['name']] = task_results
+
             except Exception as e:
                 logger.error(f"Error while evaluating {task.description['name']}: {e}")
                 logger.error(f"Please check all the error logs at: {self.err_logs_path}")
@@ -241,3 +244,6 @@ class MTEB:
 
             # empty memory
             del self.tasks[0]
+
+        if return_resutls:
+            return evaluation_results
