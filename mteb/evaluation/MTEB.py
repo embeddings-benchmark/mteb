@@ -168,7 +168,7 @@ class MTEB:
             logger.info(f"\n# Loading dataset for {task.description['name']}")
             task.load_data()
 
-    def run(self, model, verbosity=1, output_folder="results/result", eval_splits=None, return_resutls=False, **kwargs):
+    def run(self, model, verbosity=1, output_folder="results/result", eval_splits=None, return_results=False, **kwargs):
         """
         Run the evaluation pipeline on the selected tasks.
 
