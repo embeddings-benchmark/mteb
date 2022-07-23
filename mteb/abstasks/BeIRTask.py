@@ -18,7 +18,7 @@ class BeIRTask(AbsTask):
         except ImportError:
             raise Exception("Retrieval tasks require beir package. Please install it with `pip install mteb[beir]`")
 
-        #USE_BEIR_DEVELOPMENT = False
+        USE_BEIR_DEVELOPMENT = False
         #try:
         #    from beir.datasets.data_loader_hf import HFDataLoader as BeirDataLoader
 
@@ -33,16 +33,18 @@ class BeIRTask(AbsTask):
         dataset = self.description["beir_name"]
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         for split in eval_splits:
-            #if USE_BEIR_DEVELOPMENT:
-            #    self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
-            #        hf_repo=f"BeIR/{dataset}"
-            #    ).load(split=split)
-            #else:
-            url = f"https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/{dataset}.zip"
-            #download_path = os.path.join(datasets.config.HF_DATASETS_CACHE, "BeIR")
-            download_path = "/gpfsscratch/rech/six/commun/commun/experiments/muennighoff/mteb/"
-            data_path = util.download_and_unzip(url, download_path)
-            self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
-                data_folder=data_path
-            ).load(split=split)
+            if USE_BEIR_DEVELOPMENT:
+                self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
+                    hf_repo=f"/gpfsscratch/rech/six/commun/experiments/muennighoff/mteb/hfbeir/{dataset}"
+                ).load(split=split)
+                #hf_repo=f"BeIR/{dataset}"
+                
+            else:
+                url = f"https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/{dataset}.zip"
+                #download_path = os.path.join(datasets.config.HF_DATASETS_CACHE, "BeIR")
+                download_path = "/gpfsscratch/rech/six/commun/commun/experiments/muennighoff/mteb/"
+                data_path = util.download_and_unzip(url, download_path)
+                self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
+                    data_folder=data_path
+                ).load(split=split)
         self.data_loaded = True
