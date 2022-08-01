@@ -115,7 +115,8 @@ class MTEB:
         instance = cls()
         instance._display_tasks(instance.tasks_cls, name="MTEB tasks")
 
-    def selected_tasks(self):
+    def print_selected_tasks(self):
+        """ Print the selected tasks. """
         self._display_tasks(self.tasks, name="Selected tasks")
 
     def select_tasks(self, **kwargs):
@@ -194,7 +195,8 @@ class MTEB:
             pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
 
         # Run selected tasks
-        logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks: {self.selected_tasks}")
+        logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks:")
+        self.print_selected_tasks()
         evaluation_results = {}
         while len(self.tasks) > 0:
             task = self.tasks[0]
