@@ -15,7 +15,7 @@ class HotpotQA(AbsTaskRetrieval, BeIRTask):
             "reference": "https://hotpotqa.github.io/",
             "type": "Retrieval",
             "category": "s2s",
-            "eval_splits": ["dev", "test"],
+            "eval_splits": ["validation", "test"],
             "eval_langs": ["en"],
             "main_score": "map",
         }
