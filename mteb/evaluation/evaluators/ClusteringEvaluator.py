@@ -1,6 +1,5 @@
 import logging
 import random
-import multiprocessing
 
 import numpy as np
 import sklearn
@@ -25,17 +24,15 @@ class ClusteringEvaluator(Evaluator):
         random.seed(seed)
         np.random.seed(seed)
 
-        self.clustering_batch_size = multiprocessing.cpu_count() * 256#clustering_batch_size
-        print("Using BS ", self.clustering_batch_size)
+        self.clustering_batch_size = clustering_batch_size
 
     def __call__(self, model):
         logger.info(f"Encoding {len(self.sentences)} sentences...")
         corpus_embeddings = np.asarray(model.encode(self.sentences))
 
-        print("Got embeddings of shape ", corpus_embeddings.shape, len(set(self.labels)))
         logger.info("Fitting Mini-Batch K-Means model...")
         clustering_model = sklearn.cluster.MiniBatchKMeans(
-            n_clusters=2, batch_size=self.clustering_batch_size
+            n_clusters=len(set(self.labels)), batch_size=self.clustering_batch_size
         )
         clustering_model.fit(corpus_embeddings)
         cluster_assignment = clustering_model.labels_
