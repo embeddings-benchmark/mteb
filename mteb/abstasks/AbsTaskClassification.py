@@ -65,7 +65,8 @@ class AbsTaskClassification(AbsTask):
 
         scores = []
         idxs = None  # we store idxs to make the shuffling reproducible
-        for _ in range(self.n_experiments):
+        for i in range(self.n_experiments):
+            logger.info("="*10 + f" Experiment {i+1}/{self.n_experiments} " + "="*10)
             # Bootstrap `self.samples_per_label` samples per label for each split
             X_sampled, y_sampled, idxs = self._undersample_data(
                 train_split["text"], train_split["label"], self.samples_per_label, idxs
