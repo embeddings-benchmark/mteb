@@ -1,6 +1,3 @@
-import datasets
-import numpy as np
-
 from ..evaluation.evaluators import RerankingEvaluator
 from .AbsTask import AbsTask
 
