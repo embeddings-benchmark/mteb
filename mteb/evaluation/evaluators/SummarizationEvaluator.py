@@ -61,7 +61,7 @@ class SummarizationEvaluator(Evaluator):
                 dot_pred_scores.append(dot_max_score)
                 human_scores.append(human_eval_score)
 
-            if (len(set(human_scores)) == 1) or (len(set(dot_pred_scores)) == 1) or len(set(cosine_pred_scores)) == 1:
+            if (len(set(human_scores)) == 1) or (len(set(dot_pred_scores)) == 1) or (len(set(cosine_pred_scores)) == 1):
                 logging.info(f"Skipping sample {i} due to equal scores")
                 continue
 
