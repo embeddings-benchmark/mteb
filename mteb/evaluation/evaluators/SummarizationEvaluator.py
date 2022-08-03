@@ -65,32 +65,16 @@ class SummarizationEvaluator(Evaluator):
             if (len(set(human_scores)) == 1) or (len(set(dot_pred_scores)) == 1) or len(set(cosine_pred_scores)) == 1:
                 logging.info(f"Skipping sample {i} due to equal scores")
                 continue
-            #if len(set(human_scores)) == 1:
-            #    print("SAME HUMAN", i, human_scores, human_summaries, self.machine_summaries[i])
-            #if len(set(dot_pred_scores)) == 1:
-            #    print("SAME DOT", i, dot_pred_scores, human_summaries, self.machine_summaries[i])
-            #if len(set(cosine_pred_scores)) == 1:
-            #    print("SAME COSINE", i, cosine_pred_scores, human_summaries, self.machine_summaries[i])
-
-            #if (np.all(human_scores == human_scores[0])) or \
-            #    (np.all(cosine_pred_scores == cosine_pred_scores[0])) or \
-            #    (np.all(dot_pred_scores == dot_pred_scores[0])):
-            #    print("GOT ALL THE SAME")
-            #    print(np.all(human_scores == human_scores[0]))
-            #    print(np.all(cosine_pred_scores == cosine_pred_scores[0]))
-            #    print(np.all(dot_pred_scores == dot_pred_scores[0]))
-            #    print(i)
-
 
             cosine_spearman_scores.append(spearmanr(human_scores, cosine_pred_scores))
             cosine_pearson_scores.append(pearsonr(human_scores, cosine_pred_scores))
             dot_spearman_scores.append(spearmanr(human_scores, dot_pred_scores))
             dot_pearson_scores.append(pearsonr(human_scores, dot_pred_scores))
 
-        cosine_spearman = np.mean(np.array(cosine_spearman_scores)[~np.isnan(cosine_spearman_scores)])
-        dot_spearman = np.mean(np.array(dot_spearman_scores)[~np.isnan(dot_spearman_scores)])
-        cosine_pearson = np.mean(np.array(cosine_pearson_scores)[~np.isnan(cosine_pearson_scores)])
-        dot_pearson = np.mean(np.array(dot_pearson_scores)[~np.isnan(dot_pearson_scores)])
+        cosine_spearman = np.mean(cosine_spearman_scores)
+        dot_spearman = np.mean(dot_spearman_scores)
+        cosine_pearson = np.mean(cosine_pearson_scores)
+        dot_pearson = np.mean(dot_pearson_scores)
 
         return {
             "cos_sim": {
