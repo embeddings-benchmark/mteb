@@ -97,7 +97,7 @@ class AbsTaskClassification(AbsTask):
         y_sampled = []
         if idxs is None:
             idxs = np.arange(len(y))
-        np.random.shuffle(idxs)  # TODO: fix reproducibility
+        np.random.shuffle(idxs)
         label_counter = defaultdict(int)
         for i in idxs:
             if label_counter[y[i]] < samples_per_label:
