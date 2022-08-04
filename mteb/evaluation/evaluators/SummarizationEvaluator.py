@@ -62,7 +62,7 @@ class SummarizationEvaluator(Evaluator):
                 human_scores.append(human_eval_score)
 
             if (len(set(human_scores)) == 1) or (len(set(dot_pred_scores)) == 1) or (len(set(cosine_pred_scores)) == 1):
-                logging.info(f"Skipping sample {i} due to equal scores")
+                logger.info(f"Skipping sample {i} due to equal scores")
                 continue
 
             cosine_spearman_scores.append(spearmanr(human_scores, cosine_pred_scores))
