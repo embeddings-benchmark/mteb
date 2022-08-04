@@ -63,6 +63,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
     def __init__(
         self, sentences_train, y_train, sentences_test, y_test, k=1, batch_size=32, limit=None, **kwargs
     ):
+        super().__init__(**kwargs)
         if limit is not None:
             sentences_train = sentences_train[:limit]
             y_train = y_train[:limit]
@@ -184,6 +185,7 @@ class logRegClassificationEvaluator(Evaluator):
         limit=None,
         **kwargs
     ):
+        super().__init__(**kwargs)
         if limit is not None:
             sentences_train = sentences_train[:limit]
             y_train = y_train[:limit]
