@@ -41,7 +41,7 @@ class RetrievalEvaluator(Evaluator):
         limit: int = None,
         **kwargs
     ):
-
+        super().__init__(**kwargs)
         self.queries_ids = []
         for qid in queries:
             if qid in relevant_docs and len(relevant_docs[qid]) > 0:

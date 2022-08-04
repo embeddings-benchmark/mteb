@@ -35,6 +35,7 @@ class RerankingEvaluator(Evaluator):
         limit: int = None,
         **kwargs,
     ):
+        super().__init__(**kwargs)
         if limit:
             samples = samples.train_test_split(limit)["test"]
         self.samples = samples

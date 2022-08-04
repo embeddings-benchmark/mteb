@@ -23,7 +23,7 @@ class SummarizationEvaluator(Evaluator):
         # machine_summaries shape : (None, num_machine_summaries)
         # gold scores shape : (None, num_machine_summaries)
         # texts: (None,)
-
+        super().__init__(**kwargs)
         if limit is not None:
             human_summaries = human_summaries[:limit]
             machine_summaries = machine_summaries[:limit]
