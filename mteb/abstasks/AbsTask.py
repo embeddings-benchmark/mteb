@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
+import random
 
 import datasets
+import numpy as np
+import torch
 
 class AbsTask(ABC):
     def __init__(self, **kwargs):
@@ -9,6 +12,12 @@ class AbsTask(ABC):
         self.is_multilingual = False
         self.is_crosslingual = False
         self.save_suffix = kwargs.get("save_suffix", "")
+
+        self.seed = kwargs.get("seed", 42)
+
+        random.seed(self.seed)
+        np.random.seed(self.seed)
+        torch.manual_seed(self.seed)
 
 
     def load_data(self, **kwargs):
