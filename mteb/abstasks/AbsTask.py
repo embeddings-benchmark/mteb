@@ -6,18 +6,18 @@ import numpy as np
 import torch
 
 class AbsTask(ABC):
-    def __init__(self, **kwargs):
+    def __init__(self, seed=42, **kwargs):
         self.dataset = None
         self.data_loaded = False
         self.is_multilingual = False
         self.is_crosslingual = False
         self.save_suffix = kwargs.get("save_suffix", "")
 
-        self.seed = kwargs.get("seed", 42)
-
+        self.seed = seed
         random.seed(self.seed)
         np.random.seed(self.seed)
         torch.manual_seed(self.seed)
+        torch.cuda.manual_seed_all(self.seed)
 
 
     def load_data(self, **kwargs):
