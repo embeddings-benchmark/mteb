@@ -22,11 +22,10 @@ class AbsTaskClassification(AbsTask):
     """
 
     def __init__(
-        self, method="logReg", n_experiments=None, samples_per_label=None, k=3, batch_size=32, seed=42, **kwargs
+        self, method="logReg", n_experiments=None, samples_per_label=None, k=3, batch_size=32, **kwargs
     ):
         super().__init__(**kwargs)
         self.batch_size = batch_size
-        self.seed = seed
         self.method = method
 
         # Bootstrap parameters
@@ -64,7 +63,7 @@ class AbsTaskClassification(AbsTask):
     def _evaluate_monolingual(self, model, dataset, eval_split="test", train_split="train", **kwargs):
         train_split = dataset[train_split]
         eval_split = dataset[eval_split]
-        params = {"k": self.k, "batch_size": self.batch_size, "seed": self.seed}
+        params = {"k": self.k, "batch_size": self.batch_size}
         params.update(kwargs)
 
         scores = []
@@ -106,7 +105,7 @@ class AbsTaskClassification(AbsTask):
         y_sampled = []
         if idxs is None:
             idxs = np.arange(len(y))
-        np.random.shuffle(idxs)  # TODO: fix reproducibility
+        np.random.shuffle(idxs)
         label_counter = defaultdict(int)
         for i in idxs:
             if label_counter[y[i]] < samples_per_label:

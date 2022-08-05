@@ -1,9 +1,6 @@
 import logging
 from collections import defaultdict
 
-import datasets
-import numpy as np
-
 from ..evaluation.evaluators import PairClassificationEvaluator
 from .AbsTask import AbsTask
 

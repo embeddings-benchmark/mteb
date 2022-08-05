@@ -1,5 +1,4 @@
 import logging
-import random
 
 import numpy as np
 import sklearn
@@ -13,17 +12,12 @@ from .Evaluator import Evaluator
 
 class ClusteringEvaluator(Evaluator):
     def __init__(self, sentences, labels, clustering_batch_size=500, limit=None, **kwargs):
+        super().__init__(**kwargs)
         if limit is not None:
             sentences = sentences[:limit]
             labels = labels[:limit]
         self.sentences = sentences
         self.labels = labels
-
-        # Set seed since KMeans is used
-        seed = 28042000
-        random.seed(seed)
-        np.random.seed(seed)
-
         self.clustering_batch_size = clustering_batch_size
 
     def __call__(self, model):

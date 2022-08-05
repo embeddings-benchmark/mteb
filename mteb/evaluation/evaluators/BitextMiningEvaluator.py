@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 class BitextMiningEvaluator(Evaluator):
     def __init__(self, sentences1, sentences2, gold, batch_size=32, limit=None, **kwargs):
+        super().__init__(**kwargs)
         self.gold = gold
         self.sentences1 = [sentences1[i] for (i, j) in self.gold]
         self.sentences2 = sentences2

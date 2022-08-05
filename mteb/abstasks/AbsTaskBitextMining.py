@@ -1,9 +1,3 @@
-import random
-
-import datasets
-import numpy as np
-import tqdm
-
 from ..evaluation.evaluators import BitextMiningEvaluator
 from .AbsTask import AbsTask
 
@@ -11,7 +5,6 @@ from .AbsTask import AbsTask
 class AbsTaskBitextMining(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.seed = 42
 
     def evaluate(self, model, split, **kwargs):
         if not self.data_loaded:

@@ -1,5 +1,4 @@
 import logging
-import random
 
 import numpy as np
 import torch
@@ -16,8 +15,9 @@ logger = logging.getLogger(__name__)
 
 class kNNClassificationEvaluator(Evaluator):
     def __init__(
-        self, sentences_train, y_train, sentences_test, y_test, k=1, batch_size=32, seed=42, limit=None, **kwargs
+        self, sentences_train, y_train, sentences_test, y_test, k=1, batch_size=32, limit=None, **kwargs
     ):
+        super().__init__(**kwargs)
         if limit is not None:
             sentences_train = sentences_train[:limit]
             y_train = y_train[:limit]
@@ -28,8 +28,6 @@ class kNNClassificationEvaluator(Evaluator):
         self.sentences_test = sentences_test
         self.y_test = y_test
 
-        random.seed(seed)
-        np.random.seed(seed)
         self.batch_size = batch_size
 
         self.k = k
@@ -62,8 +60,9 @@ class kNNClassificationEvaluator(Evaluator):
 
 class kNNClassificationEvaluatorPytorch(Evaluator):
     def __init__(
-        self, sentences_train, y_train, sentences_test, y_test, k=1, batch_size=32, seed=42, limit=None, **kwargs
+        self, sentences_train, y_train, sentences_test, y_test, k=1, batch_size=32, limit=None, **kwargs
     ):
+        super().__init__(**kwargs)
         if limit is not None:
             sentences_train = sentences_train[:limit]
             y_train = y_train[:limit]
@@ -75,9 +74,6 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         self.sentences_test = sentences_test
         self.y_test = y_test
 
-        seed = seed
-        random.seed(seed)
-        np.random.seed(seed)
         self.batch_size = batch_size
 
         self.k = k
@@ -141,8 +137,6 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         Computes the euclidean distance euclidean_dist(a[i], b[j]) for all i and j.
         :return: Matrix with res[i][j]  = euclidean_dist(a[i], b[j])
         """
-        from sklearn.metrics.pairwise import euclidean_distances
-
         if not isinstance(a, torch.Tensor):
             a = torch.tensor(a)
 
@@ -187,10 +181,10 @@ class logRegClassificationEvaluator(Evaluator):
         y_test,
         max_iter=100,
         batch_size=32,
-        seed=42,
         limit=None,
         **kwargs
     ):
+        super().__init__(**kwargs)
         if limit is not None:
             sentences_train = sentences_train[:limit]
             y_train = y_train[:limit]
@@ -201,9 +195,6 @@ class logRegClassificationEvaluator(Evaluator):
         self.sentences_test = sentences_test
         self.y_test = y_test
 
-        self.seed = seed
-        random.seed(self.seed)
-        np.random.seed(self.seed)
         self.max_iter = max_iter
         self.batch_size = batch_size
 

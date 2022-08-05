@@ -1,6 +1,3 @@
-import random
-
-import datasets
 import numpy as np
 import tqdm
 
@@ -11,7 +8,6 @@ from .AbsTask import AbsTask
 class AbsTaskClustering(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.seed = 42
 
     def evaluate(self, model, split="test", **kwargs):
         if not self.data_loaded:
