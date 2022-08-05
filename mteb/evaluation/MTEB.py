@@ -169,7 +169,7 @@ class MTEB:
             logger.info(f"\n# Loading dataset for {task.description['name']}")
             task.load_data()
 
-    def run(self, model, verbosity=1, output_folder="results/result", eval_splits=None, return_results=False, **kwargs):
+    def run(self, model, verbosity=1, output_folder="results/result", eval_splits=None, return_results=True, **kwargs):
         """
         Run the evaluation pipeline on the selected tasks.
 
@@ -184,6 +184,7 @@ class MTEB:
             2: print everything (including datasets loading)
         output_folder: str
             Folder where the results will be saved
+        :return: Returns a dictionary of task names and corresponding metrics results.
         """
         # Set logging
         if verbosity < 2:

@@ -1,6 +1,6 @@
 # Massive Text Embedding Benchmark
 
-Massive Text Embedding Benchmark 
+Massive Text Embedding Benchmark
 
 ## Installation
 
@@ -21,7 +21,7 @@ model_name = "average_word_embeddings_komninos"
 
 model = SentenceTransformer(model_name)
 evaluation = MTEB(tasks=["Banking77Classification"])
-evaluation.run(model, output_folder=f"results/{model_name}")
+results = evaluation.run(model, output_folder=f"results/{model_name}")
 
 
 ````
