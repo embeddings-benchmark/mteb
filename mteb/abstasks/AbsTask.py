@@ -21,7 +21,7 @@ class AbsTask(ABC):
         # TODO: add split argument
         self.dataset = datasets.load_dataset(
             self.description["hf_hub_name"], 
-            revision=self.description["revision"]
+            revision=self.description.get("revision", None)
         )
         self.data_loaded = True
 
