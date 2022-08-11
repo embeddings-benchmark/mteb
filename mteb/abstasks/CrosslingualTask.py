@@ -24,5 +24,9 @@ class CrosslingualTask(AbsTask):
             return
         self.dataset = {}
         for lang in self.langs:
-            self.dataset[lang] = datasets.load_dataset(self.description["hf_hub_name"], lang)
+            self.dataset[lang] = datasets.load_dataset(
+                self.description["hf_hub_name"], 
+                lang,
+                revision=self.description.get("revision", None),
+            )
         self.data_loaded = True
