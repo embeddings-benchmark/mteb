@@ -221,7 +221,7 @@ class MTEB:
                 task.load_data(eval_splits=task_eval_splits)
 
                 # run evaluation
-                task_results = {}
+                task_results = {"mteb_version": self.version}
                 for split in task_eval_splits:
                     tick = time()
                     results = task.evaluate(model, split, **kwargs)
