@@ -6,13 +6,12 @@ import traceback
 from datetime import datetime
 from time import time
 
-import git
 import datasets
 from rich.console import Console
 
 from ..abstasks import *
 from ..tasks import *
-import mteb
+from .. import __version__
 
 
 logger = logging.getLogger(__name__)
@@ -66,8 +65,6 @@ class MTEB:
         self.err_logs_path = err_logs_path if err_logs_path is not None else "error_logs.txt"
 
         self.select_tasks(**kwargs)
-
-        self.version = f"{mteb.__version__}+{git.Repo(search_parent_directories=True).head.object.hexsha}"
 
     @property
     def available_tasks(self):
@@ -221,7 +218,7 @@ class MTEB:
                 task.load_data(eval_splits=task_eval_splits)
 
                 # run evaluation
-                task_results = {"mteb_version": self.version}
+                task_results = {"mteb_version": __version__, "dataset_version": task.description.get("revision", None)}
                 for split in task_eval_splits:
                     tick = time()
                     results = task.evaluate(model, split, **kwargs)
