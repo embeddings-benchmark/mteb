@@ -115,7 +115,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         scores["accuracy"] = max_accuracy
         scores["f1"] = max_f1
         scores["ap"] = max_ap
-        return scores
+        return scores, test_cache
 
     @staticmethod
     def _cos_sim(a: Tensor, b: Tensor):
@@ -236,4 +236,4 @@ class logRegClassificationEvaluator(Evaluator):
             ap = average_precision_score(self.y_test, y_pred)
             scores["ap"] = ap
 
-        return scores
+        return scores, test_cache
