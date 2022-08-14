@@ -67,7 +67,7 @@ class AbsTaskClassification(AbsTask):
         params.update(kwargs)
 
         scores = []
-        idxs = None  # we store idxs to make the shuffling reproducible
+        test_cache, idxs = None, None  # we store idxs to make the shuffling reproducible
         for i in range(self.n_experiments):
             logger.info("=" * 10 + f" Experiment {i+1}/{self.n_experiments} " + "=" * 10)
             # Bootstrap `self.samples_per_label` samples per label for each split
@@ -76,21 +76,21 @@ class AbsTaskClassification(AbsTask):
             )
 
             if self.method == "kNN":
-                evaluator = kNNClassificationEvaluator(
+                evaluator, test_cache = kNNClassificationEvaluator(
                     X_sampled, y_sampled, eval_split["text"], eval_split["label"], **params
                 )
             elif self.method == "kNN-pytorch":
-                evaluator = kNNClassificationEvaluatorPytorch(
+                evaluator, test_cache = kNNClassificationEvaluatorPytorch(
                     X_sampled, y_sampled, eval_split["text"], eval_split["label"], **params
                 )
             elif self.method == "logReg":
-                evaluator = logRegClassificationEvaluator(
+                evaluator, test_cache = logRegClassificationEvaluator(
                     X_sampled, y_sampled, eval_split["text"], eval_split["label"], **params
                 )
             else:
                 raise ValueError(f"Method {self.method} not supported")
 
-            scores.append(evaluator(model))
+            scores.append(evaluator(model, test_cache=test_cache))
 
         if self.n_experiments == 1:
             return scores[0]

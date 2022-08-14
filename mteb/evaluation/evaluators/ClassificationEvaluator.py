@@ -32,13 +32,17 @@ class kNNClassificationEvaluator(Evaluator):
 
         self.k = k
 
-    def __call__(self, model):
+    def __call__(self, model, test_cache=None):
         scores = {}
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
         X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
-        X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
+        if test_cache is None:
+            X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
+            test_cache = X_test
+        else:
+            X_test = test_cache
         for metric in ["cosine", "euclidean"]:  # TODO: "dot"
             knn = KNeighborsClassifier(n_neighbors=self.k, n_jobs=-1, metric=metric)
             knn.fit(X_train, self.y_train)
@@ -55,7 +59,7 @@ class kNNClassificationEvaluator(Evaluator):
         scores["accuracy"] = max_accuracy
         scores["f1"] = max_f1
         scores["ap"] = max_ap
-        return scores
+        return scores, test_cache
 
 
 class kNNClassificationEvaluatorPytorch(Evaluator):
@@ -78,13 +82,17 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 
         self.k = k
 
-    def __call__(self, model):
+    def __call__(self, model, test_cache=None):
         scores = {}
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
         X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
-        X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
+        if test_cache is None:
+            X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
+            test_cache = X_test
+        else:
+            X_test = test_cache
         for metric in ["cosine", "euclidean", "dot"]:
             if metric == "cosine":
                 distances = 1 - self._cos_sim(X_test, X_train)
@@ -198,7 +206,7 @@ class logRegClassificationEvaluator(Evaluator):
         self.max_iter = max_iter
         self.batch_size = batch_size
 
-    def __call__(self, model):
+    def __call__(self, model, test_cache=None):
         scores = {}
         clf = LogisticRegression(
             random_state=self.seed,
@@ -209,7 +217,11 @@ class logRegClassificationEvaluator(Evaluator):
         logger.info(f"Encoding {len(self.sentences_train)} training sentences...")
         X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
         logger.info(f"Encoding {len(self.sentences_test)} test sentences...")
-        X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
+        if test_cache is None:
+            X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
+            test_cache = X_test
+        else:
+            X_test = test_cache
         logger.info("Fitting logistic regression classifier...")
         clf.fit(X_train, self.y_train)
         logger.info("Evaluating...")
