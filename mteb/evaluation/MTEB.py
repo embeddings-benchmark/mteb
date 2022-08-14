@@ -134,6 +134,9 @@ class MTEB:
         # If `task_list` is specified, select list of tasks
         if self._tasks is not None:
             self.tasks = list(filter(lambda x: (x.description["name"] in self._tasks), self.tasks_cls))
+            if len(self.tasks) != len(self._tasks):
+                tasks_not_found = set(x for x in self._tasks if isinstance(x, str)) - set([x.description["name"] for x in self.tasks_cls])
+                if tasks_not_found: logger.warn(f"WARNING: Did not find tasks {','.join(tasks_not_found)}")
             # add task if subclass of mteb.tasks
             self.tasks.extend([x for x in self._tasks if isinstance(x, AbsTask)])
             return
