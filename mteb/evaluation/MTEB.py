@@ -138,7 +138,8 @@ class MTEB:
                 tasks_known = set([x.description["name"] for x in self.tasks_cls])
                 tasks_unknown = set(x for x in self._tasks if isinstance(x, str)) - tasks_known
                 if tasks_unknown:
-                    logger.warn(f"WARNING: Unknown tasks: {','.join(tasks_unknown)}. Known tasks: {','.join(tasks_known)}.")
+                    logger.warn(f"WARNING: Unknown tasks: {','.join(sorted(list(tasks_unknown)))}. \
+                    Known tasks: {','.join(sorted(list(tasks_known)))}.")
             # add task if subclass of mteb.tasks
             self.tasks.extend([x for x in self._tasks if isinstance(x, AbsTask)])
             return
