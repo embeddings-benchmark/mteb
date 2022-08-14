@@ -76,21 +76,22 @@ class AbsTaskClassification(AbsTask):
             )
 
             if self.method == "kNN":
-                evaluator, test_cache = kNNClassificationEvaluator(
+                evaluator = kNNClassificationEvaluator(
                     X_sampled, y_sampled, eval_split["text"], eval_split["label"], **params
                 )
             elif self.method == "kNN-pytorch":
-                evaluator, test_cache = kNNClassificationEvaluatorPytorch(
+                evaluator = kNNClassificationEvaluatorPytorch(
                     X_sampled, y_sampled, eval_split["text"], eval_split["label"], **params
                 )
             elif self.method == "logReg":
-                evaluator, test_cache = logRegClassificationEvaluator(
+                evaluator = logRegClassificationEvaluator(
                     X_sampled, y_sampled, eval_split["text"], eval_split["label"], **params
                 )
             else:
                 raise ValueError(f"Method {self.method} not supported")
 
-            scores.append(evaluator(model, test_cache=test_cache))
+            scores_exp, test_cache = evaluator(model, test_cache=test_cache)
+            scores.append(scores_exp)
 
         if self.n_experiments == 1:
             return scores[0]
