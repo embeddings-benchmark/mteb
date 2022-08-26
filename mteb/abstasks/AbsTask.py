@@ -1,16 +1,28 @@
 from abc import ABC, abstractmethod
+<<<<<<< HEAD
 import os
+=======
+import random
+>>>>>>> main
 
 import datasets
-
+import numpy as np
+import torch
 
 class AbsTask(ABC):
-    def __init__(self, **kwargs):
+    def __init__(self, seed=42, **kwargs):
         self.dataset = None
         self.data_loaded = False
         self.is_multilingual = False
         self.is_crosslingual = False
         self.save_suffix = kwargs.get("save_suffix", "")
+
+        self.seed = seed
+        random.seed(self.seed)
+        np.random.seed(self.seed)
+        torch.manual_seed(self.seed)
+        torch.cuda.manual_seed_all(self.seed)
+
 
     def load_data(self, **kwargs):
         """
@@ -22,11 +34,11 @@ class AbsTask(ABC):
         path = "/gpfsscratch/rech/six/commun/commun/experiments/muennighoff/" + self.description["hf_hub_name"]
         is_offline = int(os.environ["HF_DATASETS_OFFLINE"])
         if is_offline or os.path.exists(path):
-            self.dataset = datasets.load_dataset(path)  # TODO: add split argument
+            self.dataset = datasets.load_dataset(path, revision=self.description.get("revision", None))  # TODO: add split argument
         else:
             from git import Repo
             Repo.clone_from("https://huggingface.co/datasets/" + self.description["hf_hub_name"], path)
-            self.dataset = datasets.load_dataset(path)
+            self.dataset = datasets.load_dataset(path, revision=self.description.get("revision", None))
         self.data_loaded = True
 
     @abstractmethod

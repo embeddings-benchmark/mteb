@@ -13,6 +13,7 @@ from .Evaluator import Evaluator
 
 class STSEvaluator(Evaluator):
     def __init__(self, sentences1, sentences2, gold_scores, batch_size=64, limit=None, **kwargs):
+        super().__init__(**kwargs)
         if limit is not None:
             sentences1 = sentences1[:limit]
             sentences2 = sentences2[:limit]

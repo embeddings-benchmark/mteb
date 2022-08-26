@@ -6,7 +6,7 @@ class SickrSTS(AbsTaskSTS):
     def description(self):
         return {
             "name": "SICK-R",
-            "hf_hub_name": "mteb/biosses-sts",
+            "hf_hub_name": "mteb/sickr-sts",
             "description": "Semantic Textual Similarity SICK-R dataset as described here:",
             "reference": "https://www.aclweb.org/anthology/S14-2001.pdf",
             "type": "STS",

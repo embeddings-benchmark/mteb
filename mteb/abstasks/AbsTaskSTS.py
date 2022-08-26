@@ -1,8 +1,3 @@
-import logging
-
-import datasets
-import numpy as np
-
 from ..evaluation.evaluators import STSEvaluator
 from .AbsTask import AbsTask
 

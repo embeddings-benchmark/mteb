@@ -1,6 +1,6 @@
 # Massive Text Embedding Benchmark
 
-Massive Text Embedding Benchmark 
+Massive Text Embedding Benchmark
 
 ## Installation
 
@@ -21,7 +21,7 @@ model_name = "average_word_embeddings_komninos"
 
 model = SentenceTransformer(model_name)
 evaluation = MTEB(tasks=["Banking77Classification"])
-evaluation.run(model, output_folder=f"results/{model_name}")
+results = evaluation.run(model, output_folder=f"results/{model_name}")
 
 
 ````
@@ -85,7 +85,7 @@ Models should implement the following interface, implementing an `encode` functi
 
 ```python
 class MyModel():
-    def encode(self, sentences, batch_size=32):
+    def encode(self, sentences, batch_size=32, **kwargs):
         """ Returns a list of embeddings for the given sentences.
         Args:
             sentences (`List[str]`): List of sentences to encode
@@ -167,7 +167,7 @@ evaluation.run(model)
 | [TwitterURLCorpus](https://languagenet.github.io/)                                                                                                                    | mteb/twitterurlcorpus-pairclassification         | Paraphrase-Pairs of Tweets.                                                                                                                                                                                      | PairClassification | s2s        |              1 |
 | [AskUbuntuDupQuestions](https://github.com/taolei87/askubuntu)                                                                                                        | mteb/askubuntudupquestions-reranking             | AskUbuntu Question Dataset - Questions from AskUbuntu with manual annotations marking pairs of questions as similar or non-similar                                                                               | Reranking          | s2s        |              1 |
 | [MindSmallReranking](https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf)                                                                 | mteb/mind_small                                  | Microsoft News Dataset: A Large-Scale English Dataset for News Recommendation Research                                                                                                                           | Reranking          | s2s        |              1 |
-| [SciDocs](https://allenai.org/data/scidocs)                                                                                                                           | mteb/scidocs-reranking                           | Ranking of related scientific papers based on their title.                                                                                                                                                       | Reranking          | s2s        |              1 |
+| [SciDocsRR](https://allenai.org/data/scidocs)                                                                                                                           | mteb/scidocs-reranking                           | Ranking of related scientific papers based on their title.                                                                                                                                                       | Reranking          | s2s        |              1 |
 | [StackOverflowDupQuestions](https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf)                                                          | mteb/stackoverflowdupquestions-reranking         | Stack Overflow Duplicate Questions Task for questions with the tags Java, JavaScript and Python                                                                                                                  | Reranking          | s2s        |              1 |
 | [ArguAna](http://argumentation.bplaced.net/arguana/data)                                                                                                              | nan                                              | NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval                                                                                                                                 | Retrieval          | s2s        |              1 |
 | [ClimateFEVER](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html)                                                                                  | nan                                              | CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change.                                                                                     | Retrieval          | s2s        |              1 |

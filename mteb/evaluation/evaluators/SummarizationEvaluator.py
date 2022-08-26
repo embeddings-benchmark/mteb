@@ -1,5 +1,4 @@
 import logging
-from sys import prefix
 
 import numpy as np
 import torch
@@ -19,11 +18,11 @@ class SummarizationEvaluator(Evaluator):
     def __init__(
         self, human_summaries=None, machine_summaries=None, texts=None, gold_scores=None, limit=None, **kwargs
     ):
-        # human_summaries shape : (None, num_human_summaries)
-        # machine_summaries shape : (None, num_machine_summaries)
-        # gold scores shape : (None, num_machine_summaries)
+        # human_summaries shape: (None, num_human_summaries)
+        # machine_summaries shape: (None, num_machine_summaries)
+        # gold scores shape: (None, num_machine_summaries)
         # texts: (None,)
-
+        super().__init__(**kwargs)
         if limit is not None:
             human_summaries = human_summaries[:limit]
             machine_summaries = machine_summaries[:limit]
@@ -44,9 +43,9 @@ class SummarizationEvaluator(Evaluator):
         for i in trange(len(self.texts), desc="Texts"):  # iterate over all original texts
             human_summaries = self.human_summaries[i]  # Get the human summaries for the text
             embs_human_summaries = model.encode(human_summaries)
-            cosine_pred_scores = []  # Our predict quality score for a summary
-            dot_pred_scores = []  # Our predict quality score for a summary
-            human_scores = []  # Our human score for a summary
+            cosine_pred_scores = []  # Predicted quality score for a summary
+            dot_pred_scores = []  # Predicted quality score for a summary
+            human_scores = []  # Human score for a summary
             for machine_summary, human_eval_score in zip(
                 self.machine_summaries[i], self.gold_scores[i]
             ):  # Get all machine summaries + scores for this text
@@ -61,6 +60,10 @@ class SummarizationEvaluator(Evaluator):
                 dot_max_score = torch.max(dot_scores).item()
                 dot_pred_scores.append(dot_max_score)
                 human_scores.append(human_eval_score)
+
+            if (len(set(human_scores)) == 1) or (len(set(dot_pred_scores)) == 1) or (len(set(cosine_pred_scores)) == 1):
+                logger.info(f"Skipping sample {i} due to equal scores")
+                continue
 
             cosine_spearman_scores.append(spearmanr(human_scores, cosine_pred_scores))
             cosine_pearson_scores.append(pearsonr(human_scores, cosine_pred_scores))

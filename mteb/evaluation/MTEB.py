@@ -7,12 +7,11 @@ from datetime import datetime
 from time import time
 
 import datasets
-from tqdm import trange
-
 from rich.console import Console
 
 from ..abstasks import *
 from ..tasks import *
+from .. import __version__
 
 
 logger = logging.getLogger(__name__)
@@ -115,7 +114,8 @@ class MTEB:
         instance = cls()
         instance._display_tasks(instance.tasks_cls, name="MTEB tasks")
 
-    def selected_tasks(self):
+    def print_selected_tasks(self):
+        """ Print the selected tasks. """
         self._display_tasks(self.tasks, name="Selected tasks")
 
     def select_tasks(self, **kwargs):
@@ -134,6 +134,12 @@ class MTEB:
         # If `task_list` is specified, select list of tasks
         if self._tasks is not None:
             self.tasks = list(filter(lambda x: (x.description["name"] in self._tasks), self.tasks_cls))
+            if len(self.tasks) != len(self._tasks):
+                tasks_known = set([x.description["name"] for x in self.tasks_cls])
+                tasks_unknown = set(x for x in self._tasks if isinstance(x, str)) - tasks_known
+                if tasks_unknown:
+                    unknown_str, known_str = ','.join(sorted(list(tasks_unknown))), ','.join(sorted(list(tasks_known)))
+                    logger.warn(f"WARNING: Unknown tasks: {unknown_str}. Known tasks: {known_str}.")
             # add task if subclass of mteb.tasks
             filtered_tasks = filter(
                 lambda x: (self._task_langs is None)
@@ -173,7 +179,8 @@ class MTEB:
             logger.info(f"\n# Loading dataset for {task.description['name']}")
             task.load_data()
 
-    def run(self, model, verbosity=1, output_folder="results/result", eval_splits=None, **kwargs):
+
+    def run(self, model, verbosity=1, output_folder="results/result", eval_splits=None, overwrite_results=False, **kwargs):
         """
         Run the evaluation pipeline on the selected tasks.
 
@@ -188,6 +195,7 @@ class MTEB:
             2: print everything (including datasets loading)
         output_folder: str
             Folder where the results will be saved
+        :return: Returns a dictionary of task names and corresponding metrics results.
         """
         # Set logging
         if verbosity < 2:
@@ -199,15 +207,17 @@ class MTEB:
             pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
 
         # Run selected tasks
-        logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks: {self.selected_tasks}")
+        logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks:")
+        self.print_selected_tasks()
+        evaluation_results = {}
         while len(self.tasks) > 0:
             task = self.tasks[0]
             logger.info(f"\n\n********************** Evaluating {task.description['name']} **********************")
 
-            # skip evaluation if results folder exists
+            # skip evaluation if results folder exists and overwrite_results is False
             if output_folder is not None:
                 save_path = os.path.join(output_folder, f"{task.description['name']}{task.save_suffix}.json")
-                if os.path.exists(save_path):
+                if os.path.exists(save_path) and overwrite_results is False:
                     logger.warn(f"WARNING: {task.description['name']} results already exists. Skipping.")
                     del self.tasks[0]
                     continue
@@ -220,7 +230,7 @@ class MTEB:
                 task.load_data(eval_splits=task_eval_splits)
 
                 # run evaluation
-                task_results = {}
+                task_results = {"mteb_version": __version__, "dataset_version": task.description.get("revision", None)}
                 for split in task_eval_splits:
                     tick = time()
                     results = task.evaluate(model, split, **kwargs)
@@ -236,6 +246,8 @@ class MTEB:
                     with open(save_path, "w") as f_out:
                         json.dump(task_results, f_out, indent=2, sort_keys=True)
 
+                evaluation_results[task.description['name']] = task_results
+
             except Exception as e:
                 logger.error(f"Error while evaluating {task.description['name']}: {e}")
                 logger.error(f"Please check all the error logs at: {self.err_logs_path}")
@@ -246,3 +258,5 @@ class MTEB:
 
             # empty memory
             del self.tasks[0]
+
+        return evaluation_results

@@ -36,6 +36,7 @@ class STS22CrosslingualSTS(AbsTaskSTS, CrosslingualTask):
             "eval_splits": ["test"],
             "eval_langs": _LANGUAGES,
             "main_score": "cosine_spearman",
-            "min_score": 0,
-            "max_score": 5,
+            "min_score": 1,
+            "max_score": 4,
+            "revision": "6d1ba47164174a496b7fa5d3569dae26a6813b80",
         }

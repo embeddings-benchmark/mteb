@@ -1,4 +1,5 @@
 from collections import defaultdict
+import logging
 
 import numpy as np
 
@@ -10,6 +11,9 @@ from ..evaluation.evaluators import (
 from .AbsTask import AbsTask
 
 
+logger = logging.getLogger(__name__)
+
+
 class AbsTaskClassification(AbsTask):
     """
     Abstract class for kNN classification tasks
@@ -18,11 +22,10 @@ class AbsTaskClassification(AbsTask):
     """
 
     def __init__(
-        self, method="logReg", n_experiments=None, samples_per_label=None, k=3, batch_size=32, seed=42, **kwargs
+        self, method="logReg", n_experiments=None, samples_per_label=None, k=3, batch_size=32, **kwargs
     ):
         super().__init__(**kwargs)
         self.batch_size = batch_size
-        self.seed = seed
         self.method = method
 
         # Bootstrap parameters
@@ -60,12 +63,13 @@ class AbsTaskClassification(AbsTask):
     def _evaluate_monolingual(self, model, dataset, eval_split="test", train_split="train", **kwargs):
         train_split = dataset[train_split]
         eval_split = dataset[eval_split]
-        params = {"k": self.k, "batch_size": self.batch_size, "seed": self.seed}
+        params = {"k": self.k, "batch_size": self.batch_size}
         params.update(kwargs)
 
         scores = []
-        idxs = None  # we store idxs to make the shuffling reproducible
-        for _ in range(self.n_experiments):
+        test_cache, idxs = None, None  # we store idxs to make the shuffling reproducible
+        for i in range(self.n_experiments):
+            logger.info("=" * 10 + f" Experiment {i+1}/{self.n_experiments} " + "=" * 10)
             # Bootstrap `self.samples_per_label` samples per label for each split
             X_sampled, y_sampled, idxs = self._undersample_data(
                 train_split["text"], train_split["label"], self.samples_per_label, idxs
@@ -86,7 +90,8 @@ class AbsTaskClassification(AbsTask):
             else:
                 raise ValueError(f"Method {self.method} not supported")
 
-            scores.append(evaluator(model))
+            scores_exp, test_cache = evaluator(model, test_cache=test_cache)
+            scores.append(scores_exp)
 
         if self.n_experiments == 1:
             return scores[0]
@@ -101,7 +106,7 @@ class AbsTaskClassification(AbsTask):
         y_sampled = []
         if idxs is None:
             idxs = np.arange(len(y))
-        np.random.shuffle(idxs)  # TODO: fix reproducibility
+        np.random.shuffle(idxs)
         label_counter = defaultdict(int)
         for i in idxs:
             if label_counter[y[i]] < samples_per_label:
