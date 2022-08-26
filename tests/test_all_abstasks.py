@@ -12,7 +12,7 @@ eval = MTEB(
     tasks=[
         "Banking77Classification",
         "TwentyNewsgroupsClustering",
-        "SciDocs",
+        "SciDocsRR",
         "SprintDuplicateQuestions",
         "NFCorpus",
         BUCCBitextMining(langs=["de-en"]),
