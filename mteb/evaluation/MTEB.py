@@ -7,11 +7,11 @@ from datetime import datetime
 from time import time
 
 import datasets
-
 from rich.console import Console
 
 from ..abstasks import *
 from ..tasks import *
+from .. import __version__
 
 
 logger = logging.getLogger(__name__)
@@ -168,7 +168,7 @@ class MTEB:
             logger.info(f"\n# Loading dataset for {task.description['name']}")
             task.load_data()
 
-    def run(self, model, verbosity=1, output_folder="results/result", eval_splits=None, return_results=True, **kwargs):
+    def run(self, model, verbosity=1, output_folder="results/result", eval_splits=None, **kwargs):
         """
         Run the evaluation pipeline on the selected tasks.
 
@@ -218,7 +218,7 @@ class MTEB:
                 task.load_data(eval_splits=task_eval_splits)
 
                 # run evaluation
-                task_results = {}
+                task_results = {"mteb_version": __version__, "dataset_version": task.description.get("revision", None)}
                 for split in task_eval_splits:
                     tick = time()
                     results = task.evaluate(model, split, **kwargs)
@@ -247,5 +247,4 @@ class MTEB:
             # empty memory
             del self.tasks[0]
 
-        if return_results:
-            return evaluation_results
+        return evaluation_results
