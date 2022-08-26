@@ -1,6 +1,5 @@
 from .ArguAnaRetrieval import *
 from .ClimateFEVERRetrieval import *
-from .CQADupstackRetrieval import *
 from .CQADupstackAndroidRetrieval import *
 from .CQADupstackEnglishRetrieval import *
 from .CQADupstackGamingRetrieval import *
