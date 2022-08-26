@@ -5,7 +5,7 @@ class SciDocsReranking(AbsTaskReranking):
     @property
     def description(self):
         return {
-            "name": "SciDocs",
+            "name": "SciDocsRR",
             "hf_hub_name": "mteb/scidocs-reranking",
             "description": "Ranking of related scientific papers based on their title.",
             "reference": "https://allenai.org/data/scidocs",
