@@ -168,7 +168,8 @@ class MTEB:
             logger.info(f"\n# Loading dataset for {task.description['name']}")
             task.load_data()
 
-    def run(self, model, verbosity=1, output_folder="results/result", eval_splits=None, **kwargs):
+
+    def run(self, model, verbosity=1, output_folder="results/result", eval_splits=None, overwrite_results=False, **kwargs):
         """
         Run the evaluation pipeline on the selected tasks.
 
@@ -202,10 +203,10 @@ class MTEB:
             task = self.tasks[0]
             logger.info(f"\n\n********************** Evaluating {task.description['name']} **********************")
 
-            # skip evaluation if results folder exists
+            # skip evaluation if results folder exists and overwrite_results is False
             if output_folder is not None:
                 save_path = os.path.join(output_folder, f"{task.description['name']}{task.save_suffix}.json")
-                if os.path.exists(save_path):
+                if os.path.exists(save_path) and overwrite_results is False:
                     logger.warn(f"WARNING: {task.description['name']} results already exists. Skipping.")
                     del self.tasks[0]
                     continue
