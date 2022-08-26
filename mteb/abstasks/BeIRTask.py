@@ -42,9 +42,10 @@ class BeIRTask(AbsTask):
                 
             else:
                 url = f"https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/{dataset}.zip"
-                #download_path = os.path.join(datasets.config.HF_DATASETS_CACHE, "BeIR")
-                download_path = "/gpfsscratch/rech/six/commun/commun/experiments/muennighoff/mteb/"
-                data_path = util.download_and_unzip(url, download_path)
+                download_path = os.path.join(datasets.config.HF_DATASETS_CACHE, "BeIR")
+                #download_path = "/gpfsscratch/rech/six/commun/commun/experiments/muennighoff/mteb/"
+                #data_path = util.download_and_unzip(url, download_path)
+                data_path = download_path + dataset
                 data_path = f"{data_path}/{sub_dataset}" if sub_dataset else data_path
                 self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
                     data_folder=data_path
