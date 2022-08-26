@@ -202,7 +202,7 @@ class MTEB:
             task = self.tasks[0]
             logger.info(f"\n\n********************** Evaluating {task.description['name']} **********************")
 
-            # skip evaluation if results folder exists
+            # skip evaluation if results folder exists and overwrite_results is False
             if output_folder is not None:
                 save_path = os.path.join(output_folder, f"{task.description['name']}{task.save_suffix}.json")
                 if os.path.exists(save_path) and overwrite_results is False:
