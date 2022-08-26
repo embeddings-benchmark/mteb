@@ -1,9 +1,6 @@
 from abc import ABC, abstractmethod
-<<<<<<< HEAD
 import os
-=======
 import random
->>>>>>> main
 
 import datasets
 import numpy as np
