@@ -67,7 +67,7 @@ class AbsTaskClassification(AbsTask):
         params.update(kwargs)
 
         scores = []
-        idxs = None  # we store idxs to make the shuffling reproducible
+        test_cache, idxs = None, None  # we store idxs to make the shuffling reproducible
         for i in range(self.n_experiments):
             logger.info("=" * 10 + f" Experiment {i+1}/{self.n_experiments} " + "=" * 10)
             # Bootstrap `self.samples_per_label` samples per label for each split
@@ -90,7 +90,8 @@ class AbsTaskClassification(AbsTask):
             else:
                 raise ValueError(f"Method {self.method} not supported")
 
-            scores.append(evaluator(model))
+            scores_exp, test_cache = evaluator(model, test_cache=test_cache)
+            scores.append(scores_exp)
 
         if self.n_experiments == 1:
             return scores[0]
