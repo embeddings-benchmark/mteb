@@ -1,63 +1,58 @@
 import gzip
 import os
+import random
 
 import datasets
-import numpy as np
-from tqdm import tqdm
-
 import jsonlines
+import numpy as np
 
+SEED = 42
+NUM_SETS = 10
+MIN_LABELS = 10
+MAX_LABELS = 100
+MIN_SAMPLES = 1_000
+MAX_SAMPLES = 100_000
 
-np.random.seed(28042000)
+np.random.seed(SEED)
+random.seed(SEED)
 
-d = datasets.load_dataset("sentence-transformers/reddit-title-body", data_files=["reddit_title_text_2021.jsonl.gz"])[
-    "train"
-]
+ds = datasets.load_dataset(
+    "sentence-transformers/reddit-title-body", 
+    data_files=["reddit_title_text_2021.jsonl.gz"],
+    split="train",
+)
 
-# d = d.select(range(1000))
+unique, counts = np.unique(ds["subreddit"], return_counts=True) 
+unique_to_count = {k: v for k,v in zip(unique, counts)}
 
+# Check top subreddits :)
+# sorted(unique_to_count, key=lambda x: unique_to_count[x], reverse=True)[:10]
 
-def cluster_stats(labels):
-    (unique, counts) = np.unique(labels, return_counts=True)
-    for u, c in zip(unique, counts):
-        print(u, c)
+sets = []
+for _ in range(NUM_SETS):
+    num_labels = random.randint(MIN_LABELS, MAX_LABELS)
+    num_samples = random.randint(MIN_SAMPLES, MAX_SAMPLES)
 
+    print(f"Creating dataset with {num_labels} labels & {num_samples} samples")
 
-def get_text(record):
-    return record["title"] + " " + record["body"]
+    # Weigh by counts to reduce noise from random poorly defined subreddits
+    # For 10 labels, ~85K samples; For 100 labels ~850K
+    labels = random.choices(list(unique_to_count.keys()), weights=unique_to_count.values(), k=num_labels)
+    sub_ds = ds.filter(lambda x: x["subreddit"] in labels).shuffle()
+    if len(sub_ds) < MIN_SAMPLES:
+        continue
+    # Probability for len(sub_ds) to be smaller than selected samples is <5%
+    sub_ds = sub_ds.select(range(min(len(sub_ds), num_samples)))
 
+    text = [f"{x} {y}" for x, y in zip(sub_ds["title"], sub_ds["body"])]
+    sets.append({"sentences": text, "labels": sub_ds["subreddit"]})
 
-split_size = 50000
-split_number = 10
-indices = np.arange(len(d))
-
-splits = []
-
-# Coarse splits 50k
-for k in tqdm(range(split_number)):
-    np.random.shuffle(indices)
-    current_indices = indices[:split_size]
-    subset = d.select(current_indices)
-    text = [x + " " + y for (x, y) in zip(subset["title"], subset["body"])]
-    splits.append({"sentences": text, "labels": subset["subreddit"]})
-
-split_size = 10000
-split_number = 40
-
-# Coarse splits 25k
-for k in tqdm(range(split_number)):
-    np.random.shuffle(indices)
-    current_indices = indices[:split_size]
-    subset = d.select(current_indices)
-    text = [x + " " + y for (x, y) in zip(subset["title"], subset["body"])]
-    splits.append({"sentences": text, "labels": subset["subreddit"]})
-
-repository = f"reddit-clustering-p2p"
-with jsonlines.open(f"{repository}/test.jsonl", "w") as f_out:
-    f_out.write_all(splits)
+repo_name = "reddit-clustering-p2p"
+with jsonlines.open(f"{repo_name}/test.jsonl", "w") as f_out:
+    f_out.write_all(sets)
 # Compress
-with open(f"{repository}/test.jsonl", "rb") as f_in:
-    with gzip.open(f"{repository}/test.jsonl.gz", "wb") as f_out:
+with open(f"{repo_name}/test.jsonl", "rb") as f_in:
+    with gzip.open(f"{repo_name}/test.jsonl.gz", "wb") as f_out:
         f_out.writelines(f_in)
 # Remove uncompressed file
-os.remove(f"{repository}/test.jsonl")
+os.remove(f"{repo_name}/test.jsonl")
