@@ -1,5 +1,4 @@
 import os
-
 import datasets
 
 from .AbsTask import AbsTask
@@ -31,6 +30,8 @@ class BeIRTask(AbsTask):
         if eval_splits is None:
             eval_splits = self.description["eval_splits"]
         dataset = self.description["beir_name"]
+        dataset, sub_dataset = dataset.split("/") if "cqadupstack" in dataset else (dataset, None)
+
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         for split in eval_splits:
             if USE_BEIR_DEVELOPMENT:
@@ -41,6 +42,7 @@ class BeIRTask(AbsTask):
                 url = f"https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/{dataset}.zip"
                 download_path = os.path.join(datasets.config.HF_DATASETS_CACHE, "BeIR")
                 data_path = util.download_and_unzip(url, download_path)
+                data_path = f"{data_path}/{sub_dataset}" if sub_dataset else data_path
                 self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
                     data_folder=data_path
                 ).load(split=split)

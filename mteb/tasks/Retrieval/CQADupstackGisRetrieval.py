@@ -2,14 +2,14 @@ from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from ...abstasks.BeIRTask import BeIRTask
 
 
-class FiQA2018(AbsTaskRetrieval, BeIRTask):
+class CQADupstackGisRetrieval(AbsTaskRetrieval, BeIRTask):
     @property
     def description(self):
         return {
-            "name": "FiQA2018",
-            "beir_name": "fiqa",
-            "description": "Financial Opinion Mining and Question Answering",
-            "reference": "https://sites.google.com/view/fiqa/",
+            "name": "CQADupstackGisRetrieval",
+            "beir_name": "cqadupstack/gis",
+            "description": "CQADupStack: A Benchmark Data Set for Community Question-Answering Research",
+            "reference": "http://nlp.cis.unimelb.edu.au/resources/cqadupstack/",
             "type": "Retrieval",
             "category": "s2s",
             "eval_splits": ["test"],

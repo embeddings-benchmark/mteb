@@ -2,12 +2,12 @@ from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from ...abstasks.BeIRTask import BeIRTask
 
 
-class CQADupstackRetrieval(AbsTaskRetrieval, BeIRTask):
+class CQADupstackWebmastersRetrieval(AbsTaskRetrieval, BeIRTask):
     @property
     def description(self):
         return {
-            "name": "CQADupstackRetrieval",
-            "beir_name": "cqadupstack",
+            "name": "CQADupstackWebmastersRetrieval",
+            "beir_name": "cqadupstack/webmasters",
             "description": "CQADupStack: A Benchmark Data Set for Community Question-Answering Research",
             "reference": "http://nlp.cis.unimelb.edu.au/resources/cqadupstack/",
             "type": "Retrieval",

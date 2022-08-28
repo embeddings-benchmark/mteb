@@ -16,7 +16,7 @@ class FEVER(AbsTaskRetrieval, BeIRTask):
             "reference": "https://fever.ai/",
             "type": "Retrieval",
             "category": "s2s",
-            "eval_splits": ["validation", "test"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
         }
