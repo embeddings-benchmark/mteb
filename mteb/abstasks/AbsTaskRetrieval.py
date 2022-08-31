@@ -44,7 +44,7 @@ class AbsTaskRetrieval(AbsTask):
 
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
 
-        if False:
+        if True:
             from beir.retrieval.search.dense import DenseRetrievalParallelExactSearch as DRPES
 
             model = DRPES(

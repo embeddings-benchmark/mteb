@@ -17,12 +17,9 @@ class BeIRTask(AbsTask):
         except ImportError:
             raise Exception("Retrieval tasks require beir package. Please install it with `pip install mteb[beir]`")
 
-        USE_BEIR_DEVELOPMENT = False
-        #try:
-        #    from beir.datasets.data_loader_hf import HFDataLoader as BeirDataLoader
-
-        #    USE_BEIR_DEVELOPMENT = True
-        #except ImportError:
+        #USE_BEIR_DEVELOPMENT = False
+        #from beir.datasets.data_loader_hf import HFDataLoader as BeirDataLoader
+        USE_BEIR_DEVELOPMENT = True
         from beir.datasets.data_loader import GenericDataLoader as BeirDataLoader
 
         if self.data_loaded:

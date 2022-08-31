@@ -224,7 +224,7 @@ class MTEB:
 
             try:
                 task_eval_splits = eval_splits if eval_splits is not None else task.description.get("eval_splits", [])
-                task_eval_splits = ["test"]
+                task_eval_splits = ["validation"] if task.description['name'] == "MSMARCO" else ["test"]
                 # load data
                 logger.info(f"Loading dataset for {task.description['name']}")
                 task.load_data(eval_splits=task_eval_splits)
