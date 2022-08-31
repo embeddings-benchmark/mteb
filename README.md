@@ -1,4 +1,4 @@
-<center> <h1>Massive Text Embedding Benchmark</h1> </center>
+<h1 align="center">Massive Text Embedding Benchmark</h1>
 
 <p align="center">
     <a href="https://github.com/mbeddings-benchmark/mteb/releases">
