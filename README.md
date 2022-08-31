@@ -1,6 +1,37 @@
 # Massive Text Embedding Benchmark
 
-Massive Text Embedding Benchmark
+<p align="center">
+    <a href="https://github.com/mbeddings-benchmark/mteb/releases">
+        <img alt="GitHub release" src="https://img.shields.io/github/release/embeddings-benchmark/mteb.svg">
+    </a>
+    <a href="https://www.python.org/">
+            <img alt="Build" src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg?color=purple">
+    </a>
+    <a href="https://github.com/embeddings-benchmark/mteb/blob/master/LICENSE">
+        <img alt="License" src="https://img.shields.io/github/license/embeddings-benchmark/mteb.svg?color=green">
+    </a>
+    <a href="https://pepy.tech/project/mteb">
+        <img alt="Downloads" src="https://static.pepy.tech/personalized-badge/mteb?period=total&units=international_system&left_color=grey&right_color=orange&left_text=Downloads">
+    </a>
+</p>
+
+<h4 align="center">
+    <p>
+        <a href="">Paper (WIP)</a> |
+        <a href="#installation">Installation</a> |
+        <a href="#usage">Usage</a> |
+        <a href="#available-tasks">Tasks</a> |
+        <a href="https://huggingface.co/mteb">Hugging Face</a>
+    <p>
+</h4>
+
+<!-- > The development of MTEB is supported by: -->
+
+
+<h3 align="center">
+    <a href="https://huggingface.co/"><img style="float: middle; padding: 10px 10px 10px 10px;" width="50" height="50" src="./images/HF.png" /></a>
+</h3>
+
 
 ## Installation
 
@@ -8,7 +39,7 @@ Massive Text Embedding Benchmark
 pip install mteb
 ```
 
-## Minimal use
+## Usage
 
 * Using a python script:
 
