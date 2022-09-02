@@ -8,6 +8,7 @@ class MSMARCOv2(AbsTaskRetrieval, BeIRTask):
         return {
             "name": "MSMARCOv2",
             "beir_name": "msmarco-v2",
+            "description": "MS MARCO is a collection of datasets focused on deep learning in search",
             "reference": "https://microsoft.github.io/msmarco/TREC-Deep-Learning.html",
             "type": "Retrieval",
             "category": "s2s",
