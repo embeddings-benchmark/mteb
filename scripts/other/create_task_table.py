@@ -1,16 +1,13 @@
 from mteb import MTEB
 
-# Select all tasks
-tasks = MTEB().tasks
-
 HEADER = "| Name | Hub URL | Description | Type | Category | N° Languages |"
 SEP = "|:-----|:-----|:-----|:-----|:-----|-----:|"
 ONE_LINE = "| {} | {} | {} | {} | {} | {} |"
 
 TABLE_STRING = "\n".join([HEADER, SEP])
 
-for task in tasks:
-    print(task.description)
+# Select all tasks
+for task in MTEB().tasks:
     if "hf_hub_name" in task.description:
         hub_name = hub_url = task.description.get("hf_hub_name")
     elif "beir_name" in task.description:
