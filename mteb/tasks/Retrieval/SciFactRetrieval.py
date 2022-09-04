@@ -9,6 +9,7 @@ class SciFact(AbsTaskRetrieval, BeIRTask):
             "name": "SciFact",
             "beir_name": "scifact",
             "reference": "https://github.com/allenai/scifact",
+            "description": "SciFact verifies scientific claims using evidence from the research literature containing scientific paper abstracts.",
             "type": "Retrieval",
             "category": "s2s",
             "eval_splits": ["test"],
