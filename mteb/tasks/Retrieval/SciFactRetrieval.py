@@ -8,6 +8,7 @@ class SciFact(AbsTaskRetrieval, BeIRTask):
         return {
             "name": "SciFact",
             "beir_name": "scifact",
+            "description": "SciFact verifies scientific claims using evidence from the research literature containing scientific paper abstracts.",
             "reference": "https://github.com/allenai/scifact",
             "description": "SciFact verifies scientific claims using evidence from the research literature containing scientific paper abstracts.",
             "type": "Retrieval",
