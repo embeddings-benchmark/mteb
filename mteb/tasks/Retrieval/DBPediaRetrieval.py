@@ -13,7 +13,7 @@ class DBPedia(AbsTaskRetrieval, BeIRTask):
             ),
             "reference": "https://github.com/iai-group/DBpedia-Entity/",
             "type": "Retrieval",
-            "category": "s2s",
+            "category": "s2p",
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",

@@ -11,7 +11,7 @@ class NQ(AbsTaskRetrieval, BeIRTask):
             "description": "NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
             "reference": "https://ai.google.com/research/NaturalQuestions/",
             "type": "Retrieval",
-            "category": "s2s",
+            "category": "s2p",
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",

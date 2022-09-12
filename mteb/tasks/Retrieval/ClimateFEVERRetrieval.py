@@ -14,7 +14,7 @@ class ClimateFEVER(AbsTaskRetrieval, BeIRTask):
             ),
             "reference": "https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html",
             "type": "Retrieval",
-            "category": "s2s",
+            "category": "s2p",
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
