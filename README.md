@@ -132,6 +132,19 @@ evaluation = MTEB(tasks=["Banking77Classification"])
 evaluation.run(model)
 ```
 
+If you'd like to use different encoding functions for query and corpus when evaluating on BeIR, you can make your model BeIR compatible. If compatible like the below example, it will be used for BeIR upon evaluation.
+
+```python
+from mteb import AbsTaskRetrieval, BeIRModel
+
+class MyModel(BeIRModel):
+    # Refer to the code of BeIRModel for the methods to overwrite
+    pass
+
+assert AbsTaskRetrieval.is_beir_compatible(MyModel)
+```
+
+
 ### Evaluating on a custom task
 
 To add a new task, you need to implement a new class that inherits from the `AbsTask` associated with the task type (e.g. `AbsTaskReranking` for reranking tasks). You can find the supported task types in [here](https://github.com/embeddings-benchmark/mteb-draft/tree/main/mteb/abstasks).

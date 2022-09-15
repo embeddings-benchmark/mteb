@@ -28,7 +28,7 @@ class AbsTaskRetrieval(AbsTask):
         super().__init__(**kwargs)
 
     @staticmethod
-    def is_beir_compatible(beir_model, is_parallel):
+    def is_beir_compatible(beir_model, is_parallel=True):
         methods = BEIR_METHODS_PARALLEL if is_parallel else BEIR_METHODS
         for method in methods:
             op = getattr(beir_model, method, None)
