@@ -28,17 +28,17 @@ class AbsTaskRetrieval(AbsTask):
         super().__init__(**kwargs)
 
     @staticmethod
-    def is_beir_compatible(beir_model, is_parallel=True):
+    def is_beir_compatible(model, is_parallel=True):
         methods = BEIR_METHODS_PARALLEL if is_parallel else BEIR_METHODS
         for method in methods:
-            op = getattr(beir_model, method, None)
+            op = getattr(model, method, None)
             if not(callable(op)):
                 return False
         return True
 
     def evaluate(
         self,
-        beir_model,
+        model,
         split="test",
         batch_size=128,
         corpus_chunk_size=None,
@@ -56,16 +56,13 @@ class AbsTaskRetrieval(AbsTask):
 
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
 
-        # Check if the provided model already is BeIR compatible
-        
-
         try:
             from beir.retrieval.search.dense import DenseRetrievalParallelExactSearch as DRPES
 
-            beir_model = beir_model if self.is_beir_compatible(beir_model, is_parallel=True) else BeIRModel(model)
+            model = model if self.is_beir_compatible(model, is_parallel=True) else BeIRModel(model)
 
             model = DRPES(
-                beir_model,
+                model,
                 batch_size=batch_size,
                 target_devices=target_devices,
                 corpus_chunk_size=corpus_chunk_size,
@@ -80,7 +77,7 @@ class AbsTaskRetrieval(AbsTask):
 
             from beir.retrieval.search.dense import DenseRetrievalExactSearch as DRES
             
-            beir_model = beir_model if self.is_beir_compatible(beir_model, is_parallel=False) else BeIRModel(model)
+            model = model if self.is_beir_compatible(model, is_parallel=False) else BeIRModel(model)
 
             model = DRES(
                 BeIRModel(model),
