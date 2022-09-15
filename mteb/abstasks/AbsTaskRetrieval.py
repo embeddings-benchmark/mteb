@@ -77,12 +77,14 @@ class AbsTaskRetrieval(AbsTask):
         print("Time taken to retrieve: {:.2f} seconds".format(end_time - start_time))
 
         ndcg, _map, recall, precision = retriever.evaluate(relevant_docs, results, retriever.k_values)
+        mrr = retriever.evaluate_custom(relevant_docs, results, retriever.k_values, "mrr")
 
         scores = {
             **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
             **{f"map_at_{k.split('@')[1]}": v for (k, v) in _map.items()},
             **{f"recall_at_{k.split('@')[1]}": v for (k, v) in recall.items()},
             **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
+            **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
         }
 
         return scores
