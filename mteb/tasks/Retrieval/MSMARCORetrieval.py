@@ -11,7 +11,7 @@ class MSMARCO(AbsTaskRetrieval, BeIRTask):
             "description": "MS MARCO is a collection of datasets focused on deep learning in search",
             "reference": "https://microsoft.github.io/msmarco/",
             "type": "Retrieval",
-            "category": "s2s",
+            "category": "s2p",
             "eval_splits": ["validation", "test"], # "dev" if not using latest BEIR i.e. not HFDataLoader
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",

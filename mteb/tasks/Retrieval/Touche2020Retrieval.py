@@ -11,7 +11,7 @@ class Touche2020(AbsTaskRetrieval, BeIRTask):
             "description": "Touché Task 1: Argument Retrieval for Controversial Questions",
             "reference": "https://webis.de/events/touche-20/shared-task-1.html",
             "type": "Retrieval",
-            "category": "s2s",
+            "category": "s2p",
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
