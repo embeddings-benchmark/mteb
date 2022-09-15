@@ -11,6 +11,9 @@ from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 
+BEIR_METHODS = ["encode_queries", "encode_corpus"]
+BEIR_METHODS_PARALLEL = ["start_multi_process_pool", "stop_multi_process_pool", "encode_queries", "encode_corpus", "encode_corpus_parallel"]
+
 
 class AbsTaskRetrieval(AbsTask):
     """
@@ -24,9 +27,18 @@ class AbsTaskRetrieval(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+    @staticmethod
+    def is_beir_compatible(beir_model, is_parallel):
+        methods = BEIR_METHODS_PARALLEL if is_parallel else BEIR_METHODS
+        for method in methods:
+            op = getattr(beir_model, method, None)
+            if not(callable(op)):
+                return False
+        return True
+
     def evaluate(
         self,
-        model,
+        beir_model,
         split="test",
         batch_size=128,
         corpus_chunk_size=None,
@@ -44,11 +56,16 @@ class AbsTaskRetrieval(AbsTask):
 
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
 
+        # Check if the provided model already is BeIR compatible
+        
+
         try:
             from beir.retrieval.search.dense import DenseRetrievalParallelExactSearch as DRPES
 
+            beir_model = beir_model if self.is_beir_compatible(beir_model, is_parallel=True) else BeIRModel(model)
+
             model = DRPES(
-                BeIRModel(model),
+                beir_model,
                 batch_size=batch_size,
                 target_devices=target_devices,
                 corpus_chunk_size=corpus_chunk_size,
@@ -62,6 +79,8 @@ class AbsTaskRetrieval(AbsTask):
                 logger.warning("The parameter target_devices is ignored.")
 
             from beir.retrieval.search.dense import DenseRetrievalExactSearch as DRES
+            
+            beir_model = beir_model if self.is_beir_compatible(beir_model, is_parallel=False) else BeIRModel(model)
 
             model = DRES(
                 BeIRModel(model),
