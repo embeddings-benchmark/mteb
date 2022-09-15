@@ -162,7 +162,7 @@ class MTEB:
         )
         # keep only tasks with at least one language in the filter
         filtered_tasks = filter(
-            lambda x: (self._task_langs is None)
+            lambda x: (not(self._task_langs))
             or (len(set(x.description["eval_langs"]) & set(self._task_langs)) > 0),
             filtered_tasks,
         )
