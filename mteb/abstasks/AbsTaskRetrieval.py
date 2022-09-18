@@ -11,8 +11,8 @@ from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 
-BEIR_METHODS = ["encode_queries", "encode_corpus"]
-BEIR_METHODS_PARALLEL = ["start_multi_process_pool", "stop_multi_process_pool", "encode_queries", "encode_corpus", "encode_corpus_parallel"]
+DRES_METHODS = ["encode_queries", "encode_corpus"]
+DRPES_METHODS = ["start_multi_process_pool", "stop_multi_process_pool", "encode_queries", "encode_corpus", "encode_corpus_parallel"]
 
 
 class AbsTaskRetrieval(AbsTask):
@@ -28,8 +28,8 @@ class AbsTaskRetrieval(AbsTask):
         super().__init__(**kwargs)
 
     @staticmethod
-    def is_beir_compatible(model, is_parallel=True):
-        methods = BEIR_METHODS_PARALLEL if is_parallel else BEIR_METHODS
+    def is_dres_compatible(model, is_parallel=True):
+        methods = DRPES_METHODS if is_parallel else DRES_METHODS
         for method in methods:
             op = getattr(model, method, None)
             if not(callable(op)):
@@ -59,7 +59,7 @@ class AbsTaskRetrieval(AbsTask):
         try:
             from beir.retrieval.search.dense import DenseRetrievalParallelExactSearch as DRPES
 
-            model = model if self.is_beir_compatible(model, is_parallel=True) else BeIRModel(model)
+            model = model if self.is_dres_compatible(model, is_parallel=True) else DRESModel(model)
 
             model = DRPES(
                 model,
@@ -77,7 +77,7 @@ class AbsTaskRetrieval(AbsTask):
 
             from beir.retrieval.search.dense import DenseRetrievalExactSearch as DRES
             
-            model = model if self.is_beir_compatible(model, is_parallel=False) else BeIRModel(model)
+            model = model if self.is_dres_compatible(model, is_parallel=False) else DRESModel(model)
 
             model = DRES(
                 model,
@@ -106,11 +106,10 @@ class AbsTaskRetrieval(AbsTask):
         return scores
 
 
-class BeIRModel:
+class DRESModel:
     """
-    BeIR requires to have an encode_queries and encode_corpus method.
-    This class converts a MTEB model (with just an .encode method) into
-    BeIR format model
+    Dense Retrieval Exact Search (DRES) in BeIR requires an encode_queries & encode_corpus method.
+    This class converts a MTEB model (with just an .encode method) into BeIR DRES format.
     """
 
     def __init__(self, model, sep=" ", **kwargs):
