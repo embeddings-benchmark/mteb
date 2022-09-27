@@ -18,6 +18,7 @@
 <h4 align="center">
     <p>
         <a href="">Paper (WIP)</a> |
+        <a href="https://huggingface.co/spaces/mteb/leaderboard">Leaderboard</a> |
         <a href="#installation">Installation</a> |
         <a href="#usage">Usage</a> |
         <a href="#available-tasks">Tasks</a> |
