@@ -14,4 +14,5 @@ class TwentyNewsgroupsClustering(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "v_measure",
+            "revision": "6125ec4e24fa026cec8a478383ee943acfbd5449",
         }

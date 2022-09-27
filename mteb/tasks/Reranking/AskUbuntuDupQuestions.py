@@ -17,4 +17,5 @@ class AskUbuntuDupQuestions(AbsTaskReranking):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "map",
+            "revision": "2000358ca161889fa9c082cb41daa8dcfb161a54",
         }

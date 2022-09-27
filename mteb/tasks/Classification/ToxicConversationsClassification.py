@@ -21,4 +21,5 @@ class ToxicConversationsClassification(AbsTaskClassification):
             "main_score": "accuracy",
             "n_experiments": 10,
             "samples_per_label": 32,
+            "revision": "d7c0de2777da35d6aae2200a62c6e0e5af397c4c",
         }

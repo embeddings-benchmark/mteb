@@ -16,4 +16,5 @@ class MedrxivClusteringP2P(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "v_measure",
+            "revision": "e7a26af6f3ae46b30dde8737f02c07b1505bcc73",
         }

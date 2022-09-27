@@ -17,4 +17,5 @@ class StackExchangeClustering(AbsTaskClustering):
             "eval_splits": ["validation", "test"],
             "eval_langs": ["en"],
             "main_score": "v_measure",
+            "revision": "6cbc1f7b2bc0622f2e39d2c77fa502909748c259",
         }

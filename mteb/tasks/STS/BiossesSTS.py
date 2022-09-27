@@ -16,4 +16,5 @@ class BiossesSTS(AbsTaskSTS):
             "main_score": "cosine_spearman",
             "min_score": 0,
             "max_score": 4,
+            "revision": "d3fb88f8f02e40887cd149695127462bbcf29b4a",
         }

@@ -16,4 +16,5 @@ class ArxivClusteringS2S(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "v_measure",
+            "revision": "f910caf1a6075f7329cdf8c1a6135696f37dbd53",
         }

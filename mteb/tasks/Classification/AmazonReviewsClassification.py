@@ -20,4 +20,5 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
             "eval_splits": ["validation", "test"],
             "eval_langs": _LANGUAGES,
             "main_score": "accuracy",
+            "revision": "1399c76144fd37290681b995c656ef9b2e06e26d",
         }

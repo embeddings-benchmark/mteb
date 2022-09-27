@@ -17,4 +17,5 @@ class ArxivClusteringP2P(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "v_measure",
+            "revision": "a122ad7f3f0291bf49cc6f4d32aa80929df69d5d",
         }

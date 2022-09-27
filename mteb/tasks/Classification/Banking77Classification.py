@@ -14,4 +14,5 @@ class Banking77Classification(AbsTaskClassification):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "accuracy",
+            "revision": "0fd18e25b25c072e09e0d92ab615fda904d66300",
         }
