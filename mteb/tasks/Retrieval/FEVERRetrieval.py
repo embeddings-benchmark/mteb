@@ -19,5 +19,4 @@ class FEVER(AbsTaskRetrieval, BeIRTask):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "1429cf27e393599b8b359b9b72c666f96b2525f9",
         }
