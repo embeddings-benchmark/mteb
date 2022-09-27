@@ -29,7 +29,7 @@
 
 
 <h3 align="center">
-    <a href="https://huggingface.co/"><img style="float: middle; padding: 10px 10px 10px 10px;" width="50" height="50" src="./images/HF.png" /></a>
+    <a href="https://huggingface.co/"><img style="float: middle; padding: 10px 10px 10px 10px;" width="50" height="50" src="./images/hf_logo.png" /></a>
 </h3>
 
 
