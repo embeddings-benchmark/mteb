@@ -16,4 +16,5 @@ class STSBenchmarkSTS(AbsTaskSTS):
             "main_score": "cosine_spearman",
             "min_score": 0,
             "max_score": 5,
+            "revision": "b0fddb56ed78048fa8b90373c8a3cfc37b684831",
         }

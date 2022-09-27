@@ -14,4 +14,5 @@ class MedrxivClusteringS2S(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "v_measure",
+            "revision": "35191c8c0dca72d8ff3efcd72aa802307d469663",
         }

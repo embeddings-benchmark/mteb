@@ -17,4 +17,5 @@ class StackExchangeClusteringP2P(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "v_measure",
+            "revision": "815ca46b2622cec33ccafc3735d572c266efdb44",
         }

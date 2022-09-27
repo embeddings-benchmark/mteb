@@ -72,4 +72,5 @@ class MassiveIntentClassification(MultilingualTask, AbsTaskClassification):
             "eval_splits": ["validation", "test"],
             "eval_langs": _LANGUAGES,
             "main_score": "accuracy",
+            "revision": "31efe3c427b0bae9c22cbb560b8f15491cc6bed7",
         }

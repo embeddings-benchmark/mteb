@@ -130,4 +130,5 @@ class TatoebaBitextMining(AbsTaskBitextMining, CrosslingualTask):
             "eval_splits": ["test"],
             "eval_langs": _LANGUAGES,
             "main_score": "f1",
+            "revision": "9080400076fbadbb4c4dcb136ff4eddc40b42553",
         }

@@ -14,4 +14,5 @@ class AmazonPolarityClassification(AbsTaskClassification):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "accuracy",
+            "revision": "e2d317d38cd51312af73b3d32a06d1a08b442046",
         }

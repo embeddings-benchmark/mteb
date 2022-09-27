@@ -16,4 +16,5 @@ class SickrSTS(AbsTaskSTS):
             "main_score": "cosine_spearman",
             "min_score": 1,
             "max_score": 5,
+            "revision": "a6ea5a8cab320b040a23452cc28066d9beae2cee",
         }

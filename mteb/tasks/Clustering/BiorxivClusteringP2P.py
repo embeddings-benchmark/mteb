@@ -16,4 +16,5 @@ class BiorxivClusteringP2P(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "v_measure",
+            "revision": "65b79d1d13f80053f67aca9498d9402c2d9f1f40",
         }

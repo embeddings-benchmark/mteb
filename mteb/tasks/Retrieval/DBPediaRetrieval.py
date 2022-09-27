@@ -17,4 +17,5 @@ class DBPedia(AbsTaskRetrieval, BeIRTask):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "f097057d03ed98220bc7309ddb10b71a54d667d6",
         }

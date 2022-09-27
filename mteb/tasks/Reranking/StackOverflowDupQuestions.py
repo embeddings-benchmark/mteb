@@ -16,4 +16,5 @@ class StackOverflowDupQuestions(AbsTaskReranking):
             "eval_splits": ["test", "validation"],
             "eval_langs": ["en"],
             "main_score": "map",
+            "revision": "e185fbe320c72810689fc5848eb6114e1ef5ec69",
         }
