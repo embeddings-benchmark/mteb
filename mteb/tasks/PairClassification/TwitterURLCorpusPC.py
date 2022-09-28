@@ -1,7 +1,7 @@
 from ...abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
-class TwitterURLCorpusBC(AbsTaskPairClassification):
+class TwitterURLCorpusPC(AbsTaskPairClassification):
     @property
     def description(self):
         return {
