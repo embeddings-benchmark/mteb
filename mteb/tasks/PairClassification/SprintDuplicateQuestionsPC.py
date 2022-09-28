@@ -1,7 +1,7 @@
 from ...abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
-class SprintDuplicateQuestionsBC(AbsTaskPairClassification):
+class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
     @property
     def description(self):
         return {

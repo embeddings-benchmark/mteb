@@ -1,7 +1,7 @@
 from ...abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
-class TwitterSemEval2015BC(AbsTaskPairClassification):
+class TwitterSemEval2015PC(AbsTaskPairClassification):
     @property
     def description(self):
         return {
