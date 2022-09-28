@@ -14,4 +14,5 @@ class TwitterURLCorpusPC(AbsTaskPairClassification):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ap",
+            "revision": "8b6510b0b1fa4e4c4f879467980e9be563ec1cdf",
         }

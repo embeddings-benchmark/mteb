@@ -14,4 +14,5 @@ class MindSmallReranking(AbsTaskReranking):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "map",
+            "revision": "3bdac13927fdc888b903db93b2ffdbd90b295a69",
         }

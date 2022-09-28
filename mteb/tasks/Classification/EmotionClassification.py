@@ -19,4 +19,5 @@ class EmotionClassification(AbsTaskClassification):
             "main_score": "accuracy",
             "n_experiments": 10,
             "samples_per_label": 16,
+            "revision": "4f58c6b202a23cf9a4da393831edf4f9183cad37",
         }

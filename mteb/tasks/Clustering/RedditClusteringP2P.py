@@ -16,4 +16,5 @@ class RedditClusteringP2P(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "v_measure",
+            "revision": "282350215ef01743dc01b456c7f5241fa8937f16",
         }

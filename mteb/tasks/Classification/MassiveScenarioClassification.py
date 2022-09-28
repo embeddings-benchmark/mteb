@@ -72,4 +72,5 @@ class MassiveScenarioClassification(MultilingualTask, AbsTaskClassification):
             "eval_splits": ["validation", "test"],
             "eval_langs": _LANGUAGES,
             "main_score": "accuracy",
+            "revision": "7d571f92784cd94a019292a1f45445077d0ef634",
         }

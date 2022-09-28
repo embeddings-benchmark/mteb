@@ -16,4 +16,5 @@ class SummEvalSummarization(AbsTaskSummarization):
             "main_score": "cosine_spearman",
             "min_score": 0,
             "max_score": 5,
+            "revision": "cda12ad7615edc362dbf25a00fdd61d3b1eaf93c",
         }

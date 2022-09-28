@@ -16,4 +16,5 @@ class STS13STS(AbsTaskSTS):
             "main_score": "cosine_spearman",
             "min_score": 0,
             "max_score": 5,
+            "revision": "7e90230a92c190f1bf69ae9002b8cea547a64cca",
         }

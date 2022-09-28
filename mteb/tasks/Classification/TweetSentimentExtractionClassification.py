@@ -16,4 +16,5 @@ class TweetSentimentExtractionClassification(AbsTaskClassification):
             "main_score": "accuracy",
             "n_experiments": 10,
             "samples_per_label": 32,
+            "revision": "d604517c81ca91fe16a244d1248fc021f9ecee7a",
         }

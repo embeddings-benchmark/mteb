@@ -17,4 +17,5 @@ class MTOPIntentClassification(MultilingualTask, AbsTaskClassification):
             "eval_splits": ["validation", "test"],
             "eval_langs": _LANGUAGES,
             "main_score": "accuracy",
+            "revision": "ae001d0e6b1228650b7bd1c2c65fb50ad11a8aba",
         }

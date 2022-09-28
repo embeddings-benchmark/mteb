@@ -14,4 +14,5 @@ class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
             "eval_splits": ["validation", "test"],
             "eval_langs": ["en"],
             "main_score": "ap",
+            "revision": "d66bd1f72af766a5cc4b0ca5e00c162f89e8cc46",
         }
