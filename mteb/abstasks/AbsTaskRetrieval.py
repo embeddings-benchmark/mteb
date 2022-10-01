@@ -57,6 +57,8 @@ class AbsTaskRetrieval(AbsTask):
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
 
         try:
+            if self.description["beir_name"].startswith("cqadupstack"):
+                raise ImportError("CQADupstack is incompatible with latest BEIR")
             from beir.retrieval.search.dense import DenseRetrievalParallelExactSearch as DRPES
 
             model = model if self.is_dres_compatible(model, is_parallel=True) else DRESModel(model)

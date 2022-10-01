@@ -19,6 +19,8 @@ class BeIRTask(AbsTask):
 
         USE_BEIR_DEVELOPMENT = False
         try:
+            if self.description["beir_name"].startswith("cqadupstack"):
+                raise ImportError("CQADupstack is incompatible with latest BEIR")
             from beir.datasets.data_loader_hf import HFDataLoader as BeirDataLoader
 
             USE_BEIR_DEVELOPMENT = True
