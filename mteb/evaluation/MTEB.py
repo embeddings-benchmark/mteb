@@ -225,7 +225,11 @@ class MTEB:
                 task.load_data(eval_splits=task_eval_splits)
 
                 # run evaluation
-                task_results = {"mteb_version": __version__, "dataset_version": task.description.get("revision", None)}
+                task_results = {
+                    "mteb_version": __version__, 
+                    "dataset_version": task.description.get("revision", None),
+                    "mteb_dataset_name": task.description['name'],
+                }
                 for split in task_eval_splits:
                     tick = time()
                     results = task.evaluate(model, split, **kwargs)
