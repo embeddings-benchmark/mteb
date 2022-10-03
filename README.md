@@ -184,7 +184,7 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 1. Run your model on MTEB
 2. Format the json files into metadata using the script at `scripts/other/mteb_meta.py`. For example
 `python scripts/mteb_meta.py path_to_results_folder`, which will create a `mteb_metadata.md` file.
-3. Copy the content of the `mteb_metadata.md` file to the top of a `README.md` file of your model on the Hub. See [here](https://huggingface.co/Muennighoff/SGPT-5.8B-weightedmean-msmarco-specb-bitfit/edit/main/README.md) for an example.
+3. Copy the content of the `mteb_metadata.md` file to the top of a `README.md` file of your model on the Hub. See [here](https://huggingface.co/Muennighoff/SGPT-5.8B-weightedmean-msmarco-specb-bitfit/blob/main/README.md) for an example.
 4. Refresh the leaderboard and you should see your scores 🥇
 
 ## Available tasks
