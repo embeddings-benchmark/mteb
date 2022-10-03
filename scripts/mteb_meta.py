@@ -71,7 +71,7 @@ for ds_name, res_dict in sorted(all_results.items()):
     if "CQADupstack" in ds_name:
         hf_hub_name = "BeIR/cqadupstack"
     mteb_type = mteb_desc["type"]
-    revision = res_dict.get("dataset_version") # Okay if it's None
+    revision = res_dict.get("dataset_revision") # Okay if it's None
     split = "test"
     if ds_name == "MSMARCO":
         split = "dev" if "dev" in res_dict else "validation"
