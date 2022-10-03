@@ -227,7 +227,7 @@ class MTEB:
                 # run evaluation
                 task_results = {
                     "mteb_version": __version__, 
-                    "dataset_version": task.description.get("revision", None),
+                    "dataset_revision": task.description.get("revision", None),
                     "mteb_dataset_name": task.description['name'],
                 }
                 for split in task_eval_splits:

@@ -178,6 +178,15 @@ evaluation.run(model)
 
 > **Note:** for multilingual tasks, make sure your class also inherits from the `MultilingualTask` class like in [this](https://github.com/embeddings-benchmark/mteb-draft/blob/main/mteb/tasks/Classification/MTOPIntentClassification.py) example.
 
+## Leaderboard
+
+The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/leaderboard). To submit:
+1. Run your model on MTEB
+2. Format the json files into metadata using the script at `scripts/other/mteb_meta.py`. For example
+`python scripts/mteb_meta.py path_to_results_folder`, which will create a `mteb_metadata.md` file.
+3. Copy the content of the `mteb_metadata.md` file to the top of a `README.md` file of your model on the Hub. See [here](https://huggingface.co/Muennighoff/SGPT-5.8B-weightedmean-msmarco-specb-bitfit/edit/main/README.md) for an example.
+4. Refresh the leaderboard and you should see your scores 🥇
+
 ## Available tasks
 
 | Name | Hub URL | Description | Type | Category | #Languages | Train #Samples | Dev #Samples | Test #Samples | Avg. chars / train | Avg. chars / dev | Avg. chars / test
