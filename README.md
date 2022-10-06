@@ -37,7 +37,7 @@
 ## Installation
 
 ```bash
-pip install git+https://github.com/embeddings-benchmark/mteb.git
+pip install mteb
 ```
 
 ## Usage
