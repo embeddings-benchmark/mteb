@@ -32,7 +32,7 @@ class STS22CrosslingualSTS(AbsTaskSTS, CrosslingualTask):
             "description": "SemEval 2022 Task 8: Multilingual News Article Similarity",
             "reference": "https://competitions.codalab.org/competitions/33835",
             "type": "STS",
-            "category": "s2s",
+            "category": "p2p",
             "eval_splits": ["test"],
             "eval_langs": _LANGUAGES,
             "main_score": "cosine_spearman",
