@@ -113,7 +113,9 @@ evaluation.run(model, eval_splits=["test"])
 
 ### Using a custom model
 
-Models should implement the following interface, implementing an `encode` function taking as inputs a list of sentences, and returning a list of embeddings (embeddings can be `np.array`, `torch.tensor`, etc.).
+Models should implement the following interface, implementing an `encode` function taking as inputs a list of sentences, and returning a list of embeddings (embeddings can be `np.array`, `torch.tensor`, etc.). For inspiration, you can look at the [mtebscripts repo](https://github.com/embeddings-benchmark/mtebscripts) used for running diverse models via SLURM scripts for the paper.
+
+````python
 
 ```python
 class MyModel():
@@ -183,7 +185,7 @@ evaluation.run(model)
 The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/leaderboard). To submit:
 1. Run your model on MTEB
 2. Format the json files into metadata using the script at `scripts/other/mteb_meta.py`. For example
-`python scripts/mteb_meta.py path_to_results_folder`, which will create a `mteb_metadata.md` file.
+`python scripts/mteb_meta.py path_to_results_folder`, which will create a `mteb_metadata.md` file. If you ran CQADupstack retrieval, make sure to merge the results first with `python scripts/merge_cqadupstack.py path_to_results_folder`.
 3. Copy the content of the `mteb_metadata.md` file to the top of a `README.md` file of your model on the Hub. See [here](https://huggingface.co/Muennighoff/SGPT-5.8B-weightedmean-msmarco-specb-bitfit/blob/main/README.md) for an example.
 4. Refresh the leaderboard and you should see your scores 🥇
 
