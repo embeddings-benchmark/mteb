@@ -11,14 +11,14 @@ extras["beir"] = ["beir"]
 
 setup(
     name="mteb",
-    version="0.0.2",
+    version="0.9.1",
     description="Massive Text Embedding Benchmark",
     long_description=readme,
     long_description_content_type="text/markdown",
     keywords="deep learning, text embeddings, benchmark",
     license="Apache",
-    author="MTEB",
-    author_email="info@nils-reimers.de",
+    author="MTEB Contributors (https://github.com/embeddings-benchmark/mteb/graphs/contributors)",
+    author_email="niklas@huggingface.co, nouamane@huggingface.co, info@nils-reimers.de",
     url="https://github.com/embeddings-benchmark/mteb",
     project_urls={
         "Huggingface Organization": "https://huggingface.co/mteb",
