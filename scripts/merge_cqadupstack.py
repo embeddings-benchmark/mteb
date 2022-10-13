@@ -3,6 +3,10 @@ Merges CQADupstack subset results
 Usage: python merge_cqadupstack.py path_to_results_folder
 """
 import json
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 TASK_LIST_CQA = [
     "CQADupstackAndroid",
@@ -34,7 +38,7 @@ import glob
 results_folder = sys.argv[1]
 files = glob.glob(f'{results_folder.strip("/")}/CQADupstack*.json')
 
-print("Found CQADupstack files: ", files)
+logger.info("Found CQADupstack files: ", files)
 
 if len(files) == len(TASK_LIST_CQA):
     all_results = {}
@@ -54,8 +58,8 @@ if len(files) == len(TASK_LIST_CQA):
                         score = all_results[split][metric] + score * 1/len(TASK_LIST_CQA)
                     all_results[split][metric] = score
 
-    print("Saving ", all_results)
+    logger.info("Saving ", all_results)
     with open(os.path.join(results_folder, "CQADupstackRetrieval.json"), 'w', encoding='utf-8') as f:
         json.dump(all_results, f, indent=4)
 else:
-    print(f"Missing files {set(TASK_LIST_CQA) - set(files)} or got too many files.")
+    logger.warning(f"Missing files {set(TASK_LIST_CQA) - set(files)} or got too many files.")
