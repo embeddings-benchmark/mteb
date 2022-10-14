@@ -44,7 +44,7 @@ pip install mteb
 
 * Using a python script:
 
-````python
+```python
 from mteb import MTEB
 from sentence_transformers import SentenceTransformer
 
@@ -54,9 +54,7 @@ model_name = "average_word_embeddings_komninos"
 model = SentenceTransformer(model_name)
 evaluation = MTEB(tasks=["Banking77Classification"])
 results = evaluation.run(model, output_folder=f"results/{model_name}")
-
-
-````
+```
 
 * Using CLI
 
@@ -114,8 +112,6 @@ evaluation.run(model, eval_splits=["test"])
 ### Using a custom model
 
 Models should implement the following interface, implementing an `encode` function taking as inputs a list of sentences, and returning a list of embeddings (embeddings can be `np.array`, `torch.tensor`, etc.). For inspiration, you can look at the [mtebscripts repo](https://github.com/embeddings-benchmark/mtebscripts) used for running diverse models via SLURM scripts for the paper.
-
-````python
 
 ```python
 class MyModel():
