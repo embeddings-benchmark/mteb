@@ -17,7 +17,7 @@
 
 <h4 align="center">
     <p>
-        <a href="https://arxiv.org/pdf/2210.07316.pdf">Paper</a> |
+        <a href="https://arxiv.org/abs/2210.07316">Paper</a> |
         <a href="https://huggingface.co/spaces/mteb/leaderboard">Leaderboard</a> |
         <a href="#installation">Installation</a> |
         <a href="#usage">Usage</a> |
