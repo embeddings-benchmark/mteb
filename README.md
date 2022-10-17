@@ -17,7 +17,7 @@
 
 <h4 align="center">
     <p>
-        <a href="">Paper (WIP)</a> |
+        <a href="https://arxiv.org/pdf/2210.07316.pdf">Paper</a> |
         <a href="https://huggingface.co/spaces/mteb/leaderboard">Leaderboard</a> |
         <a href="#installation">Installation</a> |
         <a href="#usage">Usage</a> |
@@ -259,3 +259,19 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 | [STS22](https://competitions.codalab.org/competitions/33835) | [mteb/sts22-crosslingual-sts](https://huggingface.co/datasets/mteb/sts22-crosslingual-sts) | SemEval 2022 Task 8: Multilingual News Article Similarity | STS | s2s | 18 | 0 | 0 | 8060 | 0 | 0 | 1992.8 |
 | [STSBenchmark](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark) | [mteb/stsbenchmark-sts](https://huggingface.co/datasets/mteb/stsbenchmark-sts) | Semantic Textual Similarity Benchmark (STSbenchmark) dataset. | STS | s2s | 1 | 11498 | 3000 | 2758 | 57.6 | 64.0 | 53.6 |
 | [SummEval](https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html) | [mteb/summeval](https://huggingface.co/datasets/mteb/summeval) | Biomedical Semantic Similarity Estimation. | Summarization | s2s | 1 | 0 | 0 | 2800 | 0 | 0 | 359.8 |
+
+
+## Citation
+
+If you find MTEB useful, feel free to cite our publication [MTEB: Massive Text Embedding Benchmark](https://arxiv.org/abs/2210.07316):
+
+```bibtex
+@article{muennighoff2022mteb,
+  doi = {10.48550/ARXIV.2210.07316},
+  url = {https://arxiv.org/abs/2210.07316},
+  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Loïc and Reimers, Nils},
+  title = {MTEB: Massive Text Embedding Benchmark},
+  publisher = {arXiv},
+  year = {2022}
+}
+```
