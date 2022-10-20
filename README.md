@@ -269,9 +269,10 @@ If you find MTEB useful, feel free to cite our publication [MTEB: Massive Text E
 @article{muennighoff2022mteb,
   doi = {10.48550/ARXIV.2210.07316},
   url = {https://arxiv.org/abs/2210.07316},
-  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Loïc and Reimers, Nils},
+  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
   title = {MTEB: Massive Text Embedding Benchmark},
   publisher = {arXiv},
+  journal={arXiv preprint arXiv:2210.07316},  
   year = {2022}
 }
 ```
