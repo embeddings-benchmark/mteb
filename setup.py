@@ -50,7 +50,7 @@ extras["beir"] = ["beir"]
 
 setup(
     name="mteb",
-    version="1.0.0",
+    version="1.0.1",
     description="Massive Text Embedding Benchmark",
     long_description=readme,
     long_description_content_type="text/markdown",
