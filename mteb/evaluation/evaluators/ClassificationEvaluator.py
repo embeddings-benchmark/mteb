@@ -49,16 +49,19 @@ class kNNClassificationEvaluator(Evaluator):
             y_pred = knn.predict(X_test)
             accuracy = accuracy_score(self.y_test, y_pred)
             f1 = f1_score(self.y_test, y_pred, average="macro")
-            ap = average_precision_score(self.y_test, y_pred)
             scores["accuracy_" + metric] = accuracy
             scores["f1_" + metric] = f1
-            scores["ap_" + metric] = ap
             max_accuracy = max(max_accuracy, accuracy)
             max_f1 = max(max_f1, f1)
-            max_ap = max(max_ap, ap)
+            # if binary classification
+            if len(np.unique(self.y_train)) == 2:
+                ap = average_precision_score(self.y_test, y_pred)
+                scores["ap_" + metric] = ap
+                max_ap = max(max_ap, ap)
         scores["accuracy"] = max_accuracy
         scores["f1"] = max_f1
-        scores["ap"] = max_ap
+        if len(np.unique(self.y_train)) == 2:
+            scores["ap"] = max_ap
         return scores, test_cache
 
 
@@ -105,16 +108,19 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
             y_pred = torch.mode(y_train[neigh_indices], dim=1).values  # TODO: case where there is no majority
             accuracy = accuracy_score(self.y_test, y_pred)
             f1 = f1_score(self.y_test, y_pred, average="macro")
-            ap = average_precision_score(self.y_test, y_pred)
             scores["accuracy_" + metric] = accuracy
             scores["f1_" + metric] = f1
-            scores["ap_" + metric] = ap
             max_accuracy = max(max_accuracy, accuracy)
             max_f1 = max(max_f1, f1)
-            max_ap = max(max_ap, ap)
+            # if binary classification
+            if len(np.unique(self.y_train)) == 2:
+                ap = average_precision_score(self.y_test, y_pred)
+                scores["ap_" + metric] = ap
+                max_ap = max(max_ap, ap)
         scores["accuracy"] = max_accuracy
         scores["f1"] = max_f1
-        scores["ap"] = max_ap
+        if len(np.unique(self.y_train)) == 2:
+            scores["ap"] = max_ap
         return scores, test_cache
 
     @staticmethod
