@@ -14,7 +14,7 @@ class RedditClustering(AbsTaskClustering):
             "reference": "https://arxiv.org/abs/2104.07081",
             "type": "Clustering",
             "category": "s2s",
-            "eval_splits": ["test", "validation"],
+            "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "v_measure",
             "revision": "24640382cdbf8abc73003fb0fa6d111a705499eb",
