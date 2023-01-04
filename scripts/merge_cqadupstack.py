@@ -38,7 +38,7 @@ import glob
 results_folder = sys.argv[1]
 files = glob.glob(f'{results_folder.strip("/")}/CQADupstack*.json')
 
-logger.info("Found CQADupstack files: ", files)
+logger.info(f"Found CQADupstack files: {files}")
 
 if len(files) == len(TASK_LIST_CQA):
     all_results = {}
