@@ -1,3 +1,5 @@
+"""Example script for benchmarking all of datasets constituting the MTEB English Leaderboard & Average scores"""
+
 import argparse
 import logging
 import os
