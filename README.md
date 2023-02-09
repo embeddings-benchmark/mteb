@@ -18,7 +18,7 @@
 <h4 align="center">
     <p>
         <a href="https://arxiv.org/abs/2210.07316">Paper</a> |
-        <a href="https://huggingface.co/spaces/mteb/leaderboard">Leaderboard</a> |
+        <a href=#leaderboard>Leaderboard</a> |
         <a href="#installation">Installation</a> |
         <a href="#usage">Usage</a> |
         <a href="#available-tasks">Tasks</a> |
@@ -28,9 +28,8 @@
 
 <!-- > The development of MTEB is supported by: -->
 
-
 <h3 align="center">
-    <a href="https://huggingface.co/"><img style="float: middle; padding: 10px 10px 10px 10px;" width="50" height="50" src="./images/hf_logo.png" /></a>
+    <a href="https://huggingface.co/"><img style="float: middle; padding: 10px 10px 10px 10px;" width="60" height="55" src="./images/hf_logo.png" /></a>
 </h3>
 
 
@@ -69,11 +68,11 @@ mteb -m average_word_embeddings_komninos \
 
 ## Advanced usage
 
-### Tasks selection
+### Dataset selection
 
-Tasks can be selected by providing the list of tasks that needs to be run, but also
+Datasets can be selected by providing the list of datasets, but also
 
-* by their types (e.g. "Clustering" or "Classification")
+* by their task (e.g. "Clustering" or "Classification")
 
 ````python
 evaluation = MTEB(task_types=['Clustering', 'Retrieval']) # Only select clustering and retrieval tasks
@@ -82,16 +81,16 @@ evaluation = MTEB(task_types=['Clustering', 'Retrieval']) # Only select clusteri
 * by their categories e.g. "S2S" (sentence to sentence) or "P2P" (paragraph to paragraph)
 
 ````python
-evaluation = MTEB(task_categories=['S2S']) # Only select sentence2sentence tasks
+evaluation = MTEB(task_categories=['S2S']) # Only select sentence2sentence datasets
 ````
 
 * by their languages
 
 ````python
-evaluation = MTEB(task_langs=["en", "de"]) # Only select tasks which support "en", "de" or "en-de"
+evaluation = MTEB(task_langs=["en", "de"]) # Only select datasets which are "en", "de" or "en-de"
 ````
 
-You can also specify which languages to load for multilingual/crosslingual tasks like this:
+You can also specify which languages to load for multilingual/crosslingual tasks like below:
 
 ````python
 from mteb.tasks import AmazonReviewsClassification, BUCCBitextMining
@@ -103,11 +102,13 @@ evaluation = MTEB(tasks=[
 ````
 
 ### Evaluation split
-We can choose to evaluate only on `test` splits of all tasks by doing the following:
+You can evaluate only on `test` splits of all tasks by doing the following:
 
 ````python
 evaluation.run(model, eval_splits=["test"])
 ````
+
+Note that the public leaderboard uses the test splits for all datasets except MSMARCO, where the "dev" split is used.
 
 ### Using a custom model
 
