@@ -1,4 +1,4 @@
-"""Example script for benchmarking all of datasets constituting the MTEB English Leaderboard & Average scores"""
+"""Example script for benchmarking all datasets constituting the MTEB English Leaderboard & Average scores"""
 
 import argparse
 import logging
@@ -104,5 +104,5 @@ model = SentenceTransformer(model_name)
 for task in TASK_LIST:
     logger.info(f"Running task: {task}")
     eval_splits = ["dev"] if task == "MSMARCO" else ["test"]
-    evaluation = MTEB(tasks=[task], task_langs=["en"])
+    evaluation = MTEB(tasks=[task], task_langs=["en"]) # Remove "en" for running all languages
     evaluation.run(model, output_folder=f"results/{model_name}", eval_splits=eval_splits)
