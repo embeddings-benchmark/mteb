@@ -258,7 +258,7 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 | [STS17](http://alt.qcri.org/semeval2016/task1/) | [mteb/sts17-crosslingual-sts](https://huggingface.co/datasets/mteb/sts17-crosslingual-sts) | STS 2017 dataset | STS | s2s | 11 | 0 | 0 | 500 | 0 | 0 | 43.3 |
 | [STS22](https://competitions.codalab.org/competitions/33835) | [mteb/sts22-crosslingual-sts](https://huggingface.co/datasets/mteb/sts22-crosslingual-sts) | SemEval 2022 Task 8: Multilingual News Article Similarity | STS | s2s | 18 | 0 | 0 | 8060 | 0 | 0 | 1992.8 |
 | [STSBenchmark](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark) | [mteb/stsbenchmark-sts](https://huggingface.co/datasets/mteb/stsbenchmark-sts) | Semantic Textual Similarity Benchmark (STSbenchmark) dataset. | STS | s2s | 1 | 11498 | 3000 | 2758 | 57.6 | 64.0 | 53.6 |
-| [SummEval](https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html) | [mteb/summeval](https://huggingface.co/datasets/mteb/summeval) | Biomedical Semantic Similarity Estimation. | Summarization | s2s | 1 | 0 | 0 | 2800 | 0 | 0 | 359.8 |
+| [SummEval](https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html) | [mteb/summeval](https://huggingface.co/datasets/mteb/summeval) | News Article Summary Semantic Similarity Estimation. | Summarization | s2s | 1 | 0 | 0 | 2800 | 0 | 0 | 359.8 |
 
 
 ## Citation
