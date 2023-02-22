@@ -7,7 +7,7 @@ class SummEvalSummarization(AbsTaskSummarization):
         return {
             "name": "SummEval",
             "hf_hub_name": "mteb/summeval",
-            "description": "Biomedical Semantic Similarity Estimation.",
+            "description": "News Article Summary Semantic Similarity Estimation.",
             "reference": "https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html",
             "type": "Summarization",
             "category": "p2p",
