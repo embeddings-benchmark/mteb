@@ -3,7 +3,7 @@ from typing import Callable, Dict, List, Set, Tuple
 
 import numpy as np
 import torch
-from tqdm import tqdm, trange
+from tqdm import trange
 
 from .Evaluator import Evaluator
 from .utils import cos_sim, dot_score
