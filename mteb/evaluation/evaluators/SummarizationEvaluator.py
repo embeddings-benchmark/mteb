@@ -40,10 +40,27 @@ class SummarizationEvaluator(Evaluator):
         dot_spearman_scores = []
         dot_pearson_scores = []
 
+        # Get the human & machine summaries for the text in one go for all
+        human_lens = [len(human_summaries) for human_summaries in self.human_summaries]
+        machine_lens = [len(machine_summaries) for machine_summaries in self.machine_summaries]
+
+        embs_human_summaries = model.encode(
+            [summary for human_summaries in self.human_summaries for summary in human_summaries],
+            batch_size=self.batch_size,
+        )
+        embs_machine_summaries = model.encode(
+            [summary for machine_summaries in self.machine_summaries for summary in machine_summaries],
+            batch_size=self.batch_size,
+        )
+
+        # Split the embeddings into the original human & machine summaries
+        embs_human_summaries_all = np.split(embs_human_summaries, np.cumsum(human_lens)[:-1])
+        embs_machine_summaries_all = np.split(embs_machine_summaries, np.cumsum(machine_lens)[:-1])
+
         for i in trange(len(self.texts), desc="Texts"):  # iterate over all original texts
             # Get the human & machine summaries for the text
-            embs_human_summaries = model.encode(self.human_summaries[i])
-            embs_machine_summaries = model.encode(self.machine_summaries[i])
+            embs_human_summaries = embs_human_summaries_all[i]
+            embs_machine_summaries = embs_machine_summaries_all[i]
 
             cosine_pred_scores = []  # Predicted quality score for a summary
             dot_pred_scores = []  # Predicted quality score for a summary
