@@ -1,1 +1,1 @@
-from .SummEvalSummrization import SummEvalSummarization
+from .SummEvalSummarization import SummEvalSummarization
