@@ -64,8 +64,8 @@ class SummarizationEvaluator(Evaluator):
         )
 
         # Split the embeddings into the original human & machine summaries
-        embs_human_summaries_all = np.split(embs_human_summaries, np.cumsum(human_lens)[:-1])
-        embs_machine_summaries_all = np.split(embs_machine_summaries, np.cumsum(machine_lens)[:-1])
+        embs_human_summaries_all = np.split(embs_human_summaries_all, np.cumsum(human_lens)[:-1])
+        embs_machine_summaries_all = np.split(embs_machine_summaries_all, np.cumsum(machine_lens)[:-1])
 
         for i, (embs_human_summaries, embs_machine_summaries) in tqdm.tqdm(
             enumerate(zip(embs_human_summaries_all, embs_machine_summaries_all)), 
