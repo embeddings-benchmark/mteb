@@ -41,17 +41,16 @@ class SummarizationEvaluator(Evaluator):
         dot_pearson_scores = []
 
         for i in trange(len(self.texts), desc="Texts"):  # iterate over all original texts
-            human_summaries = self.human_summaries[i]  # Get the human summaries for the text
-            embs_human_summaries = model.encode(human_summaries)
+            # Get the human & machine summaries for the text
+            embs_human_summaries = model.encode(self.human_summaries[i])
+            embs_machine_summaries = model.encode(self.machine_summaries[i])
+
             cosine_pred_scores = []  # Predicted quality score for a summary
             dot_pred_scores = []  # Predicted quality score for a summary
             human_scores = []  # Human score for a summary
-            for machine_summary, human_eval_score in zip(
-                self.machine_summaries[i], self.gold_scores[i]
-            ):  # Get all machine summaries + scores for this text
-                emb_machine_summary = model.encode(
-                    machine_summary, show_progress_bar=False
-                )  # 1 embedding for the summary
+            for emb_machine_summary, human_eval_score in zip(
+                embs_machine_summaries, self.gold_scores[i]
+            ):
                 cosine_scores = cos_sim(emb_machine_summary, embs_human_summaries)
                 dot_scores = dot_score(emb_machine_summary, embs_human_summaries)
 
