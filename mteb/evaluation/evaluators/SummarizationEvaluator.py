@@ -2,7 +2,7 @@ import logging
 
 import numpy as np
 import torch
-from tqdm import trange
+import tqdm
 
 from scipy.stats import pearsonr, spearmanr
 
@@ -52,11 +52,13 @@ class SummarizationEvaluator(Evaluator):
         human_lens = [len(human_summaries) for human_summaries in self.human_summaries]
         machine_lens = [len(machine_summaries) for machine_summaries in self.machine_summaries]
 
-        embs_human_summaries = model.encode(
+        logger.info(f"Encoding {sum(human_lens)} human summaries...")
+        embs_human_summaries_all = model.encode(
             [summary for human_summaries in self.human_summaries for summary in human_summaries],
             batch_size=self.batch_size,
         )
-        embs_machine_summaries = model.encode(
+        logger.info(f"Encoding {sum(machine_lens)} machine summaries...")
+        embs_machine_summaries_all = model.encode(
             [summary for machine_summaries in self.machine_summaries for summary in machine_summaries],
             batch_size=self.batch_size,
         )
@@ -65,11 +67,10 @@ class SummarizationEvaluator(Evaluator):
         embs_human_summaries_all = np.split(embs_human_summaries, np.cumsum(human_lens)[:-1])
         embs_machine_summaries_all = np.split(embs_machine_summaries, np.cumsum(machine_lens)[:-1])
 
-        for i in trange(len(self.texts), desc="Texts"):  # iterate over all original texts
-            # Get the human & machine summaries for the text
-            embs_human_summaries = embs_human_summaries_all[i]
-            embs_machine_summaries = embs_machine_summaries_all[i]
-
+        for i, (embs_human_summaries, embs_machine_summaries) in tqdm.tqdm(
+            enumerate(zip(embs_human_summaries_all, embs_machine_summaries_all)), 
+            desc="Scoring", total=len(self.human_summaries)
+        ):
             cosine_pred_scores = []  # Predicted quality score for a summary
             dot_pred_scores = []  # Predicted quality score for a summary
             human_scores = []  # Human score for a summary
