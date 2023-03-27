@@ -16,7 +16,14 @@ from .Evaluator import Evaluator
 
 class SummarizationEvaluator(Evaluator):
     def __init__(
-        self, human_summaries=None, machine_summaries=None, texts=None, gold_scores=None, limit=None, **kwargs
+        self, 
+        human_summaries=None, 
+        machine_summaries=None, 
+        texts=None, 
+        gold_scores=None, 
+        limit=None, 
+        batch_size=32, 
+        **kwargs
     ):
         # human_summaries shape: (None, num_human_summaries)
         # machine_summaries shape: (None, num_machine_summaries)
@@ -32,6 +39,7 @@ class SummarizationEvaluator(Evaluator):
         self.machine_summaries = machine_summaries
         self.texts = texts
         self.gold_scores = gold_scores
+        self.batch_size = batch_size
 
     def __call__(self, model):
 
