@@ -7,6 +7,7 @@ To create the package for pypi.
 0. Prerequisites:
    - Dependencies:
      - twine: "pip install twine"
+     - wheel: "pip install wheel"
    - Create an account in (and join the 'datasets' project):
      - PyPI: https://pypi.org/
      - Test PyPI: https://test.pypi.org/
