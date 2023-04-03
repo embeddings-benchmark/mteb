@@ -26,7 +26,7 @@ class ClusteringEvaluator(Evaluator):
 
         logger.info("Fitting Mini-Batch K-Means model...")
         clustering_model = sklearn.cluster.MiniBatchKMeans(
-            n_clusters=len(set(self.labels)), batch_size=self.clustering_batch_size
+            n_clusters=len(set(self.labels)), batch_size=self.clustering_batch_size, n_init="auto"
         )
         clustering_model.fit(corpus_embeddings)
         cluster_assignment = clustering_model.labels_

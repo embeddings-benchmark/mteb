@@ -139,7 +139,7 @@ class MTEB:
                 tasks_unknown = set(x for x in self._tasks if isinstance(x, str)) - tasks_known
                 if tasks_unknown:
                     unknown_str, known_str = ','.join(sorted(list(tasks_unknown))), ','.join(sorted(list(tasks_known)))
-                    logger.warn(f"WARNING: Unknown tasks: {unknown_str}. Known tasks: {known_str}.")
+                    logger.warning(f"WARNING: Unknown tasks: {unknown_str}. Known tasks: {known_str}.")
             # add task if subclass of mteb.tasks
             self.tasks.extend([x for x in self._tasks if isinstance(x, AbsTask)])
             return
@@ -213,7 +213,7 @@ class MTEB:
             if output_folder is not None:
                 save_path = os.path.join(output_folder, f"{task.description['name']}{task.save_suffix}.json")
                 if os.path.exists(save_path) and overwrite_results is False:
-                    logger.warn(f"WARNING: {task.description['name']} results already exists. Skipping.")
+                    logger.warning(f"WARNING: {task.description['name']} results already exists. Skipping.")
                     del self.tasks[0]
                     continue
 
