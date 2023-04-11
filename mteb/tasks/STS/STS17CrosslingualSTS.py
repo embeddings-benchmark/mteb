@@ -1,6 +1,5 @@
 from ...abstasks import AbsTaskSTS, CrosslingualTask
 
-
 _LANGUAGES = ["ko-ko", "ar-ar", "en-ar", "en-de", "en-en", "en-tr", "es-en", "es-es", "fr-en", "it-en", "nl-en"]
 
 

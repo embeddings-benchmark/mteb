@@ -1,6 +1,5 @@
 from ...abstasks import AbsTaskClassification, MultilingualTask
 
-
 _LANGUAGES = ["en", "de", "es", "fr", "hi", "th"]
 
 

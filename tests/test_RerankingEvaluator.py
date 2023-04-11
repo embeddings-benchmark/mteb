@@ -2,7 +2,6 @@ import pytest
 
 from mteb.evaluation.evaluators import RerankingEvaluator
 
-
 TOL = 0.0001
 
 
@@ -23,7 +22,6 @@ class TestRerankingEvaluator:
         assert self.evaluator.mrr_at_k_score(is_relevant, pred_ranking, 1) == pytest.approx(0, TOL)
 
     def test_map(self):
-
         is_relevant = [1, 1, 1, 0, 0]
         pred_scores = [0.75, 0.93, 0.85, 0.76, 0.75]
 

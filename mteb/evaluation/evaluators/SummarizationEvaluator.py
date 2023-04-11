@@ -3,11 +3,9 @@ import logging
 import numpy as np
 import torch
 import tqdm
-
 from scipy.stats import pearsonr, spearmanr
 
 from .utils import cos_sim, dot_score
-
 
 logger = logging.getLogger(__name__)
 
@@ -16,13 +14,13 @@ from .Evaluator import Evaluator
 
 class SummarizationEvaluator(Evaluator):
     def __init__(
-        self, 
-        human_summaries=None, 
-        machine_summaries=None, 
-        texts=None, 
-        gold_scores=None, 
-        limit=None, 
-        batch_size=32, 
+        self,
+        human_summaries=None,
+        machine_summaries=None,
+        texts=None,
+        gold_scores=None,
+        limit=None,
+        batch_size=32,
         **kwargs
     ):
         # human_summaries shape: (None, num_human_summaries)
@@ -42,7 +40,6 @@ class SummarizationEvaluator(Evaluator):
         self.batch_size = batch_size
 
     def __call__(self, model):
-
         cosine_spearman_scores = []
         cosine_pearson_scores = []
         dot_spearman_scores = []
@@ -68,15 +65,16 @@ class SummarizationEvaluator(Evaluator):
         embs_machine_summaries_all = np.split(embs_machine_summaries_all, np.cumsum(machine_lens)[:-1])
 
         for i, (embs_human_summaries, embs_machine_summaries) in tqdm.tqdm(
-            enumerate(zip(embs_human_summaries_all, embs_machine_summaries_all)), 
-            desc="Scoring", total=len(self.human_summaries)
+            enumerate(zip(embs_human_summaries_all, embs_machine_summaries_all)),
+            desc="Scoring",
+            total=len(self.human_summaries),
         ):
             cosine_pred_scores = []  # Predicted quality score for a summary
             dot_pred_scores = []  # Predicted quality score for a summary
             human_scores = []  # Human score for a summary
             for emb_machine_summary, human_eval_score in zip(
                 embs_machine_summaries, self.gold_scores[i]
-            ): # Iterate through all machine summaries + scores for a single sample
+            ):  # Iterate through all machine summaries + scores for a single sample
                 cosine_scores = cos_sim(emb_machine_summary, embs_human_summaries)
                 dot_scores = dot_score(emb_machine_summary, embs_human_summaries)
 
@@ -86,7 +84,11 @@ class SummarizationEvaluator(Evaluator):
                 dot_pred_scores.append(dot_max_score)
                 human_scores.append(human_eval_score)
 
-            if (len(set(human_scores)) == 1) or (len(set(dot_pred_scores)) == 1) or (len(set(cosine_pred_scores)) == 1):
+            if (
+                (len(set(human_scores)) == 1)
+                or (len(set(dot_pred_scores)) == 1)
+                or (len(set(cosine_pred_scores)) == 1)
+            ):
                 logger.info(f"Skipping sample {i} due to equal scores")
                 continue
 

@@ -45,7 +45,7 @@ class AbsTaskBitextMining(AbsTask):
             # If a 2nd 0-indexed dataset is added, it'd be cleaner to update BUCC on the Hub to be 0-indexed
             gold = [(i - 1, j - 1) for (i, j) in gold]
             assert all(
-                [(i>0) and (j>0) for i,j in gold]
+                [(i > 0) and (j > 0) for i, j in gold]
             ), "Found negative gold indices. This may be caused by MTEB expecting 1-indexed gold labels."
 
         evaluator = BitextMiningEvaluator(sentence1, sentence2, gold, **kwargs)

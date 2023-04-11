@@ -1,4 +1,5 @@
 import os
+
 import datasets
 
 from .AbsTask import AbsTask
@@ -20,7 +21,7 @@ class BeIRTask(AbsTask):
         USE_BEIR_DEVELOPMENT = False
         try:
             raise ImportError("MTEB is temporarily incompatible with HFDataLoader")
-                              
+
             if self.description["beir_name"].startswith("cqadupstack"):
                 raise ImportError("CQADupstack is incompatible with latest BEIR")
             from beir.datasets.data_loader_hf import HFDataLoader as BeirDataLoader

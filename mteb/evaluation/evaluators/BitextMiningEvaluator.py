@@ -7,7 +7,6 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 from .Evaluator import Evaluator
 from .utils import cos_sim
 
-
 logger = logging.getLogger(__name__)
 
 

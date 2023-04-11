@@ -1,9 +1,10 @@
-from abc import ABC, abstractmethod
 import random
+from abc import ABC, abstractmethod
 
 import datasets
 import numpy as np
 import torch
+
 
 class AbsTask(ABC):
     def __init__(self, seed=42, **kwargs):
@@ -19,7 +20,6 @@ class AbsTask(ABC):
         torch.manual_seed(self.seed)
         torch.cuda.manual_seed_all(self.seed)
 
-
     def load_data(self, **kwargs):
         """
         Load dataset from HuggingFace hub
@@ -29,8 +29,7 @@ class AbsTask(ABC):
 
         # TODO: add split argument
         self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"], 
-            revision=self.description.get("revision", None)
+            self.description["hf_hub_name"], revision=self.description.get("revision", None)
         )
         self.data_loaded = True
 

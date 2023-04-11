@@ -8,7 +8,6 @@ from sklearn.metrics import average_precision_score
 from .Evaluator import Evaluator
 from .utils import cos_sim
 
-
 logger = logging.getLogger(__name__)
 
 
