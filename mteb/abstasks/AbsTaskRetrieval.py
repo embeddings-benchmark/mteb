@@ -3,16 +3,20 @@ from time import time
 from typing import Dict, List
 
 import torch.multiprocessing as mp
-
 from sentence_transformers import SentenceTransformer
 
 from .AbsTask import AbsTask
 
-
 logger = logging.getLogger(__name__)
 
 DRES_METHODS = ["encode_queries", "encode_corpus"]
-DRPES_METHODS = ["start_multi_process_pool", "stop_multi_process_pool", "encode_queries", "encode_corpus", "encode_corpus_parallel"]
+DRPES_METHODS = [
+    "start_multi_process_pool",
+    "stop_multi_process_pool",
+    "encode_queries",
+    "encode_corpus",
+    "encode_corpus_parallel",
+]
 
 
 class AbsTaskRetrieval(AbsTask):
@@ -32,7 +36,7 @@ class AbsTaskRetrieval(AbsTask):
         methods = DRPES_METHODS if is_parallel else DRES_METHODS
         for method in methods:
             op = getattr(model, method, None)
-            if not(callable(op)):
+            if not (callable(op)):
                 return False
         return True
 
@@ -58,10 +62,12 @@ class AbsTaskRetrieval(AbsTask):
 
         try:
             raise ImportError("MTEB is temporarily incompatible with HFDataLoader")
-            
+
             if self.description["beir_name"].startswith("cqadupstack"):
                 raise ImportError("CQADupstack is incompatible with latest BEIR")
-            from beir.retrieval.search.dense import DenseRetrievalParallelExactSearch as DRPES
+            from beir.retrieval.search.dense import (
+                DenseRetrievalParallelExactSearch as DRPES,
+            )
 
             model = model if self.is_dres_compatible(model, is_parallel=True) else DRESModel(model)
 
@@ -80,7 +86,7 @@ class AbsTaskRetrieval(AbsTask):
                 logger.warning("The parameter target_devices is ignored.")
 
             from beir.retrieval.search.dense import DenseRetrievalExactSearch as DRES
-            
+
             model = model if self.is_dres_compatible(model, is_parallel=False) else DRESModel(model)
 
             model = DRES(

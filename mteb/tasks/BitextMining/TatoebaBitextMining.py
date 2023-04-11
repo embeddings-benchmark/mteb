@@ -1,6 +1,5 @@
 from ...abstasks import AbsTaskBitextMining, CrosslingualTask
 
-
 _LANGUAGES = [
     "sqi-eng",
     "fry-eng",

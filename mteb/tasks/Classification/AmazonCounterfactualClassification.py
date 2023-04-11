@@ -1,6 +1,5 @@
 from ...abstasks import AbsTaskClassification, MultilingualTask
 
-
 _LANGUAGES = ["en", "de", "en-ext", "ja"]
 
 
@@ -21,5 +20,5 @@ class AmazonCounterfactualClassification(MultilingualTask, AbsTaskClassification
             "main_score": "accuracy",
             "n_experiments": 10,
             "samples_per_label": 32,
-            "revision": "e8379541af4e31359cca9fbcf4b00f2671dba205"
+            "revision": "e8379541af4e31359cca9fbcf4b00f2671dba205",
         }

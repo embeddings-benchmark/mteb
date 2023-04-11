@@ -8,7 +8,6 @@ from tqdm import trange
 from .Evaluator import Evaluator
 from .utils import cos_sim, dot_score
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -114,7 +113,6 @@ class RetrievalEvaluator(Evaluator):
             desc="Corpus Chunks",
             disable=not self.show_progress_bar,
         ):
-
             # Encode chunk of corpus
             if corpus_embeddings is None:
                 corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(self.corpus))

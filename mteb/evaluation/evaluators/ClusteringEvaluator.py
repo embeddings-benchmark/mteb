@@ -4,7 +4,6 @@ import numpy as np
 import sklearn
 import sklearn.cluster
 
-
 logger = logging.getLogger(__name__)
 
 from .Evaluator import Evaluator

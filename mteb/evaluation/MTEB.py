@@ -9,10 +9,9 @@ from time import time
 import datasets
 from rich.console import Console
 
+from .. import __version__
 from ..abstasks import *
 from ..tasks import *
-from .. import __version__
-
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +114,7 @@ class MTEB:
         instance._display_tasks(instance.tasks_cls, name="MTEB tasks")
 
     def print_selected_tasks(self):
-        """ Print the selected tasks. """
+        """Print the selected tasks."""
         self._display_tasks(self.tasks, name="Selected tasks")
 
     def select_tasks(self, **kwargs):
@@ -138,7 +137,7 @@ class MTEB:
                 tasks_known = set([x.description["name"] for x in self.tasks_cls])
                 tasks_unknown = set(x for x in self._tasks if isinstance(x, str)) - tasks_known
                 if tasks_unknown:
-                    unknown_str, known_str = ','.join(sorted(list(tasks_unknown))), ','.join(sorted(list(tasks_known)))
+                    unknown_str, known_str = ",".join(sorted(list(tasks_unknown))), ",".join(sorted(list(tasks_known)))
                     logger.warning(f"WARNING: Unknown tasks: {unknown_str}. Known tasks: {known_str}.")
             # add task if subclass of mteb.tasks
             self.tasks.extend([x for x in self._tasks if isinstance(x, AbsTask)])
@@ -157,8 +156,7 @@ class MTEB:
         )
         # keep only tasks with at least one language in the filter
         filtered_tasks = filter(
-            lambda x: (not(self._task_langs))
-            or (len(set(x.description["eval_langs"]) & set(self._task_langs)) > 0),
+            lambda x: (not (self._task_langs)) or (len(set(x.description["eval_langs"]) & set(self._task_langs)) > 0),
             filtered_tasks,
         )
 
@@ -174,8 +172,9 @@ class MTEB:
             logger.info(f"\n# Loading dataset for {task.description['name']}")
             task.load_data()
 
-
-    def run(self, model, verbosity=1, output_folder="results/result", eval_splits=None, overwrite_results=False, **kwargs):
+    def run(
+        self, model, verbosity=1, output_folder="results/result", eval_splits=None, overwrite_results=False, **kwargs
+    ):
         """
         Run the evaluation pipeline on the selected tasks.
 
@@ -226,9 +225,9 @@ class MTEB:
 
                 # run evaluation
                 task_results = {
-                    "mteb_version": __version__, 
+                    "mteb_version": __version__,
                     "dataset_revision": task.description.get("revision", None),
-                    "mteb_dataset_name": task.description['name'],
+                    "mteb_dataset_name": task.description["name"],
                 }
                 for split in task_eval_splits:
                     tick = time()
@@ -245,7 +244,7 @@ class MTEB:
                     with open(save_path, "w") as f_out:
                         json.dump(task_results, f_out, indent=2, sort_keys=True)
 
-                evaluation_results[task.description['name']] = task_results
+                evaluation_results[task.description["name"]] = task_results
 
             except Exception as e:
                 logger.error(f"Error while evaluating {task.description['name']}: {e}")

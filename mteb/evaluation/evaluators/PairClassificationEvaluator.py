@@ -2,10 +2,13 @@ import logging
 
 import numpy as np
 from sklearn.metrics import average_precision_score
-from sklearn.metrics.pairwise import paired_cosine_distances, paired_euclidean_distances, paired_manhattan_distances
+from sklearn.metrics.pairwise import (
+    paired_cosine_distances,
+    paired_euclidean_distances,
+    paired_manhattan_distances,
+)
 
 from .Evaluator import Evaluator
-
 
 logger = logging.getLogger(__name__)
 

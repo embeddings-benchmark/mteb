@@ -12,9 +12,9 @@ example call:
 import argparse
 import logging
 
-from mteb import MTEB
 from sentence_transformers import SentenceTransformer
 
+from mteb import MTEB
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)

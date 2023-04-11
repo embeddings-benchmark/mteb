@@ -1,6 +1,5 @@
 from ...abstasks import AbsTaskBitextMining, CrosslingualTask
 
-
 _LANGUAGES = ["de-en", "fr-en", "ru-en", "zh-en"]
 
 
@@ -17,5 +16,5 @@ class BUCCBitextMining(AbsTaskBitextMining, CrosslingualTask):
             "eval_splits": ["test"],
             "eval_langs": _LANGUAGES,
             "main_score": "f1",
-            "revision": "d51519689f32196a32af33b075a01d0e7c51e252"
+            "revision": "d51519689f32196a32af33b075a01d0e7c51e252",
         }
