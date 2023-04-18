@@ -55,9 +55,7 @@ class MTEB:
         self._task_langs = task_langs if task_langs is not None else []
         if type(self._task_langs) is str:
             self._task_langs = [self._task_langs]
-        self._task_langs.extend(
-            [f"{x}-{y}" for x in self._task_langs for y in self._task_langs]
-        )  # add all possible pairs
+        self._extend_lang_paris()  # add all possible pairs
 
         self._tasks = tasks
 
@@ -76,6 +74,18 @@ class MTEB:
     @property
     def available_task_categories(self):
         return set([x.description["category"] for x in self.tasks_cls])
+
+    def _extend_lang_paris(self):
+        # add all possible language pairs
+        langs = set(self._task_langs)
+        for x in langs:
+            if '-' not in x:
+                for y in langs:
+                    if '-' not in y:
+                        pair = f"{x}-{y}"
+                        if pair not in langs:
+                            self._task_langs.append(pair)
+        return
 
     def _display_tasks(self, task_list, name=None):
         console = Console()
