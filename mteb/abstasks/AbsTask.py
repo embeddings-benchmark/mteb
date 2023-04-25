@@ -33,6 +33,7 @@ class AbsTask(ABC):
         )
         self.data_loaded = True
 
+    @property
     @abstractmethod
     def description(self):
         """
