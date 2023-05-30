@@ -8,7 +8,7 @@ class TenKGnadClusteringS2S(AbsTaskClustering):
             "name": "TenKGnadClusteringS2S",
             "hf_hub_name": "slvnwhrl/tenkgnad-clustering-s2s",
             "description": "Clustering of news article titles. Clustering of 10 splits on the news article category.",
-            "reference": "https://github.com/tblock/10kGNAD",
+            "reference": "https://tblock.github.io/10kGNAD/",
             "type": "Clustering",
             "category": "s2s",
             "eval_splits": ["test"],
