@@ -34,7 +34,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-results_folder = sys.argv[1].strip("/")
+results_folder = sys.argv[1].rstrip("/")
 model_name = results_folder.split("/")[-1]
 
 all_results = {}
