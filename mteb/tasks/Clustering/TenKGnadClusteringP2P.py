@@ -14,5 +14,5 @@ class TenKGnadClusteringP2P(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["de"],
             "main_score": "v_measure",
-            "revision": "a2dd5b02a77de3466a3eaa98ae586b5610314496",
+            "revision": "5c59e41555244b7e45c9a6be2d720ab4bafae558",
         }
