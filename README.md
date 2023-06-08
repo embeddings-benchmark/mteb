@@ -4,6 +4,9 @@
     <a href="https://github.com/mbeddings-benchmark/mteb/releases">
         <img alt="GitHub release" src="https://img.shields.io/github/release/embeddings-benchmark/mteb.svg">
     </a>
+    <a href="https://arxiv.org/abs/2210.07316">
+        <img alt="GitHub release" src="https://img.shields.io/badge/arXiv-2305.14251-b31b1b.svg">
+    </a>
     <a href="https://www.python.org/">
             <img alt="Build" src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg?color=purple">
     </a>
