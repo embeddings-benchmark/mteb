@@ -2,7 +2,7 @@ import gzip
 import json
 import re
 
-from huggingface_hub import create_repo, upload_file
+from huggingface_hub import upload_file
 
 
 repo_name = "bucc-bitext-mining"
@@ -41,7 +41,7 @@ with gzip.open("test.json.gz", "wt", encoding="UTF-8") as zipfile:
 
 upload_file(
     path_or_fileobj="test.json.gz",
-    path_in_repo=f"zh-en/test.json.gz",
+    path_in_repo="zh-en/test.json.gz",
     repo_id=f"mteb/{repo_name}",
     repo_type="dataset",
 )

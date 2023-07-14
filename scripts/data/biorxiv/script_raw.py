@@ -3,7 +3,6 @@ Fetch data from https://api.biorxiv.org/ and keep useful information
 """
 
 import gzip
-import json
 
 from tqdm import tqdm
 

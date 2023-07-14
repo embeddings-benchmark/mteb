@@ -98,7 +98,7 @@ class MTEB:
             else:
                 console.print(f"[bold]{task_type}[/]")
                 for task in current_type_tasks:
-                    prefix = f"    - "
+                    prefix = "    - "
                     name = f"{task.description['name']}"
                     category = f", [italic grey39]{task.description['category']}[/]"
                     multilingual = (
@@ -111,7 +111,7 @@ class MTEB:
                         if task.is_crosslingual
                         else ""
                     )
-                    beir = f", [italic yellow]beir[/]" if task.description.get("beir_name", False) else ""
+                    beir = ", [italic yellow]beir[/]" if task.description.get("beir_name", False) else ""
                     console.print(f"{prefix}{name}{beir}{category}{multilingual}{crosslingual}")
                 console.print("\n")
 

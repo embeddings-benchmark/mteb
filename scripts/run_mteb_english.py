@@ -1,8 +1,6 @@
 """Example script for benchmarking all datasets constituting the MTEB English leaderboard & average scores"""
 
-import argparse
 import logging
-import os
 
 from mteb import MTEB
 from sentence_transformers import SentenceTransformer

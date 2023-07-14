@@ -114,5 +114,5 @@ for ds_name, res_dict in sorted(all_results.items()):
 META_STRING += "\n" + MARKER
 if os.path.exists("./mteb_metadata.md"):
     logger.warning("Overwriting mteb_metadata.md")
-with open(f"./mteb_metadata.md", "w") as f:
+with open("./mteb_metadata.md", "w") as f:
     f.write(META_STRING)
