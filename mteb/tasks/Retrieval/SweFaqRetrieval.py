@@ -7,7 +7,7 @@ class SweFAQRetrieval(AbsTaskRetrieval):
     @property
     def description(self):
         return {
-            "name": "SweFAQ",
+            "name": "SweFAQRetrieval",
             "hf_hub_name": "AI-Sweden/SuperLim",
             "description": "A Swedish FAQ dataset. Available as a part of Superlim",
             "reference": "https://spraakbanken.gu.se/en/resources/superlim",
