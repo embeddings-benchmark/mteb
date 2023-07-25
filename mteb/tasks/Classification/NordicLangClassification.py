@@ -17,7 +17,7 @@ class NordicLangClassification(AbsTaskClassification):
             "eval_langs": ["da", "no", "sv", "nb", "no", "is", "fo"],
             "main_score": "accuracy",
             "n_experiments": 10,
-            "samples_per_label": 16,
+            "samples_per_label": 32,
             "revision": "e254179d18ab0165fdb6dbef91178266222bee2a",
         }
 
