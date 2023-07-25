@@ -1,5 +1,3 @@
-from SweFaqRetrieval import *
-
 from .ArguAnaRetrieval import *
 from .ClimateFEVERRetrieval import *
 from .CQADupstackAndroidRetrieval import *
@@ -25,5 +23,6 @@ from .NQRetrieval import *
 from .QuoraRetrieval import *
 from .SCIDOCSRetrieval import *
 from .SciFactRetrieval import *
+from .SweFaqRetrieval import *
 from .Touche2020Retrieval import *
 from .TRECCOVIDRetrieval import *
