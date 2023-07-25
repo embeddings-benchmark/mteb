@@ -1,11 +1,11 @@
 from mteb.abstasks import AbsTaskClassification
 
 
-class LccClassification(AbsTaskClassification):
+class LccSentimentClassification(AbsTaskClassification):
     @property
     def description(self):
         return {
-            "name": "LccClassification",
+            "name": "LccSentimentClassification",
             "hf_hub_name": "DDSC/lcc",
             "description": "The leipzig corpora collection, annotated for sentiment",
             "reference": "https://github.com/fnielsen/lcc-sentiment",

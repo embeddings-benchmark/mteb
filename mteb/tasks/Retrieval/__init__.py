@@ -1,3 +1,5 @@
+from SweFaqRetrieval import *
+
 from .ArguAnaRetrieval import *
 from .ClimateFEVERRetrieval import *
 from .CQADupstackAndroidRetrieval import *
