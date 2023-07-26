@@ -6,7 +6,7 @@ class NQPL(AbsTaskRetrieval, BeIRPLTask):
     @property
     def description(self):
         return {
-            "name": "NQPL",
+            "name": "NQ-PL",
             "beir_name": "nq-pl",
             "description": "Natural Questions: A Benchmark for Question Answering Research",
             "reference": "https://ai.google.com/research/NaturalQuestions/",

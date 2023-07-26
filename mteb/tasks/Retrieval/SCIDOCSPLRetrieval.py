@@ -6,7 +6,7 @@ class SCIDOCSPL(AbsTaskRetrieval, BeIRPLTask):
     @property
     def description(self):
         return {
-            "name": "SCIDOCSPL",
+            "name": "SCIDOCS-PL",
             "beir_name": "scidocs-pl",
             "description": (
                 "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation"

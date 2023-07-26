@@ -6,7 +6,7 @@ class QuoraPLRetrieval(AbsTaskRetrieval, BeIRPLTask):
     @property
     def description(self):
         return {
-            "name": "QuoraPLRetrieval",
+            "name": "Quora-PL",
             "beir_name": "quora-pl",
             "description": (
                 "QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a"

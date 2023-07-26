@@ -6,7 +6,7 @@ class DBPediaPL(AbsTaskRetrieval, BeIRPLTask):
     @property
     def description(self):
         return {
-            "name": "DBPedia-pl",
+            "name": "DBPedia-PL",
             "beir_name": "dbpedia-pl",
             "description": (
                 "DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base"

@@ -6,7 +6,7 @@ class NFCorpusPL(AbsTaskRetrieval, BeIRPLTask):
     @property
     def description(self):
         return {
-            "name": "NFCorpusPL",
+            "name": "NFCorpus-PL",
             "beir_name": "nfcorpus-pl",
             "description": "NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
             "reference": "https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/",
