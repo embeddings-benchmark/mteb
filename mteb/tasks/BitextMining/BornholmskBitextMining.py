@@ -29,12 +29,13 @@ class BornholmBitextMining(AbsTaskBitextMining):
             return
 
         self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"], revision=self.description.get("revision", None)
+            self.description["hf_hub_name"],
+            revision=self.description.get("revision", None),
         )
         self.dataset_transform()
         self.data_loaded = True
 
     def dataset_transform(self):
         # Convert to standard format
-        self.dataset.rename_column("da", "sentence1")
-        self.dataset.rename_column("da_bornholm", "sentence2")
+        self.dataset = self.dataset.rename_column("da", "sentence1")
+        self.dataset = self.dataset.rename_column("da_bornholm", "sentence2")
