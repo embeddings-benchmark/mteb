@@ -12,7 +12,7 @@ class NorwegianParliamentClassification(AbsTaskClassification):
             "type": "Classification",
             "category": "s2s",
             "eval_splits": ["test", "validation"],
-            "eval_langs": ["no"],
+            "eval_langs": ["nb"], # assumed to be bokmål
             "main_score": "accuracy",
             "n_experiments": 10,
             "samples_per_label": 16,
