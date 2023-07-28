@@ -1,7 +1,7 @@
 from mteb.abstasks import AbsTaskClassification
 
 
-class SweRecClassificition(AbsTaskClassification):
+class SwerecClassification(AbsTaskClassification):
     @property
     def description(self):
         return {
