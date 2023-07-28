@@ -1,11 +1,11 @@
 from mteb.abstasks import AbsTaskClassification
 
 
-class SwerecClassification(AbsTaskClassification):
+class SweRecClassification(AbsTaskClassification):
     @property
     def description(self):
         return {
-            "name": "SwerecClassification",
+            "name": "SweRecClassification",
             "hf_hub_name": "ScandEval/swerec-mini",  # using the mini version to keep results ~comparable to ScandEval
             "description": "A Swedish dataset for sentiment classification on review",
             "reference": "https://aclanthology.org/2023.nodalida-1.20/",
