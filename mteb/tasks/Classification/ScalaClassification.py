@@ -107,6 +107,7 @@ class ScalaNnClassification(AbsTaskClassification):
         self.dataset = datasets.load_dataset(
             self.description["hf_hub_name"], revision=self.description.get("revision", None)
         )
+        self.dataset_transform()
         self.data_loaded = True
 
     def dataset_transform(self):
