@@ -10,7 +10,7 @@ class DalajClassification(AbsTaskClassification):
         return {
             "name": "DalajClassification",
             "hf_hub_name": "AI-Sweden/SuperLim",
-            "description": "A Swedish dataset for linguistic accebtablity. Available as a part of Superlim.",
+            "description": "A Swedish dataset for linguistic acceptability. Available as a part of Superlim.",
             "reference": "https://spraakbanken.gu.se/en/resources/superlim",
             "type": "Classification",
             "category": "s2s",
