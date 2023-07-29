@@ -15,8 +15,8 @@ from .MassiveIntentClassification import *
 from .MassiveScenarioClassification import *
 from .MTOPDomainClassification import *
 from .MTOPIntentClassification import *
-from .NordicLangClassification import *
 from .NoRecClassification import *
+from .NordicLangClassification import *
 from .NorwegianParliamentClassification import *
 from .ScalaClassification import *
 from .SweRecClassification import *
