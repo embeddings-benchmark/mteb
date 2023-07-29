@@ -267,9 +267,9 @@ class MTEB:
 
             except Exception as e:
                 logger.error(f"Error while evaluating {task.description['name']}: {e}")
-                logger.error(f"Please check all the error logs at: {self.err_logs_path}")
                 if raise_error:
                     raise e
+                logger.error(f"Please check all the error logs at: {self.err_logs_path}")
                 with open(self.err_logs_path, "a") as f_out:
                     f_out.write(f"{datetime.now()} >>> {task.description['name']}\n")
                     f_out.write(traceback.format_exc())
