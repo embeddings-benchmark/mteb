@@ -13,7 +13,7 @@ class MSMARCOPL(AbsTaskRetrieval, BeIRPLTask):
             "benchmark": "BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language",
             "type": "Retrieval",
             "category": "s2p",
-            "eval_splits": ["dev", "test"],  # "validation" if using latest BEIR i.e. HFDataLoader
+            "eval_splits": ["validation", "test"],  # "validation" if using latest BEIR i.e. HFDataLoader
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
         }
