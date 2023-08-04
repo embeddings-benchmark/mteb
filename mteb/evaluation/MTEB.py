@@ -79,9 +79,9 @@ class MTEB:
         # add all possible language pairs
         langs = set(self._task_langs)
         for x in langs:
-            if '-' not in x:
+            if "-" not in x:
                 for y in langs:
-                    if '-' not in y:
+                    if "-" not in y:
                         pair = f"{x}-{y}"
                         if pair not in langs:
                             self._task_langs.append(pair)
@@ -183,7 +183,14 @@ class MTEB:
             task.load_data()
 
     def run(
-        self, model, verbosity=1, output_folder="results/result", eval_splits=None, overwrite_results=False, **kwargs
+        self,
+        model,
+        verbosity=1,
+        output_folder="results/result",
+        eval_splits=None,
+        overwrite_results=False,
+        raise_error: bool = True,
+        **kwargs
     ):
         """
         Run the evaluation pipeline on the selected tasks.
@@ -199,6 +206,8 @@ class MTEB:
             2: print everything (including datasets loading)
         output_folder: str
             Folder where the results will be saved
+        raise_error: bool
+            Whether to raise an error if an exception occurs during evaluation.
         :return: Returns a dictionary of task names and corresponding metrics results.
         """
         # Set logging
@@ -258,6 +267,8 @@ class MTEB:
 
             except Exception as e:
                 logger.error(f"Error while evaluating {task.description['name']}: {e}")
+                if raise_error:
+                    raise e
                 logger.error(f"Please check all the error logs at: {self.err_logs_path}")
                 with open(self.err_logs_path, "a") as f_out:
                     f_out.write(f"{datetime.now()} >>> {task.description['name']}\n")
