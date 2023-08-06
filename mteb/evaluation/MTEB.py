@@ -60,11 +60,11 @@ class MTEB:
 
         if tasks is not None:
             self._tasks = tasks
-            logger.info("List of tasks specified. Ignoring other task filters.")
+            assert task_types is None and task_categories is None, "Cannot specify both `tasks` and `task_types`/`task_categories`"
         else:
             self._task_types = task_types
             self._task_categories = task_categories
-            
+
         self._task_langs = task_langs if task_langs is not None else []
         if type(self._task_langs) is str:
             self._task_langs = [self._task_langs]
@@ -114,12 +114,12 @@ class MTEB:
                     name = f"{task.description['name']}"
                     category = f", [italic grey39]{task.description['category']}[/]"
                     multilingual = (
-                        f", [italic red]multilingual {len(task.description['eval_langs'])} langs[/]"
+                        f", [italic red]multilingual {len(task.langs)} / {len(task.description['eval_langs'])} langs[/]"
                         if task.is_multilingual
                         else ""
                     )
                     crosslingual = (
-                        f", [italic cyan]crosslingual {len(task.description['eval_langs'])} pairs[/]"
+                        f", [italic cyan]crosslingual {len(task.langs)} / {len(task.description['eval_langs'])} pairs[/]"
                         if task.is_crosslingual
                         else ""
                     )
