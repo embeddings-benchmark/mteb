@@ -16,8 +16,7 @@ from ..tasks import *
 
 logger = logging.getLogger(__name__)
 
-from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List, Union
 
 
 class MTEB:
@@ -26,7 +25,7 @@ class MTEB:
         task_types: List[str] = None,
         task_categories: List[str] = None,
         task_langs: List[str] = None,
-        tasks: List[str | AbsTask] = None,
+        tasks: List[Union[str, AbsTask]] = None,
         version=None,
         err_logs_path="error_logs.txt",
         **kwargs
@@ -60,7 +59,9 @@ class MTEB:
 
         if tasks is not None:
             self._tasks = tasks
-            assert task_types is None and task_categories is None, "Cannot specify both `tasks` and `task_types`/`task_categories`"
+            assert (
+                task_types is None and task_categories is None
+            ), "Cannot specify both `tasks` and `task_types`/`task_categories`"
         else:
             self._task_types = task_types
             self._task_categories = task_categories
