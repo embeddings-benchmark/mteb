@@ -58,6 +58,15 @@ def main():
     parser.add_argument("--output_folder", type=str, default="results", help="Output directory for results")
     parser.add_argument("-v", "--verbosity", type=int, default=2, help="Verbosity level")
 
+    ## evaluation params
+    parser.add_argument(
+        "--eval_splits",
+        nargs="+",
+        type=str,
+        default=None,
+        help="Evaluation splits to use (train, dev, test..). If None, all splits will be used",
+    )
+
     ## classification params
     parser.add_argument("--k", type=int, default=None, help="Number of nearest neighbors to use for classification")
     parser.add_argument("--n_experiments", type=int, default=None, help="Number of splits for bootstrapping")
@@ -108,7 +117,7 @@ def main():
         task_categories=args.task_categories, task_types=args.task_types, task_langs=args.task_langs, tasks=args.tasks
     )
 
-    eval.run(model, verbosity=args.verbosity, output_folder=args.output_folder, eval_splits=None)
+    eval.run(model, verbosity=args.verbosity, output_folder=args.output_folder, eval_splits=args.eval_splits)
 
 
 if __name__ == "__main__":
