@@ -59,12 +59,6 @@ def main():
     parser.add_argument("-v", "--verbosity", type=int, default=2, help="Verbosity level")
 
     ## classification params
-    # parser.add_argument(
-    #     "--method",
-    #     type=str,
-    #     default=None,
-    #     help="Method to use for evaluation. Can be 'kNN' or 'logReg'",
-    # )
     parser.add_argument("--k", type=int, default=None, help="Number of nearest neighbors to use for classification")
     parser.add_argument("--n_experiments", type=int, default=None, help="Number of splits for bootstrapping")
     parser.add_argument(
@@ -105,18 +99,16 @@ def main():
     if args.available_tasks:
         MTEB.mteb_tasks()
         return
-    del args.available_tasks
 
     if args.model is None:
         raise ValueError("Please specify a model using the -m or --model argument")
-    # delete None values
-    for key in [k for k in args.__dict__ if args.__dict__[k] is None]:
-        del args.__dict__[key]
 
-    model = SentenceTransformer(args.model, device=args.device if "device" in args else None)
-    eval = MTEB(**vars(args))
-    del args.model
-    eval.run(model, **vars(args))
+    model = SentenceTransformer(args.model, device=args.device)
+    eval = MTEB(
+        task_categories=args.task_categories, task_types=args.task_types, task_langs=args.task_langs, tasks=args.tasks
+    )
+
+    eval.run(model, verbosity=args.verbosity, output_folder=args.output_folder, eval_splits=None)
 
 
 if __name__ == "__main__":
