@@ -88,7 +88,7 @@ for ds_name, res_dict in sorted(all_results.items()):
         META_STRING += "\n" + ONE_TASK.format(
             mteb_type, hf_hub_name, mteb_name, lang if len(mteb_desc["eval_langs"]) > 1 else "default", split, revision
         )
-        for (metric, score) in test_result_lang.items():
+        for metric, score in test_result_lang.items():
             if not isinstance(score, dict):
                 score = {metric: score}
             for sub_metric, sub_score in score.items():
