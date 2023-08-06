@@ -42,6 +42,7 @@ class AbsTaskSTS(AbsTask):
     def _evaluate_split(self, model, data_split, **kwargs):
         def normalize(x):
             return (x - self.min_score) / (self.max_score - self.min_score)
+
         normalized_scores = list(map(normalize, data_split["score"]))
         evaluator = STSEvaluator(data_split["sentence1"], data_split["sentence2"], normalized_scores, **kwargs)
         metrics = evaluator(model)
