@@ -11,20 +11,24 @@ from rich.console import Console
 
 from .. import __version__
 from ..abstasks import *
+from ..abstasks import AbsTask
 from ..tasks import *
 
 logger = logging.getLogger(__name__)
+
+from dataclasses import dataclass, field
+from typing import List, Optional
 
 
 class MTEB:
     def __init__(
         self,
-        task_types=None,
-        task_categories=None,
-        tasks=None,
-        task_langs=None,
+        task_types: List[str] = None,
+        task_categories: List[str] = None,
+        task_langs: List[str] = None,
+        tasks: List[str | AbsTask] = None,
         version=None,
-        err_logs_path=None,
+        err_logs_path="error_logs.txt",
         **kwargs
     ):
         """
@@ -36,7 +40,7 @@ class MTEB:
         The selected tasks will be the tasks satisfying conditions
         from the 3 arguments. Alternatively, one can specify a list
         of tasks to be evaluated with the `tasks` argument. If
-        `tasks` is specified, the other arguments are ignored.
+        `tasks` is specified, we filter tasks based on `task_langs`
 
         Parameters
         ----------
@@ -44,22 +48,30 @@ class MTEB:
             List of task types (Clustering, Retrieval..) to be evaluated. If None, all tasks will be evaluated
         task_categories: list of str / None
             List of task categories (s2s, p2p..) to be evaluated. If None, all tasks will be evaluated
+        task_langs: list of str / None
+            List of languages to be evaluated. if None, all languages will be evaluated. ["en", "de"] will evaluate on "en", "de", "en-de" and "de-en"
+        tasks: list of str / None
+            List of tasks to be evaluated. If specified, we filter tasks based on `task_langs` only
         version: int / None
             Version of the benchmark to use. If None, latest is used
-        tasks: list of AbsTask / None
-            List of tasks to be evaluated. If specified, the other arguments are ignored.
+        err_logs_path: str / None
+            Path to save error logs
         """
-        self._task_types = task_types
-        self._task_categories = task_categories
-        self._version = version
+
+        if tasks is not None:
+            self._tasks = tasks
+            logger.info("List of tasks specified. Ignoring other task filters.")
+        else:
+            self._task_types = task_types
+            self._task_categories = task_categories
+            
         self._task_langs = task_langs if task_langs is not None else []
         if type(self._task_langs) is str:
             self._task_langs = [self._task_langs]
         self._extend_lang_pairs()  # add all possible pairs
 
-        self._tasks = tasks
-
-        self.err_logs_path = err_logs_path if err_logs_path is not None else "error_logs.txt"
+        self._version = version
+        self.err_logs_path = err_logs_path
 
         self.select_tasks(**kwargs)
 
@@ -79,9 +91,9 @@ class MTEB:
         # add all possible language pairs
         langs = set(self._task_langs)
         for x in langs:
-            if '-' not in x:
+            if "-" not in x:
                 for y in langs:
-                    if '-' not in y:
+                    if "-" not in y:
                         pair = f"{x}-{y}"
                         if pair not in langs:
                             self._task_langs.append(pair)

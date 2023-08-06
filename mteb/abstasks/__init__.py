@@ -1,4 +1,5 @@
 from .AbsTask import *
+from .AbsTask import AbsTask
 from .AbsTaskBitextMining import *
 from .AbsTaskClassification import *
 from .AbsTaskClustering import *
