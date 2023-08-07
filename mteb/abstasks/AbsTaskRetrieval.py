@@ -4,6 +4,7 @@ from typing import Dict, List
 
 import torch.multiprocessing as mp
 from sentence_transformers import SentenceTransformer
+from sentence_transformers.models import Transformer, WordEmbeddings
 
 from .AbsTask import AbsTask
 
@@ -61,8 +62,6 @@ class AbsTaskRetrieval(AbsTask):
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
 
         try:
-            raise ImportError("MTEB is temporarily incompatible with HFDataLoader")
-
             if self.description["beir_name"].startswith("cqadupstack"):
                 raise ImportError("CQADupstack is incompatible with latest BEIR")
             from beir.retrieval.search.dense import (
@@ -151,6 +150,12 @@ class DRESModel:
         return self.model.stop_multi_process_pool(pool)
 
     def encode_queries(self, queries: List[str], batch_size: int, **kwargs):
+        if isinstance(self.model._first_module(), Transformer):
+            logger.info(f"Queries will be truncated to {self.model.get_max_seq_length()} tokens.")
+        elif isinstance(self.model._first_module(), WordEmbeddings):
+            logger.warning(
+                "Queries will not be truncated. This could lead to memory issues. In that case please lower the batch_size."
+            )
         return self.model.encode(queries, batch_size=batch_size, **kwargs)
 
     def encode_corpus(self, corpus: List[Dict[str, str]], batch_size: int, **kwargs):
