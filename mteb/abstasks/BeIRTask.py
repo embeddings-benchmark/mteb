@@ -18,15 +18,13 @@ class BeIRTask(AbsTask):
         except ImportError:
             raise Exception("Retrieval tasks require beir package. Please install it with `pip install mteb[beir]`")
 
-        USE_BEIR_DEVELOPMENT = False
+        USE_HF_DATASETS = False
         try:
-            raise ImportError("MTEB is temporarily incompatible with HFDataLoader")
-
             if self.description["beir_name"].startswith("cqadupstack"):
                 raise ImportError("CQADupstack is incompatible with latest BEIR")
             from beir.datasets.data_loader_hf import HFDataLoader as BeirDataLoader
 
-            USE_BEIR_DEVELOPMENT = True
+            USE_HF_DATASETS = True
         except ImportError:
             from beir.datasets.data_loader import GenericDataLoader as BeirDataLoader
 
@@ -39,7 +37,7 @@ class BeIRTask(AbsTask):
 
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         for split in eval_splits:
-            if USE_BEIR_DEVELOPMENT:
+            if USE_HF_DATASETS:
                 self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
                     hf_repo=f"BeIR/{dataset}"
                 ).load(split=split)
