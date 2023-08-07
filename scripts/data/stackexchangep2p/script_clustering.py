@@ -53,7 +53,7 @@ for k in tqdm(range(split_number)):
     labels = [item["tags"][0] for item in subset]
     splits.append({"sentences": text, "labels": labels})
 
-repository = f"stackexchange-clustering-p2p"
+repository = "stackexchange-clustering-p2p"
 with jsonlines.open(f"{repository}/test.jsonl", "w") as f_out:
     f_out.write_all(splits)
 # Compress

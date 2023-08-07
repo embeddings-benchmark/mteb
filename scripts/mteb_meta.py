@@ -63,15 +63,13 @@ SKIP_KEYS = ["std", "evaluation_time", "main_score", "threshold"]
 
 for ds_name, res_dict in sorted(all_results.items()):
     mteb_desc = (
-        MTEB(tasks=[ds_name.replace("CQADupstackRetrieval", "CQADupstackAndroidRetrieval")])
-        .tasks[0]
-        .description
+        MTEB(tasks=[ds_name.replace("CQADupstackRetrieval", "CQADupstackAndroidRetrieval")]).tasks[0].description
     )
     hf_hub_name = mteb_desc.get("hf_hub_name", mteb_desc.get("beir_name"))
     if "CQADupstack" in ds_name:
         hf_hub_name = "BeIR/cqadupstack"
     mteb_type = mteb_desc["type"]
-    revision = res_dict.get("dataset_revision") # Okay if it's None
+    revision = res_dict.get("dataset_revision")  # Okay if it's None
     split = "test"
     if ds_name == "MSMARCO":
         split = "dev" if "dev" in res_dict else "validation"
@@ -88,14 +86,9 @@ for ds_name, res_dict in sorted(all_results.items()):
         if test_result_lang is None:
             continue
         META_STRING += "\n" + ONE_TASK.format(
-            mteb_type,
-            hf_hub_name,
-            mteb_name,
-            lang if len(mteb_desc["eval_langs"]) > 1 else "default",
-            split,
-            revision
+            mteb_type, hf_hub_name, mteb_name, lang if len(mteb_desc["eval_langs"]) > 1 else "default", split, revision
         )
-        for (metric, score) in test_result_lang.items():
+        for metric, score in test_result_lang.items():
             if not isinstance(score, dict):
                 score = {metric: score}
             for sub_metric, sub_score in score.items():
@@ -114,5 +107,5 @@ for ds_name, res_dict in sorted(all_results.items()):
 META_STRING += "\n" + MARKER
 if os.path.exists("./mteb_metadata.md"):
     logger.warning("Overwriting mteb_metadata.md")
-with open(f"./mteb_metadata.md", "w") as f:
+with open("./mteb_metadata.md", "w") as f:
     f.write(META_STRING)

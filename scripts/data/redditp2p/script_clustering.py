@@ -17,13 +17,13 @@ np.random.seed(SEED)
 random.seed(SEED)
 
 ds = datasets.load_dataset(
-    "sentence-transformers/reddit-title-body", 
+    "sentence-transformers/reddit-title-body",
     data_files=["reddit_title_text_2021.jsonl.gz"],
     split="train",
 )
 
-unique, counts = np.unique(ds["subreddit"], return_counts=True) 
-unique_to_count = {k: v for k,v in zip(unique, counts)}
+unique, counts = np.unique(ds["subreddit"], return_counts=True)
+unique_to_count = {k: v for k, v in zip(unique, counts)}
 
 # Check top subreddits :)
 # sorted(unique_to_count, key=lambda x: unique_to_count[x], reverse=True)[:10]

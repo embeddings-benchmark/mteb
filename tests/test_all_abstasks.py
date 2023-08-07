@@ -10,12 +10,12 @@ logging.basicConfig(level=logging.INFO)
 model = SentenceTransformer("average_word_embeddings_komninos")
 eval = MTEB(
     tasks=[
+        BUCCBitextMining(),
         "Banking77Classification",
         "TwentyNewsgroupsClustering",
         "SciDocsRR",
         "SprintDuplicateQuestions",
         "NFCorpus",
-        BUCCBitextMining(langs=["de-en"]),
         "STS12",
         "SummEval",
     ]
