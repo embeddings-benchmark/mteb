@@ -65,6 +65,7 @@ class MTEB:
         else:
             self._task_types = task_types
             self._task_categories = task_categories
+            self._tasks = None
 
         self._task_langs = task_langs if task_langs is not None else []
         if type(self._task_langs) is str:
