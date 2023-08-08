@@ -37,3 +37,6 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("sentence", "text")
         self.dataset = self.dataset.rename_column("target", "label")
+
+        # create train and test splits
+        self.dataset = self.dataset["train"].train_test_split(0.2, seed=self.seed)

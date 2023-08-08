@@ -12,7 +12,7 @@ class NoRecClassification(AbsTaskClassification):
             "type": "Classification",
             "category": "s2s",
             "eval_splits": ["test"],
-            "eval_langs": ["no"],
+            "eval_langs": ["nb"],
             "main_score": "accuracy",
             "n_experiments": 10,
             "samples_per_label": 16,

@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 
 
 if __name__ == "__main__":
-
     model = SentenceTransformer("msmarco-distilbert-base-tas-b")
 
     eval = MTEB(tasks=["NFCorpus"])

@@ -1,6 +1,5 @@
 import gzip
 import os
-from collections import Counter
 
 import datasets
 import numpy as np

@@ -1,5 +1,5 @@
 import logging
-from typing import Callable, Dict, List, Set, Tuple
+from typing import Callable, Dict, List, Set
 
 import numpy as np
 import torch

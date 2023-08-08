@@ -1,8 +1,6 @@
 """Example script for benchmarking all datasets constituting the MTEB English leaderboard & average scores"""
 
-import argparse
 import logging
-import os
 
 from mteb import MTEB
 from sentence_transformers import SentenceTransformer
@@ -96,7 +94,14 @@ TASK_LIST_STS = [
     "SummEval",
 ]
 
-TASK_LIST = TASK_LIST_CLASSIFICATION + TASK_LIST_CLUSTERING + TASK_LIST_PAIR_CLASSIFICATION + TASK_LIST_RERANKING + TASK_LIST_RETRIEVAL + TASK_LIST_STS
+TASK_LIST = (
+    TASK_LIST_CLASSIFICATION
+    + TASK_LIST_CLUSTERING
+    + TASK_LIST_PAIR_CLASSIFICATION
+    + TASK_LIST_RERANKING
+    + TASK_LIST_RETRIEVAL
+    + TASK_LIST_STS
+)
 
 model_name = "average_word_embeddings_komninos"
 model = SentenceTransformer(model_name)
@@ -104,5 +109,5 @@ model = SentenceTransformer(model_name)
 for task in TASK_LIST:
     logger.info(f"Running task: {task}")
     eval_splits = ["dev"] if task == "MSMARCO" else ["test"]
-    evaluation = MTEB(tasks=[task], task_langs=["en"]) # Remove "en" for running all languages
+    evaluation = MTEB(tasks=[task], task_langs=["en"])  # Remove "en" for running all languages
     evaluation.run(model, output_folder=f"results/{model_name}", eval_splits=eval_splits)
