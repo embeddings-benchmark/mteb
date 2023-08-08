@@ -181,7 +181,9 @@ evaluation.run(model)
 ## Leaderboard
 
 The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/leaderboard). To submit:
-1. Run on MTEB: You can reference [scripts/run_mteb_english.py](https://github.com/embeddings-benchmark/mteb/blob/main/scripts/run_mteb_english.py) for all MTEB English datasets used in the main ranking. Advanced scripts with different models are available in the [mteb/mtebscripts repo](https://github.com/embeddings-benchmark/mtebscripts).
+1. Run on MTEB: You can reference [scripts/run_mteb_english.py](https://github.com/embeddings-benchmark/mteb/blob/main/scripts/run_mteb_english.py) for all MTEB English datasets used in the main ranking, 
+You can reference [scripts/run_mteb_chinese.py](https://github.com/embeddings-benchmark/mteb/blob/main/scripts/run_mteb_english.py) for all MTEB English datasets used in the main ranking, 
+. Advanced scripts with different models are available in the [mteb/mtebscripts repo](https://github.com/embeddings-benchmark/mtebscripts).
 2. Format the json files into metadata using the script at `scripts/mteb_meta.py`. For example
 `python scripts/mteb_meta.py path_to_results_folder`, which will create a `mteb_metadata.md` file. If you ran CQADupstack retrieval, make sure to merge the results first with `python scripts/merge_cqadupstack.py path_to_results_folder`.
 3. Copy the content of the `mteb_metadata.md` file to the top of a `README.md` file of your model on the Hub. See [here](https://huggingface.co/Muennighoff/SGPT-5.8B-weightedmean-msmarco-specb-bitfit/blob/main/README.md) for an example.
@@ -282,6 +284,7 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 | [STSBenchmark](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark)                                                                                                  | [mteb/stsbenchmark-sts](https://huggingface.co/datasets/mteb/stsbenchmark-sts)                                                       | Semantic Textual Similarity Benchmark (STSbenchmark) dataset.                                                                                                                                                    | STS                | s2s      |          1 |          11498 |         3000 |          2758 |               57.6 |             64.0 |              53.6 |
 | [SummEval](https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html)                                                                                                     | [mteb/summeval](https://huggingface.co/datasets/mteb/summeval)                                                                       | News Article Summary Semantic Similarity Estimation.                                                                                                                                                             | Summarization      | s2s      |          1 |              0 |            0 |          2800 |                  0 |                0 |             359.8 |
 
+For Chinese tasks, you can reference to [C_MTEB](https://github.com/FlagOpen/FlagEmbedding/tree/master/C_MTEB).
 
 ## Citation
 

@@ -22,3 +22,4 @@ from .ScalaClassification import *
 from .SweRecClassification import *
 from .ToxicConversationsClassification import *
 from .TweetSentimentExtractionClassification import *
+from .CMTEBClassification import *

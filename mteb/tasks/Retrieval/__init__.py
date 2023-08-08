@@ -25,3 +25,4 @@ from .SCIDOCSRetrieval import *
 from .SciFactRetrieval import *
 from .Touche2020Retrieval import *
 from .TRECCOVIDRetrieval import *
+from .CMTEBRetrieval import *
