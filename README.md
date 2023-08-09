@@ -284,7 +284,7 @@ Advanced scripts with different models are available in the [mteb/mtebscripts re
 | [STSBenchmark](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark)                                                                                                  | [mteb/stsbenchmark-sts](https://huggingface.co/datasets/mteb/stsbenchmark-sts)                                                       | Semantic Textual Similarity Benchmark (STSbenchmark) dataset.                                                                                                                                                    | STS                | s2s      |          1 |          11498 |         3000 |          2758 |               57.6 |             64.0 |              53.6 |
 | [SummEval](https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html)                                                                                                     | [mteb/summeval](https://huggingface.co/datasets/mteb/summeval)                                                                       | News Article Summary Semantic Similarity Estimation.                                                                                                                                                             | Summarization      | s2s      |          1 |              0 |            0 |          2800 |                  0 |                0 |             359.8 |
 
-For Chinese tasks, you can reference to [C_MTEB](https://github.com/FlagOpen/FlagEmbedding/tree/master/C_MTEB).
+For Chinese tasks, you can refer to [C_MTEB](https://github.com/FlagOpen/FlagEmbedding/tree/master/C_MTEB).
 
 ## Citation
 
