@@ -17,7 +17,7 @@ class T2Reranking(AbsTaskReranking):
         }
 
 
-class MmarcoReranking(AbsTaskReranking):
+class MMarcoReranking(AbsTaskReranking):
     @property
     def description(self):
         return {
