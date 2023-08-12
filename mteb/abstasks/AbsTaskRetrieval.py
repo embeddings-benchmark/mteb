@@ -100,7 +100,7 @@ class AbsTaskRetrieval(AbsTask):
         start_time = time()
         results = retriever.retrieve(corpus, queries)
         end_time = time()
-        print("Time taken to retrieve: {:.2f} seconds".format(end_time - start_time))
+        logger.info("Time taken to retrieve: {:.2f} seconds".format(end_time - start_time))
 
         ndcg, _map, recall, precision = retriever.evaluate(relevant_docs, results, retriever.k_values)
         mrr = retriever.evaluate_custom(relevant_docs, results, retriever.k_values, "mrr")
