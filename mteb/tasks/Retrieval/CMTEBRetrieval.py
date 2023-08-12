@@ -209,6 +209,7 @@ class VideoRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_retrieval_data(self.description['hf_hub_name'], self.description['eval_splits'])
+        self.corpus, self.queries, self.relevant_docs = load_retrieval_data(self.description['hf_hub_name'],
+                                                                            self.description['eval_splits'])
         self.data_loaded = True
 
