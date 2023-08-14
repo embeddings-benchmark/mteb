@@ -8,7 +8,10 @@ import torch
 import os
 
 
-# To run this script on multiple GPUs, use the following command:
+# To run this script on multiple GPUs, you need to install the following branch of BEIR
+# pip install git+https://github.com/NouamaneTazi/beir@nouamane/better-multi-gpu
+
+# Then use this command to run on 2 GPUs for example
 # torchrun --nproc_per_node=2 scripts/retrieval_multigpu.py
 
 if __name__ == "__main__":
