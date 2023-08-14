@@ -131,30 +131,6 @@ class DRESModel:
         self.sep = sep
         self.use_sbert_model = isinstance(model, SentenceTransformer)
 
-    def start_multi_process_pool(self, target_devices: List[str] = None) -> Dict[str, object]:
-        logger.info("Start multi-process pool on devices: {}".format(", ".join(map(str, target_devices))))
-
-        ctx = mp.get_context("spawn")
-        input_queue = ctx.Queue()
-        output_queue = ctx.Queue()
-        processes = []
-
-        for process_id, device_name in enumerate(target_devices):
-            p = ctx.Process(
-                target=SentenceTransformer._encode_multi_process_worker,
-                args=(process_id, device_name, self.model, input_queue, output_queue),
-                daemon=True,
-            )
-            p.start()
-            processes.append(p)
-
-        return {"input": input_queue, "output": output_queue, "processes": processes}
-
-    def stop_multi_process_pool(self, pool: Dict[str, object]):
-        output_queue = pool["output"]
-        [output_queue.get() for _ in range(len(pool["processes"]))]
-        return self.model.stop_multi_process_pool(pool)
-
     def encode_queries(self, queries: List[str], batch_size: int, **kwargs):
         if self.use_sbert_model:
             if isinstance(self.model._first_module(), Transformer):
@@ -179,26 +155,3 @@ class DRESModel:
                 for doc in corpus
             ]
         return self.model.encode(sentences, batch_size=batch_size, **kwargs)
-
-    def encode_corpus_parallel(
-        self, corpus: List[Dict[str, str]], pool: Dict[str, object], batch_size: int, chunk_id: int, **kwargs
-    ):
-        if type(corpus) is dict:
-            sentences = [
-                (corpus["title"][i] + self.sep + corpus["text"][i]).strip()
-                if "title" in corpus
-                else corpus["text"][i].strip()
-                for i in range(len(corpus["text"]))
-            ]
-        else:
-            sentences = [
-                (doc["title"] + self.sep + doc["text"]).strip() if "title" in doc else doc["text"].strip()
-                for doc in corpus
-            ]
-
-        if chunk_id is not None and chunk_id >= len(pool["processes"]):
-            output_queue = pool["output"]
-            output_queue.get()
-
-        input_queue = pool["input"]
-        input_queue.put([chunk_id, batch_size, sentences])
