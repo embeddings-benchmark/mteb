@@ -5,6 +5,7 @@ from typing import Dict, List
 import torch.multiprocessing as mp
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
+import os
 
 from .AbsTask import AbsTask
 
@@ -62,6 +63,9 @@ class AbsTaskRetrieval(AbsTask):
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
 
         try:
+            if os.getenv("RANK", None) is None:
+                raise ImportError("DenseRetrievalParallelExactSearch only works in distributed mode")
+            
             if self.description["beir_name"].startswith("cqadupstack"):
                 raise ImportError("CQADupstack is incompatible with latest BEIR")
             from beir.retrieval.search.dense import (
@@ -92,6 +96,7 @@ class AbsTaskRetrieval(AbsTask):
                 model,
                 batch_size=batch_size,
                 corpus_chunk_size=corpus_chunk_size if corpus_chunk_size is not None else 50000,
+                ignore_identical_ids=kwargs.get("ignore_identical_ids", True),
                 **kwargs,
             )
 
@@ -101,7 +106,7 @@ class AbsTaskRetrieval(AbsTask):
         end_time = time()
         logger.info("Time taken to retrieve: {:.2f} seconds".format(end_time - start_time))
 
-        ndcg, _map, recall, precision = retriever.evaluate(relevant_docs, results, retriever.k_values)
+        ndcg, _map, recall, precision = retriever.evaluate(relevant_docs, results, retriever.k_values, ignore_identical_ids=kwargs.get("ignore_identical_ids", True))
         mrr = retriever.evaluate_custom(relevant_docs, results, retriever.k_values, "mrr")
 
         scores = {
@@ -124,6 +129,7 @@ class DRESModel:
     def __init__(self, model, sep=" ", **kwargs):
         self.model = model
         self.sep = sep
+        self.use_sbert_model = isinstance(model, SentenceTransformer)
 
     def start_multi_process_pool(self, target_devices: List[str] = None) -> Dict[str, object]:
         logger.info("Start multi-process pool on devices: {}".format(", ".join(map(str, target_devices))))
@@ -150,12 +156,13 @@ class DRESModel:
         return self.model.stop_multi_process_pool(pool)
 
     def encode_queries(self, queries: List[str], batch_size: int, **kwargs):
-        if isinstance(self.model._first_module(), Transformer):
-            logger.info(f"Queries will be truncated to {self.model.get_max_seq_length()} tokens.")
-        elif isinstance(self.model._first_module(), WordEmbeddings):
-            logger.warning(
-                "Queries will not be truncated. This could lead to memory issues. In that case please lower the batch_size."
-            )
+        if self.use_sbert_model:
+            if isinstance(self.model._first_module(), Transformer):
+                logger.info(f"Queries will be truncated to {self.model.get_max_seq_length()} tokens.")
+            elif isinstance(self.model._first_module(), WordEmbeddings):
+                logger.warning(
+                    "Queries will not be truncated. This could lead to memory issues. In that case please lower the batch_size."
+                )
         return self.model.encode(queries, batch_size=batch_size, **kwargs)
 
     def encode_corpus(self, corpus: List[Dict[str, str]], batch_size: int, **kwargs):
