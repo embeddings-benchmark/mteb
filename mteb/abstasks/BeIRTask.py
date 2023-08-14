@@ -3,7 +3,9 @@ import os
 import datasets
 
 from .AbsTask import AbsTask
+import logging
 
+logger = logging.getLogger(__name__)
 
 class BeIRTask(AbsTask):
     def __init__(self, **kwargs):
@@ -19,14 +21,17 @@ class BeIRTask(AbsTask):
             raise Exception("Retrieval tasks require beir package. Please install it with `pip install mteb[beir]`")
 
         USE_HF_DATASETS = False
-        try:
-            if self.description["beir_name"].startswith("cqadupstack"):
-                raise ImportError("CQADupstack is incompatible with latest BEIR")
-            from beir.datasets.data_loader_hf import HFDataLoader as BeirDataLoader
 
+        # TODO @nouamane: move non-distributed to `HFDataLoader`
+        if os.getenv("RANK", None) is not None:
+            if self.description["beir_name"].startswith("cqadupstack"):
+                raise ImportError("CQADupstack is incompatible with BEIR's HFDataLoader in a distributed setting")
+            from beir.datasets.data_loader_hf import HFDataLoader as BeirDataLoader
+            logger.info("Using HFDataLoader for BeIR")
             USE_HF_DATASETS = True
-        except ImportError:
+        else:
             from beir.datasets.data_loader import GenericDataLoader as BeirDataLoader
+            logger.info("Using GenericDataLoader for BeIR")
 
         if self.data_loaded:
             return
