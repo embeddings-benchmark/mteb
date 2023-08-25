@@ -7,9 +7,7 @@ class SickrPLSTS(AbsTaskSTS):
         return {
             "name": "SICK-R-PL",
             "hf_hub_name": "PL-MTEB/sickr-pl-sts",
-            "description": "Task based on the Polish version of the English natural language inference (NLI) dataset "
-                           "SICK (Sentences Involving Compositional Knowledge), where the goal is to predict the "
-                           "probability distribution of relatedness scores between statements",
+            "description": "Polish version of SICK dataset for textual relatedness.",
             "reference": "https://aclanthology.org/2020.lrec-1.207.pdf",
             "type": "STS",
             "category": "s2s",
@@ -27,8 +25,7 @@ class CdscrSTS(AbsTaskSTS):
         return {
             "name": "CDSC-R",
             "hf_hub_name": "PL-MTEB/cdscr-sts",
-            "description": "Task based on the Compositional Distributional Semantics Corpus (CDSC), where the goal is to "
-                           "predict the probability distribution of relatedness scores between statements.",
+            "description": "Compositional Distributional Semantics Corpus for textual relatedness.",
             "reference": "https://aclanthology.org/P17-1073.pdf",
             "type": "STS",
             "category": "s2s",

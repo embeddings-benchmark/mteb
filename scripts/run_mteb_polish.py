@@ -13,7 +13,7 @@ classification_tasks = [
     "PolEmo2.0-IN",
     "PolEmo2.0-OUT",
     "AllegroReviews",
-    "AbusiveClauses",
+    "PAC",
     "MassiveIntentClassification",
     "MassiveScenarioClassification"
 ]
