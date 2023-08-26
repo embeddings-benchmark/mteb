@@ -26,11 +26,11 @@ class BeIRTask(AbsTask):
         if os.getenv("RANK", None) is not None:
             if self.description["beir_name"].startswith("cqadupstack"):
                 raise ImportError("CQADupstack is incompatible with BEIR's HFDataLoader in a distributed setting")
-            from beir.datasets.data_loader_hf import HFDataLoader as BeirDataLoader
+            from beir.datasets.data_loader_hf import HFDataLoader 
             logger.info("Using HFDataLoader for BeIR")
             USE_HF_DATASETS = True
         else:
-            from beir.datasets.data_loader import GenericDataLoader as BeirDataLoader
+            from beir.datasets.data_loader import GenericDataLoader 
             logger.info("Using GenericDataLoader for BeIR")
 
         if self.data_loaded:
@@ -43,7 +43,7 @@ class BeIRTask(AbsTask):
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         for split in eval_splits:
             if USE_HF_DATASETS:
-                self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
+                self.corpus[split], self.queries[split], self.relevant_docs[split] = HFDataLoader(
                     hf_repo=f"BeIR/{dataset}"
                 ).load(split=split)
             else:
@@ -51,7 +51,7 @@ class BeIRTask(AbsTask):
                 download_path = os.path.join(datasets.config.HF_DATASETS_CACHE, "BeIR")
                 data_path = util.download_and_unzip(url, download_path)
                 data_path = f"{data_path}/{sub_dataset}" if sub_dataset else data_path
-                self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
+                self.corpus[split], self.queries[split], self.relevant_docs[split] = GenericDataLoader(
                     data_folder=data_path
                 ).load(split=split)
         self.data_loaded = True
