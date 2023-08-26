@@ -13,3 +13,4 @@ from .StackExchangeClusteringP2P import *
 from .TenKGnadClusteringP2P import *
 from .TenKGnadClusteringS2S import *
 from .TwentyNewsgroupsClustering import *
+from .PolishClustering import *

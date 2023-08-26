@@ -1,5 +1,3 @@
-
-
 from .AmazonCounterfactualClassification import *
 from .AmazonPolarityClassification import *
 from .AmazonReviewsClassification import *
@@ -22,3 +20,4 @@ from .ScalaClassification import *
 from .SweRecClassification import *
 from .ToxicConversationsClassification import *
 from .TweetSentimentExtractionClassification import *
+from .PolishClassification import *
