@@ -48,7 +48,6 @@ class AbsTaskRetrieval(AbsTask):
         split="test",
         batch_size=128,
         corpus_chunk_size=None,
-        target_devices=None,
         score_function="cos_sim",
         **kwargs
     ):
@@ -62,32 +61,8 @@ class AbsTaskRetrieval(AbsTask):
 
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
 
-        try:
-            if os.getenv("RANK", None) is None:
-                raise ImportError("DenseRetrievalParallelExactSearch only works in distributed mode")
-            
-            if self.description["beir_name"].startswith("cqadupstack"):
-                raise ImportError("CQADupstack is incompatible with latest BEIR")
-            from beir.retrieval.search.dense import (
-                DenseRetrievalParallelExactSearch as DRPES,
-            )
-
-            model = model if self.is_dres_compatible(model, is_parallel=True) else DRESModel(model)
-
-            model = DRPES(
-                model,
-                batch_size=batch_size,
-                target_devices=target_devices,
-                corpus_chunk_size=corpus_chunk_size,
-                **kwargs,
-            )
-        except ImportError:
-            if target_devices is not None:
-                logger.warning(
-                    "DenseRetrievalParallelExactSearch could not be imported from beir. Using DenseRetrievalExactSearch instead."
-                )
-                logger.warning("The parameter target_devices is ignored.")
-
+        if os.getenv("RANK", None) is None:
+            # Non-distributed
             from beir.retrieval.search.dense import DenseRetrievalExactSearch as DRES
 
             model = model if self.is_dres_compatible(model, is_parallel=False) else DRESModel(model)
@@ -98,6 +73,23 @@ class AbsTaskRetrieval(AbsTask):
                 corpus_chunk_size=corpus_chunk_size if corpus_chunk_size is not None else 50000,
                 **kwargs,
             )
+        
+        else:
+            # Distributed (multi-GPU)
+            from beir.retrieval.search.dense import (
+                DenseRetrievalParallelExactSearch as DRPES,
+            )
+
+            model = model if self.is_dres_compatible(model, is_parallel=True) else DRESModel(model)
+
+            model = DRPES(
+                model,
+                batch_size=batch_size,
+                corpus_chunk_size=corpus_chunk_size,
+                **kwargs,
+            )
+
+
 
         retriever = EvaluateRetrieval(model, score_function=score_function)  # or "cos_sim" or "dot"
         start_time = time()
