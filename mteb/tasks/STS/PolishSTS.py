@@ -35,3 +35,4 @@ class CdscrSTS(AbsTaskSTS):
             "min_score": 1,
             "max_score": 5
         }
+        
