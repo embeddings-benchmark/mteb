@@ -9,3 +9,4 @@ from .STS17CrosslingualSTS import *
 from .STS22CrosslingualSTS import *
 from .STSBenchmarkSTS import *
 from .CMTEBSTS import *
+from .PolishSTS import *

@@ -26,3 +26,14 @@ from .SciFactRetrieval import *
 from .Touche2020Retrieval import *
 from .TRECCOVIDRetrieval import *
 from .CMTEBRetrieval import *
+from .ArguAnaPLRetrieval import *
+from .DBPediaPLRetrieval import *
+from .FiQAPLRetrieval import *
+from .HotpotQAPLRetrieval import *
+from .MSMARCOPLRetrieval import *
+from .NFCorpusPLRetrieval import *
+from .NQPLRetrieval import *
+from .QuoraPLRetrieval import *
+from .SCIDOCSPLRetrieval import *
+from .SciFactPLRetrieval import *
+from .TRECCOVIDPLRetrieval import *
