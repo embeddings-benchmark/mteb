@@ -2,7 +2,6 @@ import logging
 from time import time
 from typing import Dict, List
 
-import torch.multiprocessing as mp
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
 import os
