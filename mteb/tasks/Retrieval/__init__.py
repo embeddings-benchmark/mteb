@@ -25,6 +25,7 @@ from .SCIDOCSRetrieval import *
 from .SciFactRetrieval import *
 from .Touche2020Retrieval import *
 from .TRECCOVIDRetrieval import *
+from .CMTEBRetrieval import *
 from .ArguAnaPLRetrieval import *
 from .DBPediaPLRetrieval import *
 from .FiQAPLRetrieval import *
@@ -36,5 +37,3 @@ from .QuoraPLRetrieval import *
 from .SCIDOCSPLRetrieval import *
 from .SciFactPLRetrieval import *
 from .TRECCOVIDPLRetrieval import *
-
-

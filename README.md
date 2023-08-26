@@ -181,7 +181,8 @@ evaluation.run(model)
 ## Leaderboard
 
 The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/leaderboard). To submit:
-1. Run on MTEB: You can reference [scripts/run_mteb_english.py](https://github.com/embeddings-benchmark/mteb/blob/main/scripts/run_mteb_english.py) for all MTEB English datasets used in the main ranking. Advanced scripts with different models are available in the [mteb/mtebscripts repo](https://github.com/embeddings-benchmark/mtebscripts).
+1. Run on MTEB: You can reference [scripts/run_mteb_english.py](https://github.com/embeddings-benchmark/mteb/blob/main/scripts/run_mteb_english.py) for all MTEB English datasets used in the main ranking, or [scripts/run_mteb_chinese.py](https://github.com/embeddings-benchmark/mteb/blob/main/scripts/run_mteb_chinese.py) for the Chinese ones. 
+Advanced scripts with different models are available in the [mteb/mtebscripts repo](https://github.com/embeddings-benchmark/mtebscripts).
 2. Format the json files into metadata using the script at `scripts/mteb_meta.py`. For example
 `python scripts/mteb_meta.py path_to_results_folder`, which will create a `mteb_metadata.md` file. If you ran CQADupstack retrieval, make sure to merge the results first with `python scripts/merge_cqadupstack.py path_to_results_folder`.
 3. Copy the content of the `mteb_metadata.md` file to the top of a `README.md` file of your model on the Hub. See [here](https://huggingface.co/Muennighoff/SGPT-5.8B-weightedmean-msmarco-specb-bitfit/blob/main/README.md) for an example.
@@ -303,6 +304,8 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 | [SICK-R-PL](https://aclanthology.org/2020.lrec-1.207.pdf)                                                                                                             | [PL-MTEB/sickr-pl-sts](https://huggingface.co/datasets/PL-MTEB/sickr-pl-sts)                                                         | Polish version of SICK dataset for textual relatedness.                                                                                                                                                          | STS                | s2s      |          1 |           8878 |          990 |          9812 |               42.9 |             44.0 |              42.8 |
 | [CDSC-R](https://aclanthology.org/P17-1073.pdf)                                                                                                                       | [PL-MTEB/cdscr-sts](https://huggingface.co/datasets/PL-MTEB/cdscr-sts)                                                               | Compositional Distributional Semantics Corpus for textual relatedness.                                                                                                                                           | STS                | s2s      |          1 |          16000 |         2000 |          2000 |               72.1 |             73.2 |              75.0 |
 | [SummEval](https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html)                                                                                                     | [mteb/summeval](https://huggingface.co/datasets/mteb/summeval)                                                                       | News Article Summary Semantic Similarity Estimation.                                                                                                                                                             | Summarization      | s2s      |          1 |              0 |            0 |          2800 |                  0 |                0 |             359.8 |
+
+For Chinese tasks, you can refer to [C_MTEB](https://github.com/FlagOpen/FlagEmbedding/tree/master/C_MTEB).
 
 ## Citation
 
