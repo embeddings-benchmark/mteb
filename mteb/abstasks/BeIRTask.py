@@ -3,7 +3,9 @@ import os
 import datasets
 
 from .AbsTask import AbsTask
+import logging
 
+logger = logging.getLogger(__name__)
 
 class BeIRTask(AbsTask):
     def __init__(self, **kwargs):
@@ -18,17 +20,18 @@ class BeIRTask(AbsTask):
         except ImportError:
             raise Exception("Retrieval tasks require beir package. Please install it with `pip install mteb[beir]`")
 
-        USE_BEIR_DEVELOPMENT = False
-        try:
-            raise ImportError("MTEB is temporarily incompatible with HFDataLoader")
+        USE_HF_DATASETS = False
 
+        # TODO @nouamane: move non-distributed to `HFDataLoader`
+        if os.getenv("RANK", None) is not None:
             if self.description["beir_name"].startswith("cqadupstack"):
-                raise ImportError("CQADupstack is incompatible with latest BEIR")
-            from beir.datasets.data_loader_hf import HFDataLoader as BeirDataLoader
-
-            USE_BEIR_DEVELOPMENT = True
-        except ImportError:
-            from beir.datasets.data_loader import GenericDataLoader as BeirDataLoader
+                raise ImportError("CQADupstack is incompatible with BEIR's HFDataLoader in a distributed setting")
+            from beir.datasets.data_loader_hf import HFDataLoader 
+            logger.info("Using HFDataLoader for BeIR")
+            USE_HF_DATASETS = True
+        else:
+            from beir.datasets.data_loader import GenericDataLoader 
+            logger.info("Using GenericDataLoader for BeIR")
 
         if self.data_loaded:
             return
@@ -39,8 +42,8 @@ class BeIRTask(AbsTask):
 
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         for split in eval_splits:
-            if USE_BEIR_DEVELOPMENT:
-                self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
+            if USE_HF_DATASETS:
+                self.corpus[split], self.queries[split], self.relevant_docs[split] = HFDataLoader(
                     hf_repo=f"BeIR/{dataset}"
                 ).load(split=split)
             else:
@@ -48,7 +51,7 @@ class BeIRTask(AbsTask):
                 download_path = os.path.join(datasets.config.HF_DATASETS_CACHE, "BeIR")
                 data_path = util.download_and_unzip(url, download_path)
                 data_path = f"{data_path}/{sub_dataset}" if sub_dataset else data_path
-                self.corpus[split], self.queries[split], self.relevant_docs[split] = BeirDataLoader(
+                self.corpus[split], self.queries[split], self.relevant_docs[split] = GenericDataLoader(
                     data_folder=data_path
                 ).load(split=split)
         self.data_loaded = True

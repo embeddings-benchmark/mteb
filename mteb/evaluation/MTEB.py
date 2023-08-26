@@ -102,6 +102,10 @@ class MTEB:
         return
 
     def _display_tasks(self, task_list, name=None):
+        # disable logging for other ranks
+        if int(os.getenv("RANK", 0)) != 0:
+            return
+            
         console = Console()
         if name:
             console.rule(f"[bold]{name}\n", style="grey15")
