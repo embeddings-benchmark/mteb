@@ -135,6 +135,11 @@ class RerankingEvaluator(Evaluator):
         all_mrr_scores = []
         all_ap_scores = []
 
+        # using encode_queries and encode_corpus functions if they exists,
+        # which can be defined by users to add different instructions for query and passage conveniently
+        encode_queries_func = model.encode_queries if hasattr(model, 'encode_queries') else model.encode
+        encode_corpus_func = model.encode_corpus if hasattr(model, 'encode_corpus') else model.encode
+        
         for instance in tqdm.tqdm(self.samples, desc="Samples"):
             query = instance["query"]
             positive = list(instance["positive"])
@@ -146,8 +151,8 @@ class RerankingEvaluator(Evaluator):
             docs = positive + negative
             is_relevant = [True] * len(positive) + [False] * len(negative)
 
-            query_emb = model.encode([query], convert_to_tensor=True, batch_size=self.batch_size)
-            docs_emb = model.encode(docs, convert_to_tensor=True, batch_size=self.batch_size)
+            query_emb = encode_queries_func([query], convert_to_tensor=True, batch_size=self.batch_size)
+            docs_emb = encode_corpus_func(docs, convert_to_tensor=True, batch_size=self.batch_size)
 
             scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
             all_mrr_scores.append(scores["mrr"])
