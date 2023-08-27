@@ -67,6 +67,15 @@ mteb -m average_word_embeddings_komninos \
     --verbosity 3
 ```
 
+* Multi-GPU evaluation for retrieval tasks (see [scripts/retrieval.slurm](scripts/retrieval.slurm) for multi-node slurm script example)
+
+```python
+pip install git+https://github.com/NouamaneTazi/beir@nouamane/better-multi-gpu
+# Run on 2 gpus
+torchrun --nproc_per_node=2 scripts/retrieval_multigpu.py
+```
+
+``
 ## Advanced usage
 
 ### Dataset selection
