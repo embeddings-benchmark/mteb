@@ -33,7 +33,7 @@ class AbsTaskRetrieval(AbsTask):
         super().__init__(**kwargs)
 
     @staticmethod
-    def is_dres_compatible(model, is_parallel=True):
+    def is_dres_compatible(model, is_parallel=False):
         methods = DRPES_METHODS if is_parallel else DRES_METHODS
         for method in methods:
             op = getattr(model, method, None)
