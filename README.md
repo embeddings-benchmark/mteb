@@ -148,12 +148,11 @@ If you'd like to use different encoding functions for query and corpus when eval
 from mteb import AbsTaskRetrieval, DRESModel
 
 class MyModel(DRESModel):
-    # Refer to the code of DRESModel for the methods to overwrite
-    pass
+    # You will need to overwrite the methods `encode_queries` and `encode_corpus` for custom behavior
+    # Refer to the code of DRESModel for how these methods look like by default
 
 assert AbsTaskRetrieval.is_dres_compatible(MyModel)
 ```
-
 
 ### Evaluating on a custom task
 
