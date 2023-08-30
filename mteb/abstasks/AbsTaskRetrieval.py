@@ -11,14 +11,6 @@ from .AbsTask import AbsTask
 logger = logging.getLogger(__name__)
 
 DRES_METHODS = ["encode_queries", "encode_corpus"]
-DRPES_METHODS = [
-    "start_multi_process_pool",
-    "stop_multi_process_pool",
-    "encode_queries",
-    "encode_corpus",
-    "encode_corpus_parallel",
-]
-
 
 class AbsTaskRetrieval(AbsTask):
     """
@@ -33,9 +25,8 @@ class AbsTaskRetrieval(AbsTask):
         super().__init__(**kwargs)
 
     @staticmethod
-    def is_dres_compatible(model, is_parallel=False):
-        methods = DRPES_METHODS if is_parallel else DRES_METHODS
-        for method in methods:
+    def is_dres_compatible(model):
+        for method in DRES_METHODS:
             op = getattr(model, method, None)
             if not (callable(op)):
                 return False
@@ -59,13 +50,11 @@ class AbsTaskRetrieval(AbsTask):
             self.load_data()
 
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
+        model = model if self.is_dres_compatible(model) else DRESModel(model)
 
         if os.getenv("RANK", None) is None:
             # Non-distributed
             from beir.retrieval.search.dense import DenseRetrievalExactSearch as DRES
-
-            model = model if self.is_dres_compatible(model, is_parallel=False) else DRESModel(model)
-
             model = DRES(
                 model,
                 batch_size=batch_size,
@@ -78,9 +67,6 @@ class AbsTaskRetrieval(AbsTask):
             from beir.retrieval.search.dense import (
                 DenseRetrievalParallelExactSearch as DRPES,
             )
-
-            model = model if self.is_dres_compatible(model, is_parallel=True) else DRESModel(model)
-
             model = DRPES(
                 model,
                 batch_size=batch_size,
