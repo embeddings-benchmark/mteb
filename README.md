@@ -150,6 +150,7 @@ from mteb import AbsTaskRetrieval, DRESModel
 class MyModel(DRESModel):
     # You will need to overwrite the methods `encode_queries` and `encode_corpus` for custom behavior
     # Refer to the code of DRESModel for how these methods look like by default
+    pass
 
 assert AbsTaskRetrieval.is_dres_compatible(MyModel)
 ```
