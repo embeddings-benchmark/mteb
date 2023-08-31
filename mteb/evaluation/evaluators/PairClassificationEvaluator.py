@@ -56,11 +56,7 @@ class PairClassificationEvaluator(Evaluator):
     def compute_metrics(self, model):
         sentences = list(set(self.sentences1 + self.sentences2))
         logger.info(f"Encoding {len(sentences)} sentences...")
-        embeddings = model.encode(
-            sentences,
-            batch_size=self.batch_size,
-            convert_to_numpy=True,
-        )
+        embeddings = np.asarray(model.encode(sentences, batch_size=self.batch_size))
         emb_dict = {sent: emb for sent, emb in zip(sentences, embeddings)}
         embeddings1 = [emb_dict[sent] for sent in self.sentences1]
         embeddings2 = [emb_dict[sent] for sent in self.sentences2]

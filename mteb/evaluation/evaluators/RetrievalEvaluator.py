@@ -1,4 +1,5 @@
 import logging
+import inspect
 from typing import Callable, Dict, List, Set
 
 import numpy as np
@@ -93,12 +94,13 @@ class RetrievalEvaluator(Evaluator):
 
         # Compute embedding for the queries
         logger.info("Encoding the queries...")
-        query_embeddings = model.encode(
-            self.queries,
-            show_progress_bar=self.show_progress_bar,
-            batch_size=self.batch_size,
-            convert_to_tensor=True,
-        )
+        # We don't know if encode has the kwargs show_progress_bar
+        kwargs = {
+            "show_progress_bar": self.show_progress_bar
+        } if "show_progress_bar" in inspect.signature(model.encode).parameters else {}
+        query_embeddings = model.encode(self.queries, batch_size=self.batch_size, **kwargs)
+        # Convert to torch tensor
+        query_embeddings = torch.stack([torch.tensor(emb) for emb in query_embeddings])
 
         queries_result_list = {}
         for name in self.score_functions:
@@ -118,10 +120,10 @@ class RetrievalEvaluator(Evaluator):
                 corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(self.corpus))
                 sub_corpus_embeddings = corpus_model.encode(
                     self.corpus[corpus_start_idx:corpus_end_idx],
-                    show_progress_bar=False,
                     batch_size=self.batch_size,
-                    convert_to_tensor=True,
                 )
+                # Convert to torch tensor
+                sub_corpus_embeddings = torch.stack([torch.tensor(emb) for emb in sub_corpus_embeddings])
             else:
                 corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus_embeddings))
                 sub_corpus_embeddings = corpus_embeddings[corpus_start_idx:corpus_end_idx]

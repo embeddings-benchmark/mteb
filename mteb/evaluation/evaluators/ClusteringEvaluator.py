@@ -10,7 +10,7 @@ from .Evaluator import Evaluator
 
 
 class ClusteringEvaluator(Evaluator):
-    def __init__(self, sentences, labels, clustering_batch_size=500, limit=None, **kwargs):
+    def __init__(self, sentences, labels, clustering_batch_size=500, batch_size=32, limit=None, **kwargs):
         super().__init__(**kwargs)
         if limit is not None:
             sentences = sentences[:limit]
@@ -18,10 +18,11 @@ class ClusteringEvaluator(Evaluator):
         self.sentences = sentences
         self.labels = labels
         self.clustering_batch_size = clustering_batch_size
+        self.batch_size = batch_size
 
     def __call__(self, model):
         logger.info(f"Encoding {len(self.sentences)} sentences...")
-        corpus_embeddings = np.asarray(model.encode(self.sentences))
+        corpus_embeddings = np.asarray(model.encode(self.sentences, batch_size=self.batch_size))
 
         logger.info("Fitting Mini-Batch K-Means model...")
         clustering_model = sklearn.cluster.MiniBatchKMeans(
