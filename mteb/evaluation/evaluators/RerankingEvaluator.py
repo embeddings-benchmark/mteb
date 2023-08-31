@@ -78,15 +78,14 @@ class RerankingEvaluator(Evaluator):
 
         logger.info("Encoding queries...")
         if isinstance(self.samples[0]["query"], str):
-            all_query_embs = encode_queries_func(
-                    [sample["query"] for sample in self.samples],
-                    convert_to_tensor=True,
-                    batch_size=self.batch_size,
-                )
+            all_query_embs = np.asarray(encode_queries_func(
+                [sample["query"] for sample in self.samples],
+                batch_size=self.batch_size,
+            ))
         elif isinstance(self.samples[0]["query"], list):
             # In case the query is a list of strings, we get the most similar embedding to any of the queries
             all_query_flattened = [q for sample in self.samples for q in sample["query"]]
-            all_query_embs = encode_queries_func(all_query_flattened, convert_to_tensor=True, batch_size=self.batch_size)
+            all_query_embs = np.asarray(encode_queries_func(all_query_flattened, batch_size=self.batch_size))
         else:
             raise ValueError(f"Query must be a string or a list of strings but is {type(self.samples[0]['query'])}")
 
@@ -96,7 +95,7 @@ class RerankingEvaluator(Evaluator):
             all_docs.extend(sample["positive"])
             all_docs.extend(sample["negative"])
 
-        all_docs_embs = encode_corpus_func(all_docs, convert_to_tensor=True, batch_size=self.batch_size)
+        all_docs_embs = np.asarray(encode_corpus_func(all_docs, batch_size=self.batch_size))
 
         # Compute scores
         logger.info("Evaluating...")
@@ -151,8 +150,8 @@ class RerankingEvaluator(Evaluator):
             docs = positive + negative
             is_relevant = [True] * len(positive) + [False] * len(negative)
 
-            query_emb = encode_queries_func([query], convert_to_tensor=True, batch_size=self.batch_size)
-            docs_emb = encode_corpus_func(docs, convert_to_tensor=True, batch_size=self.batch_size)
+            query_emb = np.adsencode_queries_func([query], batch_size=self.batch_size)
+            docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
 
             scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
             all_mrr_scores.append(scores["mrr"])
