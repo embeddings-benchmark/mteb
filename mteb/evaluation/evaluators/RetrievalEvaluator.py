@@ -98,10 +98,7 @@ class RetrievalEvaluator(Evaluator):
         kwargs = {
             "show_progress_bar": self.show_progress_bar
         } if "show_progress_bar" in inspect.signature(model.encode).parameters else {}
-        query_embeddings = model.encode(self.queries, batch_size=self.batch_size, **kwargs)
-        # Convert to torch tensor
-        query_embeddings = torch.stack([torch.tensor(emb) for emb in query_embeddings])
-
+        query_embeddings = np.asarray(model.encode(self.queries, batch_size=self.batch_size, **kwargs))
         queries_result_list = {}
         for name in self.score_functions:
             queries_result_list[name] = [[] for _ in range(len(query_embeddings))]
@@ -118,12 +115,10 @@ class RetrievalEvaluator(Evaluator):
             # Encode chunk of corpus
             if corpus_embeddings is None:
                 corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(self.corpus))
-                sub_corpus_embeddings = corpus_model.encode(
+                sub_corpus_embeddings = np.asarray(corpus_model.encode(
                     self.corpus[corpus_start_idx:corpus_end_idx],
                     batch_size=self.batch_size,
-                )
-                # Convert to torch tensor
-                sub_corpus_embeddings = torch.stack([torch.tensor(emb) for emb in sub_corpus_embeddings])
+                ))
             else:
                 corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus_embeddings))
                 sub_corpus_embeddings = corpus_embeddings[corpus_start_idx:corpus_end_idx]
