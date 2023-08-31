@@ -133,7 +133,8 @@ class MyModel():
             batch_size (`int`): Batch size for the encoding
 
         Returns:
-            `List[np.ndarray]` or `List[tensor]`: List of embeddings for the given sentences
+            `np.array` or `tensor`: An array/tensor of embeddings for the given sentences.
+            Should have shape `(len(sentences), embedding_size)`
         """
         pass
 
