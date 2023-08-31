@@ -8,7 +8,7 @@ from mteb.evaluation.evaluators import ClusteringEvaluator
 class TestClusteringEvaluator:
     def test_clustering_v_measure(self):
         class Model:
-            def encode(self, sentences: List[str]) -> np.ndarray:
+            def encode(self, sentences: List[str], batch_size=32) -> np.ndarray:
                 return np.eye(len(sentences))
 
         model = Model()
