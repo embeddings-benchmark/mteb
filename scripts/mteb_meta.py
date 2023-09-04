@@ -47,6 +47,13 @@ for file_name in os.listdir(results_folder):
         results = json.load(f)
         all_results = {**all_results, **{file_name.replace(".json", ""): results}}
 
+# Use "train" split instead
+TRAIN_SPLIT = ["DanishPoliticalCommentsClassification"]
+# Use "validation" split instead
+VALIDATION_SPLIT = ["AFQMC", "Cmnli", "IFlyTek", "TNews", "MSMARCO", "MultilingualSentiment", "Ocnli"]
+# Use "dev" split instead
+DEV_SPLIT = ["CmedqaRetrieval", "CovidRetrieval", "DuRetrieval", "EcomRetrieval", "MedicalRetrieval", "MMarcoReranking", "MMarcoRetrieval", "MSMARCO", "T2Reranking", "T2Retrieval", "VideoRetrieval"]
+
 MARKER = "---"
 TAGS = "tags:"
 MTEB_TAG = "- mteb"
@@ -71,9 +78,13 @@ for ds_name, res_dict in sorted(all_results.items()):
     mteb_type = mteb_desc["type"]
     revision = res_dict.get("dataset_revision")  # Okay if it's None
     split = "test"
-    if ds_name == "MSMARCO":
-        split = "dev" if "dev" in res_dict else "validation"
-    if split not in res_dict:
+    if (ds_name in TRAIN_SPLIT) and ("train" in res_dict):
+        split = "train"
+    elif (ds_name in VALIDATION_SPLIT) and ("validation" in res_dict):
+        split = "validation"
+    elif (ds_name in DEV_SPLIT) and ("dev" in res_dict):
+        split = "dev"
+    elif "test" not in res_dict:
         logger.info(f"Skipping {ds_name} as split {split} not present.")
         continue
     res_dict = res_dict.get(split)
