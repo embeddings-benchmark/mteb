@@ -14,7 +14,7 @@ class PatentClassification(AbsTaskClassification):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "accuracy",
-            "revision": "01ab216c0a33cb4163a3ac0f69b9e573017382fd",
+            "revision": "2b7c7dcba3b82373706ca56d1ab5526eb007e2ee",
         }
 
 
