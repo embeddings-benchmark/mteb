@@ -22,3 +22,4 @@ from .ToxicConversationsClassification import *
 from .TweetSentimentExtractionClassification import *
 from .CMTEBClassification import *
 from .PolishClassification import *
+from .LongDocumentClassification import *
