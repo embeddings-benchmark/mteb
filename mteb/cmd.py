@@ -52,6 +52,14 @@ def main():
         default=None,
         help="List of tasks to be evaluated. If specified, the other arguments are ignored.",
     )
+    parser.add_argument(
+        "-l",
+        "--task-langs",
+        nargs="*",
+        type=str,
+        default=None,
+        help="List of languages to be evaluated. if not set, all languages will be evaluated.",
+    )
     parser.add_argument("--device", type=int, default=None, help="Device to use for computation")
     parser.add_argument("--batch_size", type=int, default=32, help="Batch size for computation")
     parser.add_argument("--seed", type=int, default=42, help="Random seed for computation")
