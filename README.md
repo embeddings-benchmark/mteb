@@ -75,7 +75,6 @@ pip install git+https://github.com/NouamaneTazi/beir@nouamane/better-multi-gpu
 torchrun --nproc_per_node=2 scripts/retrieval_multigpu.py
 ```
 
-``
 ## Advanced usage
 
 ### Dataset selection
@@ -84,39 +83,39 @@ Datasets can be selected by providing the list of datasets, but also
 
 * by their task (e.g. "Clustering" or "Classification")
 
-````python
+```python
 evaluation = MTEB(task_types=['Clustering', 'Retrieval']) # Only select clustering and retrieval tasks
-````
+```
 
 * by their categories e.g. "S2S" (sentence to sentence) or "P2P" (paragraph to paragraph)
 
-````python
+```python
 evaluation = MTEB(task_categories=['S2S']) # Only select sentence2sentence datasets
-````
+```
 
 * by their languages
 
-````python
+```python
 evaluation = MTEB(task_langs=["en", "de"]) # Only select datasets which are "en", "de" or "en-de"
-````
+```
 
 You can also specify which languages to load for multilingual/crosslingual tasks like below:
 
-````python
+```python
 from mteb.tasks import AmazonReviewsClassification, BUCCBitextMining
 
 evaluation = MTEB(tasks=[
         AmazonReviewsClassification(langs=["en", "fr"]) # Only load "en" and "fr" subsets of Amazon Reviews
         BUCCBitextMining(langs=["de-en"]), # Only load "de-en" subset of BUCC
 ])
-````
+```
 
 ### Evaluation split
 You can evaluate only on `test` splits of all tasks by doing the following:
 
-````python
+```python
 evaluation.run(model, eval_splits=["test"])
-````
+```
 
 Note that the public leaderboard uses the test splits for all datasets except MSMARCO, where the "dev" split is used.
 
