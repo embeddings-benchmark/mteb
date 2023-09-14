@@ -67,7 +67,7 @@ mteb -m average_word_embeddings_komninos \
     --verbosity 3
 ```
 
-* Multi-GPU evaluation for retrieval tasks (see [scripts/retrieval.slurm](scripts/retrieval.slurm) for multi-node slurm script example)
+* Using multiple GPUs in parallel can be done either by just having a custom encode function that distributes the inputs to multiple GPUs [like e.g. here](https://github.com/microsoft/unilm/blob/b60c741f746877293bb85eed6806736fc8fa0ffd/e5/mteb_eval.py#L60). For retrieval tasks you can also use the below (see [scripts/retrieval.slurm](scripts/retrieval.slurm) for multi-node slurm script example):
 
 ```python
 pip install git+https://github.com/NouamaneTazi/beir@nouamane/better-multi-gpu
