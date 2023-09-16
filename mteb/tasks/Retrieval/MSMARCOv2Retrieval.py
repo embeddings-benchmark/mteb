@@ -12,7 +12,7 @@ class MSMARCOv2(AbsTaskRetrieval, BeIRTask):
             "reference": "https://microsoft.github.io/msmarco/TREC-Deep-Learning.html",
             "type": "Retrieval",
             "category": "s2p",
-            "eval_splits": ["dev1", "dev2"],
+            "eval_splits": ["dev", "dev2"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
         }
