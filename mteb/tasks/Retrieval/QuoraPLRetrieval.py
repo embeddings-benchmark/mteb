@@ -17,6 +17,6 @@ class QuoraPLRetrieval(AbsTaskRetrieval, BeIRPLTask):
             "benchmark": "BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language",
             "category": "s2s",
             "eval_splits": ["validation", "test"],  # validation for new DataLoader
-            "eval_langs": ["en"],
+            "eval_langs": ["pl"],
             "main_score": "ndcg_at_10",
         }

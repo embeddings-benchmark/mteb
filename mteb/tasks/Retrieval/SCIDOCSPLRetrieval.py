@@ -17,6 +17,6 @@ class SCIDOCSPL(AbsTaskRetrieval, BeIRPLTask):
             "type": "Retrieval",
             "category": "s2p",
             "eval_splits": ["test"],
-            "eval_langs": ["en"],
+            "eval_langs": ["pl"],
             "main_score": "ndcg_at_10",
         }
