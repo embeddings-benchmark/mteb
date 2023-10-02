@@ -199,3 +199,14 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+--------------------------------------------------------------------------------
+
+Code in https://github.com/embeddings-benchmark/mteb/tree/main/scripts/run_mteb_peft_model_multigpu.py is adapted from
+
+1. https://github.com/embeddings-benchmark/mteb/blob/main/scripts/retrieval_multigpu.py
+2. https://github.com/UKPLab/sentence-transformers/blob/master/sentence_transformers/SentenceTransformer.py
+3. https://github.com/UKPLab/sentence-transformers/blob/master/sentence_transformers/models/Transformer.py
+4. https://github.com/AI4Finance-Foundation/FinGPT/blob/master/fingpt/FinGPT-v3/training_int4/train.ipynb
+
+Copyright (c) 2023 Yu-Cheng Tsai (Sage, https://www.sage.com/en-us/)
