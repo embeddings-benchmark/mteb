@@ -150,7 +150,10 @@ class RerankingEvaluator(Evaluator):
             docs = positive + negative
             is_relevant = [True] * len(positive) + [False] * len(negative)
 
-            query_emb = np.adsencode_queries_func([query], batch_size=self.batch_size)
+            if isinstance(query, str):
+                # .encoding interface requires List[str] as input
+                query = [query]
+            query_emb = np.asarray(encode_queries_func(query, batch_size=self.batch_size))
             docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
 
             scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
