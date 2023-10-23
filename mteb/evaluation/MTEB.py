@@ -7,7 +7,6 @@ from datetime import datetime
 from time import time
 
 import datasets
-from rich.console import Console
 
 from .. import __version__
 from ..abstasks import *
@@ -102,6 +101,7 @@ class MTEB:
         return
 
     def _display_tasks(self, task_list, name=None):
+        from rich.console import Console
         # disable logging for other ranks
         if int(os.getenv("RANK", 0)) != 0:
             return
