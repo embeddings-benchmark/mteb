@@ -15,3 +15,5 @@ from .TenKGnadClusteringS2S import *
 from .TwentyNewsgroupsClustering import *
 from .CMTEBClustering import *
 from .PolishClustering import *
+from .BigPatentClustering import *
+from .WikiCitiesClustering import *
