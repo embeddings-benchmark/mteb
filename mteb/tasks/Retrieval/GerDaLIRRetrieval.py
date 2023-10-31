@@ -1,13 +1,17 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from ...abstasks.BeIRTask import BeIRTask
 
+import datasets
 
-class SciFact(AbsTaskRetrieval, BeIRTask):
+
+class GerDaLIR(AbsTaskRetrieval):
+    _EVAL_SPLIT = 'test'
+
     @property
     def description(self):
         return {
             "name": "GerDaLIR",
-            "hf_hub_name": "jinaai/gerdalir",
+            "hf_hub_name": "jinaai/ger_da_lir",
             "description": (
                 "GerDaLIR is a legal information retrieval dataset created from the Open Legal Data platform."
             ),
