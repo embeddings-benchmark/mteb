@@ -31,23 +31,20 @@ class WikiCLIRRetrieval(AbsTaskRetrieval):
             return
 
         dataset = ir_datasets.load(self.description['ir_datasets_name'])
-
-        # load first 1k queries
+        # load first 10k queries
         queries = defaultdict(dict)
         for item in dataset.queries_iter():
-            if len(queries) < 1000:
+            if len(queries) < 10_000:
                 queries[item.query_id] = item.first_sent
         # load corpus and qrels
         qrel_dict = defaultdict(dict)
         corpus = {item.doc_id: {'title': item.title, 'text': item.text} for item in dataset.docs_iter()}
-        restricted_corpus = defaultdict(dict)
         for item in dataset.qrels_iter():
             if item.query_id in queries.keys():
                 qrel_dict[item.query_id][item.doc_id] = item.relevance
-                restricted_corpus[item.doc_id] = corpus[item.doc_id]
 
         self.queries = {self._EVAL_SPLIT: queries}
-        self.corpus = {self._EVAL_SPLIT: restricted_corpus}
+        self.corpus = {self._EVAL_SPLIT: corpus}
         self.relevant_docs = {self._EVAL_SPLIT: qrel_dict}
 
         self.data_loaded = True
