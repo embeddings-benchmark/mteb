@@ -17,7 +17,8 @@ class WikiCLIRRetrieval(AbsTaskRetrieval):
             'reference': 'https://ir-datasets.com/wikiclir#wikiclir/de',
             'description': (
                 'A Cross-Language IR (CLIR) collection between English queries and German documents '
-                'built from Wikipedia.'
+                'built from Wikipedia. Queries are limited to the first 10k queries to reduce the '
+                'evaluation time.'
             ),
             'type': 'Retrieval',
             'category': 's2p',
