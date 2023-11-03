@@ -43,3 +43,4 @@ from .GerDaLIRRetrieval import *
 from .GermanDPRRetrieval import *
 from .XMarketRetrieval import *
 from .WikiCLIRRetrieval import *
+from .GerDaLIRRetrieval import *
