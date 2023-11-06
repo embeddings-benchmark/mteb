@@ -17,5 +17,5 @@ class GermanSTSBenchmarkSTS(AbsTaskSTS):
             "main_score": "cosine_spearman",
             "min_score": 0,
             "max_score": 5,
-            "revision": "b0fddb56ed78048fa8b90373c8a3cfc37b684831",
+            "revision": "f760a94d2370c91df8827b6a3622ff7d691f5102",
         }
