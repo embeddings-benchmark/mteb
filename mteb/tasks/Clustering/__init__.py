@@ -6,6 +6,7 @@ from .BlurbsClusteringP2P import *
 from .BlurbsClusteringS2S import *
 from .MedrxivClusteringP2P import *
 from .MedrxivClusteringS2S import *
+from .RedditClustering_Spanish import *
 from .RedditClustering import *
 from .RedditClusteringP2P import *
 from .StackExchangeClustering import *
