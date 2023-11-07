@@ -10,7 +10,7 @@ import datasets
 
 from .. import __version__
 from ..abstasks import *
-from ..abstasks import AbsTask
+from ..abstasks import AbsTask, LangMapping
 from ..tasks import *
 
 logger = logging.getLogger(__name__)
@@ -69,6 +69,8 @@ class MTEB:
         self._task_langs = task_langs if task_langs is not None else []
         if type(self._task_langs) is str:
             self._task_langs = [self._task_langs]
+
+        self._extend_lang_code()
         self._extend_lang_pairs()  # add all possible pairs
 
         self._version = version
@@ -88,6 +90,14 @@ class MTEB:
     def available_task_categories(self):
         return set([x.description["category"] for x in self.tasks_cls])
 
+    def _extend_lang_code(self):
+        # add all possible language codes
+        langs = set(self._task_langs)
+        for lang in langs:
+            if LangMapping.LANG_MAPPING.get(lang) is not None:
+                self._task_langs.append(LangMapping.LANG_MAPPING[lang])
+        return
+    
     def _extend_lang_pairs(self):
         # add all possible language pairs
         langs = set(self._task_langs)
