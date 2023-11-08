@@ -17,5 +17,4 @@ class RedditClustering_Spanish(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["es"],
             "main_score": "v_measure",
-            "revision": "24640382cdbf8abc73003fb0fa6d111a705499eb",
         }

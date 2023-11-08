@@ -2,6 +2,7 @@ from .ArxivClusteringP2P import *
 from .ArxivClusteringS2S import *
 from .BiorxivClusteringP2P import *
 from .BiorxivClusteringS2S import *
+from .BiorxivClusteringS2S_Spanish import * 
 from .BlurbsClusteringP2P import *
 from .BlurbsClusteringS2S import *
 from .MedrxivClusteringP2P import *
