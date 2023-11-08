@@ -19,23 +19,23 @@ alloprof_queries = alloprof_queries[~alloprof_queries["text"].isna()]
 
 # most data flagged as language "en" are actually french. We je remove english ones
 # by matching specifig words
-alloprof_queries = alloprof_queries[~(
-    (alloprof_queries["text"].str.lower().str.startswith("hi"))\
-    | (alloprof_queries["text"].str.lower().str.startswith("hello"))\
-    | (alloprof_queries["text"].str.lower().str.startswith("how"))\
-    | (alloprof_queries["text"].str.lower().str.startswith("i "))\
-        )]
+alloprof_queries = alloprof_queries[
+    ~(
+        (alloprof_queries["text"].str.lower().str.startswith("hi"))
+        | (alloprof_queries["text"].str.lower().str.startswith("hello"))
+        | (alloprof_queries["text"].str.lower().str.startswith("how"))
+        | (alloprof_queries["text"].str.lower().str.startswith("i "))
+    )
+]
 
 # only keep queries with french relevant documents
 alloprof_queries = alloprof_queries[
-    (~alloprof_queries["relevant"].isna())\
-    & (alloprof_queries["relevant"].str.endswith("-fr"))
-    ]
+    (~alloprof_queries["relevant"].isna()) & (alloprof_queries["relevant"].str.endswith("-fr"))
+]
 
 # remove queries with url in text because question relies on picture
-alloprof_queries = alloprof_queries[
-    ~alloprof_queries["text"].str.contains("https://www.alloprof.qc.ca")
-    ]
+alloprof_queries = alloprof_queries[~alloprof_queries["text"].str.contains("https://www.alloprof.qc.ca")]
+
 
 # split multiple relevant docs and remove -fr suffix on id
 def parse_relevant_ids(row):
@@ -43,7 +43,9 @@ def parse_relevant_ids(row):
     row = [r[:-3] for r in row if r.endswith("-fr")]
     return row
 
+
 alloprof_queries["relevant"] = alloprof_queries["relevant"].apply(parse_relevant_ids)
+
 
 # Parse the answer
 def parse_answer(row):
@@ -51,12 +53,13 @@ def parse_answer(row):
         row = json.loads(row)
         text = []
         for i in row:
-            if type(i["insert"])is not dict:
+            if type(i["insert"]) is not dict:
                 text.append(i["insert"])
         text = "".join(text)
     except:
         text = row
     return text.replace("&nbsp;", " ").replace("\u200b", "").replace("\xa0", "")
+
 
 alloprof_queries["answer"] = alloprof_queries["answer"].apply(parse_answer)
 
@@ -72,9 +75,10 @@ alloprof_docs = pd.read_json("alloprof/data/pages/page-content-fr.json")
 # Remove Nans in data
 alloprof_docs = alloprof_docs[~alloprof_docs["data"].isna()]
 
+
 # parse dataset
 def parse_row(row):
-    return [row['file']["uuid"], row['file']["title"], row['file']["topic"]]
+    return [row["file"]["uuid"], row["file"]["title"], row["file"]["topic"]]
 
 
 def get_text(row):
@@ -88,12 +92,13 @@ def get_text(row):
                             text.append(sm["text"])
             elif m["type"] == "text":
                 text.append(m["text"])
-    text = ' '.join(text)
-    text = re.sub('<[^<]+?>', '', text)
+    text = " ".join(text)
+    text = re.sub("<[^<]+?>", "", text)
     text = text.replace("&nbsp;", " ").replace("\u200b", "")
-    text = re.sub('\s{2,}', ' ', text)
+    text = re.sub("\s{2,}", " ", text)
 
     return text
+
 
 parsed_df = alloprof_docs["data"].apply(parse_row)
 alloprof_docs[["uuid", "title", "topic"]] = parsed_df.tolist()
@@ -108,9 +113,10 @@ alloprof_docs = alloprof_docs[["uuid", "title", "topic", "text"]]
 
 # check that all relevant docs mentioned in queries are in docs dataset
 relevants = alloprof_queries["relevant"].tolist()
-relevants = {i for j in relevants for i in j} # flatten list and get uniques
-assert relevants.issubset(alloprof_docs["uuid"].tolist()),\
-"Some relevant document of queries are not present in the corpus"
+relevants = {i for j in relevants for i in j}  # flatten list and get uniques
+assert relevants.issubset(
+    alloprof_docs["uuid"].tolist()
+), "Some relevant document of queries are not present in the corpus"
 
 # create HF repo
 repo_id = "lyon-nlp/alloprof"
@@ -126,15 +132,5 @@ except HfHubHTTPError as e:
 alloprof_queries.to_json("queries.json", orient="records")
 alloprof_docs.to_json("documents.json", orient="records")
 
-upload_file(
-    path_or_fileobj="queries.json",
-    path_in_repo="queries.json",
-    repo_id=repo_id,
-    repo_type="dataset"
-)
-upload_file(
-    path_or_fileobj="documents.json",
-    path_in_repo="documents.json",
-    repo_id=repo_id,
-    repo_type="dataset"
-)
+upload_file(path_or_fileobj="queries.json", path_in_repo="queries.json", repo_id=repo_id, repo_type="dataset")
+upload_file(path_or_fileobj="documents.json", path_in_repo="documents.json", repo_id=repo_id, repo_type="dataset")
