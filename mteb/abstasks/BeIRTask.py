@@ -20,18 +20,16 @@ class BeIRTask(AbsTask):
         except ImportError:
             raise Exception("Retrieval tasks require beir package. Please install it with `pip install mteb[beir]`")
 
-        USE_HF_DATASETS = False
+        
 
         # TODO @nouamane: move non-distributed to `HFDataLoader`
-        if os.getenv("RANK", None) is not None:
-            if self.description["beir_name"].startswith("cqadupstack"):
-                raise ImportError("CQADupstack is incompatible with BEIR's HFDataLoader in a distributed setting")
-            from beir.datasets.data_loader_hf import HFDataLoader 
-            logger.info("Using HFDataLoader for BeIR")
-            USE_HF_DATASETS = True
-        else:
-            from beir.datasets.data_loader import GenericDataLoader 
-            logger.info("Using GenericDataLoader for BeIR")
+        
+        from .dataloader import HFDataLoader
+        logger.info("Using HFDataLoader for BeIR")
+        USE_HF_DATASETS = True
+
+        from beir.datasets.data_loader import GenericDataLoader
+       
 
         if self.data_loaded:
             return
@@ -40,11 +38,13 @@ class BeIRTask(AbsTask):
         dataset = self.description["beir_name"]
         dataset, sub_dataset = dataset.split("/") if "cqadupstack" in dataset else (dataset, None)
 
+        
+
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         for split in eval_splits:
             if USE_HF_DATASETS:
                 self.corpus[split], self.queries[split], self.relevant_docs[split] = HFDataLoader(
-                    hf_repo=f"BeIR/{dataset}"
+                    hf_repo=f"Santiclibrain/{dataset}"
                 ).load(split=split)
             else:
                 url = f"https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/{dataset}.zip"

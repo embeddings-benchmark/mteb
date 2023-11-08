@@ -45,7 +45,8 @@ class AbsTaskRetrieval(AbsTask):
             from beir.retrieval.evaluation import EvaluateRetrieval
         except ImportError:
             raise Exception("Retrieval tasks require beir package. Please install it with `pip install mteb[beir]`")
-
+        
+    
         if not self.data_loaded:
             self.load_data()
 
