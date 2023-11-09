@@ -1,7 +1,3 @@
-from collections import defaultdict
-
-import datasets
-
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 
 
