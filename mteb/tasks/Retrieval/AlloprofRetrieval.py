@@ -21,7 +21,7 @@ class AlloprofRetrieval(AbsTaskRetrieval):
             "eval_langs": ["fr"],
             "main_score": "ndcg_at_10",
         }
-    
+
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -36,14 +36,14 @@ class AlloprofRetrieval(AbsTaskRetrieval):
                 in queries_raw["queries"]
                 }
             }
-        
+
         self.corpus = {
             "test": {
                 str(d["uuid"]):{"text":d["text"]} for d
                 in corpus_raw["documents"]
                 }
             }
-        
+
         self.relevant_docs = {"test": {}}
         for q in queries_raw["queries"]:
             for r in q["relevant"]:
