@@ -4,6 +4,7 @@ from .BiorxivClusteringP2P import *
 from .BiorxivClusteringS2S import *
 from .BlurbsClusteringP2P import *
 from .BlurbsClusteringS2S import *
+from .HALClusteringS2S import *
 from .MedrxivClusteringP2P import *
 from .MedrxivClusteringS2S import *
 from .RedditClustering import *

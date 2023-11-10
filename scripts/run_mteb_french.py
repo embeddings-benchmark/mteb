@@ -2,8 +2,9 @@
 
 import logging
 
-from mteb import MTEB
 from sentence_transformers import SentenceTransformer
+
+from mteb import MTEB
 
 logging.basicConfig(level=logging.INFO)
 
@@ -18,7 +19,9 @@ TASK_LIST_CLASSIFICATION = [
     "MTOPIntentClassification",
 ]
 
-TASK_LIST_CLUSTERING = []
+TASK_LIST_CLUSTERING = [
+    "HALClusteringS2S"
+]
 
 TASK_LIST_PAIR_CLASSIFICATION = [
     "OpusparcusPC",
