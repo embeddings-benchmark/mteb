@@ -28,7 +28,8 @@ TASK_LIST_PAIR_CLASSIFICATION = [
 TASK_LIST_RERANKING = []
 
 TASK_LIST_RETRIEVAL = [
-    "AlloprofRetrieval"
+    "AlloprofRetrieval",
+    "BSARDRetrieval"
 ]
 
 TASK_LIST_STS = []
