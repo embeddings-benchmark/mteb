@@ -1,19 +1,14 @@
-from mteb import AbsTaskRetrieval
-from mteb import BeIRTask
-
-
 import datasets
-from mteb import AbsTaskRetrieval
+
+from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class Alloprof(AbsTaskRetrieval):
-
-    _EVAL_SPLIT = 'test'
+class AlloprofRetrieval(AbsTaskRetrieval):
 
     @property
     def description(self):
         return {
-            'name': 'Alloprof',
+            'name': 'AlloprofRetrieval',
             'hf_hub_name': 'lyon-nlp/alloprof',
             'reference': 'https://huggingface.co/datasets/antoinelb7/alloprof',
             "description": (
@@ -52,6 +47,6 @@ class Alloprof(AbsTaskRetrieval):
         self.relevant_docs = {"test": {}}
         for q in queries_raw["queries"]:
             for r in q["relevant"]:
-                self.relevant_docs["test"][q["id"]] = {r:1}
+                self.relevant_docs["test"][str(q["id"])] = {r:1}
 
         self.data_loaded = True
