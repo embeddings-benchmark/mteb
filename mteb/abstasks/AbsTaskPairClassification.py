@@ -4,6 +4,8 @@ from collections import defaultdict
 from ..evaluation.evaluators import PairClassificationEvaluator
 from .AbsTask import AbsTask
 
+logger = logging.getLogger(__name__)
+
 
 class AbsTaskPairClassification(AbsTask):
     """
@@ -19,9 +21,20 @@ class AbsTaskPairClassification(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
-        data_split = self.dataset[split][0]
+        if self.is_multilingual:
+            scores = {}
+            for lang in self.dataset:
+                logger.info(f"\nTask: {self.description['name']}, split: {split}, language: {lang}. Running...")
+                scores[lang] = self._evaluate_monolingual(model, self.dataset[lang], split, **kwargs)
+        else:
+            logger.info(f"\nTask: {self.description['name']}, split: {split}. Running...")
+            scores = self._evaluate_monolingual(model, self.dataset, split, **kwargs)
 
-        logging.getLogger("sentence_transformers.evaluation.PairClassificationEvaluator").setLevel(logging.WARN)
+        return scores
+
+    def _evaluate_monolingual(self, model, dataset, split, **kwargs):
+        data_split = dataset[split][0]
+        scores = []
         evaluator = PairClassificationEvaluator(
             data_split["sent1"], data_split["sent2"], data_split["labels"], **kwargs
         )

@@ -18,20 +18,17 @@ TASK_LIST_CLASSIFICATION = [
     "MTOPIntentClassification",
 ]
 
-TASK_LIST_CLUSTERING = [
-]
+TASK_LIST_CLUSTERING = []
 
 TASK_LIST_PAIR_CLASSIFICATION = [
+    "OpusparcusPC",
 ]
 
-TASK_LIST_RERANKING = [
-]
+TASK_LIST_RERANKING = []
 
-TASK_LIST_RETRIEVAL = [
-]
+TASK_LIST_RETRIEVAL = []
 
-TASK_LIST_STS = [
-]
+TASK_LIST_STS = []
 
 TASK_LIST = (
     TASK_LIST_CLASSIFICATION
@@ -47,6 +44,5 @@ model = SentenceTransformer(model_name)
 logger.info(f"Task list : {TASK_LIST}")
 for task in TASK_LIST:
     logger.info(f"Running task: {task}")
-    eval_splits = ["dev"] if task == "MSMARCO" else ["test"]
     evaluation = MTEB(tasks=[task], task_langs=["fr"])  # Remove "fr" for running all languages
-    evaluation.run(model, output_folder=f"results/{model_name}", eval_splits=eval_splits)
+    evaluation.run(model, output_folder=f"results/{model_name}")
