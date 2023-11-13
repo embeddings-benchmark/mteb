@@ -40,3 +40,4 @@ from .TRECCOVIDPLRetrieval import *
 from .NarrativeQARetrieval import *
 from .AlloprofRetrieval import *
 from .BSARDRetrieval import *
+from .HagridRetrieval import *
