@@ -19,9 +19,7 @@ TASK_LIST_CLASSIFICATION = [
     "MTOPIntentClassification",
 ]
 
-TASK_LIST_CLUSTERING = [
-    "HALClusteringS2S"
-]
+TASK_LIST_CLUSTERING = ["HALClusteringS2S"]
 
 TASK_LIST_PAIR_CLASSIFICATION = [
     "OpusparcusPC",
@@ -33,6 +31,12 @@ TASK_LIST_RETRIEVAL = []
 
 TASK_LIST_STS = []
 
+TAKS_LIST_BITEXTMINING = [
+    "DiaBLaBitextMining",
+    "FloresBitextMining",
+]
+
+
 TASK_LIST = (
     TASK_LIST_CLASSIFICATION
     + TASK_LIST_CLUSTERING
@@ -40,6 +44,7 @@ TASK_LIST = (
     + TASK_LIST_RERANKING
     + TASK_LIST_RETRIEVAL
     + TASK_LIST_STS
+    + TAKS_LIST_BITEXTMINING
 )
 
 model_name = "dangvantuan/sentence-camembert-base"
