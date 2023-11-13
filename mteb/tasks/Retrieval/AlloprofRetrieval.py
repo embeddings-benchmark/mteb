@@ -22,6 +22,7 @@ class AlloprofRetrieval(AbsTaskRetrieval):
             "main_score": "ndcg_at_10",
         }
 
+
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
@@ -35,6 +36,7 @@ class AlloprofRetrieval(AbsTaskRetrieval):
                 in queries_raw["queries"]
                 }
             }
+
         self.corpus = {
             "test": {
                 str(d["uuid"]):{"text":d["text"]} for d
