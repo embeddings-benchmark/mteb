@@ -29,10 +29,10 @@ models = ["TaylorAI/gte-tiny"]
 log_into_huggingface_hub()
 for model_name in models:
     model = SentenceTransformer(model_name)
-    evaluation = MTEB(task_langs=["es"])
-    # evaluation = MTEB(tasks=[
-    #         ArguAna(langs=["en"])
-    # ])
-    evaluation.run(model, output_folder=f"../add_new_model/results/{model_name}", eval_splits=["test"])
+    # evaluation = MTEB(task_langs=["es"])
+    evaluation = MTEB(tasks=[
+            ArguAna(langs=["en"])
+    ])
+    evaluation.run(model, output_folder=f"./results/{model_name}", eval_splits=["test"])
 
     

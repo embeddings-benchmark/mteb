@@ -44,7 +44,7 @@ class BeIRTask(AbsTask):
         for split in eval_splits:
             if USE_HF_DATASETS:
                 self.corpus[split], self.queries[split], self.relevant_docs[split] = HFDataLoader(
-                    hf_repo=f"Santiclibrain/{dataset}"
+                    hf_repo=f"BeIR/{dataset}"
                 ).load(split=split)
             else:
                 url = f"https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/{dataset}.zip"
