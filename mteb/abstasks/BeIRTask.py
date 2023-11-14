@@ -20,17 +20,14 @@ class BeIRTask(AbsTask):
         except ImportError:
             raise Exception("Retrieval tasks require beir package. Please install it with `pip install mteb[beir]`")
 
-        
-
         # TODO @nouamane: move non-distributed to `HFDataLoader`
         
         from .dataloader import HFDataLoader
         logger.info("Using HFDataLoader for BeIR")
-        USE_HF_DATASETS = True
+        USE_HF_DATASETS = False
 
         from beir.datasets.data_loader import GenericDataLoader
        
-
         if self.data_loaded:
             return
         if eval_splits is None:
