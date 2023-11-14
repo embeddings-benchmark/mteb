@@ -1,3 +1,5 @@
+from .AlloProfClusteringP2P import *
+from .AlloProfClusteringS2S import *
 from .ArxivClusteringP2P import *
 from .ArxivClusteringS2S import *
 from .BiorxivClusteringP2P import *

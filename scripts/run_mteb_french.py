@@ -19,7 +19,11 @@ TASK_LIST_CLASSIFICATION = [
     "MTOPIntentClassification",
 ]
 
-TASK_LIST_CLUSTERING = ["HALClusteringS2S"]
+TASK_LIST_CLUSTERING = [
+    "AlloProfClusteringP2P",
+    "AlloProfClusteringS2S",
+    "HALClusteringS2S",
+]
 
 TASK_LIST_PAIR_CLASSIFICATION = [
     "OpusparcusPC",
