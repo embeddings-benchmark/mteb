@@ -4,6 +4,8 @@ from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class AlloprofRetrieval(AbsTaskRetrieval):
+    _EVAL_SPLITS = ["test"]
+
     @property
     def description(self):
         return {
@@ -16,7 +18,7 @@ class AlloprofRetrieval(AbsTaskRetrieval):
             ),
             "type": "Retrieval",
             "category": "s2p",
-            "eval_splits": ["test"],
+            "eval_splits": self._EVAL_SPLITS,
             "eval_langs": ["fr"],
             "main_score": "ndcg_at_10",
             "revision": "3e394f99549416c102c44af9b38460d0d07fa10f",
@@ -29,12 +31,12 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         corpus_raw = datasets.load_dataset(self.description["hf_hub_name"], "documents")
         queries_raw = datasets.load_dataset(self.description["hf_hub_name"], "queries")
 
-        self.queries = {"test": {str(q["id"]): q["text"] for q in queries_raw["queries"]}}
-        self.corpus = {"test": {str(d["uuid"]): {"text": d["text"]} for d in corpus_raw["documents"]}}
+        self.queries = {self._EVAL_SPLITS[0]: {str(q["id"]): q["text"] for q in queries_raw["queries"]}}
+        self.corpus = {self._EVAL_SPLITS[0]: {str(d["uuid"]): {"text": d["text"]} for d in corpus_raw["documents"]}}
 
-        self.relevant_docs = {"test": {}}
+        self.relevant_docs = {self._EVAL_SPLITS[0]: {}}
         for q in queries_raw["queries"]:
             for r in q["relevant"]:
-                self.relevant_docs["test"][str(q["id"])] = {r: 1}
+                self.relevant_docs[self._EVAL_SPLITS[0]][str(q["id"])] = {r: 1}
 
         self.data_loaded = True
