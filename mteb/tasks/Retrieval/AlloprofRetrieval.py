@@ -19,6 +19,7 @@ class AlloprofRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["fr"],
             "main_score": "ndcg_at_10",
+            "revision": "3e394f99549416c102c44af9b38460d0d07fa10f",
         }
 
     def load_data(self, **kwargs):
