@@ -20,6 +20,7 @@ class AlloprofRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["fr"],
             "main_score": "ndcg_at_10",
+            "revision": "3e394f99549416c102c44af9b38460d0d07fa10f", 
         }
 
 
@@ -27,8 +28,16 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
         # fetch both subsets of the dataset
-        corpus_raw = datasets.load_dataset(self.description['hf_hub_name'], "documents")
-        queries_raw = datasets.load_dataset(self.description['hf_hub_name'], "queries")
+        corpus_raw = datasets.load_dataset(
+            self.description['hf_hub_name'],
+            "documents",
+            revision=self.description.get("revision", None)
+            )
+        queries_raw = datasets.load_dataset(
+            self.description['hf_hub_name'],
+            "queries",
+            revision=self.description.get("revision", None)
+            )
 
         self.queries = {
             "test": {
