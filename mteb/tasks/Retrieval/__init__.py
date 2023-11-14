@@ -1,4 +1,6 @@
 from .ArguAnaRetrieval import *
+from .AlloprofRetrieval import *
+from .BSARDRetrieval import *
 from .ClimateFEVERRetrieval import *
 from .CQADupstackAndroidRetrieval import *
 from .CQADupstackEnglishRetrieval import *
@@ -15,9 +17,11 @@ from .CQADupstackWordpressRetrieval import *
 from .DBPediaRetrieval import *
 from .FEVERRetrieval import *
 from .FiQA2018Retrieval import *
+from .HagridRetrieval import *
 from .HotpotQARetrieval import *
 from .MSMARCORetrieval import *
 from .MSMARCOv2Retrieval import *
+from .NarrativeQARetrieval import *
 from .NFCorpusRetrieval import *
 from .NQRetrieval import *
 from .QuoraRetrieval import *
@@ -37,7 +41,3 @@ from .QuoraPLRetrieval import *
 from .SCIDOCSPLRetrieval import *
 from .SciFactPLRetrieval import *
 from .TRECCOVIDPLRetrieval import *
-from .NarrativeQARetrieval import *
-from .AlloprofRetrieval import *
-from .BSARDRetrieval import *
-from .HagridRetrieval import *
