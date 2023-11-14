@@ -25,6 +25,7 @@ class BSARDRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["fr"],
             "main_score": "ndcg_at_10",
+            "revision": "5effa1b9b5fa3b0f9e12523e6e43e5f86a6e6d59"
         }
 
 
@@ -33,10 +34,16 @@ class BSARDRetrieval(AbsTaskRetrieval):
             return
         # fetch both subsets of the dataset, only test split
         corpus_raw = datasets.load_dataset(
-            self.description['hf_hub_name'], "corpus", split="corpus"
+            self.description['hf_hub_name'],
+            "corpus",
+            split="corpus",
+            revision=self.description.get("revision", None)
             )
         queries_raw = datasets.load_dataset(
-            self.description['hf_hub_name'], "questions", split=self._EVAL_SPLIT
+            self.description['hf_hub_name'],
+            "questions",
+            split=self._EVAL_SPLIT,
+            revision=self.description.get("revision", None)
             )
 
         self.queries = {
