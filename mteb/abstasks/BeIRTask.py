@@ -22,20 +22,16 @@ class BeIRTask(AbsTask):
 
         # TODO @nouamane: move non-distributed to `HFDataLoader`
         
-        from .dataloader import HFDataLoader
-        logger.info("Using HFDataLoader for BeIR")
+        from .dataloader import HFDataLoader, GenericDataLoader
+        #logger.info("Using HFDataLoader for BeIR")
         USE_HF_DATASETS = False
 
-        from beir.datasets.data_loader import GenericDataLoader
-       
         if self.data_loaded:
             return
         if eval_splits is None:
             eval_splits = self.description["eval_splits"]
         dataset = self.description["beir_name"]
         dataset, sub_dataset = dataset.split("/") if "cqadupstack" in dataset else (dataset, None)
-
-        
 
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         for split in eval_splits:
@@ -45,10 +41,16 @@ class BeIRTask(AbsTask):
                 ).load(split=split)
             else:
                 url = f"https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/{dataset}.zip"
-                download_path = os.path.join(datasets.config.HF_DATASETS_CACHE, "BeIR")
-                data_path = util.download_and_unzip(url, download_path)
-                data_path = f"{data_path}/{sub_dataset}" if sub_dataset else data_path
-                self.corpus[split], self.queries[split], self.relevant_docs[split] = GenericDataLoader(
-                    data_folder=data_path
-                ).load(split=split)
+                download_path = os.path.join(datasets.config.HF_DATASETS_CACHE, "BeIR") 
+                
+                if dataset == "arguana":
+                    self.corpus[split], self.queries[split], self.relevant_docs[split] = GenericDataLoader(corpus_file="mteb/abstasks/data_retrieval/corpus_arguana.jsonl",query_file="mteb/abstasks/data_retrieval/queries_arguana.jsonl",
+                        qrels_folder=f"{download_path}/arguana/qrels"
+                    ).load(split=split)
+                elif dataset == "scidocs":
+                    self.corpus[split], self.queries[split], self.relevant_docs[split] = GenericDataLoader(corpus_file="mteb/abstasks/data_retrieval/corpus_scidocs.jsonl",query_file="mteb/abstasks/data_retrieval/corpus_scidocs.jsonl",
+                        qrels_folder=f"{download_path}/scidocs/qrels"
+                    ).load(split=split)
+                    
+                    
         self.data_loaded = True

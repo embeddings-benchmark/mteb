@@ -75,10 +75,9 @@ class AbsTaskRetrieval(AbsTask):
                 **kwargs,
             )
 
-
-
         retriever = EvaluateRetrieval(model, score_function=score_function)  # or "cos_sim" or "dot"
         start_time = time()
+        print('I AM GOING TO RETRIEVE')
         results = retriever.retrieve(corpus, queries)
         end_time = time()
         logger.info("Time taken to retrieve: {:.2f} seconds".format(end_time - start_time))

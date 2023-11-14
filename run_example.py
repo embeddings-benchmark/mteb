@@ -1,6 +1,7 @@
 """Example script for benchmarking all datasets constituting the MTEB English leaderboard & average scores"""
 
 import logging
+import os
 
 from mteb.evaluation.MTEB import MTEB
 from sentence_transformers import SentenceTransformer
@@ -28,7 +29,7 @@ logger = logging.getLogger("main")
 models = ["TaylorAI/gte-tiny"]
 log_into_huggingface_hub()
 for model_name in models:
-    model = SentenceTransformer(model_name)
+    model = SentenceTransformer(model_name, device="cpu")
     # evaluation = MTEB(task_langs=["es"])
     evaluation = MTEB(tasks=[
             ArguAna(langs=["en"])
