@@ -5,7 +5,7 @@ import os
 
 from mteb.evaluation.MTEB import MTEB
 from sentence_transformers import SentenceTransformer
-from mteb.tasks import  ArguAna, FEVER, SCIDOCS
+from mteb.tasks import  ArguAna, SCIDOCS
 import huggingface_hub
 
 def log_into_huggingface_hub() -> None:
@@ -26,14 +26,14 @@ logging.basicConfig(level=logging.INFO)
 
 logger = logging.getLogger("main")
 
-models = ["TaylorAI/gte-tiny"]
+models = ["BAAI/bge-small-en-v1.5"]
 log_into_huggingface_hub()
 for model_name in models:
     model = SentenceTransformer(model_name, device="cpu")
-    # evaluation = MTEB(task_langs=["es"])
-    evaluation = MTEB(tasks=[
-            ArguAna(langs=["en"])
-    ])
+    evaluation = MTEB(task_langs=["es"])
+    # evaluation = MTEB(tasks=[
+    #         SCIDOCS(langs=["en"])
+    # ])
     evaluation.run(model, output_folder=f"./results/{model_name}", eval_splits=["test"])
 
     

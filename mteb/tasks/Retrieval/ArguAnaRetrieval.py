@@ -13,6 +13,6 @@ class ArguAna(AbsTaskRetrieval, BeIRTask):
             "type": "Retrieval",
             "category": "p2p",
             "eval_splits": ["test"],
-            "eval_langs": ["en"],
+            "eval_langs": ["es"],
             "main_score": "ndcg_at_10",
         }
