@@ -1,4 +1,6 @@
 from .BiossesSTS import *
+from .CMTEBSTS import *
+from .PolishSTS import *
 from .SickrSTS import *
 from .STS12STS import *
 from .STS13STS import *
@@ -8,5 +10,3 @@ from .STS16STS import *
 from .STS17CrosslingualSTS import *
 from .STS22CrosslingualSTS import *
 from .STSBenchmarkSTS import *
-from .CMTEBSTS import *
-from .PolishSTS import *
