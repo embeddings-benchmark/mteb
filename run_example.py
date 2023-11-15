@@ -26,10 +26,10 @@ logging.basicConfig(level=logging.INFO)
 
 logger = logging.getLogger("main")
 
-models = ["BAAI/bge-small-en-v1.5"]
+models = ["intfloat/e5-large-v2"]
 log_into_huggingface_hub()
 for model_name in models:
-    model = SentenceTransformer(model_name, device="cpu")
+    model = SentenceTransformer(model_name, device="cuda")
     evaluation = MTEB(task_langs=["es"])
     # evaluation = MTEB(tasks=[
     #         SCIDOCS(langs=["en"])
