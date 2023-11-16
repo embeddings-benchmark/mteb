@@ -89,11 +89,11 @@ def main(results_folder):
                         # 3) It's accepted practice (SuperGLUE, GLUE are 0-100)
                         sub_score * 100,
                     )
-
+    
     META_STRING += "\n" + MARKER
     if os.path.exists(f"./mteb_metadata.yaml"):
         logger.warning("Overwriting mteb_metadata.md")
-    with open(f"./mteb_metadata.yaml", "w") as f:
+    with open(f"./mteb_metadata_{model_name}.yaml", "w") as f:
         f.write(META_STRING)
 
 
