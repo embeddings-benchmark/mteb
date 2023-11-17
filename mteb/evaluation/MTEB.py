@@ -258,7 +258,7 @@ class MTEB:
 
                 # load data
                 logger.info(f"Loading dataset for {task.description['name']}")
-                task.load_data(eval_splits=task_eval_splits)
+                task.load_data(eval_splits=task_eval_splits, **kwargs)
 
                 # run evaluation
                 task_results = {
