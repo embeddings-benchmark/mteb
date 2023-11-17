@@ -11,7 +11,7 @@ class BeIRTask(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def load_data(self, eval_splits=None, **kwargs):
+    def load_data(self, eval_splits=None, parallel_retrieval=False, **kwargs):
         """
         Load dataset from BeIR benchmark. TODO: replace with HF hub once datasets are moved there
         """
@@ -23,7 +23,7 @@ class BeIRTask(AbsTask):
         USE_HF_DATASETS = False
 
         # TODO @nouamane: move non-distributed to `HFDataLoader`
-        if os.getenv("RANK", None) is not None:
+        if parallel_retrieval:
             if self.description["beir_name"].startswith("cqadupstack"):
                 raise ImportError("CQADupstack is incompatible with BEIR's HFDataLoader in a distributed setting")
             from beir.datasets.data_loader_hf import HFDataLoader 

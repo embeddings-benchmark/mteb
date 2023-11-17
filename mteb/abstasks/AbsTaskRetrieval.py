@@ -40,6 +40,7 @@ class AbsTaskRetrieval(AbsTask):
         batch_size=128,
         corpus_chunk_size=None,
         score_function="cos_sim",
+        parallel_retrieval=False,
         **kwargs
     ):
         try:
@@ -48,12 +49,13 @@ class AbsTaskRetrieval(AbsTask):
             raise Exception("Retrieval tasks require beir package. Please install it with `pip install mteb[beir]`")
 
         if not self.data_loaded:
-            self.load_data()
+            print("Bla", parallel_retrieval)
+            self.load_data(parallel_retrieval=parallel_retrieval)
 
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
         model = model if self.is_dres_compatible(model) else DRESModel(model)
 
-        if os.getenv("RANK", None) is None:
+        if not parallel_retrieval:
             # Non-distributed
             from beir.retrieval.search.dense import DenseRetrievalExactSearch as DRES
             model = DRES(
