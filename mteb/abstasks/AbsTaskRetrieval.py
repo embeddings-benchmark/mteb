@@ -48,7 +48,6 @@ class AbsTaskRetrieval(AbsTask):
             raise Exception("Retrieval tasks require beir package. Please install it with `pip install mteb[beir]`")
 
         if not self.data_loaded:
-            print("Bla", parallel_retrieval)
             self.load_data(parallel_retrieval=parallel_retrieval)
 
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
