@@ -23,6 +23,8 @@ TASK_LIST_CLUSTERING = [
     "AlloProfClusteringP2P",
     "AlloProfClusteringS2S",
     "HALClusteringS2S",
+    "MasakhaneClusteringP2P",
+    "MasakhaneClusteringS2S",
     "MLSUMClusteringP2P",
     "MLSUMClusteringS2S",
 ]
