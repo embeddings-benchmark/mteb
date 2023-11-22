@@ -3,6 +3,7 @@ import numpy as np
 
 from ...abstasks.AbsTaskClustering import AbsTaskClustering
 
+
 class AlloProfClusteringS2S(AbsTaskClustering):
     @property
     def description(self):
@@ -49,4 +50,3 @@ class AlloProfClusteringS2S(AbsTaskClustering):
         }
         self.dataset["test"] = datasets.Dataset.from_dict(new_format)
         self.dataset.pop("documents")
-        

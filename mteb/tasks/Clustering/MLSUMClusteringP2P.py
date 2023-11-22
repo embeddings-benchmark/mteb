@@ -4,22 +4,22 @@ import numpy as np
 from ...abstasks.AbsTaskClustering import AbsTaskClustering
 
 
-class AlloProfClusteringP2P(AbsTaskClustering):
+class MLSUMClusteringP2P(AbsTaskClustering):
     @property
     def description(self):
         return {
-            "name": "AlloProfClusteringP2P",
-            "hf_hub_name": "lyon-nlp/alloprof",
+            "name": "MLSUMClusteringP2P",
+            "hf_hub_name": "mlsum",
             "description": (
-                "Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic."
+                "Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics."
             ),
-            "reference": "https://huggingface.co/datasets/lyon-nlp/alloprof",
+            "reference": "https://huggingface.co/datasets/mlsum",
             "type": "Clustering",
             "category": "p2p",
             "eval_splits": ["test"],
             "eval_langs": ["fr"],
             "main_score": "v_measure",
-            "revision": "3e394f99549416c102c44af9b38460d0d07fa10f",
+            "revision": "b5d54f8f3b61ae17845046286940f03c6bc79bc7",
         }
 
     def load_data(self, **kwargs):
@@ -28,10 +28,9 @@ class AlloProfClusteringP2P(AbsTaskClustering):
         """
         if self.data_loaded:
             return
-
         self.dataset = datasets.load_dataset(
             self.description["hf_hub_name"],
-            "documents",
+            "fr",
             revision=self.description.get("revision", None),
         )
         self.dataset_transform()
@@ -45,13 +44,17 @@ class AlloProfClusteringP2P(AbsTaskClustering):
         """
         Convert to standard format
         """
-        self.dataset = self.dataset.remove_columns("uuid")
+        self.dataset.pop("train")
+        self.dataset.pop("validation")
+        self.dataset = self.dataset.remove_columns("summary")
+        self.dataset = self.dataset.remove_columns("url")
+        self.dataset = self.dataset.remove_columns("date")
         self.dataset = self.dataset.map(self.create_description)
-        texts = self.dataset["documents"]["text"]
-        topics = self.dataset["documents"]["topic"]
+        self.dataset = self.dataset.remove_columns("title")
+        texts = self.dataset["test"]["text"]
+        topics = self.dataset["test"]["topic"]
         new_format = {
             "sentences": [split.tolist() for split in np.array_split(texts, 10)],
             "labels": [split.tolist() for split in np.array_split(topics, 10)],
         }
         self.dataset["test"] = datasets.Dataset.from_dict(new_format)
-        self.dataset.pop("documents")
