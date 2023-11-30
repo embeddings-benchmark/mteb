@@ -31,6 +31,7 @@ class MLSUMClusteringP2P(AbsTaskClustering):
         self.dataset = datasets.load_dataset(
             self.description["hf_hub_name"],
             "fr",
+            split=self.description["eval_splits"][0],
             revision=self.description.get("revision", None),
         )
         self.dataset_transform()
@@ -44,17 +45,15 @@ class MLSUMClusteringP2P(AbsTaskClustering):
         """
         Convert to standard format
         """
-        self.dataset.pop("train")
-        self.dataset.pop("validation")
         self.dataset = self.dataset.remove_columns("summary")
         self.dataset = self.dataset.remove_columns("url")
         self.dataset = self.dataset.remove_columns("date")
         self.dataset = self.dataset.map(self.create_description)
         self.dataset = self.dataset.remove_columns("title")
-        texts = self.dataset["test"]["text"]
-        topics = self.dataset["test"]["topic"]
+        texts = self.dataset["text"]
+        topics = self.dataset["topic"]
         new_format = {
             "sentences": [split.tolist() for split in np.array_split(texts, 10)],
             "labels": [split.tolist() for split in np.array_split(topics, 10)],
         }
-        self.dataset["test"] = datasets.Dataset.from_dict(new_format)
+        self.dataset = {self.description["eval_splits"][0]: datasets.Dataset.from_dict(new_format)}
