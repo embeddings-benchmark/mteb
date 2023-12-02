@@ -36,7 +36,7 @@ NOAVG_KEYS = [
 
 results_folder = sys.argv[1]
 # Ensure at least 1 character btw CQADupstack & Retrieval
-files = glob.glob(f'{results_folder.strip("/")}/CQADupstack*?*Retrieval.json')
+files = glob.glob(f'{results_folder.rstrip("/")}/CQADupstack*?*Retrieval.json')
 
 logger.info(f"Found CQADupstack files: {files}")
 
