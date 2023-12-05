@@ -11,7 +11,7 @@ class DiaBLaBitextMining(AbsTaskBitextMining):
             "hf_hub_name": "rbawden/DiaBLa",
             "description": (
                 "English-French Parallel Corpus. "
-                + "DiaBLa is an Englis-French dataset for the evaluation of Machine Translation (MT) for informal,"
+                + "DiaBLa is an English-French dataset for the evaluation of Machine Translation (MT) for informal,"
                 " written bilingual dialogue."
             ),
             "reference": "https://inria.hal.science/hal-03021633",
