@@ -1,14 +1,30 @@
 from ...abstasks import AbsTaskClassification, MultilingualTask
 
-_LANGUAGES = ["amh", "eng", "fra", "hau", "ibo", "lin", "lug", "orm", "pcm", "run", "sna", "som", "swa", "tir", "xho", "yor"
+_LANGUAGES = [
+    "amh",
+    "eng",
+    "fra",
+    "hau",
+    "ibo",
+    "lin",
+    "lug",
+    "orm",
+    "pcm",
+    "run",
+    "sna",
+    "som",
+    "swa",
+    "tir",
+    "xho",
+    "yor",
 ]
 
 
-class MasakhaneClassification(MultilingualTask, AbsTaskClassification):
+class MasakhaNEWSClassification(MultilingualTask, AbsTaskClassification):
     @property
     def description(self):
         return {
-            "name": "MasakhaneClassification",
+            "name": "MasakhaNEWSClassification",
             "hf_hub_name": "masakhane/masakhanews",
             "description": (
                 "MasakhaNEWS is the largest publicly available dataset for news topic classification in 16 languages widely spoken in Africa. The train/validation/test sets are available for all the 16 languages."

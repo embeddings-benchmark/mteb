@@ -4,18 +4,18 @@ import numpy as np
 from ...abstasks.AbsTaskClustering import AbsTaskClustering
 
 
-class MasakhaneClusteringS2S(AbsTaskClustering):
+class MasakhaNEWSClusteringP2P(AbsTaskClustering):
     @property
     def description(self):
         return {
-            "name": "MasakhaneClusteringS2S",
+            "name": "MasakhaNEWSClusteringP2P",
             "hf_hub_name": "masakhane/masakhanews",
             "description": (
-                "Clustering of news article headlines from Masakhane dataset. Clustering of 10 sets on the news article label."
+                "Clustering of news article headlines and texts from MasakhaNEWS dataset. Clustering of 10 sets on the news article label."
             ),
             "reference": "https://huggingface.co/datasets/masakhane/masakhanews",
             "type": "Clustering",
-            "category": "s2s",
+            "category": "p2p",
             "eval_splits": ["test"],
             "eval_langs": ["fr"],
             "main_score": "v_measure",
@@ -42,15 +42,15 @@ class MasakhaneClusteringS2S(AbsTaskClustering):
         """
         self.dataset = self.dataset.remove_columns("url")
         self.dataset = self.dataset.remove_columns("text")
-        self.dataset = self.dataset.remove_columns("headline_text")
-        headlines = (
-            self.dataset["train"]["headline"]
-            + self.dataset["validation"]["headline"]
-            + self.dataset["test"]["headline"]
+        self.dataset = self.dataset.remove_columns("headline")
+        texts = (
+            self.dataset["train"]["headline_text"]
+            + self.dataset["validation"]["headline_text"]
+            + self.dataset["test"]["headline_text"]
         )
         labels = self.dataset["train"]["label"] + self.dataset["validation"]["label"] + self.dataset["test"]["label"]
         new_format = {
-            "sentences": [split.tolist() for split in np.array_split(headlines, 10)],
+            "sentences": [split.tolist() for split in np.array_split(texts, 10)],
             "labels": [split.tolist() for split in np.array_split(labels, 10)],
         }
         self.dataset["test"] = datasets.Dataset.from_dict(new_format)
