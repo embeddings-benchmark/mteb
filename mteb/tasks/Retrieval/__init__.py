@@ -38,6 +38,7 @@ from .SCIDOCSPLRetrieval import *
 from .SCIDOCSRetrieval import *
 from .SciFactPLRetrieval import *
 from .SciFactRetrieval import *
+from .SyntecRetrieval import *
 from .Touche2020Retrieval import *
 from .TRECCOVIDPLRetrieval import *
 from .TRECCOVIDRetrieval import *
