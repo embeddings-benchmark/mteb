@@ -33,7 +33,10 @@ TASK_LIST_PAIR_CLASSIFICATION = [
     "OpusparcusPC",
 ]
 
-TASK_LIST_RERANKING = []
+TASK_LIST_RERANKING = [
+    "SyntecReranking",
+    "AlloprofReranking"
+]
 
 TASK_LIST_RETRIEVAL = [
     "AlloprofRetrieval", 
