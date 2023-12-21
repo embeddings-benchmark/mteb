@@ -46,7 +46,9 @@ TASK_LIST_RETRIEVAL = [
 ]
 
 TASK_LIST_STS = [
-    "SummEvalFr"
+    "SummEvalFr",
+    "STSBenchmarkMultilingualSTS",
+    "STS22"
 ]
 
 TASK_LIST_BITEXTMINING = [
