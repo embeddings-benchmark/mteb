@@ -24,4 +24,4 @@ model_name = "intfloat/multilingual-e5-small"
 model = SentenceTransformer(model_name)
 
 evaluation = MTEB(tasks=tasks)
-evaluation.run(model, output_folder=f"results/pl/{model_name.split('/')[-1]}")
+evaluation.run(model, output_folder=f"results/de/{model_name.split('/')[-1]}")
