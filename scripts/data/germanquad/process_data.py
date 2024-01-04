@@ -17,9 +17,7 @@ queries_file_path = PATH + "queries.jsonl"
 os.makedirs(PATH + "qrels/", exist_ok=True)
 qrels_file_path = PATH + "qrels/test.tsv"
 
-# contexts = [item["context"] for item in dataset["test"]]
-
-# Deduplicate contexts and map uniquely one-to-one to ids
+# Deduplicate contexts and map them uniquely one-to-one to ids
 context_to_id = {}
 
 with open(corpus_file_path, 'w') as file:
@@ -56,14 +54,3 @@ with open(qrels_file_path, 'w') as file:
         # qrels_data.append(entry)
         corpus_id = context_to_id[item["context"]]
         file.write('\t'.join(["q"+str(item["id"]), corpus_id, "1"]) + '\n')
-
-
-# loaded_dataset = load_dataset('json', data_files={'test': corpus_file_path}, split='test')
-# loaded_dataset = load_dataset('json', data_files={'test': queries_file_path}, split='test')
-# loaded_dataset = load_dataset('json', data_files={'test': qrels_file_path}, split='test')
-# dataset_dict = DatasetDict({"test": loaded_dataset})
-# loaded_dataset = load_dataset('csv', data_files={'test': qrels_file_path}, delimiter='\t', keep_in_memory=True)
-# qrels_ds = load_dataset('csv', data_files=qrels_file_path, delimiter='\t')
-# features = Features({'query-id': Value('string'), 'corpus-id': Value('string'), 'score': Value('float')})
-# qrels_ds = qrels_ds.cast(features)
-# breakpoint()
