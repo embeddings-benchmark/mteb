@@ -4,13 +4,13 @@ from .AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class BeIRDETask(AbsTask):
+# TODO: beyond copying from BeIRPLTask this is unrelated, rename this
 # class BeIRDETask(AbsTaskRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def load_data(self, eval_splits=None, **kwargs):
         """
-        Load dataset from BeIR-PL benchmark.
         """
         try:
             from beir.datasets.data_loader_hf import HFDataLoader

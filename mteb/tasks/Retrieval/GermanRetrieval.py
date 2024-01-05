@@ -10,8 +10,8 @@ class GermanRetrieval(AbsTaskRetrieval, BeIRDETask):
             "name": "GermanQuAD-Retrieval",
             "beir_name": "germanquad",
             "description": "Context Retrieval for German Question Answering",
-            # "reference": "",
-            # "benchmark": "",
+            "reference": "GermanQuAD and GermanDPR: Improving Non-English Question Answering and Passage Retrieval",
+            # "benchmark": "", #TODO: figure out what goes into a proper description
             "type": "Retrieval",
             "category": "p2p",
             "eval_splits": ["test"],
