@@ -1,7 +1,6 @@
 """Example script for benchmarking German Context Retrieval models."""
 
 import logging
-import os
 
 from mteb import MTEB
 from sentence_transformers import SentenceTransformer
