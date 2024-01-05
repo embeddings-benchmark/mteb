@@ -1,11 +1,8 @@
 import os
 from .AbsTask import AbsTask
-from .AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class BeIRDETask(AbsTask):
-# TODO: beyond copying from BeIRPLTask this is unrelated, rename this
-# class BeIRDETask(AbsTaskRetrieval):
+class GermanRetrievalTask(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 

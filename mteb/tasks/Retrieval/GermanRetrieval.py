@@ -1,8 +1,8 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRDETask import BeIRDETask
+from ...abstasks.GermanRetrievalTask import GermanRetrievalTask
 
 
-class GermanRetrieval(AbsTaskRetrieval, BeIRDETask):
+class GermanRetrieval(AbsTaskRetrieval, GermanRetrievalTask):
 
     @property
     def description(self):
