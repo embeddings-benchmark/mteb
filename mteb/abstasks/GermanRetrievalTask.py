@@ -26,11 +26,12 @@ class GermanRetrievalTask(AbsTask):
 
         for split in eval_splits:
 
-            # corpus, queries, qrels = HFDataLoader(hf_repo=f"deepset/{dataset}", streaming=False, keep_in_memory=False).load(split=split)
-            corpus, queries, qrels = HFDataLoader(data_folder="scripts/data/germanquad", streaming=False, keep_in_memory=False).load(split=split)
+            # corpus, queries, qrels = HFDataLoader(hf_repo=f"mteb/{dataset}", streaming=False, keep_in_memory=False).load(split=split)
+            corpus, queries = HFDataLoader(hf_repo=f"mteb/{dataset}", streaming=False, keep_in_memory=False).load(split=split)
+            qrels = HFDataLoader(hf_repo=f"mteb/{dataset}-qrels", streaming=False, keep_in_memory=False).load(split=split)
+            # corpus, queries, qrels = HFDataLoader(data_folder="scripts/data/germanquad", streaming=False, keep_in_memory=False).load(split=split)
             # Conversion from DataSet
             queries = {query['id']: {'text': query['text']} for query in queries}
-            # corpus = {doc['id']: {'title': doc['title'] , 'text': doc['text']} for doc in corpus}
             corpus = {doc['id']: {'text': doc['text']} for doc in corpus}
 
             self.corpus[split], self.queries[split], self.relevant_docs[split] = corpus, queries, qrels
