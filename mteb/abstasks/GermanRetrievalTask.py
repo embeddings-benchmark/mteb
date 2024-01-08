@@ -8,6 +8,7 @@ class GermanRetrievalTask(AbsTask):
 
     def load_data(self, eval_splits=None, **kwargs):
         """
+        Load dataset in BeIR format.
         """
         try:
             from beir.datasets.data_loader_hf import HFDataLoader
