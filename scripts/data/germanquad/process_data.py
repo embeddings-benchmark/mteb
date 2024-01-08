@@ -48,7 +48,7 @@ with open(qrels_file_path, 'w') as file:
     for item in dataset["test"]:
         corpus_id = context_to_id[item["context"]]
         entry = {
-            "query-id": str(item["id"]),
+            "query-id": "q" + str(item["id"]),
             "corpus-id": corpus_id,
             "score": 1
         }
