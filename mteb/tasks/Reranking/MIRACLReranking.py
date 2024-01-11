@@ -15,7 +15,7 @@ class MIRACLReranking(AbsTaskReranking):
             ),
             'type': 'Reranking',
             'category': 's2p',
-            'eval_splits': ['dev'],
+            'eval_splits': ['test'],
             'eval_langs': ['de'],
             'main_score': 'map',
             'revision': '8741c3b61cd36ed9ca1b3d4203543a41793239e2',
