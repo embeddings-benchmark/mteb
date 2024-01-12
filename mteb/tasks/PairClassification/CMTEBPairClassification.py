@@ -14,6 +14,7 @@ class Ocnli(AbsTaskPairClassification):
             'eval_splits': ['validation'],
             'eval_langs': ['zh'],
             'main_score': 'ap',
+            'revision': '66e76a618a34d6d565d5538088562851e6daa7ec',
         }
 
 
@@ -30,4 +31,5 @@ class Cmnli(AbsTaskPairClassification):
             'eval_splits': ['validation'],
             'eval_langs': ['zh'],
             'main_score': 'ap',
+            'revision': '41bc36f332156f7adc9e38f53777c959b2ae9766',
         }
