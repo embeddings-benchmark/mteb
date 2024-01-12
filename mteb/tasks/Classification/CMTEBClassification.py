@@ -14,6 +14,7 @@ class TNews(AbsTaskClassification):
             'eval_langs': ['zh'],
             'main_score': 'accuracy',
             'samples_per_label': 32,
+            'revision': '317f262bf1e6126357bbe89e875451e4b0938fe4',
         }
 
 
@@ -31,7 +32,8 @@ class IFlyTek(AbsTaskClassification):
             'eval_langs': ['zh'],
             'main_score': 'accuracy',
             'samples_per_label': 32,
-            'n_experiments': 5
+            'n_experiments': 5,
+            'revision': '421605374b29664c5fc098418fe20ada9bd55f8a',
         }
 
 
@@ -49,6 +51,7 @@ class MultilingualSentiment(AbsTaskClassification):
             'eval_langs': ['zh'],
             'main_score': 'accuracy',
             'samples_per_label': 32,
+            'revision': '46958b007a63fdbf239b7672c25d0bea67b5ea1a',       
         }
 
 
@@ -66,6 +69,7 @@ class JDReview(AbsTaskClassification):
             'eval_langs': ['zh'],
             'main_score': 'accuracy',
             'samples_per_label': 32,
+            'revision': 'b7c64bd89eb87f8ded463478346f76731f07bf8b',
         }
 
 
@@ -82,6 +86,7 @@ class OnlineShopping(AbsTaskClassification):
             'eval_langs': ['zh'],
             'main_score': 'accuracy',
             'samples_per_label': 32,
+            'revision': 'e610f2ebd179a8fda30ae534c3878750a96db120',
         }
 
 
@@ -98,4 +103,5 @@ class Waimai(AbsTaskClassification):
             'eval_langs': ['zh'],
             'main_score': 'accuracy',
             'samples_per_label': 32,
+            'revision': '339287def212450dcaa9df8c22bf93e9980c7023',
         }
