@@ -2,7 +2,7 @@ import os
 from .AbsTask import AbsTask
 
 
-class GermanRetrievalTask(AbsTask):
+class GermanQuADRetrievalTask(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
