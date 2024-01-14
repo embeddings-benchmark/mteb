@@ -2,7 +2,6 @@ from collections import defaultdict
 from datasets import load_dataset, DatasetDict
 
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-# from ...abstasks.GermanRetrievalTask import GermanRetrievalTask
 
 
 def load_retrieval_data(hf_hub_name, eval_splits):
@@ -11,12 +10,10 @@ def load_retrieval_data(hf_hub_name, eval_splits):
     queries_dataset = load_dataset(hf_hub_name, 'queries')
     qrels = load_dataset(hf_hub_name + '-qrels')[eval_split]
 
-    # breakpoint()
     corpus = {e['_id']: {'text': e['text']} for e in corpus_dataset['corpus']}
     queries = {e['_id']: e['text'] for e in queries_dataset['queries']}
     relevant_docs = defaultdict(dict)
     for e in qrels:
-        # relevant_docs[e['qid']][e['pid']] = e['score']
         relevant_docs[e['query-id']][e['corpus-id']] = e['score']
 
     corpus = DatasetDict({eval_split:corpus})
