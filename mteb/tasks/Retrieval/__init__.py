@@ -47,3 +47,5 @@ from .MultiLongDocRetrieval import *
 from .KoStrategyQA import *
 from .KoMrtydi import *
 from .KoMiracl import *
+
+from .XMarketESRetrieval import *
