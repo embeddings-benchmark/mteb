@@ -11,7 +11,7 @@ class XMarketES(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "XMarketES",
-            "hf_hub_name": "jinaai/xmarket_es",
+            "hf_hub_name": "jinaai/xmarket_ml",
             "description": "XMarket is an ecommerce category to product retrieval dataset in Spanish.",
             "reference": "https://xmrec.github.io/",
             "type": "Retrieval",
@@ -27,13 +27,17 @@ class XMarketES(AbsTaskRetrieval):
             return
 
         query_rows = datasets.load_dataset(
-            self.description["hf_hub_name"], "queries", split=self._EVAL_SPLIT, trust_remote_code=True
+            self.description["hf_hub_name"],
+            "queries",
+            languages=['es'],
+            split=self._EVAL_SPLIT,
+            trust_remote_code=True,
         )
         corpus_rows = datasets.load_dataset(
-            self.description["hf_hub_name"], "corpus", split=self._EVAL_SPLIT, trust_remote_code=True
+            self.description["hf_hub_name"], "corpus", languages=['es'], split=self._EVAL_SPLIT, trust_remote_code=True
         )
         qrels_rows = datasets.load_dataset(
-            self.description["hf_hub_name"], "qrels", split=self._EVAL_SPLIT, trust_remote_code=True
+            self.description["hf_hub_name"], "qrels", languages=['es'], split=self._EVAL_SPLIT, trust_remote_code=True
         )
 
         self.queries = {self._EVAL_SPLIT: {row["_id"]: row["text"] for row in query_rows}}
