@@ -54,7 +54,7 @@ class MIRACLRerankingES(AbsTaskReranking):
             'eval_splits': ['test'],
             'eval_langs': ['es'],
             'main_score': 'map',
-            'revision': '',
+            'revision': 'd28a029f35c4ff7f616df47b0edf54e6882395e6',
         }
 
     def load_data(self, **kwargs):
