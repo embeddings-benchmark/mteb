@@ -16,5 +16,5 @@ class FloresClusteringS2S(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["es"],
             "main_score": "v_measure",
-            "revision": "b5d0b2bd6ba007bc9145120b47818e3d3e5d1735",
+            "revision": "480b580487f53a46f881354a8348335d4edbb2de",
         }
