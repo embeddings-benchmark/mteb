@@ -19,7 +19,7 @@ class XMarketES(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["es"],
             "main_score": "ndcg_at_10",
-            "revision": "2336818db4c06570fcdf263e1bcb9993b786f67a",
+            "revision": "705db869e8107dfe6e34b832af90446e77d813e3",
         }
 
     def load_data(self, **kwargs):
