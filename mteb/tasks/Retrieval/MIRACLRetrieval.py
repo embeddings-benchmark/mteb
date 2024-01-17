@@ -12,7 +12,7 @@ class MIRACLRetrieval(AbsTaskRetrieval):
             'name': 'MIRACLRetrieval',
             'hf_hub_name': 'jinaai/miracl',
             'reference': 'https://project-miracl.github.io/',
-            'description':  (
+            'description': (
                 'MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual '
                 'retrieval dataset that focuses on search across 18 different languages. This task focuses on '
                 'the Spanish subset, using the test set containing 648 queries and 6443 passages.'
@@ -67,9 +67,7 @@ class MIRACLRetrieval(AbsTaskRetrieval):
 
         # relevant_docs will be positives for the query
         self.queries = {_EVAL_SPLIT: queries}
-        self.corpus = {_EVAL_SPLIT: corpus}
-        self.relevant_docs = {
-            _EVAL_SPLIT: relevant_docs
-        }
+        self.corpus = {_EVAL_SPLIT: {k: {'text': v} for k, v in corpus.items()}}
+        self.relevant_docs = {_EVAL_SPLIT: relevant_docs}
 
         self.data_loaded = True
