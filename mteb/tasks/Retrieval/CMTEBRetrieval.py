@@ -34,6 +34,7 @@ class T2Retrieval(AbsTaskRetrieval):
             'eval_splits': ['dev'],
             'eval_langs': ['zh'],
             'main_score': 'ndcg_at_10',
+            'revision': '8731a845f1bf500a4f111cf1070785c793d10e64',
         }
 
     def load_data(self, **kwargs):
@@ -58,6 +59,7 @@ class MMarcoRetrieval(AbsTaskRetrieval):
             'eval_splits': ['dev'],
             'eval_langs': ['zh'],
             'main_score': 'ndcg_at_10',
+            'revision': '539bbde593d947e2a124ba72651aafc09eb33fc2',
         }
 
     def load_data(self, **kwargs):
@@ -82,6 +84,7 @@ class DuRetrieval(AbsTaskRetrieval):
             'eval_splits': ['dev'],
             'eval_langs': ['zh'],
             'main_score': 'ndcg_at_10',
+            'revision': 'a1a333e290fe30b10f3f56498e3a0d911a693ced',
         }
 
     def load_data(self, **kwargs):
@@ -106,6 +109,7 @@ class CovidRetrieval(AbsTaskRetrieval):
             'eval_splits': ['dev'],
             'eval_langs': ['zh'],
             'main_score': 'ndcg_at_10',
+            'revision': '1271c7809071a13532e05f25fb53511ffce77117',
         }
 
     def load_data(self, **kwargs):
@@ -131,6 +135,7 @@ class CmedqaRetrieval(AbsTaskRetrieval):
             'eval_splits': ['dev'],
             'eval_langs': ['zh'],
             'main_score': 'ndcg_at_10',
+            'revision': 'cd540c506dae1cf9e9a59c3e06f42030d54e7301',
         }
 
     def load_data(self, **kwargs):
@@ -155,6 +160,7 @@ class EcomRetrieval(AbsTaskRetrieval):
             'eval_splits': ['dev'],
             'eval_langs': ['zh'],
             'main_score': 'ndcg_at_10',
+            'revision': '687de13dc7294d6fd9be10c6945f9e8fec8166b9',
         }
 
     def load_data(self, **kwargs):
@@ -179,6 +185,7 @@ class MedicalRetrieval(AbsTaskRetrieval):
             'eval_splits': ['dev'],
             'eval_langs': ['zh'],
             'main_score': 'ndcg_at_10',
+            'revision': '2039188fb5800a9803ba5048df7b76e6fb151fc6',
         }
 
     def load_data(self, **kwargs):
@@ -203,6 +210,7 @@ class VideoRetrieval(AbsTaskRetrieval):
             'eval_splits': ['dev'],
             'eval_langs': ['zh'],
             'main_score': 'ndcg_at_10',
+            'revision': '58c2597a5943a2ba48f4668c3b90d796283c5639',
         }
 
     def load_data(self, **kwargs):
