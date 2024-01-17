@@ -1,4 +1,8 @@
+from datasets import load_dataset
+
 from ...abstasks.AbsTaskSTS import AbsTaskSTS
+
+_EVAL_SPLIT = 'test'
 
 
 class STSES(AbsTaskSTS):
@@ -18,3 +22,16 @@ class STSES(AbsTaskSTS):
             "max_score": 5,
             "revision": "0912bb6c9393c76d62a7c5ee81c4c817ff47c9f4",
         }
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        data = load_dataset(
+            self.description["hf_hub_name"],
+            trust_remote_code=True,
+        )[_EVAL_SPLIT]
+        data = data.add_column('score', [d['label'] for d in data])
+        self.dataset = {_EVAL_SPLIT: data}
+
+        self.data_loaded = True
