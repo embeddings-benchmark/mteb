@@ -79,6 +79,11 @@ class AbsTaskRetrieval(AbsTask):
         retriever = EvaluateRetrieval(model, score_function=score_function)  # or "cos_sim" or "dot"
         start_time = time()
         results = retriever.retrieve(corpus, queries)
+        if kwargs.get("save_results", False):
+            if not os.path.isdir("results"):
+                os.makedirs("results")
+            with open(f"results/{kwargs['task_name']}.json", "w") as f:
+                json.dump(results, f)
         end_time = time()
         logger.info("Time taken to retrieve: {:.2f} seconds".format(end_time - start_time))
 
