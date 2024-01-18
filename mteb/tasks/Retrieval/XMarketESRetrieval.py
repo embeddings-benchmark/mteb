@@ -6,6 +6,7 @@ from ...abstasks.BeIRTask import BeIRTask
 
 class XMarketES(AbsTaskRetrieval):
     _EVAL_SPLIT = 'test'
+    _LANG = 'es'
 
     @property
     def description(self):
@@ -17,7 +18,7 @@ class XMarketES(AbsTaskRetrieval):
             "type": "Retrieval",
             "category": "s2p",
             "eval_splits": ["test"],
-            "eval_langs": ["es"],
+            "eval_langs": [self._LANG],
             "main_score": "ndcg_at_10",
             "revision": "705db869e8107dfe6e34b832af90446e77d813e3",
         }
@@ -29,15 +30,23 @@ class XMarketES(AbsTaskRetrieval):
         query_rows = datasets.load_dataset(
             self.description["hf_hub_name"],
             "queries",
-            languages=['es'],
+            languages=[self._LANG],
             split=self._EVAL_SPLIT,
             trust_remote_code=True,
         )
         corpus_rows = datasets.load_dataset(
-            self.description["hf_hub_name"], "corpus", languages=['es'], split=self._EVAL_SPLIT, trust_remote_code=True
+            self.description["hf_hub_name"],
+            "corpus",
+            languages=[self._LANG],
+            split=self._EVAL_SPLIT,
+            trust_remote_code=True,
         )
         qrels_rows = datasets.load_dataset(
-            self.description["hf_hub_name"], "qrels", languages=['es'], split=self._EVAL_SPLIT, trust_remote_code=True
+            self.description["hf_hub_name"],
+            "qrels",
+            languages=[self._LANG],
+            split=self._EVAL_SPLIT,
+            trust_remote_code=True,
         )
 
         self.queries = {self._EVAL_SPLIT: {row["_id"]: row["text"] for row in query_rows}}
