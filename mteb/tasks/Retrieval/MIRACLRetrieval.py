@@ -30,7 +30,7 @@ class MIRACLRetrieval(AbsTaskRetrieval):
 
         data = load_dataset(
             self.description["hf_hub_name"],
-            'es',
+            self.description['eval_langs'][0],
             trust_remote_code=True,
         )[_EVAL_SPLIT]
 
