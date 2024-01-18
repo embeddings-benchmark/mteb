@@ -30,6 +30,7 @@ class STSES(AbsTaskSTS):
         data = load_dataset(
             self.description["hf_hub_name"],
             trust_remote_code=True,
+            revision=self.description.get("revision", None)
         )[_EVAL_SPLIT]
         data = data.add_column('score', [d['label'] for d in data])
         self.dataset = {_EVAL_SPLIT: data}
