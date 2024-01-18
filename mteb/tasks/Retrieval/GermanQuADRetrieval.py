@@ -36,6 +36,7 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["de"],
             "main_score": "mrr_at_10",
+            "revision": "f5c87ae5a2e7a5106606314eef45255f03151bb3",
         }
 
     def load_data(self, **kwargs):
