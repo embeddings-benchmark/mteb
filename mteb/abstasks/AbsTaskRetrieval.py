@@ -1,10 +1,11 @@
 import logging
+import json
+import os
 from time import time
 from typing import Dict, List
 
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
-import os
 
 from .AbsTask import AbsTask
 
@@ -79,14 +80,14 @@ class AbsTaskRetrieval(AbsTask):
         retriever = EvaluateRetrieval(model, score_function=score_function)  # or "cos_sim" or "dot"
         start_time = time()
         results = retriever.retrieve(corpus, queries)
-        if kwargs.get("save_results", False):
-            if not os.path.isdir("results"):
-                os.makedirs("results")
-            with open(f"results/{kwargs['task_name']}.json", "w") as f:
-                json.dump(results, f)
-        end_time = time()
+        end_time = time()        
         logger.info("Time taken to retrieve: {:.2f} seconds".format(end_time - start_time))
-
+        if kwargs.get("save_qrels", False):
+            output_folder = kwargs.get("output_folder", "results")
+            if not os.path.isdir(output_folder):
+                os.makedirs(output_folder)
+            with open(f"{output_folder}/{self.description['name']}_qrels.json", "w") as f:
+                json.dump(results, f)
         ndcg, _map, recall, precision = retriever.evaluate(relevant_docs, results, retriever.k_values, ignore_identical_ids=kwargs.get("ignore_identical_ids", True))
         mrr = retriever.evaluate_custom(relevant_docs, results, retriever.k_values, "mrr")
 
