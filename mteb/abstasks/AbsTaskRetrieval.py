@@ -106,8 +106,12 @@ class DRESModel:
         self.model = model
         self.sep = sep
         self.use_sbert_model = isinstance(model, SentenceTransformer)
+        print(kwargs)
 
     def encode_queries(self, queries: List[str], batch_size: int, **kwargs):
+        prefix = ''
+        if(self.model._model_card_text is not None and 'multilingual-e5' in self.model._model_card_text):
+            prefix = 'query: '
         if self.use_sbert_model:
             if isinstance(self.model._first_module(), Transformer):
                 logger.info(f"Queries will be truncated to {self.model.get_max_seq_length()} tokens.")
@@ -115,9 +119,14 @@ class DRESModel:
                 logger.warning(
                     "Queries will not be truncated. This could lead to memory issues. In that case please lower the batch_size."
                 )
+        if prefix != '':
+            queries = [prefix + query for query in queries]
         return self.model.encode(queries, batch_size=batch_size, **kwargs)
 
     def encode_corpus(self, corpus: List[Dict[str, str]], batch_size: int, **kwargs):
+        prefix = ''
+        if(self.model._model_card_text is not None and 'multilingual-e5' in self.model._model_card_text):
+            prefix = 'passage: '
         if type(corpus) is dict:
             sentences = [
                 (corpus["title"][i] + self.sep + corpus["text"][i]).strip()
@@ -130,4 +139,6 @@ class DRESModel:
                 (doc["title"] + self.sep + doc["text"]).strip() if "title" in doc else doc["text"].strip()
                 for doc in corpus
             ]
+        if prefix != '':
+            sentences = [prefix + sentence for sentence in sentences]
         return self.model.encode(sentences, batch_size=batch_size, **kwargs)

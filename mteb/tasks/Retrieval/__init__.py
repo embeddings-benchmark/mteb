@@ -38,3 +38,6 @@ from .SCIDOCSPLRetrieval import *
 from .SciFactPLRetrieval import *
 from .TRECCOVIDPLRetrieval import *
 from .NarrativeQARetrieval import *
+from .KoStrategyQA import *
+from .KoMrtydi import *
+from .KoMiracl import *
