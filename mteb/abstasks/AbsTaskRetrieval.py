@@ -86,7 +86,7 @@ class AbsTaskRetrieval(AbsTask):
             output_folder = kwargs.get("output_folder", "results")
             if not os.path.isdir(output_folder):
                 os.makedirs(output_folder)
-            top_k = kwargs.get('tok_k', 20)
+            top_k = kwargs.get('top_k', 10)
             all_qids = []
             for k in results:
                 all_qids.append(k)
