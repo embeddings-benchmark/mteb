@@ -19,7 +19,7 @@ class AlloProfClusteringS2S(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["fr"],
             "main_score": "v_measure",
-            "revision": "3e394f99549416c102c44af9b38460d0d07fa10f",
+            "revision": "392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
         }
     
     def load_data(self, **kwargs):

@@ -37,7 +37,7 @@ For more information about the data source and the features, please refer to the
 This re-edition of the dataset has been made for easier usage in the MTEB benchmarking pipeline. (https://huggingface.co/spaces/mteb/leaderboard). It is a filtered version of the original dataset, in a more ready-to-use format.
 """
 
-_SPLITS = ["documents", "queries"]
+_SPLITS = ["documents", "queries-train", "queries-test"]
 _HOMEPAGE = "https://huggingface.co/datasets/antoinelb7/alloprof"
 _LICENSE = "Creative Commons Attribution Non Commercial Share Alike 4.0 International"
 _URLS = {
@@ -48,7 +48,7 @@ _URLS = {
 class Alloprof(datasets.GeneratorBasedBuilder):
     """Alloprof: a new French question-answer education dataset and its use in an information retrieval case study"""
 
-    VERSION = datasets.Version("1.0.0")
+    VERSION = datasets.Version("1.1.0")
     BUILDER_CONFIGS = [
         datasets.BuilderConfig(name="documents", version=VERSION, description="Corpus of documents from the Alloprof website"),
         datasets.BuilderConfig(name="queries", version=VERSION, description="Corpus of queries from students"),
@@ -90,8 +90,10 @@ class Alloprof(datasets.GeneratorBasedBuilder):
             dl_path = dl_manager.download_and_extract(_URLS["documents"])
             return [datasets.SplitGenerator(name="documents", gen_kwargs={"filepath": dl_path})]
         elif self.config.name == "queries":
-            dl_paths = dl_manager.download_and_extract(_URLS["queries"])
-            return [datasets.SplitGenerator(name="queries", gen_kwargs={"filepath": dl_paths})]
+            dl_path_train = dl_manager.download_and_extract(_URLS["queries-train"])
+            dl_path_test = dl_manager.download_and_extract(_URLS["queries-test"])
+            return [datasets.SplitGenerator(name=datasets.Split.TRAIN, gen_kwargs={"filepath": dl_path_train}),
+                    datasets.SplitGenerator(name=datasets.Split.TEST, gen_kwargs={"filepath": dl_path_test})]
         else:
             raise ValueError(f"Please specify a valid config name : {_SPLITS}")
 

@@ -48,9 +48,14 @@ def retrieve_documents(queries_embs, documents_embs, topk:int=10) -> torch.retur
 
     return tops
 
-top_docs = retrieve_documents(queries["queries"]["embeddings"], corpus["documents"]["embeddings"])
-queries = queries.map(
-    lambda _, i: {"top_cosim_values": top_docs.values[i], "top_cosim_indexes": top_docs.indices[i]},
+top_docs_train = retrieve_documents(queries["train"]["embeddings"], corpus["documents"]["embeddings"])
+top_docs_test =  retrieve_documents(queries["test"]["embeddings"], corpus["documents"]["embeddings"])
+queries["train"] = queries["train"].map(
+    lambda _, i: {"top_cosim_values": top_docs_train.values[i], "top_cosim_indexes": top_docs_train.indices[i]},
+    with_indices=True
+    )
+queries["test"] = queries["test"].map(
+    lambda _, i: {"top_cosim_values": top_docs_test.values[i], "top_cosim_indexes": top_docs_test.indices[i]},
     with_indices=True
     )
 
@@ -64,7 +69,7 @@ queries = queries.map(lambda x: {"positive": [corpus["documents"][i]["text"] for
 queries = queries.rename_column("text", "query")
 dataset = queries.remove_columns(['embeddings', 'relevant', 'top_cosim_values', 'top_cosim_indexes', 'answer', 'subject', "id"])
 # Rename the key of dataset key as "test"
-dataset["test"] = dataset.pop("queries")
+# dataset["test"] = dataset.pop("queries")
 
 # create HF repo
 repo_id = "lyon-nlp/mteb-fr-reranking-alloprof-s2p"

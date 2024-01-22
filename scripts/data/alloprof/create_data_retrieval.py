@@ -158,6 +158,9 @@ for dup_text in duplicate_docs:
 # remove the queries that have no remaining relevant documents
 alloprof_queries = alloprof_queries.filter(lambda x: len(x["relevant"]) > 0)
 
+# split queries into train-test
+alloprof_queries = alloprof_queries.train_test_split(test_size=.2)
+
 ####################
 # Upload to HF Hub #
 ####################
@@ -170,8 +173,10 @@ except HfHubHTTPError as e:
     print("HF repo already exist")
 
 # save datasets as json
-alloprof_queries.to_pandas().to_json("queries.json", orient="records")
+alloprof_queries["train"].to_pandas().to_json("queries-train.json", orient="records")
+alloprof_queries["test"].to_pandas().to_json("queries-test.json", orient="records")
 alloprof_docs.to_pandas().to_json("documents.json", orient="records")
 
-upload_file(path_or_fileobj="queries.json", path_in_repo="queries.json", repo_id=repo_id, repo_type="dataset")
+upload_file(path_or_fileobj="queries-train.json", path_in_repo="queries-train.json", repo_id=repo_id, repo_type="dataset")
+upload_file(path_or_fileobj="queries-test.json", path_in_repo="queries-test.json", repo_id=repo_id, repo_type="dataset")
 upload_file(path_or_fileobj="documents.json", path_in_repo="documents.json", repo_id=repo_id, repo_type="dataset")
