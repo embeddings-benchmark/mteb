@@ -36,7 +36,7 @@ class MintakaESRetrieval(AbsTaskRetrieval):
         relevant_docs = {}
 
         for row in data:
-            row_id = row["id_"]
+            row_id = row["id"]
             question = row["question"]
             answer = row["answer"]
             query_id = f"Q{row_id}"
