@@ -7,9 +7,6 @@
     <a href="https://arxiv.org/abs/2210.07316">
         <img alt="GitHub release" src="https://img.shields.io/badge/arXiv-2305.14251-b31b1b.svg">
     </a>
-    <a href="https://www.python.org/">
-            <img alt="Build" src="https://img.shields.io/badge/Made%20with-Python-1f425f.svg?color=purple">
-    </a>
     <a href="https://github.com/embeddings-benchmark/mteb/blob/master/LICENSE">
         <img alt="License" src="https://img.shields.io/github/license/embeddings-benchmark/mteb.svg?color=green">
     </a>
@@ -20,17 +17,16 @@
 
 <h4 align="center">
     <p>
-        <a href="https://arxiv.org/abs/2210.07316">Paper</a> |
-        <a href=#leaderboard>Leaderboard</a> |
         <a href="#installation">Installation</a> |
         <a href="#usage">Usage</a> |
-        <a href="#available-tasks">Tasks</a> |
-        <a href="https://huggingface.co/mteb">Hugging Face</a>
+        <a href="#leaderboard">Leaderboard</a> |
+        <a href="#citing">Citing</a> |
+        <a href="#available-tasks">Tasks</a>
     <p>
 </h4>
 
 <h3 align="center">
-    <a href="https://huggingface.co/"><img style="float: middle; padding: 10px 10px 10px 10px;" width="60" height="55" src="./images/hf_logo.png" /></a>
+    <a href="https://huggingface.co/spaces/mteb/leaderboard"><img style="float: middle; padding: 10px 10px 10px 10px;" width="60" height="55" src="./images/hf_logo.png" /></a>
 </h3>
 
 
@@ -215,6 +211,30 @@ Advanced scripts with different models are available in the [mteb/mtebscripts re
 4. Hit the Refresh button at the bottom of the leaderboard and you should see your scores 🥇
 5. To have the scores appear without refreshing, you can open an issue on the [Community Tab of the LB](https://huggingface.co/spaces/mteb/leaderboard/discussions) and someone will restart the space to cache your average scores. The cache is updated anyways ~1x/week.
 
+## Citing
+
+MTEB has been introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.org/abs/2210.07316)". If you find MTEB useful, feel free to cite:
+
+```bibtex
+@article{muennighoff2022mteb,
+  doi = {10.48550/ARXIV.2210.07316},
+  url = {https://arxiv.org/abs/2210.07316},
+  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
+  title = {MTEB: Massive Text Embedding Benchmark},
+  publisher = {arXiv},
+  journal={arXiv preprint arXiv:2210.07316},  
+  year = {2022}
+}
+```
+
+You may also want to read and cite the amazing work that has extended MTEB & integrated new datasets:
+- Shitao Xiao, Zheng Liu, Peitian Zhang, Niklas Muennighoff. "[C-Pack: Packaged Resources To Advance General Chinese Embedding](https://arxiv.org/abs/2309.07597)" arXiv 2023
+- Michael Günther, Jackmin Ong, Isabelle Mohr, Alaeddine Abdessalem, Tanguy Abel, Mohammad Kalim Akram, Susana Guzman, Georgios Mastrapas, Saba Sturua, Bo Wang, Maximilian Werk, Nan Wang, Han Xiao. "[Jina Embeddings 2: 8192-Token General-Purpose Text Embeddings for Long Documents](https://arxiv.org/abs/2310.19923)" arXiv 2023
+- Silvan Wehrli, Bert Arnrich, Christopher Irrgang. "[German Text Embedding Clustering Benchmark](https://arxiv.org/abs/2401.02709)" arXiv 2024
+
+For works that have used MTEB for benchmarking, you can find them on the [leaderboard](https://huggingface.co/spaces/mteb/leaderboard).
+
+
 ## Available tasks
 
 | Name                                                                                                                                                                  | Hub URL                                                                                                                              | Description                                                                                                                                                                                                      | Type               | Category | #Languages | Train #Samples | Dev #Samples | Test #Samples | Avg. chars / train | Avg. chars / dev | Avg. chars / test |
@@ -332,19 +352,3 @@ Advanced scripts with different models are available in the [mteb/mtebscripts re
 | [SummEval](https://github.com/Yale-LILY/SummEval)                                                                                                     | [mteb/summeval](https://huggingface.co/datasets/mteb/summeval)                                                                       | News Article Summary Semantic Similarity Estimation.                                                                                                                                                             | Summarization      | s2s      |          1 |              0 |            0 |          2800 |                  0 |                0 |             359.8 |
 
 For Chinese tasks, you can refer to [C_MTEB](https://github.com/FlagOpen/FlagEmbedding/tree/master/C_MTEB).
-
-## Citation
-
-If you find MTEB useful, feel free to cite our publication [MTEB: Massive Text Embedding Benchmark](https://arxiv.org/abs/2210.07316):
-
-```bibtex
-@article{muennighoff2022mteb,
-  doi = {10.48550/ARXIV.2210.07316},
-  url = {https://arxiv.org/abs/2210.07316},
-  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
-  title = {MTEB: Massive Text Embedding Benchmark},
-  publisher = {arXiv},
-  journal={arXiv preprint arXiv:2210.07316},  
-  year = {2022}
-}
-```
