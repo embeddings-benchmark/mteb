@@ -50,3 +50,6 @@ from .KoMiracl import *
 from .XMarketESRetrieval import *
 from .SpanishPassageRetrievalS2S import *
 from .SpanishPassageRetrievalS2P import *
+from .XMarketESRetrieval import *
+from .XPQAESRetrieval import *
+from .MintakaESRetrieval import *
