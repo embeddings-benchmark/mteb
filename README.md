@@ -213,7 +213,7 @@ Advanced scripts with different models are available in the [mteb/mtebscripts re
 
 ## Citing
 
-MTEB has been introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.org/abs/2210.07316)". If you find MTEB useful, feel free to cite:
+MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.org/abs/2210.07316)", feel free to cite:
 
 ```bibtex
 @article{muennighoff2022mteb,
