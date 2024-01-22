@@ -7,7 +7,7 @@ from ...abstasks.MultilingualTask import MultilingualTask
 _EVAL_SPLIT = "test"
 _LANGUAGES = ["ar", "de", "es", "fr", "hi", "it", "ja", "pt"]
 
-class MintakaRetrieval(AbsTaskRetrieval):
+class MintakaRetrieval(AbsTaskRetrieval, MultilingualTask):
     @property
     def description(self):
         return {

@@ -6,7 +6,7 @@ from ...abstasks.MultilingualTask import MultilingualTask
 _EVAL_SPLIT = "test"
 _LANGUAGES = ["ar", "de", "es", "fr", "hi", "it", "ja", "ko", "pl", "pt", "ta", "zh"]
 
-class XPQARetrieval(AbsTaskRetrieval):
+class XPQARetrieval(AbsTaskRetrieval, MultilingualTask):
     @property
     def description(self):
         return {
