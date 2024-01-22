@@ -66,7 +66,7 @@ class MIRACLRerankingES(AbsTaskReranking):
 
         self.dataset = datasets.load_dataset(
             self.description["hf_hub_name"],
-            self.description['eval_lags'][0],
+            self.description["eval_langs"][0],
             revision=self.description.get("revision", None),
         )
         self.data_loaded = True
