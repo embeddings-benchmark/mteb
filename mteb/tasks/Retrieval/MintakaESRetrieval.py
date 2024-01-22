@@ -1,6 +1,6 @@
 from datasets import load_dataset
 
-from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval, MultilingualTask
+from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 _EVAL_SPLIT = "test"
 
