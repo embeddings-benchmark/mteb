@@ -1,22 +1,24 @@
 from datasets import load_dataset
 
-from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval, MultilingualTask
 
 _EVAL_SPLIT = "test"
+_LANGUAGES = ["ar", "de", "es", "fr", "hi", "it", "ja", "pt"]
 
-
-class XPQAESRetrieval(AbsTaskRetrieval):
+class MintakaRetrieval(AbsTaskRetrieval):
     @property
     def description(self):
         return {
-            "name": "XPQAESRetrieval",
-            "hf_hub_name": "jinaai/xpqa",
-            "reference": "https://arxiv.org/abs/2305.09249",
-            "description": ("xPQA is a large-scale annotated cross-lingual Product QA dataset."),
+            "name": "MintakaRetrieval",
+            "hf_hub_name": "jinaai/mintakaqa",
+            "reference": "https://github.com/amazon-science/mintaka",
+            "description": (
+                "Mintaka: A Complex, Natural, and Multilingual Dataset for End-to-End Question Answering."
+            ),
             "type": "Retrieval",
             "category": "s2s",
             "eval_splits": ["test"],
-            "eval_langs": ["es"],
+            "eval_langs": _LANGUAGES,
             "main_score": "ndcg_at_10",
         }
 
