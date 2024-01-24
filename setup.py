@@ -82,7 +82,6 @@ setup(
         "torch",
         "tqdm",
         "rich",
-        "ir_datasets==0.5.5",
     ],
     extras_require=extras,
     classifiers=[
