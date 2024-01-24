@@ -4,13 +4,13 @@ from ...abstasks.BeIRTask import BeIRTask
 import datasets
 
 
-class XMarket(AbsTaskRetrieval):
+class XMarketDE(AbsTaskRetrieval):
     _EVAL_SPLIT = 'test'
 
     @property
     def description(self):
         return {
-            "name": "XMarket",
+            "name": "XMarketDE",
             "hf_hub_name": "jinaai/xmarket_de",
             "description": "XMarket is an ecommerce category to product retrieval dataset in German.",
             "reference": "https://xmrec.github.io/",

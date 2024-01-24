@@ -41,6 +41,5 @@ from .NarrativeQARetrieval import *
 from .GermanQuADRetrieval import *
 from .GerDaLIRRetrieval import *
 from .GermanDPRRetrieval import *
-from .XMarketRetrieval import *
 from .GerDaLIRRetrieval import *
 from .XMarketRetrieval import *
