@@ -269,7 +269,7 @@ class MTEB:
 
                 # load data
                 logger.info(f"Loading dataset for {task.description['name']}")
-                task.load_data(eval_splits=task_eval_splits)
+                task.load_data(eval_splits=task_eval_splits, **kwargs)
 
                 # run evaluation
                 task_results = {
@@ -279,7 +279,7 @@ class MTEB:
                 }
                 for split in task_eval_splits:
                     tick = time()
-                    results = task.evaluate(model, split, **kwargs)
+                    results = task.evaluate(model, split, output_folder=output_folder, **kwargs)
                     tock = time()
                     logger.info(f"Evaluation for {task.description['name']} on {split} took {tock - tick:.2f} seconds")
                     results["evaluation_time"] = round(tock - tick, 2)

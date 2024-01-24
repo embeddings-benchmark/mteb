@@ -21,6 +21,7 @@ from .DBPediaRetrieval import *
 from .FEVERRetrieval import *
 from .FiQA2018Retrieval import *
 from .FiQAPLRetrieval import *
+from .GermanQuADRetrieval import *
 from .HagridRetrieval import *
 from .HotpotQAPLRetrieval import *
 from .HotpotQARetrieval import *
