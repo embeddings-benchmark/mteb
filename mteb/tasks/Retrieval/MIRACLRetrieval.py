@@ -5,7 +5,7 @@ from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 _EVAL_SPLIT = 'test'
 
 
-class MIRACLRetrieval(AbsTaskRetrieval):
+class MIRACLESRetrieval(AbsTaskRetrieval):
     @property
     def description(self):
         return {
