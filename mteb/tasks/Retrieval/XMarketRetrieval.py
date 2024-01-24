@@ -5,7 +5,7 @@ import datasets
 
 
 class XMarketDE(AbsTaskRetrieval):
-    _EVAL_SPLIT = 'test'
+    _EVAL_SPLIT = "test"
 
     @property
     def description(self):
@@ -26,9 +26,24 @@ class XMarketDE(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        query_rows = datasets.load_dataset(self.description["hf_hub_name"], "queries", split=self._EVAL_SPLIT)
-        corpus_rows = datasets.load_dataset(self.description["hf_hub_name"], "corpus", split=self._EVAL_SPLIT)
-        qrels_rows = datasets.load_dataset(self.description["hf_hub_name"], "qrels", split=self._EVAL_SPLIT)
+        query_rows = datasets.load_dataset(
+            self.description["hf_hub_name"],
+            "queries",
+            revision=self.description.get("revision", None),
+            split=self._EVAL_SPLIT,
+        )
+        corpus_rows = datasets.load_dataset(
+            self.description["hf_hub_name"],
+            "corpus",
+            revision=self.description.get("revision", None),
+            split=self._EVAL_SPLIT,
+        )
+        qrels_rows = datasets.load_dataset(
+            self.description["hf_hub_name"],
+            "qrels",
+            revision=self.description.get("revision", None),
+            split=self._EVAL_SPLIT,
+        )
 
         self.queries = {self._EVAL_SPLIT: {row["_id"]: row["text"] for row in query_rows}}
         self.corpus = {self._EVAL_SPLIT: {row["_id"]: row for row in corpus_rows}}
