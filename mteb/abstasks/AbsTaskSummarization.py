@@ -37,15 +37,15 @@ class AbsTaskSummarization(AbsTask):
             for lang in self.dataset:
                 logger.info(f"\nTask: {self.description['name']}, split: {split}, language: {lang}. Running...")
                 data_split = self.dataset[lang][split]
-                scores[lang] = self._evaluate_split(model, data_split, **kwargs)
+                scores[lang] = self._evaluate_split(model, data_split, language=lang, **kwargs)
         else:
             logger.info(f"\nTask: {self.description['name']}, split: {split}. Running...")
             data_split = self.dataset[split]
-            scores = self._evaluate_split(model, data_split, **kwargs)
+            scores = self._evaluate_split(model, data_split, language=self.get_language(), **kwargs)
 
         return scores
 
-    def _evaluate_split(self, model, data_split, **kwargs):
+    def _evaluate_split(self, model, data_split, language, **kwargs):
         normalized_scores = list(
             map(lambda x: (np.array(x) - self.min_score) / (self.max_score - self.min_score), data_split["relevance"])
         )
@@ -54,6 +54,7 @@ class AbsTaskSummarization(AbsTask):
             human_summaries=data_split["human_summaries"],
             texts=data_split["text"],
             gold_scores=normalized_scores,
+            language=language,
             **kwargs,
         )
         metrics = evaluator(model)

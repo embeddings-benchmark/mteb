@@ -1,4 +1,5 @@
 import logging
+from mteb.utils import get_embed_with_lang_func
 
 import numpy as np
 import torch
@@ -18,6 +19,7 @@ class SummarizationEvaluator(Evaluator):
         human_summaries=None,
         machine_summaries=None,
         texts=None,
+        language=None,
         gold_scores=None,
         limit=None,
         batch_size=32,
@@ -38,6 +40,7 @@ class SummarizationEvaluator(Evaluator):
         self.texts = texts
         self.gold_scores = gold_scores
         self.batch_size = batch_size
+        self.language = language
 
     def __call__(self, model):
         cosine_spearman_scores = []
@@ -50,14 +53,17 @@ class SummarizationEvaluator(Evaluator):
         machine_lens = [len(machine_summaries) for machine_summaries in self.machine_summaries]
 
         logger.info(f"Encoding {sum(human_lens)} human summaries...")
-        embs_human_summaries_all = model.encode(
+        embed_fn = get_embed_with_lang_func(model)
+        embs_human_summaries_all = embed_fn(
             [summary for human_summaries in self.human_summaries for summary in human_summaries],
             batch_size=self.batch_size,
+            language=self.language,
         )
         logger.info(f"Encoding {sum(machine_lens)} machine summaries...")
-        embs_machine_summaries_all = model.encode(
+        embs_machine_summaries_all = embed_fn(
             [summary for machine_summaries in self.machine_summaries for summary in machine_summaries],
             batch_size=self.batch_size,
+            language=self.language,
         )
 
         # Split the embeddings into the original human & machine summaries

@@ -1,6 +1,7 @@
 import logging
 import inspect
 from typing import Callable, Dict, List, Set
+from mteb.utils import get_embed_with_lang_func
 
 import numpy as np
 import torch
@@ -39,6 +40,7 @@ class RetrievalEvaluator(Evaluator):
         },  # Score function, higher=more similar
         main_score_function: str = None,
         limit: int = None,
+        language: str = None,
         **kwargs
     ):
         super().__init__(**kwargs)
@@ -68,6 +70,7 @@ class RetrievalEvaluator(Evaluator):
         self.score_functions = score_functions
         self.score_function_names = sorted(list(self.score_functions.keys()))
         self.main_score_function = main_score_function
+        self.language = language
 
     def __call__(self, model) -> float:
         scores = self.compute_metrics(model)
@@ -98,7 +101,8 @@ class RetrievalEvaluator(Evaluator):
         kwargs = {
             "show_progress_bar": self.show_progress_bar
         } if "show_progress_bar" in inspect.signature(model.encode).parameters else {}
-        query_embeddings = np.asarray(model.encode(self.queries, batch_size=self.batch_size, **kwargs))
+        embed_fn = get_embed_with_lang_func(model)
+        query_embeddings = np.asarray(embed_fn(self.queries, batch_size=self.batch_size, language=self.language, **kwargs))
         queries_result_list = {}
         for name in self.score_functions:
             queries_result_list[name] = [[] for _ in range(len(query_embeddings))]
@@ -115,9 +119,11 @@ class RetrievalEvaluator(Evaluator):
             # Encode chunk of corpus
             if corpus_embeddings is None:
                 corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(self.corpus))
-                sub_corpus_embeddings = np.asarray(corpus_model.encode(
+                embed_fn_corpus = get_embed_with_lang_func(corpus_model)
+                sub_corpus_embeddings = np.asarray(embed_fn_corpus(
                     self.corpus[corpus_start_idx:corpus_end_idx],
                     batch_size=self.batch_size,
+                    language=self.language,
                 ))
             else:
                 corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus_embeddings))

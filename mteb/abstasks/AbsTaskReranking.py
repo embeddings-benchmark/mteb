@@ -20,7 +20,7 @@ class AbsTaskReranking(AbsTask):
 
         data_split = self.dataset[split]
 
-        evaluator = RerankingEvaluator(data_split, **kwargs)
+        evaluator = RerankingEvaluator(data_split, language=self.get_language(), **kwargs)
         scores = evaluator(model)
 
         return dict(scores)

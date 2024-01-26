@@ -1,4 +1,5 @@
 import logging
+from mteb.utils import get_embed_with_lang_func, maybe_split_language_pair
 
 import numpy as np
 import torch
@@ -11,13 +12,14 @@ logger = logging.getLogger(__name__)
 
 
 class BitextMiningEvaluator(Evaluator):
-    def __init__(self, sentences1, sentences2, gold, batch_size=32, limit=None, **kwargs):
+    def __init__(self, sentences1, sentences2, gold, language, batch_size=32, limit=None, **kwargs):
         super().__init__(**kwargs)
         self.gold = gold
         self.sentences1 = [sentences1[i] for (i, j) in self.gold]
         self.sentences2 = sentences2
 
         self.batch_size = batch_size
+        self.language = language
 
     def __call__(self, model):
         scores = self.compute_metrics(model)
@@ -25,12 +27,12 @@ class BitextMiningEvaluator(Evaluator):
 
     def compute_metrics(self, model):
         # Compute embeddings
-        sentences = list(set(self.sentences1 + self.sentences2))
-        logger.info(f"Encoding {len(sentences)} sentences...")
-        embeddings = model.encode(sentences, batch_size=self.batch_size)
-        emb_dict = {sent: emb for sent, emb in zip(sentences, embeddings)}
-        embeddings1 = np.asarray([emb_dict[sent] for sent in self.sentences1])
-        embeddings2 = np.asarray([emb_dict[sent] for sent in self.sentences2])
+        encode_func = get_embed_with_lang_func(model)
+        lang1, lang2 = maybe_split_language_pair(self.language)
+        logger.info(f"Encoding {len(self.sentences1)} LHS sentences...")
+        embeddings1 = encode_func(self.sentences1, batch_size=self.batch_size, language=lang1)
+        logger.info(f"Encoding {len(self.sentences2)} LHS sentences...")
+        embeddings2 = encode_func(self.sentences2, batch_size=self.batch_size, language=lang2)
 
         # Find nearest neighbors
         logger.info("Finding nearest neighbors...")

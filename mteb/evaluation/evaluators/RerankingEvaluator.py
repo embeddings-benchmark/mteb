@@ -1,4 +1,5 @@
 import logging
+from mteb.utils import get_embed_with_lang_func
 
 import numpy as np
 import torch
@@ -32,6 +33,7 @@ class RerankingEvaluator(Evaluator):
         batch_size: int = 512,
         use_batched_encoding: bool = True,
         limit: int = None,
+        language: str = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -43,6 +45,7 @@ class RerankingEvaluator(Evaluator):
         self.similarity_fct = similarity_fct
         self.batch_size = batch_size
         self.use_batched_encoding = use_batched_encoding
+        self.language = language
 
         if isinstance(self.samples, dict):
             self.samples = list(self.samples.values())
@@ -73,8 +76,8 @@ class RerankingEvaluator(Evaluator):
 
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
-        encode_queries_func = model.encode_queries if hasattr(model, 'encode_queries') else model.encode
-        encode_corpus_func = model.encode_corpus if hasattr(model, 'encode_corpus') else model.encode
+        encode_queries_func = get_embed_with_lang_func(model, language=self.language, query_specific=True)
+        encode_corpus_func = get_embed_with_lang_func(model, language=self.language, corpus_specific=True)
 
         logger.info("Encoding queries...")
         if isinstance(self.samples[0]["query"], str):
@@ -136,8 +139,8 @@ class RerankingEvaluator(Evaluator):
 
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
-        encode_queries_func = model.encode_queries if hasattr(model, 'encode_queries') else model.encode
-        encode_corpus_func = model.encode_corpus if hasattr(model, 'encode_corpus') else model.encode
+        encode_queries_func = get_embed_with_lang_func(model, language=self.language, query_specific=True)
+        encode_corpus_func = get_embed_with_lang_func(model, language=self.language, corpus_specific=True)
         
         for instance in tqdm.tqdm(self.samples, desc="Samples"):
             query = instance["query"]

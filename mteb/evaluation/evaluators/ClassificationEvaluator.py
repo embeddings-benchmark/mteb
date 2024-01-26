@@ -1,4 +1,5 @@
 import logging
+from mteb.utils import get_embed_with_lang_func
 
 import numpy as np
 import torch
@@ -13,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class kNNClassificationEvaluator(Evaluator):
-    def __init__(self, sentences_train, y_train, sentences_test, y_test, k=1, batch_size=32, limit=None, **kwargs):
+    def __init__(self, sentences_train, y_train, sentences_test, y_test, language, k=1, batch_size=32, limit=None, **kwargs):
         super().__init__(**kwargs)
         if limit is not None:
             sentences_train = sentences_train[:limit]
@@ -29,14 +30,18 @@ class kNNClassificationEvaluator(Evaluator):
 
         self.k = k
 
+        self.langauge = language
+
     def __call__(self, model, test_cache=None):
         scores = {}
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
-        X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
+        embed_fn = get_embed_with_lang_func(model)
+
+        X_train = np.asarray(embed_fn(self.sentences_train, batch_size=self.batch_size, language=self.language))
         if test_cache is None:
-            X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
+            X_test = np.asarray(embed_fn(self.sentences_test, batch_size=self.batch_size, language=self.language))
             test_cache = X_test
         else:
             X_test = test_cache
@@ -63,7 +68,7 @@ class kNNClassificationEvaluator(Evaluator):
 
 
 class kNNClassificationEvaluatorPytorch(Evaluator):
-    def __init__(self, sentences_train, y_train, sentences_test, y_test, k=1, batch_size=32, limit=None, **kwargs):
+    def __init__(self, sentences_train, y_train, sentences_test, y_test, language, k=1, batch_size=32, limit=None, **kwargs):
         super().__init__(**kwargs)
         if limit is not None:
             sentences_train = sentences_train[:limit]
@@ -80,14 +85,19 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 
         self.k = k
 
+        self.language = language
+
     def __call__(self, model, test_cache=None):
         scores = {}
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
-        X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
+
+        embed_fn = get_embed_with_lang_func(model)
+
+        X_train = np.asarray(embed_fn(self.sentences_train, batch_size=self.batch_size, language=self.language))
         if test_cache is None:
-            X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
+            X_test = np.asarray(embed_fn(self.sentences_test, batch_size=self.batch_size, language=self.language))
             test_cache = X_test
         else:
             X_test = test_cache
@@ -183,7 +193,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 
 class logRegClassificationEvaluator(Evaluator):
     def __init__(
-        self, sentences_train, y_train, sentences_test, y_test, max_iter=100, batch_size=32, limit=None, **kwargs
+        self, sentences_train, y_train, sentences_test, y_test, language, max_iter=100, batch_size=32, limit=None, **kwargs
     ):
         super().__init__(**kwargs)
         if limit is not None:
@@ -198,6 +208,7 @@ class logRegClassificationEvaluator(Evaluator):
 
         self.max_iter = max_iter
         self.batch_size = batch_size
+        self.language = language
 
     def __call__(self, model, test_cache=None):
         scores = {}
@@ -208,10 +219,11 @@ class logRegClassificationEvaluator(Evaluator):
             verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
         )
         logger.info(f"Encoding {len(self.sentences_train)} training sentences...")
-        X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
+        embed_fn = get_embed_with_lang_func(model)
+        X_train = np.asarray(embed_fn(self.sentences_train, batch_size=self.batch_size, language=self.language))
         logger.info(f"Encoding {len(self.sentences_test)} test sentences...")
         if test_cache is None:
-            X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
+            X_test = np.asarray(embed_fn(self.sentences_test, batch_size=self.batch_size, language=self.language))
             test_cache = X_test
         else:
             X_test = test_cache

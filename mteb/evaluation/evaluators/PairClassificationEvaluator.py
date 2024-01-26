@@ -1,4 +1,5 @@
 import logging
+from mteb.utils import get_embed_with_lang_func, maybe_split_language_pair
 
 import numpy as np
 from sklearn.metrics import average_precision_score
@@ -29,7 +30,7 @@ class PairClassificationEvaluator(Evaluator):
     :param write_csv: Write results to a CSV file
     """
 
-    def __init__(self, sentences1, sentences2, labels, batch_size=32, limit=None, **kwargs):
+    def __init__(self, sentences1, sentences2, labels, language, batch_size=32, limit=None, **kwargs):
         super().__init__(**kwargs)
         if limit:
             sentences1 = sentences1[:limit]
@@ -39,6 +40,7 @@ class PairClassificationEvaluator(Evaluator):
         self.sentences2 = sentences2
         self.labels = labels
         self.batch_size = batch_size
+        self.language = language
 
         assert len(self.sentences1) == len(self.sentences2)
         assert len(self.sentences1) == len(self.labels)
@@ -54,12 +56,14 @@ class PairClassificationEvaluator(Evaluator):
         return scores
 
     def compute_metrics(self, model):
-        sentences = list(set(self.sentences1 + self.sentences2))
-        logger.info(f"Encoding {len(sentences)} sentences...")
-        embeddings = np.asarray(model.encode(sentences, batch_size=self.batch_size))
-        emb_dict = {sent: emb for sent, emb in zip(sentences, embeddings)}
-        embeddings1 = [emb_dict[sent] for sent in self.sentences1]
-        embeddings2 = [emb_dict[sent] for sent in self.sentences2]
+        embed_fn = get_embed_with_lang_func(model)
+         # TODO: split the language in two, if this task is cross-lingual
+        lang1, lang2 = maybe_split_language_pair(self.language)
+        logger.info(f"Encoding {len(self.sentences1)} LHS sentences...")
+        embeddings1 = embed_fn(self.sentences1, language=lang1)
+
+        logger.info(f"Encoding {len(self.sentences2)} RHS sentences...")
+        embeddings2 = embed_fn(self.sentences2, language=lang2)
 
         logger.info("Computing similarity distances...")
         cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)

@@ -56,3 +56,11 @@ class AbsTask(ABC):
         :param split: Which datasplit to be used.
         """
         raise NotImplementedError
+
+    def get_language(self):
+        """ Return the first language of the task.
+        This is not meaningful for multilingual or cross-lingual tasks.
+        Also, a few Nordic tasks although not marked as multilingual, contain multiple languages.
+        For them, the first language will be returned.
+        """
+        return self.description['eval_langs'][0]

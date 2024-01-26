@@ -15,7 +15,7 @@ class AbsTaskClustering(AbsTask):
 
         v_measures = []
         for cluster_set in tqdm.tqdm(self.dataset[split], desc="Clustering"):
-            evaluator = ClusteringEvaluator(cluster_set["sentences"], cluster_set["labels"], **kwargs)
+            evaluator = ClusteringEvaluator(cluster_set["sentences"], cluster_set["labels"], language=self.get_language(), **kwargs)
             metrics = evaluator(model)
             v_measures.append(metrics["v_measure"])
 

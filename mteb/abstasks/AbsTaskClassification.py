@@ -48,16 +48,16 @@ class AbsTaskClassification(AbsTask):
             scores = {}
             for lang in self.dataset:
                 logger.info(f"\nTask: {self.description['name']}, split: {eval_split}, language: {lang}. Running...")
-                scores[lang] = self._evaluate_monolingual(model, self.dataset[lang], eval_split, train_split, **kwargs)
+                scores[lang] = self._evaluate_monolingual(model, self.dataset[lang], eval_split, train_split, language=lang, **kwargs)
                 self._add_main_score(scores[lang])
         else:
             logger.info(f"\nTask: {self.description['name']}, split: {eval_split}. Running...")
-            scores = self._evaluate_monolingual(model, self.dataset, eval_split, train_split, **kwargs)
+            scores = self._evaluate_monolingual(model, self.dataset, eval_split, train_split, language=self.get_language(), **kwargs)
             self._add_main_score(scores)
 
         return scores
 
-    def _evaluate_monolingual(self, model, dataset, eval_split="test", train_split="train", **kwargs):
+    def _evaluate_monolingual(self, model, dataset, eval_split="test", train_split="train", language=None, **kwargs):
         train_split = dataset[train_split]
         eval_split = dataset[eval_split]
         params = {"k": self.k, "batch_size": self.batch_size}
@@ -74,15 +74,15 @@ class AbsTaskClassification(AbsTask):
 
             if self.method == "kNN":
                 evaluator = kNNClassificationEvaluator(
-                    X_sampled, y_sampled, eval_split["text"], eval_split["label"], **params
+                    X_sampled, y_sampled, eval_split["text"], eval_split["label"], language=language, **params
                 )
             elif self.method == "kNN-pytorch":
                 evaluator = kNNClassificationEvaluatorPytorch(
-                    X_sampled, y_sampled, eval_split["text"], eval_split["label"], **params
+                    X_sampled, y_sampled, eval_split["text"], eval_split["label"], language=language, **params
                 )
             elif self.method == "logReg":
                 evaluator = logRegClassificationEvaluator(
-                    X_sampled, y_sampled, eval_split["text"], eval_split["label"], **params
+                    X_sampled, y_sampled, eval_split["text"], eval_split["label"], language=language, **params
                 )
             else:
                 raise ValueError(f"Method {self.method} not supported")

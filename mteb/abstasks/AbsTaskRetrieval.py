@@ -77,7 +77,7 @@ class AbsTaskRetrieval(AbsTask):
             )
 
 
-
+        # TODO: find a way to pass the language to the retriever model
         retriever = EvaluateRetrieval(model, score_function=score_function)  # or "cos_sim" or "dot"
         start_time = time()
         results = retriever.retrieve(corpus, queries)

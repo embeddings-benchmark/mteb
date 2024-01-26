@@ -1,4 +1,5 @@
 import logging
+from mteb.utils import get_embed_with_lang_func, maybe_split_language_pair
 
 import numpy as np
 from scipy.stats import pearsonr, spearmanr
@@ -14,7 +15,7 @@ from .Evaluator import Evaluator
 
 
 class STSEvaluator(Evaluator):
-    def __init__(self, sentences1, sentences2, gold_scores, batch_size=64, limit=None, **kwargs):
+    def __init__(self, sentences1, sentences2, gold_scores, language, batch_size=64, limit=None, **kwargs):
         super().__init__(**kwargs)
         if limit is not None:
             sentences1 = sentences1[:limit]
@@ -24,12 +25,15 @@ class STSEvaluator(Evaluator):
         self.sentences2 = sentences2
         self.gold_scores = gold_scores
         self.batch_size = batch_size
+        self.language = language
 
     def __call__(self, model):
         logger.info(f"Encoding {len(self.sentences1)} sentences1...")
-        embeddings1 = np.asarray(model.encode(self.sentences1, batch_size=self.batch_size))
+        embed_fn = get_embed_with_lang_func(model)
+        lang1, lang2 = maybe_split_language_pair(self.language)
+        embeddings1 = np.asarray(embed_fn(self.sentences1, batch_size=self.batch_size, language=lang1))
         logger.info(f"Encoding {len(self.sentences2)} sentences2...")
-        embeddings2 = np.asarray(model.encode(self.sentences2, batch_size=self.batch_size))
+        embeddings2 = np.asarray(embed_fn(self.sentences2, batch_size=self.batch_size, language=lang2))
 
         logger.info("Evaluating...")
         cosine_scores = 1 - (paired_cosine_distances(embeddings1, embeddings2))

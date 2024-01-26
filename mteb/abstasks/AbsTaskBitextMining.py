@@ -19,15 +19,15 @@ class AbsTaskBitextMining(AbsTask):
             for lang in self.dataset:
                 logger.info(f"\nTask: {self.description['name']}, split: {split}, language: {lang}. Running...")
                 data_split = self.dataset[lang][split]
-                scores[lang] = self._evaluate_split(model, data_split, **kwargs)
+                scores[lang] = self._evaluate_split(model, data_split, split_langs=lang, **kwargs)
         else:
             logger.info(f"\nTask: {self.description['name']}, split: {split}. Running...")
             data_split = self.dataset[split]
-            scores = self._evaluate_split(model, data_split, **kwargs)
+            scores = self._evaluate_split(model, data_split, split_langs=self.get_language(), **kwargs)
 
         return scores
 
-    def _evaluate_split(self, model, data_split, **kwargs):
+    def _evaluate_split(self, model, data_split, split_langs, **kwargs):
         if len(data_split["sentence1"]) == 1:
             sentence1 = data_split["sentence1"][0]
         else:
@@ -52,7 +52,7 @@ class AbsTaskBitextMining(AbsTask):
                 [(i > 0) and (j > 0) for i, j in gold]
             ), "Found negative gold indices. This may be caused by MTEB expecting 1-indexed gold labels."
 
-        evaluator = BitextMiningEvaluator(sentence1, sentence2, gold, **kwargs)
+        evaluator = BitextMiningEvaluator(sentence1, sentence2, gold, language=split_langs, **kwargs)
         metrics = evaluator(model)
         self._add_main_score(metrics)
         return metrics
