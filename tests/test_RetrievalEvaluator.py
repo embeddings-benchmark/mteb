@@ -23,6 +23,7 @@ class TestRetrievalEvaluator:
             accuracy_at_k=[],
             precision_recall_at_k=[],
             map_at_k=[],
+            language="en",
         )
 
     def test_accuracy_at_k(self):

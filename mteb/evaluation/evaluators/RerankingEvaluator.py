@@ -76,19 +76,20 @@ class RerankingEvaluator(Evaluator):
 
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
-        encode_queries_func = get_embed_with_lang_func(model, language=self.language, query_specific=True)
-        encode_corpus_func = get_embed_with_lang_func(model, language=self.language, corpus_specific=True)
+        encode_queries_func = get_embed_with_lang_func(model, query_specific=True)
+        encode_corpus_func = get_embed_with_lang_func(model, corpus_specific=True)
 
         logger.info("Encoding queries...")
         if isinstance(self.samples[0]["query"], str):
             all_query_embs = np.asarray(encode_queries_func(
                 [sample["query"] for sample in self.samples],
                 batch_size=self.batch_size,
+                language=self.language,
             ))
         elif isinstance(self.samples[0]["query"], list):
             # In case the query is a list of strings, we get the most similar embedding to any of the queries
             all_query_flattened = [q for sample in self.samples for q in sample["query"]]
-            all_query_embs = np.asarray(encode_queries_func(all_query_flattened, batch_size=self.batch_size))
+            all_query_embs = np.asarray(encode_queries_func(all_query_flattened, batch_size=self.batch_size, language=self.language))
         else:
             raise ValueError(f"Query must be a string or a list of strings but is {type(self.samples[0]['query'])}")
 
@@ -98,7 +99,7 @@ class RerankingEvaluator(Evaluator):
             all_docs.extend(sample["positive"])
             all_docs.extend(sample["negative"])
 
-        all_docs_embs = np.asarray(encode_corpus_func(all_docs, batch_size=self.batch_size))
+        all_docs_embs = np.asarray(encode_corpus_func(all_docs, batch_size=self.batch_size, language=self.language))
 
         # Compute scores
         logger.info("Evaluating...")
@@ -139,8 +140,8 @@ class RerankingEvaluator(Evaluator):
 
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
-        encode_queries_func = get_embed_with_lang_func(model, language=self.language, query_specific=True)
-        encode_corpus_func = get_embed_with_lang_func(model, language=self.language, corpus_specific=True)
+        encode_queries_func = get_embed_with_lang_func(model, query_specific=True)
+        encode_corpus_func = get_embed_with_lang_func(model, corpus_specific=True)
         
         for instance in tqdm.tqdm(self.samples, desc="Samples"):
             query = instance["query"]
@@ -156,8 +157,8 @@ class RerankingEvaluator(Evaluator):
             if isinstance(query, str):
                 # .encoding interface requires List[str] as input
                 query = [query]
-            query_emb = np.asarray(encode_queries_func(query, batch_size=self.batch_size))
-            docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
+            query_emb = np.asarray(encode_queries_func(query, batch_size=self.batch_size, language=self.language))
+            docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size, language=self.language))
 
             scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
             all_mrr_scores.append(scores["mrr"])
