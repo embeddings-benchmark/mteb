@@ -51,4 +51,4 @@ class AbsTaskPairClassification(AbsTask):
             return scores
         else:
             logger.info(f"\nTask: {self.description['name']}, split: {split}, language: {lang}. Running...")
-            return self._evaluate_monolingual(model, dataset, split=split, **kwargs)
+            return self._evaluate_monolingual(model, self.dataset, split=split, **kwargs)
