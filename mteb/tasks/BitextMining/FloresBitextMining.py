@@ -222,8 +222,6 @@ def extend_lang_pairs():
                         pair = f"{x}-{y}"
                         if pair not in _LANGUAGES:
                             _LANGUAGES_PAIRS.append(pair)
-    return
-
 
 extend_lang_pairs()
 
