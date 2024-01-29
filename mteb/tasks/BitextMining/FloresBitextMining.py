@@ -209,7 +209,7 @@ _LANGUAGES = [
 ]
 _LANGUAGES_PAIRS = []
 
-_SPLIT = ["dev"]
+_SPLIT = ["dev", "devtest"]
 
 
 def extend_lang_pairs():
