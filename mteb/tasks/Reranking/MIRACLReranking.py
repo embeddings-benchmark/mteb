@@ -1,5 +1,6 @@
+from ...abstasks.AbsTaskReranking import AbsTaskReranking
+
 import datasets
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 
 
 class MIRACLReranking(AbsTaskReranking):
