@@ -20,7 +20,7 @@ _LANGUAGES = [
 ]
 
 
-class MasakhaNEWSClassification(MultilingualTask, AbsTaskClassification):
+class MasakhaNEWSClassification(AbsTaskClassification, MultilingualTask):
     @property
     def description(self):
         return {
