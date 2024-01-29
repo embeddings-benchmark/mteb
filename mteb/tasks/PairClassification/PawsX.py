@@ -24,7 +24,6 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
         if self.data_loaded:
             return
 
-        print(kwargs, self.is_multilingual, self.langs)
         self.dataset = dict()
         for lang in self.langs:
             hf_dataset = datasets.load_dataset(
