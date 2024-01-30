@@ -1,5 +1,6 @@
 from .BiossesSTS import *
 from .CMTEBSTS import *
+from .GermanSTSBenchmarkSTS import *
 from .PolishSTS import *
 from .SickFrSTS import *
 from .SickrSTS import *
