@@ -19,7 +19,7 @@ class AbsTaskPairClassification(AbsTask):
 
     def _evaluate_monolingual(self, model, dataset, split="test", **kwargs):
         data_split = dataset[split][0]
-        scores = []
+        logging.getLogger("sentence_transformers.evaluation.PairClassificationEvaluator").setLevel(logging.WARN)
         evaluator = PairClassificationEvaluator(
             data_split["sent1"], data_split["sent2"], data_split["labels"], **kwargs
         )
