@@ -3,6 +3,7 @@ import json
 import os
 from time import time
 from typing import Dict, List
+from mteb.utils import get_embed_with_lang_func
 
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
@@ -52,7 +53,7 @@ class AbsTaskRetrieval(AbsTask):
             self.load_data(parallel_retrieval=parallel_retrieval)
 
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
-        model = model if self.is_dres_compatible(model) else DRESModel(model)
+        model = model if self.is_dres_compatible(model) else DRESModel(model, language=self.get_language())
 
         if not parallel_retrieval:
             # Non-distributed
@@ -76,8 +77,6 @@ class AbsTaskRetrieval(AbsTask):
                 **kwargs,
             )
 
-
-        # TODO: find a way to pass the language to the retriever model
         retriever = EvaluateRetrieval(model, score_function=score_function)  # or "cos_sim" or "dot"
         start_time = time()
         results = retriever.retrieve(corpus, queries)
@@ -109,10 +108,11 @@ class DRESModel:
     This class converts a MTEB model (with just an .encode method) into BeIR DRES format.
     """
 
-    def __init__(self, model, sep=" ", **kwargs):
+    def __init__(self, model, sep=" ", language=None, **kwargs):
         self.model = model
         self.sep = sep
         self.use_sbert_model = isinstance(model, SentenceTransformer)
+        self.language = language
 
     def encode_queries(self, queries: List[str], batch_size: int, **kwargs):
         if self.use_sbert_model:
@@ -122,7 +122,8 @@ class DRESModel:
                 logger.warning(
                     "Queries will not be truncated. This could lead to memory issues. In that case please lower the batch_size."
                 )
-        return self.model.encode(queries, batch_size=batch_size, **kwargs)
+        embed_fn = get_embed_with_lang_func(self.model)
+        return embed_fn(queries, batch_size=batch_size, language=self.language, **kwargs)
 
     def encode_corpus(self, corpus: List[Dict[str, str]], batch_size: int, **kwargs):
         if type(corpus) is dict:
@@ -137,4 +138,5 @@ class DRESModel:
                 (doc["title"] + self.sep + doc["text"]).strip() if "title" in doc else doc["text"].strip()
                 for doc in corpus
             ]
-        return self.model.encode(sentences, batch_size=batch_size, **kwargs)
+        embed_fn = get_embed_with_lang_func(self.model)
+        return embed_fn(sentences, batch_size=batch_size, language=self.language, **kwargs)

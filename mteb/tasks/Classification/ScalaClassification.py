@@ -52,7 +52,7 @@ class ScalaNbClassification(AbsTaskClassification):
             "type": "Classification",
             "category": "s2s",
             "eval_splits": ["test"],
-            "eval_langs": ["no", "nb"],
+            "eval_langs": ["nb"],
             "main_score": "accuracy",
             "n_experiments": 10,
             "samples_per_label": 16,
@@ -83,14 +83,14 @@ class ScalaNnClassification(AbsTaskClassification):
     @property
     def description(self):
         return {
-            "name": "ScalaNbClassification",
+            "name": "ScalaNnClassification",
             "hf_hub_name": "ScandEval/scala-nn",
             "description": "A Norwegian dataset for linguistic acceptability classification for Nynorsk",
             "reference": "https://aclanthology.org/2023.nodalida-1.20/",
             "type": "Classification",
             "category": "s2s",
             "eval_splits": ["test"],
-            "eval_langs": ["no", "nn"],
+            "eval_langs": ["nn"],
             "main_score": "accuracy",
             "n_experiments": 10,
             "samples_per_label": 16,

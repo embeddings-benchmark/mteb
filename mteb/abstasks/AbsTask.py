@@ -1,9 +1,13 @@
+import logging
 import random
 from abc import ABC, abstractmethod
 
 import datasets
 import numpy as np
 import torch
+
+
+logger = logging.getLogger(__name__)
 
 
 class AbsTask(ABC):
@@ -63,4 +67,8 @@ class AbsTask(ABC):
         Also, a few Nordic tasks although not marked as multilingual, contain multiple languages.
         For them, the first language will be returned.
         """
-        return self.description['eval_langs'][0]
+        langs = self.description['eval_langs']
+        if len(langs) != 1:
+            name = self.description['name']
+            logger.warning(f"For task {name}, the number of languages is not 1: {langs}. Is it multi- or cross-lingual?")
+        return langs[0]
