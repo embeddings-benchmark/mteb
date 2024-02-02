@@ -87,6 +87,11 @@ class AbsTaskRetrieval(AbsTask):
             output_folder = kwargs.get("output_folder", "results")
             if not os.path.isdir(output_folder):
                 os.makedirs(output_folder)
+            top_k = kwargs.get('top_k', None)
+            if top_k is not None:
+                for qid in list(results.keys()):
+                    doc_ids = set(sorted(results[qid], key=lambda x: results[qid][x], reverse=True)[:top_k])
+                    results[qid] = {k: v for k, v in results[qid].items() if k in doc_ids}
             with open(f"{output_folder}/{self.description['name']}_qrels.json", "w") as f:
                 json.dump(results, f)
         ndcg, _map, recall, precision = retriever.evaluate(relevant_docs, results, retriever.k_values, ignore_identical_ids=kwargs.get("ignore_identical_ids", True))
