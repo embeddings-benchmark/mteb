@@ -113,7 +113,7 @@ You can evaluate only on `test` splits of all tasks by doing the following:
 evaluation.run(model, eval_splits=["test"])
 ```
 
-Note that the public leaderboard uses the test splits for all datasets except MSMARCO, where the "dev" split is used.
+Note that the public leaderboard for English uses the test splits for all datasets except MSMARCO, where the "dev" split is used.
 
 ### Using a custom model
 
@@ -137,6 +137,13 @@ model = MyModel()
 evaluation = MTEB(tasks=["Banking77Classification"])
 evaluation.run(model)
 ```
+Please note that some evaluators pass additional arguments to `encode` (such as `show_progress_bar` or `convert_to_tensor`), 
+expecting the [SentenceTransformer.method](https://github.com/UKPLab/sentence-transformers/blob/master/sentence_transformers/SentenceTransformer.py#L220) 
+or a compatible one. A custom `encode` method with `**kwargs` will ignore all such extra arguments.
+
+If your model needs the language tag to embed the texts, you can add the `language` argument to its `encode` method.
+If you are running it on multilingual tasks, please make sure that diverse language codes 
+(such as `es`, `ber`, `zh-TW`, `da-bornholm`) are processed correctly.
 
 If you'd like to use different encoding functions for query and corpus when evaluating on Retrieval or Reranking tasks, you can add separate methods for `encode_queries` and `encode_corpus`. If these methods exist, they will be automatically used for those tasks. You can refer to the `DRESModel` at `mteb/mteb/abstasks/AbsTaskRetrieval.py` for an example of these functions.
 
@@ -199,6 +206,11 @@ evaluation.run(model)
 ```
 
 > **Note:** for multilingual tasks, make sure your class also inherits from the `MultilingualTask` class like in [this](https://github.com/embeddings-benchmark/mteb-draft/blob/main/mteb/tasks/Classification/MTOPIntentClassification.py) example.
+
+### Task-specific notes
+* To run the `DKHateClassification` task (Danish language) you need first to manually ask for access to the gated 
+dataset: https://huggingface.co/datasets/DDSC/dkhate.
+
 
 ## Leaderboard
 
