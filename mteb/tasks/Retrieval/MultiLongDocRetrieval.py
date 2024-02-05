@@ -7,15 +7,16 @@ _LANGUAGES = ['ar', 'de', 'en', 'es', 'fr', 'hi', 'it', 'ja', 'ko', 'pt', 'ru', 
 
 
 def load_mldr_data(path: str, langs: list, eval_splits: list, cache_dir: str=None):
-    corpus = {lang: None for lang in langs}
+    corpus = {lang: {split: None for split in eval_splits} for lang in langs}
     queries = {lang: {split: None for split in eval_splits} for lang in langs}
     relevant_docs = {lang: {split: None for split in eval_splits} for lang in langs}
     
     for lang in langs:
         lang_corpus = datasets.load_dataset(path, f'corpus-{lang}', cache_dir=cache_dir)['corpus']
-        corpus[lang] = {e['docid']: {'text': e['text']} for e in lang_corpus}
+        lang_corpus = {e['docid']: {'text': e['text']} for e in lang_corpus}
         lang_data = datasets.load_dataset(path, lang, cache_dir=cache_dir)
         for split in eval_splits:
+            corpus[lang][split] = lang_corpus
             queries[lang][split] = {e['query_id']: e['query'] for e in lang_data[split]}
             relevant_docs[lang][split] = {e['query_id']: {e['positive_passages'][0]['docid']: 1} for e in lang_data[split]}
     
