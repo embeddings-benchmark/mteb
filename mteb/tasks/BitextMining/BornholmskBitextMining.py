@@ -16,7 +16,7 @@ class BornholmBitextMining(AbsTaskBitextMining):
             "type": "BitextMining",
             "category": "s2s",
             "eval_splits": ["test"],
-            "eval_langs": ["da", "da-bornholm"],
+            "eval_langs": ["da-da-bornholm"],
             "main_score": "f1",
             "revision": "3bc5cfb4ec514264fe2db5615fac9016f7251552",
         }
