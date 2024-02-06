@@ -106,7 +106,6 @@ class DRESModel:
         self.model = model
         self.sep = sep
         self.use_sbert_model = isinstance(model, SentenceTransformer)
-        print(kwargs)
 
     def encode_queries(self, queries: List[str], batch_size: int, **kwargs):
         prefix = ''
