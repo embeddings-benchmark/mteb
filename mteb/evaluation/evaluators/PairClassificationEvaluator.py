@@ -57,7 +57,6 @@ class PairClassificationEvaluator(Evaluator):
 
     def compute_metrics(self, model):
         embed_fn = get_embed_with_lang_func(model)
-         # TODO: split the language in two, if this task is cross-lingual
         lang1, lang2 = maybe_split_language_pair(self.language)
         logger.info(f"Encoding {len(self.sentences1)} LHS sentences...")
         embeddings1 = embed_fn(self.sentences1, language=lang1)
