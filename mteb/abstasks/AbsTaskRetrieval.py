@@ -1,10 +1,11 @@
 import logging
+import json
+import os
 from time import time
 from typing import Dict, List
 
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
-import os
 
 from .AbsTask import AbsTask
 
@@ -39,6 +40,7 @@ class AbsTaskRetrieval(AbsTask):
         batch_size=128,
         corpus_chunk_size=None,
         score_function="cos_sim",
+        parallel_retrieval=False,
         **kwargs
     ):
         try:
@@ -47,12 +49,12 @@ class AbsTaskRetrieval(AbsTask):
             raise Exception("Retrieval tasks require beir package. Please install it with `pip install mteb[beir]`")
 
         if not self.data_loaded:
-            self.load_data()
+            self.load_data(parallel_retrieval=parallel_retrieval)
 
         corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
         model = model if self.is_dres_compatible(model) else DRESModel(model)
 
-        if os.getenv("RANK", None) is None:
+        if not parallel_retrieval:
             # Non-distributed
             from beir.retrieval.search.dense import DenseRetrievalExactSearch as DRES
             model = DRES(
@@ -81,7 +83,17 @@ class AbsTaskRetrieval(AbsTask):
         results = retriever.retrieve(corpus, queries)
         end_time = time()
         logger.info("Time taken to retrieve: {:.2f} seconds".format(end_time - start_time))
-
+        if kwargs.get("save_qrels", False):
+            output_folder = kwargs.get("output_folder", "results")
+            if not os.path.isdir(output_folder):
+                os.makedirs(output_folder)
+            top_k = kwargs.get('top_k', None)
+            if top_k is not None:
+                for qid in list(results.keys()):
+                    doc_ids = set(sorted(results[qid], key=lambda x: results[qid][x], reverse=True)[:top_k])
+                    results[qid] = {k: v for k, v in results[qid].items() if k in doc_ids}
+            with open(f"{output_folder}/{self.description['name']}_qrels.json", "w") as f:
+                json.dump(results, f)
         ndcg, _map, recall, precision = retriever.evaluate(relevant_docs, results, retriever.k_values, ignore_identical_ids=kwargs.get("ignore_identical_ids", True))
         mrr = retriever.evaluate_custom(relevant_docs, results, retriever.k_values, "mrr")
 
@@ -108,9 +120,6 @@ class DRESModel:
         self.use_sbert_model = isinstance(model, SentenceTransformer)
 
     def encode_queries(self, queries: List[str], batch_size: int, **kwargs):
-        prefix = ''
-        if(self.model._model_card_text is not None and 'multilingual-e5' in self.model._model_card_text):
-            prefix = 'query: '
         if self.use_sbert_model:
             if isinstance(self.model._first_module(), Transformer):
                 logger.info(f"Queries will be truncated to {self.model.get_max_seq_length()} tokens.")
@@ -118,14 +127,9 @@ class DRESModel:
                 logger.warning(
                     "Queries will not be truncated. This could lead to memory issues. In that case please lower the batch_size."
                 )
-        if prefix != '':
-            queries = [prefix + query for query in queries]
         return self.model.encode(queries, batch_size=batch_size, **kwargs)
 
     def encode_corpus(self, corpus: List[Dict[str, str]], batch_size: int, **kwargs):
-        prefix = ''
-        if(self.model._model_card_text is not None and 'multilingual-e5' in self.model._model_card_text):
-            prefix = 'passage: '
         if type(corpus) is dict:
             sentences = [
                 (corpus["title"][i] + self.sep + corpus["text"][i]).strip()
@@ -138,6 +142,4 @@ class DRESModel:
                 (doc["title"] + self.sep + doc["text"]).strip() if "title" in doc else doc["text"].strip()
                 for doc in corpus
             ]
-        if prefix != '':
-            sentences = [prefix + sentence for sentence in sentences]
         return self.model.encode(sentences, batch_size=batch_size, **kwargs)
