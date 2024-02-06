@@ -32,7 +32,7 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
         return {
             'name': 'MultiLongDocRetrieval',
             'hf_hub_name': 'Shitao/MLDR',
-            'reference': 'https://github.com/FlagOpen/FlagEmbedding/tree/master/FlagEmbedding/BGE_M3',
+            'reference': 'https://arxiv.org/abs/2402.03216',
             'description': 'MultiLongDocRetrieval: A Multilingual Long-Document Retrieval Dataset',
             'type': 'Retrieval',
             'category': 's2p',
