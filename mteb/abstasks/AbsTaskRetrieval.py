@@ -52,7 +52,6 @@ class AbsTaskRetrieval(AbsTask):
         if not self.data_loaded:
             self.load_data(parallel_retrieval=parallel_retrieval)
 
-        corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
         model = model if self.is_dres_compatible(model) else DRESModel(model, language=self.get_language())
 
         if not parallel_retrieval:
@@ -78,19 +77,43 @@ class AbsTaskRetrieval(AbsTask):
             )
 
         retriever = EvaluateRetrieval(model, score_function=score_function)  # or "cos_sim" or "dot"
+
+        scores = {}
+        if self.is_multilingual:
+            for lang in self.langs:
+                logger.info(f"Language: {lang}")
+                corpus, queries, relevant_docs = self.corpus[lang][split], self.queries[lang][split], self.relevant_docs[lang][split]
+                scores[lang] = self._evaluate_monolingual(retriever, corpus, queries, relevant_docs, lang, **kwargs)
+        else:
+            corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
+            scores = self._evaluate_monolingual(retriever, corpus, queries, relevant_docs, None, **kwargs)
+        return scores
+
+    def _evaluate_monolingual(self, retriever, corpus, queries, relevant_docs, lang=None, **kwargs):
         start_time = time()
         results = retriever.retrieve(corpus, queries)
         end_time = time()
         logger.info("Time taken to retrieve: {:.2f} seconds".format(end_time - start_time))
+
         if kwargs.get("save_qrels", False):
             output_folder = kwargs.get("output_folder", "results")
             if not os.path.isdir(output_folder):
                 os.makedirs(output_folder)
-            with open(f"{output_folder}/{self.description['name']}_qrels.json", "w") as f:
+            top_k = kwargs.get('top_k', None)
+            if top_k is not None:
+                for qid in list(results.keys()):
+                    doc_ids = set(sorted(results[qid], key=lambda x: results[qid][x], reverse=True)[:top_k])
+                    results[qid] = {k: v for k, v in results[qid].items() if k in doc_ids}
+            if lang is None:
+                qrels_save_path = f"{output_folder}/{self.description['name']}_qrels.json"
+            else:
+                qrels_save_path = f"{output_folder}/{self.description['name']}_{lang}_qrels.json"
+            
+            with open(qrels_save_path, "w") as f:
                 json.dump(results, f)
+
         ndcg, _map, recall, precision = retriever.evaluate(relevant_docs, results, retriever.k_values, ignore_identical_ids=kwargs.get("ignore_identical_ids", True))
         mrr = retriever.evaluate_custom(relevant_docs, results, retriever.k_values, "mrr")
-
         scores = {
             **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
             **{f"map_at_{k.split('@')[1]}": v for (k, v) in _map.items()},
@@ -98,7 +121,6 @@ class AbsTaskRetrieval(AbsTask):
             **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
             **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
         }
-
         return scores
 
 

@@ -39,3 +39,11 @@ from .SciFactPLRetrieval import *
 from .TRECCOVIDPLRetrieval import *
 from .NarrativeQARetrieval import *
 from .GermanQuADRetrieval import *
+from .GerDaLIRRetrieval import *
+from .GermanDPRRetrieval import *
+from .GerDaLIRRetrieval import *
+from .XMarketRetrieval import *
+from .MultiLongDocRetrieval import *
+from .KoStrategyQA import *
+from .KoMrtydi import *
+from .KoMiracl import *

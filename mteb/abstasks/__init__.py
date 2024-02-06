@@ -11,3 +11,4 @@ from .BeIRTask import *
 from .CrosslingualTask import *
 from .MultilingualTask import *
 from .BeIRPLTask import *
+from .BeIRKOTask import *
