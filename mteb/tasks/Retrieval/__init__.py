@@ -43,6 +43,7 @@ from .GerDaLIRRetrieval import *
 from .GermanDPRRetrieval import *
 from .GerDaLIRRetrieval import *
 from .XMarketRetrieval import *
+from .MultiLongDocRetrieval import *
 from .KoStrategyQA import *
 from .KoMrtydi import *
 from .KoMiracl import *
