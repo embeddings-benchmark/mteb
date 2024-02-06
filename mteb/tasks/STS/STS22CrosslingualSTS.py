@@ -37,5 +37,5 @@ class STS22CrosslingualSTS(AbsTaskSTS, CrosslingualTask):
             "main_score": "cosine_spearman",
             "min_score": 1,
             "max_score": 4,
-            "revision": "6d1ba47164174a496b7fa5d3569dae26a6813b80",
+            "revision": "eea2b4fe26a775864c896887d910b76a8098ad3f",
         }

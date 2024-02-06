@@ -14,6 +14,7 @@ class T2Reranking(AbsTaskReranking):
             'eval_splits': ['dev'],
             'eval_langs': ['zh'],
             'main_score': 'map',
+            'revision': '76631901a18387f85eaa53e5450019b87ad58ef9',
         }
 
 
@@ -30,6 +31,7 @@ class MMarcoReranking(AbsTaskReranking):
             'eval_splits': ['dev'],
             'eval_langs': ['zh'],
             'main_score': 'map',
+            'revision': '8e0c766dbe9e16e1d221116a3f36795fbade07f6',
         }
 
 
@@ -46,6 +48,7 @@ class CMedQAv1(AbsTaskReranking):
             'eval_splits': ['test'],
             'eval_langs': ['zh'],
             'main_score': 'map',
+            'revision': '8d7f1e942507dac42dc58017c1a001c3717da7df',
         }
 
 
@@ -62,4 +65,5 @@ class CMedQAv2(AbsTaskReranking):
             'eval_splits': ['test'],
             'eval_langs': ['zh'],
             'main_score': 'map',
+            'revision': '23d186750531a14a0357ca22cd92d712fd512ea0',
         }

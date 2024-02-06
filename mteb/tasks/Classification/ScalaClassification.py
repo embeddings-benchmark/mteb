@@ -83,7 +83,7 @@ class ScalaNnClassification(AbsTaskClassification):
     @property
     def description(self):
         return {
-            "name": "ScalaNbClassification",
+            "name": "ScalaNnClassification",
             "hf_hub_name": "ScandEval/scala-nn",
             "description": "A Norwegian dataset for linguistic acceptability classification for Nynorsk",
             "reference": "https://aclanthology.org/2023.nodalida-1.20/",

@@ -16,6 +16,7 @@ class CLSClusteringS2S(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["zh"],
             "main_score": "v_measure",
+            'revision': 'e458b3f5414b62b7f9f83499ac1f5497ae2e869f',
         }
 
 
@@ -35,6 +36,7 @@ class CLSClusteringP2P(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["zh"],
             "main_score": "v_measure",
+            'revision': '4b6227591c6c1a73bc76b1055f3b7f3588e72476',
         }
 
 
@@ -52,6 +54,7 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["zh"],
             "main_score": "v_measure",
+            'revision': '8a8b2caeda43f39e13c4bc5bea0f8a667896e10d',
         }
 
 
@@ -68,4 +71,5 @@ class ThuNewsClusteringP2P(AbsTaskClustering):
             "eval_splits": ["test"],
             "eval_langs": ["zh"],
             "main_score": "v_measure",
+            'revision': '5798586b105c0434e4f0fe5e767abe619442cf93',
         }
