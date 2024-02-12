@@ -31,7 +31,7 @@ class BeIRPLTask(AbsTask):
 
             corpus, queries, qrels = HFDataLoader(hf_repo=f"clarin-knext/{dataset}", streaming=False, keep_in_memory=False).load(split=split)
             # Conversion from DataSet
-            queries = {query['id']: query['text']} for query in queries}
+            queries = {query['id']: query['text'] for query in queries}
             corpus = {doc['id']: {'title': doc['title'] , 'text': doc['text']} for doc in corpus}
 
             self.corpus[split], self.queries[split], self.relevant_docs[split] = corpus, queries, qrels
