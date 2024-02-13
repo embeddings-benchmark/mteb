@@ -9,6 +9,11 @@ from sentence_transformers.models import Transformer, WordEmbeddings
 
 from .AbsTask import AbsTask
 
+import sys 
+current_dir = os.path.dirname(os.path.realpath(__file__))
+beir_path = os.path.join(current_dir, "..", "..", "..", "beir")
+sys.path.append(beir_path)
+
 logger = logging.getLogger(__name__)
 
 DRES_METHODS = ["encode_queries", "encode_corpus"]

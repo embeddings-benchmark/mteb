@@ -3,6 +3,12 @@ import os
 import datasets
 
 from .AbsTask import AbsTask
+
+import sys 
+current_dir = os.path.dirname(os.path.realpath(__file__))
+beir_path = os.path.join(current_dir, "..", "..", "..", "beir")
+sys.path.append(beir_path)
+
 import logging
 
 logger = logging.getLogger(__name__)
