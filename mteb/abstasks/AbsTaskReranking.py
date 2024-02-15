@@ -18,9 +18,16 @@ class AbsTaskReranking(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
-        data_split = self.dataset[split]
+        scores = {}
+        if self.is_multilingual:
+            for lang in self.langs:
+                data_split = self.dataset[lang][split]
+                evaluator = RerankingEvaluator(data_split, **kwargs)
+                scores[lang] = evaluator(model)
+        else:
+            data_split = self.dataset[split]
 
-        evaluator = RerankingEvaluator(data_split, **kwargs)
-        scores = evaluator(model)
+            evaluator = RerankingEvaluator(data_split, **kwargs)
+            scores = evaluator(model)
 
         return dict(scores)
