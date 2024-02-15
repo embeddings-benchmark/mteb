@@ -9,7 +9,7 @@ class MIRACLESRetrieval(AbsTaskRetrieval):
     @property
     def description(self):
         return {
-            'name': 'MIRACLRetrieval',
+            'name': 'MIRACLESRetrieval',
             'hf_hub_name': 'jinaai/miracl',
             'reference': 'https://project-miracl.github.io/',
             'description': (
