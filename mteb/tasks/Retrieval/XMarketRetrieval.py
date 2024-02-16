@@ -48,7 +48,7 @@ def _load_xmarket_data(path: str, langs: list, split: str, cache_dir: str=None, 
     return corpus, queries, relevant_docs
 
 
-class XMarketDE(MultilingualTask, AbsTaskRetrieval):
+class XMarket(MultilingualTask, AbsTaskRetrieval):
 
     @property
     def description(self):
