@@ -3,7 +3,7 @@ __version__ = "1.1.2.dev0"
 from mteb.evaluation import *
 
 
-MTEB_MAIN = [
+MTEB_MAIN_EN = [
     "AmazonCounterfactualClassification",
     "AmazonPolarityClassification",
     "AmazonReviewsClassification",
