@@ -31,6 +31,7 @@ TASK_LIST_CLUSTERING = [
 
 TASK_LIST_PAIR_CLASSIFICATION = [
     "OpusparcusPC",
+    "PawsX",
 ]
 
 TASK_LIST_RERANKING = [
