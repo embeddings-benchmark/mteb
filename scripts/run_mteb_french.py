@@ -43,7 +43,9 @@ TASK_LIST_RETRIEVAL = [
     "AlloprofRetrieval", 
     "BSARDRetrieval", 
     "HagridRetrieval",
-    "SyntecRetrieval"
+    "SyntecRetrieval",
+    "XPQARetrieval",
+    "MintakaRetrieval",
 ]
 
 TASK_LIST_STS = [
