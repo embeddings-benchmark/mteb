@@ -82,7 +82,6 @@ setup(
         "torch",
         "tqdm",
         "rich",
-        "patool",
     ],
     extras_require=extras,
     classifiers=[
