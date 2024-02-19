@@ -17,3 +17,5 @@ from .CMTEBClustering import *
 from .PolishClustering import *
 from .BigPatentClustering import *
 from .WikiCitiesClustering import *
+from .FloresClusteringS2S import *
+from .SpanishNewsClusteringP2P import *

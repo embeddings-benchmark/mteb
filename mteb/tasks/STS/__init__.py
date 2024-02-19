@@ -11,3 +11,4 @@ from .CMTEBSTS import *
 from .GermanSTSBenchmarkSTS import *
 from .PolishSTS import *
 from .STSBenchmarkSTS import *
+from .STSES import *
