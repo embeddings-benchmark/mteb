@@ -40,9 +40,7 @@ class MasakhaNEWSClusteringP2P(AbsTaskClustering):
         """
         Convert to standard format
         """
-        self.dataset = self.dataset.remove_columns("url")
-        self.dataset = self.dataset.remove_columns("text")
-        self.dataset = self.dataset.remove_columns("headline")
+        self.dataset = self.dataset.remove_columns(["url", "text", "headline"])
         texts = (
             self.dataset["train"]["headline_text"]
             + self.dataset["validation"]["headline_text"]
