@@ -81,9 +81,5 @@ class HagridRetrieval(AbsTaskRetrieval):
         data: a dict representing one element of the dataset
         """
         good_answers = [a["answer"] for a in data["answers"] if a["informative"] == 1 and a["attributable"] == 1]
-        # if no good answer found, return Non
-        if len(good_answers) == 0:
-            return
-        # if 1 or more answers are ok, just pick the first one
-        else:
-            return good_answers[0]
+        # Return 1st one if >=1 good answers else None
+        return good_answers[0] if len(good_answers) > 0 else None
