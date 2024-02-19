@@ -106,6 +106,14 @@ evaluation = MTEB(tasks=[
 ])
 ```
 
+There are also presets available for certain task collections, e.g. to select the 56 English datasets that form the "Overall MTEB English leaderboard":
+
+```python
+from mteb import MTEB_MAIN_EN
+evaluation = MTEB(tasks=MTEB_MAIN_EN, task_langs=["en"])
+```
+
+
 ### Evaluation split
 You can evaluate only on `test` splits of all tasks by doing the following:
 

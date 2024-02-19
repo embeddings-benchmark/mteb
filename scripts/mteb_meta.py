@@ -88,16 +88,20 @@ for ds_name, res_dict in sorted(all_results.items()):
         logger.info(f"Skipping {ds_name} as split {split} not present.")
         continue
     res_dict = res_dict.get(split)
-    for lang in mteb_desc["eval_langs"]:
+
+    has_langs = any([x in res_dict for x in mteb_desc["eval_langs"]])
+    langs = mteb_desc["eval_langs"] if has_langs else ["default"]
+    for lang in langs:
         mteb_name = f"MTEB {ds_name}"
-        mteb_name += f" ({lang})" if len(mteb_desc["eval_langs"]) > 1 else ""
+        mteb_name += f" ({lang})" if has_langs else ""
         # For English there is no language key if it's the only language
-        test_result_lang = res_dict.get(lang) if len(mteb_desc["eval_langs"]) > 1 else res_dict
+        test_result_lang = res_dict.get(lang) if has_langs else res_dict
         # Skip if the language was not found but it has other languages
         if test_result_lang is None:
+            logger.info(f"Skipping {ds_name} as {lang} not present.")
             continue
         META_STRING += "\n" + ONE_TASK.format(
-            mteb_type, hf_hub_name, mteb_name, lang if len(mteb_desc["eval_langs"]) > 1 else "default", split, revision
+            mteb_type, hf_hub_name, mteb_name, lang, split, revision
         )
         for metric, score in test_result_lang.items():
             if not isinstance(score, dict):

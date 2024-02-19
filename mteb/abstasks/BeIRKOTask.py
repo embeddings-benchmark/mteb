@@ -2,13 +2,13 @@ import os
 from .AbsTask import AbsTask
 
 
-class BeIRPLTask(AbsTask):
+class BeIRKOTask(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def load_data(self, eval_splits=None, **kwargs):
         """
-        Load dataset from BeIR-PL benchmark.
+        Load dataset from BeIR-KO benchmark.
         """
         try:
             from beir.datasets.data_loader_hf import HFDataLoader
@@ -21,6 +21,9 @@ class BeIRPLTask(AbsTask):
         if eval_splits is None:
             eval_splits = self.description["eval_splits"]
         dataset = self.description["beir_name"]
+        
+        hf_repo = self.description["hf_repo"]
+        hf_repo_qrels = self.description["hf_repo_qrels"]
 
         # cqadupstack not on huggingface yet
         # dataset, sub_dataset = dataset.split("/") if "cqadupstack" in dataset else (dataset, None)
@@ -29,7 +32,7 @@ class BeIRPLTask(AbsTask):
 
         for split in eval_splits:
 
-            corpus, queries, qrels = HFDataLoader(hf_repo=f"clarin-knext/{dataset}", streaming=False, keep_in_memory=False).load(split=split)
+            corpus, queries, qrels = HFDataLoader(hf_repo=hf_repo, hf_repo_qrels=hf_repo_qrels, streaming=False, keep_in_memory=False).load(split=split)
             # Conversion from DataSet
             queries = {query['id']: query['text'] for query in queries}
             corpus = {doc['id']: {'title': doc['title'] , 'text': doc['text']} for doc in corpus}
