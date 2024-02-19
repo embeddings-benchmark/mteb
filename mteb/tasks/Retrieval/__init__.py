@@ -48,7 +48,7 @@ from .KoMrtydi import *
 from .KoMiracl import *
 from .SpanishPassageRetrievalS2S import *
 from .SpanishPassageRetrievalS2P import *
-from .XPQAESRetrieval import *
-from .MintakaESRetrieval import *
+from .XPQARetrieval import *
+from .MintakaRetrieval import *
 from .MIRACLRetrieval import *
 from .XMarketRetrieval import *
