@@ -41,14 +41,9 @@ class MLSUMClusteringS2S(AbsTaskClustering):
         """
         Convert to standard format
         """
-        self.dataset = self.dataset.remove_columns("summary")
-        self.dataset = self.dataset.remove_columns("text")
-        self.dataset = self.dataset.remove_columns("url")
-        self.dataset = self.dataset.remove_columns("date")
-        titles = self.dataset["title"]
-        topics = self.dataset["topic"]
+        self.dataset = self.dataset.remove_columns(["summary", "text", "url", "date"])
         new_format = {
-            "sentences": [split.tolist() for split in np.array_split(titles, 10)],
-            "labels": [split.tolist() for split in np.array_split(topics, 10)],
+            "sentences": [split.tolist() for split in np.array_split(self.dataset["title"], 10)],
+            "labels": [split.tolist() for split in np.array_split(self.dataset["topic"], 10)],
         }
         self.dataset = {self.description["eval_splits"][0]: datasets.Dataset.from_dict(new_format)}
