@@ -16,6 +16,7 @@ class SpanishPassageRetrievalS2S(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["es"],
             "main_score": "ndcg_at_10",
+            "revision": "9cddf2ce5209ade52c2115ccfa00eb22c6d3a837",
         }
 
     def load_data(self, **kwargs):
