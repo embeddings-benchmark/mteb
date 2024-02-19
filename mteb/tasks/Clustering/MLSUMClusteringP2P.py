@@ -45,11 +45,8 @@ class MLSUMClusteringP2P(AbsTaskClustering):
         """
         Convert to standard format
         """
-        self.dataset = self.dataset.remove_columns("summary")
-        self.dataset = self.dataset.remove_columns("url")
-        self.dataset = self.dataset.remove_columns("date")
         self.dataset = self.dataset.map(self.create_description)
-        self.dataset = self.dataset.remove_columns("title")
+        self.dataset = self.dataset.remove_columns(["summary", "url", "date", "title"])
         texts = self.dataset["text"]
         topics = self.dataset["topic"]
         new_format = {
