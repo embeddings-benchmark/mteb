@@ -31,8 +31,8 @@ class SickFrSTS(AbsTaskSTS):
             self.description["hf_hub_name"], revision=self.description.get("revision", None)
         )
 
-        self.dataset = self.dataset.rename_column("sentence_A", "sentence1")
-        self.dataset = self.dataset.rename_column("sentence_B", "sentence2")
-        self.dataset = self.dataset.rename_column("relatedness_score", "score")
-        self.dataset = self.dataset.rename_column("Unnamed: 0", "id")
+        self.dataset = self.dataset.rename_columns({
+        "sentence_A": "sentence1",  "sentence_B": "sentence2", 
+        "relatedness_score": "score", "Unnamed: 0": "id"
+        })
         self.data_loaded = True
