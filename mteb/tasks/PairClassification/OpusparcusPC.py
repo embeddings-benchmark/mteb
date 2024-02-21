@@ -20,9 +20,6 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
             "revision": "9e9b1f8ef51616073f47f306f7f47dd91663f86a",
         }
 
-    def __init__(self, langs=None, **kwargs):
-        super().__init__(**kwargs)
-
     def load_data(self, **kwargs):
         """
         Load dataset from HuggingFace hub
