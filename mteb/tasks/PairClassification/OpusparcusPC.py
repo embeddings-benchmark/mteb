@@ -1,10 +1,10 @@
-from ...abstasks import AbsTaskPairClassification
+from ...abstasks import AbsTaskPairClassification, MultilingualTask
 import datasets
 
 _LANGUAGES = ["de", "en", "fi", "fr", "ru", "sv"]
 
 
-class OpusparcusPC(AbsTaskPairClassification):
+class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
     @property
     def description(self):
         return {
@@ -19,16 +19,6 @@ class OpusparcusPC(AbsTaskPairClassification):
             "main_score": "ap",
             "revision": "9e9b1f8ef51616073f47f306f7f47dd91663f86a",
         }
-
-    def __init__(self, langs=None, **kwargs):
-        super().__init__(**kwargs)
-        if type(langs) is list:
-            langs = [lang for lang in langs if lang in self.description["eval_langs"]]
-        if langs is not None and len(langs) > 0:
-            self.langs = langs  # TODO: case where user provides langs not in the dataset
-        else:
-            self.langs = self.description["eval_langs"]
-        self.is_multilingual = True
 
     def load_data(self, **kwargs):
         """
