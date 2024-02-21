@@ -38,11 +38,10 @@ class SyntecRetrieval(AbsTaskRetrieval):
                 str(i): q["Question"] 
                 for i, q in enumerate(queries_raw["queries"])}
             }
-        self.corpus = {
-            self._EVAL_SPLITS[0]: {
-                str(d["id"]): {"text": d["title"] + "\n\n" + d["content"]} 
-                for d in corpus_raw["documents"]
-                }}
+
+        corpus_raw = corpus_raw["documents"]
+        corpus_raw = corpus_raw.rename_column("content", "text")
+        self.corpus = {self._EVAL_SPLITS[0]: {str(row["id"]): row for row in corpus_raw}}
 
         self.relevant_docs = {
             self._EVAL_SPLITS[0]: {

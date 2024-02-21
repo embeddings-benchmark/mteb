@@ -32,7 +32,9 @@ class BSARDRetrieval(AbsTaskRetrieval):
             return
         # fetch both subsets of the dataset, only test split
         corpus_raw = datasets.load_dataset(
-            self.description["hf_hub_name"], "corpus", split="corpus", revision=self.description.get("revision", None)
+            self.description["hf_hub_name"],
+            "corpus", split="corpus",
+            revision=self.description.get("revision", None),
         )
         queries_raw = datasets.load_dataset(
             self.description["hf_hub_name"],
