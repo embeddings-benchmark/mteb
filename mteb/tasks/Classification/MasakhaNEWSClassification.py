@@ -32,7 +32,7 @@ class MasakhaNEWSClassification(AbsTaskClassification, MultilingualTask):
             "reference": "https://arxiv.org/abs/2304.09972",
             "category": "s2s",
             "type": "Classification",
-            "eval_splits": ["train", "test"],
+            "eval_splits": ["test"],
             "eval_langs": _LANGUAGES,
             "main_score": "accuracy",
             "n_experiments": 10,
