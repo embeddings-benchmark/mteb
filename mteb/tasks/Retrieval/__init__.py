@@ -47,8 +47,13 @@ from .GermanQuADRetrieval import *
 from .GerDaLIRRetrieval import *
 from .GermanDPRRetrieval import *
 from .GerDaLIRRetrieval import *
-from .XMarketRetrieval import *
 from .MultiLongDocRetrieval import *
 from .KoStrategyQA import *
 from .KoMrtydi import *
 from .KoMiracl import *
+from .SpanishPassageRetrievalS2S import *
+from .SpanishPassageRetrievalS2P import *
+from .XPQARetrieval import *
+from .MintakaRetrieval import *
+from .MIRACLRetrieval import *
+from .XMarketRetrieval import *

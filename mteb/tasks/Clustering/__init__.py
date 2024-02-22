@@ -24,3 +24,5 @@ from .TenKGnadClusteringP2P import *
 from .TenKGnadClusteringS2S import *
 from .TwentyNewsgroupsClustering import *
 from .WikiCitiesClustering import *
+from .FloresClusteringS2S import *
+from .SpanishNewsClusteringP2P import *

@@ -13,3 +13,4 @@ from .STS17CrosslingualSTS import *
 from .STS22CrosslingualSTS import *
 from .STSBenchmarkMultilingualSTS import *
 from .STSBenchmarkSTS import *
+from .STSES import *
