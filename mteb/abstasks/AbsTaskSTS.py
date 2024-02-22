@@ -29,7 +29,7 @@ class AbsTaskSTS(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
-        if self.is_crosslingual:
+        if self.is_crosslingual or self.is_multilingual:
             scores = {}
             for lang in self.dataset:
                 logger.info(f"Task: {self.description['name']}, split: {split}, language: {lang}. Running...")

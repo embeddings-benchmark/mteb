@@ -10,7 +10,7 @@ import datasets
 
 from .. import __version__
 from ..abstasks import *
-from ..abstasks import AbsTask
+from ..abstasks import AbsTask, LangMapping
 from ..tasks import *
 
 logger = logging.getLogger(__name__)
@@ -69,6 +69,8 @@ class MTEB:
         self._task_langs = task_langs if task_langs is not None else []
         if type(self._task_langs) is str:
             self._task_langs = [self._task_langs]
+
+        self._extend_lang_code()
         self._extend_lang_pairs()  # add all possible pairs
 
         self._version = version
@@ -88,6 +90,12 @@ class MTEB:
     def available_task_categories(self):
         return set([x.description["category"] for x in self.tasks_cls])
 
+    def _extend_lang_code(self):
+        # add all possible language codes
+        for lang in set(self._task_langs):
+            if lang in LangMapping.LANG_MAPPING:
+                self._task_langs += LangMapping.LANG_MAPPING[lang]
+
     def _extend_lang_pairs(self):
         # add all possible language pairs
         langs = set(self._task_langs)
@@ -102,10 +110,11 @@ class MTEB:
 
     def _display_tasks(self, task_list, name=None):
         from rich.console import Console
+
         # disable logging for other ranks
         if int(os.getenv("RANK", 0)) != 0:
             return
-            
+
         console = Console()
         if name:
             console.rule(f"[bold]{name}\n", style="grey15")
