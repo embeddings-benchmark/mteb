@@ -1,10 +1,29 @@
 import datasets
 import numpy as np
 
-from ...abstasks.AbsTaskClustering import AbsTaskClustering
+from ...abstasks import AbsTaskClustering, MultilingualTask
+
+_LANGUAGES =[
+    "amh",
+    "eng",
+    "fra",
+    "hau",
+    "ibo",
+    "lin",
+    "lug",
+    "orm",
+    "pcm",
+    "run",
+    "sna",
+    "som",
+    "swa",
+    "tir",
+    "xho",
+    "yor",
+]
 
 
-class MasakhaNEWSClusteringS2S(AbsTaskClustering):
+class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
     @property
     def description(self):
         return {
@@ -17,7 +36,7 @@ class MasakhaNEWSClusteringS2S(AbsTaskClustering):
             "type": "Clustering",
             "category": "s2s",
             "eval_splits": ["test"],
-            "eval_langs": ["fr"],
+            "eval_langs": _LANGUAGES,
             "main_score": "v_measure",
             "revision": "8ccc72e69e65f40c70e117d8b3c08306bb788b60",
         }
@@ -28,29 +47,28 @@ class MasakhaNEWSClusteringS2S(AbsTaskClustering):
         """
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"],
-            "fra",
-            revision=self.description.get("revision", None),
-        )
-        self.dataset_transform()
+        self.dataset = {}
+        for lang in self.langs:
+            self.dataset[lang] = datasets.load_dataset(
+                self.description["hf_hub_name"],
+                lang,
+                revision=self.description.get("revision", None),
+            )
+            self.dataset_transform(lang)
         self.data_loaded = True
 
-    def dataset_transform(self):
+    def dataset_transform(self, lang):
         """
         Convert to standard format
         """
-        self.dataset = self.dataset.remove_columns(["url", "text", "headline_text"])
-        headlines = (
-            self.dataset["train"]["headline"]
-            + self.dataset["validation"]["headline"]
-            + self.dataset["test"]["headline"]
-        )
-        labels = self.dataset["train"]["label"] + self.dataset["validation"]["label"] + self.dataset["test"]["label"]
+        self.dataset[lang].pop("train")
+        self.dataset[lang].pop("validation")
+
+        self.dataset[lang] = self.dataset[lang].remove_columns(["url", "text", "headline_text"])
+        texts = self.dataset[lang]["test"]["headline"]
+        labels = self.dataset[lang]["test"]["label"]
         new_format = {
-            "sentences": [split.tolist() for split in np.array_split(headlines, 10)],
-            "labels": [split.tolist() for split in np.array_split(labels, 10)],
+            "sentences": [split.tolist() for split in np.array_split(texts, 5)],
+            "labels": [split.tolist() for split in np.array_split(labels, 5)],
         }
-        self.dataset["test"] = datasets.Dataset.from_dict(new_format)
-        self.dataset.pop("train")
-        self.dataset.pop("validation")
+        self.dataset[lang]["test"] = datasets.Dataset.from_dict(new_format)
