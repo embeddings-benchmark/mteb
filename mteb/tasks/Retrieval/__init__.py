@@ -42,6 +42,7 @@ from .SciFactRetrieval import *
 from .SyntecRetrieval import *
 from .Touche2020Retrieval import *
 from .TRECCOVIDPLRetrieval import *
+from .TRECCOVIDRetrieval import *
 from .NarrativeQARetrieval import *
 from .GermanQuADRetrieval import *
 from .GerDaLIRRetrieval import *
