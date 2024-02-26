@@ -1,15 +1,12 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRKOTask import BeIRKOTask
 
 
-class KoMrtydi(AbsTaskRetrieval, BeIRKOTask):
+class KoMrtydi(AbsTaskRetrieval):
     @property
     def description(self):
         return {
             "name": "Ko-mrtydi",
-            "hf_repo": "taeminlee/Ko-mrtydi",
-            "hf_repo_qrels": "taeminlee/Ko-mrtydi",
-            "beir_name": "Ko-mrtydi",
+            "hf_hub_name": "taeminlee/Ko-mrtydi",
             "description": "Ko-mrtydi",
             "reference": "",
             "type": "Retrieval",
@@ -17,4 +14,5 @@ class KoMrtydi(AbsTaskRetrieval, BeIRKOTask):
             "eval_splits": ["dev"],
             "eval_langs": ["ko"],
             "main_score": "ndcg_at_10",
+            "revision": "71a2e011a42823051a2b4eb303a3366bdbe048d3",
         }

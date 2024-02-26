@@ -1,8 +1,7 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class CQADupstackGamingRetrieval(AbsTaskRetrieval, BeIRTask):
+class CQADupstackGamingRetrieval(AbsTaskRetrieval):
     @property
     def description(self):
         return {

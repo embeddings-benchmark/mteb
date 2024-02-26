@@ -1,7 +1,6 @@
-from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
-
 import datasets
+
+from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class GerDaLIR(AbsTaskRetrieval):

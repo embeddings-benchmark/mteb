@@ -24,8 +24,7 @@ class AbsTask(ABC):
         """
         Load dataset from HuggingFace hub
         """
-        if self.data_loaded:
-            return
+        if self.data_loaded: return
 
         # TODO: add split argument
         self.dataset = datasets.load_dataset(

@@ -1,8 +1,7 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class ClimateFEVER(AbsTaskRetrieval, BeIRTask):
+class ClimateFEVER(AbsTaskRetrieval):
     @property
     def description(self):
         return {

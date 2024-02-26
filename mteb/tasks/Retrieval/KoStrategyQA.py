@@ -1,15 +1,12 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRKOTask import BeIRKOTask
 
 
-class KoStrategyQA(AbsTaskRetrieval, BeIRKOTask):
+class KoStrategyQA(AbsTaskRetrieval):
     @property
     def description(self):
         return {
             "name": "Ko-StrategyQA",
-            "hf_repo": "taeminlee/Ko-StrategyQA",
-            "hf_repo_qrels": "taeminlee/Ko-StrategyQA",
-            "beir_name": "Ko-StrategyQA",
+            "hf_hub_name": "taeminlee/Ko-StrategyQA",
             "description": "Ko-StrategyQA",
             "reference": "",
             "type": "Retrieval",
@@ -17,4 +14,5 @@ class KoStrategyQA(AbsTaskRetrieval, BeIRKOTask):
             "eval_splits": ["dev"],
             "eval_langs": ["ko"],
             "main_score": "ndcg_at_10",
+            "revision": "d243889a3eb6654029dbd7e7f9319ae31d58f97c"
         }

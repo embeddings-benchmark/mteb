@@ -1,13 +1,12 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class SciFact(AbsTaskRetrieval, BeIRTask):
+class SciFact(AbsTaskRetrieval):
     @property
     def description(self):
         return {
             "name": "SciFact",
-            "beir_name": "scifact",
+            "hf_hub_name": "mteb/scifact",
             "description": "SciFact verifies scientific claims using evidence from the research literature containing scientific paper abstracts.",
             "reference": "https://github.com/allenai/scifact",
             "type": "Retrieval",
@@ -15,4 +14,5 @@ class SciFact(AbsTaskRetrieval, BeIRTask):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "0228b52cf27578f30900b9e5271d331663a030d7"
         }

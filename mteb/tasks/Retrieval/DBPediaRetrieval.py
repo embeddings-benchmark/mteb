@@ -1,8 +1,7 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class DBPedia(AbsTaskRetrieval, BeIRTask):
+class DBPedia(AbsTaskRetrieval):
     @property
     def description(self):
         return {

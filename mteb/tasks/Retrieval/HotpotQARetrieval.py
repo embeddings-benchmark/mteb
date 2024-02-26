@@ -1,8 +1,7 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class HotpotQA(AbsTaskRetrieval, BeIRTask):
+class HotpotQA(AbsTaskRetrieval):
     @property
     def description(self):
         return {

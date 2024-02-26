@@ -1,8 +1,7 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class MSMARCO(AbsTaskRetrieval, BeIRTask):
+class MSMARCO(AbsTaskRetrieval):
     @property
     def description(self):
         return {

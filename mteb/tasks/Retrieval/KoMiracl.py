@@ -1,15 +1,12 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRKOTask import BeIRKOTask
 
 
-class KoMiracl(AbsTaskRetrieval, BeIRKOTask):
+class KoMiracl(AbsTaskRetrieval):
     @property
     def description(self):
         return {
             "name": "Ko-miracl",
-            "hf_repo": "taeminlee/Ko-miracl",
-            "hf_repo_qrels": "taeminlee/Ko-miracl",
-            "beir_name": "Ko-miracl",
+            "hf_hub_name": "taeminlee/Ko-miracl",
             "description": "Ko-miracl",
             "reference": "",
             "type": "Retrieval",
@@ -17,4 +14,5 @@ class KoMiracl(AbsTaskRetrieval, BeIRKOTask):
             "eval_splits": ["dev"],
             "eval_langs": ["ko"],
             "main_score": "ndcg_at_10",
+            "revision": "5c7690518e481375551916f24241048cf7b017d0",
         }

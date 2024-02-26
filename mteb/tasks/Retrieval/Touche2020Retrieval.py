@@ -1,8 +1,7 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class Touche2020(AbsTaskRetrieval, BeIRTask):
+class Touche2020(AbsTaskRetrieval):
     @property
     def description(self):
         return {

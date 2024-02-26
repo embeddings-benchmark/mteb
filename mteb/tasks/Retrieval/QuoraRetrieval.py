@@ -1,8 +1,7 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class QuoraRetrieval(AbsTaskRetrieval, BeIRTask):
+class QuoraRetrieval(AbsTaskRetrieval):
     @property
     def description(self):
         return {

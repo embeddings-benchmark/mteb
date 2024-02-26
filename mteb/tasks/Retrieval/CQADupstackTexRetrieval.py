@@ -1,8 +1,7 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class CQADupstackTexRetrieval(AbsTaskRetrieval, BeIRTask):
+class CQADupstackTexRetrieval(AbsTaskRetrieval):
     @property
     def description(self):
         return {

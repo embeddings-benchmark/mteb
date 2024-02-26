@@ -1,8 +1,7 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class SCIDOCS(AbsTaskRetrieval, BeIRTask):
+class SCIDOCS(AbsTaskRetrieval):
     @property
     def description(self):
         return {

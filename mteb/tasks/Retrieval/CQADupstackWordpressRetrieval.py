@@ -1,8 +1,7 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class CQADupstackWordpressRetrieval(AbsTaskRetrieval, BeIRTask):
+class CQADupstackWordpressRetrieval(AbsTaskRetrieval):
     @property
     def description(self):
         return {

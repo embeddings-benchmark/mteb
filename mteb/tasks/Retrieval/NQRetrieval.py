@@ -1,8 +1,7 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class NQ(AbsTaskRetrieval, BeIRTask):
+class NQ(AbsTaskRetrieval):
     @property
     def description(self):
         return {

@@ -1,8 +1,7 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class ArguAna(AbsTaskRetrieval, BeIRTask):
+class ArguAna(AbsTaskRetrieval):
     @property
     def description(self):
         return {
