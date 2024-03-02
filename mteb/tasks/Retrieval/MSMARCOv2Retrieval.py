@@ -6,7 +6,7 @@ class MSMARCOv2(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "MSMARCOv2",
-            "beir_name": "msmarco-v2",
+            "hf_hub_name": "mteb/msmarco-v2",
             "description": "MS MARCO is a collection of datasets focused on deep learning in search",
             "reference": "https://microsoft.github.io/msmarco/TREC-Deep-Learning.html",
             "type": "Retrieval",
@@ -14,4 +14,5 @@ class MSMARCOv2(AbsTaskRetrieval):
             "eval_splits": ["dev", "dev2"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "",
         }

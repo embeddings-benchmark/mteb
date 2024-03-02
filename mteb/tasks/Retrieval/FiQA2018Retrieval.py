@@ -6,7 +6,7 @@ class FiQA2018(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "FiQA2018",
-            "beir_name": "fiqa",
+            "hf_hub_name": "mteb/fiqa",
             "description": "Financial Opinion Mining and Question Answering",
             "reference": "https://sites.google.com/view/fiqa/",
             "type": "Retrieval",
@@ -14,4 +14,5 @@ class FiQA2018(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "",            
         }

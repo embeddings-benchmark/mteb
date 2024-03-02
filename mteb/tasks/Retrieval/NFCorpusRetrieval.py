@@ -6,7 +6,7 @@ class NFCorpus(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "NFCorpus",
-            "beir_name": "nfcorpus",
+            "hf_hub_name": "mteb/nfcorpus",
             "description": "NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
             "reference": "https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/",
             "type": "Retrieval",
@@ -14,4 +14,5 @@ class NFCorpus(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "",
         }

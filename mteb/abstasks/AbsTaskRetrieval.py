@@ -21,8 +21,7 @@ class HFDataLoader:
         self.qrels = {}
         self.hf_repo = hf_repo
         if hf_repo:
-            logger.warn("A huggingface repository is provided. This will override the data_folder, prefix and *_file arguments.")
-            # By default fetch qrels from same repo not a second repo with "-qrels" like in original BEIR
+            # By default fetch qrels from same repo not a second repo with "-qrels" like in original
             self.hf_repo_qrels = hf_repo_qrels if hf_repo_qrels else hf_repo
         else:
             # data folder would contain these files: 
@@ -137,6 +136,7 @@ class AbsTaskRetrieval(AbsTask):
     def load_data(self, **kwargs):
         if self.data_loaded: return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
+        hf_repo_qrels = self.description["hf_hub_name"] + "-qrels" if "clarin-knext" in self.description["hf_hub_name"] else None
         for split in kwargs.get("eval_splits", self.description["eval_splits"]):
             corpus, queries, qrels = HFDataLoader(hf_repo=self.description["hf_hub_name"], streaming=False, keep_in_memory=False).load(split=split)
             # Conversion from DataSet

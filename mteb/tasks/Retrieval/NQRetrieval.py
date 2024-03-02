@@ -6,7 +6,7 @@ class NQ(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "NQ",
-            "beir_name": "nq",
+            "hf_hub_name": "mteb/nq",
             "description": "NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
             "reference": "https://ai.google.com/research/NaturalQuestions/",
             "type": "Retrieval",
@@ -14,4 +14,5 @@ class NQ(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "",
         }

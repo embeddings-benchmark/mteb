@@ -6,7 +6,7 @@ class CQADupstackEnglishRetrieval(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "CQADupstackEnglishRetrieval",
-            "beir_name": "cqadupstack/english",
+            "hf_hub_name": "mteb/cqadupstack-english",
             "description": "CQADupStack: A Benchmark Data Set for Community Question-Answering Research",
             "reference": "http://nlp.cis.unimelb.edu.au/resources/cqadupstack/",
             "type": "Retrieval",
@@ -14,4 +14,5 @@ class CQADupstackEnglishRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "",            
         }

@@ -6,7 +6,7 @@ class CQADupstackProgrammersRetrieval(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "CQADupstackProgrammersRetrieval",
-            "beir_name": "cqadupstack/programmers",
+            "hf_hub_name": "mteb/cqadupstack-programmers",
             "description": "CQADupStack: A Benchmark Data Set for Community Question-Answering Research",
             "reference": "http://nlp.cis.unimelb.edu.au/resources/cqadupstack/",
             "type": "Retrieval",
@@ -14,4 +14,5 @@ class CQADupstackProgrammersRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "",            
         }

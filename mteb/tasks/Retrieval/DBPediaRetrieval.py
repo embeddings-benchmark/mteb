@@ -6,7 +6,7 @@ class DBPedia(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "DBPedia",
-            "beir_name": "dbpedia-entity",
+            "hf_hub_name": "mteb/dbpedia",
             "description": (
                 "DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base"
             ),
@@ -16,4 +16,5 @@ class DBPedia(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "",            
         }

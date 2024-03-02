@@ -6,7 +6,7 @@ class HotpotQA(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "HotpotQA",
-            "beir_name": "hotpotqa",
+            "hf_hub_name": "mteb/hotpotqa",
             "description": (
                 "HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong"
                 " supervision for supporting facts to enable more explainable question answering systems."
@@ -17,4 +17,5 @@ class HotpotQA(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "",
         }

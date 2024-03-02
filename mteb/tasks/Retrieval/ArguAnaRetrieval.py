@@ -6,7 +6,7 @@ class ArguAna(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "ArguAna",
-            "beir_name": "arguana",
+            "hf_hub_name": "mteb/arguana",
             "description": "NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
             "reference": "http://argumentation.bplaced.net/arguana/data",
             "type": "Retrieval",
@@ -14,4 +14,5 @@ class ArguAna(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "",
         }

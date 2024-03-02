@@ -138,8 +138,7 @@ class MTEB:
                         if task.is_crosslingual
                         else ""
                     )
-                    beir = ", [italic yellow]beir[/]" if task.description.get("beir_name", False) else ""
-                    console.print(f"{prefix}{name}{beir}{category}{multilingual}{crosslingual}")
+                    console.print(f"{prefix}{name}{category}{multilingual}{crosslingual}")
                 console.print("\n")
 
     @classmethod

@@ -6,7 +6,7 @@ class MSMARCO(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "MSMARCO",
-            "beir_name": "msmarco",
+            "hf_hub_name": "mteb/msmarco",
             "description": "MS MARCO is a collection of datasets focused on deep learning in search",
             "reference": "https://microsoft.github.io/msmarco/",
             "type": "Retrieval",
@@ -14,4 +14,5 @@ class MSMARCO(AbsTaskRetrieval):
             "eval_splits": ["dev", "test"],  # "validation" if using latest BEIR i.e. HFDataLoader
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "",
         }

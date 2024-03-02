@@ -6,7 +6,7 @@ class ClimateFEVER(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "ClimateFEVER",
-            "beir_name": "climate-fever",
+            "hf_hub_name": "climate-fever",
             "description": (
                 "CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims"
                 " regarding climate-change."
@@ -17,4 +17,5 @@ class ClimateFEVER(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "",            
         }

@@ -6,7 +6,7 @@ class QuoraRetrieval(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "QuoraRetrieval",
-            "beir_name": "quora",
+            "hf_hub_name": "mteb/quora",
             "description": (
                 "QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a"
                 " question, find other (duplicate) questions."

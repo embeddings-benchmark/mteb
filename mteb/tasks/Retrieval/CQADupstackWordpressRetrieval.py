@@ -6,7 +6,7 @@ class CQADupstackWordpressRetrieval(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "CQADupstackWordpressRetrieval",
-            "beir_name": "cqadupstack/wordpress",
+            "hf_hub_name": "mteb/cqadupstack-wordpress",
             "description": "CQADupStack: A Benchmark Data Set for Community Question-Answering Research",
             "reference": "http://nlp.cis.unimelb.edu.au/resources/cqadupstack/",
             "type": "Retrieval",
@@ -14,4 +14,5 @@ class CQADupstackWordpressRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "",            
         }

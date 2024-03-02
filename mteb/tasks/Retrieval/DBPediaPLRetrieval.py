@@ -1,13 +1,12 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRPLTask import BeIRPLTask
 
 
-class DBPediaPL(AbsTaskRetrieval, BeIRPLTask):
+class DBPediaPL(AbsTaskRetrieval):
     @property
     def description(self):
         return {
             "name": "DBPedia-PL",
-            "beir_name": "dbpedia-pl",
+            "hf_hub_name": "clarin-knext/dbpedia-pl",
             "description": (
                 "DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base"
             ),
@@ -18,4 +17,5 @@ class DBPediaPL(AbsTaskRetrieval, BeIRPLTask):
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
             "main_score": "ndcg_at_10",
+            "revision": "",            
         }

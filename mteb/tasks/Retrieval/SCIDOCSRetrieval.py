@@ -6,7 +6,7 @@ class SCIDOCS(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "SCIDOCS",
-            "beir_name": "scidocs",
+            "hf_hub_name": "mteb/scidocs",
             "description": (
                 "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation"
                 " prediction, to document classification and recommendation."

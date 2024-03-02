@@ -77,6 +77,7 @@ setup(
         "torch",
         "tqdm",
         "rich",
+        "pytrec_eval",
     ],
     classifiers=[
         "Development Status :: 4 - Beta",
