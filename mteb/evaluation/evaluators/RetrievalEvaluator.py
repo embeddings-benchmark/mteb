@@ -142,6 +142,7 @@ class RetrievalEvaluator(Evaluator):
     def __init__(
             self, retriever = None, k_values: List[int] = [1,3,5,10,100,1000], score_function: str = "cos_sim", **kwargs
         ):
+        super().__init__(**kwargs)
         self.retriever = DenseRetrievalExactSearch(
             retriever if is_dres_compatible(retriever) else DRESModel(retriever),
             **kwargs,
@@ -150,7 +151,7 @@ class RetrievalEvaluator(Evaluator):
         self.top_k = max(k_values)
         self.score_function = score_function
             
-    def retrieve(self, corpus: Dict[str, Dict[str, str]], queries: Dict[str, str], **kwargs) -> Dict[str, Dict[str, float]]:
+    def __call__(self, corpus: Dict[str, Dict[str, str]], queries: Dict[str, str], **kwargs) -> Dict[str, Dict[str, float]]:
         if not self.retriever: raise ValueError("Model/Technique has not been provided!")
         return self.retriever.search(corpus, queries, self.top_k, self.score_function, **kwargs)
     

@@ -167,7 +167,7 @@ class AbsTaskRetrieval(AbsTask):
 
     def _evaluate_monolingual(self, retriever, corpus, queries, relevant_docs, lang=None, **kwargs):
         start_time = time()
-        results = retriever.retrieve(corpus, queries)
+        results = retriever(corpus, queries)
         end_time = time()
         logger.info("Time taken to retrieve: {:.2f} seconds".format(end_time - start_time))
 
