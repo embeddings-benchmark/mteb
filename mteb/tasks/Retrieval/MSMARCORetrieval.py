@@ -11,7 +11,7 @@ class MSMARCO(AbsTaskRetrieval):
             "reference": "https://microsoft.github.io/msmarco/",
             "type": "Retrieval",
             "category": "s2p",
-            "eval_splits": ["dev", "test"],  # "validation" if using latest BEIR i.e. HFDataLoader
+            "eval_splits": ["train", "dev", "test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
             "revision": "",

@@ -11,7 +11,7 @@ class SciFact(AbsTaskRetrieval):
             "reference": "https://github.com/allenai/scifact",
             "type": "Retrieval",
             "category": "s2p",
-            "eval_splits": ["test"],
+            "eval_splits": ["train", "test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
             "revision": "0228b52cf27578f30900b9e5271d331663a030d7"

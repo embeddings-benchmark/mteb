@@ -6,7 +6,7 @@ class Touche2020(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "Touche2020",
-            "hf_hub_name": "mteb/webis-touche2020",
+            "hf_hub_name": "mteb/touche2020",
             "description": "Touché Task 1: Argument Retrieval for Controversial Questions",
             "reference": "https://webis.de/events/touche-20/shared-task-1.html",
             "type": "Retrieval",
