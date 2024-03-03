@@ -155,8 +155,8 @@ class RetrievalEvaluator(Evaluator):
         if not self.retriever: raise ValueError("Model/Technique has not been provided!")
         return self.retriever.search(corpus, queries, self.top_k, self.score_function, **kwargs)
     
-    def rerank(self, 
-            corpus: Dict[str, Dict[str, str]], 
+    def rerank(self,
+            corpus: Dict[str, Dict[str, str]],
             queries: Dict[str, str],
             results: Dict[str, Dict[str, float]],
             top_k: int) -> Dict[str, Dict[str, float]]:
