@@ -14,5 +14,5 @@ class CQADupstackWordpressRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "",            
+            "revision": "4ffe81d471b1924886b33c7567bfb200e9eec5c4",            
         }

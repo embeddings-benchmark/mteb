@@ -14,5 +14,5 @@ class CQADupstackGamingRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "",            
+            "revision": "4885aa143210c98657558c04aaf3dc47cfb54340",            
         }

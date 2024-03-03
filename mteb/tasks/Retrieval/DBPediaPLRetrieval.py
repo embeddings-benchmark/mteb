@@ -17,5 +17,5 @@ class DBPediaPL(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
             "main_score": "ndcg_at_10",
-            "revision": "",            
+            "revision": "76afe41d9af165cc40999fcaa92312b8b012064a",            
         }

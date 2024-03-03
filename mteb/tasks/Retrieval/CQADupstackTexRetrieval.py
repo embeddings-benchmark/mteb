@@ -14,5 +14,5 @@ class CQADupstackTexRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "",            
+            "revision": "46989137a86843e03a6195de44b09deda022eec7",            
         }

@@ -14,5 +14,5 @@ class NQ(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "",
+            "revision": "b774495ed302d8c44a3a7ea25c90dbce03968f31",
         }

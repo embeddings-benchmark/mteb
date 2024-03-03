@@ -14,5 +14,5 @@ class ArguAna(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "",
+            "revision": "c22ab2a51041ffd869aaddef7af8d8215647e41a",
         }

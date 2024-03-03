@@ -17,5 +17,5 @@ class ClimateFEVER(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "",            
+            "revision": "47f2ac6acb640fc46020b02a5b59fdda04d39380",            
         }

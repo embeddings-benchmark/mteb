@@ -15,5 +15,5 @@ class FiQAPLRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
             "main_score": "ndcg_at_10",
-            "revision": "",            
+            "revision": "2e535829717f8bf9dc829b7f911cc5bbd4e6608e",            
         }

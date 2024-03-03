@@ -15,5 +15,5 @@ class NFCorpusPL(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
             "main_score": "ndcg_at_10",
-            "revision": "",
+            "revision": "9a6f9567fda928260afed2de480d79c98bf0bec0",
         }

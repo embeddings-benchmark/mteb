@@ -14,5 +14,5 @@ class CQADupstackGisRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "",            
+            "revision": "5003b3064772da1887988e05400cf3806fe491f2",            
         }

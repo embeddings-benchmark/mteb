@@ -14,5 +14,5 @@ class CQADupstackMathematicaRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "",            
+            "revision": "90fceea13679c63fe563ded68f3b6f06e50061de",            
         }

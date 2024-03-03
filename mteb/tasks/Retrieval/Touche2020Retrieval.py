@@ -14,5 +14,5 @@ class Touche2020(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "",
+            "revision": "a34f9a33db75fa0cbb21bb5cfc3dae8dc8bec93f",
         }

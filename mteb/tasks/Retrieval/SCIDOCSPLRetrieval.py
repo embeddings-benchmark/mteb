@@ -18,5 +18,5 @@ class SCIDOCSPL(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
             "main_score": "ndcg_at_10",
-            "revision": "",
+            "revision": "45452b03f05560207ef19149545f168e596c9337",
         }

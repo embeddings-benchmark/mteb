@@ -14,5 +14,5 @@ class CQADupstackUnixRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "",            
+            "revision": "6c6430d3a6d36f8d2a829195bc5dc94d7e063e53",            
         }

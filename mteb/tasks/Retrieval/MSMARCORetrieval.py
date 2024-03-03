@@ -14,5 +14,5 @@ class MSMARCO(AbsTaskRetrieval):
             "eval_splits": ["train", "dev", "test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "",
+            "revision": "c5a29a104738b98a9e76336939199e264163d4a0",
         }

@@ -15,5 +15,5 @@ class TRECCOVIDPL(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
             "main_score": "ndcg_at_10",
-            "revision": "",
+            "revision": "81bcb408f33366c2a20ac54adafad1ae7e877fdd",
         }

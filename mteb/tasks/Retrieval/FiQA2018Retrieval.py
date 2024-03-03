@@ -14,5 +14,5 @@ class FiQA2018(AbsTaskRetrieval):
             "eval_splits": ["train", "dev", "test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "",            
+            "revision": "27a168819829fe9bcd655c2df245fb19452e8e06",            
         }

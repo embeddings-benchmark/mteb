@@ -18,5 +18,5 @@ class HotpotQAPL(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
             "main_score": "ndcg_at_10",
-            "revision": "",
+            "revision": "a0bd479ac97b4ccb5bd6ce320c415d0bb4beb907",
         }

@@ -14,5 +14,5 @@ class CQADupstackPhysicsRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "",            
+            "revision": "79531abbd1fb92d06c6d6315a0cbbbf5bb247ea4",            
         }

@@ -18,5 +18,5 @@ class FEVER(AbsTaskRetrieval):
             "eval_splits": ["train", "dev", "test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "",            
+            "revision": "bea83ef9e8fb933d90a2f1d5515737465d613e12",            
         }

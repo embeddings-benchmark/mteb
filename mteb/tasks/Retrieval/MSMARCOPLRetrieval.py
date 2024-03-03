@@ -15,5 +15,5 @@ class MSMARCOPL(AbsTaskRetrieval):
             "eval_splits": ["validation", "test"],  # "validation" if using latest BEIR i.e. HFDataLoader
             "eval_langs": ["pl"],
             "main_score": "ndcg_at_10",
-            "revision": "",
+            "revision": "8634c07806d5cce3a6138e260e59b81760a0a640",
         }

@@ -15,5 +15,5 @@ class SciFactPL(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
             "main_score": "ndcg_at_10",
-            "revision": "",
+            "revision": "47932a35f045ef8ed01ba82bf9ff67f6e109207e",
         }
