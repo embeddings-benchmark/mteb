@@ -19,7 +19,7 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
             "eval_splits": ["test"],
             "eval_langs": ["nb", "nn"],
             "main_score": "f1",
-            "revision": None,
+            "revision": "d79af07e969a6678fcbbe819956840425816468f",
         }
 
     def load_data(self, **kwargs):
