@@ -138,7 +138,7 @@ class AbsTaskRetrieval(AbsTask):
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         hf_repo_qrels = self.description["hf_hub_name"] + "-qrels" if "clarin-knext" in self.description["hf_hub_name"] else None
         for split in kwargs.get("eval_splits", self.description["eval_splits"]):
-            corpus, queries, qrels = HFDataLoader(hf_repo=self.description["hf_hub_name"], streaming=False, keep_in_memory=False).load(split=split)
+            corpus, queries, qrels = HFDataLoader(hf_repo=self.description["hf_hub_name"], hf_repo_qrels=hf_repo_qrels, streaming=False, keep_in_memory=False).load(split=split)
             # Conversion from DataSet
             queries = {query['id']: query['text'] for query in queries}
             corpus = {doc['id']: {'title': doc['title'] , 'text': doc['text']} for doc in corpus}
