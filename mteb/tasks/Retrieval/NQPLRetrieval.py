@@ -6,7 +6,7 @@ class NQPL(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "NQ-PL",
-            "hf_hub_name": "nq-pl",
+            "hf_hub_name": "clarin-knext/nq-pl",
             "description": "Natural Questions: A Benchmark for Question Answering Research",
             "reference": "https://ai.google.com/research/NaturalQuestions/",
             "benchmark": "BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language",
