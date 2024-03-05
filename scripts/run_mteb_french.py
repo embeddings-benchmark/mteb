@@ -69,7 +69,6 @@ TASK_LIST = (
     + TASK_LIST_RERANKING
     + TASK_LIST_RETRIEVAL
     + TASK_LIST_STS
-    + TASK_LIST_BITEXTMINING
 )
 
 model_name = "dangvantuan/sentence-camembert-base"
