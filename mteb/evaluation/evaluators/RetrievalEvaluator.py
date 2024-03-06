@@ -143,10 +143,11 @@ class RetrievalEvaluator(Evaluator):
             self, retriever = None, k_values: List[int] = [1,3,5,10,100,1000], score_function: str = "cos_sim", **kwargs
         ):
         super().__init__(**kwargs)
-        self.retriever = DenseRetrievalExactSearch(
-            retriever if is_dres_compatible(retriever) else DRESModel(retriever),
-            **kwargs,
-        )
+        if is_dres_compatible(retriever):
+            logger.info("The custom encode_queries and encode_corpus functions of the model will be used")
+            self.retriever = DenseRetrievalExactSearch(retriever, **kwargs)
+        else:
+            self.retriever = DenseRetrievalExactSearch(DRESModel(retriever), **kwargs)
         self.k_values = k_values
         self.top_k = max(k_values)
         self.score_function = score_function
