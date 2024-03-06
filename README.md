@@ -1,7 +1,7 @@
 <h1 align="center">Massive Text Embedding Benchmark</h1>
 
 <p align="center">
-    <a href="https://github.com/mbeddings-benchmark/mteb/releases">
+    <a href="https://github.com/embeddings-benchmark/mteb/releases">
         <img alt="GitHub release" src="https://img.shields.io/github/release/embeddings-benchmark/mteb.svg">
     </a>
     <a href="https://arxiv.org/abs/2210.07316">
