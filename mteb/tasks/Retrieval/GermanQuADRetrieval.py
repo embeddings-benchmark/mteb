@@ -27,7 +27,6 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
     def description(self):
         return {
             "name": "GermanQuAD-Retrieval",
-            "beir_name": "germanquad-retrieval",
             "hf_hub_name": "mteb/germanquad-retrieval",
             "description": "Context Retrieval for German Question Answering",
             "reference": "https://www.deepset.ai/germanquad",

@@ -73,8 +73,10 @@ for ds_name, res_dict in sorted(all_results.items()):
         MTEB(tasks=[ds_name.replace("CQADupstackRetrieval", "CQADupstackAndroidRetrieval")]).tasks[0].description
     )
     hf_hub_name = mteb_desc.get("hf_hub_name", mteb_desc.get("beir_name"))
-    if "CQADupstack" in ds_name:
-        hf_hub_name = "BeIR/cqadupstack"
+    if "beir_name" in mteb_desc:
+        logger.warning(f"`beir_name` is deprecated and will be removed in the future. New result files contain `hf_hub_name` instead.")
+    if ds_name == "CQADupstackRetrieval" in ds_name:
+        hf_hub_name = "mteb/cqadupstack"
     mteb_type = mteb_desc["type"]
     revision = res_dict.get("dataset_revision")  # Okay if it's None
     split = "test"
