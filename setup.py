@@ -46,7 +46,7 @@ with open("README.md", mode="r", encoding="utf-8") as readme_file:
 
 setup(
     name="mteb",
-    version="1.1.3.dev0",
+    version="1.2.0",
     description="Massive Text Embedding Benchmark",
     long_description=readme,
     long_description_content_type="text/markdown",
