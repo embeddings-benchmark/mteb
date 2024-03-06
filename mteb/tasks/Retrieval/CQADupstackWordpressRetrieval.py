@@ -1,13 +1,12 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class CQADupstackWordpressRetrieval(AbsTaskRetrieval, BeIRTask):
+class CQADupstackWordpressRetrieval(AbsTaskRetrieval):
     @property
     def description(self):
         return {
             "name": "CQADupstackWordpressRetrieval",
-            "beir_name": "cqadupstack/wordpress",
+            "hf_hub_name": "mteb/cqadupstack-wordpress",
             "description": "CQADupStack: A Benchmark Data Set for Community Question-Answering Research",
             "reference": "http://nlp.cis.unimelb.edu.au/resources/cqadupstack/",
             "type": "Retrieval",
@@ -15,4 +14,5 @@ class CQADupstackWordpressRetrieval(AbsTaskRetrieval, BeIRTask):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "4ffe81d471b1924886b33c7567bfb200e9eec5c4",            
         }

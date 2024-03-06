@@ -1,13 +1,12 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class ArguAna(AbsTaskRetrieval, BeIRTask):
+class ArguAna(AbsTaskRetrieval):
     @property
     def description(self):
         return {
             "name": "ArguAna",
-            "beir_name": "arguana",
+            "hf_hub_name": "mteb/arguana",
             "description": "NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
             "reference": "http://argumentation.bplaced.net/arguana/data",
             "type": "Retrieval",
@@ -15,4 +14,5 @@ class ArguAna(AbsTaskRetrieval, BeIRTask):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "c22ab2a51041ffd869aaddef7af8d8215647e41a",
         }

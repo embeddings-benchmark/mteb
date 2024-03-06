@@ -7,9 +7,6 @@ from .AbsTaskReranking import *
 from .AbsTaskRetrieval import *
 from .AbsTaskSTS import *
 from .AbsTaskSummarization import *
-from .BeIRKOTask import *
-from .BeIRPLTask import *
-from .BeIRTask import *
 from .CrosslingualTask import *
 from .LangMapping import *
 from .MultilingualTask import *

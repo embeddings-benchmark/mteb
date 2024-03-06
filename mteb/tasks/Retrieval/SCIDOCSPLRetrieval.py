@@ -1,13 +1,12 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRPLTask import BeIRPLTask
 
 
-class SCIDOCSPL(AbsTaskRetrieval, BeIRPLTask):
+class SCIDOCSPL(AbsTaskRetrieval):
     @property
     def description(self):
         return {
             "name": "SCIDOCS-PL",
-            "beir_name": "scidocs-pl",
+            "hf_hub_name": "clarin-knext/scidocs-pl",
             "description": (
                 "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation"
                 " prediction, to document classification and recommendation."
@@ -19,4 +18,5 @@ class SCIDOCSPL(AbsTaskRetrieval, BeIRPLTask):
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
             "main_score": "ndcg_at_10",
+            "revision": "45452b03f05560207ef19149545f168e596c9337",
         }

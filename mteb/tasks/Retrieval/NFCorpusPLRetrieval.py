@@ -1,13 +1,12 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRPLTask import BeIRPLTask
 
 
-class NFCorpusPL(AbsTaskRetrieval, BeIRPLTask):
+class NFCorpusPL(AbsTaskRetrieval):
     @property
     def description(self):
         return {
             "name": "NFCorpus-PL",
-            "beir_name": "nfcorpus-pl",
+            "hf_hub_name": "clarin-knext/nfcorpus-pl",
             "description": "NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
             "reference": "https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/",
             "benchmark": "BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language",
@@ -16,4 +15,5 @@ class NFCorpusPL(AbsTaskRetrieval, BeIRPLTask):
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
             "main_score": "ndcg_at_10",
+            "revision": "9a6f9567fda928260afed2de480d79c98bf0bec0",
         }

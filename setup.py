@@ -44,11 +44,6 @@ from setuptools import find_packages, setup
 with open("README.md", mode="r", encoding="utf-8") as readme_file:
     readme = readme_file.read()
 
-
-extras = {}
-extras["beir"] = ["beir"]
-
-
 setup(
     name="mteb",
     version="1.1.3.dev0",
@@ -82,8 +77,8 @@ setup(
         "torch",
         "tqdm",
         "rich",
+        "pytrec_eval",
     ],
-    extras_require=extras,
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",

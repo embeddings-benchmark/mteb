@@ -1,13 +1,12 @@
 from ...abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ...abstasks.BeIRTask import BeIRTask
 
 
-class CQADupstackMathematicaRetrieval(AbsTaskRetrieval, BeIRTask):
+class CQADupstackMathematicaRetrieval(AbsTaskRetrieval):
     @property
     def description(self):
         return {
             "name": "CQADupstackMathematicaRetrieval",
-            "beir_name": "cqadupstack/mathematica",
+            "hf_hub_name": "mteb/cqadupstack-mathematica",
             "description": "CQADupStack: A Benchmark Data Set for Community Question-Answering Research",
             "reference": "http://nlp.cis.unimelb.edu.au/resources/cqadupstack/",
             "type": "Retrieval",
@@ -15,4 +14,5 @@ class CQADupstackMathematicaRetrieval(AbsTaskRetrieval, BeIRTask):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
+            "revision": "90fceea13679c63fe563ded68f3b6f06e50061de",            
         }
