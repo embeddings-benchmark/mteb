@@ -12,7 +12,7 @@ class TestRetrievalEvaluator:
 
         self.evaluator = RetrievalEvaluator()
 
-    def test_ndcg_at_k(self):
+    def test_metrics_at_k(self):
         # Qid: {Docid: Relevance}
         relevant_docs = {
             "0": {"0": 1, "1": 1},
