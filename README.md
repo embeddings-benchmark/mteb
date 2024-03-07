@@ -140,7 +140,7 @@ evaluation = MTEB(tasks=["Banking77Classification"])
 evaluation.run(model)
 ```
 
-If you'd like to use different encoding functions for query and corpus when evaluating on Retrieval or Reranking tasks, you can add separate methods for `encode_queries` and `encode_corpus`. If these methods exist, they will be automatically used for those tasks. You can refer to the `DRESModel` at `mteb/mteb/abstasks/AbsTaskRetrieval.py` for an example of these functions.
+If you'd like to use different encoding functions for query and corpus when evaluating on Retrieval or Reranking tasks, you can add separate methods for `encode_queries` and `encode_corpus`. If these methods exist, they will be automatically used for those tasks. You can refer to the `DRESModel` at `mteb/evaluation/evaluators/RetrievalEvaluator.py` for an example of these functions.
 
 ```python
 class MyModel():
