@@ -19,6 +19,8 @@ class HFDataLoader:
         self.corpus = {}
         self.queries = {}
         self.qrels = {}
+        self.og_instructions = {}
+        self.changed_instructions = {}
         self.hf_repo = hf_repo
         if hf_repo:
             # By default fetch qrels from same repo not a second repo with "-qrels" like in original
@@ -28,14 +30,15 @@ class HFDataLoader:
             # (1) fiqa/corpus.jsonl  (format: jsonlines)
             # (2) fiqa/queries.jsonl (format: jsonlines)
             # (3) fiqa/qrels/test.tsv (format: tsv ("\t"))
-            if prefix:
-                query_file = prefix + "-" + query_file
-                qrels_folder = prefix + "-" + qrels_folder
+            assert False # not implemented for now
+            # if prefix:
+            #     query_file = prefix + "-" + query_file
+            #     qrels_folder = prefix + "-" + qrels_folder
 
-            self.corpus_file = os.path.join(data_folder, corpus_file) if data_folder else corpus_file
-            self.query_file = os.path.join(data_folder, query_file) if data_folder else query_file
-            self.qrels_folder = os.path.join(data_folder, qrels_folder) if data_folder else None
-            self.qrels_file = qrels_file
+            # self.corpus_file = os.path.join(data_folder, corpus_file) if data_folder else corpus_file
+            # self.query_file = os.path.join(data_folder, query_file) if data_folder else query_file
+            # self.qrels_folder = os.path.join(data_folder, qrels_folder) if data_folder else None
+            # self.qrels_file = qrels_file
         self.streaming = streaming
         self.keep_in_memory = keep_in_memory
     
@@ -47,13 +50,15 @@ class HFDataLoader:
         if not fIn.endswith(ext):
             raise ValueError("File {} must be present with extension {}".format(fIn, ext))
 
-    def load(self, split="test") -> Tuple[Dict[str, Dict[str, str]], Dict[str, str], Dict[str, Dict[str, int]]]:
+    def load(self, split="test") -> Tuple[Dict[str, Dict[str, str]], Dict[str, str], Dict[str, Dict[str, int]], Dict[str, Dict[str, int]]]:
         if not self.hf_repo:
-            self.qrels_file = os.path.join(self.qrels_folder, split + ".tsv")
+            self.og_qrels_file = os.path.join(self.qrels_folder + "_og", split + ".tsv")
+            self.changed_qrels_file = os.path.join(self.qrels_folder + "_changed", split + ".tsv")
             self.check(fIn=self.corpus_file, ext="jsonl")
             self.check(fIn=self.query_file, ext="jsonl")
-            self.check(fIn=self.qrels_file, ext="tsv")
-        
+            self.check(fIn=self.og_qrels_file, ext="tsv")
+            self.check(fIn=self.changed_qrels_file, ext="tsv")
+
         if not len(self.corpus):
             logger.info("Loading Corpus...")
             self._load_corpus()
@@ -64,19 +69,27 @@ class HFDataLoader:
             logger.info("Loading Queries...")
             self._load_queries()
         
-        self._load_qrels(split)
+        self._load_qrels(split, changed=False)
+        self._load_qrels(split, changed=True)
         # filter queries with no qrels
-        qrels_dict = defaultdict(dict)
+        og_qrels_dict = defaultdict(dict)
+        changed_qrels_dict = defaultdict(dict)
 
         def qrels_dict_init(row):
-            qrels_dict[row['query-id']][row['corpus-id']] = int(row['score'])
-        self.qrels.map(qrels_dict_init)
-        self.qrels = qrels_dict
-        self.queries = self.queries.filter(lambda x: x['id'] in self.qrels)
+            og_qrels_dict[row['query-id']][row['corpus-id']] = int(row['score'])
+
+        def qrels_changed_dict_init(row):
+            changed_qrels_dict[row['query-id']][row['corpus-id']] = int(row['score'])
+        
+        self.changed_qrels.map(qrels_dict_init)
+        self.og_qrels.map(qrels_changed_dict_init)
+        self.og_qrels = og_qrels_dict
+        self.changed_qrels = changed_qrels_dict
+        self.queries = self.queries.filter(lambda x: x['id'] in self.og_qrels)
         logger.info("Loaded %d %s Queries.", len(self.queries), split.upper())
         logger.info("Query Example: %s", self.queries[0])
         
-        return self.corpus, self.queries, self.qrels
+        return self.corpus, self.queries, self.og_qrels, self.changed_qrels
     
     def load_corpus(self) -> Dict[str, Dict[str, str]]:
         if not self.hf_repo:
@@ -109,17 +122,22 @@ class HFDataLoader:
         queries_ds = next(iter(queries_ds.values())) # get first split
         queries_ds = queries_ds.cast_column('_id', Value('string'))
         queries_ds = queries_ds.rename_column('_id', 'id')
-        queries_ds = queries_ds.remove_columns([col for col in queries_ds.column_names if col not in ['id', 'text']])
+        queries_ds = queries_ds.remove_columns([col for col in queries_ds.column_names if col not in ['id', 'text', 'instruction_og', 'instruction_changed']])
         self.queries = queries_ds
         
-    def _load_qrels(self, split):
+    def _load_qrels(self, split, changed=False):
         if self.hf_repo:
-            qrels_ds = load_dataset(self.hf_repo_qrels, keep_in_memory=self.keep_in_memory, streaming=self.streaming)[split]
+            qrels_ds = load_dataset(self.hf_repo_qrels, "qrels_og" if not changed else "qrels_changed", keep_in_memory=self.keep_in_memory, streaming=self.streaming)[split]
         else:
-            qrels_ds = load_dataset('csv', data_files=self.qrels_file, delimiter='\t', keep_in_memory=self.keep_in_memory)
+            qrels_file = self.og_qrels_file if not changed else self.changed_qrels_file
+            qrels_ds = load_dataset('csv', data_files=qrels_file, delimiter='\t', keep_in_memory=self.keep_in_memory)
         features = Features({'query-id': Value('string'), 'corpus-id': Value('string'), 'score': Value('float')})
         qrels_ds = qrels_ds.cast(features)
-        self.qrels = qrels_ds
+
+        if changed:
+            self.changed_qrels = qrels_ds
+        else:
+            self.og_qrels = qrels_ds
 
 
 class AbsTaskInstructionRetrieval(AbsTask):
@@ -135,14 +153,18 @@ class AbsTaskInstructionRetrieval(AbsTask):
 
     def load_data(self, **kwargs):
         if self.data_loaded: return
-        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
+        self.corpus, self.queries, self.og_relevant_docs, self.changed_relevant_docs = {}, {}, {}, {}
+        self.og_instructions, self.changed_instructions = {}, {}
         hf_repo_qrels = self.description["hf_hub_name"] + "-qrels" if "clarin-knext" in self.description["hf_hub_name"] else None
         for split in kwargs.get("eval_splits", self.description["eval_splits"]):
-            corpus, queries, qrels = HFDataLoader(hf_repo=self.description["hf_hub_name"], hf_repo_qrels=hf_repo_qrels, streaming=False, keep_in_memory=False).load(split=split)
+            corpus, queries, og_qrels, changed_qrels = HFDataLoader(hf_repo=self.description["hf_hub_name"], hf_repo_qrels=hf_repo_qrels, streaming=False, keep_in_memory=False).load(split=split)
             # Conversion from DataSet
+            og_instructions = {query["text"]: query["instruction_og"] for query in queries}
+            changed_instructions = {query["text"]: query["instruction_changed"] for query in queries}
             queries = {query['id']: query['text'] for query in queries}
             corpus = {doc['id']: {'title': doc['title'] , 'text': doc['text']} for doc in corpus}
-            self.corpus[split], self.queries[split], self.relevant_docs[split] = corpus, queries, qrels
+            self.corpus[split], self.queries[split], self.og_relevant_docs[split], self.changed_relevant_docs[split] = corpus, queries, og_qrels, changed_qrels
+            self.changed_instructions[split], self.og_instructions[split] = changed_instructions, og_instructions
 
         self.data_loaded = True
 
@@ -152,22 +174,35 @@ class AbsTaskInstructionRetrieval(AbsTask):
         split="test",
         **kwargs
     ):
-        retriever = RetrievalEvaluator(model, **kwargs)
+        retriever = InstructionRetrievalEvaluator(model, **kwargs)
 
-        scores = {}
+        scores_og = {}
+        scores_changed = {}
         if self.is_multilingual:
             for lang in self.langs:
                 logger.info(f"Language: {lang}")
-                corpus, queries, relevant_docs = self.corpus[lang][split], self.queries[lang][split], self.relevant_docs[lang][split]
-                scores[lang] = self._evaluate_monolingual(retriever, corpus, queries, relevant_docs, lang, **kwargs)
+                corpus, queries, og_relevant_docs, changed_relevant_docs = self.corpus[lang][split], self.queries[lang][split], self.og_relevant_docs[lang][split], self.changed_relevant_docs[lang][split]
+                og_instructions, changed_instructions = self.og_instructions[lang][split], self.changed_instructions[lang][split]
+                scores_og[lang], results_og = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "og", og_instructions, lang, **kwargs)
+                scores_changed[lang], results_changed = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "changed", changed_instructions, lang, **kwargs)
         else:
-            corpus, queries, relevant_docs = self.corpus[split], self.queries[split], self.relevant_docs[split]
-            scores = self._evaluate_monolingual(retriever, corpus, queries, relevant_docs, None, **kwargs)
-        return scores
+            corpus, queries, og_relevant_docs, changed_relevant_docs = self.corpus[split], self.queries[split], self.og_relevant_docs[split], self.changed_relevant_docs[split]
+            og_instructions, changed_instructions = self.og_instructions[split], self.changed_instructions[split]
+            scores_og, results_og = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "og", og_instructions, None, **kwargs)
+            scores_changed, results_changed = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "changed", changed_instructions, None, **kwargs)
 
-    def _evaluate_monolingual(self, retriever, corpus, queries, relevant_docs, lang=None, **kwargs):
+        newly_irrelevant_qrels = self.create_qrel_diff(self.og_relevant_docs[split], self.changed_relevant_docs[split])
+        changed_scores = retriever.evaluate_change(results_og, results_changed, newly_irrelevant_qrels)
+
+        changed_scores["individual"] = {
+            "original": scores_og,
+            "changed": scores_changed
+        }
+        return changed_scores
+
+    def _evaluate_monolingual(self, retriever, corpus, queries, relevant_docs, qrels_name: str, instructions, lang=None, **kwargs):
         start_time = time()
-        results = retriever(corpus, queries)
+        results = retriever(corpus, queries, instructions=instructions)
         end_time = time()
         logger.info("Time taken to retrieve: {:.2f} seconds".format(end_time - start_time))
 
@@ -181,9 +216,9 @@ class AbsTaskInstructionRetrieval(AbsTask):
                     doc_ids = set(sorted(results[qid], key=lambda x: results[qid][x], reverse=True)[:top_k])
                     results[qid] = {k: v for k, v in results[qid].items() if k in doc_ids}
             if lang is None:
-                qrels_save_path = f"{output_folder}/{self.description['name']}_qrels.json"
+                qrels_save_path = f"{output_folder}/{self.description['name']}_qrels_{qrels_name}.json"
             else:
-                qrels_save_path = f"{output_folder}/{self.description['name']}_{lang}_qrels.json"
+                qrels_save_path = f"{output_folder}/{self.description['name']}_{lang}_qrels_{qrels_name}.json"
             
             with open(qrels_save_path, "w") as f:
                 json.dump(results, f)
@@ -197,4 +232,15 @@ class AbsTaskInstructionRetrieval(AbsTask):
             **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
             **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
         }
-        return scores
+        return scores, results
+
+
+    def create_qrel_diff(self, og_qrels, changed_qrels):
+        newly_irrelevant_qrels = {}
+        for qid in og_qrels:
+            newly_irrelevant_qrels[qid] = []
+            for doc_id in og_qrels[qid]:
+                if changed_qrels[qid][doc_id] != og_qrels[qid][doc_id]:
+                    newly_irrelevant_qrels[qid].append(doc_id)
+
+        return newly_irrelevant_qrels

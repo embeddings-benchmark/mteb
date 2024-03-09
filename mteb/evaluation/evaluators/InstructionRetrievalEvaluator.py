@@ -1,6 +1,7 @@
 import logging
 import heapq
 from typing import Dict, List, Tuple
+import pandas as pd
 
 import pytrec_eval
 from sentence_transformers import SentenceTransformer
@@ -24,10 +25,13 @@ class DenseRetrievalExactSearch:
         self.show_progress_bar = kwargs.get("show_progress_bar", True)
         self.convert_to_tensor = kwargs.get("convert_to_tensor", True)
         self.results = {}
-    
+        self.save_corpus_embeddings = kwargs.get("save_corpus_embeddings", False)
+        self.corpus_embeddings = [] 
+
     def search(self, 
                corpus: Dict[str, Dict[str, str]], 
                queries: Dict[str, str], 
+               instructions: Dict[str, str],
                top_k: int, 
                score_function: str,
                return_sorted: bool = False, 
@@ -43,7 +47,7 @@ class DenseRetrievalExactSearch:
         self.results = {qid: {} for qid in query_ids}
         queries = [queries[qid] for qid in queries]
         query_embeddings = self.model.encode_queries(
-            queries, batch_size=self.batch_size, show_progress_bar=self.show_progress_bar, convert_to_tensor=self.convert_to_tensor)
+            queries, batch_size=self.batch_size, show_progress_bar=self.show_progress_bar, convert_to_tensor=self.convert_to_tensor, instructions=instructions)
           
         logger.info("Sorting Corpus by document length (Longest first)...")
 
@@ -60,13 +64,18 @@ class DenseRetrievalExactSearch:
             logger.info("Encoding Batch {}/{}...".format(batch_num+1, len(itr)))
             corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus))
 
-            # Encode chunk of corpus    
-            sub_corpus_embeddings = self.model.encode_corpus(
-                corpus[corpus_start_idx:corpus_end_idx],
-                batch_size=self.batch_size,
-                show_progress_bar=self.show_progress_bar, 
-                convert_to_tensor = self.convert_to_tensor
-                )
+            # Encode chunk of corpus
+            if self.save_corpus_embeddings and len(self.corpus_embeddings) > batch_num:
+                sub_corpus_embeddings = self.corpus_embeddings[batch_num]
+            else:
+                sub_corpus_embeddings = self.model.encode_corpus(
+                    corpus[corpus_start_idx:corpus_end_idx],
+                    batch_size=self.batch_size,
+                    show_progress_bar=self.show_progress_bar, 
+                    convert_to_tensor = self.convert_to_tensor
+                    )
+                if self.save_corpus_embeddings:
+                    self.corpus_embeddings.append(sub_corpus_embeddings)
 
             # Compute similarites using either cosine-similarity or dot product
             cos_scores = self.score_functions[score_function](query_embeddings, sub_corpus_embeddings)
@@ -105,6 +114,8 @@ class DRESModel:
         self.model = model
         self.sep = sep
         self.use_sbert_model = isinstance(model, SentenceTransformer)
+        self.save_corpus_embeddings = kwargs.get("save_corpus_embeddings", False)
+        self.corpus_embeddings = [] 
 
     def encode_queries(self, queries: List[str], batch_size: int, **kwargs):
         if self.use_sbert_model:
@@ -117,6 +128,9 @@ class DRESModel:
         return self.model.encode(queries, batch_size=batch_size, **kwargs)
 
     def encode_corpus(self, corpus: List[Dict[str, str]], batch_size: int, **kwargs):
+        if self.save_corpus_embeddings and len(self.corpus_embeddings) > 0:
+            return self.corpus_embeddings
+        
         if type(corpus) is dict:
             sentences = [
                 (corpus["title"][i] + self.sep + corpus["text"][i]).strip()
@@ -129,7 +143,10 @@ class DRESModel:
                 (doc["title"] + self.sep + doc["text"]).strip() if "title" in doc else doc["text"].strip()
                 for doc in corpus
             ]
-        return self.model.encode(sentences, batch_size=batch_size, **kwargs)
+        corpus_embeddings = self.model.encode(sentences, batch_size=batch_size, **kwargs)
+        if self.save_corpus_embeddings:
+            self.corpus_embeddings = corpus_embeddings.cpu().detach()
+        return corpus_embeddings
 
 def is_dres_compatible(model):
     for method in ["encode_queries", "encode_corpus"]:
@@ -152,9 +169,9 @@ class InstructionRetrievalEvaluator(Evaluator):
         self.top_k = max(k_values)
         self.score_function = score_function
             
-    def __call__(self, corpus: Dict[str, Dict[str, str]], queries: Dict[str, str], **kwargs) -> Dict[str, Dict[str, float]]:
+    def __call__(self, corpus: Dict[str, Dict[str, str]], queries: Dict[str, str], instructions: Dict[str, str], **kwargs) -> Dict[str, Dict[str, float]]:
         if not self.retriever: raise ValueError("Model/Technique has not been provided!")
-        return self.retriever.search(corpus, queries, self.top_k, self.score_function, **kwargs)
+        return self.retriever.search(corpus, queries, instructions, self.top_k, self.score_function, **kwargs)
     
     def rerank(self,
             corpus: Dict[str, Dict[str, str]],
@@ -239,3 +256,84 @@ class InstructionRetrievalEvaluator(Evaluator):
             return hole(qrels, results, k_values)
         elif metric.lower() in ["acc", "top_k_acc", "accuracy", "accuracy@k", "top_k_accuracy"]:
             return top_k_accuracy(qrels, results, k_values)
+
+
+
+    @staticmethod 
+    def get_rank_from_dict(dict_of_results, doc_id):
+        tuple_of_id_score = dict_of_results.items()
+        # sort them by score
+        sorted_by_score = sorted(tuple_of_id_score, key=lambda x: x[1], reverse=True)
+        # return the rank of the doc_id, if not found return -1
+        for i, (id, score) in enumerate(sorted_by_score):
+            if id == doc_id:
+                return i + 1, score
+            
+        return len(sorted_by_score) + 1, 0
+
+
+
+    @staticmethod
+    def evaluate_change(original_run, new_run, changed_qrels):
+        changes = []
+        for qid in changed_qrels.keys():
+            original_qid_run = original_run[qid]
+            new_qid_run = new_run[qid]
+            for idx, changed_doc in enumerate(changed_qrels[qid]):
+                original_rank, original_score = InstructionRetrievalEvaluator.get_rank_from_dict(original_qid_run, changed_doc)
+                new_rank, new_score = InstructionRetrievalEvaluator.get_rank_from_dict(new_qid_run, changed_doc)
+                change = int(original_rank - new_rank)
+                changes.append(
+                    {
+                        "qid": qid,
+                        "doc_id": changed_doc,
+                        "change": change,
+                        "relevance": 0,
+                        "og_rank": original_rank,
+                        "new_rank": new_rank,
+                        "og_score": original_score,
+                        "new_score": new_score
+                    }
+                )
+
+
+        # we now have a DF of [qid, doc_id, change] to run our calculations with
+        changes_df = pd.DataFrame(changes)
+        changes_df["rankwise_score"] = changes_df.apply(lambda x: InstructionRetrievalEvaluator.rank_score(x), axis=1)
+        changes_df["pointwise_score"] = changes_df.apply(lambda x: InstructionRetrievalEvaluator.pointwise_score(x), axis=1)
+
+        doc_wise = changes_df.groupby("doc_id").agg({"rankwise_score": "mean", "pointwise_score": "mean"})
+
+        # do qid wise calculations
+        qid_wise = changes_df.groupby("qid").agg({"rankwise_score": "mean", "pointwise_score": "mean"})
+
+        return {
+            "per_doc": doc_wise.to_dict(orient="index"),
+            "per_qid": qid_wise.to_dict(orient="index"),
+            "rankwise_score": qid_wise["rankwise_score"].mean(),
+            "pointwise_score": qid_wise["pointwise_score"].mean()
+        }
+
+    @staticmethod
+    def rank_score(x: dict):
+        # if x["og_rank"] == 0 and x["new_rank"] == 0:
+        #     return 0
+
+        if x["og_rank"] >= x["new_rank"]:
+            return ((1/x["og_rank"]) / (1/x["new_rank"])) - 1
+        else:
+            return (1 - ((1/x["new_rank"]) / (1/x["og_rank"])))
+
+    @staticmethod
+    def pointwise_score(x: dict):
+        if x["og_score"] == 0 and x["new_score"] == 0:
+            return 0
+
+        if x["og_score"] >= x["new_score"]:
+            return (x["og_score"] - x["new_score"]) / x["og_score"]
+        else:
+            return -1 * ((x["new_score"] - x["og_score"]) / x["new_score"])
+
+
+
+

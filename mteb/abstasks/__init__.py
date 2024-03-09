@@ -10,4 +10,4 @@ from .AbsTaskSummarization import *
 from .CrosslingualTask import *
 from .LangMapping import *
 from .MultilingualTask import *
-from .AbsTaskInstructionReranking import *
+from .AbsTaskInstructionRetrieval import *

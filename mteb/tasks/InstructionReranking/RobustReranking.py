@@ -1,15 +1,15 @@
-from ...abstasks.AbsTaskInstructionReranking import AbsTaskInstructionReranking
+from ...abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 
 
-class RobustReranking(AbsTaskInstructionReranking):
+class RobustReranking(AbsTaskInstructionRetrieval):
     @property
     def description(self):
         return {
-            "name": "RobustReranking",
-            "hf_hub_name": "mteb/scidocs-reranking",
+            "name": "RobustInstructionRetrieval",
+            "hf_hub_name": "orionweller/robust-instructions",
             "description": "Measuring instruction following ability on Robust04 narratives.",
             "reference": "TODO",
-            "type": "InstructionReranking",
+            "type": "InstructionRetrieval",
             "category": "s2p",
             "eval_splits": ["test"],
             "eval_langs": ["en"],

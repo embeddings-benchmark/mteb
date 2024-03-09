@@ -70,5 +70,6 @@ MTEB_MAIN_EN = [
     "TweetSentimentExtractionClassification",
     "TwentyNewsgroupsClustering",
     "TwitterSemEval2015",
-    "TwitterURLCorpus"
+    "TwitterURLCorpus",
+    "RobustInstructionRetrieval"
 ]
