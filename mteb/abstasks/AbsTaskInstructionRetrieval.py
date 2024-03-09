@@ -234,7 +234,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
             cur_queries = {query_id: queries[query_id]}
             cur_instructions = {queries[query_id]: instructions[queries[query_id]]}
             cur_docs = {key: value for (key, value) in corpus.items() if key in top_ranked[query_id]}
-            all_results.append(retriever(cur_docs, cur_queries, instructions=cur_instructions))
+            all_results.append(retriever(cur_docs, cur_queries, instructions=cur_instructions, qid=query_id))
 
         # combine all the results (which are {'qid' -> {'doc_id' -> score} mappings)
         # we know all are unique qids, so we can smash together

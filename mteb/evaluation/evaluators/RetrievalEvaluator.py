@@ -251,56 +251,56 @@ class RetrievalEvaluator(Evaluator):
             return top_k_accuracy(qrels, results, k_values)
 
 
-class Reranker:    
-    def __init__(self, model, batch_size: int = 32, **kwargs):
-        # Model is class that provides encode_corpus() and encode_queries()
-        self.model = model
-        self.batch_size = batch_size
-        self.show_progress_bar = kwargs.get("show_progress_bar", True)
-        self.convert_to_tensor = kwargs.get("convert_to_tensor", True)
-        self.results = {}
+# class Reranker:    
+#     def __init__(self, model, batch_size: int = 32, **kwargs):
+#         # Model is class that provides encode_corpus() and encode_queries()
+#         self.model = model
+#         self.batch_size = batch_size
+#         self.show_progress_bar = kwargs.get("show_progress_bar", True)
+#         self.convert_to_tensor = kwargs.get("convert_to_tensor", True)
+#         self.results = {}
     
-    def search(self, 
-               corpus: Dict[str, Dict[str, str]], 
-               queries: Dict[str, str], 
-               **kwargs) -> Dict[str, Dict[str, float]]:
-        # Reranks and returns a ranked list with the corpus ids
-        # ignores most other kwargs given to non-cross-encoders
+#     def search(self, 
+#                corpus: Dict[str, Dict[str, str]], 
+#                queries: Dict[str, str], 
+#                **kwargs) -> Dict[str, Dict[str, float]]:
+#         # Reranks and returns a ranked list with the corpus ids
+#         # ignores most other kwargs given to non-cross-encoders
             
 
-        logger.info("Reranking...")
-        query_ids = list(queries.keys())
-        self.results = {qid: {} for qid in query_ids}
-        queries = [queries[qid] for qid in queries]
+#         logger.info("Reranking...")
+#         query_ids = list(queries.keys())
+#         self.results = {qid: {} for qid in query_ids}
+#         queries = [queries[qid] for qid in queries]
 
 
-        corpus_ids = sorted(corpus, key=lambda k: len(corpus[k].get("title", "") + corpus[k].get("text", "")), reverse=True)
-        corpus = [corpus[cid] for cid in corpus_ids]
+#         corpus_ids = sorted(corpus, key=lambda k: len(corpus[k].get("title", "") + corpus[k].get("text", "")), reverse=True)
+#         corpus = [corpus[cid] for cid in corpus_ids]
 
 
-        pairs = []
-        for q_idx, query in enumerate(queries):
-            for d_idx, doc in enumerate(corpus):
-                pairs.append((query, doc, (query_ids[q_idx], corpus_ids[d_idx])))
+#         pairs = []
+#         for q_idx, query in enumerate(queries):
+#             for d_idx, doc in enumerate(corpus):
+#                 pairs.append((query, doc, (query_ids[q_idx], corpus_ids[d_idx])))
 
-        logger.info("Reranking in batches... Warning: This might take a while!")
-        itr = range(0, len(pairs), self.batch_size)
+#         logger.info("Reranking in batches... Warning: This might take a while!")
+#         itr = range(0, len(pairs), self.batch_size)
         
-        results = {qid: [] for qid in query_ids}  
-        for batch_num, corpus_start_idx in enumerate(itr):
-            logger.info("Encoding Batch {}/{}...".format(batch_num+1, len(itr)))
-            corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus))
+#         results = {qid: [] for qid in query_ids}  
+#         for batch_num, corpus_start_idx in enumerate(itr):
+#             logger.info("Encoding Batch {}/{}...".format(batch_num+1, len(itr)))
+#             corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus))
 
-            # rerank chunks
-            queries_in_pair = [pair[0] for pair in pairs[corpus_start_idx:corpus_end_idx]]
-            corpus_in_pair = [pair[1] for pair in pairs[corpus_start_idx:corpus_end_idx]]
-            query_ids = [pair[2][0] for pair in pairs[corpus_start_idx:corpus_end_idx]]
-            corpus_ids = [pair[2][1] for pair in pairs[corpus_start_idx:corpus_end_idx]]
-            scores = self.model.rerank(
-                queries_in_pair, corpus_in_pair,
-            )
+#             # rerank chunks
+#             queries_in_pair = [pair[0] for pair in pairs[corpus_start_idx:corpus_end_idx]]
+#             corpus_in_pair = [pair[1] for pair in pairs[corpus_start_idx:corpus_end_idx]]
+#             query_ids = [pair[2][0] for pair in pairs[corpus_start_idx:corpus_end_idx]]
+#             corpus_ids = [pair[2][1] for pair in pairs[corpus_start_idx:corpus_end_idx]]
+#             scores = self.model.rerank(
+#                 queries_in_pair, corpus_in_pair,
+#             )
 
-            for i, score in enumerate(scores):
-                results[query_ids[i]][corpus_ids[i]] = score
+#             for i, score in enumerate(scores):
+#                 results[query_ids[i]][corpus_ids[i]] = score
         
-        return self.results
+#         return self.results

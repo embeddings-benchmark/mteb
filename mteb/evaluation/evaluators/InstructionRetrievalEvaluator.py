@@ -73,17 +73,17 @@ class DenseRetrievalExactSearch:
             corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus))
 
             # Encode chunk of corpus
-            # if self.save_corpus_embeddings and len(self.corpus_embeddings) > batch_num:
-            #     sub_corpus_embeddings = self.corpus_embeddings[qid][batch_num]
-            # else:
-            sub_corpus_embeddings = self.model.encode_corpus(
-                corpus[corpus_start_idx:corpus_end_idx],
-                batch_size=self.batch_size,
-                show_progress_bar=self.show_progress_bar, 
-                convert_to_tensor = self.convert_to_tensor
-            )
-                # if self.save_corpus_embeddings:
-                #     self.corpus_embeddings[qid].append(sub_corpus_embeddings)
+            if self.save_corpus_embeddings and "qid" in kwargs and len(self.corpus_embeddings[kwargs["qid"]]):
+                sub_corpus_embeddings = self.corpus_embeddings[qid][batch_num]
+            else:
+                sub_corpus_embeddings = self.model.encode_corpus(
+                    corpus[corpus_start_idx:corpus_end_idx],
+                    batch_size=self.batch_size,
+                    show_progress_bar=self.show_progress_bar, 
+                    convert_to_tensor = self.convert_to_tensor
+                )
+                if self.save_corpus_embeddings and "qid" in kwargs:
+                    self.corpus_embeddings[kwargs["qid"]].append(sub_corpus_embeddings)
 
             # Compute similarites using either cosine-similarity or dot product
             cos_scores = self.score_functions[score_function](query_embeddings, sub_corpus_embeddings)
@@ -94,11 +94,7 @@ class DenseRetrievalExactSearch:
             for query_itr in range(len(query_embeddings)):
                 query_id = query_ids[query_itr]                  
                 for sub_corpus_id, score in enumerate(cos_scores[query_itr]):
-                    try:
-                        corpus_id = corpus_ids[corpus_start_idx+sub_corpus_id]
-                    except Exception as e:
-                        breakpoint()
-                        print(e)
+                    corpus_id = corpus_ids[corpus_start_idx+sub_corpus_id]
                     results[query_id].append((corpus_id, score))
 
 
@@ -132,8 +128,8 @@ class DRESModel:
         return self.model.encode(queries, batch_size=batch_size, **kwargs)
 
     def encode_corpus(self, corpus: List[Dict[str, str]], batch_size: int, **kwargs):
-        # if self.save_corpus_embeddings and len(self.corpus_embeddings) > 0:
-        #     return self.corpus_embeddings[qid]
+        if "qid" in kwargs and self.save_corpus_embeddings and len(self.corpus_embeddings) > 0:
+            return self.corpus_embeddings[kwargs["qid"]]
         
         if type(corpus) is dict:
             sentences = [
@@ -148,8 +144,8 @@ class DRESModel:
                 for doc in corpus
             ]
         corpus_embeddings = self.model.encode(sentences, batch_size=batch_size, **kwargs)
-        # if self.save_corpus_embeddings:
-        #     self.corpus_embeddings = corpus_embeddings.cpu().detach()
+        if self.save_corpus_embeddings and "qid" in kwargs:
+            self.corpus_embeddings[kwargs["qid"]] = corpus_embeddings.cpu().detach()
         return corpus_embeddings
     
 
@@ -218,7 +214,7 @@ class Reranker:
             for i, score in enumerate(scores):
                 results[query_ids[i]][corpus_ids[i]] = score
         
-        return self.results
+        return results
     
 
 def is_dres_compatible(model):
