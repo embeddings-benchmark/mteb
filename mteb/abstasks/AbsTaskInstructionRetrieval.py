@@ -4,6 +4,7 @@ import os
 from collections import defaultdict
 from time import time
 from typing import Dict, Tuple
+import tqdm
 
 from datasets import load_dataset, Value, Features
 
@@ -21,6 +22,7 @@ class HFDataLoader:
         self.qrels = {}
         self.og_instructions = {}
         self.changed_instructions = {}
+        self.top_ranked = {}
         self.hf_repo = hf_repo
         if hf_repo:
             # By default fetch qrels from same repo not a second repo with "-qrels" like in original
@@ -88,8 +90,24 @@ class HFDataLoader:
         self.queries = self.queries.filter(lambda x: x['id'] in self.og_qrels)
         logger.info("Loaded %d %s Queries.", len(self.queries), split.upper())
         logger.info("Query Example: %s", self.queries[0])
+
+        # load top_ranked
+        self.load_top_ranked()
         
-        return self.corpus, self.queries, self.og_qrels, self.changed_qrels
+        return self.corpus, self.queries, self.og_qrels, self.changed_qrels, self.top_ranked
+    
+
+    def load_top_ranked(self) -> Dict[str, Dict[str, str]]:
+        if self.hf_repo:
+            top_ranked_ds = load_dataset(self.hf_repo, 'top_ranked', keep_in_memory=self.keep_in_memory, streaming=self.streaming)
+        else:
+            top_ranked_ds = load_dataset('json', data_files=self.top_ranked_file, streaming=self.streaming, keep_in_memory=self.keep_in_memory)
+        top_ranked_ds = next(iter(top_ranked_ds.values())) # get first split
+        top_ranked_ds = top_ranked_ds.cast_column('qid', Value('string'))
+        top_ranked_ds = top_ranked_ds.cast_column('pid', Value('string'))
+        top_ranked_ds = top_ranked_ds.remove_columns([col for col in top_ranked_ds.column_names if col not in ['qid', 'pid']])
+        self.top_ranked = top_ranked_ds
+
     
     def load_corpus(self) -> Dict[str, Dict[str, str]]:
         if not self.hf_repo:
@@ -155,16 +173,21 @@ class AbsTaskInstructionRetrieval(AbsTask):
         if self.data_loaded: return
         self.corpus, self.queries, self.og_relevant_docs, self.changed_relevant_docs = {}, {}, {}, {}
         self.og_instructions, self.changed_instructions = {}, {}
+        self.top_ranked = {}
         hf_repo_qrels = self.description["hf_hub_name"] + "-qrels" if "clarin-knext" in self.description["hf_hub_name"] else None
         for split in kwargs.get("eval_splits", self.description["eval_splits"]):
-            corpus, queries, og_qrels, changed_qrels = HFDataLoader(hf_repo=self.description["hf_hub_name"], hf_repo_qrels=hf_repo_qrels, streaming=False, keep_in_memory=False).load(split=split)
+            corpus, queries, og_qrels, changed_qrels, top_ranked_init = HFDataLoader(hf_repo=self.description["hf_hub_name"], hf_repo_qrels=hf_repo_qrels, streaming=False, keep_in_memory=False).load(split=split)
             # Conversion from DataSet
+            top_ranked = defaultdict(list)
+            [top_ranked[cur_inst["qid"]].append(cur_inst["pid"]) for cur_inst in top_ranked_init]
             og_instructions = {query["text"]: query["instruction_og"] for query in queries}
             changed_instructions = {query["text"]: query["instruction_changed"] for query in queries}
             queries = {query['id']: query['text'] for query in queries}
+            assert len(top_ranked) == len(queries), f"Top ranked not loaded properly! Expected {len(self.queries)} but got {len(self.top_ranked)}."
             corpus = {doc['id']: {'title': doc['title'] , 'text': doc['text']} for doc in corpus}
             self.corpus[split], self.queries[split], self.og_relevant_docs[split], self.changed_relevant_docs[split] = corpus, queries, og_qrels, changed_qrels
             self.changed_instructions[split], self.og_instructions[split] = changed_instructions, og_instructions
+            self.top_ranked[split] = top_ranked
 
         self.data_loaded = True
 
@@ -183,13 +206,15 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 logger.info(f"Language: {lang}")
                 corpus, queries, og_relevant_docs, changed_relevant_docs = self.corpus[lang][split], self.queries[lang][split], self.og_relevant_docs[lang][split], self.changed_relevant_docs[lang][split]
                 og_instructions, changed_instructions = self.og_instructions[lang][split], self.changed_instructions[lang][split]
-                scores_og[lang], results_og = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "og", og_instructions, lang, **kwargs)
-                scores_changed[lang], results_changed = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "changed", changed_instructions, lang, **kwargs)
+                top_ranked = self.top_ranked[lang][split]
+                scores_og[lang], results_og = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "og", og_instructions, top_ranked, lang, **kwargs)
+                scores_changed[lang], results_changed = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "changed", changed_instructions, top_ranked, lang, **kwargs)
         else:
             corpus, queries, og_relevant_docs, changed_relevant_docs = self.corpus[split], self.queries[split], self.og_relevant_docs[split], self.changed_relevant_docs[split]
             og_instructions, changed_instructions = self.og_instructions[split], self.changed_instructions[split]
-            scores_og, results_og = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "og", og_instructions, None, **kwargs)
-            scores_changed, results_changed = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "changed", changed_instructions, None, **kwargs)
+            top_ranked = self.top_ranked[split]
+            scores_og, results_og = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "og", og_instructions, top_ranked, None, **kwargs)
+            scores_changed, results_changed = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "changed", changed_instructions, top_ranked, None, **kwargs)
 
         newly_irrelevant_qrels = self.create_qrel_diff(self.og_relevant_docs[split], self.changed_relevant_docs[split])
         changed_scores = retriever.evaluate_change(results_og, results_changed, newly_irrelevant_qrels)
@@ -200,9 +225,21 @@ class AbsTaskInstructionRetrieval(AbsTask):
         }
         return changed_scores
 
-    def _evaluate_monolingual(self, retriever, corpus, queries, relevant_docs, qrels_name: str, instructions, lang=None, **kwargs):
+    def _evaluate_monolingual(self, retriever, corpus, queries, relevant_docs, qrels_name: str, instructions, top_ranked, lang=None, **kwargs):
         start_time = time()
-        results = retriever(corpus, queries, instructions=instructions)
+
+        # do the results by query and relevant docs only
+        all_results = []
+        for query_id in tqdm.tqdm(list(queries.keys()), leave=True):
+            cur_queries = {query_id: queries[query_id]}
+            cur_instructions = {queries[query_id]: instructions[queries[query_id]]}
+            cur_docs = {key: value for (key, value) in corpus.items() if key in top_ranked[query_id]}
+            all_results.append(retriever(cur_docs, cur_queries, instructions=cur_instructions))
+
+        # combine all the results (which are {'qid' -> {'doc_id' -> score} mappings)
+        # we know all are unique qids, so we can smash together
+        results = {k: v for d in all_results for k, v in d.items()}
+
         end_time = time()
         logger.info("Time taken to retrieve: {:.2f} seconds".format(end_time - start_time))
 

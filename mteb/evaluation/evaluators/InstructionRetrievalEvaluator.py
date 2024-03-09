@@ -2,11 +2,13 @@ import logging
 import heapq
 from typing import Dict, List, Tuple
 import pandas as pd
+import tqdm
 
 import pytrec_eval
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
 import torch
+from collections import defaultdict
 
 from .Evaluator import Evaluator
 from .utils import cos_sim, dot_score, mrr, recall_cap, hole, top_k_accuracy
@@ -26,7 +28,7 @@ class DenseRetrievalExactSearch:
         self.convert_to_tensor = kwargs.get("convert_to_tensor", True)
         self.results = {}
         self.save_corpus_embeddings = kwargs.get("save_corpus_embeddings", False)
-        self.corpus_embeddings = [] 
+        self.corpus_embeddings = defaultdict(list)
 
     def search(self, 
                corpus: Dict[str, Dict[str, str]], 
@@ -36,6 +38,12 @@ class DenseRetrievalExactSearch:
                score_function: str,
                return_sorted: bool = False, 
                **kwargs) -> Dict[str, Dict[str, float]]:
+        
+        # reranking here, so no need for the heap
+        top_k = len(corpus)
+        qid = list(queries.keys())[0] 
+        assert len(queries) == 1
+        
         # Create embeddings for all queries using model.encode_queries()
         # Runs semantic search against the corpus embeddings
         # Returns a ranked list with the corpus ids
@@ -59,48 +67,44 @@ class DenseRetrievalExactSearch:
 
         itr = range(0, len(corpus), self.corpus_chunk_size)
         
-        result_heaps = {qid: [] for qid in query_ids}  # Keep only the top-k docs for each query
+        results = {qid: [] for qid in query_ids}
         for batch_num, corpus_start_idx in enumerate(itr):
             logger.info("Encoding Batch {}/{}...".format(batch_num+1, len(itr)))
             corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus))
 
             # Encode chunk of corpus
-            if self.save_corpus_embeddings and len(self.corpus_embeddings) > batch_num:
-                sub_corpus_embeddings = self.corpus_embeddings[batch_num]
-            else:
-                sub_corpus_embeddings = self.model.encode_corpus(
-                    corpus[corpus_start_idx:corpus_end_idx],
-                    batch_size=self.batch_size,
-                    show_progress_bar=self.show_progress_bar, 
-                    convert_to_tensor = self.convert_to_tensor
-                    )
-                if self.save_corpus_embeddings:
-                    self.corpus_embeddings.append(sub_corpus_embeddings)
+            # if self.save_corpus_embeddings and len(self.corpus_embeddings) > batch_num:
+            #     sub_corpus_embeddings = self.corpus_embeddings[qid][batch_num]
+            # else:
+            sub_corpus_embeddings = self.model.encode_corpus(
+                corpus[corpus_start_idx:corpus_end_idx],
+                batch_size=self.batch_size,
+                show_progress_bar=self.show_progress_bar, 
+                convert_to_tensor = self.convert_to_tensor
+            )
+                # if self.save_corpus_embeddings:
+                #     self.corpus_embeddings[qid].append(sub_corpus_embeddings)
 
             # Compute similarites using either cosine-similarity or dot product
             cos_scores = self.score_functions[score_function](query_embeddings, sub_corpus_embeddings)
             cos_scores[torch.isnan(cos_scores)] = -1
 
-            # Get top-k values
-            cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(cos_scores, min(top_k+1, len(cos_scores[1])), dim=1, largest=True, sorted=return_sorted)
-            cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
-            cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
-            
+            # get all values to put in results
+            cos_scores = cos_scores.cpu().tolist()
             for query_itr in range(len(query_embeddings)):
                 query_id = query_ids[query_itr]                  
-                for sub_corpus_id, score in zip(cos_scores_top_k_idx[query_itr], cos_scores_top_k_values[query_itr]):
-                    corpus_id = corpus_ids[corpus_start_idx+sub_corpus_id]
-                    if corpus_id != query_id:
-                        if len(result_heaps[query_id]) < top_k:
-                            # Push item on the heap
-                            heapq.heappush(result_heaps[query_id], (score, corpus_id))
-                        else:
-                            # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
-                            heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
+                for sub_corpus_id, score in enumerate(cos_scores[query_itr]):
+                    try:
+                        corpus_id = corpus_ids[corpus_start_idx+sub_corpus_id]
+                    except Exception as e:
+                        breakpoint()
+                        print(e)
+                    results[query_id].append((corpus_id, score))
 
-        for qid in result_heaps:
-            for score, corpus_id in result_heaps[qid]:
-                self.results[qid][corpus_id] = score
+
+        for qid in results:
+            for doc_id, score in results[qid]:
+                self.results[qid][doc_id] = score
         
         return self.results
 
@@ -115,7 +119,7 @@ class DRESModel:
         self.sep = sep
         self.use_sbert_model = isinstance(model, SentenceTransformer)
         self.save_corpus_embeddings = kwargs.get("save_corpus_embeddings", False)
-        self.corpus_embeddings = [] 
+        self.corpus_embeddings = {}
 
     def encode_queries(self, queries: List[str], batch_size: int, **kwargs):
         if self.use_sbert_model:
@@ -128,8 +132,8 @@ class DRESModel:
         return self.model.encode(queries, batch_size=batch_size, **kwargs)
 
     def encode_corpus(self, corpus: List[Dict[str, str]], batch_size: int, **kwargs):
-        if self.save_corpus_embeddings and len(self.corpus_embeddings) > 0:
-            return self.corpus_embeddings
+        # if self.save_corpus_embeddings and len(self.corpus_embeddings) > 0:
+        #     return self.corpus_embeddings[qid]
         
         if type(corpus) is dict:
             sentences = [
@@ -144,15 +148,91 @@ class DRESModel:
                 for doc in corpus
             ]
         corpus_embeddings = self.model.encode(sentences, batch_size=batch_size, **kwargs)
-        if self.save_corpus_embeddings:
-            self.corpus_embeddings = corpus_embeddings.cpu().detach()
+        # if self.save_corpus_embeddings:
+        #     self.corpus_embeddings = corpus_embeddings.cpu().detach()
         return corpus_embeddings
+    
+
+
+class Reranker:    
+    def __init__(self, model, batch_size: int = 32, **kwargs):
+        # Model is class that provides encode_corpus() and encode_queries()
+        self.model = model
+        self.batch_size = batch_size
+        logger.info("Reranker initialized with batch size: {}".format(batch_size))
+        self.show_progress_bar = kwargs.get("show_progress_bar", True)
+        self.convert_to_tensor = kwargs.get("convert_to_tensor", True)
+        self.results = {}
+        self.sep = kwargs.get("sep", " ")
+
+
+
+    def search(self, 
+               corpus: Dict[str, Dict[str, str]], 
+               queries: Dict[str, str], 
+               instructions: Dict[str, str],
+               top_k, score_function, # all ignored
+               **kwargs) -> Dict[str, Dict[str, float]]:
+        # Reranks and returns a ranked list with the corpus ids
+        # ignores most other kwargs given to non-cross-encoders
+            
+
+        logger.info("Reranking...")
+        query_ids = list(queries.keys())
+        self.results = {qid: {} for qid in query_ids}
+        queries = [queries[qid] for qid in queries]
+
+        corpus_ids = sorted(corpus, key=lambda k: len(corpus[k].get("title", "") + corpus[k].get("text", "")), reverse=True)
+        corpus = [corpus[cid] for cid in corpus_ids]
+        
+        corpus = [
+            (doc["title"] + self.sep + doc["text"]).strip() if "title" in doc else doc["text"].strip()
+            for doc in corpus
+        ]
+
+        pairs = []
+        for q_idx, query in enumerate(queries):
+            for d_idx, doc in enumerate(corpus):
+                pairs.append((query, doc, instructions[query], (query_ids[q_idx], corpus_ids[d_idx])))
+
+        logger.info("Reranking in batches... Warning: This might take a while!")
+        itr = range(0, len(pairs), self.batch_size)
+        
+        results = {qid: {} for qid in query_ids}  
+        for batch_num, corpus_start_idx in enumerate(tqdm.tqdm(itr, leave=False)):
+            # logger.info("Encoding Batch {}/{}...".format(batch_num+1, len(itr)))
+            corpus_end_idx = min(corpus_start_idx + self.batch_size, len(corpus))
+
+            # rerank chunks
+            queries_in_pair = [pair[0] for pair in pairs[corpus_start_idx:corpus_end_idx]]
+            corpus_in_pair = [pair[1] for pair in pairs[corpus_start_idx:corpus_end_idx]]        
+
+            instructions_in_pair = [pair[2] for pair in pairs[corpus_start_idx:corpus_end_idx]]
+            query_ids = [pair[3][0] for pair in pairs[corpus_start_idx:corpus_end_idx]]
+            corpus_ids = [pair[3][1] for pair in pairs[corpus_start_idx:corpus_end_idx]]
+            assert len(queries_in_pair) == len(corpus_in_pair) == len(instructions_in_pair)
+            scores = self.model.rerank(
+                queries_in_pair, corpus_in_pair, instructions=instructions_in_pair
+            )
+
+            for i, score in enumerate(scores):
+                results[query_ids[i]][corpus_ids[i]] = score
+        
+        return self.results
+    
 
 def is_dres_compatible(model):
     for method in ["encode_queries", "encode_corpus"]:
         op = getattr(model, method, None)
         if not (callable(op)): return False
     return True
+
+def is_rerank_compatible(model):
+    for method in ["rerank"]:
+        op = getattr(model, method, None)
+        if not (callable(op)): return False
+    return True
+
 
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/evaluation.py#L9
 class InstructionRetrievalEvaluator(Evaluator):
@@ -163,6 +243,8 @@ class InstructionRetrievalEvaluator(Evaluator):
         if is_dres_compatible(retriever):
             logger.info("The custom encode_queries and encode_corpus functions of the model will be used")
             self.retriever = DenseRetrievalExactSearch(retriever, **kwargs)
+        elif is_rerank_compatible(retriever):
+            self.retriever = Reranker(retriever, **kwargs)
         else:
             self.retriever = DenseRetrievalExactSearch(DRESModel(retriever), **kwargs)
         self.k_values = k_values
@@ -333,7 +415,5 @@ class InstructionRetrievalEvaluator(Evaluator):
             return (x["og_score"] - x["new_score"]) / x["og_score"]
         else:
             return -1 * ((x["new_score"] - x["og_score"]) / x["new_score"])
-
-
 
 
