@@ -207,8 +207,10 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 corpus, queries, og_relevant_docs, changed_relevant_docs = self.corpus[lang][split], self.queries[lang][split], self.og_relevant_docs[lang][split], self.changed_relevant_docs[lang][split]
                 og_instructions, changed_instructions = self.og_instructions[lang][split], self.changed_instructions[lang][split]
                 top_ranked = self.top_ranked[lang][split]
-                scores_og[lang], results_og = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "og", og_instructions, top_ranked, lang, **kwargs)
-                scores_changed[lang], results_changed = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "changed", changed_instructions, top_ranked, lang, **kwargs)
+                scores_og[lang], results_og[lang] = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "og", og_instructions, top_ranked, lang, **kwargs)
+                scores_changed[lang], results_changed[lang] = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "changed", changed_instructions, top_ranked, lang, **kwargs)
+
+                scores_base[lang], results_base[lang] = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "base", defaultdict(str), top_ranked, lang, **kwargs)
         else:
             corpus, queries, og_relevant_docs, changed_relevant_docs = self.corpus[split], self.queries[split], self.og_relevant_docs[split], self.changed_relevant_docs[split]
             og_instructions, changed_instructions = self.og_instructions[split], self.changed_instructions[split]
@@ -216,12 +218,15 @@ class AbsTaskInstructionRetrieval(AbsTask):
             scores_og, results_og = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "og", og_instructions, top_ranked, None, **kwargs)
             scores_changed, results_changed = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "changed", changed_instructions, top_ranked, None, **kwargs)
 
+            scores_base, results_base = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "base", defaultdict(str), top_ranked, None, **kwargs)
+
         newly_irrelevant_qrels = self.create_qrel_diff(self.og_relevant_docs[split], self.changed_relevant_docs[split])
         changed_scores = retriever.evaluate_change(results_og, results_changed, newly_irrelevant_qrels)
 
         changed_scores["individual"] = {
             "original": scores_og,
-            "changed": scores_changed
+            "changed": scores_changed,
+            "base": scores_base
         }
         return changed_scores
 
@@ -232,7 +237,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         all_results = []
         for query_id in tqdm.tqdm(list(queries.keys()), leave=True):
             cur_queries = {query_id: queries[query_id]}
-            cur_instructions = {queries[query_id]: instructions[queries[query_id]]}
+            cur_instructions = {queries[query_id]: instructions[queries[query_id]]} 
             cur_docs = {key: value for (key, value) in corpus.items() if key in top_ranked[query_id]}
             all_results.append(retriever(cur_docs, cur_queries, instructions=cur_instructions, qid=query_id))
 
