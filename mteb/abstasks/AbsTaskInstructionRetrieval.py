@@ -140,7 +140,7 @@ class HFDataLoader:
         queries_ds = next(iter(queries_ds.values())) # get first split
         queries_ds = queries_ds.cast_column('_id', Value('string'))
         queries_ds = queries_ds.rename_column('_id', 'id')
-        queries_ds = queries_ds.remove_columns([col for col in queries_ds.column_names if col not in ['id', 'text', 'instruction_og', 'instruction_changed']])
+        queries_ds = queries_ds.remove_columns([col for col in queries_ds.column_names if col not in ['id', 'text', 'instruction_og', 'instruction_changed', "keywords", "short_query"]])
         self.queries = queries_ds
         
     def _load_qrels(self, split, changed=False):
@@ -168,12 +168,14 @@ class AbsTaskInstructionRetrieval(AbsTask):
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.do_length_ablation = True
 
     def load_data(self, **kwargs):
         if self.data_loaded: return
         self.corpus, self.queries, self.og_relevant_docs, self.changed_relevant_docs = {}, {}, {}, {}
         self.og_instructions, self.changed_instructions = {}, {}
         self.top_ranked = {}
+        self.keywords, self.short_instructions = {}, {}
         hf_repo_qrels = self.description["hf_hub_name"] + "-qrels" if "clarin-knext" in self.description["hf_hub_name"] else None
         for split in kwargs.get("eval_splits", self.description["eval_splits"]):
             corpus, queries, og_qrels, changed_qrels, top_ranked_init = HFDataLoader(hf_repo=self.description["hf_hub_name"], hf_repo_qrels=hf_repo_qrels, streaming=False, keep_in_memory=False).load(split=split)
@@ -182,12 +184,15 @@ class AbsTaskInstructionRetrieval(AbsTask):
             [top_ranked[cur_inst["qid"]].append(cur_inst["pid"]) for cur_inst in top_ranked_init]
             og_instructions = {query["text"]: query["instruction_og"] for query in queries}
             changed_instructions = {query["text"]: query["instruction_changed"] for query in queries}
+            keywords = {query['text']: query['keywords'] for query in queries}
+            short_instructions = {query['text']: query['short_query'] for query in queries}
             queries = {query['id']: query['text'] for query in queries}
             assert len(top_ranked) == len(queries), f"Top ranked not loaded properly! Expected {len(self.queries)} but got {len(self.top_ranked)}."
             corpus = {doc['id']: {'title': doc['title'] , 'text': doc['text']} for doc in corpus}
             self.corpus[split], self.queries[split], self.og_relevant_docs[split], self.changed_relevant_docs[split] = corpus, queries, og_qrels, changed_qrels
             self.changed_instructions[split], self.og_instructions[split] = changed_instructions, og_instructions
             self.top_ranked[split] = top_ranked
+            self.keywords[split], self.short_instructions[split] = keywords, short_instructions
 
         self.data_loaded = True
 
@@ -206,28 +211,39 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 logger.info(f"Language: {lang}")
                 corpus, queries, og_relevant_docs, changed_relevant_docs = self.corpus[lang][split], self.queries[lang][split], self.og_relevant_docs[lang][split], self.changed_relevant_docs[lang][split]
                 og_instructions, changed_instructions = self.og_instructions[lang][split], self.changed_instructions[lang][split]
+                keywords, short_instructions = self.keywords[lang][split], self.short_instructions[lang][split]
                 top_ranked = self.top_ranked[lang][split]
                 scores_og[lang], results_og[lang] = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "og", og_instructions, top_ranked, lang, **kwargs)
                 scores_changed[lang], results_changed[lang] = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "changed", changed_instructions, top_ranked, lang, **kwargs)
 
-                scores_base[lang], results_base[lang] = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "base", defaultdict(str), top_ranked, lang, **kwargs)
+                scores_base[lang], results_base[lang] = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "base", defaultdict(str), top_ranked, lang, **kwargs)
+                assert False # need to add the other options here if we extend to multilingual
         else:
             corpus, queries, og_relevant_docs, changed_relevant_docs = self.corpus[split], self.queries[split], self.og_relevant_docs[split], self.changed_relevant_docs[split]
             og_instructions, changed_instructions = self.og_instructions[split], self.changed_instructions[split]
             top_ranked = self.top_ranked[split]
+            keywords, short_instructions = self.keywords[split], self.short_instructions[split]
             scores_og, results_og = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "og", og_instructions, top_ranked, None, **kwargs)
             scores_changed, results_changed = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "changed", changed_instructions, top_ranked, None, **kwargs)
-
-            scores_base, results_base = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "base", defaultdict(str), top_ranked, None, **kwargs)
+            scores_base, results_base = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "base", defaultdict(str), top_ranked, None, **kwargs)
 
         newly_irrelevant_qrels = self.create_qrel_diff(self.og_relevant_docs[split], self.changed_relevant_docs[split])
-        changed_scores = retriever.evaluate_change(results_og, results_changed, newly_irrelevant_qrels)
+        changed_scores = retriever.evaluate_change(results_og, results_changed, newly_irrelevant_qrels)            
 
         changed_scores["individual"] = {
             "original": scores_og,
             "changed": scores_changed,
             "base": scores_base
         }
+
+        if self.do_length_ablation:
+            scores_w_keywords = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "keywords", keywords, top_ranked, None, **kwargs)
+            scores_w_short_instr = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "short_instructions", short_instructions, top_ranked, None, **kwargs)
+            changed_scores["length_ablation"] = {
+                "keywords": scores_w_keywords,
+                "short_instructions": scores_w_short_instr
+            }
+
         return changed_scores
 
     def _evaluate_monolingual(self, retriever, corpus, queries, relevant_docs, qrels_name: str, instructions, top_ranked, lang=None, **kwargs):
