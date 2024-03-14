@@ -155,6 +155,8 @@ class Reranker:
         # Model is class that provides encode_corpus() and encode_queries()
         self.model = model
         self.batch_size = batch_size
+        if model == "bm25":
+            self.batch_size = 999999999 # all of them
         logger.info("Reranker initialized with batch size: {}".format(batch_size))
         self.show_progress_bar = kwargs.get("show_progress_bar", True)
         self.convert_to_tensor = kwargs.get("convert_to_tensor", True)
@@ -213,6 +215,7 @@ class Reranker:
 
             for i, score in enumerate(scores):
                 results[query_ids[i]][corpus_ids[i]] = score
+
         
         return results
     

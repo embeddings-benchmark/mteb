@@ -1,13 +1,13 @@
 from ...abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 
 
-class RobustReranking(AbsTaskInstructionRetrieval):
+class NewsReranking(AbsTaskInstructionRetrieval):
     @property
     def description(self):
         return {
-            "name": "RobustInstructionRetrieval",
-            "hf_hub_name": "orionweller/robust04-instructions",
-            "description": "Measuring instruction following ability on Robust04 narratives.",
+            "name": "CoreInstructionRetrieval",
+            "hf_hub_name": "orionweller/core17-instructions",
+            "description": "Measuring instruction following ability on TREC Core 17 narratives.",
             "reference": "TODO",
             "type": "InstructionRetrieval",
             "category": "s2p",
