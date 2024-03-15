@@ -67,6 +67,7 @@ mteb -m average_word_embeddings_komninos \
 
 ## Advanced usage
 
+
 ### Dataset selection
 
 Datasets can be selected by providing the list of datasets, but also
@@ -212,6 +213,30 @@ Advanced scripts with different models are available in the [mteb/mtebscripts re
 3. Copy the content of the `mteb_metadata.md` file to the top of a `README.md` file of your model on the Hub. See [here](https://huggingface.co/Muennighoff/SGPT-5.8B-weightedmean-msmarco-specb-bitfit/blob/main/README.md) for an example.
 4. Hit the Refresh button at the bottom of the leaderboard and you should see your scores 🥇
 5. To have the scores appear without refreshing, you can open an issue on the [Community Tab of the LB](https://huggingface.co/spaces/mteb/leaderboard/discussions) and someone will restart the space to cache your average scores. The cache is updated anyways ~1x/week.
+
+
+
+## Contributing to MTEB
+We welcome contributions such as new datasets to MTEB! This section describes how to set up the repository for development.
+
+### Development Installation
+If you want to submit a dataset or on other ways contribute to MTEB, you can install the package in development mode:
+
+```bash
+git clone https://github.com/embeddings-benchmark/mteb
+pip install -e .
+pip install -r requirement.dev.txt
+```
+
+### Running Tests
+To run the tests, you can use the following command:
+
+```bash
+pytest 
+# or if you want to run on multiple cores
+pytest -n auto
+```
+
 
 ## Citing
 
