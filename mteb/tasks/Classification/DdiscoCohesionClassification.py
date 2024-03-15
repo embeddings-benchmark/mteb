@@ -1,7 +1,6 @@
 from datasets import load_dataset
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.evaluation import MTEB
 
 
 class DdiscoCohesionClassification(AbsTaskClassification):
