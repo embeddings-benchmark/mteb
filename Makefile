@@ -13,25 +13,32 @@ modified_only_fixup:
 		echo "No library .py files were modified"; \
 	fi
 
+# Super fast fix and check target that only works on relevant modified files since the branch was made
+fixup: modified_only_fixup
+
+
+# This installs all the required dependencies
+install:
+	pip install -e .
+	pip install -r requirements.dev.txt
 
 # this target runs checks on all files
-
 quality:
 	black --check --preview $(check_dirs)
 	isort --check-only $(check_dirs)
 	flake8 $(check_dirs)
 
-# this target runs checks on all files and potentially modifies some of them
 
+# this target runs checks on all files and potentially modifies some of them
 style:
 	black --preview $(check_dirs)
 	isort $(check_dirs)
 
-# Super fast fix and check target that only works on relevant modified files since the branch was made
-
-fixup: modified_only_fixup
 
 # Run tests for the library
-
 test:
+	pytest -s -v ./tests/
+
+# add parllel test for faster execution (can sometimes cause issues with some tests)
+test-parallel:
 	pytest -n auto --dist=loadfile -s -v ./tests/
