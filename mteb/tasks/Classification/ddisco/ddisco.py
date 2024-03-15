@@ -1,18 +1,16 @@
-import pathlib
-
 from datasets import load_dataset
 from sentence_transformers import SentenceTransformer
 
-from mteb import MTEB
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.evaluation import MTEB
 
 
-class Ddisco(AbsTaskClassification):
+class DdiscoCohesionClassification(AbsTaskClassification):
     @property
     def description(self):
         return {
             "name": "Ddisco",
-            "hf_hub_name": "",
+            "hf_hub_name": "DDSC/ddisco",
             "description": "A Danish Discourse dataset with values for coherence and source (Wikipedia or Reddit)",
             "reference": "https://aclanthology.org/2022.lrec-1.260/",
             "type": "Classification",
@@ -20,6 +18,7 @@ class Ddisco(AbsTaskClassification):
             "eval_splits": ["test"],
             "eval_langs": ["da"],
             "main_score": "accuracy",
+            "revision": "514ab557579fcfba538a4078d6d647248a0e6eb7",
         }
 
     def load_data(self, **kwargs):
@@ -29,14 +28,8 @@ class Ddisco(AbsTaskClassification):
         if self.data_loaded:
             return
 
-        data_path = pathlib.Path(__file__).parent
         self.dataset = load_dataset(
-            "csv",
-            data_files={
-                "train": str(data_path / "ddisco.train.tsv"),
-                "test": str(data_path / "ddisco.test.tsv"),
-            },
-            delimiter="\t",
+            self.description["hf_hub_name"], revision=self.description.get("revision")
         )
         self.dataset_transform()
         self.data_loaded = True
@@ -92,10 +85,7 @@ class Ddisco(AbsTaskClassification):
 
 
 if __name__ == "__main__":
-    task = Ddisco()
+    task = DdiscoCohesionClassification()
     task.load_data()
-
-    pass
-    evaluation = MTEB(tasks=[Ddisco()])
-    evaluation.run(SentenceTransformer("average_word_embeddings_komninos"))
-    pass
+    evaluation = MTEB(tasks=[DdiscoCohesionClassification()])
+    evaluation.run(SentenceTransformer("intfloat/multilingual-e5-small"))
