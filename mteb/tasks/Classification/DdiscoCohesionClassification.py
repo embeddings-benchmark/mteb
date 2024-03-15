@@ -47,7 +47,7 @@ class DdiscoCohesionClassification(AbsTaskClassification):
             "domains": ["non-fiction", "social"],  
             "dialect": [], 
             "task_subtypes": ["Discourse coherence"],  
-            "license": "Agreement with the authors, none specified, @Kenneth?",
+            "license": "cc-by-sa-3.0",
             "socioeconomic_status": "high", 
             "annotations_creators": "expert-annotated",  
             "text_creation": "found", 
