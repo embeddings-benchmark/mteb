@@ -43,8 +43,8 @@ lint:
 
 # Run tests for the library
 test:
-	pytest -s -v ./tests/
+	pytest -s -v
 
 # add parllel test for faster execution (can sometimes cause issues with some tests)
 test-parallel:
-	pytest -n auto --dist=loadfile -s -v ./tests/
+	pytest -n auto --dist=loadfile -s -v
