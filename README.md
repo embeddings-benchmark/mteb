@@ -239,6 +239,13 @@ make test
 make test-parallel
 ```
 
+### Running linting
+To run the linting before a PR you can use the following command:
+
+```bash
+make lint
+```
+
 
 ## Citing
 
