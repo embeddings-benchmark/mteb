@@ -42,15 +42,15 @@ class DdiscoCohesionClassification(AbsTaskClassification):
     @property
     def metadata(self):
         return {
-            "date": "2012-01-01/2022-06-25",  # str # date range following ISO 8601
-            "form": ["written"],  # list[str]
-            "domains": ["non-fiction", "social"],  # list[str]
-            "dialect": [],  # list[str]
-            "task_subtypes": ["Discourse coherence"],  # list[str]
+            "date": "2012-01-01/2022-06-25", 
+            "form": ["written"],  
+            "domains": ["non-fiction", "social"],  
+            "dialect": [], 
+            "task_subtypes": ["Discourse coherence"],  
             "license": "Agreement with the authors, none specified, @Kenneth?",
-            "socioeconomic_status": "high",  # str
-            "annotations_creators": "expert-annotated",  # str
-            "text_creation": "found",  # str
+            "socioeconomic_status": "high", 
+            "annotations_creators": "expert-annotated",  
+            "text_creation": "found", 
             "citation": """
         @inproceedings{flansmose-mikkelsen-etal-2022-ddisco,
     title = "{DD}is{C}o: A Discourse Coherence Dataset for {D}anish",
@@ -80,7 +80,7 @@ class DdiscoCohesionClassification(AbsTaskClassification):
     pages = "2440--2445",
     abstract = "To date, there has been no resource for studying discourse coherence on real-world Danish texts. Discourse coherence has mostly been approached with the assumption that incoherent texts can be represented by coherent texts in which sentences have been shuffled. However, incoherent real-world texts rarely resemble that. We thus present DDisCo, a dataset including text from the Danish Wikipedia and Reddit annotated for discourse coherence. We choose to annotate real-world texts instead of relying on artificially incoherent text for training and testing models. Then, we evaluate the performance of several methods, including neural networks, on the dataset.",
 }
-        """,  # str
+        """, 
         }
 
 
