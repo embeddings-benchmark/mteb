@@ -84,8 +84,3 @@ class DdiscoCohesionClassification(AbsTaskClassification):
         }
 
 
-if __name__ == "__main__":
-    task = DdiscoCohesionClassification()
-    task.load_data()
-    evaluation = MTEB(tasks=[DdiscoCohesionClassification()])
-    evaluation.run(SentenceTransformer("intfloat/multilingual-e5-small"))
