@@ -1,5 +1,4 @@
 from datasets import load_dataset
-from sentence_transformers import SentenceTransformer
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.evaluation import MTEB
