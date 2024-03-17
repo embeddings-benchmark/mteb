@@ -6,7 +6,7 @@ class NewsReranking(AbsTaskInstructionRetrieval):
     def description(self):
         return {
             "name": "NewsInstructionRetrieval",
-            "hf_hub_name": "orionweller/news21-instructions",
+            "hf_hub_name": "jhu-clsp/news21-instructions",
             "description": "Measuring instruction following ability on TREC News 21 narratives.",
             "reference": "TODO",
             "type": "InstructionRetrieval",

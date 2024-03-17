@@ -6,7 +6,7 @@ class RobustReranking(AbsTaskInstructionRetrieval):
     def description(self):
         return {
             "name": "RobustInstructionRetrieval",
-            "hf_hub_name": "orionweller/robust04-instructions",
+            "hf_hub_name": "jhu-clsp/robust04-instructions",
             "description": "Measuring instruction following ability on Robust04 narratives.",
             "reference": "TODO",
             "type": "InstructionRetrieval",
