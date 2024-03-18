@@ -40,7 +40,6 @@ To create the package for pypi.
 
 from setuptools import find_packages, setup
 
-
 with open("README.md", mode="r", encoding="utf-8") as readme_file:
     readme = readme_file.read()
 
@@ -79,6 +78,14 @@ setup(
         "rich",
         "pytrec_eval",
     ],
+    # optional dependencies
+    extras_require={
+        "dev": [
+            "flake8",
+            "isort",
+            "black==24.2.0",
+        ]
+    },
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",

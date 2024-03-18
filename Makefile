@@ -19,8 +19,7 @@ fixup: modified_only_fixup
 
 # This installs all the required dependencies
 install:
-	pip install -e .
-	pip install -r requirements.dev.txt
+	pip install -e ".[dev]"
 
 # this target runs checks on all files
 quality:
