@@ -39,3 +39,10 @@ class BornholmBitextMining(AbsTaskBitextMining):
         # Convert to standard format
         self.dataset = self.dataset.rename_column("da", "sentence1")
         self.dataset = self.dataset.rename_column("da_bornholm", "sentence2")
+
+
+if __name__ == "__main__":
+    dataset = BornholmBitextMining()
+    dataset.load_data()
+
+    pass
