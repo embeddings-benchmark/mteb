@@ -57,10 +57,13 @@ results = evaluation.run(model, output_folder=f"results/{model_name}")
 ```bash
 mteb --available_tasks
 
-mteb -m average_word_embeddings_komninos \
+mteb -m sentence-transformers/all-MiniLM-L6-v2 \
     -t Banking77Classification  \
-    --output_folder results/average_word_embeddings_komninos \
     --verbosity 3
+
+# if nothing is specified it with default to saving the results in the results/{model_name} folder
+
+mteb -m sentence-transformers/all-MiniLM-L6-v2
 ```
 
 * Using multiple GPUs in parallel can be done by just having a custom encode function that distributes the inputs to multiple GPUs like e.g. [here](https://github.com/microsoft/unilm/blob/b60c741f746877293bb85eed6806736fc8fa0ffd/e5/mteb_eval.py#L60) or [here](https://github.com/ContextualAI/gritlm/blob/09d8630f0c95ac6a456354bcb6f964d7b9b6a609/gritlm/gritlm.py#L75).
