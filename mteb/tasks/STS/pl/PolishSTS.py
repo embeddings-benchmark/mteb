@@ -1,4 +1,4 @@
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 
 
 class SickrPLSTS(AbsTaskSTS):
@@ -15,7 +15,7 @@ class SickrPLSTS(AbsTaskSTS):
             "eval_langs": ["pl"],
             "main_score": "cosine_spearman",
             "min_score": 1,
-            "max_score": 5
+            "max_score": 5,
         }
 
 
@@ -33,6 +33,15 @@ class CdscrSTS(AbsTaskSTS):
             "eval_langs": ["pl"],
             "main_score": "cosine_spearman",
             "min_score": 1,
-            "max_score": 5
+            "max_score": 5,
         }
-        
+
+
+if __name__ == "__main__":
+    task = SickrPLSTS()
+    task.load_data()
+    dataset = task.dataset
+    split = dataset["test"]
+    split.data.schema
+
+    pass

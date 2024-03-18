@@ -1,6 +1,6 @@
 import datasets
 
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class GerDaLIR(AbsTaskRetrieval):
@@ -46,10 +46,24 @@ class GerDaLIR(AbsTaskRetrieval):
             split=self._EVAL_SPLIT,
         )
 
-        self.queries = {self._EVAL_SPLIT: {row["_id"]: row["text"] for row in query_rows}}
+        self.queries = {
+            self._EVAL_SPLIT: {row["_id"]: row["text"] for row in query_rows}
+        }
         self.corpus = {self._EVAL_SPLIT: {row["_id"]: row for row in corpus_rows}}
         self.relevant_docs = {
-            self._EVAL_SPLIT: {row["_id"]: {v: 1 for v in row["text"].split(" ")} for row in qrels_rows}
+            self._EVAL_SPLIT: {
+                row["_id"]: {v: 1 for v in row["text"].split(" ")} for row in qrels_rows
+            }
         }
 
         self.data_loaded = True
+
+
+if __name__ == "__main__":
+    task = GerDaLIR()
+    task.load_data()
+    dataset = task.dataset
+    split = dataset["test"]
+    split.data.schema
+
+    pass
