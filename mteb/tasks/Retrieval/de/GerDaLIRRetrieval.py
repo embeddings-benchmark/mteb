@@ -57,13 +57,3 @@ class GerDaLIR(AbsTaskRetrieval):
         }
 
         self.data_loaded = True
-
-
-if __name__ == "__main__":
-    task = GerDaLIR()
-    task.load_data()
-    dataset = task.dataset
-    split = dataset["test"]
-    split.data.schema
-
-    pass
