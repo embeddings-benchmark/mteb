@@ -1,4 +1,4 @@
-from ....abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class BlurbsClusteringP2P(AbsTaskClustering):
