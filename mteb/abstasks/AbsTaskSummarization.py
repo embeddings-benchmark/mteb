@@ -12,7 +12,7 @@ class AbsTaskSummarization(AbsTask):
     """
     Abstract class for summarization experiments.
 
-    self.load_data() must return a huggingface dataset containing a split matching self.description['eval_splits'] and the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.description["eval_splits"], and assign it to self.dataset. It must contain the following columns:
         text: str
         human_summaries: list[str]
         machine_summaries: list[str]

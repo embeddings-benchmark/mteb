@@ -10,7 +10,7 @@ class AbsTaskSTS(AbsTask):
     """
     Abstract class for STS experiments.
 
-    self.load_data() must return a huggingface dataset containing a test split, and the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.description["eval_splits"], and assign it to self.dataset. It must contain the following columns::
         sentence1: str
         sentence2: str
         score: float

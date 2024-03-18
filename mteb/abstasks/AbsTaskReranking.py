@@ -6,7 +6,7 @@ class AbsTaskReranking(AbsTask):
     """
     Abstract class for re-ranking experiments.
 
-    self.load_data() must return a huggingface dataset containing a split matching the task description's "eval_splits" and the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.description["eval_splits"], and assign it to self.dataset. It must contain the following columns:
         query: str
         positive: list[str]
         negative: list[str]

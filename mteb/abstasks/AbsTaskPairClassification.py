@@ -13,7 +13,7 @@ class AbsTaskPairClassification(AbsTask):
     The similarity is computed between pairs and the results are ranked. Average precision
     is computed to measure how well the methods can be used for pairwise pair classification.
 
-    self.load_data() must return a huggingface dataset containing a split matching the task description's "eval_splits" and the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.description["eval_splits"], and assign it to self.dataset. It must contain the following columns:
         sent1: list[str]
         sent2: list[str]
         labels: list[int]
