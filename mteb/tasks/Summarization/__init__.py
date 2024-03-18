@@ -1,2 +1,2 @@
-from .SummEvalFrSummarization import *
-from .SummEvalSummarization import *
+from .fr.SummEvalFrSummarization import *
+from .en.SummEvalSummarization import *
