@@ -5,10 +5,6 @@ from .AbsTask import AbsTask
 class AbsTaskReranking(AbsTask):
     """
     Abstract class for re-ranking experiments.
-    Child-classes must implement the following properties:
-    self.corpus = {'dev': Dict[id, str], 'test': Dict[id, str]}         #id => sentence
-    self.queries = {'dev': Dict[id, str], 'test': Dict[id, str]}
-    self.relevant_docs = {'dev': Dict[id, set], 'test': Dict[id, set]}
 
     self.load_data() must return a huggingface dataset containing a split matching the task description's "eval_splits" and the following columns:
         query: str
