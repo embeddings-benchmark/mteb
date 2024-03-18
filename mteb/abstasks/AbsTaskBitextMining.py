@@ -7,6 +7,16 @@ logger = logging.getLogger(__name__)
 
 
 class AbsTaskBitextMining(AbsTask):
+    """
+    Abstract class for BitextMining tasks
+    The similarity is computed between pairs and the results are ranked.
+
+    Dataset must be a huggingface dataset split into train/test, and contain the following columns:
+        id: str
+        sentence1: str
+        sentence2: str
+    """
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -17,11 +27,15 @@ class AbsTaskBitextMining(AbsTask):
         if self.is_crosslingual:
             scores = {}
             for lang in self.dataset:
-                logger.info(f"\nTask: {self.description['name']}, split: {split}, language: {lang}. Running...")
+                logger.info(
+                    f"\nTask: {self.description['name']}, split: {split}, language: {lang}. Running..."
+                )
                 data_split = self.dataset[lang][split]
                 scores[lang] = self._evaluate_split(model, data_split, **kwargs)
         else:
-            logger.info(f"\nTask: {self.description['name']}, split: {split}. Running...")
+            logger.info(
+                f"\nTask: {self.description['name']}, split: {split}. Running..."
+            )
             data_split = self.dataset[split]
             scores = self._evaluate_split(model, data_split, **kwargs)
 
@@ -61,4 +75,6 @@ class AbsTaskBitextMining(AbsTask):
         if self.description["main_score"] in scores:
             scores["main_score"] = scores[self.description["main_score"]]
         else:
-            logger.warn(f"main score {self.description['main_score']} not found in scores {scores.keys()}")
+            logger.warn(
+                f"main score {self.description['main_score']} not found in scores {scores.keys()}"
+            )
