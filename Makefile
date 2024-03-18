@@ -42,7 +42,7 @@ lint:
 
 # Run tests for the library
 test:
-	pytest -s -v
+	pytest
 
 # add parllel test for faster execution (can sometimes cause issues with some tests)
 test-parallel:
