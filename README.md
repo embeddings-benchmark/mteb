@@ -61,7 +61,7 @@ mteb -m sentence-transformers/all-MiniLM-L6-v2 \
     -t Banking77Classification  \
     --verbosity 3
 
-# if nothing is specified it with default to saving the results in the results/{model_name} folder
+# if nothing is specified default to saving the results in the results/{model_name} folder
 
 mteb -m sentence-transformers/all-MiniLM-L6-v2
 ```
