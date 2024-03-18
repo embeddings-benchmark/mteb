@@ -16,13 +16,3 @@ class BlurbsClusteringP2P(AbsTaskClustering):
             "main_score": "v_measure",
             "revision": "a2dd5b02a77de3466a3eaa98ae586b5610314496",
         }
-
-
-if __name__ == "__main__":
-    task = BlurbsClusteringP2P()
-    task.load_data()
-    dataset = task.dataset
-    dataset["test"].data
-    dataset["test"].data.schema
-
-    pass
