@@ -33,13 +33,3 @@ class Cmnli(AbsTaskPairClassification):
             "main_score": "ap",
             "revision": "41bc36f332156f7adc9e38f53777c959b2ae9766",
         }
-
-
-if __name__ == "__main__":
-    task = ()
-    task.load_data()
-    dataset = task.dataset
-    split = dataset["validation"]
-    split.data.schema
-
-    pass
