@@ -18,7 +18,7 @@ class AbsTaskClassification(AbsTask):
     Abstract class for kNN classification tasks
     The similarity is computed between pairs and the results are ranked.
 
-    Dataset must be a huggingface dataset split into train/test, and contain the following columns:
+    self.load_data() must return a huggingface dataset split into train/test, and contain the following columns:
         text: str
         label: int
     """

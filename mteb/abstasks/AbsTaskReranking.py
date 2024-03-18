@@ -10,7 +10,7 @@ class AbsTaskReranking(AbsTask):
     self.queries = {'dev': Dict[id, str], 'test': Dict[id, str]}
     self.relevant_docs = {'dev': Dict[id, set], 'test': Dict[id, set]}
 
-    Dataset must be a huggingface dataset containing a split matching the task description's "eval_splits" and the following columns:
+    self.load_data() must return a huggingface dataset containing a split matching the task description's "eval_splits" and the following columns:
         query: str
         positive: list[str]
         negative: list[str]

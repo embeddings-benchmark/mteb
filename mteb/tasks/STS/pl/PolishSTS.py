@@ -35,13 +35,3 @@ class CdscrSTS(AbsTaskSTS):
             "min_score": 1,
             "max_score": 5,
         }
-
-
-if __name__ == "__main__":
-    task = SickrPLSTS()
-    task.load_data()
-    dataset = task.dataset
-    split = dataset["test"]
-    split.data.schema
-
-    pass

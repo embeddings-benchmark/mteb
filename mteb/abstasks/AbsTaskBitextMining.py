@@ -11,7 +11,7 @@ class AbsTaskBitextMining(AbsTask):
     Abstract class for BitextMining tasks
     The similarity is computed between pairs and the results are ranked.
 
-    Dataset must be a huggingface dataset split into train/test, and contain the following columns:
+    self.load_data() must return a huggingface dataset split into train/test, and contain the following columns:
         id: str
         sentence1: str
         sentence2: str

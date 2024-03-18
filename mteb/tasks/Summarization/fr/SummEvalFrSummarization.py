@@ -1,4 +1,4 @@
-from ....abstasks import AbsTaskSummarization
+from mteb.abstasks import AbsTaskSummarization
 
 
 class SummEvalFrSummarization(AbsTaskSummarization):

@@ -14,7 +14,7 @@ class AbsTaskClustering(AbsTask):
     Abstract class for Clustering tasks
     The similarity is computed between pairs and the results are ranked.
 
-    Dataset must be a huggingface dataset containing a test set, and the following columns:
+    self.load_data() must return a huggingface dataset containing a test set, and the following columns:
         sentences: list of str
         labels: list of str
     """
