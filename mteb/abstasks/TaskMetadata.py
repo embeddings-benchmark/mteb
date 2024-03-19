@@ -10,6 +10,37 @@ from pydantic import (
     TypeAdapter,
 )
 
+TASK_SUBTYPES = Literal[
+    "Article retrieval",
+    "Dialect pairing",
+    "Dialog Systems",
+    "Discourse coherence",
+    "Language identification",
+    "Linguistic acceptability",
+    "Political",
+    "Question answering",
+    "Sentiment/Hate speech",
+    "Thematic clustering",
+]
+
+TASK_DOMAINS = Literal[
+    "Academic",
+    "Blog",
+    "Encyclopaedic",
+    "Fiction",
+    "Government",
+    "Legal",
+    "Medical",
+    "News",
+    "Non-fiction",
+    "Poetry",
+    "Religious",
+    "Reviews",
+    "Social",
+    "Spoken",
+    "Web",
+]
+
 http_url_adapter = TypeAdapter(AnyUrl)
 STR_URL = Annotated[
     str, BeforeValidator(lambda value: str(http_url_adapter.validate_python(value)))
@@ -38,46 +69,11 @@ class TaskMetadata(BaseModel):
     main_score: str  # Might want a literal here
 
     date: tuple[STR_DATE, STR_DATE] | None  # When the data was collected
-    form: list[Literal["spoken", "written", ""]]
-    domains: (
-        list[
-            Literal[
-                "Academic",
-                "Blog",
-                "Encyclopaedic",
-                "Fiction",
-                "Government",
-                "Legal",
-                "Medical",
-                "News",
-                "Non-fiction",
-                "Poetry",
-                "Religious",
-                "Reviews",
-                "Social",
-                "Spoken",
-                "Web",
-            ]
-        ]
-        | None
-    )
-    task_subtypes: (
-        list[
-            Literal[
-                "Article retrieval",
-                "Dialect pairing",
-                "Dialog Systems",
-                "Discourse coherence",
-                "Language identification",
-                "Linguistic acceptability",
-                "Political",
-                "Question answering",
-                "Sentiment/Hate speech",
-                "Thematic clustering",
-            ]
-        ]
-        | None
-    )
+    form: list[Literal["spoken", "written"]] | None
+
+    domains: list[TASK_DOMAINS] | None
+
+    task_subtypes: list[TASK_SUBTYPES] | None
     license: str
     socioeconomic_status: (
         Literal[
@@ -87,7 +83,9 @@ class TaskMetadata(BaseModel):
         ]
         | None
     )
-    annotations_creators: Literal["expert-annotated", "human-annotated", "derived", ""]
+    annotations_creators: (
+        Literal["expert-annotated", "human-annotated", "derived"] | None
+    )
     dialect: list[str] | None
     text_creation: (
         Literal[
