@@ -24,17 +24,19 @@ class AbsTask(ABC):
         """
         Load dataset from HuggingFace hub
         """
-        if self.data_loaded: return
+        if self.data_loaded:
+            return
 
         # TODO: add split argument
         self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"], revision=self.description.get("revision", None)
+            self.metadata_dict["hf_hub_name"],
+            revision=self.metadata_dict.get("revision", None),
         )
         self.data_loaded = True
 
     @property
     @abstractmethod
-    def description(self):
+    def metadata_dict(self) -> dict[str, str]:
         """
         Returns a description of the task. Should contain the following fields:
         name: Name of the task (usually equal to the class name. Should be a valid name for a path on disc)

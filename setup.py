@@ -37,7 +37,6 @@ To create the package for pypi.
    Then push the change with a message 'set dev version'
 """
 
-
 from setuptools import find_packages, setup
 
 with open("README.md", mode="r", encoding="utf-8") as readme_file:
@@ -77,6 +76,7 @@ setup(
         "tqdm",
         "rich",
         "pytrec_eval",
+        "pydantic",
     ],
     # optional dependencies
     extras_require={
