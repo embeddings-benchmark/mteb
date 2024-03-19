@@ -80,11 +80,7 @@ setup(
     ],
     # optional dependencies
     extras_require={
-        "dev": [
-            "flake8",
-            "isort",
-            "black==24.2.0",
-        ]
+        "dev": ["flake8", "isort", "black==24.2.0", "pytest", "pytest-xdist"]
     },
     classifiers=[
         "Development Status :: 4 - Beta",
