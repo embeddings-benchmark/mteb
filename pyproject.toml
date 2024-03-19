@@ -76,3 +76,12 @@ convention = "google"
 [tool.ruff.lint.flake8-annotations]
 mypy-init-return = true
 suppress-none-returning = true
+
+[tool.semantic_release]
+branch = "main"
+version_toml = ["pyproject.toml:project.version"]
+build_command = "python -m pip install build; python -m build"
+
+[tool.semantic_release.commit_parser_options]
+minor_types = ["feat"]
+patch_types = ["*", "fix", "perf"] # "*" mean always patch
