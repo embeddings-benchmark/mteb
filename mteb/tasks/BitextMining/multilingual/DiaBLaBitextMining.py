@@ -1,4 +1,3 @@
-import json
 import datasets
 
 from ....abstasks import AbsTaskBitextMining, CrosslingualTask
@@ -6,7 +5,7 @@ from ....abstasks import AbsTaskBitextMining, CrosslingualTask
 
 class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "DiaBLaBitextMining",
             "hf_hub_name": "rbawden/DiaBLa",
@@ -30,12 +29,12 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
         """
         if self.data_loaded:
             return
-        
+
         self.dataset = {}
         for lang in self.langs:
             self.dataset[lang] = datasets.load_dataset(
-                self.description["hf_hub_name"],
-                revision=self.description.get("revision", None),
+                self.metadata_dict["hf_hub_name"],
+                revision=self.metadata_dict.get("revision", None),
             )
 
         self.dataset_transform()
@@ -45,8 +44,12 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
         def create_columns(row):
             """Put all French texts in column 'sentence1' and English texts in 'sentence2' column"""
             row["orig_lang"] = row["utterance_meta"]["lang"]
-            row["sentence1"] = row["orig"] if row["orig_lang"] == "french" else row["ref"]
-            row["sentence2"] = row["orig"] if not row["orig_lang"] == "french" else row["ref"]
+            row["sentence1"] = (
+                row["orig"] if row["orig_lang"] == "french" else row["ref"]
+            )
+            row["sentence2"] = (
+                row["orig"] if not row["orig_lang"] == "french" else row["ref"]
+            )
             return row
 
         # Convert to standard format

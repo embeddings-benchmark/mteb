@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class HotpotQAPL(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "HotpotQA-PL",
             "hf_hub_name": "clarin-knext/hotpotqa-pl",

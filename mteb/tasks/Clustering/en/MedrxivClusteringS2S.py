@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 class MedrxivClusteringS2S(AbsTaskClustering):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "MedrxivClusteringS2S",
             "hf_hub_name": "mteb/medrxiv-clustering-s2s",

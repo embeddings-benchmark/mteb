@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 
 class GermanSTSBenchmarkSTS(AbsTaskSTS):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "GermanSTSBenchmark",
             "hf_hub_name": "jinaai/german-STSbenchmark",

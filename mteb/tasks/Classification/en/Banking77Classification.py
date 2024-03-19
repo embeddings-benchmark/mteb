@@ -3,7 +3,7 @@ from ....abstasks import AbsTaskClassification
 
 class Banking77Classification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "Banking77Classification",
             "hf_hub_name": "mteb/banking77",

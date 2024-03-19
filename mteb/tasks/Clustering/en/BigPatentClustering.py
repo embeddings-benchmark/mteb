@@ -3,7 +3,7 @@ from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 
 class BigPatentClustering(AbsTaskClustering):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "BigPatentClustering",
             "hf_hub_name": "jinaai/big-patent-clustering",

@@ -40,23 +40,30 @@ class AbsTaskClassification(AbsTask):
         self.n_experiments = (
             n_experiments
             if n_experiments is not None
-            else self.description.get("n_experiments", 10)
+            else self.metadata_dict.get("n_experiments", 10)
         )
         self.samples_per_label = (
             samples_per_label
             if samples_per_label is not None
-            else self.description.get("samples_per_label", 8)
+            else self.metadata_dict.get("samples_per_label", 8)
         )
 
         # kNN parameters
         self.k = k
 
+        # Run metadata validation by instantiating addressing the attribute
+        # This is quite hacky. Ideally, this would be done in the constructor of
+        # each concrete task, but then we have to duplicate the __init__ method's
+        # interface.
+        if hasattr(self, "metadata"):
+            self.metadata
+
     def _add_main_score(self, scores):
-        if self.description["main_score"] in scores:
-            scores["main_score"] = scores[self.description["main_score"]]
+        if self.metadata_dict["main_score"] in scores:
+            scores["main_score"] = scores[self.metadata_dict["main_score"]]
         else:
             logger.warn(
-                f"main score {self.description['main_score']} not found in scores {scores.keys()}"
+                f"main score {self.metadata_dict['main_score']} not found in scores {scores.keys()}"
             )
 
     def evaluate(self, model, eval_split="test", train_split="train", **kwargs):
@@ -67,7 +74,7 @@ class AbsTaskClassification(AbsTask):
             scores = {}
             for lang in self.dataset:
                 logger.info(
-                    f"\nTask: {self.description['name']}, split: {eval_split}, language: {lang}. Running..."
+                    f"\nTask: {self.metadata_dict['name']}, split: {eval_split}, language: {lang}. Running..."
                 )
                 scores[lang] = self._evaluate_monolingual(
                     model, self.dataset[lang], eval_split, train_split, **kwargs
@@ -75,7 +82,7 @@ class AbsTaskClassification(AbsTask):
                 self._add_main_score(scores[lang])
         else:
             logger.info(
-                f"\nTask: {self.description['name']}, split: {eval_split}. Running..."
+                f"\nTask: {self.metadata_dict['name']}, split: {eval_split}. Running..."
             )
             scores = self._evaluate_monolingual(
                 model, self.dataset, eval_split, train_split, **kwargs

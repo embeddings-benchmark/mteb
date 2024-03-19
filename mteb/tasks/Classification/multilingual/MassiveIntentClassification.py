@@ -57,7 +57,7 @@ _LANGUAGES = [
 
 class MassiveIntentClassification(MultilingualTask, AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "MassiveIntentClassification",
             "hf_hub_name": "mteb/amazon_massive_intent",

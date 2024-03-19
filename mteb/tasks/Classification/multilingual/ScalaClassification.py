@@ -5,7 +5,7 @@ from mteb.abstasks import AbsTaskClassification
 
 class ScalaDaClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "ScalaDaClassification",
             "hf_hub_name": "ScandEval/scala-da",
@@ -29,7 +29,8 @@ class ScalaDaClassification(AbsTaskClassification):
             return
 
         self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"], revision=self.description.get("revision", None)
+            self.metadata_dict["hf_hub_name"],
+            revision=self.metadata_dict.get("revision", None),
         )
         self.dataset_transform()
         self.data_loaded = True
@@ -38,12 +39,14 @@ class ScalaDaClassification(AbsTaskClassification):
         # convert label to a 0/1 label
         labels = self.dataset["train"]["label"]  # type: ignore
         lab2idx = {lab: idx for idx, lab in enumerate(set(labels))}
-        self.dataset = self.dataset.map(lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"])
+        self.dataset = self.dataset.map(
+            lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"]
+        )
 
 
 class ScalaNbClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "ScalaNbClassification",
             "hf_hub_name": "ScandEval/scala-nb",
@@ -67,7 +70,8 @@ class ScalaNbClassification(AbsTaskClassification):
             return
 
         self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"], revision=self.description.get("revision", None)
+            self.metadata_dict["hf_hub_name"],
+            revision=self.metadata_dict.get("revision", None),
         )
         self.dataset_transform()
         self.data_loaded = True
@@ -76,12 +80,14 @@ class ScalaNbClassification(AbsTaskClassification):
         # convert label to a 0/1 label
         labels = self.dataset["train"]["label"]  # type: ignore
         lab2idx = {lab: idx for idx, lab in enumerate(set(labels))}
-        self.dataset = self.dataset.map(lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"])
+        self.dataset = self.dataset.map(
+            lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"]
+        )
 
 
 class ScalaNnClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "ScalaNnClassification",
             "hf_hub_name": "ScandEval/scala-nn",
@@ -105,7 +111,8 @@ class ScalaNnClassification(AbsTaskClassification):
             return
 
         self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"], revision=self.description.get("revision", None)
+            self.metadata_dict["hf_hub_name"],
+            revision=self.metadata_dict.get("revision", None),
         )
         self.dataset_transform()
         self.data_loaded = True
@@ -114,12 +121,14 @@ class ScalaNnClassification(AbsTaskClassification):
         # convert label to a 0/1 label
         labels = self.dataset["train"]["label"]  # type: ignore
         lab2idx = {lab: idx for idx, lab in enumerate(set(labels))}
-        self.dataset = self.dataset.map(lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"])
+        self.dataset = self.dataset.map(
+            lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"]
+        )
 
 
 class ScalaSvClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "ScalaSvClassification",
             "hf_hub_name": "ScandEval/scala-sv",
@@ -143,7 +152,8 @@ class ScalaSvClassification(AbsTaskClassification):
             return
 
         self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"], revision=self.description.get("revision", None)
+            self.metadata_dict["hf_hub_name"],
+            revision=self.metadata_dict.get("revision", None),
         )
         self.dataset_transform()
         self.data_loaded = True
@@ -152,4 +162,6 @@ class ScalaSvClassification(AbsTaskClassification):
         # convert label to a 0/1 label
         labels = self.dataset["train"]["label"]  # type: ignore
         lab2idx = {lab: idx for idx, lab in enumerate(set(labels))}
-        self.dataset = self.dataset.map(lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"])
+        self.dataset = self.dataset.map(
+            lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"]
+        )

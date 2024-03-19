@@ -3,7 +3,7 @@ from ....abstasks import AbsTaskClassification
 
 class TweetSentimentExtractionClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "TweetSentimentExtractionClassification",
             "hf_hub_name": "mteb/tweet_sentiment_extraction",

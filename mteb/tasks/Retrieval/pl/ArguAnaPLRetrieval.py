@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class ArguAnaPL(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "ArguAna-PL",
             "hf_hub_name": "clarin-knext/arguana-pl",

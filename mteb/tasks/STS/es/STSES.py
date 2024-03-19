@@ -2,12 +2,12 @@ from datasets import load_dataset
 
 from ....abstasks.AbsTaskSTS import AbsTaskSTS
 
-_EVAL_SPLIT = 'test'
+_EVAL_SPLIT = "test"
 
 
 class STSES(AbsTaskSTS):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "STSES",
             "hf_hub_name": "PlanTL-GOB-ES/sts-es",
@@ -28,11 +28,11 @@ class STSES(AbsTaskSTS):
             return
 
         data = load_dataset(
-            self.description["hf_hub_name"],
+            self.metadata_dict["hf_hub_name"],
             trust_remote_code=True,
-            revision=self.description.get("revision", None)
+            revision=self.metadata_dict.get("revision", None),
         )[_EVAL_SPLIT]
-        data = data.add_column('score', [d['label'] for d in data])
+        data = data.add_column("score", [d["label"] for d in data])
         self.dataset = {_EVAL_SPLIT: data}
 
         self.data_loaded = True

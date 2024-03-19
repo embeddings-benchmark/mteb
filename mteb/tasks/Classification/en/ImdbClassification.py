@@ -3,7 +3,7 @@ from ....abstasks import AbsTaskClassification
 
 class ImdbClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "ImdbClassification",
             "hf_hub_name": "mteb/imdb",

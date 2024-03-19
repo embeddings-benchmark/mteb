@@ -5,7 +5,7 @@ from mteb.abstasks import AbsTaskClassification
 
 class NordicLangClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "NordicLangClassification",
             "hf_hub_name": "strombergnlp/nordic_langid",
@@ -29,7 +29,9 @@ class NordicLangClassification(AbsTaskClassification):
             return
 
         self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"], "10k", revision=self.description.get("revision")  # select relevant subset
+            self.metadata_dict["hf_hub_name"],
+            "10k",
+            revision=self.metadata_dict.get("revision"),  # select relevant subset
         )
         self.dataset_transform()
         self.data_loaded = True

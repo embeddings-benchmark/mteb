@@ -57,7 +57,7 @@ _LANGUAGES = [
 
 class MassiveScenarioClassification(MultilingualTask, AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "MassiveScenarioClassification",
             "hf_hub_name": "mteb/amazon_massive_scenario",

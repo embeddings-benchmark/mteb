@@ -7,7 +7,7 @@ class BSARDRetrieval(AbsTaskRetrieval):
     _EVAL_SPLITS = ["test"]
 
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "BSARDRetrieval",
             "hf_hub_name": "maastrichtlawtech/bsard",
@@ -32,28 +32,36 @@ class BSARDRetrieval(AbsTaskRetrieval):
             return
         # fetch both subsets of the dataset, only test split
         corpus_raw = datasets.load_dataset(
-            self.description["hf_hub_name"],
-            "corpus", split="corpus",
-            revision=self.description.get("revision", None),
+            self.metadata_dict["hf_hub_name"],
+            "corpus",
+            split="corpus",
+            revision=self.metadata_dict.get("revision", None),
         )
         queries_raw = datasets.load_dataset(
-            self.description["hf_hub_name"],
+            self.metadata_dict["hf_hub_name"],
             "questions",
             split=self._EVAL_SPLITS[0],
-            revision=self.description.get("revision", None),
+            revision=self.metadata_dict.get("revision", None),
         )
 
         self.queries = {
             self._EVAL_SPLITS[0]: {
-                str(q["id"]): " ".join((q["question"] + q["extra_description"])) for q in queries_raw
+                str(q["id"]): " ".join((q["question"] + q["extra_description"]))
+                for q in queries_raw
             }
         }
 
-        self.corpus = {self._EVAL_SPLITS[0]: {str(d["id"]): {"text": d["article"]} for d in corpus_raw}}
+        self.corpus = {
+            self._EVAL_SPLITS[0]: {
+                str(d["id"]): {"text": d["article"]} for d in corpus_raw
+            }
+        }
 
         self.relevant_docs = {self._EVAL_SPLITS[0]: {}}
         for q in queries_raw:
             for doc_id in q["article_ids"]:
-                self.relevant_docs[self._EVAL_SPLITS[0]][str(q["id"])] = {str(doc_id): 1}
+                self.relevant_docs[self._EVAL_SPLITS[0]][str(q["id"])] = {
+                    str(doc_id): 1
+                }
 
         self.data_loaded = True

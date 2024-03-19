@@ -3,7 +3,7 @@ from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 
 class SickrPLSTS(AbsTaskSTS):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "SICK-R-PL",
             "hf_hub_name": "PL-MTEB/sickr-pl-sts",
@@ -21,7 +21,7 @@ class SickrPLSTS(AbsTaskSTS):
 
 class CdscrSTS(AbsTaskSTS):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "CDSC-R",
             "hf_hub_name": "PL-MTEB/cdscr-sts",

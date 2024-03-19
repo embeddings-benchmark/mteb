@@ -24,7 +24,7 @@ _LANGUAGES = {
 
 class STS22CrosslingualSTS(AbsTaskSTS, CrosslingualTask):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "STS22",
             "hf_hub_name": "mteb/sts22-crosslingual-sts",

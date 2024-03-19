@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 class TwitterURLCorpusPC(AbsTaskPairClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "TwitterURLCorpus",
             "hf_hub_name": "mteb/twitterurlcorpus-pairclassification",

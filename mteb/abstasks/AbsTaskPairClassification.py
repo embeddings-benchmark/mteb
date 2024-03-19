@@ -53,7 +53,7 @@ class AbsTaskPairClassification(AbsTask):
             print("loaded langs:", self.dataset.keys())
             for lang, monolingual_dataset in self.dataset.items():
                 logger.info(
-                    f"\nTask: {self.description['name']}, split: {split}, language: {lang}. Running..."
+                    f"\nTask: {self.metadata_dict['name']}, split: {split}, language: {lang}. Running..."
                 )
                 scores[lang] = self._evaluate_monolingual(
                     model, monolingual_dataset, split=split, **kwargs
@@ -61,7 +61,7 @@ class AbsTaskPairClassification(AbsTask):
             return scores
         else:
             logger.info(
-                f"\nTask: {self.description['name']}, split: {split}. Running..."
+                f"\nTask: {self.metadata_dict['name']}, split: {split}. Running..."
             )
             return self._evaluate_monolingual(
                 model, self.dataset, split=split, **kwargs

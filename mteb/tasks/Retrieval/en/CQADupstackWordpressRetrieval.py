@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class CQADupstackWordpressRetrieval(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "CQADupstackWordpressRetrieval",
             "hf_hub_name": "mteb/cqadupstack-wordpress",
@@ -14,5 +14,5 @@ class CQADupstackWordpressRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "4ffe81d471b1924886b33c7567bfb200e9eec5c4",            
+            "revision": "4ffe81d471b1924886b33c7567bfb200e9eec5c4",
         }

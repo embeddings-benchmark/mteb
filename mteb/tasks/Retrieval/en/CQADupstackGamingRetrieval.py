@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class CQADupstackGamingRetrieval(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "CQADupstackGamingRetrieval",
             "hf_hub_name": "mteb/cqadupstack-gaming",
@@ -14,5 +14,5 @@ class CQADupstackGamingRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "4885aa143210c98657558c04aaf3dc47cfb54340",            
+            "revision": "4885aa143210c98657558c04aaf3dc47cfb54340",
         }

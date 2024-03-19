@@ -3,7 +3,7 @@ from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 
 class BiorxivClusteringP2P(AbsTaskClustering):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "BiorxivClusteringP2P",
             "hf_hub_name": "mteb/biorxiv-clustering-p2p",

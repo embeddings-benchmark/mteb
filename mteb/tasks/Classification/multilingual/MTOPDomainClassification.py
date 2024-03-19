@@ -5,7 +5,7 @@ _LANGUAGES = ["en", "de", "es", "fr", "hi", "th"]
 
 class MTOPDomainClassification(MultilingualTask, AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "MTOPDomainClassification",
             "hf_hub_name": "mteb/mtop_domain",

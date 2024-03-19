@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 
 class STS14STS(AbsTaskSTS):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "STS14",
             "hf_hub_name": "mteb/sts14-sts",

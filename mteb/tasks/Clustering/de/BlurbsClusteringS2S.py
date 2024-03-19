@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 class BlurbsClusteringS2S(AbsTaskClustering):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "BlurbsClusteringS2S",
             "hf_hub_name": "slvnwhrl/blurbs-clustering-s2s",

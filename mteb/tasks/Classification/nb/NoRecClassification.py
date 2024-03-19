@@ -3,7 +3,7 @@ from mteb.abstasks import AbsTaskClassification
 
 class NoRecClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "NoRecClassification",
             "hf_hub_name": "ScandEval/norec-mini",  # Using the mini version to keep results ~comparable to the ScandEval benchmark

@@ -1,13 +1,15 @@
+import datasets
+
 from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-
-import datasets
 
 _EVAL_SPLIT = "test"
 _EVAL_LANGS = ["es", "de", "en"]
 
 
-def _load_xmarket_data(path: str, langs: list, split: str, cache_dir: str=None, revision: str=None):
+def _load_xmarket_data(
+    path: str, langs: list, split: str, cache_dir: str = None, revision: str = None
+):
     corpus = {lang: {split: None} for lang in langs}
     queries = {lang: {split: None} for lang in langs}
     relevant_docs = {lang: {split: None} for lang in langs}
@@ -39,7 +41,9 @@ def _load_xmarket_data(path: str, langs: list, split: str, cache_dir: str=None, 
 
         corpus[lang][split] = {row["_id"]: row for row in corpus_rows}
         queries[lang][split] = {row["_id"]: row["text"] for row in query_rows}
-        relevant_docs[lang][split] = {row["_id"]: {v: 1 for v in row["text"].split(" ")} for row in qrels_rows}
+        relevant_docs[lang][split] = {
+            row["_id"]: {v: 1 for v in row["text"].split(" ")} for row in qrels_rows
+        }
 
     corpus = datasets.DatasetDict(corpus)
     queries = datasets.DatasetDict(queries)
@@ -49,9 +53,8 @@ def _load_xmarket_data(path: str, langs: list, split: str, cache_dir: str=None, 
 
 
 class XMarket(MultilingualTask, AbsTaskRetrieval):
-
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "XMarket",
             "hf_hub_name": "jinaai/xmarket_ml",
@@ -70,11 +73,11 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_xmarket_data(
-            path=self.description['hf_hub_name'],
+            path=self.metadata_dict["hf_hub_name"],
             langs=self.langs,
-            split=self.description['eval_splits'][0],
-            cache_dir=kwargs.get('cache_dir', None),
-            revision=self.description['revision'],
+            split=self.metadata_dict["eval_splits"][0],
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata_dict["revision"],
         )
 
         self.data_loaded = True

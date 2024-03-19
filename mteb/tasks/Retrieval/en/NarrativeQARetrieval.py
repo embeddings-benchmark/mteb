@@ -1,17 +1,17 @@
 import datasets
+
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class NarrativeQARetrieval(AbsTaskRetrieval):
-
-    _EVAL_SPLIT = 'test'
+    _EVAL_SPLIT = "test"
 
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
-            'name': 'NarrativeQARetrieval',
-            'hf_hub_name': 'narrativeqa',
-            'reference': 'https://metatext.io/datasets/narrativeqa',
+            "name": "NarrativeQARetrieval",
+            "hf_hub_name": "narrativeqa",
+            "reference": "https://metatext.io/datasets/narrativeqa",
             "description": (
                 "NarrativeQA is a dataset for the task of question answering on long narratives. It consists of "
                 "realistic QA instances collected from literature (fiction and non-fiction) and movie scripts. "
@@ -27,9 +27,24 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        data = datasets.load_dataset(self.description['hf_hub_name'], split=self._EVAL_SPLIT)
-        self.queries = {self._EVAL_SPLIT: {str(i): row['question']['text'] for i, row in enumerate(data)}}
-        self.corpus = {self._EVAL_SPLIT: {str(row['document']['id']): {'text': row['document']['text']} for row in data}}
-        self.relevant_docs = {self._EVAL_SPLIT: {str(i): {row['document']['id']: 1} for i, row in enumerate(data)}}
+        data = datasets.load_dataset(
+            self.metadata_dict["hf_hub_name"], split=self._EVAL_SPLIT
+        )
+        self.queries = {
+            self._EVAL_SPLIT: {
+                str(i): row["question"]["text"] for i, row in enumerate(data)
+            }
+        }
+        self.corpus = {
+            self._EVAL_SPLIT: {
+                str(row["document"]["id"]): {"text": row["document"]["text"]}
+                for row in data
+            }
+        }
+        self.relevant_docs = {
+            self._EVAL_SPLIT: {
+                str(i): {row["document"]["id"]: 1} for i, row in enumerate(data)
+            }
+        }
 
         self.data_loaded = True

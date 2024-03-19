@@ -3,7 +3,7 @@ from ....abstasks import AbsTaskClassification
 
 class AmazonPolarityClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "AmazonPolarityClassification",
             "hf_hub_name": "mteb/amazon_polarity",

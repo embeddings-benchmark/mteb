@@ -3,7 +3,7 @@ from ....abstasks import AbsTaskSummarization
 
 class SummEvalSummarization(AbsTaskSummarization):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "SummEval",
             "hf_hub_name": "mteb/summeval",

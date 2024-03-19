@@ -3,7 +3,7 @@ from mteb.abstasks import AbsTaskClassification
 
 class LccSentimentClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "LccSentimentClassification",
             "hf_hub_name": "DDSC/lcc",

@@ -217,13 +217,13 @@ class AbsTaskRetrieval(AbsTask):
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         hf_repo_qrels = (
-            self.description["hf_hub_name"] + "-qrels"
-            if "clarin-knext" in self.description["hf_hub_name"]
+            self.metadata_dict["hf_hub_name"] + "-qrels"
+            if "clarin-knext" in self.metadata_dict["hf_hub_name"]
             else None
         )
-        for split in kwargs.get("eval_splits", self.description["eval_splits"]):
+        for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
             corpus, queries, qrels = HFDataLoader(
-                hf_repo=self.description["hf_hub_name"],
+                hf_repo=self.metadata_dict["hf_hub_name"],
                 hf_repo_qrels=hf_repo_qrels,
                 streaming=False,
                 keep_in_memory=False,
@@ -295,11 +295,11 @@ class AbsTaskRetrieval(AbsTask):
                     }
             if lang is None:
                 qrels_save_path = (
-                    f"{output_folder}/{self.description['name']}_qrels.json"
+                    f"{output_folder}/{self.metadata_dict['name']}_qrels.json"
                 )
             else:
                 qrels_save_path = (
-                    f"{output_folder}/{self.description['name']}_{lang}_qrels.json"
+                    f"{output_folder}/{self.metadata_dict['name']}_{lang}_qrels.json"
                 )
 
             with open(qrels_save_path, "w") as f:

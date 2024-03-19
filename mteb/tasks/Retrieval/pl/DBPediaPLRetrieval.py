@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class DBPediaPL(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "DBPedia-PL",
             "hf_hub_name": "clarin-knext/dbpedia-pl",
@@ -17,5 +17,5 @@ class DBPediaPL(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
             "main_score": "ndcg_at_10",
-            "revision": "76afe41d9af165cc40999fcaa92312b8b012064a",            
+            "revision": "76afe41d9af165cc40999fcaa92312b8b012064a",
         }

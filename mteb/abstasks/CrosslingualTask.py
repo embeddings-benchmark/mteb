@@ -7,11 +7,11 @@ class CrosslingualTask(AbsTask):
     def __init__(self, langs=None, **kwargs):
         super().__init__(**kwargs)
         if type(langs) is list:
-            langs = [lang for lang in langs if lang in self.description["eval_langs"]]
+            langs = [lang for lang in langs if lang in self.metadata_dict["eval_langs"]]
         if langs is not None and len(langs) > 0:
             self.langs = langs
         else:
-            self.langs = self.description["eval_langs"]
+            self.langs = self.metadata_dict["eval_langs"]
         self.is_crosslingual = True
 
     def load_data(self, **kwargs):
@@ -23,8 +23,8 @@ class CrosslingualTask(AbsTask):
         self.dataset = {}
         for lang in self.langs:
             self.dataset[lang] = datasets.load_dataset(
-                self.description["hf_hub_name"],
+                self.metadata_dict["hf_hub_name"],
                 lang,
-                revision=self.description.get("revision", None),
+                revision=self.metadata_dict.get("revision", None),
             )
         self.data_loaded = True

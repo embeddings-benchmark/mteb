@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class KoMrtydi(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "Ko-mrtydi",
             "hf_hub_name": "taeminlee/Ko-mrtydi",

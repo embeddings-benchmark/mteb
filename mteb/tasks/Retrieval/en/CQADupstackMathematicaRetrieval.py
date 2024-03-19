@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class CQADupstackMathematicaRetrieval(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "CQADupstackMathematicaRetrieval",
             "hf_hub_name": "mteb/cqadupstack-mathematica",
@@ -14,5 +14,5 @@ class CQADupstackMathematicaRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "90fceea13679c63fe563ded68f3b6f06e50061de",            
+            "revision": "90fceea13679c63fe563ded68f3b6f06e50061de",
         }

@@ -3,7 +3,7 @@ from ....abstasks import AbsTaskClassification
 
 class EmotionClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "EmotionClassification",
             "hf_hub_name": "mteb/emotion",

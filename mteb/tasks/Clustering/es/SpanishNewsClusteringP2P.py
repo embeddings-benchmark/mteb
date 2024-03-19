@@ -3,13 +3,11 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 class SpanishNewsClusteringP2P(AbsTaskClustering):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "SpanishNewsClusteringP2P",
             "hf_hub_name": "jinaai/spanish_news_clustering",
-            "description": (
-                "Clustering of news articles, 7 topics in total."
-            ),
+            "description": ("Clustering of news articles, 7 topics in total."),
             "reference": "https://www.kaggle.com/datasets/kevinmorgado/spanish-news-classification",
             "type": "Clustering",
             "category": "p2p",

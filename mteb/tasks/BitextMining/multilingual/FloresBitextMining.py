@@ -1,4 +1,5 @@
 import datasets
+
 from ....abstasks import AbsTaskBitextMining, CrosslingualTask
 
 _LANGUAGES = [
@@ -223,12 +224,13 @@ def extend_lang_pairs():
                         if pair not in _LANGUAGES:
                             _LANGUAGES_PAIRS.append(pair)
 
+
 extend_lang_pairs()
 
 
 class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "FloresBitextMining",
             "hf_hub_name": "facebook/flores",
@@ -251,9 +253,9 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
         self.dataset = {}
         for lang in self.langs:
             self.dataset[lang] = datasets.load_dataset(
-                self.description["hf_hub_name"],
+                self.metadata_dict["hf_hub_name"],
                 lang,
-                revision=self.description.get("revision", None),
+                revision=self.metadata_dict.get("revision", None),
             )
         self.dataset_transform()
         self.data_loaded = True
@@ -264,5 +266,9 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
             lang1 = lang.split("-")[0]
             lang2 = lang.split("-")[1]
             for split in _SPLIT:
-                self.dataset[lang][split] = self.dataset[lang][split].rename_column("sentence_" + lang1, "sentence1")
-                self.dataset[lang][split] = self.dataset[lang][split].rename_column("sentence_" + lang2, "sentence2")
+                self.dataset[lang][split] = self.dataset[lang][split].rename_column(
+                    "sentence_" + lang1, "sentence1"
+                )
+                self.dataset[lang][split] = self.dataset[lang][split].rename_column(
+                    "sentence_" + lang2, "sentence2"
+                )

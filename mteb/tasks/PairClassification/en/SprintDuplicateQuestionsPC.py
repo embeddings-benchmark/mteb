@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "SprintDuplicateQuestions",
             "hf_hub_name": "mteb/sprintduplicatequestions-pairclassification",

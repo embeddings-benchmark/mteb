@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 class FloresClusteringS2S(AbsTaskClustering):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "FloresClusteringS2S",
             "hf_hub_name": "jinaai/flores_clustering",

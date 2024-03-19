@@ -1,30 +1,31 @@
 from collections import defaultdict
-from datasets import load_dataset, DatasetDict
+
+from datasets import DatasetDict, load_dataset
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 def load_retrieval_data(hf_hub_name, eval_splits):
     eval_split = eval_splits[0]
-    corpus_dataset = load_dataset(hf_hub_name, 'corpus')
-    queries_dataset = load_dataset(hf_hub_name, 'queries')
-    qrels = load_dataset(hf_hub_name + '-qrels')[eval_split]
+    corpus_dataset = load_dataset(hf_hub_name, "corpus")
+    queries_dataset = load_dataset(hf_hub_name, "queries")
+    qrels = load_dataset(hf_hub_name + "-qrels")[eval_split]
 
-    corpus = {e['_id']: {'text': e['text']} for e in corpus_dataset['corpus']}
-    queries = {e['_id']: e['text'] for e in queries_dataset['queries']}
+    corpus = {e["_id"]: {"text": e["text"]} for e in corpus_dataset["corpus"]}
+    queries = {e["_id"]: e["text"] for e in queries_dataset["queries"]}
     relevant_docs = defaultdict(dict)
     for e in qrels:
-        relevant_docs[e['query-id']][e['corpus-id']] = e['score']
+        relevant_docs[e["query-id"]][e["corpus-id"]] = e["score"]
 
-    corpus = DatasetDict({eval_split:corpus})
-    queries = DatasetDict({eval_split:queries})
-    relevant_docs = DatasetDict({eval_split:relevant_docs})
+    corpus = DatasetDict({eval_split: corpus})
+    queries = DatasetDict({eval_split: queries})
+    relevant_docs = DatasetDict({eval_split: relevant_docs})
     return corpus, queries, relevant_docs
 
-class GermanQuADRetrieval(AbsTaskRetrieval):
 
+class GermanQuADRetrieval(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "GermanQuAD-Retrieval",
             "hf_hub_name": "mteb/germanquad-retrieval",
@@ -42,6 +43,7 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_retrieval_data(self.description['hf_hub_name'],
-                                                                            self.description['eval_splits'])
+        self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
+            self.metadata_dict["hf_hub_name"], self.metadata_dict["eval_splits"]
+        )
         self.data_loaded = True

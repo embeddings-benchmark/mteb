@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 class SciDocsReranking(AbsTaskReranking):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "SciDocsRR",
             "hf_hub_name": "mteb/scidocs-reranking",

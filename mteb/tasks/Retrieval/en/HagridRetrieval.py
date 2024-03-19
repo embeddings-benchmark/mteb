@@ -2,6 +2,7 @@ import uuid
 from typing import Dict, List
 
 import datasets
+
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
@@ -9,7 +10,7 @@ class HagridRetrieval(AbsTaskRetrieval):
     _EVAL_SPLITS = ["dev"]
 
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "HagridRetrieval",
             "hf_hub_name": "miracl/hagrid",
@@ -35,13 +36,25 @@ class HagridRetrieval(AbsTaskRetrieval):
             return
 
         data = datasets.load_dataset(
-            "miracl/hagrid", split=self._EVAL_SPLITS[0], revision=self.description.get("revision", None)
+            "miracl/hagrid",
+            split=self._EVAL_SPLITS[0],
+            revision=self.metadata_dict.get("revision", None),
         )
         proc_data = self.preprocess_data(data)
 
-        self.queries = {self._EVAL_SPLITS[0]: {d["query_id"]: d["query_text"] for d in proc_data}}
-        self.corpus = {self._EVAL_SPLITS[0]: {d["answer_id"]: {"text": d["answer_text"]} for d in proc_data}}
-        self.relevant_docs = {self._EVAL_SPLITS[0]: {d["query_id"]: {d["answer_id"]: 1} for d in proc_data}}
+        self.queries = {
+            self._EVAL_SPLITS[0]: {d["query_id"]: d["query_text"] for d in proc_data}
+        }
+        self.corpus = {
+            self._EVAL_SPLITS[0]: {
+                d["answer_id"]: {"text": d["answer_text"]} for d in proc_data
+            }
+        }
+        self.relevant_docs = {
+            self._EVAL_SPLITS[0]: {
+                d["query_id"]: {d["answer_id"]: 1} for d in proc_data
+            }
+        }
 
         self.data_loaded = True
 
@@ -80,6 +93,10 @@ class HagridRetrieval(AbsTaskRetrieval):
         PARAMS:
         data: a dict representing one element of the dataset
         """
-        good_answers = [a["answer"] for a in data["answers"] if a["informative"] == 1 and a["attributable"] == 1]
+        good_answers = [
+            a["answer"]
+            for a in data["answers"]
+            if a["informative"] == 1 and a["attributable"] == 1
+        ]
         # Return 1st one if >=1 good answers else None
         return good_answers[0] if len(good_answers) > 0 else None

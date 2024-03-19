@@ -5,7 +5,7 @@ _LANGUAGES = ["de-en", "fr-en", "ru-en", "zh-en"]
 
 class BUCCBitextMining(AbsTaskBitextMining, CrosslingualTask):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "BUCC",
             "hf_hub_name": "mteb/bucc-bitext-mining",

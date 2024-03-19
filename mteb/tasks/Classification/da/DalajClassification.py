@@ -6,7 +6,7 @@ from mteb.abstasks import AbsTaskClassification
 
 class DalajClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "DalajClassification",
             "hf_hub_name": "AI-Sweden/SuperLim",
@@ -30,9 +30,9 @@ class DalajClassification(AbsTaskClassification):
             return
 
         self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"],
+            self.metadata_dict["hf_hub_name"],
             "dalaj",  # chose the relevant subset
-            revision=self.description.get("revision"),
+            revision=self.metadata_dict.get("revision"),
         )
         self.dataset_transform()
         self.data_loaded = True
@@ -45,15 +45,21 @@ class DalajClassification(AbsTaskClassification):
 
         def __convert_sample_to_classification(sample):
             text = sample["original_sentence"] + sample["corrected_sentence"]
-            label = [1] * len(sample["original_sentence"]) + [0] * len(sample["corrected_sentence"])
+            label = [1] * len(sample["original_sentence"]) + [0] * len(
+                sample["corrected_sentence"]
+            )
             return {"text": text, "label": label}
 
         columns_to_keep = ["original_sentence", "corrected_sentence"]
         for split in self.dataset:
             columns_names = self.dataset[split].column_names  # type: ignore
-            columns_to_remove = [col for col in columns_names if col not in columns_to_keep]
+            columns_to_remove = [
+                col for col in columns_names if col not in columns_to_keep
+            ]
             self.dataset[split] = self.dataset[split].remove_columns(columns_to_remove)  # type: ignore
 
         self.dataset = self.dataset.map(
-            __convert_sample_to_classification, batched=True, remove_columns=columns_to_keep
+            __convert_sample_to_classification,
+            batched=True,
+            remove_columns=columns_to_keep,
         )

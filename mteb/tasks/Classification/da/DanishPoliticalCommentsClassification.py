@@ -5,7 +5,7 @@ from mteb.abstasks import AbsTaskClassification
 
 class DanishPoliticalCommentsClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "DanishPoliticalCommentsClassification",
             "hf_hub_name": "danish_political_comments",
@@ -29,7 +29,8 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
             return
 
         self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"], revision=self.description.get("revision")
+            self.metadata_dict["hf_hub_name"],
+            revision=self.metadata_dict.get("revision"),
         )
         self.dataset_transform()
         self.data_loaded = True

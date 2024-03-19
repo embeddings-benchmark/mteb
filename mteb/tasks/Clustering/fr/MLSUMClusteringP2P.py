@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 class MLSUMClusteringP2P(AbsTaskClustering):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "MLSUMClusteringP2P",
             "hf_hub_name": "mlsum",
@@ -29,10 +29,10 @@ class MLSUMClusteringP2P(AbsTaskClustering):
         if self.data_loaded:
             return
         self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"],
+            self.metadata_dict["hf_hub_name"],
             "fr",
-            split=self.description["eval_splits"][0],
-            revision=self.description.get("revision", None),
+            split=self.metadata_dict["eval_splits"][0],
+            revision=self.metadata_dict.get("revision", None),
         )
         self.dataset_transform()
         self.data_loaded = True
@@ -53,4 +53,6 @@ class MLSUMClusteringP2P(AbsTaskClustering):
             "sentences": [split.tolist() for split in np.array_split(texts, 10)],
             "labels": [split.tolist() for split in np.array_split(topics, 10)],
         }
-        self.dataset = {self.description["eval_splits"][0]: datasets.Dataset.from_dict(new_format)}
+        self.dataset = {
+            self.metadata_dict["eval_splits"][0]: datasets.Dataset.from_dict(new_format)
+        }

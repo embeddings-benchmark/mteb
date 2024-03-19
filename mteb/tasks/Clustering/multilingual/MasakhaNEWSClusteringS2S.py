@@ -3,7 +3,7 @@ import numpy as np
 
 from ....abstasks import AbsTaskClustering, MultilingualTask
 
-_LANGUAGES =[
+_LANGUAGES = [
     "amh",
     "eng",
     "fra",
@@ -25,7 +25,7 @@ _LANGUAGES =[
 
 class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "MasakhaNEWSClusteringS2S",
             "hf_hub_name": "masakhane/masakhanews",
@@ -50,9 +50,9 @@ class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
         self.dataset = {}
         for lang in self.langs:
             self.dataset[lang] = datasets.load_dataset(
-                self.description["hf_hub_name"],
+                self.metadata_dict["hf_hub_name"],
                 lang,
-                revision=self.description.get("revision", None),
+                revision=self.metadata_dict.get("revision", None),
             )
             self.dataset_transform(lang)
         self.data_loaded = True
@@ -64,7 +64,9 @@ class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
         self.dataset[lang].pop("train")
         self.dataset[lang].pop("validation")
 
-        self.dataset[lang] = self.dataset[lang].remove_columns(["url", "text", "headline_text"])
+        self.dataset[lang] = self.dataset[lang].remove_columns(
+            ["url", "text", "headline_text"]
+        )
         texts = self.dataset[lang]["test"]["headline"]
         labels = self.dataset[lang]["test"]["label"]
         new_format = {

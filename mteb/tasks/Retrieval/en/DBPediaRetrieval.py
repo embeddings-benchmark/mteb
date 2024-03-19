@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class DBPedia(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "DBPedia",
             "hf_hub_name": "mteb/dbpedia",
@@ -16,5 +16,5 @@ class DBPedia(AbsTaskRetrieval):
             "eval_splits": ["dev", "test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "c0f706b76e590d620bd6618b3ca8efdd34e2d659",            
+            "revision": "c0f706b76e590d620bd6618b3ca8efdd34e2d659",
         }

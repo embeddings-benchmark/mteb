@@ -4,9 +4,8 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class AlloprofRetrieval(AbsTaskRetrieval):
-
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "AlloprofRetrieval",
             "hf_hub_name": "lyon-nlp/alloprof",
@@ -27,11 +26,21 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
         # fetch both subsets of the dataset
-        corpus_raw = datasets.load_dataset(self.description["hf_hub_name"], "documents")
-        queries_raw = datasets.load_dataset(self.description["hf_hub_name"], "queries")
-        eval_split = self.description["eval_splits"][0]
-        self.queries = {eval_split: {str(q["id"]): q["text"] for q in queries_raw[eval_split]}}
-        self.corpus = {eval_split: {str(d["uuid"]): {"text": d["text"]} for d in corpus_raw["documents"]}}
+        corpus_raw = datasets.load_dataset(
+            self.metadata_dict["hf_hub_name"], "documents"
+        )
+        queries_raw = datasets.load_dataset(
+            self.metadata_dict["hf_hub_name"], "queries"
+        )
+        eval_split = self.metadata_dict["eval_splits"][0]
+        self.queries = {
+            eval_split: {str(q["id"]): q["text"] for q in queries_raw[eval_split]}
+        }
+        self.corpus = {
+            eval_split: {
+                str(d["uuid"]): {"text": d["text"]} for d in corpus_raw["documents"]
+            }
+        }
 
         self.relevant_docs = {eval_split: {}}
         for q in queries_raw[eval_split]:

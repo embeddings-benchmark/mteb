@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 class StackExchangeClusteringP2P(AbsTaskClustering):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "StackExchangeClusteringP2P",
             "hf_hub_name": "mteb/stackexchange-clustering-p2p",

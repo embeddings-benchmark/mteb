@@ -1,12 +1,13 @@
-from ....abstasks import AbsTaskPairClassification, MultilingualTask
 import datasets
+
+from ....abstasks import AbsTaskPairClassification, MultilingualTask
 
 _LANGUAGES = ["de", "en", "fi", "fr", "ru", "sv"]
 
 
 class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "OpusparcusPC",
             "hf_hub_name": "GEM/opusparcus",
@@ -29,10 +30,10 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
         self.dataset = {}
         for lang in self.langs:
             self.dataset[lang] = datasets.load_dataset(
-                self.description["hf_hub_name"],
+                self.metadata_dict["hf_hub_name"],
                 lang=lang,
                 quality=100,
-                revision=self.description.get("revision", None),
+                revision=self.metadata_dict.get("revision", None),
             )
             self.dataset_transform(lang)
         self.data_loaded = True
@@ -45,7 +46,9 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
             sent2 = self.dataset[lang][split]["target"]
             new_dict = {}
             # Labels are a score between 1.0 and 4.0, and we need binary classification
-            labels = [0 if label < 2.5 else 1 if label > 2.5 else 2.5 for label in labels]
+            labels = [
+                0 if label < 2.5 else 1 if label > 2.5 else 2.5 for label in labels
+            ]
             # Get neutral label to delete them
             neutral = [i for i, val in enumerate(labels) if val == 2.5]
             for i in sorted(neutral, reverse=True):

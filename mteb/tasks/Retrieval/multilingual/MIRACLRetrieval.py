@@ -7,7 +7,9 @@ _EVAL_SPLIT = "test"
 _LANGS = ["de", "es"]
 
 
-def _load_miracl_data(path: str, langs: list, split: str, cache_dir: str = None, revision: str = None):
+def _load_miracl_data(
+    path: str, langs: list, split: str, cache_dir: str = None, revision: str = None
+):
     queries = {lang: {split: {}} for lang in langs}
     corpus = {lang: {split: {}} for lang in langs}
     relevant_docs = {lang: {split: {}} for lang in langs}
@@ -55,7 +57,7 @@ def _load_miracl_data(path: str, langs: list, split: str, cache_dir: str = None,
 
 class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "MIRACLRetrieval",
             "hf_hub_name": "jinaai/miracl",
@@ -78,11 +80,11 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
-            path=self.description["hf_hub_name"],
+            path=self.metadata_dict["hf_hub_name"],
             langs=self.langs,
-            split=self.description["eval_splits"][0],
+            split=self.metadata_dict["eval_splits"][0],
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.description["revision"],
+            revision=self.metadata_dict["revision"],
         )
 
         self.data_loaded = True

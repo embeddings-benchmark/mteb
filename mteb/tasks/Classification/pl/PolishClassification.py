@@ -3,7 +3,7 @@ from ....abstasks import AbsTaskClassification
 
 class CbdClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "CBD",
             "hf_hub_name": "PL-MTEB/cbd",
@@ -13,49 +13,49 @@ class CbdClassification(AbsTaskClassification):
             "type": "Classification",
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
-            "main_score": "accuracy"
+            "main_score": "accuracy",
         }
 
 
 class PolEmo2InClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "PolEmo2.0-IN",
             "hf_hub_name": "PL-MTEB/polemo2_in",
             "description": "A collection of Polish online reviews from four domains: medicine, hotels, products and "
-                           "school. The PolEmo2.0-IN task is to predict the sentiment of in-domain (medicine and hotels) "
-                           "reviews.",
+            "school. The PolEmo2.0-IN task is to predict the sentiment of in-domain (medicine and hotels) "
+            "reviews.",
             "reference": "https://aclanthology.org/K19-1092.pdf",
             "category": "s2s",
             "type": "Classification",
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
-            "main_score": "accuracy"
+            "main_score": "accuracy",
         }
 
 
 class PolEmo2OutClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "PolEmo2.0-OUT",
             "hf_hub_name": "PL-MTEB/polemo2_out",
             "description": "A collection of Polish online reviews from four domains: medicine, hotels, products and "
-                           "school. The PolEmo2.0-OUT task is to predict the sentiment of out-of-domain (products and "
-                           "school) reviews using models train on reviews from medicine and hotels domains.",
+            "school. The PolEmo2.0-OUT task is to predict the sentiment of out-of-domain (products and "
+            "school) reviews using models train on reviews from medicine and hotels domains.",
             "reference": "https://aclanthology.org/K19-1092.pdf",
             "category": "s2s",
             "type": "Classification",
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
-            "main_score": "accuracy"
+            "main_score": "accuracy",
         }
 
 
 class AllegroReviewsClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "AllegroReviews",
             "hf_hub_name": "PL-MTEB/allegro-reviews",
@@ -65,13 +65,13 @@ class AllegroReviewsClassification(AbsTaskClassification):
             "type": "Classification",
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
-            "main_score": "accuracy"
+            "main_score": "accuracy",
         }
 
 
 class PacClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "PAC",
             "hf_hub_name": "laugustyniak/abusive-clauses-pl",
@@ -81,5 +81,5 @@ class PacClassification(AbsTaskClassification):
             "type": "Classification",
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
-            "main_score": "accuracy"
+            "main_score": "accuracy",
         }

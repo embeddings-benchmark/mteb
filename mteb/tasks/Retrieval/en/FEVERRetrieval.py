@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class FEVER(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "FEVER",
             "hf_hub_name": "mteb/fever",
@@ -18,5 +18,5 @@ class FEVER(AbsTaskRetrieval):
             "eval_splits": ["train", "dev", "test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "bea83ef9e8fb933d90a2f1d5515737465d613e12",            
+            "revision": "bea83ef9e8fb933d90a2f1d5515737465d613e12",
         }

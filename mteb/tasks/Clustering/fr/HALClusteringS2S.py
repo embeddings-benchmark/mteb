@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 class HALClusteringS2S(AbsTaskClustering):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "HALClusteringS2S",
             "hf_hub_name": "lyon-nlp/clustering-hal-s2s",
@@ -30,8 +30,8 @@ class HALClusteringS2S(AbsTaskClustering):
             return
 
         self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"],
-            revision=self.description.get("revision", None),
+            self.metadata_dict["hf_hub_name"],
+            revision=self.metadata_dict.get("revision", None),
         )
         self.dataset_transform()
         self.data_loaded = True

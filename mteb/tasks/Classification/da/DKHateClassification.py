@@ -5,7 +5,7 @@ from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 
 class DKHateClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "DKHateClassification",
             "hf_hub_name": "DDSC/dkhate",
@@ -29,7 +29,8 @@ class DKHateClassification(AbsTaskClassification):
             return
 
         self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"], revision=self.description.get("revision", None)
+            self.metadata_dict["hf_hub_name"],
+            revision=self.metadata_dict.get("revision", None),
         )
         self.dataset_transform()
         self.data_loaded = True
@@ -38,4 +39,6 @@ class DKHateClassification(AbsTaskClassification):
         # convert label to a 0/1 label
         labels = self.dataset["train"]["label"]  # type: ignore
         lab2idx = {lab: idx for idx, lab in enumerate(set(labels))}
-        self.dataset = self.dataset.map(lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"])
+        self.dataset = self.dataset.map(
+            lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"]
+        )

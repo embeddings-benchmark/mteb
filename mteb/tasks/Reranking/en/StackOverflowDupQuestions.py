@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 class StackOverflowDupQuestions(AbsTaskReranking):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "StackOverflowDupQuestions",
             "hf_hub_name": "mteb/stackoverflowdupquestions-reranking",

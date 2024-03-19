@@ -3,7 +3,7 @@ from mteb.abstasks import AbsTaskClassification
 
 class SweRecClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "SweRecClassification",
             "hf_hub_name": "ScandEval/swerec-mini",  # using the mini version to keep results ~comparable to ScandEval

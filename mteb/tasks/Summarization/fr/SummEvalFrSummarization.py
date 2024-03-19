@@ -3,7 +3,7 @@ from mteb.abstasks import AbsTaskSummarization
 
 class SummEvalFrSummarization(AbsTaskSummarization):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "SummEvalFr",
             "hf_hub_name": "lyon-nlp/summarization-summeval-fr-p2p",

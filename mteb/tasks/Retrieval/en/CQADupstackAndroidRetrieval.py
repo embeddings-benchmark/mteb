@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class CQADupstackAndroidRetrieval(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "CQADupstackAndroidRetrieval",
             "hf_hub_name": "mteb/cqadupstack-android",
@@ -14,5 +14,5 @@ class CQADupstackAndroidRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "f46a197baaae43b4f621051089b82a364682dfeb"
+            "revision": "f46a197baaae43b4f621051089b82a364682dfeb",
         }

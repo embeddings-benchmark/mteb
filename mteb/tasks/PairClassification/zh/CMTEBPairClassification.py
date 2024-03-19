@@ -3,7 +3,7 @@ from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 class Ocnli(AbsTaskPairClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "Ocnli",
             "hf_hub_name": "C-MTEB/OCNLI",
@@ -20,7 +20,7 @@ class Ocnli(AbsTaskPairClassification):
 
 class Cmnli(AbsTaskPairClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "Cmnli",
             "hf_hub_name": "C-MTEB/CMNLI",

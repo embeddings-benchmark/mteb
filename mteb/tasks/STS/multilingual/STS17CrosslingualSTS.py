@@ -1,11 +1,23 @@
 from ....abstasks import AbsTaskSTS, CrosslingualTask
 
-_LANGUAGES = ["ko-ko", "ar-ar", "en-ar", "en-de", "en-en", "en-tr", "es-en", "es-es", "fr-en", "it-en", "nl-en"]
+_LANGUAGES = [
+    "ko-ko",
+    "ar-ar",
+    "en-ar",
+    "en-de",
+    "en-en",
+    "en-tr",
+    "es-en",
+    "es-es",
+    "fr-en",
+    "it-en",
+    "nl-en",
+]
 
 
 class STS17Crosslingual(AbsTaskSTS, CrosslingualTask):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "STS17",
             "hf_hub_name": "mteb/sts17-crosslingual-sts",

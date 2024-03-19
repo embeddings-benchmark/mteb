@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class NFCorpusPL(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "NFCorpus-PL",
             "hf_hub_name": "clarin-knext/nfcorpus-pl",

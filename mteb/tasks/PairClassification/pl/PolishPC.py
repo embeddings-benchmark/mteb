@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 class SickePLPC(AbsTaskPairClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "SICK-E-PL",
             "hf_hub_name": "PL-MTEB/sicke-pl-pairclassification",
@@ -19,7 +19,7 @@ class SickePLPC(AbsTaskPairClassification):
 
 class PpcPC(AbsTaskPairClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "PPC",
             "hf_hub_name": "PL-MTEB/ppc-pairclassification",
@@ -29,13 +29,13 @@ class PpcPC(AbsTaskPairClassification):
             "type": "PairClassification",
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
-            "main_score": "ap"
+            "main_score": "ap",
         }
 
 
 class CdscePC(AbsTaskPairClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "CDSC-E",
             "hf_hub_name": "PL-MTEB/cdsce-pairclassification",
@@ -45,13 +45,13 @@ class CdscePC(AbsTaskPairClassification):
             "type": "PairClassification",
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
-            "main_score": "ap"
+            "main_score": "ap",
         }
 
 
 class PscPC(AbsTaskPairClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "PSC",
             "hf_hub_name": "PL-MTEB/psc-pairclassification",
@@ -61,5 +61,5 @@ class PscPC(AbsTaskPairClassification):
             "type": "PairClassification",
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
-            "main_score": "ap"
+            "main_score": "ap",
         }

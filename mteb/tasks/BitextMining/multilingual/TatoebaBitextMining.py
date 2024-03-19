@@ -118,7 +118,7 @@ _LANGUAGES = [
 
 class TatoebaBitextMining(AbsTaskBitextMining, CrosslingualTask):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "Tatoeba",
             "hf_hub_name": "mteb/tatoeba-bitext-mining",

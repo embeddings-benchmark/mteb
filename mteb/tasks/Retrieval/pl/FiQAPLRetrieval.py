@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class FiQAPLRetrieval(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "FiQA-PL",
             "hf_hub_name": "clarin-knext/fiqa-pl",
@@ -15,5 +15,5 @@ class FiQAPLRetrieval(AbsTaskRetrieval):
             "eval_splits": ["test"],
             "eval_langs": ["pl"],
             "main_score": "ndcg_at_10",
-            "revision": "2e535829717f8bf9dc829b7f911cc5bbd4e6608e",            
+            "revision": "2e535829717f8bf9dc829b7f911cc5bbd4e6608e",
         }

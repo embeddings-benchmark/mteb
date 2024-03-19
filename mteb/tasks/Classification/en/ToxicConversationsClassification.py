@@ -3,7 +3,7 @@ from ....abstasks import AbsTaskClassification
 
 class ToxicConversationsClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "ToxicConversationsClassification",
             "hf_hub_name": "mteb/toxic_conversations_50k",

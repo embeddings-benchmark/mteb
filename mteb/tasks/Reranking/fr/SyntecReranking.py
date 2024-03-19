@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 class SyntecReranking(AbsTaskReranking):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "SyntecReranking",
             "hf_hub_name": "lyon-nlp/mteb-fr-reranking-syntec-s2p",

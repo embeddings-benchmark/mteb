@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 class TwitterSemEval2015PC(AbsTaskPairClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "TwitterSemEval2015",
             "hf_hub_name": "mteb/twittersemeval2015-pairclassification",

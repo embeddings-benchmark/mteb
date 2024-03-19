@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 class TenKGnadClusteringS2S(AbsTaskClustering):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "TenKGnadClusteringS2S",
             "hf_hub_name": "slvnwhrl/tenkgnad-clustering-s2s",

@@ -3,7 +3,7 @@ from mteb.abstasks import AbsTaskClassification
 
 class NorwegianParliamentClassification(AbsTaskClassification):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "NorwegianParliament",
             "hf_hub_name": "NbAiLab/norwegian_parliament",

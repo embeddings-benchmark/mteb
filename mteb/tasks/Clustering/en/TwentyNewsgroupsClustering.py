@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 class TwentyNewsgroupsClustering(AbsTaskClustering):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "TwentyNewsgroupsClustering",
             "hf_hub_name": "mteb/twentynewsgroups-clustering",

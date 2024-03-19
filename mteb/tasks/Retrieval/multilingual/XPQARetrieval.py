@@ -7,7 +7,9 @@ _EVAL_SPLIT = "test"
 _LANGS = ["ar", "de", "es", "fr", "hi", "it", "ja", "ko", "pl", "pt", "ta", "zh"]
 
 
-def _load_xpqa_data(path: str, langs: list, split: str, cache_dir: str = None, revision: str = None):
+def _load_xpqa_data(
+    path: str, langs: list, split: str, cache_dir: str = None, revision: str = None
+):
     queries = {lang: {split: {}} for lang in langs}
     corpus = {lang: {split: {}} for lang in langs}
     relevant_docs = {lang: {split: {}} for lang in langs}
@@ -20,7 +22,9 @@ def _load_xpqa_data(path: str, langs: list, split: str, cache_dir: str = None, r
             cache_dir=cache_dir,
             revision=revision,
         )
-        question_ids = {question: _id for _id, question in enumerate(set(data["question"]))}
+        question_ids = {
+            question: _id for _id, question in enumerate(set(data["question"]))
+        }
         answer_ids = {answer: _id for _id, answer in enumerate(set(data["answer"]))}
 
         for row in data:
@@ -43,7 +47,7 @@ def _load_xpqa_data(path: str, langs: list, split: str, cache_dir: str = None, r
 
 class XPQARetrieval(MultilingualTask, AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "XPQARetrieval",
             "hf_hub_name": "jinaai/xpqa",
@@ -62,11 +66,11 @@ class XPQARetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_xpqa_data(
-            path=self.description["hf_hub_name"],
+            path=self.metadata_dict["hf_hub_name"],
             langs=self.langs,
-            split=self.description["eval_splits"][0],
+            split=self.metadata_dict["eval_splits"][0],
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.description["revision"],
+            revision=self.metadata_dict["revision"],
         )
 
         self.data_loaded = True

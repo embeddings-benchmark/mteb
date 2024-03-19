@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 class WikiCitiesClustering(AbsTaskClustering):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "WikiCitiesClustering",
             "hf_hub_name": "jinaai/cities_wiki_clustering",

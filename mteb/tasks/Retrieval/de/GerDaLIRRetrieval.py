@@ -7,7 +7,7 @@ class GerDaLIR(AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
 
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "GerDaLIR",
             "hf_hub_name": "jinaai/ger_da_lir",
@@ -28,21 +28,21 @@ class GerDaLIR(AbsTaskRetrieval):
             return
 
         query_rows = datasets.load_dataset(
-            self.description["hf_hub_name"],
+            self.metadata_dict["hf_hub_name"],
             "queries",
-            revision=self.description.get("revision", None),
+            revision=self.metadata_dict.get("revision", None),
             split=self._EVAL_SPLIT,
         )
         corpus_rows = datasets.load_dataset(
-            self.description["hf_hub_name"],
+            self.metadata_dict["hf_hub_name"],
             "corpus",
-            revision=self.description.get("revision", None),
+            revision=self.metadata_dict.get("revision", None),
             split=self._EVAL_SPLIT,
         )
         qrels_rows = datasets.load_dataset(
-            self.description["hf_hub_name"],
+            self.metadata_dict["hf_hub_name"],
             "qrels",
-            revision=self.description.get("revision", None),
+            revision=self.metadata_dict.get("revision", None),
             split=self._EVAL_SPLIT,
         )
 

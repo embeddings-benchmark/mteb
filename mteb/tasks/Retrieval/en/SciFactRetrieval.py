@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class SciFact(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "SciFact",
             "hf_hub_name": "mteb/scifact",
@@ -14,5 +14,5 @@ class SciFact(AbsTaskRetrieval):
             "eval_splits": ["train", "test"],
             "eval_langs": ["en"],
             "main_score": "ndcg_at_10",
-            "revision": "0228b52cf27578f30900b9e5271d331663a030d7"
+            "revision": "0228b52cf27578f30900b9e5271d331663a030d7",
         }

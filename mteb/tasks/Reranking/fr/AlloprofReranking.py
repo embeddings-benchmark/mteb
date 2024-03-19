@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 class AlloprofReranking(AbsTaskReranking):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "AlloprofReranking",
             "hf_hub_name": "lyon-nlp/mteb-fr-reranking-alloprof-s2p",

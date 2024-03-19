@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class SCIDOCSPL(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "SCIDOCS-PL",
             "hf_hub_name": "clarin-knext/scidocs-pl",

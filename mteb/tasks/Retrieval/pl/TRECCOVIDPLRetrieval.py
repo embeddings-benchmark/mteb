@@ -3,7 +3,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class TRECCOVIDPL(AbsTaskRetrieval):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "TRECCOVID-PL",
             "hf_hub_name": "clarin-knext/trec-covid-pl",

@@ -5,7 +5,7 @@ from mteb.abstasks import AbsTaskBitextMining
 
 class BornholmBitextMining(AbsTaskBitextMining):
     @property
-    def description(self):
+    def metadata_dict(self):
         return {
             "name": "BornholmBitextMining",
             "hf_hub_name": "strombergnlp/bornholmsk_parallel",
@@ -29,8 +29,8 @@ class BornholmBitextMining(AbsTaskBitextMining):
             return
 
         self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"],
-            revision=self.description.get("revision", None),
+            self.metadata_dict["hf_hub_name"],
+            revision=self.metadata_dict.get("revision", None),
         )
         self.dataset_transform()
         self.data_loaded = True
