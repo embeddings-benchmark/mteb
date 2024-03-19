@@ -87,9 +87,7 @@ class TaskMetadata(BaseModel):
 
     date: tuple[STR_DATE, STR_DATE] | None  # When the data was collected
     form: list[Literal["spoken", "written"]] | None
-
     domains: list[TASK_DOMAINS] | None
-
     task_subtypes: list[TASK_SUBTYPES] | None
     license: str
 
