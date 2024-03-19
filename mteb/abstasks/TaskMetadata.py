@@ -41,6 +41,23 @@ TASK_DOMAINS = Literal[
     "Web",
 ]
 
+TEXT_CREATION_METHOD = Literal[
+    "found",
+    "created",
+    "machine-translated",
+    "human-translated and localized",
+    "machine-translated and verified",
+    "machine-translated and localized",
+]
+
+SOCIOECONOMIC_STATUS = Literal[
+    "high",
+    "medium",
+    "low",
+]
+
+ANNOTATOR_TYPE = Literal["expert-annotated", "human-annotated", "derived"]
+
 http_url_adapter = TypeAdapter(AnyUrl)
 STR_URL = Annotated[
     str, BeforeValidator(lambda value: str(http_url_adapter.validate_python(value)))
@@ -75,27 +92,10 @@ class TaskMetadata(BaseModel):
 
     task_subtypes: list[TASK_SUBTYPES] | None
     license: str
-    socioeconomic_status: (
-        Literal[
-            "high",
-            "medium",
-            "low",
-        ]
-        | None
-    )
-    annotations_creators: (
-        Literal["expert-annotated", "human-annotated", "derived"] | None
-    )
+
+    socioeconomic_status: SOCIOECONOMIC_STATUS | None
+    annotations_creators: ANNOTATOR_TYPE | None
     dialect: list[str] | None
-    text_creation: (
-        Literal[
-            "found",
-            "created",
-            "machine-translated",
-            "human-translated and localized",
-            "machine-translated and verified",
-            "machine-translated and localized",
-        ]
-        | None
-    )
+
+    text_creation: TEXT_CREATION_METHOD | None
     bibtex_citation: str | None
