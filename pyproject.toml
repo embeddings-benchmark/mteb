@@ -23,7 +23,7 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python"
 ]
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dependencies = [
     "datasets>=2.2.0",
     "jsonlines",
@@ -59,7 +59,7 @@ dev = [
 
 
 [tool.setuptools.packages.find]
-where = ["mteb"]
+exclude = ["tests", "results"]
 
 [tool.black]
 line-length = 119
