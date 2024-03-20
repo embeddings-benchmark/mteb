@@ -7,8 +7,11 @@ _SPLITS = ["dev", "test"]
 
 
 class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "STSBenchmarkMultilingualSTS",
             "hf_hub_name": "stsb_multi_mt",

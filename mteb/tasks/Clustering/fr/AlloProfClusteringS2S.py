@@ -5,8 +5,11 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class AlloProfClusteringS2S(AbsTaskClustering):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "AlloProfClusteringS2S",
             "hf_hub_name": "lyon-nlp/alloprof",

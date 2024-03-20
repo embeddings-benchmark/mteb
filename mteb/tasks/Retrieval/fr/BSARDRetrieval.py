@@ -6,8 +6,11 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class BSARDRetrieval(AbsTaskRetrieval):
     _EVAL_SPLITS = ["test"]
 
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "BSARDRetrieval",
             "hf_hub_name": "maastrichtlawtech/bsard",

@@ -4,8 +4,11 @@ from ....abstasks import AbsTaskBitextMining, CrosslingualTask
 
 
 class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "DiaBLaBitextMining",
             "hf_hub_name": "rbawden/DiaBLa",

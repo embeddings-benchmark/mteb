@@ -2,8 +2,11 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class CQADupstackWebmastersRetrieval(AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "CQADupstackWebmastersRetrieval",
             "hf_hub_name": "mteb/cqadupstack-webmasters",

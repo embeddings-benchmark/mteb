@@ -2,8 +2,11 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "SprintDuplicateQuestions",
             "hf_hub_name": "mteb/sprintduplicatequestions-pairclassification",

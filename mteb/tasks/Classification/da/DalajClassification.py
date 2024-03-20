@@ -5,8 +5,11 @@ from mteb.abstasks import AbsTaskClassification
 
 
 class DalajClassification(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "DalajClassification",
             "hf_hub_name": "AI-Sweden/SuperLim",

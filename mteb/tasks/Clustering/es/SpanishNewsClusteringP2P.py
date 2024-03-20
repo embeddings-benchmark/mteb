@@ -2,8 +2,11 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class SpanishNewsClusteringP2P(AbsTaskClustering):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "SpanishNewsClusteringP2P",
             "hf_hub_name": "jinaai/spanish_news_clustering",

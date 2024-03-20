@@ -2,8 +2,11 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class RedditClusteringP2P(AbsTaskClustering):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "RedditClusteringP2P",
             "hf_hub_name": "mteb/reddit-clustering-p2p",

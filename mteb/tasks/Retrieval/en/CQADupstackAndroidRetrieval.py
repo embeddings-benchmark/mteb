@@ -2,8 +2,11 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class CQADupstackAndroidRetrieval(AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "CQADupstackAndroidRetrieval",
             "hf_hub_name": "mteb/cqadupstack-android",

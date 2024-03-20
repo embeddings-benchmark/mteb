@@ -46,8 +46,11 @@ def load_mldr_data(path: str, langs: list, eval_splits: list, cache_dir: str = N
 
 
 class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "MultiLongDocRetrieval",
             "hf_hub_name": "Shitao/MLDR",

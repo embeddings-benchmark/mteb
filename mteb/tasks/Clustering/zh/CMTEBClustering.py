@@ -2,8 +2,11 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class CLSClusteringS2S(AbsTaskClustering):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "CLSClusteringS2S",
             "hf_hub_name": "C-MTEB/CLSClusteringS2S",
@@ -21,8 +24,11 @@ class CLSClusteringS2S(AbsTaskClustering):
 
 
 class CLSClusteringP2P(AbsTaskClustering):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "CLSClusteringP2P",
             "hf_hub_name": "C-MTEB/CLSClusteringP2P",
@@ -40,8 +46,11 @@ class CLSClusteringP2P(AbsTaskClustering):
 
 
 class ThuNewsClusteringS2S(AbsTaskClustering):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "ThuNewsClusteringS2S",
             "hf_hub_name": "C-MTEB/ThuNewsClusteringS2S",
@@ -57,8 +66,11 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
 
 
 class ThuNewsClusteringP2P(AbsTaskClustering):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "ThuNewsClusteringP2P",
             "hf_hub_name": "C-MTEB/ThuNewsClusteringP2P",

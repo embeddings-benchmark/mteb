@@ -2,8 +2,11 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class SickePLPC(AbsTaskPairClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "SICK-E-PL",
             "hf_hub_name": "PL-MTEB/sicke-pl-pairclassification",
@@ -18,8 +21,11 @@ class SickePLPC(AbsTaskPairClassification):
 
 
 class PpcPC(AbsTaskPairClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "PPC",
             "hf_hub_name": "PL-MTEB/ppc-pairclassification",
@@ -34,8 +40,11 @@ class PpcPC(AbsTaskPairClassification):
 
 
 class CdscePC(AbsTaskPairClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "CDSC-E",
             "hf_hub_name": "PL-MTEB/cdsce-pairclassification",
@@ -50,8 +59,11 @@ class CdscePC(AbsTaskPairClassification):
 
 
 class PscPC(AbsTaskPairClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "PSC",
             "hf_hub_name": "PL-MTEB/psc-pairclassification",

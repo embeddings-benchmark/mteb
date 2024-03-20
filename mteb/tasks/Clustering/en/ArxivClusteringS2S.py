@@ -2,8 +2,11 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class ArxivClusteringS2S(AbsTaskClustering):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "ArxivClusteringS2S",
             "hf_hub_name": "mteb/arxiv-clustering-s2s",

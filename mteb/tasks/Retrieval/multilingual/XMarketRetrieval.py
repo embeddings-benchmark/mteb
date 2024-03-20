@@ -53,8 +53,11 @@ def _load_xmarket_data(
 
 
 class XMarket(MultilingualTask, AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "XMarket",
             "hf_hub_name": "jinaai/xmarket_ml",

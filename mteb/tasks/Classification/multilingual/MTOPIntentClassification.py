@@ -4,8 +4,11 @@ _LANGUAGES = ["en", "de", "es", "fr", "hi", "th"]
 
 
 class MTOPIntentClassification(MultilingualTask, AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "MTOPIntentClassification",
             "hf_hub_name": "mteb/mtop_intent",

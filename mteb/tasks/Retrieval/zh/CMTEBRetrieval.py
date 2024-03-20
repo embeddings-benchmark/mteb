@@ -23,8 +23,11 @@ def load_retrieval_data(hf_hub_name, eval_splits):
 
 
 class T2Retrieval(AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "T2Retrieval",
             "hf_hub_name": "C-MTEB/T2Retrieval",
@@ -49,8 +52,11 @@ class T2Retrieval(AbsTaskRetrieval):
 
 
 class MMarcoRetrieval(AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "MMarcoRetrieval",
             "hf_hub_name": "C-MTEB/MMarcoRetrieval",
@@ -75,8 +81,11 @@ class MMarcoRetrieval(AbsTaskRetrieval):
 
 
 class DuRetrieval(AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "DuRetrieval",
             "hf_hub_name": "C-MTEB/DuRetrieval",
@@ -101,8 +110,11 @@ class DuRetrieval(AbsTaskRetrieval):
 
 
 class CovidRetrieval(AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "CovidRetrieval",
             "hf_hub_name": "C-MTEB/CovidRetrieval",
@@ -127,8 +139,11 @@ class CovidRetrieval(AbsTaskRetrieval):
 
 
 class CmedqaRetrieval(AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "CmedqaRetrieval",
             "hf_hub_name": "C-MTEB/CmedqaRetrieval",
@@ -153,8 +168,11 @@ class CmedqaRetrieval(AbsTaskRetrieval):
 
 
 class EcomRetrieval(AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "EcomRetrieval",
             "hf_hub_name": "C-MTEB/EcomRetrieval",
@@ -179,8 +197,11 @@ class EcomRetrieval(AbsTaskRetrieval):
 
 
 class MedicalRetrieval(AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "MedicalRetrieval",
             "hf_hub_name": "C-MTEB/MedicalRetrieval",
@@ -205,8 +226,11 @@ class MedicalRetrieval(AbsTaskRetrieval):
 
 
 class VideoRetrieval(AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "VideoRetrieval",
             "hf_hub_name": "C-MTEB/VideoRetrieval",

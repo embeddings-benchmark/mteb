@@ -9,8 +9,11 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class HagridRetrieval(AbsTaskRetrieval):
     _EVAL_SPLITS = ["dev"]
 
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "HagridRetrieval",
             "hf_hub_name": "miracl/hagrid",

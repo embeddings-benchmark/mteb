@@ -6,8 +6,11 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class NarrativeQARetrieval(AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
 
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "NarrativeQARetrieval",
             "hf_hub_name": "narrativeqa",

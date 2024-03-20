@@ -2,8 +2,11 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 
 
 class ATEC(AbsTaskSTS):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "ATEC",
             "hf_hub_name": "C-MTEB/ATEC",
@@ -19,8 +22,11 @@ class ATEC(AbsTaskSTS):
 
 
 class BQ(AbsTaskSTS):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "BQ",
             "hf_hub_name": "C-MTEB/BQ",
@@ -36,8 +42,11 @@ class BQ(AbsTaskSTS):
 
 
 class LCQMC(AbsTaskSTS):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "LCQMC",
             "hf_hub_name": "C-MTEB/LCQMC",
@@ -53,8 +62,11 @@ class LCQMC(AbsTaskSTS):
 
 
 class PAWSX(AbsTaskSTS):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "PAWSX",
             "hf_hub_name": "C-MTEB/PAWSX",
@@ -70,8 +82,11 @@ class PAWSX(AbsTaskSTS):
 
 
 class STSB(AbsTaskSTS):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "STSB",
             "hf_hub_name": "C-MTEB/STSB",
@@ -87,8 +102,11 @@ class STSB(AbsTaskSTS):
 
 
 class AFQMC(AbsTaskSTS):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "AFQMC",
             "hf_hub_name": "C-MTEB/AFQMC",
@@ -104,8 +122,11 @@ class AFQMC(AbsTaskSTS):
 
 
 class QBQTC(AbsTaskSTS):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "QBQTC",
             "hf_hub_name": "C-MTEB/QBQTC",

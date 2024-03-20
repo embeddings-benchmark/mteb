@@ -6,8 +6,11 @@ _EVAL_SPLIT = "test"
 
 
 class STSES(AbsTaskSTS):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "STSES",
             "hf_hub_name": "PlanTL-GOB-ES/sts-es",

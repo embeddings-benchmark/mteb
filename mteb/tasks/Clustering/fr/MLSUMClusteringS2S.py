@@ -5,8 +5,11 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class MLSUMClusteringS2S(AbsTaskClustering):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "MLSUMClusteringS2S",
             "hf_hub_name": "mlsum",

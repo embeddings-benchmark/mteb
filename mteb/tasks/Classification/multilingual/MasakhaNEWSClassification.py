@@ -21,8 +21,11 @@ _LANGUAGES = [
 
 
 class MasakhaNEWSClassification(AbsTaskClassification, MultilingualTask):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "MasakhaNEWSClassification",
             "hf_hub_name": "masakhane/masakhanews",

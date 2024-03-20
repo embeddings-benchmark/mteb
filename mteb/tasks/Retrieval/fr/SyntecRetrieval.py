@@ -6,8 +6,11 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class SyntecRetrieval(AbsTaskRetrieval):
     _EVAL_SPLITS = ["test"]
 
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "SyntecRetrieval",
             "hf_hub_name": "lyon-nlp/mteb-fr-retrieval-syntec-s2p",

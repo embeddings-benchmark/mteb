@@ -68,8 +68,8 @@ TASK_TYPE = Literal[
 ]
 
 TASK_CATEGORY = Literal[
-    "s2s",
-    "p2p",
+    "s2s",  # Sentence-to-sentence
+    "p2p",  # Paragraph-to-paragraph
 ]
 
 ANNOTATOR_TYPE = Literal["expert-annotated", "human-annotated", "derived"]

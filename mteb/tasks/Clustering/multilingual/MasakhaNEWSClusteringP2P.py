@@ -24,8 +24,11 @@ _LANGUAGES = [
 
 
 class MasakhaNEWSClusteringP2P(AbsTaskClustering, MultilingualTask):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "MasakhaNEWSClusteringP2P",
             "hf_hub_name": "masakhane/masakhanews",

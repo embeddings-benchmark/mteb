@@ -2,8 +2,11 @@ from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 
 
 class SickrPLSTS(AbsTaskSTS):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "SICK-R-PL",
             "hf_hub_name": "PL-MTEB/sickr-pl-sts",
@@ -20,8 +23,11 @@ class SickrPLSTS(AbsTaskSTS):
 
 
 class CdscrSTS(AbsTaskSTS):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "CDSC-R",
             "hf_hub_name": "PL-MTEB/cdscr-sts",

@@ -2,8 +2,11 @@ from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 
 class AlloprofReranking(AbsTaskReranking):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "AlloprofReranking",
             "hf_hub_name": "lyon-nlp/mteb-fr-reranking-alloprof-s2p",

@@ -2,8 +2,11 @@ from ....abstasks import AbsTaskClassification
 
 
 class TNews(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "TNews",
             "hf_hub_name": "C-MTEB/TNews-classification",
@@ -20,8 +23,11 @@ class TNews(AbsTaskClassification):
 
 
 class IFlyTek(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "IFlyTek",
             "hf_hub_name": "C-MTEB/IFlyTek-classification",
@@ -39,8 +45,11 @@ class IFlyTek(AbsTaskClassification):
 
 
 class MultilingualSentiment(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "MultilingualSentiment",
             "hf_hub_name": "C-MTEB/MultilingualSentiment-classification",
@@ -57,8 +66,11 @@ class MultilingualSentiment(AbsTaskClassification):
 
 
 class JDReview(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "JDReview",
             "hf_hub_name": "C-MTEB/JDReview-classification",
@@ -74,8 +86,11 @@ class JDReview(AbsTaskClassification):
 
 
 class OnlineShopping(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "OnlineShopping",
             "hf_hub_name": "C-MTEB/OnlineShopping-classification",
@@ -91,8 +106,11 @@ class OnlineShopping(AbsTaskClassification):
 
 
 class Waimai(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "Waimai",
             "hf_hub_name": "C-MTEB/waimai-classification",

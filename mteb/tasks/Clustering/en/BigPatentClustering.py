@@ -2,8 +2,11 @@ from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class BigPatentClustering(AbsTaskClustering):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "BigPatentClustering",
             "hf_hub_name": "jinaai/big-patent-clustering",

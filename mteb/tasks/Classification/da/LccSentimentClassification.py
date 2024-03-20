@@ -2,8 +2,11 @@ from mteb.abstasks import AbsTaskClassification
 
 
 class LccSentimentClassification(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "LccSentimentClassification",
             "hf_hub_name": "DDSC/lcc",

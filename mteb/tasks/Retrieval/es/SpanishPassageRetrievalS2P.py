@@ -4,8 +4,11 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class SpanishPassageRetrievalS2P(AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "SpanishPassageRetrievalS2P",
             "hf_hub_name": "jinaai/spanish_passage_retrieval",

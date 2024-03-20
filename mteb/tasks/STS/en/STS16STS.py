@@ -2,8 +2,11 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 
 
 class STS16STS(AbsTaskSTS):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "STS16",
             "hf_hub_name": "mteb/sts16-sts",

@@ -2,8 +2,11 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class TenKGnadClusteringP2P(AbsTaskClustering):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "TenKGnadClusteringP2P",
             "hf_hub_name": "slvnwhrl/tenkgnad-clustering-p2p",

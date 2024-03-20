@@ -2,8 +2,11 @@ from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 
 
 class T2Reranking(AbsTaskReranking):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "T2Reranking",
             "hf_hub_name": "C-MTEB/T2Reranking",
@@ -19,8 +22,11 @@ class T2Reranking(AbsTaskReranking):
 
 
 class MMarcoReranking(AbsTaskReranking):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "MMarcoReranking",
             "hf_hub_name": "C-MTEB/Mmarco-reranking",
@@ -36,8 +42,11 @@ class MMarcoReranking(AbsTaskReranking):
 
 
 class CMedQAv1(AbsTaskReranking):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "CMedQAv1",
             "hf_hub_name": "C-MTEB/CMedQAv1-reranking",
@@ -53,8 +62,11 @@ class CMedQAv1(AbsTaskReranking):
 
 
 class CMedQAv2(AbsTaskReranking):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "CMedQAv2",
             "hf_hub_name": "C-MTEB/CMedQAv2-reranking",

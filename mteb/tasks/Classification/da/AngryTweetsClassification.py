@@ -2,8 +2,11 @@ from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 
 
 class AngryTweetsClassification(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "AngryTweetsClassification",
             "hf_hub_name": "DDSC/angry-tweets",

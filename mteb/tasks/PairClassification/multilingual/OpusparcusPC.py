@@ -6,8 +6,11 @@ _LANGUAGES = ["de", "en", "fi", "fr", "ru", "sv"]
 
 
 class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "OpusparcusPC",
             "hf_hub_name": "GEM/opusparcus",

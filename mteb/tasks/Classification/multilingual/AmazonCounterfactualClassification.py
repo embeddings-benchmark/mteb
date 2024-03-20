@@ -4,8 +4,11 @@ _LANGUAGES = ["en", "de", "en-ext", "ja"]
 
 
 class AmazonCounterfactualClassification(MultilingualTask, AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "AmazonCounterfactualClassification",
             "hf_hub_name": "mteb/amazon_counterfactual",

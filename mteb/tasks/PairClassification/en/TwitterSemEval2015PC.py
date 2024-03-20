@@ -2,8 +2,11 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class TwitterSemEval2015PC(AbsTaskPairClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "TwitterSemEval2015",
             "hf_hub_name": "mteb/twittersemeval2015-pairclassification",

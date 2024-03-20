@@ -4,8 +4,11 @@ from mteb.abstasks import AbsTaskClassification
 
 
 class DanishPoliticalCommentsClassification(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "DanishPoliticalCommentsClassification",
             "hf_hub_name": "danish_political_comments",

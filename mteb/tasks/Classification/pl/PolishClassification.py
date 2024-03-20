@@ -2,8 +2,11 @@ from ....abstasks import AbsTaskClassification
 
 
 class CbdClassification(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "CBD",
             "hf_hub_name": "PL-MTEB/cbd",
@@ -18,8 +21,11 @@ class CbdClassification(AbsTaskClassification):
 
 
 class PolEmo2InClassification(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "PolEmo2.0-IN",
             "hf_hub_name": "PL-MTEB/polemo2_in",
@@ -36,8 +42,11 @@ class PolEmo2InClassification(AbsTaskClassification):
 
 
 class PolEmo2OutClassification(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "PolEmo2.0-OUT",
             "hf_hub_name": "PL-MTEB/polemo2_out",
@@ -54,8 +63,11 @@ class PolEmo2OutClassification(AbsTaskClassification):
 
 
 class AllegroReviewsClassification(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "AllegroReviews",
             "hf_hub_name": "PL-MTEB/allegro-reviews",
@@ -70,8 +82,11 @@ class AllegroReviewsClassification(AbsTaskClassification):
 
 
 class PacClassification(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "PAC",
             "hf_hub_name": "laugustyniak/abusive-clauses-pl",

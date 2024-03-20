@@ -56,8 +56,11 @@ def _load_miracl_data(
 
 
 class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "MIRACLRetrieval",
             "hf_hub_name": "jinaai/miracl",

@@ -16,8 +16,11 @@ _LANGUAGES = [
 
 
 class STS17Crosslingual(AbsTaskSTS, CrosslingualTask):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "STS17",
             "hf_hub_name": "mteb/sts17-crosslingual-sts",

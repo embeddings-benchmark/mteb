@@ -24,8 +24,11 @@ def load_retrieval_data(hf_hub_name, eval_splits):
 
 
 class GermanQuADRetrieval(AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "GermanQuAD-Retrieval",
             "hf_hub_name": "mteb/germanquad-retrieval",

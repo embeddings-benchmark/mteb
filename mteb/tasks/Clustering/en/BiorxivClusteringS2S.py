@@ -2,8 +2,11 @@ from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class BiorxivClusteringS2S(AbsTaskClustering):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "BiorxivClusteringS2S",
             "hf_hub_name": "mteb/biorxiv-clustering-s2s",

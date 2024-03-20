@@ -4,8 +4,11 @@ from mteb.abstasks import AbsTaskClassification
 
 
 class ScalaDaClassification(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "ScalaDaClassification",
             "hf_hub_name": "ScandEval/scala-da",
@@ -45,8 +48,11 @@ class ScalaDaClassification(AbsTaskClassification):
 
 
 class ScalaNbClassification(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "ScalaNbClassification",
             "hf_hub_name": "ScandEval/scala-nb",
@@ -86,8 +92,11 @@ class ScalaNbClassification(AbsTaskClassification):
 
 
 class ScalaNnClassification(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "ScalaNnClassification",
             "hf_hub_name": "ScandEval/scala-nn",
@@ -127,8 +136,11 @@ class ScalaNnClassification(AbsTaskClassification):
 
 
 class ScalaSvClassification(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "ScalaSvClassification",
             "hf_hub_name": "ScandEval/scala-sv",

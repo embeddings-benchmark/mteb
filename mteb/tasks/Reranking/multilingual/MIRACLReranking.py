@@ -3,8 +3,11 @@ from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 
 class MIRACLReranking(MultilingualTask, AbsTaskReranking):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "MIRACLReranking",
             "hf_hub_name": "jinaai/miracl",

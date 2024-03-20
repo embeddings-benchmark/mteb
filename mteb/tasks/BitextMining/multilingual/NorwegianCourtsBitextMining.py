@@ -4,8 +4,11 @@ from mteb.abstasks import AbsTaskBitextMining
 
 
 class NorwegianCourtsBitextMining(AbsTaskBitextMining):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "NorwegianCourtsBitextMining",
             "hf_hub_name": "kardosdrur/norwegian-courts",

@@ -4,8 +4,11 @@ from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 
 
 class DKHateClassification(AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "DKHateClassification",
             "hf_hub_name": "DDSC/dkhate",

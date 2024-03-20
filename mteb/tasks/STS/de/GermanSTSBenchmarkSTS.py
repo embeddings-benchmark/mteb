@@ -2,8 +2,11 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 
 
 class GermanSTSBenchmarkSTS(AbsTaskSTS):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "GermanSTSBenchmark",
             "hf_hub_name": "jinaai/german-STSbenchmark",

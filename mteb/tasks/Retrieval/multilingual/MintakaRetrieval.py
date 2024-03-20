@@ -46,8 +46,11 @@ def _load_mintaka_data(
 
 
 class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "MintakaRetrieval",
             "hf_hub_name": "jinaai/mintakaqa",

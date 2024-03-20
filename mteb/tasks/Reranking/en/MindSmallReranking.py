@@ -2,8 +2,11 @@ from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 
 class MindSmallReranking(AbsTaskReranking):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "MindSmallReranking",
             "hf_hub_name": "mteb/mind_small",

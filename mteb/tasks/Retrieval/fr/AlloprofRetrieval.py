@@ -4,8 +4,11 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class AlloprofRetrieval(AbsTaskRetrieval):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "AlloprofRetrieval",
             "hf_hub_name": "lyon-nlp/alloprof",

@@ -2,8 +2,11 @@ from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class BlurbsClusteringP2P(AbsTaskClustering):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "BlurbsClusteringP2P",
             "hf_hub_name": "slvnwhrl/blurbs-clustering-p2p",

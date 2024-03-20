@@ -4,8 +4,11 @@ _LANGUAGES = ["en", "de", "es", "fr", "ja", "zh"]
 
 
 class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
-    @property
-    def metadata_dict(self):
+    metadata = 
+
+@property
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
         return {
             "name": "AmazonReviewsClassification",
             "hf_hub_name": "mteb/amazon_reviews_multi",
