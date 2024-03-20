@@ -1,29 +1,38 @@
 import datasets
 import numpy as np
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class AlloProfClusteringP2P(AbsTaskClustering):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="AlloProfClusteringP2P",
+        description="Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic.",
+        reference="https://huggingface.co/datasets/lyon-nlp/alloprof",
+        hf_hub_name="mteb/alloprof",
+        type="Clustering",
+        category="p2p",
+        eval_splits=["test"],
+        eval_langs=["fr"],
+        main_score="v_measure",
+        revision="392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license="",
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "AlloProfClusteringP2P",
-            "hf_hub_name": "lyon-nlp/alloprof",
-            "description": (
-                "Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic."
-            ),
-            "reference": "https://huggingface.co/datasets/lyon-nlp/alloprof",
-            "type": "Clustering",
-            "category": "p2p",
-            "eval_splits": ["test"],
-            "eval_langs": ["fr"],
-            "main_score": "v_measure",
-            "revision": "392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
-        }
 
     def load_data(self, **kwargs):
         """

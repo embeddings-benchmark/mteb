@@ -5,7 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class DdiscoCohesionClassification(AbsTaskClassification):
-    metadata = TaskMetadata()TaskMetadata(
+    metadata = TaskMetadata(
         name="Ddisco",
         hf_hub_name="DDSC/ddisco",
         description="A Danish Discourse dataset with values for coherence and source (Wikipedia or Reddit)",
@@ -76,6 +76,6 @@ class DdiscoCohesionClassification(AbsTaskClassification):
             ["domain"]
         )
 
-        @property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)

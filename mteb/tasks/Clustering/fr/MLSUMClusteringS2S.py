@@ -1,29 +1,38 @@
 import datasets
 import numpy as np
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class MLSUMClusteringS2S(AbsTaskClustering):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="MLSUMClusteringS2S",
+        description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",
+        reference="https://huggingface.co/datasets/mlsum",
+        hf_hub_name="mteb/mlsum",
+        type="Clustering",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["fr"],
+        main_score="v_measure",
+        revision="b5d54f8f3b61ae17845046286940f03c6bc79bc7",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license="",
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "MLSUMClusteringS2S",
-            "hf_hub_name": "mlsum",
-            "description": (
-                "Clustering of newspaper article titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics."
-            ),
-            "reference": "https://huggingface.co/datasets/mlsum",
-            "type": "Clustering",
-            "category": "s2s",
-            "eval_splits": ["test"],
-            "eval_langs": ["fr"],
-            "main_score": "v_measure",
-            "revision": "b5d54f8f3b61ae17845046286940f03c6bc79bc7",
-        }
 
     def load_data(self, **kwargs):
         """

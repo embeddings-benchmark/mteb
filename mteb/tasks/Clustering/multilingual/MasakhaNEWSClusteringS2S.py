@@ -1,6 +1,8 @@
 import datasets
 import numpy as np
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks import AbsTaskClustering, MultilingualTask
 
 _LANGUAGES = [
@@ -24,25 +26,34 @@ _LANGUAGES = [
 
 
 class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="MasakhaNEWSClusteringS2S",
+        hf_hub_name="masakhane/masakhanews",
+        description=(
+            "Clustering of news article headlines from MasakhaNEWS dataset. Clustering of 10 sets on the news article label."
+        ),
+        reference="https://huggingface.co/datasets/masakhane/masakhanews",
+        type="Clustering",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=_LANGUAGES,
+        main_score="v_measure",
+        revision="8ccc72e69e65f40c70e117d8b3c08306bb788b60",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license="",
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "MasakhaNEWSClusteringS2S",
-            "hf_hub_name": "masakhane/masakhanews",
-            "description": (
-                "Clustering of news article headlines from MasakhaNEWS dataset. Clustering of 10 sets on the news article label."
-            ),
-            "reference": "https://huggingface.co/datasets/masakhane/masakhanews",
-            "type": "Clustering",
-            "category": "s2s",
-            "eval_splits": ["test"],
-            "eval_langs": _LANGUAGES,
-            "main_score": "v_measure",
-            "revision": "8ccc72e69e65f40c70e117d8b3c08306bb788b60",
-        }
 
     def load_data(self, **kwargs):
         """
