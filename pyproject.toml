@@ -49,10 +49,7 @@ mteb = "mteb.cmd:main"
 
 [project.optional-dependencies]
 dev = [
-    "flake8",
-    "Flake8-pyproject>=1.2.3",
-    "isort",
-    "black==24.2.0",
+    "ruff>=0.0.254",
     "pytest",
     "pytest-xdist"
 ]
@@ -61,65 +58,30 @@ dev = [
 [tool.setuptools.packages.find]
 exclude = ["tests", "results"]
 
-[tool.black]
-line-length = 119
-target-version = ['py35']
+[tool.ruff]
+target-version = "py38"
 
-[tool.isort]
-profile = "black"
-default_section = "FIRSTPARTY"
-ensure_newline_before_comments = true
-force_grid_wrap = 0
-include_trailing_comma = true
-known_first_party = "transformers"
-known_third_party = [
-    "absl",
-    "conllu",
-    "datasets",
-    "elasticsearch",
-    "fairseq",
-    "faiss-cpu",
-    "fastprogress",
-    "fire",
-    "fugashi",
-    "git",
-    "h5py",
-    "matplotlib",
-    "nltk",
-    "numpy",
-    "packaging",
-    "pandas",
-    "PIL",
-    "psutil",
-    "pytest",
-    "pytorch_lightning",
-    "rouge_score",
-    "sacrebleu",
-    "seqeval",
-    "sklearn",
-    "streamlit",
-    "tensorboardX",
-    "tensorflow",
-    "tensorflow_datasets",
-    "timeout_decorator",
-    "torch",
-    "torchaudio",
-    "torchtext",
-    "torchvision",
-    "torch_xla",
-    "tqdm",
-]
-line_length = 119
-lines_after_imports = 2
-multi_line_output = 3
-use_parentheses = true
-
-[tool.flake8]
+[tool.ruff.lint]
 ignore = [
     "E203",
     "E501",
     "E741",
-    "W503",
-    "W605",
+    "F403"
 ]
-max-line-length = 119
+ignore-init-module-imports = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.flake8-annotations]
+mypy-init-return = true
+suppress-none-returning = true
+
+[tool.semantic_release]
+branch = "main"
+version_toml = ["pyproject.toml:project.version"]
+build_command = "python -m pip install build; python -m build"
+
+[tool.semantic_release.commit_parser_options]
+minor_types = ["feat"]
+patch_types = ["*", "fix", "perf"] # "*" mean always patch
