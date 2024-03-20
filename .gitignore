@@ -133,3 +133,6 @@ dmypy.json
 
 # error logs
 error_logs.txt
+
+# tests
+tests/results

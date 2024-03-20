@@ -1,6 +1,8 @@
-__version__ = "1.2.1.dev0"
+from importlib.metadata import version
 
 from mteb.evaluation import *
+
+__version__ = version("mteb")  # fetch version from install metadata
 
 
 MTEB_MAIN_EN = [
@@ -70,5 +72,5 @@ MTEB_MAIN_EN = [
     "TweetSentimentExtractionClassification",
     "TwentyNewsgroupsClustering",
     "TwitterSemEval2015",
-    "TwitterURLCorpus"
+    "TwitterURLCorpus",
 ]

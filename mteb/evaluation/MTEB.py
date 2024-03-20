@@ -5,17 +5,15 @@ import pathlib
 import traceback
 from datetime import datetime
 from time import time
+from typing import List, Union
 
 import datasets
 
-from .. import __version__
 from ..abstasks import *
 from ..abstasks import AbsTask, LangMapping
 from ..tasks import *
 
 logger = logging.getLogger(__name__)
-
-from typing import List, Union
 
 
 class MTEB:
