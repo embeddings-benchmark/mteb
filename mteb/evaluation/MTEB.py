@@ -4,6 +4,7 @@ import os
 import pathlib
 import traceback
 from datetime import datetime
+from importlib.metadata import version
 from time import time
 from typing import List, Union
 
