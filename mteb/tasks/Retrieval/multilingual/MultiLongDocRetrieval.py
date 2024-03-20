@@ -1,5 +1,7 @@
 import datasets
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks import AbsTaskRetrieval, MultilingualTask
 from ....abstasks.AbsTaskRetrieval import *
 
@@ -46,22 +48,32 @@ def load_mldr_data(path: str, langs: list, eval_splits: list, cache_dir: str = N
 
 
 class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="MultiLongDocRetrieval",
+        description="MultiLongDocRetrieval",
+        reference="",
+        hf_hub_name="Shitao/MLDR",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["dev", "test"],
+        eval_langs=_LANGUAGES,
+        main_score="ndcg_at_10",
+        revision="d79af07e969a6678fcbbe819956840425816468f",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "MultiLongDocRetrieval",
-            "hf_hub_name": "Shitao/MLDR",
-            "reference": "https://arxiv.org/abs/2402.03216",
-            "description": "MultiLongDocRetrieval: A Multilingual Long-Document Retrieval Dataset",
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": ["dev", "test"],
-            "eval_langs": _LANGUAGES,
-            "main_score": "ndcg_at_10",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -69,7 +81,7 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
 
         self.corpus, self.queries, self.relevant_docs = load_mldr_data(
             path=self.metadata_dict["hf_hub_name"],
-            langs=self.langs,
+            langs=self.metadata.eval_langs,
             eval_splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
         )

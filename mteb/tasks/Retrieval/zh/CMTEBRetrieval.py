@@ -2,6 +2,8 @@ from collections import defaultdict
 
 from datasets import DatasetDict, load_dataset
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
@@ -23,23 +25,32 @@ def load_retrieval_data(hf_hub_name, eval_splits):
 
 
 class T2Retrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="T2Retrieval",
+        description="T2Ranking: A large-scale Chinese Benchmark for Passage Ranking",
+        reference="https://arxiv.org/abs/2304.03679",
+        hf_hub_name="C-MTEB/T2Retrieval",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["dev"],
+        eval_langs=["zh"],
+        main_score="ndcg_at_10",
+        revision="8731a845f1bf500a4f111cf1070785c793d10e64",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "T2Retrieval",
-            "hf_hub_name": "C-MTEB/T2Retrieval",
-            "reference": "https://arxiv.org/abs/2304.03679",
-            "description": "T2Ranking: A large-scale Chinese Benchmark for Passage Ranking",
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": ["dev"],
-            "eval_langs": ["zh"],
-            "main_score": "ndcg_at_10",
-            "revision": "8731a845f1bf500a4f111cf1070785c793d10e64",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -52,23 +63,32 @@ class T2Retrieval(AbsTaskRetrieval):
 
 
 class MMarcoRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="MMarcoRetrieval",
+        description="MMarcoRetrieval",
+        reference="",
+        hf_hub_name="C-MTEB/MMarcoRetrieval",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["dev"],
+        eval_langs=["zh"],
+        main_score="ndcg_at_10",
+        revision="539bbde593d947e2a124ba72651aafc09eb33fc2",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "MMarcoRetrieval",
-            "hf_hub_name": "C-MTEB/MMarcoRetrieval",
-            "reference": "https://github.com/unicamp-dl/mMARCO",
-            "description": "mMARCO is a multilingual version of the MS MARCO passage ranking dataset",
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": ["dev"],
-            "eval_langs": ["zh"],
-            "main_score": "ndcg_at_10",
-            "revision": "539bbde593d947e2a124ba72651aafc09eb33fc2",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -81,23 +101,32 @@ class MMarcoRetrieval(AbsTaskRetrieval):
 
 
 class DuRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="DuRetrieval",
+        description="A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine",
+        reference="https://aclanthology.org/2022.emnlp-main.357.pdf",
+        hf_hub_name="C-MTEB/DuRetrieval",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["dev"],
+        eval_langs=["zh"],
+        main_score="ndcg_at_10",
+        revision="a1a333e290fe30b10f3f56498e3a0d911a693ced",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "DuRetrieval",
-            "hf_hub_name": "C-MTEB/DuRetrieval",
-            "reference": "https://aclanthology.org/2022.emnlp-main.357.pdf",
-            "description": "A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine",
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": ["dev"],
-            "eval_langs": ["zh"],
-            "main_score": "ndcg_at_10",
-            "revision": "a1a333e290fe30b10f3f56498e3a0d911a693ced",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -139,23 +168,32 @@ class CovidRetrieval(AbsTaskRetrieval):
 
 
 class CmedqaRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="CmedqaRetrieval",
+        description="Online medical consultation text",
+        reference="https://aclanthology.org/2022.emnlp-main.357.pdf",
+        hf_hub_name="C-MTEB/CmedqaRetrieval",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["dev"],
+        eval_langs=["zh"],
+        main_score="ndcg_at_10",
+        revision="cd540c506dae1cf9e9a59c3e06f42030d54e7301",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "CmedqaRetrieval",
-            "hf_hub_name": "C-MTEB/CmedqaRetrieval",
-            "reference": "https://aclanthology.org/2022.emnlp-main.357.pdf",
-            "description": "Online medical consultation text",
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": ["dev"],
-            "eval_langs": ["zh"],
-            "main_score": "ndcg_at_10",
-            "revision": "cd540c506dae1cf9e9a59c3e06f42030d54e7301",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -168,23 +206,32 @@ class CmedqaRetrieval(AbsTaskRetrieval):
 
 
 class EcomRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="EcomRetrieval",
+        description="EcomRetrieval",
+        reference="https://arxiv.org/abs/2203.03367",
+        hf_hub_name="C-MTEB/EcomRetrieval",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["dev"],
+        eval_langs=["zh"],
+        main_score="ndcg_at_10",
+        revision="687de13dc7294d6fd9be10c6945f9e8fec8166b9",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "EcomRetrieval",
-            "hf_hub_name": "C-MTEB/EcomRetrieval",
-            "reference": "https://arxiv.org/abs/2203.03367",
-            "description": "Passage retrieval dataset collected from Alibaba search engine systems in ecom domain",
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": ["dev"],
-            "eval_langs": ["zh"],
-            "main_score": "ndcg_at_10",
-            "revision": "687de13dc7294d6fd9be10c6945f9e8fec8166b9",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -197,23 +244,32 @@ class EcomRetrieval(AbsTaskRetrieval):
 
 
 class MedicalRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="MedicalRetrieval",
+        description="MedicalRetrieval",
+        reference="https://arxiv.org/abs/2203.03367",
+        hf_hub_name="C-MTEB/MedicalRetrieval",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["dev"],
+        eval_langs=["zh"],
+        main_score="ndcg_at_10",
+        revision="2039188fb5800a9803ba5048df7b76e6fb151fc6",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "MedicalRetrieval",
-            "hf_hub_name": "C-MTEB/MedicalRetrieval",
-            "reference": "https://arxiv.org/abs/2203.03367",
-            "description": "Passage retrieval dataset collected from Alibaba search engine systems in medical domain",
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": ["dev"],
-            "eval_langs": ["zh"],
-            "main_score": "ndcg_at_10",
-            "revision": "2039188fb5800a9803ba5048df7b76e6fb151fc6",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -226,23 +282,32 @@ class MedicalRetrieval(AbsTaskRetrieval):
 
 
 class VideoRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="VideoRetrieval",
+        description="VideoRetrieval",
+        reference="https://arxiv.org/abs/2203.03367",
+        hf_hub_name="C-MTEB/VideoRetrieval",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["dev"],
+        eval_langs=["zh"],
+        main_score="ndcg_at_10",
+        revision="58c2597a5943a2ba48f4668c3b90d796283c5639",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "VideoRetrieval",
-            "hf_hub_name": "C-MTEB/VideoRetrieval",
-            "reference": "https://arxiv.org/abs/2203.03367",
-            "description": "Passage retrieval dataset collected from Alibaba search engine systems in video domain",
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": ["dev"],
-            "eval_langs": ["zh"],
-            "main_score": "ndcg_at_10",
-            "revision": "58c2597a5943a2ba48f4668c3b90d796283c5639",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:

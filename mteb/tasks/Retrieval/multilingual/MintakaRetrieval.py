@@ -1,5 +1,7 @@
 import datasets
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -46,25 +48,32 @@ def _load_mintaka_data(
 
 
 class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="MintakaRetrieval",
+        description="MintakaRetrieval",
+        reference="",
+        hf_hub_name="jinaai/mintakaqa",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=[_EVAL_SPLIT],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        revision="efa78cc2f74bbcd21eff2261f9e13aebe40b814e",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "MintakaRetrieval",
-            "hf_hub_name": "jinaai/mintakaqa",
-            "reference": "https://github.com/amazon-science/mintaka",
-            "description": (
-                "Mintaka: A Complex, Natural, and Multilingual Dataset for End-to-End Question Answering."
-            ),
-            "type": "Retrieval",
-            "category": "s2s",
-            "eval_splits": [_EVAL_SPLIT],
-            "eval_langs": _LANGS,
-            "main_score": "ndcg_at_10",
-            "revision": "efa78cc2f74bbcd21eff2261f9e13aebe40b814e",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -72,7 +81,7 @@ class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
 
         self.corpus, self.queries, self.relevant_docs = _load_mintaka_data(
             path=self.metadata_dict["hf_hub_name"],
-            langs=self.langs,
+            langs=self.metadata.eval_langs,
             split=self.metadata_dict["eval_splits"][0],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["revision"],

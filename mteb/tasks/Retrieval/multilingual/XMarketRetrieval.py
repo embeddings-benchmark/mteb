@@ -1,5 +1,7 @@
 import datasets
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -53,23 +55,32 @@ def _load_xmarket_data(
 
 
 class XMarket(MultilingualTask, AbsTaskRetrieval):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="XMarket",
+        description="XMarket",
+        reference="",
+        hf_hub_name="jinaai/xmarket_ml",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=[_EVAL_SPLIT],
+        eval_langs=_EVAL_LANGS,
+        main_score="ndcg_at_10",
+        revision="dfe57acff5b62c23732a7b7d3e3fb84ff501708b",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "XMarket",
-            "hf_hub_name": "jinaai/xmarket_ml",
-            "description": "XMarket is an ecommerce category to product retrieval dataset in German.",
-            "reference": "https://xmrec.github.io/",
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": [_EVAL_SPLIT],
-            "eval_langs": _EVAL_LANGS,
-            "main_score": "ndcg_at_10",
-            "revision": "dfe57acff5b62c23732a7b7d3e3fb84ff501708b",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -77,7 +88,7 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
 
         self.corpus, self.queries, self.relevant_docs = _load_xmarket_data(
             path=self.metadata_dict["hf_hub_name"],
-            langs=self.langs,
+            langs=self.metadata.eval_langs,
             split=self.metadata_dict["eval_splits"][0],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["revision"],

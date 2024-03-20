@@ -1,5 +1,7 @@
 import datasets
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -56,27 +58,32 @@ def _load_miracl_data(
 
 
 class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="MIRACLRetrieval",
+        description="MIRACLRetrieval",
+        reference="",
+        hf_hub_name="jinaai/miracl",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=[_EVAL_SPLIT],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        revision="d28a029f35c4ff7f616df47b0edf54e6882395e6",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "MIRACLRetrieval",
-            "hf_hub_name": "jinaai/miracl",
-            "reference": "https://project-miracl.github.io/",
-            "description": (
-                "MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual "
-                "retrieval dataset that focuses on search across 18 different languages. This task focuses on "
-                "the Spanish subset, using the test set containing 648 queries and 6443 passages."
-            ),
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": [_EVAL_SPLIT],
-            "eval_langs": _LANGS,
-            "main_score": "ndcg_at_10",
-            "revision": "d28a029f35c4ff7f616df47b0edf54e6882395e6",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:

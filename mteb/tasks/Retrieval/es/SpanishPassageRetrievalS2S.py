@@ -1,26 +1,37 @@
 import datasets
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class SpanishPassageRetrievalS2S(AbsTaskRetrieval):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="SpanishPassageRetrievalS2S",
+        description="Test collection for passage retrieval from health-related Web resources in Spanish.",
+        reference="https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/",
+        hf_hub_name="jinaai/spanish_passage_retrieval",
+        type="Retrieval",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["es"],
+        main_score="ndcg_at_10",
+        revision="9cddf2ce5209ade52c2115ccfa00eb22c6d3a837",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "SpanishPassageRetrievalS2S",
-            "hf_hub_name": "jinaai/spanish_passage_retrieval",
-            "description": "Test collection for passage retrieval from health-related Web resources in Spanish.",
-            "reference": "https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/",
-            "type": "Retrieval",
-            "category": "s2s",
-            "eval_splits": ["test"],
-            "eval_langs": ["es"],
-            "main_score": "ndcg_at_10",
-            "revision": "9cddf2ce5209ade52c2115ccfa00eb22c6d3a837",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:

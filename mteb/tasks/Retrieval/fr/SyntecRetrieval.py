@@ -1,31 +1,39 @@
 import datasets
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class SyntecRetrieval(AbsTaskRetrieval):
     _EVAL_SPLITS = ["test"]
 
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="SyntecRetrieval",
+        description="This dataset has been built from the Syntec Collective bargaining agreement.",
+        reference="https://huggingface.co/datasets/lyon-nlp/mteb-fr-retrieval-syntec-s2p",
+        hf_hub_name="lyon-nlp/mteb-fr-retrieval-syntec-s2p",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=self._EVAL_SPLITS,
+        eval_langs=["fr"],
+        main_score="map",
+        revision="b205c5084a0934ce8af14338bf03feb19499c84d",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "SyntecRetrieval",
-            "hf_hub_name": "lyon-nlp/mteb-fr-retrieval-syntec-s2p",
-            "reference": "https://huggingface.co/datasets/lyon-nlp/mteb-fr-retrieval-syntec-s2p",
-            "description": (
-                "This dataset has been built from the Syntec Collective bargaining agreement."
-                "It maps a question to an article from the agreement"
-            ),
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": self._EVAL_SPLITS,
-            "eval_langs": ["fr"],
-            "main_score": "ndcg_at_5",
-            "revision": "77f7e271bf4a92b24fce5119f3486b583ca016ff",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:
