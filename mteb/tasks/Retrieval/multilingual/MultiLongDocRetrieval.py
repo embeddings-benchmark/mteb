@@ -46,9 +46,9 @@ def load_mldr_data(path: str, langs: list, eval_splits: list, cache_dir: str = N
 
 
 class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

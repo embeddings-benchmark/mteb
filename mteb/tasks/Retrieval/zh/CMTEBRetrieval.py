@@ -23,9 +23,9 @@ def load_retrieval_data(hf_hub_name, eval_splits):
 
 
 class T2Retrieval(AbsTaskRetrieval):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -52,9 +52,9 @@ class T2Retrieval(AbsTaskRetrieval):
 
 
 class MMarcoRetrieval(AbsTaskRetrieval):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -81,9 +81,9 @@ class MMarcoRetrieval(AbsTaskRetrieval):
 
 
 class DuRetrieval(AbsTaskRetrieval):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -110,9 +110,9 @@ class DuRetrieval(AbsTaskRetrieval):
 
 
 class CovidRetrieval(AbsTaskRetrieval):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -139,9 +139,9 @@ class CovidRetrieval(AbsTaskRetrieval):
 
 
 class CmedqaRetrieval(AbsTaskRetrieval):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -168,9 +168,9 @@ class CmedqaRetrieval(AbsTaskRetrieval):
 
 
 class EcomRetrieval(AbsTaskRetrieval):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -197,9 +197,9 @@ class EcomRetrieval(AbsTaskRetrieval):
 
 
 class MedicalRetrieval(AbsTaskRetrieval):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -226,9 +226,9 @@ class MedicalRetrieval(AbsTaskRetrieval):
 
 
 class VideoRetrieval(AbsTaskRetrieval):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

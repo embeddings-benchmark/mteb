@@ -1,26 +1,35 @@
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks import AbsTaskClassification
 
 
 class EmotionClassification(AbsTaskClassification):
-    metadata = 
+    metadata = TaskMetadata(
+        name="EmotionClassification",
+        description="Emotion is a dataset of English Twitter messages with six basic emotions: anger, fear, joy, love, sadness, and surprise.",
+        reference="https://www.aclweb.org/anthology/D18-1404",
+        hf_hub_name="mteb/emotion",
+        type="Classification",
+        category="s2s",
+        eval_splits=["validation", "test"],
+        eval_langs=["en"],
+        main_score="accuracy",
+        revision="4f58c6b202a23cf9a4da393831edf4f9183cad37",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license="",
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
-        return {
-            "name": "EmotionClassification",
-            "hf_hub_name": "mteb/emotion",
-            "description": (
-                "Emotion is a dataset of English Twitter messages with six basic emotions: anger, fear, joy, love,"
-                " sadness, and surprise. For more detailed information please refer to the paper."
-            ),
-            "reference": "https://www.aclweb.org/anthology/D18-1404",
-            "category": "s2s",
-            "type": "Classification",
-            "eval_splits": ["validation", "test"],
-            "eval_langs": ["en"],
-            "main_score": "accuracy",
-            "n_experiments": 10,
-            "samples_per_label": 16,
-            "revision": "4f58c6b202a23cf9a4da393831edf4f9183cad37",
-        }
+        metadata_dict = dict(self.metadata)
+        metadata_dict["n_experiments"] = 10
+        metadata_dict["samples_per_label"] = 16
+        return metadata_dict

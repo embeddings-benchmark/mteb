@@ -2,9 +2,9 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class TwitterURLCorpusPC(AbsTaskPairClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

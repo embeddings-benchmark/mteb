@@ -2,9 +2,9 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class CLSClusteringS2S(AbsTaskClustering):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -24,9 +24,9 @@ class CLSClusteringS2S(AbsTaskClustering):
 
 
 class CLSClusteringP2P(AbsTaskClustering):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -46,9 +46,9 @@ class CLSClusteringP2P(AbsTaskClustering):
 
 
 class ThuNewsClusteringS2S(AbsTaskClustering):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -66,9 +66,9 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
 
 
 class ThuNewsClusteringP2P(AbsTaskClustering):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

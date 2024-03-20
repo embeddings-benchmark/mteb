@@ -1,5 +1,7 @@
 import datasets
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks import AbsTaskBitextMining, CrosslingualTask
 
 _LANGUAGES = [
@@ -229,23 +231,32 @@ extend_lang_pairs()
 
 
 class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
-    metadata = 
+    metadata = TaskMetadata(
+        name="FloresBitextMining",
+        hf_hub_name="facebook/flores",
+        description="FLORES is a benchmark dataset for machine translation between English and low-resource languages.",
+        reference="https://huggingface.co/datasets/facebook/flores",
+        type="BitextMining",
+        category="s2s",
+        eval_splits=_SPLIT,
+        eval_langs=_LANGUAGES_PAIRS,
+        main_score="f1",
+        revision="80dc3040d19756742c9a18267ab30f54fb8e226b",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license="",
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "FloresBitextMining",
-            "hf_hub_name": "facebook/flores",
-            "description": "FLORES is a benchmark dataset for machine translation between English and low-resource languages.",
-            "reference": "https://huggingface.co/datasets/facebook/flores",
-            "type": "BitextMining",
-            "category": "s2s",
-            "eval_splits": _SPLIT,
-            "eval_langs": _LANGUAGES_PAIRS,
-            "main_score": "f1",
-            "revision": "80dc3040d19756742c9a18267ab30f54fb8e226b",
-        }
 
     def load_data(self, **kwargs):
         """

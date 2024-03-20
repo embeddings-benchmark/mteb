@@ -2,9 +2,9 @@ from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 
 
 class T2Reranking(AbsTaskReranking):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -22,9 +22,9 @@ class T2Reranking(AbsTaskReranking):
 
 
 class MMarcoReranking(AbsTaskReranking):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -42,9 +42,9 @@ class MMarcoReranking(AbsTaskReranking):
 
 
 class CMedQAv1(AbsTaskReranking):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -62,9 +62,9 @@ class CMedQAv1(AbsTaskReranking):
 
 
 class CMedQAv2(AbsTaskReranking):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

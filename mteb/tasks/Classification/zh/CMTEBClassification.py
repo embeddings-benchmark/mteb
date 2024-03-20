@@ -2,9 +2,9 @@ from ....abstasks import AbsTaskClassification
 
 
 class TNews(AbsTaskClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -23,9 +23,9 @@ class TNews(AbsTaskClassification):
 
 
 class IFlyTek(AbsTaskClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -45,9 +45,9 @@ class IFlyTek(AbsTaskClassification):
 
 
 class MultilingualSentiment(AbsTaskClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -66,9 +66,9 @@ class MultilingualSentiment(AbsTaskClassification):
 
 
 class JDReview(AbsTaskClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -86,9 +86,9 @@ class JDReview(AbsTaskClassification):
 
 
 class OnlineShopping(AbsTaskClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -106,9 +106,9 @@ class OnlineShopping(AbsTaskClassification):
 
 
 class Waimai(AbsTaskClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

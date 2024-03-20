@@ -6,9 +6,9 @@ _LANGUAGES = ["de", "en", "fi", "fr", "ru", "sv"]
 
 
 class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

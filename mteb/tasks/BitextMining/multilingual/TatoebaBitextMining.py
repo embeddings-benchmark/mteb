@@ -1,3 +1,5 @@
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks import AbsTaskBitextMining, CrosslingualTask
 
 _LANGUAGES = [
@@ -117,20 +119,29 @@ _LANGUAGES = [
 
 
 class TatoebaBitextMining(AbsTaskBitextMining, CrosslingualTask):
-    metadata = 
+    metadata = TaskMetadata(
+        name="Tatoeba",
+        hf_hub_name="facebook/flores",
+        description="1,000 English-aligned sentence pairs for each language based on the Tatoeba corpus",
+        reference="https://huggingface.co/datasets/facebook/flores",
+        type="BitextMining",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng", "de", "en"],
+        main_score="f1",
+        revision="80dc3040d19756742c9a18267ab30f54fb8e226b",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license="",
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "Tatoeba",
-            "hf_hub_name": "mteb/tatoeba-bitext-mining",
-            "description": "1,000 English-aligned sentence pairs for each language based on the Tatoeba corpus",
-            "reference": "https://github.com/facebookresearch/LASER/tree/main/data/tatoeba/v1",
-            "type": "BitextMining",
-            "category": "s2s",
-            "eval_splits": ["test"],
-            "eval_langs": _LANGUAGES,
-            "main_score": "f1",
-            "revision": "9080400076fbadbb4c4dcb136ff4eddc40b42553",
-        }

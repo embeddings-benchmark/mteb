@@ -4,9 +4,9 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class SpanishPassageRetrievalS2S(AbsTaskRetrieval):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

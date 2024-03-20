@@ -2,9 +2,9 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class SickePLPC(AbsTaskPairClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -21,9 +21,9 @@ class SickePLPC(AbsTaskPairClassification):
 
 
 class PpcPC(AbsTaskPairClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -40,9 +40,9 @@ class PpcPC(AbsTaskPairClassification):
 
 
 class CdscePC(AbsTaskPairClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -59,9 +59,9 @@ class CdscePC(AbsTaskPairClassification):
 
 
 class PscPC(AbsTaskPairClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

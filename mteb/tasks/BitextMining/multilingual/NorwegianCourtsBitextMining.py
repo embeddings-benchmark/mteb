@@ -1,29 +1,36 @@
 import datasets
 
 from mteb.abstasks import AbsTaskBitextMining
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class NorwegianCourtsBitextMining(AbsTaskBitextMining):
-    metadata = 
+    metadata = TaskMetadata(
+        name="NorwegianCourtsBitextMining",
+        hf_hub_name="kardosdrur/norwegian-courts",
+        description="Nynorsk and Bokmål parallel corpus from Norwegian courts. Norwegian courts have two standardised written languages. Bokmål is a variant closer to Danish, while Nynorsk was created to resemble regional dialects of Norwegian.",
+        reference="https://opus.nlpl.eu/index.php",
+        type="BitextMining",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["nb", "nn"],
+        main_score="f1",
+        revision="d79af07e969a6678fcbbe819956840425816468f",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license="",
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "NorwegianCourtsBitextMining",
-            "hf_hub_name": "kardosdrur/norwegian-courts",
-            "description": "Nynorsk and Bokmål parallel corpus from Norwegian courts. "
-            + "Norway has two standardised written languages. "
-            + "Bokmål is a variant closer to Danish, while Nynorsk was created to resemble "
-            + "regional dialects of Norwegian.",
-            "reference": "https://opus.nlpl.eu/index.php",
-            "type": "BitextMining",
-            "category": "s2s",
-            "eval_splits": ["test"],
-            "eval_langs": ["nb", "nn"],
-            "main_score": "f1",
-            "revision": "d79af07e969a6678fcbbe819956840425816468f",
-        }
 
     def load_data(self, **kwargs):
         """

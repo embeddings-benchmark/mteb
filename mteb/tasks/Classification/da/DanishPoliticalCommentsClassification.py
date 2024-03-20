@@ -1,28 +1,39 @@
 import datasets
 
 from mteb.abstasks import AbsTaskClassification
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class DanishPoliticalCommentsClassification(AbsTaskClassification):
-    metadata = 
+    metadata = TaskMetadata(
+        name="DanishPoliticalCommentsClassification",
+        hf_hub_name="danish_political_comments",
+        description="A dataset of Danish political comments rated for sentiment",
+        reference="NA",
+        type="Classification",
+        category="s2s",
+        eval_splits=["train"],
+        eval_langs=["da"],
+        main_score="accuracy",
+        revision="edbb03726c04a0efab14fc8c3b8b79e4d420e5a1",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license="",
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
-        return {
-            "name": "DanishPoliticalCommentsClassification",
-            "hf_hub_name": "danish_political_comments",
-            "description": "A dataset of Danish political comments rated for sentiment",
-            "reference": "NA",
-            "type": "Classification",
-            "category": "s2s",
-            "eval_splits": ["train"],
-            "eval_langs": ["da"],
-            "main_score": "accuracy",
-            "n_experiments": 10,
-            "samples_per_label": 16,
-            "revision": "edbb03726c04a0efab14fc8c3b8b79e4d420e5a1",
-        }
+        metadata_dict = dict(self.metadata)
+        metadata_dict["n_experiments"] = 10
+        metadata_dict["samples_per_label"] = 16
+        return metadata_dict
 
     def load_data(self, **kwargs):
         """

@@ -46,9 +46,9 @@ def _load_xpqa_data(
 
 
 class XPQARetrieval(MultilingualTask, AbsTaskRetrieval):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

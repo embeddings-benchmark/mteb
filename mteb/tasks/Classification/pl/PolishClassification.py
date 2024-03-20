@@ -2,9 +2,9 @@ from ....abstasks import AbsTaskClassification
 
 
 class CbdClassification(AbsTaskClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -21,9 +21,9 @@ class CbdClassification(AbsTaskClassification):
 
 
 class PolEmo2InClassification(AbsTaskClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -42,9 +42,9 @@ class PolEmo2InClassification(AbsTaskClassification):
 
 
 class PolEmo2OutClassification(AbsTaskClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -63,9 +63,9 @@ class PolEmo2OutClassification(AbsTaskClassification):
 
 
 class AllegroReviewsClassification(AbsTaskClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -82,9 +82,9 @@ class AllegroReviewsClassification(AbsTaskClassification):
 
 
 class PacClassification(AbsTaskClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

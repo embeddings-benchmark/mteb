@@ -2,9 +2,9 @@ from ....abstasks import AbsTaskSummarization
 
 
 class SummEvalSummarization(AbsTaskSummarization):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

@@ -56,9 +56,9 @@ def _load_miracl_data(
 
 
 class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

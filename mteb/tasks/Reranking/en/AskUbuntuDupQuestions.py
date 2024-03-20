@@ -2,9 +2,9 @@ from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 
 class AskUbuntuDupQuestions(AbsTaskReranking):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

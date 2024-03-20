@@ -2,9 +2,9 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 
 
 class GermanSTSBenchmarkSTS(AbsTaskSTS):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

@@ -2,9 +2,9 @@ from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class BigPatentClustering(AbsTaskClustering):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

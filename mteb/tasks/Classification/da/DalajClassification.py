@@ -2,28 +2,39 @@
 import datasets
 
 from mteb.abstasks import AbsTaskClassification
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class DalajClassification(AbsTaskClassification):
-    metadata = 
+    metadata = TaskMetadata(
+        name="DalajClassification",
+        hf_hub_name="AI-Sweden/SuperLim",
+        description="A Swedish dataset for linguistic acceptability. Available as a part of Superlim.",
+        reference="https://spraakbanken.gu.se/en/resources/superlim",
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["da"],
+        main_score="accuracy",
+        revision="7ebf0b4caa7b2ae39698a889de782c09e6f5ee56",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license="",
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
-        return {
-            "name": "DalajClassification",
-            "hf_hub_name": "AI-Sweden/SuperLim",
-            "description": "A Swedish dataset for linguistic acceptability. Available as a part of Superlim.",
-            "reference": "https://spraakbanken.gu.se/en/resources/superlim",
-            "type": "Classification",
-            "category": "s2s",
-            "eval_splits": ["test"],
-            "eval_langs": ["sv"],
-            "main_score": "accuracy",
-            "n_experiments": 10,
-            "samples_per_label": 16,
-            "revision": "7ebf0b4caa7b2ae39698a889de782c09e6f5ee56",
-        }
+        metadata_dict = dict(self.metadata)
+        metadata_dict["n_experiments"] = 10
+        metadata_dict["samples_per_label"] = 16
+        return metadata_dict
 
     def load_data(self, **kwargs):
         """

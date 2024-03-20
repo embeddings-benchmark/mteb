@@ -6,9 +6,9 @@ _EVAL_SPLIT = "test"
 
 
 class STSES(AbsTaskSTS):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

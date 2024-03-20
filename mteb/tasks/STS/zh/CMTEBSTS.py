@@ -2,9 +2,9 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 
 
 class ATEC(AbsTaskSTS):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -22,9 +22,9 @@ class ATEC(AbsTaskSTS):
 
 
 class BQ(AbsTaskSTS):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -42,9 +42,9 @@ class BQ(AbsTaskSTS):
 
 
 class LCQMC(AbsTaskSTS):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -62,9 +62,9 @@ class LCQMC(AbsTaskSTS):
 
 
 class PAWSX(AbsTaskSTS):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -82,9 +82,9 @@ class PAWSX(AbsTaskSTS):
 
 
 class STSB(AbsTaskSTS):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -102,9 +102,9 @@ class STSB(AbsTaskSTS):
 
 
 class AFQMC(AbsTaskSTS):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -122,9 +122,9 @@ class AFQMC(AbsTaskSTS):
 
 
 class QBQTC(AbsTaskSTS):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

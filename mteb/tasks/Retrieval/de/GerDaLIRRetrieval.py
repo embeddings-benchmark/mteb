@@ -6,9 +6,9 @@ from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class GerDaLIR(AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
 
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

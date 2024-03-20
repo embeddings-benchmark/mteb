@@ -2,9 +2,9 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 
 
 class SickrSTS(AbsTaskSTS):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

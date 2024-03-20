@@ -5,7 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class BornholmBitextMining(AbsTaskBitextMining):
-    metadata = TaskMetadata(
+    metadata = TaskMetadata()TaskMetadata(
         name="BornholmBitextMining",
         hf_hub_name="strombergnlp/bornholmsk_parallel",
         description="Danish Bornholmsk Parallel Corpus. Bornholmsk is a Danish dialect spoken on the island of Bornholm, Denmark. Historically it is a part of east Danish which was also spoken in Scania and Halland, Sweden.",
@@ -28,7 +28,7 @@ class BornholmBitextMining(AbsTaskBitextMining):
         bibtex_citation=None,
     )
 
-    @property
+        @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return

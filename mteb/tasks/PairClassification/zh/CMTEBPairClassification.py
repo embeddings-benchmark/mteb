@@ -2,9 +2,9 @@ from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class Ocnli(AbsTaskPairClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {
@@ -22,9 +22,9 @@ class Ocnli(AbsTaskPairClassification):
 
 
 class Cmnli(AbsTaskPairClassification):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

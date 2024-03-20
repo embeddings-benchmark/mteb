@@ -24,9 +24,9 @@ _LANGUAGES = [
 
 
 class MasakhaNEWSClusteringP2P(AbsTaskClustering, MultilingualTask):
-    metadata = 
+    metadata = TaskMetadata()
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
         return {

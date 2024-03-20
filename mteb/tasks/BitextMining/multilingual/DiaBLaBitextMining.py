@@ -1,30 +1,37 @@
 import datasets
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks import AbsTaskBitextMining, CrosslingualTask
 
 
 class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
-    metadata = 
+    metadata = TaskMetadata(
+        name="DiaBlaBitextMining",
+        hf_hub_name="rbawden/DiaBLa",
+        description="English-French Parallel Corpus. DiaBLa is an English-French dataset for the evaluation of Machine Translation (MT) for informal, written bilingual dialogue.",
+        reference="https://inria.hal.science/hal-03021633",
+        type="BitextMining",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["fr-en", "en-fr"],
+        main_score="f1",
+        revision="5345895c56a601afe1a98519ce3199be60a27dba",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license="",
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
-@property
+    @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "DiaBLaBitextMining",
-            "hf_hub_name": "rbawden/DiaBLa",
-            "description": (
-                "English-French Parallel Corpus. "
-                + "DiaBLa is an English-French dataset for the evaluation of Machine Translation (MT) for informal,"
-                " written bilingual dialogue."
-            ),
-            "reference": "https://inria.hal.science/hal-03021633",
-            "type": "BitextMining",
-            "category": "s2s",
-            "eval_splits": ["test"],
-            "eval_langs": ["fr-en"],
-            "main_score": "f1",
-            "revision": "5345895c56a601afe1a98519ce3199be60a27dba",
-        }
 
     def load_data(self, **kwargs):
         """
