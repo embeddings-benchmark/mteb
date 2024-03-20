@@ -69,6 +69,7 @@ TASK_TYPE = Literal[
 
 TASK_CATEGORY = Literal[
     "s2s",  # Sentence-to-sentence
+    "s2p",  # Sentence-to-paragraph
     "p2p",  # Paragraph-to-paragraph
 ]
 
@@ -105,7 +106,7 @@ class TaskMetadata(BaseModel):
     form: list[Literal["spoken", "written"]] | None
     domains: list[TASK_DOMAIN] | None
     task_subtypes: list[TASK_SUBTYPE] | None
-    license: str
+    license: str | None
 
     socioeconomic_status: SOCIOECONOMIC_STATUS | None
     annotations_creators: ANNOTATOR_TYPE | None

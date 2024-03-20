@@ -38,7 +38,7 @@ class MasakhaNEWSClassification(AbsTaskClassification, MultilingualTask):
         form=None,
         domains=None,
         task_subtypes=None,
-        license="",
+        license=None,
         socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,

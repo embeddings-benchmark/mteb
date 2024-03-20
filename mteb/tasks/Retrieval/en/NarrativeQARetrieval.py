@@ -1,30 +1,43 @@
 import datasets
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class NarrativeQARetrieval(AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
 
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="NarrativeQARetrieval",
+        hf_hub_name="narrativeqa",
+        reference="https://metatext.io/datasets/narrativeqa",
+        description=(
+            "NarrativeQA is a dataset for the task of question answering on long narratives. It consists of "
+            "realistic QA instances collected from literature (fiction and non-fiction) and movie scripts. "
+        ),
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["test"],
+        eval_langs=["en"],
+        main_score="ndcg_at_10",
+        revision="2e643e7363944af1c33a652d1c87320d0871c4e4",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "NarrativeQARetrieval",
-            "hf_hub_name": "narrativeqa",
-            "reference": "https://metatext.io/datasets/narrativeqa",
-            "description": (
-                "NarrativeQA is a dataset for the task of question answering on long narratives. It consists of "
-                "realistic QA instances collected from literature (fiction and non-fiction) and movie scripts. "
-            ),
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": ["test"],
-            "eval_langs": ["en"],
-            "main_score": "ndcg_at_10",
-        }
+        return {}
 
     def load_data(self, **kwargs):
         if self.data_loaded:

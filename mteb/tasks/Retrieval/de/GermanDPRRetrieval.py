@@ -1,5 +1,7 @@
 import datasets
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
@@ -7,24 +9,32 @@ class GermanDPR(AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
     _LANGUAGE = "de"
 
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="GermanDPR",
+        description="GermanDPR is a German Question Answering dataset for open-domain QA. It associates questions with a textual context containing the answer",
+        reference="https://www.deepset.ai/germanquad",
+        hf_hub_name="deepset/germanquad",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["test"],
+        eval_langs=["de"],
+        main_score="ndcg_at_10",
+        revision="5129d02422a66be600ac89cd3e8531b4f97d347d",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "GermanDPR",
-            "hf_hub_name": "deepset/germandpr",
-            "description": "GermanDPR is a German Question Answering dataset for open-domain QA. It associates "
-            "questions with a textual context containing the answer",
-            "reference": "https://www.deepset.ai/germanquad",
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": [self._EVAL_SPLIT],
-            "eval_langs": [self._LANGUAGE],
-            "main_score": "ndcg_at_10",
-            "revision": "5129d02422a66be600ac89cd3e8531b4f97d347d",
-        }
 
     @staticmethod
     def _format_documents(docs, id_prefix="", existing_docs=None):

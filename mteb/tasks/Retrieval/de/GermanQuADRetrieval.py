@@ -2,6 +2,8 @@ from collections import defaultdict
 
 from datasets import DatasetDict, load_dataset
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
@@ -24,23 +26,32 @@ def load_retrieval_data(hf_hub_name, eval_splits):
 
 
 class GermanQuADRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="GermanQuAD-Retrieval",
+        description="Context Retrieval for German Question Answering",
+        reference="https://www.kaggle.com/datasets/GermanQuAD",
+        hf_hub_name="mteb/germanquad",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["test"],
+        eval_langs=["de"],
+        main_score="mrr_at_5",
+        revision="f5c87ae5a2e7a5106606314eef45255f03151bb3",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "GermanQuAD-Retrieval",
-            "hf_hub_name": "mteb/germanquad-retrieval",
-            "description": "Context Retrieval for German Question Answering",
-            "reference": "https://www.deepset.ai/germanquad",
-            "type": "Retrieval",
-            "category": "p2p",
-            "eval_splits": ["test"],
-            "eval_langs": ["de"],
-            "main_score": "mrr_at_10",
-            "revision": "f5c87ae5a2e7a5106606314eef45255f03151bb3",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:

@@ -19,7 +19,7 @@ class BornholmBitextMining(AbsTaskBitextMining):
         date=None,
         form=None,
         domains=None,
-        license="",
+        license=None,
         task_subtypes=None,
         socioeconomic_status=None,
         annotations_creators=None,

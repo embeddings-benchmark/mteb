@@ -6,25 +6,32 @@ from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class GerDaLIR(AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
 
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="GerDaLIR",
+        description="GerDaLIR is a legal information retrieval dataset created from the Open Legal Data platform.",
+        reference="https://github.com/lavis-nlp/GerDaLIR",
+        hf_hub_name="jinaai/ger_da_lir",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["test"],
+        eval_langs=["de"],
+        main_score="ndcg_at_10",
+        revision="0bb47f1d73827e96964edb84dfe552f62f4fd5eb",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "GerDaLIR",
-            "hf_hub_name": "jinaai/ger_da_lir",
-            "description": (
-                "GerDaLIR is a legal information retrieval dataset created from the Open Legal Data platform."
-            ),
-            "reference": "https://github.com/lavis-nlp/GerDaLIR",
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": ["test"],
-            "eval_langs": ["de"],
-            "main_score": "ndcg_at_10",
-            "revision": "0bb47f1d73827e96964edb84dfe552f62f4fd5eb",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:
