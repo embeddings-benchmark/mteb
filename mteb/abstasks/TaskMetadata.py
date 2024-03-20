@@ -10,7 +10,7 @@ from pydantic import (
     TypeAdapter,
 )
 
-TASK_SUBTYPES = Literal[
+TASK_SUBTYPE = Literal[
     "Article retrieval",
     "Dialect pairing",
     "Dialog Systems",
@@ -23,7 +23,7 @@ TASK_SUBTYPES = Literal[
     "Thematic clustering",
 ]
 
-TASK_DOMAINS = Literal[
+TASK_DOMAIN = Literal[
     "Academic",
     "Blog",
     "Encyclopaedic",
@@ -56,6 +56,22 @@ SOCIOECONOMIC_STATUS = Literal[
     "low",
 ]
 
+TASK_TYPE = Literal[
+    "BitextMining",
+    "Classification",
+    "Clustering",
+    "PairClassification",
+    "Reranking",
+    "Retrieval",
+    "STS",
+    "Summarization",
+]
+
+TASK_CATEGORY = Literal[
+    "s2s",
+    "p2p",
+]
+
 ANNOTATOR_TYPE = Literal["expert-annotated", "human-annotated", "derived"]
 
 http_url_adapter = TypeAdapter(AnyUrl)
@@ -77,8 +93,8 @@ class TaskMetadata(BaseModel):
 
     name: str
     description: str
-    type: str  # No equivalent in mmteb
-    category: str  # No equivalent in mmteb
+    type: TASK_TYPE
+    category: TASK_CATEGORY
     reference: STR_URL  # URL to documentation, e.g. published paper
 
     eval_splits: list[str]
@@ -87,8 +103,8 @@ class TaskMetadata(BaseModel):
 
     date: tuple[STR_DATE, STR_DATE] | None  # When the data was collected
     form: list[Literal["spoken", "written"]] | None
-    domains: list[TASK_DOMAINS] | None
-    task_subtypes: list[TASK_SUBTYPES] | None
+    domains: list[TASK_DOMAIN] | None
+    task_subtypes: list[TASK_SUBTYPE] | None
     license: str
 
     socioeconomic_status: SOCIOECONOMIC_STATUS | None
