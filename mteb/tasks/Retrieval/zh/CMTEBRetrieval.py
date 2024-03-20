@@ -66,7 +66,7 @@ class MMarcoRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MMarcoRetrieval",
         description="MMarcoRetrieval",
-        reference="",
+        reference="https://arxiv.org/abs/2309.07597",
         hf_hub_name="C-MTEB/MMarcoRetrieval",
         type="Retrieval",
         category="s2p",
@@ -139,23 +139,32 @@ class DuRetrieval(AbsTaskRetrieval):
 
 
 class CovidRetrieval(AbsTaskRetrieval):
-    metadata = TaskMetadata()
+    metadata = TaskMetadata(
+        name="CovidRetrieval",
+        description="COVID-19 news articles",
+        reference="https://arxiv.org/abs/2203.03367",
+        hf_hub_name="C-MTEB/CovidRetrieval",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["test"],
+        eval_langs=["zh"],
+        main_score="ndcg_at_10",
+        revision="687de13dc7294d6fd9be10c6945f9e8fec8166b9",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         return dict(self.metadata)
-        return {
-            "name": "CovidRetrieval",
-            "hf_hub_name": "C-MTEB/CovidRetrieval",
-            "reference": "https://aclanthology.org/2022.emnlp-main.357.pdf",
-            "description": "COVID-19 news articles",
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": ["dev"],
-            "eval_langs": ["zh"],
-            "main_score": "ndcg_at_10",
-            "revision": "1271c7809071a13532e05f25fb53511ffce77117",
-        }
 
     def load_data(self, **kwargs):
         if self.data_loaded:

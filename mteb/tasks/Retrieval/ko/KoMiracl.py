@@ -7,7 +7,7 @@ class KoMiracl(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Ko-miracl",
         description="Ko-miracl",
-        reference="",
+        reference=None,
         hf_hub_name="taeminlee/Ko-miracl",
         type="Retrieval",
         category="s2p",

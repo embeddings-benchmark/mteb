@@ -51,7 +51,7 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultiLongDocRetrieval",
         description="MultiLongDocRetrieval",
-        reference="",
+        reference="https://arxiv.org/abs/2402.03216",
         hf_hub_name="Shitao/MLDR",
         type="Retrieval",
         category="s2p",
@@ -68,7 +68,15 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@misc{bge-m3,
+      title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation}, 
+      author={Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
+      year={2024},
+      eprint={2402.03216},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+""",
     )
 
     @property

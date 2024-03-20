@@ -61,7 +61,7 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MIRACLRetrieval",
         description="MIRACLRetrieval",
-        reference="",
+        reference=None,
         hf_hub_name="jinaai/miracl",
         type="Retrieval",
         category="s2p",

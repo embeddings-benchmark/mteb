@@ -96,7 +96,7 @@ class TaskMetadata(BaseModel):
     description: str
     type: TASK_TYPE
     category: TASK_CATEGORY
-    reference: STR_URL  # URL to documentation, e.g. published paper
+    reference: STR_URL | None  # URL to documentation, e.g. published paper
 
     eval_splits: list[str]
     eval_langs: list[str]  # Might want to have a literal of langs when #251 is resolved

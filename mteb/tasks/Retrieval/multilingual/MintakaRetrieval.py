@@ -51,7 +51,7 @@ class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MintakaRetrieval",
         description="MintakaRetrieval",
-        reference="",
+        reference=None,
         hf_hub_name="jinaai/mintakaqa",
         type="Retrieval",
         category="s2p",

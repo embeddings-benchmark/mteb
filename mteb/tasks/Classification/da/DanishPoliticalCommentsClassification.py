@@ -9,7 +9,7 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
         name="DanishPoliticalCommentsClassification",
         hf_hub_name="danish_political_comments",
         description="A dataset of Danish political comments rated for sentiment",
-        reference="NA",
+        reference="https://huggingface.co/datasets/danish_political_comments",
         type="Classification",
         category="s2s",
         eval_splits=["train"],

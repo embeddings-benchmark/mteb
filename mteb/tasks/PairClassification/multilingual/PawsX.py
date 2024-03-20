@@ -11,7 +11,7 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
         name="PawsX",
         hf_hub_name="paws-x",
         description="",
-        reference="",
+        reference="https://arxiv.org/abs/1908.11828",
         category="s2s",
         type="PairClassification",
         eval_splits=["test.full", "validation.full"],

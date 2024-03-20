@@ -1,6 +1,7 @@
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class GerDaLIR(AbsTaskRetrieval):

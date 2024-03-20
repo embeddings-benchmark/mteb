@@ -7,7 +7,7 @@ class AmazonPolarityClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AmazonPolarityClassification",
         description="Amazon Polarity Classification Dataset.",
-        reference="",
+        reference="https://huggingface.co/datasets/amazon_polarity",
         hf_hub_name="mteb/amazon_polarity",
         type="Classification",
         category="s2s",

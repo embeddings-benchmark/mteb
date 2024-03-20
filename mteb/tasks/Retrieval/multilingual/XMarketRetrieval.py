@@ -58,7 +58,7 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="XMarket",
         description="XMarket",
-        reference="",
+        reference=None,
         hf_hub_name="jinaai/xmarket_ml",
         type="Retrieval",
         category="s2p",

@@ -7,7 +7,7 @@ class KoMrtydi(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Ko-mrtydi",
         description="Ko-mrtydi",
-        reference="",
+        reference=None,
         hf_hub_name="taeminlee/Ko-mrtydi",
         type="Retrieval",
         category="s2p",

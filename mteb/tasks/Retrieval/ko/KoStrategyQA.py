@@ -7,7 +7,7 @@ class KoStrategyQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Ko-StrategyQA",
         description="Ko-StrategyQA",
-        reference="",
+        reference=None,
         hf_hub_name="taeminlee/Ko-StrategyQA",
         type="Retrieval",
         category="s2p",
