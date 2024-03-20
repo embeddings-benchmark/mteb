@@ -15,7 +15,7 @@ class SyntecRetrieval(AbsTaskRetrieval):
         hf_hub_name="lyon-nlp/mteb-fr-retrieval-syntec-s2p",
         type="Retrieval",
         category="s2p",
-        eval_splits=self._EVAL_SPLITS,
+        eval_splits=_EVAL_SPLITS,
         eval_langs=["fr"],
         main_score="map",
         revision="b205c5084a0934ce8af14338bf03feb19499c84d",

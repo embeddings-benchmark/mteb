@@ -13,7 +13,7 @@ class GerDaLIR(AbsTaskRetrieval):
         hf_hub_name="jinaai/ger_da_lir",
         type="Retrieval",
         category="s2p",
-        eval_splits=["test"],
+        eval_splits=[_EVAL_SPLIT],
         eval_langs=["de"],
         main_score="ndcg_at_10",
         revision="0bb47f1d73827e96964edb84dfe552f62f4fd5eb",

@@ -15,7 +15,7 @@ class STSES(AbsTaskSTS):
         reference="https://huggingface.co/datasets/PlanTL-GOB-ES/sts-es",
         type="STS",
         category="s2s",
-        eval_splits=["test"],
+        eval_splits=[_EVAL_SPLIT],
         eval_langs=["es"],
         main_score="cosine_spearman",
         revision="0912bb6c9393c76d62a7c5ee81c4c817ff47c9f4",

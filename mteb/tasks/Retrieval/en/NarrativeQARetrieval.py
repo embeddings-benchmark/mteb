@@ -18,7 +18,7 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
         ),
         type="Retrieval",
         category="s2p",
-        eval_splits=["test"],
+        eval_splits=[_EVAL_SPLIT],
         eval_langs=["en"],
         main_score="ndcg_at_10",
         revision="2e643e7363944af1c33a652d1c87320d0871c4e4",
