@@ -1,22 +1,34 @@
+from __future__ import annotations
+
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class SCIDOCSPL(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="SCIDOCS-PL",
+        description="SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation.",
+        reference="https://allenai.org/data/scidocs",
+        hf_hub_name="clarin-knext/scidocs-pl",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["test"],
+        eval_langs=["pl"],
+        main_score="ndcg_at_10",
+        revision="45452b03f05560207ef19149545f168e596c9337",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
+
     @property
-    def description(self):
-        return {
-            "name": "SCIDOCS-PL",
-            "hf_hub_name": "clarin-knext/scidocs-pl",
-            "description": (
-                "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation"
-                " prediction, to document classification and recommendation."
-            ),
-            "reference": "https://allenai.org/data/scidocs",
-            "benchmark": "BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language",
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": ["test"],
-            "eval_langs": ["pl"],
-            "main_score": "ndcg_at_10",
-            "revision": "45452b03f05560207ef19149545f168e596c9337",
-        }
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 import numpy as np
@@ -8,13 +10,15 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
-logger = logging.getLogger(__name__)
-
 from .Evaluator import Evaluator
+
+logger = logging.getLogger(__name__)
 
 
 class STSEvaluator(Evaluator):
-    def __init__(self, sentences1, sentences2, gold_scores, batch_size=64, limit=None, **kwargs):
+    def __init__(
+        self, sentences1, sentences2, gold_scores, batch_size=64, limit=None, **kwargs
+    ):
         super().__init__(**kwargs)
         if limit is not None:
             sentences1 = sentences1[:limit]
@@ -27,9 +31,13 @@ class STSEvaluator(Evaluator):
 
     def __call__(self, model):
         logger.info(f"Encoding {len(self.sentences1)} sentences1...")
-        embeddings1 = np.asarray(model.encode(self.sentences1, batch_size=self.batch_size))
+        embeddings1 = np.asarray(
+            model.encode(self.sentences1, batch_size=self.batch_size)
+        )
         logger.info(f"Encoding {len(self.sentences2)} sentences2...")
-        embeddings2 = np.asarray(model.encode(self.sentences2, batch_size=self.batch_size))
+        embeddings2 = np.asarray(
+            model.encode(self.sentences2, batch_size=self.batch_size)
+        )
 
         logger.info("Evaluating...")
         cosine_scores = 1 - (paired_cosine_distances(embeddings1, embeddings2))

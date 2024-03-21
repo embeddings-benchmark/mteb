@@ -1,10 +1,82 @@
 [build-system]
-requires = ["pbr>=5.7.0", "setuptools>=36.6.0"]
-build-backend = "pbr.build"
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
 
-[tool.black]
-line-length = 119
-target-version = ['py35']
+[project]
+name = "mteb"
+version = "1.2.1.dev0"
+description = "Massive Text Embedding Benchmark"
+readme = "README.md"
+authors = [
+    { name = "MTEB Contributors", email = "niklas@huggingface.co" },
+    { email = "nouamane@huggingface.co" },
+    { email = "info@nils-reimers.de" },
+]
+license = { file = "LICENSE" }
+keywords = ["deep learning", "text embeddings", "benchmark"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "datasets>=2.2.0",
+    "jsonlines",
+    "numpy",
+    "requests>=2.26.0",
+    "scikit_learn>=1.0.2",
+    "scipy",
+    "sentence_transformers>=2.2.0",
+    "torch",
+    "tqdm",
+    "rich",
+    "pytrec_eval",
+    "pydantic",
+    "typing_extensions",
+    "eval_type_backport",
+]
 
-[tool.isort]
-profile = "black"
+
+[project.urls]
+homepage = "https://github.com/embeddings-benchmark/mteb"
+"Huggingface Organization" = "https://huggingface.co/mteb"
+"Source Code" = "https://github.com/embeddings-benchmark/mteb"
+
+[project.scripts]
+mteb = "mteb.cmd:main"
+
+[project.optional-dependencies]
+dev = ["ruff>=0.0.254", "pytest", "pytest-xdist"]
+
+
+[tool.setuptools.packages.find]
+exclude = ["tests", "results"]
+
+[tool.ruff]
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
+ignore = ["E203", "E501", "E741", "F403"]
+ignore-init-module-imports = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.flake8-annotations]
+mypy-init-return = true
+suppress-none-returning = true
+
+[tool.semantic_release]
+branch = "main"
+version_toml = ["pyproject.toml:project.version"]
+build_command = "python -m pip install build; python -m build"
+
+[tool.semantic_release.commit_parser_options]
+minor_types = ["feat"]
+patch_types = ["*", "fix", "perf"] # "*" mean always patch

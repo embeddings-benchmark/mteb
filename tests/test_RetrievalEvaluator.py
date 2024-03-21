@@ -1,8 +1,9 @@
-import pytest
+from __future__ import annotations
 
 from mteb.evaluation.evaluators import RetrievalEvaluator
 
 TOL = 0.0001
+
 
 class TestRetrievalEvaluator:
     def setup_method(self):
@@ -29,7 +30,7 @@ class TestRetrievalEvaluator:
             [1, 2, 3],
         )
 
-        assert ndcg == {'NDCG@1': 0.5, 'NDCG@2': 0.30657, 'NDCG@3': 0.30657}
-        assert _map == {'MAP@1': 0.25, 'MAP@2': 0.25, 'MAP@3': 0.25}
-        assert recall == {'Recall@1': 0.25, 'Recall@2': 0.25, 'Recall@3': 0.25}
-        assert precision == {'P@1': 0.5, 'P@2': 0.25, 'P@3': 0.16667}
+        assert ndcg == {"NDCG@1": 0.5, "NDCG@2": 0.30657, "NDCG@3": 0.30657}
+        assert _map == {"MAP@1": 0.25, "MAP@2": 0.25, "MAP@3": 0.25}
+        assert recall == {"Recall@1": 0.25, "Recall@2": 0.25, "Recall@3": 0.25}
+        assert precision == {"P@1": 0.5, "P@2": 0.25, "P@3": 0.16667}

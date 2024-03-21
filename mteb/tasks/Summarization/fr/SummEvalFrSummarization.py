@@ -1,20 +1,37 @@
+from __future__ import annotations
+
 from mteb.abstasks import AbsTaskSummarization
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class SummEvalFrSummarization(AbsTaskSummarization):
+    metadata = TaskMetadata(
+        name="SummEvalFr",
+        description="News Article Summary Semantic Similarity Estimation translated from english to french with DeepL.",
+        reference="https://github.com/Yale-LILY/SummEval",
+        hf_hub_name="lyon-nlp/summeval",
+        type="Summarization",
+        category="p2p",
+        eval_splits=["test"],
+        eval_langs=["fr"],
+        main_score="cosine_spearman",
+        revision="b385812de6a9577b6f4d0f88c6a6e35395a94054",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
+
     @property
-    def description(self):
-        return {
-            "name": "SummEvalFr",
-            "hf_hub_name": "lyon-nlp/summarization-summeval-fr-p2p",
-            "description": "News Article Summary Semantic Similarity Estimation translated from english to french with DeepL.",
-            "reference": "https://github.com/Yale-LILY/SummEval",
-            "type": "Summarization",
-            "category": "p2p",
-            "eval_splits": ["test"],
-            "eval_langs": ["fr"],
-            "main_score": "cosine_spearman",
-            "min_score": 0,
-            "max_score": 5,
-            "revision": "b385812de6a9577b6f4d0f88c6a6e35395a94054",
-        }
+    def metadata_dict(self) -> dict[str, str]:
+        metadata_dict = dict(self.metadata)
+        metadata_dict["min_score"] = 0
+        metadata_dict["max_score"] = 5
+
+        return metadata_dict

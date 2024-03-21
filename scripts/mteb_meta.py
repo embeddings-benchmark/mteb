@@ -1,7 +1,7 @@
 """
 Usage: python mteb_meta.py path_to_results_folder
 
-Creates evaluation results metadata for the model card. 
+Creates evaluation results metadata for the model card.
 E.g.
 ---
 tags:
@@ -22,6 +22,8 @@ model-index:
       value: 84.49350649350649
 ---
 """
+
+from __future__ import annotations
 
 import json
 import logging
@@ -50,9 +52,29 @@ for file_name in os.listdir(results_folder):
 # Use "train" split instead
 TRAIN_SPLIT = ["DanishPoliticalCommentsClassification"]
 # Use "validation" split instead
-VALIDATION_SPLIT = ["AFQMC", "Cmnli", "IFlyTek", "TNews", "MSMARCO", "MultilingualSentiment", "Ocnli"]
+VALIDATION_SPLIT = [
+    "AFQMC",
+    "Cmnli",
+    "IFlyTek",
+    "TNews",
+    "MSMARCO",
+    "MultilingualSentiment",
+    "Ocnli",
+]
 # Use "dev" split instead
-DEV_SPLIT = ["CmedqaRetrieval", "CovidRetrieval", "DuRetrieval", "EcomRetrieval", "MedicalRetrieval", "MMarcoReranking", "MMarcoRetrieval", "MSMARCO", "T2Reranking", "T2Retrieval", "VideoRetrieval"]
+DEV_SPLIT = [
+    "CmedqaRetrieval",
+    "CovidRetrieval",
+    "DuRetrieval",
+    "EcomRetrieval",
+    "MedicalRetrieval",
+    "MMarcoReranking",
+    "MMarcoRetrieval",
+    "MSMARCO",
+    "T2Reranking",
+    "T2Retrieval",
+    "VideoRetrieval",
+]
 
 MARKER = "---"
 TAGS = "tags:"
@@ -70,11 +92,19 @@ SKIP_KEYS = ["std", "evaluation_time", "main_score", "threshold"]
 
 for ds_name, res_dict in sorted(all_results.items()):
     mteb_desc = (
-        MTEB(tasks=[ds_name.replace("CQADupstackRetrieval", "CQADupstackAndroidRetrieval")]).tasks[0].description
+        MTEB(
+            tasks=[
+                ds_name.replace("CQADupstackRetrieval", "CQADupstackAndroidRetrieval")
+            ]
+        )
+        .tasks[0]
+        .metadata_dict
     )
     hf_hub_name = mteb_desc.get("hf_hub_name", mteb_desc.get("beir_name"))
     if "beir_name" in mteb_desc:
-        logger.warning(f"`beir_name` is deprecated and will be removed in the future. New result files contain `hf_hub_name` instead.")
+        logger.warning(
+            "`beir_name` is deprecated and will be removed in the future. New result files contain `hf_hub_name` instead."
+        )
     if ds_name == "CQADupstackRetrieval" in ds_name:
         hf_hub_name = "mteb/cqadupstack"
     mteb_type = mteb_desc["type"]

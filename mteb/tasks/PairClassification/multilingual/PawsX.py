@@ -1,24 +1,40 @@
+from __future__ import annotations
+
 import datasets
+
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class PawsX(MultilingualTask, AbsTaskPairClassification):
+    metadata = TaskMetadata(
+        name="PawsX",
+        hf_hub_name="paws-x",
+        description="",
+        reference="https://arxiv.org/abs/1908.11828",
+        category="s2s",
+        type="PairClassification",
+        eval_splits=["test.full", "validation.full"],
+        eval_langs=["de", "en", "es", "fr", "ja", "ko", "zh"],
+        main_score="ap",
+        revision="8a04d940a42cd40658986fdd8e3da561533a3646",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
+
     @property
-    def description(self):
-        return {
-            "name": "PawsX",
-            "hf_hub_name": "paws-x",
-            "description": "",
-            "reference": "",
-            "category": "s2s",
-            "type": "PairClassification",
-            "eval_splits": ["test"],
-            "eval_langs": ["de", "en", "es", "fr", "ja", "ko", "zh"],
-            "main_score": "ap",
-            "revision": "8a04d940a42cd40658986fdd8e3da561533a3646",
-        }
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -27,9 +43,9 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
         self.dataset = dict()
         for lang in self.langs:
             hf_dataset = datasets.load_dataset(
-                self.description["hf_hub_name"],
+                self.metadata_dict["hf_hub_name"],
                 lang,
-                revision=self.description.get("revision", None),
+                revision=self.metadata_dict.get("revision", None),
             )
 
             sent1 = []

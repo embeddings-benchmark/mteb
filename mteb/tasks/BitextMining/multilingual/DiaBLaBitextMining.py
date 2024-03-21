@@ -1,28 +1,39 @@
-import json
+from __future__ import annotations
+
 import datasets
+
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskBitextMining, CrosslingualTask
 
 
 class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
+    metadata = TaskMetadata(
+        name="DiaBlaBitextMining",
+        hf_hub_name="rbawden/DiaBLa",
+        description="English-French Parallel Corpus. DiaBLa is an English-French dataset for the evaluation of Machine Translation (MT) for informal, written bilingual dialogue.",
+        reference="https://inria.hal.science/hal-03021633",
+        type="BitextMining",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["fr-en", "en-fr"],
+        main_score="f1",
+        revision="5345895c56a601afe1a98519ce3199be60a27dba",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
+
     @property
-    def description(self):
-        return {
-            "name": "DiaBLaBitextMining",
-            "hf_hub_name": "rbawden/DiaBLa",
-            "description": (
-                "English-French Parallel Corpus. "
-                + "DiaBLa is an English-French dataset for the evaluation of Machine Translation (MT) for informal,"
-                " written bilingual dialogue."
-            ),
-            "reference": "https://inria.hal.science/hal-03021633",
-            "type": "BitextMining",
-            "category": "s2s",
-            "eval_splits": ["test"],
-            "eval_langs": ["fr-en"],
-            "main_score": "f1",
-            "revision": "5345895c56a601afe1a98519ce3199be60a27dba",
-        }
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         """
@@ -30,12 +41,12 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
         """
         if self.data_loaded:
             return
-        
+
         self.dataset = {}
         for lang in self.langs:
             self.dataset[lang] = datasets.load_dataset(
-                self.description["hf_hub_name"],
-                revision=self.description.get("revision", None),
+                self.metadata_dict["hf_hub_name"],
+                revision=self.metadata_dict.get("revision", None),
             )
 
         self.dataset_transform()
@@ -45,8 +56,12 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
         def create_columns(row):
             """Put all French texts in column 'sentence1' and English texts in 'sentence2' column"""
             row["orig_lang"] = row["utterance_meta"]["lang"]
-            row["sentence1"] = row["orig"] if row["orig_lang"] == "french" else row["ref"]
-            row["sentence2"] = row["orig"] if not row["orig_lang"] == "french" else row["ref"]
+            row["sentence1"] = (
+                row["orig"] if row["orig_lang"] == "french" else row["ref"]
+            )
+            row["sentence2"] = (
+                row["orig"] if not row["orig_lang"] == "french" else row["ref"]
+            )
             return row
 
         # Convert to standard format

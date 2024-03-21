@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import gzip
 import os
 import random
@@ -37,7 +39,9 @@ for _ in range(NUM_SETS):
 
     # Weigh by counts to reduce noise from random poorly defined subreddits
     # For 10 labels, ~85K samples; For 100 labels ~850K
-    labels = random.choices(list(unique_to_count.keys()), weights=unique_to_count.values(), k=num_labels)
+    labels = random.choices(
+        list(unique_to_count.keys()), weights=unique_to_count.values(), k=num_labels
+    )
     sub_ds = ds.filter(lambda x: x["subreddit"] in labels).shuffle()
     if len(sub_ds) < MIN_SAMPLES:
         continue

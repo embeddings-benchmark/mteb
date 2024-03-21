@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 import numpy as np
@@ -49,7 +51,9 @@ class RerankingEvaluator(Evaluator):
 
         ### Remove sample with empty positive / negative set
         self.samples = [
-            sample for sample in self.samples if len(sample["positive"]) > 0 and len(sample["negative"]) > 0
+            sample
+            for sample in self.samples
+            if len(sample["positive"]) > 0 and len(sample["negative"]) > 0
         ]
 
     def __call__(self, model):
@@ -73,21 +77,33 @@ class RerankingEvaluator(Evaluator):
 
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
-        encode_queries_func = model.encode_queries if hasattr(model, 'encode_queries') else model.encode
-        encode_corpus_func = model.encode_corpus if hasattr(model, 'encode_corpus') else model.encode
+        encode_queries_func = (
+            model.encode_queries if hasattr(model, "encode_queries") else model.encode
+        )
+        encode_corpus_func = (
+            model.encode_corpus if hasattr(model, "encode_corpus") else model.encode
+        )
 
         logger.info("Encoding queries...")
         if isinstance(self.samples[0]["query"], str):
-            all_query_embs = np.asarray(encode_queries_func(
-                [sample["query"] for sample in self.samples],
-                batch_size=self.batch_size,
-            ))
+            all_query_embs = np.asarray(
+                encode_queries_func(
+                    [sample["query"] for sample in self.samples],
+                    batch_size=self.batch_size,
+                )
+            )
         elif isinstance(self.samples[0]["query"], list):
             # In case the query is a list of strings, we get the most similar embedding to any of the queries
-            all_query_flattened = [q for sample in self.samples for q in sample["query"]]
-            all_query_embs = np.asarray(encode_queries_func(all_query_flattened, batch_size=self.batch_size))
+            all_query_flattened = [
+                q for sample in self.samples for q in sample["query"]
+            ]
+            all_query_embs = np.asarray(
+                encode_queries_func(all_query_flattened, batch_size=self.batch_size)
+            )
         else:
-            raise ValueError(f"Query must be a string or a list of strings but is {type(self.samples[0]['query'])}")
+            raise ValueError(
+                f"Query must be a string or a list of strings but is {type(self.samples[0]['query'])}"
+            )
 
         logger.info("Encoding candidates...")
         all_docs = []
@@ -95,13 +111,17 @@ class RerankingEvaluator(Evaluator):
             all_docs.extend(sample["positive"])
             all_docs.extend(sample["negative"])
 
-        all_docs_embs = np.asarray(encode_corpus_func(all_docs, batch_size=self.batch_size))
+        all_docs_embs = np.asarray(
+            encode_corpus_func(all_docs, batch_size=self.batch_size)
+        )
 
         # Compute scores
         logger.info("Evaluating...")
         query_idx, docs_idx = 0, 0
         for instance in self.samples:
-            num_subqueries = len(instance["query"]) if isinstance(instance["query"], list) else 1
+            num_subqueries = (
+                len(instance["query"]) if isinstance(instance["query"], list) else 1
+            )
             query_emb = all_query_embs[query_idx : query_idx + num_subqueries]
             query_idx += num_subqueries
 
@@ -136,9 +156,13 @@ class RerankingEvaluator(Evaluator):
 
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
-        encode_queries_func = model.encode_queries if hasattr(model, 'encode_queries') else model.encode
-        encode_corpus_func = model.encode_corpus if hasattr(model, 'encode_corpus') else model.encode
-        
+        encode_queries_func = (
+            model.encode_queries if hasattr(model, "encode_queries") else model.encode
+        )
+        encode_corpus_func = (
+            model.encode_corpus if hasattr(model, "encode_corpus") else model.encode
+        )
+
         for instance in tqdm.tqdm(self.samples, desc="Samples"):
             query = instance["query"]
             positive = list(instance["positive"])
@@ -153,7 +177,9 @@ class RerankingEvaluator(Evaluator):
             if isinstance(query, str):
                 # .encoding interface requires List[str] as input
                 query = [query]
-            query_emb = np.asarray(encode_queries_func(query, batch_size=self.batch_size))
+            query_emb = np.asarray(
+                encode_queries_func(query, batch_size=self.batch_size)
+            )
             docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
 
             scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 from collections import defaultdict
 
@@ -13,7 +15,7 @@ class AbsTaskPairClassification(AbsTask):
     The similarity is computed between pairs and the results are ranked. Average precision
     is computed to measure how well the methods can be used for pairwise pair classification.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.description["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
         sent1: list[str]
         sent2: list[str]
         labels: list[int]
@@ -53,7 +55,7 @@ class AbsTaskPairClassification(AbsTask):
             print("loaded langs:", self.dataset.keys())
             for lang, monolingual_dataset in self.dataset.items():
                 logger.info(
-                    f"\nTask: {self.description['name']}, split: {split}, language: {lang}. Running..."
+                    f"\nTask: {self.metadata_dict['name']}, split: {split}, language: {lang}. Running..."
                 )
                 scores[lang] = self._evaluate_monolingual(
                     model, monolingual_dataset, split=split, **kwargs
@@ -61,7 +63,7 @@ class AbsTaskPairClassification(AbsTask):
             return scores
         else:
             logger.info(
-                f"\nTask: {self.description['name']}, split: {split}. Running..."
+                f"\nTask: {self.metadata_dict['name']}, split: {split}. Running..."
             )
             return self._evaluate_monolingual(
                 model, self.dataset, split=split, **kwargs

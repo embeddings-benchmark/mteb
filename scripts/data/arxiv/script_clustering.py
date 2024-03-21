@@ -1,13 +1,13 @@
+from __future__ import annotations
+
 import gzip
 import os
 from collections import Counter
 
 import datasets
+import jsonlines
 import numpy as np
 from tqdm import tqdm
-
-import jsonlines
-
 
 np.random.seed(28042000)
 
