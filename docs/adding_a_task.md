@@ -13,15 +13,17 @@ If you have any questions regarding this process feel free to open a discussion 
 
 ## 1) Creating a new subclass
 
+### A Simple Example
+
 To add a new task, you need to implement a new class that inherits from the `AbsTask` associated with the task type (e.g. `AbsTaskReranking` for reranking tasks). You can find the supported task types in [here](https://github.com/embeddings-benchmark/mteb-draft/tree/main/mteb/abstasks).
 
 ```python
 from mteb import MTEB
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from sentence_transformers import SentenceTransformer
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
-
-class MindSmallReranking(AbsTaskReranking):
+class SciDocsReranking(AbsTaskReranking):
     metadata = TaskMetadata(
         name="SciDocsRR",
         description="Ranking of related scientific papers based on their title.",
@@ -33,17 +35,17 @@ class MindSmallReranking(AbsTaskReranking):
         eval_langs=["en"],
         main_score="map",
         revision="d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
-        date="2020",
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
+        date=None,
+        form="written",
+        domains=["Academic", "Non-fiction"],
+        task_subtypes=["Scientific Reranking"],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
-    )
+        text_creation="found",
+        bibtex_citation= ... # removed for brevity
+)
 
 # testing the task with a model:
 model = SentenceTransformer("average_word_embeddings_komninos")
@@ -54,29 +56,35 @@ evaluation.run(model)
 > **Note:** for multilingual tasks, make sure your class also inherits from the `MultilingualTask` class like in [this](https://github.com/embeddings-benchmark/mteb-draft/blob/main/mteb/tasks/Classification/MTOPIntentClassification.py) example.  
 > For cross-lingual tasks, make sure your class also inherits from the `CrosslingualTask` class like in [this](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/tasks/BitextMining/TatoebaBitextMining.py).
 
+
+
+### A Detailed Example
 Often the dataset from HuggingFace is not in the format expected by MTEB. To resolve this you can add a `dataset_transform` method to your dataset to ensure it is in the right format. Here is an example along with some design considerations: 
-
-
-<details closed>
-<summary>An additional example</summary>
-<br>
 
 ```python
 class VGClustering(AbsTaskClustering):
-    @property
-    def description(self) -> dict[str, Any]:
-        return {
-            "name": "VGClustering",
-            "hf_hub_name": "navjordj/VG_summarization",
-            "description": "Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.",
-            "reference": "https://huggingface.co/datasets/navjordj/VG_summarization",
-            "type": "Clustering",
-            "category": "p2p",
-            "eval_splits": ["test"],
-            "eval_langs": ["nb"],
-            "main_score": "v_measure",
-            "revision": "d4c5a8ba10ae71224752c727094ac4c46947fa29",
-        }
+    metadata = TaskMetadata(
+        name="VGClustering",
+        description="Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.",
+        reference="https://huggingface.co/datasets/navjordj/VG_summarization",
+        hf_hub_name="navjordj/VG_summarization",
+        type="Clustering",
+        category="p2p",
+        eval_splits=["test"],
+        eval_langs=["nb"],
+        main_score="v_measure",
+        revision="d4c5a8ba10ae71224752c727094ac4c46947fa29",
+        date=("2012-01-01", "2020-01-01"),
+        form="written",
+        domains=["Academic", "Non-fiction"],
+        task_subtypes=["Scientific Reranking"],
+        license="cc-by-nc",
+        socioeconomic_status="high",
+        annotations_creators="derived",
+        dialect=None,
+        text_creation="found",
+        bibtex_citation= ... # removed for brevity
+)
 
     def load_data(self, **kwargs: dict):  # noqa: ARG002
         """
@@ -144,56 +152,11 @@ class VGClustering(AbsTaskClustering):
 </details>
 
 
-
 ## 2) Creating the metadata object
+Along with the task MMTEB requires metadata regarding the task. If the metadata isn't available please provide your best guess or leave the field as `None`.
 
-Along with the dataset MMTEB requires metadata regarding the dataset. If the metadata isn't available please provide your best guess or leave the field blank.
+To get an overview of the fields in the metadata object, you can look at the [TaskMetadata](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/abstasks/TaskMetadata.py) class.
 
-
-```python
-metadata = {
-    "date": "2012-01-01/2020-01-01", # str # date range following ISO 8601
-    "form": ["written"], # list[str]
-    "domains": ["non-fiction", "news"], # list[str]
-    "dialect": [], # list[str]
-    "task_subtypes": ["Thematic Clustering"], # list[str]
-    "license": "CC-BY-NC",
-    "socioeconomic_status": "high", # str
-    "annotations_creators": "derived", # str
-    "text_creation": "found", # str
-    "citation": """
-@mastersthesis{navjord2023beyond,
-  title={Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
-  author={Navjord, J{\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
-  year={2023},
-  school={Norwegian University of Life Sciences, {\AA}s}
-}
-""",  # str
-}
-
-# remember to add it to the class
-class MyNewDataset(AbsTaskClustering):
-    ...
-
-    @property
-    def metadata(self):
-        return metadata
-```
-
-The following tables give a description to each of the fields:  
-
-
-| **Field**              | **Description**                                                                                                                                                                             |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `date`                 | When was the text written? Range should following ISO 8601 format (reasonable guesses are allowed)                                                                                          |
-| `form`                 | Either "spoken" or "written"                                                                                                                                                                |
-| `domains`              | See table below of full list of domains, feel free to suggest new domains                                                                                                                   |
-| `task_subtypes`        | See table below of full list of task subtypes, feel free to suggest new subtypes                                                                                                            |
-| `license`              | The license of the dataet                                                                                                                                                                   |
-| `citation`             | How we will cite the dataset within the publication                                                                                                                                         |
-| `socioeconomic_status` | The socioeconomic status of the writer. Can be "high", "low", "middle", "mixed", "unknown"                                                                                                  |
-| `annotations_creators` | How was the annotations made? Options include "expert-annotated", "human-annotated", "derived" (e.g. derived from website structure)                                                        |
-| `text_creation`        | How was the text created? Options include "found", "created", "machine-translated", "human-translated and localized", "machine-translated and verified", "machine-translated and localized" |
 
 Note that these fields can be left blank if the information is not available and can be extended if necessary. We do not include any machine-translated (without verification) datasets in the benchmark.
 
@@ -230,7 +193,7 @@ The domains follow the categories used in the [Universal Dependencies project](h
 <summary>Task Subtypes</summary>
 <br>
 
-These domains subtypes were introduced in the [Scandinavian Embedding Benchmark](https://openreview.net/pdf/f5f1953a9c798ec61bb050e62bc7a94037fd4fab.pdf) and is intended to be extended.
+These domains subtypes were introduced in the [Scandinavian Embedding Benchmark](https://openreview.net/pdf/f5f1953a9c798ec61bb050e62bc7a94037fd4fab.pdf) and is intended to be extended as needed.
 
 
 
@@ -267,9 +230,7 @@ The PR will be reviewed by one of the organizers or contributors who might ask y
 
 Before you commit here is a checklist you should consider completing before submitting:
 
-- [ ] I have tested that the dataset runs
-
-E.g. by ensuring it is placed in the right folder
+- [ ] I have tested that the dataset runs with the `mteb` package.
 
 An easy way to test it is using:
 ```python
@@ -283,8 +244,9 @@ model = SentenceTransformer(model_name)
 evaluation = MTEB(tasks=["{the name of your task}"])
 ```
 
-- [ ] I have run at least the `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` on the dataset (and attached the results)
+- [ ] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb run -m {model_name} -t {task_name}` command.
+  - [ ] `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
+  - [ ] `intfloat/multilingual-e5-small`
 - [ ] I have considered the size of the dataset and reduced it if it is too big (2048 examples is typically large enough for most tasks)
 - [ ] Run tests locally to make sure nothing is broken using `make test`. 
 - [ ] Run black formatter to format the code using `make lint`.
-- [ ] I have added the description of the dataset to the [table in the Readme.md](https://github.com/embeddings-benchmark/mteb?tab=readme-ov-file#available-tasks)https://github.com/embeddings-benchmark/mteb?tab=readme-ov-file#available-tasks
