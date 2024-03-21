@@ -59,7 +59,7 @@ evaluation.run(model)
 
 
 ### A Detailed Example
-Often the dataset from HuggingFace is not in the format expected by MTEB. To resolve this you can add a `dataset_transform` method to your dataset to ensure it is in the right format. Here is an example along with some design considerations: 
+Often the dataset from HuggingFace is not in the format expected by MTEB. To resolve this you can either change the format on Hugging Face or add a `dataset_transform` method to your dataset to transform it into the right format on the fly. Here is an example along with some design considerations: 
 
 ```python
 class VGClustering(AbsTaskClustering):
@@ -153,7 +153,7 @@ class VGClustering(AbsTaskClustering):
 
 
 ## 2) Creating the metadata object
-Along with the task MMTEB requires metadata regarding the task. If the metadata isn't available please provide your best guess or leave the field as `None`.
+Along with the task MTEB requires metadata regarding the task. If the metadata isn't available please provide your best guess or leave the field as `None`.
 
 To get an overview of the fields in the metadata object, you can look at the [TaskMetadata](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/abstasks/TaskMetadata.py) class.
 
@@ -164,7 +164,7 @@ Note that these fields can be left blank if the information is not available and
 <summary>Domains</summary>
 <br>
 
-The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though we updated them were deemed appropriate. These do no have to be mutually exclusive.
+The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though we updated them where deemed appropriate. These do not have to be mutually exclusive.
 
 | **Domain**    | **Description**                                                  |
 | ------------- | ---------------------------------------------------------------- |
@@ -193,7 +193,7 @@ The domains follow the categories used in the [Universal Dependencies project](h
 <summary>Task Subtypes</summary>
 <br>
 
-These domains subtypes were introduced in the [Scandinavian Embedding Benchmark](https://openreview.net/pdf/f5f1953a9c798ec61bb050e62bc7a94037fd4fab.pdf) and is intended to be extended as needed.
+These domains subtypes were introduced in the [Scandinavian Embedding Benchmark](https://openreview.net/pdf/f5f1953a9c798ec61bb050e62bc7a94037fd4fab.pdf) and are intended to be extended as needed.
 
 
 
