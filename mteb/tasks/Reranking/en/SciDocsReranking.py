@@ -18,7 +18,7 @@ class SciDocsReranking(AbsTaskReranking):
         main_score="map",
         revision="d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
         date=None,
-        form="written",
+        form=["written"],
         domains=["Academic", "Non-fiction"],
         task_subtypes=["Scientific Reranking"],
         license="cc-by-4.0",
