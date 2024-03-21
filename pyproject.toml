@@ -71,9 +71,6 @@ convention = "google"
 mypy-init-return = true
 suppress-none-returning = true
 
-[tool.ruff.lint.isort]
-required-imports = ["from __future__ import annotations"]
-
 [tool.semantic_release]
 branch = "main"
 version_toml = ["pyproject.toml:project.version"]
