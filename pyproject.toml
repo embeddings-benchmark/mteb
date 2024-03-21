@@ -38,7 +38,7 @@ dependencies = [
     "pytrec_eval",
     "pydantic",
     "typing_extensions",
-    "eval_type_backpot",
+    "eval_type_backport",
 ]
 
 
