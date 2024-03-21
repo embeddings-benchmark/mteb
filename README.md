@@ -222,8 +222,6 @@ evaluation.run(model)
 | 📈 [Leaderboard] | The interactive leaderboard of the benchmark |
 | 🤖 [Adding a model] | Information related to how to submit a model to the leaderboard |
 | 🤝  [Contributing] | How to contribute to MTEB and set it up for development |
-| 
-
 
 [Tasks]: docs/tasks.md
 [Contributing]: docs/contributing.md
