@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from typing import List
 
 import numpy as np
 import torch
@@ -14,8 +15,8 @@ logger = logging.getLogger(__name__)
 
 
 class RerankingEvaluator(Evaluator):
-    """
-    This class evaluates a SentenceTransformer model for the task of re-ranking.
+    """This class evaluates a SentenceTransformer model for the task of re-ranking.
+
     Given a query and a list of documents, it computes the score [query, doc_i] for all possible
     documents and sorts them in decreasing order. Then, MRR@10 and MAP is compute to measure the quality of the ranking.
     :param samples: Must be a list and each element is of the form:
@@ -68,10 +69,7 @@ class RerankingEvaluator(Evaluator):
         )
 
     def compute_metrics_batched(self, model):
-        """
-        Computes the metrices in a batched way, by batching all queries and
-        all documents together
-        """
+        """Computes the metrices in a batched way, by batching all queries and all documents together."""
         all_mrr_scores = []
         all_ap_scores = []
 
@@ -145,11 +143,11 @@ class RerankingEvaluator(Evaluator):
         return {"map": mean_ap, "mrr": mean_mrr}
 
     def compute_metrics_individual(self, model):
-        """
-        Embeds every (query, positive, negative) tuple individually.
+        """Embeds every (query, positive, negative) tuple individually.
+
         Is slower than the batched version, but saves memory as only the
         embeddings for one tuple are needed. Useful when you have
-        a really large test set
+        a really large test set.
         """
         all_mrr_scores = []
         all_ap_scores = []
@@ -192,8 +190,7 @@ class RerankingEvaluator(Evaluator):
         return {"map": mean_ap, "mrr": mean_mrr}
 
     def _compute_metrics_instance(self, query_emb, docs_emb, is_relevant):
-        """
-        Computes metrics for a single instance = (query, positives, negatives)
+        """Computes metrics for a single instance = (query, positives, negatives).
 
         Args:
             query_emb (`torch.Tensor` of shape `(num_queries, hidden_size)`): Query embedding
@@ -206,7 +203,6 @@ class RerankingEvaluator(Evaluator):
                 - `mrr`: Mean Reciprocal Rank @ `self.mrr_at_k`
                 - `ap`: Average Precision
         """
-
         pred_scores = self.similarity_fct(query_emb, docs_emb)
         if len(pred_scores.shape) > 1:
             pred_scores = torch.amax(pred_scores, dim=0)
@@ -218,14 +214,14 @@ class RerankingEvaluator(Evaluator):
         return {"mrr": mrr, "ap": ap}
 
     @staticmethod
-    def mrr_at_k_score(is_relevant, pred_ranking, k):
-        """
-        Computes MRR@k score
+    def mrr_at_k_score(is_relevant: List[bool], pred_ranking: List[int], k: int):
+        """Computes MRR@k score.
 
         Args:
-            is_relevant (`List[bool]` of length `num_pos+num_neg`): True if the document is relevant
-            pred_ranking (`List[int]` of length `num_pos+num_neg`): Indices of the documents sorted in decreasing order
+            is_relevant: True if the document is relevant
+            pred_ranking: Indices of the documents sorted in decreasing order
                 of the similarity score
+            k: Top-k documents to consider
 
         Returns:
             mrr_score (`float`): MRR@k score
@@ -240,8 +236,7 @@ class RerankingEvaluator(Evaluator):
 
     @staticmethod
     def ap_score(is_relevant, pred_scores):
-        """
-        Computes AP score
+        """Computes AP score.
 
         Args:
             is_relevant (`List[bool]` of length `num_pos+num_neg`): True if the document is relevant

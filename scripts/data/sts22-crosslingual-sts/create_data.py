@@ -1,7 +1,8 @@
-"""
+"""Create data for sts22.
+
 Preparation (Scraping the data):
 pip install semeval_8_2022_ia_downloader
-python3 -m semeval_8_2022_ia_downloader.cli --links_file=semeval-2022_task8_train-data_batch.csv --dump_dir=train
+python3 -m semeval_8_2022_ia_downloader.cli --links_file=semeval-2022_task8_train-data_batch.csv --dump_dir=train.
 
 wget https://competitions.codalab.org/my/datasets/download/6798bbee-77fa-452d-bde2-96b8631acb5d
 mv 6798bbee-77fa-452d-bde2-96b8631acb5d final_evaluation_data.csv

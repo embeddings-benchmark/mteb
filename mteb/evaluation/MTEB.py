@@ -30,16 +30,16 @@ class MTEB:
         err_logs_path="error_logs.txt",
         **kwargs,
     ):
-        """
-        Create an Evaluation pipeline. The tasks selected
-        depends on the parameters. One can specify the tasks types
+        """Create an Evaluation pipeline.
+
+        The tasks selected depends on the parameters. One can specify the tasks types
         they want to evaluate (e.g. Clustering, Retrieval, etc.)
         the categories of tasks they want (e.g. Sentence2Sentence,
         Sentence2Paragraph, etc.) and the version of the benchmark.
         The selected tasks will be the tasks satisfying conditions
         from the 3 arguments. Alternatively, one can specify a list
         of tasks to be evaluated with the `tasks` argument. If
-        `tasks` is specified, we filter tasks based on `task_langs`
+        `tasks` is specified, we filter tasks based on `task_langs`.
 
         Parameters
         ----------
@@ -56,7 +56,6 @@ class MTEB:
         err_logs_path: str / None
             Path to save error logs
         """
-
         if tasks is not None:
             self._tasks = tasks
             assert (
@@ -148,9 +147,7 @@ class MTEB:
 
     @classmethod
     def mteb_tasks(cls):
-        """
-        Get all tasks available in the MTEB.
-        """
+        """Get all tasks available in the MTEB."""
         instance = cls()
         instance._display_tasks(instance.tasks_cls, name="MTEB tasks")
 
@@ -159,9 +156,7 @@ class MTEB:
         self._display_tasks(self.tasks, name="Selected tasks")
 
     def select_tasks(self, **kwargs):
-        """
-        Select the tasks to be evaluated.
-        """
+        """Select the tasks to be evaluated."""
         # Get all existing tasks
         tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
         self.tasks_cls = [
@@ -222,9 +217,7 @@ class MTEB:
         self.tasks = list(filtered_tasks)
 
     def load_tasks_data(self):
-        """
-        Load datasets for the selected tasks.
-        """
+        """Load datasets for the selected tasks."""
         logger.info(f"\n\n## Loading datasets for {len(self.tasks)} tasks")
         for task in self.tasks:
             logger.info(f"\n# Loading dataset for {task.metadata_dict['name']}")
@@ -240,8 +233,7 @@ class MTEB:
         raise_error: bool = True,
         **kwargs,
     ):
-        """
-        Run the evaluation pipeline on the selected tasks.
+        """Run the evaluation pipeline on the selected tasks.
 
         Parameters
         ----------

@@ -1,7 +1,4 @@
-"""
-Take data from https://www.kaggle.com/datasets/Cornell-University/arxiv?resource=download and
-only keep useful information
-"""
+"""Take data from https://www.kaggle.com/datasets/Cornell-University/arxiv?resource=download and only keep useful information."""
 
 from __future__ import annotations
 

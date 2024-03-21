@@ -39,9 +39,7 @@ class DalajClassification(AbsTaskClassification):
         return metadata_dict
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
+        """Load dataset from HuggingFace hub."""
         if self.data_loaded:
             return
 
@@ -54,9 +52,9 @@ class DalajClassification(AbsTaskClassification):
         self.data_loaded = True
 
     def dataset_transform(self):
-        """
-        This dataset consist of two columns of relevance, "original_sentence" and "corrected_sentence".
-        We will use the original sentence as we "wrong" sentence and the corrected sentence as the "correct" sentence
+        """This dataset consist of two columns of relevance, "original_sentence" and "corrected_sentence".
+
+        We will use the original sentence as we "wrong" sentence and the corrected sentence as the "correct" sentence.
         """
 
         def __convert_sample_to_classification(sample):

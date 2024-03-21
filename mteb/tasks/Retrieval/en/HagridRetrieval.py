@@ -44,9 +44,7 @@ class HagridRetrieval(AbsTaskRetrieval):
         return {}
 
     def load_data(self, **kwargs):
-        """
-        Loads the different split of the dataset (queries/corpus/relevants)
-        """
+        """Loads the different split of the dataset (queries/corpus/relevants)."""
         if self.data_loaded:
             return
 
@@ -76,14 +74,12 @@ class HagridRetrieval(AbsTaskRetrieval):
         self.data_loaded = True
 
     def preprocess_data(self, dataset: Dict) -> List[Dict]:
-        """
-        Preprocessed the data in a format easirer
-        to handle for the loading of queries and corpus
+        """Preprocessed the data in a format easier to handle for the loading of queries and corpus.
+
         ------
         PARAMS
         dataset : the hagrid dataset (json)
         """
-
         preprocessed_data = []
         for d in dataset:
             # get the best answer among positively rated answers
@@ -102,10 +98,9 @@ class HagridRetrieval(AbsTaskRetrieval):
         return preprocessed_data
 
     def get_best_answer(self, data: Dict) -> str:
-        """
-        Get the best answer among available answers
-        of a query.
-        WARNING : May return None if no good answer available
+        """Get the best answer among available answers of a query.
+
+        WARNING : May return None if no good answer available.
         --------
         PARAMS:
         data: a dict representing one element of the dataset

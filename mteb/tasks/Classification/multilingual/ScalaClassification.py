@@ -38,9 +38,7 @@ class ScalaDaClassification(AbsTaskClassification):
         return metadata_dict
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
+        """Load dataset from HuggingFace hub."""
         if self.data_loaded:
             return
 
@@ -92,9 +90,7 @@ class ScalaNbClassification(AbsTaskClassification):
         return dict(self.metadata)
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
+        """Load dataset from HuggingFace hub."""
         if self.data_loaded:
             return
 
@@ -146,9 +142,7 @@ class ScalaNnClassification(AbsTaskClassification):
         return metadata_dict
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
+        """Load dataset from HuggingFace hub."""
         if self.data_loaded:
             return
 
@@ -200,9 +194,7 @@ class ScalaSvClassification(AbsTaskClassification):
         return metadata_dict
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
+        """Load dataset from HuggingFace hub."""
         if self.data_loaded:
             return
 

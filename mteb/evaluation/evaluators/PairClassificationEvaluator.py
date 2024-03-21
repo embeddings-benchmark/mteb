@@ -16,9 +16,8 @@ logger = logging.getLogger(__name__)
 
 
 class PairClassificationEvaluator(Evaluator):
-    """
-    Evaluate a model based on the similarity of the embeddings by calculating the accuracy of identifying similar and
-    dissimilar sentences.
+    """Evaluate a model based on the similarity of the embeddings by calculating the accuracy of identifying similar and dissimilar sentences.
+
     The metrics are the cosine similarity as well as euclidean and Manhattan distance
     The returned score is the accuracy with a specified metric.
     The results are written in a CSV. If a CSV already exists, then values are appended.
@@ -28,7 +27,7 @@ class PairClassificationEvaluator(Evaluator):
     :param labels: labels[i] is the label for the pair (sentences1[i], sentences2[i]). Must be 0 or 1
     :param name: Name for the output
     :param batch_size: Batch size used to compute embeddings
-    :param write_csv: Write results to a CSV file
+    :param write_csv: Write results to a CSV file.
     """
 
     def __init__(
@@ -92,8 +91,7 @@ class PairClassificationEvaluator(Evaluator):
 
     @staticmethod
     def _compute_metrics(scores, labels, high_score_more_similar):
-        """
-        Compute the metrics for the given scores and labels.
+        """Compute the metrics for the given scores and labels.
 
         Args:
             scores (`np.ndarray` of shape (n_pairs, )): The similarity/dissimilarity scores for the pairs.

@@ -39,9 +39,7 @@ class SickFrSTS(AbsTaskSTS):
         return metadata_dict
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub and rename columns to the standard format.
-        """
+        """Load dataset from HuggingFace hub and rename columns to the standard format."""
         if self.data_loaded:
             return
 

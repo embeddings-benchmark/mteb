@@ -1,11 +1,11 @@
-"""
-entry point for the library
+"""Entry point for the library.
+
 example call:
   pip install git+https://github.com/embeddings-benchmark/mteb-draft.git
   mteb -m average_word_embeddings_komninos \
        -t Banking77Classification EmotionClassification \
        --output_folder mteb_output \
-       --verbosity 3
+       --verbosity 3.
 """
 
 from __future__ import annotations

@@ -38,9 +38,7 @@ class NordicLangClassification(AbsTaskClassification):
         return metadata_dict
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
+        """Load dataset from HuggingFace hub."""
         if self.data_loaded:
             return
 

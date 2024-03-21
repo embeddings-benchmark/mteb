@@ -16,8 +16,8 @@ logger = logging.getLogger(__name__)
 
 
 class AbsTaskClassification(AbsTask):
-    """
-    Abstract class for kNN classification tasks
+    """Abstract class for kNN classification tasks.
+
     The similarity is computed between pairs and the results are ranked.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
@@ -155,7 +155,7 @@ class AbsTaskClassification(AbsTask):
             return {**avg_scores, **std_errors}
 
     def _undersample_data(self, X, y, samples_per_label, idxs=None):
-        """Undersample data to have samples_per_label samples of each label"""
+        """Undersample data to have samples_per_label samples of each label."""
         X_sampled = []
         y_sampled = []
         if idxs is None:

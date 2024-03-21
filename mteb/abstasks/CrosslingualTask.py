@@ -17,9 +17,7 @@ class CrosslingualTask(AbsTask):
         self.is_crosslingual = True
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
+        """Load dataset from HuggingFace hub."""
         if self.data_loaded:
             return
         self.dataset = {}

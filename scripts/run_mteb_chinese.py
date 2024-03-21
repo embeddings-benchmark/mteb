@@ -1,4 +1,4 @@
-"""Example script for benchmarking all datasets constituting the MTEB Chinese leaderboard & average scores"""
+"""Example script for benchmarking all datasets constituting the MTEB Chinese leaderboard & average scores."""
 
 from __future__ import annotations
 

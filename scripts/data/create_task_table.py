@@ -29,9 +29,9 @@ DATAPATH = "/gpfsscratch/rech/six/commun/commun/experiments/muennighoff/mteb"
 
 
 def load_data(hf_hub_name, subset=None):
-    """
-    Load dataset from Hub via cloning for easy offline usage with HF_DATASETS_OFFLINE=1
-    Can be replaced with just `load_dataset(hf_hub_name, subset)` if preferred
+    """Load dataset from Hub via cloning for easy offline usage with HF_DATASETS_OFFLINE=1.
+
+    Can be replaced with just `load_dataset(hf_hub_name, subset)` if preferred.
     """
     from datasets import load_dataset
 
@@ -47,7 +47,7 @@ def load_data(hf_hub_name, subset=None):
 
 
 def get_ds_stats_beir_hub(hf_hub_name):
-    """Not used as some BEIR datasets are still missing on the Hub"""
+    """Not used as some BEIR datasets are still missing on the Hub."""
     lens = {}
     for subset in ["corpus", "queries"]:
         ds = load_data("mteb/hfbeir" + hf_hub_name.replace("BeIR", ""), subset)

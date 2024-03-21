@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 
 
 class AbsTaskClustering(AbsTask):
-    """
-    Abstract class for Clustering tasks
+    """Abstract class for Clustering tasks.
+
     The similarity is computed between pairs and the results are ranked.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:

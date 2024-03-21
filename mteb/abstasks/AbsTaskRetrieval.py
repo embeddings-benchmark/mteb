@@ -193,8 +193,7 @@ class HFDataLoader:
 
 
 class AbsTaskRetrieval(AbsTask):
-    """
-    Abstract class for re-ranking experiments.
+    """Abstract class for re-ranking experiments.
 
     Child-classes must implement the following properties:
 

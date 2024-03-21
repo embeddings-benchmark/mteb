@@ -1,6 +1,6 @@
-"""
-Merges CQADupstack subset results
-Usage: python merge_cqadupstack.py path_to_results_folder
+"""Merges CQADupstack subset results.
+
+Usage: python merge_cqadupstack.py path_to_results_folder.
 """
 
 from __future__ import annotations

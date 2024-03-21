@@ -49,9 +49,7 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
             return
 
         def get_dataset_subset(lang: str):
-            """For a specified subset (=language)
-            only get the splits listed in _SPLIT
-            and rename column "score"
+            """For a specified subset (=language) only get the splits listed in _SPLIT and rename column "score".
 
             Args:
                 lang (str): _description_

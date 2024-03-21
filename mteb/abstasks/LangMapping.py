@@ -1,4 +1,4 @@
-"""The `LANG_MAPPING` dictionary is mapping bigram, trigram language codes to each others, to include various datasets that use one or the other"""
+"""The `LANG_MAPPING` dictionary is mapping bigram, trigram language codes to each others, to include various datasets that use one or the other."""
 
 from __future__ import annotations
 

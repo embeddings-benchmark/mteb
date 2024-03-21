@@ -1,5 +1,4 @@
-"""
-Usage: python mteb_meta.py path_to_results_folder
+"""Usage: python mteb_meta.py path_to_results_folder.
 
 Creates evaluation results metadata for the model card.
 E.g.

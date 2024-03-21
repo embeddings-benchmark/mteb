@@ -61,8 +61,8 @@ exclude = ["tests", "results"]
 target-version = "py38"
 
 [tool.ruff.lint]
-select = ["E4", "E7", "E9", "F", "I"]
-ignore = ["E203", "E501", "E741", "F403"]
+select = ["E4", "E7", "E9", "D", "F", "I"]
+ignore = ["E203", "E501", "E741", "F403", "D1"]
 ignore-init-module-imports = true
 
 [tool.ruff.lint.pydocstyle]

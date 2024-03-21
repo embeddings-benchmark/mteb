@@ -36,9 +36,7 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
         return dict(self.metadata)
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub and convert it to the standard format.
-        """
+        """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return
 
@@ -54,7 +52,7 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
 
     def dataset_transform(self):
         def create_columns(row):
-            """Put all French texts in column 'sentence1' and English texts in 'sentence2' column"""
+            """Put all French texts in column 'sentence1' and English texts in 'sentence2' column."""
             row["orig_lang"] = row["utterance_meta"]["lang"]
             row["sentence1"] = (
                 row["orig"] if row["orig_lang"] == "french" else row["ref"]

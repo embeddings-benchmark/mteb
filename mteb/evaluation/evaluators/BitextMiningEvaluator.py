@@ -66,8 +66,8 @@ class BitextMiningEvaluator(Evaluator):
         top_k=10,
         score_function=cos_sim,
     ):
-        """
-        This function performs a cosine similarity search between a list of query embeddings  and a list of corpus embeddings.
+        """This function performs a cosine similarity search between a list of query embeddings and a list of corpus embeddings.
+
         It can be used for Information Retrieval / Semantic Search for corpora up to about 1 Million entries.
         :param query_embeddings: A 2 dimensional tensor with the query embeddings.
         :param corpus_embeddings: A 2 dimensional tensor with the corpus embeddings.
