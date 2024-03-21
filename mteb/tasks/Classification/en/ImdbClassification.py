@@ -27,4 +27,6 @@ class ImdbClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 25000},
+        avg_character_length={"test": 1293.8},
     )

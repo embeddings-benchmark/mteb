@@ -27,4 +27,6 @@ class RedditClusteringP2P(AbsTaskClustering):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 459399},
+        avg_character_length={"test": 727.7},
     )

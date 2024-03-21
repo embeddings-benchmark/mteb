@@ -48,6 +48,8 @@ class T2Retrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={},
+        avg_character_length={},
     )
 
     def load_data(self, **kwargs):
@@ -82,6 +84,8 @@ class MMarcoRetrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={},
+        avg_character_length={},
     )
 
     def load_data(self, **kwargs):
@@ -116,6 +120,8 @@ class DuRetrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={},
+        avg_character_length={},
     )
 
     def load_data(self, **kwargs):
@@ -150,6 +156,8 @@ class CovidRetrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={},
+        avg_character_length={},
     )
 
     def load_data(self, **kwargs):
@@ -184,6 +192,8 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={},
+        avg_character_length={},
     )
 
     def load_data(self, **kwargs):
@@ -218,6 +228,8 @@ class EcomRetrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={},
+        avg_character_length={},
     )
 
     def load_data(self, **kwargs):
@@ -252,6 +264,8 @@ class MedicalRetrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={},
+        avg_character_length={},
     )
 
     def load_data(self, **kwargs):
@@ -286,6 +300,8 @@ class VideoRetrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={},
+        avg_character_length={},
     )
 
     def load_data(self, **kwargs):

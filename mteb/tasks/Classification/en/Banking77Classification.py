@@ -27,4 +27,6 @@ class Banking77Classification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 3080},
+        avg_character_length={"test": 54.2},
     )

@@ -27,4 +27,6 @@ class TwentyNewsgroupsClustering(AbsTaskClustering):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 59545},
+        avg_character_length={"test": 32.0},
     )

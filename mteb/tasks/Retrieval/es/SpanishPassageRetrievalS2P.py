@@ -29,6 +29,8 @@ class SpanishPassageRetrievalS2P(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={},
+        avg_character_length={},
     )
 
     def load_data(self, **kwargs):

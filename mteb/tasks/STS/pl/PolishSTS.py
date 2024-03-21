@@ -26,6 +26,8 @@ class SickrPLSTS(AbsTaskSTS):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 9812},
+        avg_character_length={"test": 42.8},
     )
 
     @property
@@ -58,6 +60,8 @@ class CdscrSTS(AbsTaskSTS):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={},
+        avg_character_length={},
     )
 
     @property

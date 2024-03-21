@@ -45,6 +45,8 @@ class SciDocsReranking(AbsTaskReranking):
         dialect=None,
         text_creation="found",
         bibtex_citation= ... # removed for brevity
+        n_samples={"test": 19599},
+        avg_character_length={"test": 69.0},
 )
 
 # testing the task with a model:

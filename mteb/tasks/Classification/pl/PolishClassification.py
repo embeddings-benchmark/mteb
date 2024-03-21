@@ -27,6 +27,8 @@ class CbdClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 1000},
+        avg_character_length={"test": 93.2},
     )
 
 
@@ -53,6 +55,8 @@ class PolEmo2InClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={},
+        avg_character_length={},
     )
 
 
@@ -80,6 +84,8 @@ class PolEmo2OutClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 722},
+        avg_character_length={"test": 756.2},
     )
 
 
@@ -105,6 +111,8 @@ class AllegroReviewsClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 1006},
+        avg_character_length={"test": 477.2},
     )
 
 
@@ -130,4 +138,6 @@ class PacClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 3453},
+        avg_character_length={"test": 185.3},
     )

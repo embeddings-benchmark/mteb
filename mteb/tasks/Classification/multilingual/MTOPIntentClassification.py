@@ -29,4 +29,6 @@ class MTOPIntentClassification(MultilingualTask, AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"validation": 2235, "test": 4386},
+        avg_character_length={"validation": 36.5, "test": 36.8},
     )
