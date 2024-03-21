@@ -33,6 +33,3 @@ class FEVER(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)

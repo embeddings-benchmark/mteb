@@ -50,9 +50,6 @@ class T2Retrieval(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -88,9 +85,6 @@ class MMarcoRetrieval(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -126,9 +120,6 @@ class DuRetrieval(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -164,9 +155,6 @@ class CovidRetrieval(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -202,9 +190,6 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -240,9 +225,6 @@ class EcomRetrieval(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -278,9 +260,6 @@ class MedicalRetrieval(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -316,9 +295,6 @@ class VideoRetrieval(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:

@@ -29,9 +29,6 @@ class SickePLPC(AbsTaskPairClassification):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
 
 class PpcPC(AbsTaskPairClassification):
@@ -58,10 +55,6 @@ class PpcPC(AbsTaskPairClassification):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
-
 
 class CdscePC(AbsTaskPairClassification):
     metadata = TaskMetadata(
@@ -87,9 +80,6 @@ class CdscePC(AbsTaskPairClassification):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
 
 class PscPC(AbsTaskPairClassification):
@@ -116,6 +106,3 @@ class PscPC(AbsTaskPairClassification):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)

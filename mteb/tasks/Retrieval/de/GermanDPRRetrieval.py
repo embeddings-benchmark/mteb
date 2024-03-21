@@ -34,10 +34,6 @@ class GermanDPR(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
-
     @staticmethod
     def _format_documents(docs, id_prefix="", existing_docs=None):
         if existing_docs is None:

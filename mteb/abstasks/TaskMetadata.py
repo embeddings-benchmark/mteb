@@ -21,6 +21,7 @@ TASK_SUBTYPE = Literal[
     "Question answering",
     "Sentiment/Hate speech",
     "Thematic clustering",
+    "Scientific Reranking",
 ]
 
 TASK_DOMAIN = Literal[

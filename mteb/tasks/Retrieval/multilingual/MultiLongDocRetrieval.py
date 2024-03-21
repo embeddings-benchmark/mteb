@@ -81,9 +81,6 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:

@@ -29,10 +29,6 @@ class CbdClassification(AbsTaskClassification):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
-
 
 class PolEmo2InClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -59,9 +55,7 @@ class PolEmo2InClassification(AbsTaskClassification):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
+
 
 
 class PolEmo2OutClassification(AbsTaskClassification):
@@ -90,9 +84,6 @@ class PolEmo2OutClassification(AbsTaskClassification):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
 
 class AllegroReviewsClassification(AbsTaskClassification):
@@ -119,10 +110,6 @@ class AllegroReviewsClassification(AbsTaskClassification):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
-
 
 class PacClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -148,6 +135,3 @@ class PacClassification(AbsTaskClassification):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)

@@ -78,6 +78,3 @@ class DdiscoCohesionClassification(AbsTaskClassification):
             ["domain"]
         )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
