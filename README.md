@@ -180,7 +180,7 @@ class MyModel():
 
 ### Evaluating on a custom task
 
-To evaluate on a custom task, you can run the following code on your custom task. See [how to add a new task](docs/adding_a_task.md), for how to create a new task in MTEB.
+To evaluate on a custom task, you can run the following code on your custom task. See [how to add a new task](docs/adding_a_dataset.md), for how to create a new task in MTEB.
 
 ```python
 from mteb import MTEB
@@ -207,14 +207,14 @@ evaluation.run(model)
 | 📋 [Tasks] | Overview of available tasks |
 | 📈 [Leaderboard] | The interactive leaderboard of the benchmark |
 | 🤖 [Adding a model] | Information related to how to submit a model to the leaderboard |
-| 👩‍💻 [Adding a task] | How to add a new task to MTEB | 
+| 👩‍💻 [Adding a dataset] | How to add a new task/dataset to MTEB | 
 | 🤝  [Contributing] | How to contribute to MTEB and set it up for development |
 <!-- | 🌐 [MMTEB] | An open-source effort to extend MTEB to cover a broad set of languages |   -->
 
 [Tasks]: docs/tasks.md
 [Contributing]: docs/contributing.md
 [Adding a model]: docs/adding_a_model.md
-[Adding a task]: docs/adding_a_task.md
+[Adding a task]: docs/adding_a_dataset.md
 [Leaderboard]: https://huggingface.co/spaces/mteb/leaderboard
 [MMTEB]: docs/mmteb/readme.md
 

@@ -1,7 +1,7 @@
 
-# Adding a Task
+# Adding a Dataset
 
-To add a new task to MTEB, you need to do three things:
+To add a new dataset to MTEB, you need to do three things:
 
 1) Implement a task with the desired dataset, by subclassing an abstract task
 2) Add metadata to the task
