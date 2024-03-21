@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import logging
 import os
@@ -71,7 +73,7 @@ class HFDataLoader:
 
     def load(
         self, split="test"
-    ) -> Tuple[Dict[str, Dict[str, str]], Dict[str, str], Dict[str, Dict[str, int]]]:
+    ) -> Tuple[Dict[str, dict[str, str]], dict[str, str], dict[str, dict[str, int]]]:
         if not self.hf_repo:
             self.qrels_file = os.path.join(self.qrels_folder, split + ".tsv")
             self.check(fIn=self.corpus_file, ext="jsonl")
@@ -103,7 +105,7 @@ class HFDataLoader:
 
         return self.corpus, self.queries, self.qrels
 
-    def load_corpus(self) -> Dict[str, Dict[str, str]]:
+    def load_corpus(self) -> dict[str, dict[str, str]]:
         if not self.hf_repo:
             self.check(fIn=self.corpus_file, ext="jsonl")
 

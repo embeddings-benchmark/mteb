@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 from typing import Union
 
@@ -9,7 +11,6 @@ from mteb.abstasks import AbsTask
 from mteb.tasks.BitextMining import BUCCBitextMining
 
 logging.basicConfig(level=logging.INFO)
-from mteb import MTEB
 
 
 def test_two_mteb_tasks():

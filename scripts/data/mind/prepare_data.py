@@ -1,15 +1,20 @@
+from __future__ import annotations
+
 import os
 
 import pandas as pd
 
-
-df_news = pd.read_csv("scripts/mind/data/MINDsmall_train/news.tsv", sep="\t", header=None)
+df_news = pd.read_csv(
+    "scripts/mind/data/MINDsmall_train/news.tsv", sep="\t", header=None
+)
 df_news = df_news[[0, 3]]
 df_news.columns = ["id", "text"]
 df_news.index = df_news["id"]
 
 
-df_behaviours = pd.read_csv("scripts/mind/data/MINDsmall_train/behaviors.tsv", sep="\t", header=None)
+df_behaviours = pd.read_csv(
+    "scripts/mind/data/MINDsmall_train/behaviors.tsv", sep="\t", header=None
+)
 df_behaviours = df_behaviours[[0, 3, 4]]
 df_behaviours.columns = ["id", "query", "data"]
 df_behaviours.dropna(inplace=True)

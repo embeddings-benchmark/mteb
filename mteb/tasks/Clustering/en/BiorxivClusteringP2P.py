@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
 

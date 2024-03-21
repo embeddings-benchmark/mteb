@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 
 from mteb import MTEB
@@ -81,7 +83,7 @@ def get_ds_stats_beir(hf_hub_name):
     for split in lens.keys():
         try:
             corpus, queries, relevant_docs = BeirDataLoader(path).load(split=split)
-        except:  # split does not exist
+        except:  # split does not exist  # noqa: E722
             continue
         # + 1 for space added between Title & Text by default in BEIR
         avg_lens_c = [len(v["text"]) + len(v["title"]) + 1 for v in corpus.values()]

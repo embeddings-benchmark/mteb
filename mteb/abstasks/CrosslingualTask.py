@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import datasets
 
 from .AbsTask import AbsTask
@@ -6,7 +8,7 @@ from .AbsTask import AbsTask
 class CrosslingualTask(AbsTask):
     def __init__(self, langs=None, **kwargs):
         super().__init__(**kwargs)
-        if type(langs) is list:
+        if isinstance(langs, list):
             langs = [lang for lang in langs if lang in self.metadata_dict["eval_langs"]]
         if langs is not None and len(langs) > 0:
             self.langs = langs

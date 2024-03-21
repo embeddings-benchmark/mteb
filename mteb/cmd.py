@@ -8,6 +8,7 @@ example call:
        --verbosity 3
 """
 
+from __future__ import annotations
 
 import argparse
 import datetime

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from ..evaluation.evaluators import RerankingEvaluator
 from .AbsTask import AbsTask
 

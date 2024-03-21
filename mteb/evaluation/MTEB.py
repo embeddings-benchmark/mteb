@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import logging
 import os
@@ -66,7 +68,7 @@ class MTEB:
             self._tasks = None
 
         self._task_langs = task_langs if task_langs is not None else []
-        if type(self._task_langs) is str:
+        if isinstance(self._task_langs, str):
             self._task_langs = [self._task_langs]
 
         self._extend_lang_code()
@@ -301,7 +303,7 @@ class MTEB:
 
                 # run evaluation
                 task_results = {
-                    "mteb_version": __version__,
+                    "mteb_version": version("mteb"),  # noqa: F405
                     "dataset_revision": task.metadata_dict.get("revision", None),
                     "mteb_dataset_name": task.metadata_dict["name"],
                 }

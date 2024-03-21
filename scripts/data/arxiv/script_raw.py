@@ -3,13 +3,13 @@ Take data from https://www.kaggle.com/datasets/Cornell-University/arxiv?resource
 only keep useful information
 """
 
+from __future__ import annotations
+
 import gzip
 import json
 
-from tqdm import tqdm
-
 import jsonlines
-
+from tqdm import tqdm
 
 with open("archive/arxiv-metadata-oai-snapshot.json", "r") as file:
     old_lines = file.readlines()
