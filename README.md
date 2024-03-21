@@ -46,6 +46,8 @@ from sentence_transformers import SentenceTransformer
 
 # Define the sentence-transformers model name
 model_name = "average_word_embeddings_komninos"
+# or directly from huggingface:
+# model_name = "sentence-transformers/all-MiniLM-L6-v2"
 
 model = SentenceTransformer(model_name)
 evaluation = MTEB(tasks=["Banking77Classification"])
@@ -131,15 +133,15 @@ Models should implement the following interface, implementing an `encode` functi
 
 ```python
 class MyModel():
-    def encode(self, sentences, batch_size=32, **kwargs):
+    def encode(self, sentences: list[str], **kwargs) -> list[np.ndarray] | list[torch.Tensor]:
         """
         Returns a list of embeddings for the given sentences.
+        
         Args:
-            sentences (`List[str]`): List of sentences to encode
-            batch_size (`int`): Batch size for the encoding
+            sentences: List of sentences to encode
 
         Returns:
-            `List[np.ndarray]` or `List[tensor]`: List of embeddings for the given sentences
+            List of embeddings for the given sentences
         """
         pass
 
@@ -152,35 +154,33 @@ If you'd like to use different encoding functions for query and corpus when eval
 
 ```python
 class MyModel():
-    def encode_queries(self, queries, batch_size=32, **kwargs):
+    def encode_queries(self, queries: list[str], **kwargs) -> list[np.ndarray] | list[torch.Tensor]:
         """
         Returns a list of embeddings for the given sentences.
         Args:
-            queries (`List[str]`): List of sentences to encode
-            batch_size (`int`): Batch size for the encoding
+            queries: List of sentences to encode
 
         Returns:
-            `List[np.ndarray]` or `List[tensor]`: List of embeddings for the given sentences
+            List of embeddings for the given sentences
         """
         pass
 
-    def encode_corpus(self, corpus, batch_size=32, **kwargs):
+    def encode_corpus(self, corpus: list[str] | list[dict[str, str]], **kwargs) -> list[np.ndarray] | list[torch.Tensor]:
         """
         Returns a list of embeddings for the given sentences.
         Args:
-            corpus (`List[str]` or `List[Dict[str, str]]`): List of sentences to encode
+            corpus: List of sentences to encode
                 or list of dictionaries with keys "title" and "text"
-            batch_size (`int`): Batch size for the encoding
 
         Returns:
-            `List[np.ndarray]` or `List[tensor]`: List of embeddings for the given sentences
+            List of embeddings for the given sentences
         """
         pass
 ```
 
 ### Evaluating on a custom task
 
-To add a new task, you need to implement a new class that inherits from the `AbsTask` associated with the task type (e.g. `AbsTaskReranking` for reranking tasks). You can find the supported task types in [here](https://github.com/embeddings-benchmark/mteb-draft/tree/main/mteb/abstasks).
+To evaluate on a custom task, you can run the following code on your custom task. See [how to add a new task](docs/adding_a_task.md), for how to create a new task in MTEB.
 
 ```python
 from mteb import MTEB
@@ -188,27 +188,13 @@ from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from sentence_transformers import SentenceTransformer
 
 
-class MindSmallReranking(AbsTaskReranking):
-    @property
-    def description(self):
-        return {
-            "name": "MindSmallReranking",
-            "hf_hub_name": "mteb/mind_small",
-            "description": "Microsoft News Dataset: A Large-Scale English Dataset for News Recommendation Research",
-            "reference": "https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf",
-            "type": "Reranking",
-            "category": "s2s",
-            "eval_splits": ["validation"],
-            "eval_langs": ["en"],
-            "main_score": "map",
-        }
+class MyCustomTask(AbsTaskReranking):
+    ...
 
 model = SentenceTransformer("average_word_embeddings_komninos")
-evaluation = MTEB(tasks=[MindSmallReranking()])
+evaluation = MTEB(tasks=[MyCustomTask()])
 evaluation.run(model)
 ```
-
-> **Note:** for multilingual tasks, make sure your class also inherits from the `MultilingualTask` class like in [this](https://github.com/embeddings-benchmark/mteb-draft/blob/main/mteb/tasks/Classification/MTOPIntentClassification.py) example.
 
 </details>
 
@@ -221,12 +207,16 @@ evaluation.run(model)
 | 📋 [Tasks] | Overview of available tasks |
 | 📈 [Leaderboard] | The interactive leaderboard of the benchmark |
 | 🤖 [Adding a model] | Information related to how to submit a model to the leaderboard |
+| 👩‍💻 [Adding a task] | How to add a new task to MTEB | 
 | 🤝  [Contributing] | How to contribute to MTEB and set it up for development |
+<!-- | 🌐 [MMTEB] | An open-source effort to extend MTEB to cover a broad set of languages |   -->
 
 [Tasks]: docs/tasks.md
 [Contributing]: docs/contributing.md
 [Adding a model]: docs/adding_a_model.md
+[Adding a task]: docs/adding_a_task.md
 [Leaderboard]: https://huggingface.co/spaces/mteb/leaderboard
+[MMTEB]: docs/mmteb/readme.md
 
 ## Citing
 
