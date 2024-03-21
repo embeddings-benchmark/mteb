@@ -61,7 +61,7 @@ exclude = ["tests", "results"]
 target-version = "py38"
 
 [tool.ruff.lint]
-select = ["E4", "E7", "E9", "D", "F", "I"]
+select = ["E", "D", "F", "I"]
 ignore = ["E203", "E501", "E741", "F403", "D1"]
 ignore-init-module-imports = true
 
