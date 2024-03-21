@@ -17,7 +17,7 @@ class SciDocsReranking(AbsTaskReranking):
         eval_langs=["en"],
         main_score="map",
         revision="d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
-        date="2020",
+        date=None,
         form="written",
         domains=["Academic", "Non-fiction"],
         task_subtypes=["Scientific Reranking"],
