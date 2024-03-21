@@ -10,7 +10,7 @@ readme = "README.md"
 authors = [
     { name = "MTEB Contributors", email = "niklas@huggingface.co" },
     { email = "nouamane@huggingface.co" },
-    { email = "info@nils-reimers.de" }
+    { email = "info@nils-reimers.de" },
 ]
 license = { file = "LICENSE" }
 keywords = ["deep learning", "text embeddings", "benchmark"]
@@ -21,7 +21,7 @@ classifiers = [
     "Intended Audience :: Information Technology",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
-    "Programming Language :: Python"
+    "Programming Language :: Python",
 ]
 requires-python = ">=3.8"
 dependencies = [
@@ -35,7 +35,9 @@ dependencies = [
     "torch",
     "tqdm",
     "rich",
-    "pytrec_eval"
+    "pytrec_eval",
+    "pydantic",
+    "typing_extensions",
 ]
 
 
@@ -54,7 +56,7 @@ dev = [
     "isort",
     "black==24.2.0",
     "pytest",
-    "pytest-xdist"
+    "pytest-xdist",
 ]
 
 
@@ -115,11 +117,5 @@ multi_line_output = 3
 use_parentheses = true
 
 [tool.flake8]
-ignore = [
-    "E203",
-    "E501",
-    "E741",
-    "W503",
-    "W605",
-]
+ignore = ["E203", "E501", "E741", "W503", "W605"]
 max-line-length = 119

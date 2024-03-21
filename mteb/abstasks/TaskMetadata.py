@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from datetime import date
-from typing import Annotated, Literal
 
 from pydantic import (
     AnyUrl,
@@ -9,6 +8,7 @@ from pydantic import (
     BeforeValidator,
     TypeAdapter,
 )
+from typing_extensions import Annotated, Literal
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
