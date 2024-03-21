@@ -1,31 +1,47 @@
+from __future__ import annotations
+
 import uuid
 from typing import Dict, List
 
 import datasets
+
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class HagridRetrieval(AbsTaskRetrieval):
-    _EVAL_SPLITS = ["dev"]
+    metadata = TaskMetadata(
+        name="HagridRetrieval",
+        hf_hub_name="miracl/hagrid",
+        reference="https://github.com/project-miracl/hagrid",
+        description=(
+            "HAGRID (Human-in-the-loop Attributable Generative Retrieval for Information-seeking Dataset)"
+            "is a dataset for generative information-seeking scenarios. It consists of queries"
+            "along with a set of manually labelled relevant passages"
+        ),
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["dev"],
+        eval_langs=["en"],
+        main_score="ndcg_at_10",
+        revision="b2a085913606be3c4f2f1a8bff1810e38bade8fa",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
-    def description(self):
-        return {
-            "name": "HagridRetrieval",
-            "hf_hub_name": "miracl/hagrid",
-            "reference": "https://github.com/project-miracl/hagrid",
-            "description": (
-                "HAGRID (Human-in-the-loop Attributable Generative Retrieval for Information-seeking Dataset)"
-                "is a dataset for generative information-seeking scenarios. It consists of queries"
-                "along with a set of manually labelled relevant passages"
-            ),
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": self._EVAL_SPLITS,
-            "eval_langs": ["en"],
-            "main_score": "ndcg_at_10",
-            "revision": "b2a085913606be3c4f2f1a8bff1810e38bade8fa",
-        }
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
+        return {}
 
     def load_data(self, **kwargs):
         """
@@ -35,13 +51,27 @@ class HagridRetrieval(AbsTaskRetrieval):
             return
 
         data = datasets.load_dataset(
-            "miracl/hagrid", split=self._EVAL_SPLITS[0], revision=self.description.get("revision", None)
+            "miracl/hagrid",
+            split=self.metadata.eval_splits[0],
+            revision=self.metadata_dict.get("revision", None),
         )
         proc_data = self.preprocess_data(data)
 
-        self.queries = {self._EVAL_SPLITS[0]: {d["query_id"]: d["query_text"] for d in proc_data}}
-        self.corpus = {self._EVAL_SPLITS[0]: {d["answer_id"]: {"text": d["answer_text"]} for d in proc_data}}
-        self.relevant_docs = {self._EVAL_SPLITS[0]: {d["query_id"]: {d["answer_id"]: 1} for d in proc_data}}
+        self.queries = {
+            self.metadata.eval_splits[0]: {
+                d["query_id"]: d["query_text"] for d in proc_data
+            }
+        }
+        self.corpus = {
+            self.metadata.eval_splits[0]: {
+                d["answer_id"]: {"text": d["answer_text"]} for d in proc_data
+            }
+        }
+        self.relevant_docs = {
+            self.metadata.eval_splits[0]: {
+                d["query_id"]: {d["answer_id"]: 1} for d in proc_data
+            }
+        }
 
         self.data_loaded = True
 
@@ -80,6 +110,10 @@ class HagridRetrieval(AbsTaskRetrieval):
         PARAMS:
         data: a dict representing one element of the dataset
         """
-        good_answers = [a["answer"] for a in data["answers"] if a["informative"] == 1 and a["attributable"] == 1]
+        good_answers = [
+            a["answer"]
+            for a in data["answers"]
+            if a["informative"] == 1 and a["attributable"] == 1
+        ]
         # Return 1st one if >=1 good answers else None
         return good_answers[0] if len(good_answers) > 0 else None

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 from ..evaluation.evaluators import STSEvaluator
@@ -10,7 +12,7 @@ class AbsTaskSTS(AbsTask):
     """
     Abstract class for STS experiments.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.description["eval_splits"], and assign it to self.dataset. It must contain the following columns::
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns::
         sentence1: str
         sentence2: str
         score: float
@@ -21,11 +23,11 @@ class AbsTaskSTS(AbsTask):
 
     @property
     def min_score(self):
-        return self.description["min_score"]
+        return self.metadata_dict["min_score"]
 
     @property
     def max_score(self):
-        return self.description["max_score"]
+        return self.metadata_dict["max_score"]
 
     def evaluate(self, model, split, **kwargs):
         if not self.data_loaded:
@@ -35,13 +37,13 @@ class AbsTaskSTS(AbsTask):
             scores = {}
             for lang in self.dataset:
                 logger.info(
-                    f"Task: {self.description['name']}, split: {split}, language: {lang}. Running..."
+                    f"Task: {self.metadata_dict['name']}, split: {split}, language: {lang}. Running..."
                 )
                 data_split = self.dataset[lang][split]
                 scores[lang] = self._evaluate_split(model, data_split, **kwargs)
         else:
             logger.info(
-                f"\nTask: {self.description['name']}, split: {split}. Running..."
+                f"\nTask: {self.metadata_dict['name']}, split: {split}. Running..."
             )
             data_split = self.dataset[split]
             scores = self._evaluate_split(model, data_split, **kwargs)

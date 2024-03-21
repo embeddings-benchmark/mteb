@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from .da.BornholmskBitextMining import *
 from .multilingual.BUCCBitextMining import *
 from .multilingual.DiaBLaBitextMining import *

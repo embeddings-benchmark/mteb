@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 import logging
 import os
@@ -71,7 +73,7 @@ class HFDataLoader:
 
     def load(
         self, split="test"
-    ) -> Tuple[Dict[str, Dict[str, str]], Dict[str, str], Dict[str, Dict[str, int]]]:
+    ) -> Tuple[Dict[str, dict[str, str]], dict[str, str], dict[str, dict[str, int]]]:
         if not self.hf_repo:
             self.qrels_file = os.path.join(self.qrels_folder, split + ".tsv")
             self.check(fIn=self.corpus_file, ext="jsonl")
@@ -103,7 +105,7 @@ class HFDataLoader:
 
         return self.corpus, self.queries, self.qrels
 
-    def load_corpus(self) -> Dict[str, Dict[str, str]]:
+    def load_corpus(self) -> dict[str, dict[str, str]]:
         if not self.hf_repo:
             self.check(fIn=self.corpus_file, ext="jsonl")
 
@@ -217,13 +219,13 @@ class AbsTaskRetrieval(AbsTask):
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         hf_repo_qrels = (
-            self.description["hf_hub_name"] + "-qrels"
-            if "clarin-knext" in self.description["hf_hub_name"]
+            self.metadata_dict["hf_hub_name"] + "-qrels"
+            if "clarin-knext" in self.metadata_dict["hf_hub_name"]
             else None
         )
-        for split in kwargs.get("eval_splits", self.description["eval_splits"]):
+        for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
             corpus, queries, qrels = HFDataLoader(
-                hf_repo=self.description["hf_hub_name"],
+                hf_repo=self.metadata_dict["hf_hub_name"],
                 hf_repo_qrels=hf_repo_qrels,
                 streaming=False,
                 keep_in_memory=False,
@@ -295,11 +297,11 @@ class AbsTaskRetrieval(AbsTask):
                     }
             if lang is None:
                 qrels_save_path = (
-                    f"{output_folder}/{self.description['name']}_qrels.json"
+                    f"{output_folder}/{self.metadata_dict['name']}_qrels.json"
                 )
             else:
                 qrels_save_path = (
-                    f"{output_folder}/{self.description['name']}_{lang}_qrels.json"
+                    f"{output_folder}/{self.metadata_dict['name']}_{lang}_qrels.json"
                 )
 
             with open(qrels_save_path, "w") as f:

@@ -1,13 +1,19 @@
-from ....abstasks import MultilingualTask
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from __future__ import annotations
 
 import datasets
+
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from ....abstasks import MultilingualTask
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 _EVAL_SPLIT = "test"
 _EVAL_LANGS = ["es", "de", "en"]
 
 
-def _load_xmarket_data(path: str, langs: list, split: str, cache_dir: str=None, revision: str=None):
+def _load_xmarket_data(
+    path: str, langs: list, split: str, cache_dir: str = None, revision: str = None
+):
     corpus = {lang: {split: None} for lang in langs}
     queries = {lang: {split: None} for lang in langs}
     relevant_docs = {lang: {split: None} for lang in langs}
@@ -39,7 +45,9 @@ def _load_xmarket_data(path: str, langs: list, split: str, cache_dir: str=None, 
 
         corpus[lang][split] = {row["_id"]: row for row in corpus_rows}
         queries[lang][split] = {row["_id"]: row["text"] for row in query_rows}
-        relevant_docs[lang][split] = {row["_id"]: {v: 1 for v in row["text"].split(" ")} for row in qrels_rows}
+        relevant_docs[lang][split] = {
+            row["_id"]: {v: 1 for v in row["text"].split(" ")} for row in qrels_rows
+        }
 
     corpus = datasets.DatasetDict(corpus)
     queries = datasets.DatasetDict(queries)
@@ -49,32 +57,43 @@ def _load_xmarket_data(path: str, langs: list, split: str, cache_dir: str=None, 
 
 
 class XMarket(MultilingualTask, AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="XMarket",
+        description="XMarket",
+        reference=None,
+        hf_hub_name="jinaai/xmarket_ml",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=[_EVAL_SPLIT],
+        eval_langs=_EVAL_LANGS,
+        main_score="ndcg_at_10",
+        revision="dfe57acff5b62c23732a7b7d3e3fb84ff501708b",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
 
     @property
-    def description(self):
-        return {
-            "name": "XMarket",
-            "hf_hub_name": "jinaai/xmarket_ml",
-            "description": "XMarket is an ecommerce category to product retrieval dataset in German.",
-            "reference": "https://xmrec.github.io/",
-            "type": "Retrieval",
-            "category": "s2p",
-            "eval_splits": [_EVAL_SPLIT],
-            "eval_langs": _EVAL_LANGS,
-            "main_score": "ndcg_at_10",
-            "revision": "dfe57acff5b62c23732a7b7d3e3fb84ff501708b",
-        }
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_xmarket_data(
-            path=self.description['hf_hub_name'],
-            langs=self.langs,
-            split=self.description['eval_splits'][0],
-            cache_dir=kwargs.get('cache_dir', None),
-            revision=self.description['revision'],
+            path=self.metadata_dict["hf_hub_name"],
+            langs=self.metadata.eval_langs,
+            split=self.metadata_dict["eval_splits"][0],
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata_dict["revision"],
         )
 
         self.data_loaded = True

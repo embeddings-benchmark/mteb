@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from .AbsTask import *
 from .AbsTaskBitextMining import *
 from .AbsTaskClassification import *

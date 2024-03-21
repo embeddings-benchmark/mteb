@@ -1,4 +1,8 @@
+from __future__ import annotations
+
 import datasets
+
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -7,7 +11,9 @@ _EVAL_SPLIT = "test"
 _LANGS = ["ar", "de", "es", "fr", "hi", "it", "ja", "ko", "pl", "pt", "ta", "zh"]
 
 
-def _load_xpqa_data(path: str, langs: list, split: str, cache_dir: str = None, revision: str = None):
+def _load_xpqa_data(
+    path: str, langs: list, split: str, cache_dir: str = None, revision: str = None
+):
     queries = {lang: {split: {}} for lang in langs}
     corpus = {lang: {split: {}} for lang in langs}
     relevant_docs = {lang: {split: {}} for lang in langs}
@@ -20,7 +26,9 @@ def _load_xpqa_data(path: str, langs: list, split: str, cache_dir: str = None, r
             cache_dir=cache_dir,
             revision=revision,
         )
-        question_ids = {question: _id for _id, question in enumerate(set(data["question"]))}
+        question_ids = {
+            question: _id for _id, question in enumerate(set(data["question"]))
+        }
         answer_ids = {answer: _id for _id, answer in enumerate(set(data["answer"]))}
 
         for row in data:
@@ -42,31 +50,43 @@ def _load_xpqa_data(path: str, langs: list, split: str, cache_dir: str = None, r
 
 
 class XPQARetrieval(MultilingualTask, AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="XPQARetrieval",
+        description="XPQARetrieval",
+        reference="https://arxiv.org/abs/2305.09249",
+        hf_hub_name="jinaai/xpqa",
+        type="Retrieval",
+        category="s2p",
+        eval_splits=[_EVAL_SPLIT],
+        eval_langs=_LANGS,
+        main_score="ndcg_at_10",
+        revision="c99d599f0a6ab9b85b065da6f9d94f9cf731679f",
+        date=None,
+        form=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        socioeconomic_status=None,
+        annotations_creators=None,
+        dialect=None,
+        text_creation=None,
+        bibtex_citation=None,
+    )
+
     @property
-    def description(self):
-        return {
-            "name": "XPQARetrieval",
-            "hf_hub_name": "jinaai/xpqa",
-            "reference": "https://arxiv.org/abs/2305.09249",
-            "description": "xPQA is a large-scale annotated cross-lingual Product QA dataset.",
-            "type": "Retrieval",
-            "category": "s2s",
-            "eval_splits": [_EVAL_SPLIT],
-            "eval_langs": _LANGS,
-            "main_score": "ndcg_at_10",
-            "revision": "c99d599f0a6ab9b85b065da6f9d94f9cf731679f",
-        }
+    def metadata_dict(self) -> dict[str, str]:
+        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_xpqa_data(
-            path=self.description["hf_hub_name"],
+            path=self.metadata_dict["hf_hub_name"],
             langs=self.langs,
-            split=self.description["eval_splits"][0],
+            split=self.metadata_dict["eval_splits"][0],
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.description["revision"],
+            revision=self.metadata_dict["revision"],
         )
 
         self.data_loaded = True

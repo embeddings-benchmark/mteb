@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 import numpy as np
@@ -14,7 +16,7 @@ class AbsTaskClustering(AbsTask):
     Abstract class for Clustering tasks
     The similarity is computed between pairs and the results are ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.description["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
         sentences: list of str
         labels: list of str
     """
@@ -23,11 +25,11 @@ class AbsTaskClustering(AbsTask):
         super().__init__(**kwargs)
 
     def _add_main_score(self, scores):
-        if self.description["main_score"] in scores:
-            scores["main_score"] = scores[self.description["main_score"]]
+        if self.metadata_dict["main_score"] in scores:
+            scores["main_score"] = scores[self.metadata_dict["main_score"]]
         else:
             logger.warn(
-                f"main score {self.description['main_score']} not found in scores {scores.keys()}"
+                f"main score {self.metadata_dict['main_score']} not found in scores {scores.keys()}"
             )
 
     def evaluate(self, model, split="test", **kwargs):
@@ -38,7 +40,7 @@ class AbsTaskClustering(AbsTask):
             scores = {}
             for lang in self.dataset:
                 logger.info(
-                    f"\nTask: {self.description['name']}, split: {split}, language: {lang}. Running..."
+                    f"\nTask: {self.metadata_dict['name']}, split: {split}, language: {lang}. Running..."
                 )
                 scores[lang] = self._evaluate_monolingual(
                     model, self.dataset[lang], split, **kwargs
@@ -46,7 +48,7 @@ class AbsTaskClustering(AbsTask):
                 self._add_main_score(scores[lang])
         else:
             logger.info(
-                f"\nTask: {self.description['name']}, split: {split}. Running..."
+                f"\nTask: {self.metadata_dict['name']}, split: {split}. Running..."
             )
             scores = self._evaluate_monolingual(model, self.dataset, split, **kwargs)
             self._add_main_score(scores)
