@@ -77,4 +77,3 @@ class DdiscoCohesionClassification(AbsTaskClassification):
         self.dataset = self.dataset.rename_columns({"rating": "label"}).remove_columns(
             ["domain"]
         )
-

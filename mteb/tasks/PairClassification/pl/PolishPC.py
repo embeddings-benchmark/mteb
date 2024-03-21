@@ -30,7 +30,6 @@ class SickePLPC(AbsTaskPairClassification):
     )
 
 
-
 class PpcPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PpcPC",
@@ -81,7 +80,6 @@ class CdscePC(AbsTaskPairClassification):
     )
 
 
-
 class PscPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PSC",
@@ -105,4 +103,3 @@ class PscPC(AbsTaskPairClassification):
         text_creation=None,
         bibtex_citation=None,
     )
-

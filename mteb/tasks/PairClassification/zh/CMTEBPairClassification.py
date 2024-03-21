@@ -52,4 +52,3 @@ class Cmnli(AbsTaskPairClassification):
         text_creation=None,
         bibtex_citation=None,
     )
-

@@ -114,8 +114,8 @@ class TaskMetadata(BaseModel):
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
         dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag.
-        text_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and 
-            "machine-translated and localized". 
+        text_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
+            "machine-translated and localized".
         bibtex_citation: The BibTeX citation for the dataset.
     """
 

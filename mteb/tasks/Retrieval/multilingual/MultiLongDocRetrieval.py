@@ -81,7 +81,6 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
 """,
     )
 
-
     def load_data(self, **kwargs):
         if self.data_loaded:
             return

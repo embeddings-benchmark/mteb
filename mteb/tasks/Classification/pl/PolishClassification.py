@@ -56,8 +56,6 @@ class PolEmo2InClassification(AbsTaskClassification):
     )
 
 
-
-
 class PolEmo2OutClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PolEmo2.0-OUT",
@@ -83,7 +81,6 @@ class PolEmo2OutClassification(AbsTaskClassification):
         text_creation=None,
         bibtex_citation=None,
     )
-
 
 
 class AllegroReviewsClassification(AbsTaskClassification):
@@ -134,4 +131,3 @@ class PacClassification(AbsTaskClassification):
         text_creation=None,
         bibtex_citation=None,
     )
-

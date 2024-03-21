@@ -28,4 +28,3 @@ class NFCorpusPL(AbsTaskRetrieval):
         text_creation=None,
         bibtex_citation=None,
     )
-

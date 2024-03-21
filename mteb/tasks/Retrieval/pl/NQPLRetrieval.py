@@ -28,4 +28,3 @@ class NQPL(AbsTaskRetrieval):
         text_creation=None,
         bibtex_citation=None,
     )
-

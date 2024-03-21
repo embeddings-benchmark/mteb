@@ -31,7 +31,6 @@ class BSARDRetrieval(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-
     def load_data(self, **kwargs):
         if self.data_loaded:
             return

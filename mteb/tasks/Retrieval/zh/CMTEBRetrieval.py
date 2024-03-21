@@ -50,7 +50,6 @@ class T2Retrieval(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
@@ -84,7 +83,6 @@ class MMarcoRetrieval(AbsTaskRetrieval):
         text_creation=None,
         bibtex_citation=None,
     )
-
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -120,7 +118,6 @@ class DuRetrieval(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
@@ -154,7 +151,6 @@ class CovidRetrieval(AbsTaskRetrieval):
         text_creation=None,
         bibtex_citation=None,
     )
-
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -190,7 +186,6 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
@@ -224,7 +219,6 @@ class EcomRetrieval(AbsTaskRetrieval):
         text_creation=None,
         bibtex_citation=None,
     )
-
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -260,7 +254,6 @@ class MedicalRetrieval(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
@@ -294,7 +287,6 @@ class VideoRetrieval(AbsTaskRetrieval):
         text_creation=None,
         bibtex_citation=None,
     )
-
 
     def load_data(self, **kwargs):
         if self.data_loaded:

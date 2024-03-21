@@ -30,7 +30,6 @@ class BornholmBitextMining(AbsTaskBitextMining):
         bibtex_citation=None,
     )
 
-
     def load_data(self, **kwargs):
         """
         Load dataset from HuggingFace hub and convert it to the standard format.

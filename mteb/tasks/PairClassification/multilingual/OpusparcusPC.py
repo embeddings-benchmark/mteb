@@ -33,7 +33,6 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
         bibtex_citation=None,
     )
 
-
     def load_data(self, **kwargs):
         """
         Load dataset from HuggingFace hub

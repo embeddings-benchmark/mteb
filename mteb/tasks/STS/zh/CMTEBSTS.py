@@ -220,4 +220,3 @@ class QBQTC(AbsTaskSTS):
         text_creation=None,
         bibtex_citation=None,
     )
-

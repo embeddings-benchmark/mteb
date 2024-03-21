@@ -55,7 +55,6 @@ class CLSClusteringP2P(AbsTaskClustering):
     )
 
 
-
 class ThuNewsClusteringS2S(AbsTaskClustering):
     metadata = TaskMetadata(
         name="ThuNewsClusteringS2S",

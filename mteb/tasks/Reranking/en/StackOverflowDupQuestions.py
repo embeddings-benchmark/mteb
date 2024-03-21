@@ -28,4 +28,3 @@ class StackOverflowDupQuestions(AbsTaskReranking):
         text_creation=None,
         bibtex_citation=None,
     )
-

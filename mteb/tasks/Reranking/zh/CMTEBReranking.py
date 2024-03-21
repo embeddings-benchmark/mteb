@@ -29,7 +29,6 @@ class T2Reranking(AbsTaskReranking):
     )
 
 
-
 class MMarcoReranking(AbsTaskReranking):
     metadata = TaskMetadata(
         name="MMarcoReranking",

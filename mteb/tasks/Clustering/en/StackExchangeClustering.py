@@ -28,4 +28,3 @@ class StackExchangeClustering(AbsTaskClustering):
         text_creation=None,
         bibtex_citation=None,
     )
-

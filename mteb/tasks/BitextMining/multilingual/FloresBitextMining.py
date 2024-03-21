@@ -256,7 +256,6 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
         bibtex_citation=None,
     )
 
-
     def load_data(self, **kwargs):
         """
         Load dataset from HuggingFace hub

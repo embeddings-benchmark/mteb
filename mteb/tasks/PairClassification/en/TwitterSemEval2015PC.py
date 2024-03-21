@@ -28,4 +28,3 @@ class TwitterSemEval2015PC(AbsTaskPairClassification):
         text_creation=None,
         bibtex_citation=None,
     )
-
