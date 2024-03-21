@@ -58,3 +58,7 @@ Team submissions are free to distribute points among the members as they like.
 ## Communication Channels
 
 We will communicate via this GitHub repository. Please feel free to open issues or discussions and `Watch` the repository to be notified of any changes.
+
+## Acknowledgements
+
+We thank [Contextual AI](https://contextual.ai/) for sponsoring compute for this project.
