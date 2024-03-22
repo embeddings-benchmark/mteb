@@ -15,3 +15,8 @@ test-parallel:
 	@echo "--- 🧪 Running tests ---"
 	@echo "Note that parallel tests can sometimes cause issues with some tests."
 	pytest -n auto --dist=loadfile -s -v
+
+pr:
+	@echo "--- 🚀 Running requirements for a PR ---"
+	make lint
+	make test-parallel

@@ -221,7 +221,7 @@ These domains subtypes were introduced in the [Scandinavian Embedding Benchmark]
 
 
 
-## submit a PR
+## Submit a PR
 
 Once you are finished create a PR to the [MTEB](https://github.com/embeddings-benchmark/mteb) repository. If you haven't created a PR before please refer to the [GitHub documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/)
 
@@ -241,12 +241,13 @@ from sentence_transformers import SentenceTransformer
 model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 
 model = SentenceTransformer(model_name)
-evaluation = MTEB(tasks=["{the name of your task}"])
+evaluation = MTEB(tasks=[YourNewTask()])
 ```
 
 - [ ] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb run -m {model_name} -t {task_name}` command.
   - [ ] `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
   - [ ] `intfloat/multilingual-e5-small`
+- [ ] I have checked that the performance is neither trivial (both models gain close to perfect scores) nor random (both models gain close to random scores).
 - [ ] I have considered the size of the dataset and reduced it if it is too big (2048 examples is typically large enough for most tasks)
 - [ ] Run tests locally to make sure nothing is broken using `make test`. 
-- [ ] Run black formatter to format the code using `make lint`.
+- [ ] Run the formatter to format the code using `make lint`.
