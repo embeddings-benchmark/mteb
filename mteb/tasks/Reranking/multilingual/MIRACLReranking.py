@@ -29,7 +29,3 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         text_creation=None,
         bibtex_citation=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)

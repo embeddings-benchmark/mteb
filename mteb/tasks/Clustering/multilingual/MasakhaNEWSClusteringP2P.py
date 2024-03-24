@@ -51,10 +51,6 @@ class MasakhaNEWSClusteringP2P(AbsTaskClustering, MultilingualTask):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
-
     def load_data(self, **kwargs):
         """
         Load dataset from HuggingFace hub and convert it to the standard format.

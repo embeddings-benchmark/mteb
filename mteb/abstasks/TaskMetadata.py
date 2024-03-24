@@ -21,6 +21,7 @@ TASK_SUBTYPE = Literal[
     "Question answering",
     "Sentiment/Hate speech",
     "Thematic clustering",
+    "Scientific Reranking",
 ]
 
 TASK_DOMAIN = Literal[
@@ -54,6 +55,7 @@ SOCIOECONOMIC_STATUS = Literal[
     "high",
     "medium",
     "low",
+    "mixed",
 ]
 
 TASK_TYPE = Literal[
@@ -87,7 +89,35 @@ STR_DATE = Annotated[
 
 
 class TaskMetadata(BaseModel):
-    # Meta: We can annotate the requirements here, and then link to it in the docs. This would move the documentation closer to the code, which I think is a good idea.
+    """
+    Metadata for a task.
+
+    Args:
+        hf_hub_name: The name of the dataset for the task on the Hugging Face Hub.
+        revision: The revision of the dataset for the task on the Hugging Face Hub.
+        name: The name of the task.
+        description: A description of the task.
+        type: The type of the task. These includes "Classification", "Summarization", "STS", "Retrieval", "Reranking", "Clustering",
+            "PairClassification", "BitextMining". The type should match the abstask type.
+        category: The category of the task. E.g. includes "s2s", "s2p", "p2p" (s=sentence, p=paragraph).
+        reference: A URL to the documentation of the task. E.g. a published paper.
+        eval_splits: The splits of the dataset used for evaluation.
+        eval_langs: The languages of the dataset used for evaluation.
+        main_score: The main score used for evaluation.
+        date: The date when the data was collected. Specified as a tuple of two dates.
+        form: The form of the data. Either "spoken", "written".
+        domains: The domains of the data. These includes "Non-fiction", "Social", "Fiction", "News", "Academic", "Blog", "Encyclopaedic",
+            "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken". A dataset can belong to multiple domains.
+        task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
+        license: The license of the data.
+        socioeconomic_status: The socioeconomic status of the data. Includes "high", "medium", "low", "mixed".
+        annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
+            mturkers), "derived" (derived from structure in the data).
+        dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag.
+        text_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
+            "machine-translated and localized".
+        bibtex_citation: The BibTeX citation for the dataset.
+    """
 
     hf_hub_name: str
     revision: str

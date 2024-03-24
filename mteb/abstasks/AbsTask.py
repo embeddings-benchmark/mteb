@@ -7,8 +7,12 @@ import datasets
 import numpy as np
 import torch
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 
 class AbsTask(ABC):
+    metadata: TaskMetadata
+
     def __init__(self, seed=42, **kwargs):
         self.dataset = None
         self.data_loaded = False
@@ -37,17 +41,8 @@ class AbsTask(ABC):
         self.data_loaded = True
 
     @property
-    @abstractmethod
     def metadata_dict(self) -> dict[str, str]:
-        """
-        Returns a description of the task. Should contain the following fields:
-        name: Name of the task (usually equal to the class name. Should be a valid name for a path on disc)
-        description: Longer description & references for the task
-        type: Of the set: [sts]
-        eval_splits: Splits used for evaluation as list, e.g. ['dev', 'test']
-        main_score: Main score value for task
-        """
-        raise NotImplementedError
+        return dict(self.metadata)
 
     @abstractmethod
     def evaluate(self, model, split="test"):

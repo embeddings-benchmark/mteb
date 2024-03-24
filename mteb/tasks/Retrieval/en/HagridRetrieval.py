@@ -38,11 +38,6 @@ class HagridRetrieval(AbsTaskRetrieval):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
-        return {}
-
     def load_data(self, **kwargs):
         """
         Loads the different split of the dataset (queries/corpus/relevants)
