@@ -1,7 +1,7 @@
 
-# Adding a Task
+# Adding a Dataset
 
-To add a new task to MTEB, you need to do three things:
+To add a new dataset to MTEB, you need to do three things:
 
 1) Implement a task with the desired dataset, by subclassing an abstract task
 2) Add metadata to the task
@@ -61,7 +61,7 @@ evaluation.run(model)
 
 
 ### A Detailed Example
-Often the dataset from HuggingFace is not in the format expected by MTEB. To resolve this you can add a `dataset_transform` method to your dataset to ensure it is in the right format. Here is an example along with some design considerations: 
+Often the dataset from HuggingFace is not in the format expected by MTEB. To resolve this you can either change the format on Hugging Face or add a `dataset_transform` method to your dataset to transform it into the right format on the fly. Here is an example along with some design considerations: 
 
 ```python
 class VGClustering(AbsTaskClustering):
@@ -155,7 +155,7 @@ class VGClustering(AbsTaskClustering):
 
 
 ## 2) Creating the metadata object
-Along with the task MMTEB requires metadata regarding the task. If the metadata isn't available please provide your best guess or leave the field as `None`.
+Along with the task MTEB requires metadata regarding the task. If the metadata isn't available please provide your best guess or leave the field as `None`.
 
 To get an overview of the fields in the metadata object, you can look at the [TaskMetadata](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/abstasks/TaskMetadata.py) class.
 
@@ -166,7 +166,7 @@ Note that these fields can be left blank if the information is not available and
 <summary>Domains</summary>
 <br>
 
-The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though we updated them were deemed appropriate. These do no have to be mutually exclusive.
+The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though we updated them where deemed appropriate. These do not have to be mutually exclusive.
 
 | **Domain**    | **Description**                                                  |
 | ------------- | ---------------------------------------------------------------- |
@@ -195,7 +195,7 @@ The domains follow the categories used in the [Universal Dependencies project](h
 <summary>Task Subtypes</summary>
 <br>
 
-These domains subtypes were introduced in the [Scandinavian Embedding Benchmark](https://openreview.net/pdf/f5f1953a9c798ec61bb050e62bc7a94037fd4fab.pdf) and is intended to be extended as needed.
+These domains subtypes were introduced in the [Scandinavian Embedding Benchmark](https://openreview.net/pdf/f5f1953a9c798ec61bb050e62bc7a94037fd4fab.pdf) and are intended to be extended as needed.
 
 
 
@@ -223,7 +223,7 @@ These domains subtypes were introduced in the [Scandinavian Embedding Benchmark]
 
 
 
-## submit a PR
+## Submit a PR
 
 Once you are finished create a PR to the [MTEB](https://github.com/embeddings-benchmark/mteb) repository. If you haven't created a PR before please refer to the [GitHub documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/)
 
@@ -243,12 +243,13 @@ from sentence_transformers import SentenceTransformer
 model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 
 model = SentenceTransformer(model_name)
-evaluation = MTEB(tasks=["{the name of your task}"])
+evaluation = MTEB(tasks=[YourNewTask()])
 ```
 
 - [ ] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb run -m {model_name} -t {task_name}` command.
   - [ ] `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
   - [ ] `intfloat/multilingual-e5-small`
+- [ ] I have checked that the performance is neither trivial (both models gain close to perfect scores) nor random (both models gain close to random scores).
 - [ ] I have considered the size of the dataset and reduced it if it is too big (2048 examples is typically large enough for most tasks)
 - [ ] Run tests locally to make sure nothing is broken using `make test`. 
-- [ ] Run black formatter to format the code using `make lint`.
+- [ ] Run the formatter to format the code using `make lint`.
