@@ -26,6 +26,8 @@ class T2Reranking(AbsTaskReranking):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
 
 
@@ -51,6 +53,8 @@ class MMarcoReranking(AbsTaskReranking):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
 
 
@@ -76,6 +80,8 @@ class CMedQAv1(AbsTaskReranking):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
 
 
@@ -101,4 +107,6 @@ class CMedQAv2(AbsTaskReranking):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )

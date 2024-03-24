@@ -27,6 +27,8 @@ class EmotionClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"validation": 2000, "test": 2000},
+        avg_character_length={"validation": 95.3, "test": 95.6},
     )
 
     @property

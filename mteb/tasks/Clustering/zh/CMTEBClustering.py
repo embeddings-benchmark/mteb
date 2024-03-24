@@ -27,6 +27,8 @@ class CLSClusteringS2S(AbsTaskClustering):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
 
 
@@ -52,6 +54,8 @@ class CLSClusteringP2P(AbsTaskClustering):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
 
 
@@ -77,6 +81,8 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
 
 
@@ -102,4 +108,6 @@ class ThuNewsClusteringP2P(AbsTaskClustering):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )

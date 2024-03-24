@@ -29,4 +29,6 @@ class BUCCBitextMining(AbsTaskBitextMining, CrosslingualTask):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 641684},
+        avg_character_length={"test": 101.3},
     )

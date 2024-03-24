@@ -81,4 +81,6 @@ class MassiveIntentClassification(MultilingualTask, AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"validation": 2033, "test": 2974},
+        avg_character_length={"validation": 34.8, "test": 34.6},
     )

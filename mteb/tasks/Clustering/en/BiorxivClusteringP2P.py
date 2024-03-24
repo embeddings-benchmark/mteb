@@ -26,4 +26,6 @@ class BiorxivClusteringP2P(AbsTaskClustering):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 75000},
+        avg_character_length={"test": 1666.2},
     )

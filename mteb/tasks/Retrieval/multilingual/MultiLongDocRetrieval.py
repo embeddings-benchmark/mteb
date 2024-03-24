@@ -79,6 +79,8 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
       primaryClass={cs.CL}
 }
 """,
+        n_samples=None,
+        avg_character_length=None,
     )
 
     def load_data(self, **kwargs):

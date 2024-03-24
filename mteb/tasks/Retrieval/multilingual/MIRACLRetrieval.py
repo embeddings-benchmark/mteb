@@ -81,6 +81,8 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
 
     def load_data(self, **kwargs):

@@ -28,6 +28,8 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 2050},
+        avg_character_length={"test": 1884.0},
     )
 
     def load_data(self, **kwargs):

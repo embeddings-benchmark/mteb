@@ -27,4 +27,6 @@ class TwitterURLCorpusPC(AbsTaskPairClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 51534},
+        avg_character_length={"test": 79.5},
     )

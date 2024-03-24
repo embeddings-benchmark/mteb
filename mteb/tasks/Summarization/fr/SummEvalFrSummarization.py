@@ -17,15 +17,17 @@ class SummEvalFrSummarization(AbsTaskSummarization):
         main_score="cosine_spearman",
         revision="b385812de6a9577b6f4d0f88c6a6e35395a94054",
         date=None,
-        form=None,
+        form=["written"],
         domains=None,
         task_subtypes=None,
         license=None,
         socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        text_creation="machine-translated",
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
 
     @property

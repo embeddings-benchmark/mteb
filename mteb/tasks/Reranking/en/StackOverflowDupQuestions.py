@@ -27,4 +27,6 @@ class StackOverflowDupQuestions(AbsTaskReranking):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 3467},
+        avg_character_length={"test": 49.8},
     )

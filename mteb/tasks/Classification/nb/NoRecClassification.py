@@ -26,4 +26,6 @@ class NoRecClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 2050},
+        avg_character_length={"test": 82},
     )

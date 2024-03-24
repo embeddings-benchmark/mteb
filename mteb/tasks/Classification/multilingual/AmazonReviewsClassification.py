@@ -29,4 +29,6 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"validation": 30000, "test": 30000},
+        avg_character_length={"validation": 159.2, "test": 160.4},
     )

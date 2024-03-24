@@ -27,4 +27,6 @@ class AskUbuntuDupQuestions(AbsTaskReranking):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 2255},
+        avg_character_length={"test": 52.5},
     )

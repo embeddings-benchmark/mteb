@@ -31,6 +31,8 @@ class AmazonCounterfactualClassification(MultilingualTask, AbsTaskClassification
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"validation": 335, "test": 670},
+        avg_character_length={"validation": 109.2, "test": 106.1},
     )
 
     @property

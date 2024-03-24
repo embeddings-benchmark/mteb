@@ -117,6 +117,8 @@ class TaskMetadata(BaseModel):
         text_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
         bibtex_citation: The BibTeX citation for the dataset.
+        n_samples: The number of samples in the dataset. This should only be for the splits evaluated on.
+        avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on.
     """
 
     hf_hub_name: str
@@ -144,3 +146,6 @@ class TaskMetadata(BaseModel):
 
     text_creation: TEXT_CREATION_METHOD | None
     bibtex_citation: str | None
+
+    n_samples: dict[str, int] | None
+    avg_character_length: dict[str, float] | None
