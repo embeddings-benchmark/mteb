@@ -27,8 +27,8 @@ class ATEC(AbsTaskSTS):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )
 
     @property
@@ -61,8 +61,8 @@ class BQ(AbsTaskSTS):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )
 
     @property
@@ -95,8 +95,8 @@ class LCQMC(AbsTaskSTS):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )
 
     @property
@@ -129,8 +129,8 @@ class PAWSX(AbsTaskSTS):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )
 
     @property
@@ -163,8 +163,8 @@ class STSB(AbsTaskSTS):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )
 
     @property
@@ -197,8 +197,8 @@ class AFQMC(AbsTaskSTS):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )
 
     @property
@@ -231,6 +231,6 @@ class QBQTC(AbsTaskSTS):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )

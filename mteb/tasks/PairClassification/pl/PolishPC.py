@@ -27,8 +27,8 @@ class SickePLPC(AbsTaskPairClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )
 
 
@@ -54,8 +54,8 @@ class PpcPC(AbsTaskPairClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )
 
 
@@ -81,8 +81,8 @@ class CdscePC(AbsTaskPairClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )
 
 
@@ -108,6 +108,6 @@ class PscPC(AbsTaskPairClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )

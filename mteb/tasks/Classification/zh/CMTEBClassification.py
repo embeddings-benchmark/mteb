@@ -27,8 +27,8 @@ class TNews(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )
 
     @property
@@ -60,8 +60,8 @@ class IFlyTek(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )
 
     @property
@@ -94,8 +94,8 @@ class MultilingualSentiment(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )
 
     @property
@@ -127,8 +127,8 @@ class JDReview(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )
 
     @property
@@ -160,8 +160,8 @@ class OnlineShopping(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )
 
     @property
@@ -193,8 +193,8 @@ class Waimai(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={},
-        avg_character_length={},
+        n_samples=None,
+        avg_character_length=None,
     )
 
     @property
