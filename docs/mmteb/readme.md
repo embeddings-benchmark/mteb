@@ -1,10 +1,10 @@
 # Welcome to MMTEB! 👋
 
-MMTEB is a community-led extension of [MTEB](https://arxiv.org/abs/2210.07316) to cover embedding tasks for a massive number of languages.
+The Massive Multilingual Text Embedding Benchmark (MMTEB) is a community-led extension of [MTEB](https://arxiv.org/abs/2210.07316) to cover embedding tasks for a massive number of languages.
 
 ## Background 
 
-MTEB or the Massive Text Embedding Benchmark is intended to evaluate the quality of document embeddings. When it was initially introduced, the benchmark consisted of 8 embedding tasks and 58 different datasets. Since then, MTEB has been subject to multiple community contributions as well as benchmark extensions over specific languages such as [SEB](https://openreview.net/pdf/f5f1953a9c798ec61bb050e62bc7a94037fd4fab.pdf), [C-MTEB](https://github.com/FlagOpen/FlagEmbedding/tree/master/C_MTEB) and [MTEB-French](https://github.com/Lyon-NLP/mteb-french). However, we want even wider coverage and thus announce the community-led extension of MTEB, where we seek to expand coverage of MTEB to as many languages as possible.
+The Massive Text Embedding Benchmark (MTEB) is intended to evaluate the quality of document embeddings. When it was initially introduced, the benchmark consisted of 8 embedding tasks and 58 different datasets. Since then, MTEB has been subject to multiple community contributions as well as benchmark extensions over specific languages such as [SEB](https://openreview.net/pdf/f5f1953a9c798ec61bb050e62bc7a94037fd4fab.pdf), [C-MTEB](https://github.com/FlagOpen/FlagEmbedding/tree/master/C_MTEB) and [MTEB-French](https://github.com/Lyon-NLP/mteb-french). However, we want even wider coverage and thus announce the community-led extension of MTEB, where we seek to expand coverage of MTEB to as many languages as possible.
 
 ## Contributing to MMTEB
 

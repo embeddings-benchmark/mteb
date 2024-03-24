@@ -17,4 +17,5 @@ if you are not
 - [ ] I have checked that the performance is neither trivial (both models gain close to perfect scores) nor random (both models gain close to random scores).
 - [ ] I have considered the size of the dataset and reduced it if it is too big (2048 examples is typically large enough for most tasks)
 - [ ] Run tests locally to make sure nothing is broken using `make test`. 
-- [ ] Run the formatter to format  the code using `make lint`.
+- [ ] Run the formatter to format the code using `make lint`. 
+- [ ] I have added points for my submission to the [POINTS.md](https://github.com/embeddings-benchmark/mteb/tree/main/docs/mmteb/POINTS.md) file.

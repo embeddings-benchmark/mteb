@@ -178,7 +178,7 @@ class MyModel():
         pass
 ```
 
-### Evaluating on a custom task
+### Evaluating on a custom dataset
 
 To evaluate on a custom task, you can run the following code on your custom task. See [how to add a new task](docs/adding_a_dataset.md), for how to create a new task in MTEB.
 
