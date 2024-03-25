@@ -87,6 +87,8 @@ STR_DATE = Annotated[
     str, BeforeValidator(lambda value: str(pastdate_adapter.validate_python(value)))
 ]  # Allows the type to be a string, but ensures that the string is a valid date
 
+SPLIT_NAME = str
+
 
 class TaskMetadata(BaseModel):
     """
@@ -147,5 +149,5 @@ class TaskMetadata(BaseModel):
     text_creation: TEXT_CREATION_METHOD | None
     bibtex_citation: str | None
 
-    n_samples: dict[str, int] | None
-    avg_character_length: dict[str, float] | None
+    n_samples: dict[SPLIT_NAME, int] | None
+    avg_character_length: dict[SPLIT_NAME, float] | None
