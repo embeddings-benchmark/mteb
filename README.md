@@ -214,7 +214,7 @@ evaluation.run(model)
 [Tasks]: docs/tasks.md
 [Contributing]: docs/contributing.md
 [Adding a model]: docs/adding_a_model.md
-[Adding a task]: docs/adding_a_dataset.md
+[Adding a dataset]: docs/adding_a_dataset.md
 [Leaderboard]: https://huggingface.co/spaces/mteb/leaderboard
 [MMTEB]: docs/mmteb/readme.md
 
