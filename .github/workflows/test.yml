@@ -3,14 +3,14 @@
 # 2) run make test
 
 
-name: Tests
+name: Test
 on:
   push:
     branches: [main]
   pull_request:
 
 jobs:
-  pytest:
+  test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
