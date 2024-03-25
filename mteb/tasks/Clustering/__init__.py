@@ -26,5 +26,8 @@ from .fr.MLSUMClusteringP2P import *
 from .fr.MLSUMClusteringS2S import *
 from .multilingual.MasakhaNEWSClusteringP2P import *
 from .multilingual.MasakhaNEWSClusteringS2S import *
+from .nb.snl_clustering import *
+from .nb.vg_clustering import *
 from .pl.PolishClustering import *
+from .sv.swedn_clustering import *
 from .zh.CMTEBClustering import *

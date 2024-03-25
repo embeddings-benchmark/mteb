@@ -17,11 +17,12 @@ TASK_SUBTYPE = Literal[
     "Discourse coherence",
     "Language identification",
     "Linguistic acceptability",
-    "Political",
+    "Political classification",
     "Question answering",
     "Sentiment/Hate speech",
     "Thematic clustering",
     "Scientific Reranking",
+    "Claim verification",
 ]
 
 TASK_DOMAIN = Literal[
