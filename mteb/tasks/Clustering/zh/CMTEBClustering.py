@@ -27,11 +27,9 @@ class CLSClusteringS2S(AbsTaskClustering):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
 
 class CLSClusteringP2P(AbsTaskClustering):
@@ -56,11 +54,9 @@ class CLSClusteringP2P(AbsTaskClustering):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
 
 class ThuNewsClusteringS2S(AbsTaskClustering):
@@ -85,11 +81,9 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
 
 class ThuNewsClusteringP2P(AbsTaskClustering):
@@ -114,8 +108,6 @@ class ThuNewsClusteringP2P(AbsTaskClustering):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)

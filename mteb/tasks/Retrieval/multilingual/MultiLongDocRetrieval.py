@@ -79,11 +79,9 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
       primaryClass={cs.CL}
 }
 """,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:

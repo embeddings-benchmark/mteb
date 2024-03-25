@@ -27,8 +27,6 @@ class TenKGnadClusteringS2S(AbsTaskClustering):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 45914},
+        avg_character_length={"test": 50.96},
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)

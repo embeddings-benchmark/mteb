@@ -51,11 +51,9 @@ class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         """

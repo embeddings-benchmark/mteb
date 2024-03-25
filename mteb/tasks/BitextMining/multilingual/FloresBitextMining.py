@@ -254,11 +254,9 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"dev": 997, "devtest": 1012},
+        avg_character_length={},
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         """

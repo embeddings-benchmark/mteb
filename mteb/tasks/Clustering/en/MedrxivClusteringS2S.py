@@ -27,8 +27,6 @@ class MedrxivClusteringS2S(AbsTaskClustering):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 375000},
+        avg_character_length={"test": 114.7},
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)

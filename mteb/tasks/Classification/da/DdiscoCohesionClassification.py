@@ -57,6 +57,8 @@ class DdiscoCohesionClassification(AbsTaskClassification):
     abstract = "To date, there has been no resource for studying discourse coherence on real-world Danish texts. Discourse coherence has mostly been approached with the assumption that incoherent texts can be represented by coherent texts in which sentences have been shuffled. However, incoherent real-world texts rarely resemble that. We thus present DDisCo, a dataset including text from the Danish Wikipedia and Reddit annotated for discourse coherence. We choose to annotate real-world texts instead of relying on artificially incoherent text for training and testing models. Then, we evaluate the performance of several methods, including neural networks, on the dataset.",
 }
         """,
+        n_samples=None,
+        avg_character_length=None,
     )
 
     def load_data(self, **kwargs):
@@ -77,7 +79,3 @@ class DdiscoCohesionClassification(AbsTaskClassification):
         self.dataset = self.dataset.rename_columns({"rating": "label"}).remove_columns(
             ["domain"]
         )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)

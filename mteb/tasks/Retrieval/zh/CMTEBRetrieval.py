@@ -48,11 +48,9 @@ class T2Retrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -86,11 +84,9 @@ class MMarcoRetrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -124,11 +120,9 @@ class DuRetrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -162,11 +156,9 @@ class CovidRetrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -200,11 +192,9 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -238,11 +228,9 @@ class EcomRetrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -276,11 +264,9 @@ class MedicalRetrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -314,11 +300,9 @@ class VideoRetrieval(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     def load_data(self, **kwargs):
         if self.data_loaded:

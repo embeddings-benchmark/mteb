@@ -27,11 +27,9 @@ class CbdClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 1000},
+        avg_character_length={"test": 93.2},
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
 
 class PolEmo2InClassification(AbsTaskClassification):
@@ -57,11 +55,9 @@ class PolEmo2InClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
 
 class PolEmo2OutClassification(AbsTaskClassification):
@@ -88,11 +84,9 @@ class PolEmo2OutClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 722},
+        avg_character_length={"test": 756.2},
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
 
 class AllegroReviewsClassification(AbsTaskClassification):
@@ -117,11 +111,9 @@ class AllegroReviewsClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 1006},
+        avg_character_length={"test": 477.2},
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
 
 class PacClassification(AbsTaskClassification):
@@ -146,8 +138,6 @@ class PacClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 3453},
+        avg_character_length={"test": 185.3},
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)

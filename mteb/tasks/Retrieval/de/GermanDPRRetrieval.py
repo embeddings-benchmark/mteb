@@ -32,11 +32,9 @@ class GermanDPR(AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
     @staticmethod
     def _format_documents(docs, id_prefix="", existing_docs=None):

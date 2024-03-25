@@ -28,12 +28,9 @@ class BornholmBitextMining(AbsTaskBitextMining):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        avg_character_length={"test": 89.7},
+        n_samples={"test": 500},
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
-        return
 
     def load_data(self, **kwargs):
         """

@@ -26,23 +26,9 @@ class T2Reranking(AbsTaskReranking):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
-        return {
-            "name": "T2Reranking",
-            "hf_hub_name": "C-MTEB/T2Reranking",
-            "description": "T2Ranking: A large-scale Chinese Benchmark for Passage Ranking",
-            "reference": "https://arxiv.org/abs/2304.03679",
-            "type": "Reranking",
-            "category": "s2p",
-            "eval_splits": ["dev"],
-            "eval_langs": ["zh"],
-            "main_score": "map",
-            "revision": "76631901a18387f85eaa53e5450019b87ad58ef9",
-        }
 
 
 class MMarcoReranking(AbsTaskReranking):
@@ -67,11 +53,9 @@ class MMarcoReranking(AbsTaskReranking):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
 
 class CMedQAv1(AbsTaskReranking):
@@ -96,11 +80,9 @@ class CMedQAv1(AbsTaskReranking):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)
 
 
 class CMedQAv2(AbsTaskReranking):
@@ -125,8 +107,6 @@ class CMedQAv2(AbsTaskReranking):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples=None,
+        avg_character_length=None,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)

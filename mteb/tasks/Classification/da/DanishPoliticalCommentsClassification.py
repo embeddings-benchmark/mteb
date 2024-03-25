@@ -28,6 +28,8 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"train": 9010},
+        avg_character_length={"train": 69.9},
     )
 
     @property

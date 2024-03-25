@@ -27,8 +27,6 @@ class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"validation": 101000, "test": 101000},
+        avg_character_length={"validation": 65.2, "test": 67.9},
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)

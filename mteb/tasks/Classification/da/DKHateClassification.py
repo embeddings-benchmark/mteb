@@ -28,6 +28,8 @@ class DKHateClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 329},
+        avg_character_length={"test": 104.0},
     )
 
     @property

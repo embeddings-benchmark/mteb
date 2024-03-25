@@ -81,8 +81,6 @@ class MassiveScenarioClassification(MultilingualTask, AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"validation": 2033, "test": 2974},
+        avg_character_length={"validation": 34.8, "test": 34.6},
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)

@@ -26,8 +26,6 @@ class BlurbsClusteringP2P(AbsTaskClustering):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 174637},
+        avg_character_length={"test": 664.09},
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)

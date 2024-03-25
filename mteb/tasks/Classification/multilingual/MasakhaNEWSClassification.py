@@ -46,8 +46,6 @@ class MasakhaNEWSClassification(AbsTaskClassification, MultilingualTask):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 422},
+        avg_character_length={"test": 5116.6},
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)

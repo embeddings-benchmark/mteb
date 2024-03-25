@@ -27,8 +27,6 @@ class MindSmallReranking(AbsTaskReranking):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 107968},
+        avg_character_length={"test": 70.9},
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        return dict(self.metadata)

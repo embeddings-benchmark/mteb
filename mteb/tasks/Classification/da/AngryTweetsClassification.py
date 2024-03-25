@@ -26,6 +26,8 @@ class AngryTweetsClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
+        n_samples={"test": 1050},
+        avg_character_length={"test": 156.1},
     )
 
     @property
