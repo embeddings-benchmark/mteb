@@ -8,10 +8,9 @@ from sentence_transformers import SentenceTransformer
 
 from mteb import MTEB
 from mteb.abstasks import AbsTask
-from mteb.tasks.BitextMining import BUCCBitextMining
+from mteb.tasks.BitextMining.da.BornholmskBitextMining import BornholmBitextMining
 
 logging.basicConfig(level=logging.INFO)
-from mteb import MTEB
 
 
 def test_two_mteb_tasks():
@@ -31,7 +30,7 @@ def test_two_mteb_tasks():
 @pytest.mark.parametrize(
     "task",
     [
-        BUCCBitextMining(),
+        BornholmBitextMining(),
         "TwentyNewsgroupsClustering",
         "Banking77Classification",
         "SciDocsRR",
@@ -44,7 +43,7 @@ def test_two_mteb_tasks():
 @pytest.mark.parametrize(
     "model_name",
     [
-        "average_word_embeddings_komninos",
+        "average_word_embeddings_levy_dependency",
     ],
 )
 def test_mteb_task(task: Union[str, AbsTask], model_name: str):

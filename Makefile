@@ -9,12 +9,7 @@ lint:
 
 test:
 	@echo "--- 🧪 Running tests ---"
-	pytest
-
-test-parallel:
-	@echo "--- 🧪 Running tests ---"
-	@echo "Note that parallel tests can sometimes cause issues with some tests."
-	pytest -n auto --dist=loadfile -s -v
+	pytest -n auto --durations=5
 
 pr:
 	@echo "--- 🚀 Running requirements for a PR ---"
