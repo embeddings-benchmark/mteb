@@ -1,7 +1,6 @@
 import random
-from collections.abc import Iterable
 from itertools import islice
-from typing import TypeVar
+from typing import Iterable, TypeVar
 
 import datasets
 
