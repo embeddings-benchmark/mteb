@@ -17,8 +17,6 @@ To run the tests, you can use the following command:
 
 ```bash
 make test
-# or if you want to run on multiple cores
-make test-parallel
 ```
 
 ### Running linting
@@ -27,6 +25,7 @@ To run the linting before a PR you can use the following command:
 ```bash
 make lint
 ```
+
 
 ## Semantic Versioning and Releases
 MTEB follows [semantic versioning](https://semver.org/). This means that the version number of the package is composed of three numbers: `MAJOR.MINOR.PATCH`. This allow us to use existing tools to automatically manage the versioning of the package. For maintainers (and contributors), this mean that commits with the following prefixes will automatically trigger a version bump:
