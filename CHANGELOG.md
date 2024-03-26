@@ -2,7 +2,14 @@
 
 
 
-## v2.0.0 (2024-03-26)
+## v1.3.1 (2024-03-26)
+
+### Fix
+
+* fix: updated version in transition to semantic release ci ([`238ab82`](https://github.com/embeddings-benchmark/mteb/commit/238ab825e9b221c363589eed89273481e058c50f))
+
+
+## v1.3.0 (2024-03-26)
 
 ### Breaking
 
