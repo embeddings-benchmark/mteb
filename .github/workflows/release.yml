@@ -12,7 +12,7 @@
 name: Release
 on:
   workflow_run:
-    workflows: ["tests"]
+    workflows: ["test"]
     types:
       - completed
 jobs:
