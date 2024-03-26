@@ -83,4 +83,4 @@ patch_types = ["fix", "perf"]
 
 [tool.semantic_release.changelog]
 # no changelog:
-changelog_file = ""
+changelog_file = "/dev/null"
