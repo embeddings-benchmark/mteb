@@ -80,3 +80,7 @@ build_command = "python -m pip install build; python -m build"
 [tool.semantic_release.commit_parser_options]
 minor_types = ["feat"]
 patch_types = ["*", "fix", "perf"] # "*" mean always patch
+
+[tool.semantic_release.changelog]
+# no changelog
+changelog_file = ""
