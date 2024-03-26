@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from .da.dan_fever import *
+from .da.t2nord_retrieval import *
+from .da.twitterhjerne import *
 from .de.GerDaLIRRetrieval import *
 from .de.GermanDPRRetrieval import *
 from .de.GermanQuADRetrieval import *
@@ -45,6 +48,8 @@ from .multilingual.MIRACLRetrieval import *
 from .multilingual.MultiLongDocRetrieval import *
 from .multilingual.XMarketRetrieval import *
 from .multilingual.XPQARetrieval import *
+from .nb.norquad import *
+from .nb.snl_retrieval import *
 from .pl.ArguAnaPLRetrieval import *
 from .pl.DBPediaPLRetrieval import *
 from .pl.FiQAPLRetrieval import *
@@ -56,4 +61,6 @@ from .pl.QuoraPLRetrieval import *
 from .pl.SCIDOCSPLRetrieval import *
 from .pl.SciFactPLRetrieval import *
 from .pl.TRECCOVIDPLRetrieval import *
+from .sv.swedn_retrieval import *
+from .sv.swefaq_retrieval import *
 from .zh.CMTEBRetrieval import *

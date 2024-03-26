@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "d79af07e969a6678fcbbe819956840425816468f",
+  "mteb_dataset_name": "NorwegianCourtsBitextMining",
+  "mteb_version": "1.2.1.dev0",
+  "test": {
+    "accuracy": 0.8596491228070176,
+    "evaluation_time": 5.92,
+    "f1": 0.8241228070175439,
+    "main_score": 0.8241228070175439,
+    "precision": 0.8073830409356726,
+    "recall": 0.8596491228070176
+  }
+}
