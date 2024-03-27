@@ -49,7 +49,7 @@ The contribution points are computed using the following table:
 | Dataset annotations | On demand           | 1       | Adding missing dataset annotations to existing datasets.                                                          |
 | (bug)fixes            | On demand           | 1-10    | Points depends the effect of code changes. If you want to find issues related to the MMTEB you can find them [here](https://github.com/embeddings-benchmark/mteb/milestone/1). |
 | Running Models      | On demand           | 1       | Task 3.                                   |
-| Review PR           | On demand           | 2       | Task 4.                                   |
+| Review PR           | On demand           | 1-10       | Task 4. Points depend on the complexity of the PR. For reviewing a dataset PR, typically 1 point.                                  |
 
 For the purpose of counting points, a language is defined by its [ISO 639-3](https://en.wikipedia.org/wiki/ISO_639-3) code, however, we encourage dialects or written language variants. All programming languages are considered one language.
 
