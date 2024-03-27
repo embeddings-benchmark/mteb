@@ -31,12 +31,12 @@ make lint
 This command is equivalent to the command run during CI. It will check for code style and formatting issues.
 
 ## Semantic Versioning and Releases
-MTEB follows [semantic versioning](https://semver.org/). This means that the version number of the package is composed of three numbers: `MAJOR.MINOR.PATCH`. This allow us to use existing tools to automatically manage the versioning of the package. For maintainers (and contributors), this mean that commits with the following prefixes will automatically trigger a version bump:
+MTEB follows [semantic versioning](https://semver.org/). This means that the version number of the package is composed of three numbers: `MAJOR.MINOR.PATCH`. This allow us to use existing tools to automatically manage the versioning of the package. For maintainers (and contributors), this means that commits with the following prefixes will automatically trigger a version bump:
 
 - `fix:` for patches
 - `feat:` for minor versions
 - `breaking:` for major versions
 
-Any commit with one of these prefixes will trigger a version bump upon merging to the main branch as long tests pass. A version bump will then trigger a new release on PyPI as well as a new release on GitHub.
+Any commit with one of these prefixes will trigger a version bump upon merging to the main branch as long as tests pass. A version bump will then trigger a new release on PyPI as well as a new release on GitHub.
 
-Other prefixes will not trigger a version bump. For example, `docs:`, `chore:`, `refactor:`, etc., however they will structure the commit history and the changelog. You can find more information about this in the [python-semantic-release documentation](https://python-semantic-release.readthedocs.io/en/latest/). If you do not intend to trigger a version bump your are not required to follow this convention when contributing to MTEB.
+Other prefixes will not trigger a version bump. For example, `docs:`, `chore:`, `refactor:`, etc., however they will structure the commit history and the changelog. You can find more information about this in the [python-semantic-release documentation](https://python-semantic-release.readthedocs.io/en/latest/). If you do not intend to trigger a version bump you're not required to follow this convention when contributing to MTEB.
