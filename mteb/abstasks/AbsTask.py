@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 import random
 from abc import ABC, abstractmethod
 
@@ -9,16 +8,6 @@ import numpy as np
 import torch
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-logger = logging.getLogger(__name__)
-
-
-def _log_dataset_configuration_deprecation_warning():
-    logger.warning(
-        "hf_hub_name and revision are deprecated. This will be removed in a future version. "
-        "Use the dataset key instead, which can contains any argument passed to datasets.load_dataset. "
-        "Refer to https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset"
-    )
 
 
 class AbsTask(ABC):
@@ -50,27 +39,13 @@ class AbsTask(ABC):
         """
         if self.data_loaded:
             return
-
-        if "dataset" in self.metadata_dict:
-            self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
-        else:
-            _log_dataset_configuration_deprecation_warning()
-            self.dataset = datasets.load_dataset(
-                self.metadata_dict["hf_hub_name"],
-                revision=self.metadata_dict.get("revision", None),
-            )
+        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
         self.dataset_transform()
         self.data_loaded = True
 
     @property
     def metadata_dict(self) -> dict[str, str]:
         metadata_dict = dict(self.metadata)
-        if metadata_dict.get("hf_hub_name"):
-            _log_dataset_configuration_deprecation_warning()
-            metadata_dict["dataset"] = {
-                "path": metadata_dict.pop("hf_hub_name"),
-                "revision": metadata_dict.pop("revision", None),
-            }
         return metadata_dict
 
     @abstractmethod

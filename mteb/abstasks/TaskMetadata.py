@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 from datetime import date
+import logging
 
 from pydantic import (
     AnyUrl,
     BaseModel,
     BeforeValidator,
     TypeAdapter,
+    field_validator,
+    model_validator,
 )
 from typing_extensions import Annotated, Literal
 
@@ -91,6 +94,8 @@ STR_DATE = Annotated[
 SPLIT_NAME = str
 
 
+logger = logging.getLogger(__name__)
+
 class TaskMetadata(BaseModel):
     """
     Metadata for a task.
@@ -125,7 +130,7 @@ class TaskMetadata(BaseModel):
         avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on.
     """
 
-    dataset: dict | None = None
+    dataset: dict | None
     hf_hub_name: str | None = None  # DEPRECATED, use dataset instead
     revision: str | None = None # DEPRECATED, use dataset instead
 
@@ -154,3 +159,41 @@ class TaskMetadata(BaseModel):
 
     n_samples: dict[SPLIT_NAME, int] | None
     avg_character_length: dict[SPLIT_NAME, float] | None
+
+    @model_validator(mode="before")
+    def _check_dataset_configuration(cls, values):
+        """
+        This method checks that the dataset configuration is correct.
+        It ensures that the dataset is specified correctly and that the deprecated
+        hf_hub_name and revision are not used together with dataset.
+        """
+        dataset = values.get("dataset")
+        hf_hub_name = values.get("hf_hub_name")
+        revision = values.get("revision")
+
+        if dataset is None:
+            logger.warning(
+                "hf_hub_name and revision are deprecated. This will be removed in a future version. "
+                "Use the dataset key instead, which can contains any argument passed to datasets.load_dataset. "
+                "Refer to https://huggingface.co/docs/datasets/main/en/package_reference/loading_methods#datasets.load_dataset"
+            )
+            values["dataset"] = {"path": hf_hub_name, "revision": revision}
+        else:
+            if hf_hub_name is not None or revision is not None:
+                raise ValueError("You can't specify both the deprecated hf_hub_name/revision and dataset. Use dataset instead.")
+
+        return values
+
+
+    @field_validator("dataset")
+    def _check_dataset_path_is_specified(cls, dataset):
+        """
+        This method checks that the dataset path is specified.
+        """
+        if "path" not in dataset or dataset["path"] is None:
+            raise ValueError(
+                "You must specify the path to the dataset in the dataset dictionary. "
+                "See https://huggingface.co/docs/datasets/main/en/package_reference/loading_methods#datasets.load_dataset"
+            )
+        return dataset
+
