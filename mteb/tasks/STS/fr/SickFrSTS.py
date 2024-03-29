@@ -49,9 +49,7 @@ class SickFrSTS(AbsTaskSTS):
         if self.data_loaded:
             return
 
-        self.dataset = datasets.load_dataset(
-            **self.metadata_dict["dataset"]
-        )
+        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
 
         self.dataset = self.dataset.rename_columns(
             {

@@ -10,7 +10,6 @@ import torch
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -20,6 +19,7 @@ def _log_dataset_configuration_deprecation_warning():
         "Use the dataset key instead, which can contains any argument passed to datasets.load_dataset. "
         "Refer to https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset"
     )
+
 
 class AbsTask(ABC):
     metadata: TaskMetadata
@@ -69,7 +69,7 @@ class AbsTask(ABC):
             _log_dataset_configuration_deprecation_warning()
             metadata_dict["dataset"] = {
                 "path": metadata_dict.pop("hf_hub_name"),
-                "revision": metadata_dict.pop("revision", None)
+                "revision": metadata_dict.pop("revision", None),
             }
         return metadata_dict
 

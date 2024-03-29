@@ -1,7 +1,3 @@
-from typing import Any
-
-import datasets
-
 from mteb.abstasks import AbsTaskBitextMining
 from mteb.abstasks.TaskMetadata import TaskMetadata
 

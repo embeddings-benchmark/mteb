@@ -220,9 +220,7 @@ class AbsTaskRetrieval(AbsTask):
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         dataset_path = self.metadata_dict["dataset"]["path"]
         hf_repo_qrels = (
-            dataset_path + "-qrels"
-            if "clarin-knext" in dataset_path
-            else None
+            dataset_path + "-qrels" if "clarin-knext" in dataset_path else None
         )
         for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
             corpus, queries, qrels = HFDataLoader(

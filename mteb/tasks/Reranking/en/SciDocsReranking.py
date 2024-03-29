@@ -11,8 +11,8 @@ class SciDocsReranking(AbsTaskReranking):
         description="Ranking of related scientific papers based on their title.",
         reference="https://allenai.org/data/scidocs",
         dataset={
-          "path": "mteb/scidocs-reranking",
-          "revision": "d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
+            "path": "mteb/scidocs-reranking",
+            "revision": "d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
         },
         type="Reranking",
         category="s2s",

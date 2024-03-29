@@ -11,7 +11,7 @@ class MSMARCOv2(AbsTaskRetrieval):
         dataset={
             "path": "mteb/msmarco-v2",
             "revision": "b1663124850d305ab7c470bb0548acf8e2e7ea43",
-        }
+        },
         description="MS MARCO is a collection of datasets focused on deep learning in search",
         reference="https://microsoft.github.io/msmarco/TREC-Deep-Learning.html",
         type="Retrieval",

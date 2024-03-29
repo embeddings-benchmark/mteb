@@ -1,5 +1,3 @@
-import datasets
-
 from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
 
 

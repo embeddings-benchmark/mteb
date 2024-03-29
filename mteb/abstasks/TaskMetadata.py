@@ -126,9 +126,8 @@ class TaskMetadata(BaseModel):
     """
 
     dataset: dict | None
-    hf_hub_name: str | None # DEPRECATED, use dataset instead
-    revision: str | None # DEPRECATED, use dataset instead
-
+    hf_hub_name: str | None  # DEPRECATED, use dataset instead
+    revision: str | None  # DEPRECATED, use dataset instead
 
     name: str
     description: str
