@@ -19,9 +19,9 @@
     <p>
         <a href="#installation">Installation</a> |
         <a href="#usage">Usage</a> |
-        <a href="#leaderboard">Leaderboard</a> |
-        <a href="#citing">Citing</a> |
-        <a href="#available-tasks">Tasks</a>
+        <a href="https://huggingface.co/spaces/mteb/leaderboard">Leaderboard</a> |
+        <a href="#documentation">Documentation</a> |
+        <a href="#citing">Citing</a>
     <p>
 </h4>
 
