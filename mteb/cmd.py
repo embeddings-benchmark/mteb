@@ -36,7 +36,7 @@ def _save_model_metadata(
     model_meta = {
         "model_name": model_name,
         "time_of_run": str(datetime.datetime.today()),
-        "versions": model._model_config["__version__"],
+        "versions": model._model_config.get("__version__", None),
     }
 
     with save_path.open("w") as f:
