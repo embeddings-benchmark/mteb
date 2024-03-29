@@ -1,0 +1,11 @@
+{
+  "dataset_revision": "3d3d27aa7af8941408cefc3991ada5d12a4273d1",
+  "mteb_dataset_name": "SNLClustering",
+  "mteb_version": "1.2.1.dev0",
+  "test": {
+    "evaluation_time": 12.1,
+    "main_score": 0.5337551996491272,
+    "v_measure": 0.5337551996491272,
+    "v_measure_std": 0.009861876385146653
+  }
+}
