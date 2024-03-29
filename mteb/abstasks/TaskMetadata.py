@@ -125,9 +125,9 @@ class TaskMetadata(BaseModel):
         avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on.
     """
 
-    dataset: dict | None
-    hf_hub_name: str | None  # DEPRECATED, use dataset instead
-    revision: str | None  # DEPRECATED, use dataset instead
+    dataset: dict | None = None
+    hf_hub_name: str | None = None  # DEPRECATED, use dataset instead
+    revision: str | None = None # DEPRECATED, use dataset instead
 
     name: str
     description: str

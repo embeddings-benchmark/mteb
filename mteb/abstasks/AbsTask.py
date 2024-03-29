@@ -65,7 +65,7 @@ class AbsTask(ABC):
     @property
     def metadata_dict(self) -> dict[str, str]:
         metadata_dict = dict(self.metadata)
-        if "hf_hub_name" in metadata_dict:
+        if metadata_dict.get("hf_hub_name"):
             _log_dataset_configuration_deprecation_warning()
             metadata_dict["dataset"] = {
                 "path": metadata_dict.pop("hf_hub_name"),
