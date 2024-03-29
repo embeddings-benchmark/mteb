@@ -16,6 +16,7 @@ class AlloProfClusteringP2P(AbsTaskClustering):
         dataset={
             "path": "mteb/alloprof",
             "revision": "392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
+            "name": "documents",
         },
         type="Clustering",
         category="p2p",
@@ -35,20 +36,6 @@ class AlloProfClusteringP2P(AbsTaskClustering):
         n_samples=None,
         avg_character_length=None,
     )
-
-    def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub and convert it to the standard format.
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(
-            name="documents",
-            **self.metadata_dict["dataset"],
-        )
-        self.dataset_transform()
-        self.data_loaded = True
 
     def create_description(self, example):
         example["text"] = example["title"] + " " + example["text"]

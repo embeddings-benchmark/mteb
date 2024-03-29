@@ -79,7 +79,7 @@ class VGClustering(AbsTaskClustering):
         dataset={
             "path": "navjordj/VG_summarization",
             "revision": "d4c5a8ba10ae71224752c727094ac4c46947fa29",
-        }
+        },
         date=("2012-01-01", "2020-01-01"),
         form="written",
         domains=["Academic", "Non-fiction"],
@@ -91,20 +91,6 @@ class VGClustering(AbsTaskClustering):
         text_creation="found",
         bibtex_citation= ... # removed for brevity
 )
-
-    def load_data(self, **kwargs: dict):  # noqa: ARG002
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset: datasets.DatasetDict = datasets.load_dataset(
-            **self.description["dataset"]
-        )
-
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self):
         splits = self.description["eval_splits"]

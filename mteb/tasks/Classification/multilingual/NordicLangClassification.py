@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -14,6 +12,7 @@ class NordicLangClassification(AbsTaskClassification):
         dataset={
             "path": "strombergnlp/nordic_langid",
             "revision": "e254179d18ab0165fdb6dbef91178266222bee2a",
+            "name": "10k",
         },
         type="Classification",
         category="s2s",
@@ -40,20 +39,6 @@ class NordicLangClassification(AbsTaskClassification):
         metadata_dict["n_experiments"] = 10
         metadata_dict["samples_per_label"] = 32
         return metadata_dict
-
-    def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(
-            name="10k",
-            **self.metadata_dict["dataset"],
-        )
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("sentence", "text")

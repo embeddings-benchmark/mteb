@@ -1,8 +1,6 @@
 # SuperLIM tasks
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -13,6 +11,7 @@ class DalajClassification(AbsTaskClassification):
         dataset={
             "path": "AI-Sweden/SuperLim",
             "revision": "7ebf0b4caa7b2ae39698a889de782c09e6f5ee56",
+            "name": "dalaj",
         },
         description="A Swedish dataset for linguistic acceptability. Available as a part of Superlim.",
         reference="https://spraakbanken.gu.se/en/resources/superlim",
@@ -41,20 +40,6 @@ class DalajClassification(AbsTaskClassification):
         metadata_dict["n_experiments"] = 10
         metadata_dict["samples_per_label"] = 16
         return metadata_dict
-
-    def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(
-            name="dalaj",  # chose the relevant subset
-            **self.metadata_dict["dataset"],
-        )
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self):
         """
