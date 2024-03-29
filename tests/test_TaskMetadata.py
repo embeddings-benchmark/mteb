@@ -2,6 +2,7 @@ import pytest
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+
 def test_given_only_legacy_hf_hub_name_then_it_is_valid():
     my_task = TaskMetadata(
         name="MyTask",
@@ -117,4 +118,3 @@ def test_given_missing_dataset_path_then_it_throws():
             avg_character_length=None,
             n_samples=None,
         )
-

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from datetime import date
 import logging
+from datetime import date
 
 from pydantic import (
     AnyUrl,
@@ -96,6 +96,7 @@ SPLIT_NAME = str
 
 logger = logging.getLogger(__name__)
 
+
 class TaskMetadata(BaseModel):
     """
     Metadata for a task.
@@ -132,7 +133,7 @@ class TaskMetadata(BaseModel):
 
     dataset: dict | None
     hf_hub_name: str | None = None  # DEPRECATED, use dataset instead
-    revision: str | None = None # DEPRECATED, use dataset instead
+    revision: str | None = None  # DEPRECATED, use dataset instead
 
     name: str
     description: str
@@ -180,10 +181,11 @@ class TaskMetadata(BaseModel):
             values["dataset"] = {"path": hf_hub_name, "revision": revision}
         else:
             if hf_hub_name is not None or revision is not None:
-                raise ValueError("You can't specify both the deprecated hf_hub_name/revision and dataset. Use dataset instead.")
+                raise ValueError(
+                    "You can't specify both the deprecated hf_hub_name/revision and dataset. Use dataset instead."
+                )
 
         return values
-
 
     @field_validator("dataset")
     def _check_dataset_path_is_specified(cls, dataset):
@@ -196,4 +198,3 @@ class TaskMetadata(BaseModel):
                 "See https://huggingface.co/docs/datasets/main/en/package_reference/loading_methods#datasets.load_dataset"
             )
         return dataset
-
