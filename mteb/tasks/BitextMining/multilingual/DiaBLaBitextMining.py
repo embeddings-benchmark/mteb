@@ -44,7 +44,6 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
 
         self.dataset = {}
         for lang in self.langs:
-            # TODO it looks like the lang is not used here, should we pass `name=lang`?
             self.dataset[lang] = datasets.load_dataset(**self.metadata_dict["dataset"])
 
         self.dataset_transform()
