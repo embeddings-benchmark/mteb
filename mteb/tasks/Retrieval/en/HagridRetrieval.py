@@ -13,7 +13,10 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class HagridRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HagridRetrieval",
-        hf_hub_name="miracl/hagrid",
+        dataset={
+            "path": "miracl/hagrid",
+            "revision": "b2a085913606be3c4f2f1a8bff1810e38bade8fa",
+        },
         reference="https://github.com/project-miracl/hagrid",
         description=(
             "HAGRID (Human-in-the-loop Attributable Generative Retrieval for Information-seeking Dataset)"
@@ -25,7 +28,6 @@ class HagridRetrieval(AbsTaskRetrieval):
         eval_splits=["dev"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="b2a085913606be3c4f2f1a8bff1810e38bade8fa",
         date=None,
         form=None,
         domains=None,

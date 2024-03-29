@@ -6,7 +6,11 @@ from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
 class SwednRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SwednRetrieval",
-        hf_hub_name="sbx/superlim-2",
+        dataset={
+            "path": "sbx/superlim-2",
+            "revision": "ef1661775d746e0844b299164773db733bdc0bf6",
+            "name": "swedn",
+        },
         description="The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper Dagens Nyheter (DN) during the years 2000--2020. The articles are filtered to resemble the CNN/DailyMail dataset both regarding textual structure",
         reference="https://spraakbanken.gu.se/en/resources/swedn",
         type="Retrieval",
@@ -14,7 +18,6 @@ class SwednRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["sv"],
         main_score="ndcg_at_10",
-        revision="ef1661775d746e0844b299164773db733bdc0bf6",
         date=("2000-01-01", "2020-12-31"),
         form=["written"],
         domains=["News", "Non-fiction"],
@@ -33,22 +36,6 @@ class SwednRetrieval(AbsTaskRetrieval):
         n_samples={"test": 2048},
         avg_character_length={"test": 1946.35},
     )
-
-    def load_data(self, **kwargs: dict):  # noqa: ARG002
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset: datasets.DatasetDict = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            "swedn",  # chose the relevant subset
-            revision=self.metadata_dict.get("revision"),
-        )  # type: ignore
-
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self) -> None:
         """

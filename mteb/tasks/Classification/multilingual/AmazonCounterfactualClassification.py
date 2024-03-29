@@ -10,7 +10,10 @@ _LANGUAGES = ["en", "de", "en-ext", "ja"]
 class AmazonCounterfactualClassification(MultilingualTask, AbsTaskClassification):
     metadata = TaskMetadata(
         name="AmazonCounterfactualClassification",
-        hf_hub_name="mteb/amazon_counterfactual",
+        dataset={
+            "path": "mteb/amazon_counterfactual",
+            "revision": "e8379541af4e31359cca9fbcf4b00f2671dba205",
+        },
         description=(
             "A collection of Amazon customer reviews annotated for counterfactual detection pair classification."
         ),
@@ -20,7 +23,6 @@ class AmazonCounterfactualClassification(MultilingualTask, AbsTaskClassification
         eval_splits=["validation", "test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
-        revision="e8379541af4e31359cca9fbcf4b00f2671dba205",
         date=None,
         form=None,
         domains=None,

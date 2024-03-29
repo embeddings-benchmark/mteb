@@ -10,7 +10,10 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class DalajClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DalajClassification",
-        hf_hub_name="AI-Sweden/SuperLim",
+        dataset={
+            "path": "AI-Sweden/SuperLim",
+            "revision": "7ebf0b4caa7b2ae39698a889de782c09e6f5ee56",
+        },
         description="A Swedish dataset for linguistic acceptability. Available as a part of Superlim.",
         reference="https://spraakbanken.gu.se/en/resources/superlim",
         type="Classification",
@@ -18,7 +21,6 @@ class DalajClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["da"],
         main_score="accuracy",
-        revision="7ebf0b4caa7b2ae39698a889de782c09e6f5ee56",
         date=None,
         form=None,
         domains=None,
@@ -48,9 +50,8 @@ class DalajClassification(AbsTaskClassification):
             return
 
         self.dataset = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            "dalaj",  # chose the relevant subset
-            revision=self.metadata_dict.get("revision"),
+            name="dalaj",  # chose the relevant subset
+            **self.metadata_dict["dataset"],
         )
         self.dataset_transform()
         self.data_loaded = True

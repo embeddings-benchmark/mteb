@@ -10,7 +10,10 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 class SickFrSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="SICKFr",
-        hf_hub_name="Lajavaness/SICK-fr",
+        dataset={
+            "path": "Lajavaness/SICK-fr",
+            "revision": "e077ab4cf4774a1e36d86d593b150422fafd8e8a",
+        },
         description="SICK dataset french version",
         reference="https://huggingface.co/datasets/Lajavaness/SICK-fr",
         type="STS",
@@ -18,7 +21,6 @@ class SickFrSTS(AbsTaskSTS):
         eval_splits=["validation", "test"],
         eval_langs=["fr"],
         main_score="cosine_spearman",
-        revision="e077ab4cf4774a1e36d86d593b150422fafd8e8a",
         date=None,
         form=None,
         domains=None,
@@ -35,7 +37,7 @@ class SickFrSTS(AbsTaskSTS):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 5
         return metadata_dict
@@ -48,8 +50,7 @@ class SickFrSTS(AbsTaskSTS):
             return
 
         self.dataset = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            revision=self.metadata_dict.get("revision", None),
+            **self.metadata_dict["dataset"]
         )
 
         self.dataset = self.dataset.rename_columns(

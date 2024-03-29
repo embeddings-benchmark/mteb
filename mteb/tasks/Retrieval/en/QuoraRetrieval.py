@@ -8,7 +8,10 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class QuoraRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="QuoraRetrieval",
-        hf_hub_name="mteb/quora",
+        dataset={
+            "path": "mteb/quora",
+            "revision": "0be27e93455051e531182b85e85e425aba12e9d4",
+        },
         description=(
             "QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a"
             " question, find other (duplicate) questions."
@@ -19,7 +22,6 @@ class QuoraRetrieval(AbsTaskRetrieval):
         eval_splits=["dev", "test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="0be27e93455051e531182b85e85e425aba12e9d4",
         date=None,
         form=None,
         domains=None,

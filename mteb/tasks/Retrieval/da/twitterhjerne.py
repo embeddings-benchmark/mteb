@@ -6,7 +6,10 @@ from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
 class TwitterHjerneRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="TwitterHjerneRetrieval",
-        hf_hub_name="sorenmulli/da-hashtag-twitterhjerne",
+        dataset={
+            "path": "sorenmulli/da-hashtag-twitterhjerne",
+            "revision": "099ee143c7fdfa6bd7965be8c801cb161c313b29",
+        },
         description="Danish question asked on Twitter with the Hashtag #Twitterhjerne ('Twitter brain') and their corresponding answer.",
         reference="https://huggingface.co/datasets/sorenmulli/da-hashtag-twitterhjerne",
         type="Retrieval",
@@ -14,7 +17,6 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         eval_splits=["train"],
         eval_langs=["da"],
         main_score="ndcg_at_10",
-        revision="099ee143c7fdfa6bd7965be8c801cb161c313b29",
         date=("2006-01-01", "2024-12-31"),  # best guess
         form=["written"],
         domains=["Social"],
@@ -34,21 +36,6 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         avg_character_length={"train": 138.23},
         task_subtypes=["Question answering"],
     )
-
-    def load_data(self, **kwargs: dict):  # noqa: ARG002
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset: datasets.DatasetDict = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            revision=self.metadata_dict.get("revision"),
-        )  # type: ignore
-
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self) -> None:
         """

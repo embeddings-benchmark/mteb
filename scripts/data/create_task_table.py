@@ -138,8 +138,8 @@ def get_ds_stats(hf_hub_name):
 # Select all tasks
 for task in MTEB().tasks:
     print("Task: ", task)
-    if "hf_hub_name" in task.metadata_dict:
-        hub_name = hub_url = task.metadata_dict.get("hf_hub_name")
+    if "dataset" in task.metadata_dict:
+        hub_name = hub_url = task.metadata_dict["dataset"]["path"]
         ds_stats = get_ds_stats(hub_name.split("/")[-1])
     elif "beir_name" in task.metadata_dict:
         hub_name = hub_url = "BeIR/" + task.metadata_dict.get("beir_name")

@@ -13,13 +13,15 @@ class AlloProfClusteringP2P(AbsTaskClustering):
         name="AlloProfClusteringP2P",
         description="Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic.",
         reference="https://huggingface.co/datasets/lyon-nlp/alloprof",
-        hf_hub_name="mteb/alloprof",
+        dataset={
+            "path": "mteb/alloprof",
+            "revision": "392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
+        },
         type="Clustering",
         category="p2p",
         eval_splits=["test"],
         eval_langs=["fr"],
         main_score="v_measure",
-        revision="392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
         date=None,
         form=None,
         domains=None,
@@ -42,9 +44,8 @@ class AlloProfClusteringP2P(AbsTaskClustering):
             return
 
         self.dataset = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            "documents",
-            revision=self.metadata_dict.get("revision", None),
+            name="documents",
+            **self.metadata_dict["dataset"],
         )
         self.dataset_transform()
         self.data_loaded = True

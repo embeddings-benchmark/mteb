@@ -27,8 +27,7 @@ class MultilingualTask(AbsTask):
         self.dataset = {}
         for lang in self.langs:
             self.dataset[lang] = datasets.load_dataset(
-                self.metadata_dict["hf_hub_name"],
-                lang,
-                revision=self.metadata_dict.get("revision", None),
+                name=lang,
+                **self.metadata_dict.get("dataset", None),
             )
         self.data_loaded = True

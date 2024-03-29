@@ -9,7 +9,10 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class DdiscoCohesionClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="Ddisco",
-        hf_hub_name="DDSC/ddisco",
+        dataset={
+            "path": "DDSC/ddisco",
+            "revision": "514ab557579fcfba538a4078d6d647248a0e6eb7",
+        },
         description="A Danish Discourse dataset with values for coherence and source (Wikipedia or Reddit)",
         reference="https://aclanthology.org/2022.lrec-1.260/",
         type="Classification",
@@ -17,7 +20,6 @@ class DdiscoCohesionClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["da"],
         main_score="accuracy",
-        revision="514ab557579fcfba538a4078d6d647248a0e6eb7",
         date=("2021-01-01", "2022-06-25"),
         form=["written"],
         domains=["Non-fiction", "Social"],
@@ -60,20 +62,6 @@ class DdiscoCohesionClassification(AbsTaskClassification):
         n_samples=None,
         avg_character_length=None,
     )
-
-    def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset = load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            revision=self.metadata_dict.get("revision"),
-        )
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_columns({"rating": "label"}).remove_columns(

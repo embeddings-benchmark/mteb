@@ -11,13 +11,15 @@ class NordicLangClassification(AbsTaskClassification):
         name="NordicLangClassification",
         description="A dataset for Nordic language identification.",
         reference="https://aclanthology.org/2021.vardial-1.8/",
-        hf_hub_name="strombergnlp/nordic_langid",
+        dataset={
+            "path": "strombergnlp/nordic_langid",
+            "revision": "e254179d18ab0165fdb6dbef91178266222bee2a",
+        },
         type="Classification",
         category="s2s",
         eval_splits=["test"],
         eval_langs=["no", "nn"],
         main_score="accuracy",
-        revision="e254179d18ab0165fdb6dbef91178266222bee2a",
         date=None,
         form=None,
         domains=None,
@@ -47,9 +49,8 @@ class NordicLangClassification(AbsTaskClassification):
             return
 
         self.dataset = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            "10k",
-            revision=self.metadata_dict.get("revision"),  # select relevant subset
+            name="10k",
+            **self.metadata_dict["dataset"],
         )
         self.dataset_transform()
         self.data_loaded = True

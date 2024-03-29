@@ -11,13 +11,15 @@ class ScalaDaClassification(AbsTaskClassification):
         name="ScalaDaClassification",
         description="A modified version of DDT modified for linguistic acceptability classification",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
-        hf_hub_name="ScandEval/scala-da",
+        dataset={
+            "path": "ScandEval/scala-da",
+            "revision": "1de08520a7b361e92ffa2a2201ebd41942c54675",
+        },
         type="Classification",
         category="s2s",
         eval_splits=["test"],
         eval_langs=["da"],
         main_score="accuracy",
-        revision="1de08520a7b361e92ffa2a2201ebd41942c54675",
         date=None,
         form=None,
         domains=None,
@@ -39,20 +41,6 @@ class ScalaDaClassification(AbsTaskClassification):
         metadata_dict["samples_per_label"] = 32
         return metadata_dict
 
-    def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            revision=self.metadata_dict.get("revision", None),
-        )
-        self.dataset_transform()
-        self.data_loaded = True
-
     def dataset_transform(self):
         # convert label to a 0/1 label
         labels = self.dataset["train"]["label"]  # type: ignore
@@ -67,13 +55,15 @@ class ScalaNbClassification(AbsTaskClassification):
         name="ScalaNbClassification",
         description="A Norwegian dataset for linguistic acceptability classification for Bokmål",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
-        hf_hub_name="ScandEval/scala-nb",
+        dataset={
+            "path": "ScandEval/scala-nb",
+            "revision": "237111a078ad5a834a55c57803d40bbe410ed03b",
+        },
         type="Classification",
         category="s2s",
         eval_splits=["test"],
         eval_langs=["nb"],
         main_score="accuracy",
-        revision="237111a078ad5a834a55c57803d40bbe410ed03b",
         date=None,
         form=None,
         domains=None,
@@ -95,20 +85,6 @@ class ScalaNbClassification(AbsTaskClassification):
         metadata_dict["samples_per_label"] = 32
         return dict(self.metadata)
 
-    def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            revision=self.metadata_dict.get("revision", None),
-        )
-        self.dataset_transform()
-        self.data_loaded = True
-
     def dataset_transform(self):
         # convert label to a 0/1 label
         labels = self.dataset["train"]["label"]  # type: ignore
@@ -123,13 +99,15 @@ class ScalaNnClassification(AbsTaskClassification):
         name="ScalaNnClassification",
         description="A Norwegian dataset for linguistic acceptability classification for Nynorsk",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
-        hf_hub_name="ScandEval/scala-nn",
+        dataset={
+            "path": "ScandEval/scala-nn",
+            "revision": "9d9a2a4092ed3cacf0744592f6d2f32ab8ef4c0b",
+        },
         type="Classification",
         category="s2s",
         eval_splits=["test"],
         eval_langs=["nn"],
         main_score="accuracy",
-        revision="9d9a2a4092ed3cacf0744592f6d2f32ab8ef4c0b",
         date=None,
         form=None,
         domains=None,
@@ -151,20 +129,6 @@ class ScalaNnClassification(AbsTaskClassification):
         metadata_dict["samples_per_label"] = 32
         return metadata_dict
 
-    def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            revision=self.metadata_dict.get("revision", None),
-        )
-        self.dataset_transform()
-        self.data_loaded = True
-
     def dataset_transform(self):
         # convert label to a 0/1 label
         labels = self.dataset["train"]["label"]  # type: ignore
@@ -179,13 +143,15 @@ class ScalaSvClassification(AbsTaskClassification):
         name="ScalaSvClassification",
         description="A Swedish dataset for linguistic acceptability classification",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
-        hf_hub_name="ScandEval/scala-sv",
+        dataset={
+            "path": "ScandEval/scala-sv",
+            "revision": "1b48e3dcb02872335ff985ff938a054a4ed99008",
+        },
         type="Classification",
         category="s2s",
         eval_splits=["test"],
         eval_langs=["sv"],
         main_score="accuracy",
-        revision="1b48e3dcb02872335ff985ff938a054a4ed99008",
         date=None,
         form=None,
         domains=None,
@@ -206,20 +172,6 @@ class ScalaSvClassification(AbsTaskClassification):
         metadata_dict["n_experiments"] = 10
         metadata_dict["samples_per_label"] = 32
         return metadata_dict
-
-    def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            revision=self.metadata_dict.get("revision", None),
-        )
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self):
         # convert label to a 0/1 label

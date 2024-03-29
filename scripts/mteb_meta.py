@@ -100,7 +100,7 @@ for ds_name, res_dict in sorted(all_results.items()):
         .tasks[0]
         .metadata_dict
     )
-    hf_hub_name = mteb_desc.get("hf_hub_name", mteb_desc.get("beir_name"))
+    hf_hub_name = mteb_desc["dataset"]["hf_hub_name"] if "dataset" in mteb_desc else mteb_desc.get("beir_name")
     if "beir_name" in mteb_desc:
         logger.warning(
             "`beir_name` is deprecated and will be removed in the future. New result files contain `hf_hub_name` instead."

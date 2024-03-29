@@ -96,8 +96,9 @@ class TaskMetadata(BaseModel):
     Metadata for a task.
 
     Args:
-        hf_hub_name: The name of the dataset for the task on the Hugging Face Hub.
-        revision: The revision of the dataset for the task on the Hugging Face Hub.
+        dataset: All arguments to pass to datasets.load_dataset to load the dataset for the task. Refer to https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset
+        hf_hub_name: DEPRECATED. The name of the dataset for the task on the Hugging Face Hub.
+        revision: DEPRECATED. The revision of the dataset for the task on the Hugging Face Hub.
         name: The name of the task.
         description: A description of the task.
         type: The type of the task. These includes "Classification", "Summarization", "STS", "Retrieval", "Reranking", "Clustering",
@@ -124,8 +125,10 @@ class TaskMetadata(BaseModel):
         avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on.
     """
 
-    hf_hub_name: str
-    revision: str
+    dataset: dict | None
+    hf_hub_name: str | None # DEPRECATED, use dataset instead
+    revision: str | None # DEPRECATED, use dataset instead
+
 
     name: str
     description: str

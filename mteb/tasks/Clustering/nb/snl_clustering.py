@@ -23,7 +23,10 @@ def batched(iterable: Iterable[T], n: int) -> Iterable[tuple[T, ...]]:
 class SNLClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="SNLClustering",
-        hf_hub_name="navjordj/SNL_summarization",
+        dataset={
+            "path": "navjordj/SNL_summarization",
+            "revision": "3d3d27aa7af8941408cefc3991ada5d12a4273d1",
+        },
         description="Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.",
         reference="https://huggingface.co/datasets/navjordj/SNL_summarization",
         type="Clustering",
@@ -31,7 +34,6 @@ class SNLClustering(AbsTaskClustering):
         eval_splits=["test"],
         eval_langs=["nb"],
         main_score="v_measure",
-        revision="3d3d27aa7af8941408cefc3991ada5d12a4273d1",
         date=("2020-01-01", "2024-12-31"),  # best guess
         form=["written"],
         domains=["Encyclopaedic", "Non-fiction"],
@@ -50,21 +52,6 @@ class SNLClustering(AbsTaskClustering):
         n_samples={"test": 2048},
         avg_character_length={"test": 1101.30},
     )
-
-    def load_data(self, **kwargs: dict):  # noqa: ARG002
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset: datasets.DatasetDict = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            revision=self.metadata_dict.get("revision"),
-        )  # type: ignore
-
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self):
         splits = self.metadata_dict["eval_splits"]

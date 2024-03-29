@@ -8,7 +8,10 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 class ATEC(AbsTaskSTS):
     metadata = TaskMetadata(
         name="ATEC",
-        hf_hub_name="C-MTEB/ATEC",
+        dataset={
+            "path": "C-MTEB/ATEC",
+            "revision": "0f319b1142f2ae3f7dc7be10c3c7f3598ec6c602",
+        },
         description="A Chinese dataset for textual relatedness",
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
@@ -16,7 +19,6 @@ class ATEC(AbsTaskSTS):
         eval_splits=["validation", "test"],
         eval_langs=["zh"],
         main_score="cosine_spearman",
-        revision="0f319b1142f2ae3f7dc7be10c3c7f3598ec6c602",
         date=None,
         form=None,
         domains=None,
@@ -33,7 +35,7 @@ class ATEC(AbsTaskSTS):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 1
         return metadata_dict
@@ -42,7 +44,10 @@ class ATEC(AbsTaskSTS):
 class BQ(AbsTaskSTS):
     metadata = TaskMetadata(
         name="BQ",
-        hf_hub_name="C-MTEB/BQ",
+        dataset={
+            "path": "C-MTEB/BQ",
+            "revision": "e3dda5e115e487b39ec7e618c0c6a29137052a55",
+        },
         description="A Chinese dataset for textual relatedness",
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
@@ -50,7 +55,6 @@ class BQ(AbsTaskSTS):
         eval_splits=["validation", "test"],
         eval_langs=["zh"],
         main_score="cosine_spearman",
-        revision="e3dda5e115e487b39ec7e618c0c6a29137052a55",
         date=None,
         form=None,
         domains=None,
@@ -67,7 +71,7 @@ class BQ(AbsTaskSTS):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 1
         return metadata_dict
@@ -76,7 +80,10 @@ class BQ(AbsTaskSTS):
 class LCQMC(AbsTaskSTS):
     metadata = TaskMetadata(
         name="LCQMC",
-        hf_hub_name="C-MTEB/LCQMC",
+        dataset={
+            "path": "C-MTEB/LCQMC",
+            "revision": "17f9b096f80380fce5ed12a9be8be7784b337daf",
+        },
         description="A Chinese dataset for textual relatedness",
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
@@ -84,7 +91,6 @@ class LCQMC(AbsTaskSTS):
         eval_splits=["test"],
         eval_langs=["zh"],
         main_score="cosine_spearman",
-        revision="17f9b096f80380fce5ed12a9be8be7784b337daf",
         date=None,
         form=None,
         domains=None,
@@ -101,7 +107,7 @@ class LCQMC(AbsTaskSTS):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 1
         return metadata_dict
@@ -110,7 +116,10 @@ class LCQMC(AbsTaskSTS):
 class PAWSX(AbsTaskSTS):
     metadata = TaskMetadata(
         name="PAWSX",
-        hf_hub_name="C-MTEB/PAWSX",
+        dataset={
+            "path": "C-MTEB/PAWSX",
+            "revision": "9c6a90e430ac22b5779fb019a23e820b11a8b5e1",
+        },
         description="A Chinese dataset for textual relatedness",
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
@@ -118,7 +127,6 @@ class PAWSX(AbsTaskSTS):
         eval_splits=["test"],
         eval_langs=["zh"],
         main_score="cosine_spearman",
-        revision="9c6a90e430ac22b5779fb019a23e820b11a8b5e1",
         date=None,
         form=None,
         domains=None,
@@ -135,7 +143,7 @@ class PAWSX(AbsTaskSTS):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 1
         return metadata_dict
@@ -144,7 +152,10 @@ class PAWSX(AbsTaskSTS):
 class STSB(AbsTaskSTS):
     metadata = TaskMetadata(
         name="STSB",
-        hf_hub_name="C-MTEB/STSB",
+        dataset={
+            "path": "C-MTEB/STSB",
+            "revision": "0cde68302b3541bb8b3c340dc0644b0b745b3dc0",
+        },
         description="A Chinese dataset for textual relatedness",
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
@@ -152,7 +163,6 @@ class STSB(AbsTaskSTS):
         eval_splits=["validation", "test"],
         eval_langs=["zh"],
         main_score="cosine_spearman",
-        revision="0cde68302b3541bb8b3c340dc0644b0b745b3dc0",
         date=None,
         form=None,
         domains=None,
@@ -178,7 +188,10 @@ class STSB(AbsTaskSTS):
 class AFQMC(AbsTaskSTS):
     metadata = TaskMetadata(
         name="AFQMC",
-        hf_hub_name="C-MTEB/AFQMC",
+        dataset={
+            "path": "C-MTEB/AFQMC",
+            "revision": "b44c3b011063adb25877c13823db83bb193913c4",
+        },
         description="A Chinese dataset for textual relatedness",
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
@@ -186,7 +199,6 @@ class AFQMC(AbsTaskSTS):
         eval_splits=["validation", "test"],
         eval_langs=["zh"],
         main_score="cosine_spearman",
-        revision="b44c3b011063adb25877c13823db83bb193913c4",
         date=None,
         form=None,
         domains=None,
@@ -203,7 +215,7 @@ class AFQMC(AbsTaskSTS):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 1
         return metadata_dict
@@ -212,7 +224,10 @@ class AFQMC(AbsTaskSTS):
 class QBQTC(AbsTaskSTS):
     metadata = TaskMetadata(
         name="QBQTC",
-        hf_hub_name="C-MTEB/QBQTC",
+        dataset={
+            "path": "C-MTEB/QBQTC",
+            "revision": "790b0510dc52b1553e8c49f3d2afb48c0e5c48b7",
+        },
         description="",
         reference="https://github.com/CLUEbenchmark/QBQTC/tree/main/dataset",
         type="STS",
@@ -220,7 +235,6 @@ class QBQTC(AbsTaskSTS):
         eval_splits=["test"],
         eval_langs=["zh"],
         main_score="cosine_spearman",
-        revision="790b0510dc52b1553e8c49f3d2afb48c0e5c48b7",
         date=None,
         form=None,
         domains=None,
