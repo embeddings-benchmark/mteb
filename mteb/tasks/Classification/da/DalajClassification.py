@@ -37,7 +37,7 @@ class DalajClassification(AbsTaskClassification):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["n_experiments"] = 10
         metadata_dict["samples_per_label"] = 16
         return metadata_dict

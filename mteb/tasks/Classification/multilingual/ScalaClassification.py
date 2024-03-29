@@ -34,7 +34,7 @@ class ScalaDaClassification(AbsTaskClassification):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["n_experiments"] = 10
         metadata_dict["samples_per_label"] = 32
         return metadata_dict
@@ -78,10 +78,10 @@ class ScalaNbClassification(AbsTaskClassification):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["n_experiments"] = 10
         metadata_dict["samples_per_label"] = 32
-        return dict(self.metadata)
+        return metadata_dict
 
     def dataset_transform(self):
         # convert label to a 0/1 label
@@ -122,7 +122,7 @@ class ScalaNnClassification(AbsTaskClassification):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["n_experiments"] = 10
         metadata_dict["samples_per_label"] = 32
         return metadata_dict
@@ -166,7 +166,7 @@ class ScalaSvClassification(AbsTaskClassification):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["n_experiments"] = 10
         metadata_dict["samples_per_label"] = 32
         return metadata_dict
