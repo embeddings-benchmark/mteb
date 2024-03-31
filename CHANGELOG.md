@@ -2,6 +2,27 @@
 
 
 
+## v1.3.2 (2024-03-29)
+
+### Documentation
+
+* docs: Update links in README.md (#296) ([`76056b5`](https://github.com/embeddings-benchmark/mteb/commit/76056b5ba92dcbfe32d629897ab6d5db3a0861c4))
+
+### Fix
+
+* fix: Added tasks from SEB (#287)
+
+* Added tasks from SEB
+
+* docs: fix link
+
+* fix: ran linting
+
+* fix typing for 3.8
+
+* fixed annotation for v3.8 ([`39cff49`](https://github.com/embeddings-benchmark/mteb/commit/39cff490157ae87d1cf62c77022f325be729bf04))
+
+
 ## v1.3.1 (2024-03-26)
 
 ### Fix
