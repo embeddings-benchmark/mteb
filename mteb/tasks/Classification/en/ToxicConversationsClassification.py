@@ -16,7 +16,7 @@ class ToxicConversationsClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="accuracy",
-        revision="d604517c81ca91fe16a244d1248fc021f9ecee7a",
+        revision="edfaf9da55d3dd50d43143d90c1ac476895ae6de",
         date=None,
         form=None,
         domains=None,
