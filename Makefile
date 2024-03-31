@@ -14,4 +14,4 @@ test:
 pr:
 	@echo "--- 🚀 Running requirements for a PR ---"
 	make lint
-	make test-parallel
+	make test
