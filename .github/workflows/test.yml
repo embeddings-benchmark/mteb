@@ -16,7 +16,10 @@ jobs:
       matrix:
         os: [ubuntu-latest] #, macos-latest, windows-latest]
         python-version: ["3.8", "3.9", "3.10"]
-
+        include:
+          # Add Windows with Python 3.8 only to avoid tests taking too long
+          - os: windows-latest
+            python-version: "3.8"
     # This allows a subsequently queued workflow run to interrupt previous runs
     concurrency:
       group: "${{ github.workflow }}-${{ matrix.python-version}}-${{ matrix.os }} @ ${{ github.ref }}"
