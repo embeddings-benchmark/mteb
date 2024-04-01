@@ -35,7 +35,7 @@ dependencies = [
     "torch",
     "tqdm",
     "rich",
-    "pytrec_eval",
+    "pytrec-eval-terrier>=0.5.6",
     "pydantic",
     "typing_extensions",
     "eval_type_backport",
