@@ -8,9 +8,9 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 class WikiCitiesClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="WikiCitiesClustering",
-        description="Clustering of Wikipedia articles of cities by country from https://huggingface.co/datasets/wikipedia.",
+        description="Clustering of Wikipedia articles of cities by country from https://huggingface.co/datasets/wikipedia. Test set includes 126 countries, and a total of 3531 cities.",
         reference="https://huggingface.co/datasets/wikipedia",
-        hf_hub_name="mteb/wikipedia-clustering",
+        hf_hub_name="jinaai/cities_wiki_clustering",
         type="Clustering",
         category="p2p",
         eval_splits=["test"],
