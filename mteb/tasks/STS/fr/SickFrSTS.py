@@ -42,15 +42,7 @@ class SickFrSTS(AbsTaskSTS):
         metadata_dict["max_score"] = 5
         return metadata_dict
 
-    def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub and rename columns to the standard format.
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
-
+    def dataset_transform(self):
         self.dataset = self.dataset.rename_columns(
             {
                 "sentence_A": "sentence1",
@@ -59,4 +51,3 @@ class SickFrSTS(AbsTaskSTS):
                 "Unnamed: 0": "id",
             }
         )
-        self.data_loaded = True

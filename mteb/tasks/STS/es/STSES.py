@@ -15,6 +15,7 @@ class STSES(AbsTaskSTS):
         dataset={
             "path": "PlanTL-GOB-ES/sts-es",
             "revision": "0912bb6c9393c76d62a7c5ee81c4c817ff47c9f4",
+            "trust_remote_code": True
         },
         description="Spanish test sets from SemEval-2014 (Agirre et al., 2014) and SemEval-2015 (Agirre et al., 2015)",
         reference="https://huggingface.co/datasets/PlanTL-GOB-ES/sts-es",
@@ -44,15 +45,8 @@ class STSES(AbsTaskSTS):
         metadata_dict["max_score"] = 5
         return metadata_dict
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        data = load_dataset(
-            trust_remote_code=True,
-            **self.metadata_dict["dataset"],
-        )[_EVAL_SPLIT]
+    def dataset_transform(self):
+        data = self.dataset[_EVAL_SPLIT]
         data = data.add_column("score", [d["label"] for d in data])
         self.dataset = {_EVAL_SPLIT: data}
 
-        self.data_loaded = True
