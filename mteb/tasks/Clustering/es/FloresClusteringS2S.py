@@ -10,7 +10,7 @@ class FloresClusteringS2S(AbsTaskClustering):
         name="FloresClusteringS2S",
         description="Clustering of sentences from various web articles, 32 topics in total.",
         reference="https://huggingface.co/datasets/facebook/flores",
-        hf_hub_name="mteb/flores", # Dataset not available on HF, not sure what to put here
+        hf_hub_name="facebook/flores",
         type="Clustering",
         category="s2s",
         eval_splits=["test"],

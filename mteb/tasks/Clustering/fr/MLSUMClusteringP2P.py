@@ -13,7 +13,7 @@ class MLSUMClusteringP2P(AbsTaskClustering):
         name="MLSUMClusteringP2P",
         description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",
         reference="https://huggingface.co/datasets/mlsum",
-        hf_hub_name="mteb/mlsum",  # can't find the original dataset on HF
+        hf_hub_name="mlsum",
         type="Clustering",
         category="p2p",
         eval_splits=["test"],
