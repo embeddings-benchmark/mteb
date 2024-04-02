@@ -43,6 +43,7 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
             return
 
         self.dataset = {}
+
         for lang in self.langs:
             self.dataset[lang] = datasets.load_dataset(**self.metadata_dict["dataset"])
 

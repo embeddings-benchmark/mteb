@@ -101,7 +101,7 @@ for ds_name, res_dict in sorted(all_results.items()):
         .metadata_dict
     )
     hf_hub_name = (
-        mteb_desc["dataset"]["hf_hub_name"]
+        mteb_desc["dataset"]["path"]
         if "dataset" in mteb_desc
         else mteb_desc.get("beir_name")
     )

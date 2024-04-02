@@ -103,8 +103,6 @@ class TaskMetadata(BaseModel):
 
     Args:
         dataset: All arguments to pass to datasets.load_dataset to load the dataset for the task. Refer to https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset
-        hf_hub_name: DEPRECATED. The name of the dataset for the task on the Hugging Face Hub.
-        revision: DEPRECATED. The revision of the dataset for the task on the Hugging Face Hub.
         name: The name of the task.
         description: A description of the task.
         type: The type of the task. These includes "Classification", "Summarization", "STS", "Retrieval", "Reranking", "Clustering",
@@ -131,9 +129,7 @@ class TaskMetadata(BaseModel):
         avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on.
     """
 
-    dataset: dict | None
-    hf_hub_name: str | None = None  # DEPRECATED, use dataset instead
-    revision: str | None = None  # DEPRECATED, use dataset instead
+    dataset: dict
 
     name: str
     description: str
@@ -161,32 +157,6 @@ class TaskMetadata(BaseModel):
     n_samples: dict[SPLIT_NAME, int] | None
     avg_character_length: dict[SPLIT_NAME, float] | None
 
-    @model_validator(mode="before")
-    def _check_dataset_configuration(cls, values):
-        """
-        This method checks that the dataset configuration is correct.
-        It ensures that the dataset is specified correctly and that the deprecated
-        hf_hub_name and revision are not used together with dataset.
-        """
-        dataset = values.get("dataset")
-        hf_hub_name = values.get("hf_hub_name")
-        revision = values.get("revision")
-
-        if dataset is None:
-            logger.warning(
-                "hf_hub_name and revision are deprecated. This will be removed in a future version. "
-                "Use the dataset key instead, which can contains any argument passed to datasets.load_dataset. "
-                "Refer to https://huggingface.co/docs/datasets/main/en/package_reference/loading_methods#datasets.load_dataset"
-            )
-            values["dataset"] = {"path": hf_hub_name, "revision": revision}
-        else:
-            if hf_hub_name is not None or revision is not None:
-                raise ValueError(
-                    "You can't specify both the deprecated hf_hub_name/revision and dataset. Use dataset instead."
-                )
-
-        return values
-
     @field_validator("dataset")
     def _check_dataset_path_is_specified(cls, dataset):
         """
@@ -197,4 +167,12 @@ class TaskMetadata(BaseModel):
                 "You must specify the path to the dataset in the dataset dictionary. "
                 "See https://huggingface.co/docs/datasets/main/en/package_reference/loading_methods#datasets.load_dataset"
             )
+        return dataset
+
+    @field_validator("dataset")
+    def _check_dataset_revision_is_specified(cls, dataset):
+        if "revision" not in dataset:
+            raise ValueError("You must explicitly specify a revision for the dataset (either a SHA or None).")
+        if dataset["revision"] is None:
+            logging.warning("It is encourage to specify a dataset revision for reproducability")
         return dataset
