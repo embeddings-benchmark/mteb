@@ -13,7 +13,7 @@ class AlloProfClusteringP2P(AbsTaskClustering):
         name="AlloProfClusteringP2P",
         description="Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic.",
         reference="https://huggingface.co/datasets/lyon-nlp/alloprof",
-        hf_hub_name="mteb/alloprof",
+        hf_hub_name="lyon-nlp/alloprof",
         type="Clustering",
         category="p2p",
         eval_splits=["test"],

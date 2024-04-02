@@ -13,7 +13,7 @@ _SPLITS = ["dev", "test"]
 class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
     metadata = TaskMetadata(
         name="STSBenchmarkMultilingualSTS",
-        hf_hub_name="stsb_multi_mt",
+        hf_hub_name="PhilipMay/stsb_multi_mt",
         description=(
             "Semantic Textual Similarity Benchmark (STSbenchmark) dataset,"
             "but translated using DeepL API."

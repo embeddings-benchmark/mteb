@@ -21,7 +21,7 @@ class GermanDPR(AbsTaskRetrieval):
         eval_splits=[_EVAL_SPLIT],
         eval_langs=[_LANGUAGE],
         main_score="ndcg_at_10",
-        revision="5129d02422a66be600ac89cd3e8531b4f97d347d",
+        revision="fff05ceaf2ffbe5b65c7e0c57e678f7b7e1a0581",
         date=None,
         form=None,
         domains=None,

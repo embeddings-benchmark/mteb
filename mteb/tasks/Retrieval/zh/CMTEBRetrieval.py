@@ -145,7 +145,7 @@ class CovidRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["zh"],
         main_score="ndcg_at_10",
-        revision="687de13dc7294d6fd9be10c6945f9e8fec8166b9",
+        revision="1271c7809071a13532e05f25fb53511ffce77117",
         date=None,
         form=None,
         domains=None,

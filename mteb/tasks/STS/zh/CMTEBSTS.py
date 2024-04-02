@@ -16,7 +16,7 @@ class ATEC(AbsTaskSTS):
         eval_splits=["validation", "test"],
         eval_langs=["zh"],
         main_score="cosine_spearman",
-        revision="0f319b1142f2ae3f7dc7be10c3c7f3598ec6c602",
+        revision="0f319b1142f28d00e055a6770f3f726ae9b7d865",
         date=None,
         form=None,
         domains=None,

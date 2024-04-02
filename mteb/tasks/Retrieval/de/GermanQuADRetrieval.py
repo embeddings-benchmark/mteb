@@ -32,7 +32,7 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
         name="GermanQuAD-Retrieval",
         description="Context Retrieval for German Question Answering",
         reference="https://www.kaggle.com/datasets/GermanQuAD",
-        hf_hub_name="mteb/germanquad",
+        hf_hub_name="mteb/germanquad-retrieval",
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],

@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 class SickrSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="SICK-R",
-        hf_hub_name="MMathematica/sickr-sts",
+        hf_hub_name="mteb/sickr-sts",
         description="Semantic Textual Similarity SICK-R dataset as described here:",
         reference="https://aclanthology.org/2020.lrec-1.207",
         type="STS",
@@ -16,7 +16,7 @@ class SickrSTS(AbsTaskSTS):
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="cosine_spearman",
-        revision="a6ea5a8cab320b040a23452cc28066d9beae2cee",
+        revision="20a6d6f312dd54037fe07a32d58e5e168867909d",
         date=None,
         form=None,
         domains=None,

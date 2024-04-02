@@ -16,7 +16,7 @@ class BlurbsClusteringS2S(AbsTaskClustering):
         eval_splits=["test"],
         eval_langs=["de"],
         main_score="v_measure",
-        revision="5bfd9ee0ae3d2ef0d9a0e0bd0c3b2d0",
+        revision="22793b6a6465bf00120ad525e38c51210858132c",
         date=None,
         form=None,
         domains=None,

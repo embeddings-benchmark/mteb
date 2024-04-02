@@ -19,7 +19,7 @@ class QuoraRetrieval(AbsTaskRetrieval):
         eval_splits=["dev", "test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="0be27e93455051e531182b85e85e425aba12e9d4",
+        revision="e4e08e0b7dbe3c8700f0daef558ff32256715259",
         date=None,
         form=None,
         domains=None,

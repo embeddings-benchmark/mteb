@@ -60,7 +60,7 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
         eval_splits=["dev", "test"],
         eval_langs=_LANGUAGES,
         main_score="ndcg_at_10",
-        revision="d79af07e969a6678fcbbe819956840425816468f",
+        revision="d67138e705d963e346253a80e59676ddb418810a",
         date=None,
         form=None,
         domains=None,

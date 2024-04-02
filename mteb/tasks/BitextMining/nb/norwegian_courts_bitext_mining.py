@@ -9,7 +9,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class NorwegianCourtsBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="NorwegianCourtsBitextMining",
-        hf_hub_name="kaedrodrur/norwegian-courts",
+        hf_hub_name="kardosdrur/norwegian-courts",
         description="Nynorsk and Bokmål parallel corpus from Norwegian courts. ",
         reference="https://opus.nlpl.eu/ELRC-Courts_Norway-v1.php",
         type="BitextMining",

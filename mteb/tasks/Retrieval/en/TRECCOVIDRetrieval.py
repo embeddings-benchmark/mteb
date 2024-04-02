@@ -16,7 +16,7 @@ class TRECCOVID(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="1271c7809071a13532e05f25fb53511ffce77117",
+        revision="bb9466bac8153a0349341eb1b22e06409e78ef4e",
         date=None,
         form=None,
         domains=None,

@@ -19,7 +19,7 @@ class SCIDOCS(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="56a6d0140cf6356659e2a7c1413286a774468d44",
+        revision="f8c2fcf00f625baaa80f62ec5bd9e1fff3b8ae88",
         date=None,
         form=None,
         domains=None,

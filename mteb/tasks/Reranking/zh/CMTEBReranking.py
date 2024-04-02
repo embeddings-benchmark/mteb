@@ -69,7 +69,7 @@ class CMedQAv1(AbsTaskReranking):
         eval_splits=["test"],
         eval_langs=["zh"],
         main_score="map",
-        revision="cd540c506dae1cf9e9a59c3e06f42030d54e7301",
+        revision="8d7f1e942507dac42dc58017c1a001c3717da7df",
         date=None,
         form=None,
         domains=None,

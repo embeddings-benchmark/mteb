@@ -9,7 +9,7 @@ class SweRecClassification(AbsTaskClassification):
         name="SweRecClassification",
         description="A Swedish dataset for sentiment classification on review",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
-        hf_hub_name="SweRecClassification",
+        hf_hub_name="ScandEval/swerec-mini",
         type="Classification",
         category="s2s",
         eval_splits=["test"],

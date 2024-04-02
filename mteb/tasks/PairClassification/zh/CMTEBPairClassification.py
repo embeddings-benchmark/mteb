@@ -15,7 +15,7 @@ class Ocnli(AbsTaskPairClassification):
         eval_splits=["validation", "test"],
         eval_langs=["zh"],
         main_score="accuracy",
-        revision="7bd1ee0ae3a820d8a4b6f8a624063f8504a3564d",
+        revision="66e76a618a34d6d565d5538088562851e6daa7ec",
         date=None,
         form=None,
         domains=None,
