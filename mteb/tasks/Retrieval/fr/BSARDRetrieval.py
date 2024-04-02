@@ -18,7 +18,7 @@ class BSARDRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["fr"],
         main_score="ndcg_at_100",
-        revision="5e1b70b3be3f5bd4676d3cd59bd01fb17f3ce722",
+        revision="5effa1b9b5fa3b0f9e12523e6e43e5f86a6e6d59",
         date=None,
         form=None,
         domains=None,
