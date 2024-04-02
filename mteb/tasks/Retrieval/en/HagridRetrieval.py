@@ -52,7 +52,7 @@ class HagridRetrieval(AbsTaskRetrieval):
         data = datasets.load_dataset(
             "miracl/hagrid",
             split=self.metadata.eval_splits[0],
-            revision=self.metadata_dict.get("revision", None),
+            revision=self.metadata_dict["dataset"].get("revision", None),
         )
         proc_data = self.preprocess_data(data)
 
