@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -11,13 +9,16 @@ class NordicLangClassification(AbsTaskClassification):
         name="NordicLangClassification",
         description="A dataset for Nordic language identification.",
         reference="https://aclanthology.org/2021.vardial-1.8/",
-        hf_hub_name="strombergnlp/nordic_langid",
+        dataset={
+            "path": "strombergnlp/nordic_langid",
+            "revision": "e254179d18ab0165fdb6dbef91178266222bee2a",
+            "name": "10k",
+        },
         type="Classification",
         category="s2s",
         eval_splits=["test"],
         eval_langs=["no", "nn"],
         main_score="accuracy",
-        revision="e254179d18ab0165fdb6dbef91178266222bee2a",
         date=None,
         form=None,
         domains=None,
@@ -34,25 +35,10 @@ class NordicLangClassification(AbsTaskClassification):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["n_experiments"] = 10
         metadata_dict["samples_per_label"] = 32
         return metadata_dict
-
-    def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            "10k",
-            revision=self.metadata_dict.get("revision"),  # select relevant subset
-        )
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("sentence", "text")

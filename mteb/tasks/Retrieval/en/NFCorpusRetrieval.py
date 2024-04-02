@@ -8,7 +8,10 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class NFCorpus(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NFCorpus",
-        hf_hub_name="mteb/nfcorpus",
+        dataset={
+            "path": "mteb/nfcorpus",
+            "revision": "ec0fa4fe99da2ff19ca1214b7966684033a58814",
+        },
         description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
         reference="https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/",
         type="Retrieval",
@@ -16,7 +19,6 @@ class NFCorpus(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="ec0fa4fe99da2ff19ca1214b7966684033a58814",
         date=None,
         form=None,
         domains=None,

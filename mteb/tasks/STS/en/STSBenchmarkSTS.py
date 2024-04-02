@@ -8,7 +8,10 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 class STSBenchmarkSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="STSBenchmark",
-        hf_hub_name="mteb/stsbenchmark-sts",
+        dataset={
+            "path": "mteb/stsbenchmark-sts",
+            "revision": "b0fddb56ed78048fa8b90373c8a3cfc37b684831",
+        },
         description="Semantic Textual Similarity Benchmark (STSbenchmark) dataset.",
         reference="https://github.com/PhilipMay/stsb-multi-mt/",
         type="STS",
@@ -16,7 +19,6 @@ class STSBenchmarkSTS(AbsTaskSTS):
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="cosine_spearman",
-        revision="b0fddb56ed78048fa8b90373c8a3cfc37b684831",
         date=None,
         form=None,
         domains=None,
@@ -33,7 +35,7 @@ class STSBenchmarkSTS(AbsTaskSTS):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 5
         return metadata_dict

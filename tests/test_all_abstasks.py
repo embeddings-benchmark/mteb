@@ -9,9 +9,24 @@ from sentence_transformers import SentenceTransformer
 from mteb import MTEB
 from mteb.abstasks import AbsTask
 from mteb.tasks.BitextMining.da.BornholmskBitextMining import BornholmBitextMining
+from unittest.mock import patch, Mock
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 logging.basicConfig(level=logging.INFO)
 
+@pytest.mark.parametrize("task", MTEB().tasks_cls)
+@patch("datasets.load_dataset")
+def test_load_data(mock_load_dataset: Mock, task: AbsTask):
+    # TODO: We skip because this load_data is completely different.
+    if isinstance(task, AbsTaskRetrieval):
+        pytest.skip()
+    with patch.object(task, "dataset_transform") as mock_dataset_transform:
+        task.load_data()
+        mock_load_dataset.assert_called()
+
+        # They don't yet but should they so they can be expanded more easily?
+        if not task.is_crosslingual and not task.is_multilingual:
+            mock_dataset_transform.assert_called_once()
 
 def test_two_mteb_tasks():
     """

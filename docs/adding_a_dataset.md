@@ -7,7 +7,7 @@ To add a new dataset to MTEB, you need to do three things:
 2) Add metadata to the task
 3) Submit the edits to the [MTEB](https://github.com/embeddings-benchmark/mteb) repository
 
-If you have any questions regarding this process feel free to open a discussion [thread](https://github.com/embeddings-benchmark/mteb/discussions). 
+If you have any questions regarding this process feel free to open a discussion [thread](https://github.com/embeddings-benchmark/mteb/discussions).
 
 > Note: When we mention adding a dataset we refer to a subclass of one of the abstasks.
 
@@ -28,13 +28,15 @@ class SciDocsReranking(AbsTaskReranking):
         name="SciDocsRR",
         description="Ranking of related scientific papers based on their title.",
         reference="https://allenai.org/data/scidocs",
-        hf_hub_name="mteb/scidocs-reranking",
         type="Reranking",
         category="s2s",
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="map",
-        revision="d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
+        dataset={
+            "path": "mteb/scidocs-reranking",
+            "revision": "d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
+        }
         date=None,
         form="written",
         domains=["Academic", "Non-fiction"],
@@ -55,13 +57,13 @@ evaluation = MTEB(tasks=[MindSmallReranking()])
 evaluation.run(model)
 ```
 
-> **Note:** for multilingual tasks, make sure your class also inherits from the `MultilingualTask` class like in [this](https://github.com/embeddings-benchmark/mteb-draft/blob/main/mteb/tasks/Classification/MTOPIntentClassification.py) example.  
+> **Note:** for multilingual tasks, make sure your class also inherits from the `MultilingualTask` class like in [this](https://github.com/embeddings-benchmark/mteb-draft/blob/main/mteb/tasks/Classification/MTOPIntentClassification.py) example.
 > For cross-lingual tasks, make sure your class also inherits from the `CrosslingualTask` class like in [this](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/tasks/BitextMining/TatoebaBitextMining.py).
 
 
 
 ### A Detailed Example
-Often the dataset from HuggingFace is not in the format expected by MTEB. To resolve this you can either change the format on Hugging Face or add a `dataset_transform` method to your dataset to transform it into the right format on the fly. Here is an example along with some design considerations: 
+Often the dataset from HuggingFace is not in the format expected by MTEB. To resolve this you can either change the format on Hugging Face or add a `dataset_transform` method to your dataset to transform it into the right format on the fly. Here is an example along with some design considerations:
 
 ```python
 class VGClustering(AbsTaskClustering):
@@ -69,13 +71,15 @@ class VGClustering(AbsTaskClustering):
         name="VGClustering",
         description="Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.",
         reference="https://huggingface.co/datasets/navjordj/VG_summarization",
-        hf_hub_name="navjordj/VG_summarization",
         type="Clustering",
         category="p2p",
         eval_splits=["test"],
         eval_langs=["nb"],
         main_score="v_measure",
-        revision="d4c5a8ba10ae71224752c727094ac4c46947fa29",
+        dataset={
+            "path": "navjordj/VG_summarization",
+            "revision": "d4c5a8ba10ae71224752c727094ac4c46947fa29",
+        },
         date=("2012-01-01", "2020-01-01"),
         form="written",
         domains=["Academic", "Non-fiction"],
@@ -87,21 +91,6 @@ class VGClustering(AbsTaskClustering):
         text_creation="found",
         bibtex_citation= ... # removed for brevity
 )
-
-    def load_data(self, **kwargs: dict):  # noqa: ARG002
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset: datasets.DatasetDict = datasets.load_dataset(
-            self.description["hf_hub_name"],
-            revision=self.description.get("revision"),
-        )
-
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self):
         splits = self.description["eval_splits"]
@@ -136,7 +125,7 @@ class VGClustering(AbsTaskClustering):
             labels_batched = list(batched(labels, 512))
 
             # reduce the size of the dataset as we see that we obtain a consistent scores (if we change the seed) even
-            # with only 512x4 samples. 
+            # with only 512x4 samples.
             documents_batched = documents_batched[:4]
             labels_batched = labels_batched[:4]
 
@@ -227,7 +216,7 @@ These domains subtypes were introduced in the [Scandinavian Embedding Benchmark]
 
 Once you are finished create a PR to the [MTEB](https://github.com/embeddings-benchmark/mteb) repository. If you haven't created a PR before please refer to the [GitHub documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/)
 
-The PR will be reviewed by one of the organizers or contributors who might ask you to change things. Once the PR is approved the dataset will be added into the main repository. 
+The PR will be reviewed by one of the organizers or contributors who might ask you to change things. Once the PR is approved the dataset will be added into the main repository.
 
 
 Before you commit here is a checklist you should consider completing before submitting:
@@ -251,5 +240,5 @@ evaluation = MTEB(tasks=[YourNewTask()])
   - [ ] `intfloat/multilingual-e5-small`
 - [ ] I have checked that the performance is neither trivial (both models gain close to perfect scores) nor random (both models gain close to random scores).
 - [ ] I have considered the size of the dataset and reduced it if it is too big (2048 examples is typically large enough for most tasks)
-- [ ] Run tests locally to make sure nothing is broken using `make test`. 
+- [ ] Run tests locally to make sure nothing is broken using `make test`.
 - [ ] Run the formatter to format the code using `make lint`.

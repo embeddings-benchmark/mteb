@@ -54,13 +54,15 @@ class XPQARetrieval(MultilingualTask, AbsTaskRetrieval):
         name="XPQARetrieval",
         description="XPQARetrieval",
         reference="https://arxiv.org/abs/2305.09249",
-        hf_hub_name="jinaai/xpqa",
+        dataset={
+            "path": "jinaai/xpqa",
+            "revision": "c99d599f0a6ab9b85b065da6f9d94f9cf731679f",
+        },
         type="Retrieval",
         category="s2p",
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGS,
         main_score="ndcg_at_10",
-        revision="c99d599f0a6ab9b85b065da6f9d94f9cf731679f",
         date=None,
         form=None,
         domains=None,
@@ -80,11 +82,11 @@ class XPQARetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_xpqa_data(
-            path=self.metadata_dict["hf_hub_name"],
+            path=self.metadata_dict["dataset"]["path"],
             langs=self.langs,
             split=self.metadata_dict["eval_splits"][0],
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["revision"],
+            revision=self.metadata_dict["dataset"]["revision"],
         )
 
         self.data_loaded = True

@@ -12,13 +12,15 @@ class BSARDRetrieval(AbsTaskRetrieval):
         name="BSARDRetrieval",
         description="The Belgian Statutory Article Retrieval Dataset (BSARD) is a French native dataset for studying legal information retrieval. BSARD consists of more than 22,600 statutory articles from Belgian law and about 1,100 legal questions posed by Belgian citizens and labeled by experienced jurists with relevant articles from the corpus.",
         reference="https://huggingface.co/datasets/maastrichtlawtech/bsard",
-        hf_hub_name="mteb/bsard",
+        dataset={
+            "path": "mteb/bsard",
+            "revision": "5effa1b9b5fa3b0f9e12523e6e43e5f86a6e6d59",
+        },
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],
         eval_langs=["fr"],
         main_score="ndcg_at_100",
-        revision="5effa1b9b5fa3b0f9e12523e6e43e5f86a6e6d59",
         date=None,
         form=None,
         domains=None,
@@ -38,16 +40,14 @@ class BSARDRetrieval(AbsTaskRetrieval):
             return
         # fetch both subsets of the dataset, only test split
         corpus_raw = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            "corpus",
+            name="corpus",
             split="corpus",
-            revision=self.metadata_dict.get("revision", None),
+            **self.metadata_dict["dataset"],
         )
         queries_raw = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            "questions",
+            name="questions",
             split=self.metadata.eval_splits[0],
-            revision=self.metadata_dict.get("revision", None),
+            **self.metadata_dict["dataset"],
         )
 
         self.queries = {

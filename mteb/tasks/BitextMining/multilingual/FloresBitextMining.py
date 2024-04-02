@@ -235,7 +235,10 @@ extend_lang_pairs()
 class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
     metadata = TaskMetadata(
         name="FloresBitextMining",
-        hf_hub_name="facebook/flores",
+        dataset={
+            "path": "facebook/flores",
+            "revision": "80dc3040d19756742c9a18267ab30f54fb8e226b",
+        },
         description="FLORES is a benchmark dataset for machine translation between English and low-resource languages.",
         reference="https://huggingface.co/datasets/facebook/flores",
         type="BitextMining",
@@ -243,7 +246,6 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
         eval_splits=_SPLIT,
         eval_langs=_LANGUAGES_PAIRS,
         main_score="f1",
-        revision="80dc3040d19756742c9a18267ab30f54fb8e226b",
         date=None,
         form=None,
         domains=None,
@@ -267,9 +269,8 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
         self.dataset = {}
         for lang in self.langs:
             self.dataset[lang] = datasets.load_dataset(
-                self.metadata_dict["hf_hub_name"],
-                lang,
-                revision=self.metadata_dict.get("revision", None),
+                name=lang,
+                **self.metadata_dict["dataset"],
             )
         self.dataset_transform()
         self.data_loaded = True

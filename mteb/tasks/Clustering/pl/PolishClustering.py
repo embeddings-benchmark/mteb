@@ -11,13 +11,15 @@ class EightTagsClustering(AbsTaskClustering):
         description="Clustering of headlines from social media posts in Polish belonging to 8 categories: film, history, "
         "food, medicine, motorization, work, sport and technology.",
         reference="https://aclanthology.org/2020.lrec-1.207.pdf",
-        hf_hub_name="mteb/polish-clustering",
+        dataset={
+            "path": "mteb/polish-clustering",
+            "revision": "e7a26af6f3ae46b30dde8737f02c07b1505bcc73",
+        },
         type="Clustering",
         category="s2s",
         eval_splits=["test"],
         eval_langs=["pl"],
         main_score="v_measure",
-        revision="e7a26af6f3ae46b30dde8737f02c07b1505bcc73",
         date=None,
         form=None,
         domains=None,

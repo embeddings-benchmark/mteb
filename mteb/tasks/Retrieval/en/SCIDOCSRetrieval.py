@@ -8,7 +8,10 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class SCIDOCS(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SCIDOCS",
-        hf_hub_name="mteb/scidocs",
+        dataset={
+            "path": "mteb/scidocs",
+            "revision": "56a6d0140cf6356659e2a7c1413286a774468d44",
+        },
         description=(
             "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation"
             " prediction, to document classification and recommendation."
@@ -19,7 +22,6 @@ class SCIDOCS(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="56a6d0140cf6356659e2a7c1413286a774468d44",
         date=None,
         form=None,
         domains=None,

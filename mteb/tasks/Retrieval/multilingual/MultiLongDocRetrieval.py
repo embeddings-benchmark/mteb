@@ -24,14 +24,20 @@ _LANGUAGES = [
 ]
 
 
-def load_mldr_data(path: str, langs: list, eval_splits: list, cache_dir: str = None):
+def load_mldr_data(
+    path: str,
+    langs: list,
+    eval_splits: list,
+    cache_dir: str = None,
+    revision: str = None,
+):
     corpus = {lang: {split: None for split in eval_splits} for lang in langs}
     queries = {lang: {split: None for split in eval_splits} for lang in langs}
     relevant_docs = {lang: {split: None for split in eval_splits} for lang in langs}
 
     for lang in langs:
         lang_corpus = datasets.load_dataset(
-            path, f"corpus-{lang}", cache_dir=cache_dir
+            path, f"corpus-{lang}", cache_dir=cache_dir, revision=revision
         )["corpus"]
         lang_corpus = {e["docid"]: {"text": e["text"]} for e in lang_corpus}
         lang_data = datasets.load_dataset(path, lang, cache_dir=cache_dir)
@@ -54,13 +60,15 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
         name="MultiLongDocRetrieval",
         description="MultiLongDocRetrieval",
         reference="https://arxiv.org/abs/2402.03216",
-        hf_hub_name="Shitao/MLDR",
+        dataset={
+            "path": "Shitao/MLDR",
+            "revision": "d79af07e969a6678fcbbe819956840425816468f",
+        },
         type="Retrieval",
         category="s2p",
         eval_splits=["dev", "test"],
         eval_langs=_LANGUAGES,
         main_score="ndcg_at_10",
-        revision="d79af07e969a6678fcbbe819956840425816468f",
         date=None,
         form=None,
         domains=None,
@@ -71,7 +79,7 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
         dialect=None,
         text_creation=None,
         bibtex_citation="""@misc{bge-m3,
-      title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation}, 
+      title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation},
       author={Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
       year={2024},
       eprint={2402.03216},
@@ -88,9 +96,10 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = load_mldr_data(
-            path=self.metadata_dict["hf_hub_name"],
+            path=self.metadata_dict["dataset"]["path"],
             langs=self.metadata.eval_langs,
             eval_splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata_dict["dataset"]["revision"],
         )
         self.data_loaded = True

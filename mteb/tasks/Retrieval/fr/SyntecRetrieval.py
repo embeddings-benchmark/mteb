@@ -14,13 +14,15 @@ class SyntecRetrieval(AbsTaskRetrieval):
         name="SyntecRetrieval",
         description="This dataset has been built from the Syntec Collective bargaining agreement.",
         reference="https://huggingface.co/datasets/lyon-nlp/mteb-fr-retrieval-syntec-s2p",
-        hf_hub_name="lyon-nlp/mteb-fr-retrieval-syntec-s2p",
+        dataset={
+            "path": "lyon-nlp/mteb-fr-retrieval-syntec-s2p",
+            "revision": "b205c5084a0934ce8af14338bf03feb19499c84d",
+        },
         type="Retrieval",
         category="s2p",
         eval_splits=_EVAL_SPLITS,
         eval_langs=["fr"],
         main_score="map",
-        revision="b205c5084a0934ce8af14338bf03feb19499c84d",
         date=None,
         form=None,
         domains=None,
@@ -39,11 +41,14 @@ class SyntecRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
         # fetch both subsets of the dataset
+        # BUGFIX: the revision is now used
         corpus_raw = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"], "documents"
+            name="documents",
+            **self.metadata_dict["dataset"],
         )
         queries_raw = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"], "queries"
+            name="queries",
+            **self.metadata_dict["dataset"],
         )
 
         self.queries = {

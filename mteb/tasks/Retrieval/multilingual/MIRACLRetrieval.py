@@ -64,13 +64,15 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
         name="MIRACLRetrieval",
         description="MIRACLRetrieval",
         reference=None,
-        hf_hub_name="jinaai/miracl",
+        dataset={
+            "path": "jinaai/miracl",
+            "revision": "d28a029f35c4ff7f616df47b0edf54e6882395e6",
+        },
         type="Retrieval",
         category="s2p",
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGS,
         main_score="ndcg_at_10",
-        revision="d28a029f35c4ff7f616df47b0edf54e6882395e6",
         date=None,
         form=None,
         domains=None,
@@ -90,11 +92,11 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
-            path=self.metadata_dict["hf_hub_name"],
+            path=self.metadata_dict["dataset"]["path"],
             langs=self.langs,
             split=self.metadata_dict["eval_splits"][0],
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["revision"],
+            revision=self.metadata_dict["dataset"]["revision"],
         )
 
         self.data_loaded = True
