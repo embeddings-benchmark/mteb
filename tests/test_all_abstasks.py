@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import asyncio
 import logging
 from typing import Union
 
+import aiohttp
 import pytest
 from sentence_transformers import SentenceTransformer
 
@@ -60,3 +62,41 @@ def test_all_tasks_fetch():
     Test that all tasks can be fetched
     """
     MTEB.mteb_tasks()
+
+
+async def check_dataset_on_hf(
+    session: aiohttp.ClientSession, dataset: str, revision: str
+) -> bool:
+    url = f"https://huggingface.co/datasets/{dataset}/tree/{revision}"
+    async with session.head(url) as response:
+        return response.status == 200
+
+
+async def check_datasets_are_available_on_hf(tasks, fail_fast: bool = False):
+    does_not_exist = []
+    async with aiohttp.ClientSession() as session:
+        tasks_checks = []
+        for task in tasks:
+            hf_hub_name = task.metadata.hf_hub_name
+            revision = task.metadata.revision
+            task_check = check_dataset_on_hf(session, hf_hub_name, revision)
+            tasks_checks.append((task_check, hf_hub_name, revision))
+
+        for task_check, hf_hub_name, revision in tasks_checks:
+            ds_exists = await task_check
+            if not ds_exists:
+                does_not_exist.append((hf_hub_name, revision))
+
+    if does_not_exist:
+        pretty_print = "\n".join(
+            [f"{ds[0]} - revision {ds[1]}" for ds in does_not_exist]
+        )
+        assert False, f"Datasets not available on Hugging Face:\n{pretty_print}"
+
+
+def test_dataset_availability():
+    """
+    Checks if the datasets are available on Hugging Face using both their name and revision.
+    """
+    tasks = MTEB().tasks_cls
+    asyncio.run(check_datasets_are_available_on_hf(tasks))
