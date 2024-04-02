@@ -8,7 +8,10 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 class STS16STS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="STS16",
-        hf_hub_name="mteb/sts16-sts",
+        dataset={
+            "path": "mteb/sts16-sts",
+            "revision": "4d8694f8f0e0100860b497b999b3dbed754a0513",
+        },
         description="SemEval STS 2016 dataset",
         reference="https://www.aclweb.org/anthology/S16-1001",
         type="STS",
@@ -16,7 +19,6 @@ class STS16STS(AbsTaskSTS):
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="cosine_spearman",
-        revision="4d8694f8f0e0100860b497b999b3dbed754a0513",
         date=None,
         form=None,
         domains=None,
@@ -33,7 +35,7 @@ class STS16STS(AbsTaskSTS):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 5
         return metadata_dict

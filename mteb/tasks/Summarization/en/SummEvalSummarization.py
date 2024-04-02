@@ -10,13 +10,15 @@ class SummEvalSummarization(AbsTaskSummarization):
         name="SummEval",
         description="News Article Summary Semantic Similarity Estimation.",
         reference="https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html",
-        hf_hub_name="mteb/summeval",
+        dataset={
+            "path": "mteb/summeval",
+            "revision": "cda12ad7615edc362dbf25a00fdd61d3b1eaf93c",
+        },
         type="Summarization",
         category="p2p",
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="cosine_spearman",
-        revision="cda12ad7615edc362dbf25a00fdd61d3b1eaf93c",
         date=None,
         form=None,
         domains=None,
@@ -33,7 +35,7 @@ class SummEvalSummarization(AbsTaskSummarization):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 5
         return metadata_dict

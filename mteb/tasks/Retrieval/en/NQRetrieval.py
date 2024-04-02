@@ -8,7 +8,10 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class NQ(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NQ",
-        hf_hub_name="mteb/nq",
+        dataset={
+            "path": "mteb/nq",
+            "revision": "b774495ed302d8c44a3a7ea25c90dbce03968f31",
+        },
         description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
         reference="https://ai.google.com/research/NaturalQuestions/",
         type="Retrieval",
@@ -16,7 +19,6 @@ class NQ(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="b774495ed302d8c44a3a7ea25c90dbce03968f31",
         date=None,
         form=None,
         domains=None,

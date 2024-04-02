@@ -11,7 +11,10 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 class PawsX(MultilingualTask, AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PawsX",
-        hf_hub_name="paws-x",
+        dataset={
+            "path": "paws-x",
+            "revision": "8a04d940a42cd40658986fdd8e3da561533a3646",
+        },
         description="",
         reference="https://arxiv.org/abs/1908.11828",
         category="s2s",
@@ -19,7 +22,6 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
         eval_splits=["test.full", "validation.full"],
         eval_langs=["de", "en", "es", "fr", "ja", "ko", "zh"],
         main_score="ap",
-        revision="8a04d940a42cd40658986fdd8e3da561533a3646",
         date=None,
         form=None,
         domains=None,
@@ -41,9 +43,8 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
         self.dataset = dict()
         for lang in self.langs:
             hf_dataset = datasets.load_dataset(
-                self.metadata_dict["hf_hub_name"],
-                lang,
-                revision=self.metadata_dict.get("revision", None),
+                name=lang,
+                **self.metadata_dict["dataset"],
             )
 
             sent1 = []

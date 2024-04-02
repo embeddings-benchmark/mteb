@@ -8,7 +8,10 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class SciFact(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SciFact",
-        hf_hub_name="mteb/scifact",
+        dataset={
+            "path": "mteb/scifact",
+            "revision": "0228b52cf27578f30900b9e5271d331663a030d7",
+        },
         description="SciFact verifies scientific claims using evidence from the research literature containing scientific paper abstracts.",
         reference="https://github.com/allenai/scifact",
         type="Retrieval",
@@ -16,7 +19,6 @@ class SciFact(AbsTaskRetrieval):
         eval_splits=["train", "test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="0228b52cf27578f30900b9e5271d331663a030d7",
         date=None,
         form=None,
         domains=None,

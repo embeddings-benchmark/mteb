@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -9,7 +7,10 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class DanishPoliticalCommentsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DanishPoliticalCommentsClassification",
-        hf_hub_name="danish_political_comments",
+        dataset={
+            "path": "danish_political_comments",
+            "revision": "edbb03726c04a0efab14fc8c3b8b79e4d420e5a1",
+        },
         description="A dataset of Danish political comments rated for sentiment",
         reference="https://huggingface.co/datasets/danish_political_comments",
         type="Classification",
@@ -17,7 +18,6 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
         eval_splits=["train"],
         eval_langs=["da"],
         main_score="accuracy",
-        revision="edbb03726c04a0efab14fc8c3b8b79e4d420e5a1",
         date=None,
         form=None,
         domains=None,
@@ -38,20 +38,6 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
         metadata_dict["n_experiments"] = 10
         metadata_dict["samples_per_label"] = 16
         return metadata_dict
-
-    def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            revision=self.metadata_dict.get("revision"),
-        )
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("sentence", "text")

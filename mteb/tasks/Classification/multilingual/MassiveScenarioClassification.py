@@ -62,7 +62,10 @@ _LANGUAGES = [
 class MassiveScenarioClassification(MultilingualTask, AbsTaskClassification):
     metadata = TaskMetadata(
         name="MassiveScenarioClassification",
-        hf_hub_name="mteb/amazon_massive_scenario",
+        dataset={
+            "path": "mteb/amazon_massive_scenario",
+            "revision": "7d571f92784cd94a019292a1f45445077d0ef634",
+        },
         description="MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages",
         reference="https://arxiv.org/abs/2204.08582#:~:text=MASSIVE%20contains%201M%20realistic%2C%20parallel,diverse%20languages%20from%2029%20genera.",
         category="s2s",
@@ -70,7 +73,6 @@ class MassiveScenarioClassification(MultilingualTask, AbsTaskClassification):
         eval_splits=["validation", "test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
-        revision="7d571f92784cd94a019292a1f45445077d0ef634",
         date=None,
         form=None,
         domains=None,
