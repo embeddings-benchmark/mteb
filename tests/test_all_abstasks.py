@@ -72,20 +72,20 @@ async def check_dataset_on_hf(
         return response.status == 200
 
 
-async def check_datasets_are_available_on_hf(tasks, fail_fast: bool = False):
+async def check_datasets_are_available_on_hf(tasks):
     does_not_exist = []
     async with aiohttp.ClientSession() as session:
-        tasks_checks = []
-        for task in tasks:
-            hf_hub_name = task.metadata.hf_hub_name
-            revision = task.metadata.revision
-            task_check = check_dataset_on_hf(session, hf_hub_name, revision)
-            tasks_checks.append((task_check, hf_hub_name, revision))
+        tasks_checks = [
+            check_dataset_on_hf(
+                session, task.metadata.hf_hub_name, task.metadata.revision
+            )
+            for task in tasks
+        ]
+        datasets_exists = await asyncio.gather(*tasks_checks)
 
-        for task_check, hf_hub_name, revision in tasks_checks:
-            ds_exists = await task_check
-            if not ds_exists:
-                does_not_exist.append((hf_hub_name, revision))
+    for task, ds_exists in zip(tasks, datasets_exists):
+        if not ds_exists:
+            does_not_exist.append((task.metadata.hf_hub_name, task.metadata.revision))
 
     if does_not_exist:
         pretty_print = "\n".join(
