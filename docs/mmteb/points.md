@@ -23,6 +23,6 @@ First name and last name are as you want them to appear in a publication.
 | imenelydiaker     | Imene      | Kerboua    |                              |                      |
 | wissam-sib        | Wissam     | Siblini    |                              |                      |
 | GabrielSequeira   | Gabriel    | Sequeira   |                              |                      |
-| schmarion         | Marion     | Schaeffer  |                              |                      |
+| schmarion         | Marion     | Schaeffer  |                              |  ~Marion_Schaeffer1 |
 | MathieuCiancone   | Mathieu    | Ciancone   |                              |                      |
 
