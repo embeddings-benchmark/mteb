@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import logging
 from typing import Union
+from unittest.mock import Mock, patch
 
 import aiohttp
 import pytest
@@ -10,11 +11,11 @@ from sentence_transformers import SentenceTransformer
 
 from mteb import MTEB
 from mteb.abstasks import AbsTask
-from mteb.tasks.BitextMining.da.BornholmskBitextMining import BornholmBitextMining
-from unittest.mock import patch, Mock
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.tasks.BitextMining.da.BornholmskBitextMining import BornholmBitextMining
 
 logging.basicConfig(level=logging.INFO)
+
 
 @pytest.mark.parametrize("task", MTEB().tasks_cls)
 @patch("datasets.load_dataset")
@@ -29,6 +30,7 @@ def test_load_data(mock_load_dataset: Mock, task: AbsTask):
         # They don't yet but should they so they can be expanded more easily?
         if not task.is_crosslingual and not task.is_multilingual:
             mock_dataset_transform.assert_called_once()
+
 
 def test_two_mteb_tasks():
     """
@@ -92,7 +94,9 @@ async def check_datasets_are_available_on_hf(tasks):
     async with aiohttp.ClientSession() as session:
         tasks_checks = [
             check_dataset_on_hf(
-                session, task.metadata.hf_hub_name, task.metadata.revision
+                session,
+                task.metadata.dataset["path"],
+                task.metadata.dataset["revision"],
             )
             for task in tasks
         ]
@@ -100,7 +104,9 @@ async def check_datasets_are_available_on_hf(tasks):
 
     for task, ds_exists in zip(tasks, datasets_exists):
         if not ds_exists:
-            does_not_exist.append((task.metadata.hf_hub_name, task.metadata.revision))
+            does_not_exist.append(
+                (task.metadata.dataset["path"], task.metadata.dataset["revision"])
+            )
 
     if does_not_exist:
         pretty_print = "\n".join(
