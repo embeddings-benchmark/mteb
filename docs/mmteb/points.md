@@ -16,13 +16,13 @@ Note that coordination and ideation is not included in the total points, but is 
 
 First name and last name are as you want them to appear in a publication.
 
-| GitHub            | First name | Last name  | Email                        | User on openreview   |
-| ----------------- | ---------- | ---------- | ---------------------------- | -------------------- |
-| KennethEnevoldsen | Kenneth    | Enevoldsen | kennethcenevoldsen@gmail.com | ~Kenneth_Enevoldsen1 |
-| x-tabdeveloping   | Márton     | Kardos     |                              | ~Márton_Kardos1      |
-| imenelydiaker     | Imene      | Kerboua    |                              |                      |
-| wissam-sib        | Wissam     | Siblini    |                              |                      |
-| GabrielSequeira   | Gabriel    | Sequeira   |                              |                      |
-| schmarion         | Marion     | Schaeffer  |                              |  ~Marion_Schaeffer1 |
-| MathieuCiancone   | Mathieu    | Ciancone   |                              |                      |
+| GitHub            | First name | Last name  | Email                        | User on openreview   | Affiliations                                          |
+| ----------------- | ---------- | ---------- | ---------------------------- | -------------------- |                                                       |
+| KennethEnevoldsen | Kenneth    | Enevoldsen | kennethcenevoldsen@gmail.com | ~Kenneth_Enevoldsen1 |                                                       |
+| x-tabdeveloping   | Márton     | Kardos     |                              | ~Márton_Kardos1      |                                                       |
+| imenelydiaker     | Imene      | Kerboua    |                              |                      | Esker, Lyon, France && INSA Lyon, LIRIS, Lyon, France |
+| wissam-sib        | Wissam     | Siblini    |                              |                      |                                                       |
+| GabrielSequeira   | Gabriel    | Sequeira   |                              |                      |                                                       |
+| schmarion         | Marion     | Schaeffer  |                              |  ~Marion_Schaeffer1  |  Wikit, Lyon, France                                  |
+| MathieuCiancone   | Mathieu    | Ciancone   |                              |                      |  Wikit, Lyon, France                                  |
 
