@@ -33,7 +33,7 @@ class MasakhaNEWSClusteringP2P(AbsTaskClustering, MultilingualTask):
         description="Clustering of news article headlines and texts from MasakhaNEWS dataset. Clustering of 10 sets on the news article label.",
         reference="https://huggingface.co/datasets/masakhane/masakhanews",
         dataset={
-            "path": "mteb/masakhanews",
+            "path": "masakhane/masakhanews",
             "revision": "8ccc72e69e65f40c70e117d8b3c08306bb788b60",
         },
         type="Clustering",

@@ -33,7 +33,7 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
         description="Context Retrieval for German Question Answering",
         reference="https://www.kaggle.com/datasets/GermanQuAD",
         dataset={
-            "path": "mteb/germanquad",
+            "path": "mteb/germanquad-retrieval",
             "revision": "f5c87ae5a2e7a5106606314eef45255f03151bb3",
         },
         type="Retrieval",

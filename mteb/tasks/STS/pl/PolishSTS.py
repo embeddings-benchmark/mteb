@@ -9,7 +9,7 @@ class SickrPLSTS(AbsTaskSTS):
         name="SICK-R-PL",
         dataset={
             "path": "PL-MTEB/sickr-pl-sts",
-            "revision": "a6ea5a8cab320b040a23452cc28066d9beae2cee",
+            "revision": "fd5c2441b7eeff8676768036142af4cfa42c1339",
         },
         description="Polish version of SICK dataset for textual relatedness.",
         reference="https://aclanthology.org/2020.lrec-1.207",
@@ -45,7 +45,7 @@ class CdscrSTS(AbsTaskSTS):
         name="CDSC-R",
         dataset={
             "path": "PL-MTEB/cdscr-sts",
-            "revision": "1de08520a7b361e92ffa2a2201ebd41942c54675",
+            "revision": "1cd6abbb00df7d14be3dbd76a7dcc64b3a79a7cd",
         },
         description="Compositional Distributional Semantics Corpus for textual relatedness.",
         reference="https://aclanthology.org/P17-1073.pdf",

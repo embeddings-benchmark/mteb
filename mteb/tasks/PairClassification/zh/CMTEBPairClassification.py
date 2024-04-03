@@ -11,7 +11,7 @@ class Ocnli(AbsTaskPairClassification):
         reference="https://arxiv.org/abs/2010.05444",
         dataset={
             "path": "C-MTEB/OCNLI",
-            "revision": "7bd1ee0ae3a820d8a4b6f8a624063f8504a3564d",
+            "revision": "66e76a618a34d6d565d5538088562851e6daa7ec",
         },
         type="PairClassification",
         category="s2s",

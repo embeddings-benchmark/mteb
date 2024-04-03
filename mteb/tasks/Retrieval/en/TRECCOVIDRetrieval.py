@@ -12,7 +12,7 @@ class TRECCOVID(AbsTaskRetrieval):
         reference="https://ir.nist.gov/covidSubmit/index.html",
         dataset={
             "path": "mteb/trec-covid",
-            "revision": "1271c7809071a13532e05f25fb53511ffce77117",
+            "revision": "bb9466bac8153a0349341eb1b22e06409e78ef4e",
         },
         type="Retrieval",
         category="s2p",

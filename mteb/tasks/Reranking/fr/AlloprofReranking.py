@@ -11,8 +11,8 @@ class AlloprofReranking(AbsTaskReranking):
         description="This dataset was provided by AlloProf, an organisation in Quebec, Canada offering resources and a help forum curated by a large number of teachers to students on all subjects taught from in primary and secondary school",
         reference="https://huggingface.co/datasets/antoinelb7/alloprof",
         dataset={
-            "path": "mteb/alloprof-reranking",
-            "revision": "666fdacebe0291776e86f29345663dfaf80a0db9",
+            "path": "lyon-nlp/mteb-fr-reranking-alloprof-s2p",
+            "revision": "e40c8a63ce02da43200eccb5b0846fcaa888f562",
         },
         type="Reranking",
         category="s2s",

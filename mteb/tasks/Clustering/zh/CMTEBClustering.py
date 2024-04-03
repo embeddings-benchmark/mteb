@@ -11,7 +11,7 @@ class CLSClusteringS2S(AbsTaskClustering):
         description="Clustering of titles from CLS dataset. Clustering of 13 sets on the main category.",
         reference="https://arxiv.org/abs/2209.05034",
         dataset={
-            "path": "mteb/cls",
+            "path": "C-MTEB/CLSClusteringS2S",
             "revision": "e458b3f5414b62b7f9f83499ac1f5497ae2e869f",
         },
         type="Clustering",
@@ -40,7 +40,7 @@ class CLSClusteringP2P(AbsTaskClustering):
         description="Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the main category.",
         reference="https://arxiv.org/abs/2209.05034",
         dataset={
-            "path": "mteb/cls",
+            "path": "C-MTEB/CLSClusteringP2P",
             "revision": "4b6227591c6c1a73bc76b1055f3b7f3588e72476",
         },
         type="Clustering",

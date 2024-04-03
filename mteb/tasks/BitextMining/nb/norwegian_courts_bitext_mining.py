@@ -6,7 +6,7 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="NorwegianCourtsBitextMining",
         dataset={
-            "path": "kaedrodrur/norwegian-courts",
+            "path": "kardosdrur/norwegian-courts",
             "revision": "d79af07e969a6678fcbbe819956840425816468f",
         },
         description="Nynorsk and Bokmål parallel corpus from Norwegian courts. ",

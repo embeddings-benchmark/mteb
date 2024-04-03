@@ -10,7 +10,7 @@ class ATEC(AbsTaskSTS):
         name="ATEC",
         dataset={
             "path": "C-MTEB/ATEC",
-            "revision": "0f319b1142f2ae3f7dc7be10c3c7f3598ec6c602",
+            "revision": "0f319b1142f28d00e055a6770f3f726ae9b7d865",
         },
         description="A Chinese dataset for textual relatedness",
         reference="https://aclanthology.org/2021.emnlp-main.357",

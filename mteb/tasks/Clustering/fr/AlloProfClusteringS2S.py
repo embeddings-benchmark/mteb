@@ -14,7 +14,7 @@ class AlloProfClusteringS2S(AbsTaskClustering):
         description="Clustering of document titles from Allo Prof dataset. Clustering of 10 sets on the document topic.",
         reference="https://huggingface.co/datasets/lyon-nlp/alloprof",
         dataset={
-            "path": "mteb/alloprof",
+            "path": "lyon-nlp/alloprof",
             "revision": "392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
             "name": "documents",
         },

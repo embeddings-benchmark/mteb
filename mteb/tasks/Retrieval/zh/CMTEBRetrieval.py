@@ -153,7 +153,7 @@ class CovidRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2203.03367",
         dataset={
             "path": "C-MTEB/CovidRetrieval",
-            "revision": "687de13dc7294d6fd9be10c6945f9e8fec8166b9",
+            "revision": "1271c7809071a13532e05f25fb53511ffce77117",
         },
         type="Retrieval",
         category="s2p",

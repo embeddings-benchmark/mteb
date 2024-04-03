@@ -12,7 +12,7 @@ class CQADupstackTexRetrieval(AbsTaskRetrieval):
         reference="http://nlp.cis.unimelb.edu.au/resources/cqadupstack/",
         dataset={
             "path": "mteb/cqadupstack-tex",
-            "revision": "6c6430d3a6d36f8d2a829195bc5dc94d7e063e53",
+            "revision": "46989137a86843e03a6195de44b09deda022eec7",
         },
         type="Retrieval",
         category="s2p",

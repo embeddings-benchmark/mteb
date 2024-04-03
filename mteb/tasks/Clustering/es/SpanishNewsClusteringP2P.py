@@ -11,8 +11,8 @@ class SpanishNewsClusteringP2P(AbsTaskClustering):
         description="Clustering of news articles, 7 topics in total.",
         reference="https://www.kaggle.com/datasets/kevinmorgado/spanish-news-classification",
         dataset={
-            "path": "mteb/spanish_news_clustering",
-            "revision": "b5edc3d3d7c12c7b9f883e9da50f6732f3624142",
+            "path": "jinaai/spanish_news_clustering",
+            "revision": "bf8ca8ddc5b7da4f7004720ddf99bbe0483480e6",
         },
         type="Clustering",
         category="p2p",

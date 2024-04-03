@@ -16,7 +16,7 @@ class SyntecRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/lyon-nlp/mteb-fr-retrieval-syntec-s2p",
         dataset={
             "path": "lyon-nlp/mteb-fr-retrieval-syntec-s2p",
-            "revision": "b205c5084a0934ce8af14338bf03feb19499c84d",
+            "revision": "aa460cd4d177e6a3c04fcd2affd95e8243289033",
         },
         type="Retrieval",
         category="s2p",

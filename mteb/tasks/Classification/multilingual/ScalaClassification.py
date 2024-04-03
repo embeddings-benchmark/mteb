@@ -10,8 +10,8 @@ class ScalaDaClassification(AbsTaskClassification):
         description="A modified version of DDT modified for linguistic acceptability classification",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
         dataset={
-            "path": "ScandEval/scala-da",
-            "revision": "1de08520a7b361e92ffa2a2201ebd41942c54675",
+            "path": "mteb/scala_da_classification",
+            "revision": "e60a77795ed5488fb7a03751cf6f2b026fa27a71",
         },
         type="Classification",
         category="s2s",
@@ -54,8 +54,8 @@ class ScalaNbClassification(AbsTaskClassification):
         description="A Norwegian dataset for linguistic acceptability classification for Bokmål",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
         dataset={
-            "path": "ScandEval/scala-nb",
-            "revision": "237111a078ad5a834a55c57803d40bbe410ed03b",
+            "path": "mteb/scala_nb_classification",
+            "revision": "dda7af4696bd8d5150441908ea8ed6e68a357c13",
         },
         type="Classification",
         category="s2s",
@@ -98,8 +98,8 @@ class ScalaNnClassification(AbsTaskClassification):
         description="A Norwegian dataset for linguistic acceptability classification for Nynorsk",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
         dataset={
-            "path": "ScandEval/scala-nn",
-            "revision": "9d9a2a4092ed3cacf0744592f6d2f32ab8ef4c0b",
+            "path": "mteb/scala_nn_classification",
+            "revision": "d81637ad324afb995ae395a87055380e8118a9c0",
         },
         type="Classification",
         category="s2s",
@@ -142,8 +142,8 @@ class ScalaSvClassification(AbsTaskClassification):
         description="A Swedish dataset for linguistic acceptability classification",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
         dataset={
-            "path": "ScandEval/scala-sv",
-            "revision": "1b48e3dcb02872335ff985ff938a054a4ed99008",
+            "path": "mteb/scala_sv_classification",
+            "revision": "aded78beae37445bf3917102d0b332049cfc8c99",
         },
         type="Classification",
         category="s2s",

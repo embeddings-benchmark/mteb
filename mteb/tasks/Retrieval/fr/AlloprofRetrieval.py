@@ -13,8 +13,8 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         description="This dataset was provided by AlloProf, an organisation in Quebec, Canada offering resources and a help forum curated by a large number of teachers to students on all subjects taught from in primary and secondary school",
         reference="https://huggingface.co/datasets/antoinelb7/alloprof",
         dataset={
-            "path": "mteb/alloprof",
-            "revision": "392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
+            "path": "lyon-nlp/alloprof",
+            "revision": "2df7bee4080bedf2e97de3da6bd5c7bc9fc9c4d2",
         },
         type="Retrieval",
         category="s2p",
