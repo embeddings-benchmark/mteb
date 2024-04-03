@@ -12,7 +12,7 @@ class FloresClusteringS2S(AbsTaskClustering):
         reference="https://huggingface.co/datasets/facebook/flores",
         dataset={
             "path": "facebook/flores",
-            "revision": "480b580487f53a46f881354a8348335d4edbb2de",
+            "revision": "2db78afdeaccaedc3b33a95442a4e55766887e17",
         },
         type="Clustering",
         category="s2s",
