@@ -10,8 +10,8 @@ class SweRecClassification(AbsTaskClassification):
         description="A Swedish dataset for sentiment classification on review",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
         dataset={
-            "path": "ScandEval/swerec-mini",
-            "revision": "3c62f26bafdc4c4e1c16401ad4b32f0a94b46612",
+            "path": "mteb/swerec_classification",
+            "revision": "b07c6ce548f6a7ac8d546e1bbe197a0086409190",
         },
         type="Classification",
         category="s2s",
