@@ -7,8 +7,8 @@ class NorQuadRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NorQuadRetrieval",
         dataset={
-            "path": "ScandEval/norquad-mini",
-            "revision": "a47881440ce4b18ef61a99be66dc4badbf5aac6e",
+            "path": "mteb/norquad_retrieval",
+            "revision": "9dcfcdb2aa578dd178330d49bf564248935f7fbe",
         },
         description="Human-created question for Norwegian wikipedia passages.",
         reference="https://aclanthology.org/2023.nodalida-1.17/",

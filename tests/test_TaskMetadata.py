@@ -1,7 +1,9 @@
 import logging
+
 import pytest
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
+
 
 def test_given_dataset_config_then_it_is_valid():
     my_task = TaskMetadata(
@@ -88,14 +90,12 @@ def test_given_missing_revision_path_then_it_throws():
             n_samples=None,
         )
 
+
 def test_given_none_revision_path_then_it_logs_warning(caplog):
     with caplog.at_level(logging.WARNING):
         my_task = TaskMetadata(
             name="MyTask",
-            dataset={
-                "path": "test/dataset",
-                "revision": None
-            },
+            dataset={"path": "test/dataset", "revision": None},
             description="testing",
             reference=None,
             type="Classification",
@@ -118,7 +118,7 @@ def test_given_none_revision_path_then_it_logs_warning(caplog):
         )
 
         assert my_task.dataset["revision"] is None
-        assert len([
-            record for record in caplog.records if record.levelname == "WARNING"
-        ]) == 1
-
+        assert (
+            len([record for record in caplog.records if record.levelname == "WARNING"])
+            == 1
+        )

@@ -10,7 +10,7 @@ class QuoraRetrieval(AbsTaskRetrieval):
         name="QuoraRetrieval",
         dataset={
             "path": "mteb/quora",
-            "revision": "0be27e93455051e531182b85e85e425aba12e9d4",
+            "revision": "e4e08e0b7dbe3c8700f0daef558ff32256715259",
         },
         description=(
             "QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a"

@@ -9,7 +9,6 @@ from pydantic import (
     BeforeValidator,
     TypeAdapter,
     field_validator,
-    model_validator,
 )
 from typing_extensions import Annotated, Literal
 
@@ -172,7 +171,11 @@ class TaskMetadata(BaseModel):
     @field_validator("dataset")
     def _check_dataset_revision_is_specified(cls, dataset):
         if "revision" not in dataset:
-            raise ValueError("You must explicitly specify a revision for the dataset (either a SHA or None).")
+            raise ValueError(
+                "You must explicitly specify a revision for the dataset (either a SHA or None)."
+            )
         if dataset["revision"] is None:
-            logging.warning("It is encourage to specify a dataset revision for reproducability")
+            logging.warning(
+                "It is encourage to specify a dataset revision for reproducability"
+            )
         return dataset

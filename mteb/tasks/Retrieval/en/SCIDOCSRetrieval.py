@@ -10,7 +10,7 @@ class SCIDOCS(AbsTaskRetrieval):
         name="SCIDOCS",
         dataset={
             "path": "mteb/scidocs",
-            "revision": "56a6d0140cf6356659e2a7c1413286a774468d44",
+            "revision": "f8c2fcf00f625baaa80f62ec5bd9e1fff3b8ae88",
         },
         description=(
             "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation"

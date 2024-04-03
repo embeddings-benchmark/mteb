@@ -12,8 +12,8 @@ class EightTagsClustering(AbsTaskClustering):
         "food, medicine, motorization, work, sport and technology.",
         reference="https://aclanthology.org/2020.lrec-1.207.pdf",
         dataset={
-            "path": "mteb/polish-clustering",
-            "revision": "e7a26af6f3ae46b30dde8737f02c07b1505bcc73",
+            "path": "PL-MTEB/8tags-clustering",
+            "revision": "78b962b130c6690659c65abf67bf1c2f030606b6",
         },
         type="Clustering",
         category="s2s",

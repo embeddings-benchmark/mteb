@@ -62,7 +62,7 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2402.03216",
         dataset={
             "path": "Shitao/MLDR",
-            "revision": "d79af07e969a6678fcbbe819956840425816468f",
+            "revision": "d67138e705d963e346253a80e59676ddb418810a",
         },
         type="Retrieval",
         category="s2p",

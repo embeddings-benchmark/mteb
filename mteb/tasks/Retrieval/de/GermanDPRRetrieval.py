@@ -17,7 +17,7 @@ class GermanDPR(AbsTaskRetrieval):
         reference="https://www.deepset.ai/germanquad",
         dataset={
             "path": "deepset/germanquad",
-            "revision": "5129d02422a66be600ac89cd3e8531b4f97d347d",
+            "revision": "fff05ceaf2ffbe5b65c7e0c57e678f7b7e1a0581",
         },
         type="Retrieval",
         category="s2p",

@@ -12,7 +12,7 @@ class CbdClassification(AbsTaskClassification):
         reference="http://2019.poleval.pl/files/poleval2019.pdf",
         dataset={
             "path": "PL-MTEB/cbd",
-            "revision": "59d12749a3c91a186063c7d729ec392fda94681c",
+            "revision": "36ddb419bcffe6a5374c3891957912892916f28d",
         },
         type="Classification",
         category="s2s",
@@ -42,7 +42,7 @@ class PolEmo2InClassification(AbsTaskClassification):
         reference="https://aclanthology.org/K19-1092.pdf",
         dataset={
             "path": "PL-MTEB/polemo2_in",
-            "revision": "9e9b1f8ef51616073f47f306f7f47dd91663f86a",
+            "revision": "d90724373c70959f17d2331ad51fb60c71176b03",
         },
         type="Classification",
         category="s2s",
@@ -73,7 +73,7 @@ class PolEmo2OutClassification(AbsTaskClassification):
         reference="https://aclanthology.org/K19-1092.pdf",
         dataset={
             "path": "PL-MTEB/polemo2_out",
-            "revision": "c99d599f0a6ab9b85b065da6f9d94f9cf731679f",
+            "revision": "6a21ab8716e255ab1867265f8b396105e8aa63d4",
         },
         type="Classification",
         category="s2s",
@@ -102,7 +102,7 @@ class AllegroReviewsClassification(AbsTaskClassification):
         reference="https://aclanthology.org/2020.acl-main.111.pdf",
         dataset={
             "path": "PL-MTEB/allegro-reviews",
-            "revision": "477b8bd4448b5ef8ed01ba82bf9ff67f6e109207",
+            "revision": "b89853e6de927b0e3bfa8ecc0e56fe4e02ceafc6",
         },
         type="Classification",
         category="s2s",
@@ -131,7 +131,7 @@ class PacClassification(AbsTaskClassification):
         reference="https://arxiv.org/pdf/2211.13112.pdf",
         dataset={
             "path": "laugustyniak/abusive-clauses-pl",
-            "revision": "8a04d940a42cd40658986fdd8e3da561533a3646",
+            "revision": "fc69d1c153a8ccdcf1eef52f4e2a27f88782f543",
         },
         type="Classification",
         category="p2p",

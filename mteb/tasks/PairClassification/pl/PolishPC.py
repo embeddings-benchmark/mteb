@@ -10,7 +10,7 @@ class SickePLPC(AbsTaskPairClassification):
         name="SICK-E-PL",
         dataset={
             "path": "PL-MTEB/sicke-pl-pairclassification",
-            "revision": "5c59e41555244b7e45c9a6be2d720ab4bafae558",
+            "revision": "71bba34b0ece6c56dfcf46d9758a27f7a90f17e9",
         },
         description="Polish version of SICK dataset for textual entailment.",
         reference="https://aclanthology.org/2020.lrec-1.207",
@@ -39,7 +39,7 @@ class PpcPC(AbsTaskPairClassification):
         name="PpcPC",
         dataset={
             "path": "PL-MTEB/ppc-pairclassification",
-            "revision": "1.0",
+            "revision": "2c7d2df57801a591f6b1e3aaf042e7a04ec7d9f2",
         },
         description="Polish Paraphrase Corpus",
         reference="https://arxiv.org/pdf/2207.12759.pdf",
@@ -68,7 +68,7 @@ class CdscePC(AbsTaskPairClassification):
         name="CDSC-E",
         dataset={
             "path": "PL-MTEB/cdsce-pairclassification",
-            "revision": "1.0",
+            "revision": "0a3d4aa409b22f80eb22cbf59b492637637b536d",
         },
         description="Compositional Distributional Semantics Corpus for textual entailment.",
         reference="https://aclanthology.org/P17-1073.pdf",
@@ -97,7 +97,7 @@ class PscPC(AbsTaskPairClassification):
         name="PSC",
         dataset={
             "path": "PL-MTEB/psc-pairclassification",
-            "revision": "1.0",
+            "revision": "d05a294af9e1d3ff2bfb6b714e08a24a6cabc669",
         },
         description="Polish Summaries Corpus",
         reference="http://www.lrec-conf.org/proceedings/lrec2014/pdf/1211_Paper.pdf",

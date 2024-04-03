@@ -14,7 +14,7 @@ class HALClusteringS2S(AbsTaskClustering):
         description="Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s)",
         reference="https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s",
         dataset={
-            "path": "mteb/hal",
+            "path": "lyon-nlp/clustering-hal-s2s",
             "revision": "e06ebbbb123f8144bef1a5d18796f3dec9ae2915",
         },
         type="Clustering",

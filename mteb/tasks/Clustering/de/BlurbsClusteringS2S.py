@@ -12,7 +12,7 @@ class BlurbsClusteringS2S(AbsTaskClustering):
         reference="https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html",
         dataset={
             "path": "slvnwhrl/blurbs-clustering-s2s",
-            "revision": "5bfd9ee0ae3d2ef0d9a0e0bd0c3b2d0",
+            "revision": "22793b6a6465bf00120ad525e38c51210858132c",
         },
         type="Clustering",
         category="s2s",

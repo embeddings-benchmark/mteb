@@ -10,7 +10,7 @@ class SummEvalFrSummarization(AbsTaskSummarization):
         description="News Article Summary Semantic Similarity Estimation translated from english to french with DeepL.",
         reference="https://github.com/Yale-LILY/SummEval",
         dataset={
-            "path": "lyon-nlp/summeval",
+            "path": "lyon-nlp/summarization-summeval-fr-p2p",
             "revision": "b385812de6a9577b6f4d0f88c6a6e35395a94054",
         },
         type="Summarization",

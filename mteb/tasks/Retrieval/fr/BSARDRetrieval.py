@@ -13,7 +13,7 @@ class BSARDRetrieval(AbsTaskRetrieval):
         description="The Belgian Statutory Article Retrieval Dataset (BSARD) is a French native dataset for studying legal information retrieval. BSARD consists of more than 22,600 statutory articles from Belgian law and about 1,100 legal questions posed by Belgian citizens and labeled by experienced jurists with relevant articles from the corpus.",
         reference="https://huggingface.co/datasets/maastrichtlawtech/bsard",
         dataset={
-            "path": "mteb/bsard",
+            "path": "maastrichtlawtech/bsard",
             "revision": "5effa1b9b5fa3b0f9e12523e6e43e5f86a6e6d59",
         },
         type="Retrieval",

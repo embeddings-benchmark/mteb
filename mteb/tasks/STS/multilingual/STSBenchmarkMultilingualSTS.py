@@ -14,7 +14,7 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
     metadata = TaskMetadata(
         name="STSBenchmarkMultilingualSTS",
         dataset={
-            "path": "stsb_multi_mt",
+            "path": "PhilipMay/stsb_multi_mt",
             "revision": "93d57ef91790589e3ce9c365164337a8a78b7632",
         },
         description=(

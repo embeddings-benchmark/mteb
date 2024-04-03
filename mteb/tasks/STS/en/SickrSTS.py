@@ -9,8 +9,8 @@ class SickrSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="SICK-R",
         dataset={
-            "path": "MMathematica/sickr-sts",
-            "revision": "a6ea5a8cab320b040a23452cc28066d9beae2cee",
+            "path": "mteb/sickr-sts",
+            "revision": "20a6d6f312dd54037fe07a32d58e5e168867909d",
         },
         description="Semantic Textual Similarity SICK-R dataset as described here:",
         reference="https://aclanthology.org/2020.lrec-1.207",
