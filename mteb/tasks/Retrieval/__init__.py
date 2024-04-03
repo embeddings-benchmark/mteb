@@ -64,3 +64,11 @@ from .pl.TRECCOVIDPLRetrieval import *
 from .sv.swedn_retrieval import *
 from .sv.swefaq_retrieval import *
 from .zh.CMTEBRetrieval import *
+from .law.AILACasedocs import *
+from .law.AILAStatutes import *
+from .law.GerDaLIR import *
+from .law.LeCaRDv2 import *
+from .law.LegalBenchConsumerContractsQA import *
+from .law.LegalBenchCorporateLobbying import *
+from .law.LegalQuAD import *
+from .law.LegalSummarization import *
