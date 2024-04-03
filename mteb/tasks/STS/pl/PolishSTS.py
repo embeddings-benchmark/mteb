@@ -7,7 +7,10 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class SickrPLSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="SICK-R-PL",
-        hf_hub_name="PL-MTEB/sickr-pl-sts",
+        dataset={
+            "path": "PL-MTEB/sickr-pl-sts",
+            "revision": "fd5c2441b7eeff8676768036142af4cfa42c1339",
+        },
         description="Polish version of SICK dataset for textual relatedness.",
         reference="https://aclanthology.org/2020.lrec-1.207",
         type="STS",
@@ -15,7 +18,6 @@ class SickrPLSTS(AbsTaskSTS):
         eval_splits=["test"],
         eval_langs=["pl"],
         main_score="cosine_spearman",
-        revision="fd5c2441b7eeff8676768036142af4cfa42c1339",
         date=None,
         form=None,
         domains=None,
@@ -32,7 +34,7 @@ class SickrPLSTS(AbsTaskSTS):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 1
         metadata_dict["max_score"] = 5
         return metadata_dict
@@ -41,7 +43,10 @@ class SickrPLSTS(AbsTaskSTS):
 class CdscrSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="CDSC-R",
-        hf_hub_name="PL-MTEB/cdscr-sts",
+        dataset={
+            "path": "PL-MTEB/cdscr-sts",
+            "revision": "1cd6abbb00df7d14be3dbd76a7dcc64b3a79a7cd",
+        },
         description="Compositional Distributional Semantics Corpus for textual relatedness.",
         reference="https://aclanthology.org/P17-1073.pdf",
         type="STS",
@@ -49,7 +54,6 @@ class CdscrSTS(AbsTaskSTS):
         eval_splits=["test"],
         eval_langs=["pl"],
         main_score="cosine_spearman",
-        revision="1cd6abbb00df7d14be3dbd76a7dcc64b3a79a7cd",
         date=None,
         form=None,
         domains=None,
@@ -66,7 +70,7 @@ class CdscrSTS(AbsTaskSTS):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 1
         metadata_dict["max_score"] = 5
         return metadata_dict

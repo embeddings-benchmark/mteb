@@ -1,12 +1,13 @@
-import datasets
-
 from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
 
 
 class DanFever(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="DanFEVER",
-        hf_hub_name="strombergnlp/danfever",
+        dataset={
+            "path": "strombergnlp/danfever",
+            "revision": "5d01e3f6a661d48e127ab5d7e3aaa0dc8331438a",
+        },
         description="A Danish dataset intended for misinformation research. It follows the same format as the English FEVER dataset.",
         reference="https://aclanthology.org/2021.nodalida-main.47/",
         type="Retrieval",
@@ -14,7 +15,6 @@ class DanFever(AbsTaskRetrieval):
         eval_splits=["train"],
         eval_langs=["da"],
         main_score="ndcg_at_10",
-        revision="5d01e3f6a661d48e127ab5d7e3aaa0dc8331438a",
         date=("2020-01-01", "2021-12-31"),  # best guess
         form=["spoken"],
         domains=["Encyclopaedic", "Non-fiction"],
@@ -44,21 +44,6 @@ class DanFever(AbsTaskRetrieval):
         avg_character_length={"train": 124.84},
         task_subtypes=["Claim verification"],
     )
-
-    def load_data(self, **kwargs: dict):  # noqa: ARG002
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset: datasets.DatasetDict = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            revision=self.metadata_dict.get("revision"),
-        )  # type: ignore
-
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self) -> None:
         """

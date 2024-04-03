@@ -13,7 +13,10 @@ _SPLITS = ["dev", "test"]
 class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
     metadata = TaskMetadata(
         name="STSBenchmarkMultilingualSTS",
-        hf_hub_name="PhilipMay/stsb_multi_mt",
+        dataset={
+            "path": "PhilipMay/stsb_multi_mt",
+            "revision": "93d57ef91790589e3ce9c365164337a8a78b7632",
+        },
         description=(
             "Semantic Textual Similarity Benchmark (STSbenchmark) dataset,"
             "but translated using DeepL API."
@@ -24,7 +27,6 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
         eval_splits=_SPLITS,
         eval_langs=_LANGUAGES,
         main_score="cosine_spearman",
-        revision="93d57ef91790589e3ce9c365164337a8a78b7632",
         date=None,
         form=None,
         domains=None,
@@ -41,7 +43,7 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 5
         return metadata_dict
@@ -66,10 +68,9 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
                     zip(
                         _SPLITS,
                         datasets.load_dataset(
-                            self.metadata_dict["hf_hub_name"],
-                            lang,
+                            name=lang,
                             split=_SPLITS,
-                            revision=self.metadata_dict.get("revision", None),
+                            **self.metadata_dict["dataset"],
                         ),
                     )
                 )

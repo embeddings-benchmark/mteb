@@ -6,7 +6,10 @@ from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
 class NorQuadRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NorQuadRetrieval",
-        hf_hub_name="ScandEval/norquad-mini",
+        dataset={
+            "path": "ScandEval/norquad-mini",
+            "revision": "a47881440ce4b18ef61a99be66dc4badbf5aac6e",
+        },
         description="Human-created question for Norwegian wikipedia passages.",
         reference="https://aclanthology.org/2023.nodalida-1.17/",
         type="Retrieval",
@@ -14,7 +17,6 @@ class NorQuadRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["nb"],
         main_score="ndcg_at_10",
-        revision="a47881440ce4b18ef61a99be66dc4badbf5aac6e",
         date=("2022-01-01", "2023-12-31"),
         form=["written"],
         task_subtypes=["Question answering"],
@@ -45,21 +47,6 @@ class NorQuadRetrieval(AbsTaskRetrieval):
         n_samples={"test": 2602},
         avg_character_length={"test": 502.19},
     )
-
-    def load_data(self, **kwargs: dict):  # noqa: ARG002
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset: datasets.DatasetDict = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            revision=self.metadata_dict.get("revision"),
-        )  # type: ignore
-
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self) -> None:
         """

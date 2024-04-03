@@ -10,13 +10,15 @@ class QuoraPLRetrieval(AbsTaskRetrieval):
         name="Quora-PL",
         description="QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions.",
         reference="https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs",
-        hf_hub_name="clarin-knext/quora-pl",
+        dataset={
+            "path": "clarin-knext/quora-pl",
+            "revision": "0be27e93455051e531182b85e85e425aba12e9d4",
+        },
         type="Retrieval",
         category="s2s",
         eval_splits=["validation", "test"],  # validation for new DataLoader
         eval_langs=["pl"],
         main_score="ndcg_at_10",
-        revision="0be27e93455051e531182b85e85e425aba12e9d4",
         date=None,
         form=None,
         domains=None,

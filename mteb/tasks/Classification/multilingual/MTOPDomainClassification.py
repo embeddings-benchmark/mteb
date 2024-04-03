@@ -10,7 +10,10 @@ _LANGUAGES = ["en", "de", "es", "fr", "hi", "th"]
 class MTOPDomainClassification(MultilingualTask, AbsTaskClassification):
     metadata = TaskMetadata(
         name="MTOPDomainClassification",
-        hf_hub_name="mteb/mtop_domain",
+        dataset={
+            "path": "mteb/mtop_domain",
+            "revision": "d80d48c1eb48d3562165c59d59d0034df9fff0bf",
+        },
         description="MTOP: Multilingual Task-Oriented Semantic Parsing",
         reference="https://arxiv.org/pdf/2008.09335.pdf",
         category="s2s",
@@ -18,7 +21,6 @@ class MTOPDomainClassification(MultilingualTask, AbsTaskClassification):
         eval_splits=["validation", "test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
-        revision="d80d48c1eb48d3562165c59d59d0034df9fff0bf",
         date=None,
         form=None,
         domains=None,

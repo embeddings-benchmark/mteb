@@ -12,13 +12,15 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         name="AlloprofRetrieval",
         description="This dataset was provided by AlloProf, an organisation in Quebec, Canada offering resources and a help forum curated by a large number of teachers to students on all subjects taught from in primary and secondary school",
         reference="https://huggingface.co/datasets/antoinelb7/alloprof",
-        hf_hub_name="lyon-nlp/alloprof",
+        dataset={
+            "path": "lyon-nlp/alloprof",
+            "revision": "2df7bee4080bedf2e97de3da6bd5c7bc9fc9c4d2",
+        },
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],
         eval_langs=["fr"],
         main_score="ndcg_at_10",
-        revision="2df7bee4080bedf2e97de3da6bd5c7bc9fc9c4d2",
         date=None,
         form=None,
         domains=None,
@@ -37,11 +39,14 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
         # fetch both subsets of the dataset
+        # BUGFIX: the revision is now used
         corpus_raw = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"], "documents"
+            name="documents",
+            **self.metadata_dict["dataset"],
         )
         queries_raw = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"], "queries"
+            name="queries",
+            **self.metadata_dict["dataset"],
         )
         eval_split = self.metadata_dict["eval_splits"][0]
         self.queries = {

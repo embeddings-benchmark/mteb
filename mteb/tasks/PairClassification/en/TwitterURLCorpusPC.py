@@ -8,7 +8,10 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 class TwitterURLCorpusPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="TwitterURLCorpus",
-        hf_hub_name="mteb/twitterurlcorpus-pairclassification",
+        dataset={
+            "path": "mteb/twitterurlcorpus-pairclassification",
+            "revision": "8b6510b0b1fa4e4c4f879467980e9be563ec1cdf",
+        },
         description="Paraphrase-Pairs of Tweets.",
         reference="https://languagenet.github.io/",
         category="s2s",
@@ -16,7 +19,6 @@ class TwitterURLCorpusPC(AbsTaskPairClassification):
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="ap",
-        revision="8b6510b0b1fa4e4c4f879467980e9be563ec1cdf",
         date=None,
         form=None,
         domains=None,

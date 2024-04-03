@@ -6,7 +6,10 @@ from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
 class TV2Nordretrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="TV2Nordretrieval",
-        hf_hub_name="alexandrainst/nordjylland-news-summarization",
+        dataset={
+            "path": "alexandrainst/nordjylland-news-summarization",
+            "revision": "80cdb115ec2ef46d4e926b252f2b59af62d6c070",
+        },
         description="News Article and corresponding summaries extracted from the Danish newspaper TV2 Nord.",
         reference="https://huggingface.co/datasets/alexandrainst/nordjylland-news-summarization",
         type="Retrieval",
@@ -14,7 +17,6 @@ class TV2Nordretrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["da"],
         main_score="ndcg_at_10",
-        revision="80cdb115ec2ef46d4e926b252f2b59af62d6c070",
         date=("2020-01-01", "2024-12-31"),  # best guess
         form=["written"],
         domains=["News", "Non-fiction"],
@@ -28,21 +30,6 @@ class TV2Nordretrieval(AbsTaskRetrieval):
         avg_character_length={"test": 784.11},
         task_subtypes=["Article retrieval"],
     )
-
-    def load_data(self, **kwargs: dict):  # noqa: ARG002
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset: datasets.DatasetDict = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            revision=self.metadata_dict.get("revision"),
-        )  # type: ignore
-
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self) -> None:
         """

@@ -61,13 +61,15 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
         name="XMarket",
         description="XMarket",
         reference=None,
-        hf_hub_name="jinaai/xmarket_ml",
+        dataset={
+            "path": "jinaai/xmarket_ml",
+            "revision": "dfe57acff5b62c23732a7b7d3e3fb84ff501708b",
+        },
         type="Retrieval",
         category="s2p",
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_EVAL_LANGS,
         main_score="ndcg_at_10",
-        revision="dfe57acff5b62c23732a7b7d3e3fb84ff501708b",
         date=None,
         form=None,
         domains=None,
@@ -87,11 +89,11 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_xmarket_data(
-            path=self.metadata_dict["hf_hub_name"],
+            path=self.metadata_dict["dataset"]["path"],
             langs=self.metadata.eval_langs,
             split=self.metadata_dict["eval_splits"][0],
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["revision"],
+            revision=self.metadata_dict["dataset"]["revision"],
         )
 
         self.data_loaded = True

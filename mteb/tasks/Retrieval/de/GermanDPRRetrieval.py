@@ -15,13 +15,15 @@ class GermanDPR(AbsTaskRetrieval):
         name="GermanDPR",
         description="GermanDPR is a German Question Answering dataset for open-domain QA. It associates questions with a textual context containing the answer",
         reference="https://www.deepset.ai/germanquad",
-        hf_hub_name="deepset/germanquad",
+        dataset={
+            "path": "deepset/germanquad",
+            "revision": "fff05ceaf2ffbe5b65c7e0c57e678f7b7e1a0581",
+        },
         type="Retrieval",
         category="s2p",
         eval_splits=[_EVAL_SPLIT],
         eval_langs=[_LANGUAGE],
         main_score="ndcg_at_10",
-        revision="fff05ceaf2ffbe5b65c7e0c57e678f7b7e1a0581",
         date=None,
         form=None,
         domains=None,
@@ -56,9 +58,8 @@ class GermanDPR(AbsTaskRetrieval):
             return
 
         data = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            revision=self.metadata_dict.get("revision", None),
             split=self._EVAL_SPLIT,
+            **self.metadata_dict["dataset"],
         )
         corpus = dict()
         queries = dict()
