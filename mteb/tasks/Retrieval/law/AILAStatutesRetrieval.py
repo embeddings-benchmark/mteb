@@ -5,18 +5,20 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class GerDaLIR(AbsTaskRetrieval):
+class AILAStatutes(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="GerDaLIR",
-        description="",
-        reference="https://huggingface.co/datasets/mteb/GerDaLIR",
-        hf_hub_name="mteb/GerDaLIR",
+        name="AILAStatutes",
+        description="This dataset is structured for the task of identifying the most relevant statutes for a given situation.",
+        reference="https://zenodo.org/records/4063986",
+        dataset={
+            "path": "mteb/AILA_statutes",
+            "revision": "ebfcd844eadd3d667efa3c57fc5c8c87f5c2867e",
+        },
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="",
         date=None,
         form=None,
         domains=None,

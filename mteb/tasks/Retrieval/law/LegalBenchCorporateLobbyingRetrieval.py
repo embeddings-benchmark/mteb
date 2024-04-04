@@ -5,18 +5,20 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class LegalBenchConsumerContractsQA(AbsTaskRetrieval):
+class LegalBenchCorporateLobbying(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="LegalBenchConsumerContractsQA",
-        description="",
-        reference="https://huggingface.co/datasets/mteb/legalbench_consumer_contracts_qa",
-        hf_hub_name="mteb/legalbench_consumer_contracts_qa",
+        name="LegalBenchCorporateLobbying",
+        description="The dataset includes bill titles and bill summaries related to corporate lobbying.",
+        reference="https://huggingface.co/datasets/nguha/legalbench/viewer/corporate_lobbying",
+        dataset={
+            "path": "mteb/legalbench_corporate_lobbying",
+            "revision": "f69691c650464e62546d7f2a4536f8f87c891e38",
+        },
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="",
         date=None,
         form=None,
         domains=None,

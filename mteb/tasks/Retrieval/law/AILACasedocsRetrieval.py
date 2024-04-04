@@ -5,18 +5,20 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class LegalSummarization(AbsTaskRetrieval):
+class AILACasedocs(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="LegalSummarization",
-        description="",
-        reference="https://huggingface.co/datasets/mteb/legal_summarization",
-        hf_hub_name="mteb/legal_summarization",
+        name="AILACasedocs",
+        description="The task is to retrieve the case document that most closely matches or is most relevant to the scenario described in the provided query.",
+        reference="https://zenodo.org/records/4063986",
+        dataset={
+            "path": "mteb/AILA_casedocs",
+            "revision": "4106e6bcc72e0698d714ea8b101355e3e238431a",
+        },
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="",
         date=None,
         form=None,
         domains=None,

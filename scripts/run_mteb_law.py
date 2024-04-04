@@ -30,7 +30,7 @@ for task in TASK_LIST_RETRIEVAL:
     logger.info(f"Running task: {task}")
     eval_splits = ["test"]
     evaluation = MTEB(
-        tasks=[task], task_langs=["de"]
+        tasks=[task]
     )
     evaluation.run(
         model, output_folder=f"results/{model_name}", eval_splits=eval_splits

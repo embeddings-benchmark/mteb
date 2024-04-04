@@ -75,4 +75,12 @@ MTEB_MAIN_EN = [
     "TwentyNewsgroupsClustering",
     "TwitterSemEval2015",
     "TwitterURLCorpus",
+    "LegalSummarization",
+    "LegalBenchConsumerContractsQA",
+    "LegalBenchCorporateLobbying",
+    "AILACasedocs",
+    "AILAStatutes",
+    "LeCaRDv2",
+    "LegalQuAD",
+    "GerDaLIR",
 ]

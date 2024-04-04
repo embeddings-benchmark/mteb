@@ -5,18 +5,20 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class LegalQuAD(AbsTaskRetrieval):
+class LegalSummarization(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="LegalQuAD",
-        description="",
-        reference="https://huggingface.co/datasets/mteb/LegalQuAD",
-        hf_hub_name="mteb/LegalQuAD",
+        name="LegalSummarization",
+        description="The dataset consistes of 439 pairs of contracts and their summarizations from https://tldrlegal.com and https://tosdr.org/.",
+        reference="https://github.com/lauramanor/legal_summarization",
+        dataset={
+            "path": "mteb/legal_summarization",
+            "revision": "3bb1a05c66872889662af04c5691c14489cebd72",
+        },
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="",
         date=None,
         form=None,
         domains=None,
@@ -30,3 +32,4 @@ class LegalQuAD(AbsTaskRetrieval):
         n_samples=None,
         avg_character_length=None,
     )
+    

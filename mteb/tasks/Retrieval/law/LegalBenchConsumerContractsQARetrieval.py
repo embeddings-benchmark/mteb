@@ -5,18 +5,20 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class AILAStatutes(AbsTaskRetrieval):
+class LegalBenchConsumerContractsQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="AILAStatutes",
-        description="",
-        reference="https://huggingface.co/datasets/mteb/AILA_statutes",
-        hf_hub_name="mteb/AILA_statutes",
+        name="LegalBenchConsumerContractsQA",
+        description="The dataset includes questions and answers related to contracts.",
+        reference="https://huggingface.co/datasets/nguha/legalbench/viewer/consumer_contracts_qa",
+        dataset={
+            "path": "mteb/legalbench_consumer_contracts_qa",
+            "revision": "b23590301ec94e8087e2850b21d43d4956b1cca9",
+        },
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="",
         date=None,
         form=None,
         domains=None,
