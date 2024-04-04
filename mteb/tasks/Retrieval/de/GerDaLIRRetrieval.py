@@ -13,13 +13,15 @@ class GerDaLIR(AbsTaskRetrieval):
         name="GerDaLIR",
         description="GerDaLIR is a legal information retrieval dataset created from the Open Legal Data platform.",
         reference="https://github.com/lavis-nlp/GerDaLIR",
-        hf_hub_name="jinaai/ger_da_lir",
+        dataset={
+            "path": "jinaai/ger_da_lir",
+            "revision": "0bb47f1d73827e96964edb84dfe552f62f4fd5eb",
+        },
         type="Retrieval",
         category="s2p",
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["de"],
         main_score="ndcg_at_10",
-        revision="0bb47f1d73827e96964edb84dfe552f62f4fd5eb",
         date=None,
         form=None,
         domains=None,
@@ -39,22 +41,18 @@ class GerDaLIR(AbsTaskRetrieval):
             return
 
         query_rows = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            "queries",
-            revision=self.metadata_dict.get("revision", None),
+            name="queries",
             split=self._EVAL_SPLIT,
         )
         corpus_rows = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            "corpus",
-            revision=self.metadata_dict.get("revision", None),
+            name="corpus",
             split=self._EVAL_SPLIT,
+            **self.metadata_dict["dataset"],
         )
         qrels_rows = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            "qrels",
-            revision=self.metadata_dict.get("revision", None),
+            name="qrels",
             split=self._EVAL_SPLIT,
+            **self.metadata_dict["dataset"],
         )
 
         self.queries = {

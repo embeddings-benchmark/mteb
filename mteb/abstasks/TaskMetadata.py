@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from datetime import date
 
 from pydantic import (
@@ -7,6 +8,7 @@ from pydantic import (
     BaseModel,
     BeforeValidator,
     TypeAdapter,
+    field_validator,
 )
 from typing_extensions import Annotated, Literal
 
@@ -91,13 +93,15 @@ STR_DATE = Annotated[
 SPLIT_NAME = str
 
 
+logger = logging.getLogger(__name__)
+
+
 class TaskMetadata(BaseModel):
     """
     Metadata for a task.
 
     Args:
-        hf_hub_name: The name of the dataset for the task on the Hugging Face Hub.
-        revision: The revision of the dataset for the task on the Hugging Face Hub.
+        dataset: All arguments to pass to datasets.load_dataset to load the dataset for the task. Refer to https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset
         name: The name of the task.
         description: A description of the task.
         type: The type of the task. These includes "Classification", "Summarization", "STS", "Retrieval", "Reranking", "Clustering",
@@ -124,8 +128,7 @@ class TaskMetadata(BaseModel):
         avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on.
     """
 
-    hf_hub_name: str
-    revision: str
+    dataset: dict
 
     name: str
     description: str
@@ -152,3 +155,27 @@ class TaskMetadata(BaseModel):
 
     n_samples: dict[SPLIT_NAME, int] | None
     avg_character_length: dict[SPLIT_NAME, float] | None
+
+    @field_validator("dataset")
+    def _check_dataset_path_is_specified(cls, dataset):
+        """
+        This method checks that the dataset path is specified.
+        """
+        if "path" not in dataset or dataset["path"] is None:
+            raise ValueError(
+                "You must specify the path to the dataset in the dataset dictionary. "
+                "See https://huggingface.co/docs/datasets/main/en/package_reference/loading_methods#datasets.load_dataset"
+            )
+        return dataset
+
+    @field_validator("dataset")
+    def _check_dataset_revision_is_specified(cls, dataset):
+        if "revision" not in dataset:
+            raise ValueError(
+                "You must explicitly specify a revision for the dataset (either a SHA or None)."
+            )
+        if dataset["revision"] is None:
+            logging.warning(
+                "It is encourage to specify a dataset revision for reproducability"
+            )
+        return dataset

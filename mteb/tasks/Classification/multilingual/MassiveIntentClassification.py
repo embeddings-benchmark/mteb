@@ -62,7 +62,10 @@ _LANGUAGES = [
 class MassiveIntentClassification(MultilingualTask, AbsTaskClassification):
     metadata = TaskMetadata(
         name="MassiveIntentClassification",
-        hf_hub_name="mteb/amazon_massive_intent",
+        dataset={
+            "path": "mteb/amazon_massive_intent",
+            "revision": "31efe3c427b0bae9c22cbb560b8f15491cc6bed7",
+        },
         description="MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages",
         reference="https://arxiv.org/abs/2204.08582#:~:text=MASSIVE%20contains%201M%20realistic%2C%20parallel,diverse%20languages%20from%2029%20genera.",
         category="s2s",
@@ -70,7 +73,6 @@ class MassiveIntentClassification(MultilingualTask, AbsTaskClassification):
         eval_splits=["validation", "test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
-        revision="31efe3c427b0bae9c22cbb560b8f15491cc6bed7",
         date=None,
         form=None,
         domains=None,

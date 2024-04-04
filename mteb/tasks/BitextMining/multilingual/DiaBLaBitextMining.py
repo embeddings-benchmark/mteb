@@ -10,7 +10,10 @@ from ....abstasks import AbsTaskBitextMining, CrosslingualTask
 class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
     metadata = TaskMetadata(
         name="DiaBlaBitextMining",
-        hf_hub_name="rbawden/DiaBLa",
+        dataset={
+            "path": "rbawden/DiaBLa",
+            "revision": "5345895c56a601afe1a98519ce3199be60a27dba",
+        },
         description="English-French Parallel Corpus. DiaBLa is an English-French dataset for the evaluation of Machine Translation (MT) for informal, written bilingual dialogue.",
         reference="https://inria.hal.science/hal-03021633",
         type="BitextMining",
@@ -18,7 +21,6 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
         eval_splits=["test"],
         eval_langs=["fr-en", "en-fr"],
         main_score="f1",
-        revision="5345895c56a601afe1a98519ce3199be60a27dba",
         date=None,
         form=None,
         domains=None,
@@ -41,11 +43,9 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
             return
 
         self.dataset = {}
+
         for lang in self.langs:
-            self.dataset[lang] = datasets.load_dataset(
-                self.metadata_dict["hf_hub_name"],
-                revision=self.metadata_dict.get("revision", None),
-            )
+            self.dataset[lang] = datasets.load_dataset(**self.metadata_dict["dataset"])
 
         self.dataset_transform()
         self.data_loaded = True

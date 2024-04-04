@@ -13,13 +13,15 @@ class HALClusteringS2S(AbsTaskClustering):
         name="HALClusteringS2S",
         description="Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s)",
         reference="https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s",
-        hf_hub_name="mteb/hal",
+        dataset={
+            "path": "lyon-nlp/clustering-hal-s2s",
+            "revision": "e06ebbbb123f8144bef1a5d18796f3dec9ae2915",
+        },
         type="Clustering",
         category="s2s",
         eval_splits=["test"],
         eval_langs=["fr"],
         main_score="v_measure",
-        revision="e06ebbbb123f8144bef1a5d18796f3dec9ae2915",
         date=None,
         form=None,
         domains=None,
@@ -33,20 +35,6 @@ class HALClusteringS2S(AbsTaskClustering):
         n_samples=None,
         avg_character_length=None,
     )
-
-    def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub and convert it to the standard format.
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            revision=self.metadata_dict.get("revision", None),
-        )
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self):
         """

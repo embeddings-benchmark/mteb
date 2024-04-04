@@ -304,7 +304,9 @@ class MTEB:
                 # run evaluation
                 task_results = {
                     "mteb_version": version("mteb"),  # noqa: F405
-                    "dataset_revision": task.metadata_dict.get("revision", None),
+                    "dataset_revision": task.metadata_dict["dataset"].get(
+                        "revision", None
+                    ),
                     "mteb_dataset_name": task.metadata_dict["name"],
                 }
                 for split in task_eval_splits:

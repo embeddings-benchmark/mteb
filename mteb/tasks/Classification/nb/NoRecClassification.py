@@ -9,13 +9,16 @@ class NoRecClassification(AbsTaskClassification):
         name="NoRecClassification",
         description="A Norwegian dataset for sentiment classification on review",
         reference="https://aclanthology.org/L18-1661/",
-        hf_hub_name="ScandEval/norec-mini",  # using the mini version to keep results ~comparable to the ScandEval benchmark
+        dataset={
+            # using the mini version to keep results ~comparable to the ScandEval benchmark
+            "path": "mteb/norec_classification",
+            "revision": "5b740b7c42c73d586420812a35745fc37118862f",
+        },
         type="Classification",
         category="s2s",
         eval_splits=["test"],
         eval_langs=["nb"],
         main_score="accuracy",
-        revision="07b99ab3363c2e7f8f87015b01c21f4d9b917ce3",
         date=None,
         form=None,
         domains=None,

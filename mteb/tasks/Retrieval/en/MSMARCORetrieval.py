@@ -8,7 +8,10 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class MSMARCO(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSMARCO",
-        hf_hub_name="mteb/msmarco",
+        dataset={
+            "path": "mteb/msmarco",
+            "revision": "c5a29a104738b98a9e76336939199e264163d4a0",
+        },
         description="MS MARCO is a collection of datasets focused on deep learning in search",
         reference="https://microsoft.github.io/msmarco/",
         type="Retrieval",
@@ -16,7 +19,6 @@ class MSMARCO(AbsTaskRetrieval):
         eval_splits=["train", "dev", "test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="c5a29a104738b98a9e76336939199e264163d4a0",
         date=None,
         form=None,
         domains=None,

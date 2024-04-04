@@ -12,7 +12,10 @@ _LANGUAGES = ["de", "en", "fi", "fr", "ru", "sv"]
 class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
     metadata = TaskMetadata(
         name="OpusparcusPC",
-        hf_hub_name="GEM/opusparcus",
+        dataset={
+            "path": "GEM/opusparcus",
+            "revision": "9e9b1f8ef51616073f47f306f7f47dd91663f86a",
+        },
         description="Opusparcus is a paraphrase corpus for six European language: German, English, Finnish, French, Russian, and Swedish. The paraphrases consist of subtitles from movies and TV shows.",
         reference="https://gem-benchmark.com/data_cards/opusparcus",
         category="s2s",
@@ -20,7 +23,6 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
         eval_splits=["test.full", "validation.full"],
         eval_langs=_LANGUAGES,
         main_score="ap",
-        revision="9e9b1f8ef51616073f47f306f7f47dd91663f86a",
         date=None,
         form=None,
         domains=None,
@@ -44,10 +46,9 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
         self.dataset = {}
         for lang in self.langs:
             self.dataset[lang] = datasets.load_dataset(
-                self.metadata_dict["hf_hub_name"],
                 lang=lang,
                 quality=100,
-                revision=self.metadata_dict.get("revision", None),
+                **self.metadata_dict["dataset"],
             )
             self.dataset_transform(lang)
         self.data_loaded = True

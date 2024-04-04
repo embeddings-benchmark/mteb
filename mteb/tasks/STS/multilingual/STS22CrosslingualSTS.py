@@ -29,7 +29,10 @@ _LANGUAGES = [
 class STS22CrosslingualSTS(AbsTaskSTS, CrosslingualTask):
     metadata = TaskMetadata(
         name="STS22",
-        hf_hub_name="mteb/sts22-crosslingual-sts",
+        dataset={
+            "path": "mteb/sts22-crosslingual-sts",
+            "revision": "eea2b4fe26a775864c896887d910b76a8098ad3f",
+        },
         description="SemEval 2022 Task 8: Multilingual News Article Similarity",
         reference="https://competitions.codalab.org/competitions/33835",
         type="STS",
@@ -37,7 +40,6 @@ class STS22CrosslingualSTS(AbsTaskSTS, CrosslingualTask):
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="cosine_spearman",
-        revision="eea2b4fe26a775864c896887d910b76a8098ad3f",
         date=None,
         form=None,
         domains=None,
@@ -54,7 +56,7 @@ class STS22CrosslingualSTS(AbsTaskSTS, CrosslingualTask):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 1
         metadata_dict["max_score"] = 4
         return metadata_dict

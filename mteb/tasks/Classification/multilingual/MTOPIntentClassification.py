@@ -10,7 +10,10 @@ _LANGUAGES = ["en", "de", "es", "fr", "hi", "th"]
 class MTOPIntentClassification(MultilingualTask, AbsTaskClassification):
     metadata = TaskMetadata(
         name="MTOPIntentClassification",
-        hf_hub_name="mteb/mtop_intent",
+        dataset={
+            "path": "mteb/mtop_intent",
+            "revision": "ae001d0e6b1228650b7bd1c2c65fb50ad11a8aba",
+        },
         description="MTOP: Multilingual Task-Oriented Semantic Parsing",
         reference="https://arxiv.org/pdf/2008.09335.pdf",
         category="s2s",
@@ -18,7 +21,6 @@ class MTOPIntentClassification(MultilingualTask, AbsTaskClassification):
         eval_splits=["validation", "test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
-        revision="ae001d0e6b1228650b7bd1c2c65fb50ad11a8aba",
         date=None,
         form=None,
         domains=None,

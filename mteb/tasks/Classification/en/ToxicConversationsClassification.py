@@ -10,13 +10,15 @@ class ToxicConversationsClassification(AbsTaskClassification):
         name="ToxicConversationsClassification",
         description="Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not.",
         reference="https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/overview",
-        hf_hub_name="mteb/toxic_conversations_50k",
+        dataset={
+            "path": "mteb/toxic_conversations_50k",
+            "revision": "edfaf9da55d3dd50d43143d90c1ac476895ae6de",
+        },
         type="Classification",
         category="s2s",
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="accuracy",
-        revision="edfaf9da55d3dd50d43143d90c1ac476895ae6de",
         date=None,
         form=None,
         domains=None,
@@ -33,7 +35,7 @@ class ToxicConversationsClassification(AbsTaskClassification):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["n_experiments"] = 10
         metadata_dict["samples_per_label"] = 16
-        return dict(self.metadata)
+        return metadata_dict

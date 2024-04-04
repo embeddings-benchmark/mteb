@@ -8,7 +8,10 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 class BiossesSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="BIOSSES",
-        hf_hub_name="mteb/biosses-sts",
+        dataset={
+            "path": "mteb/biosses-sts",
+            "revision": "d3fb88f8f02e40887cd149695127462bbcf29b4a",
+        },
         description="Biomedical Semantic Similarity Estimation.",
         reference="https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html",
         type="STS",
@@ -16,7 +19,6 @@ class BiossesSTS(AbsTaskSTS):
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="cosine_spearman",
-        revision="d3fb88f8f02e40887cd149695127462bbcf29b4a",
         date=None,
         form=None,
         domains=None,
@@ -33,7 +35,7 @@ class BiossesSTS(AbsTaskSTS):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 5
         return metadata_dict

@@ -23,7 +23,10 @@ def batched(iterable: Iterable[T], n: int) -> Iterable[tuple[T, ...]]:
 class VGClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="VGClustering",
-        hf_hub_name="navjordj/VG_summarization",
+        dataset={
+            "path": "navjordj/VG_summarization",
+            "revision": "d4c5a8ba10ae71224752c727094ac4c46947fa29",
+        },
         description="Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.",
         reference="https://huggingface.co/datasets/navjordj/VG_summarization",
         type="Clustering",
@@ -31,7 +34,6 @@ class VGClustering(AbsTaskClustering):
         eval_splits=["test"],
         eval_langs=["nb"],
         main_score="v_measure",
-        revision="d4c5a8ba10ae71224752c727094ac4c46947fa29",
         date=("2020-01-01", "2024-12-31"),  # best guess
         form=["written"],
         domains=["News", "Non-fiction"],
@@ -50,21 +52,6 @@ class VGClustering(AbsTaskClustering):
         n_samples={"test": 2048},
         avg_character_length={"test": 1009.65},
     )
-
-    def load_data(self, **kwargs: dict):  # noqa: ARG002
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-
-        self.dataset: datasets.DatasetDict = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            revision=self.metadata_dict.get("revision"),
-        )  # type: ignore
-
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self):
         splits = self.metadata_dict["eval_splits"]

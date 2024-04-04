@@ -9,14 +9,16 @@ class ImdbClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ImdbClassification",
         description="Large Movie Review Dataset",
-        hf_hub_name="mteb/imdb",
+        dataset={
+            "path": "mteb/imdb",
+            "revision": "3d86128a09e091d6018b6d26cad27f2739fc2db7",
+        },
         reference="http://www.aclweb.org/anthology/P11-1015",
         type="Classification",
         category="p2p",
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="accuracy",
-        revision="3d86128a09e091d6018b6d26cad27f2739fc2db7",
         date=None,
         form=None,
         domains=None,
