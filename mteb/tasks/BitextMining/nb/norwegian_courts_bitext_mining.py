@@ -20,8 +20,8 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
         revision="d79af07e969a6678fcbbe819956840425816468f",
         date=("2000-01-01", "2020-12-31"),  # approximate guess
         form=["spoken"],
-        domains=["Spoken"],
-        task_subtypes=["Political classification"],
+        domains=["Spoken", "Legal"],
+        task_subtypes=["Dialect pairing"],
         license="openUnder-PSI",
         socioeconomic_status="high",
         annotations_creators="derived",  # best guess
