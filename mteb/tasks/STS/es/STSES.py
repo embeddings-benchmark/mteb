@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from datasets import load_dataset
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskSTS import AbsTaskSTS
@@ -12,7 +10,11 @@ _EVAL_SPLIT = "test"
 class STSES(AbsTaskSTS):
     metadata = TaskMetadata(
         name="STSES",
-        hf_hub_name="PlanTL-GOB-ES/sts-es",
+        dataset={
+            "path": "PlanTL-GOB-ES/sts-es",
+            "revision": "0912bb6c9393c76d62a7c5ee81c4c817ff47c9f4",
+            "trust_remote_code": True,
+        },
         description="Spanish test sets from SemEval-2014 (Agirre et al., 2014) and SemEval-2015 (Agirre et al., 2015)",
         reference="https://huggingface.co/datasets/PlanTL-GOB-ES/sts-es",
         type="STS",
@@ -20,7 +22,6 @@ class STSES(AbsTaskSTS):
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["es"],
         main_score="cosine_spearman",
-        revision="0912bb6c9393c76d62a7c5ee81c4c817ff47c9f4",
         date=None,
         form=None,
         domains=None,
@@ -37,22 +38,12 @@ class STSES(AbsTaskSTS):
 
     @property
     def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
+        metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 5
+        return metadata_dict
 
-        return dict(self.metadata)
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        data = load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            trust_remote_code=True,
-            revision=self.metadata_dict.get("revision", None),
-        )[_EVAL_SPLIT]
+    def dataset_transform(self):
+        data = self.dataset[_EVAL_SPLIT]
         data = data.add_column("score", [d["label"] for d in data])
         self.dataset = {_EVAL_SPLIT: data}
-
-        self.data_loaded = True

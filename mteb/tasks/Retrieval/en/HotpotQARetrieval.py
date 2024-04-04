@@ -8,7 +8,10 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class HotpotQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HotpotQA",
-        hf_hub_name="mteb/hotpotqa",
+        dataset={
+            "path": "mteb/hotpotqa",
+            "revision": "ab518f4d6fcca38d87c25209f94beba119d02014",
+        },
         description=(
             "HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong"
             " supervision for supporting facts to enable more explainable question answering systems."
@@ -19,7 +22,6 @@ class HotpotQA(AbsTaskRetrieval):
         eval_splits=["train", "dev", "test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        revision="ab518f4d6fcca38d87c25209f94beba119d02014",
         date=None,
         form=None,
         domains=None,

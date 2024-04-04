@@ -54,13 +54,15 @@ class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
         name="MintakaRetrieval",
         description="MintakaRetrieval",
         reference=None,
-        hf_hub_name="jinaai/mintakaqa",
+        dataset={
+            "path": "jinaai/mintakaqa",
+            "revision": "efa78cc2f74bbcd21eff2261f9e13aebe40b814e",
+        },
         type="Retrieval",
         category="s2p",
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGS,
         main_score="ndcg_at_10",
-        revision="efa78cc2f74bbcd21eff2261f9e13aebe40b814e",
         date=None,
         form=None,
         domains=None,
@@ -80,11 +82,11 @@ class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_mintaka_data(
-            path=self.metadata_dict["hf_hub_name"],
+            path=self.metadata_dict["dataset"]["path"],
             langs=self.metadata.eval_langs,
             split=self.metadata_dict["eval_splits"][0],
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["revision"],
+            revision=self.metadata_dict["dataset"]["revision"],
         )
 
         self.data_loaded = True

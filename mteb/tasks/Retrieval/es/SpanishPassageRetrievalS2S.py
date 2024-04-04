@@ -12,13 +12,15 @@ class SpanishPassageRetrievalS2S(AbsTaskRetrieval):
         name="SpanishPassageRetrievalS2S",
         description="Test collection for passage retrieval from health-related Web resources in Spanish.",
         reference="https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/",
-        hf_hub_name="jinaai/spanish_passage_retrieval",
+        dataset={
+            "path": "jinaai/spanish_passage_retrieval",
+            "revision": "9cddf2ce5209ade52c2115ccfa00eb22c6d3a837",
+        },
         type="Retrieval",
         category="s2s",
         eval_splits=["test"],
         eval_langs=["es"],
         main_score="ndcg_at_10",
-        revision="9cddf2ce5209ade52c2115ccfa00eb22c6d3a837",
         date=None,
         form=None,
         domains=None,
@@ -38,22 +40,22 @@ class SpanishPassageRetrievalS2S(AbsTaskRetrieval):
             return
 
         query_rows = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            "queries",
+            name="queries",
             split="test",
             trust_remote_code=True,
+            **self.metadata_dict["dataset"],
         )
         corpus_rows = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            "corpus.sentences",
+            name="corpus.sentences",
             split="test",
             trust_remote_code=True,
+            **self.metadata_dict["dataset"],
         )
         qrels_rows = datasets.load_dataset(
-            self.metadata_dict["hf_hub_name"],
-            "qrels.s2s",
+            name="qrels.s2s",
             split="test",
             trust_remote_code=True,
+            **self.metadata_dict["dataset"],
         )
 
         self.queries = {"test": {row["_id"]: row["text"] for row in query_rows}}

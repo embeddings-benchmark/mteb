@@ -9,13 +9,15 @@ class NorwegianParliamentClassification(AbsTaskClassification):
         name="NorwegianParliamentClassification",
         description="Norwegian parliament speeches annotated for sentiment",
         reference="https://huggingface.co/datasets/NbAiLab/norwegian_parliament",
-        hf_hub_name="NbAiLab/norwegian_parliament",
+        dataset={
+            "path": "NbAiLab/norwegian_parliament",
+            "revision": "f7393532774c66312378d30b197610b43d751972",
+        },
         type="Classification",
         category="s2s",
         eval_splits=["test", "validation"],
         eval_langs=["nb"],  # assumed to be bokmål
         main_score="accuracy",
-        revision="f7393532774c66312378d30b197610b43d751972",
         date=None,
         form=None,
         domains=None,

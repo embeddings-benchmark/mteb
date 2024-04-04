@@ -1,0 +1,22 @@
+{
+  "dataset_revision": "5345895c56a601afe1a98519ce3199be60a27dba",
+  "mteb_dataset_name": "DiaBlaBitextMining",
+  "mteb_version": "1.2.1.dev0",
+  "test": {
+    "en-fr": {
+      "accuracy": 0.8107167710508003,
+      "f1": 0.7772438859983376,
+      "main_score": 0.7772438859983376,
+      "precision": 0.7637658654697831,
+      "recall": 0.8107167710508003
+    },
+    "evaluation_time": 30.59,
+    "fr-en": {
+      "accuracy": 0.8107167710508003,
+      "f1": 0.7772438859983376,
+      "main_score": 0.7772438859983376,
+      "precision": 0.7637658654697831,
+      "recall": 0.8107167710508003
+    }
+  }
+}
