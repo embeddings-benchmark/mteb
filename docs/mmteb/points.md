@@ -2,7 +2,9 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 | ----------------- | ------------ | ----------- | -------- | ------------------- | ---------- | -------------- |  -------- | -------------- | -------- | ------------- |
-| KennethEnevoldsen |              |   38        |          |                     |         8  |                |           |                |          |               |
+| KennethEnevoldsen |              |   38        |          |                   1  |            |                |           |                |         |               |
+| x-tabdeveloping   |              |    2        |          |                     |            |                |           |                |        |               |
+| KennethEnevoldsen |              |   38        |          |                    1 |         8  |                |         1  |                |          |               |
 | x-tabdeveloping   |              |    2        |          |                     |            |                |           |                |          |               |
 | imenelydiaker     |              |    88       |          |                     |            |                |     7     |                |          |               |
 | wissam-sib        |              |    88       |          |                     |            |                |     1     |                |          |               |
@@ -18,8 +20,8 @@ First name and last name are as you want them to appear in a publication.
 
 | GitHub            | First name | Last name  | Email                        | User on openreview   | Affiliations                                          |
 | ----------------- | ---------- | ---------- | ---------------------------- | -------------------- |                                                       |
-| KennethEnevoldsen | Kenneth    | Enevoldsen | kennethcenevoldsen@gmail.com | ~Kenneth_Enevoldsen1 |                                                       |
-| x-tabdeveloping   | Márton     | Kardos     |                              | ~Márton_Kardos1      |                                                       |
+| KennethEnevoldsen | Kenneth    | Enevoldsen | kennethcenevoldsen@gmail.com | ~Kenneth_Enevoldsen1 | Aarhus University, Denmark                                                      |
+| x-tabdeveloping   | Márton     | Kardos     |                              | ~Márton_Kardos1      | Aarhus University, Denmark                                                      |
 | imenelydiaker     | Imene      | Kerboua    |                              |                      | Esker, Lyon, France && INSA Lyon, LIRIS, Lyon, France |
 | wissam-sib        | Wissam     | Siblini    | wissamsiblini92@gmail.com    |                      | N/A                                                   |
 | GabrielSequeira   | Gabriel    | Sequeira   |                              |                      | N/A                                                   |

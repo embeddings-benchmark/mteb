@@ -10,6 +10,7 @@ class MindSmallReranking(AbsTaskReranking):
         name="MindSmallReranking",
         description="Microsoft News Dataset: A Large-Scale English Dataset for News Recommendation Research",
         reference="https://msnews.github.io/assets/doc/ACL2020_MIND.pdf",
+        hf_hub_name="mteb/mind_small",
         dataset={
             "path": "mteb/mind_small",
             "revision": "3bdac13927fdc888b903db93b2ffdbd90b295a69",
