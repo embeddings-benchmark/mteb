@@ -15,7 +15,7 @@ class GerDaLIRSmall(AbsTaskRetrieval):
             "revision": "48327de6ee192e9610f3069789719788957c7abd",
         },
         type="Retrieval",
-        category="s2p",
+        category="p2p",
         eval_splits=["test"],
         eval_langs=["de"],
         main_score="ndcg_at_10",
