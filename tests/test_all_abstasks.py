@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import contextvars
+import copy
 import functools
 import logging
 from dataclasses import dataclass
@@ -148,7 +149,9 @@ async def check_hf_lang_configuration_is_valid(
     metadata: TaskMetadata, hf_name: str | None
 ) -> Sequence[HFSpecificationError]:
     errors: list[HFSpecificationError] = []
-    kw_args = metadata.dataset
+    kw_args = copy.deepcopy(
+        metadata.dataset
+    )  # Avoid mutating it so you invalidate the cache
     kw_args["streaming"] = True
     kw_args["task_name"] = metadata.name
     if hf_name is not None:
@@ -175,6 +178,9 @@ async def check_task_hf_specification(
     task: AbsTask,
 ) -> Sequence[HFSpecificationError]:
     # Check if task has been already validated
+    # Add the task name to the dataset metadata so it becomes part of cache invalidation
+    # E.g. some tasks have the same dataset but different splits, so we want to check them independently
+    task.metadata.dataset["task_name"] = task.metadata.name
     cache_path = Path(__file__).parent / "checked_hf_specifications.jsonl"
     if task.metadata.dataset in list(srsly.read_jsonl(cache_path)):
         return []

@@ -171,10 +171,7 @@
 {"path":"mteb/amazon_massive_scenario","revision":"7d571f92784cd94a019292a1f45445077d0ef634"}
 {"path":"mteb/amazon_massive_intent","revision":"31efe3c427b0bae9c22cbb560b8f15491cc6bed7"}
 {"path":"mteb/tatoeba-bitext-mining","revision":"9080400076fbadbb4c4dcb136ff4eddc40b42553"}
-{"path":"AI-Sweden/SuperLim","revision":"7ebf0b4caa7b2ae39698a889de782c09e6f5ee56","name":"dalaj","streaming":true}
-{"path":"sbx/superlim-2","revision":"ef1661775d746e0844b299164773db733bdc0bf6","name":"swedn","streaming":true}
-{"path":"strombergnlp/nordic_langid","revision":"e254179d18ab0165fdb6dbef91178266222bee2a","name":"10k","streaming":true}
-{"path":"AI-Sweden/SuperLim","revision":"7ebf0b4caa7b2ae39698a889de782c09e6f5ee56","name":"dalaj","streaming":true}
-{"path":"mlsum","revision":"b5d54f8f3b61ae17845046286940f03c6bc79bc7","name":"fr","split":"test","streaming":true,"task_name":"MLSUMClusteringS2S"}
-{"path":"AI-Sweden/SuperLim","revision":"7ebf0b4caa7b2ae39698a889de782c09e6f5ee56","name":"dalaj","streaming":true,"task_name":"DalajClassification"}
-{"path":"AI-Sweden/SuperLim","revision":"7ebf0b4caa7b2ae39698a889de782c09e6f5ee56","name":"queries","streaming":true,"task_name":"SweFaqRetrieval"}
+{"path":"AI-Sweden/SuperLim","revision":"7ebf0b4caa7b2ae39698a889de782c09e6f5ee56"}
+{"path":"sbx/superlim-2","revision":"ef1661775d746e0844b299164773db733bdc0bf6"}
+{"path":"strombergnlp/nordic_langid","revision":"e254179d18ab0165fdb6dbef91178266222bee2a"}
+{"path":"mlsum","revision":"b5d54f8f3b61ae17845046286940f03c6bc79bc7"}
