@@ -19,7 +19,7 @@ class AILACasedocs(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
-        date=("2024-04-05"),
+        date=None,
         form="written",
         domains=["Legal"],
         task_subtypes=["Article retrieval"],
