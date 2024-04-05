@@ -15,7 +15,7 @@ class LeCaRDv2(AbsTaskRetrieval):
             "revision": "b78e18688c3d012a33dc3676597c1d1b2243ce1c",
         },
         type="Retrieval",
-        category="s2p",
+        category="p2p",
         eval_splits=["test"],
         eval_langs=["zh"],
         main_score="ndcg_at_10",
