@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import random
 from abc import ABC, abstractmethod
+from typing import Any
 
 import datasets
 import numpy as np
@@ -44,7 +45,7 @@ class AbsTask(ABC):
         self.data_loaded = True
 
     @property
-    def metadata_dict(self) -> dict[str, str]:
+    def metadata_dict(self) -> dict[str, Any]:
         metadata_dict = dict(self.metadata)
         return metadata_dict
 
