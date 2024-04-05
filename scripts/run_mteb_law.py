@@ -26,7 +26,7 @@ TASK_LIST_RETRIEVAL = [
 model_name = "average_word_embeddings_komninos"
 model = SentenceTransformer(model_name)
 
-for task in TASK_LIST_RETRIEVAL:
+for task in TASK_LIST_RETRIEVAL_LAW:
     logger.info(f"Running task: {task}")
     eval_splits = ["test"]
     evaluation = MTEB(
