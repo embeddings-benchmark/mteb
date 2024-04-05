@@ -82,5 +82,5 @@ MTEB_MAIN_EN = [
     "AILAStatutes",
     "LeCaRDv2",
     "LegalQuAD",
-    "GerDaLIR",
+    "GerDaLIRSmall",
 ]
