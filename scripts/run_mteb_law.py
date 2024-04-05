@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 
 logger = logging.getLogger("main")
 
-TASK_LIST_RETRIEVAL = [
+TASK_LIST_RETRIEVAL_LAW = [
     "LegalSummarization",
     "LegalBenchConsumerContractsQA",
     "LegalBenchCorporateLobbying",
