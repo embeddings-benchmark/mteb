@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class GerDaLIR(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="GerDaLIR",
-        description="The dataset consists of documents, passages and relevance labels in German.",
+        description="The dataset consists of documents, passages and relevance labels in German. In contrast to the original dataset, only documents that have corresponding queries in the query set are chosen to create a smaller corpus for evaluation purposes.",
         reference="https://github.com/lavis-nlp/GerDaLIR",
         dataset={
             "path": "mteb/GerDaLIR",
