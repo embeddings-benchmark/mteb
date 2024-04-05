@@ -20,7 +20,7 @@ class AILACasedocs(AbsTaskRetrieval):
         eval_langs=["en"],
         main_score="ndcg_at_10",
         date=None,
-        form="written",
+        form=["written"],
         domains=["Legal"],
         task_subtypes=["Article retrieval"],
         license="CC BY 4.0",
