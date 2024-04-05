@@ -21,7 +21,12 @@ class AmazonCounterfactualClassification(MultilingualTask, AbsTaskClassification
         category="s2s",
         type="Classification",
         eval_splits=["validation", "test"],
-        eval_langs=_LANGUAGES,
+        eval_langs={
+            "en-ext": ["eng-Latn"],
+            "en": ["eng-Latn"],
+            "de": ["deu-Latn"],
+            "ja": ["jpn-Jpan"],
+        },
         main_score="accuracy",
         date=None,
         form=None,

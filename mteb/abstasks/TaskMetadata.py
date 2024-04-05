@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from datetime import date
+from typing import Mapping
 
 from pydantic import (
     AnyUrl,
@@ -11,6 +12,8 @@ from pydantic import (
     field_validator,
 )
 from typing_extensions import Annotated, Literal
+
+from .languages import ISOCODE639_3_TO_LANGUAGE, ISOCODE15924_TO_SCRIPT
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
@@ -91,7 +94,8 @@ STR_DATE = Annotated[
 ]  # Allows the type to be a string, but ensures that the string is a valid date
 
 SPLIT_NAME = str
-
+LANGUAGE_SCRIPT_CODE = str  # a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
+LANGUAGES = list[LANGUAGE_SCRIPT_CODE] | Mapping[str, list[LANGUAGE_SCRIPT_CODE]]
 
 logger = logging.getLogger(__name__)
 
@@ -109,7 +113,9 @@ class TaskMetadata(BaseModel):
         category: The category of the task. E.g. includes "s2s", "s2p", "p2p" (s=sentence, p=paragraph).
         reference: A URL to the documentation of the task. E.g. a published paper.
         eval_splits: The splits of the dataset used for evaluation.
-        eval_langs: The languages of the dataset used for evaluation.
+        eval_langs: The languages of the dataset used for evaluation. Specified as a list of ISO 639-3 language codes followed by ISO 15924 script
+            codes (e.g. "eng-Latn"). Can be either a list of languages or a dictionary mapping huggingface subsets to lists of languages (e.g. if a
+            the huggingface dataset contain different languages).
         main_score: The main score used for evaluation.
         date: The date when the data was collected. Specified as a tuple of two dates.
         form: The form of the data. Either "spoken", "written".
@@ -137,7 +143,7 @@ class TaskMetadata(BaseModel):
     reference: STR_URL | None  # URL to documentation, e.g. published paper
 
     eval_splits: list[str]
-    eval_langs: list[str]  # Might want to have a literal of langs when #251 is resolved
+    eval_langs: list[LANGUAGE_SCRIPT_CODE]
     main_score: str  # Might want a literal here
 
     date: tuple[STR_DATE, STR_DATE] | None  # When the data was collected
@@ -179,3 +185,28 @@ class TaskMetadata(BaseModel):
                 "It is encourage to specify a dataset revision for reproducability"
             )
         return dataset
+
+    @field_validator("eval_langs")
+    def _check_eval_langs(cls, eval_langs):
+        """
+        This method checks that the eval_langs are specified as a list of languages.
+        """
+        if isinstance(eval_langs, list):
+            for code in eval_langs:
+                cls.check_language_code(code)
+        elif isinstance(eval_langs, dict):
+            for langs in eval_langs.values():
+                for code in langs:
+                    cls.check_language_code(code)
+        return eval_langs
+
+    @staticmethod
+    def check_language_code(code):
+        """
+        This method checks that the language code (e.g. "eng-Latn") is valid.
+        """
+        lang, script = code.split("-")
+        if lang not in ISOCODE639_3_TO_LANGUAGE:
+            raise ValueError(f"Invalid language code: {lang}")
+        if script not in ISOCODE15924_TO_SCRIPT:
+            raise ValueError(f"Invalid script code: {script}")
