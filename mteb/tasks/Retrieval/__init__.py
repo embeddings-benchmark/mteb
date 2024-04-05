@@ -66,7 +66,7 @@ from .sv.swefaq_retrieval import *
 from .zh.CMTEBRetrieval import *
 from .law.AILACasedocsRetrieval import *
 from .law.AILAStatutesRetrieval import *
-from .law.GerDaLIRRetrieval import *
+from .law.GerDaLIRSmallRetrieval import *
 from .law.LeCaRDv2Retrieval import *
 from .law.LegalBenchConsumerContractsQARetrieval import *
 from .law.LegalBenchCorporateLobbyingRetrieval import *
