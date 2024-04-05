@@ -136,24 +136,28 @@ def test_dataset_availability():
     asyncio.run(check_datasets_are_available_on_hf(tasks))
 
 
+class HFDidNotLoadError(Exception):
+    pass
+
+
 # asyncio.to_thread is only available in Python 3.9
 # Have copied the source code. If deprecating support for 3.8, use the built-in function.
 async def to_thread(func, /, *args, **kwargs):
-    loop = asyncio.get_running_loop()
-    ctx = contextvars.copy_context()
-    func_call = functools.partial(ctx.run, func, *args, **kwargs)
-    return await loop.run_in_executor(None, func_call)
+    try:
+        loop = asyncio.get_running_loop()
+        ctx = contextvars.copy_context()
+        func_call = functools.partial(ctx.run, func, *args, **kwargs)
+        return await loop.run_in_executor(None, func_call)
+    except ValueError as e:
+        raise HFDidNotLoadError(e)
 
 
 async def check_hf_lang_configuration_is_valid(
     metadata: TaskMetadata, hf_name: str | None
 ) -> Sequence[HFSpecificationError]:
     errors: list[HFSpecificationError] = []
-    kw_args = copy.deepcopy(
-        metadata.dataset
-    )  # Avoid mutating it so you invalidate the cache
+    kw_args = metadata.dataset
     kw_args["streaming"] = True
-    kw_args["task_name"] = metadata.name
     if hf_name is not None:
         kw_args["name"] = hf_name
 
@@ -162,7 +166,7 @@ async def check_hf_lang_configuration_is_valid(
             load_dataset,
             **kw_args,
         )
-    except Exception as e:
+    except HFDidNotLoadError as e:
         return [HFSpecificationError(metadata.name, str(e))]
 
     for split in metadata.eval_splits:
@@ -178,11 +182,14 @@ async def check_task_hf_specification(
     task: AbsTask,
 ) -> Sequence[HFSpecificationError]:
     # Check if task has been already validated
+    # Copy so you do not mutate the original metadata
+    cache_key = copy.deepcopy(task.metadata.dataset)
+
     # Add the task name to the dataset metadata so it becomes part of cache invalidation
     # E.g. some tasks have the same dataset but different splits, so we want to check them independently
-    task.metadata.dataset["task_name"] = task.metadata.name
+    cache_key["task_name"] = task.metadata.name
     cache_path = Path(__file__).parent / "checked_hf_specifications.jsonl"
-    if task.metadata.dataset in list(srsly.read_jsonl(cache_path)):
+    if cache_key in list(srsly.read_jsonl(cache_path)):
         return []
 
     logging.info(f"Checking task {task.metadata.name}")
@@ -205,9 +212,7 @@ async def check_task_hf_specification(
     ]
 
     # Add to the cache
-    srsly.write_jsonl(
-        cache_path, [task.metadata.dataset], append=True, append_new_line=False
-    )
+    srsly.write_jsonl(cache_path, [cache_key], append=True, append_new_line=False)
     return [error for task_errors in errors for error in task_errors]
 
 
@@ -272,6 +277,43 @@ def test_dataset_conforms_to_schema():
                 "SweFaqRetrieval",
                 "MLSUMClusteringS2S",
                 "DalajClassification",
+                "CQADupstackStatsRetrieval",
+                "Ko-StrategyQA",
+                "AlloProfClusteringS2S",
+                "CQADupstackWebmastersRetrieval",
+                "TRECCOVID",
+                "DanFEVER",
+                "CQADupstackEnglishRetrieval",
+                "CQADupstackGisRetrieval",
+                "SciFact",
+                "Ko-miracl",
+                "AlloProfClusteringP2P",
+                "ArguAna",
+                "CQADupstackWordpressRetrieval",
+                "MSMARCO",
+                "CQADupstackUnixRetrieval",
+                "SCIDOCS",
+                "FiQA2018",
+                "QuoraRetrieval",
+                "CQADupstackTexRetrieval",
+                "BSARDRetrieval",
+                "ClimateFEVER",
+                "GermanDPR",
+                "TwitterHjerneRetrieval",
+                "DBPedia",
+                "Ocnli",
+                "Touche2020",
+                "CQADupstackGamingRetrieval",
+                "CQADupstackPhysicsRetrieval",
+                "CQADupstackProgrammersRetrieval",
+                "TV2Nordretrieval",
+                "CQADupstackAndroidRetrieval",
+                "Cmnli",
+                "NQ",
+                "SNLRetrieval",
+                "FEVER",
+                "HagridRetrieval",
+                "CQADupstackMathematicaRetrieval",
             ]
         )
     ]
