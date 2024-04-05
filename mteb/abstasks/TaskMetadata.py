@@ -113,9 +113,10 @@ class TaskMetadata(BaseModel):
         category: The category of the task. E.g. includes "s2s", "s2p", "p2p" (s=sentence, p=paragraph).
         reference: A URL to the documentation of the task. E.g. a published paper.
         eval_splits: The splits of the dataset used for evaluation.
-        eval_langs: The languages of the dataset used for evaluation. Specified as a list of ISO 639-3 language codes followed by ISO 15924 script
-            codes (e.g. "eng-Latn"). Can be either a list of languages or a dictionary mapping huggingface subsets to lists of languages (e.g. if a
-            the huggingface dataset contain different languages).
+        eval_langs: The languages of the dataset used for evaluation. Langauges follows a ETF BCP 47 standard consisting of "{language}-{script}"
+            tag (e.g. "eng-Latn"). Where language is specified as a list of ISO 639-3 language codes (e.g. "eng") followed by ISO 15924 script codes
+            (e.g. "Latn"). Can be either a list of languages or a dictionary mapping huggingface subsets to lists of languages (e.g. if a the
+            huggingface dataset contain different languages).
         main_score: The main score used for evaluation.
         date: The date when the data was collected. Specified as a tuple of two dates.
         form: The form of the data. Either "spoken", "written".
