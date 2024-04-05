@@ -22,7 +22,7 @@ class GerDaLIRSmall(AbsTaskRetrieval):
         date=("2024-04-05"),
         form="written",
         domains=["Legal"],
-        task_subtypes=["Question answering"],
+        task_subtypes=["Article retrieval"],
         license="MIT license",
         socioeconomic_status="high",
         annotations_creators="derived",
