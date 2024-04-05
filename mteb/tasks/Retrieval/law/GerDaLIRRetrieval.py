@@ -32,4 +32,3 @@ class GerDaLIRSmall(AbsTaskRetrieval):
         n_samples=None,
         avg_character_length=None,
     )
-    
