@@ -11,7 +11,7 @@ class GerDaLIR(AbsTaskRetrieval):
         description="The dataset consists of documents, passages and relevance labels in German. In contrast to the original dataset, only documents that have corresponding queries in the query set are chosen to create a smaller corpus for evaluation purposes.",
         reference="https://github.com/lavis-nlp/GerDaLIR",
         dataset={
-            "path": "mteb/GerDaLIR",
+            "path": "mteb/GerDaLIRSmall",
             "revision": "48327de6ee192e9610f3069789719788957c7abd",
         },
         type="Retrieval",
