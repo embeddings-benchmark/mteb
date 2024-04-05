@@ -15,7 +15,7 @@ class AILAStatutes(AbsTaskRetrieval):
             "revision": "ebfcd844eadd3d667efa3c57fc5c8c87f5c2867e",
         },
         type="Retrieval",
-        category="s2p",
+        category="p2p",
         eval_splits=["test"],
         eval_langs=["en"],
         main_score="ndcg_at_10",
