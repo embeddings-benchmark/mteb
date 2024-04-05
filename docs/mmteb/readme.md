@@ -12,7 +12,7 @@ Everyone can join and contribute to this initiative from 1 April 2024 to 31 Apri
 
 ### 🗃️ 1: Contribute a new dataset
 
-For this segment, you open a PR in the MTEB repository where you create an implementation (subclass) of a task using a new language dataset uploaded to huggingface. Read more about how to add a task [here](adding_a_new_dataset.md) and check out [one of the previous additions](https://github.com/embeddings-benchmark/mteb/pull/247) for an example.
+For this segment, you open a PR in the MTEB repository where you create an implementation (subclass) of a task using a new language dataset uploaded to huggingface. Read more about how to add a dataset [here](../adding_a_dataset.md) and check out [one of the previous additions](https://github.com/embeddings-benchmark/mteb/pull/247) for an example.
 
 ### 🖥️ 2: Contribute a new task
 
@@ -32,7 +32,7 @@ We follow a similar approach as in the [SeaCrowd Project](https://github.com/SEA
 
 To be considered a co-author, at least 10 contribution points are required. The position of contributors in the author list is determined by the score they acquire, higher scores will appear first.
 
-To monitor how many points you have obtained, the contribution point tracking is now live at [this sheet](POINTS.md) and we recommend updating the score along with your PR. Past contributions also count. 
+To monitor how many points you have obtained, the contribution point tracking is now live at [this sheet](points.md) and we recommend updating the score along with your PR. Past contributions also count. 
 
 Everyone with sufficient points will also be added to the MTEB GitHub and Huggingface repository as a contributor.
 
