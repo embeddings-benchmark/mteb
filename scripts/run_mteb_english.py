@@ -23,6 +23,7 @@ TASK_LIST_CLASSIFICATION = [
     "MassiveScenarioClassification",
     "MTOPDomainClassification",
     "MTOPIntentClassification",
+    "NewsClassification",
     "ToxicConversationsClassification",
     "TweetSentimentExtractionClassification",
 ]
