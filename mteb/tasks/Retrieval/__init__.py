@@ -6,6 +6,8 @@ from .da.twitterhjerne import *
 from .de.GerDaLIRRetrieval import *
 from .de.GermanDPRRetrieval import *
 from .de.GermanQuADRetrieval import *
+from .de.GerDaLIRSmallRetrieval import *
+from .de.LegalQuADRetrieval import *
 from .en.ArguAnaRetrieval import *
 from .en.ClimateFEVERRetrieval import *
 from .en.CQADupstackAndroidRetrieval import *
@@ -35,6 +37,11 @@ from .en.SCIDOCSRetrieval import *
 from .en.SciFactRetrieval import *
 from .en.Touche2020Retrieval import *
 from .en.TRECCOVIDRetrieval import *
+from .en.AILACasedocsRetrieval import *
+from .en.AILAStatutesRetrieval import *
+from .en.LegalBenchConsumerContractsQARetrieval import *
+from .en.LegalBenchCorporateLobbyingRetrieval import *
+from .en.LegalSummarizationRetrieval import *
 from .es.SpanishPassageRetrievalS2P import *
 from .es.SpanishPassageRetrievalS2S import *
 from .fr.AlloprofRetrieval import *
@@ -64,11 +71,4 @@ from .pl.TRECCOVIDPLRetrieval import *
 from .sv.swedn_retrieval import *
 from .sv.swefaq_retrieval import *
 from .zh.CMTEBRetrieval import *
-from .law.AILACasedocsRetrieval import *
-from .law.AILAStatutesRetrieval import *
-from .law.GerDaLIRSmallRetrieval import *
-from .law.LeCaRDv2Retrieval import *
-from .law.LegalBenchConsumerContractsQARetrieval import *
-from .law.LegalBenchCorporateLobbyingRetrieval import *
-from .law.LegalQuADRetrieval import *
-from .law.LegalSummarizationRetrieval import *
+from .zh.LeCaRDv2Retrieval import *
