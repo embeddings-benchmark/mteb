@@ -19,7 +19,7 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
         reference="https://arxiv.org/abs/1908.11828",
         category="s2s",
         type="PairClassification",
-        eval_splits=["test.full", "validation.full"],
+        eval_splits=["test", "validation"],
         eval_langs=["de", "en", "es", "fr", "ja", "ko", "zh"],
         main_score="ap",
         date=None,
