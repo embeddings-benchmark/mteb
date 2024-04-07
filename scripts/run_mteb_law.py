@@ -20,7 +20,7 @@ TASK_LIST_RETRIEVAL_LAW = [
     "AILAStatutes",
     "LeCaRDv2",
     "LegalQuAD",
-    "GerDaLIR",
+    "GerDaLIRSmall",
 ]
 
 model_name = "average_word_embeddings_komninos"
