@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "eb185aade064a813bc0b7f42de02595523103ca4",
+  "mteb_dataset_name": "NewsClassification",
+  "mteb_version": "1.5.2",
+  "test": {
+    "accuracy": 0.8145526315789475,
+    "accuracy_stderr": 0.02163049043233855,
+    "evaluation_time": 69.36,
+    "f1": 0.813099457864691,
+    "f1_stderr": 0.02206820251059848,
+    "main_score": 0.8145526315789475
+  }
+}

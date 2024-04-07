@@ -1,1 +1,1 @@
-{"model_name": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "time_of_run": "2024-04-02 10:10:21.708612", "versions": {"sentence_transformers": "2.0.0", "transformers": "4.7.0", "pytorch": "1.9.0+cu102"}}
+{"model_name": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "time_of_run": "2024-04-07 09:48:17.924041", "versions": {"sentence_transformers": "2.0.0", "transformers": "4.7.0", "pytorch": "1.9.0+cu102"}}

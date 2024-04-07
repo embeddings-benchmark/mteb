@@ -25,6 +25,7 @@ TASK_SUBTYPE = Literal[
     "Thematic clustering",
     "Scientific Reranking",
     "Claim verification",
+    "Topic classification",
 ]
 
 TASK_DOMAIN = Literal[
