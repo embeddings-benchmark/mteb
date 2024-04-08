@@ -169,3 +169,15 @@
 {"path":"clarin-knext/fiqa-pl","revision":"2e535829717f8bf9dc829b7f911cc5bbd4e6608e","task_name":"FiQA-PL"}
 {"path":"clarin-knext/arguana-pl","revision":"63fc86750af76253e8c760fc9e534bbf24d260a2","task_name":"ArguAna-PL"}
 {"path":"clarin-knext/nfcorpus-pl","revision":"9a6f9567fda928260afed2de480d79c98bf0bec0","task_name":"NFCorpus-PL"}
+{"path":"C-MTEB/EcomRetrieval","revision":"687de13dc7294d6fd9be10c6945f9e8fec8166b9","task_name":"EcomRetrieval"}
+{"path":"C-MTEB/VideoRetrieval","revision":"58c2597a5943a2ba48f4668c3b90d796283c5639","task_name":"VideoRetrieval"}
+{"path":"C-MTEB/MedicalRetrieval","revision":"2039188fb5800a9803ba5048df7b76e6fb151fc6","task_name":"MedicalRetrieval"}
+{"path":"C-MTEB/MMarcoRetrieval","revision":"539bbde593d947e2a124ba72651aafc09eb33fc2","task_name":"MMarcoRetrieval"}
+{"path":"C-MTEB/CovidRetrieval","revision":"1271c7809071a13532e05f25fb53511ffce77117","task_name":"CovidRetrieval"}
+{"path":"C-MTEB/CmedqaRetrieval","revision":"cd540c506dae1cf9e9a59c3e06f42030d54e7301","task_name":"CmedqaRetrieval"}
+{"path":"facebook/flores","revision":"80dc3040d19756742c9a18267ab30f54fb8e226b","task_name":"FloresBitextMining"}
+{"path":"mlsum","revision":"b5d54f8f3b61ae17845046286940f03c6bc79bc7","name":"fr","split":"test","task_name":"MLSUMClusteringP2P"}
+{"path":"mlsum","revision":"b5d54f8f3b61ae17845046286940f03c6bc79bc7","name":"fr","split":"test","task_name":"MLSUMClusteringS2S"}
+{"path":"C-MTEB/DuRetrieval","revision":"a1a333e290fe30b10f3f56498e3a0d911a693ced","task_name":"DuRetrieval"}
+{"path":"C-MTEB/T2Retrieval","revision":"8731a845f1bf500a4f111cf1070785c793d10e64","task_name":"T2Retrieval"}
+{"path":"clarin-knext/trec-covid-pl","revision":"81bcb408f33366c2a20ac54adafad1ae7e877fdd","task_name":"TRECCOVID-PL"}

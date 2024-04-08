@@ -11,7 +11,7 @@ from typing import Sequence
 
 import srsly
 
-from mteb import MTEB
+from mteb.mteb.evaluation import MTEB
 from mteb.abstasks import AbsTask
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
@@ -65,10 +65,13 @@ def check_hf_lang_configuration_is_valid(
             )
     else:
         for split in task.metadata.eval_splits:
-            if split not in task.dataset.keys():  # type: ignore
-                errors.append(
-                    HFSpecificationError(task.metadata.name, f"Split {split} not found")
-                )
+            try:
+                if split not in task.dataset.keys():  # type: ignore
+                    errors.append(
+                        HFSpecificationError(task.metadata.name, f"Split {split} not found")
+                    )
+            except Exception as e:
+                errors.append(HFSpecificationError(task.metadata.name, str(e)))
 
     return errors
 
@@ -96,11 +99,14 @@ async def check_task_hf_specification(
 
 
 async def check_all_tasks(tasks: Sequence[AbsTask]) -> Sequence[HFSpecificationError]:
+    errors = []
+    #for task in tasks:
+    #    single_task_errors = await check_task_hf_specification(task=task)
+    #    errors.append([single_task_errors])
     errors = await asyncio.gather(
         *[check_task_hf_specification(task) for task in tasks]
     )
     return [error for task_errors in errors for error in task_errors]
-
 
 def test_dataset_conforms_to_schema():
     tasks = MTEB().tasks_cls
