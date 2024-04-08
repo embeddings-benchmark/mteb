@@ -235,7 +235,7 @@ model = SentenceTransformer(model_name)
 evaluation = MTEB(tasks=[YourNewTask()])
 ```
 
-- [ ] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb run -m {model_name} -t {task_name}` command.
+- [ ] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb -m {model_name} -t {task_name}` command.
   - [ ] `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
   - [ ] `intfloat/multilingual-e5-small`
 - [ ] I have checked that the performance is neither trivial (both models gain close to perfect scores) nor random (both models gain close to random scores).

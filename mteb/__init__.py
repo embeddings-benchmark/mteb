@@ -76,3 +76,14 @@ MTEB_MAIN_EN = [
     "TwitterSemEval2015",
     "TwitterURLCorpus",
 ]
+
+MTEB_RETRIEVAL_LAW = [
+    "LegalSummarization",
+    "LegalBenchConsumerContractsQA",
+    "LegalBenchCorporateLobbying",
+    "AILACasedocs",
+    "AILAStatutes",
+    "LeCaRDv2",
+    "LegalQuAD",
+    "GerDaLIRSmall",
+]
