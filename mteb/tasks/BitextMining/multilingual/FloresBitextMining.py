@@ -241,6 +241,7 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
         dataset={
             "path": "facebook/flores",
             "revision": "80dc3040d19756742c9a18267ab30f54fb8e226b",
+            "trust_remote_code": True,
         },
         description="FLORES is a benchmark dataset for machine translation between English and low-resource languages.",
         reference="https://huggingface.co/datasets/facebook/flores",
