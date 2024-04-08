@@ -196,11 +196,9 @@ class TaskMetadata(BaseModel):
             for code in eval_langs:
                 cls.check_language_code(code)
         elif isinstance(eval_langs, dict):
-            pass  # for now just skip it
-            # TODO: Implement this:
-            # for langs in eval_langs.values():  # noqa
-            #     for code in langs:  # noqa
-            #         cls.check_language_code(code)  # noqa
+            for langs in eval_langs.values():
+                for code in langs:
+                    cls.check_language_code(code)
         return eval_langs
 
     @staticmethod
@@ -213,3 +211,33 @@ class TaskMetadata(BaseModel):
             raise ValueError(f"Invalid language code: {lang}")
         if script not in ISOCODE15924_TO_SCRIPT:
             raise ValueError(f"Invalid script code: {script}")
+
+    @property
+    def languages(self) -> set[str]:
+        """
+        Return the languages of the dataset as iso639-3 codes.
+        """
+
+        def get_lang(lang: str) -> str:
+            return lang.split("-")[0]
+
+        if isinstance(self.eval_langs, dict):
+            return set(
+                get_lang(lang) for langs in self.eval_langs.values() for lang in langs
+            )
+        return set(get_lang(lang) for lang in self.eval_langs)
+
+    @property
+    def scripts(self) -> set[str]:
+        """
+        Return the scripts of the dataset as iso15924 codes.
+        """
+
+        def get_script(lang: str) -> str:
+            return lang.split("-")[1]
+
+        if isinstance(self.eval_langs, dict):
+            return set(
+                get_script(lang) for langs in self.eval_langs.values() for lang in langs
+            )
+        return set(get_script(lang) for lang in self.eval_langs)

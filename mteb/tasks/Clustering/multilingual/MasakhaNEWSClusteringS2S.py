@@ -26,6 +26,7 @@ _LANGUAGES = {
     "yor": ["yor-Latn"],
 }
 
+
 class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
     metadata = TaskMetadata(
         name="MasakhaNEWSClusteringS2S",

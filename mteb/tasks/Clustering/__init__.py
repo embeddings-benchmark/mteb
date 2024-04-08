@@ -17,8 +17,6 @@ from .eng.StackExchangeClustering import *
 from .eng.StackExchangeClusteringP2P import *
 from .eng.TwentyNewsgroupsClustering import *
 from .eng.WikiCitiesClustering import *
-from .spa.FloresClusteringS2S import *
-from .spa.SpanishNewsClusteringP2P import *
 from .fra.AlloProfClusteringP2P import *
 from .fra.AlloProfClusteringS2S import *
 from .fra.HALClusteringS2S import *
@@ -29,5 +27,7 @@ from .multilingual.MasakhaNEWSClusteringS2S import *
 from .nob.snl_clustering import *
 from .nob.vg_clustering import *
 from .pol.PolishClustering import *
+from .spa.FloresClusteringS2S import *
+from .spa.SpanishNewsClusteringP2P import *
 from .swe.swedn_clustering import *
 from .zho.CMTEBClustering import *

@@ -9,10 +9,10 @@ from .eng.STS14STS import *
 from .eng.STS15STS import *
 from .eng.STS16STS import *
 from .eng.STSBenchmarkSTS import *
-from .spa.STSES import *
 from .fra.SickFrSTS import *
 from .multilingual.STS17CrosslingualSTS import *
 from .multilingual.STS22CrosslingualSTS import *
 from .multilingual.STSBenchmarkMultilingualSTS import *
 from .pol.PolishSTS import *
+from .spa.STSES import *
 from .zho.CMTEBSTS import *
