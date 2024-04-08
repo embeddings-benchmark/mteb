@@ -12,7 +12,7 @@ from sentence_transformers import SentenceTransformer
 from mteb import MTEB
 from mteb.abstasks import AbsTask
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.tasks.BitextMining.da.BornholmskBitextMining import BornholmBitextMining
+from mteb.tasks.BitextMining.dan.BornholmskBitextMining import BornholmBitextMining
 
 logging.basicConfig(level=logging.INFO)
 

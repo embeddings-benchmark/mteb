@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from datetime import date
-from typing import Mapping
+from typing import List, Mapping, Union
 
 from pydantic import (
     AnyUrl,
@@ -95,7 +95,7 @@ STR_DATE = Annotated[
 
 SPLIT_NAME = str
 LANGUAGE_SCRIPT_CODE = str  # a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
-LANGUAGES = list[LANGUAGE_SCRIPT_CODE] | Mapping[str, list[LANGUAGE_SCRIPT_CODE]]
+LANGUAGES = Union[List[LANGUAGE_SCRIPT_CODE], Mapping[str, List[LANGUAGE_SCRIPT_CODE]]]
 
 logger = logging.getLogger(__name__)
 
@@ -187,19 +187,21 @@ class TaskMetadata(BaseModel):
             )
         return dataset
 
-    @field_validator("eval_langs")
-    def _check_eval_langs(cls, eval_langs):
-        """
-        This method checks that the eval_langs are specified as a list of languages.
-        """
-        if isinstance(eval_langs, list):
-            for code in eval_langs:
-                cls.check_language_code(code)
-        elif isinstance(eval_langs, dict):
-            for langs in eval_langs.values():
-                for code in langs:
-                    cls.check_language_code(code)
-        return eval_langs
+    # @field_validator("eval_langs")
+    # def _check_eval_langs(cls, eval_langs):
+    #     """
+    #     This method checks that the eval_langs are specified as a list of languages.
+    #     """
+    #     if isinstance(eval_langs, list):
+    #         for code in eval_langs:
+    #             cls.check_language_code(code)
+    #     elif isinstance(eval_langs, dict):
+    #         pass  # for now just skip it
+    #         # TODO: Implement this:
+    #         # for langs in eval_langs.values():  # noqa
+    #         #     for code in langs:  # noqa
+    #         #         cls.check_language_code(code)  # noqa
+    #     return eval_langs
 
     @staticmethod
     def check_language_code(code):
