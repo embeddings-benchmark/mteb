@@ -12,7 +12,6 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
         dataset={
             "path": "paws-x",
             "revision": "8a04d940a42cd40658986fdd8e3da561533a3646",
-            "trust_remote_code": True,
         },
         description="",
         reference="https://arxiv.org/abs/1908.11828",
@@ -36,12 +35,17 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
     )
 
     def dataset_transform(self):
+        _dataset = {}
         for lang in self.langs:
-            hf_dataset = self.dataset[lang]
+            _dataset[lang] = {}
+            for split in self.metadata.eval_splits:
+                hf_dataset = self.dataset[lang][split]
 
-            # Rename columns
-            hf_dataset = hf_dataset.rename_columns("sentence1", "sent1")
-            hf_dataset = hf_dataset.rename_columns("sentence2", "sent2")
-            hf_dataset = hf_dataset.rename_columns("label", "labels")
-
-            self.dataset[lang] = hf_dataset
+                _dataset[lang][split] = [
+                    {
+                        "sent1": hf_dataset["sentence1"],
+                        "sent2": hf_dataset["sentence2"],
+                        "labels": hf_dataset["label"],
+                    }
+                ]
+        self.dataset = _dataset
