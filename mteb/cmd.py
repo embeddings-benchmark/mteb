@@ -11,7 +11,6 @@ example call:
 from __future__ import annotations
 
 import argparse
-import datetime
 import json
 import logging
 from pathlib import Path
@@ -35,7 +34,6 @@ def _save_model_metadata(
 
     model_meta = {
         "model_name": model_name,
-        "time_of_run": str(datetime.datetime.today()),
         "versions": model._model_config.get("__version__", None),
     }
 

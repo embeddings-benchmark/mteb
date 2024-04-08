@@ -30,4 +30,5 @@ class MultilingualTask(AbsTask):
                 name=lang,
                 **self.metadata_dict.get("dataset", None),
             )
+        self.dataset_transform()
         self.data_loaded = True
