@@ -9,6 +9,7 @@ from .en.AmazonPolarityClassification import *
 from .en.Banking77Classification import *
 from .en.EmotionClassification import *
 from .en.ImdbClassification import *
+from .en.NewsClassification import *
 from .en.ToxicConversationsClassification import *
 from .en.TweetSentimentExtractionClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
