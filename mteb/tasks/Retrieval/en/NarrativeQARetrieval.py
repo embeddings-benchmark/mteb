@@ -45,8 +45,7 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
             return
 
         data = datasets.load_dataset(
-            split=self._EVAL_SPLIT
-            # BUGFIX: the revision is now used
+            split=self._EVAL_SPLIT,
             ** self.metadata_dict["dataset"],
         )
         self.queries = {
