@@ -17,7 +17,7 @@ class SyntecReranking(AbsTaskReranking):
         type="Reranking",
         category="s2p",
         eval_splits=["test"],
-        eval_langs=["fr"],
+        eval_langs=["fra-Latn"],
         main_score="map",
         date=None,
         form=None,

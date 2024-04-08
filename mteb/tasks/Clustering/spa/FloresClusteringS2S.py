@@ -17,7 +17,7 @@ class FloresClusteringS2S(AbsTaskClustering):
         type="Clustering",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["es"],
+        eval_langs=["spa-Latn"],
         main_score="v_measure",
         date=None,
         form=None,

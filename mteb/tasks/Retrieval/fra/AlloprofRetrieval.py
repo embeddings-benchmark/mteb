@@ -19,7 +19,7 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],
-        eval_langs=["fr"],
+        eval_langs=["fra-Latn"],
         main_score="ndcg_at_10",
         date=None,
         form=None,

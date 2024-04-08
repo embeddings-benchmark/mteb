@@ -18,7 +18,7 @@ class GermanSTSBenchmarkSTS(AbsTaskSTS):
         type="STS",
         category="s2s",
         eval_splits=["validation", "test"],
-        eval_langs=["de"],
+        eval_langs=["deu-Latn"],
         main_score="cosine_spearman",
         date=None,
         form=None,

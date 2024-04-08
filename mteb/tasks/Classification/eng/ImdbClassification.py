@@ -17,7 +17,7 @@ class ImdbClassification(AbsTaskClassification):
         type="Classification",
         category="p2p",
         eval_splits=["test"],
-        eval_langs=["en"],
+        eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=None,
         form=None,

@@ -17,7 +17,7 @@ class TRECCOVIDPL(AbsTaskRetrieval):
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],
-        eval_langs=["pl"],
+        eval_langs=["pol-Latn"],
         main_score="ndcg_at_10",
         date=None,
         form=None,

@@ -22,10 +22,10 @@ logger = logging.getLogger(__name__)
 class MTEB:
     def __init__(
         self,
-        task_types: List[str] = None,
-        task_categories: List[str] = None,
-        task_langs: List[str] = None,
-        tasks: List[Union[str, AbsTask]] = None,
+        task_types: List[str] | None = None,
+        task_categories: List[str] | None = None,
+        task_langs: List[str] | None = None,
+        tasks: List[Union[str, AbsTask]] | None = None,
         version=None,
         err_logs_path="error_logs.txt",
         **kwargs,
@@ -41,20 +41,14 @@ class MTEB:
         of tasks to be evaluated with the `tasks` argument. If
         `tasks` is specified, we filter tasks based on `task_langs`
 
-        Parameters
-        ----------
-        task_types: list of str / None
-            List of task types (Clustering, Retrieval..) to be evaluated. If None, all tasks will be evaluated
-        task_categories: list of str / None
-            List of task categories (s2s, p2p..) to be evaluated. If None, all tasks will be evaluated
-        task_langs: list of str / None
-            List of languages to be evaluated. if None, all languages will be evaluated. ["en", "de"] will evaluate on "en", "de", "en-de" and "de-en"
-        tasks: list of str / None
-            List of tasks to be evaluated. If specified, we filter tasks based on `task_langs` only
-        version: int / None
-            Version of the benchmark to use. If None, latest is used
-        err_logs_path: str / None
-            Path to save error logs
+        Args:
+            task_types: List of task types (Clustering, Retrieval..) to be evaluated. If None, all tasks will be evaluated
+            task_categories: List of task categories (s2s, p2p..) to be evaluated. If None, all tasks will be evaluated
+        task_langs: List of languages to be evaluated. if None, all languages will be evaluated. ["eng-Latn", "deu_Latn"] will evaluate on all tasks
+            with these languages.
+        tasks: List of tasks to be evaluated. If specified, we filter tasks based on `task_langs` only
+        version: Version of the benchmark to use. If None, latest is used
+        err_logs_path: Path to save error logs
         """
 
         if tasks is not None:

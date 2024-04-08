@@ -16,7 +16,7 @@ class DdiscoCohesionClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["da"],
+        eval_langs=["dan-Latn"],
         main_score="accuracy",
         date=("2021-01-01", "2022-06-25"),
         form=["written"],

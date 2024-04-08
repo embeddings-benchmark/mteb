@@ -16,7 +16,7 @@ class SweRecClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["sv"],
+        eval_langs=["swe-Latn"],
         main_score="accuracy",
         date=None,
         form=None,

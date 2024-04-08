@@ -16,7 +16,7 @@ class SummEvalFrSummarization(AbsTaskSummarization):
         type="Summarization",
         category="p2p",
         eval_splits=["test"],
-        eval_langs=["fr"],
+        eval_langs=["fra-Latn"],
         main_score="cosine_spearman",
         date=None,
         form=["written"],

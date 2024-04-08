@@ -4,19 +4,19 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskSTS, CrosslingualTask
 
-_LANGUAGES = [
-    "ko-ko",
-    "ar-ar",
-    "en-ar",
-    "en-de",
-    "en-en",
-    "en-tr",
-    "es-en",
-    "es-es",
-    "fr-en",
-    "it-en",
-    "nl-en",
-]
+_LANGUAGES = {
+    "ko-ko": ["kor-Hang"],
+    "ar-ar": ["ara-Arab"],
+    "en-ar": ["eng-Latn", "ara-Arab"],
+    "en-de": ["eng-Latn", "deu-Latn"],
+    "en-en": ["eng-Latn"],
+    "en-tr": ["eng-Latn", "tur-Latn"],
+    "es-en": ["spa-Latn", "eng-Latn"],
+    "es-es": ["spa-Latn"],
+    "fr-en": ["fra-Latn", "eng-Latn"],
+    "it-en": ["ita-Latn", "eng-Latn"],
+    "nl-en": ["nld-Latn", "eng-Latn"],
+}
 
 
 class STS17Crosslingual(AbsTaskSTS, CrosslingualTask):

@@ -15,7 +15,7 @@ class TV2Nordretrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="p2p",
         eval_splits=["test"],
-        eval_langs=["da"],
+        eval_langs=["dan-Latn"],
         main_score="ndcg_at_10",
         date=("2020-01-01", "2024-12-31"),  # best guess
         form=["written"],

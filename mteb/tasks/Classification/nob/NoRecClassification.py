@@ -17,7 +17,7 @@ class NoRecClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["nb"],
+        eval_langs=["nob-Latn"],
         main_score="accuracy",
         date=None,
         form=None,

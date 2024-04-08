@@ -18,7 +18,7 @@ class EightTagsClustering(AbsTaskClustering):
         type="Clustering",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["pl"],
+        eval_langs=["pol-Latn"],
         main_score="v_measure",
         date=None,
         form=None,

@@ -31,7 +31,7 @@ class SciDocsReranking(AbsTaskReranking):
         type="Reranking",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["en"],
+        eval_langs=["eng-Latn"],
         main_score="map",
         dataset={
             "path": "mteb/scidocs-reranking",
@@ -74,7 +74,7 @@ class VGClustering(AbsTaskClustering):
         type="Clustering",
         category="p2p",
         eval_splits=["test"],
-        eval_langs=["nb"],
+        eval_langs=["nob-Latn"],
         main_score="v_measure",
         dataset={
             "path": "navjordj/VG_summarization",

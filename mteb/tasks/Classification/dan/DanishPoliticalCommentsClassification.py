@@ -16,7 +16,7 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         eval_splits=["train"],
-        eval_langs=["da"],
+        eval_langs=["dan-Latn"],
         main_score="accuracy",
         date=None,
         form=None,

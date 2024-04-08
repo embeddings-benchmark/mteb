@@ -14,7 +14,7 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
         type="BitextMining",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["nb", "nn"],
+        eval_langs=["nno-Latn", "nob-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2020-12-31"),  # approximate guess
         form=["spoken"],

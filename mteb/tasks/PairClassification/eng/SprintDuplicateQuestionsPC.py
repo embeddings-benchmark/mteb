@@ -17,7 +17,7 @@ class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
         type="PairClassification",
         category="s2s",
         eval_splits=["validation", "test"],
-        eval_langs=["en"],
+        eval_langs=["eng-Latn"],
         main_score="ap",
         date=None,
         form=None,

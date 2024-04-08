@@ -17,7 +17,7 @@ class AlloprofReranking(AbsTaskReranking):
         type="Reranking",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["fr"],
+        eval_langs=["fra-Latn"],
         main_score="map",
         date=None,
         form=None,

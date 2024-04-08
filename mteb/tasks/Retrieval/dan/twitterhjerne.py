@@ -15,7 +15,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="p2p",
         eval_splits=["train"],
-        eval_langs=["da"],
+        eval_langs=["dan-Latn"],
         main_score="ndcg_at_10",
         date=("2006-01-01", "2024-12-31"),  # best guess
         form=["written"],

@@ -17,7 +17,7 @@ class SummEvalSummarization(AbsTaskSummarization):
         type="Summarization",
         category="p2p",
         eval_splits=["test"],
-        eval_langs=["en"],
+        eval_langs=["eng-Latn"],
         main_score="cosine_spearman",
         date=None,
         form=None,

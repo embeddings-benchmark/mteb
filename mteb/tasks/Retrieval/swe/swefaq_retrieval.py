@@ -16,7 +16,7 @@ class SweFaqRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["sv"],
+        eval_langs=["swe-Latn"],
         main_score="ndcg_at_10",
         date=("2000-01-01", "2024-12-31"),  # best guess
         form=["written"],

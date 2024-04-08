@@ -17,7 +17,7 @@ class StackExchangeClustering(AbsTaskClustering):
         type="Clustering",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["en"],
+        eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=None,
         form=None,

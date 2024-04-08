@@ -15,7 +15,7 @@ class NorQuadRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="p2p",
         eval_splits=["test"],
-        eval_langs=["nb"],
+        eval_langs=["nob-Latn"],
         main_score="ndcg_at_10",
         date=("2022-01-01", "2023-12-31"),
         form=["written"],

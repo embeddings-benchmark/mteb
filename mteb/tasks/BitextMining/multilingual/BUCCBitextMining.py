@@ -4,7 +4,12 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskBitextMining, CrosslingualTask
 
-_LANGUAGES = ["de-en", "fr-en", "ru-en", "zh-en"]
+_LANGUAGES = {
+    "de-en": ["deu-Latn", "eng-Latn"],
+    "fr-en": ["fra-Latn", "eng-Latn"],
+    "ru-en": ["rus-Cyrl", "eng-Latn"],
+    "zh-en": ["cmn-Hans", "eng-Latn"],
+}
 
 
 class BUCCBitextMining(AbsTaskBitextMining, CrosslingualTask):

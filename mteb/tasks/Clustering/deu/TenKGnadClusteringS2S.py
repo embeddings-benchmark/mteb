@@ -17,7 +17,7 @@ class TenKGnadClusteringS2S(AbsTaskClustering):
         type="Clustering",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["de"],
+        eval_langs=["deu-Latn"],
         main_score="v_measure",
         date=None,
         form=None,

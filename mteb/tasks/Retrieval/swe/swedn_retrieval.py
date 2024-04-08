@@ -16,7 +16,7 @@ class SwednRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="p2p",
         eval_splits=["test"],
-        eval_langs=["sv"],
+        eval_langs=["swe-Latn"],
         main_score="ndcg_at_10",
         date=("2000-01-01", "2020-12-31"),
         form=["written"],

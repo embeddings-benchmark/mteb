@@ -34,7 +34,7 @@ class SwednClustering(AbsTaskClustering):
         type="Clustering",
         category="p2p",
         eval_splits=["all"],
-        eval_langs=["sv"],
+        eval_langs=["swe-Latn"],
         main_score="v_measure",
         date=("2000-01-01", "2020-12-31"),  # best guess
         form=["written"],

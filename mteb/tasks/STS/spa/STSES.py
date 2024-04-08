@@ -20,7 +20,7 @@ class STSES(AbsTaskSTS):
         type="STS",
         category="s2s",
         eval_splits=[_EVAL_SPLIT],
-        eval_langs=["es"],
+        eval_langs=["spa-Latn"],
         main_score="cosine_spearman",
         date=None,
         form=None,

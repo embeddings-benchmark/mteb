@@ -39,6 +39,7 @@ model = SentenceTransformer(model_name)
 for task in TASK_LIST:
     logger.info(f"Running task: {task}")
     evaluation = MTEB(
-        tasks=[task], task_langs=["ko"]
-    )  # Remove "ko" for running all languages
+        tasks=[task],
+        task_langs=["kor-Hang"],
+    )
     evaluation.run(model, output_folder=f"results/{model_name}")

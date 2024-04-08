@@ -17,7 +17,7 @@ class TwitterURLCorpusPC(AbsTaskPairClassification):
         category="s2s",
         type="PairClassification",
         eval_splits=["test"],
-        eval_langs=["en"],
+        eval_langs=["eng-Latn"],
         main_score="ap",
         date=None,
         form=None,

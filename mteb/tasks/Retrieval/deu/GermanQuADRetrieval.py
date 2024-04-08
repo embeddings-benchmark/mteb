@@ -39,7 +39,7 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],
-        eval_langs=["de"],
+        eval_langs=["deu-Latn"],
         main_score="mrr_at_5",
         date=None,
         form=None,

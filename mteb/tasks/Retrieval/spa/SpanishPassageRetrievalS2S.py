@@ -19,7 +19,7 @@ class SpanishPassageRetrievalS2S(AbsTaskRetrieval):
         type="Retrieval",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["es"],
+        eval_langs=["spa-Latn"],
         main_score="ndcg_at_10",
         date=None,
         form=None,

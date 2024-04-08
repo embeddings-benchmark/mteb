@@ -17,7 +17,7 @@ class Banking77Classification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["en"],
+        eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=None,
         form=None,

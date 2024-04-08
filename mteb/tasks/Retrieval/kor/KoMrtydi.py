@@ -17,7 +17,7 @@ class KoMrtydi(AbsTaskRetrieval):
         type="Retrieval",
         category="s2p",
         eval_splits=["dev"],
-        eval_langs=["ko"],
+        eval_langs=["kor-Hang"],
         main_score="ndcg_at_10",
         date=None,
         form=None,

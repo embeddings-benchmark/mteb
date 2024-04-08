@@ -17,7 +17,7 @@ class WikiCitiesClustering(AbsTaskClustering):
         type="Clustering",
         category="p2p",
         eval_splits=["test"],
-        eval_langs=["en"],
+        eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=None,
         form=None,

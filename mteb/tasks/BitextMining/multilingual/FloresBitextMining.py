@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -212,24 +214,25 @@ _LANGUAGES = [
     "som_Latn",
     "tum_Latn",
 ]
-_LANGUAGES_PAIRS = []
-
 _SPLIT = ["dev", "devtest"]
 
 
-def extend_lang_pairs():
+def extend_lang_pairs() -> dict[str, list[str]]:
     # add all possible language pairs
+    hf_lang_subset2isolang = {}
     for x in _LANGUAGES:
         if "-" not in x:
             for y in _LANGUAGES:
-                if "-" not in y:
-                    if x != y:
-                        pair = f"{x}-{y}"
-                        if pair not in _LANGUAGES:
-                            _LANGUAGES_PAIRS.append(pair)
+                if x != y:
+                    pair = f"{x}-{y}"
+                    hf_lang_subset2isolang[pair] = [
+                        x.replace("_", "-"),
+                        y.replace("_", "-"),
+                    ]
+    return hf_lang_subset2isolang
 
 
-extend_lang_pairs()
+_LANGUAGES_MAPPING = extend_lang_pairs()
 
 
 class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
@@ -244,7 +247,7 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
         type="BitextMining",
         category="s2s",
         eval_splits=_SPLIT,
-        eval_langs=_LANGUAGES_PAIRS,
+        eval_langs=_LANGUAGES_MAPPING,
         main_score="f1",
         date=None,
         form=None,
@@ -260,7 +263,7 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
         avg_character_length={},
     )
 
-    def load_data(self, **kwargs):
+    def load_data(self, **kwargs: Any) -> None:
         """
         Load dataset from HuggingFace hub
         """
@@ -275,7 +278,7 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
         self.dataset_transform()
         self.data_loaded = True
 
-    def dataset_transform(self):
+    def dataset_transform(self) -> None:
         # Convert to standard format
         for lang in self.langs:
             lang1 = lang.split("-")[0]

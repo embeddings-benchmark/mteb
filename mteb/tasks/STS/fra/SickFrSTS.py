@@ -17,7 +17,7 @@ class SickFrSTS(AbsTaskSTS):
         type="STS",
         category="s2s",
         eval_splits=["validation", "test"],
-        eval_langs=["fr"],
+        eval_langs=["fra-Latn"],
         main_score="cosine_spearman",
         date=None,
         form=None,

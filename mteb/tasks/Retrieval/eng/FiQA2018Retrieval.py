@@ -17,7 +17,7 @@ class FiQA2018(AbsTaskRetrieval):
         type="Retrieval",
         category="s2p",
         eval_splits=["train", "dev", "test"],
-        eval_langs=["en"],
+        eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
         form=None,

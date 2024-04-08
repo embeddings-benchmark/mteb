@@ -16,7 +16,8 @@ class NorwegianParliamentClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         eval_splits=["test", "validation"],
-        eval_langs=["nb"],  # assumed to be bokmål
+        eval_langs=["nob-Latn"],
+        # assumed to be bokmål
         main_score="accuracy",
         date=None,
         form=None,
