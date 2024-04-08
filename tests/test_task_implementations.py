@@ -88,6 +88,7 @@ def check_task_hf_specification(
 @pytest.mark.parametrize(
     ("task"),
     MTEB().tasks_cls,
+    ids=lambda task: task.metadata.name,
 )
 def test_dataset_conforms_to_schema(task: AbsTask):
     if any(
