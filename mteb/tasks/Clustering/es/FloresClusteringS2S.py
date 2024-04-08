@@ -11,8 +11,8 @@ class FloresClusteringS2S(AbsTaskClustering):
         description="Clustering of sentences from various web articles, 32 topics in total.",
         reference="https://huggingface.co/datasets/facebook/flores",
         dataset={
-            "path": "facebook/flores",
-            "revision": "2db78afdeaccaedc3b33a95442a4e55766887e17",
+            "path": "jinaai/flores_clustering",
+            "revision": "97faaf98d7ef21869d176115e669e2a4286513bf",
         },
         type="Clustering",
         category="s2s",

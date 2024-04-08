@@ -17,7 +17,7 @@ class MLSUMClusteringP2P(AbsTaskClustering):
             "path": "mlsum",
             "revision": "b5d54f8f3b61ae17845046286940f03c6bc79bc7",
             "name": "fr",
-            "split": "test",
+            "trust_remote_code": True,
         },
         type="Clustering",
         category="p2p",

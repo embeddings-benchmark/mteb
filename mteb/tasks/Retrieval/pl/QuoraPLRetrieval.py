@@ -16,7 +16,7 @@ class QuoraPLRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2s",
-        eval_splits=["validation", "test"],  # validation for new DataLoader
+        eval_splits=["validation", "test"],
         eval_langs=["pl"],
         main_score="ndcg_at_10",
         date=None,
