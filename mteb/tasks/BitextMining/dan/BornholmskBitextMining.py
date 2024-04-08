@@ -10,6 +10,7 @@ class BornholmBitextMining(AbsTaskBitextMining):
         dataset={
             "path": "strombergnlp/bornholmsk_parallel",
             "revision": "3bc5cfb4ec514264fe2db5615fac9016f7251552",
+            "trust_remote_code": True,
         },
         description="Danish Bornholmsk Parallel Corpus. Bornholmsk is a Danish dialect spoken on the island of Bornholm, Denmark. Historically it is a part of east Danish which was also spoken in Scania and Halland, Sweden.",
         reference="https://aclanthology.org/W19-6138/",
