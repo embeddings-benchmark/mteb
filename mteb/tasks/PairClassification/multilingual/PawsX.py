@@ -14,6 +14,7 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
         dataset={
             "path": "paws-x",
             "revision": "8a04d940a42cd40658986fdd8e3da561533a3646",
+            "trust_remote_code": True,
         },
         description="",
         reference="https://arxiv.org/abs/1908.11828",
@@ -40,30 +41,32 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
         if self.data_loaded:
             return
 
+        self.dataset_transform()
+        self.data_loaded = True
+
+    def dataset_transform(self):
         self.dataset = dict()
         for lang in self.langs:
-            hf_dataset = datasets.load_dataset(
-                name=lang,
-                **self.metadata_dict["dataset"],
-            )
+            self.dataset[lang] = dict()
+            for split in self.metadata.eval_splits:
+                hf_dataset = datasets.load_dataset(
+                    name=lang,
+                    **self.metadata.dataset,
+                )
 
-            sent1 = []
-            sent2 = []
-            labels = []
+                sent1 = []
+                sent2 = []
+                labels = []
 
-            for line in hf_dataset["test"]:
-                sent1.append(line["sentence1"])
-                sent2.append(line["sentence2"])
-                labels.append(line["label"])
+                for line in hf_dataset["test"]:
+                    sent1.append(line["sentence1"])
+                    sent2.append(line["sentence2"])
+                    labels.append(line["label"])
 
-            self.dataset[lang] = {
-                "test": [
+                self.dataset[lang][split] = [
                     {
                         "sent1": sent1,
                         "sent2": sent2,
                         "labels": labels,
                     }
                 ]
-            }
-
-        self.data_loaded = True
