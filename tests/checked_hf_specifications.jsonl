@@ -181,3 +181,12 @@
 {"path":"C-MTEB/DuRetrieval","revision":"a1a333e290fe30b10f3f56498e3a0d911a693ced","task_name":"DuRetrieval"}
 {"path":"C-MTEB/T2Retrieval","revision":"8731a845f1bf500a4f111cf1070785c793d10e64","task_name":"T2Retrieval"}
 {"path":"clarin-knext/trec-covid-pl","revision":"81bcb408f33366c2a20ac54adafad1ae7e877fdd","task_name":"TRECCOVID-PL"}
+{"path":"clarin-knext/scifact-pl","revision":"47932a35f045ef8ed01ba82bf9ff67f6e109207e","task_name":"SciFact-PL"}
+{"path":"AI-Sweden/SuperLim","revision":"7ebf0b4caa7b2ae39698a889de782c09e6f5ee56","name":"swefaq","task_name":"SweFaqRetrieval"}
+{"path":"clarin-knext/scidocs-pl","revision":"45452b03f05560207ef19149545f168e596c9337","task_name":"SCIDOCS-PL"}
+{"path":"sbx/superlim-2","revision":"ef1661775d746e0844b299164773db733bdc0bf6","name":"swedn","task_name":"SwednRetrieval"}
+{"path":"taeminlee/Ko-mrtydi","revision":"71a2e011a42823051a2b4eb303a3366bdbe048d3","task_name":"Ko-mrtydi"}
+{"path":"mteb/msmarco-v2","revision":"b1663124850d305ab7c470bb0548acf8e2e7ea43","task_name":"MSMARCOv2"}
+{"path":"jinaai/xmarket_ml","revision":"dfe57acff5b62c23732a7b7d3e3fb84ff501708b","task_name":"XMarket"}
+{"path":"clarin-knext/dbpedia-pl","revision":"76afe41d9af165cc40999fcaa92312b8b012064a","task_name":"DBPedia-PL"}
+
