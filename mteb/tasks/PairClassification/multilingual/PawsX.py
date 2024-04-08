@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import MultilingualTask
@@ -37,36 +35,13 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
         avg_character_length=None,
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.dataset_transform()
-        self.data_loaded = True
-
     def dataset_transform(self):
-        self.dataset = dict()
         for lang in self.langs:
-            self.dataset[lang] = dict()
-            for split in self.metadata.eval_splits:
-                hf_dataset = datasets.load_dataset(
-                    name=lang,
-                    **self.metadata.dataset,
-                )
+            hf_dataset = self.dataset[lang]
 
-                sent1 = []
-                sent2 = []
-                labels = []
+            # Rename columns
+            hf_dataset = hf_dataset.rename_columns("sentence1", "sent1")
+            hf_dataset = hf_dataset.rename_columns("sentence2", "sent2")
+            hf_dataset = hf_dataset.rename_columns("label", "labels")
 
-                for line in hf_dataset["test"]:
-                    sent1.append(line["sentence1"])
-                    sent2.append(line["sentence2"])
-                    labels.append(line["label"])
-
-                self.dataset[lang][split] = [
-                    {
-                        "sent1": sent1,
-                        "sent2": sent2,
-                        "labels": labels,
-                    }
-                ]
+            self.dataset[lang] = hf_dataset
