@@ -1783,7 +1783,7 @@ class OpenSubtitlesBitextMining(AbsTaskBitextMining, CrosslingualTask):
         main_score="f1",
         date=None,
         form=["spoken"],
-        domains=["Spoken"],
+        domains=["Spoken", "Fiction", "Non-fiction"]
         task_subtypes=None,
         license=None,
         socioeconomic_status=None,
