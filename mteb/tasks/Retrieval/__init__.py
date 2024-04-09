@@ -32,6 +32,7 @@ from .en.HotpotQARetrieval import *
 from .en.LegalBenchConsumerContractsQARetrieval import *
 from .en.LegalBenchCorporateLobbyingRetrieval import *
 from .en.LegalSummarizationRetrieval import *
+from .en.MedicalQARetrieval import *
 from .en.MSMARCORetrieval import *
 from .en.MSMARCOv2Retrieval import *
 from .en.NarrativeQARetrieval import *
