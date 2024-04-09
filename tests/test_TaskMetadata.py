@@ -118,7 +118,12 @@ def test_given_none_revision_path_then_it_logs_warning(caplog):
         )
 
         assert my_task.dataset["revision"] is None
+
+        warning_logs = [record for record in caplog.records if record.levelname == "WARNING"]
+        assert len(warning_logs) == 1
         assert (
-            len([record for record in caplog.records if record.levelname == "WARNING"])
-            == 1
+            warning_logs[0].message ==
+            "Revision missing for the dataset test/dataset. "
+            "It is encourage to specify a dataset revision for reproducability."
         )
+
