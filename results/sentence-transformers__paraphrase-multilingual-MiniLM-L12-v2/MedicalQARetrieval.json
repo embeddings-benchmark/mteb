@@ -1,6 +1,6 @@
 {
-  "dataset_revision": "7b14a4ab92cabc4d2506d1dd138507f904f0928e",
-  "mteb_dataset_name": "MedicalQA",
+  "dataset_revision": "ae763399273d8b20506b80cf6f6f9a31a6a2b238",
+  "mteb_dataset_name": "MedicalQARetrieval",
   "mteb_version": "1.5.4",
   "test": {
     "evaluation_time": 11.98,
