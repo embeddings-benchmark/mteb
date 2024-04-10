@@ -43,6 +43,7 @@ class GerDaLIR(AbsTaskRetrieval):
         query_rows = datasets.load_dataset(
             name="queries",
             split=self._EVAL_SPLIT,
+            **self.metadata_dict["dataset"],
         )
         corpus_rows = datasets.load_dataset(
             name="corpus",

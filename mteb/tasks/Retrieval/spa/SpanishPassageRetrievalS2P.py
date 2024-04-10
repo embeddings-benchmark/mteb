@@ -39,11 +39,11 @@ class SpanishPassageRetrievalS2P(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        # BUGFIX: the revision is now used
         query_rows = datasets.load_dataset(
             name="queries",
             split="test",
             trust_remote_code=True,
+            **self.metadata_dict["dataset"],
         )
         corpus_rows = datasets.load_dataset(
             name="corpus.documents",

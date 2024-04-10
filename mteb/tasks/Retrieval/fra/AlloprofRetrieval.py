@@ -39,7 +39,6 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
         # fetch both subsets of the dataset
-        # BUGFIX: the revision is now used
         corpus_raw = datasets.load_dataset(
             name="documents",
             **self.metadata_dict["dataset"],

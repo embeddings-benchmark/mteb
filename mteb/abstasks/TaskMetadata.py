@@ -183,8 +183,9 @@ class TaskMetadata(BaseModel):
                 "You must explicitly specify a revision for the dataset (either a SHA or None)."
             )
         if dataset["revision"] is None:
-            logging.warning(
-                "It is encourage to specify a dataset revision for reproducability"
+            logger.warning(
+                "Revision missing for the dataset %s. It is encourage to specify a dataset revision for reproducability.",
+                dataset["path"],
             )
         return dataset
 

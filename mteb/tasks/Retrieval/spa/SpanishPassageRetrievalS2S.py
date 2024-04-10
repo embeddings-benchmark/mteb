@@ -15,6 +15,7 @@ class SpanishPassageRetrievalS2S(AbsTaskRetrieval):
         dataset={
             "path": "jinaai/spanish_passage_retrieval",
             "revision": "9cddf2ce5209ade52c2115ccfa00eb22c6d3a837",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",
@@ -42,19 +43,16 @@ class SpanishPassageRetrievalS2S(AbsTaskRetrieval):
         query_rows = datasets.load_dataset(
             name="queries",
             split="test",
-            trust_remote_code=True,
             **self.metadata_dict["dataset"],
         )
         corpus_rows = datasets.load_dataset(
             name="corpus.sentences",
             split="test",
-            trust_remote_code=True,
             **self.metadata_dict["dataset"],
         )
         qrels_rows = datasets.load_dataset(
             name="qrels.s2s",
             split="test",
-            trust_remote_code=True,
             **self.metadata_dict["dataset"],
         )
 
