@@ -8,7 +8,8 @@ from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 _EVAL_SPLIT = "test"
-_LANGS = ["de", "es"]
+
+_LANGS = {"de": ["deu-Latn"], "es": ["spa-Latn"]}
 
 
 def _load_miracl_data(

@@ -8,7 +8,12 @@ from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 _EVAL_SPLIT = "test"
-_EVAL_LANGS = ["es", "de", "en"]
+
+_EVAL_LANGS = {
+    "de": ["deu-Latn"],
+    "en": ["eng-Latn"],
+    "es": ["spa-Latn"],
+}
 
 
 def _load_xmarket_data(

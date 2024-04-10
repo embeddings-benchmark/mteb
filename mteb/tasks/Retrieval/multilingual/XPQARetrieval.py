@@ -8,7 +8,21 @@ from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 _EVAL_SPLIT = "test"
-_LANGS = ["ar", "de", "es", "fr", "hi", "it", "ja", "ko", "pl", "pt", "ta", "zh"]
+
+_LANGS = {
+    "ar": ["ara-Arab"],
+    "de": ["deu-Latn"],
+    "es": ["spa-Latn"],
+    "fr": ["fra-Latn"],
+    "hi": ["hin-Deva"],
+    "it": ["ita-Latn"],
+    "ja": ["jpn-Hira"],
+    "ko": ["kor-Hang"],
+    "pl": ["pol-Latn"],
+    "pt": ["por-Latn"],
+    "ta": ["tam-Taml"],
+    "zh": ["cmn-Hans"],
+}
 
 
 def _load_xpqa_data(

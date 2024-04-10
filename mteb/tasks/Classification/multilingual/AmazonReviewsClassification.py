@@ -4,8 +4,6 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskClassification, MultilingualTask
 
-_LANGUAGES = ["en", "de", "es", "fr", "ja", "zh"]
-
 
 class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
     metadata = TaskMetadata(
@@ -19,7 +17,14 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
         category="s2s",
         type="Classification",
         eval_splits=["validation", "test"],
-        eval_langs=_LANGUAGES,
+        eval_langs={
+            "en": ["eng-Latn"],
+            "de": ["deu-Latn"],
+            "es": ["spa-Latn"],
+            "fr": ["fra-Latn"],
+            "ja": ["jpn-Jpan"],
+            "zh": ["cmn-Hans"],
+        },
         main_score="accuracy",
         date=None,
         form=None,

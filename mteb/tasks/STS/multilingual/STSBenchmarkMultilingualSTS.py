@@ -6,7 +6,19 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskSTS, MultilingualTask
 
-_LANGUAGES = ["en", "de", "es", "fr", "it", "nl", "pl", "pt", "ru", "zh"]
+_LANGUAGES = {
+    "en": ["eng-Latn"],
+    "de": ["deu-Latn"],
+    "es": ["spa-Latn"],
+    "fr": ["fra-Latn"],
+    "it": ["ita-Latn"],
+    "nl": ["nld-Latn"],
+    "pl": ["pol-Latn"],
+    "pt": ["por-Latn"],
+    "ru": ["rus-Cyrl"],
+    "zh": ["cmn-Hans"],
+}
+
 _SPLITS = ["dev", "test"]
 
 

@@ -17,7 +17,7 @@ def test_given_dataset_config_then_it_is_valid():
         type="Classification",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["en"],
+        eval_langs=["eng-Latn"],
         main_score="map",
         date=None,
         form=None,
@@ -45,7 +45,7 @@ def test_given_missing_dataset_path_then_it_throws():
             type="Classification",
             category="s2s",
             eval_splits=["test"],
-            eval_langs=["en"],
+            eval_langs=["eng-Latn"],
             main_score="map",
             date=None,
             form=None,
@@ -74,7 +74,7 @@ def test_given_missing_revision_path_then_it_throws():
             type="Classification",
             category="s2s",
             eval_splits=["test"],
-            eval_langs=["en"],
+            eval_langs=["eng-Latn"],
             main_score="map",
             date=None,
             form=None,
@@ -101,7 +101,7 @@ def test_given_none_revision_path_then_it_logs_warning(caplog):
             type="Classification",
             category="s2s",
             eval_splits=["test"],
-            eval_langs=["en"],
+            eval_langs=["eng-Latn"],
             main_score="map",
             date=None,
             form=None,
@@ -119,11 +119,11 @@ def test_given_none_revision_path_then_it_logs_warning(caplog):
 
         assert my_task.dataset["revision"] is None
 
-        warning_logs = [record for record in caplog.records if record.levelname == "WARNING"]
+        warning_logs = [
+            record for record in caplog.records if record.levelname == "WARNING"
+        ]
         assert len(warning_logs) == 1
         assert (
-            warning_logs[0].message ==
-            "Revision missing for the dataset test/dataset. "
+            warning_logs[0].message == "Revision missing for the dataset test/dataset. "
             "It is encourage to specify a dataset revision for reproducability."
         )
-

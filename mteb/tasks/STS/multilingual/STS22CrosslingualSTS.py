@@ -4,26 +4,26 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskSTS, CrosslingualTask
 
-_LANGUAGES = [
-    "en",
-    "de",
-    "es",
-    "pl",
-    "tr",
-    "ar",
-    "ru",
-    "zh",
-    "fr",
-    "de-en",
-    "es-en",
-    "it",
-    "pl-en",
-    "zh-en",
-    "es-it",
-    "de-fr",
-    "de-pl",
-    "fr-pl",
-]
+_LANGUAGES = {
+    "en": ["eng-Latn"],
+    "de": ["deu-Latn"],
+    "es": ["spa-Latn"],
+    "pl": ["pol-Latn"],
+    "tr": ["tur-Latn"],
+    "ar": ["ara-Arab"],
+    "ru": ["rus-Cyrl"],
+    "zh": ["cmn-Hans"],
+    "fr": ["fra-Latn"],
+    "de-en": ["deu-Latn", "eng-Latn"],
+    "es-en": ["spa-Latn", "eng-Latn"],
+    "it": ["ita-Latn"],
+    "pl-en": ["pol-Latn", "eng-Latn"],
+    "zh-en": ["cmn-Hans", "eng-Latn"],
+    "es-it": ["spa-Latn", "ita-Latn"],
+    "de-fr": ["deu-Latn", "fra-Latn"],
+    "de-pl": ["deu-Latn", "pol-Latn"],
+    "fr-pl": ["fra-Latn", "pol-Latn"],
+}
 
 
 class STS22CrosslingualSTS(AbsTaskSTS, CrosslingualTask):
