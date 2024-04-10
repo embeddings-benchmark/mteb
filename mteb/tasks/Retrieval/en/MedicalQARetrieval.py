@@ -7,11 +7,11 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class MedicalQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MedicalQA",
-        description="The dataset consistes 16.4 medical question and answer pairs.",
+        description="The dataset consists 2048 medical question and answer pairs.",
         reference="https://github.com/lauramanor/legal_summarization",
         dataset={
-            "path": "Sakshamrzt/medical_qa",
-            "revision": "7b14a4ab92cabc4d2506d1dd138507f904f0928e",
+            "path": "mteb/medical_qa",
+            "revision": "ae763399273d8b20506b80cf6f6f9a31a6a2b238",
         },
         type="Retrieval",
         category="s2s",
