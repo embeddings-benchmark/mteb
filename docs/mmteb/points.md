@@ -10,6 +10,7 @@
 | schmarion         |              | 88          |          |                     |            |                |           |                |          |               |
 | MathieuCiancone   |              | 88          |          |                     |            |                |           |                |          |               |
 | Sakshamrzt        |              | 2           |          |                     |            |                |           |                |          |               |
+| MartinBernstorff  |              | 2           |          |                     | 7          |                | 3         |                |          |               |
 
 Note that coordination and ideation is not included in the total points, but is used to determine first and last authors. 
 
@@ -26,5 +27,6 @@ First name and last name are as you want them to appear in a publication.
 | GabrielSequeira   | Gabriel    | Sequeira   |                              |                      | N/A                                                   |
 | schmarion         | Marion     | Schaeffer  |                              |  ~Marion_Schaeffer1  |  Wikit, Lyon, France                                  |
 | MathieuCiancone   | Mathieu    | Ciancone   |                              |                      |  Wikit, Lyon, France                                  |
+| MartinBernstorff  | Martin     | Bernstorff | martinbernstorff@gmail.com   | ~Martin_Bernstorff1  |  Aarhus University, Denmark                           |
 
 
