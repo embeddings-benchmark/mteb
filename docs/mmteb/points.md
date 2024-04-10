@@ -9,7 +9,7 @@
 | GabrielSequeira   |              | 88          |          |                     |            |                |           |                |          |               |
 | schmarion         |              | 88          |          |                     |            |                |           |                |          |               |
 | MathieuCiancone   |              | 88          |          |                     |            |                |           |                |          |               |
-| Sakshamrzt        |              | 2           |          |                     |            |                |           |                |          |               |
+| Sakshamrzt        |              | 4           |          |                     |            |                |           |                |          |               |
 
 Note that coordination and ideation is not included in the total points, but is used to determine first and last authors. 
 
