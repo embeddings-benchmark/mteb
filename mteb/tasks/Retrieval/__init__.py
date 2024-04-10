@@ -25,6 +25,7 @@ from .eng.FEVERRetrieval import *
 from .eng.FiQA2018Retrieval import *
 from .eng.HagridRetrieval import *
 from .eng.HotpotQARetrieval import *
+from .eng.MedicalQARetrieval import *
 from .eng.MSMARCORetrieval import *
 from .eng.MSMARCOv2Retrieval import *
 from .eng.NarrativeQARetrieval import *

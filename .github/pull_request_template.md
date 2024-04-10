@@ -2,13 +2,17 @@
 <!-- If you are not submitting for a dataset, feel free to remove the content below  -->
 
 
-<!-- add additonal description, question etc. related to the new dataset -->
+<!-- add additional description, question etc. related to the new dataset -->
 
 ## Checklist for adding MMTEB dataset
+
 <!-- 
 Before you commit here is a checklist you should complete before submitting
 if you are not 
  -->
+Reason for dataset addition:
+<!-- Add reason for adding dataset here. E.g. it covers task/language/domain previously not covered -->
+
 
 - [ ] I have tested that the dataset runs with the `mteb` package.
 - [ ] I have run the following models on the task (adding the results to the pr). These can be run using the `mteb run -m {model_name} -t {task_name}` command.
