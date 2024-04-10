@@ -17,7 +17,7 @@ class AILACasedocs(AbsTaskRetrieval):
         type="Retrieval",
         category="p2p",
         eval_splits=["test"],
-        eval_langs=["en"],
+        eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
         form=["written"],

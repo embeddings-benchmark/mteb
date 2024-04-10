@@ -17,7 +17,7 @@ class LegalQuAD(AbsTaskRetrieval):
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],
-        eval_langs=["de"],
+        eval_langs=["deu-Latn"],
         main_score="ndcg_at_10",
         date=None,
         form=["written"],

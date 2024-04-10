@@ -4,8 +4,12 @@ from .dan.dan_fever import *
 from .dan.t2nord_retrieval import *
 from .dan.twitterhjerne import *
 from .deu.GerDaLIRRetrieval import *
+from .deu.GerDaLIRSmallRetrieval import *
 from .deu.GermanDPRRetrieval import *
 from .deu.GermanQuADRetrieval import *
+from .deu.LegalQuADRetrieval import *
+from .eng.AILACasedocsRetrieval import *
+from .eng.AILAStatutesRetrieval import *
 from .eng.ArguAnaRetrieval import *
 from .eng.ClimateFEVERRetrieval import *
 from .eng.CQADupstackAndroidRetrieval import *
@@ -25,6 +29,9 @@ from .eng.FEVERRetrieval import *
 from .eng.FiQA2018Retrieval import *
 from .eng.HagridRetrieval import *
 from .eng.HotpotQARetrieval import *
+from .eng.LegalBenchConsumerContractsQARetrieval import *
+from .eng.LegalBenchCorporateLobbyingRetrieval import *
+from .eng.LegalSummarizationRetrieval import *
 from .eng.MedicalQARetrieval import *
 from .eng.MSMARCORetrieval import *
 from .eng.MSMARCOv2Retrieval import *
@@ -65,3 +72,4 @@ from .spa.SpanishPassageRetrievalS2S import *
 from .swe.swedn_retrieval import *
 from .swe.swefaq_retrieval import *
 from .zho.CMTEBRetrieval import *
+from .zho.LeCaRDv2Retrieval import *

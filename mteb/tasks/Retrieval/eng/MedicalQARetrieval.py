@@ -16,7 +16,7 @@ class MedicalQARetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["en"],
+        eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2017-01-01", "2019-12-31"),  # best guess,
         form=["written"],

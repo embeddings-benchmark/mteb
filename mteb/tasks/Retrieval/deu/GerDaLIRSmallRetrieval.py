@@ -17,7 +17,7 @@ class GerDaLIRSmall(AbsTaskRetrieval):
         type="Retrieval",
         category="p2p",
         eval_splits=["test"],
-        eval_langs=["de"],
+        eval_langs=["deu-Latn"],
         main_score="ndcg_at_10",
         date=None,
         form=["written"],
