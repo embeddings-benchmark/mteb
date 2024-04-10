@@ -11,7 +11,7 @@ path_to_lang_scripts = Path(__file__).parent / "iso_15924_to_script.json"
 
 
 with path_to_lang_codes.open("r") as f:
-    ISOCODE639_3_TO_LANGUAGE = json.load(f)
+    ISO_TO_LANGUAGE = json.load(f)
 
 with path_to_lang_scripts.open("r") as f:
-    ISOCODE15924_TO_SCRIPT = json.load(f)
+    ISO_TO_SCRIPT = json.load(f)

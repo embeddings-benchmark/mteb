@@ -13,7 +13,12 @@ from pydantic import (
 )
 from typing_extensions import Annotated, Literal
 
-from .languages import ISOCODE639_3_TO_LANGUAGE, ISOCODE15924_TO_SCRIPT
+from .languages import (
+    ISO_TO_LANGUAGE,
+    ISO_TO_SCRIPT,
+    path_to_lang_codes,
+    path_to_lang_scripts,
+)
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
@@ -95,8 +100,8 @@ STR_DATE = Annotated[
 ]  # Allows the type to be a string, but ensures that the string is a valid date
 
 SPLIT_NAME = str
-LANGUAGE_SCRIPT_CODE = str  # a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
-LANGUAGES = Union[List[LANGUAGE_SCRIPT_CODE], Mapping[str, List[LANGUAGE_SCRIPT_CODE]]]
+ISO_LANGUAGE_SCRIPT = str  # a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
+LANGUAGES = Union[List[ISO_LANGUAGE_SCRIPT], Mapping[str, List[ISO_LANGUAGE_SCRIPT]]]
 
 logger = logging.getLogger(__name__)
 
@@ -194,25 +199,29 @@ class TaskMetadata(BaseModel):
         """
         This method checks that the eval_langs are specified as a list of languages.
         """
-        if isinstance(eval_langs, list):
-            for code in eval_langs:
-                cls.check_language_code(code)
-        elif isinstance(eval_langs, dict):
+        if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
                 for code in langs:
-                    cls.check_language_code(code)
+                    cls._check_language_code(code)
+        else:
+            for code in eval_langs:
+                cls._check_language_code(code)
         return eval_langs
 
     @staticmethod
-    def check_language_code(code):
+    def _check_language_code(code):
         """
         This method checks that the language code (e.g. "eng-Latn") is valid.
         """
         lang, script = code.split("-")
-        if lang not in ISOCODE639_3_TO_LANGUAGE:
-            raise ValueError(f"Invalid language code: {lang}")
-        if script not in ISOCODE15924_TO_SCRIPT:
-            raise ValueError(f"Invalid script code: {script}")
+        if lang not in ISO_TO_LANGUAGE:
+            raise ValueError(
+                f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
+            )
+        if script not in ISO_TO_SCRIPT:
+            raise ValueError(
+                f"Invalid script code: {script}, you can find valid ISO 15924 codes in {path_to_lang_scripts}"
+            )
 
     @property
     def languages(self) -> set[str]:
