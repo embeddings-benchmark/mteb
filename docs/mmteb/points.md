@@ -2,7 +2,7 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | ------------ |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 38+16       |          |                   1 |           9+1+2 |             | 1         |                |          |               |
+| KennethEnevoldsen |              | 38+16       |          |                   5 |         14 |             | 8         |                |          |              4 |
 | x-tabdeveloping   |              | 2+16        |          |                     |            |              |           |                |          |               |
 | imenelydiaker     |              | 88          |          |                     |            |              | 7         |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |              | 1         |                |          |               |
@@ -11,6 +11,9 @@
 | MathieuCiancone   |              | 88          |          |                     |            |              |           |                |          |               |
 | Sakshamrzt        |              | 4           |          |                     |            |              |           |                |          |               |
 | MartinBernstorff  |              | 2           |          |                     | 7          |                | 3         |                |          |               |
+
+
+
 
 Note that coordination and ideation is not included in the total points, but is used to determine first and last authors. 
 
