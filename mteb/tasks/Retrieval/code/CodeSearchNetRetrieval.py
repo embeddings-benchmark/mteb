@@ -1,6 +1,4 @@
 from __future__ import annotations
-from mteb import MTEB
-from sentence_transformers import SentenceTransformer
 import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -66,8 +64,3 @@ class CodeSearchNetRetrieval(AbsTaskRetrieval):
         }
 
         self.data_loaded = True
-
-
-model = SentenceTransformer("sentence-transformers/msmarco-bert-co-condensor")
-evaluation = MTEB(tasks=[CodeSearchNetRetrieval()])
-evaluation.run(model)
