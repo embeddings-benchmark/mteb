@@ -12,12 +12,14 @@
 | Sakshamrzt        |              | 4           |          |                     |            |                |           |                |          |               |
 | MartinBernstorff  |              | 2           |          |                     | 7          |                | 3         |                |          |               |
 | guenthermi        |              | 12          |          |                     |            |                |           |                |          |               |
-| Muennighoff       |              |             |          |                     |            |                | 3         |                |          |               |
+| Muennighoff       |              |             |          |                     |            |                | 4         |                |          |               |
 | rasdani           |              | 4           |          |                     |            |                |           |                |          |               |            
 | PhilipMay         |              |             |          |                     |            |                | 1         |                |          |               |   
 | slvnwhrl          |              | 8           |          |                     |            |                |           |                |          |               |  
+| staoxiao          |              | 50          |          |                     |            |                |           |                |          |               |
+| NouamaneTazi      |              |             |          |                     |            |                | 1         |                |          |               |   
 
-Note that coordination and ideation is not included in the total points, but is used to determine first and last authors. 
+Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors. 
 
 # Contributor Informations
 
