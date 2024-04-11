@@ -39,5 +39,6 @@ First name and last name are as you want them to appear in a publication.
 | schmarion         | Marion     | Schaeffer  |                              |  ~Marion_Schaeffer1  |  Wikit, Lyon, France                                  |
 | MathieuCiancone   | Mathieu    | Ciancone   |                              |                      |  Wikit, Lyon, France                                  |
 | MartinBernstorff  | Martin     | Bernstorff | martinbernstorff@gmail.com   | ~Martin_Bernstorff1  |  Aarhus University, Denmark                           |
+| staoxiao          | Shitao     | Xiao       | 2906698981@qq.com            | ~Shitao_Xiao1        |  Beijing Academy of Artificial Intelligence           |
 
 
