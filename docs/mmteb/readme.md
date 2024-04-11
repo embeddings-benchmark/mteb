@@ -8,7 +8,11 @@ The Massive Text Embedding Benchmark (MTEB) is intended to evaluate the quality 
 
 ## Contributing to MMTEB
 
-Everyone can join and contribute to this initiative from 1 April 2024 to 31 April 2024, win some SWAG, and become a co-author of our upcoming paper. We aim to publish the results of our findings at a top conference such as EMNLP, NeurIPS, etc. We have identified four ways to contribute:
+Everyone can join and contribute to this initiative from:
+- 10th of April 2024 to 15th of May 2024 for adding new datasets
+- 15th of May to 30th of May for running models
+
+Win some SWAG, and become a co-author of our upcoming paper. We aim to publish the results of our findings at a top conference such as EMNLP, NeurIPS, etc. We have identified four ways to contribute:
 
 ### 🗃️ 1: Contribute a new dataset
 
