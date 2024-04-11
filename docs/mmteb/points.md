@@ -12,13 +12,14 @@
 | Sakshamrzt        |              | 4           |          |                     |            |                |           |                |          |               |
 | MartinBernstorff  |              | 2           |          |                     | 7          |                | 3         |                |          |               |
 | guenthermi        |              | 12          |          |                     |            |                |           |                |          |               |
-| Muennighoff       |              |             |          |                     |            |                | 5         |                |          |               |
+| Muennighoff       |              |             |          |                     |            |                | 6         |                |          |               |
 | rasdani           |              | 4           |          |                     |            |                |           |                |          |               |            
 | PhilipMay         |              |             |          |                     |            |                | 1         |                |          |               |   
 | slvnwhrl          |              | 8           |          |                     |            |                |           |                |          |               |  
 | staoxiao          |              | 50          |          |                     |            |                |           |                |          |               |
 | NouamaneTazi      |              |             |          |                     |            |                | 1         |                |          |               |   
 | rafalposwiata     |              | 32          |          |                     |            |                |           |                |          |               |
+| violenil          |              | 26          |          |                     |            |                |           |                |          |               |
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors. 
 
