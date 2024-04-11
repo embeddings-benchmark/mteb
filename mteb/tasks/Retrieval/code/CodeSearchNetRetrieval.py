@@ -46,6 +46,10 @@ class CodeSearchNetRetrieval(AbsTaskRetrieval):
             ** self.metadata_dict["dataset"],
         )
 
+        # remove any leaked labels. quite common in this dataset
+        data = data.map(lambda ex: {"func_code_string": ex["func_code_string"].replace(
+            ex['func_documentation_string'], "")})
+
         self.queries = {
             self._EVAL_SPLIT: {
                 str(i): row["func_documentation_string"] for i, row in enumerate(data)
