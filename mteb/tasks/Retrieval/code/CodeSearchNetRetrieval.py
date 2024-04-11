@@ -1,8 +1,9 @@
 from __future__ import annotations
+
 import datasets
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class CodeSearchNetRetrieval(AbsTaskRetrieval):
@@ -43,16 +44,20 @@ class CodeSearchNetRetrieval(AbsTaskRetrieval):
         data = datasets.load_dataset(
             split=self._EVAL_SPLIT,
             trust_remote_code=True,
-            ** self.metadata_dict["dataset"],
+            **self.metadata_dict["dataset"],
         )
         # take a random (seeded) subset of the data
         data = data.shuffle(seed=42)
-        data = data.select(
-            range(self.metadata_dict["n_samples"][self._EVAL_SPLIT]))
+        data = data.select(range(self.metadata_dict["n_samples"][self._EVAL_SPLIT]))
 
         # remove any leaked labels. quite common in this dataset
-        data = data.map(lambda ex: {"func_code_string": ex["func_code_string"].replace(
-            ex['func_documentation_string'], "")})
+        data = data.map(
+            lambda ex: {
+                "func_code_string": ex["func_code_string"].replace(
+                    ex["func_documentation_string"], ""
+                )
+            }
+        )
 
         self.queries = {
             self._EVAL_SPLIT: {
