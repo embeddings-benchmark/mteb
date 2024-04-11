@@ -57,6 +57,9 @@ dev = ["ruff>=0.0.254", "pytest", "pytest-xdist"]
 [tool.setuptools.packages.find]
 exclude = ["tests", "results"]
 
+[tool.setuptools.package-data]
+"*" = ["*.json"]
+
 [tool.ruff]
 target-version = "py38"
 
