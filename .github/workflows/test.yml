@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          make install
+          make install-for-tests
 
       - name: Run tests
         shell: bash
