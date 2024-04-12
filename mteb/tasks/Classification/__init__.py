@@ -22,6 +22,7 @@ from .multilingual.MTOPDomainClassification import *
 from .multilingual.MTOPIntentClassification import *
 from .multilingual.NordicLangClassification import *
 from .multilingual.ScalaClassification import *
+from .multilingual.SwissJudgementClassification import *
 from .nob.NoRecClassification import *
 from .nob.NorwegianParliamentClassification import *
 from .pol.PolishClassification import *
