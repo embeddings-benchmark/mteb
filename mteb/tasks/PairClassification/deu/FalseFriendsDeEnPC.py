@@ -20,7 +20,7 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
         eval_langs=["deu-Latn"],
         main_score="ap",
         date=None,
-        form=None,
+        form="written",
         domains=[],
         task_subtypes=None,
         license="mit",
