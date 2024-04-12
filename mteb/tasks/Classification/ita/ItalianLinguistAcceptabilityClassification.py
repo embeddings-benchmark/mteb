@@ -1,0 +1,52 @@
+from __future__ import annotations
+
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
+
+class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="Ddisco",
+        dataset={
+            "path": "gsarti/itacola",
+            "revision": "f8f98e5c4d3059cf1a00c8eb3d70aa271423f636",
+        },
+        description="",
+        reference="https://aclanthology.org/2021.findings-emnlp.250/",
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["ita-Latn"],
+        main_score="accuracy",
+        date=("2021-01-01", "2022-06-25"),
+        form=["written"],
+        domains=[],
+        dialect=None,
+        task_subtypes=["acceptability-classification"],
+        license="unknown",
+        socioeconomic_status=[],
+        annotations_creators="expert-annotated",
+        text_creation="found",
+        bibtex_citation="""
+        @inproceedings{trotta-etal-2021-monolingual-cross,
+    title = "Monolingual and Cross-Lingual Acceptability Judgments with the {I}talian {C}o{LA} corpus",
+    author = "Trotta, Daniela  and
+      Guarasci, Raffaele  and
+      Leonardelli, Elisa  and
+      Tonelli, Sara",
+    booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2021",
+    month = nov,
+    year = "2021",
+    address = "Punta Cana, Dominican Republic",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2021.findings-emnlp.250",
+    doi = "10.18653/v1/2021.findings-emnlp.250",
+    pages = "2929--2940"
+}
+        """,
+        n_samples=None,
+        avg_character_length=None,
+    )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_columns({"acceptability": "label"})
