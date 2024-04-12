@@ -44,8 +44,8 @@ class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
     pages = "2929--2940"
 }
         """,
-        n_samples=None,
-        avg_character_length=None,
+        n_samples=975,
+        avg_character_length=36.67,
     )
 
     def dataset_transform(self):
