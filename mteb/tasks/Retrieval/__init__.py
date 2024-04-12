@@ -46,6 +46,7 @@ from .eng.TRECCOVIDRetrieval import *
 from .fra.AlloprofRetrieval import *
 from .fra.BSARDRetrieval import *
 from .fra.SyntecRetrieval import *
+from .jpn.JaQuADRetrieval import *
 from .kor.KoMiracl import *
 from .kor.KoMrtydi import *
 from .kor.KoStrategyQA import *

@@ -22,6 +22,7 @@
 | violenil          |              | 26          |          |                     |            |                |           |                |          |               |
 | hanhainebula      |              | 2           |          |                     |            |                |           |                |          |               |
 | taeminlee         |              | 8           |          |                     |            |                |           |                |          |               |
+| xu3kev            |              | 6           |          |                     |            |                |           |                |          |               |
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors. 
 
@@ -40,5 +41,6 @@ First name and last name are as you want them to appear in a publication.
 | MathieuCiancone   | Mathieu    | Ciancone   |                              |                      |  Wikit, Lyon, France                                  |
 | MartinBernstorff  | Martin     | Bernstorff | martinbernstorff@gmail.com   | ~Martin_Bernstorff1  |  Aarhus University, Denmark                           |
 | staoxiao          | Shitao     | Xiao       | 2906698981@qq.com            | ~Shitao_Xiao1        |  Beijing Academy of Artificial Intelligence           |
+| xu3kev            | Wen-Ding   | Li         | wl678@cornell.edu            | ~Wen-Ding_Li1        |  Cornell University                                   |
 
 
