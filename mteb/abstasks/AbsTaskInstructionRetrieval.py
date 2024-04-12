@@ -32,15 +32,14 @@ class HFDataLoader:
             # (1) fiqa/corpus.jsonl  (format: jsonlines)
             # (2) fiqa/queries.jsonl (format: jsonlines)
             # (3) fiqa/qrels/test.tsv (format: tsv ("\t"))
-            assert False # not implemented for now
-            # if prefix:
-            #     query_file = prefix + "-" + query_file
-            #     qrels_folder = prefix + "-" + qrels_folder
+            if prefix:
+                query_file = prefix + "-" + query_file
+                qrels_folder = prefix + "-" + qrels_folder
 
-            # self.corpus_file = os.path.join(data_folder, corpus_file) if data_folder else corpus_file
-            # self.query_file = os.path.join(data_folder, query_file) if data_folder else query_file
-            # self.qrels_folder = os.path.join(data_folder, qrels_folder) if data_folder else None
-            # self.qrels_file = qrels_file
+            self.corpus_file = os.path.join(data_folder, corpus_file) if data_folder else corpus_file
+            self.query_file = os.path.join(data_folder, query_file) if data_folder else query_file
+            self.qrels_folder = os.path.join(data_folder, qrels_folder) if data_folder else None
+            self.qrels_file = qrels_file
         self.streaming = streaming
         self.keep_in_memory = keep_in_memory
     
@@ -168,7 +167,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.do_length_ablation = True
+        self.do_length_ablation = kwargs.get("do_length_ablation", False)
 
     def load_data(self, **kwargs):
         if self.data_loaded: return
@@ -217,7 +216,15 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 scores_changed[lang], results_changed[lang] = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "changed", changed_instructions, top_ranked, lang, **kwargs)
 
                 scores_base[lang], results_base[lang] = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "base", defaultdict(str), top_ranked, lang, **kwargs)
-                assert False # need to add the other options here if we extend to multilingual
+
+                newly_irrelevant_qrels = self.create_qrel_diff(self.og_relevant_docs[lang][split], self.changed_relevant_docs[lang][split])
+                changed_scores[lang] = retriever.evaluate_change(results_og[lang], results_changed[lang], newly_irrelevant_qrels)
+
+                changed_scores[lang]["individual"] = {
+                    "original": scores_og[lang],
+                    "changed": scores_changed[lang],
+                    "base": scores_base[lang]
+                }
         else:
             corpus, queries, og_relevant_docs, changed_relevant_docs = self.corpus[split], self.queries[split], self.og_relevant_docs[split], self.changed_relevant_docs[split]
             og_instructions, changed_instructions = self.og_instructions[split], self.changed_instructions[split]
@@ -227,22 +234,22 @@ class AbsTaskInstructionRetrieval(AbsTask):
             scores_changed, results_changed = self._evaluate_monolingual(retriever, corpus, queries, changed_relevant_docs, "changed", changed_instructions, top_ranked, None, **kwargs)
             scores_base, results_base = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "base", defaultdict(str), top_ranked, None, **kwargs)
 
-        newly_irrelevant_qrels = self.create_qrel_diff(self.og_relevant_docs[split], self.changed_relevant_docs[split])
-        changed_scores = retriever.evaluate_change(results_og, results_changed, newly_irrelevant_qrels)            
+            newly_irrelevant_qrels = self.create_qrel_diff(self.og_relevant_docs[split], self.changed_relevant_docs[split])
+            changed_scores = retriever.evaluate_change(results_og, results_changed, newly_irrelevant_qrels)            
 
-        changed_scores["individual"] = {
-            "original": scores_og,
-            "changed": scores_changed,
-            "base": scores_base
-        }
-
-        if self.do_length_ablation:
-            scores_w_keywords = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "keywords", keywords, top_ranked, None, **kwargs)
-            scores_w_short_instr = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "short_instructions", short_instructions, top_ranked, None, **kwargs)
-            changed_scores["length_ablation"] = {
-                "keywords": scores_w_keywords,
-                "short_instructions": scores_w_short_instr
+            changed_scores["individual"] = {
+                "original": scores_og,
+                "changed": scores_changed,
+                "base": scores_base
             }
+
+            if self.do_length_ablation:
+                scores_w_keywords = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "keywords", keywords, top_ranked, None, **kwargs)
+                scores_w_short_instr = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "short_instructions", short_instructions, top_ranked, None, **kwargs)
+                changed_scores["length_ablation"] = {
+                    "keywords": scores_w_keywords,
+                    "short_instructions": scores_w_short_instr
+                }
 
         return changed_scores
 

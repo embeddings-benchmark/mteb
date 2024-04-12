@@ -164,7 +164,6 @@ class Reranker:
         self.sep = kwargs.get("sep", " ")
 
 
-
     def search(self, 
                corpus: Dict[str, Dict[str, str]], 
                queries: Dict[str, str], 
