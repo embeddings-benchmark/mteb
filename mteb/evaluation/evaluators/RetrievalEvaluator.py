@@ -239,3 +239,4 @@ class RetrievalEvaluator(Evaluator):
             return hole(qrels, results, k_values)
         elif metric.lower() in ["acc", "top_k_acc", "accuracy", "accuracy@k", "top_k_accuracy"]:
             return top_k_accuracy(qrels, results, k_values)
+            

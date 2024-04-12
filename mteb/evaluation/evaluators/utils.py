@@ -1,5 +1,6 @@
 import logging
 from typing import List, Dict, Union, Tuple
+import pandas as pd
 
 import torch
 
@@ -180,8 +181,8 @@ def evaluate_change(original_run, new_run, changed_qrels):
         original_qid_run = original_run[qid]
         new_qid_run = new_run[qid]
         for idx, changed_doc in enumerate(changed_qrels[qid]):
-            original_rank, original_score = InstructionRetrievalEvaluator.get_rank_from_dict(original_qid_run, changed_doc)
-            new_rank, new_score = InstructionRetrievalEvaluator.get_rank_from_dict(new_qid_run, changed_doc)
+            original_rank, original_score = get_rank_from_dict(original_qid_run, changed_doc)
+            new_rank, new_score = get_rank_from_dict(new_qid_run, changed_doc)
             change = int(original_rank - new_rank)
             changes.append(
                 {
@@ -199,19 +200,10 @@ def evaluate_change(original_run, new_run, changed_qrels):
 
     # we now have a DF of [qid, doc_id, change] to run our calculations with
     changes_df = pd.DataFrame(changes)
-    changes_df["rankwise_score"] = changes_df.apply(lambda x: InstructionRetrievalEvaluator.rank_score(x), axis=1)
-    changes_df["pointwise_score"] = changes_df.apply(lambda x: InstructionRetrievalEvaluator.pointwise_score(x), axis=1)
-
-    doc_wise = changes_df.groupby("doc_id").agg({"rankwise_score": "mean", "pointwise_score": "mean"})
-
-    # do qid wise calculations
-    qid_wise = changes_df.groupby("qid").agg({"rankwise_score": "mean", "pointwise_score": "mean"})
-
+    changes_df["p-MRR"] = changes_df.apply(lambda x: rank_score(x), axis=1)
+    qid_wise = changes_df.groupby("qid").agg({"p-MRR": "mean"})
     return {
-        "per_doc": doc_wise.to_dict(orient="index"),
-        "per_qid": qid_wise.to_dict(orient="index"),
-        "rankwise_score": qid_wise["rankwise_score"].mean(),
-        "pointwise_score": qid_wise["pointwise_score"].mean()
+        "p-MRR": qid_wise["p-MRR"].mean(),
     }
 
 
