@@ -26,7 +26,7 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
         license="mit",
         socioeconomic_status=None,
         annotations_creators=None,
-        dialect=None,
+        dialect=[],
         text_creation=None,
         bibtex_citation=None,
         n_samples={"test": 1524},
