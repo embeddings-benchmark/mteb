@@ -5,18 +5,19 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class LeCaRDv2(AbsTaskRetrieval):
+class NeuCLIR2022RusRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="NeuCLIR2022Fas",
+        name="NeuCLIRRus2022",
         description="The task involves identifying and retrieving the documents that are relevant to the queries.",
         reference="https://neuclir.github.io/",
         dataset={
-            "path": "mteb/neuclir2022fas",
+            "path": "mteb/neuclir-2022-rus",
+            "revision": "e8f8b5d60068d2e699ecf8bad8df1d30e445f98f",
         },
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],
-        eval_langs=["fas"],
+        eval_langs=["rus-Cyrl"],
         main_score="ndcg_at_20",
         date=None,
         form=None,
