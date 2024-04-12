@@ -49,4 +49,8 @@ class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns({"acceptability": "label"}).rename_columns({"sentence": "text"}).remove_columns(["unique_id", "source"])
+        self.dataset = (
+            self.dataset.rename_columns({"acceptability": "label"})
+            .rename_columns({"sentence": "text"})
+            .remove_columns(["unique_id", "source"])
+        )
