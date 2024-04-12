@@ -160,3 +160,63 @@ def top_k_accuracy(
         logging.info("Accuracy@{}: {:.4f}".format(k, top_k_acc[f"Accuracy@{k}"]))
 
     return top_k_acc
+
+
+def get_rank_from_dict(dict_of_results, doc_id):
+    tuple_of_id_score = dict_of_results.items()
+    # sort them by score
+    sorted_by_score = sorted(tuple_of_id_score, key=lambda x: x[1], reverse=True)
+    # return the rank of the doc_id, if not found return -1
+    for i, (id, score) in enumerate(sorted_by_score):
+        if id == doc_id:
+            return i + 1, score
+        
+    return len(sorted_by_score) + 1, 0
+
+
+def evaluate_change(original_run, new_run, changed_qrels):
+    changes = []
+    for qid in changed_qrels.keys():
+        original_qid_run = original_run[qid]
+        new_qid_run = new_run[qid]
+        for idx, changed_doc in enumerate(changed_qrels[qid]):
+            original_rank, original_score = InstructionRetrievalEvaluator.get_rank_from_dict(original_qid_run, changed_doc)
+            new_rank, new_score = InstructionRetrievalEvaluator.get_rank_from_dict(new_qid_run, changed_doc)
+            change = int(original_rank - new_rank)
+            changes.append(
+                {
+                    "qid": qid,
+                    "doc_id": changed_doc,
+                    "change": change,
+                    "relevance": 0,
+                    "og_rank": original_rank,
+                    "new_rank": new_rank,
+                    "og_score": original_score,
+                    "new_score": new_score
+                }
+            )
+
+
+    # we now have a DF of [qid, doc_id, change] to run our calculations with
+    changes_df = pd.DataFrame(changes)
+    changes_df["rankwise_score"] = changes_df.apply(lambda x: InstructionRetrievalEvaluator.rank_score(x), axis=1)
+    changes_df["pointwise_score"] = changes_df.apply(lambda x: InstructionRetrievalEvaluator.pointwise_score(x), axis=1)
+
+    doc_wise = changes_df.groupby("doc_id").agg({"rankwise_score": "mean", "pointwise_score": "mean"})
+
+    # do qid wise calculations
+    qid_wise = changes_df.groupby("qid").agg({"rankwise_score": "mean", "pointwise_score": "mean"})
+
+    return {
+        "per_doc": doc_wise.to_dict(orient="index"),
+        "per_qid": qid_wise.to_dict(orient="index"),
+        "rankwise_score": qid_wise["rankwise_score"].mean(),
+        "pointwise_score": qid_wise["pointwise_score"].mean()
+    }
+
+
+def rank_score(x: dict):
+    if x["og_rank"] >= x["new_rank"]:
+        return ((1/x["og_rank"]) / (1/x["new_rank"])) - 1
+    else:
+        return (1 - ((1/x["new_rank"]) / (1/x["og_rank"])))

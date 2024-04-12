@@ -147,76 +147,7 @@ class DRESModel:
         if self.save_corpus_embeddings and "qid" in kwargs:
             self.corpus_embeddings[kwargs["qid"]] = corpus_embeddings.cpu().detach()
         return corpus_embeddings
-    
 
-
-class Reranker:    
-    def __init__(self, model, batch_size: int = 32, **kwargs):
-        # Model is class that provides encode_corpus() and encode_queries()
-        self.model = model
-        self.batch_size = batch_size
-        if model == "bm25":
-            self.batch_size = 999999999 # all of them
-        logger.info("Reranker initialized with batch size: {}".format(batch_size))
-        self.show_progress_bar = kwargs.get("show_progress_bar", True)
-        self.convert_to_tensor = kwargs.get("convert_to_tensor", True)
-        self.results = {}
-        self.sep = kwargs.get("sep", " ")
-
-
-    def search(self, 
-               corpus: Dict[str, Dict[str, str]], 
-               queries: Dict[str, str], 
-               instructions: Dict[str, str],
-               top_k, score_function, # all ignored
-               **kwargs) -> Dict[str, Dict[str, float]]:
-        # Reranks and returns a ranked list with the corpus ids
-        # ignores most other kwargs given to non-cross-encoders
-            
-
-        logger.info("Reranking...")
-        query_ids = list(queries.keys())
-        self.results = {qid: {} for qid in query_ids}
-        queries = [queries[qid] for qid in queries]
-
-        corpus_ids = sorted(corpus, key=lambda k: len(corpus[k].get("title", "") + corpus[k].get("text", "")), reverse=True)
-        corpus = [corpus[cid] for cid in corpus_ids]
-        
-        corpus = [
-            (doc["title"] + self.sep + doc["text"]).strip() if "title" in doc else doc["text"].strip()
-            for doc in corpus
-        ]
-
-        pairs = []
-        for q_idx, query in enumerate(queries):
-            for d_idx, doc in enumerate(corpus):
-                pairs.append((query, doc, instructions[query], (query_ids[q_idx], corpus_ids[d_idx])))
-
-        logger.info("Reranking in batches... Warning: This might take a while!")
-        itr = range(0, len(pairs), self.batch_size)
-        
-        results = {qid: {} for qid in query_ids}  
-        for batch_num, corpus_start_idx in enumerate(tqdm.tqdm(itr, leave=False)):
-            # logger.info("Encoding Batch {}/{}...".format(batch_num+1, len(itr)))
-            corpus_end_idx = min(corpus_start_idx + self.batch_size, len(corpus))
-
-            # rerank chunks
-            queries_in_pair = [pair[0] for pair in pairs[corpus_start_idx:corpus_end_idx]]
-            corpus_in_pair = [pair[1] for pair in pairs[corpus_start_idx:corpus_end_idx]]        
-
-            instructions_in_pair = [pair[2] for pair in pairs[corpus_start_idx:corpus_end_idx]]
-            query_ids = [pair[3][0] for pair in pairs[corpus_start_idx:corpus_end_idx]]
-            corpus_ids = [pair[3][1] for pair in pairs[corpus_start_idx:corpus_end_idx]]
-            assert len(queries_in_pair) == len(corpus_in_pair) == len(instructions_in_pair)
-            scores = self.model.rerank(
-                queries_in_pair, corpus_in_pair, instructions=instructions_in_pair
-            )
-
-            for i, score in enumerate(scores):
-                results[query_ids[i]][corpus_ids[i]] = score
-
-        
-        return results
     
 
 def is_dres_compatible(model):
@@ -225,11 +156,6 @@ def is_dres_compatible(model):
         if not (callable(op)): return False
     return True
 
-def is_rerank_compatible(model):
-    for method in ["rerank"]:
-        op = getattr(model, method, None)
-        if not (callable(op)): return False
-    return True
 
 
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/evaluation.py#L9
@@ -241,8 +167,6 @@ class InstructionRetrievalEvaluator(Evaluator):
         if is_dres_compatible(retriever):
             logger.info("The custom encode_queries and encode_corpus functions of the model will be used")
             self.retriever = DenseRetrievalExactSearch(retriever, **kwargs)
-        elif is_rerank_compatible(retriever):
-            self.retriever = Reranker(retriever, **kwargs)
         else:
             self.retriever = DenseRetrievalExactSearch(DRESModel(retriever), **kwargs)
         self.k_values = k_values
@@ -336,82 +260,4 @@ class InstructionRetrievalEvaluator(Evaluator):
             return hole(qrels, results, k_values)
         elif metric.lower() in ["acc", "top_k_acc", "accuracy", "accuracy@k", "top_k_accuracy"]:
             return top_k_accuracy(qrels, results, k_values)
-
-
-
-    @staticmethod 
-    def get_rank_from_dict(dict_of_results, doc_id):
-        tuple_of_id_score = dict_of_results.items()
-        # sort them by score
-        sorted_by_score = sorted(tuple_of_id_score, key=lambda x: x[1], reverse=True)
-        # return the rank of the doc_id, if not found return -1
-        for i, (id, score) in enumerate(sorted_by_score):
-            if id == doc_id:
-                return i + 1, score
-            
-        return len(sorted_by_score) + 1, 0
-
-
-
-    @staticmethod
-    def evaluate_change(original_run, new_run, changed_qrels):
-        changes = []
-        for qid in changed_qrels.keys():
-            original_qid_run = original_run[qid]
-            new_qid_run = new_run[qid]
-            for idx, changed_doc in enumerate(changed_qrels[qid]):
-                original_rank, original_score = InstructionRetrievalEvaluator.get_rank_from_dict(original_qid_run, changed_doc)
-                new_rank, new_score = InstructionRetrievalEvaluator.get_rank_from_dict(new_qid_run, changed_doc)
-                change = int(original_rank - new_rank)
-                changes.append(
-                    {
-                        "qid": qid,
-                        "doc_id": changed_doc,
-                        "change": change,
-                        "relevance": 0,
-                        "og_rank": original_rank,
-                        "new_rank": new_rank,
-                        "og_score": original_score,
-                        "new_score": new_score
-                    }
-                )
-
-
-        # we now have a DF of [qid, doc_id, change] to run our calculations with
-        changes_df = pd.DataFrame(changes)
-        changes_df["rankwise_score"] = changes_df.apply(lambda x: InstructionRetrievalEvaluator.rank_score(x), axis=1)
-        changes_df["pointwise_score"] = changes_df.apply(lambda x: InstructionRetrievalEvaluator.pointwise_score(x), axis=1)
-
-        doc_wise = changes_df.groupby("doc_id").agg({"rankwise_score": "mean", "pointwise_score": "mean"})
-
-        # do qid wise calculations
-        qid_wise = changes_df.groupby("qid").agg({"rankwise_score": "mean", "pointwise_score": "mean"})
-
-        return {
-            "per_doc": doc_wise.to_dict(orient="index"),
-            "per_qid": qid_wise.to_dict(orient="index"),
-            "rankwise_score": qid_wise["rankwise_score"].mean(),
-            "pointwise_score": qid_wise["pointwise_score"].mean()
-        }
-
-    @staticmethod
-    def rank_score(x: dict):
-        # if x["og_rank"] == 0 and x["new_rank"] == 0:
-        #     return 0
-
-        if x["og_rank"] >= x["new_rank"]:
-            return ((1/x["og_rank"]) / (1/x["new_rank"])) - 1
-        else:
-            return (1 - ((1/x["new_rank"]) / (1/x["og_rank"])))
-
-    @staticmethod
-    def pointwise_score(x: dict):
-        if x["og_score"] == 0 and x["new_score"] == 0:
-            return 0
-
-        if x["og_score"] >= x["new_score"]:
-            return (x["og_score"] - x["new_score"]) / x["og_score"]
-        else:
-            return -1 * ((x["new_score"] - x["og_score"]) / x["new_score"])
-
 

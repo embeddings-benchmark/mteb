@@ -9,6 +9,7 @@ import tqdm
 from datasets import load_dataset, Value, Features
 
 from ..evaluation.evaluators import InstructionRetrievalEvaluator
+from ..evaluation.evaluators import utils
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -218,7 +219,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 scores_base[lang], results_base[lang] = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "base", defaultdict(str), top_ranked, lang, **kwargs)
 
                 newly_irrelevant_qrels = self.create_qrel_diff(self.og_relevant_docs[lang][split], self.changed_relevant_docs[lang][split])
-                changed_scores[lang] = retriever.evaluate_change(results_og[lang], results_changed[lang], newly_irrelevant_qrels)
+                changed_scores[lang] = utils.evaluate_change(results_og[lang], results_changed[lang], newly_irrelevant_qrels)
 
                 changed_scores[lang]["individual"] = {
                     "original": scores_og[lang],
@@ -235,7 +236,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
             scores_base, results_base = self._evaluate_monolingual(retriever, corpus, queries, og_relevant_docs, "base", defaultdict(str), top_ranked, None, **kwargs)
 
             newly_irrelevant_qrels = self.create_qrel_diff(self.og_relevant_docs[split], self.changed_relevant_docs[split])
-            changed_scores = retriever.evaluate_change(results_og, results_changed, newly_irrelevant_qrels)            
+            changed_scores = utils.evaluate_change(results_og, results_changed, newly_irrelevant_qrels)            
 
             changed_scores["individual"] = {
                 "original": scores_og,
