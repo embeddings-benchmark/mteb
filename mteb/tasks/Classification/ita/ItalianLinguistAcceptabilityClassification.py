@@ -6,7 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="Ddisco",
+        name="Itacola",
         dataset={
             "path": "gsarti/itacola",
             "revision": "f8f98e5c4d3059cf1a00c8eb3d70aa271423f636",
@@ -18,13 +18,13 @@ class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["ita-Latn"],
         main_score="accuracy",
-        date=("2021-01-01", "2022-06-25"),
+        date=None,
         form=["written"],
-        domains=[],
+        domains=["Non-fiction", "Spoken"],
         dialect=None,
-        task_subtypes=["acceptability-classification"],
-        license="unknown",
-        socioeconomic_status=[],
+        task_subtypes=["Linguistic acceptability"],
+        license=None,
+        socioeconomic_status=None,
         annotations_creators="expert-annotated",
         text_creation="found",
         bibtex_citation="""
@@ -49,4 +49,4 @@ class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns({"acceptability": "label"})
+        self.dataset = self.dataset.rename_columns({"acceptability": "label"}).rename_columns({"sentence": "text"}).remove_columns(["unique_id", "source"])
