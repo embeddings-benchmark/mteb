@@ -11,7 +11,7 @@ class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
             "path": "gsarti/itacola",
             "revision": "f8f98e5c4d3059cf1a00c8eb3d70aa271423f636",
         },
-        description="",
+        description="An Italian Corpus of Linguistic Acceptability taken from linguistic literature with a binary annotation made by the original authors themselves.",
         reference="https://aclanthology.org/2021.findings-emnlp.250/",
         type="Classification",
         category="s2s",
