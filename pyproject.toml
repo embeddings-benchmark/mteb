@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.5.5"
+version = "1.6.1"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -56,6 +56,9 @@ dev = ["ruff>=0.0.254", "pytest", "pytest-xdist"]
 
 [tool.setuptools.packages.find]
 exclude = ["tests", "results"]
+
+[tool.setuptools.package-data]
+"*" = ["*.json"]
 
 [tool.ruff]
 target-version = "py38"

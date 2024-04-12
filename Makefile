@@ -2,6 +2,11 @@ install:
 	@echo "--- 🚀 Installing project dependencies ---"
 	pip install -e ".[dev]"
 
+install-for-tests:
+	@echo "--- 🚀 Installing project dependencies for test ---"
+	@echo "This ensures that the project is not installed in editable mode"
+	pip install ".[dev]"
+
 lint:
 	@echo "--- 🧹 Running linters ---"
 	ruff format . 			# running ruff formatting

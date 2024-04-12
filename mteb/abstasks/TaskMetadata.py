@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from datetime import date
+from typing import List, Mapping, Union
 
 from pydantic import (
     AnyUrl,
@@ -11,6 +12,13 @@ from pydantic import (
     field_validator,
 )
 from typing_extensions import Annotated, Literal
+
+from .languages import (
+    ISO_TO_LANGUAGE,
+    ISO_TO_SCRIPT,
+    path_to_lang_codes,
+    path_to_lang_scripts,
+)
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
@@ -92,7 +100,8 @@ STR_DATE = Annotated[
 ]  # Allows the type to be a string, but ensures that the string is a valid date
 
 SPLIT_NAME = str
-
+ISO_LANGUAGE_SCRIPT = str  # a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
+LANGUAGES = Union[List[ISO_LANGUAGE_SCRIPT], Mapping[str, List[ISO_LANGUAGE_SCRIPT]]]
 
 logger = logging.getLogger(__name__)
 
@@ -110,7 +119,10 @@ class TaskMetadata(BaseModel):
         category: The category of the task. E.g. includes "s2s", "s2p", "p2p" (s=sentence, p=paragraph).
         reference: A URL to the documentation of the task. E.g. a published paper.
         eval_splits: The splits of the dataset used for evaluation.
-        eval_langs: The languages of the dataset used for evaluation.
+        eval_langs: The languages of the dataset used for evaluation. Langauges follows a ETF BCP 47 standard consisting of "{language}-{script}"
+            tag (e.g. "eng-Latn"). Where language is specified as a list of ISO 639-3 language codes (e.g. "eng") followed by ISO 15924 script codes
+            (e.g. "Latn"). Can be either a list of languages or a dictionary mapping huggingface subsets to lists of languages (e.g. if a the
+            huggingface dataset contain different languages).
         main_score: The main score used for evaluation.
         date: The date when the data was collected. Specified as a tuple of two dates.
         form: The form of the data. Either "spoken", "written".
@@ -138,7 +150,7 @@ class TaskMetadata(BaseModel):
     reference: STR_URL | None  # URL to documentation, e.g. published paper
 
     eval_splits: list[str]
-    eval_langs: list[str]  # Might want to have a literal of langs when #251 is resolved
+    eval_langs: LANGUAGES
     main_score: str  # Might want a literal here
 
     date: tuple[STR_DATE, STR_DATE] | None  # When the data was collected
@@ -181,3 +193,62 @@ class TaskMetadata(BaseModel):
                 dataset["path"],
             )
         return dataset
+
+    @field_validator("eval_langs")
+    def _check_eval_langs(cls, eval_langs):
+        """
+        This method checks that the eval_langs are specified as a list of languages.
+        """
+        if isinstance(eval_langs, dict):
+            for langs in eval_langs.values():
+                for code in langs:
+                    cls._check_language_code(code)
+        else:
+            for code in eval_langs:
+                cls._check_language_code(code)
+        return eval_langs
+
+    @staticmethod
+    def _check_language_code(code):
+        """
+        This method checks that the language code (e.g. "eng-Latn") is valid.
+        """
+        lang, script = code.split("-")
+        if lang not in ISO_TO_LANGUAGE:
+            raise ValueError(
+                f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
+            )
+        if script not in ISO_TO_SCRIPT:
+            raise ValueError(
+                f"Invalid script code: {script}, you can find valid ISO 15924 codes in {path_to_lang_scripts}"
+            )
+
+    @property
+    def languages(self) -> set[str]:
+        """
+        Return the languages of the dataset as iso639-3 codes.
+        """
+
+        def get_lang(lang: str) -> str:
+            return lang.split("-")[0]
+
+        if isinstance(self.eval_langs, dict):
+            return set(
+                get_lang(lang) for langs in self.eval_langs.values() for lang in langs
+            )
+        return set(get_lang(lang) for lang in self.eval_langs)
+
+    @property
+    def scripts(self) -> set[str]:
+        """
+        Return the scripts of the dataset as iso15924 codes.
+        """
+
+        def get_script(lang: str) -> str:
+            return lang.split("-")[1]
+
+        if isinstance(self.eval_langs, dict):
+            return set(
+                get_script(lang) for langs in self.eval_langs.values() for lang in langs
+            )
+        return set(get_script(lang) for lang in self.eval_langs)

@@ -58,3 +58,24 @@ class AbsTask(ABC):
         :param split: Which datasplit to be used.
         """
         raise NotImplementedError
+
+    @property
+    def languages(self) -> set[str]:
+        """
+        Returns the languages of the task
+        """
+        return self.metadata.languages
+
+    def __repr__(self) -> str:
+        """
+        Format the representation of the task such that it appears as:
+
+        TaskObjectName(name='{name}', languages={lang1, lang2, ...})
+        """
+        langs = self.languages
+        if len(langs) > 3:
+            langs = list(langs)[:3]
+            langs.append("...")
+        return (
+            f"{self.__class__.__name__}(name='{self.metadata.name}', languages={langs})"
+        )

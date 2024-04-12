@@ -7,21 +7,21 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks import AbsTaskRetrieval, MultilingualTask
 from ....abstasks.AbsTaskRetrieval import *
 
-_LANGUAGES = [
-    "ar",
-    "de",
-    "en",
-    "es",
-    "fr",
-    "hi",
-    "it",
-    "ja",
-    "ko",
-    "pt",
-    "ru",
-    "th",
-    "zh",
-]
+_LANGUAGES = {
+    "ar": ["ara-Arab"],
+    "de": ["deu-Latn"],
+    "en": ["eng-Latn"],
+    "es": ["spa-Latn"],
+    "fr": ["fra-Latn"],
+    "hi": ["hin-Deva"],
+    "it": ["ita-Latn"],
+    "ja": ["jpn-Jpan"],
+    "ko": ["kor-Hang"],
+    "pt": ["por-Latn"],
+    "ru": ["rus-Cyrl"],
+    "th": ["tha-Thai"],
+    "zh": ["cmn-Hans"],
+}
 
 
 def load_mldr_data(

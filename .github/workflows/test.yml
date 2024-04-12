@@ -20,10 +20,6 @@ jobs:
           # Add Windows with Python 3.8 only to avoid tests taking too long
           - os: windows-latest
             python-version: "3.8"
-    # This allows a subsequently queued workflow run to interrupt previous runs
-    concurrency:
-      group: "${{ github.workflow }}-${{ matrix.python-version}}-${{ matrix.os }} @ ${{ github.ref }}"
-      cancel-in-progress: true
 
     steps:
       - uses: actions/checkout@v3
@@ -37,7 +33,7 @@ jobs:
       - name: Install dependencies
         shell: bash
         run: |
-          make install
+          make install-for-tests
 
       - name: Run tests
         shell: bash

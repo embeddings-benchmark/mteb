@@ -1,4 +1,4 @@
 from __future__ import annotations
 
-from .en.SummEvalSummarization import *
-from .fr.SummEvalFrSummarization import *
+from .eng.SummEvalSummarization import *
+from .fra.SummEvalFrSummarization import *

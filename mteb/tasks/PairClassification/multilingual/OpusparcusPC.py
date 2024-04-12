@@ -6,7 +6,14 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskPairClassification, MultilingualTask
 
-_LANGUAGES = ["de", "en", "fi", "fr", "ru", "sv"]
+_LANGUAGES = {
+    "de": ["deu-Latn"],
+    "en": ["eng-Latn"],
+    "fi": ["fin-Latn"],
+    "fr": ["fra-Latn"],
+    "ru": ["rus-Cyrl"],
+    "sv": ["swe-Latn"],
+}
 
 
 class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
