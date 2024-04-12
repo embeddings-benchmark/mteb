@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "29806f87bba4f23d0707d3b6d9ea5432afefbe2f",
+  "mteb_dataset_name": "ItalianSwissJudgementClassification",
+  "mteb_version": "1.6.1",
+  "test": {
+    "accuracy": 0.5282019704433497,
+    "accuracy_stderr": 0.0864764434817093,
+    "ap": 0.18937301842638846,
+    "ap_stderr": 0.005798651247321819,
+    "evaluation_time": 6.08,
+    "f1": 0.4542408899560801,
+    "f1_stderr": 0.04700864093700379,
+    "main_score": 0.5282019704433497
+  }
+}
