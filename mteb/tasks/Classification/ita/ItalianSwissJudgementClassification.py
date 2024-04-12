@@ -22,7 +22,7 @@ class ItalianSwissJudgementClassification(AbsTaskClassification):
         ],
         main_score="accuracy",
         date=None,
-        form="written",
+        form=["written"],
         domains=["Legal"],
         task_subtypes=[],
         license="cc-by-sa-4.0",
