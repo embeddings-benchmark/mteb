@@ -16,7 +16,7 @@ class HindiDiscourseClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         eval_splits=["train"],
-        eval_langs=["hin"],
+        eval_langs=["hin-Deva"],
         main_score="accuracy",
         date=("2019-12-01", "2020-04-09"),
         form=["written"],
