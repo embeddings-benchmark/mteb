@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 class FalseFriendsDeEnPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="FalseFriendsGermanEnglish",
-        description="False Friends / false cognates between English and German.",
+        description="A dataset to identify False Friends / false cognates between English and German. A generally challenging task for multilingual models.",
         reference="https://drive.google.com/file/d/1jgq0nBnV-UiYNxbKNrrr2gxDEHm-DMKH/view?usp=share_link",
         dataset={
             "path": "aari1995/false_friends_de_en_mteb",
@@ -22,12 +22,12 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
         date=None,
         form="written",
         domains=[],
-        task_subtypes=None,
+        task_subtypes="False Friends",
         license="mit",
-        socioeconomic_status=None,
+        socioeconomic_status="mixed",
         annotations_creators=None,
         dialect=[],
-        text_creation=None,
+        text_creation="created",
         bibtex_citation=None,
         n_samples={"test": 1524},
         avg_character_length={"test": 40.3},
