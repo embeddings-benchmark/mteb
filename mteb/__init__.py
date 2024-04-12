@@ -75,9 +75,14 @@ MTEB_MAIN_EN = [
     "TwentyNewsgroupsClustering",
     "TwitterSemEval2015",
     "TwitterURLCorpus",
+]
+
+
+MTEB_INSTRUCTION_FOLLOWING = [
     "RobustInstructionRetrieval",
     "NewsInstructionRetrieval",
     "CoreInstructionRetrieval",
+]
 
   
 MTEB_RETRIEVAL_LAW = [
