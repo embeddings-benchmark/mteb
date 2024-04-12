@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 import numpy as np
@@ -29,7 +31,9 @@ class PairClassificationEvaluator(Evaluator):
     :param write_csv: Write results to a CSV file
     """
 
-    def __init__(self, sentences1, sentences2, labels, batch_size=32, limit=None, **kwargs):
+    def __init__(
+        self, sentences1, sentences2, labels, batch_size=32, limit=None, **kwargs
+    ):
         super().__init__(**kwargs)
         if limit:
             sentences1 = sentences1[:limit]
@@ -68,7 +72,10 @@ class PairClassificationEvaluator(Evaluator):
 
         embeddings1_np = np.asarray(embeddings1)
         embeddings2_np = np.asarray(embeddings2)
-        dot_scores = [np.dot(embeddings1_np[i], embeddings2_np[i]) for i in range(len(embeddings1_np))]
+        dot_scores = [
+            np.dot(embeddings1_np[i], embeddings2_np[i])
+            for i in range(len(embeddings1_np))
+        ]
 
         logger.info("Computing metrics...")
         labels = np.asarray(self.labels)
@@ -99,10 +106,14 @@ class PairClassificationEvaluator(Evaluator):
         acc, acc_threshold = PairClassificationEvaluator.find_best_acc_and_threshold(
             scores, labels, high_score_more_similar
         )
-        f1, precision, recall, f1_threshold = PairClassificationEvaluator.find_best_f1_and_threshold(
+        f1, precision, recall, f1_threshold = (
+            PairClassificationEvaluator.find_best_f1_and_threshold(
+                scores, labels, high_score_more_similar
+            )
+        )
+        ap = PairClassificationEvaluator.ap_score(
             scores, labels, high_score_more_similar
         )
-        ap = PairClassificationEvaluator.ap_score(scores, labels, high_score_more_similar)
 
         return {
             "accuracy": acc,
@@ -179,4 +190,6 @@ class PairClassificationEvaluator(Evaluator):
 
     @staticmethod
     def ap_score(scores, labels, high_score_more_similar: bool):
-        return average_precision_score(labels, scores * (1 if high_score_more_similar else -1))
+        return average_precision_score(
+            labels, scores * (1 if high_score_more_similar else -1)
+        )

@@ -1,10 +1,13 @@
 """Example script for benchmarking all datasets constituting the MTEB Chinese leaderboard & average scores"""
 
-import logging
+from __future__ import annotations
+
 import functools
+import logging
+
+from sentence_transformers import SentenceTransformer
 
 from mteb import MTEB
-from sentence_transformers import SentenceTransformer
 
 logging.basicConfig(level=logging.INFO)
 

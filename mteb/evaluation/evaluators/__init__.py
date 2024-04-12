@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from .BitextMiningEvaluator import *
 from .ClassificationEvaluator import *
 from .ClusteringEvaluator import *

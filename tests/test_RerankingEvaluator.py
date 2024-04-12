@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from mteb.evaluation.evaluators import RerankingEvaluator
@@ -17,12 +19,20 @@ class TestRerankingEvaluator:
         is_relevant = [1, 1, 1, 0, 0, 0, 0, 0, 0]
         pred_ranking = [5, 2, 6, 1, 3, 4, 7, 8, 9]
 
-        assert self.evaluator.mrr_at_k_score(is_relevant, pred_ranking, 10) == pytest.approx(0.5, TOL)
-        assert self.evaluator.mrr_at_k_score(is_relevant, pred_ranking, 3) == pytest.approx(0.5, TOL)
-        assert self.evaluator.mrr_at_k_score(is_relevant, pred_ranking, 1) == pytest.approx(0, TOL)
+        assert self.evaluator.mrr_at_k_score(
+            is_relevant, pred_ranking, 10
+        ) == pytest.approx(0.5, TOL)
+        assert self.evaluator.mrr_at_k_score(
+            is_relevant, pred_ranking, 3
+        ) == pytest.approx(0.5, TOL)
+        assert self.evaluator.mrr_at_k_score(
+            is_relevant, pred_ranking, 1
+        ) == pytest.approx(0, TOL)
 
     def test_map(self):
         is_relevant = [1, 1, 1, 0, 0]
         pred_scores = [0.75, 0.93, 0.85, 0.76, 0.75]
 
-        assert self.evaluator.ap_score(is_relevant, pred_scores) == pytest.approx(0.86666, TOL)
+        assert self.evaluator.ap_score(is_relevant, pred_scores) == pytest.approx(
+            0.86666, TOL
+        )

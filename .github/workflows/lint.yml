@@ -1,0 +1,28 @@
+# GitHub action to run linting
+
+name: run-linting
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: make install
+
+      - name: Lint
+        id: lint
+        run: |
+          make lint

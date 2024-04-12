@@ -2,6 +2,9 @@
 Merges CQADupstack subset results
 Usage: python merge_cqadupstack.py path_to_results_folder
 """
+
+from __future__ import annotations
+
 import glob
 import json
 import logging
@@ -55,12 +58,16 @@ if len(files) == len(TASK_LIST_CQA):
                     if metric == "evaluation_time":
                         score = all_results[split][metric] + score
                     elif metric not in NOAVG_KEYS:
-                        score = all_results[split][metric] + score * 1 / len(TASK_LIST_CQA)
+                        score = all_results[split][metric] + score * 1 / len(
+                            TASK_LIST_CQA
+                        )
                     all_results[split][metric] = score
     all_results["mteb_dataset_name"] = "CQADupstackRetrieval"
 
     logger.info("Saving ", all_results)
-    with open(os.path.join(results_folder, "CQADupstackRetrieval.json"), "w", encoding="utf-8") as f:
+    with open(
+        os.path.join(results_folder, "CQADupstackRetrieval.json"), "w", encoding="utf-8"
+    ) as f:
         json.dump(all_results, f, indent=4)
 else:
     logger.warning(

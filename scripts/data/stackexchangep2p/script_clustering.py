@@ -1,16 +1,18 @@
+from __future__ import annotations
+
 import gzip
 import os
 
 import datasets
+import jsonlines
 import numpy as np
 from tqdm import tqdm
 
-import jsonlines
-
-
 np.random.seed(28042000)
 
-d = datasets.load_dataset("flax-sentence-embeddings/stackexchange_title_body_jsonl")["validation"]
+d = datasets.load_dataset("flax-sentence-embeddings/stackexchange_title_body_jsonl")[
+    "validation"
+]
 
 # d = d.select(range(1000))
 

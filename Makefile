@@ -1,37 +1,22 @@
-.PHONY: modified_only_fixup quality style fixup tests
+install:
+	@echo "--- 🚀 Installing project dependencies ---"
+	pip install -e ".[dev]"
 
-check_dirs := tests mteb scripts
+install-for-tests:
+	@echo "--- 🚀 Installing project dependencies for test ---"
+	@echo "This ensures that the project is not installed in editable mode"
+	pip install ".[dev]"
 
-modified_only_fixup:
-	$(eval modified_py_files := $(shell python utils/get_modified_files.py $(check_dirs)))
-	@if test -n "$(modified_py_files)"; then \
-		echo "Checking/fixing $(modified_py_files)"; \
-		black --preview $(modified_py_files); \
-		isort $(modified_py_files); \
-		flake8 $(modified_py_files); \
-	else \
-		echo "No library .py files were modified"; \
-	fi
-
-
-# this target runs checks on all files
-
-quality:
-	black --check --preview $(check_dirs)
-	isort --check-only $(check_dirs)
-	flake8 $(check_dirs)
-
-# this target runs checks on all files and potentially modifies some of them
-
-style:
-	black --preview $(check_dirs)
-	isort $(check_dirs)
-
-# Super fast fix and check target that only works on relevant modified files since the branch was made
-
-fixup: modified_only_fixup
-
-# Run tests for the library
+lint:
+	@echo "--- 🧹 Running linters ---"
+	ruff format . 			# running ruff formatting
+	ruff check . --fix  	# running ruff linting
 
 test:
-	pytest -n auto --dist=loadfile -s -v ./tests/
+	@echo "--- 🧪 Running tests ---"
+	pytest -n auto --durations=5
+
+pr:
+	@echo "--- 🚀 Running requirements for a PR ---"
+	make lint
+	make test

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import random
 from abc import ABC, abstractmethod
 
@@ -5,8 +7,12 @@ import datasets
 import numpy as np
 import torch
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 
 class AbsTask(ABC):
+    metadata: TaskMetadata
+
     def __init__(self, seed=42, **kwargs):
         self.dataset = None
         self.data_loaded = False
@@ -20,30 +26,27 @@ class AbsTask(ABC):
         torch.manual_seed(self.seed)
         torch.cuda.manual_seed_all(self.seed)
 
+    def dataset_transform(self):
+        """
+        Transform operations applied to the dataset after loading.
+        Override this method if your dataset requires any transformation.
+        """
+        pass
+
     def load_data(self, **kwargs):
         """
         Load dataset from HuggingFace hub
         """
-        if self.data_loaded: return
-
-        # TODO: add split argument
-        self.dataset = datasets.load_dataset(
-            self.description["hf_hub_name"], revision=self.description.get("revision", None)
-        )
+        if self.data_loaded:
+            return
+        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
+        self.dataset_transform()
         self.data_loaded = True
 
     @property
-    @abstractmethod
-    def description(self):
-        """
-        Returns a description of the task. Should contain the following fields:
-        name: Name of the task (usually equal to the class name. Should be a valid name for a path on disc)
-        description: Longer description & references for the task
-        type: Of the set: [sts]
-        eval_splits: Splits used for evaluation as list, e.g. ['dev', 'test']
-        main_score: Main score value for task
-        """
-        raise NotImplementedError
+    def metadata_dict(self) -> dict[str, str]:
+        metadata_dict = dict(self.metadata)
+        return metadata_dict
 
     @abstractmethod
     def evaluate(self, model, split="test"):
@@ -55,3 +58,24 @@ class AbsTask(ABC):
         :param split: Which datasplit to be used.
         """
         raise NotImplementedError
+
+    @property
+    def languages(self) -> set[str]:
+        """
+        Returns the languages of the task
+        """
+        return self.metadata.languages
+
+    def __repr__(self) -> str:
+        """
+        Format the representation of the task such that it appears as:
+
+        TaskObjectName(name='{name}', languages={lang1, lang2, ...})
+        """
+        langs = self.languages
+        if len(langs) > 3:
+            langs = list(langs)[:3]
+            langs.append("...")
+        return (
+            f"{self.__class__.__name__}(name='{self.metadata.name}', languages={langs})"
+        )

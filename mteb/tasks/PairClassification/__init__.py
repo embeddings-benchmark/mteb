@@ -1,7 +1,9 @@
-from .CMTEBPairClassification import *
-from .OpusparcusPC import *
-from .PolishPC import *
-from .PawsX import *
-from .SprintDuplicateQuestionsPC import *
-from .TwitterSemEval2015PC import *
-from .TwitterURLCorpusPC import *
+from __future__ import annotations
+
+from .eng.SprintDuplicateQuestionsPC import *
+from .eng.TwitterSemEval2015PC import *
+from .eng.TwitterURLCorpusPC import *
+from .multilingual.OpusparcusPC import *
+from .multilingual.PawsX import *
+from .pol.PolishPC import *
+from .zho.CMTEBPairClassification import *

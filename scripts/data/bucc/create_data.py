@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import gzip
 import json
 import re
 
 from huggingface_hub import upload_file
-
 
 repo_name = "bucc-bitext-mining"
 # create_repo(repo_name, organization="mteb", repo_type="dataset")

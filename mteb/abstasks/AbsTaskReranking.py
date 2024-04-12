@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from ..evaluation.evaluators import RerankingEvaluator
 from .AbsTask import AbsTask
 
@@ -5,10 +7,11 @@ from .AbsTask import AbsTask
 class AbsTaskReranking(AbsTask):
     """
     Abstract class for re-ranking experiments.
-    Child-classes must implement the following properties:
-    self.corpus = {'dev': Dict[id, str], 'test': Dict[id, str]}         #id => sentence
-    self.queries = {'dev': Dict[id, str], 'test': Dict[id, str]}
-    self.relevant_docs = {'dev': Dict[id, set], 'test': Dict[id, set]}
+
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+        query: str
+        positive: list[str]
+        negative: list[str]
     """
 
     def __init__(self, **kwargs):

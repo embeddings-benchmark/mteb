@@ -1,6 +1,10 @@
-__version__ = "1.2.1.dev0"
+from __future__ import annotations
+
+from importlib.metadata import version
 
 from mteb.evaluation import *
+
+__version__ = version("mteb")  # fetch version from install metadata
 
 
 MTEB_MAIN_EN = [
@@ -74,4 +78,15 @@ MTEB_MAIN_EN = [
     "RobustInstructionRetrieval",
     "NewsInstructionRetrieval",
     "CoreInstructionRetrieval",
+
+  
+MTEB_RETRIEVAL_LAW = [
+    "LegalSummarization",
+    "LegalBenchConsumerContractsQA",
+    "LegalBenchCorporateLobbying",
+    "AILACasedocs",
+    "AILAStatutes",
+    "LeCaRDv2",
+    "LegalQuAD",
+    "GerDaLIRSmall",
 ]
