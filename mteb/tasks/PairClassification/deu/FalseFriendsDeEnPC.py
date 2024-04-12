@@ -21,7 +21,7 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
         main_score="ap",
         date=None,
         form=None,
-        domains=None,
+        domains=[],
         task_subtypes=None,
         license="mit",
         socioeconomic_status=None,
