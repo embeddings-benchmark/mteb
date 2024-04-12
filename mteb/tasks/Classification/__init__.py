@@ -12,6 +12,7 @@ from .en.ImdbClassification import *
 from .en.NewsClassification import *
 from .en.ToxicConversationsClassification import *
 from .en.TweetSentimentExtractionClassification import *
+from .hin.HindiDiscourseClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
 from .multilingual.MasakhaNEWSClassification import *
