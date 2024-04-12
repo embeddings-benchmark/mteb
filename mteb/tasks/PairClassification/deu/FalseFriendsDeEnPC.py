@@ -12,7 +12,7 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
         reference="https://drive.google.com/file/d/1jgq0nBnV-UiYNxbKNrrr2gxDEHm-DMKH/view?usp=share_link",
         dataset={
             "path": "aari1995/false_friends_de_en_mteb",
-            "revision": "7d8812d78d85f62b541d8383565f938b8ce10a22",
+            "revision": "15d6c030d3336cbb09de97b2cefc46db93262d40",
         },
         type="PairClassification",
         category="s2s",
@@ -29,7 +29,7 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={"test": 1778},
+        n_samples={"test": 1524},
         avg_character_length={"test": 40.3},
     )
 
