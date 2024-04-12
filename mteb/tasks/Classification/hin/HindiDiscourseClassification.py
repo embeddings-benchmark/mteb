@@ -47,8 +47,6 @@ class HindiDiscourseClassification(AbsTaskClassification):
     address = "Marseille, France",
     publisher = "European Language Resources Association",
     url = "https://www.aclweb.org/anthology/2020.lrec-1.149",
-    pages = "1191--1196",
-    abstract = "In this paper, we present a new corpus consisting of sentences from Hindi short stories annotated for five different discourse modes argumentative, narrative, descriptive, dialogic and informative. We present a detailed account of the entire data collection and annotation processes. The annotations have a very high inter-annotator agreement (0.87 k-alpha). We analyze the data in terms of label distributions, part of speech tags, and sentence lengths. We characterize the performance of various classification algorithms on this dataset and perform ablation studies to understand the nature of the linguistic models suitable for capturing the nuances of the embedded discourse structures in the presented corpus.",
     language = "English",
     ISBN = "979-10-95546-34-4",
 }""",
