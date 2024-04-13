@@ -38,7 +38,8 @@ def _load_mintaka_data(
         question_ids = {
             question: _id for _id, question in enumerate(set(data["question"]))
         }
-        answer_ids = {answer: _id for _id, answer in enumerate(set(data["answer"]))}
+        answer_ids = {answer: _id for _id,
+                      answer in enumerate(set(data["answer"]))}
 
         for row in data:
             question = row["question"]

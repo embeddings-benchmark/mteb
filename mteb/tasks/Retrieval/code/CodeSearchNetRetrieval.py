@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import datasets
 
+from mteb.abstasks import MultilingualTask
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -9,7 +10,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 _LANGS = ['python', 'javascript', 'go', 'ruby', 'java', 'php']
 
 
-class CodeSearchNetRetrieval(AbsTaskRetrieval):
+class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
     metadata = TaskMetadata(
         name="CodeSearchNetRetrieval",
