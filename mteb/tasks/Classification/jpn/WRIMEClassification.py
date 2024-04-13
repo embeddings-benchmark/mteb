@@ -10,7 +10,7 @@ class WRIMEClassification(AbsTaskClassification):
         dataset={
             "path": "shunk031/wrime",
             "revision": "3fb7212c389d7818b8e6179e2cdac762f2e081d9",
-            "name": "ver2"
+            "name": "ver2",
         },
         description="A dataset of Japanese social network rated for sentiment",
         reference="https://aclanthology.org/2021.naacl-main.169/",
@@ -54,19 +54,17 @@ class WRIMEClassification(AbsTaskClassification):
     pages = "2095--2104",
     abstract = "We annotate 17,000 SNS posts with both the writer{'}s subjective emotional intensity and the reader{'}s objective one to construct a Japanese emotion analysis dataset. In this study, we explore the difference between the emotional intensity of the writer and that of the readers with this dataset. We found that the reader cannot fully detect the emotions of the writer, especially anger and trust. In addition, experimental results in estimating the emotional intensity show that it is more difficult to estimate the writer{'}s subjective labels than the readers{'}. The large gap between the subjective and objective emotions imply the complexity of the mapping from a post to the subjective emotion intensities, which also leads to a lower performance with machine learning models.",
 }""",
-        n_samples={"test": 9010}, # TODO
-        avg_character_length={"test": 69.9}, # TODO
+        n_samples={"test": 2048},
+        avg_character_length={"test": 47.78},
     )
 
     def dataset_transform(self):
-        
-        self.dataset = self.dataset.flatten().select_columns(['sentence', 'avg_readers.sentiment'])
+        self.dataset = self.dataset.flatten().select_columns(
+            ["sentence", "avg_readers.sentiment"]
+        )
         self.dataset = self.dataset.rename_column("sentence", "text")
         self.dataset = self.dataset.rename_column("avg_readers.sentiment", "label")
-        # random downsample to 2048 
-        self.dataset['test'] = self.dataset['test'].shuffle(seed=42)
-        max_samples = min(2048, len(self.dataset['test']))
-        self.dataset['test'] = self.dataset['test'].select(
-            range(max_samples)
-        )
-        
+        # random downsample to 2048
+        self.dataset["test"] = self.dataset["test"].shuffle(seed=42)
+        max_samples = min(2048, len(self.dataset["test"]))
+        self.dataset["test"] = self.dataset["test"].select(range(max_samples))
