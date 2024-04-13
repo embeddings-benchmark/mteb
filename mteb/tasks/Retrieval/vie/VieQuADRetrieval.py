@@ -85,11 +85,6 @@ pages = "2595--2605"}""",
         contexts = [contexts[idx] for idx in indices]
         answers = [answers[idx] for idx in indices]
 
-        average_length = sum(len(context) for context in set(contexts)) / len(
-            set(contexts)
-        )
-        print(f"Average Character Length of Contexts: {average_length:.2f}")
-
         self.corpus = {split: {}}
         self.relevant_docs = {split: {}}
         self.queries = {split: {}}
