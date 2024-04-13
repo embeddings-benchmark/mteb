@@ -2,14 +2,14 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 8         |                |          |             4 |
+| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 9         |                |          |             5 |
 | x-tabdeveloping   |              | 18          |          |                     |            |                |           |                |          |               |
 | imenelydiaker     |              | 88          |          |                     |            |                | 7         |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
 | GabrielSequeira   |              | 88          |          |                     |            |                |           |                |          |               |
 | schmarion         |              | 88          |          |                     |            |                |           |                |          |               |
 | MathieuCiancone   |              | 88          |          |                     |            |                |           |                |          |               |
-| Sakshamrzt        |              | 4           |          |                     |            |                |           |                |          |               |
+| Sakshamrzt        |              | 10          |          |                     |            |                |           |                |          |               |
 | MartinBernstorff  |              | 2           |          |                     | 7          |                | 3         |                |          |               |
 | guenthermi        |              | 12          |          |                     |            |                |           |                |          |               |
 | Muennighoff       |              |             |          |                     |            |                | 8         |                |          |               |
