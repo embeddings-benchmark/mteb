@@ -73,3 +73,4 @@ from .swe.swedn_retrieval import *
 from .swe.swefaq_retrieval import *
 from .zho.CMTEBRetrieval import *
 from .zho.LeCaRDv2Retrieval import *
+from .code.CodeSearchNetRetrieval import *
