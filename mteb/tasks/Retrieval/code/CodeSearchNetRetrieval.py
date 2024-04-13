@@ -6,8 +6,7 @@ from mteb.abstasks import MultilingualTask
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-
-_LANGS = ['python', 'javascript', 'go', 'ruby', 'java', 'php']
+_LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
 
 
 class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
@@ -71,12 +70,14 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         self.relevant_docs = {}
 
         for lang, sub in lang_subs.items():
-            sub = sub[:min(
-                len(sub), self.metadata_dict["n_samples"][self._EVAL_SPLIT])]
+            sub = sub[
+                : min(len(sub), self.metadata_dict["n_samples"][self._EVAL_SPLIT])
+            ]
 
             self.queries[lang] = {
                 self._EVAL_SPLIT: {
-                    str(i): row["func_documentation_string"] for i, row in enumerate(sub)
+                    str(i): row["func_documentation_string"]
+                    for i, row in enumerate(sub)
                 }
             }
             self.corpus[lang] = {
