@@ -6,6 +6,9 @@ from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
+_LANGS = ['python', 'javascript', 'go', 'ruby', 'java', 'php']
+
+
 class CodeSearchNetRetrieval(AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
     metadata = TaskMetadata(
@@ -19,7 +22,7 @@ class CodeSearchNetRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="p2p",
         eval_splits=[_EVAL_SPLIT],
-        eval_langs=["eng-Latn"],
+        eval_langs=_LANGS,
         main_score="ndcg_at_10",
         date=None,
         form=None,
@@ -32,7 +35,7 @@ class CodeSearchNetRetrieval(AbsTaskRetrieval):
         text_creation="found",
         bibtex_citation="@article{husain2019codesearchnet, title={{CodeSearchNet} challenge: Evaluating the state of semantic code search}, author={Husain, Hamel and Wu, Ho-Hsiang and Gazit, Tiferet and Allamanis, Miltiadis and Brockschmidt, Marc}, journal={arXiv preprint arXiv:1909.09436}, year={2019} }",
         n_samples={
-            _EVAL_SPLIT: 5000,
+            _EVAL_SPLIT: 1000,
         },
         avg_character_length=None,
     )
@@ -46,9 +49,7 @@ class CodeSearchNetRetrieval(AbsTaskRetrieval):
             trust_remote_code=True,
             **self.metadata_dict["dataset"],
         )
-        # take a random (seeded) subset of the data
         data = data.shuffle(seed=42)
-        data = data.select(range(self.metadata_dict["n_samples"][self._EVAL_SPLIT]))
 
         # remove any leaked labels. quite common in this dataset
         data = data.map(
@@ -59,21 +60,33 @@ class CodeSearchNetRetrieval(AbsTaskRetrieval):
             }
         )
 
-        self.queries = {
-            self._EVAL_SPLIT: {
-                str(i): row["func_documentation_string"] for i, row in enumerate(data)
+        lang_subs = {lang: [] for lang in _LANGS}
+        for ex in data:
+            lang_subs[ex["language"]].append(ex)
+
+        self.queries = {}
+        self.corpus = {}
+        self.relevant_docs = {}
+
+        for lang, sub in lang_subs.items():
+            sub = sub[:min(
+                len(sub), self.metadata_dict["n_samples"][self._EVAL_SPLIT])]
+
+            self.queries[lang] = {
+                self._EVAL_SPLIT: {
+                    str(i): row["func_documentation_string"] for i, row in enumerate(sub)
+                }
             }
-        }
-        self.corpus = {
-            self._EVAL_SPLIT: {
-                str(row["func_code_url"]): {"text": row["func_code_string"]}
-                for row in data
+            self.corpus[lang] = {
+                self._EVAL_SPLIT: {
+                    str(row["func_code_url"]): {"text": row["func_code_string"]}
+                    for row in sub
+                }
             }
-        }
-        self.relevant_docs = {
-            self._EVAL_SPLIT: {
-                str(i): {row["func_code_url"]: 1} for i, row in enumerate(data)
+            self.relevant_docs[lang] = {
+                self._EVAL_SPLIT: {
+                    str(i): {row["func_code_url"]: 1} for i, row in enumerate(sub)
+                }
             }
-        }
 
         self.data_loaded = True
