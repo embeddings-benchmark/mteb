@@ -214,6 +214,8 @@ class TaskMetadata(BaseModel):
         This method checks that the language code (e.g. "eng-Latn") is valid.
         """
         lang, script = code.split("-")
+        if script == "Code":
+            return # override for code
         if lang not in ISO_TO_LANGUAGE:
             raise ValueError(
                 f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
