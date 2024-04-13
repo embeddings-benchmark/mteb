@@ -22,7 +22,7 @@ class CodeSearchNetRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="p2p",
         eval_splits=[_EVAL_SPLIT],
-        eval_langs={lang: [lang] for lang in _LANGS},
+        eval_langs={lang: [lang + "-Latn"] for lang in _LANGS},
         main_score="ndcg_at_10",
         date=None,
         form=None,
