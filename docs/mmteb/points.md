@@ -42,10 +42,7 @@ First name and last name are as you want them to appear in a publication.
 | MathieuCiancone   | Mathieu    | Ciancone   |                              |                      |  Wikit, Lyon, France                                  |
 | MartinBernstorff  | Martin     | Bernstorff | martinbernstorff@gmail.com   | ~Martin_Bernstorff1  |  Aarhus University, Denmark                           |
 | staoxiao          | Shitao     | Xiao       | 2906698981@qq.com            | ~Shitao_Xiao1        |  Beijing Academy of Artificial Intelligence           |
-<<<<<<< HEAD
 | taidnguyen        | Nguyen     | Tai        | taing@seas.upenn.edu         | ~Nguyen_Tai1         |  University of Pennsylvania                           |
-=======
 | xu3kev            | Wen-Ding   | Li         | wl678@cornell.edu            | ~Wen-Ding_Li1        |  Cornell University                                   |
 
 
->>>>>>> ad6a40fd94a385a49347b7f74277c52a7f12e9b6
