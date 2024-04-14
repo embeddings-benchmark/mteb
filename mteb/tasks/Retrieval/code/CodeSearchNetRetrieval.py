@@ -37,7 +37,7 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         n_samples={
             _EVAL_SPLIT: 1000,
         },
-        avg_character_length=None,
+        avg_character_length={"test": 1196.4609},
     )
 
     def load_data(self, **kwargs):
