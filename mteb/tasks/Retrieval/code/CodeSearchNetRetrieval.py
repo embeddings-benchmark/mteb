@@ -25,7 +25,7 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         eval_langs={lang: [lang + "-Code"] for lang in _LANGS},
         main_score="ndcg_at_10",
         date=None,
-        form=None,
+        form="written",
         domains=None,
         task_subtypes=None,
         license=None,
