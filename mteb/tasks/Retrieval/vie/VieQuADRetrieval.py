@@ -29,7 +29,7 @@ class VieQuADRetrieval(AbsTaskRetrieval):
         form=["written"],
         domains=["Encyclopaedic", "Non-fiction"],
         task_subtypes=["Question answering"],
-        license=None,
+        license="mit",
         socioeconomic_status="medium",
         annotations_creators="human-annotated",
         dialect=[],

@@ -29,7 +29,7 @@ class VieMedEVBitextMining(AbsTaskBitextMining):
         form=["written"],
         domains=["Medical"],
         task_subtypes=[],
-        license=None,
+        license="cc-by-nc",
         socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
