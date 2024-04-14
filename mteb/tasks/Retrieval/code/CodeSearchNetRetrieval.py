@@ -26,7 +26,7 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=None,
         form="written",
-        domains=None,
+        domains=["Programming Languages"],
         task_subtypes=None,
         license=None,
         socioeconomic_status=None,
