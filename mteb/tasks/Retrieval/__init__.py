@@ -43,8 +43,6 @@ from .eng.SCIDOCSRetrieval import *
 from .eng.SciFactRetrieval import *
 from .eng.Touche2020Retrieval import *
 from .eng.TRECCOVIDRetrieval import *
-from .fas.NeuCLIR2022FasRetrieval import *
-from .fas.NeuCLIR2023FasRetrieval import *
 from .fra.AlloprofRetrieval import *
 from .fra.BSARDRetrieval import *
 from .fra.SyntecRetrieval import *
@@ -56,6 +54,8 @@ from .multilingual.MIRACLRetrieval import *
 from .multilingual.MultiLongDocRetrieval import *
 from .multilingual.XMarketRetrieval import *
 from .multilingual.XPQARetrieval import *
+from .multilingual.NeuCLIR2022Retrieval import *
+from .multilingual.NeuCLIR2023Retrieval import *
 from .nob.norquad import *
 from .nob.snl_retrieval import *
 from .pol.ArguAnaPLRetrieval import *
@@ -69,14 +69,10 @@ from .pol.QuoraPLRetrieval import *
 from .pol.SCIDOCSPLRetrieval import *
 from .pol.SciFactPLRetrieval import *
 from .pol.TRECCOVIDPLRetrieval import *
-from .rus.NeuCLIR2022RusRetrieval import *
-from .rus.NeuCLIR2023RusRetrieval import *
 from .spa.SpanishPassageRetrievalS2P import *
 from .spa.SpanishPassageRetrievalS2S import *
 from .swe.swedn_retrieval import *
 from .swe.swefaq_retrieval import *
 from .zho.CMTEBRetrieval import *
 from .zho.LeCaRDv2Retrieval import *
-from .zho.NeuCLIR2022ZhoRetrieval import *
-from .zho.NeuCLIR2023ZhoRetrieval import *
 
