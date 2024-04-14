@@ -145,8 +145,10 @@ class TaskMetadata(BaseModel):
         text_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
         bibtex_citation: The BibTeX citation for the dataset.
-        n_samples: The number of samples in the dataset. This should only be for the splits evaluated on.
-        avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on.
+        n_samples: The number of samples in the dataset. This should only be for the splits evaluated on. For retrieval tasks, this should be the
+            number of query-document pairs.
+        avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on. For
+            retrieval tasks, this should be the average character length of the query-document pairs.
     """
 
     dataset: dict
