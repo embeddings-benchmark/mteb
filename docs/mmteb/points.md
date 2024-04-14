@@ -22,7 +22,7 @@
 | violenil          |              | 26          |          |                     |            |                |           |                |          |               |
 | hanhainebula      |              | 2           |          |                     |            |                |           |                |          |               |
 | taeminlee         |              | 8           |          |                     |            |                |           |                |          |               |
-| taindnguyen       |              | 14          |          |                     |            |                |           |                |          |               |
+| taidnguyen       |              | 14          |          |                     |            |                |           |                |          |               |
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
 
