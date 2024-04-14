@@ -53,10 +53,10 @@ from .kor.KoStrategyQA import *
 from .multilingual.MintakaRetrieval import *
 from .multilingual.MIRACLRetrieval import *
 from .multilingual.MultiLongDocRetrieval import *
-from .multilingual.XMarketRetrieval import *
-from .multilingual.XPQARetrieval import *
 from .multilingual.NeuCLIR2022Retrieval import *
 from .multilingual.NeuCLIR2023Retrieval import *
+from .multilingual.XMarketRetrieval import *
+from .multilingual.XPQARetrieval import *
 from .nob.norquad import *
 from .nob.snl_retrieval import *
 from .pol.ArguAnaPLRetrieval import *
@@ -76,4 +76,3 @@ from .swe.swedn_retrieval import *
 from .swe.swefaq_retrieval import *
 from .zho.CMTEBRetrieval import *
 from .zho.LeCaRDv2Retrieval import *
-

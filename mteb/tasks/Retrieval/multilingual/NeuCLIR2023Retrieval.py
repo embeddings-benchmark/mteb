@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections import defaultdict
+
 import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -28,18 +30,20 @@ def load_neuclir_data(
     for lang in langs:
         lang_corpus = datasets.load_dataset(
             path, f"corpus-{lang}", cache_dir=cache_dir, revision=revision
-        )[f"corpus"]
+        )["corpus"]
         lang_queries = datasets.load_dataset(
             path, f"queries-{lang}", cache_dir=cache_dir, revision=revision
-        )[f"queries"]
+        )["queries"]
         lang_qrels = datasets.load_dataset(
             path, f"{lang}", cache_dir=cache_dir, revision=revision
-        )[f"test"]
+        )["test"]
         corpus[lang] = {"test": {e["_id"]: {"text": e["text"]} for e in lang_corpus}}
         queries[lang] = {"test": {e["_id"]: e["text"] for e in lang_queries}}
         relevant_docs[lang]["test"] = defaultdict(dict)
         for item in lang_qrels:
-            relevant_docs[lang]["test"][item["query-id"]].update({item["corpus-id"]: item["score"]})
+            relevant_docs[lang]["test"][item["query-id"]].update(
+                {item["corpus-id"]: item["score"]}
+            )
 
     corpus = datasets.DatasetDict(corpus)
     queries = datasets.DatasetDict(queries)
@@ -62,7 +66,7 @@ class NeuCLIR2023Retrieval(MultilingualTask, AbsTaskRetrieval):
         eval_langs=_LANGUAGES,
         main_score="ndcg_at_20",
         date=("2022-08-01", "2023-06-30"),
-        form=None, 
+        form=None,
         domains=None,
         task_subtypes=None,
         license="odc-by",
