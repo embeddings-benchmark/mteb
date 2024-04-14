@@ -215,7 +215,10 @@ class TaskMetadata(BaseModel):
         """
         lang, script = code.split("-")
         if script == "Code":
-            return  # override for code
+            if lang in PROGRAMMING_LANGS # you can create this list in the same file as where languages is loaded in
+              return  # override for code
+            else:
+               raise ValueError(f"Programming language {lang} is not a valid programming language.")
         if lang not in ISO_TO_LANGUAGE:
             raise ValueError(
                 f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
