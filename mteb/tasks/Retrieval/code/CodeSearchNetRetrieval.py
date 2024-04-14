@@ -29,7 +29,7 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         domains=["Programming Languages"],
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
+        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=None,
         text_creation="found",
