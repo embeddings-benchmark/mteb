@@ -25,4 +25,5 @@ from .nob.NoRecClassification import *
 from .nob.NorwegianParliamentClassification import *
 from .pol.PolishClassification import *
 from .swe.SweRecClassification import *
+from .yue.YueOpenriceClassification import YueOpenriceClassification
 from .zho.CMTEBClassification import *
