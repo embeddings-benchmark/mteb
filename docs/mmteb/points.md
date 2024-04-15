@@ -27,6 +27,7 @@
 | cassanof          |              | 6           |          |                     | 1          | 1              |           |                |          |               |
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
 | orionw         |              |            |          |                     |      2      |              |           |                |          |               |
+| Rysias |              |     24      |          |                    |          |                |         |                |          |              |
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
 
@@ -51,3 +52,4 @@ First name and last name are as you want them to appear in a publication.
 | xu3kev            | Wen-Ding   | Li         | wl678@cornell.edu            | ~Wen-Ding_Li1        |  Cornell University                                   |
 | orionw          | Orion     | Weller       | oweller@cs.jhu.edu            | ~Orion_Weller1        |  Johns Hopkins University          |
 | slvnwhrl          | Silvan     | Wehrli       | wehrlis@rki.de            | ~Silvan_Wehrli1        | Robert Koch Institute, Berlin, Germany          |
+| Rysias | Jonathan    | Rystrøm | jonathan.rystroem@gmail.com |  | University of Oxford, UK                            |
