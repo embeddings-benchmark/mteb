@@ -2,7 +2,7 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 14        |                |          |             5 |
+| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 16        |                |          |             5 |
 | x-tabdeveloping   |              | 18          |          |                     |            |                |           |                |          |               |
 | imenelydiaker     |              | 88          |          |                     |            |                | 7         |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
@@ -22,9 +22,9 @@
 | violenil          |              | 26          |          |                     |            |                |           |                |          |               |
 | hanhainebula      |              | 2           |          |                     |            |                |           |                |          |               |
 | taeminlee         |              | 8           |          |                     |            |                |           |                |          |               |
+| xu3kev            |              | 8           |          |                     |            |                |           |                |          |               |
 | cassanof          |              | 6           |          |                     | 1          | 1              |           |                |          |               |
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
-| xu3kev            |              | 6           |          |                     |            |                |           |                |          |               |
 | orionw         |              |            |          |                     |      2      |              |           |                |          |               |
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
