@@ -35,6 +35,7 @@ TASK_SUBTYPE = Literal[
     "Claim verification",
     "Topic classification",
     "Code retrieval",
+    "False Friends",
 ]
 
 TASK_DOMAIN = Literal[

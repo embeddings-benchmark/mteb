@@ -1,11 +1,14 @@
 from __future__ import annotations
 
-import datasets
 import random
+
+import datasets
+
 from mteb.abstasks import AbsTaskBitextMining
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 TEST_SAMPLES = 2048
+
 
 class VieMedEVBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
@@ -57,7 +60,9 @@ class VieMedEVBitextMining(AbsTaskBitextMining):
         # Pairs are in two halves
         en_sentences = all_texts[:mid_index]
         vie_sentences = all_texts[mid_index:]
-        assert len(en_sentences) == len(vie_sentences), "The split does not result in equal halves."
+        assert len(en_sentences) == len(
+            vie_sentences
+        ), "The split does not result in equal halves."
 
         # Downsample
         indices = list(range(len(en_sentences)))
@@ -65,7 +70,9 @@ class VieMedEVBitextMining(AbsTaskBitextMining):
         sample_indices = indices[:TEST_SAMPLES]
         en_sentences = [en_sentences[i] for i in sample_indices]
         vie_sentences = [vie_sentences[i] for i in sample_indices]
-        assert len(en_sentences) == len(vie_sentences) == TEST_SAMPLES, f"Exceeded {TEST_SAMPLES} samples for 'test' split."
+        assert (
+            len(en_sentences) == len(vie_sentences) == TEST_SAMPLES
+        ), f"Exceeded {TEST_SAMPLES} samples for 'test' split."
 
         # Return dataset
         ds["test"] = datasets.Dataset.from_dict(

@@ -27,7 +27,7 @@ TASK_LIST_CLUSTERING = [
     "TenKGnadClusteringS2S",
 ]
 
-TASK_LIST_PAIR_CLASSIFICATION = ["PawsX"]
+TASK_LIST_PAIR_CLASSIFICATION = ["FalseFriendsGermanEnglish", "PawsX"]
 
 TASK_LIST_RERANKING = ["MIRACL"]
 
