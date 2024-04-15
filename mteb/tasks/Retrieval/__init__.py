@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .code.CodeSearchNetRetrieval import *
 from .dan.dan_fever import *
 from .dan.t2nord_retrieval import *
 from .dan.twitterhjerne import *
@@ -48,7 +49,6 @@ from .fra.BSARDRetrieval import *
 from .fra.SyntecRetrieval import *
 from .jpn.JaQuADRetrieval import *
 from .kor.KoMiracl import *
-from .kor.KoMrtydi import *
 from .kor.KoStrategyQA import *
 from .multilingual.MintakaRetrieval import *
 from .multilingual.MIRACLRetrieval import *
@@ -72,5 +72,6 @@ from .spa.SpanishPassageRetrievalS2P import *
 from .spa.SpanishPassageRetrievalS2S import *
 from .swe.swedn_retrieval import *
 from .swe.swefaq_retrieval import *
+from .vie.VieQuADRetrieval import *
 from .zho.CMTEBRetrieval import *
 from .zho.LeCaRDv2Retrieval import *
