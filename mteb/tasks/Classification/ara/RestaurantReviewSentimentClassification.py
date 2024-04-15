@@ -37,7 +37,7 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
   organization={Springer}
 }
 """,
-        n_samples={"train": 8364},
+        n_samples={"train": 2048},
         avg_character_length={"train": 231.4},
     )
 
