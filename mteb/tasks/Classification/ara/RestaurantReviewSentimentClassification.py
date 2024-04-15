@@ -15,7 +15,7 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
         reference="https://link.springer.com/chapter/10.1007/978-3-319-18117-2_2",
         type="Classification",
         category="s2s",
-        eval_splits=["test"],
+        eval_splits=["train"],
         eval_langs=["ara-Arab"],
         main_score="accuracy",
         date=("2014-01-01", "2015-01-01"),
@@ -44,6 +44,4 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
     def dataset_transform(self):
         # labels: 0 negative, 1 positive
         self.dataset = self.dataset.rename_column("polarity", "label")
-        self.dataset = self.dataset["train"].train_test_split(
-            0.2, stratify_by_column="label", seed=self.seed
-        )
+        self.dataset["train"] = self.dataset["train"].shuffle(seed=self.seed).select(range(2048))
