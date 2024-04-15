@@ -2,7 +2,7 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 17        |                |          |             5 |
+| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 18        |                |          |             5 |
 | x-tabdeveloping   |              | 18          |          |                     |            |                |           |                |          |               |
 | imenelydiaker     |              | 88          |          |                     |            |                | 7         |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
@@ -27,7 +27,7 @@
 | cassanof          |              | 6           |          |                     | 1          | 1              |           |                |          |               |
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
 | orionw         |              |            |          |                     |      2      |              |           |                |          |               |
-| Rysias |              |     24      |          |                    |          |                |         |                |          |              |
+| Rysias |              |     16      |          |                    |          |                |         |                |          |              |
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
 
