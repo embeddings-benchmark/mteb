@@ -2,7 +2,7 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 11        |                |          |             5 |
+| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 13        |                |          |             5 |
 | x-tabdeveloping   |              | 18          |          |                     |            |                |           |                |          |               |
 | imenelydiaker     |              | 88          |          |                     |            |                | 7         |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
@@ -24,6 +24,7 @@
 | taeminlee         |              | 8           |          |                     |            |                |           |                |          |               |
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
 | xu3kev            |              | 6           |          |                     |            |                |           |                |          |               |
+| orionw         |              |            |          |                     |      2      |              |           |                |          |               |
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
 
@@ -44,5 +45,6 @@ First name and last name are as you want them to appear in a publication.
 | staoxiao          | Shitao     | Xiao       | 2906698981@qq.com            | ~Shitao_Xiao1        |  Beijing Academy of Artificial Intelligence           |
 | taidnguyen        | Nguyen     | Tai        | taing@seas.upenn.edu         | ~Nguyen_Tai1         |  University of Pennsylvania                           |
 | xu3kev            | Wen-Ding   | Li         | wl678@cornell.edu            | ~Wen-Ding_Li1        |  Cornell University                                   |
+| orionw          | Orion     | Weller       | oweller@cs.jhu.edu            | ~Orion_Weller1        |  Johns Hopkins University          |
 
 

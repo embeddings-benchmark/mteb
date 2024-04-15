@@ -48,7 +48,6 @@ from .fra.BSARDRetrieval import *
 from .fra.SyntecRetrieval import *
 from .jpn.JaQuADRetrieval import *
 from .kor.KoMiracl import *
-from .kor.KoMrtydi import *
 from .kor.KoStrategyQA import *
 from .multilingual.MintakaRetrieval import *
 from .multilingual.MIRACLRetrieval import *
