@@ -28,7 +28,7 @@ class JSTS(AbsTaskSTS):
         license="CC BY-SA 4.0",
         socioeconomic_status="high",
         annotations_creators="human-annotated",
-        dialect=None,
+        dialect=[],
         text_creation="found",
         bibtex_citation="""@inproceedings{kurihara-etal-2022-jglue,
     title = "{JGLUE}: {J}apanese General Language Understanding Evaluation",
