@@ -4,7 +4,7 @@ from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class BlurbsClusteringP2P(AbsTaskClustering):
+class WikiClusteringP2P(AbsTaskClustering):
     metadata = TaskMetadata(
         name="WikiClusteringP2P",
         description="Clustering of wikipedia articles inspired by BlubrbsClusteringP2P. Labels are taken from top-level categories as defined in https://gv.wikipedia.org/wiki/Ronney:Bunneydagh.",
