@@ -2,8 +2,7 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 13        |                |          |             5 |
-| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 18        |                |          |             5 |
+| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 19        |                |          |             5 |
 | x-tabdeveloping   |              | 18          |          |                     |            |                |           |                |          |               |
 | imenelydiaker     |              | 88          |          |                     |            |                | 9         |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
@@ -25,7 +24,7 @@
 | taeminlee         |              | 8           |          |                     |            |                |           |                |          |               |
 | izhx              |              | 6           |          |                     |            |                |           |                |          |               |
 | achibb            |              | 2           |          |                     |            |                | 0         |                |          |               |   
-| xu3kev            |              | 8           |          |                     |            |                |           |                |          |               |
+| xu3kev            |              | 10           |          |                     |            |                |           |                |          |               |
 | cassanof          |              | 6           |          |                     | 1          | 1              |           |                |          |               |
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
 | orionw         |              |            |          |                     |      2      |              |           |                |          |               |
