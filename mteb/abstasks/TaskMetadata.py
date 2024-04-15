@@ -34,6 +34,7 @@ TASK_SUBTYPE = Literal[
     "Scientific Reranking",
     "Claim verification",
     "Topic classification",
+    "Code retrieval",
 ]
 
 TASK_DOMAIN = Literal[
@@ -52,6 +53,7 @@ TASK_DOMAIN = Literal[
     "Social",
     "Spoken",
     "Web",
+    "Programming",
 ]
 
 TEXT_CREATION_METHOD = Literal[
@@ -100,8 +102,11 @@ STR_DATE = Annotated[
 ]  # Allows the type to be a string, but ensures that the string is a valid date
 
 SPLIT_NAME = str
-ISO_LANGUAGE_SCRIPT = str  # a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
+# a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
+ISO_LANGUAGE_SCRIPT = str
 LANGUAGES = Union[List[ISO_LANGUAGE_SCRIPT], Mapping[str, List[ISO_LANGUAGE_SCRIPT]]]
+
+PROGRAMMING_LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
 
 logger = logging.getLogger(__name__)
 
@@ -216,6 +221,13 @@ class TaskMetadata(BaseModel):
         This method checks that the language code (e.g. "eng-Latn") is valid.
         """
         lang, script = code.split("-")
+        if script == "Code":
+            if lang in PROGRAMMING_LANGS:
+                return  # override for code
+            else:
+                raise ValueError(
+                    f"Programming language {lang} is not a valid programming language."
+                )
         if lang not in ISO_TO_LANGUAGE:
             raise ValueError(
                 f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
