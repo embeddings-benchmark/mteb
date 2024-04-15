@@ -26,5 +26,5 @@ from .nob.NoRecClassification import *
 from .nob.NorwegianParliamentClassification import *
 from .pol.PolishClassification import *
 from .swe.SweRecClassification import *
-from .yue.YueOpenriceClassification import YueOpenriceClassification  # noqa: F401
+from .yue.YueOpenriceReviewClassification import YueOpenriceReviewClassification  # noqa: F401
 from .zho.CMTEBClassification import *

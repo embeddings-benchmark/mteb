@@ -4,13 +4,13 @@ from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class YueOpenriceClassification(AbsTaskClassification):
+class YueOpenriceReviewClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="YueOpenriceClassification",
-        description="A Cantonese dataset for sentiment classification on review",
+        name="YueOpenriceReviewClassification",
+        description="A Cantonese dataset for review classification",
         reference="https://github.com/Christainx/Dataset_Cantonese_Openrice",
         dataset={
-            "path": "izhx/yue-openrice-senti",
+            "path": "izhx/yue-openrice-review",
             "revision": "b8b9a3d0e40bc0674945a0edb0bc549b554d6f20",
         },
         type="Classification",
@@ -18,14 +18,14 @@ class YueOpenriceClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs={"yue": ["yue-Hant"]},
         main_score="accuracy",
-        date=None,
+        date=("2019-01-01", "2019-05-01"),
         form=["spoken"],
         domains=["Reviews"],
         task_subtypes=["Sentiment/Hate speech"],
-        license=None,
-        socioeconomic_status=None,
+        license="Not specified",
+        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
-        dialect=None,
+        dialect=[],
         text_creation="found",
         bibtex_citation="""@inproceedings{xiang2019sentiment,
   title={Sentiment Augmented Attention Network for Cantonese Restaurant Review Analysis},
@@ -36,7 +36,7 @@ class YueOpenriceClassification(AbsTaskClassification):
   organization={KDD WISDOM}
 }""",
         n_samples={"test": 6161},
-        avg_character_length={"test": 173.2},
+        avg_character_length={"test": 173.0},
     )
 
     @property

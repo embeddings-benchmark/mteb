@@ -1,6 +1,6 @@
 {
   "dataset_revision": "b8b9a3d0e40bc0674945a0edb0bc549b554d6f20",
-  "mteb_dataset_name": "YueOpenriceClassification",
+  "mteb_dataset_name": "YueOpenriceReviewClassification",
   "mteb_version": "1.6.3",
   "test": {
     "accuracy": 0.2919006654763837,
