@@ -1,5 +1,7 @@
 ## Contributing to MTEB
-We welcome contributions such as new datasets to MTEB! This section describes how to set up the repository for development.
+We welcome contributions such as new datasets to MTEB! Please see detailed see the related [issue](https://github.com/embeddings-benchmark/mteb/issues/360) for more information. 
+
+Once you have decided on your contribution, this document describes how to set up the repository for development.
 
 ### Development Installation
 If you want to submit a dataset or on other ways contribute to MTEB, you can install the package in development mode:
