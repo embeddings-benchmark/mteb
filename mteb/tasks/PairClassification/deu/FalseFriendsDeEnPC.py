@@ -25,7 +25,7 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
         task_subtypes="False Friends",
         license="mit",
         socioeconomic_status="mixed",
-        annotations_creators=None,
+        annotations_creators="human-annotated",
         dialect=[],
         text_creation="created",
         bibtex_citation="""
