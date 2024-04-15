@@ -15,7 +15,7 @@
 | Muennighoff       |              |             |          |                     |            |                | 8         |                |          |               |
 | rasdani           |              | 4           |          |                     |            |                |           |                |          |               |
 | PhilipMay         |              |             |          |                     |            |                | 1         |                |          |               |
-| slvnwhrl          |              | 8           |          |                     |            |                |           |                |          |               |
+| slvnwhrl          |              | 12           |          |                     |            |                |           |                |          |               |
 | staoxiao          |              | 50          |          |                     |            |                |           |                |          |               |
 | NouamaneTazi      |              |             |          |                     |            |                | 1         |                |          |               |
 | rafalposwiata     |              | 32          |          |                     |            |                |           |                |          |               |
@@ -48,4 +48,4 @@ First name and last name are as you want them to appear in a publication.
 | taidnguyen        | Nguyen     | Tai        | taing@seas.upenn.edu         | ~Nguyen_Tai1         |  University of Pennsylvania                           |
 | xu3kev            | Wen-Ding   | Li         | wl678@cornell.edu            | ~Wen-Ding_Li1        |  Cornell University                                   |
 | orionw          | Orion     | Weller       | oweller@cs.jhu.edu            | ~Orion_Weller1        |  Johns Hopkins University          |
-
+| slvnwhrl          | Silvan     | Wehrli       | wehrlis@rki.de            | ~Silvan_Wehrli1        | Robert Koch Institute, Berlin, Germany          |
