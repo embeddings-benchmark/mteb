@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .deu.FalseFriendsDeEnPC import *
 from .eng.SprintDuplicateQuestionsPC import *
 from .eng.TwitterSemEval2015PC import *
 from .eng.TwitterURLCorpusPC import *

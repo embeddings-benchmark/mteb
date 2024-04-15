@@ -26,7 +26,7 @@ class WRIMEClassification(AbsTaskClassification):
         license="The dataset is available for research purposes only. Redistribution of the dataset is prohibited.",
         socioeconomic_status="high",
         annotations_creators="human-annotated",
-        dialect=None,
+        dialect=[],
         text_creation="found",
         bibtex_citation="""@inproceedings{kajiwara-etal-2021-wrime,
     title = "{WRIME}: A New Dataset for Emotional Intensity Estimation with Subjective and Objective Annotations",
