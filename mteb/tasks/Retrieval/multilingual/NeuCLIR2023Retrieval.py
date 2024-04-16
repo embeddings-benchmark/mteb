@@ -78,10 +78,13 @@ class NeuCLIR2023Retrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=None,
         text_creation="found",
-        bibtex_citation="""@article{lawrie2024overview,
-  title={Overview of the TREC 2023 NeuCLIR track},
-  author={Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
-  year={2024}
+        bibtex_citation="""@misc{lawrie2024overview,
+      title={Overview of the TREC 2023 NeuCLIR Track}, 
+      author={Dawn Lawrie and Sean MacAvaney and James Mayfield and Paul McNamee and Douglas W. Oard and Luca Soldaini and Eugene Yang},
+      year={2024},
+      eprint={2404.08071},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR}
 }""",
         n_samples={"fas": 2232092, "zho": 3179285, "rus": 4627619},
         avg_character_length={
