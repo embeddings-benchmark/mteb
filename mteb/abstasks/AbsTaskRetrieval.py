@@ -324,35 +324,42 @@ class AbsTaskRetrieval(AbsTask):
         }
         return scores
 
-    def calculate_metadata_metrics(self):
-        """Defines the approach for calculating metadata metrics for retrieval tasks."""
-        lengths = []
-        if self.is_multilingual:
-            # get all the positive documents combined with their queries to count the lengths
-            for lang in self.relevant_docs.keys():
-                for query_id, corpus_dict in self.relevant_docs[lang]["test"].items():
-                    for doc_id, _ in corpus_dict.items():
-                        query = self.queries[lang]["test"][query_id]
-                        doc = self.corpus[lang]["test"][doc_id]
-                        doc_text = doc["title"] + doc["text"]
-                        lengths.append(len(query) + len(doc_text))
+    def calculate_metadata_metrics(self) -> None:
+        self.load_data()
 
-                print(
-                    f"Average character length for language {lang} is {sum(lengths) / len(lengths)}"
+        for split in self.metadata_dict["eval_splits"]:
+            if self.is_multilingual:
+                for lang in self.relevant_docs.keys():
+                    process_language(
+                        self.relevant_docs[lang][split],
+                        self.queries[lang][split],
+                        self.corpus[lang][split],
+                        lang,
+                    )
+            else:
+                process_language(
+                    self.relevant_docs[split], self.queries[split], self.corpus[split]
                 )
 
-                count = len(self.queries[lang]["test"]) + len(self.corpus[lang]["test"])
-                print(f"Number of queries and documents for language {lang} is {count}")
-        else:
-            # get all the positive documents combined with their queries to count the lengths
-            for query_id, corpus_dict in self.relevant_docs["test"].items():
-                for doc_id, _ in corpus_dict.items():
-                    query = self.queries["test"][query_id]
-                    doc = self.corpus["test"][doc_id]
-                    doc_text = doc["title"] + doc["text"]
-                    lengths.append(len(query) + len(doc_text))
 
-            print(f"Average character length is {sum(lengths) / len(lengths)}")
+def process_language(relevant_docs, queries, corpus, lang=None):
+    total_length, num_pairs = calculate_length_and_count(relevant_docs, queries, corpus)
+    average_length = total_length / num_pairs if num_pairs else 0
+    num_documents = len(queries) + len(corpus)
 
-            count = len(self.queries["test"]) + len(self.corpus["test"])
-            print(f"Number of queries and documents is {count}")
+    language_description = f" for language {lang}" if lang else ""
+    print(f"Average character length{language_description} is {average_length}")
+    print(f"Number of queries and documents{language_description} is {num_documents}")
+
+
+def calculate_length_and_count(relevant_docs, queries, corpus):
+    total_length = 0
+    num_pairs = 0
+    for query_id, docs in relevant_docs.items():
+        query = queries[query_id]
+        for doc_id in docs:
+            doc = corpus[doc_id]
+            doc_text = doc["title"] + doc["text"]
+            total_length += len(query) + len(doc_text)
+            num_pairs += 1
+    return total_length, num_pairs
