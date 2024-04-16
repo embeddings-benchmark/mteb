@@ -20,8 +20,8 @@ def load_neuclir_data(
     path: str,
     langs: list,
     eval_splits: list,
-    cache_dir: str = None,
-    revision: str = None,
+    cache_dir: str | None = None,
+    revision: str | None = None,
 ):
     corpus = {lang: {split: None for split in eval_splits} for lang in langs}
     queries = {lang: {split: None for split in eval_splits} for lang in langs}
@@ -73,11 +73,11 @@ class NeuCLIR2022Retrieval(MultilingualTask, AbsTaskRetrieval):
         date=("2021-08-01", "2022-06-30"),
         form=["written"],
         domains=["News"],
-        task_subtypes=None,
+        task_subtypes=[],
         license="odc-by",
         socioeconomic_status="medium",
         annotations_creators="expert-annotated",
-        dialect=None,
+        dialect=[],
         text_creation="found",
         bibtex_citation="""@article{lawrie2023overview,
   title={Overview of the TREC 2022 NeuCLIR track},
@@ -105,21 +105,3 @@ class NeuCLIR2022Retrieval(MultilingualTask, AbsTaskRetrieval):
             revision=self.metadata_dict["dataset"]["revision"],
         )
         self.data_loaded = True
-
-    def get_metadata(self):
-        lengths = []
-        # get all the positive documents combined with their queries to count the lengths
-        for lang in self.relevant_docs.keys():
-            for query_id, corpus_dict in self.relevant_docs[lang]["test"].items():
-                for doc_id, _ in corpus_dict.items():
-                    query = self.queries[lang]["test"][query_id]
-                    doc = self.corpus[lang]["test"][doc_id]
-                    doc_text = doc["title"] + doc["text"]
-                    lengths.append(len(query) + len(doc_text))
-
-            print(
-                f"Average character length for language {lang} is {sum(lengths) / len(lengths)}"
-            )
-
-            count = len(self.queries[lang]["test"]) + len(self.corpus[lang]["test"])
-            print(f"Number of queries and documents for language {lang} is {count}")

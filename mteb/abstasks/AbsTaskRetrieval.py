@@ -323,3 +323,36 @@ class AbsTaskRetrieval(AbsTask):
             **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
         }
         return scores
+
+    def calculate_metadata_metrics(self):
+        """Defines the approach for calculating metadata metrics for retrieval tasks."""
+        lengths = []
+        if self.is_multilingual:
+            # get all the positive documents combined with their queries to count the lengths
+            for lang in self.relevant_docs.keys():
+                for query_id, corpus_dict in self.relevant_docs[lang]["test"].items():
+                    for doc_id, _ in corpus_dict.items():
+                        query = self.queries[lang]["test"][query_id]
+                        doc = self.corpus[lang]["test"][doc_id]
+                        doc_text = doc["title"] + doc["text"]
+                        lengths.append(len(query) + len(doc_text))
+
+                print(
+                    f"Average character length for language {lang} is {sum(lengths) / len(lengths)}"
+                )
+
+                count = len(self.queries[lang]["test"]) + len(self.corpus[lang]["test"])
+                print(f"Number of queries and documents for language {lang} is {count}")
+        else:
+            # get all the positive documents combined with their queries to count the lengths
+            for query_id, corpus_dict in self.relevant_docs["test"].items():
+                for doc_id, _ in corpus_dict.items():
+                    query = self.queries["test"][query_id]
+                    doc = self.corpus["test"][doc_id]
+                    doc_text = doc["title"] + doc["text"]
+                    lengths.append(len(query) + len(doc_text))
+
+            print(f"Average character length is {sum(lengths) / len(lengths)}")
+
+            count = len(self.queries["test"]) + len(self.corpus["test"])
+            print(f"Number of queries and documents is {count}")
