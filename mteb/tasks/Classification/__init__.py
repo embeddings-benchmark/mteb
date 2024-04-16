@@ -13,6 +13,7 @@ from .eng.ImdbClassification import *
 from .eng.NewsClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
+from .est.EstonianValenceSentimentClassification import *
 from .hin.HindiDiscourseClassification import *
 from .jpn.WRIMEClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
