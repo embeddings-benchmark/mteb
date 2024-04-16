@@ -303,8 +303,6 @@ class MTEB:
                     ),
                     "mteb_dataset_name": task.metadata_dict["name"],
                 }
-
-                # check if evaluation metric is not included
                 for split in task_eval_splits:
                     tick = time()
                     results = task.evaluate(
