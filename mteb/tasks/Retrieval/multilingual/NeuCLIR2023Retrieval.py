@@ -37,14 +37,13 @@ def load_neuclir_data(
         lang_qrels = datasets.load_dataset(
             path, f"{lang}", cache_dir=cache_dir, revision=revision
         )["test"]
-        corpus[lang] = {"test": {e["_id"]: {"text": e["text"]} for e in lang_corpus}}
-        queries[lang] = {"test": {e["_id"]: e["text"] for e in lang_queries}}
+        corpus[lang] = {"test": {str(e["_id"]): {"text": e["text"], "title": e["title"]} for e in lang_corpus}}
+        queries[lang] = {"test": {str(e["_id"]): e["text"] for e in lang_queries}}
         relevant_docs[lang]["test"] = defaultdict(dict)
         for item in lang_qrels:
-            relevant_docs[lang]["test"][item["query-id"]].update(
-                {item["corpus-id"]: item["score"]}
+            relevant_docs[lang]["test"][str(item["query-id"])].update(
+                {str(item["corpus-id"]): item["score"]}
             )
-
     corpus = datasets.DatasetDict(corpus)
     queries = datasets.DatasetDict(queries)
     relevant_docs = datasets.DatasetDict(relevant_docs)
@@ -58,7 +57,7 @@ class NeuCLIR2023Retrieval(MultilingualTask, AbsTaskRetrieval):
         reference="https://neuclir.github.io/",
         dataset={
             "path": "mteb/neuclir-2023",
-            "revision": "216011beb23382284cac2c819ce4a1ac86897495",
+            "revision": "dfad7cc7fe4064d6568d6b7d43b99e3a0246d29b",
         },
         type="Retrieval",
         category="s2p",
@@ -79,8 +78,8 @@ class NeuCLIR2023Retrieval(MultilingualTask, AbsTaskRetrieval):
   author={Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
   year={2024}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"fas": 2232092, "zho": 3179285, "rus": 4627619},
+        avg_character_length={"fas": 3579.508213937439, "zho": 2704.44834488453, "rus": 3466.8192213553616},
     )
 
     def load_data(self, **kwargs):
@@ -95,3 +94,19 @@ class NeuCLIR2023Retrieval(MultilingualTask, AbsTaskRetrieval):
             revision=self.metadata_dict["dataset"]["revision"],
         )
         self.data_loaded = True
+
+    def get_metadata(self):
+        lengths = []
+        # get all the positive documents combined with their queries to count the lengths
+        for lang in self.relevant_docs.keys():
+            for query_id, corpus_dict in self.relevant_docs[lang]["test"].items():
+                for doc_id, _ in corpus_dict.items():
+                    query = self.queries[lang]["test"][query_id]
+                    doc = self.corpus[lang]["test"][doc_id]
+                    doc_text = doc["title"] + doc["text"]
+                    lengths.append(len(query) + len(doc_text))
+        
+            print(f"Average character length for language {lang} is {sum(lengths) / len(lengths)}")
+
+            count = len(self.queries[lang]["test"]) + len(self.corpus[lang]["test"])
+            print(f"Number of queries and documents for language {lang} is {count}")

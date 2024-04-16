@@ -37,12 +37,12 @@ def load_neuclir_data(
         lang_qrels = datasets.load_dataset(
             path, f"{lang}", cache_dir=cache_dir, revision=revision
         )["test"]
-        corpus[lang] = {"test": {e["_id"]: {"text": e["text"]} for e in lang_corpus}}
-        queries[lang] = {"test": {e["_id"]: e["text"] for e in lang_queries}}
+        corpus[lang] = {"test": {str(e["_id"]): {"text": e["text"], "title": e["title"]} for e in lang_corpus}}
+        queries[lang] = {"test": {str(e["_id"]): e["text"] for e in lang_queries}}
         relevant_docs[lang]["test"] = defaultdict(dict)
         for item in lang_qrels:
-            relevant_docs[lang]["test"][item["query-id"]].update(
-                {item["corpus-id"]: item["score"]}
+            relevant_docs[lang]["test"][str(item["query-id"])].update(
+                {str(item["corpus-id"]): item["score"]}
             )
 
     corpus = datasets.DatasetDict(corpus)
@@ -58,7 +58,7 @@ class NeuCLIR2022Retrieval(MultilingualTask, AbsTaskRetrieval):
         reference="https://neuclir.github.io/",
         dataset={
             "path": "mteb/neuclir-2022",
-            "revision": "16a506c748bf2b7fdb886677dcdbbc07c677a7fa",
+            "revision": "920fc15b81e2324e52163904be663f340235cdea",
         },
         type="Retrieval",
         category="s2p",
@@ -80,8 +80,8 @@ class NeuCLIR2022Retrieval(MultilingualTask, AbsTaskRetrieval):
   journal={arXiv preprint arXiv:2304.12367},
   year={2023}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"fas": 2232130, "zho": 3179323, "rus": 4627657},
+        avg_character_length={"fas": 3500.5143969099317, "zho": 2543.1140667919617, "rus": 3214.755239654659},
     )
 
     def load_data(self, **kwargs):
@@ -96,3 +96,20 @@ class NeuCLIR2022Retrieval(MultilingualTask, AbsTaskRetrieval):
             revision=self.metadata_dict["dataset"]["revision"],
         )
         self.data_loaded = True
+
+
+    def get_metadata(self):
+        lengths = []
+        # get all the positive documents combined with their queries to count the lengths
+        for lang in self.relevant_docs.keys():
+            for query_id, corpus_dict in self.relevant_docs[lang]["test"].items():
+                for doc_id, _ in corpus_dict.items():
+                    query = self.queries[lang]["test"][query_id]
+                    doc = self.corpus[lang]["test"][doc_id]
+                    doc_text = doc["title"] + doc["text"]
+                    lengths.append(len(query) + len(doc_text))
+        
+            print(f"Average character length for language {lang} is {sum(lengths) / len(lengths)}")
+
+            count = len(self.queries[lang]["test"]) + len(self.corpus[lang]["test"])
+            print(f"Number of queries and documents for language {lang} is {count}")

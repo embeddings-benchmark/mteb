@@ -295,17 +295,6 @@ class MTEB:
                 logger.info(f"Loading dataset for {task.metadata_dict['name']}")
                 task.load_data(eval_splits=task_eval_splits, **kwargs)
 
-                # be sure the k_values includes the ones in the task
-                k_values = [1, 3, 5, 10, 100, 1000]  # default
-                for cur_task in self.tasks:
-                    score_num = cur_task.metadata_dict["main_score"].split("_")[
-                        -1
-                    ]  # get the number
-                    if score_num.isnumeric() and score_num not in k_values:
-                        k_values.append(int(score_num))
-                k_values.sort()
-                kwargs.update({"k_values": k_values})
-
                 # run evaluation
                 task_results = {
                     "mteb_version": version("mteb"),  # noqa: F405
