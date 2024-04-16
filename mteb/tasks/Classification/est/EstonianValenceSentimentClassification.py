@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+
 class EstonianValenceSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="EstonianValenceSentimentClassification",
@@ -61,8 +62,13 @@ class EstonianValenceSentimentClassification(AbsTaskClassification):
 
         ## There are 4 unique labels.
         def map_valence_to_label_num(example):
-            mapping = {'negatiivne': 1, 'neutraalne': 2, 'positiivne': 3, 'vastuoluline': 4}
-            example['valence'] = mapping.get(example['valence'])
+            mapping = {
+                "negatiivne": 1,
+                "neutraalne": 2,
+                "positiivne": 3,
+                "vastuoluline": 4,
+            }
+            example["valence"] = mapping.get(example["valence"])
 
         self.dataset = self.dataset.map(map_valence_to_label_num)
         self.dataset = self.dataset.rename_column("valence", "label")
