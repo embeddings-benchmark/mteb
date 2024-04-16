@@ -1,0 +1,35 @@
+{
+  "dataset_revision": "761f3fc78d853f7fff25e4777a371091d289615a",
+  "mteb_dataset_name": "TurkishSTSBenchmark",
+  "mteb_version": "1.6.8",
+  "test": {
+    "cos_sim": {
+      "pearson": 0.7650107745102112,
+      "spearman": 0.7615356080765736
+    },
+    "euclidean": {
+      "pearson": 0.7509265502737309,
+      "spearman": 0.7615350697157687
+    },
+    "evaluation_time": 21.45,
+    "manhattan": {
+      "pearson": 0.7489489792910216,
+      "spearman": 0.7595809332804901
+    }
+  },
+  "validation": {
+    "cos_sim": {
+      "pearson": 0.8090546397370427,
+      "spearman": 0.8104616168029124
+    },
+    "euclidean": {
+      "pearson": 0.7994746067688131,
+      "spearman": 0.8104616168029124
+    },
+    "evaluation_time": 33.49,
+    "manhattan": {
+      "pearson": 0.7976161151779149,
+      "spearman": 0.8083953092848649
+    }
+  }
+}

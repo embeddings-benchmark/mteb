@@ -16,4 +16,5 @@ from .multilingual.STS22CrosslingualSTS import *
 from .multilingual.STSBenchmarkMultilingualSTS import *
 from .pol.PolishSTS import *
 from .spa.STSES import *
+from .tur.TurkishSTSBenchmarkSTS import *
 from .zho.CMTEBSTS import *

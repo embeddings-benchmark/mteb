@@ -29,4 +29,6 @@ from .pol.PolishClassification import *
 from .swe.SweRecClassification import *
 from .vie.VieStudentFeedbackClassification import *
 from .zho.CMTEBClassification import *
-from .zho.YueOpenriceReviewClassification import YueOpenriceReviewClassification  # noqa: F401
+from .zho.YueOpenriceReviewClassification import (
+    YueOpenriceReviewClassification,  # noqa: F401
+)
