@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .ara.RestaurantReviewSentimentClassification import *
 from .dan.AngryTweetsClassification import *
 from .dan.DalajClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
@@ -29,4 +30,6 @@ from .pol.PolishClassification import *
 from .swe.SweRecClassification import *
 from .vie.VieStudentFeedbackClassification import *
 from .zho.CMTEBClassification import *
-from .zho.YueOpenriceReviewClassification import YueOpenriceReviewClassification  # noqa: F401
+from .zho.YueOpenriceReviewClassification import (
+    YueOpenriceReviewClassification,  # noqa: F401
+)
