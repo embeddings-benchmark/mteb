@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .ara.RestaurantReviewSentimentClassification import *
 from .dan.AngryTweetsClassification import *
 from .dan.DalajClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
@@ -13,6 +14,7 @@ from .eng.NewsClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
 from .hin.HindiDiscourseClassification import *
+from .jpn.WRIMEClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
 from .multilingual.MasakhaNEWSClassification import *
@@ -26,4 +28,8 @@ from .nob.NoRecClassification import *
 from .nob.NorwegianParliamentClassification import *
 from .pol.PolishClassification import *
 from .swe.SweRecClassification import *
+from .vie.VieStudentFeedbackClassification import *
 from .zho.CMTEBClassification import *
+from .zho.YueOpenriceReviewClassification import (
+    YueOpenriceReviewClassification,  # noqa: F401
+)

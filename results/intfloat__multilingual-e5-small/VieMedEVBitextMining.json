@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "d03c69413bc53d1cea5a5375b3a953c4fee35ecd",
+  "mteb_dataset_name": "VieMedEVBitextMining",
+  "mteb_version": "1.6.2",
+  "test": {
+    "accuracy": 0.7275390625,
+    "evaluation_time": 13.31,
+    "f1": 0.7115196432599935,
+    "main_score": 0.7115196432599935,
+    "precision": 0.7056239054789202,
+    "recall": 0.7275390625
+  }
+}

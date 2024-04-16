@@ -212,7 +212,7 @@ evaluation.run(model)
 <!-- | 🌐 [MMTEB] | An open-source effort to extend MTEB to cover a broad set of languages |   -->
 
 [Tasks]: docs/tasks.md
-[Contributing]: docs/contributing.md
+[Contributing]: contributing.md
 [Adding a model]: docs/adding_a_model.md
 [Adding a dataset]: docs/adding_a_dataset.md
 [Leaderboard]: https://huggingface.co/spaces/mteb/leaderboard
