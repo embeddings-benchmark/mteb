@@ -28,6 +28,7 @@
 | cassanof          |              | 6           |          |                     | 1          | 1              |           |                |          |               |
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
 | orionw         |              |            |          |                     |      2      |              |           |                |          |               |
+| rbroc             |       2      |      2      |          |                     |      2      |              |           |                |          |               |
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
 
