@@ -77,6 +77,12 @@ MTEB_MAIN_EN = [
     "TwitterURLCorpus",
 ]
 
+MTEB_RETRIEVAL_WITH_INSTRUCTIONS = [
+    "RobustInstructionRetrieval",
+    "NewsInstructionRetrieval",
+    "CoreInstructionRetrieval",
+]
+
 MTEB_RETRIEVAL_LAW = [
     "LegalSummarization",
     "LegalBenchConsumerContractsQA",

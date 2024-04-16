@@ -31,6 +31,7 @@ class DenseRetrievalExactSearch:
         self.corpus_chunk_size = corpus_chunk_size
         self.show_progress_bar = kwargs.get("show_progress_bar", True)
         self.convert_to_tensor = kwargs.get("convert_to_tensor", True)
+        self.save_corpus_embeddings = kwargs.get("save_corpus_embeddings", False)
         self.results = {}
 
     def search(
@@ -88,6 +89,14 @@ class DenseRetrievalExactSearch:
             logger.info("Encoding Batch {}/{}...".format(batch_num + 1, len(itr)))
             corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus))
 
+        # Encode chunk of corpus
+        if (
+            self.save_corpus_embeddings
+            and "qid" in kwargs
+            and len(self.corpus_embeddings[kwargs["qid"]])
+        ):
+            sub_corpus_embeddings = self.corpus_embeddings[kwargs["qid"]][batch_num]
+        else:
             # Encode chunk of corpus
             sub_corpus_embeddings = self.model.encode_corpus(
                 corpus[corpus_start_idx:corpus_end_idx],
@@ -95,6 +104,8 @@ class DenseRetrievalExactSearch:
                 show_progress_bar=self.show_progress_bar,
                 convert_to_tensor=self.convert_to_tensor,
             )
+            if self.save_corpus_embeddings and "qid" in kwargs:
+                self.corpus_embeddings[kwargs["qid"]].append(sub_corpus_embeddings)
 
             # Compute similarites using either cosine-similarity or dot product
             cos_scores = self.score_functions[score_function](
@@ -146,6 +157,7 @@ class DRESModel:
         self.model = model
         self.sep = sep
         self.use_sbert_model = isinstance(model, SentenceTransformer)
+        self.save_corpus_embeddings = kwargs.get("save_corpus_embeddings", False)
 
     def encode_queries(self, queries: List[str], batch_size: int, **kwargs):
         if self.use_sbert_model:
@@ -160,6 +172,13 @@ class DRESModel:
         return self.model.encode(queries, batch_size=batch_size, **kwargs)
 
     def encode_corpus(self, corpus: List[Dict[str, str]], batch_size: int, **kwargs):
+        if (
+            "qid" in kwargs
+            and self.save_corpus_embeddings
+            and len(self.corpus_embeddings) > 0
+        ):
+            return self.corpus_embeddings[kwargs["qid"]]
+
         if isinstance(corpus, dict):
             sentences = [
                 (corpus["title"][i] + self.sep + corpus["text"][i]).strip()
@@ -174,7 +193,15 @@ class DRESModel:
                 else doc["text"].strip()
                 for doc in corpus
             ]
-        return self.model.encode(sentences, batch_size=batch_size, **kwargs)
+
+        corpus_embeddings = self.model.encode(
+            sentences, batch_size=batch_size, **kwargs
+        )
+        if self.save_corpus_embeddings and "qid" in kwargs:
+            if type(corpus_embeddings) == torch.tensor:
+                corpus_embeddings = corpus_embeddings.cpu().detach()
+            self.corpus_embeddings[kwargs["qid"]] = corpus_embeddings
+        return corpus_embeddings
 
 
 def is_dres_compatible(model):
