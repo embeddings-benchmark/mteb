@@ -25,7 +25,7 @@ class EstonianValenceClassification(AbsTaskClassification):
         form=["written"],
         domains=["News"],
         task_subtypes=["Sentiment/Hate speech"],
-        dialect=None,
+        dialect=[],
         license="CC BY 4.0",
         socioeconomic_status="high",
         annotations_creators="human-annotated",

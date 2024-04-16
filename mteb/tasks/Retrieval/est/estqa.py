@@ -12,7 +12,7 @@ class EstQA(AbsTaskRetrieval):
         name="EstQA",
         dataset={
             "path": "kardosdrur/estonian-qa",
-            "revision": "766c9bc74b70e6bcdd5a7720a9c7556ac10a8b04",
+            "revision": "e44b2640e32fffe4b29de547b14e4d6efb01f2ad",
         },
         description=(
             "EstQA is an Estonian question answering dataset based on Wikipedia."
@@ -20,7 +20,7 @@ class EstQA(AbsTaskRetrieval):
         reference="https://www.semanticscholar.org/paper/Extractive-Question-Answering-for-Estonian-Language-182912IAPM-Alum%C3%A4e/ea4f60ab36cadca059c880678bc4c51e293a85d6?utm_source=direct_link",
         type="Retrieval",
         category="s2p",
-        eval_splits=["train", "test"],
+        eval_splits=["test"],
         eval_langs=["est-Latn"],
         main_score="ndcg_at_10",
         date=(
@@ -30,7 +30,7 @@ class EstQA(AbsTaskRetrieval):
         form=["written"],
         domains=["Encyclopaedic"],
         task_subtypes=["Question answering"],
-        license=None,
+        license="Not specified",
         socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
@@ -43,8 +43,8 @@ class EstQA(AbsTaskRetrieval):
   year         = 2021
 }
 """,
-        n_samples={"train": 482, "test": 121},
-        avg_character_length={"train": 772.5331950207469, "test": 770.9834710743802},
+        n_samples={"test": 603},
+        avg_character_length={"test": 772.5331950207469},
     )
 
     def load_data(self, **kwargs):
