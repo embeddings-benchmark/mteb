@@ -44,4 +44,6 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
     def dataset_transform(self):
         # labels: 0 negative, 1 positive
         self.dataset = self.dataset.rename_column("polarity", "label")
-        self.dataset["train"] = self.dataset["train"].shuffle(seed=self.seed).select(range(2048))
+        self.dataset["train"] = (
+            self.dataset["train"].shuffle(seed=self.seed).select(range(2048))
+        )

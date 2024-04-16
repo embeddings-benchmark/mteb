@@ -2,9 +2,9 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 19        |                |          |             5 |
+| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 20        |                |          |             5 |
 | x-tabdeveloping   |              | 18          |          |                     |            |                |           |                |          |               |
-| imenelydiaker     |              | 88          |          |                     |            |                | 9         |                |          |               |
+| imenelydiaker     |              | 88          |          |                     |            |                | 10        |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
 | GabrielSequeira   |              | 88          |          |                     |            |                |           |                |          |               |
 | schmarion         |              | 88          |          |                     |            |                |           |                |          |               |
@@ -15,7 +15,7 @@
 | Muennighoff       |              |             |          |                     |            |                | 8         |                |          |               |
 | rasdani           |              | 4           |          |                     |            |                |           |                |          |               |
 | PhilipMay         |              |             |          |                     |            |                | 1         |                |          |               |
-| slvnwhrl          |              | 12           |          |                     |            |                |           |                |          |               |
+| slvnwhrl          |              | 12          |          |                     |            |                |           |                |          |               |
 | staoxiao          |              | 50          |          |                     |            |                |           |                |          |               |
 | NouamaneTazi      |              |             |          |                     |            |                | 1         |                |          |               |
 | rafalposwiata     |              | 32          |          |                     |            |                |           |                |          |               |
@@ -24,10 +24,11 @@
 | taeminlee         |              | 8           |          |                     |            |                |           |                |          |               |
 | izhx              |              | 6           |          |                     |            |                |           |                |          |               |
 | achibb            |              | 2           |          |                     |            |                | 0         |                |          |               |   
-| xu3kev            |              | 10           |          |                     |            |                |           |                |          |               |
+| xu3kev            |              | 10          |          |                     |            |                |           |                |          |               |
 | cassanof          |              | 6           |          |                     | 1          | 1              |           |                |          |               |
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
-| orionw         |              |            |          |                     |      2      |              |           |                |          |               |
+| orionw            |              |             |          |                     |      2     |                |           |                |          |               |
+| mmhamdy           |              | 6           |          |                     |            |                |           |                |          |               |
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
 
