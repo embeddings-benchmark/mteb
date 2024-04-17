@@ -25,4 +25,4 @@ jobs:
       - name: Lint
         id: lint
         run: |
-          make lint
+          make lint-check

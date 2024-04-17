@@ -190,7 +190,7 @@ class RetrievalEvaluator(Evaluator):
     def __init__(
         self,
         retriever=None,
-        k_values: List[int] = [1, 3, 5, 10, 100, 1000],
+        k_values: List[int] = [1, 3, 5, 10, 20, 100, 1000],
         score_function: str = "cos_sim",
         **kwargs,
     ):
