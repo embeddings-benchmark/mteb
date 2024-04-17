@@ -22,7 +22,7 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
         category="s2p",
         eval_splits=["test"],
         eval_langs=["hun-Latn"],
-        main_score="ndcg_at_10",
+        main_score="ndcg_at_1",
         date=(
             "1848-12-15",
             "2024-03-19",
@@ -32,7 +32,7 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
         task_subtypes=["Article retrieval"],
         license="CC-BY 4.0",
         socioeconomic_status="mixed",
-        annotations_creators="human-annotated",
+        annotations_creators="derived",
         dialect=[],
         text_creation="found",
         bibtex_citation="""
