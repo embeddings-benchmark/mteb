@@ -20,7 +20,7 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
         eval_langs=["tur-Latn"],
         main_score="accuracy",
         date=None,
-        form=None,
+        form=["written"],
         domains=None,
         task_subtypes=None,
         license=None,
