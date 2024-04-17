@@ -12,11 +12,6 @@ lint:
 	ruff format . 			# running ruff formatting
 	ruff check . --fix  	# running ruff linting
 
-lint:
-	@echo "--- 🧹 Running linters ---"
-	ruff format . 			# running ruff formatting
-	ruff check . --fix  	# running ruff linting
-
 lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
 	ruff format . --check						    # running ruff formatting
