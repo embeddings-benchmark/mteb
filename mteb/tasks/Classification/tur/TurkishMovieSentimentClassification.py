@@ -19,7 +19,7 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["tur-Latn"],
         main_score="accuracy",
-        date=None,
+        date=("2013-01-01","2014-01-01"),
         form=["written"],
         domains=["Reviews"],
         task_subtypes=["Sentiment/Hate speech"],
