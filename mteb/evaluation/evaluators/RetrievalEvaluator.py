@@ -198,7 +198,7 @@ class DRESModel:
             ]
 
         corpus_embeddings = self.model.encode(
-            sentences, batch_size=batch_size
+            sentences, batch_size=batch_size, **kwargs
         )
         if self.save_corpus_embeddings and "qid" in kwargs:
             if type(corpus_embeddings) == torch.tensor:
