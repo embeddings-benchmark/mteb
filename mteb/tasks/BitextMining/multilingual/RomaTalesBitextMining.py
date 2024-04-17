@@ -21,7 +21,7 @@ class RomaTalesBitextMining(AbsTaskBitextMining):
         date=None,  # Unknown, these are folk tales
         form=["written"],
         domains=["Fiction"],
-        task_subtypes=None,  # Didn't fit any
+        task_subtypes=[],  # Didn't fit any
         license="Not specified",
         socioeconomic_status="low",
         annotations_creators="expert-annotated",
