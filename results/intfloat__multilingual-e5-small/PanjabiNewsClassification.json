@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "9af7f2792e2ac1be204e3d8192980d78d28f34f2",
+  "mteb_dataset_name": "PanjabiNewsClassification",
+  "mteb_version": "1.6.11",
+  "test": {
+    "accuracy": 0.9522435897435898,
+    "accuracy_stderr": 0.008916940861053577,
+    "evaluation_time": 20.58,
+    "f1": 0.9530026828351863,
+    "f1_stderr": 0.008684153488403902,
+    "main_score": 0.9522435897435898
+  }
+}
