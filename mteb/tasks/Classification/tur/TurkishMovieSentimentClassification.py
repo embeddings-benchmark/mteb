@@ -26,7 +26,7 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
         license=None,
         socioeconomic_status=None,
         annotations_creators="derived",
-        dialect=None,
+        dialect=[],
         text_creation=None,
         bibtex_citation="""
         @inproceedings{Demirtas2013CrosslingualPD,
