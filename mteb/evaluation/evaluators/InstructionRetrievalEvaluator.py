@@ -2,10 +2,7 @@ import logging
 from typing import Dict, List
 
 from .RetrievalEvaluator import (
-    DenseRetrievalExactSearch,
-    DRESModel,
     RetrievalEvaluator,
-    is_dres_compatible,
 )
 
 logger = logging.getLogger(__name__)

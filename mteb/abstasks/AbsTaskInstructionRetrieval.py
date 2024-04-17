@@ -8,9 +8,10 @@ from typing import Dict, List, Tuple
 import tqdm
 from datasets import Features, Value, load_dataset
 
-from ..evaluation.evaluators import InstructionRetrievalEvaluator, utils
+from ..evaluation.evaluators import utils
+from ..evaluation.evaluators.InstructionRetrievalEvaluator import InstructionRetrievalEvaluator
 from .AbsTask import AbsTask
-from .AbsTaskRetrieval import HFDataLoader
+from .AbsTaskRetrieval import HFDataLoader, AbsTaskRetrieval
 
 logger = logging.getLogger(__name__)
 
@@ -255,12 +256,15 @@ class AbsTaskInstructionRetrieval(AbsTask):
         if self.do_length_ablation:
             self.keywords, self.short_instructions = {}, {}
 
-        self.hf_repo_qrels = self.hf_repo_qrels if self.hf_repo_qrels else self.hf_repo
+        dataset_path = self.metadata_dict["dataset"]["path"]
+        hf_repo_qrels = (
+            dataset_path + "-qrels" if "clarin-knext" in dataset_path else None
+        )
         for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
             corpus, queries, og_qrels, changed_qrels, top_ranked_init = (
                 HFDataLoaderInstructions(
-                    hf_repo=self.metadata_dict["hf_hub_name"],
-                    hf_repo_qrels=self.hf_repo_qrels,
+                    hf_repo=dataset_path,
+                    hf_repo_qrels=hf_repo_qrels,
                     streaming=False,
                     keep_in_memory=False,
                 ).load(split=split)
@@ -283,7 +287,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 doc["id"]: {"title": doc["title"], "text": doc["text"]}
                 for doc in corpus
             }
-            if self.length_ablation:
+            if self.do_length_ablation:
                 keywords = {query["text"]: query["keywords"] for query in queries}
                 short_instructions = {
                     query["text"]: query["short_query"] for query in queries
@@ -335,12 +339,6 @@ class AbsTaskInstructionRetrieval(AbsTask):
                     self.changed_instructions[lang][split],
                 )
 
-                if self.do_length_ablation:
-                    keywords, short_instructions = (
-                        self.keywords[lang][split],
-                        self.short_instructions[lang][split],
-                    )
-
                 top_ranked = self.top_ranked[lang][split]
                 scores_og[lang], results_og[lang] = self._evaluate_monolingual(
                     retriever,
@@ -381,6 +379,10 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 }
 
                 if self.do_length_ablation:
+                    keywords, short_instructions = (
+                        self.keywords[lang][split],
+                        self.short_instructions[lang][split],
+                    )
                     scores_base[lang], results_base[lang] = self._evaluate_monolingual(
                         retriever,
                         corpus,
@@ -430,11 +432,6 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 self.changed_instructions[split],
             )
             top_ranked = self.top_ranked[split]
-            if self.do_length_ablation:
-                keywords, short_instructions = (
-                    self.keywords[split],
-                    self.short_instructions[split],
-                )
 
             scores_og, results_og = self._evaluate_monolingual(
                 retriever,
@@ -447,6 +444,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 None,
                 **kwargs,
             )
+
             scores_changed, results_changed = self._evaluate_monolingual(
                 retriever,
                 corpus,
@@ -473,6 +471,10 @@ class AbsTaskInstructionRetrieval(AbsTask):
             }
 
             if self.do_length_ablation:
+                keywords, short_instructions = (
+                    self.keywords[split],
+                    self.short_instructions[split],
+                )
                 scores_w_keywords = self._evaluate_monolingual(
                     retriever,
                     corpus,
@@ -596,7 +598,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
             **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
             **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
         }
-        return scores
+        return scores, results
 
     def create_qrel_diff(self, og_qrels, changed_qrels):
         newly_irrelevant_qrels = {}
