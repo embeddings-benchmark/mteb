@@ -2,14 +2,14 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 20        |                |          |             5 |
-| x-tabdeveloping   |              | 18          |          |                     |            |                |           |                |          |               |
+| KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 29        |                |          |             5 |
+| x-tabdeveloping   |              | 36          |          |                     |            |                |           |                |          |               |
 | imenelydiaker     |              | 88          |          |                     |            |                | 10        |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
 | GabrielSequeira   |              | 88          |          |                     |            |                |           |                |          |               |
 | schmarion         |              | 88          |          |                     |            |                |           |                |          |               |
 | MathieuCiancone   |              | 88          |          |                     |            |                |           |                |          |               |
-| Sakshamrzt        |              | 10          |          |                     |            |                |           |                |          |               |
+| Sakshamrzt        |              | 10          |          |                     |            |                | 2         |                |          |               |
 | MartinBernstorff  |              | 2           |          |                     | 7          |                | 3         |                |          |               |
 | guenthermi        |              | 12          |          |                     |            |                |           |                |          |               |
 | Muennighoff       |              |             |          |                     |            |                | 8         |                |          |               |
@@ -27,8 +27,10 @@
 | xu3kev            |              | 10          |          |                     |            |                |           |                |          |               |
 | cassanof          |              | 6           |          |                     | 1          | 1              |           |                |          |               |
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
-| orionw            |              |             |          |                     |      2     |                |           |                |          |               |
+| orionw            |              |             |          |                     |      14     |                |           |                |          |               |
 | mmhamdy           |              | 6           |          |                     |            |                |           |                |          |               |
+| isaac-chung       |              | 12          |          |                     |            |                |   1        |                |          |               |
+| asparius          |              | 6           |          |                     |            |                |           |                |          |               |
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
 
@@ -39,7 +41,7 @@ First name and last name are as you want them to appear in a publication.
 | GitHub            | First name | Last name  | Email                        | User on openreview   | Affiliations                                          |
 | ----------------- | ---------- | ---------- | ---------------------------- | -------------------- | ----------------------------------------------------- |
 | KennethEnevoldsen | Kenneth    | Enevoldsen | kennethcenevoldsen@gmail.com | ~Kenneth_Enevoldsen1 | Aarhus University, Denmark                            |
-| x-tabdeveloping   | Márton     | Kardos     |                              | ~Márton_Kardos1      | Aarhus University, Denmark                            |
+| x-tabdeveloping   | Márton     | Kardos     | martonkardos@cas.au.dk       | ~Márton_Kardos1      | Aarhus University, Denmark                            |
 | imenelydiaker     | Imene      | Kerboua    |                              |                      | Esker, Lyon, France && INSA Lyon, LIRIS, Lyon, France |
 | wissam-sib        | Wissam     | Siblini    | wissamsiblini92@gmail.com    |                      | N/A                                                   |
 | GabrielSequeira   | Gabriel    | Sequeira   |                              |                      | N/A                                                   |
@@ -54,3 +56,5 @@ First name and last name are as you want them to appear in a publication.
 | izhx              | Xin        | Zhang      | zhangxin2023@stu.hit.edu.cn  |                      |  Harbin Institute of Technology, Shenzhen             |
 | orionw            | Orion      | Weller     | oweller@cs.jhu.edu           | ~Orion_Weller1       |  Johns Hopkins University                             |
 | slvnwhrl          | Silvan     | Wehrli     | wehrlis@rki.de               | ~Silvan_Wehrli1      | Robert Koch Institute, Berlin, Germany                |
+| isaac-chung       | Isaac      | Chung      | chungisaac1217@gmail.com     | ~Isaac_Kwan_Yin_Chung1 | N/A                                                 |
+| asparius          | Ömer       | Çağatan    | ocagatan19@ku.edu.tr         | ~Ömer_Veysel_Çağatan1 | Koç University, Turkey                                                 |
