@@ -21,7 +21,7 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
         main_score="accuracy",
         date=None,
         form=["written"],
-        domains=None,
+        domains=["Reviews"],
         task_subtypes=None,
         license=None,
         socioeconomic_status=None,
