@@ -42,9 +42,6 @@ class RomanianSentimentClassification(AbsTaskClassification):
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("sentence", "text")
-        self.dataset["train"] = (
-            self.dataset["train"].shuffle(seed=self.seed).select(range(TEST_SAMPLES))
-        )
         self.dataset["test"] = (
             self.dataset["test"].shuffle(seed=self.seed).select(range(TEST_SAMPLES))
         )
