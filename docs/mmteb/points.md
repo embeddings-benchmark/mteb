@@ -30,8 +30,8 @@
 | orionw            |              |             |          |                     |      14     |                |           |                |          |               |
 | mmhamdy           |              | 6           |          |                     |            |                |           |                |          |               |
 | manandey           |              | 6           |          |                     |            |                |           |                |          |               |
-| isaac-chung       |              | 12          |          |                     |            |                |   1        |                |          |               |
-| asparius      |              | 6          |          |                     |            |                |   0       |                |          |               |
+| isaac-chung       |              | 12          |          |                     |            |                |           |                |          |               |
+
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
 
