@@ -12,7 +12,7 @@ class News21InstructionRetrieval(AbsTaskInstructionRetrieval):
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
             "path": "jhu-clsp/news21-instructions",
-            "revision": "374e11e7d416b2076f983d6b4af0a2389225f5e8",
+            "revision": "fae860d870141ee0f34fbab67314c65f41921943",
         },
         type="InstructionRetrieval",
         category="s2p",

@@ -205,8 +205,8 @@ def get_rank_from_dict(
 
 
 def evaluate_change(
-    original_run: pd.DataFrame,
-    new_run: pd.DataFrame,
+    original_run: dict[str, dict[str, float]],
+    new_run: dict[str, dict[str, float]],
     changed_qrels: dict[str, List[str]],
 ) -> dict[str, float]:
     changes = []
