@@ -13,7 +13,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class AbsTask(ABC):
     metadata: TaskMetadata
 
-    def __init__(self, seed=42, **kwargs):
+    def __init__(self, seed = 42, **kwargs):
         self.dataset = None
         self.data_loaded = False
         self.is_multilingual = False
