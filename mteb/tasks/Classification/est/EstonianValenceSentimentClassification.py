@@ -68,7 +68,7 @@ class EstonianValenceSentimentClassification(AbsTaskClassification):
                 "positiivne": 3,
                 "vastuoluline": 4,
             }
-            example["valence"] = mapping.get(example["valence"])
+            example["valence"] = mapping[example["valence"]]
 
         self.dataset = self.dataset.map(map_valence_to_label_num)
         self.dataset = self.dataset.rename_column("valence", "label")
