@@ -18,7 +18,7 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
         category="s2s",
         eval_splits=["train"],
         eval_langs=["ben-Beng"],
-        main_score="f1_score",
+        main_score="f1",
         date=("2019-12-01", "2020-04-09"),
         form=["written"],
         dialect=[],
@@ -37,5 +37,8 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
 }
 """,
         n_samples={"train": 3418},
-        avg_character_length={"train": 50},
+        avg_character_length={"train": 103.42},
     )
+
+    def dataset_transform(self):
+        self.dataset["train"] = self.dataset["train"].select(range(2048))
