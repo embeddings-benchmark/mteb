@@ -27,7 +27,7 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
         socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation=None,
+        text_creation="found",
         bibtex_citation="""
         @inproceedings{Demirtas2013CrosslingualPD,
             title={Cross-lingual polarity detection with machine translation},
