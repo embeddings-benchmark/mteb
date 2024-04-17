@@ -23,10 +23,10 @@ class ItaHateClassification(AbsTaskClassification):
         main_score="accuracy",
         date=("2021-11-01", "2022-02-28"),
         form=["written"],
-        domains=None, # text is created from a template
+        domains=["Constructed"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-4.0",
-        socioeconomic_status="high", # annotators are domain-expert
+        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
         text_creation="created",
@@ -66,6 +66,7 @@ class ItaHateClassification(AbsTaskClassification):
         ]
         self.dataset = self.dataset.rename_columns(rename_dict)
         self.dataset = self.dataset.class_encode_column("label")
+        self.dataset = self.dataset.class_encode_column("functionality")
         self.dataset = self.dataset["test"].train_test_split(
             test_size=0.5, seed=42, stratify_by_column="functionality"
         ) # balanced sampling across types of hate speech

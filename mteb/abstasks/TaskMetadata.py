@@ -41,6 +41,7 @@ TASK_SUBTYPE = Literal[
 TASK_DOMAIN = Literal[
     "Academic",
     "Blog",
+    "Constructed",
     "Encyclopaedic",
     "Fiction",
     "Government",
@@ -54,7 +55,7 @@ TASK_DOMAIN = Literal[
     "Social",
     "Spoken",
     "Web",
-    "Programming",
+    "Programming"
 ]
 
 TEXT_CREATION_METHOD = Literal[
