@@ -22,18 +22,42 @@ class LEMBNarrativeQARetrieval(AbsTaskRetrieval):
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("1000-01-01", "2017-12-31"),
         form=["written"],
         domains=["Fiction", "Non-fiction"],
         task_subtypes=["Article retrieval"],
-        license=None,
-        socioeconomic_status=None,
+        license="Not specified",
+        socioeconomic_status="medium",
         annotations_creators="derived",
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
-        n_samples={_EVAL_SPLIT: 10449},
-        avg_character_length=None,
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+            @article{kocisky-etal-2018-narrativeqa,
+            title = "The {N}arrative{QA} Reading Comprehension Challenge",
+            author = "Ko{\v{c}}isk{\'y}, Tom{\'a}{\v{s}}  and
+            Schwarz, Jonathan  and
+            Blunsom, Phil  and
+            Dyer, Chris  and
+            Hermann, Karl Moritz  and
+            Melis, G{\'a}bor  and
+            Grefenstette, Edward",
+            editor = "Lee, Lillian  and
+            Johnson, Mark  and
+            Toutanova, Kristina  and
+            Roark, Brian",
+            journal = "Transactions of the Association for Computational Linguistics",
+            volume = "6",
+            year = "2018",
+            address = "Cambridge, MA",
+            publisher = "MIT Press",
+            url = "https://aclanthology.org/Q18-1023",
+            doi = "10.1162/tacl_a_00023",
+            pages = "317--328",
+            abstract = "",
+        }
+        """,
+        n_samples={_EVAL_SPLIT: 10804},
+        avg_character_length={_EVAL_SPLIT: 326399.3},
     )
 
     def load_data(self, **kwargs):

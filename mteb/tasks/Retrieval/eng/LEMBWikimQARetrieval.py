@@ -22,18 +22,27 @@ class LEMBWikimQARetrieval(AbsTaskRetrieval):
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("1950-01-01", "2019-12-31"),
         form=["written"],
         domains=["Encyclopaedic"],
         task_subtypes=["Article retrieval"],
-        license=None,
-        socioeconomic_status=None,
+        license="Not specified",
+        socioeconomic_status="medium",
         annotations_creators="derived",
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
-        n_samples={_EVAL_SPLIT: 300},
-        avg_character_length=None,
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+            @inproceedings{ho2020constructing,
+                title={Constructing A Multi-hop QA Dataset for Comprehensive Evaluation of Reasoning Steps},
+                author={Ho, Xanh and Nguyen, Anh-Khoa Duong and Sugawara, Saku and Aizawa, Akiko},
+                booktitle={Proceedings of the 28th International Conference on Computational Linguistics},
+                pages={6609--6625},
+                year={2020}
+            }
+        """
+        ,
+        n_samples={_EVAL_SPLIT: 500},
+        avg_character_length={_EVAL_SPLIT: 37513},
     )
 
     def load_data(self, **kwargs):
@@ -65,3 +74,5 @@ class LEMBWikimQARetrieval(AbsTaskRetrieval):
         self.relevant_docs = {self._EVAL_SPLIT: qrels}
 
         self.data_loaded = True
+
+        self.calculate_metadata_metrics()

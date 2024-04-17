@@ -22,18 +22,51 @@ class LEMBQMSumRetrieval(AbsTaskRetrieval):
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("1950-01-01", "2021-12-31"),
         form=["written"],
         domains=["Spoken"],
         task_subtypes=["Article retrieval"],
-        license=None,
-        socioeconomic_status=None,
+        license="Not specified",
+        socioeconomic_status="medium",
         annotations_creators="derived",
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
-        n_samples={_EVAL_SPLIT: 1527},
-        avg_character_length=None,
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+            @inproceedings{zhong-etal-2021-qmsum,
+            title = "{QMS}um: A New Benchmark for Query-based Multi-domain Meeting Summarization",
+            author = "Zhong, Ming  and
+            Yin, Da  and
+            Yu, Tao  and
+            Zaidi, Ahmad  and
+            Mutuma, Mutethia  and
+            Jha, Rahul  and
+            Awadallah, Ahmed Hassan  and
+            Celikyilmaz, Asli  and
+            Liu, Yang  and
+            Qiu, Xipeng  and
+            Radev, Dragomir",
+            editor = "Toutanova, Kristina  and
+            Rumshisky, Anna  and
+            Zettlemoyer, Luke  and
+            Hakkani-Tur, Dilek  and
+            Beltagy, Iz  and
+            Bethard, Steven  and
+            Cotterell, Ryan  and
+            Chakraborty, Tanmoy  and
+            Zhou, Yichao",
+            booktitle = "Proceedings of the 2021 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies",
+            month = jun,
+            year = "2021",
+            address = "Online",
+            publisher = "Association for Computational Linguistics",
+            url = "https://aclanthology.org/2021.naacl-main.472",
+            doi = "10.18653/v1/2021.naacl-main.472",
+            pages = "5905--5921",
+            abstract = "",
+            }
+        """,
+        n_samples={_EVAL_SPLIT: 1724},
+        avg_character_length={_EVAL_SPLIT: 56136.4},
     )
 
     def load_data(self, **kwargs):
