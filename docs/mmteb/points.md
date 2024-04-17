@@ -11,15 +11,15 @@
 | MathieuCiancone   |              | 88          |          |                     |            |                |           |                |          |               |
 | Sakshamrzt        |              | 10          |          |                     |            |                |           |                |          |               |
 | MartinBernstorff  |              | 2           |          |                     | 7          |                | 3         |                |          |               |
-| guenthermi        |              | 12          |          |                     |            |                |           |                |          |               |
-| Muennighoff       |              |             |          |                     |            |                | 8         |                |          |               |
+| guenthermi        |              | 12          |          |                     |            |                |           |                |          |               |
+| Muennighoff       |              |             |          |                     |            |                | 8         |                |          |               |
 | rasdani           |              | 4           |          |                     |            |                |           |                |          |               |
 | PhilipMay         |              |             |          |                     |            |                | 1         |                |          |               |
 | slvnwhrl          |              | 12          |          |                     |            |                |           |                |          |               |
 | staoxiao          |              | 50          |          |                     |            |                |           |                |          |               |
 | NouamaneTazi      |              |             |          |                     |            |                | 1         |                |          |               |
 | rafalposwiata     |              | 32          |          |                     |            |                |           |                |          |               |
-| violenil          |              | 26          |          |                     |            |                |           |                |          |               |
+| violenil          |              | 26          |          |                     |            |                |           |                |          |               |
 | hanhainebula      |              | 2           |          |                     |            |                |           |                |          |               |
 | taeminlee         |              | 8           |          |                     |            |                |           |                |          |               |
 | izhx              |              | 6           |          |                     |            |                |           |                |          |               |
@@ -29,6 +29,8 @@
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
 | orionw            |              |             |          |                     |      14     |                |           |                |          |               |
 | mmhamdy           |              | 6           |          |                     |            |                |           |                |          |               |
+| davidstap           |              | 10           |          |                     |            |                |           |                |          |               |
+
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
 
@@ -54,3 +56,4 @@ First name and last name are as you want them to appear in a publication.
 | izhx              | Xin        | Zhang      | zhangxin2023@stu.hit.edu.cn  |                      |  Harbin Institute of Technology, Shenzhen             |
 | orionw            | Orion      | Weller     | oweller@cs.jhu.edu           | ~Orion_Weller1       |  Johns Hopkins University                             |
 | slvnwhrl          | Silvan     | Wehrli     | wehrlis@rki.de               | ~Silvan_Wehrli1      | Robert Koch Institute, Berlin, Germany                |
+| davidstap          | David     | Stap     | d.stap@uva.nl               | ~David_Stap      | University of Amsterdam                |

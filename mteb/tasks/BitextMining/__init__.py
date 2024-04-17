@@ -6,6 +6,7 @@ from .multilingual.DiaBLaBitextMining import *
 from .multilingual.FloresBitextMining import *
 from .multilingual.norwegian_courts_bitext_mining import *
 from .multilingual.NorwegianCourtsBitextMining import *
+from .multilingual.NTREXBitextMining import *
 from .multilingual.TatoebaBitextMining import *
 from .multilingual.TedTalksBitextMining import *
 from .vie.VieMedEVBitextMining import *
