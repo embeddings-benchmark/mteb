@@ -118,6 +118,7 @@ class DenseRetrievalExactSearch:
             )
             cos_scores[torch.isnan(cos_scores)] = -1
 
+            # Get top-k values
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
                 cos_scores,
                 min(
