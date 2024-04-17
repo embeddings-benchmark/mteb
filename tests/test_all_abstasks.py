@@ -10,6 +10,7 @@ import pytest
 from mteb import MTEB
 from mteb.abstasks import AbsTask
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 
 logging.basicConfig(level=logging.INFO)
 
@@ -18,7 +19,7 @@ logging.basicConfig(level=logging.INFO)
 @patch("datasets.load_dataset")
 def test_load_data(mock_load_dataset: Mock, task: AbsTask):
     # TODO: We skip because this load_data is completely different.
-    if isinstance(task, AbsTaskRetrieval):
+    if isinstance(task, AbsTaskRetrieval) or isinstance(task, AbsTaskInstructionRetrieval):
         pytest.skip()
     with patch.object(task, "dataset_transform") as mock_dataset_transform:
         task.load_data()
