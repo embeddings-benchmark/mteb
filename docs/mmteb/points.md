@@ -29,6 +29,7 @@
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
 | orionw            |              |             |          |                     |      2     |                |           |                |          |               |
 | mmhamdy           |              | 6           |          |                     |            |                |           |                |          |               |
+| isaac-chung       |              | 6           |          |                     |            |                |           |                |          |               |
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
 
