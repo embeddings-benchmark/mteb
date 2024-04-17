@@ -38,5 +38,5 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
         }
         """,
         n_samples={"train": 7972, "test": 2644},
-        avg_character_length=141.51,
+        avg_character_length={"train":141.03, "test":141.50},
     )
