@@ -55,5 +55,4 @@ class TweetSarcasmClassification(AbsTaskClassification):
 
     def dataset_transform(self):
         # labels: 0 non-sarcastic, 1 sarcastic
-        self.dataset = self.dataset.rename_column("tweet", "text")
-        self.dataset = self.dataset.rename_column("sarcasm", "label")
+        self.dataset = self.dataset.rename_columns({"tweet": "text", "sarcasm": "label"})
