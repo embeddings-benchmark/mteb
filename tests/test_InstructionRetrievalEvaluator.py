@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 from mteb.evaluation.evaluators import InstructionRetrievalEvaluator, utils
-import pandas as pd
-
 
 
 class TestInstructionRetrievalEvaluator:
@@ -15,7 +13,6 @@ class TestInstructionRetrievalEvaluator:
         self.evaluator = InstructionRetrievalEvaluator.InstructionRetrievalEvaluator()
 
     def test_p_mrr(self):
-
         changed_qrels = {
             "a": ["0"],
         }
@@ -60,6 +57,3 @@ class TestInstructionRetrievalEvaluator:
         )
 
         assert results["p-MRR"] == 0.75
-
-
-
