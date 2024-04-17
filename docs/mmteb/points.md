@@ -2,9 +2,9 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 19        |                |          |             5 |
+| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 22        |                |          |             5 |
 | x-tabdeveloping   |              | 18          |          |                     |            |                |           |                |          |               |
-| imenelydiaker     |              | 88          |          |                     |            |                | 9         |                |          |               |
+| imenelydiaker     |              | 88          |          |                     |            |                | 10        |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
 | GabrielSequeira   |              | 88          |          |                     |            |                |           |                |          |               |
 | schmarion         |              | 88          |          |                     |            |                |           |                |          |               |
@@ -15,7 +15,7 @@
 | Muennighoff       |              |             |          |                     |            |                | 8         |                |          |               |
 | rasdani           |              | 4           |          |                     |            |                |           |                |          |               |
 | PhilipMay         |              |             |          |                     |            |                | 1         |                |          |               |
-| slvnwhrl          |              | 12           |          |                     |            |                |           |                |          |               |
+| slvnwhrl          |              | 12          |          |                     |            |                |           |                |          |               |
 | staoxiao          |              | 50          |          |                     |            |                |           |                |          |               |
 | NouamaneTazi      |              |             |          |                     |            |                | 1         |                |          |               |
 | rafalposwiata     |              | 32          |          |                     |            |                |           |                |          |               |
@@ -24,10 +24,11 @@
 | taeminlee         |              | 8           |          |                     |            |                |           |                |          |               |
 | izhx              |              | 6           |          |                     |            |                |           |                |          |               |
 | achibb            |              | 2           |          |                     |            |                | 0         |                |          |               |   
-| xu3kev            |              | 10           |          |                     |            |                |           |                |          |               |
+| xu3kev            |              | 10          |          |                     |            |                |           |                |          |               |
 | cassanof          |              | 6           |          |                     | 1          | 1              |           |                |          |               |
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
-| orionw         |              |            |          |                     |      2      |              |           |                |          |               |
+| orionw            |              |             |          |                     |      14     |                |           |                |          |               |
+| mmhamdy           |              | 6           |          |                     |            |                |           |                |          |               |
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
 
@@ -46,10 +47,10 @@ First name and last name are as you want them to appear in a publication.
 | MathieuCiancone   | Mathieu    | Ciancone   |                              |                      |  Wikit, Lyon, France                                  |
 | MartinBernstorff  | Martin     | Bernstorff | martinbernstorff@gmail.com   | ~Martin_Bernstorff1  |  Aarhus University, Denmark                           |
 | staoxiao          | Shitao     | Xiao       | 2906698981@qq.com            | ~Shitao_Xiao1        |  Beijing Academy of Artificial Intelligence           |
-| achibb           | Aaron       | Chibb      |                              |                      | N/A                                                   |
+| achibb            | Aaron      | Chibb      |                              |                      | N/A                                                   |
 | cassanof          | Federico   | Cassano    | federico.cassanno@federico.codes | ~Federico_Cassano1 | Northeastern University, Boston, USA                |
 | taidnguyen        | Nguyen     | Tai        | taing@seas.upenn.edu         | ~Nguyen_Tai1         |  University of Pennsylvania                           |
 | xu3kev            | Wen-Ding   | Li         | wl678@cornell.edu            | ~Wen-Ding_Li1        |  Cornell University                                   |
 | izhx              | Xin        | Zhang      | zhangxin2023@stu.hit.edu.cn  |                      |  Harbin Institute of Technology, Shenzhen             |
-| orionw          | Orion     | Weller       | oweller@cs.jhu.edu            | ~Orion_Weller1        |  Johns Hopkins University          |
-| slvnwhrl          | Silvan     | Wehrli       | wehrlis@rki.de            | ~Silvan_Wehrli1        | Robert Koch Institute, Berlin, Germany          |
+| orionw            | Orion      | Weller     | oweller@cs.jhu.edu           | ~Orion_Weller1       |  Johns Hopkins University                             |
+| slvnwhrl          | Silvan     | Wehrli     | wehrlis@rki.de               | ~Silvan_Wehrli1      | Robert Koch Institute, Berlin, Germany                |
