@@ -92,58 +92,60 @@ class DenseRetrievalExactSearch:
             logger.info("Encoding Batch {}/{}...".format(batch_num + 1, len(itr)))
             corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus))
 
-        # Encode chunk of corpus
-        if (
-            self.save_corpus_embeddings
-            and "qid" in kwargs
-            and len(self.corpus_embeddings[kwargs["qid"]])
-        ):
-            sub_corpus_embeddings = torch.tensor(
-                self.corpus_embeddings[kwargs["qid"]][batch_num]
-            )
-        else:
             # Encode chunk of corpus
-            sub_corpus_embeddings = self.model.encode_corpus(
-                corpus[corpus_start_idx:corpus_end_idx],
-                batch_size=self.batch_size,
-                show_progress_bar=self.show_progress_bar,
-                convert_to_tensor=self.convert_to_tensor,
-            )
-            if self.save_corpus_embeddings and "qid" in kwargs:
-                self.corpus_embeddings[kwargs["qid"]].append(sub_corpus_embeddings)
-
-        # Compute similarites using either cosine-similarity or dot product
-        cos_scores = self.score_functions[score_function](
-            query_embeddings, sub_corpus_embeddings
-        )
-        cos_scores[torch.isnan(cos_scores)] = -1
-
-        cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
-            cos_scores,
-            min(
-                top_k + 1,
-                len(cos_scores[1]) if len(cos_scores) > 1 else len(cos_scores[-1]),
-            ),
-            dim=1,
-            largest=True,
-            sorted=return_sorted,
-        )
-        cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
-        cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
-
-        for query_itr in range(len(query_embeddings)):
-            query_id = query_ids[query_itr]
-            for sub_corpus_id, score in zip(
-                cos_scores_top_k_idx[query_itr], cos_scores_top_k_values[query_itr]
+            if (
+                self.save_corpus_embeddings
+                and "qid" in kwargs
+                and len(self.corpus_embeddings[kwargs["qid"]])
             ):
-                corpus_id = corpus_ids[corpus_start_idx + sub_corpus_id]
-                if corpus_id != query_id:
-                    if len(result_heaps[query_id]) < top_k:
-                        # Push item on the heap
-                        heapq.heappush(result_heaps[query_id], (score, corpus_id))
-                    else:
-                        # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
-                        heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
+                sub_corpus_embeddings = torch.tensor(
+                    self.corpus_embeddings[kwargs["qid"]][batch_num]
+                )
+            else:
+                # Encode chunk of corpus
+                sub_corpus_embeddings = self.model.encode_corpus(
+                    corpus[corpus_start_idx:corpus_end_idx],
+                    batch_size=self.batch_size,
+                    show_progress_bar=self.show_progress_bar,
+                    convert_to_tensor=self.convert_to_tensor,
+                )
+                if self.save_corpus_embeddings and "qid" in kwargs:
+                    self.corpus_embeddings[kwargs["qid"]].append(sub_corpus_embeddings)
+
+            # Compute similarites using either cosine-similarity or dot product
+            cos_scores = self.score_functions[score_function](
+                query_embeddings, sub_corpus_embeddings
+            )
+            cos_scores[torch.isnan(cos_scores)] = -1
+
+            cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
+                cos_scores,
+                min(
+                    top_k + 1,
+                    len(cos_scores[1]) if len(cos_scores) > 1 else len(cos_scores[-1]),
+                ),
+                dim=1,
+                largest=True,
+                sorted=return_sorted,
+            )
+            cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
+            cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
+
+            for query_itr in range(len(query_embeddings)):
+                query_id = query_ids[query_itr]
+                for sub_corpus_id, score in zip(
+                    cos_scores_top_k_idx[query_itr], cos_scores_top_k_values[query_itr]
+                ):
+                    corpus_id = corpus_ids[corpus_start_idx + sub_corpus_id]
+                    if corpus_id != query_id:
+                        if len(result_heaps[query_id]) < top_k:
+                            # Push item on the heap
+                            heapq.heappush(result_heaps[query_id], (score, corpus_id))
+                        else:
+                            # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
+                            heapq.heappushpop(
+                                result_heaps[query_id], (score, corpus_id)
+                            )
 
         for qid in result_heaps:
             for score, corpus_id in result_heaps[qid]:
