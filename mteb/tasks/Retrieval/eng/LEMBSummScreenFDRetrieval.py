@@ -23,35 +23,18 @@ class LEMBSummScreenFDRetrieval(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
+        form=["written"],
+        domains=["Spoken"],
+        task_subtypes=["Article retrieval"],
         license=None,
         socioeconomic_status=None,
-        annotations_creators=None,
+        annotations_creators="derived",
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples=None,
+        n_samples={_EVAL_SPLIT: 336},
         avg_character_length=None,
     )
-
-    # @property
-    # def description(self):
-    #     return {
-    #         'name': 'LEMBSummScreenFDRetrieval',
-    #         'dataset_name': 'dwzhu/LongEmbed',
-    #         'subset': 'summ_screen_fd',
-    #         'reference': 'https://huggingface.co/datasets/dwzhu/LongEmbed',
-    #         "description": (
-    #             "summ_screen_fd subset of dwzhu/LongEmbed dataset. "
-    #         ),
-    #         "type": "Retrieval",
-    #         "category": "s2p",
-    #         "eval_splits": ["validation"],
-    #         "eval_langs": ["en"],
-    #         "main_score": "ndcg_at_10",
-    #     }
 
     def load_data(self, **kwargs):
         if self.data_loaded:
