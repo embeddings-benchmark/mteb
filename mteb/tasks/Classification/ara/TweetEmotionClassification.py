@@ -3,6 +3,8 @@ from __future__ import annotations
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+N_SAMPLES = 2048
+
 
 class TweetEmotionClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -37,12 +39,12 @@ class TweetEmotionClassification(AbsTaskClassification):
   organization={Springer}
 }
 """,
-        n_samples={"train": 2048},
+        n_samples={"train": N_SAMPLES},
         avg_character_length={"train": 78.8},
     )
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("tweet", "text")
         self.dataset["train"] = (
-            self.dataset["train"].shuffle(seed=self.seed).select(range(2048))
+            self.dataset["train"].shuffle(seed=self.seed).select(range(N_SAMPLES))
         )
