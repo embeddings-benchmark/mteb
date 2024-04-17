@@ -24,7 +24,7 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
         domains=["Reviews"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed,
+        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         text_creation=None,
