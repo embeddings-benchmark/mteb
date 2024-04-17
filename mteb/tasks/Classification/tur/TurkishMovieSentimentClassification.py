@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-
 from mteb.abstasks import AbsTaskClassification
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class TurkishMovieSentimentClassification(AbsTaskClassification):
@@ -19,7 +18,7 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["tur-Latn"],
         main_score="accuracy",
-        date=("2013-01-01","2013-08-11"),
+        date=("2013-01-01", "2013-08-11"),
         form=["written"],
         domains=["Reviews"],
         task_subtypes=["Sentiment/Hate speech"],
@@ -38,5 +37,5 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
         }
         """,
         n_samples={"train": 7972, "test": 2644},
-        avg_character_length={"train":141.03, "test":141.50},
+        avg_character_length={"train": 141.03, "test": 141.50},
     )
