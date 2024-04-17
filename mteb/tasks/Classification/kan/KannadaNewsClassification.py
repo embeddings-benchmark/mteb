@@ -6,7 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class KannadaNewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="OriyaNewsClassification",
+        name="KannadaNewsClassification",
         dataset={
             "path": "Sakshamrzt/IndicNLP-Kannada",
             "revision": "6693aa1bff48a9df0365b861c1ba8791654f8db5",

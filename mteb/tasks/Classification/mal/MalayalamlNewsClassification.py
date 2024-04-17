@@ -9,7 +9,7 @@ class MalayalamNewsClassification(AbsTaskClassification):
         name="MalayalamNewsClassification",
         dataset={
             "path": "Sakshamrzt/IndicNLP-Malayalam",
-            "revision": "53bcf20b0f440f367aa47995d47ef358a0921f97",
+            "revision": "37ebc0fc6f40acf90b5053f70dc3b306f90de8e8",
         },
         description="A News classification dataset in Malayalam.",
         reference="https://github.com/AI4Bharat/indicnlp_corpus/blob/master/ai4bharat-indicnlp-corpus-2020.pdf",

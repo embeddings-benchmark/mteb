@@ -16,7 +16,7 @@ class GujaratiNewsClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["kan-Knda"],
+        eval_langs=["guj-Gujr"],
         main_score="accuracy",
         date=("2020-09-01", "2022-04-09"),
         form=["written"],
