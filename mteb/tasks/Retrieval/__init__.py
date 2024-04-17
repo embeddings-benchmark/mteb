@@ -44,6 +44,12 @@ from .eng.SCIDOCSRetrieval import *
 from .eng.SciFactRetrieval import *
 from .eng.Touche2020Retrieval import *
 from .eng.TRECCOVIDRetrieval import *
+from .eng.LEMBSummScreenFDRetrieval import *
+from .eng.LEMBNarrativeQARetrieval import *
+from .eng.LEMBQMSumRetrieval import *
+from .eng.LEMBWikimQARetrieval import *
+from .eng.LEMBPasskeyRetrieval import *
+from .eng.LEMBNeedleRetrieval import *
 from .fra.AlloprofRetrieval import *
 from .fra.BSARDRetrieval import *
 from .fra.SyntecRetrieval import *
