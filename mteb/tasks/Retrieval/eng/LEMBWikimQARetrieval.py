@@ -39,8 +39,7 @@ class LEMBWikimQARetrieval(AbsTaskRetrieval):
                 pages={6609--6625},
                 year={2020}
             }
-        """
-        ,
+        """,
         n_samples={_EVAL_SPLIT: 500},
         avg_character_length={_EVAL_SPLIT: 37513},
     )
@@ -63,11 +62,6 @@ class LEMBWikimQARetrieval(AbsTaskRetrieval):
             "qrels"
         ]  # dict_keys(['qid', 'doc_id'])
         qrels = {row["qid"]: {row["doc_id"]: 1} for row in qrels_list}
-
-        print("Example Query")
-        print(list(queries.values())[5])
-        print("Example Passage (truncate at 200 characters)")
-        print(list(corpus.values())[5]["text"][:200])
 
         self.corpus = {self._EVAL_SPLIT: corpus}
         self.queries = {self._EVAL_SPLIT: queries}

@@ -79,11 +79,6 @@ class LEMBNarrativeQARetrieval(AbsTaskRetrieval):
         ]  # dict_keys(['qid', 'doc_id'])
         qrels = {row["qid"]: {row["doc_id"]: 1} for row in qrels_list}
 
-        print("Example Query")
-        print(list(queries.values())[5])
-        print("Example Passage (truncate at 200 characters)")
-        print(list(corpus.values())[5]["text"][:200])
-
         self.corpus = {self._EVAL_SPLIT: corpus}
         self.queries = {self._EVAL_SPLIT: queries}
         self.relevant_docs = {self._EVAL_SPLIT: qrels}
