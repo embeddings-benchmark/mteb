@@ -48,7 +48,7 @@ _LANGUAGES = {
     "sv": ["swe-Latn"],
     "sw": ["swa-Latn"],
     "ta": ["tam-Taml"],
-    "te": ["tel-Telu"],
+    "tel": ["tel-Telu"],
     "th": ["tha-Thai"],
     "tl": ["tgl-Latn"],
     "tr": ["tur-Latn"],
