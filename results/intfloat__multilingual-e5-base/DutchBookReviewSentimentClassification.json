@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "3f756ab4572e071eb53e887ab629f19fa747d39e",
+  "mteb_dataset_name": "DutchBookReviewSentimentClassification",
+  "mteb_version": "1.6.12",
+  "test": {
+    "accuracy": 0.6610611510791367,
+    "accuracy_stderr": 0.026759302033665153,
+    "ap": 0.6093173995126039,
+    "ap_stderr": 0.024994190612424715,
+    "evaluation_time": 22.33,
+    "f1": 0.6586589515246717,
+    "f1_stderr": 0.027130552253396244,
+    "main_score": 0.6610611510791367
+  }
+}
