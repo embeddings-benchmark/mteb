@@ -13,8 +13,12 @@ from .eng.ImdbClassification import *
 from .eng.NewsClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
+from .guj.GujaratiNewsClassification import *
 from .hin.HindiDiscourseClassification import *
 from .jpn.WRIMEClassification import *
+from .kan.KannadaNewsClassification import *
+from .mal.MalayalamlNewsClassification import *
+from .mar.MarathilNewsClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
 from .multilingual.MasakhaNEWSClassification import *
@@ -26,8 +30,11 @@ from .multilingual.NordicLangClassification import *
 from .multilingual.ScalaClassification import *
 from .nob.NoRecClassification import *
 from .nob.NorwegianParliamentClassification import *
+from .ori.OriyaNewsClassification import *
+from .pan.PanjabiNewsClassification import *
 from .pol.PolishClassification import *
 from .swe.SweRecClassification import *
+from .tam.TamilNewsClassification import *
 from .tel.TeluguNewsClassification import *
 from .vie.VieStudentFeedbackClassification import *
 from .zho.CMTEBClassification import *
