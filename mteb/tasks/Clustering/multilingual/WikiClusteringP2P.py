@@ -5,7 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
     "da": ["dan-Latn"],
-    "la": ["lav-Latn"],
+    "lv": ["lav-Latn"],
     "gv": ["glv-Latn"],
     "sq": ["sqi-Latn"],
 }
@@ -14,10 +14,10 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
     metadata = TaskMetadata(
         name="WikiClusteringP2P",
         description="Clustering of wikipedia articles inspired by BlubrbsClusteringP2P. Labels are taken from top-level categories of the respective languages (e.g., https://lv.wikipedia.org/wiki/Kategorija:Pamatkategorijas).",
-        reference=None,
+        reference="https://github.com/Rysias/wiki-clustering",
         dataset={
             "path": "ryzzlestrizzle/multi-wiki-clustering-p2p",
-            "revision": "3a598004635243dd5009ac5efaeb19d52384e21f",
+            "revision": "eb5e669fbb0471a306602ebd9084545f56560abd",
         },
         type="Clustering",
         category="p2p",
@@ -26,34 +26,14 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         main_score="v_measure",
         date=None,
         form=None,
-        domains=None,
+        domains=["Encyclopaedic"],
         task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
+        license="cc-by-sa-3.0",
+        socioeconomic_status="mixed",
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        text_creation="created",
         bibtex_citation=None,
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"test": 60000},
+        avg_character_length={"test": 572.05},
     )
-
-if __name__ == "__main__":
-    from sentence_transformers import SentenceTransformer
-
-    from mteb import MTEB
-
-    # Define the sentence-transformers model name
-    model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-
-    model = SentenceTransformer(model_name)
-    evaluation = MTEB(tasks=[WikiClusteringP2P()])
-    results = evaluation.run(model)
-
-
-    # Load dataset from WikiClustering
-    task = WikiClusteringP2P()
-    data = task.load_data()
-
-    import datasets
-    df = datasets.load_dataset(**task.metadata_dict["dataset"])
