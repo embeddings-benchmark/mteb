@@ -9,7 +9,7 @@
 | GabrielSequeira   |              | 88          |          |                     |            |                |           |                |          |               |
 | schmarion         |              | 88          |          |                     |            |                |           |                |          |               |
 | MathieuCiancone   |              | 88          |          |                     |            |                |           |                |          |               |
-| Sakshamrzt        |              | 10          |          |                     |            |                | 1         |                |          |               |
+| Sakshamrzt        |              | 10          |          |                     |            |                | 2         |                |          |               |
 | MartinBernstorff  |              | 2           |          |                     | 7          |                | 3         |                |          |               |
 | guenthermi        |              | 12          |          |                     |            |                |           |                |          |               |
 | Muennighoff       |              |             |          |                     |            |                | 8         |                |          |               |
@@ -30,8 +30,8 @@
 | orionw            |              |             |          |                     |      14     |                |           |                |          |               |
 | mmhamdy           |              | 6           |          |                     |            |                |           |                |          |               |
 | manandey           |              | 6           |          |                     |            |                |           |                |          |               |
-| isaac-chung       |              | 12          |          |                     |            |                |           |                |          |               |
-| asparius       |                 | 6          |          |                     |            |                |     1      |                |          |               |
+| isaac-chung       |              | 12          |          |                     |            |                |    1       |                |          |               |
+| asparius       |                 | 6          |          |                     |            |                |           |                |          |               |
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
 
