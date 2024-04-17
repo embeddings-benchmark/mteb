@@ -25,7 +25,7 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
         task_subtypes=["Sentiment/Hate speech"],
         license=None,
         socioeconomic_status=None,
-        annotations_creators=None,
+        annotations_creators="derived",
         dialect=None,
         text_creation=None,
         bibtex_citation="""
