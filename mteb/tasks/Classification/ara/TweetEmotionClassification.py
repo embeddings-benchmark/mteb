@@ -42,7 +42,6 @@ class TweetEmotionClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        
         self.dataset = self.dataset.rename_column("tweet", "text")
         self.dataset["train"] = (
             self.dataset["train"].shuffle(seed=self.seed).select(range(2048))
