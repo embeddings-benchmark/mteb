@@ -55,7 +55,7 @@ TASK_DOMAIN = Literal[
     "Social",
     "Spoken",
     "Web",
-    "Programming"
+    "Programming",
 ]
 
 TEXT_CREATION_METHOD = Literal[
