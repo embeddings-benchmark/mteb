@@ -15,6 +15,7 @@ from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
 from .hin.HindiDiscourseClassification import *
 from .jpn.WRIMEClassification import *
+from .mkd.MacedonianTweetSentimentClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
 from .multilingual.MasakhaNEWSClassification import *
