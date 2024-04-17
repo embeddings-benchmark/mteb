@@ -105,8 +105,7 @@ class DenseRetrievalExactSearch:
                 corpus[corpus_start_idx:corpus_end_idx],
                 batch_size=self.batch_size,
                 show_progress_bar=self.show_progress_bar,
-                convert_to_tensor=self.convert_to_tensor,
-                **kwargs,
+                convert_to_tensor=self.convert_to_tensor
             )
             if self.save_corpus_embeddings and "qid" in kwargs:
                 self.corpus_embeddings[kwargs["qid"]].append(sub_corpus_embeddings)
@@ -199,7 +198,7 @@ class DRESModel:
             ]
 
         corpus_embeddings = self.model.encode(
-            sentences, batch_size=batch_size, **kwargs
+            sentences, batch_size=batch_size
         )
         if self.save_corpus_embeddings and "qid" in kwargs:
             if type(corpus_embeddings) == torch.tensor:
