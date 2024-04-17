@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "91b577e743e0c2db89d12ed676f536ae310e2d35",
+  "mteb_dataset_name": "TeluguNewsClassification",
+  "mteb_version": "1.5.2",
+  "test": {
+    "accuracy": 0.753857421875,
+    "accuracy_stderr": 0.03743843747399702,
+    "evaluation_time": 29.56,
+    "f1": 0.751757846082121,
+    "f1_stderr": 0.03919967439555231,
+    "main_score": 0.753857421875
+  }
+}

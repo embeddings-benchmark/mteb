@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "6693aa1bff48a9df0365b861c1ba8791654f8db5",
+  "mteb_dataset_name": "KannadaNewsClassification",
+  "mteb_version": "1.5.2",
+  "test": {
+    "accuracy": 0.7345703125,
+    "accuracy_stderr": 0.05136579504410201,
+    "evaluation_time": 27.49,
+    "f1": 0.7334353484694294,
+    "f1_stderr": 0.05319947698894113,
+    "main_score": 0.7345703125
+  }
+}

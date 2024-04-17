@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "53bcf20b0f440f367aa47995d47ef358a0921f97",
+  "mteb_dataset_name": "MarathiNewsClassification",
+  "mteb_version": "1.5.2",
+  "test": {
+    "accuracy": 0.912939453125,
+    "accuracy_stderr": 0.0076585478156616215,
+    "evaluation_time": 27.74,
+    "f1": 0.913354536479663,
+    "f1_stderr": 0.0076298305453788426,
+    "main_score": 0.912939453125
+  }
+}

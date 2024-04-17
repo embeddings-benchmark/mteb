@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "c5a01ecdc1925d5af07375dbf9300e3f22431b09",
+  "mteb_dataset_name": "OriyaNewsClassification",
+  "mteb_version": "1.5.2",
+  "test": {
+    "accuracy": 0.622705078125,
+    "accuracy_stderr": 0.045499350616516034,
+    "evaluation_time": 27.78,
+    "f1": 0.6173872439895252,
+    "f1_stderr": 0.04861016707478424,
+    "main_score": 0.622705078125
+  }
+}

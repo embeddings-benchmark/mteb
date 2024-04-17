@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "b98dbe0d93464c1a4789db07e0702677239c770a",
+  "mteb_dataset_name": "GujaratiNewsClassification",
+  "mteb_version": "1.5.2",
+  "test": {
+    "accuracy": 0.9067713444553483,
+    "accuracy_stderr": 0.015241035256775023,
+    "evaluation_time": 17.22,
+    "f1": 0.9063269771116991,
+    "f1_stderr": 0.015546739602758042,
+    "main_score": 0.9067713444553483
+  }
+}

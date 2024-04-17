@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "37ebc0fc6f40acf90b5053f70dc3b306f90de8e8",
+  "mteb_dataset_name": "MalayalamNewsClassification",
+  "mteb_version": "1.5.2",
+  "test": {
+    "accuracy": 0.59365234375,
+    "accuracy_stderr": 0.042276697876603486,
+    "evaluation_time": 28.43,
+    "f1": 0.591116878098591,
+    "f1_stderr": 0.04156060505861244,
+    "main_score": 0.59365234375
+  }
+}
