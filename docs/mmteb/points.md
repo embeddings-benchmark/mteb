@@ -2,8 +2,8 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 27        |                |          |             5 |
-| x-tabdeveloping   |              | 36          |          |                     |            |                |           |                |          |               |
+| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 29        |                |          |             5 |
+| x-tabdeveloping   |              | 48          |          |                     |            |                |           |                |          |               |
 | imenelydiaker     |              | 88          |          |                     |            |                | 10        |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
 | GabrielSequeira   |              | 88          |          |                     |            |                |           |                |          |               |
