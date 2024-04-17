@@ -37,7 +37,7 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
   publisher={Springer}
 }
 """,
-        n_samples={"train": 2048},
+        n_samples={"train": N_SAMPLES},
         avg_character_length={"train": 137.2},
     )
 
