@@ -17,7 +17,7 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         reference="https://github.com/Rysias/wiki-clustering",
         dataset={
             "path": "ryzzlestrizzle/multi-wiki-clustering-p2p",
-            "revision": "eb5e669fbb0471a306602ebd9084545f56560abd",
+            "revision": "7f1d0674aff24ac2b8c3c216e9128ba0f91a5cf4",
         },
         type="Clustering",
         category="p2p",
@@ -34,6 +34,6 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         dialect=None,
         text_creation="created",
         bibtex_citation=None,
-        n_samples={"test": 60000},
-        avg_character_length={"test": 572.05},
+        n_samples={"test": 40960},
+        avg_character_length={"test": 570.6},
     )
