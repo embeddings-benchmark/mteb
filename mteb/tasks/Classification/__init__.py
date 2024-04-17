@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from .ara.RestaurantReviewSentimentClassification import *
+from .ben.BengaliHateSpeechClassification import *
 from .dan.AngryTweetsClassification import *
 from .dan.DalajClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
@@ -12,9 +14,11 @@ from .eng.ImdbClassification import *
 from .eng.NewsClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
+from .est.estonian_valence import *
 from .hin.HindiDiscourseClassification import *
 from .ita.ItaHateClassification import *
 from .jpn.WRIMEClassification import *
+from .mkd.MacedonianTweetSentimentClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
 from .multilingual.MasakhaNEWSClassification import *
@@ -24,10 +28,12 @@ from .multilingual.MTOPDomainClassification import *
 from .multilingual.MTOPIntentClassification import *
 from .multilingual.NordicLangClassification import *
 from .multilingual.ScalaClassification import *
+from .nld.DutchBookReviewSentimentClassification import *
 from .nob.NoRecClassification import *
 from .nob.NorwegianParliamentClassification import *
 from .pol.PolishClassification import *
 from .swe.SweRecClassification import *
+from .tur.TurkishMovieSentimentClassification import *
 from .vie.VieStudentFeedbackClassification import *
 from .zho.CMTEBClassification import *
 from .zho.YueOpenriceReviewClassification import (
