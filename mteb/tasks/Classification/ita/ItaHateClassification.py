@@ -23,12 +23,12 @@ class ItaHateClassification(AbsTaskClassification):
         main_score="accuracy",
         date=("2021-11-01", "2022-02-28"),
         form=["written"],
-        domains=None,
+        domains=None, # text is created from a template
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-4.0",
-        socioeconomic_status=None,
+        socioeconomic_status="high", # annotators are domain-expert
         annotations_creators="expert-annotated",
-        dialect=None,
+        dialect=[],
         text_creation="created",
         bibtex_citation="""
         @inproceedings{rottger-etal-2022-multilingual,
