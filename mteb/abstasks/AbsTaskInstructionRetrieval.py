@@ -9,9 +9,11 @@ import tqdm
 from datasets import Features, Value, load_dataset
 
 from ..evaluation.evaluators import utils
-from ..evaluation.evaluators.InstructionRetrievalEvaluator import InstructionRetrievalEvaluator
+from ..evaluation.evaluators.InstructionRetrievalEvaluator import (
+    InstructionRetrievalEvaluator,
+)
 from .AbsTask import AbsTask
-from .AbsTaskRetrieval import HFDataLoader, AbsTaskRetrieval
+from .AbsTaskRetrieval import HFDataLoader
 
 logger = logging.getLogger(__name__)
 

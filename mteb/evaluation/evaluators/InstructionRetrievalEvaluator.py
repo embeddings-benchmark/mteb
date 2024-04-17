@@ -1,12 +1,11 @@
 import logging
-from typing import Dict, List
+from typing import Dict
 
 from .RetrievalEvaluator import (
     RetrievalEvaluator,
 )
 
 logger = logging.getLogger(__name__)
-
 
 
 class InstructionRetrievalEvaluator(RetrievalEvaluator):

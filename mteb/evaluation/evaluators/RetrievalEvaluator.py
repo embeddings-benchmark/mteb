@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import heapq
 import logging
-from typing import Dict, List, Tuple
 from collections import defaultdict
+from typing import Dict, List, Tuple
 
 import pytrec_eval
 import torch
@@ -98,14 +98,16 @@ class DenseRetrievalExactSearch:
             and "qid" in kwargs
             and len(self.corpus_embeddings[kwargs["qid"]])
         ):
-            sub_corpus_embeddings = torch.tensor(self.corpus_embeddings[kwargs["qid"]][batch_num])
+            sub_corpus_embeddings = torch.tensor(
+                self.corpus_embeddings[kwargs["qid"]][batch_num]
+            )
         else:
             # Encode chunk of corpus
             sub_corpus_embeddings = self.model.encode_corpus(
                 corpus[corpus_start_idx:corpus_end_idx],
                 batch_size=self.batch_size,
                 show_progress_bar=self.show_progress_bar,
-                convert_to_tensor=self.convert_to_tensor
+                convert_to_tensor=self.convert_to_tensor,
             )
             if self.save_corpus_embeddings and "qid" in kwargs:
                 self.corpus_embeddings[kwargs["qid"]].append(sub_corpus_embeddings)
@@ -118,7 +120,10 @@ class DenseRetrievalExactSearch:
 
         cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
             cos_scores,
-            min(top_k + 1, len(cos_scores[1]) if len(cos_scores) > 1 else len(cos_scores[-1])),
+            min(
+                top_k + 1,
+                len(cos_scores[1]) if len(cos_scores) > 1 else len(cos_scores[-1]),
+            ),
             dim=1,
             largest=True,
             sorted=return_sorted,
@@ -138,9 +143,7 @@ class DenseRetrievalExactSearch:
                         heapq.heappush(result_heaps[query_id], (score, corpus_id))
                     else:
                         # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
-                        heapq.heappushpop(
-                            result_heaps[query_id], (score, corpus_id)
-                        )
+                        heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
 
         for qid in result_heaps:
             for score, corpus_id in result_heaps[qid]:
