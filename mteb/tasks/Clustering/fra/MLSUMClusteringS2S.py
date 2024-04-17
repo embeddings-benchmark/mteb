@@ -45,14 +45,14 @@ class MLSUMClusteringS2S(AbsTaskClustering):
         if self.data_loaded:
             return
         self.dataset = datasets.load_dataset(
-            self.metadata.dataset['path'],
-            self.metadata.dataset['name'],
+            self.metadata.dataset["path"],
+            self.metadata.dataset["name"],
             split=self.metadata.eval_splits[0],
-            revision=self.metadata.dataset['revision'],
+            revision=self.metadata.dataset["revision"],
         )
         self.dataset_transform()
         self.data_loaded = True
-        
+
     def dataset_transform(self):
         """
         Convert to standard format
