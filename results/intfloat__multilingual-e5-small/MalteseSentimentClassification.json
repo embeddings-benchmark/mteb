@@ -1,0 +1,25 @@
+{
+  "dataset_revision": "fd47b916f9ebb5d27b0e583de9d2b2db39f7dda2",
+  "mteb_dataset_name": "MalteseSentimentClassification",
+  "mteb_version": "1.6.12",
+  "test": {
+    "accuracy": 0.5871345029239766,
+    "accuracy_stderr": 0.04752339100329834,
+    "ap": 0.40215222812168305,
+    "ap_stderr": 0.02713279956287242,
+    "evaluation_time": 3.08,
+    "f1": 0.5685613616801592,
+    "f1_stderr": 0.040561161547649084,
+    "main_score": 0.5871345029239766
+  },
+  "validation": {
+    "accuracy": 0.6188235294117647,
+    "accuracy_stderr": 0.05523150397320236,
+    "ap": 0.4226946899300195,
+    "ap_stderr": 0.03816783230056503,
+    "evaluation_time": 5.06,
+    "f1": 0.6017270223460253,
+    "f1_stderr": 0.050922496714521905,
+    "main_score": 0.6188235294117647
+  }
+}

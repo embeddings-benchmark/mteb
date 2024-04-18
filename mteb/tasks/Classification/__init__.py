@@ -25,6 +25,7 @@ from .ind.IndonesianIdClickbaitClassification import *
 from .ita.ItaHateClassification import *
 from .jpn.WRIMEClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
+from .mlt.MalteseSentimentClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
 from .multilingual.MasakhaNEWSClassification import *
