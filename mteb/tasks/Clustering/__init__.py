@@ -27,6 +27,7 @@ from .multilingual.MasakhaNEWSClusteringS2S import *
 from .nob.snl_clustering import *
 from .nob.vg_clustering import *
 from .pol.PolishClustering import *
+from .rom.RomaniBibleClustering import *
 from .spa.FloresClusteringS2S import *
 from .spa.SpanishNewsClusteringP2P import *
 from .swe.swedn_clustering import *
