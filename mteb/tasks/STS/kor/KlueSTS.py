@@ -13,7 +13,7 @@ class KlueSTS(AbsTaskSTS):
             "name": "sts",
             "revision": "349481ec73fff722f88e0453ca05c77a447d967c",
         },
-        description="",
+        description="Human-annotated STS dataset of Korean reviews, news, and spoken word sets. Part of the Korean Language Understanding Evaluation (KLUE).",
         reference="https://arxiv.org/abs/2105.09680",
         type="STS",
         category="s2s",
@@ -38,7 +38,7 @@ class KlueSTS(AbsTaskSTS):
       primaryClass={cs.CL}
 }""",
         n_samples={"validation": 519},
-        avg_character_length=None,
+        avg_character_length={"validation": 33.178227360308284},
     )
 
     @property

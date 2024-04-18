@@ -12,7 +12,7 @@ class KorSTS(AbsTaskSTS):
             "path": "dkoterwa/kor-sts",
             "revision": "016f35f9b961daaaa7a352e927084e3da662ac1f",
         },
-        description="",
+        description="Benchmark dataset for STS in Korean. Created by machine translation and human post editing of the STS-B dataset.",
         reference="https://arxiv.org/abs/2004.03289",
         type="STS",
         category="s2s",
@@ -35,7 +35,7 @@ class KorSTS(AbsTaskSTS):
   year={2020}
 }""",
         n_samples={"test": 1379},
-        avg_character_length=None,
+        avg_character_length={"test": 29.279433139534884},
     )
 
     @property
