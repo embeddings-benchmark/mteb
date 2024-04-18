@@ -4,12 +4,12 @@
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
 | KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 32        |                |          |             5 |
 | x-tabdeveloping   |              | 48          |          |                     |            |                |           |                |          |               |
-| imenelydiaker     |              | 88          |          |                     |            |                | 10        |                |          |               |
+| imenelydiaker     |              | 88          |          |                     |            |                | 15        |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
 | GabrielSequeira   |              | 88          |          |                     |            |                |           |                |          |               |
 | schmarion         |              | 88          |          |                     |            |                |           |                |          |               |
 | MathieuCiancone   |              | 88          |          |                     |            |                |           |                |          |               |
-| Sakshamrzt        |              | 10          |          |                     |            |                | 1         |                |          |               |
+| Sakshamrzt        |              | 10          |          |                     |            |                | 2         |                |          |               |
 | MartinBernstorff  |              | 2           |          |                     | 7          |                | 3         |                |          |               |
 | guenthermi        |              | 12          |          |                     |            |                |           |                |          |               |
 | Muennighoff       |              |             |          |                     |            |                | 8         |                |          |               |
@@ -27,10 +27,12 @@
 | xu3kev            |              | 10          |          |                     |            |                |           |                |          |               |
 | cassanof          |              | 6           |          |                     | 1          | 1              |           |                |          |               |
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
-| orionw            |              |             |          |                     |      14     |                |           |                |          |               |
-| mmhamdy           |              | 6           |          |                     |            |                |           |                |          |               |
-| manandey           |              | 6           |          |                     |            |                |           |                |          |               |
-| isaac-chung       |              | 12          |          |                     |            |                |           |                |          |               |
+| orionw            |              |             |          |                     |      14    |                |           |                |          |               |
+| mmhamdy           |              | 12          |          |                     |            |                |           |                |          |               |
+| manandey          |              | 12          |          |                     |            |                |           |                |          |               |
+| isaac-chung       |              | 24          |          |                     |            |                | 2         |                |          |               |
+| asparius          |              | 8           |          |                     |            |                |           |                |          |               |
+
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
 
@@ -58,3 +60,5 @@ First name and last name are as you want them to appear in a publication.
 | slvnwhrl          | Silvan     | Wehrli     | wehrlis@rki.de               | ~Silvan_Wehrli1      | Robert Koch Institute, Berlin, Germany                |
 | manandey          | Manan     | Dey     | manandey1@gmail.com               | ~Manan_Dey2      | Salesforce, India                |
 | isaac-chung       | Isaac      | Chung      | chungisaac1217@gmail.com     | ~Isaac_Kwan_Yin_Chung1 | N/A                                                 |
+| asparius       | Ömer      | Çağatan      | ocagatan19@ku.edu.tr     | ~Ömer_Veysel_Çağatan1 | Koç University,Turkey                                                 |
+
