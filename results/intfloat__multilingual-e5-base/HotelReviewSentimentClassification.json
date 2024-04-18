@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "b108d2c32ee4e1f4176ea233e1a5ac17bceb9ef9",
+  "mteb_dataset_name": "HotelReviewSentimentClassification",
+  "mteb_version": "1.6.3",
+  "train": {
+    "accuracy": 0.52529296875,
+    "accuracy_stderr": 0.023042322776057444,
+    "evaluation_time": 381.93,
+    "f1": 0.5084084837840069,
+    "f1_stderr": 0.020023125484070918,
+    "main_score": 0.52529296875
+  }
+}

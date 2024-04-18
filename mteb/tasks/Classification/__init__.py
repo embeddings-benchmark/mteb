@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+from .ara.HotelReviewSentimentClassification import *
 from .ara.RestaurantReviewSentimentClassification import *
+from .ara.TweetEmotionClassification import *
+from .ara.TweetSarcasmClassification import *
 from .ben.BengaliHateSpeechClassification import *
 from .ces.CzechSubjectivityClassification import *
 from .dan.AngryTweetsClassification import *
@@ -35,6 +38,7 @@ from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
 from .swe.SweRecClassification import *
 from .tur.TurkishMovieSentimentClassification import *
+from .tur.TurkishProductSentimentClassification import *
 from .vie.VieStudentFeedbackClassification import *
 from .zho.CMTEBClassification import *
 from .zho.YueOpenriceReviewClassification import (
