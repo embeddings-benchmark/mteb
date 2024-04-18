@@ -1,0 +1,20 @@
+{
+  "dataset_revision": "349481ec73fff722f88e0453ca05c77a447d967c",
+  "mteb_dataset_name": "KLUE-STS",
+  "mteb_version": "1.6.3",
+  "validation": {
+    "cos_sim": {
+      "pearson": 0.6643426782389475,
+      "spearman": 0.6589523623849758
+    },
+    "euclidean": {
+      "pearson": 0.6462564265558833,
+      "spearman": 0.6417309818469817
+    },
+    "evaluation_time": 1.16,
+    "manhattan": {
+      "pearson": 0.6482246986840657,
+      "spearman": 0.6441548929177391
+    }
+  }
+}
