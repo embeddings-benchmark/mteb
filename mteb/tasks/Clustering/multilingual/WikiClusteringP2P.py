@@ -27,7 +27,7 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         date=None,
         form=["written"],
         domains=["Encyclopaedic"],
-        task_subtypes=None,
+        task_subtypes=["Thematic Clustering"],
         license="cc-by-sa-3.0",
         socioeconomic_status="mixed",
         annotations_creators=None,
