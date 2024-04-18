@@ -52,6 +52,5 @@ class RomaTalesBitextMining(AbsTaskBitextMining, CrosslingualTask):
         for lang in self.langs:
             self.dataset[lang] = (
                 self.dataset[lang]
-                .rename_column("romani", "sentence1")
-                .rename_column("hungarian", "sentence2")
+                .rename_columns({"romani": "sentence1", "hungarian": "sentence2"})
             )
