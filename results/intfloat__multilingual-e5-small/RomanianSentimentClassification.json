@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "155048684cea7a6d6af1ddbfeb9a04820311ce93",
+  "mteb_dataset_name": "RomanianSentimentClassification",
+  "mteb_version": "1.6.12",
+  "test": {
+    "accuracy": 0.658447265625,
+    "accuracy_stderr": 0.050031675795602325,
+    "ap": 0.6921688218112021,
+    "ap_stderr": 0.02798613903544727,
+    "evaluation_time": 8.42,
+    "f1": 0.6485144191893879,
+    "f1_stderr": 0.060692838095249425,
+    "main_score": 0.658447265625
+  }
+}
