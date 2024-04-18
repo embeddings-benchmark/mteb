@@ -16,8 +16,8 @@ class CzechSubjectivityClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         date=("2022-04-01", "2022-04-01"),
-        eval_splits=["test"],
-        eval_langs=["ron-Latn"],
+        eval_splits=["validation", "test"],
+        eval_langs=["ces-Latn"],
         main_score="accuracy",
         form=["written"],
         domains=["Reviews"],
@@ -40,6 +40,6 @@ class CzechSubjectivityClassification(AbsTaskClassification):
     pages = "1381--1391",
 }
 """,
-        n_samples={"test": 2000},
-        avg_character_length={"test": 108.3},
+        n_samples={"validation": 500, "test": 2000},
+        avg_character_length={"validation": 108.2, "test": 108.3},
     )
