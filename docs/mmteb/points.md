@@ -2,9 +2,9 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 30        |                |          |             5 |
+| KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 31        |                |          |             5 |
 | x-tabdeveloping   |              | 36          |          |                     |            |                |           |                |          |               |
-| imenelydiaker     |              | 88          |          |                     |            |                | 14        |                |          |               |
+| imenelydiaker     |              | 88          |          |                     |            |                | 15        |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
 | GabrielSequeira   |              | 88          |          |                     |            |                |           |                |          |               |
 | schmarion         |              | 88          |          |                     |            |                |           |                |          |               |
@@ -30,7 +30,7 @@
 | orionw            |              |             |          |                     |      14    |                |           |                |          |               |
 | mmhamdy           |              | 12          |          |                     |            |                |           |                |          |               |
 | manandey          |              | 12          |          |                     |            |                |           |                |          |               |
-| isaac-chung       |              | 24          |          |                     |            |                | 2         |                |          |               |
+| isaac-chung       |              | 30          |          |                     |            |                | 2         |                |          |               |
 | asparius          |              | 8           |          |                     |            |                |           |                |          |               |
 
 
