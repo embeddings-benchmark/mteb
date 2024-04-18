@@ -1,0 +1,11 @@
+{
+  "dataset_revision": "97fae0e80a8d275bc685dcb3da08972af542ad6e",
+  "mteb_dataset_name": "RomaniBibleClustering",
+  "mteb_version": "1.6.10",
+  "test": {
+    "evaluation_time": 41.57,
+    "main_score": 0.403885265461902,
+    "v_measure": 0.403885265461902,
+    "v_measure_std": 0.009494940720589125
+  }
+}
