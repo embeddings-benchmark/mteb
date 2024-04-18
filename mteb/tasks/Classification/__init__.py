@@ -20,6 +20,7 @@ from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
 from .est.estonian_valence import *
 from .hin.HindiDiscourseClassification import *
+from .hrv.CroatianSentimentClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ita.ItaHateClassification import *
 from .jpn.WRIMEClassification import *
