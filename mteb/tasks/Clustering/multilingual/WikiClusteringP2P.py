@@ -24,10 +24,10 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="v_measure",
-        date=None,
+        date=("2001-01-15", "2024-04-15"),
         form=["written"],
         domains=["Encyclopaedic"],
-        task_subtypes=["Thematic Clustering"],
+        task_subtypes=["Thematic clustering"],
         license="cc-by-sa-3.0",
         socioeconomic_status="mixed",
         annotations_creators="derived",
@@ -37,3 +37,4 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         n_samples={"test": 40960},
         avg_character_length={"test": 570.6},
     )
+
