@@ -68,5 +68,3 @@ class LEMBWikimQARetrieval(AbsTaskRetrieval):
         self.relevant_docs = {self._EVAL_SPLIT: qrels}
 
         self.data_loaded = True
-
-        self.calculate_metadata_metrics()

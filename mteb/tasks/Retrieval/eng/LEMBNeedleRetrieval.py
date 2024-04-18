@@ -6,7 +6,16 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class LEMBNeedleRetrieval(AbsTaskRetrieval):
-    _EVAL_SPLIT = "test"
+    _EVAL_SPLIT = [
+        "test_256",
+        "test_512",
+        "test_1024",
+        "test_2048",
+        "test_4096",
+        "test_8192",
+        "test_16384",
+        "test_32768",
+    ]
 
     metadata = TaskMetadata(
         name="LEMBNeedleRetrieval",
@@ -19,7 +28,7 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
         description=("needle subset of dwzhu/LongEmbed dataset."),
         type="Retrieval",
         category="s2p",
-        eval_splits=[_EVAL_SPLIT],
+        eval_splits=_EVAL_SPLIT,
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2000-01-01", "2023-12-31"),
@@ -32,40 +41,64 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
         dialect=[],
         text_creation="found",
         bibtex_citation=None,
-        n_samples={_EVAL_SPLIT: 1200},
-        avg_character_length={_EVAL_SPLIT: 35305.2},
+        n_samples={
+            "test_256": 150,
+            "test_512": 150,
+            "test_1024": 150,
+            "test_2048": 150,
+            "test_4096": 150,
+            "test_8192": 150,
+            "test_16384": 150,
+            "test_32768": 150,
+        },
+        avg_character_length={
+            "test_256": 1074.4,
+            "test_512": 2067.0,
+            "test_1024": 4129.5,
+            "test_2048": 8513.4,
+            "test_4096": 17452.7,
+            "test_8192": 35261.6,
+            "test_16384": 72113.7,
+            "test_32768": 141829.0,
+        },
     )
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
 
-        if "context_length" not in kwargs:
-            raise ValueError("Need to specify context_length")
-        context_length = kwargs["context_length"]
+        self.corpus = {}
+        self.queries = {}
+        self.relevant_docs = {}
 
-        query_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
-            "queries"
-        ]  # dict_keys(['qid', 'text'])
-        query_list = query_list.filter(lambda x: x["context_length"] == context_length)
-        queries = {row["qid"]: row["text"] for row in query_list}
+        for split in self._EVAL_SPLIT:
+            context_length = int(split.split("_")[1])
+            query_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
+                "queries"
+            ]  # dict_keys(['qid', 'text'])
+            query_list = query_list.filter(
+                lambda x: x["context_length"] == context_length
+            )
+            queries = {row["qid"]: row["text"] for row in query_list}
 
-        corpus_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
-            "corpus"
-        ]  # dict_keys(['doc_id', 'text'])
-        corpus_list = corpus_list.filter(
-            lambda x: x["context_length"] == context_length
-        )
-        corpus = {row["doc_id"]: {"text": row["text"]} for row in corpus_list}
+            corpus_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
+                "corpus"
+            ]  # dict_keys(['doc_id', 'text'])
+            corpus_list = corpus_list.filter(
+                lambda x: x["context_length"] == context_length
+            )
+            corpus = {row["doc_id"]: {"text": row["text"]} for row in corpus_list}
 
-        qrels_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
-            "qrels"
-        ]  # dict_keys(['qid', 'doc_id'])
-        qrels_list = qrels_list.filter(lambda x: x["context_length"] == context_length)
-        qrels = {row["qid"]: {row["doc_id"]: 1} for row in qrels_list}
+            qrels_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
+                "qrels"
+            ]  # dict_keys(['qid', 'doc_id'])
+            qrels_list = qrels_list.filter(
+                lambda x: x["context_length"] == context_length
+            )
+            qrels = {row["qid"]: {row["doc_id"]: 1} for row in qrels_list}
 
-        self.corpus = {self._EVAL_SPLIT: corpus}
-        self.queries = {self._EVAL_SPLIT: queries}
-        self.relevant_docs = {self._EVAL_SPLIT: qrels}
+            self.corpus[split] = corpus
+            self.queries[split] = queries
+            self.relevant_docs[split] = qrels
 
         self.data_loaded = True
