@@ -1,7 +1,11 @@
 from __future__ import annotations
 
+from .ara.HotelReviewSentimentClassification import *
 from .ara.RestaurantReviewSentimentClassification import *
+from .ara.TweetEmotionClassification import *
+from .ara.TweetSarcasmClassification import *
 from .ben.BengaliHateSpeechClassification import *
+from .ces.CzechSubjectivityClassification import *
 from .dan.AngryTweetsClassification import *
 from .dan.DalajClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
@@ -17,6 +21,7 @@ from .eng.TweetSentimentExtractionClassification import *
 from .est.estonian_valence import *
 from .hin.HindiDiscourseClassification import *
 from .ita.ItaHateClassification import *
+from .ind.IndonesianIdClickbaitClassification import *
 from .jpn.WRIMEClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
@@ -32,8 +37,10 @@ from .nld.DutchBookReviewSentimentClassification import *
 from .nob.NoRecClassification import *
 from .nob.NorwegianParliamentClassification import *
 from .pol.PolishClassification import *
+from .ron.RomanianSentimentClassification import *
 from .swe.SweRecClassification import *
 from .tur.TurkishMovieSentimentClassification import *
+from .tur.TurkishProductSentimentClassification import *
 from .vie.VieStudentFeedbackClassification import *
 from .zho.CMTEBClassification import *
 from .zho.YueOpenriceReviewClassification import (

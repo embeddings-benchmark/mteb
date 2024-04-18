@@ -2,15 +2,15 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 31        |                |          |             5 |
-| x-tabdeveloping   |              | 36          |          |                     |            |                |           |                |          |               |
-| imenelydiaker     |              | 88          |          |                     |            |                | 10        |                |          |               |
+| KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 34        |                |          |             5 |
+| x-tabdeveloping   |              | 48          |          |                     |            |                |           |                |          |               |
+| imenelydiaker     |              | 88          |          |                     |          2 |                | 15        |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
 | GabrielSequeira   |              | 88          |          |                     |            |                |           |                |          |               |
 | schmarion         |              | 88          |          |                     |            |                |           |                |          |               |
 | MathieuCiancone   |              | 88          |          |                     |            |                |           |                |          |               |
 | Sakshamrzt        |              | 10          |          |                     |            |                | 2         |                |          |               |
-| MartinBernstorff  |              | 2           |          |                     | 7          |                | 3         |                |          |               |
+| MartinBernstorff  |              | 2           |          |                     | 7          |                | 4         |                |          |               |
 | guenthermi        |              | 12          |          |                     |            |                |           |                |          |               |
 | Muennighoff       |              |             |          |                     |            |                | 8         |                |          |               |
 | rasdani           |              | 4           |          |                     |            |                |           |                |          |               |
@@ -28,10 +28,10 @@
 | cassanof          |              | 6           |          |                     | 1          | 1              |           |                |          |               |
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
 | orionw            |              |             |          |                     |      14    |                |           |                |          |               |
-| mmhamdy           |              | 6           |          |                     |            |                |           |                |          |               |
-| manandey          |              | 6           |          |                     |            |                |           |                |          |               |
-| isaac-chung       |              | 12          |          |                     |            |                | 1         |                |          |               |
-| asparius          |              | 6           |          |                     |            |                |           |                |          |               |
+| mmhamdy           |              | 12          |          |                     |            |                |           |                |          |               |
+| manandey          |              | 12          |          |                     |            |                |           |                |          |               |
+| isaac-chung       |              | 24          |          |                     |            |                | 2         |                |          |               |
+| asparius          |              | 8           |          |                     |            |                |           |                |          |               |
 | rbroc             |              | 6           |          |                     |            |                |           |                |          |               |
 
 
