@@ -69,5 +69,5 @@ class ItaHateClassification(AbsTaskClassification):
         self.dataset = self.dataset.class_encode_column("functionality")
         self.dataset = self.dataset["test"].train_test_split(
             test_size=0.5, seed=42, stratify_by_column="functionality"
-        ) # balanced sampling across types of hate speech
+        )  # balanced sampling across types of hate speech
         self.dataset = self.dataset.remove_columns(remove_cols)
