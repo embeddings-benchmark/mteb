@@ -21,10 +21,10 @@ class RonSTS(AbsTaskSTS):
         main_score="cosine_spearman",
         date=None,
         form=["written"],
-        domains=["News", "Social", "Web"], # web for image captions
+        domains=["News", "Social", "Web"],  # web for image captions
         task_subtypes=None,
         license="cc-by-4.0",
-        socioeconomic_status=None, # not specified
+        socioeconomic_status=None,  # not specified
         annotations_creators="human-annotated",
         dialect=[],
         text_creation="machine-translated and verified",
@@ -37,7 +37,7 @@ class RonSTS(AbsTaskSTS):
             }
             """,
         n_samples={"test": 1379},
-        avg_character_length={"test": 60.5}, # avg across sent1 and sent2
+        avg_character_length={"test": 60.5},  # avg across sent1 and sent2
     )
 
     @property
