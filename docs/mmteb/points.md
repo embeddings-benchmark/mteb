@@ -21,8 +21,9 @@
 | rafalposwiata     |              | 32          |          |                     |            |                |           |                |          |               |
 | violenil          |              | 26          |          |                     |            |                |           |                |          |               |
 | hanhainebula      |              | 2           |          |                     |            |                |           |                |          |               |
-| taeminlee         |              | 12          |          |                     |            |                |           |                |          |               |
+| taeminlee         |              | 16          |          |                     |            |                |           |                |          |               |
 | xu3kev            |              | 6           |          |                     |            |                |           |                |          |               |
+| isaac-chung       |              |             |          |                     |            |                | 1         |                |          |               |
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors. 
 
