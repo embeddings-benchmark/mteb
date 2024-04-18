@@ -10,6 +10,8 @@ from .eng.STS15STS import *
 from .eng.STS16STS import *
 from .eng.STSBenchmarkSTS import *
 from .fra.SickFrSTS import *
+from .kor.KlueSTS import *
+from .kor.KorSTS import *
 from .jpn.JSTS import *
 from .multilingual.STS17CrosslingualSTS import *
 from .multilingual.STS22CrosslingualSTS import *
