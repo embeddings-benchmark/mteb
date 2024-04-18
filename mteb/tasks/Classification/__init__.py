@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+from .ara.HotelReviewSentimentClassification import *
 from .ara.RestaurantReviewSentimentClassification import *
+from .ara.TweetEmotionClassification import *
+from .ara.TweetSarcasmClassification import *
 from .ben.BengaliHateSpeechClassification import *
 from .dan.AngryTweetsClassification import *
 from .dan.DalajClassification import *
