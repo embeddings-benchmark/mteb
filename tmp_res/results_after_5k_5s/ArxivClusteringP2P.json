@@ -1,0 +1,19 @@
+{
+  "dataset_revision": "a122ad7f3f0291bf49cc6f4d32aa80929df69d5d",
+  "mteb_dataset_name": "ArxivClusteringP2P",
+  "mteb_version": "1.6.1",
+  "test": {
+    "evaluation_time": 118.38,
+    "main_score": 0.3898846330350105,
+    "v_measure": 0.3898846330350105,
+    "v_measure_std": 0.00990645846247047,
+    "v_measures": [
+      0.3711755606817384,
+      0.3871073273142395,
+      0.4036174386948685,
+      0.3918367247910991,
+      0.39609108794615505,
+      0.38947965878196183
+    ]
+  }
+}
