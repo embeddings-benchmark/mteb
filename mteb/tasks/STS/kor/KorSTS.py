@@ -10,7 +10,7 @@ class KorSTS(AbsTaskSTS):
         name="KorSTS",
         dataset={
             "path": "dkoterwa/kor-sts",
-            "revision": "016f35f9b961daaaa7a352e927084e3da662ac1f"
+            "revision": "016f35f9b961daaaa7a352e927084e3da662ac1f",
         },
         description="",
         reference="https://arxiv.org/abs/2004.03289",

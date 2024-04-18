@@ -11,7 +11,7 @@ class KlueSTS(AbsTaskSTS):
         dataset={
             "path": "klue",
             "name": "sts",
-            "revision": "349481ec73fff722f88e0453ca05c77a447d967c"
+            "revision": "349481ec73fff722f88e0453ca05c77a447d967c",
         },
         description="",
         reference="https://arxiv.org/abs/2105.09680",
@@ -51,4 +51,6 @@ class KlueSTS(AbsTaskSTS):
     def dataset_transform(self):
         # In the case of KLUE STS, score value is nested within the `labels` field.
         # We need to extract the `score` and move it outside of the `labels` field for access.
-        self.dataset["validation"] = self.dataset["validation"].map(lambda example: {**example, 'score': example['labels']['label']})
+        self.dataset["validation"] = self.dataset["validation"].map(
+            lambda example: {**example, "score": example["labels"]["label"]}
+        )
