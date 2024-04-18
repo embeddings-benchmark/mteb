@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "e387ddf167f3eba99936cff89909ed6264f17e1f",
+  "mteb_dataset_name": "CzechSubjectivityClassification",
+  "mteb_version": "1.6.12",
+  "test": {
+    "accuracy": 0.8063,
+    "accuracy_stderr": 0.02339358886532804,
+    "ap": 0.7613765553488444,
+    "ap_stderr": 0.022827704712709163,
+    "evaluation_time": 5.92,
+    "f1": 0.8045239373727544,
+    "f1_stderr": 0.02500037835573569,
+    "main_score": 0.8063
+  }
+}
