@@ -31,7 +31,7 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         license="cc-by-sa-3.0",
         socioeconomic_status="mixed",
         annotations_creators="derived",
-        dialect=None,
+        dialect=[],
         text_creation="created",
         bibtex_citation=None, # None exists
         n_samples={"test": 40960},
