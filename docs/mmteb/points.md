@@ -4,7 +4,7 @@
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
 | KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 30        |                |          |             5 |
 | x-tabdeveloping   |              | 36          |          |                     |            |                |           |                |          |               |
-| imenelydiaker     |              | 88          |          |                     |            |                | 13        |                |          |               |
+| imenelydiaker     |              | 88          |          |                     |            |                | 14        |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
 | GabrielSequeira   |              | 88          |          |                     |            |                |           |                |          |               |
 | schmarion         |              | 88          |          |                     |            |                |           |                |          |               |
@@ -30,9 +30,8 @@
 | orionw            |              |             |          |                     |      14    |                |           |                |          |               |
 | mmhamdy           |              | 12          |          |                     |            |                |           |                |          |               |
 | manandey          |              | 6           |          |                     |            |                |           |                |          |               |
-| isaac-chung       |              | 18          |          |                     |            |                | 1         |                |          |               |
+| isaac-chung       |              | 24          |          |                     |            |                | 1         |                |          |               |
 | asparius          |              | 8           |          |                     |            |                |           |                |          |               |
-
 
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
