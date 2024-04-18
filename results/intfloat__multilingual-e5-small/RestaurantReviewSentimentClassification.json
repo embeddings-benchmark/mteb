@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "d51bf2435d030e0041344f576c5e8d7154828977",
+  "mteb_dataset_name": "RestaurantReviewSentimentClassification",
+  "mteb_version": "1.6.3",
+  "train": {
+    "accuracy": 0.63349609375,
+    "accuracy_stderr": 0.06887507765085375,
+    "ap": 0.775697476764001,
+    "ap_stderr": 0.025569447066458938,
+    "evaluation_time": 240.91,
+    "f1": 0.6126517242329482,
+    "f1_stderr": 0.058337391502027616,
+    "main_score": 0.63349609375
+  }
+}
