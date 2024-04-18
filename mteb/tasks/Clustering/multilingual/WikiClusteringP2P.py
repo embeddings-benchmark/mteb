@@ -25,7 +25,7 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         eval_langs=_LANGUAGES,
         main_score="v_measure",
         date=None,
-        form=None,
+        form=["written"],
         domains=["Encyclopaedic"],
         task_subtypes=None,
         license="cc-by-sa-3.0",
