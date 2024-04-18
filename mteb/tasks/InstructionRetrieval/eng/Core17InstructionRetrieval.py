@@ -22,11 +22,11 @@ class Core17InstructionRetrieval(AbsTaskInstructionRetrieval):
         date=("2023-08-01", "2024-04-01"),
         form=["written"],
         domains=["News"],
-        task_subtypes=None,
+        task_subtypes=[],
         license="MIT",
         socioeconomic_status="medium",
         annotations_creators="derived",
-        dialect=None,
+        dialect=[],
         text_creation="found",
         bibtex_citation="""@misc{weller2024followir,
       title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions}, 
@@ -36,6 +36,6 @@ class Core17InstructionRetrieval(AbsTaskInstructionRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"eng": 19735 * 2},
+        avg_character_length={"eng": 2747.2883966244726},
     )

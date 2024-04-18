@@ -215,7 +215,10 @@ class HFDataLoaderInstructions(HFDataLoader):
 
 class AbsTaskInstructionRetrieval(AbsTask):
     """
-    Abstract class for retrieval tasks that use instructions.
+    Abstract class for retrieval tasks that use instructions. An example from Core17 would be
+        query: What is the ongoing status of The Three Gorges Project?
+        instruction: A relevant document will provide the projected or actual date of completion of the project, its estimated or actual total cost, or the estimated or ongoing electrical output of the finished project. Discussions of the social, political, or ecological impact of the project are not relevant.
+
     Child-classes must implement the following properties:
     self.corpus = Dict[id, Dict[str, str]] #id => dict with document datas like title and text
     self.queries = Dict[id, str] #id => query
@@ -611,3 +614,54 @@ class AbsTaskInstructionRetrieval(AbsTask):
                     newly_irrelevant_qrels[qid].append(doc_id)
 
         return newly_irrelevant_qrels
+
+    def calculate_metadata_metrics(self) -> None:
+        self.load_data()
+
+        for split in self.metadata_dict["eval_splits"]:
+            if self.is_multilingual:
+                for lang in self.og_relevant_docs.keys():
+                    process_language(
+                        self.og_relevant_docs[lang][split],
+                        self.queries[lang][split],
+                        self.corpus[lang][split],
+                        self.changed_instructions[lang][split],
+                        lang,
+                    )
+            else:
+                process_language(
+                    self.og_relevant_docs[split],
+                    self.queries[split],
+                    self.corpus[split],
+                    self.changed_instructions[split],
+                )
+
+
+def process_language(relevant_docs, queries, corpus, instructions, lang=None):
+    total_length, num_pairs = calculate_length_and_count(
+        relevant_docs, queries, corpus, instructions
+    )
+    average_length = total_length / num_pairs if num_pairs else 0
+    num_documents = len(queries) + len(corpus)
+
+    language_description = f" for language {lang}" if lang else ""
+    print(
+        f"Average character length for changed{language_description} is {average_length}"
+    )
+    print(
+        f"Number of queries and documents{language_description} is {num_documents} (repeated 2x)"
+    )
+
+
+def calculate_length_and_count(relevant_docs, queries, corpus, instructions):
+    total_length = 0
+    num_pairs = 0
+    for query_id, docs in relevant_docs.items():
+        query = queries[query_id]
+        query += " " + instructions[query]
+        for doc_id in docs:
+            doc = corpus[doc_id]
+            doc_text = doc["title"] + doc["text"]
+            total_length += len(query) + len(doc_text)
+            num_pairs += 1
+    return total_length, num_pairs
