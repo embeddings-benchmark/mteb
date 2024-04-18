@@ -34,7 +34,7 @@ class CroatianSentimentClassification(AbsTaskClassification):
       Nissim, Malvina",
     editor = "Beinborn, Lisa  and
       Goswami, Koustava  and
-      Murado{\u{g}}lu, Saliha  and
+      Murado{\\u{g}}lu, Saliha  and
       Sorokin, Alexey  and
       Kumar, Ritesh  and
       Shcherbakov, Andreas  and
@@ -49,7 +49,6 @@ class CroatianSentimentClassification(AbsTaskClassification):
     url = "https://aclanthology.org/2023.sigtyp-1.9",
     doi = "10.18653/v1/2023.sigtyp-1.9",
     pages = "89--95",
-    abstract = "The success of cross-lingual transfer learning for POS tagging has been shown to be strongly dependent, among other factors, on the (typological and/or genetic) similarity of the low-resource language used for testing and the language(s) used in pre-training or to fine-tune the model. We further unpack this finding in two directions by zooming in on a single language, namely Persian. First, still focusing on POS tagging we run an in-depth analysis of the behaviour of Persian with respect to closely related languages and languages that appear to benefit from cross-lingual transfer with Persian. To do so, we also use the World Atlas of Language Structures to determine which properties are shared between Persian and other languages included in the experiments. Based on our results, Persian seems to be a reasonable potential language for Kurmanji and Tagalog low-resource languages for other tasks as well. Second, we test whether previous findings also hold on a task other than POS tagging to pull apart the benefit of language similarity and the specific task for which such benefit has been shown to hold. We gather sentiment analysis datasets for 31 target languages and through a series of cross-lingual experiments analyse which languages most benefit from Persian as the source. The set of languages that benefit from Persian had very little overlap across the two tasks, suggesting a strong task-dependent component in the usefulness of language similarity in cross-lingual transfer.",
 }
 """,
         n_samples={"validation": 214, "test": 437},
