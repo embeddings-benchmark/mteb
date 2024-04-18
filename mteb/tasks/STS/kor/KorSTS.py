@@ -26,7 +26,7 @@ class KorSTS(AbsTaskSTS):
         license="CC-BY-SA-4.0",
         socioeconomic_status=None,
         annotations_creators=None,
-        dialect=None,
+        dialect=[],
         text_creation="machine-translated and localized",
         bibtex_citation="""@article{ham2020kornli,
   title={KorNLI and KorSTS: New Benchmark Datasets for Korean Natural Language Understanding},
