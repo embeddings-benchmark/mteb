@@ -29,7 +29,14 @@ class MovieReviewSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="""
+@software{blard2020,
+  title = {French sentiment analysis with BERT},
+  author = {Théophile Blard},
+  url = {https://github.com/TheophileBlard/french-sentiment-analysis-with-bert},
+  year = {2020},
+}
+""",
         n_samples={"validation": N_SAMPLES, "test": N_SAMPLES},
         avg_character_length={"validation": 550.3, "test": 558.1},
     )
