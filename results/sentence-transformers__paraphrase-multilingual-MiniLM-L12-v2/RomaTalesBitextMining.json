@@ -3,11 +3,13 @@
   "mteb_dataset_name": "RomaTalesBitextMining",
   "mteb_version": "1.6.10",
   "test": {
-    "accuracy": 0.046511627906976744,
-    "evaluation_time": 7.87,
-    "f1": 0.02071496674779848,
-    "main_score": 0.02071496674779848,
-    "precision": 0.01799373320628053,
-    "recall": 0.046511627906976744
+    "evaluation_time": 7.45,
+    "rom-hun": {
+      "accuracy": 0.046511627906976744,
+      "f1": 0.02071496674779848,
+      "main_score": 0.02071496674779848,
+      "precision": 0.01799373320628053,
+      "recall": 0.046511627906976744
+    }
   }
 }

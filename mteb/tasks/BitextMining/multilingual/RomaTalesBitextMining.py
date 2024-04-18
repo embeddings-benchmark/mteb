@@ -1,10 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskBitextMining
+import datasets
+
+from mteb.abstasks import AbsTaskBitextMining, CrosslingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class RomaTalesBitextMining(AbsTaskBitextMining):
+class RomaTalesBitextMining(AbsTaskBitextMining, CrosslingualTask):
     metadata = TaskMetadata(
         name="RomaTalesBitextMining",
         dataset={
@@ -16,7 +18,7 @@ class RomaTalesBitextMining(AbsTaskBitextMining):
         type="BitextMining",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["rom-Latn", "hun-Latn"],
+        eval_langs={"rom-hun": ["rom-Latn", "hun-Latn"]},
         main_score="f1",
         date=None,  # Unknown, these are folk tales
         form=["written"],
@@ -32,7 +34,24 @@ class RomaTalesBitextMining(AbsTaskBitextMining):
         avg_character_length={"test": 316.8046511627907},
     )
 
+    def load_data(self, **kwargs):
+        """
+        Load dataset from HuggingFace hub and convert it to the standard format.
+        """
+        if self.data_loaded:
+            return
+
+        self.dataset = {}
+        for lang in self.langs:
+            self.dataset[lang] = datasets.load_dataset(**self.metadata_dict["dataset"])
+
+        self.dataset_transform()
+        self.data_loaded = True
+
     def dataset_transform(self):
-        # Convert to standard format
-        self.dataset = self.dataset.rename_column("romani", "sentence1")
-        self.dataset = self.dataset.rename_column("hungarian", "sentence2")
+        for lang in self.langs:
+            self.dataset[lang] = (
+                self.dataset[lang]
+                .rename_column("romani", "sentence1")
+                .rename_column("hungarian", "sentence2")
+            )
