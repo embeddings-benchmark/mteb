@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from .ara.RestaurantReviewSentimentClassification import *
 from .ben.BengaliHateSpeechClassification import *
+from .ces.CzechSubjectivityClassification import *
 from .dan.AngryTweetsClassification import *
 from .dan.DalajClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
