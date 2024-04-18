@@ -2,7 +2,7 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 35        |                |          |             5 |
+| KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 36        |                |          |             5 |
 | x-tabdeveloping   |              | 48          |          |                     |            |                |           |                |          |               |
 | imenelydiaker     |              | 88          |          |                     |          2 |                | 16        |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
@@ -30,9 +30,10 @@
 | orionw            |              |             |          |                     |      14    |                |           |                |          |               |
 | mmhamdy           |              | 12          |          |                     |            |                |           |                |          |               |
 | manandey          |              | 12          |          |                     |            |                |           |                |          |               |
-| isaac-chung       |              | 30          |          |                     |            |                | 2         |                |          |               |
+| isaac-chung       |              | 30          |          |                     |            |                | 3         |                |          |               |
 | asparius          |              | 8           |          |                     |            |                |           |                |          |               |
 | rbroc             |              | 6           |          |                     |            |                |           |                |          |               |
+| dwzhu-pku         |              | 12          |          |                     |            |                |           |                |          |               |
 
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.

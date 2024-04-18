@@ -33,6 +33,12 @@ from .eng.HotpotQARetrieval import *
 from .eng.LegalBenchConsumerContractsQARetrieval import *
 from .eng.LegalBenchCorporateLobbyingRetrieval import *
 from .eng.LegalSummarizationRetrieval import *
+from .eng.LEMBNarrativeQARetrieval import *
+from .eng.LEMBNeedleRetrieval import *
+from .eng.LEMBPasskeyRetrieval import *
+from .eng.LEMBQMSumRetrieval import *
+from .eng.LEMBSummScreenFDRetrieval import *
+from .eng.LEMBWikimQARetrieval import *
 from .eng.MedicalQARetrieval import *
 from .eng.MSMARCORetrieval import *
 from .eng.MSMARCOv2Retrieval import *
