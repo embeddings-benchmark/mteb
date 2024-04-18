@@ -22,7 +22,7 @@ TASK_LIST_RERANKING = []
 
 TASK_LIST_RETRIEVAL = ["Ko-StrategyQA", "Ko-mrtydi", "Ko-miracl"]
 
-TASK_LIST_STS = []
+TASK_LIST_STS = ["KLUE-STS", "KorSTS"]
 
 TASK_LIST = (
     TASK_LIST_CLASSIFICATION

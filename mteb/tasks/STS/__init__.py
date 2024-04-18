@@ -16,3 +16,5 @@ from .multilingual.STSBenchmarkMultilingualSTS import *
 from .pol.PolishSTS import *
 from .spa.STSES import *
 from .zho.CMTEBSTS import *
+from .kor.KlueSTS import *
+from .kor.KorSTS import *
