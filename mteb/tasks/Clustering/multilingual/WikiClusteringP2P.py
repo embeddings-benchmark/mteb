@@ -30,7 +30,7 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         task_subtypes=["Thematic Clustering"],
         license="cc-by-sa-3.0",
         socioeconomic_status="mixed",
-        annotations_creators=None,
+        annotations_creators="derived",
         dialect=None,
         text_creation="created",
         bibtex_citation=None, # None exists
