@@ -58,7 +58,8 @@ First name and last name are as you want them to appear in a publication.
 | izhx              | Xin        | Zhang      | zhangxin2023@stu.hit.edu.cn  |                      |  Harbin Institute of Technology, Shenzhen             |
 | orionw            | Orion      | Weller     | oweller@cs.jhu.edu           | ~Orion_Weller1       |  Johns Hopkins University                             |
 | slvnwhrl          | Silvan     | Wehrli     | wehrlis@rki.de               | ~Silvan_Wehrli1      | Robert Koch Institute, Berlin, Germany                |
-| manandey          | Manan     | Dey     | manandey1@gmail.com               | ~Manan_Dey2      | Salesforce, India                |
+| manandey          | Manan      | Dey        | manandey1@gmail.com          | ~Manan_Dey2          | Salesforce, India                                     |
 | isaac-chung       | Isaac      | Chung      | chungisaac1217@gmail.com     | ~Isaac_Kwan_Yin_Chung1 | N/A                                                 |
-| asparius       | Ömer      | Çağatan      | ocagatan19@ku.edu.tr     | ~Ömer_Veysel_Çağatan1 | Koç University,Turkey                                                 |
+| asparius          | Ömer       | Çağatan    | ocagatan19@ku.edu.tr         | ~Ömer_Veysel_Çağatan1 | Koç University,Turkey                                |
+| rafalposwiata     | Rafał      | Poświata   | rposwiata@opi.org.pl         | ~Rafał_Poświata1     | National Information Processing Institute, Warsaw, Poland |
 
