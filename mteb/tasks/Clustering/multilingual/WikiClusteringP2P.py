@@ -33,7 +33,7 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         annotations_creators=None,
         dialect=None,
         text_creation="created",
-        bibtex_citation=None,
+        bibtex_citation=None, # None exists
         n_samples={"test": 40960},
         avg_character_length={"test": 570.6},
     )
