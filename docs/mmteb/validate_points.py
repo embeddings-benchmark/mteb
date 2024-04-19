@@ -32,7 +32,7 @@ def validate_jsonl_files(folder_path):
                 try:
                     # Read JSONL file
                     reader = Reader(file)
-                except Exception as e:
+                except Exception:
                     raise Exception("Error reading file:", file_path)
                 for line in reader:
                     try:
@@ -40,7 +40,9 @@ def validate_jsonl_files(folder_path):
                         x = JsonObject(**line)
                         logging.debug(x)
                     except ValidationError as e:
-                        raise Exception("Validation Error in file:", file_path, line) from e
+                        raise Exception(
+                            "Validation Error in file:", file_path, line
+                        ) from e
 
 
 # Main function
