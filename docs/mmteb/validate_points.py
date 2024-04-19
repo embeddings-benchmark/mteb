@@ -1,9 +1,9 @@
+import logging
 import os
 from typing import Optional
-import logging
 
 from jsonlines import Reader
-from pydantic import BaseModel, ValidationError, conint, constr, field_validator, Field
+from pydantic import BaseModel, Field, ValidationError, conint, constr, field_validator
 
 
 # Define a Pydantic model to represent each JSON object
@@ -11,7 +11,9 @@ class JsonObject(BaseModel):
     GitHub: constr(min_length=1)
     new_dataset: Optional[conint(ge=2)] = Field(alias="New dataset", default=None)
     new_task: Optional[conint(ge=2)] = Field(alias="New task", default=None)
-    dataset_annotations: Optional[conint(ge=1)] = Field(alias="Dataset annotations", default=None)
+    dataset_annotations: Optional[conint(ge=1)] = Field(
+        alias="Dataset annotations", default=None
+    )
     bug_fixes: Optional[conint(ge=2)] = Field(alias="Dataset annotations", default=None)
     running_models: Optional[conint(ge=1)] = Field(alias="Running models", default=None)
     review_pr: Optional[conint(ge=2)] = Field(alias="Review PR", default=None)
