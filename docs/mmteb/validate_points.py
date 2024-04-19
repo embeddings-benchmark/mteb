@@ -1,21 +1,23 @@
 import os
+from typing import Optional
+import logging
 
 from jsonlines import Reader
-from pydantic import BaseModel, ValidationError, conint, constr, field_validator
+from pydantic import BaseModel, ValidationError, conint, constr, field_validator, Field
 
 
 # Define a Pydantic model to represent each JSON object
 class JsonObject(BaseModel):
     GitHub: constr(min_length=1)
-    New_dataset: conint(ge=2) = None
-    New_task: conint(ge=2) = None
-    Dataset_annotations: conint(ge=1) = None
-    Bug_fixes: conint(ge=2) = None
-    Running_Models: conint(ge=1) = None
-    Review_PR: conint(ge=2) = None
-    Paper_Writing: int = None
-    Ideation: int = None
-    Coordination: int = None
+    new_dataset: Optional[conint(ge=2)] = Field(alias="New dataset", default=None)
+    new_task: Optional[conint(ge=2)] = Field(alias="New task", default=None)
+    dataset_annotations: Optional[conint(ge=1)] = Field(alias="Dataset annotations", default=None)
+    bug_fixes: Optional[conint(ge=2)] = Field(alias="Dataset annotations", default=None)
+    running_models: Optional[conint(ge=1)] = Field(alias="Running models", default=None)
+    review_pr: Optional[conint(ge=2)] = Field(alias="Review PR", default=None)
+    paper_writing: Optional[int] = Field(alias="Paper writing", default=None)
+    ideation: Optional[int] = None
+    coordination: Optional[int] = None
 
     @field_validator("*")
     def check_optional_fields(cls, value):
@@ -36,9 +38,10 @@ def validate_jsonl_files(folder_path):
                     for line in reader:
                         try:
                             # Validate JSON object against schema
-                            JsonObject(**line)
+                            x = JsonObject(**line)
+                            logging.debug(x)
                         except ValidationError as e:
-                            print("Validation Error in file:", file_path, e)
+                            print("Validation Error in file:", file_path, e, line)
                 except Exception as e:
                     print("Error reading file:", file_path, e)
 
