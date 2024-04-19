@@ -16,7 +16,7 @@ class SyntecRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/lyon-nlp/mteb-fr-retrieval-syntec-s2p",
         dataset={
             "path": "lyon-nlp/mteb-fr-retrieval-syntec-s2p",
-            "revision": "aa460cd4d177e6a3c04fcd2affd95e8243289033",
+            "revision": "19661ccdca4dfc2d15122d776b61685f48c68ca9",
         },
         type="Retrieval",
         category="s2p",
@@ -30,11 +30,11 @@ class SyntecRetrieval(AbsTaskRetrieval):
         license=None,
         socioeconomic_status=None,
         annotations_creators=None,
-        dialect=None,
+        dialect=[],
         text_creation=None,
         bibtex_citation=None,
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"test": 90},
+        avg_character_length={"test": 62},
     )
 
     def load_data(self, **kwargs):
@@ -50,22 +50,23 @@ class SyntecRetrieval(AbsTaskRetrieval):
             **self.metadata_dict["dataset"],
         )
 
+        split = self._EVAL_SPLITS[0]
         self.queries = {
-            self._EVAL_SPLITS[0]: {
-                str(i): q["Question"] for i, q in enumerate(queries_raw["queries"])
+            split: {
+                str(i): q["Question"] for i, q in enumerate(queries_raw[split])
             }
         }
 
-        corpus_raw = corpus_raw["documents"]
+        corpus_raw = corpus_raw[split]
         corpus_raw = corpus_raw.rename_column("content", "text")
         self.corpus = {
-            self._EVAL_SPLITS[0]: {str(row["id"]): row for row in corpus_raw}
+            split: {str(row["id"]): row for row in corpus_raw}
         }
 
         self.relevant_docs = {
             self._EVAL_SPLITS[0]: {
                 str(i): {str(q["Article"]): 1}
-                for i, q in enumerate(queries_raw["queries"])
+                for i, q in enumerate(queries_raw[split])
             }
         }
 
