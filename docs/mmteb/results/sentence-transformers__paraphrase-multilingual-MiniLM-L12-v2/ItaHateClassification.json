@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "21e3d5c827cb60619a89988b24979850a7af85a5",
+  "mteb_dataset_name": "ItaHateClassification",
+  "mteb_version": "1.6.10",
+  "test": {
+    "accuracy": 0.6039566395663957,
+    "accuracy_stderr": 0.044917209260505055,
+    "ap": 0.3440136284129968,
+    "ap_stderr": 0.017083699528130065,
+    "evaluation_time": 11.03,
+    "f1": 0.5624616516998935,
+    "f1_stderr": 0.02968307970060834,
+    "main_score": 0.6039566395663957
+  }
+}
