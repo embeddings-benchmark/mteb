@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "92ba517dfd22f6334111ad84154d16a2890f5b1d",
+  "mteb_dataset_name": "PersianFoodSentimentClassification",
+  "mteb_version": "1.6.8",
+  "test": {
+    "accuracy": 0.7390714285714286,
+    "accuracy_stderr": 0.04122230672134411,
+    "ap": 0.68284726798544,
+    "ap_stderr": 0.048221128906570446,
+    "evaluation_time": 262.53,
+    "f1": 0.7342220125056276,
+    "f1_stderr": 0.04679094207403073,
+    "main_score": 0.7390714285714286
+  }
+}
