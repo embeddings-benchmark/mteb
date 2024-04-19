@@ -4,7 +4,7 @@ import logging
 from collections import defaultdict
 
 import numpy as np
-from sklearn.preprocessing import MultilabelBinarizer
+from sklearn.preprocessing import MultiLabelBinarizer
 
 from ..evaluation.evaluators import kNNMultiLabelClassificationEvaluator
 from .AbsTask import AbsTask
@@ -107,7 +107,7 @@ class AbsTaskMultilabelClassification(AbsTask):
             X_sampled, y_sampled, idxs = self._undersample_data(
                 train_split["text"], train_split["label"], self.samples_per_label, idxs
             )
-            binarizer = MultilabelBinarizer()
+            binarizer = MultiLabelBinarizer()
             y_train = binarizer.fit_transform(y_sampled)
             y_test = binarizer.transform(eval_split["label"])
             evaluator = kNNMultiLabelClassificationEvaluator(
