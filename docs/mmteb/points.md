@@ -29,13 +29,8 @@
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
 | orionw            |              |             |          |                     |      14    |                |           |                |          |               |
 | mmhamdy           |              | 14          |          |                     |            |                |           |                |          |               |
-<<<<<<< HEAD
 | manandey          |              | 18          |          |                     |            |                |           |                |          |               |
 | isaac-chung       |              | 42          |          |                     |            |                | 12        |                |          |               |
-=======
-| manandey          |              | 12          |          |                     |            |                |           |                |          |               |
-| isaac-chung       |              | 36          |          |                     |            |                | 12        |                |          |               |
->>>>>>> main
 | asparius          |              | 8           |          |                     |            |                |           |                |          |               |
 | rbroc             |              | 12          |          |                     |            |                |           |                |          |               |
 | dwzhu-pku         |              | 12          |          |                     |            |                |           |                |          |               |
