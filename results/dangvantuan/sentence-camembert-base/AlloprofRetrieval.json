@@ -3,7 +3,7 @@
   "mteb_dataset_name": "AlloprofRetrieval",
   "mteb_version": "1.6.16",
   "test": {
-    "evaluation_time": 83.04,
+    "evaluation_time": 84.74,
     "map_at_1": 0.12133,
     "map_at_10": 0.18133,
     "map_at_100": 0.19369,
