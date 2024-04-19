@@ -1,0 +1,21 @@
+{
+  "dataset_revision": "de0fdb34424f07d1ac6f0ede23ee0ed44bd9f5d1",
+  "mteb_dataset_name": "GreekLegalCodeClassification",
+  "mteb_version": "1.6.24",
+  "test": {
+    "accuracy": 0.39588062211013025,
+    "accuracy_stderr": 0.010480711161108387,
+    "evaluation_time": 73.78,
+    "f1": 0.3412857925877721,
+    "f1_stderr": 0.010865207755416747,
+    "main_score": 0.39588062211013025
+  },
+  "validation": {
+    "accuracy": 0.39961097676374724,
+    "accuracy_stderr": 0.011498265358934109,
+    "evaluation_time": 73.78,
+    "f1": 0.34220276457732485,
+    "f1_stderr": 0.009905618331295468,
+    "main_score": 0.39961097676374724
+  }
+}
