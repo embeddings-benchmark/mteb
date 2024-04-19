@@ -1,0 +1,20 @@
+{
+  "dataset_revision": "41a33183b739070f3d46d9d446492c1d2f98ce1a",
+  "mteb_dataset_name": "RonSTS",
+  "mteb_version": "1.6.10",
+  "test": {
+    "cos_sim": {
+      "pearson": 0.7876999300348885,
+      "spearman": 0.7963164538205082
+    },
+    "euclidean": {
+      "pearson": 0.7817926518690359,
+      "spearman": 0.7839882898681083
+    },
+    "evaluation_time": 9.75,
+    "manhattan": {
+      "pearson": 0.7808551242625487,
+      "spearman": 0.782812449289333
+    }
+  }
+}

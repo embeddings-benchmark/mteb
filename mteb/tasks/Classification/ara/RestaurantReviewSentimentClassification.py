@@ -3,6 +3,8 @@ from __future__ import annotations
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+N_SAMPLES = 2048
+
 
 class RestaurantReviewSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -37,7 +39,7 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
   organization={Springer}
 }
 """,
-        n_samples={"train": 2048},
+        n_samples={"train": N_SAMPLES},
         avg_character_length={"train": 231.4},
     )
 
@@ -45,5 +47,5 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
         # labels: 0 negative, 1 positive
         self.dataset = self.dataset.rename_column("polarity", "label")
         self.dataset["train"] = (
-            self.dataset["train"].shuffle(seed=self.seed).select(range(2048))
+            self.dataset["train"].shuffle(seed=self.seed).select(range(N_SAMPLES))
         )

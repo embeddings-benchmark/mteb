@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "f4394dbca6845743cd33eba77431767b232ef489",
+  "mteb_dataset_name": "RomaTalesBitextMining",
+  "mteb_version": "1.6.10",
+  "test": {
+    "evaluation_time": 20.95,
+    "rom-hun": {
+      "accuracy": 0.14418604651162792,
+      "f1": 0.08533222591362125,
+      "main_score": 0.08533222591362125,
+      "precision": 0.07306562898146166,
+      "recall": 0.14418604651162792
+    }
+  }
+}
