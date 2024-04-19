@@ -7,7 +7,7 @@
 {"GitHub": "Review PR": 2}
 ```
 
-The file should be named after the contrutions. E.g. `added_dataset_dkhate.jsonl`.
+The file should be named after the PR number. E.g. `438.jsonl`, where 438 is the PR number.
 
 The possible keys to include is: 
 
