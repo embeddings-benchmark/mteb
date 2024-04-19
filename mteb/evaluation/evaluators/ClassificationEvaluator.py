@@ -5,13 +5,88 @@ import logging
 import numpy as np
 import torch
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, average_precision_score, f1_score
+from sklearn.metrics import (
+    accuracy_score,
+    average_precision_score,
+    f1_score,
+    label_ranking_average_precision_score,
+)
+from sklearn.multioutput import MultiOutputClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from torch import Tensor
 
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
+
+
+def dot_distance(a: np.ndarray, b: np.ndarray) -> float:
+    return -np.dot(a, b)
+
+
+class kNNMultiLabelClassificationEvaluator(Evaluator):
+    def __init__(
+        self,
+        sentences_train,
+        y_train,
+        sentences_test,
+        y_test,
+        k=1,
+        batch_size=32,
+        limit=None,
+        **kwargs,
+    ):
+        super().__init__(**kwargs)
+        if limit is not None:
+            sentences_train = sentences_train[:limit]
+            y_train = y_train[:limit]
+            sentences_test = sentences_test[:limit]
+            y_test = y_test[:limit]
+        self.sentences_train = sentences_train
+        self.y_train = y_train
+        self.sentences_test = sentences_test
+        self.y_test = y_test
+
+        self.batch_size = batch_size
+
+        self.k = k
+
+    def __call__(self, model, test_cache=None):
+        scores = {}
+        max_accuracy = 0
+        max_f1 = 0
+        max_ap = 0
+        X_train = np.asarray(
+            model.encode(self.sentences_train, batch_size=self.batch_size)
+        )
+        if test_cache is None:
+            X_test = np.asarray(
+                model.encode(self.sentences_test, batch_size=self.batch_size)
+            )
+            test_cache = X_test
+        else:
+            X_test = test_cache
+        for metric in ["cosine", "euclidean", "dot"]:
+            if metric == "dot":
+                metric = dot_distance
+            estimator = KNeighborsClassifier(n_neighbors=self.k, metric=metric)
+            classifier = MultiOutputClassifier(estimator, n_jobs=-1)
+            classifier.fit(X_train, self.y_train)
+            y_pred = classifier.predict(X_test)
+            accuracy = classifier.score(X_test, self.y_test)
+            f1 = f1_score(self.y_test, y_pred, average="macro")
+            scores["accuracy_" + metric] = accuracy
+            scores["f1_" + metric] = f1
+            max_accuracy = max(max_accuracy, accuracy)
+            max_f1 = max(max_f1, f1)
+            lrap = label_ranking_average_precision_score(self.y_test, y_pred)
+            scores["lrap_" + metric] = lrap
+            max_ap = max(max_ap, lrap)
+        scores["accuracy"] = max_accuracy
+        scores["f1"] = max_f1
+        if len(np.unique(self.y_train)) == 2:
+            scores["lrap"] = max_ap
+        return scores, test_cache
 
 
 class kNNClassificationEvaluator(Evaluator):
