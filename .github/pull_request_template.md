@@ -23,4 +23,4 @@ Reason for dataset addition:
 - [ ] I have filled out the metadata object in the dataset file (find documentation on it [here](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_dataset.md#2-creating-the-metadata-object)).
 - [ ] Run tests locally to make sure nothing is broken using `make test`. 
 - [ ] Run the formatter to format the code using `make lint`. 
-- [ ] I have added points for my submission to the [points folder](https://github.com/embeddings-benchmark/mteb/blob/main/docs/mmteb/points.md).
+- [ ] I have added points for my submission to the [points folder](https://github.com/embeddings-benchmark/mteb/blob/main/docs/mmteb/points.md) using the PR number as the filename (e.g. `438.jsonl`).
