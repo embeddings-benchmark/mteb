@@ -34,6 +34,7 @@
 | asparius          |              | 8           |          |                     |            |                |           |                |          |               |
 | rbroc             |              | 12          |          |                     |            |                |           |                |          |               |
 | dwzhu-pku         |              | 12          |          |                     |            |                |           |                |          |               |
+| guangyusong         |              | 6          |          |                     |            |                |           |                |          |               |
 
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
@@ -66,4 +67,4 @@ First name and last name are as you want them to appear in a publication.
 | asparius          | Ömer       | Çağatan    | ocagatan19@ku.edu.tr         | ~Ömer_Veysel_Çağatan1 | Koç University,Turkey                                |
 | rafalposwiata     | Rafał      | Poświata   | rposwiata@opi.org.pl         | ~Rafał_Poświata1     | National Information Processing Institute, Warsaw, Poland |
 | rbroc             | Roberta    | Rocca      | roberta.rocca@cas.au.dk      | ~Roberta_Rocca1      | Aarhus University, Denmark                            |
-
+| guangyusong             | Guangyu    | Song      | guangysong@gmail.com      | ~Guangyu_Song1      | N/A                            |

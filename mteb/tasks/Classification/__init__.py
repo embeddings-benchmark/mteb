@@ -5,6 +5,7 @@ from .ara.RestaurantReviewSentimentClassification import *
 from .ara.TweetEmotionClassification import *
 from .ara.TweetSarcasmClassification import *
 from .ben.BengaliHateSpeechClassification import *
+from .bul.BulgarianStoreReviewSentimentClassfication import *
 from .ces.CzechSubjectivityClassification import *
 from .dan.AngryTweetsClassification import *
 from .dan.DalajClassification import *
