@@ -1,17 +1,16 @@
 from __future__ import annotations
 
-import json
-import tqdm
 import heapq
+import json
 import logging
 from collections import defaultdict
 from typing import Dict, List, Tuple
 
 import pytrec_eval
 import torch
-from sentence_transformers import SentenceTransformer
+import tqdm
+from sentence_transformers import CrossEncoder, SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
-from sentence_transformers import CrossEncoder
 
 from .Evaluator import Evaluator
 from .utils import cos_sim, dot_score, hole, mrr, recall_cap, top_k_accuracy
@@ -73,7 +72,7 @@ class DenseRetrievalExactSearch:
         logger.info("Sorting Corpus by document length (Longest first)...")
         corpus_ids = sorted(
             corpus,
-            key=lambda k: len(corpus[k].get("title", "") + corpus[k]["text"]) ,
+            key=lambda k: len(corpus[k].get("title", "") + corpus[k]["text"]),
             reverse=True,
         )
         corpus = [corpus[cid] for cid in corpus_ids]
@@ -186,11 +185,13 @@ class DRESModel:
                     (query + self.sep + instruction).strip()
                     for query, instruction in zip(queries, kwargs["instructions"])
                 ]
-            new_kwargs = {k: v for k, v in kwargs.items() if k not in ["instructions", "qid"]}
+            new_kwargs = {
+                k: v for k, v in kwargs.items() if k not in ["instructions", "qid"]
+            }
         else:
             # can't just delete, cuz assign by reference on kwargs
             new_kwargs = kwargs
-        
+
         return self.model.encode(queries, batch_size=batch_size, **new_kwargs)
 
     def encode_corpus(self, corpus: List[Dict[str, str]], batch_size: int, **kwargs):
@@ -216,8 +217,10 @@ class DRESModel:
                 for doc in corpus
             ]
 
-        if "instructions" in kwargs: # not used on the doc side
-            new_kwargs = {k: v for k, v in kwargs.items() if k not in ["instructions", "qid"]}
+        if "instructions" in kwargs:  # not used on the doc side
+            new_kwargs = {
+                k: v for k, v in kwargs.items() if k not in ["instructions", "qid"]
+            }
         else:
             # can't just delete, cuz assign by reference on kwargs
             new_kwargs = kwargs
@@ -226,7 +229,7 @@ class DRESModel:
             sentences, batch_size=batch_size, **new_kwargs
         )
         if self.save_corpus_embeddings and "qid" in kwargs:
-            if type(corpus_embeddings) == torch.tensor:
+            if isinstance(corpus_embeddings, torch.tensor):
                 corpus_embeddings = corpus_embeddings.cpu().detach()
             self.corpus_embeddings[kwargs["qid"]] = corpus_embeddings
         return corpus_embeddings
@@ -247,14 +250,22 @@ def is_cross_encoder_compatible(model):
     return True
 
 
-class Reranker:    
+class Reranker:
     """
     This class provides support for reranker (or cross-encoder) models that encoder query and document at the same time (typically with attention).
         Some notable examples include MonoBERT, MonoT5, RankLlama, etc.
         Note: you must provide either a first stage model or the results of the first stage model so that it can rerank.
         You also must extend this class and provide an `__init__` function that loads your model and a `rerank` function that reranks a batch.
     """
-    def __init__(self, model: str, first_stage: str | CrossEncoder | None = None, batch_size: int = 32, sep: str = ' ', **kwargs):
+
+    def __init__(
+        self,
+        model: str,
+        first_stage: str | CrossEncoder | None = None,
+        batch_size: int = 32,
+        sep: str = " ",
+        **kwargs,
+    ):
         self.model = model
         self.batch_size = batch_size
 
@@ -262,20 +273,26 @@ class Reranker:
         # 1. provide the first stage model as a string (path to a results file) and it will be loaded
         # 2. provide the first stage model as a DenseRetrievalExactSearch compatible object
         if first_stage is None:
-            self.first_stage = DenseRetrievalExactSearch(DRESModel(SentenceTransformer("intfloat/e5-small-v2")), **kwargs)
-        elif type(first_stage) == str:
-            self.first_stage = first_stage  # will load it in `load_first_stage_results` 
+            self.first_stage = DenseRetrievalExactSearch(
+                DRESModel(SentenceTransformer("intfloat/e5-small-v2")), **kwargs
+            )
+        elif isinstance(first_stage, str):
+            self.first_stage = first_stage  # will load it in `load_first_stage_results`
         else:
             if is_dres_compatible(first_stage):
                 self.first_stage = DenseRetrievalExactSearch(first_stage, **kwargs)
             else:
-                self.first_stage = DenseRetrievalExactSearch(DRESModel(first_stage), **kwargs)
+                self.first_stage = DenseRetrievalExactSearch(
+                    DRESModel(first_stage), **kwargs
+                )
 
         self.sep = sep
         self.show_progress_bar = kwargs.get("show_progress_bar", True)
         self.convert_to_tensor = kwargs.get("convert_to_tensor", True)
         self.results = {}
-        logger.info("Reranker initialized with batch size: {},  sep: {}".format(batch_size, sep))
+        logger.info(
+            "Reranker initialized with batch size: {},  sep: {}".format(batch_size, sep)
+        )
 
     def load_first_stage_results(
         self,
@@ -283,56 +300,96 @@ class Reranker:
         queries: Dict[str, str] | None = None,
         top_k: int = 1000,
         score_function: str = "cos_sim",
-        **kwargs
+        **kwargs,
     ):
-        if type(self.first_stage) == str:
+        if isinstance(self.first_stage, str):
             # load the first stage results from file in format {qid: {doc_id: score}}
             with open(self.first_stage, "r") as f:
                 first_stage_results = json.load(f)
-                assert type(first_stage_results) == dict
-                assert type(first_stage_results[list(first_stage_results.keys())[0]]) == dict
+                assert isinstance(first_stage_results, dict)
+                assert isinstance(
+                    first_stage_results[list(first_stage_results.keys())[0]], dict
+                )
                 return first_stage_results
-        else: 
+        else:
             # run them from scratch
-            return self.first_stage.search(corpus, queries, top_k, score_function, **kwargs)
+            return self.first_stage.search(
+                corpus, queries, top_k, score_function, **kwargs
+            )
 
-    def search(self, 
-               corpus: Dict[str, Dict[str, str]], 
-               queries: Dict[str, str], 
-               top_k: int, 
-               score_function: str, # only used for first_stage models
-               top_k_first_stage: int = 1000,
-               instructions: Dict[str, str] | None = None,
-               **kwargs) -> Dict[str, Dict[str, float]]:
-
+    def search(
+        self,
+        corpus: Dict[str, Dict[str, str]],
+        queries: Dict[str, str],
+        top_k: int,
+        score_function: str,  # only used for first_stage models
+        top_k_first_stage: int = 1000,
+        instructions: Dict[str, str] | None = None,
+        **kwargs,
+    ) -> Dict[str, Dict[str, float]]:
         logger.info(f"Running first stage model with top_k: {top_k_first_stage}...")
-        to_rerank = self.load_first_stage_results(corpus.copy(), queries.copy(), top_k=top_k_first_stage, score_function=score_function, instructions=instructions, **kwargs)
+        to_rerank = self.load_first_stage_results(
+            corpus.copy(),
+            queries.copy(),
+            top_k=top_k_first_stage,
+            score_function=score_function,
+            instructions=instructions,
+            **kwargs,
+        )
 
-        pairs = [] # create the pairs for reranking
+        pairs = []  # create the pairs for reranking
         for qid, q_results in to_rerank.items():
             # take the top-k only
-            q_results_sorted = {k: v for k, v in sorted(q_results.items(), key=lambda item: item[1], reverse=True)}
+            q_results_sorted = {
+                k: v
+                for k, v in sorted(
+                    q_results.items(), key=lambda item: item[1], reverse=True
+                )
+            }
             top_n = [k for k, v in list(q_results_sorted.items())[:top_k]]
             query = queries[qid]
             for doc_id in top_n:
-                corpus_item = (corpus[doc_id].get("title", "") + self.sep + corpus[doc_id]["text"]).strip()
-                pairs.append((query, corpus_item, instructions[query] if instructions is not None else None, qid, doc_id))
+                corpus_item = (
+                    corpus[doc_id].get("title", "") + self.sep + corpus[doc_id]["text"]
+                ).strip()
+                pairs.append(
+                    (
+                        query,
+                        corpus_item,
+                        instructions[query] if instructions is not None else None,
+                        qid,
+                        doc_id,
+                    )
+                )
 
         logger.info(f"Reranking the top {top_k} in batches... This might take a while!")
         itr = range(0, len(pairs), self.batch_size)
-        
-        results = {qid: {} for qid in queries.keys()}  
-        for batch_num, corpus_start_idx in enumerate(tqdm.tqdm(itr, leave=False, disable=not self.show_progress_bar)):
+
+        results = {qid: {} for qid in queries.keys()}
+        for batch_num, corpus_start_idx in enumerate(
+            tqdm.tqdm(itr, leave=False, disable=not self.show_progress_bar)
+        ):
             corpus_end_idx = min(corpus_start_idx + self.batch_size, len(pairs))
             cur_batch = pairs[corpus_start_idx:corpus_end_idx]
-            
-            queries_in_pair, corpus_in_pair, instructions_in_pair, query_ids, corpus_ids = zip(*cur_batch)
 
-            assert len(queries_in_pair) == len(corpus_in_pair) == len(instructions_in_pair)
-            
+            (
+                queries_in_pair,
+                corpus_in_pair,
+                instructions_in_pair,
+                query_ids,
+                corpus_ids,
+            ) = zip(*cur_batch)
+
+            assert (
+                len(queries_in_pair) == len(corpus_in_pair) == len(instructions_in_pair)
+            )
+
             if type(self.model) == CrossEncoder:
                 # can't take instructions, so add them here
-                queries_in_pair = [f"{q} {i}".strip() for i, q in zip(instructions_in_pair, queries_in_pair)]
+                queries_in_pair = [
+                    f"{q} {i}".strip()
+                    for i, q in zip(instructions_in_pair, queries_in_pair)
+                ]
                 scores = self.model.predict(list(zip(queries_in_pair, corpus_in_pair)))
             else:
                 # may use the instructions in a unique way, so give them also
@@ -346,7 +403,9 @@ class Reranker:
         return results
 
     def predict(self, queries, passages, **kwargs):
-        raise NotImplementedError("You must implement a predict method for your model to rerank.")
+        raise NotImplementedError(
+            "You must implement a predict method for your model to rerank."
+        )
 
 
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/evaluation.py#L9
@@ -372,8 +431,14 @@ class RetrievalEvaluator(Evaluator):
         else:
             self.retriever = DenseRetrievalExactSearch(DRESModel(retriever), **kwargs)
         self.k_values = k_values
-        self.top_k = max(k_values) if "top_k" not in kwargs else kwargs["top_k"] # can lower it for reranking
-        self.top_k_first_stage = max(k_values) if "top_k_first_stage" not in kwargs else kwargs["top_k_first_stage"]
+        self.top_k = (
+            max(k_values) if "top_k" not in kwargs else kwargs["top_k"]
+        )  # can lower it for reranking
+        self.top_k_first_stage = (
+            max(k_values)
+            if "top_k_first_stage" not in kwargs
+            else kwargs["top_k_first_stage"]
+        )
         self.score_function = score_function
 
     def __call__(

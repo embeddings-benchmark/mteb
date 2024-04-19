@@ -1,23 +1,12 @@
 import torch
-import torch.nn.functional as F
-import numpy as np
-import tqdm
-import pandas as pd
-from math import ceil, exp
-from typing import List
-from tqdm.auto import tqdm
-from transformers import (
-    AutoConfig,
-    AutoTokenizer,
-    AutoModelForSequenceClassification,
-    AutoModelForSeq2SeqLM,
-    T5ForConditionalGeneration,
-    AutoModelForCausalLM,
-)
 from sentence_transformers import CrossEncoder, SentenceTransformer
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.evaluation.evaluators.RetrievalEvaluator import Reranker
+from transformers import (
+    AutoModelForSeq2SeqLM,
+    AutoTokenizer,
+)
+
 from mteb import MTEB
+from mteb.evaluation.evaluators.RetrievalEvaluator import Reranker
 
 prediction_tokens = {
     "castorini/monot5-small-msmarco-10k": ["▁false", "▁true"],
@@ -34,8 +23,6 @@ prediction_tokens = {
     "unicamp-dl/mt5-base-mmarco-v2": ["▁no", "▁yes"],
     "unicamp-dl/mt5-base-mmarco-v1": ["▁no", "▁yes"],
 }
-
-
 
 
 class MonoT5Reranker(Reranker):
@@ -58,8 +45,8 @@ class MonoT5Reranker(Reranker):
             model_name_or_path, **model_args
         )
         print(f"Using model {model_name_or_path}")
-        
-        if 'torch_compile' in kwargs and kwargs['torch_compile']:
+
+        if "torch_compile" in kwargs and kwargs["torch_compile"]:
             self.torch_compile = kwargs["torch_compile"]
             self.model = torch.compile(self.model)
         else:
@@ -72,8 +59,8 @@ class MonoT5Reranker(Reranker):
         self.token_false_id, self.token_true_id = self.get_prediction_tokens(
             model_name_or_path,
             self.tokenizer,
-            kwargs['token_false'] if 'token_false' in kwargs else None,
-            kwargs['token_true'] if 'token_true' in kwargs else None,
+            kwargs["token_false"] if "token_false" in kwargs else None,
+            kwargs["token_true"] if "token_true" in kwargs else None,
         )
         print(f"Using max_length of {self.tokenizer.model_max_length}")
         print(f"Using token_false_id of {self.token_false_id}")
@@ -81,24 +68,25 @@ class MonoT5Reranker(Reranker):
         self.max_length = self.tokenizer.model_max_length
         print(f"Using max_length of {self.max_length}")
 
-
         self.model.eval()
 
-
-    def get_prediction_tokens(self, model_name_or_path, tokenizer, token_false=None, token_true=None):
+    def get_prediction_tokens(
+        self, model_name_or_path, tokenizer, token_false=None, token_true=None
+    ):
         if not (token_false and token_true):
             if model_name_or_path in prediction_tokens:
                 token_false, token_true = prediction_tokens[model_name_or_path]
                 token_false_id = tokenizer.get_vocab()[token_false]
-                token_true_id  = tokenizer.get_vocab()[token_true]
+                token_true_id = tokenizer.get_vocab()[token_true]
                 return token_false_id, token_true_id
             else:
-                return self.get_prediction_tokens('castorini/monot5-base-msmarco', self.tokenizer)
+                return self.get_prediction_tokens(
+                    "castorini/monot5-base-msmarco", self.tokenizer
+                )
         else:
             token_false_id = tokenizer.get_vocab()[token_false]
-            token_true_id  = tokenizer.get_vocab()[token_true]
+            token_true_id = tokenizer.get_vocab()[token_true]
             return token_false_id, token_true_id
-
 
     @torch.inference_mode()
     def predict(self, inputs):
@@ -133,7 +121,6 @@ class MonoT5Reranker(Reranker):
         batch_scores = batch_scores[:, [self.token_false_id, self.token_true_id]]
         batch_scores = torch.nn.functional.log_softmax(batch_scores, dim=1)
         return batch_scores[:, 1].exp().tolist()
-
 
 
 # model = MonoT5Reranker("castorini/monot5-base-msmarco-10k")

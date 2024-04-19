@@ -320,9 +320,11 @@ class MTEB:
                 # if the model is a reranker, get the first stage model info
                 if "first_stage" in kwargs:
                     first_stage_model = kwargs["first_stage"]
-                    if type(first_stage_model) != str:
+                    if isinstance(first_stage_model, str):
                         # can't get more specific than the class name because it's unknown
-                        task_results["first_stage_model"] = str(first_stage_model.__class__.__name__) + " (unknown)"
+                        task_results["first_stage_model"] = (
+                            str(first_stage_model.__class__.__name__) + " (unknown)"
+                        )
                     else:
                         task_results["first_stage_model"] = first_stage_model
 

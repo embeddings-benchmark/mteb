@@ -9,7 +9,7 @@ from typing import Dict, Tuple
 
 from datasets import Features, Value, load_dataset
 
-from ..evaluation.evaluators import RetrievalEvaluator, is_dres_compatible
+from ..evaluation.evaluators import RetrievalEvaluator
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
