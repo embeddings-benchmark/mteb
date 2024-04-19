@@ -16,7 +16,7 @@ class BulgarianStoreReviewSentimentClassfication(AbsTaskClassification):
         type="Classification",
         category="s2s",
         date=("2018-05-14", "2018-05-14"),
-            eval_splits=["test"],
+        eval_splits=["test"],
         eval_langs=["bul-Cyrl"],
         main_score="accuracy",
         form=["written"],
@@ -44,3 +44,11 @@ url = {https://doi.org/10.7910/DVN/TXIK9P}
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("Review", "text")
         self.dataset = self.dataset.rename_column("Category", "label")
+        
+        labels = self.dataset["train"]["label"]
+        lab2idx = {lab: idx for idx, lab in enumerate(sorted(set(labels)))}
+
+        self.dataset = self.dataset.map(
+            lambda x: {"label": lab2idx[x["label"]]},
+            remove_columns=["label"]
+        )
