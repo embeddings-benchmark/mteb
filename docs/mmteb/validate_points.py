@@ -1,27 +1,26 @@
+import logging
 import os
+from typing import Optional
 
 from jsonlines import Reader
-from pydantic import BaseModel, ValidationError, conint, constr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, conint, constr
 
 
 # Define a Pydantic model to represent each JSON object
 class JsonObject(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     GitHub: constr(min_length=1)
-    New_dataset: conint(ge=2) = None
-    New_task: conint(ge=2) = None
-    Dataset_annotations: conint(ge=1) = None
-    Bug_fixes: conint(ge=2) = None
-    Running_Models: conint(ge=1) = None
-    Review_PR: conint(ge=2) = None
-    Paper_Writing: int = None
-    Ideation: int = None
-    Coordination: int = None
-
-    @field_validator("*")
-    def check_optional_fields(cls, value):
-        if value == "":
-            raise ValueError("Optional fields cannot be empty.")
-        return value
+    new_dataset: Optional[conint(ge=2)] = Field(alias="New dataset", default=None)
+    new_task: Optional[conint(ge=2)] = Field(alias="New task", default=None)
+    dataset_annotations: Optional[conint(ge=1)] = Field(
+        alias="Dataset annotations", default=None
+    )
+    bug_fixes: Optional[conint(ge=1)] = Field(alias="Bug fixes", default=None)
+    running_models: Optional[conint(ge=1)] = Field(alias="Running Models", default=None)
+    review_pr: Optional[conint(ge=2)] = Field(alias="Review PR", default=None)
+    paper_writing: Optional[int] = Field(alias="Paper writing", default=None)
+    Ideation: Optional[int] = None
+    Coordination: Optional[int] = None
 
 
 # Function to validate JSONL files in a folder
@@ -33,14 +32,17 @@ def validate_jsonl_files(folder_path):
                 try:
                     # Read JSONL file
                     reader = Reader(file)
-                    for line in reader:
-                        try:
-                            # Validate JSON object against schema
-                            JsonObject(**line)
-                        except ValidationError as e:
-                            print("Validation Error in file:", file_path, e)
-                except Exception as e:
-                    print("Error reading file:", file_path, e)
+                except Exception:
+                    raise Exception("Error reading file:", file_path)
+                for line in reader:
+                    try:
+                        # Validate JSON object against schema
+                        x = JsonObject(**line)
+                        logging.debug(x)
+                    except ValidationError as e:
+                        raise Exception(
+                            "Validation Error in file:", file_path, line
+                        ) from e
 
 
 # Main function
