@@ -4,6 +4,8 @@ from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
+TEST_SAMPLES = 2048
+
 class PersianFoodSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="PersianFoodSentimentClassification",
@@ -15,7 +17,7 @@ class PersianFoodSentimentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
-        eval_splits=["test"],
+        eval_splits=["validation", "test"],
         eval_langs=["fas-Arab"],
         main_score="accuracy",
         date=("2020-01-01", "2020-05-31"),
@@ -36,6 +38,15 @@ class PersianFoodSentimentClassification(AbsTaskClassification):
             volume={abs/2005.12515}
         }
         """,
-        n_samples={"train": 56700, "validation": 6300, "test": 7000},
-        avg_character_length={"train": 89.61, "validation": 90.37, "test": 90.58},
+        n_samples={"validation": TEST_SAMPLES, "test": TEST_SAMPLES},
+        avg_character_length={"validation": 90.37, "test": 90.58},
     )
+
+    def dataset_transform(self):
+        self.dataset["validation"] = (
+            self.dataset["validation"].shuffle(seed=self.seed).select(range(TEST_SAMPLES))
+        )
+        self.dataset["test"] = (
+            self.dataset["test"].shuffle(seed=self.seed).select(range(TEST_SAMPLES))
+        )
+    
