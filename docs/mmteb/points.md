@@ -1,10 +1,11 @@
 # Points
 
+
 **Note**: The points have been moved to [`points`](https://github.com/embeddings-benchmark/mteb/tree/main/docs/mmteb/points) folder to avoid merge conflicts. To add points you will now have to add a jsonl file to the folder. An example could looks like so:
 
 ```
 {"GitHub": "GitHubUser1", "New dataset": 6}
-{"GitHub": "Review PR": 2}
+{"GitHub": "GitHubUser2",  "Review PR": 2}
 ```
 
 The file should be named after the PR number. E.g. `438.jsonl`, where 438 is the PR number.
@@ -49,6 +50,7 @@ Please also add your first name and last name are as you want them to appear in 
 | cassanof          | Federico   | Cassano    | federico.cassanno@federico.codes | ~Federico_Cassano1 | Northeastern University, Boston, USA                |
 | taidnguyen        | Nguyen     | Tai        | taing@seas.upenn.edu         | ~Nguyen_Tai1         |  University of Pennsylvania                           |
 | xu3kev            | Wen-Ding   | Li         | wl678@cornell.edu            | ~Wen-Ding_Li1        |  Cornell University                                   |
+| Rysias            | Jonathan   | Rystrøm    | jonathan.rystroem@gmail.com  |                      | University of Oxford, UK                              |
 | taeminlee         | Taemin     | Lee        | taeminlee@korea.ac.kr        | ~Taemin_Lee1         | Korea University Human-Inspired AI Research           |
 | izhx              | Xin        | Zhang      | zhangxin2023@stu.hit.edu.cn  |                      |  Harbin Institute of Technology, Shenzhen             |
 | orionw            | Orion      | Weller     | oweller@cs.jhu.edu           | ~Orion_Weller1       |  Johns Hopkins University                             |
@@ -58,4 +60,3 @@ Please also add your first name and last name are as you want them to appear in 
 | asparius          | Ömer       | Çağatan    | ocagatan19@ku.edu.tr         | ~Ömer_Veysel_Çağatan1 | Koç University,Turkey                                |
 | rafalposwiata     | Rafał      | Poświata   | rposwiata@opi.org.pl         | ~Rafał_Poświata1     | National Information Processing Institute, Warsaw, Poland |
 | rbroc             | Roberta    | Rocca      | roberta.rocca@cas.au.dk      | ~Roberta_Rocca1      | Aarhus University, Denmark                            |
-
