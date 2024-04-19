@@ -3,8 +3,8 @@ from __future__ import annotations
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-
 TEST_SAMPLES = 2048
+
 
 class PersianFoodSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -44,9 +44,10 @@ class PersianFoodSentimentClassification(AbsTaskClassification):
 
     def dataset_transform(self):
         self.dataset["validation"] = (
-            self.dataset["validation"].shuffle(seed=self.seed).select(range(TEST_SAMPLES))
+            self.dataset["validation"]
+            .shuffle(seed=self.seed)
+            .select(range(TEST_SAMPLES))
         )
         self.dataset["test"] = (
             self.dataset["test"].shuffle(seed=self.seed).select(range(TEST_SAMPLES))
         )
-    
