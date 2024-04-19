@@ -1,0 +1,25 @@
+{
+  "dataset_revision": "c0d5c781a115d570b8acceb14928ffb99543bb74",
+  "mteb_dataset_name": "BulgarianSentimentClassification",
+  "mteb_version": "1.6.12",
+  "test": {
+    "accuracy": 0.7785415421398685,
+    "accuracy_stderr": 0.06046594589367263,
+    "ap": 0.9138203738562648,
+    "ap_stderr": 0.016358122993814245,
+    "evaluation_time": 3.34,
+    "f1": 0.7279047189447724,
+    "f1_stderr": 0.055918407384301656,
+    "main_score": 0.7785415421398685
+  },
+  "validation": {
+    "accuracy": 0.7890214797136038,
+    "accuracy_stderr": 0.06444753768326883,
+    "ap": 0.9570004694941152,
+    "ap_stderr": 0.010189851245946924,
+    "evaluation_time": 5.38,
+    "f1": 0.6974774929981921,
+    "f1_stderr": 0.06102218982582699,
+    "main_score": 0.7890214797136038
+  }
+}

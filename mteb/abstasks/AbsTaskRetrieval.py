@@ -323,3 +323,43 @@ class AbsTaskRetrieval(AbsTask):
             **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
         }
         return scores
+
+    def calculate_metadata_metrics(self) -> None:
+        self.load_data()
+
+        for split in self.metadata_dict["eval_splits"]:
+            if self.is_multilingual:
+                for lang in self.relevant_docs.keys():
+                    process_language(
+                        self.relevant_docs[lang][split],
+                        self.queries[lang][split],
+                        self.corpus[lang][split],
+                        lang,
+                    )
+            else:
+                process_language(
+                    self.relevant_docs[split], self.queries[split], self.corpus[split]
+                )
+
+
+def process_language(relevant_docs, queries, corpus, lang=None):
+    total_length, num_pairs = calculate_length_and_count(relevant_docs, queries, corpus)
+    average_length = total_length / num_pairs if num_pairs else 0
+    num_documents = len(queries) + len(corpus)
+
+    language_description = f" for language {lang}" if lang else ""
+    print(f"Average character length{language_description} is {average_length}")
+    print(f"Number of queries and documents{language_description} is {num_documents}")
+
+
+def calculate_length_and_count(relevant_docs, queries, corpus):
+    total_length = 0
+    num_pairs = 0
+    for query_id, docs in relevant_docs.items():
+        query = queries[query_id]
+        for doc_id in docs:
+            doc = corpus[doc_id]
+            doc_text = doc["title"] + doc["text"]
+            total_length += len(query) + len(doc_text)
+            num_pairs += 1
+    return total_length, num_pairs

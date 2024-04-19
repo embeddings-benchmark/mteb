@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "957e075ba35e4417ba7837987fd7053a6533a1a2",
+  "mteb_dataset_name": "MacedonianTweetSentimentClassification",
+  "mteb_version": "1.6.10",
+  "test": {
+    "accuracy": 0.48226514486391575,
+    "accuracy_stderr": 0.03184247712427621,
+    "evaluation_time": 27.86,
+    "f1": 0.4292908555472734,
+    "f1_stderr": 0.0273609282223404,
+    "main_score": 0.48226514486391575
+  }
+}
