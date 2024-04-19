@@ -32,15 +32,15 @@ def validate_jsonl_files(folder_path):
                 try:
                     # Read JSONL file
                     reader = Reader(file)
-                    for line in reader:
-                        try:
-                            # Validate JSON object against schema
-                            x = JsonObject(**line)
-                            logging.debug(x)
-                        except ValidationError as e:
-                            print("Validation Error in file:", file_path, e, line)
                 except Exception as e:
-                    print("Error reading file:", file_path, e)
+                    raise Exception("Error reading file:", file_path)
+                for line in reader:
+                    try:
+                        # Validate JSON object against schema
+                        x = JsonObject(**line)
+                        logging.debug(x)
+                    except ValidationError as e:
+                        raise Exception("Validation Error in file:", file_path, line) from e
 
 
 # Main function
