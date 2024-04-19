@@ -254,7 +254,7 @@ class Reranker:
         Note: you must provide either a first stage model or the results of the first stage model so that it can rerank.
         You also must extend this class and provide an `__init__` function that loads your model and a `rerank` function that reranks a batch.
     """
-    def __init__(self, model: str, first_stage: str | DenseRetrievalExactSearch | None = None, batch_size: int = 32, sep: str = ' ', **kwargs):
+    def __init__(self, model: str, first_stage: str | CrossEncoder | None = None, batch_size: int = 32, sep: str = ' ', **kwargs):
         self.model = model
         self.batch_size = batch_size
 
@@ -412,7 +412,7 @@ class RetrievalEvaluator(Evaluator):
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
         k_values: List[int],
-        ignore_identical_ids: bool = True
+        ignore_identical_ids: bool = True,
     ) -> Tuple[Dict[str, float], dict[str, float], dict[str, float], dict[str, float]]:
         if ignore_identical_ids:
             logger.info(
@@ -429,7 +429,7 @@ class RetrievalEvaluator(Evaluator):
         _map = {}
         recall = {}
         precision = {}
-        
+
         for k in k_values:
             ndcg[f"NDCG@{k}"] = 0.0
             _map[f"MAP@{k}"] = 0.0
@@ -457,7 +457,7 @@ class RetrievalEvaluator(Evaluator):
             _map[f"MAP@{k}"] = round(_map[f"MAP@{k}"] / len(scores), 5)
             recall[f"Recall@{k}"] = round(recall[f"Recall@{k}"] / len(scores), 5)
             precision[f"P@{k}"] = round(precision[f"P@{k}"] / len(scores), 5)
-      
+
         for eval in [ndcg, _map, recall, precision]:
             logger.info("\n")
             for k in eval.keys():

@@ -303,7 +303,6 @@ class MTEB:
                     ),
                     "mteb_dataset_name": task.metadata_dict["name"],
                 }
-                
                 for split in task_eval_splits:
                     tick = time()
                     results = task.evaluate(
