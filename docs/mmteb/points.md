@@ -1,46 +1,38 @@
 # Points
 
-| GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
-|-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 74        |                |          |             5 |
-| x-tabdeveloping   |              | 48          |          |                     |            |                |           |                |          |               |
-| imenelydiaker     |              | 88          |          |                     |          3 |                | 36        |                |          |               |
-| wissam-sib        |              | 88          |          |                     |            |                | 2         |                |          |               |
-| GabrielSequeira   |              | 88          |          |                     |            |                |           |                |          |               |
-| schmarion         |              | 88          |          |                     |            |                |           |                |          |               |
-| MathieuCiancone   |              | 88          |          |                     |            |                |           |                |          |               |
-| Sakshamrzt        |              | 10          |          |                     |            |                | 4         |                |          |               |
-| MartinBernstorff  |              | 2           |          |                     | 7          |                | 8         |                |          |               |
-| guenthermi        |              | 12          |          |                     |            |                |           |                |          |               |
-| Muennighoff       |              |             |          |                     |            |                | 16        |                |          |               |
-| rasdani           |              | 4           |          |                     |            |                |           |                |          |               |
-| PhilipMay         |              |             |          |                     |            |                | 2         |                |          |               |
-| slvnwhrl          |              | 12          |          |                     |            |                |           |                |          |               |
-| staoxiao          |              | 50          |          |                     |            |                |           |                |          |               |
-| NouamaneTazi      |              |             |          |                     |            |                | 2         |                |          |               |
-| rafalposwiata     |              | 32          |          |                     |            |                |           |                |          |               |
-| violenil          |              | 26          |          |                     |            |                |           |                |          |               |
-| hanhainebula      |              | 2           |          |                     |            |                |           |                |          |               |
-| taeminlee         |              | 16          |          |                     |            |                |           |                |          |               |
-| izhx              |              | 6           |          |                     |            |                |           |                |          |               |
-| achibb            |              | 2           |          |                     |            |                | 0         |                |          |               |   
-| xu3kev            |              | 10          |          |                     |            |                |           |                |          |               |
-| cassanof          |              | 6           |          |                     | 1          | 1              |           |                |          |               |
-| taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
-| orionw            |              |             |          |                     |      14    |                |           |                |          |               |
-| mmhamdy           |              | 14          |          |                     |            |                |           |                |          |               |
-| manandey          |              | 12          |          |                     |            |                |           |                |          |               |
-| isaac-chung       |              | 36          |          |                     |            |                | 12        |                |          |               |
-| asparius          |              | 8           |          |                     |            |                |           |                |          |               |
-| rbroc             |              | 12          |          |                     |            |                |           |                |          |               |
-| dwzhu-pku         |              | 12          |          |                     |            |                |           |                |          |               |
+**Note**: The points have been moved to [`points`](https://github.com/embeddings-benchmark/mteb/tree/main/docs/mmteb/points) folder to avoid merge conflicts. To add points you will now have to add a jsonl file to the folder. An example could looks like so:
 
+```
+{"GitHub": "GitHubUser1", "New dataset": 6}
+{"GitHub": "Review PR": 2}
+```
+
+The file should be named after the PR number. E.g. `438.jsonl`, where 438 is the PR number.
+
+The possible keys to include is: 
+
+```{python}
+{
+    "GitHub": "GitHubUser1",
+    "New dataset": 2-6,  # 2 points for the dataset and 4 points for the task
+    "New task": 2, # e.g. a new style of task (e.g. classification, or retrieval)
+    "Dataset annotations": 1, # 1 point for each full dataset annotation
+    "(Bug)fixes": 2-10, # depends on the complexity of the fix
+    "Running Models": 1, # pr model run
+    "Review PR": 2, # two points pr. reviewer, can be given to multiple reviewers
+    "Paper Writing": NA, 
+    "Ideation": NA,
+    "Coordination": NA
+}
+```
+
+**Note**: The points have been moved to points folder to avoid merge conflicts.
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
 
 # Contributor Informations
 
-First name and last name are as you want them to appear in a publication.
+Please also add your first name and last name are as you want them to appear in a publication. If you do not with to have your name in a publication, please add a note to that effect.
 
 | GitHub            | First name | Last name  | Email                        | User on openreview   | Affiliations                                          |
 | ----------------- | ---------- | ---------- | ---------------------------- | -------------------- | ----------------------------------------------------- |
