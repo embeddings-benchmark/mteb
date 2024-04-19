@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "701984d6c6efea0e14a1c7850ef70e464c5577c0",
+  "mteb_dataset_name": "BulgarianStoreReviewSentimentClassfication",
+  "mteb_version": "1.6.24",
+  "test": {
+    "accuracy": 0.5758241758241759,
+    "accuracy_stderr": 0.07358535842981631,
+    "evaluation_time": 3.89,
+    "f1": 0.4053408227623492,
+    "f1_stderr": 0.053494108411317035,
+    "main_score": 0.5758241758241759
+  }
+}
