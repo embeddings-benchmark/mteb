@@ -21,6 +21,7 @@ from .eng.NewsClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
 from .est.estonian_valence import *
+from .fas.PersianFoodSentimentClassification import *
 from .fra.MovieReviewSentimentClassification import *
 from .hin.HindiDiscourseClassification import *
 from .hrv.CroatianSentimentClassification import *
