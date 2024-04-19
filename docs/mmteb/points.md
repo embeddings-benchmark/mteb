@@ -4,7 +4,7 @@
 
 ```
 {"GitHub": "GitHubUser1", "New dataset": 6}
-{"GitHub": "Review PR": 2}
+{"GitHub": "GitHubUser2",  "Review PR": 2}
 ```
 
 The file should be named after the PR number. E.g. `438.jsonl`, where 438 is the PR number.
