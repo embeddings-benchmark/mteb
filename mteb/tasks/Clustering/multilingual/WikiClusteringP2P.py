@@ -10,6 +10,7 @@ _LANGUAGES = {
     "sq": ["sqi-Latn"],
 }
 
+
 class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
     metadata = TaskMetadata(
         name="WikiClusteringP2P",
@@ -33,8 +34,7 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         annotations_creators="derived",
         dialect=[],
         text_creation="created",
-        bibtex_citation=None, # None exists
+        bibtex_citation=None,  # None exists
         n_samples={"test": 40960},
         avg_character_length={"test": 570.6},
     )
-
