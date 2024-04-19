@@ -2,22 +2,22 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 38        |                |          |             5 |
+| KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 70        |                |          |             5 |
 | x-tabdeveloping   |              | 48          |          |                     |            |                |           |                |          |               |
-| imenelydiaker     |              | 88          |          |                     |          3 |                | 18        |                |          |               |
-| wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
+| imenelydiaker     |              | 88          |          |                     |          3 |                | 36        |                |          |               |
+| wissam-sib        |              | 88          |          |                     |            |                | 2         |                |          |               |
 | GabrielSequeira   |              | 88          |          |                     |            |                |           |                |          |               |
 | schmarion         |              | 88          |          |                     |            |                |           |                |          |               |
 | MathieuCiancone   |              | 88          |          |                     |            |                |           |                |          |               |
-| Sakshamrzt        |              | 10          |          |                     |            |                | 2         |                |          |               |
-| MartinBernstorff  |              | 2           |          |                     | 7          |                | 4         |                |          |               |
+| Sakshamrzt        |              | 10          |          |                     |            |                | 4         |                |          |               |
+| MartinBernstorff  |              | 2           |          |                     | 7          |                | 8         |                |          |               |
 | guenthermi        |              | 12          |          |                     |            |                |           |                |          |               |
-| Muennighoff       |              |             |          |                     |            |                | 8         |                |          |               |
+| Muennighoff       |              |             |          |                     |            |                | 16        |                |          |               |
 | rasdani           |              | 4           |          |                     |            |                |           |                |          |               |
-| PhilipMay         |              |             |          |                     |            |                | 1         |                |          |               |
+| PhilipMay         |              |             |          |                     |            |                | 2         |                |          |               |
 | slvnwhrl          |              | 12          |          |                     |            |                |           |                |          |               |
 | staoxiao          |              | 50          |          |                     |            |                |           |                |          |               |
-| NouamaneTazi      |              |             |          |                     |            |                | 1         |                |          |               |
+| NouamaneTazi      |              |             |          |                     |            |                | 2         |                |          |               |
 | rafalposwiata     |              | 32          |          |                     |            |                |           |                |          |               |
 | violenil          |              | 26          |          |                     |            |                |           |                |          |               |
 | hanhainebula      |              | 2           |          |                     |            |                |           |                |          |               |
