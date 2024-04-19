@@ -53,7 +53,7 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         }
         self.corpus = {
             eval_split: {
-                str(d["uuid"]): {"text": d["text"]} for d in corpus_raw["documents"]
+                str(d["uuid"]): {"text": d["text"]} for d in corpus_raw[eval_split]
             }
         }
 

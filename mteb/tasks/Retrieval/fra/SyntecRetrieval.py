@@ -50,23 +50,23 @@ class SyntecRetrieval(AbsTaskRetrieval):
             **self.metadata_dict["dataset"],
         )
 
-        split = self._EVAL_SPLITS[0]
+        eval_split = self.metadata_dict["eval_splits"][0]
         self.queries = {
-            split: {
-                str(i): q["Question"] for i, q in enumerate(queries_raw[split])
+            eval_split: {
+                str(i): q["Question"] for i, q in enumerate(queries_raw[eval_split])
             }
         }
 
-        corpus_raw = corpus_raw[split]
+        corpus_raw = corpus_raw[eval_split]
         corpus_raw = corpus_raw.rename_column("content", "text")
         self.corpus = {
-            split: {str(row["id"]): row for row in corpus_raw}
+            eval_split: {str(row["id"]): row for row in corpus_raw}
         }
 
         self.relevant_docs = {
-            self._EVAL_SPLITS[0]: {
+            eval_split: {
                 str(i): {str(q["Article"]): 1}
-                for i, q in enumerate(queries_raw[split])
+                for i, q in enumerate(queries_raw[eval_split])
             }
         }
 
