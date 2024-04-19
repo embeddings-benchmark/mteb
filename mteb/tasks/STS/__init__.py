@@ -17,5 +17,6 @@ from .multilingual.STS17CrosslingualSTS import *
 from .multilingual.STS22CrosslingualSTS import *
 from .multilingual.STSBenchmarkMultilingualSTS import *
 from .pol.PolishSTS import *
+from .ron.RonSTS import *
 from .spa.STSES import *
 from .zho.CMTEBSTS import *
