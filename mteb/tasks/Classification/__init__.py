@@ -25,6 +25,7 @@ from .hin.HindiDiscourseClassification import *
 from .hrv.CroatianSentimentClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ita.ItaHateClassification import *
+from .ita.ItalianLinguistAcceptabilityClassification import *
 from .jpn.WRIMEClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
 from .mlt.MalteseSentimentClassification import *
