@@ -303,6 +303,7 @@ class MTEB:
                     ),
                     "mteb_dataset_name": task.metadata_dict["name"],
                 }
+                
                 for split in task_eval_splits:
                     tick = time()
                     results = task.evaluate(
@@ -316,6 +317,15 @@ class MTEB:
                     task_results[split] = results
                     if verbosity >= 1:
                         logger.info(f"Scores: {results}")
+
+                # if the model is a reranker, get the first stage model info
+                if "first_stage" in kwargs:
+                    first_stage_model = kwargs["first_stage"]
+                    if type(first_stage_model) != str:
+                        # can't get more specific than the class name because it's unknown
+                        task_results["first_stage_model"] = str(first_stage_model.__class__.__name__) + " (unknown)"
+                    else:
+                        task_results["first_stage_model"] = first_stage_model
 
                 # save results
                 if output_folder is not None:
