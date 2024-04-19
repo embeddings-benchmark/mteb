@@ -26,3 +26,6 @@ jobs:
         id: lint
         run: |
           make lint-check
+      
+      - name: Validate jsonl points files
+        run: python docs/mmteb/validate_points.py
