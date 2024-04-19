@@ -17,7 +17,7 @@ class SlovakSentimentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
-        eval_splits=["test"],
+        eval_splits=["validation", "test"],
         eval_langs=["slk-Latn"],
         main_score="accuracy",
         date=("2022-08-01", "2022-08-01"),
