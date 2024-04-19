@@ -1,6 +1,8 @@
 import os
+
 from jsonlines import Reader
-from pydantic import BaseModel, ValidationError, constr, conint, field_validator
+from pydantic import BaseModel, ValidationError, conint, constr, field_validator
+
 
 # Define a Pydantic model to represent each JSON object
 class JsonObject(BaseModel):
@@ -15,11 +17,12 @@ class JsonObject(BaseModel):
     Ideation: int = None
     Coordination: int = None
 
-    @field_validator('*')
+    @field_validator("*")
     def check_optional_fields(cls, value):
         if value == "":
             raise ValueError("Optional fields cannot be empty.")
         return value
+
 
 # Function to validate JSONL files in a folder
 def validate_jsonl_files(folder_path):
@@ -42,10 +45,12 @@ def validate_jsonl_files(folder_path):
                     print("Error reading file:", file_path)
                     print(e)
 
+
 # Main function
 def main():
     folder_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "points")
     validate_jsonl_files(folder_path)
+
 
 if __name__ == "__main__":
     main()
