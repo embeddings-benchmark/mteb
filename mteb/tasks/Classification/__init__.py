@@ -6,6 +6,7 @@ from .ara.TweetEmotionClassification import *
 from .ara.TweetSarcasmClassification import *
 from .ben.BengaliHateSpeechClassification import *
 from .bul.BulgarianSentimentClassification import *
+from .bul.BulgarianStoreReviewSentimentClassfication import *
 from .ces.CzechSubjectivityClassification import *
 from .dan.AngryTweetsClassification import *
 from .dan.DalajClassification import *
@@ -20,12 +21,15 @@ from .eng.NewsClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
 from .est.estonian_valence import *
+from .fas.PersianFoodSentimentClassification import *
 from .fra.MovieReviewSentimentClassification import *
 from .hin.HindiDiscourseClassification import *
 from .hrv.CroatianSentimentClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ita.ItaHateClassification import *
+from .ita.ItalianLinguistAcceptabilityClassification import *
 from .jpn.WRIMEClassification import *
+from .kur.KurdishSentimentClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
 from .mlt.MalteseSentimentClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
