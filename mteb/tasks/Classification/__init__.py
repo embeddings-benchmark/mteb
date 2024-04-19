@@ -19,13 +19,13 @@ from .eng.ImdbClassification import *
 from .eng.NewsClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
-from .ita.ItalianLinguistAcceptabilityClassification import *
 from .est.estonian_valence import *
 from .fra.MovieReviewSentimentClassification import *
 from .hin.HindiDiscourseClassification import *
 from .hrv.CroatianSentimentClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ita.ItaHateClassification import *
+from .ita.ItalianLinguistAcceptabilityClassification import *
 from .jpn.WRIMEClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
 from .mlt.MalteseSentimentClassification import *
