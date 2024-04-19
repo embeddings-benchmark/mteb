@@ -30,7 +30,7 @@
 | orionw            |              |             |          |                     |      14    |                |           |                |          |               |
 | mmhamdy           |              | 14          |          |                     |            |                |           |                |          |               |
 | manandey          |              | 12          |          |                     |            |                |           |                |          |               |
-| isaac-chung       |              | 36          |          |                     |            |                | 14        |                |          |               |
+| isaac-chung       |              | 36          |          |                     |            |                | 12        |                |          |               |
 | asparius          |              | 8           |          |                     |            |                |           |                |          |               |
 | rbroc             |              | 12          |          |                     |            |                |           |                |          |               |
 | dwzhu-pku         |              | 12          |          |                     |            |                |           |                |          |               |
