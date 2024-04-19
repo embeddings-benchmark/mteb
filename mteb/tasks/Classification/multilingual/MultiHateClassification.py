@@ -18,44 +18,15 @@ _LANGUAGES = {
     "spa": ["spa-Latn"],
 }
 
-_HF_AFFIX = {
-    "ara": "arabic",
-    "cmn": "mandarin",
-    "eng": "",
-    "deu": "german",
-    "fra": "french",
-    "hin": "hindi",
-    "ita": "italian",
-    "nld": "dutch",
-    "por": "portuguese",
-    "spa": "spanish",
-}
-
-_REVISION_DICT = {
-    "ara": "65eb7455a05cb77b3ae0c69d444569a8eee54628",
-    "cmn": "617d3e9fccd186277297cc305f6588af7384b008",
-    "eng": "9d2ac89df04254e5c427bcc8d61b6d6c83a1f59b",
-    "deu": "5229a5cc475f36c08d03ca52f0ccb005705e60d2",
-    "fra": "5d3085f2129139abc10d2b58becd4d4f2978e5d5",
-    "hin": "e9e68e1a4db04726b9278192377049d0f9693012",
-    "ita": "21e3d5c827cb60619a89988b24979850a7af85a5",
-    "nld": "d622427417d37a8d74e110e6289bc29af4ba4056",
-    "por": "323bdf67e0fbd3d7f8086fad0971b5bd5a62524b",
-    "spa": "a7ea759535bb9fad6361cca151cf94a46e88edf3",
-}
-
 
 def _transform(dataset):
-    keep_cols = ["test_case", "label_gold"]
-    rename_dict = dict(zip(keep_cols, ["text", "label"]))
-    remove_cols = [col for col in dataset["test"].column_names if col not in keep_cols]
-    dataset = dataset.rename_columns(rename_dict)
-    dataset = dataset.class_encode_column("label")
-    dataset = dataset.class_encode_column("functionality")
+    dataset = dataset.rename_columns({"is_hateful": "label"})
+    for label in ["label", "functionality"]:
+        dataset = dataset.class_encode_column(label)
     dataset = dataset["test"].train_test_split(
-        test_size=0.5, seed=42, stratify_by_column="functionality"
+        train_size=1000, test_size=1000, seed=42, stratify_by_column="functionality"
     )  # balanced sampling across types of hate speech
-    dataset = dataset.remove_columns(remove_cols)
+    dataset = dataset.remove_columns(["functionality"])
     return dataset
 
 
@@ -63,8 +34,8 @@ class MultiHateClassification(MultilingualTask, AbsTaskClassification):
     metadata = TaskMetadata(
         name="MultiHateClassification",
         dataset={
-            "path": "Paul/hatecheck",
-            "revision": _REVISION_DICT,  # dynamic
+            "path": "mteb/multi-hatecheck",
+            "revision": "bde1317ae1cee1d719d30587afac13d5dc47ebec",
         },
         description="""Hate speech detection dataset with binary
                        (hateful vs non-hateful) labels. Includes 25+ distinct types of hate
@@ -86,6 +57,29 @@ class MultiHateClassification(MultilingualTask, AbsTaskClassification):
         dialect=[],
         text_creation="created",
         bibtex_citation="""
+        @inproceedings{rottger-etal-2021-hatecheck,
+            title = "{H}ate{C}heck: Functional Tests for Hate Speech Detection Models",
+            author = {R{\"o}ttger, Paul  and
+            Vidgen, Bertie  and
+            Nguyen, Dong  and
+            Waseem, Zeerak  and
+            Margetts, Helen  and
+            Pierrehumbert, Janet},
+            editor = "Zong, Chengqing  and
+            Xia, Fei  and
+            Li, Wenjie  and
+            Navigli, Roberto",
+            booktitle = "Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (Volume 1: Long Papers)",
+            month = aug,
+            year = "2021",
+            address = "Online",
+            publisher = "Association for Computational Linguistics",
+            url = "https://aclanthology.org/2021.acl-long.4",
+            doi = "10.18653/v1/2021.acl-long.4",
+            pages = "41--58",
+            abstract = "Detecting online hate is a difficult task that even state-of-the-art models struggle with. Typically, hate speech detection models are evaluated by measuring their performance on held-out test data using metrics such as accuracy and F1 score. However, this approach makes it difficult to identify specific model weak points. It also risks overestimating generalisable model performance due to increasingly well-evidenced systematic gaps and biases in hate speech datasets. To enable more targeted diagnostic insights, we introduce HateCheck, a suite of functional tests for hate speech detection models. We specify 29 model functionalities motivated by a review of previous research and a series of interviews with civil society stakeholders. We craft test cases for each functionality and validate their quality through a structured annotation process. To illustrate HateCheck{'}s utility, we test near-state-of-the-art transformer models as well as two popular commercial models, revealing critical model weaknesses.",
+        }
+
         @inproceedings{rottger-etal-2022-multilingual,
             title = "Multilingual {H}ate{C}heck: Functional Tests for Multilingual Hate Speech Detection Models",
             author = {R{\"o}ttger, Paul  and
@@ -109,8 +103,8 @@ class MultiHateClassification(MultilingualTask, AbsTaskClassification):
             abstract = "Hate speech detection models are typically evaluated on held-out test sets. However, this risks painting an incomplete and potentially misleading picture of model performance because of increasingly well-documented systematic gaps and biases in hate speech datasets. To enable more targeted diagnostic insights, recent research has thus introduced functional tests for hate speech detection models. However, these tests currently only exist for English-language content, which means that they cannot support the development of more effective models in other languages spoken by billions across the world. To help address this issue, we introduce Multilingual HateCheck (MHC), a suite of functional tests for multilingual hate speech detection models. MHC covers 34 functionalities across ten languages, which is more languages than any other hate speech dataset. To illustrate MHC{'}s utility, we train and test a high-performing multilingual hate speech detection model, and reveal critical model weaknesses for monolingual and cross-lingual applications.",
         }
         """,
-        n_samples={"test": 18250},
-        avg_character_length={"test": 45.9},
+        n_samples={"test": 10000},
+        avg_character_length={"test": 45.3},
     )
 
     def load_data(self, **kwargs):
@@ -122,10 +116,7 @@ class MultiHateClassification(MultilingualTask, AbsTaskClassification):
         self.dataset = {}
         for lang in self.langs:
             metadata = self.metadata_dict.get("dataset", None)
-            path = f"{metadata['path']}-{_HF_AFFIX[lang]}".rstrip("-")
-            dataset = datasets.load_dataset(
-                path=path, revision=metadata["revision"][lang]
-            )
+            dataset = datasets.load_dataset(name=lang, **metadata)
             self.dataset[lang] = _transform(dataset)
         self.dataset_transform()
         self.data_loaded = True
