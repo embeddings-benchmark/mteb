@@ -2,7 +2,7 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 70        |                |          |             5 |
+| KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 74        |                |          |             5 |
 | x-tabdeveloping   |              | 48          |          |                     |            |                |           |                |          |               |
 | imenelydiaker     |              | 88          |          |                     |          3 |                | 36        |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 2         |                |          |               |
@@ -29,8 +29,13 @@
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
 | orionw            |              |             |          |                     |      14    |                |           |                |          |               |
 | mmhamdy           |              | 14          |          |                     |            |                |           |                |          |               |
+<<<<<<< HEAD
 | manandey          |              | 18          |          |                     |            |                |           |                |          |               |
 | isaac-chung       |              | 42          |          |                     |            |                | 12        |                |          |               |
+=======
+| manandey          |              | 12          |          |                     |            |                |           |                |          |               |
+| isaac-chung       |              | 36          |          |                     |            |                | 12        |                |          |               |
+>>>>>>> main
 | asparius          |              | 8           |          |                     |            |                |           |                |          |               |
 | rbroc             |              | 12          |          |                     |            |                |           |                |          |               |
 | dwzhu-pku         |              | 12          |          |                     |            |                |           |                |          |               |
