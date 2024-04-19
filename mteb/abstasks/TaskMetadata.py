@@ -41,6 +41,7 @@ TASK_SUBTYPE = Literal[
 TASK_DOMAIN = Literal[
     "Academic",
     "Blog",
+    "Constructed",
     "Encyclopaedic",
     "Fiction",
     "Government",

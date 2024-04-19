@@ -33,6 +33,12 @@ from .eng.HotpotQARetrieval import *
 from .eng.LegalBenchConsumerContractsQARetrieval import *
 from .eng.LegalBenchCorporateLobbyingRetrieval import *
 from .eng.LegalSummarizationRetrieval import *
+from .eng.LEMBNarrativeQARetrieval import *
+from .eng.LEMBNeedleRetrieval import *
+from .eng.LEMBPasskeyRetrieval import *
+from .eng.LEMBQMSumRetrieval import *
+from .eng.LEMBSummScreenFDRetrieval import *
+from .eng.LEMBWikimQARetrieval import *
 from .eng.MedicalQARetrieval import *
 from .eng.MSMARCORetrieval import *
 from .eng.MSMARCOv2Retrieval import *
@@ -44,9 +50,11 @@ from .eng.SCIDOCSRetrieval import *
 from .eng.SciFactRetrieval import *
 from .eng.Touche2020Retrieval import *
 from .eng.TRECCOVIDRetrieval import *
+from .est.estqa import *
 from .fra.AlloprofRetrieval import *
 from .fra.BSARDRetrieval import *
 from .fra.SyntecRetrieval import *
+from .hun.HunSum2 import *
 from .jpn.JaQuADRetrieval import *
 from .kor.KoMiracl import *
 from .kor.KoStrategyQA import *
