@@ -5,6 +5,7 @@ from .ara.RestaurantReviewSentimentClassification import *
 from .ara.TweetEmotionClassification import *
 from .ara.TweetSarcasmClassification import *
 from .ben.BengaliHateSpeechClassification import *
+from .bul.BulgarianSentimentClassification import *
 from .bul.BulgarianStoreReviewSentimentClassfication import *
 from .ces.CzechSubjectivityClassification import *
 from .dan.AngryTweetsClassification import *
@@ -25,6 +26,7 @@ from .hin.HindiDiscourseClassification import *
 from .hrv.CroatianSentimentClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ita.ItaHateClassification import *
+from .ita.ItalianLinguistAcceptabilityClassification import *
 from .jpn.WRIMEClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
 from .mlt.MalteseSentimentClassification import *
@@ -42,9 +44,11 @@ from .nob.NoRecClassification import *
 from .nob.NorwegianParliamentClassification import *
 from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
+from .slk.SlovakSentimentClassification import *
 from .swe.SweRecClassification import *
 from .tur.TurkishMovieSentimentClassification import *
 from .tur.TurkishProductSentimentClassification import *
+from .uig.UyghurSentimentClassification import *
 from .vie.VieStudentFeedbackClassification import *
 from .zho.CMTEBClassification import *
 from .zho.YueOpenriceReviewClassification import (

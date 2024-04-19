@@ -1,0 +1,28 @@
+{
+  "dataset_revision": "7f1d0674aff24ac2b8c3c216e9128ba0f91a5cf4",
+  "mteb_dataset_name": "WikiClusteringP2P",
+  "mteb_version": "1.6.8",
+  "test": {
+    "da": {
+      "main_score": 0.208703723380471,
+      "v_measure": 0.208703723380471,
+      "v_measure_std": 0.0053354626858436146
+    },
+    "evaluation_time": 6921.89,
+    "gv": {
+      "main_score": 0.33919581633902696,
+      "v_measure": 0.33919581633902696,
+      "v_measure_std": 0.009884179157398467
+    },
+    "lv": {
+      "main_score": 0.17697386668241943,
+      "v_measure": 0.17697386668241943,
+      "v_measure_std": 0.010786696689272759
+    },
+    "sq": {
+      "main_score": 0.3191568682002431,
+      "v_measure": 0.3191568682002431,
+      "v_measure_std": 0.013872366324268859
+    }
+  }
+}
