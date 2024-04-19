@@ -7,10 +7,10 @@ from pydantic import BaseModel, ValidationError, conint, constr, field_validator
 # Define a Pydantic model to represent each JSON object
 class JsonObject(BaseModel):
     GitHub: constr(min_length=1)
-    New_dataset: conint(ge=2, le=6) = None
+    New_dataset: conint(ge=2) = None
     New_task: conint(ge=2) = None
     Dataset_annotations: conint(ge=1) = None
-    Bug_fixes: conint(ge=2, le=10) = None
+    Bug_fixes: conint(ge=2) = None
     Running_Models: conint(ge=1) = None
     Review_PR: conint(ge=2) = None
     Paper_Writing: int = None
