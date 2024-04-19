@@ -19,7 +19,7 @@ class RonSTS(AbsTaskSTS):
         eval_splits=["test"],
         eval_langs=["ron-Latn"],
         main_score="cosine_spearman",
-        date=('2020-01-01', '2021-01-31'),
+        date=("2020-01-01", "2021-01-31"),
         form=["written"],
         domains=["News", "Social", "Web"],  # web for image captions
         task_subtypes=None,
