@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Dict, List, Tuple
 
+import pandas as pd
 import torch
 
 
@@ -189,3 +190,59 @@ def top_k_accuracy(
         logging.info("Accuracy@{}: {:.4f}".format(k, top_k_acc[f"Accuracy@{k}"]))
 
     return top_k_acc
+
+
+def get_rank_from_dict(
+    dict_of_results: dict[str, float], doc_id: str
+) -> Tuple[int, float]:
+    tuple_of_id_score = dict_of_results.items()
+    sorted_by_score = sorted(tuple_of_id_score, key=lambda x: x[1], reverse=True)
+    for i, (id, score) in enumerate(sorted_by_score):
+        if id == doc_id:
+            return i + 1, score
+
+    return len(sorted_by_score) + 1, 0
+
+
+def evaluate_change(
+    original_run: dict[str, dict[str, float]],
+    new_run: dict[str, dict[str, float]],
+    changed_qrels: dict[str, List[str]],
+) -> dict[str, float]:
+    changes = []
+    for qid in changed_qrels.keys():
+        original_qid_run = original_run[qid]
+        new_qid_run = new_run[qid]
+        for idx, changed_doc in enumerate(changed_qrels[qid]):
+            original_rank, original_score = get_rank_from_dict(
+                original_qid_run, changed_doc
+            )
+            new_rank, new_score = get_rank_from_dict(new_qid_run, changed_doc)
+            change = int(original_rank - new_rank)
+            changes.append(
+                {
+                    "qid": qid,
+                    "doc_id": changed_doc,
+                    "change": change,
+                    "relevance": 0,
+                    "og_rank": original_rank,
+                    "new_rank": new_rank,
+                    "og_score": original_score,
+                    "new_score": new_score,
+                }
+            )
+
+    # we now have a DF of [qid, doc_id, change] to run our calculations with
+    changes_df = pd.DataFrame(changes)
+    changes_df["p-MRR"] = changes_df.apply(lambda x: rank_score(x), axis=1)
+    qid_wise = changes_df.groupby("qid").agg({"p-MRR": "mean"})
+    return {
+        "p-MRR": qid_wise["p-MRR"].mean(),
+    }
+
+
+def rank_score(x: dict[str, float]) -> float:
+    if x["og_rank"] >= x["new_rank"]:
+        return ((1 / x["og_rank"]) / (1 / x["new_rank"])) - 1
+    else:
+        return 1 - ((1 / x["new_rank"]) / (1 / x["og_rank"]))
