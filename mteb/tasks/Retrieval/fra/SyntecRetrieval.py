@@ -59,9 +59,7 @@ class SyntecRetrieval(AbsTaskRetrieval):
 
         corpus_raw = corpus_raw[eval_split]
         corpus_raw = corpus_raw.rename_column("content", "text")
-        self.corpus = {
-            eval_split: {str(row["id"]): row for row in corpus_raw}
-        }
+        self.corpus = {eval_split: {str(row["id"]): row for row in corpus_raw}}
 
         self.relevant_docs = {
             eval_split: {
