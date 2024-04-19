@@ -4,7 +4,7 @@
 
 ```
 {"GitHub": "GitHubUser1", "New dataset": 6}
-{"GitHub": "Review PR": 2}
+{"GitHub": "GitHubUser2", "Review PR": 2}
 ```
 
 The file should be named after the PR number. E.g. `438.jsonl`, where 438 is the PR number.
@@ -17,7 +17,7 @@ The possible keys to include is:
     "New dataset": 2-6,  # 2 points for the dataset and 4 points for the task
     "New task": 2, # e.g. a new style of task (e.g. classification, or retrieval)
     "Dataset annotations": 1, # 1 point for each full dataset annotation
-    "(Bug)fixes": 2-10, # depends on the complexity of the fix
+    "Bug fixes": 2-10, # depends on the complexity of the fix
     "Running Models": 1, # pr model run
     "Review PR": 2, # two points pr. reviewer, can be given to multiple reviewers
     "Paper Writing": NA, 
