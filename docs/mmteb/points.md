@@ -2,22 +2,22 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 38        |                |          |             5 |
+| KennethEnevoldsen |              | 54          |          |                   8 |         18 |                | 70        |                |          |             5 |
 | x-tabdeveloping   |              | 48          |          |                     |            |                |           |                |          |               |
-| imenelydiaker     |              | 88          |          |                     |          3 |                | 18        |                |          |               |
-| wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
+| imenelydiaker     |              | 88          |          |                     |          3 |                | 36        |                |          |               |
+| wissam-sib        |              | 88          |          |                     |            |                | 2         |                |          |               |
 | GabrielSequeira   |              | 88          |          |                     |            |                |           |                |          |               |
 | schmarion         |              | 88          |          |                     |            |                |           |                |          |               |
 | MathieuCiancone   |              | 88          |          |                     |            |                |           |                |          |               |
-| Sakshamrzt        |              | 10          |          |                     |            |                | 2         |                |          |               |
-| MartinBernstorff  |              | 2           |          |                     | 7          |                | 4         |                |          |               |
+| Sakshamrzt        |              | 10          |          |                     |            |                | 4         |                |          |               |
+| MartinBernstorff  |              | 2           |          |                     | 7          |                | 8         |                |          |               |
 | guenthermi        |              | 12          |          |                     |            |                |           |                |          |               |
-| Muennighoff       |              |             |          |                     |            |                | 8         |                |          |               |
+| Muennighoff       |              |             |          |                     |            |                | 16        |                |          |               |
 | rasdani           |              | 4           |          |                     |            |                |           |                |          |               |
-| PhilipMay         |              |             |          |                     |            |                | 1         |                |          |               |
+| PhilipMay         |              |             |          |                     |            |                | 2         |                |          |               |
 | slvnwhrl          |              | 12          |          |                     |            |                |           |                |          |               |
 | staoxiao          |              | 50          |          |                     |            |                |           |                |          |               |
-| NouamaneTazi      |              |             |          |                     |            |                | 1         |                |          |               |
+| NouamaneTazi      |              |             |          |                     |            |                | 2         |                |          |               |
 | rafalposwiata     |              | 32          |          |                     |            |                |           |                |          |               |
 | violenil          |              | 26          |          |                     |            |                |           |                |          |               |
 | hanhainebula      |              | 2           |          |                     |            |                |           |                |          |               |
@@ -29,10 +29,10 @@
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
 | orionw            |              |             |          |                     |      14    |                |           |                |          |               |
 | mmhamdy           |              | 14          |          |                     |            |                |           |                |          |               |
-| manandey          |              | 12          |          |                     |            |                |           |                |          |               |
-| isaac-chung       |              | 36          |          |                     |            |                | 8         |                |          |               |
+| manandey          |              | 18          |          |                     |            |                |           |                |          |               |
+| isaac-chung       |              | 36          |          |                     |            |                | 12        |                |          |               |
 | asparius          |              | 8           |          |                     |            |                |           |                |          |               |
-| rbroc             |              | 6           |          |                     |            |                |           |                |          |               |
+| rbroc             |              | 12          |          |                     |            |                |           |                |          |               |
 | dwzhu-pku         |              | 12          |          |                     |            |                |           |                |          |               |
 
 
@@ -65,4 +65,5 @@ First name and last name are as you want them to appear in a publication.
 | isaac-chung       | Isaac      | Chung      | chungisaac1217@gmail.com     | ~Isaac_Kwan_Yin_Chung1 | N/A                                                 |
 | asparius          | Ömer       | Çağatan    | ocagatan19@ku.edu.tr         | ~Ömer_Veysel_Çağatan1 | Koç University,Turkey                                |
 | rafalposwiata     | Rafał      | Poświata   | rposwiata@opi.org.pl         | ~Rafał_Poświata1     | National Information Processing Institute, Warsaw, Poland |
+| rbroc             | Roberta    | Rocca      | roberta.rocca@cas.au.dk      | ~Roberta_Rocca1      | Aarhus University, Denmark                            |
 
