@@ -17,7 +17,7 @@ class SlovakSentimentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
-        eval_splits=["test"],
+        eval_splits=["validation", "test"],
         eval_langs=["slk-Cyrs"],
         main_score="accuracy",
         date=("2022-08-01", "2022-08-01"),
@@ -30,7 +30,30 @@ class SlovakSentimentClassification(AbsTaskClassification):
         dialect=[],
         text_creation="found",
         bibtex_citation="""
+        @inproceedings{mollanorozy-etal-2023-cross,
+    title = "Cross-lingual Transfer Learning with \{P\}ersian",
+    author = "Mollanorozy, Sepideh  and
+      Tanti, Marc  and
+      Nissim, Malvina",
+    editor = "Beinborn, Lisa  and
+      Goswami, Koustava  and
+      Murado{\\u{g}}lu, Saliha  and
+      Sorokin, Alexey  and
+      Kumar, Ritesh  and
+      Shcherbakov, Andreas  and
+      Ponti, Edoardo M.  and
+      Cotterell, Ryan  and
+      Vylomova, Ekaterina",
+    booktitle = "Proceedings of the 5th Workshop on Research in Computational Linguistic Typology and Multilingual NLP",
+    month = may,
+    year = "2023",
+    address = "Dubrovnik, Croatia",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.sigtyp-1.9",
+    doi = "10.18653/v1/2023.sigtyp-1.9",
+    pages = "89--95",
+}
         """,
-        n_samples={"train": N_SAMPLES, "validation": 522, "test": 1040},
-        avg_character_length={"train": 87.96, "validation": 84.96, "test": 91.95},
+        n_samples={"validation": 522, "test": 1040},
+        avg_character_length={"validation": 84.96, "test": 91.95},
     )
