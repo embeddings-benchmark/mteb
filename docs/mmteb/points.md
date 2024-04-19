@@ -32,7 +32,7 @@
 | manandey          |              | 18          |          |                     |            |                |           |                |          |               |
 | isaac-chung       |              | 36          |          |                     |            |                | 10        |                |          |               |
 | asparius          |              | 8           |          |                     |            |                |           |                |          |               |
-| rbroc             |              | 6           |          |                     |            |                |           |                |          |               |
+| rbroc             |              | 12          |          |                     |            |                |           |                |          |               |
 | dwzhu-pku         |              | 12          |          |                     |            |                |           |                |          |               |
 
 
@@ -65,4 +65,5 @@ First name and last name are as you want them to appear in a publication.
 | isaac-chung       | Isaac      | Chung      | chungisaac1217@gmail.com     | ~Isaac_Kwan_Yin_Chung1 | N/A                                                 |
 | asparius          | Ömer       | Çağatan    | ocagatan19@ku.edu.tr         | ~Ömer_Veysel_Çağatan1 | Koç University,Turkey                                |
 | rafalposwiata     | Rafał      | Poświata   | rposwiata@opi.org.pl         | ~Rafał_Poświata1     | National Information Processing Institute, Warsaw, Poland |
+| rbroc             | Roberta    | Rocca      | roberta.rocca@cas.au.dk      | ~Roberta_Rocca1      | Aarhus University, Denmark                            |
 
