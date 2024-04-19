@@ -1,15 +1,25 @@
 {
   "dataset_revision": "92ba517dfd22f6334111ad84154d16a2890f5b1d",
   "mteb_dataset_name": "PersianFoodSentimentClassification",
-  "mteb_version": "1.6.8",
+  "mteb_version": "1.6.23",
   "test": {
-    "accuracy": 0.754157142857143,
-    "accuracy_stderr": 0.02678870078588953,
-    "ap": 0.6996761337233558,
-    "ap_stderr": 0.030817672824351335,
-    "evaluation_time": 257.99,
-    "f1": 0.7516360065660039,
-    "f1_stderr": 0.028930872253797677,
-    "main_score": 0.754157142857143
+    "accuracy": 0.76162109375,
+    "accuracy_stderr": 0.029608370076944144,
+    "ap": 0.7107301145647525,
+    "ap_stderr": 0.034055419244529754,
+    "evaluation_time": 12.65,
+    "f1": 0.7591600296974221,
+    "f1_stderr": 0.03217369721760639,
+    "main_score": 0.76162109375
+  },
+  "validation": {
+    "accuracy": 0.7482421875,
+    "accuracy_stderr": 0.027419676950723386,
+    "ap": 0.6907767680040339,
+    "ap_stderr": 0.03010830629103603,
+    "evaluation_time": 19.97,
+    "f1": 0.745168999799412,
+    "f1_stderr": 0.029181618331629827,
+    "main_score": 0.7482421875
   }
 }
