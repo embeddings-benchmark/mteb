@@ -42,12 +42,13 @@ url = {https://doi.org/10.7910/DVN/TXIK9P}
     )
 
     def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns({"Review": "text", "Category": "label"})
-        
+        self.dataset = self.dataset.rename_columns(
+            {"Review": "text", "Category": "label"}
+        )
+
         labels = self.dataset["train"]["label"]
         lab2idx = {lab: idx for idx, lab in enumerate(sorted(set(labels)))}
 
         self.dataset = self.dataset.map(
-            lambda x: {"label": lab2idx[x["label"]]},
-            remove_columns=["label"]
+            lambda x: {"label": lab2idx[x["label"]]}, remove_columns=["label"]
         )
