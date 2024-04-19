@@ -1,1 +1,0 @@
-{"model_name": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", "versions": {"sentence_transformers": "2.0.0", "transformers": "4.7.0", "pytorch": "1.9.0+cu102"}}
