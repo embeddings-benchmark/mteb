@@ -29,7 +29,7 @@
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
 | orionw            |              |             |          |                     |      14    |                |           |                |          |               |
 | mmhamdy           |              | 14          |          |                     |            |                |           |                |          |               |
-| manandey          |              | 12          |          |                     |            |                |           |                |          |               |
+| manandey          |              | 18          |          |                     |            |                |           |                |          |               |
 | isaac-chung       |              | 36          |          |                     |            |                | 8         |                |          |               |
 | asparius          |              | 8           |          |                     |            |                |           |                |          |               |
 | rbroc             |              | 6           |          |                     |            |                |           |                |          |               |
