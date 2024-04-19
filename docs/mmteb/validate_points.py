@@ -29,7 +29,6 @@ def validate_jsonl_files(folder_path):
     for filename in os.listdir(folder_path):
         if filename.endswith(".jsonl"):
             file_path = os.path.join(folder_path, filename)
-            print("Validating file:", file_path)
             with open(file_path, "r", encoding="utf-8") as file:
                 try:
                     # Read JSONL file
@@ -39,11 +38,9 @@ def validate_jsonl_files(folder_path):
                             # Validate JSON object against schema
                             JsonObject(**line)
                         except ValidationError as e:
-                            print("Validation Error in file:", file_path)
-                            print(e)
+                            print("Validation Error in file:", file_path, e)
                 except Exception as e:
-                    print("Error reading file:", file_path)
-                    print(e)
+                    print("Error reading file:", file_path, e)
 
 
 # Main function
