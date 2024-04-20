@@ -31,7 +31,7 @@ class IsiZuluNewsClassification(AbsTaskClassification):
         text_creation="found",
         bibtex_citation="""@article{Madodonga_Marivate_Adendorff_2023, title={Izindaba-Tindzaba: Machine learning news categorisation for Long and Short Text for isiZulu and Siswati}, volume={4}, url={https://upjournals.up.ac.za/index.php/dhasa/article/view/4449}, DOI={10.55492/dhasa.v4i01.4449}, author={Madodonga, Andani and Marivate, Vukosi and Adendorff, Matthew}, year={2023}, month={Jan.} }
         """,
-        n_samples={"train": 752,},
+        n_samples={"train": 752},
         avg_character_length={"train": 43.1},
     )
 
