@@ -57,3 +57,4 @@ from .zho.CMTEBClassification import *
 from .zho.YueOpenriceReviewClassification import (
     YueOpenriceReviewClassification,  # noqa: F401
 )
+from .zul.isiZuluNewsClassification import *
