@@ -40,14 +40,13 @@ def extend_lang_pairs() -> dict[str, list[str]]:
     # add all possible language pairs
     hf_lang_subset2isolang = {}
     for x in _LANGUAGES:
-        if "-" not in x:
-            for y in _LANGUAGES:
-                if x != y:
-                    pair = f"{x}-{y}"
-                    hf_lang_subset2isolang[pair] = [
-                        x.replace("_", "-"),
-                        y.replace("_", "-"),
-                    ]
+        for y in _LANGUAGES:
+            if x != y:
+                pair = f"{x}-{y}"
+                hf_lang_subset2isolang[pair] = [
+                    x.replace("_", "-"),
+                    y.replace("_", "-"),
+                ]
     return hf_lang_subset2isolang
 
 
@@ -62,7 +61,7 @@ class IN22GenBitextMining(AbsTaskBitextMining, CrosslingualTask):
             "revision": "e92afc34c61104b9b06e4de33cfcaccf6af6a46a",
             "trust_remote_code": True,
         },
-        description="IN22-Gen is a general-purpose multi-domain benchmark dataset for machine translation between English and 22 Indic languages.",
+        description="IN22-Gen is a n-way parallel general-purpose multi-domain benchmark dataset for machine translation spanning English and 22 Indic languages.",
         reference="https://huggingface.co/datasets/ai4bharat/IN22-Gen",
         type="BitextMining",
         category="s2s",
