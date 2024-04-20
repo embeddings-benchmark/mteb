@@ -58,18 +58,21 @@ class FQuADRetrieval(AbsTaskRetrieval):
         self.queries = {
             eval_split: {
                 str(i): q["question"] for i, q in enumerate(dataset_raw[eval_split])
-            } for eval_split in self.metadata_dict["eval_splits"]
+            }
+            for eval_split in self.metadata_dict["eval_splits"]
         }
 
-        self.corpus = {eval_split: {str(row["title"]): row for row in dataset_raw[eval_split]}
-                       for eval_split in self.metadata_dict["eval_splits"]
-                       }
+        self.corpus = {
+            eval_split: {str(row["title"]): row for row in dataset_raw[eval_split]}
+            for eval_split in self.metadata_dict["eval_splits"]
+        }
 
         self.relevant_docs = {
             eval_split: {
                 str(i): {str(q["title"]): 1}
                 for i, q in enumerate(dataset_raw[eval_split])
-            } for eval_split in self.metadata_dict["eval_splits"]
+            }
+            for eval_split in self.metadata_dict["eval_splits"]
         }
 
         self.data_loaded = True
