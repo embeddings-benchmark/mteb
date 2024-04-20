@@ -34,3 +34,6 @@ class IsiZuluNewsClassification(AbsTaskClassification):
         n_samples={"train": 752,},
         avg_character_length={"train": 43.1},
     )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_columns({"title": "text"})
