@@ -4,6 +4,7 @@ from .ara.HotelReviewSentimentClassification import *
 from .ara.RestaurantReviewSentimentClassification import *
 from .ara.TweetEmotionClassification import *
 from .ara.TweetSarcasmClassification import *
+from .bam.BambaraSentimentClassification import *
 from .ben.BengaliHateSpeechClassification import *
 from .bul.BulgarianSentimentClassification import *
 from .bul.BulgarianStoreReviewSentimentClassfication import *
