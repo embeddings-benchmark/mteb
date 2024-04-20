@@ -5,6 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
+
 class GreekLegalCodeClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="GreekLegalCodeClassification",
@@ -13,7 +14,7 @@ class GreekLegalCodeClassification(AbsTaskClassification):
         dataset={
             "path": "AI-team-UoA/greek_legal_code",
             "revision": "de0fdb34424f07d1ac6f0ede23ee0ed44bd9f5d1",
-            "name": "chapter"
+            "name": "chapter",
         },
         type="Classification",
         category="s2s",
@@ -47,7 +48,9 @@ class GreekLegalCodeClassification(AbsTaskClassification):
 
     def dataset_transform(self):
         self.dataset["validation"] = (
-            self.dataset["validation"].shuffle(seed=self.seed).select(range(TEST_SAMPLES))
+            self.dataset["validation"]
+            .shuffle(seed=self.seed)
+            .select(range(TEST_SAMPLES))
         )
         self.dataset["test"] = (
             self.dataset["test"].shuffle(seed=self.seed).select(range(TEST_SAMPLES))
