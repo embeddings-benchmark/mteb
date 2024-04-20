@@ -14,6 +14,7 @@ from .dan.DalajClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
 from .dan.DKHateClassification import *
 from .dan.LccSentimentClassification import *
+from .ell.GreekSentimentClassification import *
 from .eng.AmazonPolarityClassification import *
 from .eng.Banking77Classification import *
 from .eng.EmotionClassification import *
@@ -57,3 +58,4 @@ from .zho.CMTEBClassification import *
 from .zho.YueOpenriceReviewClassification import (
     YueOpenriceReviewClassification,  # noqa: F401
 )
+from .zul.IsiZuluNewsClassification import *
