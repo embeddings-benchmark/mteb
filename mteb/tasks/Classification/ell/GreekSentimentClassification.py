@@ -4,7 +4,6 @@ from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-
 class GreekSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="GreekSentimentClassification",
@@ -28,7 +27,31 @@ class GreekSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="""
+        @inproceedings{mollanorozy-etal-2023-cross,
+    title = "Cross-lingual Transfer Learning with \{P\}ersian",
+    author = "Mollanorozy, Sepideh  and
+      Tanti, Marc  and
+      Nissim, Malvina",
+    editor = "Beinborn, Lisa  and
+      Goswami, Koustava  and
+      Murado{\\u{g}}lu, Saliha  and
+      Sorokin, Alexey  and
+      Kumar, Ritesh  and
+      Shcherbakov, Andreas  and
+      Ponti, Edoardo M.  and
+      Cotterell, Ryan  and
+      Vylomova, Ekaterina",
+    booktitle = "Proceedings of the 5th Workshop on Research in Computational Linguistic Typology and Multilingual NLP",
+    month = may,
+    year = "2023",
+    address = "Dubrovnik, Croatia",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.sigtyp-1.9",
+    doi = "10.18653/v1/2023.sigtyp-1.9",
+    pages = "89--95",
+}
+        """,
         n_samples={"validation": 383, "test": 767},
-        avg_character_length={"validation": 0, "test": 0},
+        avg_character_length={"validation": 208, "test": 206},
     )
