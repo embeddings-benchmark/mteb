@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class FQuADRetrieval(AbsTaskRetrieval):
-    _EVAL_SPLITS = ["test_hasAns", "valid_hasAns"]
+    _EVAL_SPLITS = ["test", "validation"]
 
     metadata = TaskMetadata(
         name="FQuADRetrieval",
@@ -23,25 +23,25 @@ class FQuADRetrieval(AbsTaskRetrieval):
         eval_splits=_EVAL_SPLITS,
         eval_langs=["fra-Latn"],
         main_score="map",
-        date=None,
-        form=None,
+        date=("2019-11-01", "2020-05-01"),
+        form=["written"],
         domains=["Encyclopaedic"],
-        task_subtypes=None,
+        task_subtypes=["Article retrieval"],
         license="apache-2.0",
-        socioeconomic_status=None,
-        annotations_creators=None,
+        socioeconomic_status="mixed",
+        annotations_creators="human-annotated",
         dialect=[],
         text_creation="created",
-        bibtex_citation="""@misc{faysse2024croissantllm,
-                      title={CroissantLLM: A Truly Bilingual French-English Language Model}, 
-                      author={Manuel Faysse and Patrick Fernandes and Nuno M. Guerreiro and António Loison and Duarte M. Alves and Caio Corro and Nicolas Boizard and João Alves and Ricardo Rei and Pedro H. Martins and Antoni Bigata Casademunt and François Yvon and André F. T. Martins and Gautier Viaud and Céline Hudelot and Pierre Colombo},
-                      year={2024},
-                      eprint={2402.00786},
-                      archivePrefix={arXiv},
-                      primaryClass={cs.CL}
-                }""",
+        bibtex_citation="""@misc{dhoffschmidt2020fquad,
+      title={FQuAD: French Question Answering Dataset}, 
+      author={Martin d'Hoffschmidt and Wacim Belblidia and Tom Brendlé and Quentin Heinrich and Maxime Vidal},
+      year={2020},
+      eprint={2002.06071},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
         n_samples={"test": 400, "validation": 100},
-        avg_character_length={"test": 700, "validation": 700},
+        avg_character_length={"test": 937, "validation": 930},
     )
 
     def load_data(self, **kwargs):
@@ -52,8 +52,16 @@ class FQuADRetrieval(AbsTaskRetrieval):
             **self.metadata_dict["dataset"],
         )
 
+        # set valid_hasAns as the validation split
+        dataset_raw["validation"] = dataset_raw["valid_hasAns"]
+        del dataset_raw["valid_hasAns"]
+
+        dataset_raw["test"] = dataset_raw["test_hasAns"]
+        del dataset_raw["test_hasAns"]
+
         # rename  context column to text
         dataset_raw = dataset_raw.rename_column("context", "text")
+
 
         self.queries = {
             eval_split: {
