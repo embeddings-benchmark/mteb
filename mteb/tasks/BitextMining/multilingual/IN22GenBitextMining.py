@@ -71,7 +71,7 @@ class IN22GenBitextMining(AbsTaskBitextMining, CrosslingualTask):
         main_score="f1",
         date=("2022-10-01", "2023-03-01"),
         form=["written"],
-        domains=["Web"],
+        domains=["Web", "Legal", "Government", "News", "Religious", "Non-fiction"],
         task_subtypes=[],
         license="CC-BY-4.0",
         socioeconomic_status="mixed",
