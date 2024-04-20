@@ -86,7 +86,7 @@ class DenseRetrievalExactSearch:
         logger.info("Sorting Corpus by document length (Longest first)...")
         corpus_ids = sorted(
             corpus,
-            key=lambda k: len(corpus[k].get("title", "") + corpus[k]["text"]),
+            key=lambda k: len(corpus[k].get("title", "") + corpus[k].get("text", "")),
             reverse=True,
         )
         corpus = [corpus[cid] for cid in corpus_ids]
