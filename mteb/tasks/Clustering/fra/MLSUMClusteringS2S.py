@@ -39,9 +39,7 @@ class MLSUMClusteringS2S(AbsTaskClustering):
     )
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub and convert it to the standard format.
-        """
+        """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return
         self.dataset = datasets.load_dataset(
@@ -54,9 +52,7 @@ class MLSUMClusteringS2S(AbsTaskClustering):
         self.data_loaded = True
 
     def dataset_transform(self):
-        """
-        Convert to standard format
-        """
+        """Convert to standard format"""
         self.dataset = self.dataset.remove_columns(["summary", "text", "url", "date"])
         new_format = {
             "sentences": [

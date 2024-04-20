@@ -7,10 +7,10 @@ TOL = 0.0001
 
 class TestRetrievalEvaluator:
     def setup_method(self):
-        """setup any state tied to the execution of the given method in a
-        class.  setup_method is invoked for every test method of a class.
-        """
+        """Setup any state tied to the execution of the given method in a class.
 
+        setup_method is invoked for every test method of a class.
+        """
         self.evaluator = RetrievalEvaluator()
 
     def test_metrics_at_k(self):

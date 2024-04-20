@@ -8,10 +8,11 @@ import torch
 
 
 def cos_sim(a, b):
-    """
-    Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
-    :return: Matrix with res[i][j]  = cos_sim(a[i], b[j])
-    """
+    """Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
+
+    Return:
+        Matrix with res[i][j]  = cos_sim(a[i], b[j])
+    """  # noqa: D402
     if not isinstance(a, torch.Tensor):
         a = torch.tensor(a)
 
@@ -30,8 +31,7 @@ def cos_sim(a, b):
 
 
 def dot_score(a: torch.Tensor, b: torch.Tensor):
-    """
-    Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
+    """Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
     :return: Matrix with res[i][j]  = dot_prod(a[i], b[j])
     """
     if not isinstance(a, torch.Tensor):
