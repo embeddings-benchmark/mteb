@@ -22,7 +22,10 @@ jobs:
           cache: "pip"
 
       - name: Install dependencies
-        run: make install
+        run: |
+          make install
+          pip install tabulate # for the table creation
+
 
       - name: Validate jsonl points files
         run: python docs/mmteb/validate_points.py
