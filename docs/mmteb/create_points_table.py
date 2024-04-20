@@ -24,7 +24,6 @@ def save_to_markdown(df: pd.DataFrame, file_path: Path) -> None:
     df["Total"] = df.sum(axis=1)
     # sort the dataframe by the total points
     df = df.sort_values("Total", ascending=False)
-    print(df)
 
     md = df.to_markdown()
     # add title
