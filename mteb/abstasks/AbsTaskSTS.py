@@ -9,8 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class AbsTaskSTS(AbsTask):
-    """
-    Abstract class for STS experiments.
+    """Abstract class for STS experiments.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns::
         sentence1: str

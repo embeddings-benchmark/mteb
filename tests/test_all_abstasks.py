@@ -67,8 +67,6 @@ async def check_datasets_are_available_on_hf(tasks):
 
 
 def test_dataset_availability():
-    """
-    Checks if the datasets are available on Hugging Face using both their name and revision.
-    """
+    """Checks if the datasets are available on Hugging Face using both their name and revision."""
     tasks = MTEB().tasks_cls
     asyncio.run(check_datasets_are_available_on_hf(tasks))
