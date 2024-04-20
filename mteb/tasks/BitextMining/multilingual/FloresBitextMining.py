@@ -265,9 +265,7 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
     )
 
     def load_data(self, **kwargs: Any) -> None:
-        """
-        Load dataset from HuggingFace hub
-        """
+        """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
         self.dataset = {}

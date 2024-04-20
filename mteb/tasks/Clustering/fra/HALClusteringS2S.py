@@ -37,9 +37,7 @@ class HALClusteringS2S(AbsTaskClustering):
     )
 
     def dataset_transform(self):
-        """
-        Convert to standard format
-        """
+        """Convert to standard format"""
         self.dataset = self.dataset.remove_columns("hal_id")
         titles = self.dataset["test"]["title"]
         domains = self.dataset["test"]["domain"]

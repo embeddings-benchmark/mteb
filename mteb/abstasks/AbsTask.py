@@ -27,16 +27,13 @@ class AbsTask(ABC):
         torch.cuda.manual_seed_all(self.seed)
 
     def dataset_transform(self):
-        """
-        Transform operations applied to the dataset after loading.
+        """Transform operations applied to the dataset after loading.
         Override this method if your dataset requires any transformation.
         """
         pass
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
+        """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
@@ -50,8 +47,7 @@ class AbsTask(ABC):
 
     @abstractmethod
     def evaluate(self, model, split="test"):
-        """
-        Evaluates a Sentence Embedding Model on the task.
+        """Evaluates a Sentence Embedding Model on the task.
         Returns a dict (that can be serialized to json).
         :param model: Sentence embedding method. Implements a encode(sentences) method, that encodes sentences
         and returns a numpy matrix with the sentence embeddings
@@ -61,14 +57,11 @@ class AbsTask(ABC):
 
     @property
     def languages(self) -> set[str]:
-        """
-        Returns the languages of the task
-        """
+        """Returns the languages of the task"""
         return self.metadata.languages
 
     def __repr__(self) -> str:
-        """
-        Format the representation of the task such that it appears as:
+        """Format the representation of the task such that it appears as:
 
         TaskObjectName(name='{name}', languages={lang1, lang2, ...})
         """

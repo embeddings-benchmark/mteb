@@ -1,5 +1,4 @@
-"""
-Merges CQADupstack subset results
+"""Merges CQADupstack subset results
 Usage: python merge_cqadupstack.py path_to_results_folder
 """
 

@@ -1,5 +1,4 @@
-"""
-Preparation (Scraping the data):
+"""Preparation (Scraping the data):
 pip install semeval_8_2022_ia_downloader
 python3 -m semeval_8_2022_ia_downloader.cli --links_file=semeval-2022_task8_train-data_batch.csv --dump_dir=train
 

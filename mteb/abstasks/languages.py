@@ -1,5 +1,4 @@
-"""
-Language codes (ISO 639-3) obtained from: https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3.tab
+"""Language codes (ISO 639-3) obtained from: https://iso639-3.sil.org/sites/iso639-3/files/downloads/iso-639-3.tab
 Script codes (ISO 15924) obtained from: https://unicode.org/iso15924/iso15924.txt
 """
 

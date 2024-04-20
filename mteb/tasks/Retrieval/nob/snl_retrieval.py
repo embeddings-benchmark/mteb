@@ -37,8 +37,7 @@ class SNLRetrieval(AbsTaskRetrieval):
     )
 
     def dataset_transform(self) -> None:
-        """
-        and transform to a retrieval datset, which have the following attributes
+        """And transform to a retrieval datset, which have the following attributes
 
         self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document datas like title and text
         self.queries = Dict[query_id, str] #id => query
