@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "55caf0e52693a1ea63b15a4980a73fc137fb862b",
+  "mteb_dataset_name": "IsiZuluNewsClassification",
+  "mteb_version": "1.6.12",
+  "train": {
+    "accuracy": 0.32273936170212764,
+    "accuracy_stderr": 0.01859849001717525,
+    "evaluation_time": 5.97,
+    "f1": 0.24860623758504694,
+    "f1_stderr": 0.011676300953201775,
+    "main_score": 0.32273936170212764
+  }
+}
