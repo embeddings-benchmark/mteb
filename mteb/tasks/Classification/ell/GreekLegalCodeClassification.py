@@ -3,15 +3,17 @@ from __future__ import annotations
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+TEST_SAMPLES = 2048
 
 class GreekLegalCodeClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="GreekLegalCodeClassification",
-        description="Greek Legal Code Dataset for Classification.",
+        description="Greek Legal Code Dataset for Classification. (subset = chapter)",
         reference="https://arxiv.org/abs/2109.15298",
         dataset={
             "path": "AI-team-UoA/greek_legal_code",
             "revision": "de0fdb34424f07d1ac6f0ede23ee0ed44bd9f5d1",
+            "name": "chapter"
         },
         type="Classification",
         category="s2s",
@@ -39,6 +41,14 @@ class GreekLegalCodeClassification(AbsTaskClassification):
     pages = "63--75"
 }
 """,
-        n_samples={"validation": 9511, "test": 9516},
+        n_samples={"validation": TEST_SAMPLES, "test": TEST_SAMPLES},
         avg_character_length={"validation": 4046.8, "test": 4200.8},
     )
+
+    def dataset_transform(self):
+        self.dataset["validation"] = (
+            self.dataset["validation"].shuffle(seed=self.seed).select(range(TEST_SAMPLES))
+        )
+        self.dataset["test"] = (
+            self.dataset["test"].shuffle(seed=self.seed).select(range(TEST_SAMPLES))
+        )
