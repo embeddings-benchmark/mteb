@@ -1,0 +1,42 @@
+# GitHub action for the mmteb contributions
+# this way the CI related to the mmteb contributions will be separated from the linting CI
+
+name: mmteb
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check-points:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.RELEASE }}
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: make install
+
+      - name: Validate jsonl points files
+        run: python docs/mmteb/validate_points.py
+
+      - name: Create table
+        run: python docs/mmteb/create_points_table.py
+
+        
+      - name: Push table
+        # only run on push to main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          git add docs/mmteb/points_table.md
+          git commit -m "Update points table"
+          git push
