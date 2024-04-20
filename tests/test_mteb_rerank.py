@@ -4,7 +4,7 @@ import json
 import logging
 import os
 
-from sentence_transformers import CrossEncoder, SentenceTransformer
+from sentence_transformers import CrossEncoder
 
 from mteb import MTEB
 
@@ -13,42 +13,7 @@ logging.basicConfig(level=logging.INFO)
 
 def test_mteb_rerank():
     """
-    Test that tasks can be fetched and run
-    """
-    model = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
-    eval = MTEB(tasks=["News21InstructionRetrieval"])
-    eval.run(
-        model,
-        output_folder="tests/results",
-        overwrite_results=True,
-        eval_split=["test"],
-        top_k=2,
-    )
-
-
-def test_mteb_rerank_first_stage_give_model():
-    """
-    Test that the first stage options work
-    """
-    model = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
-    eval = MTEB(
-        tasks=[
-            "NFCorpus",
-        ]
-    )
-    eval.run(
-        model,
-        output_folder="tests/results",
-        overwrite_results=True,
-        eval_split=["test"],
-        top_k=2,
-        first_stage=SentenceTransformer("all-MiniLM-L6-v2"),
-    )
-
-
-def test_mteb_rerank_first_stage_stored_results():
-    """
-    Test that the first stage options work
+    Test that reranking works
     """
     # unfortunately, we need all the query ids to pretend to have this
     scifact_keys = [
@@ -379,6 +344,6 @@ def test_mteb_rerank_first_stage_stored_results():
         overwrite_results=True,
         eval_splits=["test"],
         top_k=2,
-        first_stage="tmp.json",
+        previous_results="tmp.json",
     )
     os.remove("tmp.json")

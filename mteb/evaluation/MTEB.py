@@ -265,6 +265,9 @@ class MTEB:
         logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks:")
         self.print_selected_tasks()
         evaluation_results = {}
+        original_tasks = (
+            self.tasks.copy()
+        )  # save them in case we re-use the object (e.g. for reranking)
         while len(self.tasks) > 0:
             task = self.tasks[0]
             logger.info(
@@ -317,17 +320,6 @@ class MTEB:
                     if verbosity >= 1:
                         logger.info(f"Scores: {results}")
 
-                # if the model is a reranker, get the first stage model info
-                if "first_stage" in kwargs:
-                    first_stage_model = kwargs["first_stage"]
-                    if isinstance(first_stage_model, str):
-                        # can't get more specific than the class name because it's unknown
-                        task_results["first_stage_model"] = (
-                            str(first_stage_model.__class__.__name__) + " (unknown)"
-                        )
-                    else:
-                        task_results["first_stage_model"] = first_stage_model
-
                 # save results
                 if output_folder is not None:
                     with open(save_path, "w") as f_out:
@@ -352,4 +344,6 @@ class MTEB:
             # empty memory
             del self.tasks[0]
 
+        # restore original tasks
+        self.tasks = original_tasks
         return evaluation_results
