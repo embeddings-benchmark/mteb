@@ -62,7 +62,6 @@ class FQuADRetrieval(AbsTaskRetrieval):
         # rename  context column to text
         dataset_raw = dataset_raw.rename_column("context", "text")
 
-
         self.queries = {
             eval_split: {
                 str(i): q["question"] for i, q in enumerate(dataset_raw[eval_split])
