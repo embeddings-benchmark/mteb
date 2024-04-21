@@ -6,6 +6,7 @@ name: mmteb
 on:
   push:
     branches: [main]
+  pull_request:
 
 jobs:
   check-points:
@@ -29,10 +30,13 @@ jobs:
       - name: Validate jsonl points files
         run: python docs/mmteb/validate_points.py
 
+  create-table:
+    runs-on: ubuntu-latest
+    needs: check-points
+    steps:
       - name: Create table
         run: python docs/mmteb/create_points_table.py
-
-        
+    
       - name: Push table
         # only run on push to main
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
