@@ -21,7 +21,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          make install
+          pip install jsonlines pydantic
 
       - name: Validate jsonl points files
         run: python docs/mmteb/validate_points.py
@@ -43,8 +43,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          make install
-          pip install tabulate # for the table creation
+          pip install pandas tabulate # for the table creation
 
       - name: Create table
         run: python docs/mmteb/create_points_table.py
@@ -53,7 +52,12 @@ jobs:
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          # check if the branch is up to date with the remote if not push the changes
-          git add docs/mmteb/points_table.md
-          git diff-index --quiet HEAD || git commit -m "Update points table" && git push
+          # Check if changes exist in points_table.md
+          if git diff --quiet; then
+            echo "No changes detected"
+          else
+            git add docs/mmteb/points_table.md
+            git commit -m "Update points table"
+            git push
+          fi
           
