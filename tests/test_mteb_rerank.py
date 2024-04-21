@@ -333,6 +333,7 @@ def test_mteb_rerank():
                         # just two random documents so we can see it works
                         "4983": 0.1,
                         "18670": 0.9,
+                        "19238": 0.01,
                     }
                     for i in scifact_keys
                 }
@@ -345,5 +346,15 @@ def test_mteb_rerank():
         eval_splits=["test"],
         top_k=2,
         previous_results="tmp.json",
+        save_qrels=True,
     )
     os.remove("tmp.json")
+
+    # read in the results
+    with open("tests/results/SciFact_qrels.json") as f:
+        results = json.load(f)
+
+    # check that only the top two results are re-orderd
+    assert "19238" not in results["1"]
+    assert "4983" in results["1"]
+    assert "18670" in results["1"]

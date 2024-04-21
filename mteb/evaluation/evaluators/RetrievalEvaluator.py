@@ -191,7 +191,8 @@ class DenseRetrievalExactSearch:
             Note: you must provide the path to the results to rerank to the __init__ function as `previous_results`
         """
         pairs = []  # create the pairs for reranking
-        for qid, q_results in self.previous_results.items():
+        for qid in queries.keys():
+            q_results = self.previous_results[qid]
             # take the top-k only
             q_results_sorted = {
                 k: v
