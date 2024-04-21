@@ -27,7 +27,7 @@ class Encoder(Protocol):
 
 
 class EncoderWithQueryCorpusEncode(Encoder, Protocol):
-    """The interface for an encoder that supports encoding a queries and a corpus."""
+    """The interface for an encoder that supports encoding queries and a corpus."""
 
     def encode_queries(
         self, queries: list[str], prompt: str, **kwargs: Any
