@@ -1,0 +1,29 @@
+{
+  "conv": {
+    "brx_Deva-ory_Orya": {
+      "accuracy": 0.016722408026755852,
+      "f1": 0.009672375091449775,
+      "main_score": 0.009672375091449775,
+      "precision": 0.008638671828327,
+      "recall": 0.016722408026755852
+    },
+    "doi_Deva-sat_Olck": {
+      "accuracy": 0.0013360053440213762,
+      "f1": 4.026009370030746e-05,
+      "main_score": 4.026009370030746e-05,
+      "precision": 2.0520040427957616e-05,
+      "recall": 0.0013360053440213762
+    },
+    "evaluation_time": 5.83,
+    "snd_Deva-mni_Mtei": {
+      "accuracy": 0.004032258064516129,
+      "f1": 0.000516737859161099,
+      "main_score": 0.000516737859161099,
+      "precision": 0.00030211094954019817,
+      "recall": 0.004032258064516129
+    }
+  },
+  "dataset_revision": "189b3d92cfbde4ddb3514223a256eb78b1aca60f",
+  "mteb_dataset_name": "IN22ConvBitextMining",
+  "mteb_version": "1.7.4"
+}

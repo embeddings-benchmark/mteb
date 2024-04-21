@@ -4,6 +4,7 @@ from .dan.BornholmskBitextMining import *
 from .multilingual.BUCCBitextMining import *
 from .multilingual.DiaBLaBitextMining import *
 from .multilingual.FloresBitextMining import *
+from .multilingual.IN22ConvBitextMining import *
 from .multilingual.IN22GenBitextMining import *
 from .multilingual.norwegian_courts_bitext_mining import *
 from .multilingual.NorwegianCourtsBitextMining import *
