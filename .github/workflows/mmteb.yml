@@ -27,6 +27,8 @@ jobs:
         run: python docs/mmteb/validate_points.py
 
   create-table:
+    # only run on push to main
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: check-points
     steps:
@@ -48,8 +50,6 @@ jobs:
         run: python docs/mmteb/create_points_table.py
     
       - name: Push table
-        # only run on push to main
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
