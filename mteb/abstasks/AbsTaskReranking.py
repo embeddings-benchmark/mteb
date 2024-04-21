@@ -5,8 +5,7 @@ from .AbsTask import AbsTask
 
 
 class AbsTaskReranking(AbsTask):
-    """
-    Abstract class for re-ranking experiments.
+    """Abstract class for re-ranking experiments.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
         query: str

@@ -214,8 +214,7 @@ class HFDataLoaderInstructions(HFDataLoader):
 
 
 class AbsTaskInstructionRetrieval(AbsTask):
-    """
-    Abstract class for retrieval tasks that use instructions. An example from Core17 would be
+    """Abstract class for retrieval tasks that use instructions. An example from Core17 would be
         query: What is the ongoing status of The Three Gorges Project?
         instruction: A relevant document will provide the projected or actual date of completion of the project, its estimated or actual total cost, or the estimated or ongoing electrical output of the finished project. Discussions of the social, political, or ecological impact of the project are not relevant.
 

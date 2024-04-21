@@ -4,6 +4,7 @@ from .ara.HotelReviewSentimentClassification import *
 from .ara.RestaurantReviewSentimentClassification import *
 from .ara.TweetEmotionClassification import *
 from .ara.TweetSarcasmClassification import *
+from .bam.BambaraSentimentClassification import *
 from .ben.BengaliHateSpeechClassification import *
 from .bul.BulgarianSentimentClassification import *
 from .bul.BulgarianStoreReviewSentimentClassfication import *
@@ -13,6 +14,7 @@ from .dan.DalajClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
 from .dan.DKHateClassification import *
 from .dan.LccSentimentClassification import *
+from .ell.GreekSentimentClassification import *
 from .eng.AmazonPolarityClassification import *
 from .eng.Banking77Classification import *
 from .eng.EmotionClassification import *
@@ -56,3 +58,4 @@ from .zho.CMTEBClassification import *
 from .zho.YueOpenriceReviewClassification import (
     YueOpenriceReviewClassification,  # noqa: F401
 )
+from .zul.IsiZuluNewsClassification import *

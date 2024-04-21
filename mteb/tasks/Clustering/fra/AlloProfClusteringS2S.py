@@ -38,9 +38,7 @@ class AlloProfClusteringS2S(AbsTaskClustering):
     )
 
     def dataset_transform(self):
-        """
-        Convert to standard format
-        """
+        """Convert to standard format"""
         self.dataset = self.dataset.remove_columns("uuid")
         self.dataset = self.dataset.remove_columns("text")
         titles = self.dataset["documents"]["title"]

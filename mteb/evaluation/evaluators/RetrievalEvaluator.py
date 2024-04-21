@@ -263,8 +263,7 @@ class DenseRetrievalExactSearch:
 
 
 class DRESModel:
-    """
-    Dense Retrieval Exact Search (DRES) requires an encode_queries & encode_corpus method.
+    """Dense Retrieval Exact Search (DRES) requires an encode_queries & encode_corpus method.
     This class converts a model with just an .encode method into DRES format.
     """
 

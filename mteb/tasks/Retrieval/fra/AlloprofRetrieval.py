@@ -14,7 +14,7 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/antoinelb7/alloprof",
         dataset={
             "path": "lyon-nlp/alloprof",
-            "revision": "2df7bee4080bedf2e97de3da6bd5c7bc9fc9c4d2",
+            "revision": "fcf295ea64c750f41fadbaa37b9b861558e1bfbd",
         },
         type="Retrieval",
         category="s2p",
@@ -53,7 +53,7 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         }
         self.corpus = {
             eval_split: {
-                str(d["uuid"]): {"text": d["text"]} for d in corpus_raw["documents"]
+                str(d["uuid"]): {"text": d["text"]} for d in corpus_raw[eval_split]
             }
         }
 
