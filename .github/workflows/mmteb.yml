@@ -54,5 +54,6 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
           # check if the branch is up to date with the remote if not push the changes
-          git diff --exit-code || git add docs/mmteb/points_table.md && git commit -m "Update points table" && git push
+          git add docs/mmteb/points_table.md
+          git diff-index --quiet HEAD || git commit -m "Update points table" && git push
           
