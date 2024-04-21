@@ -18,6 +18,10 @@ jobs:
         with:
           python-version: "3.8"
           cache: "pip"
+      
+      - name: Install dependencies
+        run: |
+          make install
 
       - name: Validate jsonl points files
         run: python docs/mmteb/validate_points.py
