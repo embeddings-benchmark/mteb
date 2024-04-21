@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "28d7098e2e5a211c4810d0a4d8deccc5889e55b6",
+  "mteb_dataset_name": "PolHateClassification",
+  "mteb_version": "1.6.37",
+  "test": {
+    "accuracy": 0.5975366876310272,
+    "accuracy_stderr": 0.03321995439023267,
+    "ap": 0.3412239415793624,
+    "ap_stderr": 0.019981827582053593,
+    "evaluation_time": 9.24,
+    "f1": 0.5617590875987502,
+    "f1_stderr": 0.029926536406602405,
+    "main_score": 0.5975366876310272
+  }
+}

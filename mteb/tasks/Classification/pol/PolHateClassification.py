@@ -68,16 +68,7 @@ class PolHateClassification(AbsTaskClassification):
         self.dataset = self.dataset.class_encode_column("label")
         self.dataset = self.dataset.class_encode_column("functionality")
         self.dataset = self.dataset["test"].train_test_split(
-            test_size=0.5, seed=42, stratify_by_column="functionality"
+            test_size=0.5, seed=self.seed, stratify_by_column="label"
         )  # balanced sampling across types of hate speech
         self.dataset = self.dataset.remove_columns(remove_cols)
 
-
-if __name__ == "__main__":
-    from sentence_transformers import SentenceTransformer
-    from mteb import MTEB
-    # Define the sentence-transformers model name
-    model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-    model = SentenceTransformer(model_name)
-    evaluation = MTEB(tasks=[PolHateClassification()])
-    evaluation.run(model)
