@@ -69,7 +69,7 @@ class TedTalksBitextMining(AbsTaskBitextMining, CrosslingualTask):
         date=("2022-11-01", "2022-11-01"),
         form=["written"],
         domains=["News"],
-        task_subtypes=None,
+        task_subtypes=[],
         license="CC-BY-SA-4.0",
         socioeconomic_status="medium",
         annotations_creators="expert-annotated",
