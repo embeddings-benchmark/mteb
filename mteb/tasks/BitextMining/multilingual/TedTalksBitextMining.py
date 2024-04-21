@@ -165,10 +165,9 @@ class TedTalksBitextMining(AbsTaskBitextMining, CrosslingualTask):
     def dataset_transform(self) -> None:
         for lang in self.langs:
             l1, l2 = lang.split("-")
-            for split in _SPLIT:
-                self.dataset[lang][split] = self.dataset[lang][split].rename_column(
-                    _ISO6393_to_ISO6391[l1], "sentence1"
-                )
-                self.dataset[lang][split] = self.dataset[lang][split].rename_column(
-                    _ISO6393_to_ISO6391[l2], "sentence2"
-                )
+            self.dataset[lang] = self.dataset[lang].rename_columns(
+                {
+                    _ISO6393_to_ISO6391[l1]: "sentence1",
+                    _ISO6393_to_ISO6391[l2]: "sentence2",
+                }
+            )
