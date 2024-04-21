@@ -73,7 +73,7 @@ class TedTalksBitextMining(AbsTaskBitextMining, CrosslingualTask):
         license="CC-BY-SA-4.0",
         socioeconomic_status="medium",
         annotations_creators="expert-annotated",
-        dialect=None,
+        dialect=[],
         text_creation="created",
         n_samples={"train": _N},
         avg_character_length={"train": 120},
