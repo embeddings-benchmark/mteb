@@ -18,7 +18,7 @@ class SiswatiNewsClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         eval_splits=["train"],
-        eval_langs=["zul-Latn"],
+        eval_langs=["ssw-Latn"],
         main_score="accuracy",
         date=("2022-08-01", "2022-08-01"),
         form=["written"],
