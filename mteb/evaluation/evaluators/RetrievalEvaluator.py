@@ -185,10 +185,9 @@ class DenseRetrievalExactSearch:
         instructions: Dict[str, str] | None = None,
         **kwargs,
     ) -> Dict[str, Dict[str, float]]:
-        """
-        This function provides support for reranker (or cross-encoder) models that encoder query and document at the same time (typically with attention).
-            Some notable examples include MonoBERT, MonoT5, RankLlama, etc.
-            Note: you must provide the path to the results to rerank to the __init__ function as `previous_results`
+        """This function provides support for reranker (or cross-encoder) models that encoder query and document at the same time (typically with attention).
+        Some notable examples include MonoBERT, MonoT5, RankLlama, etc.
+        Note: you must provide the path to the results to rerank to the __init__ function as `previous_results`
         """
         pairs = []  # create the pairs for reranking
         for qid in queries.keys():

@@ -12,9 +12,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 def test_mteb_rerank():
-    """
-    Test that reranking works
-    """
+    # Test that reranking works
     # unfortunately, we need all the query ids to pretend to have this
     scifact_keys = [
         "1",
