@@ -33,7 +33,7 @@ _LANGUAGES = [
     "tel_Telu",
     "urd_Arab",
 ]
-_SPLIT = ["gen"]
+_SPLIT = ["conv"]
 
 
 def extend_lang_pairs() -> dict[str, list[str]]:
@@ -53,24 +53,38 @@ def extend_lang_pairs() -> dict[str, list[str]]:
 _LANGUAGES_MAPPING = extend_lang_pairs()
 
 
-class IN22GenBitextMining(AbsTaskBitextMining, CrosslingualTask):
+def get_hash(text):
+    """Get hash of text field."""
+    return {"hash": hash(text)}
+
+
+def check_uniques(example, uniques):
+    """Check if current hash is still in set of unique hashes and remove if true."""
+    if example["hash"] in uniques:
+        uniques.remove(example["hash"])
+        return True
+    else:
+        return False
+
+
+class IN22ConvBitextMining(AbsTaskBitextMining, CrosslingualTask):
     metadata = TaskMetadata(
-        name="IN22GenBitextMining",
+        name="IN22ConvBitextMining",
         dataset={
-            "path": "ai4bharat/IN22-Gen",
-            "revision": "e92afc34c61104b9b06e4de33cfcaccf6af6a46a",
+            "path": "ai4bharat/IN22-Conv",
+            "revision": "189b3d92cfbde4ddb3514223a256eb78b1aca60f",
             "trust_remote_code": True,
         },
-        description="IN22-Gen is a n-way parallel general-purpose multi-domain benchmark dataset for machine translation spanning English and 22 Indic languages.",
-        reference="https://huggingface.co/datasets/ai4bharat/IN22-Gen",
+        description="IN22-Conv is a n-way parallel conversation domain benchmark dataset for machine translation spanning English and 22 Indic languages.",
+        reference="https://huggingface.co/datasets/ai4bharat/IN22-Conv",
         type="BitextMining",
         category="s2s",
         eval_splits=_SPLIT,
         eval_langs=_LANGUAGES_MAPPING,
         main_score="f1",
         date=("2022-10-01", "2023-03-01"),
-        form=["written"],
-        domains=["Web", "Legal", "Government", "News", "Religious", "Non-fiction"],
+        form=["spoken"],
+        domains=["Social", "Spoken", "Fiction"],
         task_subtypes=[],
         license="CC-BY-4.0",
         socioeconomic_status="mixed",
@@ -86,8 +100,8 @@ year={2023},
 url={https://openreview.net/forum?id=vfT4YuzAYA},
 note={}
 }""",
-        n_samples={"gen": 1024},
-        avg_character_length={"gen": 156.7},
+        n_samples={"conv": 1503},
+        avg_character_length={"conv": 54.3},
     )
 
     def load_data(self, **kwargs: Any) -> None:
@@ -111,3 +125,21 @@ note={}
             self.dataset[lang] = self.dataset[lang].rename_columns(
                 {f"sentence_{lang1}": "sentence1", f"sentence_{lang2}": "sentence2"}
             )
+
+            self.dataset[lang] = self.dataset[lang].map(
+                lambda x: get_hash(x["sentence1"])
+            )
+            uniques = set(self.dataset[lang]["conv"].unique("hash"))
+            self.dataset[lang] = self.dataset[lang].filter(
+                check_uniques, fn_kwargs={"uniques": uniques}
+            )
+
+            self.dataset[lang] = self.dataset[lang].map(
+                lambda x: get_hash(x["sentence2"])
+            )
+            uniques = set(self.dataset[lang]["gen"].unique("hash"))
+            self.dataset[lang] = self.dataset[lang].filter(
+                check_uniques, fn_kwargs={"uniques": uniques}
+            )
+
+            self.dataset[lang] = self.dataset[lang].remove_columns(["hash"])
