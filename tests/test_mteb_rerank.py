@@ -4,7 +4,7 @@ import json
 import logging
 import os
 
-from sentence_transformers import CrossEncoder
+from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb import MTEB
 
@@ -356,3 +356,40 @@ def test_mteb_rerank():
     assert "19238" not in results["1"]
     assert "4983" in results["1"]
     assert "18670" in results["1"]
+
+
+def test_reranker_same_ndcg1():
+    de = SentenceTransformer("average_word_embeddings_komninos")
+    ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
+    eval = MTEB(
+        tasks=[
+            "NFCorpus",
+        ]
+    )
+    eval.run(
+        de,
+        output_folder="tests/results/stage1",
+        overwrite_results=True,
+        eval_splits=["test"],
+        save_qrels=True,
+    )
+    eval.run(
+        ce,
+        output_folder="tests/results/stage2",
+        overwrite_results=True,
+        eval_splits=["test"],
+        previous_results="tests/results/stage1/NFCorpus_qrels.json",
+        save_qrels=False,
+        top_k=1,  # don't allow it to rerank more than 1 so we can check for top_1 being the same
+    )
+
+    # read in stage 1 and stage two and check ndcg@1 is the same
+    with open("tests/results/stage1/NFCorpus.json") as f:
+        stage1 = json.load(f)
+
+    with open("tests/results/stage2/NFCorpus.json") as f:
+        stage2 = json.load(f)
+
+    assert (
+        stage1["test"]["ndcg_at_1"] == stage2["test"]["ndcg_at_1"]
+    ), f"{stage1['test']['ndcg_at_1']} != {stage2['test']['ndcg_at_1']}"
