@@ -42,8 +42,7 @@ class DalajClassification(AbsTaskClassification):
         return metadata_dict
 
     def dataset_transform(self):
-        """
-        This dataset consist of two columns of relevance, "original_sentence" and "corrected_sentence".
+        """This dataset consist of two columns of relevance, "original_sentence" and "corrected_sentence".
         We will use the original sentence as we "wrong" sentence and the corrected sentence as the "correct" sentence
         """
 

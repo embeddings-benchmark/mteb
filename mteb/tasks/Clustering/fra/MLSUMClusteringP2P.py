@@ -38,14 +38,25 @@ class MLSUMClusteringP2P(AbsTaskClustering):
         avg_character_length=None,
     )
 
+    def load_data(self, **kwargs):
+        """Load dataset from HuggingFace hub and convert it to the standard format."""
+        if self.data_loaded:
+            return
+        self.dataset = datasets.load_dataset(
+            self.metadata.dataset["path"],
+            self.metadata.dataset["name"],
+            split=self.metadata.eval_splits[0],
+            revision=self.metadata.dataset["revision"],
+        )
+        self.dataset_transform()
+        self.data_loaded = True
+
     def create_description(self, example):
         example["text"] = example["title"] + " " + example["text"]
         return example
 
     def dataset_transform(self):
-        """
-        Convert to standard format
-        """
+        """Convert to standard format"""
         self.dataset = self.dataset.map(self.create_description)
         self.dataset = self.dataset.remove_columns(["summary", "url", "date", "title"])
         texts = self.dataset["text"]

@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "f8f98e5c4d3059cf1a00c8eb3d70aa271423f636",
+  "mteb_dataset_name": "Itacola",
+  "mteb_version": "1.6.1",
+  "test": {
+    "accuracy": 0.48523076923076924,
+    "accuracy_stderr": 0.07994271453258017,
+    "ap": 0.8411938835747519,
+    "ap_stderr": 0.005252848100215623,
+    "evaluation_time": 4.66,
+    "f1": 0.4207415408112837,
+    "f1_stderr": 0.04787939045531736,
+    "main_score": 0.48523076923076924
+  }
+}

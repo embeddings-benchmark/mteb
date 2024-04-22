@@ -9,6 +9,7 @@ import pytest
 
 from mteb import MTEB
 from mteb.abstasks import AbsTask
+from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 logging.basicConfig(level=logging.INFO)
@@ -18,7 +19,9 @@ logging.basicConfig(level=logging.INFO)
 @patch("datasets.load_dataset")
 def test_load_data(mock_load_dataset: Mock, task: AbsTask):
     # TODO: We skip because this load_data is completely different.
-    if isinstance(task, AbsTaskRetrieval):
+    if isinstance(task, AbsTaskRetrieval) or isinstance(
+        task, AbsTaskInstructionRetrieval
+    ):
         pytest.skip()
     with patch.object(task, "dataset_transform") as mock_dataset_transform:
         task.load_data()
@@ -64,8 +67,6 @@ async def check_datasets_are_available_on_hf(tasks):
 
 
 def test_dataset_availability():
-    """
-    Checks if the datasets are available on Hugging Face using both their name and revision.
-    """
+    """Checks if the datasets are available on Hugging Face using both their name and revision."""
     tasks = MTEB().tasks_cls
     asyncio.run(check_datasets_are_available_on_hf(tasks))

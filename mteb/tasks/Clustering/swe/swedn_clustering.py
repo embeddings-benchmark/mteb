@@ -56,8 +56,7 @@ class SwednClustering(AbsTaskClustering):
     )
 
     def dataset_transform(self):
-        """
-        The article_category clusters differ between the splits (with the test set only having 1 cluster). Therefore we combine it all into one
+        """The article_category clusters differ between the splits (with the test set only having 1 cluster). Therefore we combine it all into one
         cluster.
         """
         splits = ["train", "validation"]
