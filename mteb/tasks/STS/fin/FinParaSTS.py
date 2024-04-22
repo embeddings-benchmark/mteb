@@ -11,7 +11,7 @@ class FinParaSTS(AbsTaskSTS):
         dataset={
             "path": "TurkuNLP/turku_paraphrase_corpus",
             "revision": "e4428e399de70a21b8857464e76f0fe859cabe05",
-            "name": "classification",
+            "name": "plain",
         },
         description="Finnish paraphrase-based semantic similarity corpus",
         reference="https://huggingface.co/datasets/TurkuNLP/turku_paraphrase_corpus",
@@ -66,7 +66,7 @@ class FinParaSTS(AbsTaskSTS):
         return metadata_dict
 
     def dataset_transform(self):
-        self.dataset = self.dataset.shuffle(seed=42)
+        self.dataset = self.dataset.shuffle(seed=self.seed)
         for split in self.dataset:
             self.dataset[split] = self.dataset[split].select(range(1000))
         rename_dict = {"text1": "sentence1", "text2": "sentence2", "label": "score"}
