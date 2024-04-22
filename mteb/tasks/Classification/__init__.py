@@ -14,6 +14,7 @@ from .dan.DalajClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
 from .dan.DKHateClassification import *
 from .dan.LccSentimentClassification import *
+from .ell.GreekLegalCodeClassification import *
 from .ell.GreekSentimentClassification import *
 from .eng.AmazonPolarityClassification import *
 from .eng.Banking77Classification import *
@@ -24,6 +25,7 @@ from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
 from .est.estonian_valence import *
 from .fas.PersianFoodSentimentClassification import *
+from .fil.FilipinoHateSpeechClassification import *
 from .fra.MovieReviewSentimentClassification import *
 from .hin.HindiDiscourseClassification import *
 from .hrv.CroatianSentimentClassification import *
@@ -49,6 +51,7 @@ from .nob.NorwegianParliamentClassification import *
 from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
 from .slk.SlovakSentimentClassification import *
+from .ssw.SiswatiNewsClassification import *
 from .swe.SweRecClassification import *
 from .tur.TurkishMovieSentimentClassification import *
 from .tur.TurkishProductSentimentClassification import *
