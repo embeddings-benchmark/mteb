@@ -7,7 +7,7 @@ from ....abstasks import AbsTaskClassification
 
 class ArxivClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="Arxiv Classification",
+        name="ArxivClassification",
         description="Classification Dataset of Arxiv Papers",
         dataset={
             "path": "ccdv/arxiv-classification",
@@ -15,7 +15,7 @@ class ArxivClassification(AbsTaskClassification):
         },
         reference="https://ieeexplore.ieee.org/document/8675939",
         type="Classification",
-        category="p2p",
+        category="s2s",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
