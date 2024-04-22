@@ -4,32 +4,32 @@
   "mteb_version": "1.7.5",
   "test": {
     "cos_sim": {
-      "pearson": 0.20128480074300614,
-      "spearman": 0.2008604558651903
+      "pearson": 0.2061497061751686,
+      "spearman": 0.19265998872283036
     },
     "euclidean": {
-      "pearson": 0.20130920318891804,
-      "spearman": 0.20086045526260826
+      "pearson": 0.20526585866497418,
+      "spearman": 0.19265998872283036
     },
-    "evaluation_time": 6.61,
+    "evaluation_time": 7.7,
     "manhattan": {
-      "pearson": 0.20353301095012405,
-      "spearman": 0.2028316733455831
+      "pearson": 0.20752119822682502,
+      "spearman": 0.1954625993250456
     }
   },
   "validation": {
     "cos_sim": {
-      "pearson": 0.16509230853773552,
-      "spearman": 0.17447029108948583
+      "pearson": 0.21566998400201104,
+      "spearman": 0.21048579270303
     },
     "euclidean": {
-      "pearson": 0.17261574607849692,
-      "spearman": 0.17447029108948583
+      "pearson": 0.21324720933438907,
+      "spearman": 0.21048579270303
     },
-    "evaluation_time": 6.78,
+    "evaluation_time": 7.26,
     "manhattan": {
-      "pearson": 0.17157720606723764,
-      "spearman": 0.17451946531910154
+      "pearson": 0.21436353503916572,
+      "spearman": 0.21145791704627814
     }
   }
 }
