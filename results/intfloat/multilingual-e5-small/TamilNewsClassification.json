@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "bb34dd6690cf17aa731d75d45388c5801b8c4e4b",
+  "mteb_dataset_name": "TamilNewsClassification",
+  "mteb_version": "1.7.5",
+  "test": {
+    "accuracy": 0.42568359375,
+    "accuracy_stderr": 0.022889716745526357,
+    "evaluation_time": 40.66,
+    "f1": 0.41687453839343275,
+    "f1_stderr": 0.024330896777021053,
+    "main_score": 0.42568359375
+  }
+}

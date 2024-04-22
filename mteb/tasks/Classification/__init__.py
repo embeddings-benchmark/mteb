@@ -53,6 +53,7 @@ from .ron.RomanianSentimentClassification import *
 from .slk.SlovakSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
 from .swe.SweRecClassification import *
+from .tam.TamilNewsClassification import *
 from .tur.TurkishMovieSentimentClassification import *
 from .tur.TurkishProductSentimentClassification import *
 from .uig.UyghurSentimentClassification import *
