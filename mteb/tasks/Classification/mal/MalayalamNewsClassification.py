@@ -9,10 +9,10 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 TEST_SAMPLES = 2048
 
 
-class TamilNewsClassification(AbsTaskClassification):
+class MalayalamNewsClassifcation(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="TamilNewsClassification",
-        description="A Tamil dataset for classification of Tamil News Papers",
+        name="MalayalamNewsClassifcation",
+        description="A Malayalam dataset for classification of Malayalam News Papers",
         dataset={
             "path": "mlexplorer008/telugu_news_classification",
         },
