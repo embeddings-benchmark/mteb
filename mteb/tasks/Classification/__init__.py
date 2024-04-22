@@ -28,6 +28,7 @@ from .fas.PersianFoodSentimentClassification import *
 from .fil.FilipinoHateSpeechClassification import *
 from .fra.MovieReviewSentimentClassification import *
 from .hin.HindiDiscourseClassification import *
+from .hin.SentimentAnalysisHindi import *
 from .hrv.CroatianSentimentClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ita.ItaHateClassification import *
