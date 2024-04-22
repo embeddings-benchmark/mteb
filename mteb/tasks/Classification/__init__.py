@@ -38,6 +38,7 @@ from .mkd.MacedonianTweetSentimentClassification import *
 from .mlt.MalteseSentimentClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
+from .multilingual.IndicSentimentClassification import *
 from .multilingual.MasakhaNEWSClassification import *
 from .multilingual.MassiveIntentClassification import *
 from .multilingual.MassiveScenarioClassification import *
