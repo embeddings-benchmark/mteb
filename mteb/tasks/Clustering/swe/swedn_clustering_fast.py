@@ -19,7 +19,7 @@ class SwednClusteringFast(AbsTaskClusteringFast):
         reference="https://spraakbanken.gu.se/en/resources/swedn",
         type="Clustering",
         category="p2p",
-        eval_splits=["all"],
+        eval_splits=["summaries", "headlines", "articles"],
         eval_langs=["swe-Latn"],
         main_score="v_measure",
         date=("2000-01-01", "2020-12-31"),  # best guess
@@ -53,19 +53,42 @@ class SwednClusteringFast(AbsTaskClusteringFast):
         labels = []
         label_col = "article_category"
 
-        # Note that headlines is not included:
-        # Scores of sample models with headlines: 11.26, 4.27 -removing headlines-> 16.43, 4.31
-        # as headlines are soo short it is hard to meaningfully cluster them even for humans.
+        labels_headlines = []
+        labels_summaries = []
+        labels_articles = []
+        docs_headlines = []
+        docs_summaries = []
+        docs_articles = []
+
         for split in splits:
             ds_split = self.dataset[split]
 
-            documents.extend(ds_split["summary"])
-            labels.extend(ds_split[label_col])
+            docs_headlines.extend(ds_split["headline"])
+            labels_headlines.extend(ds_split[label_col])
 
-            documents.extend(ds_split["article"])
-            labels.extend(ds_split[label_col])
-        ds = datasets.Dataset.from_dict({"sentences": documents, "labels": labels})
-        self.dataset = datasets.DatasetDict({"all": ds})
+            docs_summaries.extend(ds_split["summary"])
+            labels_summaries.extend(ds_split[label_col])
+
+            docs_articles.extend(ds_split["article"])
+            labels_articles.extend(ds_split[label_col])
+
+        ds_headlines = datasets.Dataset.from_dict(
+            {"sentences": docs_headlines, "labels": labels_headlines}
+        )
+        ds_summaries = datasets.Dataset.from_dict(
+            {"sentences": docs_summaries, "labels": labels_summaries}
+        )
+        ds_articles = datasets.Dataset.from_dict(
+            {"sentences": docs_articles, "labels": labels_articles}
+        )
+
+        self.dataset = datasets.DatasetDict(
+            {
+                "headlines": ds_headlines,
+                "summaries": ds_summaries,
+                "articles": ds_articles,
+            }
+        )
 
 
 if __name__ == "__main__":

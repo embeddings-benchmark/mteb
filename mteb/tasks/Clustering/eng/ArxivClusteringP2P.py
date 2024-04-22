@@ -32,3 +32,4 @@ class ArxivClusteringP2P(AbsTaskClustering):
         n_samples={"test": 732723},
         avg_character_length={"test": 1009.98},
     )
+

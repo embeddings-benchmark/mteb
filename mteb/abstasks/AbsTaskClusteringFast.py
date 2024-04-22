@@ -23,17 +23,24 @@ HFDataset = Dict[Split, Dict[ColumnName, ColumnValues]]
 MultilingualDataset = Dict[HFLang, HFDataset]
 IsoLanguage = str
 ClusteringScores = List[Dict[str, float]]
+Scores = Dict[str, Any]
 
 
 def evaluate_clustering_bootstrapped(
     embeddings: np.ndarray,
     labels: list[str],
-    n_clusters=10,
-    cluster_size=1000,
-    kmean_batch_size=500,
+    n_clusters: int,
+    cluster_size: int,
+    kmean_batch_size: int,
     rng_state: random.Random = random.Random(),
 ) -> ClusteringScores:
+    """Bootstrapped evaluation of clustering performance using V-measure.
+
+    The bootstrapping is done by sampling N samples from the corpus and clustering them. It is done without replacement to get a diverse set of
+    samples.
+    """
     n_embeddings = embeddings.shape[0]
+    labels_arr = np.array(labels)
 
     scores = []
 
@@ -42,11 +49,13 @@ def evaluate_clustering_bootstrapped(
         batch_size=kmean_batch_size,
         n_init="auto",
     )
-    for i in range(n_clusters):
-        # sample N samples from the corpus with replacement
-        cluster_indices = rng_state.choices(range(n_embeddings), k=cluster_size)
+
+    for _ in range(n_clusters):
+        # sample N samples from the corpus without replacement
+        cluster_indices = rng_state.sample(range(n_embeddings), k=cluster_size)
+
         _embeddings = embeddings[cluster_indices]
-        _labels = [labels[i] for i in cluster_indices]
+        _labels = labels_arr[cluster_indices]
         clustering_model.fit(_embeddings)
         cluster_assignment = clustering_model.labels_
         v_measure = v_measure_score(_labels, cluster_assignment)
@@ -68,9 +77,10 @@ class AbsTaskClusteringFast(AbsTask):
         labels: list of str
     """
 
-    max_documents_to_embed = 10_000
-    max_documents_per_cluster = 1000
+    max_documents_to_embed = 16_384
+    max_documents_per_cluster = 2048
     n_clusters = 10
+    k_mean_batch_size = 512
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -122,6 +132,7 @@ class AbsTaskClusteringFast(AbsTask):
             labels,
             n_clusters=self.n_clusters,
             cluster_size=self.max_documents_per_cluster,
+            kmean_batch_size=self.k_mean_batch_size,
             rng_state=random.Random(self.seed),
         )
 
@@ -150,9 +161,9 @@ class MTEBScores:
 
     # scores
     main_score_name: str
-    scores: dict[IsoLanguage, dict[str, float | list[float]]]
+    scores: dict[IsoLanguage, dict[Split, Scores]]
     evaluation_time: float
-    main_score: dict[IsoLanguage, float]
+    main_score: dict[IsoLanguage, dict[Split, float]]
 
     def to_dict(self) -> dict:
         return {
