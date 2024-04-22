@@ -1,0 +1,35 @@
+{
+  "dataset_revision": "e4428e399de70a21b8857464e76f0fe859cabe05",
+  "mteb_dataset_name": "FinParaSTS",
+  "mteb_version": "1.7.5",
+  "test": {
+    "cos_sim": {
+      "pearson": 0.1925387288458306,
+      "spearman": 0.20805358624403716
+    },
+    "euclidean": {
+      "pearson": 0.18902512235984464,
+      "spearman": 0.19301366874841772
+    },
+    "evaluation_time": 7.14,
+    "manhattan": {
+      "pearson": 0.18853202116510126,
+      "spearman": 0.19391213629926227
+    }
+  },
+  "validation": {
+    "cos_sim": {
+      "pearson": 0.16692174482188474,
+      "spearman": 0.19128377198977656
+    },
+    "euclidean": {
+      "pearson": 0.12857808129428072,
+      "spearman": 0.13513365225825547
+    },
+    "evaluation_time": 6.93,
+    "manhattan": {
+      "pearson": 0.12699290381327968,
+      "spearman": 0.13524695360229888
+    }
+  }
+}
