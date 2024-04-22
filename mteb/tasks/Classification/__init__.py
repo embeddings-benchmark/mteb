@@ -34,6 +34,7 @@ from .ita.ItaHateClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
 from .jpn.WRIMEClassification import *
 from .kur.KurdishSentimentClassification import *
+from .mal.MalayalamNewsClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
 from .mlt.MalteseSentimentClassification import *
 from .multilingual.AmazonCounterfactualClassification import *

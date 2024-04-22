@@ -9,50 +9,36 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 TEST_SAMPLES = 2048
 
 
-class MalayalamNewsClassifcation(AbsTaskClassification):
+class MalayalamNewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="MalayalamNewsClassifcation",
-        description="A Malayalam dataset for classification of Malayalam News Papers",
+        name="MalayalamNewsClassification",
+        description="A Malayalam dataset for 3-class classification of Malayalam news articles",
+        reference="https://github.com/goru001/nlp-for-malyalam",
         dataset={
-            "path": "mlexplorer008/telugu_news_classification",
+            "path": "mlexplorer008/malayalam_news_classification",
+            "revision": "666f63bba2387456d8f846ea4d0565181bd47b81",
         },
+        type="Classification",
+        category="s2s",
+        date=("2014-01-01", "2018-01-01"),
+        eval_splits=["test"],
+        eval_langs=["mal-Mlym"],
+        main_score="accuracy",
+        form=["written"],
+        domains=["News"],
+        task_subtypes=["Topic classification"],
+        license="MIT",
+        socioeconomic_status="mixed",
+        annotations_creators="derived",
+        dialect=None,
+        text_creation="found",
+        bibtex_citation=None,
+        n_samples={"train": 5036, "test": 1260},
+        avg_character_length={"train": 79.48, "test":80.44},
     )
 
     def dataset_transform(self):
         seed = 42
         random.seed(seed)
-        self.dataset = self.dataset.rename_column("sentence", "text")
-        self.dataset = self.dataset.rename_column("sentiment", "label")
-
-        for split in ["test"]:
-            ds = self.dataset[split]
-            # Determine number of classes and samples per class
-            class_count = Counter([sample["label"] for sample in ds])
-            num_classes = len(class_count)
-            total_samples = min(TEST_SAMPLES, len(ds))
-            samples_per_class = total_samples // num_classes
-
-            # Try to maintain class balance
-            balanced_samples = []
-            for label, count in class_count.items():
-                indices = [i for i, sample in enumerate(ds) if sample["label"] == label]
-                if count <= samples_per_class:
-                    balanced_samples.extend(indices)
-                else:
-                    balanced_samples.extend(random.sample(indices, samples_per_class))
-
-            # Add missing quantity since minority classes might have too few
-            if len(balanced_samples) < total_samples:
-                extra_samples_needed = total_samples - len(balanced_samples)
-                remaining_indices = [
-                    i for i in range(len(ds)) if i not in balanced_samples
-                ]
-                balanced_samples.extend(
-                    random.sample(remaining_indices, extra_samples_needed)
-                )
-
-            test_data = ds.select(balanced_samples)
-            self.dataset["test"] = test_data
-            assert (
-                len(test_data) == TEST_SAMPLES
-            ), f"Exceeded {TEST_SAMPLES} samples for 'test' split."
+        self.dataset = self.dataset.rename_column("headings", "text")
+        print(self.dataset)
