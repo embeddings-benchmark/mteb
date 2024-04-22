@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-import datasets
 
 _LANGS = [
     "eng-Latn",
@@ -76,12 +75,10 @@ class ToxicChatClassification(AbsTaskClassification):
 
     def dataset_transform(self):
         # only use human-annotated data
-        self.dataset = self.dataset['test'].filter(lambda x: x['human_annotation'])
+        self.dataset = self.dataset["test"].filter(lambda x: x["human_annotation"])
         keep_cols = ["user_input", "toxicity"]
         rename_dict = dict(zip(keep_cols, ["text", "label"]))
-        remove_cols = [
-            col for col in self.dataset.column_names if col not in keep_cols
-        ]
+        remove_cols = [col for col in self.dataset.column_names if col not in keep_cols]
         self.dataset = self.dataset.rename_columns(rename_dict)
         self.dataset = self.dataset.remove_columns(remove_cols)
         self.dataset = self.dataset.class_encode_column("label")
