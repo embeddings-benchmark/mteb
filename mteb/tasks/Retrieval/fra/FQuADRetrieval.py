@@ -32,13 +32,24 @@ class FQuADRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         text_creation="created",
-        bibtex_citation="""@misc{dhoffschmidt2020fquad,
-      title={FQuAD: French Question Answering Dataset}, 
-      author={Martin d'Hoffschmidt and Wacim Belblidia and Tom Brendlé and Quentin Heinrich and Maxime Vidal},
-      year={2020},
-      eprint={2002.06071},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+        bibtex_citation="""@inproceedings{dhoffschmidt-etal-2020-fquad,
+    title = "{FQ}u{AD}: {F}rench Question Answering Dataset",
+    author = "d{'}Hoffschmidt, Martin  and
+      Belblidia, Wacim  and
+      Heinrich, Quentin  and
+      Brendl{\'e}, Tom  and
+      Vidal, Maxime",
+    editor = "Cohn, Trevor  and
+      He, Yulan  and
+      Liu, Yang",
+    booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2020",
+    month = nov,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2020.findings-emnlp.107",
+    doi = "10.18653/v1/2020.findings-emnlp.107",
+    pages = "1193--1208",
 }""",
         n_samples={"test": 400, "validation": 100},
         avg_character_length={"test": 937, "validation": 930},
@@ -47,12 +58,11 @@ class FQuADRetrieval(AbsTaskRetrieval):
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
-        # fetch both subsets of the dataset
         dataset_raw = datasets.load_dataset(
             **self.metadata_dict["dataset"],
         )
 
-        # set valid_hasAns as the validation split
+        # set valid_hasAns and test_hasAns as the validation and test splits (only queries with answers)
         dataset_raw["validation"] = dataset_raw["valid_hasAns"]
         del dataset_raw["valid_hasAns"]
 
