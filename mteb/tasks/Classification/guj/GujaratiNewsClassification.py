@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-
-
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -10,7 +8,7 @@ class GujaratiNewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="GujaratiNewsClassification",
         description="A Gujarati dataset for 3-class classification of Gujarati news articles",
-        reference="https://github.com/goru001/nlp-for-malyalam",
+        reference="https://github.com/goru001/nlp-for-gujarati",
         dataset={
             "path": "mlexplorer008/gujarati_news_classification",
             "revision": "1a5f2fa2914bfeff4fcdc6fff4194fa8ec8fa19e",
@@ -31,7 +29,7 @@ class GujaratiNewsClassification(AbsTaskClassification):
         text_creation="found",
         bibtex_citation=None,
         n_samples={"train": 5269, "test": 1318},
-        avg_character_length={"train": 61.95, "test":61.91},
+        avg_character_length={"train": 61.95, "test": 61.91},
     )
 
     def dataset_transform(self):
