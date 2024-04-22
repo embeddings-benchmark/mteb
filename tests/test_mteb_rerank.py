@@ -361,23 +361,17 @@ def test_mteb_rerank():
 def test_reranker_same_ndcg1():
     de = SentenceTransformer("average_word_embeddings_komninos")
     ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
-    eval = MTEB(
-        tasks=[
-            "NFCorpus",
-        ]
-    )
+    eval = MTEB(tasks=["NFCorpus"])
     eval.run(
         de,
         output_folder="tests/results/stage1",
         overwrite_results=True,
-        eval_splits=["test"],
         save_qrels=True,
     )
     eval.run(
         ce,
         output_folder="tests/results/stage2",
         overwrite_results=True,
-        eval_splits=["test"],
         previous_results="tests/results/stage1/NFCorpus_qrels.json",
         save_qrels=False,
         top_k=1,  # don't allow it to rerank more than 1 so we can check for top_1 being the same
