@@ -14,13 +14,13 @@ from .dan.DanishPoliticalCommentsClassification import *
 from .dan.DKHateClassification import *
 from .dan.LccSentimentClassification import *
 from .eng.AmazonPolarityClassification import *
+from .eng.ArxivClassification import *
 from .eng.Banking77Classification import *
 from .eng.EmotionClassification import *
 from .eng.ImdbClassification import *
 from .eng.NewsClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
-from .eng.ArxivClassification import *
 from .est.estonian_valence import *
 from .fas.PersianFoodSentimentClassification import *
 from .fra.MovieReviewSentimentClassification import *
