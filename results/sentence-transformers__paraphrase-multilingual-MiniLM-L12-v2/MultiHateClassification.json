@@ -1,5 +1,5 @@
 {
-  "dataset_revision": "bde1317ae1cee1d719d30587afac13d5dc47ebec",
+  "dataset_revision": "ef137ea2b7c719183f8f60edf536b50f56d1365b",
   "mteb_dataset_name": "MultiHateClassification",
   "mteb_version": "1.6.10",
   "test": {
@@ -39,7 +39,7 @@
       "f1_stderr": 0.045704949887003715,
       "main_score": 0.6234999999999999
     },
-    "evaluation_time": 55.84,
+    "evaluation_time": 65.31,
     "fra": {
       "accuracy": 0.5885,
       "accuracy_stderr": 0.0295101677392725,
@@ -75,6 +75,15 @@
       "f1": 0.5473339784981104,
       "f1_stderr": 0.05678694021473432,
       "main_score": 0.5735
+    },
+    "pol": {
+      "accuracy": 0.5917,
+      "accuracy_stderr": 0.03421417834757983,
+      "ap": 0.33307147420832744,
+      "ap_stderr": 0.025146573074382478,
+      "f1": 0.5475266861388586,
+      "f1_stderr": 0.030116430034427447,
+      "main_score": 0.5917
     },
     "por": {
       "accuracy": 0.62,

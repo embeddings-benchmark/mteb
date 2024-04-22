@@ -14,6 +14,7 @@ _LANGUAGES = {
     "hin": ["hin-Deva"],
     "ita": ["ita-Latn"],
     "nld": ["nld-Latn"],
+    "pol": ["pol-Latn"],
     "por": ["por-Latn"],
     "spa": ["spa-Latn"],
 }
@@ -35,11 +36,11 @@ class MultiHateClassification(MultilingualTask, AbsTaskClassification):
         name="MultiHateClassification",
         dataset={
             "path": "mteb/multi-hatecheck",
-            "revision": "bde1317ae1cee1d719d30587afac13d5dc47ebec",
+            "revision": "ef137ea2b7c719183f8f60edf536b50f56d1365b",
         },
         description="""Hate speech detection dataset with binary
                        (hateful vs non-hateful) labels. Includes 25+ distinct types of hate
-                       and challenging non-hate, and 10 languages.
+                       and challenging non-hate, and 11 languages.
                      """,
         reference="https://aclanthology.org/2022.woah-1.15/",
         type="Classification",
@@ -104,7 +105,7 @@ class MultiHateClassification(MultilingualTask, AbsTaskClassification):
         }
         """,
         n_samples={"test": 10000},
-        avg_character_length={"test": 45.3},
+        avg_character_length={"test": 45.9},
     )
 
     def load_data(self, **kwargs):
