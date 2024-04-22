@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import random
-from collections import Counter
 
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -34,7 +33,7 @@ class MalayalamNewsClassification(AbsTaskClassification):
         text_creation="found",
         bibtex_citation=None,
         n_samples={"train": 5036, "test": 1260},
-        avg_character_length={"train": 79.48, "test":80.44},
+        avg_character_length={"train": 79.48, "test": 80.44},
     )
 
     def dataset_transform(self):
