@@ -85,7 +85,7 @@ class IndicSentimentClassification(MultilingualTask, AbsTaskClassification):
             self.dataset[lang] = self.dataset[lang].filter(
                 lambda x: x["LABEL"] is not None
             )
-            self.dataset[lang] = self.dataset[lang].rename_column(
+            self.dataset[lang] = self.dataset[lang].rename_columns(
                 {"INDIC REVIEW": "text", "LABEL": "label_text"}
             )
             self.dataset[lang] = self.dataset[lang].map(
