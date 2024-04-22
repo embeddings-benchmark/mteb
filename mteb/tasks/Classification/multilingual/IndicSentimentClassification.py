@@ -82,9 +82,12 @@ class IndicSentimentClassification(MultilingualTask, AbsTaskClassification):
         label_map = {"Negative": 0, "Positive": 1}
         # Convert to standard format
         for lang in self.langs:
-            self.dataset[lang] = self.dataset[lang].filter(lambda x: x["LABEL"] is not None)
-            self.dataset[lang] = self.dataset[lang].rename_column("INDIC REVIEW", "text")
-            self.dataset[lang] = self.dataset[lang].rename_column("LABEL", "label_text")
+            self.dataset[lang] = self.dataset[lang].filter(
+                lambda x: x["LABEL"] is not None
+            )
+            self.dataset[lang] = self.dataset[lang].rename_column(
+                {"INDIC REVIEW": "text", "LABEL": "label_text"}
+            )
             self.dataset[lang] = self.dataset[lang].map(
                 lambda x: {"label": label_map[x["label_text"]]}
             )
