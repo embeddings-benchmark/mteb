@@ -2,9 +2,9 @@
 
 | GitHub            | Total points | New dataset | New task | Dataset annotations | (Bug)fixes | Running Models | Review PR |  Paper Writing | Ideation | Coordination |
 |-------------------| ------------ |-------------| -------- | ------------------- | ---------- | -------------- |-----------| -------------- | -------- | ------------- |
-| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 22        |                |          |             5 |
+| KennethEnevoldsen |              | 54          |          |                   8 |         16 |                | 24        |                |          |             5 |
 | x-tabdeveloping   |              | 18          |          |                     |            |                |           |                |          |               |
-| imenelydiaker     |              | 88          |          |                     |            |                | 10        |                |          |               |
+| imenelydiaker     |              | 88          |          |                     |            |                | 12        |                |          |               |
 | wissam-sib        |              | 88          |          |                     |            |                | 1         |                |          |               |
 | GabrielSequeira   |              | 88          |          |                     |            |                |           |                |          |               |
 | schmarion         |              | 88          |          |                     |            |                |           |                |          |               |
@@ -29,7 +29,7 @@
 | taidnguyen        |              | 14          |          |                     |            |                |           |                |          |               |
 | orionw            |              |             |          |                     |      14     |                |           |                |          |               |
 | mmhamdy           |              | 6           |          |                     |            |                |           |                |          |               |
-| davidstap           |              | 10           |          |                     |            |                |           |                |          |               |
+| davidstap         |              | 2           |          |                     |            |                |           |                |          |               |
 
 
 Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
