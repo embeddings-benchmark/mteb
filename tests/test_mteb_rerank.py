@@ -344,12 +344,12 @@ def test_mteb_rerank():
         eval_splits=["test"],
         top_k=2,
         previous_results="tmp.json",
-        save_qrels=True,
+        save_predictions=True,
     )
     os.remove("tmp.json")
 
     # read in the results
-    with open("tests/results/SciFact_qrels.json") as f:
+    with open("tests/results/SciFact_predictions.json") as f:
         results = json.load(f)
 
     # check that only the top two results are re-orderd
@@ -361,27 +361,29 @@ def test_mteb_rerank():
 def test_reranker_same_ndcg1():
     de = SentenceTransformer("average_word_embeddings_komninos")
     ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
-    eval = MTEB(tasks=["NFCorpus"])
+    eval = MTEB(tasks=["SciFact"])
     eval.run(
         de,
         output_folder="tests/results/stage1",
         overwrite_results=True,
-        save_qrels=True,
+        save_predictions=True,
+        eval_splits=["test"],
     )
     eval.run(
         ce,
         output_folder="tests/results/stage2",
         overwrite_results=True,
-        previous_results="tests/results/stage1/NFCorpus_qrels.json",
-        save_qrels=False,
+        previous_results="tests/results/stage1/SciFact_predictions.json",
+        save_predictions=False,
+        eval_splits=["test"],
         top_k=1,  # don't allow it to rerank more than 1 so we can check for top_1 being the same
     )
 
     # read in stage 1 and stage two and check ndcg@1 is the same
-    with open("tests/results/stage1/NFCorpus.json") as f:
+    with open("tests/results/stage1/SciFact.json") as f:
         stage1 = json.load(f)
 
-    with open("tests/results/stage2/NFCorpus.json") as f:
+    with open("tests/results/stage2/SciFact.json") as f:
         stage2 = json.load(f)
 
     assert (
