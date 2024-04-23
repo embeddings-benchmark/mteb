@@ -33,4 +33,6 @@ class PunjabiNewsClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns({"article": "text", "is_about_politics": "label"})
+        self.dataset = self.dataset.rename_columns(
+            {"article": "text", "is_about_politics": "label"}
+        )
