@@ -47,4 +47,11 @@ class GreekLegalCodeClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        self.stratified_subsampling(splits=["validation", "test"])
+        self.dataset["validation"] = (
+            self.dataset["validation"]
+            .shuffle(seed=self.seed)
+            .select(range(TEST_SAMPLES))
+        )
+        self.dataset["test"] = (
+            self.dataset["test"].shuffle(seed=self.seed).select(range(TEST_SAMPLES))
+        )

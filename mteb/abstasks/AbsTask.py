@@ -35,7 +35,7 @@ class AbsTask(ABC):
         """
         pass
 
-    def stratified_subsampling(self, splits: Union[str, list[str]], label: str = "label", n_samples: int = max_n_samples):
+    def stratified_subsampling(self, splits: Union[str, list[str]] = ["test"], label: str = "label", n_samples: int = max_n_samples):
         """Subsamples the dataset with stratification by the supplied label.
         The following kwargs must be provided
         for stratified_subsampling to run:
