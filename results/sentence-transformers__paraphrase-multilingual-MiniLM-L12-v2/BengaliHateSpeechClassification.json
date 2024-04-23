@@ -1,13 +1,13 @@
 {
   "dataset_revision": "99612296bc093f0720cac7d7cbfcb67eecf1ca2f",
   "mteb_dataset_name": "BengaliHateSpeechClassification",
-  "mteb_version": "1.6.12",
+  "mteb_version": "1.7.14",
   "train": {
-    "accuracy": 0.37373046875,
-    "accuracy_stderr": 0.0406384959178347,
-    "evaluation_time": 9.16,
-    "f1": 0.3413295174233677,
-    "f1_stderr": 0.02671483741773334,
-    "main_score": 0.3413295174233677
+    "accuracy": 0.368505859375,
+    "accuracy_stderr": 0.023209595468423428,
+    "evaluation_time": 9.98,
+    "f1": 0.3401968813543556,
+    "f1_stderr": 0.016787448985664453,
+    "main_score": 0.3401968813543556
   }
 }
