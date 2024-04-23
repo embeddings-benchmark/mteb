@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskClassification
+from ....abstasks import AbsTaskClassification, MultilingualTask
 
 
-class AfriSentiClassification(AbsTaskClassification):
+class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
     metadata = TaskMetadata(
         name="AfriSentiClassification",
         description="AfriSenti is the largest sentiment analysis dataset for under-represented African languages.",
@@ -18,20 +18,20 @@ class AfriSentiClassification(AbsTaskClassification):
         category="s2s",
         eval_splits=["test"],
         eval_langs={
-            "am": ["amh-Ethi"], # Amharic (Ethiopic script)
-            "ar": ["ara-Arab"], # Moroccan Arabic, Standard Arabic (Arabic script)
-            "ha": ["hau-Latn", "hau-Arab"], # Hausa (Latin script), additional script if written in Ajami (Arabic script)
-            "ig": ["ibo-Latn"], # Igbo (Latin script)
-            "rw": ["kin-Latn"], # Kinyarwanda (Latin script)
-            "pt": ["por-Latn"], # Portuguese (Latin script)
+            "amh": ["amh-Ethi"], # Amharic (Ethiopic script)
+            "arq": ["arq-Arab"],
+            "ary": ["ary-Arab"], # Moroccan Arabic, Standard Arabic (Arabic script)
+            "hau": ["hau-Latn"], # Hausa (Latin script), additional script if written in Ajami (Arabic script)
+            "ibo": ["ibo-Latn"], # Igbo (Latin script)
+            "kin": ["kin-Latn"], # Kinyarwanda (Latin script)
+            "por": ["por-Latn"], # Portuguese (Latin script)
             "pcm": ["pcm-Latn"], # Nigerian Pidgin (Latin script)
-            "en": ["eng-Latn"], # English (Latin script)
-            "ork": ["ork-Latn"], # Orokolo (Latin script)
-            "sw": ["swa-Latn"], # Swahili (macrolanguage) (Latin script)
-            "ti": ["tir-Ethi"], # Tigrinya (Ge'ez script)
-            "tw": ["twi-Latn"], # Twi (Latin script)
-            "ts": ["tso-Latn"], # Tsonga (Latin script)
-            "yo": ["yor-Latn"] # Yoruba (Latin script)
+            "orm": ["orm-Latn"], # Orokolo (Latin script)
+            "swa": ["swa-Latn"], # Swahili (macrolanguage) (Latin script)
+            "tir": ["tir-Ethi"], # Tigrinya (Ge'ez script)
+            "twi": ["twi-Latn"], # Twi (Latin script)
+            "tso": ["tso-Latn"], # Tsonga (Latin script)
+            "yor": ["yor-Latn"], # Yoruba (Latin script)
             },
         main_score="accuracy",
         date=('2023-02-16', '2023-09-03'),
