@@ -208,6 +208,7 @@ evaluation.run(model)
 | 📈 [Leaderboard] | The interactive leaderboard of the benchmark |
 | 🤖 [Adding a model] | Information related to how to submit a model to the leaderboard |
 | 👩‍💻 [Adding a dataset] | How to add a new task/dataset to MTEB | 
+| 👩‍💻 [Adding a leaderboard tab] | How to add a new leaderboard tab to MTEB | 
 | 🤝  [Contributing] | How to contribute to MTEB and set it up for development |
 <!-- | 🌐 [MMTEB] | An open-source effort to extend MTEB to cover a broad set of languages |   -->
 
@@ -215,6 +216,7 @@ evaluation.run(model)
 [Contributing]: CONTRIBUTING.md
 [Adding a model]: docs/adding_a_model.md
 [Adding a dataset]: docs/adding_a_dataset.md
+[Adding a leaderboard tab]: docs/adding_a_leaderboard_tab.md
 [Leaderboard]: https://huggingface.co/spaces/mteb/leaderboard
 [MMTEB]: docs/mmteb/readme.md
 
