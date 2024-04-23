@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import random
 from abc import ABC, abstractmethod
-
 from typing import Union
 
 import datasets
@@ -35,7 +34,12 @@ class AbsTask(ABC):
         """
         pass
 
-    def stratified_subsampling(self, splits: Union[str, list[str]] = ["test"], label: str = "label", n_samples: int = max_n_samples):
+    def stratified_subsampling(
+        self,
+        splits: Union[str, list[str]] = ["test"],
+        label: str = "label",
+        n_samples: int = max_n_samples,
+    ):
         """Subsamples the dataset with stratification by the supplied label.
         The following kwargs must be provided
         for stratified_subsampling to run:
@@ -53,7 +57,7 @@ class AbsTask(ABC):
         for split in splits:
             self.dataset[split] = self.dataset[split].train_test_split(
                 test_size=n_samples, seed=self.seed, stratify_by_column=label
-            )['test'] ## only take the specified test split.
+            )["test"]  ## only take the specified test split.
 
     def load_data(self, **kwargs):
         """Load dataset from HuggingFace hub"""
