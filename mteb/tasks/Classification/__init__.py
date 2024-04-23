@@ -17,6 +17,7 @@ from .dan.LccSentimentClassification import *
 from .ell.GreekLegalCodeClassification import *
 from .ell.GreekSentimentClassification import *
 from .eng.AmazonPolarityClassification import *
+from .eng.ArxivClassification import *
 from .eng.Banking77Classification import *
 from .eng.EmotionClassification import *
 from .eng.ImdbClassification import *
@@ -27,6 +28,7 @@ from .est.estonian_valence import *
 from .fas.PersianFoodSentimentClassification import *
 from .fil.FilipinoHateSpeechClassification import *
 from .fra.MovieReviewSentimentClassification import *
+from .guj.GujaratiNewsClassification import *
 from .hin.HindiDiscourseClassification import *
 from .hin.SentimentAnalysisHindi import *
 from .hrv.CroatianSentimentClassification import *
@@ -39,6 +41,8 @@ from .mkd.MacedonianTweetSentimentClassification import *
 from .mlt.MalteseSentimentClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
+from .multilingual.IndicLangClassification import *
+from .multilingual.IndicSentimentClassification import *
 from .multilingual.MasakhaNEWSClassification import *
 from .multilingual.MassiveIntentClassification import *
 from .multilingual.MassiveScenarioClassification import *
@@ -49,6 +53,7 @@ from .multilingual.ScalaClassification import *
 from .nld.DutchBookReviewSentimentClassification import *
 from .nob.NoRecClassification import *
 from .nob.NorwegianParliamentClassification import *
+from .pan.PunjabiNewsClassification import *
 from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
 from .slk.SlovakSentimentClassification import *

@@ -8,6 +8,7 @@ from .multilingual.IN22ConvBitextMining import *
 from .multilingual.IN22GenBitextMining import *
 from .multilingual.norwegian_courts_bitext_mining import *
 from .multilingual.NorwegianCourtsBitextMining import *
+from .multilingual.NTREXBitextMining import *
 from .multilingual.RomaTalesBitextMining import *
 from .multilingual.TatoebaBitextMining import *
 from .vie.VieMedEVBitextMining import *
