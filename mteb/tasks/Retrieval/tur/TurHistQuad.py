@@ -1,7 +1,8 @@
+
 import datasets
 
 from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
-import json
+
 
 class TurHistQuadRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -43,20 +44,18 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
         avg_character_length={"train": 1219.37, "test": 1513.83},
     )
 
-    def load_data(self,**kwargs) -> None:
+    def load_data(self, **kwargs) -> None:
         """And transform to a retrieval datset, which have the following attributes
 
         self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document datas like title and text
         self.queries = Dict[query_id, str] #id => query
         self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
         """
-
         if self.data_loaded:
             return
 
-        
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
-        
+
         self.corpus = {}
         self.relevant_docs = {}
         self.queries = {}
@@ -72,8 +71,7 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
             self.queries[split] = {}
             self.relevant_docs[split] = {}
             self.corpus[split] = {}
-            
-            
+
             question = ds["question"]
             context = ds["context"]
             answer = [a["text"] for a in ds["answers"]]
