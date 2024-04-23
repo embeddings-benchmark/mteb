@@ -42,9 +42,7 @@ class AlloProfClusteringP2P(AbsTaskClustering):
         return example
 
     def dataset_transform(self):
-        """
-        Convert to standard format
-        """
+        """Convert to standard format"""
         self.dataset = self.dataset.remove_columns("uuid")
         self.dataset = self.dataset.map(self.create_description)
         texts = self.dataset["documents"]["text"]

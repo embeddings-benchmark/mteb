@@ -41,6 +41,7 @@ TASK_SUBTYPE = Literal[
 TASK_DOMAIN = Literal[
     "Academic",
     "Blog",
+    "Constructed",
     "Encyclopaedic",
     "Fiction",
     "Government",
@@ -53,6 +54,7 @@ TASK_DOMAIN = Literal[
     "Reviews",
     "Social",
     "Spoken",
+    "Subtitles",
     "Web",
     "Programming",
 ]
@@ -82,6 +84,7 @@ TASK_TYPE = Literal[
     "Retrieval",
     "STS",
     "Summarization",
+    "InstructionRetrieval",
 ]
 
 TASK_CATEGORY = Literal[
@@ -113,8 +116,7 @@ logger = logging.getLogger(__name__)
 
 
 class TaskMetadata(BaseModel):
-    """
-    Metadata for a task.
+    """Metadata for a task.
 
     Args:
         dataset: All arguments to pass to datasets.load_dataset to load the dataset for the task. Refer to https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset
@@ -179,9 +181,7 @@ class TaskMetadata(BaseModel):
 
     @field_validator("dataset")
     def _check_dataset_path_is_specified(cls, dataset):
-        """
-        This method checks that the dataset path is specified.
-        """
+        """This method checks that the dataset path is specified."""
         if "path" not in dataset or dataset["path"] is None:
             raise ValueError(
                 "You must specify the path to the dataset in the dataset dictionary. "
@@ -204,9 +204,7 @@ class TaskMetadata(BaseModel):
 
     @field_validator("eval_langs")
     def _check_eval_langs(cls, eval_langs):
-        """
-        This method checks that the eval_langs are specified as a list of languages.
-        """
+        """This method checks that the eval_langs are specified as a list of languages."""
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
                 for code in langs:
@@ -218,9 +216,7 @@ class TaskMetadata(BaseModel):
 
     @staticmethod
     def _check_language_code(code):
-        """
-        This method checks that the language code (e.g. "eng-Latn") is valid.
-        """
+        """This method checks that the language code (e.g. "eng-Latn") is valid."""
         lang, script = code.split("-")
         if script == "Code":
             if lang in PROGRAMMING_LANGS:
@@ -240,9 +236,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def languages(self) -> set[str]:
-        """
-        Return the languages of the dataset as iso639-3 codes.
-        """
+        """Return the languages of the dataset as iso639-3 codes."""
 
         def get_lang(lang: str) -> str:
             return lang.split("-")[0]
@@ -255,9 +249,7 @@ class TaskMetadata(BaseModel):
 
     @property
     def scripts(self) -> set[str]:
-        """
-        Return the scripts of the dataset as iso15924 codes.
-        """
+        """Return the scripts of the dataset as iso15924 codes."""
 
         def get_script(lang: str) -> str:
             return lang.split("-")[1]

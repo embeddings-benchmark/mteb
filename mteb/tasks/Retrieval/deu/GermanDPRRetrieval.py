@@ -13,10 +13,10 @@ class GermanDPR(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="GermanDPR",
         description="GermanDPR is a German Question Answering dataset for open-domain QA. It associates questions with a textual context containing the answer",
-        reference="https://www.deepset.ai/germanquad",
+        reference="https://huggingface.co/datasets/deepset/germandpr",
         dataset={
-            "path": "deepset/germanquad",
-            "revision": "fff05ceaf2ffbe5b65c7e0c57e678f7b7e1a0581",
+            "path": "deepset/germandpr",
+            "revision": "5129d02422a66be600ac89cd3e8531b4f97d347d",
         },
         type="Retrieval",
         category="s2p",
