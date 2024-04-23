@@ -44,6 +44,4 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        self.dataset["train"] = (
-            self.dataset["train"].shuffle(seed=self.seed).select(range(N_SAMPLES))
-        )
+        self.stratified_subsampling(splits=["train"])

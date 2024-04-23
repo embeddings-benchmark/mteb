@@ -13,6 +13,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+          cache: "pip"
+      
+      - name: Install dependencies
+        run: |
+          pip install jsonlines pydantic
+
+      - name: Validate jsonl points files
+        run: python docs/mmteb/validate_points.py
+
+  create-table:
+    # only run on push to main
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: check-points
+    steps:
+      - uses: actions/checkout@v3
         with:
           token: ${{ secrets.RELEASE }}
 
@@ -23,24 +43,21 @@ jobs:
 
       - name: Install dependencies
         run: |
-          make install
-          pip install tabulate # for the table creation
-
-
-      - name: Validate jsonl points files
-        run: python docs/mmteb/validate_points.py
+          pip install pandas tabulate # for the table creation
 
       - name: Create table
         run: python docs/mmteb/create_points_table.py
-
-        
+    
       - name: Push table
-        # only run on push to main
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
-          git add docs/mmteb/points_table.md
-          # check if the branch is up to date with the remote if not push the changes
-          git diff --exit-code || git commit -m "Update points table" && git push
+          # Check if changes exist in points_table.md
+          if git diff --quiet; then
+            echo "No changes detected"
+          else
+            git add docs/mmteb/points_table.md
+            git commit -m "Update points table"
+            git push
+          fi
           
