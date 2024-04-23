@@ -16,7 +16,7 @@ class NepaliNewsClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         date=("2019-01-01", "2020-01-01"),
-        eval_splits=["test"],
+        eval_splits=["train"],
         eval_langs=["nep-Deva"],
         main_score="accuracy",
         form=["written"],
@@ -54,4 +54,6 @@ class NepaliNewsClassification(AbsTaskClassification):
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("paras", "text")
-        self.dataset["train"] = self.dataset["train"].select(range(2048))
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"]
+        )
