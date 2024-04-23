@@ -3,11 +3,11 @@
   "mteb_dataset_name": "YelpReviewFullClassification",
   "mteb_version": "1.6.36",
   "test": {
-    "accuracy": 0.3774572127139364,
-    "accuracy_stderr": 0.013557583981099686,
-    "evaluation_time": 76.92,
-    "f1": 0.3771684997277067,
-    "f1_stderr": 0.014168954865835677,
-    "main_score": 0.3774572127139364
+    "accuracy": 0.409765625,
+    "accuracy_stderr": 0.008673832303041664,
+    "evaluation_time": 76.01,
+    "f1": 0.40856440418130696,
+    "f1_stderr": 0.00879278391956748,
+    "main_score": 0.409765625
   }
 }

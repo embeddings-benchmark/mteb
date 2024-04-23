@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import datasets
-import pandas as pd
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskClassification
@@ -22,12 +19,12 @@ class YelpReviewFullClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=None,
+        date=("2015-01-01", "2015-12-31"),  # reviews from 2015
         form=["written"],
         domains=["Reviews"],
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
+        socioeconomic_status="mixed",
         annotations_creators=None,
         dialect=None,
         text_creation=None,
@@ -40,40 +37,10 @@ class YelpReviewFullClassification(AbsTaskClassification):
     def metadata_dict(self) -> dict[str, str]:
         metadata_dict = dict(self.metadata)
         metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 32
+        metadata_dict["samples_per_label"] = 128
         return metadata_dict
 
     def dataset_transform(self):
-        total_rows = 2048
-        eval_splits = self.metadata.eval_splits
-
-        ds = {"train": self.dataset["train"]}
-
-        for split in eval_splits:
-            ds_split = self.dataset[split]
-
-            df_split = pd.DataFrame(
-                {"text": ds_split["text"], "label": ds_split["label"]}
-            )
-
-            label_counts = df_split["label"].value_counts()
-            total_labels = len(label_counts)
-            rows_per_label = total_rows // total_labels
-
-            sampled_dfs = []
-            for label, count in label_counts.items():
-                sampled_df = df_split[df_split["label"] == label].sample(
-                    n=min(rows_per_label, count), random_state=42
-                )
-                sampled_dfs.append(sampled_df)
-
-            sampled_df = pd.concat(sampled_dfs, ignore_index=True)
-
-            ds[split] = datasets.Dataset.from_dict(
-                {
-                    "text": sampled_df["text"].tolist(),
-                    "label": sampled_df["label"].tolist(),
-                }
-            )
-
-        self.dataset = datasets.DatasetDict(ds)
+        self.dataset = self.dataset["test"].train_test_split(
+            test_size=2048, seed=42, stratify_by_column="label"
+        )
