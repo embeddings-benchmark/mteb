@@ -9,13 +9,11 @@ import torch
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-SEED = 42
-
 
 class AbsTask(ABC):
     metadata: TaskMetadata
 
-    def __init__(self, seed=SEED, **kwargs):
+    def __init__(self, seed=42, **kwargs):
         self.dataset = None
         self.data_loaded = False
         self.is_multilingual = False
@@ -37,15 +35,20 @@ class AbsTask(ABC):
     @staticmethod
     def stratified_subsampling(
         dataset_dict: datasets.DatasetDict,
+        seed: int,
         splits: list[str] = ["test"],
         label: str = "label",
         n_samples: int = 2048,
     ) -> datasets.DatasetDict:
         """Subsamples the dataset with stratification by the supplied label.
         Returns a datasetDict object.
-        :param splits: the splits of the dataset.
-        :param label: the label with which the stratified sampling is based on.
-        :param n_samples: Optional, number of samples to subsample. Default is max_n_samples.
+
+        Args:
+            dataset_dict: the DatasetDict object.
+            seed: the random seed.
+            splits: the splits of the dataset.
+            label: the label with which the stratified sampling is based on.
+            n_samples: Optional, number of samples to subsample. Default is max_n_samples.
         """
         ## Can only do this if the label column is of ClassLabel.
         if not isinstance(dataset_dict[splits[0]].features[label], datasets.ClassLabel):
@@ -56,7 +59,7 @@ class AbsTask(ABC):
             ds_dict.update(
                 {
                     split: dataset_dict[split].train_test_split(
-                        test_size=n_samples, seed=SEED, stratify_by_column=label
+                        test_size=n_samples, seed=seed, stratify_by_column=label
                     )["test"]
                 }
             )  ## only take the specified test split.
