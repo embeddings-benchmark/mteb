@@ -19,6 +19,7 @@ from .ell.GreekSentimentClassification import *
 from .eng.AmazonPolarityClassification import *
 from .eng.Banking77Classification import *
 from .eng.EmotionClassification import *
+from .eng.FinancialPhrasebankClassification import *
 from .eng.ImdbClassification import *
 from .eng.NewsClassification import *
 from .eng.ToxicConversationsClassification import *

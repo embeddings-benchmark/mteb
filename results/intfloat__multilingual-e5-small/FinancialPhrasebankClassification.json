@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "1484d06fe7af23030c7c977b12556108d1f67039",
+  "mteb_dataset_name": "FinancialPhrasebankClassification",
+  "mteb_version": "1.6.36",
+  "train": {
+    "accuracy": 0.8655477031802119,
+    "accuracy_stderr": 0.008108943987535623,
+    "evaluation_time": 25.82,
+    "f1": 0.8382133633332065,
+    "f1_stderr": 0.006947823662336562,
+    "main_score": 0.8655477031802119
+  }
+}
