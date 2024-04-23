@@ -22,6 +22,8 @@ def batched(iterable: Iterable[T], n: int) -> Iterable[tuple[T, ...]]:
 
 
 class SwednClustering(AbsTaskClustering):
+    superseeded_by = "SwednClusteringP2P"
+
     metadata = TaskMetadata(
         name="SwednClustering",
         dataset={
