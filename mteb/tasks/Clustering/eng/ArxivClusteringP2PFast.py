@@ -2,11 +2,15 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.AbsTaskClusteringFast import clustering_downsample
+from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class ArxivClusteringP2PFast(AbsTaskClusteringFast):
+class ArxivClusteringP2PFast(AbsTaskClustering):
+    # a faster version of the dataset, since it does not sample from the same distribution we can't use the AbsTaskClusteringFast, instead we
+    # simply downsample each cluster.
+
     metadata = TaskMetadata(
         name="ArxivClusteringP2P.v2",
         description="Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
@@ -34,10 +38,7 @@ class ArxivClusteringP2PFast(AbsTaskClusteringFast):
         avg_character_length={"test": 1009.98},
     )
 
-    def dataset_transform(self):
-        sent = self.dataset["test"]["sentences"][0]  # type: ignore
-        lab = self.dataset["test"]["labels"][0]  # type: ignore
 
-        self.dataset["test"] = datasets.Dataset.from_dict(  # type: ignore
-            {"sentences": sent, "labels": lab}
-        )
+    def dataset_transform(self):
+        ds = clustering_downsample(self.dataset, self.seed)
+        self.dataset = ds
