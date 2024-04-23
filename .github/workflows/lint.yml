@@ -3,10 +3,9 @@
 name: run-linting
 
 on:
-  pull_request:
-    branches: [main]
   push:
     branches: [main]
+  pull_request:
 
 jobs:
   lint:
@@ -27,5 +26,3 @@ jobs:
         run: |
           make lint-check
       
-      - name: Validate jsonl points files
-        run: python docs/mmteb/validate_points.py

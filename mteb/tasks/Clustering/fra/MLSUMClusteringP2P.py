@@ -39,9 +39,7 @@ class MLSUMClusteringP2P(AbsTaskClustering):
     )
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub and convert it to the standard format.
-        """
+        """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return
         self.dataset = datasets.load_dataset(
@@ -58,9 +56,7 @@ class MLSUMClusteringP2P(AbsTaskClustering):
         return example
 
     def dataset_transform(self):
-        """
-        Convert to standard format
-        """
+        """Convert to standard format"""
         self.dataset = self.dataset.map(self.create_description)
         self.dataset = self.dataset.remove_columns(["summary", "url", "date", "title"])
         texts = self.dataset["text"]
