@@ -8,7 +8,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class ArxivClusteringP2PFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="ArxivClusteringP2PFast",
+        name="ArxivClusteringP2P.v2",
         description="Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
         reference="https://www.kaggle.com/Cornell-University/arxiv",
         dataset={
@@ -30,32 +30,14 @@ class ArxivClusteringP2PFast(AbsTaskClusteringFast):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={"test": 732723},
+        n_samples={"test": 250_000},
         avg_character_length={"test": 1009.98},
     )
 
     def dataset_transform(self):
-        sent = self.dataset["test"]["sentences"][0]
-        lab = self.dataset["test"]["labels"][0]
+        sent = self.dataset["test"]["sentences"][0]  # type: ignore
+        lab = self.dataset["test"]["labels"][0]  # type: ignore
 
-        self.dataset["test"] = datasets.Dataset.from_dict(
+        self.dataset["test"] = datasets.Dataset.from_dict(  # type: ignore
             {"sentences": sent, "labels": lab}
         )
-
-
-if __name__ == "__main__":
-    from sentence_transformers import SentenceTransformer
-
-    import mteb
-    from mteb.tasks.Clustering.eng.ArxivClusteringP2P import ArxivClusteringP2P
-
-    old_task = ArxivClusteringP2P()
-    old_task.load_data()
-    # downsample to 1 cluster
-    old_task.dataset["test"] = datasets.Dataset.from_dict(old_task.dataset["test"][:1])
-    task = ArxivClusteringP2PFast()
-    bench = mteb.MTEB(tasks=[old_task, task])
-    model = SentenceTransformer(
-        "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-    )
-    scores = bench.run(model, output_folder="tmp/results")
