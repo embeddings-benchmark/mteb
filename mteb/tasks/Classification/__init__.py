@@ -50,6 +50,7 @@ from .nob.NoRecClassification import *
 from .nob.NorwegianParliamentClassification import *
 from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
+from .san.SanskritShlokasClassification import *
 from .slk.SlovakSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
 from .swe.SweRecClassification import *
