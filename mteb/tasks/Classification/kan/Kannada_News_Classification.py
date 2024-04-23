@@ -26,7 +26,7 @@ class Kannada_News_Classification(AbsTaskClassification):
         license="CC-BY-SA-4.0",
         socioeconomic_status="mixed",
         annotations_creators="derived",
-        dialect=None,
+        dialect=[],
         text_creation="found",
         bibtex_citation=None,
         n_samples={"train": 6460},
