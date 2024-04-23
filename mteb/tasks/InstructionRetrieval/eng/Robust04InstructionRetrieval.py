@@ -11,8 +11,8 @@ class Robust04InstructionRetrieval(AbsTaskInstructionRetrieval):
         description="Measuring retrieval instruction following ability on Robust04 narratives.",
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
-            "path": "jhu-clsp/robust04-instructions",
-            "revision": "d25e82647b09251f4feaaf5462c9a18445072ba6",
+            "path": "jhu-clsp/robust04-instructions-patched",
+            "revision": "a5a1c4fe2bc528ac12e83f8cdf82178da85d2f1d",
         },
         type="InstructionRetrieval",
         category="s2p",

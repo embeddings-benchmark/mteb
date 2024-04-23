@@ -78,9 +78,9 @@ MTEB_MAIN_EN = [
 ]
 
 MTEB_RETRIEVAL_WITH_INSTRUCTIONS = [
-    "RobustInstructionRetrieval",
-    "NewsInstructionRetrieval",
-    "CoreInstructionRetrieval",
+    "Robust04InstructionRetrieval",
+    "News21InstructionRetrieval",
+    "Core17InstructionRetrieval",
 ]
 
 MTEB_RETRIEVAL_LAW = [
