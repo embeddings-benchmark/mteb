@@ -62,7 +62,7 @@ class AbsTaskClusteringFast(AbsTask):
     """Abstract class for Clustering tasks.
 
     This class embeds the corpus sentences then samples N samples from the corpus and clusters them.
-    he similarity then is calculated using the V-measure metric, which is invariant to the permutation of the labels.
+    The similarity then is calculated using the V-measure metric, which is invariant to the permutation of the labels.
     This approach is then repeated K times.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset.
