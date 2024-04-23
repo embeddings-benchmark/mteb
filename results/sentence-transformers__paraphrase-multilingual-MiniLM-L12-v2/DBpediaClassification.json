@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "9abd46cf7fc8b4c64290f26993c540b92aa145ac",
+  "mteb_dataset_name": "DBpediaClassification",
+  "mteb_version": "1.6.36",
+  "test": {
+    "accuracy": 0.772998046875,
+    "accuracy_stderr": 0.02226739173706091,
+    "evaluation_time": 25.06,
+    "f1": 0.7657939319441809,
+    "f1_stderr": 0.025037819945513518,
+    "main_score": 0.772998046875
+  }
+}

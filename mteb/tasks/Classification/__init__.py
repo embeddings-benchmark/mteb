@@ -18,6 +18,7 @@ from .ell.GreekLegalCodeClassification import *
 from .ell.GreekSentimentClassification import *
 from .eng.AmazonPolarityClassification import *
 from .eng.Banking77Classification import *
+from .eng.DBpediaClassification import *
 from .eng.EmotionClassification import *
 from .eng.ImdbClassification import *
 from .eng.NewsClassification import *
