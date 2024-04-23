@@ -53,7 +53,7 @@ class AbsTask(ABC):
         for split in splits:
             self.dataset[split] = self.dataset[split].train_test_split(
                 test_size=n_samples, seed=self.seed, stratify_by_column=label
-            )
+            )['test'] ## only take the specified test split.
 
     def load_data(self, **kwargs):
         """Load dataset from HuggingFace hub"""
