@@ -1,0 +1,16 @@
+{
+  "dataset_revision": "d25b21e407a2d22c96681fe3ae700eb2cc0c9bb9",
+  "mteb_dataset_name": "SummEvalDeSummarization",
+  "mteb_version": "1.6.36",
+  "train": {
+    "cos_sim": {
+      "pearson": 0.3078179425451643,
+      "spearman": 0.31306507319583377
+    },
+    "dot": {
+      "pearson": 0.2463831045179226,
+      "spearman": 0.26570969555391427
+    },
+    "evaluation_time": 93.43
+  }
+}
