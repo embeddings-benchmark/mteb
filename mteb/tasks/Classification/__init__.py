@@ -14,7 +14,6 @@ from .dan.DanishPoliticalCommentsClassification import *
 from .dan.DKHateClassification import *
 from .dan.LccSentimentClassification import *
 from .eng.AmazonPolarityClassification import *
-from .eng.ArxivClassification import *
 from .eng.Banking77Classification import *
 from .eng.EmotionClassification import *
 from .eng.ImdbClassification import *
