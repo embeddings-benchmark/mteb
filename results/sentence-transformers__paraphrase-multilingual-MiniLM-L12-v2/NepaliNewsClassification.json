@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "79125f20d858a08f71ec4923169a6545221725c4",
+  "mteb_dataset_name": "NepaliNewsClassification",
+  "mteb_version": "1.7.6",
+  "test": {
+    "accuracy": 0.7931103678929766,
+    "accuracy_stderr": 0.0439796660596951,
+    "evaluation_time": 26.88,
+    "f1": 0.7931203679944014,
+    "f1_stderr": 0.044877860671872716,
+    "main_score": 0.7931103678929766
+  }
+}
