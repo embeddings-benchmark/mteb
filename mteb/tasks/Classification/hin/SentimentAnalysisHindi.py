@@ -40,4 +40,3 @@ class SentimentAnalysisHindi(AbsTaskClassification):
 
     def dataset_transform(self):
         self.dataset["train"] = self.dataset["train"].select(range(2048))
-
