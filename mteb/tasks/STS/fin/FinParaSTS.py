@@ -4,6 +4,8 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskSTS import AbsTaskSTS
 
+N_SAMPLES = 1000
+
 
 class FinParaSTS(AbsTaskSTS):
     metadata = TaskMetadata(
@@ -54,7 +56,7 @@ class FinParaSTS(AbsTaskSTS):
             abstract = "In this paper, we introduce the first fully manually annotated paraphrase corpus for Finnish containing 53,572 paraphrase pairs harvested from alternative subtitles and news headings. Out of all paraphrase pairs in our corpus 98{\%} are manually classified to be paraphrases at least in their given context, if not in all contexts. Additionally, we establish a manual candidate selection method and demonstrate its feasibility in high quality paraphrase selection in terms of both cost and quality.",
         }        
         """,
-        n_samples={"test": 1000, "validation": 1000},
+        n_samples={"test": N_SAMPLES, "validation": N_SAMPLES},
         avg_character_length={"test": 59.3, "validation": 58.1},
     )
 
@@ -68,7 +70,7 @@ class FinParaSTS(AbsTaskSTS):
     def dataset_transform(self):
         self.dataset = self.dataset.shuffle(seed=self.seed)
         for split in self.dataset:
-            self.dataset[split] = self.dataset[split].select(range(1000))
+            self.dataset[split] = self.dataset[split].select(range(N_SAMPLES))
         rename_dict = {"text1": "sentence1", "text2": "sentence2", "label": "score"}
         self.dataset = self.dataset.rename_columns(rename_dict)
         self.dataset = self.dataset.select_columns(list(rename_dict.values()))
