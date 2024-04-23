@@ -57,7 +57,7 @@ class FinParaSTS(AbsTaskSTS):
         }        
         """,
         n_samples={"test": N_SAMPLES, "validation": N_SAMPLES},
-        avg_character_length={"test": 59.3, "validation": 58.1},
+        avg_character_length={"test": 59.0, "validation": 58.8},
     )
 
     @property
