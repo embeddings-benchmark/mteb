@@ -16,7 +16,6 @@ def author_from_bibtex(bibtex: str | None) -> str:
         return ""
     authors = authors.group(1)
     authors = [a.split(", ") for a in authors.split(" and ")]
-    # authors = [f"{a[0]} et al." if len(a) > 1 else a[0] for a in authors]
     author_str_w_et_al = (
         authors[0][0] + " et al." if len(authors[0]) > 1 else authors[0][0]
     )
