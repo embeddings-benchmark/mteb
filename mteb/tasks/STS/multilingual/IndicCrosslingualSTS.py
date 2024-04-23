@@ -104,6 +104,6 @@ class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
             )
             self.dataset[lang]["test"] = self.dataset[lang]["test"].train_test_split(
                 test_size=256,
-                seed=42,
+                seed=self.seed,
                 stratify_by_column="label",
             )["test"]
