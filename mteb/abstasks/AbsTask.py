@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import random
 from abc import ABC, abstractmethod
 
@@ -9,9 +10,12 @@ import torch
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+logger = logging.getLogger(__name__)
+
 
 class AbsTask(ABC):
     metadata: TaskMetadata
+    superseeded_by: None | str = None
 
     def __init__(self, seed=42, **kwargs):
         self.dataset = None
@@ -25,6 +29,13 @@ class AbsTask(ABC):
         np.random.seed(self.seed)
         torch.manual_seed(self.seed)
         torch.cuda.manual_seed_all(self.seed)
+
+    def check_if_dataset_is_superseeded(self):
+        """Check if the dataset is superseeded by a newer version"""
+        if self.superseeded_by:
+            logger.warning(
+                f"Dataset '{self.metadata.name}' is superseeded by '{self.superseeded_by}', you might consider using the newer version of the dataset."
+            )
 
     def dataset_transform(self):
         """Transform operations applied to the dataset after loading.
