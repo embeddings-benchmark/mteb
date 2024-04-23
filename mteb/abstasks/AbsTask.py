@@ -65,16 +65,15 @@ class AbsTask(ABC):
         if not isinstance(dataset_dict[splits[0]].features[label], datasets.ClassLabel):
             dataset_dict = dataset_dict.class_encode_column(label)
 
-        ds_dict = {}
         for split in splits:
-            ds_dict.update(
+            dataset_dict.update(
                 {
                     split: dataset_dict[split].train_test_split(
                         test_size=n_samples, seed=seed, stratify_by_column=label
                     )["test"]
                 }
             )  ## only take the specified test split.
-        return datasets.DatasetDict(ds_dict)
+        return dataset_dict
 
     def load_data(self, **kwargs):
         """Load dataset from HuggingFace hub"""
