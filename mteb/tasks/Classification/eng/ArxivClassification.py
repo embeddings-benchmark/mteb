@@ -7,7 +7,7 @@ from ....abstasks import AbsTaskClassification
 
 class ArxivClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="ArxivtestClassification",
+        name="ArxivClassification",
         description="Classification Dataset of Arxiv Papers",
         dataset={
             "path": "ccdv/arxiv-classification",
