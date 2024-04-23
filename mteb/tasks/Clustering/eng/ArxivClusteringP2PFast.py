@@ -1,15 +1,14 @@
 from __future__ import annotations
 
+import datasets
+
+from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
-
-class ArxivClusteringP2P(AbsTaskClustering):
-    superseeded_by = "ArxivClusteringP2P.v2"
-
+class ArxivClusteringP2PFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="ArxivClusteringP2P",
+        name="ArxivClusteringP2P.v2",
         description="Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
         reference="https://www.kaggle.com/Cornell-University/arxiv",
         dataset={
@@ -31,6 +30,14 @@ class ArxivClusteringP2P(AbsTaskClustering):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={"test": 732723},
+        n_samples={"test": 250_000},
         avg_character_length={"test": 1009.98},
     )
+
+    def dataset_transform(self):
+        sent = self.dataset["test"]["sentences"][0]  # type: ignore
+        lab = self.dataset["test"]["labels"][0]  # type: ignore
+
+        self.dataset["test"] = datasets.Dataset.from_dict(  # type: ignore
+            {"sentences": sent, "labels": lab}
+        )
