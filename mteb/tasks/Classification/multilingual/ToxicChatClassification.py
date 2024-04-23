@@ -35,6 +35,7 @@ _LANGS = [
     "dan-Latn",
 ]
 
+_EVAL_SPLITS = ["test"]
 
 class ToxicChatClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -56,7 +57,7 @@ class ToxicChatClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
-        eval_splits=["test"],
+        eval_splits=_EVAL_SPLITS,
         eval_langs=_LANGS,
         main_score="accuracy",
         date=("2023-10-26", "2024-01-31"),
@@ -81,14 +82,13 @@ class ToxicChatClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        # only use human-annotated data
-        self.dataset = self.dataset["test"].filter(lambda x: x["human_annotation"])
         keep_cols = ["user_input", "toxicity"]
         rename_dict = dict(zip(keep_cols, ["text", "label"]))
-        remove_cols = [col for col in self.dataset.column_names if col not in keep_cols]
+        remove_cols = [col for col in self.dataset[_EVAL_SPLITS[0]].column_names if col not in keep_cols]
         self.dataset = self.dataset.rename_columns(rename_dict)
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"]
+        )
+        # only use human-annotated data
+        self.dataset = self.dataset.filter(lambda x: x["human_annotation"])
         self.dataset = self.dataset.remove_columns(remove_cols)
-        self.dataset = self.dataset.class_encode_column("label")
-        self.dataset = self.dataset.train_test_split(
-            test_size=0.5, seed=self.seed, stratify_by_column="label"
-        )  # balanced sampling across types of hate speech
