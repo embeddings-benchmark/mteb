@@ -2,12 +2,12 @@
   "dataset_revision": "79125f20d858a08f71ec4923169a6545221725c4",
   "mteb_dataset_name": "NepaliNewsClassification",
   "mteb_version": "1.7.6",
-  "test": {
-    "accuracy": 0.9187290969899665,
-    "accuracy_stderr": 0.013757979469485478,
-    "evaluation_time": 22.56,
-    "f1": 0.9174107746406653,
-    "f1_stderr": 0.013930087438186732,
-    "main_score": 0.9187290969899665
+  "train": {
+    "accuracy": 0.921337890625,
+    "accuracy_stderr": 0.019344135434650765,
+    "evaluation_time": 18.29,
+    "f1": 0.9206305809680817,
+    "f1_stderr": 0.019561114083066884,
+    "main_score": 0.921337890625
   }
 }
