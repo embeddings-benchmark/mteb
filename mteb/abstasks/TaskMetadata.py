@@ -54,6 +54,7 @@ TASK_DOMAIN = Literal[
     "Reviews",
     "Social",
     "Spoken",
+    "Subtitles",
     "Web",
     "Programming",
 ]

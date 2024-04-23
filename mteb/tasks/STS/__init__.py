@@ -9,6 +9,7 @@ from .eng.STS14STS import *
 from .eng.STS15STS import *
 from .eng.STS16STS import *
 from .eng.STSBenchmarkSTS import *
+from .fin.FinParaSTS import *
 from .fra.SickFrSTS import *
 from .jpn.JSTS import *
 from .kor.KlueSTS import *

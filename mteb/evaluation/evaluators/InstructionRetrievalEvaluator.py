@@ -19,11 +19,17 @@ class InstructionRetrievalEvaluator(RetrievalEvaluator):
     ) -> Dict[str, Dict[str, float]]:
         if not self.retriever:
             raise ValueError("Model/Technique has not been provided!")
-        return self.retriever.search(
-            corpus,
-            queries,
-            self.top_k,
-            self.score_function,
-            instructions=instructions,
-            **kwargs,
-        )
+
+        if self.is_cross_encoder:
+            return self.retriever.search_cross_encoder(
+                corpus, queries, self.top_k, instructions=instructions, **kwargs
+            )
+        else:
+            return self.retriever.search(
+                corpus,
+                queries,
+                self.top_k,
+                self.score_function,
+                instructions=instructions,
+                **kwargs,
+            )
