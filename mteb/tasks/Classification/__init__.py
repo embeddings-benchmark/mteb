@@ -6,6 +6,7 @@ from .ara.TweetEmotionClassification import *
 from .ara.TweetSarcasmClassification import *
 from .bam.BambaraSentimentClassification import *
 from .ben.BengaliHateSpeechClassification import *
+from .ben.SentimentAnalysisBengali import *
 from .bul.BulgarianSentimentClassification import *
 from .bul.BulgarianStoreReviewSentimentClassfication import *
 from .ces.CzechSubjectivityClassification import *
