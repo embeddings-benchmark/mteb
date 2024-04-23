@@ -6,7 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class SummEvalEsSummarization(AbsTaskSummarization):
     metadata = TaskMetadata(
-        name="SummEvalDeSummarization",
+        name="SummEvalEsSummarization",
         description="SummEval Dataset for Spanish",
         reference="https://huggingface.co/datasets/sproos/summeval-es/",
         dataset={
