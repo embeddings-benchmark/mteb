@@ -1,5 +1,4 @@
-# GitHub action for the mmteb contributions
-# this way the CI related to the mmteb contributions will be separated from the linting CI
+# GitHub action for the task table generation.
 
 name: documentation
 
