@@ -62,7 +62,9 @@ class WRIMEClassification(AbsTaskClassification):
         self.dataset = self.dataset.flatten().select_columns(
             ["sentence", "avg_readers.sentiment"]
         )
-        self.dataset = self.dataset.rename_columns({"sentence": "text", "avg_readers.sentiment": "label"})
+        self.dataset = self.dataset.rename_columns(
+            {"sentence": "text", "avg_readers.sentiment": "label"}
+        )
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )

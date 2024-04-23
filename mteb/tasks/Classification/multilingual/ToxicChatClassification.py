@@ -37,6 +37,7 @@ _LANGS = [
 
 _EVAL_SPLITS = ["test"]
 
+
 class ToxicChatClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ToxicChatClassification",
@@ -84,7 +85,11 @@ class ToxicChatClassification(AbsTaskClassification):
     def dataset_transform(self):
         keep_cols = ["user_input", "toxicity"]
         rename_dict = dict(zip(keep_cols, ["text", "label"]))
-        remove_cols = [col for col in self.dataset[_EVAL_SPLITS[0]].column_names if col not in keep_cols]
+        remove_cols = [
+            col
+            for col in self.dataset[_EVAL_SPLITS[0]].column_names
+            if col not in keep_cols
+        ]
         self.dataset = self.dataset.rename_columns(rename_dict)
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]

@@ -48,4 +48,6 @@ class NordicLangClassification(AbsTaskClassification):
         return metadata_dict
 
     def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns({"sentence": "text", "language": "label"})
+        self.dataset = self.dataset.rename_columns(
+            {"sentence": "text", "language": "label"}
+        )

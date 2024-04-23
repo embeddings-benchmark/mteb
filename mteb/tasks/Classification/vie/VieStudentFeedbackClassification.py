@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import random
-from collections import Counter
-
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -47,7 +44,9 @@ class VieStudentFeedbackClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns({"sentence": "text", "sentiment": "label"})
+        self.dataset = self.dataset.rename_columns(
+            {"sentence": "text", "sentiment": "label"}
+        )
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )
