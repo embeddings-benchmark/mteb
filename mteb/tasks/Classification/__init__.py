@@ -27,6 +27,7 @@ from .est.estonian_valence import *
 from .fas.PersianFoodSentimentClassification import *
 from .fil.FilipinoHateSpeechClassification import *
 from .fra.MovieReviewSentimentClassification import *
+from .guj.GujaratiNewsClassification import *
 from .hin.HindiDiscourseClassification import *
 from .hrv.CroatianSentimentClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
@@ -38,6 +39,7 @@ from .mkd.MacedonianTweetSentimentClassification import *
 from .mlt.MalteseSentimentClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
+from .multilingual.IndicSentimentClassification import *
 from .multilingual.MasakhaNEWSClassification import *
 from .multilingual.MassiveIntentClassification import *
 from .multilingual.MassiveScenarioClassification import *
