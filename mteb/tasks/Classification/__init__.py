@@ -17,6 +17,7 @@ from .dan.LccSentimentClassification import *
 from .ell.GreekLegalCodeClassification import *
 from .ell.GreekSentimentClassification import *
 from .eng.AmazonPolarityClassification import *
+from .eng.ArxivClassification import *
 from .eng.Banking77Classification import *
 from .eng.EmotionClassification import *
 from .eng.ImdbClassification import *
