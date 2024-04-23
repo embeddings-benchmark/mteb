@@ -4,19 +4,19 @@ from mteb.abstasks import AbsTaskSummarization
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SummEvalEsSummarization(AbsTaskSummarization):
+class SummEvalSwSummarization(AbsTaskSummarization):
     metadata = TaskMetadata(
-        name="SummEvalEsSummarization",
-        description="SummEval Dataset for Spanish",
-        reference="https://huggingface.co/datasets/sproos/summeval-es/",
+        name="SummEvalSwSummarization",
+        description="SummEval Dataset for Swedish",
+        reference="https://huggingface.co/datasets/sproos/summeval-sw/",
         dataset={
-            "path": "sproos/summeval-es",
-            "revision": "806c651ffcc893ee518a2b198fa160d973e2182b",
+            "path": "sproos/summeval-sw",
+            "revision": "4eb1c5a78fa8f0e9236c1c969d399c3834944e1e",
         },
         type="Summarization",
         category="p2p",
         eval_splits=["train"],
-        eval_langs=["spa-Latn"],
+        eval_langs=["swe-Latn"],
         main_score="cosine_spearman",
         date=None,
         form=None,
