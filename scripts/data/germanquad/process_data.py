@@ -1,5 +1,6 @@
 """See clarin-knext/arguana-pl, clarin-knext/arguana-pl-qrels and
-beir.datasets.data_loader_hf.HFDataLoader for BEIR format."""
+beir.datasets.data_loader_hf.HFDataLoader for BEIR format.
+"""
 
 from __future__ import annotations
 
