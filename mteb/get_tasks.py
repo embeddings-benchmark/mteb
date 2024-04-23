@@ -11,7 +11,7 @@ from mteb.abstasks.languages import (
     path_to_lang_codes,
     path_to_lang_scripts,
 )
-from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
+from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
 from mteb.tasks import *  # import all tasks
 
 logger = logging.getLogger(__name__)
@@ -32,7 +32,7 @@ def check_is_valid_language(lang: str) -> None:
 
 
 def filter_superseeded_datasets(tasks: list[AbsTask]) -> list[AbsTask]:
-    return [t for t in tasks if t.is_superseeded is None]
+    return [t for t in tasks if t.superseeded_by is None]
 
 
 def filter_tasks_by_languages(
@@ -64,18 +64,27 @@ def filter_tasks_by_domains(
     ]
 
 
-def filter_tasks_by_task_type(
-    tasks: list[AbsTask], task_type: TASK_TYPE
+def filter_tasks_by_task_types(
+    tasks: list[AbsTask], task_types: list[TASK_TYPE]
 ) -> list[AbsTask]:
-    return [t for t in tasks if t.metadata.type == task_type]
+    _task_types = set(task_types)
+    return [t for t in tasks if t.metadata.type in _task_types]
+
+
+def filter_task_by_categories(
+    tasks: list[AbsTask], categories: list[TASK_CATEGORY]
+) -> list[AbsTask]:
+    _categories = set(categories)
+    return [t for t in tasks if t.metadata.category in _categories]
 
 
 def get_tasks(
     languages: list[str] | None = None,
     script: list[str] | None = None,
     domains: list[TASK_DOMAIN] | None = None,
-    task_type: TASK_TYPE | None = None,
-    exclude_superseeded_datasets: bool = True,
+    task_types: list[TASK_TYPE] | None = None,
+    categories: list[TASK_CATEGORY] | None = None,
+    exclude_superseeded: bool = True,
 ) -> list[AbsTask]:
     """Get a list of tasks based on the specified filters.
 
@@ -84,8 +93,10 @@ def get_tasks(
             "eng-Latn".
         script: A list of script codes (ISO 15924 codes). If None, all scripts are included.
         domains: A list of task domains.
-        task_type: A string specifying the type of task. If None, all tasks are included.
-        exclude_superseeded_datasets: A boolean flag to exclude datasets which are superseeded by another.
+        task_types: A string specifying the type of task. If None, all tasks are included.
+        categories: A list of task categories these include "s2s" (sentence to sentence), "s2p" (sentence to paragraph) and "p2p" (paragraph to
+            paragraph).
+        exclude_superseeded: A boolean flag to exclude datasets which are superseeded by another.
 
     Returns:
         A list of all initialized tasks objects which pass all of the filters (AND operation).
@@ -109,9 +120,11 @@ def get_tasks(
         tasks = filter_tasks_by_script(tasks, script)
     if domains:
         tasks = filter_tasks_by_domains(tasks, domains)
-    if exclude_superseeded_datasets:
+    if exclude_superseeded:
         tasks = filter_superseeded_datasets(tasks)
-    if task_type:
-        tasks = filter_tasks_by_task_type(tasks, task_type)
+    if task_types:
+        tasks = filter_tasks_by_task_types(tasks, task_types)
+    if categories:
+        tasks = filter_task_by_categories(tasks, categories)
 
     return tasks
