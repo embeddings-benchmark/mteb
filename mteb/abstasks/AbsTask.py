@@ -11,6 +11,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 SEED = 42
 
+
 class AbsTask(ABC):
     metadata: TaskMetadata
 
@@ -46,16 +47,19 @@ class AbsTask(ABC):
         :param label: the label with which the stratified sampling is based on.
         :param n_samples: Optional, number of samples to subsample. Default is max_n_samples.
         """
-
         ## Can only do this if the label column is of ClassLabel.
         if not isinstance(dataset_dict[splits[0]].features[label], datasets.ClassLabel):
             dataset_dict = dataset_dict.class_encode_column(label)
 
         ds_dict = {}
         for split in splits:
-            ds_dict.update({split: dataset_dict[split].train_test_split(
-                test_size=n_samples, seed=SEED, stratify_by_column=label
-            )["test"]})  ## only take the specified test split.
+            ds_dict.update(
+                {
+                    split: dataset_dict[split].train_test_split(
+                        test_size=n_samples, seed=SEED, stratify_by_column=label
+                    )["test"]
+                }
+            )  ## only take the specified test split.
         return datasets.DatasetDict(ds_dict)
 
     def load_data(self, **kwargs):
