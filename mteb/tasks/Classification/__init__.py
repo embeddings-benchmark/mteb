@@ -45,6 +45,7 @@ from .multilingual.MTOPDomainClassification import *
 from .multilingual.MTOPIntentClassification import *
 from .multilingual.NordicLangClassification import *
 from .multilingual.ScalaClassification import *
+from .nep.NepaliNewsClassification import *
 from .nld.DutchBookReviewSentimentClassification import *
 from .nob.NoRecClassification import *
 from .nob.NorwegianParliamentClassification import *
