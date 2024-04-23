@@ -19,13 +19,13 @@ class Kannada_News_Classification(AbsTaskClassification):
         eval_splits=["train"],
         eval_langs=["kan-Knda"],
         main_score="accuracy",
-        date=None,
+        date=("2019-03-17", "2020-08-06"),
         form=["written"],
         domains=["News"],
         task_subtypes=["Topic classification"],
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
+        license="CC-BY-SA-4.0",
+        socioeconomic_status="mixed",
+        annotations_creators="derived",
         dialect=None,
         text_creation="found",
         bibtex_citation=None,
@@ -34,5 +34,6 @@ class Kannada_News_Classification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        self.dataset["train"] = self.dataset["train"].select(range(2048))
+        N_SAMPLES = 2048
+        self.dataset["train"] = self.dataset["train"].select(range(N_SAMPLES))
         self.dataset = self.dataset.rename_column("headline", "text")
