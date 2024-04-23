@@ -8,7 +8,7 @@ class SummEvalPtSummarization(AbsTaskSummarization):
     metadata = TaskMetadata(
         name="SummEvalPtSummarization",
         description="Portugese Summarization Dataset",
-        reference="",
+        reference="https://huggingface.co/datasets/mteb-pt/summeval",
         dataset={
             "path": "mteb-pt/summeval",
             "revision": "b57d536d89da6fc42b3ca40645bb813f538b9ede",
@@ -19,7 +19,7 @@ class SummEvalPtSummarization(AbsTaskSummarization):
         eval_langs=["por-Latn"],
         main_score="cosine_spearman",
         date=None,
-        form=["written"],
+        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
@@ -32,3 +32,10 @@ class SummEvalPtSummarization(AbsTaskSummarization):
         avg_character_length=None,
     )
 
+    @property
+    def metadata_dict(self) -> dict[str, str]:
+        metadata_dict = super().metadata_dict
+        metadata_dict["min_score"] = 0
+        metadata_dict["max_score"] = 5
+
+        return metadata_dict
