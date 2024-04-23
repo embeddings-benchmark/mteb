@@ -5,6 +5,7 @@ from .deu.BlurbsClusteringS2S import *
 from .deu.TenKGnadClusteringP2P import *
 from .deu.TenKGnadClusteringS2S import *
 from .eng.ArxivClusteringP2P import *
+from .eng.ArxivClusteringP2PFast import *
 from .eng.ArxivClusteringS2S import *
 from .eng.BigPatentClustering import *
 from .eng.BiorxivClusteringP2P import *
@@ -31,4 +32,5 @@ from .rom.RomaniBibleClustering import *
 from .spa.FloresClusteringS2S import *
 from .spa.SpanishNewsClusteringP2P import *
 from .swe.swedn_clustering import *
+from .swe.SwednClustering import *
 from .zho.CMTEBClustering import *
