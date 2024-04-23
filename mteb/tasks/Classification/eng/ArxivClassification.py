@@ -7,7 +7,7 @@ from ....abstasks import AbsTaskClassification
 
 class ArxivClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="ArxivClassification",
+        name="ArxivtestClassification",
         description="Classification Dataset of Arxiv Papers",
         dataset={
             "path": "ccdv/arxiv-classification",
@@ -19,7 +19,7 @@ class ArxivClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=(1998-11-11, 2019-03-28),
+        date=(1998-11-11, 2019-3-28),
         form=["written"],
         domains=["Academic"],
         task_subtypes=["Topic classification"],
