@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 import random
 from abc import ABC, abstractmethod
-from typing import Union
 
 import datasets
 import numpy as np
@@ -17,7 +16,6 @@ logger = logging.getLogger(__name__)
 class AbsTask(ABC):
     metadata: TaskMetadata
     superseeded_by: None | str = None
-    max_n_samples = 2048
 
     def __init__(self, seed=42, **kwargs):
         self.dataset = None
@@ -45,30 +43,38 @@ class AbsTask(ABC):
         """
         pass
 
+    @staticmethod
     def stratified_subsampling(
-        self,
-        splits: Union[str, list[str]] = ["test"],
+        dataset_dict: datasets.DatasetDict,
+        seed: int,
+        splits: list[str] = ["test"],
         label: str = "label",
-        n_samples: int = max_n_samples,
-    ):
+        n_samples: int = 2048,
+    ) -> datasets.DatasetDict:
         """Subsamples the dataset with stratification by the supplied label.
-        The following kwargs must be provided
-        for stratified_subsampling to run:
-        - splits: Union[str, list[str]], the splits of the dataset.
-        - label: str, the label with which the stratified sampling is based on.
-        - n_samples: Optional[int], number of samples to subsample. Default is max_n_samples.
+        Returns a datasetDict object.
+
+        Args:
+            dataset_dict: the DatasetDict object.
+            seed: the random seed.
+            splits: the splits of the dataset.
+            label: the label with which the stratified sampling is based on.
+            n_samples: Optional, number of samples to subsample. Default is max_n_samples.
         """
-        if isinstance(splits, str):
-            splits = [splits]
-
         ## Can only do this if the label column is of ClassLabel.
-        if not isinstance(self.dataset[splits[0]].features[label], datasets.ClassLabel):
-            self.dataset = self.dataset.class_encode_column(label)
+        if not isinstance(dataset_dict[splits[0]].features[label], datasets.ClassLabel):
+            dataset_dict = dataset_dict.class_encode_column(label)
 
+        ds_dict = {}
         for split in splits:
-            self.dataset[split] = self.dataset[split].train_test_split(
-                test_size=n_samples, seed=self.seed, stratify_by_column=label
-            )["test"]  ## only take the specified test split.
+            ds_dict.update(
+                {
+                    split: dataset_dict[split].train_test_split(
+                        test_size=n_samples, seed=seed, stratify_by_column=label
+                    )["test"]
+                }
+            )  ## only take the specified test split.
+        return datasets.DatasetDict(ds_dict)
 
     def load_data(self, **kwargs):
         """Load dataset from HuggingFace hub"""
