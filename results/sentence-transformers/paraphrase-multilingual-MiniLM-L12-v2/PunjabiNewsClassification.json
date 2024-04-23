@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "cec3923e16519efe51d535497e711932b8f1dc44",
+  "mteb_dataset_name": "PunjabiNewsClassification",
+  "mteb_version": "1.7.5",
+  "test": {
+    "accuracy": 0.6872611464968152,
+    "accuracy_stderr": 0.05826894185561482,
+    "ap": 0.27327223192391453,
+    "ap_stderr": 0.03258006746295188,
+    "evaluation_time": 19.45,
+    "f1": 0.6088190884521415,
+    "f1_stderr": 0.04592638929902085,
+    "main_score": 0.6872611464968152
+  }
+}
