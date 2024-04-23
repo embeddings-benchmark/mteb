@@ -285,6 +285,7 @@ class MTEB:
 
                 # load data
                 logger.info(f"Loading dataset for {task.metadata_dict['name']}")
+                task.check_if_dataset_is_superseeded()
                 task.load_data(eval_splits=task_eval_splits, **kwargs)
 
                 # run evaluation

@@ -7,7 +7,7 @@ from typing import Any, Dict
 import numpy as np
 import sklearn
 import sklearn.cluster
-from datasets import Dataset
+from datasets import DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 
 from .AbsTask import AbsTask
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 Split = str
 HFLang = str
-MultilingualDataset = Dict[HFLang, Dataset]
+MultilingualDataset = Dict[HFLang, DatasetDict]
 Scores = Dict[str, Any]
 
 
@@ -90,8 +90,8 @@ class AbsTaskClusteringFast(AbsTask):
     def evaluate(self, model, split="test", **kwargs) -> Scores | Dict[HFLang, Scores]:
         lang: HFLang
         multilingual_ds: MultilingualDataset
-        self.dataset: MultilingualDataset | Dataset
-        ds: Dataset
+        self.dataset: MultilingualDataset | DatasetDict
+        ds: DatasetDict
 
         if not self.data_loaded:
             self.load_data()
@@ -116,13 +116,15 @@ class AbsTaskClusteringFast(AbsTask):
         return scores
 
     def _evaluate_monolingual(
-        self, model, dataset: Dataset, split: Split = "test", **kwargs: Any
+        self, model, dataset: DatasetDict, split: Split = "test", **kwargs: Any
     ) -> dict[str, float | list[float]]:
+        _dataset = dataset[split]
+
         rng_state = random.Random(self.seed)
         example_indices = rng_state.sample(
-            range(len(dataset)), k=self.max_documents_to_embed
+            range(len(_dataset)), k=self.max_documents_to_embed
         )
-        downsampled_dataset = dataset.select(example_indices)
+        downsampled_dataset = _dataset.select(example_indices)
 
         logger.info(f"Encoding {len(downsampled_dataset)} sentences...")
 
