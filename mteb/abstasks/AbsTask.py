@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import random
 from abc import ABC, abstractmethod
-from typing import Union
 
 import datasets
 import numpy as np
@@ -34,30 +33,30 @@ class AbsTask(ABC):
         """
         pass
 
+    @staticmethod
     def stratified_subsampling(
         self,
-        splits: Union[str, list[str]] = ["test"],
+        splits: list[str] = ["test"],
         label: str = "label",
         n_samples: int = max_n_samples,
-    ):
+    ) -> list[datasets.Dataset]:
         """Subsamples the dataset with stratification by the supplied label.
-        The following kwargs must be provided
-        for stratified_subsampling to run:
-        - splits: Union[str, list[str]], the splits of the dataset.
-        - label: str, the label with which the stratified sampling is based on.
-        - n_samples: Optional[int], number of samples to subsample. Default is max_n_samples.
+        Returns a list of datasets.
+        :param splits: the splits of the dataset.
+        :param label: the label with which the stratified sampling is based on.
+        :param n_samples: Optional, number of samples to subsample. Default is max_n_samples.
         """
-        if isinstance(splits, str):
-            splits = [splits]
 
         ## Can only do this if the label column is of ClassLabel.
         if not isinstance(self.dataset[splits[0]].features[label], datasets.ClassLabel):
             self.dataset = self.dataset.class_encode_column(label)
 
+        downsampled_ds = []
         for split in splits:
-            self.dataset[split] = self.dataset[split].train_test_split(
+            downsampled_ds.append(self.dataset[split].train_test_split(
                 test_size=n_samples, seed=self.seed, stratify_by_column=label
-            )["test"]  ## only take the specified test split.
+            )["test"])  ## only take the specified test split.
+        return downsampled_ds
 
     def load_data(self, **kwargs):
         """Load dataset from HuggingFace hub"""
