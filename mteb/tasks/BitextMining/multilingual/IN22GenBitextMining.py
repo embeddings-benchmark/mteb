@@ -108,10 +108,6 @@ note={}
         for lang in self.langs:
             lang1 = lang.split("-")[0]
             lang2 = lang.split("-")[1]
-            for split in _SPLIT:
-                self.dataset[lang][split] = self.dataset[lang][split].rename_column(
-                    "sentence_" + lang1, "sentence1"
-                )
-                self.dataset[lang][split] = self.dataset[lang][split].rename_column(
-                    "sentence_" + lang2, "sentence2"
-                )
+            self.dataset[lang] = self.dataset[lang].rename_columns(
+                {f"sentence_{lang1}": "sentence1", f"sentence_{lang2}": "sentence2"}
+            )
