@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from datasets import DatasetDict, load_dataset
+import datasets
 
 from mteb.abstasks import AbsTaskBitextMining, CrosslingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -51,7 +51,7 @@ def extend_lang_pairs() -> dict[str, list[str]]:
 _EVAL_LANGS = extend_lang_pairs()
 
 
-class TedTalksBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class NTREXBitextMining(AbsTaskBitextMining, CrosslingualTask):
     metadata = TaskMetadata(
         name="NTREXBitextMining",
         dataset={
@@ -93,15 +93,13 @@ class TedTalksBitextMining(AbsTaskBitextMining, CrosslingualTask):
     )
 
     def load_data(self, **kwargs: Any) -> None:
-        """
-        Load dataset from HuggingFace hub
-        """
+        """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
         self.dataset = {}
 
         all_data = {
-            l: load_dataset(
+            l: datasets.load_dataset(
                 name=_ISO6393_to_ISO6391[l],
                 split=_SPLIT,
                 **self.metadata_dict["dataset"],
@@ -116,6 +114,6 @@ class TedTalksBitextMining(AbsTaskBitextMining, CrosslingualTask):
             assert l1_data.num_rows == l2_data.num_rows
             # Combine languages
             data = l1_data.add_column("sentence2", l2_data["sentence2"])
-            self.dataset[lang] = DatasetDict({"train": data})
+            self.dataset[lang] = datasets.DatasetDict({"train": data})
 
         self.data_loaded = True
