@@ -18,16 +18,35 @@ class LccSentimentClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["dan-Latn"],
         main_score="accuracy",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
+        date=("2006-01-01", "2006-12-31"),
+        form=["written"],
+        domains=["News", "Web"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="CC-BY-4.0",
+        socioeconomic_status="mixed",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""@inproceedings{quasthoff-etal-2006-corpus,
+    title = "Corpus Portal for Search in Monolingual Corpora",
+    author = "Quasthoff, Uwe  and
+      Richter, Matthias  and
+      Biemann, Christian",
+    editor = "Calzolari, Nicoletta  and
+      Choukri, Khalid  and
+      Gangemi, Aldo  and
+      Maegaard, Bente  and
+      Mariani, Joseph  and
+      Odijk, Jan  and
+      Tapias, Daniel",
+    booktitle = "Proceedings of the Fifth International Conference on Language Resources and Evaluation ({LREC}{'}06)",
+    month = may,
+    year = "2006",
+    address = "Genoa, Italy",
+    publisher = "European Language Resources Association (ELRA)",
+    url = "http://www.lrec-conf.org/proceedings/lrec2006/pdf/641_pdf.pdf",
+    abstract = "A simple and flexible schema for storing and presenting monolingual language resources is proposed. In this format, data for 18 different languages is already available in various sizes. The data is provided free of charge for online use and download. The main target is to ease the application of algorithms for monolingual and interlingual studies.",
+}""",
         n_samples={"test": 150},
         avg_character_length={"test": 118.7},
     )
