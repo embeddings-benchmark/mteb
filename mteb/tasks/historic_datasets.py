@@ -1,4 +1,4 @@
-# Historic datasets without filled metadata
+# Historic datasets without filled metadata. Do NOT add new datasets to this list.
 HISTORIC_DATASETS = [
     "BornholmBitextMining",
     "BUCC",
