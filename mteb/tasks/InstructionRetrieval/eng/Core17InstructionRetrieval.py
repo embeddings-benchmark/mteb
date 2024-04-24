@@ -11,7 +11,7 @@ class Core17InstructionRetrieval(AbsTaskInstructionRetrieval):
         description="Measuring retrieval instruction following ability on Core17 narratives.",
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
-            "path": "jhu-clsp/core17-instructions-patched",
+            "path": "jhu-clsp/core17-instructions",
             "revision": "e39ff896cf3efbbdeeb950e6bd7c79f266995b07",
         },
         type="InstructionRetrieval",
