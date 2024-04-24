@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+
 class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TeluguAndhraJyotiNewsClassification",
@@ -35,5 +36,3 @@ class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
         self.dataset = self.dataset.rename_columns({"body": "text", "topic": "label"})
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
         print(self.dataset)
-
-       
