@@ -3,38 +3,6 @@ from __future__ import annotations
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-_LANGS = [
-    "eng-Latn",
-    "pol-Latn",
-    "ron-Latn",
-    "glg-Latn",
-    "lit-Latn",
-    "bre-Latn",
-    "mlt-Latn",
-    "spa-Latn",
-    "swa-Latn",
-    "slv-Latn",
-    "msa-Latn",
-    "tgl-Latn",
-    "ita-Latn",
-    "est-Latn",
-    "mlg-Latn",
-    "xho-Latn",
-    "que-Latn",
-    "eus-Latn",
-    "nor-Latn",
-    "cym-Latn",
-    "cat-Latn",
-    "fra-Latn",
-    "nno-Latn",
-    "nld-Latn",
-    "ido-Latn",
-    "por-Latn",
-    "fin-Latn",
-    "deu-Latn",
-    "dan-Latn",
-]
-
 _EVAL_SPLITS = ["test"]
 
 
@@ -59,7 +27,7 @@ class ToxicChatClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         eval_splits=_EVAL_SPLITS,
-        eval_langs=_LANGS,
+        eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2023-10-26", "2024-01-31"),
         form=["written"],
