@@ -9,8 +9,7 @@ _LANGUAGES = {
     "de": ["deu-Latn"],
     "fr": ["fra-Latn"],
     "ru": ["rus-Cyrl"],
-    "es": ["spa-Latn"],
-    "tu": ["tur-Latn"],
+    "es": ["spa-Latn"]
 }
 
 
