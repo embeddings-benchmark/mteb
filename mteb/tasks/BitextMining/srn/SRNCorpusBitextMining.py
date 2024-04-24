@@ -39,7 +39,7 @@ class SRNCorpusBitextMining(AbsTaskBitextMining, CrosslingualTask):
         main_score="f1",
         date=("2022-04-01", "2022-07-31"),
         form=["written"],
-        domains=["Social", "Stories"],
+        domains=["Social", "Web"],
         task_subtypes=[],
         license="CC-BY-SA-4.0",
         socioeconomic_status="medium",
