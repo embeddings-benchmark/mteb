@@ -17,7 +17,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [AmazonCounterfactualClassification](https://arxiv.org/abs/2104.06893) | ['deu', 'eng', 'jpn'] | Classification | s2s |  | {'validation': 335, 'test': 670} | {'validation': 109.2, 'test': 106.1} |
 | [AmazonPolarityClassification](https://huggingface.co/datasets/amazon_polarity) | ['eng'] | Classification | s2s |  | {'test': 400000} | {'test': 431.4} |
 | [AmazonReviewsClassification](https://arxiv.org/abs/2010.02573) | ['cmn', 'deu', 'eng', 'fra', 'jpn', 'spa'] | Classification | s2s |  | {'validation': 30000, 'test': 30000} | {'validation': 159.2, 'test': 160.4} |
-| [AngryTweetsClassification](https://aclanthology.org/2021.nodalida-main.53/) | ['dan'] | Classification | s2s |  | {'test': 1050} | {'test': 156.1} |
+| [AngryTweetsClassification](https://aclanthology.org/2021.nodalida-main.53/) (Pauli et al., 2021) | ['dan'] | Classification | s2s | [Social] | {'test': 1050} | {'test': 156.1} |
 | [ArguAna](http://argumentation.bplaced.net/arguana/data) | ['eng'] | Retrieval | s2p |  |  |  |
 | [ArguAna-PL](https://huggingface.co/datasets/clarin-knext/arguana-pl) | ['pol'] | Retrieval | s2p |  |  |  |
 | [ArmenianParaphrasePC](https://github.com/ivannikov-lab/arpa-paraphrase-corpus) (Arthur Malajyan, 2020) | ['hye'] | PairClassification | s2s | [News] | {'train': 4023, 'test': 1470} | {'train': 243.81, 'test': 241.37} |
@@ -38,7 +38,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [BiorxivClusteringS2S](https://api.biorxiv.org/) | ['eng'] | Clustering | s2s |  | {'test': 75000} | {'test': 101.6} |
 | [BlurbsClusteringP2P](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html) | ['deu'] | Clustering | p2p |  | {'test': 174637} | {'test': 664.09} |
 | [BlurbsClusteringS2S](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html) | ['deu'] | Clustering | s2s |  | {'test': 174637} | {'test': 23.02} |
-| [BornholmBitextMining](https://aclanthology.org/W19-6138/) | ['dan'] | BitextMining | s2s |  | {'test': 500} | {'test': 89.7} |
+| [BornholmBitextMining](https://aclanthology.org/W19-6138/) | ['dan'] | BitextMining | s2s | [Web, Social, Fiction] | {'test': 500} | {'test': 89.7} |
 | [BulgarianSentimentClassification](https://arxiv.org/abs/2009.08712) | ['bul'] | Classification | s2s | [Reviews] | {'validation': 838, 'test': 1673} | {'validation': 43.3, 'test': 46.3} |
 | [BulgarianStoreReviewSentimentClassfication](https://doi.org/10.7910/DVN/TXIK9P) (Georgieva-Trifonova et al., 2018) | ['bul'] | Classification | s2s | [Reviews] | {'test': 182} | {'test': 316.7} |
 | [CBD](http://2019.poleval.pl/files/poleval2019.pdf) | ['pol'] | Classification | s2s |  | {'test': 1000} | {'test': 93.2} |
@@ -70,8 +70,8 @@ The following tables gives you an overview of the tasks in MTEB.
 | [CzechSubjectivityClassification](https://arxiv.org/abs/2009.08712) | ['ces'] | Classification | s2s | [Reviews] | {'validation': 500, 'test': 2000} | {'validation': 108.2, 'test': 108.3} |
 | [DBPedia](https://github.com/iai-group/DBpedia-Entity/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [DBPedia-PL](https://github.com/iai-group/DBpedia-Entity/) | ['pol'] | Retrieval | s2p |  |  |  |
-| [DKHateClassification](https://aclanthology.org/2020.lrec-1.430/) | ['dan'] | Classification | s2s |  | {'test': 329} | {'test': 104.0} |
-| [DalajClassification](https://spraakbanken.gu.se/en/resources/superlim) | ['dan'] | Classification | s2s |  | {'test': 444} | {'test': 243.8} |
+| [DKHateClassification](https://aclanthology.org/2020.lrec-1.430/) | ['dan'] | Classification | s2s | [Social] | {'test': 329} | {'test': 104.0} |
+| [DalajClassification](https://spraakbanken.gu.se/en/resources/superlim) | ['swe'] | Classification | s2s | [Non-fiction] | {'test': 444} | {'test': 243.8} |
 | [DanFEVER](https://aclanthology.org/2021.nodalida-main.47/) | ['dan'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'train': 8897} | {'train': 124.84} |
 | [DanishPoliticalCommentsClassification](https://huggingface.co/datasets/danish_political_comments) | ['dan'] | Classification | s2s |  | {'train': 9010} | {'train': 69.9} |
 | [DiaBlaBitextMining](https://inria.hal.science/hal-03021633) | ['eng', 'fra'] | BitextMining | s2s |  |  |  |
@@ -134,7 +134,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [LEMBQMSumRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) | ['eng'] | Retrieval | s2p | [Spoken] | {'test': 1724} | {'test': 56136.4} |
 | [LEMBSummScreenFDRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) | ['eng'] | Retrieval | s2p | [Spoken] | {'validation': 672} | {'validation': 31445.8} |
 | [LEMBWikimQARetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) (Ho et al., 2020) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'test': 500} | {'test': 37513.0} |
-| [LccSentimentClassification](https://github.com/fnielsen/lcc-sentiment) | ['dan'] | Classification | s2s |  | {'test': 150} | {'test': 118.7} |
+| [LccSentimentClassification](https://github.com/fnielsen/lcc-sentiment) | ['dan'] | Classification | s2s | [News, Web] | {'test': 150} | {'test': 118.7} |
 | [LeCaRDv2](https://github.com/THUIR/LeCaRDv2) | ['zho'] | Retrieval | p2p | [Legal] |  |  |
 | [LegalBenchConsumerContractsQA](https://huggingface.co/datasets/nguha/legalbench/viewer/consumer_contracts_qa) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
 | [LegalBenchCorporateLobbying](https://huggingface.co/datasets/nguha/legalbench/viewer/corporate_lobbying) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
