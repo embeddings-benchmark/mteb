@@ -20,7 +20,7 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=None,
+        date=("2013-11-01", "2013-11-01"),
         form=["written"],
         domains=["News"],
         task_subtypes=["Sentiment/Hate speech"],
