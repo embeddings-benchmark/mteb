@@ -50,10 +50,10 @@ class MultiEURLEXMultilabelClassification(
         domains=["Legal", "Government"],
         task_subtypes=["Topic classification"],
         license="CC BY-SA 4.0",
-        socioeconomic_status=["high", "medium"],
-        annotations_creators=["expert-annotated"],
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
         dialect=[],
-        text_creation=["found"],
+        text_creation="found",
         bibtex_citation="""
 @InProceedings{chalkidis-etal-2021-multieurlex,
   author = {Chalkidis, Ilias  
