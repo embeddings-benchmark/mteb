@@ -29,8 +29,6 @@ class RerankingArabicMedicalQA(AbsTaskReranking):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={"test": 2048}, #17552
+        n_samples={"test": 2048},  # 17552
         avg_character_length={"test": 153.11},
     )
-
-    
