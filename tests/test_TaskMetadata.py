@@ -188,7 +188,7 @@ def test_filled_metadata_is_filled():
             task_subtypes=["Thematic clustering"],
             socioeconomic_status="high",
             annotations_creators="expert-annotated",
-            dialect=["no-dialect"],
+            dialect=None,
             text_creation="found",
             bibtex_citation="Someone et al",
             avg_character_length={"train": 1},

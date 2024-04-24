@@ -265,4 +265,5 @@ class TaskMetadata(BaseModel):
         return all(
             getattr(self, field_name) is not None
             for field_name in self.model_fields
+            if field_name != "dialect"
         )
