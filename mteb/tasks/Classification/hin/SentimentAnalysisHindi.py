@@ -39,4 +39,6 @@ class SentimentAnalysisHindi(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        self.dataset["train"] = self.dataset["train"].select(range(2048))
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"]
+        )

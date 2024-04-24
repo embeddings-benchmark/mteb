@@ -1,13 +1,13 @@
 {
   "dataset_revision": "1beac1b941da76a9c51e3e5b39d230fde9a80983",
   "mteb_dataset_name": "SentimentAnalysisHindi",
-  "mteb_version": "1.7.6",
+  "mteb_version": "1.6.12",
   "train": {
-    "accuracy": 0.610302734375,
-    "accuracy_stderr": 0.0294741139389562,
-    "evaluation_time": 55.91,
-    "f1": 0.6020824005896571,
-    "f1_stderr": 0.034178101385545834,
-    "main_score": 0.6020824005896571
+    "accuracy": 0.59599609375,
+    "accuracy_stderr": 0.04385635527573272,
+    "evaluation_time": 5.99,
+    "f1": 0.5861909658086787,
+    "f1_stderr": 0.050871526301261356,
+    "main_score": 0.5861909658086787
   }
 }
