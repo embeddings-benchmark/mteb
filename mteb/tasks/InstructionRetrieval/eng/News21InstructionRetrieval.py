@@ -36,6 +36,6 @@ class News21InstructionRetrieval(AbsTaskInstructionRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples={"eng": 30129 * 2},
-        avg_character_length={"eng": 2331.381203215969},
+        n_samples={"eng": 30953 * 2},
+        avg_character_length={"eng": 2983.724665391969},
     )
