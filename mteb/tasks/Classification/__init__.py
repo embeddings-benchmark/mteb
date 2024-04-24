@@ -22,6 +22,7 @@ from .eng.Banking77Classification import *
 from .eng.EmotionClassification import *
 from .eng.FinancialPhrasebankClassification import *
 from .eng.ImdbClassification import *
+from .eng.LinguisticProbing import *
 from .eng.NewsClassification import *
 from .eng.ToxicChatClassification import *
 from .eng.ToxicConversationsClassification import *

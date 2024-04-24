@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "1372f0696870b8ad09ec3ed123173be722c7a891",
+  "mteb_dataset_name": "TopConstClassification",
+  "mteb_version": "1.6.8",
+  "test": {
+    "accuracy": 0.283349609375,
+    "accuracy_stderr": 0.012379735329653675,
+    "evaluation_time": 68.06,
+    "f1": 0.25533524549167996,
+    "f1_stderr": 0.012314579721181256,
+    "main_score": 0.283349609375
+  }
+}

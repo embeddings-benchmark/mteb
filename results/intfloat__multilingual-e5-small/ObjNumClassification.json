@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "1372f0696870b8ad09ec3ed123173be722c7a891",
+  "mteb_dataset_name": "ObjNumClassification",
+  "mteb_version": "1.6.8",
+  "test": {
+    "accuracy": 0.5671875,
+    "accuracy_stderr": 0.03289740340818674,
+    "ap": 0.540564310966034,
+    "ap_stderr": 0.020607686963117038,
+    "evaluation_time": 30.87,
+    "f1": 0.5608245094224694,
+    "f1_stderr": 0.03528419440847735,
+    "main_score": 0.5671875
+  }
+}

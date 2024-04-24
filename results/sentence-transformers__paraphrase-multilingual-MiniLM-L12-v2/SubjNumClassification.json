@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "1372f0696870b8ad09ec3ed123173be722c7a891",
+  "mteb_dataset_name": "SubjNumClassification",
+  "mteb_version": "1.6.8",
+  "test": {
+    "accuracy": 0.558251953125,
+    "accuracy_stderr": 0.028806979893884907,
+    "ap": 0.5363032084651154,
+    "ap_stderr": 0.017484575099440885,
+    "evaluation_time": 40.2,
+    "f1": 0.5564290499008684,
+    "f1_stderr": 0.029164908047429144,
+    "main_score": 0.558251953125
+  }
+}

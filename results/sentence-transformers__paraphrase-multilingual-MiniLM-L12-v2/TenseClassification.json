@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "1372f0696870b8ad09ec3ed123173be722c7a891",
+  "mteb_dataset_name": "TenseClassification",
+  "mteb_version": "1.6.8",
+  "test": {
+    "accuracy": 0.6259765625,
+    "accuracy_stderr": 0.038666819232332755,
+    "ap": 0.5811222589009042,
+    "ap_stderr": 0.02955373586324927,
+    "evaluation_time": 38.25,
+    "f1": 0.6225942675852986,
+    "f1_stderr": 0.040159051218792076,
+    "main_score": 0.6259765625
+  }
+}

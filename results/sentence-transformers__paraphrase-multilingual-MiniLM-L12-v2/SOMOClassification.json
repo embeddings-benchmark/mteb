@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "1372f0696870b8ad09ec3ed123173be722c7a891",
+  "mteb_dataset_name": "SOMOClassification",
+  "mteb_version": "1.6.8",
+  "test": {
+    "accuracy": 0.4990234375,
+    "accuracy_stderr": 0.010757712502939387,
+    "ap": 0.5015550328565802,
+    "ap_stderr": 0.005346018183916194,
+    "evaluation_time": 44.5,
+    "f1": 0.4932259182571074,
+    "f1_stderr": 0.012619659477852263,
+    "main_score": 0.4990234375
+  }
+}
