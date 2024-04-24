@@ -246,7 +246,7 @@ class AbsTaskRetrieval(AbsTask):
         retriever = RetrievalEvaluator(model, **kwargs)
 
         scores = {}
-        if self.is_multilingual:
+        if self.is_crosslingual or self.is_multilingual:
             for lang in self.langs:
                 logger.info(f"Language: {lang}")
                 corpus, queries, relevant_docs = (
