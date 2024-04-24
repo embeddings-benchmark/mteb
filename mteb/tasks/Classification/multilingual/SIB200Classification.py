@@ -220,7 +220,7 @@ class SIB200Classification(MultilingualTask, AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
-        eval_splits=["test"],
+        eval_splits=["train", "validation", "test"],
         eval_langs=_LANGS,
         main_score="accuracy",
         date=("2023-09-14", "2024-01-27"),
