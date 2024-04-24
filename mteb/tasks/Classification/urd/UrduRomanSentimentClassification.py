@@ -37,7 +37,7 @@ class UrduRomanSentimentClassification(AbsTaskClassification):
 }
     """,
         n_samples={"train": 20229},
-        avg_character_length=None,
+        avg_character_length={"train": 68.248},
     )
 
     def dataset_transform(self):
