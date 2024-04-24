@@ -27,9 +27,9 @@ def dot_distance(a: np.ndarray, b: np.ndarray) -> float:
 class kNNMultiLabelClassificationEvaluator(Evaluator):
     def __init__(
         self,
-        sentences_train,
+        embeddings_train,
         y_train,
-        sentences_test,
+        embeddings_test,
         y_test,
         k=1,
         batch_size=32,
@@ -38,13 +38,13 @@ class kNNMultiLabelClassificationEvaluator(Evaluator):
     ):
         super().__init__(**kwargs)
         if limit is not None:
-            sentences_train = sentences_train[:limit]
+            embeddings_train = embeddings_train[:limit]
             y_train = y_train[:limit]
-            sentences_test = sentences_test[:limit]
+            embeddings_test = embeddings_test[:limit]
             y_test = y_test[:limit]
-        self.sentences_train = sentences_train
+        self.embeddings_train = embeddings_train
         self.y_train = y_train
-        self.sentences_test = sentences_test
+        self.embeddings_test = embeddings_test
         self.y_test = y_test
 
         self.batch_size = batch_size
@@ -56,31 +56,23 @@ class kNNMultiLabelClassificationEvaluator(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
-        X_train = np.asarray(
-            model.encode(self.sentences_train, batch_size=self.batch_size)
-        )
-        if test_cache is None:
-            X_test = np.asarray(
-                model.encode(self.sentences_test, batch_size=self.batch_size)
-            )
-            test_cache = X_test
-        else:
-            X_test = test_cache
-        for metric in ["cosine", "euclidean", "dot"]:
-            if metric == "dot":
+        for metric_name in ["cosine", "euclidean", "dot"]:
+            if metric_name == "dot":
                 metric = dot_distance
+            else:
+                metric = metric_name
             estimator = KNeighborsClassifier(n_neighbors=self.k, metric=metric)
             classifier = MultiOutputClassifier(estimator, n_jobs=-1)
-            classifier.fit(X_train, self.y_train)
-            y_pred = classifier.predict(X_test)
-            accuracy = classifier.score(X_test, self.y_test)
+            classifier.fit(self.embeddings_train, self.y_train)
+            y_pred = classifier.predict(self.embeddings_test)
+            accuracy = classifier.score(self.embeddings_test, self.y_test)
             f1 = f1_score(self.y_test, y_pred, average="macro")
-            scores["accuracy_" + metric] = accuracy
-            scores["f1_" + metric] = f1
+            scores["accuracy_" + metric_name] = accuracy
+            scores["f1_" + metric_name] = f1
             max_accuracy = max(max_accuracy, accuracy)
             max_f1 = max(max_f1, f1)
             lrap = label_ranking_average_precision_score(self.y_test, y_pred)
-            scores["lrap_" + metric] = lrap
+            scores["lrap_" + metric_name] = lrap
             max_ap = max(max_ap, lrap)
         scores["accuracy"] = max_accuracy
         scores["f1"] = max_f1

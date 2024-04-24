@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import itertools
 import logging
 from collections import defaultdict
 
@@ -95,25 +96,41 @@ class AbsTaskMultilabelClassification(AbsTask):
             None,
             None,
         )  # we store idxs to make the shuffling reproducible
-        for i in range(self.n_experiments):
+        # Bootstrap sample indices from training set for each experiment
+        train_samples = []
+        for _ in range(self.n_experiments):
+            sample_indices, _ = self._undersample_data_indices(
+                train_split["label"], self.samples_per_label, idxs
+            )
+            train_samples.append(sample_indices)
+        # Encode all unique sentences at the indices
+        unique_train_indices = list(set(itertools.chain(train_samples)))
+        unique_train_sentences = [
+            train_split["text"][idx] for idx in unique_train_indices
+        ]
+        unique_train_embeddings = dict(
+            zip(unique_train_indices, model.encode(unique_train_sentences))
+        )
+        test_embeddings = model.encode(eval_split["text"])
+        for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
-                "=" * 10 + f" Experiment {i+1}/{self.n_experiments} " + "=" * 10
+                "=" * 10
+                + f" Experiment {i_experiment+1}/{self.n_experiments} "
+                + "=" * 10
             )
-            # Bootstrap `self.samples_per_label` samples per label for each split
-            X_sampled, y_sampled, idxs = self._undersample_data(
-                train_split["text"], train_split["label"], self.samples_per_label, idxs
-            )
+            X_train = np.stack([unique_train_embeddings[idx] for idx in sample_indices])
+            y_train = np.array([train_split["label"][idx] for idx in sample_indices])
             binarizer = MultiLabelBinarizer()
-            y_train = binarizer.fit_transform(y_sampled)
+            y_train = binarizer.fit_transform(y_train)
             y_test = binarizer.transform(eval_split["label"])
             evaluator = kNNMultiLabelClassificationEvaluator(
-                X_sampled,
-                y_train,
-                eval_split["text"],
-                y_test,
+                embeddings_train=X_train,
+                y_train=y_train,
+                embeddings_test=test_embeddings,
+                y_test=y_test,
                 **params,
             )
-            scores_exp, test_cache = evaluator(model, test_cache=test_cache)
+            scores_exp, test_cache = evaluator(model)
             scores.append(scores_exp)
 
         if self.n_experiments == 1:
@@ -125,18 +142,16 @@ class AbsTaskMultilabelClassification(AbsTask):
             }
             return {**avg_scores, **std_errors}
 
-    def _undersample_data(self, X, y, samples_per_label, idxs=None):
+    def _undersample_data_indices(self, y, samples_per_label, idxs=None):
         """Undersample data to have samples_per_label samples of each label"""
-        X_sampled = []
-        y_sampled = []
+        sample_indices = []
         if idxs is None:
             idxs = np.arange(len(y))
         np.random.shuffle(idxs)
         label_counter = defaultdict(int)
         for i in idxs:
             if any(label_counter[label] for label in y[i]) < samples_per_label:
-                X_sampled.append(X[i])
-                y_sampled.append(y[i])
+                sample_indices.append(i)
                 for label in y[i]:
                     label_counter[label] += 1
-        return X_sampled, y_sampled, idxs
+        return sample_indices, idxs
