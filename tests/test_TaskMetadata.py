@@ -2,9 +2,7 @@ import logging
 
 import pytest
 
-from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-from mteb.evaluation.MTEB import MTEB
 from mteb.get_tasks import get_tasks
 from mteb.tasks import *
 from mteb.tasks.historic_datasets import HISTORIC_DATASETS
