@@ -4,9 +4,9 @@ from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SentimentAnalysisBengali(AbsTaskClassification):
+class BengaliSentimentAnalysis(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="SentimentAnalysisBengali",
+        name="BengaliSentimentAnalysis",
         description="dataset contains 3307 Negative reviews and 8500 Positive reviews collected and manually annotated from Youtube Bengali drama.",
         reference="https://data.mendeley.com/datasets/p6zc7krs37/4",
         dataset={
@@ -39,5 +39,6 @@ class SentimentAnalysisBengali(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        N_SAMPLES = 2048
-        self.dataset["train"] = self.dataset["train"].select(range(N_SAMPLES))
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"]
+        )
