@@ -42,7 +42,7 @@ class wisesight_sentiment_classification(AbsTaskClassification):
 }
 
 """,
-        n_samples={"train": 3418},
+        n_samples={"train": 2048},
         avg_character_length={"train": 103.42},
     )
 
