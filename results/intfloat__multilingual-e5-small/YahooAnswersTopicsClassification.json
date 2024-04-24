@@ -5,7 +5,7 @@
   "test": {
     "accuracy": 0.522314453125,
     "accuracy_stderr": 0.01125178428911258,
-    "evaluation_time": 80.37,
+    "evaluation_time": 111.55,
     "f1": 0.5069399703042968,
     "f1_stderr": 0.01434654403274074,
     "main_score": 0.522314453125

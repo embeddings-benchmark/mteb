@@ -29,7 +29,7 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples={"train": 1400000, "test": 60000},
+        n_samples={"test": 60000},
         avg_character_length=None,
     )
 
@@ -46,10 +46,10 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
             remove_columns=["id", "question_title", "question_content"],
         )
 
-        # doing it here so label remains of type ClassLabel
-        self.dataset = self.dataset.rename_column("topic", "label")
-        self.dataset = self.dataset.rename_column("best_answer", "text")
+        self.dataset = self.dataset.rename_columns(
+            {"topic": "label", "best_answer": "text"}
+        )
 
         self.dataset = self.dataset["test"].train_test_split(
-            test_size=2048, train_size=2048, seed=42, stratify_by_column="label"
+            test_size=2048, train_size=2048, seed=self.seed, stratify_by_column="label"
         )
