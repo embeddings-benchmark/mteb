@@ -7,7 +7,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TeluguAndhraJyotiNewsClassification",
-        description="A Telugu dataset for 5-class classification of Tamil news articles",
+        description="A Telugu dataset for 5-class classification of Telugu news articles",
         reference="https://github.com/AnushaMotamarri/Telugu-Newspaper-Article-Dataset",
         dataset={
             "path": "mlexplorer008/telugu_news_classification",
@@ -18,7 +18,7 @@ class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],
         eval_langs=["tel-Telu"],
-        main_score="accuracy",
+        main_score="f1",
         form=["written"],
         domains=["News"],
         task_subtypes=["Topic classification"],
