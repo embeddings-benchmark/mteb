@@ -1,10 +1,16 @@
 from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskClassification, MultilingualTask
 
-from ....abstasks import AbsTaskClassification, MultilingualTask
+import datasets
 
-
+def _transform(dataset, lang):
+    dataset = dataset.rename_columns({"tweet": "text"})
+    sample_size = min(2048, len(dataset["test"]))
+    dataset["test"] = dataset["test"].select(range(sample_size))
+    return dataset
+ 
 class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
     metadata = TaskMetadata(
         name="AfriSentiClassification",
@@ -13,6 +19,7 @@ class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
             "path": "shmuhammad/AfriSenti-twitter-sentiment",
             "revision": "b52e930385cf5ed7f063072c3f7bd17b599a16cf",
         },
+
         reference="https://arxiv.org/abs/2302.08956",
         type="Classification",
         category="s2s",
@@ -26,9 +33,7 @@ class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
             "kin": ["kin-Latn"], # Kinyarwanda (Latin script)
             "por": ["por-Latn"], # Portuguese (Latin script)
             "pcm": ["pcm-Latn"], # Nigerian Pidgin (Latin script)
-            "orm": ["orm-Latn"], # Orokolo (Latin script)
             "swa": ["swa-Latn"], # Swahili (macrolanguage) (Latin script)
-            "tir": ["tir-Ethi"], # Tigrinya (Ge'ez script)
             "twi": ["twi-Latn"], # Twi (Latin script)
             "tso": ["tso-Latn"], # Tsonga (Latin script)
             "yor": ["yor-Latn"], # Yoruba (Latin script)
@@ -37,7 +42,7 @@ class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
         date=('2023-02-16', '2023-09-03'),
         form=["written"],
         domains=["Social"],
-        task_subtypes=["Topic classification"],
+        task_subtypes=["Sentiment/Hate speech"],
         license="Creative Commons Attribution 4.0 International License",
         socioeconomic_status="low",
         annotations_creators="derived",
@@ -51,3 +56,17 @@ class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
         n_samples={"test": 2048},
         avg_character_length=None,
     )
+        
+    def load_data(self, **kwargs):
+        """
+        Load dataset from HuggingFace hub
+        """
+        if self.data_loaded:
+            return
+        self.dataset = {}
+        for lang in self.langs:
+            metadata = self.metadata_dict.get("dataset", None)
+            dataset = datasets.load_dataset(name=lang, **metadata)
+            self.dataset[lang] = _transform(dataset, lang)
+        self.dataset_transform()
+        self.data_loaded = True
