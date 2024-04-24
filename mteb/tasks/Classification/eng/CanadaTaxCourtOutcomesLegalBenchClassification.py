@@ -26,7 +26,7 @@ class CanadaTaxCourtOutcomesLegalBenchClassification(AbsTaskClassification):
         license="cc-by-nc-4.0",
         socioeconomic_status="high",
         annotations_creators="expert-annotated",
-        dialect=[],
+        dialect=["en-CA"],
         text_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
@@ -38,7 +38,7 @@ class CanadaTaxCourtOutcomesLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
             }""",
         n_samples={"test": 244},
-        avg_character_length={"test": 622.6},
+        avg_character_length={"test": 622.60},
     )
 
     def dataset_transform(self):
