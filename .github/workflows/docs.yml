@@ -1,0 +1,41 @@
+# GitHub action for the task table generation.
+
+name: documentation
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  create-table:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.RELEASE }}
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          make install
+
+      - name: Create table
+        run: python docs/create_tasks_table.py
+    
+      - name: Push table
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          # Check if changes exist
+          if git diff --quiet; then
+            echo "No changes detected"
+          else
+            git add docs/tasks.md
+            git commit -m "Update tasks table"
+            git push
+          fi
+          

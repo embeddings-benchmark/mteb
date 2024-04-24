@@ -83,6 +83,7 @@ from .spa.SpanishPassageRetrievalS2P import *
 from .spa.SpanishPassageRetrievalS2S import *
 from .swe.swedn_retrieval import *
 from .swe.swefaq_retrieval import *
+from .tur.TurHistQuad import *
 from .vie.VieQuADRetrieval import *
 from .zho.CMTEBRetrieval import *
 from .zho.LeCaRDv2Retrieval import *
