@@ -59,6 +59,7 @@ from .hun.HunSum2 import *
 from .jpn.JaQuADRetrieval import *
 from .kor.KoMiracl import *
 from .kor.KoStrategyQA import *
+from .multilingual.IndicQARetrieval import *
 from .multilingual.MintakaRetrieval import *
 from .multilingual.MIRACLRetrieval import *
 from .multilingual.MultiLongDocRetrieval import *
