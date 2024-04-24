@@ -5,9 +5,8 @@ from typing import Any
 import datasets
 import numpy as np
 
+from mteb.abstasks import AbsTaskClustering, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskClustering, MultilingualTask
 
 _LANGUAGES = {
     "as": ["asm-Beng"],
