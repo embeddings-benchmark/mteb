@@ -5,9 +5,9 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks import AbsTaskClassification
 
 
-class Kannada_News_Classification(AbsTaskClassification):
+class KannadaNewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="Kannada_News_Classification",
+        name="KannadaNewsClassification",
         description="The Kannada news dataset contains only the headlines of news article in three categories: Entertainment, Tech, and Sports. The data set contains around 6300 news article headlines which are collected from Kannada news websites. The data set has been cleaned and contains train and test set using which can be used to benchmark topic classification models in Kannada.",
         dataset={
             "path": "Akash190104/kannada_news_classification",
@@ -34,6 +34,7 @@ class Kannada_News_Classification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        N_SAMPLES = 2048
-        self.dataset["train"] = self.dataset["train"].select(range(N_SAMPLES))
         self.dataset = self.dataset.rename_column("headline", "text")
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"]
+        )

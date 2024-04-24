@@ -36,7 +36,7 @@ from .ind.IndonesianIdClickbaitClassification import *
 from .ita.ItaHateClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
 from .jpn.WRIMEClassification import *
-from .kan.Kannada_News_Classification import *
+from .kan.KannadaNewsClassification import *
 from .kur.KurdishSentimentClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
 from .mlt.MalteseSentimentClassification import *
