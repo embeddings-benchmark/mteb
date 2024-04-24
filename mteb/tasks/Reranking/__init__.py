@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .ara.RerankingArabicMedicalQA import *
 from .eng.AskUbuntuDupQuestions import *
 from .eng.MindSmallReranking import *
 from .eng.SciDocsReranking import *

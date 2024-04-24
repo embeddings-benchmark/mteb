@@ -1,0 +1,10 @@
+{
+  "dataset_revision": "6122bba171d838e8394beaea34317625d8ff408e",
+  "mteb_dataset_name": "RerankingArabicMedicalQA",
+  "mteb_version": "1.7.23",
+  "test": {
+    "evaluation_time": 7200.36,
+    "map": 0.6786292160437557,
+    "mrr": 0.685412868429049
+  }
+}
