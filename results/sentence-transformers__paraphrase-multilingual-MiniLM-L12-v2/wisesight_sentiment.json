@@ -1,0 +1,29 @@
+{
+  "dataset_revision": "14aa5773afa135ba835cc5179bbc4a63657a42ae",
+  "mteb_dataset_name": "wisesight_sentiment",
+  "mteb_version": "1.7.17",
+  "test": {
+    "accuracy": 0.38525390625,
+    "accuracy_stderr": 0.026791472043229802,
+    "evaluation_time": 44.36,
+    "f1": 0.34296825874559206,
+    "f1_stderr": 0.022680406005346637,
+    "main_score": 0.34296825874559206
+  },
+  "train": {
+    "accuracy": 0.3859375,
+    "accuracy_stderr": 0.030342034178445214,
+    "evaluation_time": 67.91,
+    "f1": 0.34271335349841986,
+    "f1_stderr": 0.025163327703146852,
+    "main_score": 0.34271335349841986
+  },
+  "validation": {
+    "accuracy": 0.3833984375,
+    "accuracy_stderr": 0.027985630162736534,
+    "evaluation_time": 44.0,
+    "f1": 0.333767326449103,
+    "f1_stderr": 0.025415935909877122,
+    "main_score": 0.333767326449103
+  }
+}
