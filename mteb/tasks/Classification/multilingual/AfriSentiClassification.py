@@ -1,16 +1,18 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-from mteb.abstasks import AbsTaskClassification, MultilingualTask
-
 import datasets
+
+from mteb.abstasks import AbsTaskClassification, MultilingualTask
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 
 def _transform(dataset, lang):
     dataset = dataset.rename_columns({"tweet": "text"})
     sample_size = min(2048, len(dataset["test"]))
     dataset["test"] = dataset["test"].select(range(sample_size))
     return dataset
- 
+
+
 class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
     metadata = TaskMetadata(
         name="AfriSentiClassification",
@@ -19,27 +21,28 @@ class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
             "path": "shmuhammad/AfriSenti-twitter-sentiment",
             "revision": "b52e930385cf5ed7f063072c3f7bd17b599a16cf",
         },
-
         reference="https://arxiv.org/abs/2302.08956",
         type="Classification",
         category="s2s",
         eval_splits=["test"],
         eval_langs={
-            "amh": ["amh-Ethi"], # Amharic (Ethiopic script)
+            "amh": ["amh-Ethi"],  # Amharic (Ethiopic script)
             "arq": ["arq-Arab"],
-            "ary": ["ary-Arab"], # Moroccan Arabic, Standard Arabic (Arabic script)
-            "hau": ["hau-Latn"], # Hausa (Latin script), additional script if written in Ajami (Arabic script)
-            "ibo": ["ibo-Latn"], # Igbo (Latin script)
-            "kin": ["kin-Latn"], # Kinyarwanda (Latin script)
-            "por": ["por-Latn"], # Portuguese (Latin script)
-            "pcm": ["pcm-Latn"], # Nigerian Pidgin (Latin script)
-            "swa": ["swa-Latn"], # Swahili (macrolanguage) (Latin script)
-            "twi": ["twi-Latn"], # Twi (Latin script)
-            "tso": ["tso-Latn"], # Tsonga (Latin script)
-            "yor": ["yor-Latn"], # Yoruba (Latin script)
-            },
+            "ary": ["ary-Arab"],  # Moroccan Arabic, Standard Arabic (Arabic script)
+            "hau": [
+                "hau-Latn"
+            ],  # Hausa (Latin script), additional script if written in Ajami (Arabic script)
+            "ibo": ["ibo-Latn"],  # Igbo (Latin script)
+            "kin": ["kin-Latn"],  # Kinyarwanda (Latin script)
+            "por": ["por-Latn"],  # Portuguese (Latin script)
+            "pcm": ["pcm-Latn"],  # Nigerian Pidgin (Latin script)
+            "swa": ["swa-Latn"],  # Swahili (macrolanguage) (Latin script)
+            "twi": ["twi-Latn"],  # Twi (Latin script)
+            "tso": ["tso-Latn"],  # Tsonga (Latin script)
+            "yor": ["yor-Latn"],  # Yoruba (Latin script)
+        },
         main_score="accuracy",
-        date=('2023-02-16', '2023-09-03'),
+        date=("2023-02-16", "2023-09-03"),
         form=["written"],
         domains=["Social"],
         task_subtypes=["Sentiment/Hate speech"],
@@ -56,11 +59,9 @@ class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
         n_samples={"test": 2048},
         avg_character_length=None,
     )
-        
+
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
+        """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
         self.dataset = {}
