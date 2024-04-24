@@ -52,4 +52,6 @@ abstract = "News analysis is a popular task in Natural Language Processing (NLP)
         self.dataset = self.dataset.remove_columns(["label"]).rename_columns(
             {"title": "text", "label_score": "label"}
         )
-        self.dataset["train"] = self.dataset["train"].select(range(2048))
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"]
+        )

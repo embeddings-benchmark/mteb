@@ -45,11 +45,6 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        self.dataset["validation"] = (
-            self.dataset["validation"]
-            .shuffle(seed=self.seed)
-            .select(range(TEST_SAMPLES))
-        )
-        self.dataset["test"] = (
-            self.dataset["test"].shuffle(seed=self.seed).select(range(TEST_SAMPLES))
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["validation", "test"]
         )
