@@ -41,6 +41,6 @@ class YelpReviewFullClassification(AbsTaskClassification):
         return metadata_dict
 
     def dataset_transform(self):
-        self.dataset = self.dataset["test"].train_test_split(
-            test_size=2048, seed=42, stratify_by_column="label"
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"]
         )
