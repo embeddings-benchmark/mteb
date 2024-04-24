@@ -1,25 +1,25 @@
 {
   "dataset_revision": "a4654f4896408912913a62ace89614879a549287",
   "mteb_dataset_name": "MovieReviewSentimentClassification",
-  "mteb_version": "1.6.3",
+  "mteb_version": "1.7.14",
   "test": {
-    "accuracy": 0.69736328125,
-    "accuracy_stderr": 0.02641578998575074,
-    "ap": 0.6250509709078447,
-    "ap_stderr": 0.02528062483961101,
-    "evaluation_time": 99.77,
-    "f1": 0.694582261961588,
-    "f1_stderr": 0.02729091087634757,
-    "main_score": 0.69736328125
+    "accuracy": 0.70966796875,
+    "accuracy_stderr": 0.028527662271003517,
+    "ap": 0.6352496883785923,
+    "ap_stderr": 0.029211346439295398,
+    "evaluation_time": 14.12,
+    "f1": 0.7068573268065315,
+    "f1_stderr": 0.02940323784354962,
+    "main_score": 0.70966796875
   },
   "validation": {
-    "accuracy": 0.7119140625,
-    "accuracy_stderr": 0.0326206959190955,
-    "ap": 0.62798301719752,
-    "ap_stderr": 0.0338302838722265,
-    "evaluation_time": 112.54,
-    "f1": 0.7084629787041579,
-    "f1_stderr": 0.03254766504640324,
-    "main_score": 0.7119140625
+    "accuracy": 0.716162109375,
+    "accuracy_stderr": 0.024167751638677498,
+    "ap": 0.6503811938827033,
+    "ap_stderr": 0.024557675830771876,
+    "evaluation_time": 14.3,
+    "f1": 0.7142982254823244,
+    "f1_stderr": 0.02475159980406373,
+    "main_score": 0.716162109375
   }
 }
