@@ -133,15 +133,18 @@ Models should implement the following interface, implementing an `encode` functi
 
 ```python
 class MyModel():
-    def encode(self, sentences: list[str], **kwargs) -> list[np.ndarray] | list[torch.Tensor]:
-        """
-        Returns a list of embeddings for the given sentences.
-        
+    def encode(
+        self, sentences: list[str], prompt: str, **kwargs: Any
+    ) -> torch.Tensor | np.ndarray:
+        """Encodes the given sentences using the encoder.
+
         Args:
-            sentences: List of sentences to encode
+            sentences: The sentences to encode.
+            prompt: The prompt to use. Useful for prompt-based models.
+            **kwargs: Additional arguments to pass to the encoder.
 
         Returns:
-            List of embeddings for the given sentences
+            The encoded sentences.
         """
         pass
 
