@@ -104,7 +104,7 @@ class AbsTaskMultilabelClassification(AbsTask):
             )
             train_samples.append(sample_indices)
         # Encode all unique sentences at the indices
-        unique_train_indices = list(set(itertools.chain(train_samples)))
+        unique_train_indices = list(set(itertools.chain.from_iterable(train_samples)))
         unique_train_sentences = [
             train_split["text"][idx] for idx in unique_train_indices
         ]
