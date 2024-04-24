@@ -5,7 +5,7 @@ import pytest
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.get_tasks import get_tasks
 from mteb.tasks import *
-from mteb.tasks.historic_datasets import HISTORIC_DATASETS
+from tests.historic_datasets import HISTORIC_DATASETS
 
 
 def test_given_dataset_config_then_it_is_valid():
