@@ -45,6 +45,6 @@ class TweetEmotionClassification(AbsTaskClassification):
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("tweet", "text")
-        self.dataset["train"] = (
-            self.dataset["train"].shuffle(seed=self.seed).select(range(N_SAMPLES))
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"]
         )

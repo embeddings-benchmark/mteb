@@ -5,10 +5,10 @@ from mteb.evaluation.evaluators import InstructionRetrievalEvaluator, utils
 
 class TestInstructionRetrievalEvaluator:
     def setup_method(self):
-        """setup any state tied to the execution of the given method in a
-        class.  setup_method is invoked for every test method of a class.
-        """
+        """Setup any state tied to the execution of the given method in a class.
 
+        setup_method is invoked for every test method of a class.
+        """
         # checks that it loads
         self.evaluator = InstructionRetrievalEvaluator.InstructionRetrievalEvaluator()
 

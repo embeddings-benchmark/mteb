@@ -58,9 +58,7 @@ class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
     )
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub and convert it to the standard format.
-        """
+        """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return
         self.dataset = {}
@@ -73,9 +71,7 @@ class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
         self.data_loaded = True
 
     def dataset_transform(self, lang):
-        """
-        Convert to standard format
-        """
+        """Convert to standard format"""
         self.dataset[lang].pop("train")
         self.dataset[lang].pop("validation")
 

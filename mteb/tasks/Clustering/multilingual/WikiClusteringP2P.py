@@ -4,10 +4,20 @@ from mteb.abstasks import AbsTaskClustering, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
+    "bs": ["bos-Latn"],
+    "ca": ["cat-Latn"],
+    "cs": ["ces-Latn"],
     "da": ["dan-Latn"],
-    "lv": ["lav-Latn"],
+    "eu": ["eus-Latn"],
     "gv": ["glv-Latn"],
+    "ilo": ["ilo-Latn"],
+    "ku": ["kur-Latn"],
+    "lv": ["lav-Latn"],
+    "min": ["min-Latn"],
+    "mt": ["mlt-Latn"],
+    "sco": ["sco-Latn"],
     "sq": ["sqi-Latn"],
+    "wa": ["wln-Latn"],
 }
 
 
@@ -18,7 +28,7 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         reference="https://github.com/Rysias/wiki-clustering",
         dataset={
             "path": "ryzzlestrizzle/multi-wiki-clustering-p2p",
-            "revision": "7f1d0674aff24ac2b8c3c216e9128ba0f91a5cf4",
+            "revision": "d4d92f8f28be71035be6a96bdfd4e200cf62faa8",
         },
         type="Clustering",
         category="p2p",
@@ -35,6 +45,6 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         dialect=[],
         text_creation="created",
         bibtex_citation=None,  # None exists
-        n_samples={"test": 40960},
-        avg_character_length={"test": 570.6},
+        n_samples={"test": 71680},
+        avg_character_length={"test": 625.3},
     )
