@@ -34,7 +34,6 @@ from .hin.HindiDiscourseClassification import *
 from .hin.SentimentAnalysisHindi import *
 from .hrv.CroatianSentimentClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
-from .ita.ItaHateClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
 from .jpn.WRIMEClassification import *
 from .kan.KannadaNewsClassification import *
@@ -50,6 +49,7 @@ from .multilingual.MassiveIntentClassification import *
 from .multilingual.MassiveScenarioClassification import *
 from .multilingual.MTOPDomainClassification import *
 from .multilingual.MTOPIntentClassification import *
+from .multilingual.MultiHateClassification import *
 from .multilingual.NordicLangClassification import *
 from .multilingual.ScalaClassification import *
 from .nep.NepaliNewsClassification import *
