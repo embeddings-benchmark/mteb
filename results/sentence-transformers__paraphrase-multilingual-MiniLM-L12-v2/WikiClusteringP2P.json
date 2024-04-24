@@ -1,28 +1,78 @@
 {
-  "dataset_revision": "7f1d0674aff24ac2b8c3c216e9128ba0f91a5cf4",
+  "dataset_revision": "d4d92f8f28be71035be6a96bdfd4e200cf62faa8",
   "mteb_dataset_name": "WikiClusteringP2P",
-  "mteb_version": "1.6.8",
+  "mteb_version": "1.7.5",
   "test": {
-    "da": {
-      "main_score": 0.1866469639285096,
-      "v_measure": 0.1866469639285096,
-      "v_measure_std": 0.008480544735113525
+    "bs": {
+      "main_score": 0.24275888183250097,
+      "v_measure": 0.24275888183250097,
+      "v_measure_std": 0.015923773084382017
     },
-    "evaluation_time": 1376.03,
+    "ca": {
+      "main_score": 0.17362456492247325,
+      "v_measure": 0.17362456492247325,
+      "v_measure_std": 0.0188346214305365
+    },
+    "cs": {
+      "main_score": 0.3159118782670882,
+      "v_measure": 0.3159118782670882,
+      "v_measure_std": 0.014511322068262012
+    },
+    "da": {
+      "main_score": 0.21090080440497236,
+      "v_measure": 0.21090080440497236,
+      "v_measure_std": 0.010478052976093074
+    },
+    "eu": {
+      "main_score": 0.2758573119978112,
+      "v_measure": 0.2758573119978112,
+      "v_measure_std": 0.016229995805791906
+    },
+    "evaluation_time": 170.4,
     "gv": {
-      "main_score": 0.32782398301274507,
-      "v_measure": 0.32782398301274507,
-      "v_measure_std": 0.016829612431199174
+      "main_score": 0.3572014125910568,
+      "v_measure": 0.3572014125910568,
+      "v_measure_std": 0.02075240129364877
+    },
+    "ilo": {
+      "main_score": 0.4371649379780739,
+      "v_measure": 0.4371649379780739,
+      "v_measure_std": 0.010976415624748968
+    },
+    "ku": {
+      "main_score": 0.35246170271724336,
+      "v_measure": 0.35246170271724336,
+      "v_measure_std": 0.017273345866917124
     },
     "lv": {
-      "main_score": 0.16787180766447457,
-      "v_measure": 0.16787180766447457,
-      "v_measure_std": 0.013668170009908375
+      "main_score": 0.20122765955725047,
+      "v_measure": 0.20122765955725047,
+      "v_measure_std": 0.01987977031597341
+    },
+    "min": {
+      "main_score": 0.3858865695992173,
+      "v_measure": 0.3858865695992173,
+      "v_measure_std": 0.034634767245333355
+    },
+    "mt": {
+      "main_score": 0.2359285188819086,
+      "v_measure": 0.2359285188819086,
+      "v_measure_std": 0.016140287940952694
+    },
+    "sco": {
+      "main_score": 0.2669069634406312,
+      "v_measure": 0.2669069634406312,
+      "v_measure_std": 0.011776969628845028
     },
     "sq": {
-      "main_score": 0.30617715975273596,
-      "v_measure": 0.30617715975273596,
-      "v_measure_std": 0.01227888333864974
+      "main_score": 0.32266107538169103,
+      "v_measure": 0.32266107538169103,
+      "v_measure_std": 0.0174343604712366
+    },
+    "wa": {
+      "main_score": 0.016384432077744614,
+      "v_measure": 0.016384432077744614,
+      "v_measure_std": 0.008457831902868128
     }
   }
 }
