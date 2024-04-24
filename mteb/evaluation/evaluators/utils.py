@@ -3,8 +3,8 @@ from __future__ import annotations
 import logging
 from typing import Dict, List, Tuple
 
-import requests
 import pandas as pd
+import requests
 import torch
 import tqdm
 
