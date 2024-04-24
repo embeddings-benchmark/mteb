@@ -24,6 +24,7 @@ from .eng.ImdbClassification import *
 from .eng.NewsClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
+from .eng.YelpReviewFullClassification import *
 from .est.estonian_valence import *
 from .fas.PersianFoodSentimentClassification import *
 from .fil.FilipinoHateSpeechClassification import *
@@ -50,6 +51,7 @@ from .multilingual.MTOPDomainClassification import *
 from .multilingual.MTOPIntentClassification import *
 from .multilingual.NordicLangClassification import *
 from .multilingual.ScalaClassification import *
+from .nep.NepaliNewsClassification import *
 from .nld.DutchBookReviewSentimentClassification import *
 from .nob.NoRecClassification import *
 from .nob.NorwegianParliamentClassification import *
