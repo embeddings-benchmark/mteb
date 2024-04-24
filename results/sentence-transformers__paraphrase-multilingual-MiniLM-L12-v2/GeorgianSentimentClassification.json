@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "d4fb68dff38e89c42406080737b8431ea48fa866",
+  "mteb_dataset_name": "GeorgianSentimentClassification",
+  "mteb_version": "1.6.8",
+  "test": {
+    "accuracy": 0.7571666666666667,
+    "accuracy_stderr": 0.027223866163513386,
+    "ap": 0.6982303339367802,
+    "ap_stderr": 0.03866108274790974,
+    "evaluation_time": 29.7,
+    "f1": 0.7552573260226974,
+    "f1_stderr": 0.027441367391553517,
+    "main_score": 0.7571666666666667
+  }
+}
