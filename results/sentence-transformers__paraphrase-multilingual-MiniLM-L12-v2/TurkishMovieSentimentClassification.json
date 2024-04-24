@@ -1,15 +1,15 @@
 {
   "dataset_revision": "409a4415cce5f6bcfca6d5f3ca3c408211ca00b3",
   "mteb_dataset_name": "TurkishMovieSentimentClassification",
-  "mteb_version": "1.6.8",
+  "mteb_version": "1.7.14",
   "test": {
-    "accuracy": 0.6968229954614221,
-    "accuracy_stderr": 0.027754474954480798,
-    "ap": 0.6395411539688631,
-    "ap_stderr": 0.024815273964856305,
-    "evaluation_time": 39.73,
-    "f1": 0.6929215267435641,
-    "f1_stderr": 0.028828799352498644,
-    "main_score": 0.6968229954614221
+    "accuracy": 0.700244140625,
+    "accuracy_stderr": 0.029928454280849007,
+    "ap": 0.6426285944420467,
+    "ap_stderr": 0.02708285080696355,
+    "evaluation_time": 8.43,
+    "f1": 0.6963954976449772,
+    "f1_stderr": 0.030725002834597302,
+    "main_score": 0.700244140625
   }
 }
