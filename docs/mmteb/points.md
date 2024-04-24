@@ -1,6 +1,5 @@
 # Points
 
-
 **Note**: The points have been moved to [`points`](https://github.com/embeddings-benchmark/mteb/tree/main/docs/mmteb/points) folder to avoid merge conflicts. To add points you will now have to add a jsonl file to the folder. An example could looks like so:
 
 ```
@@ -55,6 +54,7 @@ Please also add your first name and last name are as you want them to appear in 
 | izhx              | Xin        | Zhang      | zhangxin2023@stu.hit.edu.cn  |                      |  Harbin Institute of Technology, Shenzhen             |
 | orionw            | Orion      | Weller     | oweller@cs.jhu.edu           | ~Orion_Weller1       |  Johns Hopkins University                             |
 | slvnwhrl          | Silvan     | Wehrli     | wehrlis@rki.de               | ~Silvan_Wehrli1      | Robert Koch Institute, Berlin, Germany                |
+| davidstap          | David     | Stap     | d.stap@uva.nl               | ~David_Stap      | University of Amsterdam                |
 | manandey          | Manan      | Dey        | manandey1@gmail.com          | ~Manan_Dey2          | Salesforce, India                                     |
 | isaac-chung       | Isaac      | Chung      | chungisaac1217@gmail.com     | ~Isaac_Kwan_Yin_Chung1 | N/A                                                 |
 | asparius          | Ömer       | Çağatan    | ocagatan19@ku.edu.tr         | ~Ömer_Veysel_Çağatan1 | Koç University,Turkey                                |

@@ -11,4 +11,5 @@ from .multilingual.NorwegianCourtsBitextMining import *
 from .multilingual.NTREXBitextMining import *
 from .multilingual.RomaTalesBitextMining import *
 from .multilingual.TatoebaBitextMining import *
+from .multilingual.TedTalksBitextMining import *
 from .vie.VieMedEVBitextMining import *
