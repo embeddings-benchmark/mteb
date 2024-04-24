@@ -5,6 +5,7 @@ from .eng.MindSmallReranking import *
 from .eng.SciDocsReranking import *
 from .eng.StackOverflowDupQuestions import *
 from .fra.AlloprofReranking import *
+from .fra.MIRACLFrReranking import *
 from .fra.SyntecReranking import *
 from .multilingual.MIRACLReranking import *
 from .zho.CMTEBReranking import *
