@@ -23,6 +23,7 @@ from .fra.AlloProfClusteringS2S import *
 from .fra.HALClusteringS2S import *
 from .fra.MLSUMClusteringP2P import *
 from .fra.MLSUMClusteringS2S import *
+from .multilingual.IndicReviewsClusteringP2P import *
 from .multilingual.MasakhaNEWSClusteringP2P import *
 from .multilingual.MasakhaNEWSClusteringS2S import *
 from .nob.snl_clustering import *
