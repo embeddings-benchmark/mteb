@@ -62,3 +62,4 @@ Please also add your first name and last name are as you want them to appear in 
 | rbroc             | Roberta    | Rocca      | roberta.rocca@cas.au.dk      | ~Roberta_Rocca1      | Aarhus University, Denmark                            |
 | guangyusong       | Guangyu    | Song       | guangysong@gmail.com         | ~Guangyu_Song1       | N/A                            |
 | davidstap.        | David      | Stap       | dd.stap@gmail.com            | ~David_Stap          | University of Amsterdam.                              |
+| HLasse            | Lasse      | Hansen     | lasseh0310@gmail.com         | ~Lasse_Hansen2       | Aarhus University, Denmark                            |

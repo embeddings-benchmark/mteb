@@ -11,7 +11,6 @@ from .bul.BulgarianSentimentClassification import *
 from .bul.BulgarianStoreReviewSentimentClassfication import *
 from .ces.CzechSubjectivityClassification import *
 from .dan.AngryTweetsClassification import *
-from .dan.DalajClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
 from .dan.DKHateClassification import *
 from .dan.LccSentimentClassification import *
@@ -64,6 +63,7 @@ from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
 from .slk.SlovakSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
+from .swe.DalajClassification import *
 from .swe.SweRecClassification import *
 from .tha.wisesight_sentiment_classification import *
 from .tur.TurkishMovieSentimentClassification import *
