@@ -54,7 +54,7 @@ class IndicQARetrieval(MultilingualTask, AbsTaskRetrieval):
   year      = {2022},
   doi       = {10.18653/v1/2023.acl-long.693}
 }""",
-        n_samples={"test": 1700},
+        n_samples={"test": 1500},
         avg_character_length={"test": 930.6},
     )
 
@@ -72,6 +72,7 @@ class IndicQARetrieval(MultilingualTask, AbsTaskRetrieval):
                 name=f"indicqa.{lang}", **self.metadata_dict["dataset"]
             )[split]
             data = data.filter(lambda x: x["answers"]["text"] != "")
+            data = data.select(range(self.metadata.n_samples[split]))
 
             question_ids = {
                 question: sha256(question.encode("utf-8")).hexdigest()
