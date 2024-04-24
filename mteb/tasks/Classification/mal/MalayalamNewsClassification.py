@@ -37,7 +37,4 @@ class MalayalamNewsClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        seed = 42
-        random.seed(seed)
-        self.dataset = self.dataset.rename_column("headings", "text")
-        print(self.dataset)
+        self.dataset = self.dataset.rename_columns({"headings": "text"})
