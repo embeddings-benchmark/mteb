@@ -25,7 +25,7 @@ class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
         license="MIT",
         socioeconomic_status="mixed",
         annotations_creators="derived",
-        dialect=None,
+        dialect=[],
         text_creation="found",
         bibtex_citation=None,
         n_samples={"train": 17312, "test": 4329},
