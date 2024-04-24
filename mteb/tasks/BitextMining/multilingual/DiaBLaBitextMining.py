@@ -39,9 +39,7 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
     )
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub and convert it to the standard format.
-        """
+        """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return
 

@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "e254179d18ab0165fdb6dbef91178266222bee2a",
+  "mteb_dataset_name": "NordicLangClassification",
+  "mteb_version": "1.7.14",
+  "test": {
+    "accuracy": 0.42519999999999997,
+    "accuracy_stderr": 0.010900764499183847,
+    "evaluation_time": 10.61,
+    "f1": 0.4208523125453884,
+    "f1_stderr": 0.010804163599950413,
+    "main_score": 0.42519999999999997
+  }
+}

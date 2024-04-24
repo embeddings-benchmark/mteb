@@ -221,9 +221,10 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 
     @staticmethod
     def _cos_sim(a: Tensor, b: Tensor):
-        """
-        Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
-        :return: Matrix with res[i][j]  = cos_sim(a[i], b[j])
+        """Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
+
+        Return:
+            Matrix with res[i][j]  = cos_sim(a[i], b[j])
         """
         if not isinstance(a, torch.Tensor):
             a = torch.tensor(a)
@@ -243,8 +244,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 
     @staticmethod
     def _euclidean_dist(a: Tensor, b: Tensor):
-        """
-        Computes the euclidean distance euclidean_dist(a[i], b[j]) for all i and j.
+        """Computes the euclidean distance euclidean_dist(a[i], b[j]) for all i and j.
         :return: Matrix with res[i][j]  = euclidean_dist(a[i], b[j])
         """
         if not isinstance(a, torch.Tensor):
@@ -263,8 +263,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 
     @staticmethod
     def _dot_score(a: Tensor, b: Tensor):
-        """
-        Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
+        """Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
         :return: Matrix with res[i][j]  = dot_prod(a[i], b[j])
         """
         if not isinstance(a, torch.Tensor):

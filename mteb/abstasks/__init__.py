@@ -5,6 +5,7 @@ from .AbsTaskBitextMining import *
 from .AbsTaskClassification import *
 from .AbsTaskClustering import *
 from .AbsTaskMultilabelClassification import *
+from .AbsTaskInstructionRetrieval import *
 from .AbsTaskPairClassification import *
 from .AbsTaskReranking import *
 from .AbsTaskRetrieval import *
