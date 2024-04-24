@@ -1,11 +1,7 @@
 from __future__ import annotations
 
-import random
-
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-TEST_SAMPLES = 2048
 
 
 class MalayalamNewsClassification(AbsTaskClassification):
@@ -29,7 +25,7 @@ class MalayalamNewsClassification(AbsTaskClassification):
         license="MIT",
         socioeconomic_status="mixed",
         annotations_creators="derived",
-        dialect=None,
+        dialect=[],
         text_creation="found",
         bibtex_citation=None,
         n_samples={"train": 5036, "test": 1260},
