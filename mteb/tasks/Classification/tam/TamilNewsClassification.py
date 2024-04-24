@@ -18,7 +18,7 @@ class TamilNewsClassification(AbsTaskClassification):
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],
         eval_langs=["tam-Taml"],
-        main_score="accuracy",
+        main_score="f1",
         form=["written"],
         domains=["News"],
         task_subtypes=["Topic classification"],
