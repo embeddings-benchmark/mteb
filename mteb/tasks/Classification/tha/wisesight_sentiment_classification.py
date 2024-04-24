@@ -6,7 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class wisesight_sentiment_classification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="wisesight_sentiment",
+        name="wisesight_sentiment_classification",
         description="Wisesight Sentiment Corpus: Social media messages in Thai language with sentiment label (positive, neutral, negative, question)",
         reference="https://github.com/PyThaiNLP/wisesight-sentiment",
         dataset={
@@ -15,7 +15,7 @@ class wisesight_sentiment_classification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
-        eval_splits=["train", "test", "validation"],
+        eval_splits=["test"],
         eval_langs=["tha-Thai"],
         main_score="f1",
         date=("2019-05-24", "2021-09-16"),
@@ -47,26 +47,12 @@ class wisesight_sentiment_classification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        N_SAMPLES = 2048
-        TEST_SAMPLES = 1024  # define this as per your requirement
+        for split in self.dataset.keys():
+            self.dataset[split] = self.dataset[split].rename_column("texts", "text")
+            self.dataset[split] = self.dataset[split].rename_column("category", "label")
 
-        # Transform train set
-        self.dataset["train"] = self.dataset["train"].select(range(N_SAMPLES))
-        self.dataset["train"] = self.dataset["train"].rename_column("texts", "text")
-        self.dataset["train"] = self.dataset["train"].rename_column("category", "label")
-
-        # Transform validation set
-        self.dataset["validation"] = self.dataset["validation"].select(
-            range(TEST_SAMPLES)
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            seed=self.seed,
+            splits=["test"],
         )
-        self.dataset["validation"] = self.dataset["validation"].rename_column(
-            "texts", "text"
-        )
-        self.dataset["validation"] = self.dataset["validation"].rename_column(
-            "category", "label"
-        )
-
-        # Transform test set
-        self.dataset["test"] = self.dataset["test"].select(range(TEST_SAMPLES))
-        self.dataset["test"] = self.dataset["test"].rename_column("texts", "text")
-        self.dataset["test"] = self.dataset["test"].rename_column("category", "label")
