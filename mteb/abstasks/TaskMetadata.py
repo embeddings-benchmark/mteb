@@ -259,3 +259,10 @@ class TaskMetadata(BaseModel):
                 get_script(lang) for langs in self.eval_langs.values() for lang in langs
             )
         return set(get_script(lang) for lang in self.eval_langs)
+
+    def is_filled(self) -> bool:
+        """Check if all the metadata fields are filled."""
+        return all(
+            getattr(self, field_name) is not None
+            for field_name in self.model_fields
+        )
