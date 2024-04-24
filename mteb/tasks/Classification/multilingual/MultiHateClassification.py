@@ -109,9 +109,7 @@ class MultiHateClassification(MultilingualTask, AbsTaskClassification):
     )
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
+        """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
         self.dataset = {}
