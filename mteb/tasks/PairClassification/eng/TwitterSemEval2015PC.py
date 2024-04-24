@@ -28,7 +28,7 @@ class TwitterSemEval2015PC(AbsTaskPairClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 16777},
         avg_character_length={"test": 38.3},
     )

@@ -27,7 +27,7 @@ class ScalaDaClassification(AbsTaskClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 1024},
         avg_character_length={"test": 109.4},
     )
@@ -71,7 +71,7 @@ class ScalaNbClassification(AbsTaskClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 1024},
         avg_character_length={"test": 98.4},
     )
@@ -115,7 +115,7 @@ class ScalaNnClassification(AbsTaskClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 1024},
         avg_character_length={"test": 104.8},
     )
@@ -159,7 +159,7 @@ class ScalaSvClassification(AbsTaskClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 1024},
         avg_character_length={"test": 98.3},
     )

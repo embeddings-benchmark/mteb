@@ -44,7 +44,7 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         annotations_creators="derived",
         dialect=[],
         text_creation="created",
-        bibtex_citation=None,  # None exists
+        bibtex_citation="",  # None exists
         n_samples={"test": 71680},
         avg_character_length={"test": 625.3},
     )

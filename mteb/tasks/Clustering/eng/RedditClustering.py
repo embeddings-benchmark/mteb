@@ -28,7 +28,7 @@ class RedditClustering(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 420464},
         avg_character_length={"test": 64.7},
     )

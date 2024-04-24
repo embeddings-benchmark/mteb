@@ -28,7 +28,7 @@ class LegalBenchCorporateLobbying(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=None,
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples=None,
         avg_character_length=None,
     )

@@ -259,7 +259,7 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"dev": 997, "devtest": 1012},
         avg_character_length={},
     )

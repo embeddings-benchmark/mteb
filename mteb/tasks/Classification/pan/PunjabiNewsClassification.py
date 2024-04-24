@@ -27,7 +27,7 @@ class PunjabiNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"train": 627, "test": 157},
         avg_character_length={"train": 4222.22, "test": 4115.14},
     )

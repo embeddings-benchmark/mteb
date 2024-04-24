@@ -28,7 +28,7 @@ class NorwegianParliamentClassification(AbsTaskClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 1200, "validation": 1200},
         avg_character_length={"test": 1884.0, "validation": 1911.0},
     )

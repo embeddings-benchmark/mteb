@@ -33,7 +33,7 @@ def test_given_dataset_config_then_it_is_valid():
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         avg_character_length=None,
         n_samples=None,
     )
@@ -61,7 +61,7 @@ def test_given_missing_dataset_path_then_it_throws():
             annotations_creators=None,
             dialect=None,
             text_creation=None,
-            bibtex_citation=None,
+            bibtex_citation="",
             avg_character_length=None,
             n_samples=None,
         )
@@ -90,7 +90,7 @@ def test_given_missing_revision_path_then_it_throws():
             annotations_creators=None,
             dialect=None,
             text_creation=None,
-            bibtex_citation=None,
+            bibtex_citation="",
             avg_character_length=None,
             n_samples=None,
         )
@@ -117,7 +117,7 @@ def test_given_none_revision_path_then_it_logs_warning(caplog):
             annotations_creators=None,
             dialect=None,
             text_creation=None,
-            bibtex_citation=None,
+            bibtex_citation="",
             avg_character_length=None,
             n_samples=None,
         )
@@ -158,7 +158,7 @@ def test_unfilled_metadata_is_not_filled():
             annotations_creators=None,
             dialect=None,
             text_creation=None,
-            bibtex_citation=None,
+            bibtex_citation="",
             avg_character_length=None,
             n_samples=None,
         ).is_filled()
@@ -167,33 +167,35 @@ def test_unfilled_metadata_is_not_filled():
 
 
 def test_filled_metadata_is_filled():
-    TaskMetadata(
-        name="MyTask",
-        dataset={
-            "path": "test/dataset",
-            "revision": "1.0",
-        },
-        description="testing",
-        reference=None,
-        type="Classification",
-        category="s2s",
-        eval_splits=["test"],
-        eval_langs=["eng-Latn"],
-        main_score="map",
-        date=("2021-01-01", "2021-12-31"),
-        form=["written"],
-        domains=["Non-fiction"],
-        license="mit",
-        task_subtypes=["Thematic clustering"],
-        socioeconomic_status="high",
-        annotations_creators="expert-annotated",
-        dialect=["no-dialect"],
-        text_creation="found",
-        bibtex_citation="Someone et al",
-        avg_character_length={"train": 1},
-        n_samples={"train": 1},
-    ).is_filled() is True
-
+    assert (
+        TaskMetadata(
+            name="MyTask",
+            dataset={
+                "path": "test/dataset",
+                "revision": "1.0",
+            },
+            description="testing",
+            reference="https://aclanthology.org/W19-6138/",
+            type="Classification",
+            category="s2s",
+            eval_splits=["test"],
+            eval_langs=["eng-Latn"],
+            main_score="map",
+            date=("2021-01-01", "2021-12-31"),
+            form=["written"],
+            domains=["Non-fiction"],
+            license="mit",
+            task_subtypes=["Thematic clustering"],
+            socioeconomic_status="high",
+            annotations_creators="expert-annotated",
+            dialect=["no-dialect"],
+            text_creation="found",
+            bibtex_citation="Someone et al",
+            avg_character_length={"train": 1},
+            n_samples={"train": 1},
+        ).is_filled()
+        is True
+    )
 
 
 def test_all_metadata_is_filled():

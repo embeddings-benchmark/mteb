@@ -42,7 +42,7 @@ class STS17Crosslingual(AbsTaskSTS, CrosslingualTask):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 500},
         avg_character_length={"test": 43.3},
     )

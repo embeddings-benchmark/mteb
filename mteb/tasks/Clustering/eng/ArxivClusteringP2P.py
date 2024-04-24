@@ -30,7 +30,7 @@ class ArxivClusteringP2P(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 732723},
         avg_character_length={"test": 1009.98},
     )

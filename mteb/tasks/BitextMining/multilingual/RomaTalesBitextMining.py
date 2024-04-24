@@ -29,7 +29,7 @@ class RomaTalesBitextMining(AbsTaskBitextMining, CrosslingualTask):
         annotations_creators="expert-annotated",
         dialect=["Lovari"],
         text_creation="created",
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 215},
         avg_character_length={"test": 316.8046511627907},
     )

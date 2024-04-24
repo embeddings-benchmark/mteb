@@ -27,7 +27,7 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"train": 9010},
         avg_character_length={"train": 69.9},
     )

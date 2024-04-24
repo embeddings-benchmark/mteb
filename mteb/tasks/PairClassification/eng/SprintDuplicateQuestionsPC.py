@@ -28,7 +28,7 @@ class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"validation": 101000, "test": 101000},
         avg_character_length={"validation": 65.2, "test": 67.9},
     )

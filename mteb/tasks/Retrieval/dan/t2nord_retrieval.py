@@ -25,7 +25,7 @@ class TV2Nordretrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 4096},
         avg_character_length={"test": 784.11},
         task_subtypes=["Article retrieval"],

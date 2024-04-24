@@ -27,7 +27,7 @@ class SickrPLSTS(AbsTaskSTS):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 9812},
         avg_character_length={"test": 42.8},
     )
@@ -63,7 +63,7 @@ class CdscrSTS(AbsTaskSTS):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples=None,
         avg_character_length=None,
     )

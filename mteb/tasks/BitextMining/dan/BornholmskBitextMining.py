@@ -28,7 +28,7 @@ class BornholmBitextMining(AbsTaskBitextMining):
         annotations_creators=None,
         dialect=["da-dan-bornholm"],
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         avg_character_length={"test": 89.7},
         n_samples={"test": 500},
     )

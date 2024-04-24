@@ -29,7 +29,7 @@ class MindSmallReranking(AbsTaskReranking):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 107968},
         avg_character_length={"test": 70.9},
     )

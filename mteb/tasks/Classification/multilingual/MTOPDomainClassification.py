@@ -37,7 +37,7 @@ class MTOPDomainClassification(MultilingualTask, AbsTaskClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"validation": 2235, "test": 4386},
         avg_character_length={"validation": 36.5, "test": 36.8},
     )

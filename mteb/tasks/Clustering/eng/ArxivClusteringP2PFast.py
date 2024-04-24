@@ -29,7 +29,7 @@ class ArxivClusteringP2PFast(AbsTaskClusteringFast):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 250_000},
         avg_character_length={"test": 1009.98},
     )

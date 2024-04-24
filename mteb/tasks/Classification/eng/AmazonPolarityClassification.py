@@ -28,7 +28,7 @@ class AmazonPolarityClassification(AbsTaskClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 400000},
         avg_character_length={"test": 431.4},
     )

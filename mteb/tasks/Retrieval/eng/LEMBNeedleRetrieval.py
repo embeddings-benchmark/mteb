@@ -40,7 +40,7 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={
             "test_256": 150,
             "test_512": 150,

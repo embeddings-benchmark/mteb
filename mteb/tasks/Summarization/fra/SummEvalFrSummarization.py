@@ -27,7 +27,7 @@ class SummEvalFrSummarization(AbsTaskSummarization):
         annotations_creators=None,
         dialect=None,
         text_creation="machine-translated",
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples=None,
         avg_character_length=None,
     )

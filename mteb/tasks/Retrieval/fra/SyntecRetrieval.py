@@ -32,7 +32,7 @@ class SyntecRetrieval(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=[],
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 90},
         avg_character_length={"test": 62},
     )
