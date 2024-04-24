@@ -36,7 +36,7 @@ class UrduRomanSentimentClassification(AbsTaskClassification):
   note         = {{DOI}: https://doi.org/10.24432/C58325}
 }
     """,
-        n_samples={"train": 20229},
+        n_samples={"train": 2048},
         avg_character_length={"train": 68.248},
     )
 
