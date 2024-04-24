@@ -337,6 +337,9 @@ class DRESModel:
             self.corpus_embeddings[kwargs["qid"]] = corpus_embeddings
         return corpus_embeddings
 
+    def encode(self, sentences: List[str], **kwargs):
+        return self.model.encode(sentences, **kwargs)
+
 
 def is_dres_compatible(model):
     for method in ["encode_queries", "encode_corpus"]:
