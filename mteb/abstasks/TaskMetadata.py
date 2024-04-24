@@ -263,6 +263,5 @@ class TaskMetadata(BaseModel):
     def is_filled(self) -> bool:
         """Check if all the metadata fields are filled."""
         return all(
-            getattr(self, field_name) is not None
-            for field_name in self.model_fields
+            getattr(self, field_name) is not None for field_name in self.model_fields
         )
