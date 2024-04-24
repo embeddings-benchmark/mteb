@@ -50,16 +50,18 @@ class MalteseNewsClassification(AbsTaskClassification):
 
     def dataset_transform(self):
         # 80% of categories have just one label, so it's safe to take the first
-        self.dataset = self.dataset["test"].map(lambda x: {"labels" : x["labels"][0]})
+        self.dataset = self.dataset["test"].map(lambda x: {"labels": x["labels"][0]})
         rename_dict = dict(zip(["labels"], ["label"]))
         self.dataset = self.dataset.rename_columns(rename_dict)
-        remove_cols = [col for col in self.dataset.column_names if col not in ["text", "label"]]
+        remove_cols = [
+            col for col in self.dataset.column_names if col not in ["text", "label"]
+        ]
         self.dataset = self.dataset.remove_columns(remove_cols)
         self.dataset = self.dataset.class_encode_column("label")
         # find low count labels with lower than 6 occurances
-        label_counts = Counter(self.dataset['label'])
-        low_count_labels = [k for k,v in label_counts.items() if v < 6]
-        self.dataset = self.dataset.filter(lambda x: not x['label'] in low_count_labels)
+        label_counts = Counter(self.dataset["label"])
+        low_count_labels = [k for k, v in label_counts.items() if v < 6]
+        self.dataset = self.dataset.filter(lambda x: x["label"] not in low_count_labels)
         # split dataset
         self.dataset = self.dataset.train_test_split(
             test_size=0.5, seed=self.seed, stratify_by_column="label"
