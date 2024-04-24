@@ -37,7 +37,12 @@ class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
         annotations_creators=None,
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="""@article{scialom2020mlsum,
+        title={MLSUM: The Multilingual Summarization Corpus},
+        author={Scialom, Thomas and Dray, Paul-Alexis and Lamprier, Sylvain and Piwowarski, Benjamin and Staiano, Jacopo},
+        journal={arXiv preprint arXiv:2004.14900},
+        year={2020}
+        }""",
         n_samples=None,
         avg_character_length=None,
     )
