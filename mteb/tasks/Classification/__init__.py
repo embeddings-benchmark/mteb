@@ -65,6 +65,7 @@ from .ron.RomanianSentimentClassification import *
 from .slk.SlovakSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
 from .swe.SweRecClassification import *
+from .tha.wisesight_sentiment_classification import *
 from .tur.TurkishMovieSentimentClassification import *
 from .tur.TurkishProductSentimentClassification import *
 from .uig.UyghurSentimentClassification import *
