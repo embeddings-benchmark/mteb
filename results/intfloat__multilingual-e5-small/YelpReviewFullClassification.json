@@ -1,13 +1,13 @@
 {
   "dataset_revision": "c1f9ee939b7d05667af864ee1cb066393154bf85",
   "mteb_dataset_name": "YelpReviewFullClassification",
-  "mteb_version": "1.6.36",
+  "mteb_version": "1.6.12",
   "test": {
-    "accuracy": 0.547900390625,
-    "accuracy_stderr": 0.007030063105119533,
-    "evaluation_time": 314.45,
-    "f1": 0.5341243178984992,
-    "f1_stderr": 0.009940502442807843,
-    "main_score": 0.547900390625
+    "accuracy": 0.544775390625,
+    "accuracy_stderr": 0.006780080105468686,
+    "evaluation_time": 32.92,
+    "f1": 0.5321219484163363,
+    "f1_stderr": 0.0069506895354490535,
+    "main_score": 0.544775390625
   }
 }
