@@ -39,8 +39,8 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
                 doi={10.1109/UBMK52708.2021.9559013}}
 
         """,
-        n_samples={"test": 1330, "train": 14221},
-        avg_character_length={"train": 1219.37, "test": 1513.83},
+        n_samples={"test": 1330},
+        avg_character_length={"test": 1513.83},
     )
 
     def load_data(self, **kwargs) -> None:
