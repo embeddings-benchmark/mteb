@@ -19,7 +19,7 @@ Reason for dataset addition:
   - [ ] `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
   - [ ] `intfloat/multilingual-e5-small`
 - [ ] I have checked that the performance is neither trivial (both models gain close to perfect scores) nor random (both models gain close to random scores).
-- [ ] I have considered the size of the dataset and reduced it if it is too big (2048 examples is typically large enough for most tasks)
+- [ ] If the dataset is too big (e.g. >2048 examples), considering using `self.stratified_subsampling() under dataset_transform()`
 - [ ] I have filled out the metadata object in the dataset file (find documentation on it [here](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_dataset.md#2-creating-the-metadata-object)).
 - [ ] Run tests locally to make sure nothing is broken using `make test`. 
 - [ ] Run the formatter to format the code using `make lint`. 

@@ -53,6 +53,7 @@ from .eng.TRECCOVIDRetrieval import *
 from .est.estqa import *
 from .fra.AlloprofRetrieval import *
 from .fra.BSARDRetrieval import *
+from .fra.FQuADRetrieval import *
 from .fra.SyntecRetrieval import *
 from .hun.HunSum2 import *
 from .jpn.JaQuADRetrieval import *
