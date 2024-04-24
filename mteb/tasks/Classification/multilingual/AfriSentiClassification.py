@@ -57,7 +57,7 @@ class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
         year=2023
         }""",
         n_samples={"test": 2048},
-        avg_character_length=None,
+        avg_character_length=74.77,
     )
 
     def load_data(self, **kwargs):
