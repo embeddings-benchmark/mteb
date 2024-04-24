@@ -1,0 +1,10 @@
+{
+  "dataset_revision": "50bd0db5fa3d5845142fd58d55f870b5bbb27960",
+  "mteb_dataset_name": "MIRACLFrReranking",
+  "mteb_version": "1.6.36",
+  "test": {
+    "evaluation_time": 18.08,
+    "map": 0.5619709352804938,
+    "mrr": 0.6249062890462308
+  }
+}
