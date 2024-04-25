@@ -78,6 +78,7 @@ from .tha.wisesight_sentiment_classification import *
 from .tur.TurkishMovieSentimentClassification import *
 from .tur.TurkishProductSentimentClassification import *
 from .uig.UyghurSentimentClassification import *
+from .ukr.UkrFormalityClassification import *
 from .urd.UrduRomanSentimentClassification import *
 from .vie.VieStudentFeedbackClassification import *
 from .zho.CMTEBClassification import *
