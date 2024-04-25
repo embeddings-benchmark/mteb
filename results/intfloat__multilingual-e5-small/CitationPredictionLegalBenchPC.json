@@ -1,0 +1,49 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "CitationPredictionLegalBenchPC",
+  "mteb_version": "1.7.7",
+  "test": {
+    "cos_sim": {
+      "accuracy": 0.5740740740740741,
+      "accuracy_threshold": 0.7971646785736084,
+      "ap": 0.5731050546385277,
+      "f1": 0.6708074534161491,
+      "f1_threshold": 0.751397430896759,
+      "precision": 0.5046728971962616,
+      "recall": 1.0
+    },
+    "dot": {
+      "accuracy": 0.5740740740740741,
+      "accuracy_threshold": 0.7971646189689636,
+      "ap": 0.5731050546385277,
+      "f1": 0.6708074534161491,
+      "f1_threshold": 0.7513974905014038,
+      "precision": 0.5046728971962616,
+      "recall": 1.0
+    },
+    "euclidean": {
+      "accuracy": 0.5740740740740741,
+      "accuracy_threshold": 0.6369223594665527,
+      "ap": 0.5731050546385277,
+      "f1": 0.6708074534161491,
+      "f1_threshold": 0.7051099538803101,
+      "precision": 0.5046728971962616,
+      "recall": 1.0
+    },
+    "evaluation_time": 3.36,
+    "manhattan": {
+      "accuracy": 0.6018518518518519,
+      "accuracy_threshold": 10.36783218383789,
+      "ap": 0.5855672953810945,
+      "f1": 0.6708074534161491,
+      "f1_threshold": 11.045112609863281,
+      "precision": 0.5046728971962616,
+      "recall": 1.0
+    },
+    "max": {
+      "accuracy": 0.6018518518518519,
+      "ap": 0.5855672953810945,
+      "f1": 0.6708074534161491
+    }
+  }
+}
