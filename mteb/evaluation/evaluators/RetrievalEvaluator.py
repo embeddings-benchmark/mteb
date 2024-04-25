@@ -304,7 +304,7 @@ class DRESModel:
             if kwargs["instructions"] is not None:
                 queries = [
                     (query + " " + kwargs["instructions"][query]).strip()
-                      for query in queries
+                    for query in queries
                 ]
             new_kwargs = {
                 k: v for k, v in kwargs.items() if k not in ["instructions", "qid"]
