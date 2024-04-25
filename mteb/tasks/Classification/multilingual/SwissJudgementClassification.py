@@ -23,9 +23,14 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
         },
         main_score="accuracy",
         date=("2020-12-15", "2022-04-08"),
-        form=['written'],
+        form=["written"],
         domains=["Legal"],
-        task_subtypes=["Topic classification","Political classification","Claim verification","Language identification"],
+        task_subtypes=[
+            "Topic classification",
+            "Political classification",
+            "Claim verification",
+            "Language identification",
+        ],
         license="CC-BY-4.0",
         socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
@@ -45,10 +50,7 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
     )
 
     def dataset_transform(self):
-    
         for lang in self.langs:
-            self.dataset[lang]["test"] = self.dataset[lang]["test"].select(range(min(2048, len(self.dataset[lang]["test"]))))
-        
-
-
-        
+            self.dataset[lang]["test"] = self.dataset[lang]["test"].select(
+                range(min(2048, len(self.dataset[lang]["test"])))
+            )
