@@ -19,6 +19,14 @@ from .ell.GreekSentimentClassification import *
 from .eng.AmazonPolarityClassification import *
 from .eng.ArxivClassification import *
 from .eng.Banking77Classification import *
+from .eng.ContractNLINoLicensingLegalBenchClassification import *
+from .eng.ContractNLINoticeOnCompelledDisclosureLegalBenchClassification import *
+from .eng.ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification import *
+from .eng.ContractNLIPermissibleCopyLegalBenchClassification import *
+from .eng.ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification import *
+from .eng.ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification import *
+from .eng.ContractNLIReturnOfConfidentialInformationLegalBenchClassification import *
+from .eng.ContractNLISharingWithEmployeesLegalBenchClassification import *
 from .eng.EmotionClassification import *
 from .eng.FinancialPhrasebankClassification import *
 from .eng.ImdbClassification import *
