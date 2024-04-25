@@ -6,6 +6,8 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class BlurbsClusteringS2S(AbsTaskClustering):
+    superseeded_by = "BlurbsClusteringS2S.v2"
+
     metadata = TaskMetadata(
         name="BlurbsClusteringS2S",
         description="Clustering of book titles. Clustering of 28 sets, either on the main or secondary genre.",
