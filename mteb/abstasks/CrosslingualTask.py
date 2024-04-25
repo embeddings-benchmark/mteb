@@ -37,7 +37,7 @@ class CrosslingualTask(AbsTask):
             grouped_by_lang = dict(merged_dataset[split].to_polars().group_by("lang"))
             for lang in self.langs:
                 if lang not in self.dataset:
-                    self.dataset[lang] = dict()
+                    self.dataset[lang] = {}
                 self.dataset[lang][split] = datasets.Dataset.from_polars(
                     grouped_by_lang[lang].drop("lang")
                 )  # Remove lang column and convert back to HF datasets, not strictly necessary but better for compatibility
