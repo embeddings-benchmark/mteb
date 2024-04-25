@@ -34,7 +34,7 @@ class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
         task_subtypes=["Thematic clustering", "Topic classification"],
         license="Not specified",
         socioeconomic_status="mixed",
-        annotations_creators=None,
+        annotations_creators="derived",
         dialect=[],
         text_creation="found",
         bibtex_citation="""@article{scialom2020mlsum,
