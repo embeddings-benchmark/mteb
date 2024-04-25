@@ -231,6 +231,9 @@ _HISTORIC_DATASETS = [
     "SwednClusteringS2S",
     "MalayalamNewsClassification",
     "TamilNewsClassification",
+    "ArxivClusteringP2P.v3",
+    "TenKGnadClusteringP2P.v2",
+    "TenKGnadClusteringS2S.v2",
 ]
 
 
