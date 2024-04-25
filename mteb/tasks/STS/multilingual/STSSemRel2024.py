@@ -35,10 +35,8 @@ class STSSemRel2024(AbsTaskSTS, MultilingualTask):
             "path": "SemRel/SemRel2024",
             "revision": "ef5c383d1b87eb8feccde3dfb7f95e42b1b050dd",
         },
-        description=(
-            "A Collection of Semantic Textual Relatedness Datasets for 14 Languages"
-        ),
-        reference="https://semantic-textual-relatedness.github.io",
+        description=("Semantic Textual Relatedness for African and Asian Languages"),
+        reference="https://semantic-textual-relatedness.github.io/",
         type="STS",
         category="s2s",
         eval_splits=_SPLITS,
@@ -46,25 +44,30 @@ class STSSemRel2024(AbsTaskSTS, MultilingualTask):
         main_score="cosine_spearman",
         date=None,
         form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
+        domains=["News", "Non-fiction", "Web", "Spoken"],
+        task_subtypes=[],
+        license="CC0",
         socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation=None,
-        citation="""@inproceedings{ousidhoum-etal-2024-semeval,
-'title': '{S}em{E}val-2024 Task 1: Semantic Textual Relatedness for African and Asian Languages',
-'author': 'Ousidhoum, Nedjma and Muhammad, Shamsuddeen Hassan and Abdalla, Mohamed and Abdulmumin, Idris and
-Ahmad,Ibrahim Said and Ahuja, Sanchit and Aji, Alham Fikri and Araujo, Vladimir and     Beloucif, Meriem and
-De Kock, Christine and Hourrane, Oumaima and Shrivastava, Manish and Solorio, Thamar and Surange, Nirmal and
-Vishnubhotla, Krishnapriya and Yimam, Seid Muhie and Mohammad, Saif M.',
-'booktitle': 'Proceedings of the 18th International Workshop on Semantic Evaluation (SemEval-2024)',
-'year': '2024',
-'publisher': 'Association for Computational Linguistics'
-}""",
-        n_samples=None,
-        avg_character_length=None,
+        text_creation="found",
+        bibtex_citation="""
+        @misc{ousidhoum2024semrel2024,
+        title={SemRel2024: A Collection of Semantic Textual Relatedness Datasets for 14 Languages}, 
+        author={Nedjma Ousidhoum and Shamsuddeen Hassan Muhammad and Mohamed Abdalla and Idris Abdulmumin and Ibrahim Said Ahmad and
+        Sanchit Ahuja and Alham Fikri Aji and Vladimir Araujo and Abinew Ali Ayele and Pavan Baswani and Meriem Beloucif and
+        Chris Biemann and Sofia Bourhim and Christine De Kock and Genet Shanko Dekebo and
+        Oumaima Hourrane and Gopichand Kanumolu and Lokesh Madasu and Samuel Rutunda and Manish Shrivastava and
+        Thamar Solorio and Nirmal Surange and Hailegnaw Getaneh Tilaye and Krishnapriya Vishnubhotla and Genta Winata and
+        Seid Muhie Yimam and Saif M. Mohammad},
+            year={2024},
+            eprint={2402.08638},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        """,
+        n_samples={"dev": 2471, "test": 8732},
+        avg_character_length={"dev": 166.48, "test": 151.28}
     )
 
     @property
@@ -106,5 +109,4 @@ Vishnubhotla, Krishnapriya and Yimam, Seid Muhie and Mohammad, Saif M.',
         self.dataset = datasets.DatasetDict(
             **dict(zip(self.langs, [get_dataset_subset(lang) for lang in self.langs]))
         )
-
         self.data_loaded = True
