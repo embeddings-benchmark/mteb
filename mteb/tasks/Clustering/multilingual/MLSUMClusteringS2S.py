@@ -36,7 +36,7 @@ class MLSUMClusteringS2S(AbsTaskClustering, MultilingualTask):
         task_subtypes=["Topic classification"],
         license="Not specified",
         socioeconomic_status="mixed",
-        annotations_creators="found",
+        annotations_creators="derived",
         dialect=[],
         text_creation="found",
         bibtex_citation="""@article{scialom2020mlsum,
