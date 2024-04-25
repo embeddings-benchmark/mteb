@@ -6,6 +6,7 @@ from .eng.ConsumerContractsQALegalBenchPC import *
 from .eng.SprintDuplicateQuestionsPC import *
 from .eng.TwitterSemEval2015PC import *
 from .eng.TwitterURLCorpusPC import *
+from .hye.ArmenianParaphrasePC import *
 from .multilingual.OpusparcusPC import *
 from .multilingual.PawsX import *
 from .pol.PolishPC import *

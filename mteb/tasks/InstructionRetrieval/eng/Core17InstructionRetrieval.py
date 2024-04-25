@@ -12,7 +12,7 @@ class Core17InstructionRetrieval(AbsTaskInstructionRetrieval):
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
             "path": "jhu-clsp/core17-instructions",
-            "revision": "e783a88ec6bc4bbdc1ba998edd85edeaf3d820f7",
+            "revision": "e39ff896cf3efbbdeeb950e6bd7c79f266995b07",
         },
         type="InstructionRetrieval",
         category="s2p",
@@ -36,6 +36,6 @@ class Core17InstructionRetrieval(AbsTaskInstructionRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples={"eng": 19735 * 2},
-        avg_character_length={"eng": 2747.2883966244726},
+        n_samples={"eng": 19919 * 2},
+        avg_character_length={"eng": 2768.749235474006},
     )
