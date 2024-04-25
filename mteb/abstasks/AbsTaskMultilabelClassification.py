@@ -119,7 +119,7 @@ class AbsTaskMultilabelClassification(AbsTask):
                 + "=" * 10
             )
             X_train = np.stack([unique_train_embeddings[idx] for idx in sample_indices])
-            y_train = np.array([train_split["label"][idx] for idx in sample_indices])
+            y_train = [train_split["label"][idx] for idx in sample_indices]
             binarizer = MultiLabelBinarizer()
             y_train = binarizer.fit_transform(y_train)
             y_test = binarizer.transform(eval_split["label"])
