@@ -11,6 +11,8 @@ _LANGUAGES = {
     "ru": ["rus-Cyrl"],
     "es": ["spa-Latn"],
 }
+# Did not include turkish (tu) samples because all `topics` values are set to "unknown".
+# Which results in a v-measure of 1 as all texts are considered to be in one cluster.
 
 
 class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):

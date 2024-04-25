@@ -11,6 +11,8 @@ _LANGUAGES = {
     "ru": ["rus-Cyrl"],
     "es": ["spa-Latn"],
 }
+# Did not include turkish (tu) samples because all `topics` values are set to "unknown".
+# Which results in a v-measure of 1 as all texts are considered to be in one cluster.
 
 
 class MLSUMClusteringS2S(AbsTaskClustering, MultilingualTask):
@@ -34,7 +36,7 @@ class MLSUMClusteringS2S(AbsTaskClustering, MultilingualTask):
         task_subtypes=["Thematic clustering", "Topic classification"],
         license="Not specified",
         socioeconomic_status="mixed",
-        annotations_creators=None,
+        annotations_creators="derived",
         dialect=[],
         text_creation="found",
         bibtex_citation="""@article{scialom2020mlsum,
