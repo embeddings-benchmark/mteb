@@ -38,8 +38,8 @@ class SentLenClassification(AbsTaskClassification):
       primaryClass={cs.CL}
         }
         """,
-        n_samples={"validation": 8653, "test": 8507},
-        avg_character_length={"validation": 83.41, "test": 86.80},
+        n_samples={"test": 8507},
+        avg_character_length={"test": 86.80},
     )
 
     def dataset_transform(self):
@@ -83,8 +83,8 @@ class WCClassification(AbsTaskClassification):
       primaryClass={cs.CL}
         }
         """,
-        n_samples={"validation": 8357, "test": 8458},
-        avg_character_length={"validation": 83.81, "test": 82.67},
+        n_samples={"test": 8458},
+        avg_character_length={"test": 82.67},
     )
 
     def dataset_transform(self):
@@ -128,8 +128,8 @@ class TreeDepthClassification(AbsTaskClassification):
       primaryClass={cs.CL}
         }
         """,
-        n_samples={"validation": 8675, "test": 8604},
-        avg_character_length={"validation": 69.68, "test": 70.06},
+        n_samples={"test": 8604},
+        avg_character_length={"test": 70.06},
     )
 
     def dataset_transform(self):
@@ -173,8 +173,8 @@ class TopConstClassification(AbsTaskClassification):
       primaryClass={cs.CL}
         }
         """,
-        n_samples={"validation": 7451, "test": 6866},
-        avg_character_length={"validation": 82.128, "test": 91.23},
+        n_samples={"test": 6866},
+        avg_character_length={"test": 91.23},
     )
 
     def dataset_transform(self):
@@ -218,8 +218,8 @@ class BShiftClassification(AbsTaskClassification):
       primaryClass={cs.CL}
         }
         """,
-        n_samples={"validation": 10000, "test": 1000},
-        avg_character_length={"validation": 63.19, "test": 62.76},
+        n_samples={"test": 1000},
+        avg_character_length={"test": 62.76},
     )
 
     def dataset_transform(self):
@@ -263,8 +263,8 @@ class TenseClassification(AbsTaskClassification):
       primaryClass={cs.CL}
         }
         """,
-        n_samples={"validation": 8552, "test": 8666},
-        avg_character_length={"validation": 71.2, "test": 69.21},
+        n_samples={"test": 8666},
+        avg_character_length={"test": 69.21},
     )
 
     def dataset_transform(self):
@@ -308,8 +308,8 @@ class SubjNumClassification(AbsTaskClassification):
       primaryClass={cs.CL}
         }
         """,
-        n_samples={"validation": 8088, "test": 8149},
-        avg_character_length={"validation": 85.07, "test": 85.73},
+        n_samples={"test": 8149},
+        avg_character_length={"test": 85.73},
     )
 
     def dataset_transform(self):
@@ -353,8 +353,8 @@ class ObjNumClassification(AbsTaskClassification):
       primaryClass={cs.CL}
         }
         """,
-        n_samples={"validation": 8014, "test": 7894},
-        avg_character_length={"validation": 84.31, "test": 84.74},
+        n_samples={"test": 7894},
+        avg_character_length={"test": 84.74},
     )
 
     def dataset_transform(self):
@@ -398,8 +398,8 @@ class SOMOClassification(AbsTaskClassification):
       primaryClass={cs.CL}
         }
         """,
-        n_samples={"validation": 8402, "test": 8446},
-        avg_character_length={"validation": 93.13, "test": 92.36},
+        n_samples={"test": 8446},
+        avg_character_length={"test": 92.36},
     )
 
     def dataset_transform(self):
@@ -443,8 +443,8 @@ class CoordInvClassification(AbsTaskClassification):
       primaryClass={cs.CL}
         }
         """,
-        n_samples={"validation": 10002, "test": 10002},
-        avg_character_length={"validation": 78.28, "test": 77.56},
+        n_samples={"test": 10002},
+        avg_character_length={"test": 77.56},
     )
 
     def dataset_transform(self):
