@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "7fb2f514ea683c5282dfec0a9672ece8de90ac50",
+  "mteb_dataset_name": "SinhalaNewsSourceClassification",
+  "mteb_version": "1.7.27",
+  "train": {
+    "accuracy": 0.340869140625,
+    "accuracy_stderr": 0.016878506331505345,
+    "evaluation_time": 7.16,
+    "f1": 0.3121520409074379,
+    "f1_stderr": 0.016630041317493516,
+    "main_score": 0.340869140625
+  }
+}
