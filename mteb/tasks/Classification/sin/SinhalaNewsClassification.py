@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-
 from mteb.abstasks import AbsTaskClassification
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class SinhalaNewsClassification(AbsTaskClassification):
@@ -45,8 +44,9 @@ class SinhalaNewsClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        self.dataset = self.dataset.rename_column("comments", "text")
-        self.dataset = self.dataset.rename_column("labels", "label")
+        self.dataset = self.dataset.rename_column(
+            {"comments": "text", "labels": "label"}
+        )
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"]
         )

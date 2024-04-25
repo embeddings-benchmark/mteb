@@ -61,9 +61,9 @@ from .nob.NorwegianParliamentClassification import *
 from .pan.PunjabiNewsClassification import *
 from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
-from .slk.SlovakSentimentClassification import *
 from .sin.SinhalaNewsClassification import *
 from .sin.SinhalaNewsSourceClassification import *
+from .slk.SlovakSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
 from .swe.DalajClassification import *
 from .swe.SweRecClassification import *
