@@ -245,6 +245,8 @@ class AbsTaskInstructionRetrieval(AbsTask):
     ):
         super().__init__(**kwargs)
         self.do_length_ablation = kwargs.get("do_length_ablation", False)
+        if self.do_length_ablation:
+            logger.info("Running length ablation also...")
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -286,16 +288,16 @@ class AbsTaskInstructionRetrieval(AbsTask):
             changed_instructions = {
                 query["text"]: query["instruction_changed"] for query in queries
             }
-            queries = {query["id"]: query["text"] for query in queries}
-            corpus = {
-                doc["id"]: {"title": doc["title"], "text": doc["text"]}
-                for doc in corpus
-            }
             if self.do_length_ablation:
                 keywords = {query["text"]: query["keywords"] for query in queries}
                 short_instructions = {
                     query["text"]: query["short_query"] for query in queries
                 }
+            queries = {query["id"]: query["text"] for query in queries}
+            corpus = {
+                doc["id"]: {"title": doc["title"], "text": doc["text"]}
+                for doc in corpus
+            }
             assert (
                 len(top_ranked) == len(queries)
             ), f"Top ranked not loaded properly! Expected {len(self.queries)} but got {len(self.top_ranked)}."
@@ -471,7 +473,6 @@ class AbsTaskInstructionRetrieval(AbsTask):
             overall_changed_scores["individual"] = {
                 "original": scores_og,
                 "changed": scores_changed,
-                "base": scores_base,
             }
 
             if self.do_length_ablation:
@@ -657,6 +658,9 @@ def calculate_length_and_count(relevant_docs, queries, corpus, instructions):
         query = queries[query_id]
         query += " " + instructions[query]
         for doc_id in docs:
+            # not relevant
+            if docs[doc_id] == 0:
+                continue
             doc = corpus[doc_id]
             doc_text = doc["title"] + doc["text"]
             total_length += len(query) + len(doc_text)
