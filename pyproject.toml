@@ -25,7 +25,7 @@ classifiers = [
 ]
 requires-python = ">=3.8"
 dependencies = [
-    "datasets>=2.2.0",
+    "datasets>=2.19.0",
     "jsonlines",
     "numpy",
     "requests>=2.26.0",
