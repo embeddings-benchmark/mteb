@@ -19,8 +19,8 @@ _LANGUAGES = {
     "arb": ["arb-Arab"],
     "ary": ["ary-Arab"],
     "pan": ["pan-Guru"],
-    # gold labels are hidden 
-    #"esp": ["esp"],
+    # gold labels are hidden
+    # "esp": ["esp"],
     "tel": ["tel-Telu"],
 }
 
@@ -36,10 +36,9 @@ class STSSemRel2024(AbsTaskSTS, MultilingualTask):
             "revision": "ef5c383d1b87eb8feccde3dfb7f95e42b1b050dd",
         },
         description=(
-            "Semantic Textual Similarity Benchmark (STSbenchmark) dataset,"
-            "but translated using DeepL API."
+            "A Collection of Semantic Textual Relatedness Datasets for 14 Languages"
         ),
-        reference="https://github.com/PhilipMay/stsb-multi-mt/",
+        reference="https://semantic-textual-relatedness.github.io",
         type="STS",
         category="s2s",
         eval_splits=_SPLITS,
@@ -50,11 +49,20 @@ class STSSemRel2024(AbsTaskSTS, MultilingualTask):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
+        socioeconomic_status="mixed",
+        annotations_creators="expert-annotated",
+        dialect=[],
         text_creation=None,
-        bibtex_citation=None,
+        citation="""@inproceedings{ousidhoum-etal-2024-semeval,
+'title': '{S}em{E}val-2024 Task 1: Semantic Textual Relatedness for African and Asian Languages',
+'author': 'Ousidhoum, Nedjma and Muhammad, Shamsuddeen Hassan and Abdalla, Mohamed and Abdulmumin, Idris and
+Ahmad,Ibrahim Said and Ahuja, Sanchit and Aji, Alham Fikri and Araujo, Vladimir and     Beloucif, Meriem and
+De Kock, Christine and Hourrane, Oumaima and Shrivastava, Manish and Solorio, Thamar and Surange, Nirmal and
+Vishnubhotla, Krishnapriya and Yimam, Seid Muhie and Mohammad, Saif M.',
+'booktitle': 'Proceedings of the 18th International Workshop on Semantic Evaluation (SemEval-2024)',
+'year': '2024',
+'publisher': 'Association for Computational Linguistics'
+}""",
         n_samples=None,
         avg_character_length=None,
     )
@@ -63,7 +71,7 @@ class STSSemRel2024(AbsTaskSTS, MultilingualTask):
     def metadata_dict(self) -> dict[str, str]:
         metadata_dict = super().metadata_dict
         metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
+        metadata_dict["max_score"] = 1
         return metadata_dict
 
     def load_data(self, **kwargs):
@@ -93,7 +101,7 @@ class STSSemRel2024(AbsTaskSTS, MultilingualTask):
                     )
                 )
             )
-            return subset.rename_column("similarity_score", "score")
+            return subset.rename_column("label", "score")
 
         self.dataset = datasets.DatasetDict(
             **dict(zip(self.langs, [get_dataset_subset(lang) for lang in self.langs]))
