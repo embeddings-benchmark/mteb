@@ -42,6 +42,7 @@ from .kan.KannadaNewsClassification import *
 from .kur.KurdishSentimentClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
 from .mlt.MalteseSentimentClassification import *
+from .multilingual.AfriSentiLangClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
 from .multilingual.IndicLangClassification import *
