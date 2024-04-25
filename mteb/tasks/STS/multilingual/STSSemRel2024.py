@@ -19,7 +19,7 @@ _LANGUAGES = {
     "arb": ["arb-Arab"],
     "ary": ["ary-Arab"],
     "pan": ["pan-Guru"],
-    # gold labels are hidden
+    # gold test scores are hidden
     # "esp": ["esp"],
     "tel": ["tel-Telu"],
 }
@@ -67,7 +67,7 @@ class STSSemRel2024(AbsTaskSTS, MultilingualTask):
         }
         """,
         n_samples={"dev": 2471, "test": 8732},
-        avg_character_length={"dev": 166.48, "test": 151.28}
+        avg_character_length={"dev": 166.48, "test": 151.28},
     )
 
     @property
