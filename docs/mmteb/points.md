@@ -60,6 +60,7 @@ Please also add your first name and last name are as you want them to appear in 
 | asparius          | Ömer       | Çağatan    | ocagatan19@ku.edu.tr         | ~Ömer_Veysel_Çağatan1 | Koç University,Turkey                                |
 | rafalposwiata     | Rafał      | Poświata   | rposwiata@opi.org.pl         | ~Rafał_Poświata1     | National Information Processing Institute, Warsaw, Poland |
 | rbroc             | Roberta    | Rocca      | roberta.rocca@cas.au.dk      | ~Roberta_Rocca1      | Aarhus University, Denmark                            |
+| awinml            | Ashwin     | Mathur     | ashwinxmathur@gmail.com      |                      | N/A                                                   |
 | guangyusong       | Guangyu    | Song       | guangysong@gmail.com         | ~Guangyu_Song1       | N/A                            |
 | davidstap.        | David      | Stap       | dd.stap@gmail.com            | ~David_Stap          | University of Amsterdam.                              |
 | HLasse            | Lasse      | Hansen     | lasseh0310@gmail.com         | ~Lasse_Hansen2       | Aarhus University, Denmark                            |
