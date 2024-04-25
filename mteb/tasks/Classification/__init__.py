@@ -19,6 +19,11 @@ from .ell.GreekSentimentClassification import *
 from .eng.AmazonPolarityClassification import *
 from .eng.ArxivClassification import *
 from .eng.Banking77Classification import *
+from .eng.CanadaTaxCourtOutcomesLegalBenchClassification import *
+from .eng.ContractNLIConfidentialityOfAgreementLegalBenchClassification import *
+from .eng.ContractNLIExplicitIdentificationLegalBenchClassification import *
+from .eng.ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification import *
+from .eng.ContractNLILimitedUseLegalBenchClassification import *
 from .eng.EmotionClassification import *
 from .eng.FinancialPhrasebankClassification import *
 from .eng.ImdbClassification import *
@@ -41,6 +46,7 @@ from .ita.ItalianLinguistAcceptabilityClassification import *
 from .jpn.WRIMEClassification import *
 from .kan.KannadaNewsClassification import *
 from .kur.KurdishSentimentClassification import *
+from .mal.MalayalamNewsClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
 from .mlt.MalteseSentimentClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
@@ -62,10 +68,13 @@ from .nob.NorwegianParliamentClassification import *
 from .pan.PunjabiNewsClassification import *
 from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
+from .san.SanskritShlokasClassification import *
 from .slk.SlovakSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
 from .swe.DalajClassification import *
 from .swe.SweRecClassification import *
+from .tam.TamilNewsClassification import *
+from .tel.TeluguAndhraJyotiNewsClassification import *
 from .tha.wisesight_sentiment_classification import *
 from .tur.TurkishMovieSentimentClassification import *
 from .tur.TurkishProductSentimentClassification import *

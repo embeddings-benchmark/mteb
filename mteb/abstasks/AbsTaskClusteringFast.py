@@ -7,7 +7,7 @@ from typing import Any, Dict
 import numpy as np
 import sklearn
 import sklearn.cluster
-from datasets import DatasetDict
+from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 
 from .AbsTask import AbsTask
@@ -121,10 +121,14 @@ class AbsTaskClusteringFast(AbsTask):
         _dataset = dataset[split]
 
         rng_state = random.Random(self.seed)
-        example_indices = rng_state.sample(
-            range(len(_dataset)), k=self.max_documents_to_embed
-        )
-        downsampled_dataset = _dataset.select(example_indices)
+
+        if len(_dataset) > self.max_documents_to_embed:
+            example_indices = rng_state.sample(
+                range(len(_dataset)), k=self.max_documents_to_embed
+            )
+            downsampled_dataset = _dataset.select(example_indices)
+        else:
+            downsampled_dataset = _dataset
 
         logger.info(f"Encoding {len(downsampled_dataset)} sentences...")
 
@@ -140,3 +144,75 @@ class AbsTaskClusteringFast(AbsTask):
         )
 
         return {"v_measures": v_measures, "v_measure": float(np.mean(v_measures))}
+
+
+def clustering_downsample(
+    dataset: DatasetDict, seed: int, max_samples_in_cluster: int = 2048
+) -> DatasetDict:
+    """In cases where it is not possible to convert the dataset to a fast version, we can downsample the dataset to speed up the evaluation.
+
+    This might be necessary when the clusters in the dataset is not sampled from the same distribution.
+    """
+    rng_state = random.Random(seed)
+
+    ds = {}
+    for split in dataset:
+        _docs = []
+        _labels = []
+
+        n_clusters = len(dataset[split])
+
+        for i in range(n_clusters):
+            labels = dataset[split]["labels"][i]
+            sentences = dataset[split]["sentences"][i]
+
+            n_sample = min(max_samples_in_cluster, len(sentences))
+
+            # sample n_sample from each cluster
+            idxs = rng_state.sample(range(len(sentences)), n_sample)
+            _docs.append([sentences[idx] for idx in idxs])
+            _labels.append([labels[idx] for idx in idxs])
+
+        ds[split] = Dataset.from_dict({"sentences": _docs, "labels": _labels})
+    return DatasetDict(ds)
+
+
+def convert_to_fast(
+    dataset: DatasetDict, seed: int, max_size: int = 100_000
+) -> DatasetDict:
+    """Converts a clustering dataset to a fast version. This concats the cluster into two columns, sentences and labels.
+    It additionally downsamples the dataset to max_size.
+    """
+    categories = None
+    rng_state = random.Random(seed)
+
+    ds = {}
+    for split in dataset:
+        sent_set = set()
+        labels = []
+        sentences = []
+        n_clusters = len(dataset[split])
+        for i in range(n_clusters):
+            lab = dataset[split]["labels"][i]
+            sents = dataset[split]["sentences"][i]
+            for l, s in zip(lab, sents):
+                if s not in sent_set:
+                    labels.append(l)
+                    sentences.append(s)
+                    sent_set.add(s)  # ensuring no duplicates
+
+        # check that it is the same distribution
+        if categories is None:
+            categories = set(labels)
+        else:
+            assert (
+                categories == set(labels)
+            ), "The clusters are not sampled from the same distribution as they have different labels."
+
+        ds[split] = Dataset.from_dict({"sentences": sentences, "labels": labels})
+
+        if len(ds[split]) > max_size:
+            idxs = rng_state.sample(range(len(ds[split])), max_size)
+            ds[split] = ds[split].select(idxs)
+
+    return DatasetDict(ds)
