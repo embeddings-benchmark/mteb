@@ -355,6 +355,9 @@ def calculate_length_and_count(relevant_docs, queries, corpus):
     for query_id, docs in relevant_docs.items():
         query = queries[query_id]
         for doc_id in docs:
+            # not relevant
+            if docs[doc_id] == 0:
+                continue
             doc = corpus[doc_id]
             doc_text = doc["title"] + doc["text"]
             total_length += len(query) + len(doc_text)

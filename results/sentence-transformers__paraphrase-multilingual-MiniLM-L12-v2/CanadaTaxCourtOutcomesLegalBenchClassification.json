@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "CanadaTaxCourtOutcomesLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.7745901639344261,
+    "accuracy_stderr": 1.1102230246251565e-16,
+    "evaluation_time": 31.73,
+    "f1": 0.6713839797060511,
+    "f1_stderr": 0.0,
+    "main_score": 0.7745901639344261
+  }
+}
