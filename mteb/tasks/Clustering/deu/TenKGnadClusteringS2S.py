@@ -6,6 +6,8 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class TenKGnadClusteringS2S(AbsTaskClustering):
+    superseeded_by = "TenKGnadClusteringS2S.v2"
+
     metadata = TaskMetadata(
         name="TenKGnadClusteringS2S",
         description="Clustering of news article titles. Clustering of 10 splits on the news article category.",

@@ -12,7 +12,7 @@ class News21InstructionRetrieval(AbsTaskInstructionRetrieval):
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
             "path": "jhu-clsp/news21-instructions",
-            "revision": "fae860d870141ee0f34fbab67314c65f41921943",
+            "revision": "e0144086b45fe31ac125e9ac1a83b6a409bb6ca6",
         },
         type="InstructionRetrieval",
         category="s2p",
@@ -36,6 +36,6 @@ class News21InstructionRetrieval(AbsTaskInstructionRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples={"eng": 30129 * 2},
-        avg_character_length={"eng": 2331.381203215969},
+        n_samples={"eng": 30953 * 2},
+        avg_character_length={"eng": 2983.724665391969},
     )
