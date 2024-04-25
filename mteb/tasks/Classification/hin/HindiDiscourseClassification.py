@@ -58,4 +58,6 @@ class HindiDiscourseClassification(AbsTaskClassification):
         self.dataset = self.dataset.rename_columns(
             {"Sentence": "text", "Discourse Mode": "label"}
         ).remove_columns(["Story_no"])
-        self.dataset["train"] = self.dataset["train"].select(range(2048))
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"]
+        )

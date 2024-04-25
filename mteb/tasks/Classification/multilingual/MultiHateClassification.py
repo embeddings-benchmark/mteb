@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks import AbsTaskClassification, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -18,17 +16,6 @@ _LANGUAGES = {
     "por": ["por-Latn"],
     "spa": ["spa-Latn"],
 }
-
-
-def _transform(dataset):
-    dataset = dataset.rename_columns({"is_hateful": "label"})
-    for label in ["label", "functionality"]:
-        dataset = dataset.class_encode_column(label)
-    dataset = dataset["test"].train_test_split(
-        train_size=1000, test_size=1000, seed=42, stratify_by_column="functionality"
-    )  # balanced sampling across types of hate speech
-    dataset = dataset.remove_columns(["functionality"])
-    return dataset
 
 
 class MultiHateClassification(MultilingualTask, AbsTaskClassification):
@@ -108,14 +95,19 @@ class MultiHateClassification(MultilingualTask, AbsTaskClassification):
         avg_character_length={"test": 45.9},
     )
 
-    def load_data(self, **kwargs):
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = {}
-        for lang in self.langs:
-            metadata = self.metadata_dict.get("dataset", None)
-            dataset = datasets.load_dataset(name=lang, **metadata)
-            self.dataset[lang] = _transform(dataset)
-        self.dataset_transform()
-        self.data_loaded = True
+
+    def dataset_transform(self):
+        # for each language perform some transforms
+        for lang in self.dataset.keys():
+            _dataset = self.dataset[lang]
+            _dataset = _dataset.rename_columns({"is_hateful": "label"})
+            for label in ["label", "functionality"]:
+                _dataset = _dataset.class_encode_column(label)
+            _dataset = _dataset["test"].train_test_split(
+                train_size=1000,
+                test_size=1000,
+                seed=42,
+                stratify_by_column="functionality",
+            )  # balanced sampling across types of hate speech
+            _dataset = _dataset.remove_columns(["functionality"])
+            self.dataset[lang] = _dataset
