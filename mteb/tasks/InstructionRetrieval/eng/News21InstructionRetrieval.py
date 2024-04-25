@@ -11,7 +11,7 @@ class News21InstructionRetrieval(AbsTaskInstructionRetrieval):
         description="Measuring retrieval instruction following ability on News21 narratives.",
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
-            "path": "jhu-clsp/news21-instructions",
+            "path": "jhu-clsp/news21-instructions-old",
             "revision": "e0144086b45fe31ac125e9ac1a83b6a409bb6ca6",
         },
         type="InstructionRetrieval",
