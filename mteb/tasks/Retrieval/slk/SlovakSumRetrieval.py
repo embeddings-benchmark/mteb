@@ -31,10 +31,10 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
         domains=None,
         task_subtypes=None,
         license="openrail",
-        socioeconomic_status=None,
+        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=None,
-        text_creation=None,
+        text_creation="found",
         bibtex_citation="""
             @inproceedings{OndrejowaSlovakSum24,
                 title = {SlovakSum: A Large Scale Slovak Summarization Dataset},
@@ -44,7 +44,7 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
             }
         """,
         n_samples={"test": 600},
-        avg_character_length=None,
+        avg_character_length={"test": 238.44},
     )
 
     def load_data(self, **kwargs):
