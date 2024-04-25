@@ -230,6 +230,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [STSBenchmark](https://github.com/PhilipMay/stsb-multi-mt/) | ['eng'] | STS | s2s |  |  |  |
 | [STSBenchmarkMultilingualSTS](https://github.com/PhilipMay/stsb-multi-mt/) | ['cmn', 'deu', 'eng', 'fra', 'ita', 'nld', 'pol', 'por', 'rus', 'spa'] | STS | s2s |  |  |  |
 | [STSES](https://huggingface.co/datasets/PlanTL-GOB-ES/sts-es) | ['spa'] | STS | s2s |  |  |  |
+| [SanskritShlokasClassification](https://github.com/goru001/nlp-for-sanskrit) | ['san'] | Classification | s2s | [Religious] | {'train': 383, 'validation': 96} | {'train': 98.415, 'validation': 96.635} |
 | [ScalaDaClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['dan'] | Classification | s2s |  | {'test': 1024} | {'test': 109.4} |
 | [ScalaNbClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['nob'] | Classification | s2s |  | {'test': 1024} | {'test': 98.4} |
 | [ScalaNnClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['nno'] | Classification | s2s |  | {'test': 1024} | {'test': 104.8} |
