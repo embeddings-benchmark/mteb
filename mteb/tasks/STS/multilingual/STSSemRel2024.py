@@ -19,7 +19,7 @@ _LANGUAGES = {
     "arb": ["arb-Arab"],
     "ary": ["ary-Arab"],
     "pan": ["pan-Guru"],
-    # gold test scores are hidden
+    # gold test scores are hidden for spansih 
     # "esp": ["esp"],
     "tel": ["tel-Telu"],
 }
@@ -42,7 +42,7 @@ class STSSemRel2024(AbsTaskSTS, MultilingualTask):
         eval_splits=_SPLITS,
         eval_langs=_LANGUAGES,
         main_score="cosine_spearman",
-        date=None,
+        date=("2010-01-01", "2021-01-01"),
         form=None,
         domains=["News", "Non-fiction", "Web", "Spoken"],
         task_subtypes=[],
