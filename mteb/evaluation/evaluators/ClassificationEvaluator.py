@@ -5,12 +5,8 @@ import logging
 import numpy as np
 import torch
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import (
-    accuracy_score,
-    average_precision_score,
-    f1_score,
-    label_ranking_average_precision_score,
-)
+from sklearn.metrics import (accuracy_score, average_precision_score, f1_score,
+                             label_ranking_average_precision_score)
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from torch import Tensor
@@ -61,8 +57,7 @@ class kNNMultiLabelClassificationEvaluator(Evaluator):
                 metric = dot_distance
             else:
                 metric = metric_name
-            estimator = KNeighborsClassifier(n_neighbors=self.k, metric=metric)
-            classifier = MultiOutputClassifier(estimator, n_jobs=-1)
+            classifier = KNeighborsClassifier(n_neighbors=self.k, metric=metric)
             classifier.fit(self.embeddings_train, self.y_train)
             y_pred = classifier.predict(self.embeddings_test)
             accuracy = classifier.score(self.embeddings_test, self.y_test)
