@@ -7,24 +7,24 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskClustering, MultilingualTask
 
-_LANGUAGES = [
-    "amh",
-    "eng",
-    "fra",
-    "hau",
-    "ibo",
-    "lin",
-    "lug",
-    "orm",
-    "pcm",
-    "run",
-    "sna",
-    "som",
-    "swa",
-    "tir",
-    "xho",
-    "yor",
-]
+_LANGUAGES = {
+    "amh": ["amh-Ethi"],
+    "eng": ["eng-Latn"],
+    "fra": ["fra-Latn"],
+    "hau": ["hau-Latn"],
+    "ibo": ["ibo-Latn"],
+    "lin": ["lin-Latn"],
+    "lug": ["lug-Latn"],
+    "orm": ["orm-Ethi"],
+    "pcm": ["pcm-Latn"],
+    "run": ["run-Latn"],
+    "sna": ["sna-Latn"],
+    "som": ["som-Latn"],
+    "swa": ["swa-Latn"],
+    "tir": ["tir-Ethi"],
+    "xho": ["xho-Latn"],
+    "yor": ["yor-Latn"],
+}
 
 
 class MasakhaNEWSClusteringP2P(AbsTaskClustering, MultilingualTask):
@@ -56,9 +56,7 @@ class MasakhaNEWSClusteringP2P(AbsTaskClustering, MultilingualTask):
     )
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub and convert it to the standard format.
-        """
+        """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return
         self.dataset = {}
@@ -71,9 +69,7 @@ class MasakhaNEWSClusteringP2P(AbsTaskClustering, MultilingualTask):
         self.data_loaded = True
 
     def dataset_transform(self, lang):
-        """
-        Convert to standard format
-        """
+        """Convert to standard format"""
         self.dataset[lang].pop("train")
         self.dataset[lang].pop("validation")
 

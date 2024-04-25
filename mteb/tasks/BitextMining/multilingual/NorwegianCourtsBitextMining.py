@@ -16,7 +16,7 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
         type="BitextMining",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["nb", "nn"],
+        eval_langs=["nob-Latn", "nno-Latn"],
         main_score="f1",
         date=None,
         form=None,

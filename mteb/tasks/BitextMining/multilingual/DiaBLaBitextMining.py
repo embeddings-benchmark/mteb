@@ -19,7 +19,10 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
         type="BitextMining",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["fr-en", "en-fr"],
+        eval_langs={
+            "fr-en": ["fra-Latn", "eng-Latn"],
+            "en-fr": ["eng-Latn", "fra-Latn"],
+        },
         main_score="f1",
         date=None,
         form=None,
@@ -36,9 +39,7 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
     )
 
     def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub and convert it to the standard format.
-        """
+        """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return
 

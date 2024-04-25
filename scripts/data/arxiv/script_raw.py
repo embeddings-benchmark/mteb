@@ -1,5 +1,4 @@
-"""
-Take data from https://www.kaggle.com/datasets/Cornell-University/arxiv?resource=download and
+"""Take data from https://www.kaggle.com/datasets/Cornell-University/arxiv?resource=download and
 only keep useful information
 """
 

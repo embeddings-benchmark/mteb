@@ -17,7 +17,14 @@ class NordicLangClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["no", "nn"],
+        eval_langs=[
+            "nob-Latn",
+            "nno-Latn",
+            "dan-Latn",
+            "swe-Latn",
+            "isl-Latn",
+            "fao-Latn",
+        ],
         main_score="accuracy",
         date=None,
         form=None,
@@ -41,5 +48,6 @@ class NordicLangClassification(AbsTaskClassification):
         return metadata_dict
 
     def dataset_transform(self):
-        self.dataset = self.dataset.rename_column("sentence", "text")
-        self.dataset = self.dataset.rename_column("language", "label")
+        self.dataset = self.dataset.rename_columns(
+            {"sentence": "text", "language": "label"}
+        )

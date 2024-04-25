@@ -8,7 +8,11 @@ The Massive Text Embedding Benchmark (MTEB) is intended to evaluate the quality 
 
 ## Contributing to MMTEB
 
-Everyone can join and contribute to this initiative from 1 April 2024 to 31 April 2024, win some SWAG, and become a co-author of our upcoming paper. We aim to publish the results of our findings at a top conference such as EMNLP, NeurIPS, etc. We have identified four ways to contribute:
+Everyone can join and contribute to this initiative from:
+- 10th of April 2024 to 15th of May 2024 for adding new datasets
+- 15th of May to 30th of May for running models
+
+Win some SWAG, and become a co-author of our upcoming paper. We aim to publish the results of our findings at a top conference such as EMNLP, NeurIPS, etc. We have identified four ways to contribute:
 
 ### 🗃️ 1: Contribute a new dataset
 
@@ -47,7 +51,7 @@ The contribution points are computed using the following table:
 | New dataset         | As many as possible | 2+bonus | The first dataset for a language x task gains 4 bonus points. |
 | New task            | If relevant         | 10      | Task 2.                                                                                                           |
 | Dataset annotations | On demand           | 1       | Adding missing dataset annotations to existing datasets.                                                          |
-| (bug)fixes            | On demand           | 1-10    | Points depends the effect of code changes. If you want to find issues related to the MMTEB you can find them [here](https://github.com/embeddings-benchmark/mteb/milestone/1). |
+| Bug fixes            | On demand           | 1-10    | Points depends the effect of code changes. If you want to find issues related to the MMTEB you can find them [here](https://github.com/embeddings-benchmark/mteb/milestone/1), issues marked with "help-wanted" or "good-first-issue" are great places to start. |
 | Running Models      | On demand           | 1       | Task 3.                                   |
 | Review PR           | On demand           | 2       | Task 4.                                   |
 

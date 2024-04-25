@@ -20,9 +20,9 @@ TASK_LIST_PAIR_CLASSIFICATION = []
 
 TASK_LIST_RERANKING = []
 
-TASK_LIST_RETRIEVAL = ["Ko-StrategyQA", "Ko-mrtydi", "Ko-miracl"]
+TASK_LIST_RETRIEVAL = ["Ko-StrategyQA", "Ko-miracl"]
 
-TASK_LIST_STS = []
+TASK_LIST_STS = ["KLUE-STS", "KorSTS"]
 
 TASK_LIST = (
     TASK_LIST_CLASSIFICATION
@@ -39,6 +39,7 @@ model = SentenceTransformer(model_name)
 for task in TASK_LIST:
     logger.info(f"Running task: {task}")
     evaluation = MTEB(
-        tasks=[task], task_langs=["ko"]
-    )  # Remove "ko" for running all languages
+        tasks=[task],
+        task_langs=["ko"],
+    )
     evaluation.run(model, output_folder=f"results/{model_name}")

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from datetime import date
+from typing import List, Mapping, Union
 
 from pydantic import (
     AnyUrl,
@@ -11,6 +12,13 @@ from pydantic import (
     field_validator,
 )
 from typing_extensions import Annotated, Literal
+
+from .languages import (
+    ISO_TO_LANGUAGE,
+    ISO_TO_SCRIPT,
+    path_to_lang_codes,
+    path_to_lang_scripts,
+)
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
@@ -26,11 +34,14 @@ TASK_SUBTYPE = Literal[
     "Scientific Reranking",
     "Claim verification",
     "Topic classification",
+    "Code retrieval",
+    "False Friends",
 ]
 
 TASK_DOMAIN = Literal[
     "Academic",
     "Blog",
+    "Constructed",
     "Encyclopaedic",
     "Fiction",
     "Government",
@@ -43,7 +54,9 @@ TASK_DOMAIN = Literal[
     "Reviews",
     "Social",
     "Spoken",
+    "Subtitles",
     "Web",
+    "Programming",
 ]
 
 TEXT_CREATION_METHOD = Literal[
@@ -71,6 +84,7 @@ TASK_TYPE = Literal[
     "Retrieval",
     "STS",
     "Summarization",
+    "InstructionRetrieval",
 ]
 
 TASK_CATEGORY = Literal[
@@ -92,14 +106,17 @@ STR_DATE = Annotated[
 ]  # Allows the type to be a string, but ensures that the string is a valid date
 
 SPLIT_NAME = str
+# a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
+ISO_LANGUAGE_SCRIPT = str
+LANGUAGES = Union[List[ISO_LANGUAGE_SCRIPT], Mapping[str, List[ISO_LANGUAGE_SCRIPT]]]
 
+PROGRAMMING_LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
 
 logger = logging.getLogger(__name__)
 
 
 class TaskMetadata(BaseModel):
-    """
-    Metadata for a task.
+    """Metadata for a task.
 
     Args:
         dataset: All arguments to pass to datasets.load_dataset to load the dataset for the task. Refer to https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset
@@ -110,7 +127,10 @@ class TaskMetadata(BaseModel):
         category: The category of the task. E.g. includes "s2s", "s2p", "p2p" (s=sentence, p=paragraph).
         reference: A URL to the documentation of the task. E.g. a published paper.
         eval_splits: The splits of the dataset used for evaluation.
-        eval_langs: The languages of the dataset used for evaluation.
+        eval_langs: The languages of the dataset used for evaluation. Langauges follows a ETF BCP 47 standard consisting of "{language}-{script}"
+            tag (e.g. "eng-Latn"). Where language is specified as a list of ISO 639-3 language codes (e.g. "eng") followed by ISO 15924 script codes
+            (e.g. "Latn"). Can be either a list of languages or a dictionary mapping huggingface subsets to lists of languages (e.g. if a the
+            huggingface dataset contain different languages).
         main_score: The main score used for evaluation.
         date: The date when the data was collected. Specified as a tuple of two dates.
         form: The form of the data. Either "spoken", "written".
@@ -121,12 +141,14 @@ class TaskMetadata(BaseModel):
         socioeconomic_status: The socioeconomic status of the data. Includes "high", "medium", "low", "mixed".
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
-        dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag.
+        dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
         text_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
-        bibtex_citation: The BibTeX citation for the dataset.
-        n_samples: The number of samples in the dataset. This should only be for the splits evaluated on.
-        avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on.
+        bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
+        n_samples: The number of samples in the dataset. This should only be for the splits evaluated on. For retrieval tasks, this should be the
+            number of query-document pairs.
+        avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on. For
+            retrieval tasks, this should be the average character length of the query-document pairs.
     """
 
     dataset: dict
@@ -138,7 +160,7 @@ class TaskMetadata(BaseModel):
     reference: STR_URL | None  # URL to documentation, e.g. published paper
 
     eval_splits: list[str]
-    eval_langs: list[str]  # Might want to have a literal of langs when #251 is resolved
+    eval_langs: LANGUAGES
     main_score: str  # Might want a literal here
 
     date: tuple[STR_DATE, STR_DATE] | None  # When the data was collected
@@ -159,9 +181,7 @@ class TaskMetadata(BaseModel):
 
     @field_validator("dataset")
     def _check_dataset_path_is_specified(cls, dataset):
-        """
-        This method checks that the dataset path is specified.
-        """
+        """This method checks that the dataset path is specified."""
         if "path" not in dataset or dataset["path"] is None:
             raise ValueError(
                 "You must specify the path to the dataset in the dataset dictionary. "
@@ -181,3 +201,67 @@ class TaskMetadata(BaseModel):
                 dataset["path"],
             )
         return dataset
+
+    @field_validator("eval_langs")
+    def _check_eval_langs(cls, eval_langs):
+        """This method checks that the eval_langs are specified as a list of languages."""
+        if isinstance(eval_langs, dict):
+            for langs in eval_langs.values():
+                for code in langs:
+                    cls._check_language_code(code)
+        else:
+            for code in eval_langs:
+                cls._check_language_code(code)
+        return eval_langs
+
+    @staticmethod
+    def _check_language_code(code):
+        """This method checks that the language code (e.g. "eng-Latn") is valid."""
+        lang, script = code.split("-")
+        if script == "Code":
+            if lang in PROGRAMMING_LANGS:
+                return  # override for code
+            else:
+                raise ValueError(
+                    f"Programming language {lang} is not a valid programming language."
+                )
+        if lang not in ISO_TO_LANGUAGE:
+            raise ValueError(
+                f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
+            )
+        if script not in ISO_TO_SCRIPT:
+            raise ValueError(
+                f"Invalid script code: {script}, you can find valid ISO 15924 codes in {path_to_lang_scripts}"
+            )
+
+    @property
+    def languages(self) -> set[str]:
+        """Return the languages of the dataset as iso639-3 codes."""
+
+        def get_lang(lang: str) -> str:
+            return lang.split("-")[0]
+
+        if isinstance(self.eval_langs, dict):
+            return set(
+                get_lang(lang) for langs in self.eval_langs.values() for lang in langs
+            )
+        return set(sorted([get_lang(lang) for lang in self.eval_langs]))
+
+    @property
+    def scripts(self) -> set[str]:
+        """Return the scripts of the dataset as iso15924 codes."""
+
+        def get_script(lang: str) -> str:
+            return lang.split("-")[1]
+
+        if isinstance(self.eval_langs, dict):
+            return set(
+                get_script(lang) for langs in self.eval_langs.values() for lang in langs
+            )
+        return set(get_script(lang) for lang in self.eval_langs)
+
+    def is_filled(self) -> bool:
+        """Check if all the metadata fields are filled."""
+        return all(
+            getattr(self, field_name) is not None for field_name in self.model_fields
+        )

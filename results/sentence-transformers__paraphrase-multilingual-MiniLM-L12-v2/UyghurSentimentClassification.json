@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "f859e1cdf823b3b27aa27b0f0fd4cef1d66f4b38",
+  "mteb_dataset_name": "UyghurSentimentClassification",
+  "mteb_version": "1.6.12",
+  "test": {
+    "accuracy": 0.6513674197384066,
+    "accuracy_stderr": 0.08478227512841272,
+    "ap": 0.9142633452683278,
+    "ap_stderr": 0.010792595111800274,
+    "evaluation_time": 5.94,
+    "f1": 0.5358545543759228,
+    "f1_stderr": 0.054327586289069266,
+    "main_score": 0.6513674197384066
+  }
+}

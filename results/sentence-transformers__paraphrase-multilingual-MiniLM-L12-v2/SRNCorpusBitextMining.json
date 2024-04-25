@@ -1,0 +1,22 @@
+{
+  "dataset_revision": "2903226ff89ca0b15221a75d32b6355248295119",
+  "mteb_dataset_name": "SRNCorpusBitextMining",
+  "mteb_version": "1.7.24",
+  "test": {
+    "evaluation_time": 2.89,
+    "nld_Latn-srn_Latn": {
+      "accuracy": 0.15234375,
+      "f1": 0.11054687499999999,
+      "main_score": 0.11054687499999999,
+      "precision": 0.09544270833333332,
+      "recall": 0.15234375
+    },
+    "srn_Latn-nld_Latn": {
+      "accuracy": 0.09765625,
+      "f1": 0.07773705510291595,
+      "main_score": 0.07773705510291595,
+      "precision": 0.07301897321428572,
+      "recall": 0.09765625
+    }
+  }
+}

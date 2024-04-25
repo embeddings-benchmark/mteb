@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "f334d90a9f68cc3af78cc2a2ece6a3b69408124c",
+  "mteb_dataset_name": "KurdishSentimentClassification",
+  "mteb_version": "1.6.8",
+  "test": {
+    "accuracy": 0.8028686462003021,
+    "accuracy_stderr": 0.022314902526756948,
+    "ap": 0.779674970166334,
+    "ap_stderr": 0.0280093488103528,
+    "evaluation_time": 59.27,
+    "f1": 0.8015718102921138,
+    "f1_stderr": 0.022269802821187838,
+    "main_score": 0.8028686462003021
+  }
+}

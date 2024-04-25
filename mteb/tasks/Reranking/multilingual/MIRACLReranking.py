@@ -18,7 +18,10 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         type="Reranking",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["de", "es"],
+        eval_langs={
+            "de": ["deu-Latn"],
+            "es": ["spa-Latn"],
+        },
         main_score="map",
         date=None,
         form=None,

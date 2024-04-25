@@ -133,15 +133,18 @@ Models should implement the following interface, implementing an `encode` functi
 
 ```python
 class MyModel():
-    def encode(self, sentences: list[str], **kwargs) -> list[np.ndarray] | list[torch.Tensor]:
-        """
-        Returns a list of embeddings for the given sentences.
-        
+    def encode(
+        self, sentences: list[str], prompt: str, **kwargs: Any
+    ) -> torch.Tensor | np.ndarray:
+        """Encodes the given sentences using the encoder.
+
         Args:
-            sentences: List of sentences to encode
+            sentences: The sentences to encode.
+            prompt: The prompt to use. Useful for prompt-based models.
+            **kwargs: Additional arguments to pass to the encoder.
 
         Returns:
-            List of embeddings for the given sentences
+            The encoded sentences.
         """
         pass
 
@@ -208,13 +211,15 @@ evaluation.run(model)
 | 📈 [Leaderboard] | The interactive leaderboard of the benchmark |
 | 🤖 [Adding a model] | Information related to how to submit a model to the leaderboard |
 | 👩‍💻 [Adding a dataset] | How to add a new task/dataset to MTEB | 
+| 👩‍💻 [Adding a leaderboard tab] | How to add a new leaderboard tab to MTEB | 
 | 🤝  [Contributing] | How to contribute to MTEB and set it up for development |
 <!-- | 🌐 [MMTEB] | An open-source effort to extend MTEB to cover a broad set of languages |   -->
 
 [Tasks]: docs/tasks.md
-[Contributing]: docs/contributing.md
+[Contributing]: CONTRIBUTING.md
 [Adding a model]: docs/adding_a_model.md
 [Adding a dataset]: docs/adding_a_dataset.md
+[Adding a leaderboard tab]: docs/adding_a_leaderboard_tab.md
 [Leaderboard]: https://huggingface.co/spaces/mteb/leaderboard
 [MMTEB]: docs/mmteb/readme.md
 

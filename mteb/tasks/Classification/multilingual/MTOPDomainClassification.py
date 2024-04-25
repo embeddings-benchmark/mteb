@@ -4,7 +4,14 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskClassification, MultilingualTask
 
-_LANGUAGES = ["en", "de", "es", "fr", "hi", "th"]
+_LANGUAGES = {
+    "en": ["eng-Latn"],
+    "de": ["deu-Latn"],
+    "es": ["spa-Latn"],
+    "fr": ["fra-Latn"],
+    "hi": ["hin-Deva"],
+    "th": ["tha-Thai"],
+}
 
 
 class MTOPDomainClassification(MultilingualTask, AbsTaskClassification):

@@ -8,7 +8,16 @@ from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 _EVAL_SPLIT = "test"
-_LANGS = ["ar", "de", "es", "fr", "hi", "it", "ja", "pt"]
+_LANGS = {
+    "ar": ["ara-Arab"],
+    "de": ["deu-Latn"],
+    "es": ["spa-Latn"],
+    "fr": ["fra-Latn"],
+    "hi": ["hin-Deva"],
+    "it": ["ita-Latn"],
+    "ja": ["jpn-Hira"],
+    "pt": ["por-Latn"],
+}
 
 
 def _load_mintaka_data(
