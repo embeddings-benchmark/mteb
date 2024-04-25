@@ -53,15 +53,3 @@ class UkrFormalityClassification(AbsTaskClassification):
         self.dataset = self.dataset["test"].train_test_split(
             test_size=0.5, seed=self.seed, stratify_by_column="label"
         )  # balanced sampling
-
-
-if __name__ == "__main__":
-    from sentence_transformers import SentenceTransformer
-
-    from mteb import MTEB
-
-    # intfloat/multilingual-e5-small
-    model_name = "intfloat/multilingual-e5-small"
-    model = SentenceTransformer(model_name)
-    evaluation = MTEB(tasks=[UkrFormalityClassification()])
-    evaluation.run(model)
