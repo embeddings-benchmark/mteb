@@ -299,11 +299,12 @@ class DRESModel:
                 logger.warning(
                     "Queries will not be truncated. This could lead to memory issues. In that case please lower the batch_size."
                 )
+
         if "instructions" in kwargs:
             if kwargs["instructions"] is not None:
                 queries = [
-                    (query + " " + instruction).strip()
-                    for query, instruction in zip(queries, kwargs["instructions"])
+                    (query + " " + kwargs["instructions"][query]).strip()
+                      for query in queries
                 ]
             new_kwargs = {
                 k: v for k, v in kwargs.items() if k not in ["instructions", "qid"]
