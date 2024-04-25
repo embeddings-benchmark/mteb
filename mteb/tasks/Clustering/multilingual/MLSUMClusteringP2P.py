@@ -33,10 +33,10 @@ class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
         date=("2010-01-01", "2018-09-30"),
         form=["written"],
         domains=["News"],
-        task_subtypes=["Thematic clustering", "Topic classification"],
+        task_subtypes=["Topic classification"],
         license="Not specified",
         socioeconomic_status="mixed",
-        annotations_creators="derived",
+        annotations_creators="found",
         dialect=[],
         text_creation="found",
         bibtex_citation="""@article{scialom2020mlsum,
@@ -45,8 +45,8 @@ class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"validation": 38561, "test": 41206},
+        avg_character_length={"validation": 4613, "test": 4810},
     )
 
     def load_data(self, **kwargs):
