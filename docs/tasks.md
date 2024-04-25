@@ -64,7 +64,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [CmedqaRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) | ['cmn'] | Retrieval | s2p |  |  |  |
 | [Cmnli](https://huggingface.co/datasets/clue/viewer/cmnli) | ['cmn'] | PairClassification | s2s |  |  |  |
 | [CodeSearchNetRetrieval](https://huggingface.co/datasets/code_search_net/viewer) (Husain et al., 2019) | ['go', 'java', 'javascript', 'php', 'python', 'ruby'] | Retrieval | p2p | [Programming] | {'test': 1000} | {'test': 1196.4609} |
-| [Core17InstructionRetrieval](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | InstructionRetrieval | s2p | [News] | {'eng': 39470} | {'eng': 2747.2883966244726} |
+| [Core17InstructionRetrieval](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | InstructionRetrieval | s2p | [News] | {'eng': 39838} | {'eng': 2768.749235474006} |
 | [CovidRetrieval](https://arxiv.org/abs/2203.03367) | ['cmn'] | Retrieval | s2p |  |  |  |
 | [CroatianSentimentClassification](https://arxiv.org/abs/2009.08712) | ['hrv'] | Classification | s2s | [Reviews] | {'validation': 214, 'test': 437} | {'validation': 166.9, 'test': 151.4} |
 | [CzechSubjectivityClassification](https://arxiv.org/abs/2009.08712) | ['ces'] | Classification | s2s | [Reviews] | {'validation': 500, 'test': 2000} | {'validation': 108.2, 'test': 108.3} |
@@ -113,6 +113,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [ImdbClassification](http://www.aclweb.org/anthology/P11-1015) | ['eng'] | Classification | p2p |  | {'test': 25000} | {'test': 1293.8} |
 | [IndicCrosslingualSTS](https://huggingface.co/datasets/jaygala24/indic_sts) (Ramesh et al., 2022) | ['asm', 'ben', 'eng', 'guj', 'hin', 'kan', 'mal', 'mar', 'ory', 'pan', 'tam', 'tel', 'urd'] | STS | s2s | [News, Non-fiction, Web, Spoken, Government] | {'test': 10020} | {'test': 76.22} |
 | [IndicLangClassification](https://arxiv.org/abs/2305.15814) | ['asm', 'ben', 'brx', 'doi', 'gom', 'guj', 'hin', 'kan', 'kas', 'mai', 'mal', 'mar', 'mni', 'npi', 'ory', 'pan', 'san', 'sat', 'snd', 'tam', 'tel', 'urd'] | Classification | s2s | [Web, Non-fiction] | {'test': 30418} | {'test': 106.5} |
+| [IndicQARetrieval](https://arxiv.org/abs/2212.05409) (Sumanth Doddapaneni, 2022) | ['asm', 'ben', 'guj', 'hin', 'kan', 'mal', 'mar', 'ory', 'pan', 'tam', 'tel'] | Retrieval | s2p | [Web] | {'test': 18586} | {'test': 930.6} |
 | [IndicReviewsClusteringP2P](https://arxiv.org/abs/2212.05409) (Sumanth Doddapaneni, 2022) | ['asm', 'ben', 'brx', 'guj', 'hin', 'kan', 'mal', 'mar', 'ory', 'pan', 'tam', 'tel', 'urd'] | Clustering | p2p | [Reviews] | {'test': 1000} | {'test': 137.6} |
 | [IndicSentimentClassification](https://arxiv.org/abs/2212.05409) (Sumanth Doddapaneni, 2022) | ['asm', 'ben', 'brx', 'guj', 'hin', 'kan', 'mal', 'mar', 'ory', 'pan', 'tam', 'tel', 'urd'] | Classification | s2s | [Reviews] | {'test': 1000} | {'test': 137.6} |
 | [IndonesianIdClickbaitClassification](http://www.sciencedirect.com/science/article/pii/S2352340920311252) | ['ind'] | Classification | s2s | [News] | {'train': 2048} | {'train': 64.28} |
@@ -177,7 +178,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [NepaliNewsClassification](https://github.com/goru001/nlp-for-nepali) | ['nep'] | Classification | s2s | [News] | {'train': 5975, 'test': 1495} | {'train': 196.61, 'test': 196.017} |
 | [NeuCLIR2022Retrieval](https://neuclir.github.io/) (Lawrie et al., 2023) | ['fas', 'rus', 'zho'] | Retrieval | s2p | [News] | {'fas': 2232130, 'zho': 3179323, 'rus': 4627657} | {'fas': 3500.5143969099317, 'zho': 2543.1140667919617, 'rus': 3214.755239654659} |
 | [NeuCLIR2023Retrieval](https://neuclir.github.io/) (Dawn Lawrie, 2024) | ['fas', 'rus', 'zho'] | Retrieval | s2p | [News] | {'fas': 2232092, 'zho': 3179285, 'rus': 4627619} | {'fas': 3579.508213937439, 'zho': 2704.44834488453, 'rus': 3466.8192213553616} |
-| [News21InstructionRetrieval](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | InstructionRetrieval | s2p | [News] | {'eng': 60258} | {'eng': 2331.381203215969} |
+| [News21InstructionRetrieval](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | InstructionRetrieval | s2p | [News] | {'eng': 61906} | {'eng': 2983.724665391969} |
 | [NewsClassification](https://arxiv.org/abs/1509.01626) | ['eng'] | Classification | s2s | [News] | {'test': 7600} | {'test': 235.29} |
 | [NoRecClassification](https://aclanthology.org/L18-1661/) | ['nob'] | Classification | s2s |  | {'test': 2050} | {'test': 82.0} |
 | [NorQuadRetrieval](https://aclanthology.org/2023.nodalida-1.17/) | ['nob'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'test': 2602} | {'test': 502.19} |
@@ -203,7 +204,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [RedditClustering](https://arxiv.org/abs/2104.07081) | ['eng'] | Clustering | s2s |  | {'test': 420464} | {'test': 64.7} |
 | [RedditClusteringP2P](https://arxiv.org/abs/2104.07081) | ['eng'] | Clustering | p2p |  | {'test': 459399} | {'test': 727.7} |
 | [RestaurantReviewSentimentClassification](https://link.springer.com/chapter/10.1007/978-3-319-18117-2_2) (ElSahar et al., 2015) | ['ara'] | Classification | s2s | [Reviews] | {'train': 2048} | {'train': 231.4} |
-| [Robust04InstructionRetrieval](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | InstructionRetrieval | s2p | [News] | {'eng': 85290} | {'eng': 2680.043891349965} |
+| [Robust04InstructionRetrieval](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | InstructionRetrieval | s2p | [News] | {'eng': 95088} | {'eng': 2471.0398058252426} |
 | [RomaTalesBitextMining](https://idoc.pub/documents/idocpub-zpnxm9g35ylv) | ['hun', 'rom'] | BitextMining | s2s | [Fiction] | {'test': 215} | {'test': 316.8046511627907} |
 | [RomaniBibleClustering](https://romani.global.bible/info) | ['rom'] | Clustering | p2p | [Religious] | {'test': 2048} | {'test': 132.2} |
 | [RomanianSentimentClassification](https://arxiv.org/abs/2009.08712) (Dumitrescu et al., 2020) | ['ron'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 67.6} |
