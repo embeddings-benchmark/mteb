@@ -45,6 +45,7 @@ from .ita.ItalianLinguistAcceptabilityClassification import *
 from .jpn.WRIMEClassification import *
 from .kan.KannadaNewsClassification import *
 from .kur.KurdishSentimentClassification import *
+from .mal.MalayalamNewsClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
 from .mlt.MalteseSentimentClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
@@ -66,10 +67,12 @@ from .nob.NorwegianParliamentClassification import *
 from .pan.PunjabiNewsClassification import *
 from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
+from .san.SanskritShlokasClassification import *
 from .slk.SlovakSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
 from .swe.DalajClassification import *
 from .swe.SweRecClassification import *
+from .tam.TamilNewsClassification import *
 from .tel.TeluguAndhraJyotiNewsClassification import *
 from .tha.wisesight_sentiment_classification import *
 from .tur.TurkishMovieSentimentClassification import *
