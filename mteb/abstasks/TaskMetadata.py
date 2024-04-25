@@ -141,10 +141,10 @@ class TaskMetadata(BaseModel):
         socioeconomic_status: The socioeconomic status of the data. Includes "high", "medium", "low", "mixed".
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
-        dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag.
+        dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
         text_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
-        bibtex_citation: The BibTeX citation for the dataset.
+        bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
         n_samples: The number of samples in the dataset. This should only be for the splits evaluated on. For retrieval tasks, this should be the
             number of query-document pairs.
         avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on. For
