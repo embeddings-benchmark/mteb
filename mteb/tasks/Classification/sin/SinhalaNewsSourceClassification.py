@@ -10,7 +10,7 @@ class SinhalaNewsSourceClassification(AbsTaskClassification):
         description="This dataset contains Sinhala news headlines extracted from 9 news sources (websites) (Sri Lanka Army, Dinamina, GossipLanka, Hiru, ITN, Lankapuwath, NewsLK, Newsfirst, World Socialist Web Site-Sinhala).",
         dataset={
             "path": "NLPC-UOM/Sinhala-News-Source-classification",
-            "revision": "7fb2f514ea683c5282dfec0a9672ece8de90ac50",
+            "revision": "ac4d14eeb68efbef95e247542d4432ce674faeb1",
         },
         reference="https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Source-classification",
         type="Classification",
