@@ -4,10 +4,8 @@ from .ara.HotelReviewSentimentClassification import *
 from .ara.RestaurantReviewSentimentClassification import *
 from .ara.TweetEmotionClassification import *
 from .ara.TweetSarcasmClassification import *
-from .bam.BambaraSentimentClassification import *
 from .ben.BengaliHateSpeechClassification import *
 from .ben.BengaliSentimentAnalysis import *
-from .bul.BulgarianSentimentClassification import *
 from .bul.BulgarianStoreReviewSentimentClassfication import *
 from .ces.CzechSubjectivityClassification import *
 from .dan.AngryTweetsClassification import *
@@ -15,7 +13,6 @@ from .dan.DanishPoliticalCommentsClassification import *
 from .dan.DKHateClassification import *
 from .dan.LccSentimentClassification import *
 from .ell.GreekLegalCodeClassification import *
-from .ell.GreekSentimentClassification import *
 from .eng.AmazonPolarityClassification import *
 from .eng.ArxivClassification import *
 from .eng.Banking77Classification import *
@@ -39,7 +36,6 @@ from .fra.MovieReviewSentimentClassification import *
 from .guj.GujaratiNewsClassification import *
 from .hin.HindiDiscourseClassification import *
 from .hin.SentimentAnalysisHindi import *
-from .hrv.CroatianSentimentClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
 from .jpn.WRIMEClassification import *
@@ -47,7 +43,6 @@ from .kan.KannadaNewsClassification import *
 from .kur.KurdishSentimentClassification import *
 from .mal.MalayalamNewsClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
-from .mlt.MalteseSentimentClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
 from .multilingual.IndicLangClassification import *
@@ -69,16 +64,14 @@ from .pan.PunjabiNewsClassification import *
 from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
 from .san.SanskritShlokasClassification import *
-from .slk.SlovakSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
 from .swe.DalajClassification import *
 from .swe.SweRecClassification import *
 from .tam.TamilNewsClassification import *
 from .tel.TeluguAndhraJyotiNewsClassification import *
-from .tha.wisesight_sentiment_classification import *
+from .tha.WisesightSentimentClassification import *
 from .tur.TurkishMovieSentimentClassification import *
 from .tur.TurkishProductSentimentClassification import *
-from .uig.UyghurSentimentClassification import *
 from .urd.UrduRomanSentimentClassification import *
 from .vie.VieStudentFeedbackClassification import *
 from .zho.CMTEBClassification import *
