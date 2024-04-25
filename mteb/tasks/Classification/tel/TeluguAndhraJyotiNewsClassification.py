@@ -27,12 +27,11 @@ class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
-        n_samples={"train": 17312, "test": 4329},
-        avg_character_length={"train": 1435.53, "test": 1428.28},
+        bibtex_citation="",
+        n_samples={"test": 4329},
+        avg_character_length={"test": 1428.28},
     )
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_columns({"body": "text", "topic": "label"})
         self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
-        print(self.dataset)
