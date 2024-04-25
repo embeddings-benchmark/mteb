@@ -26,7 +26,7 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["slk-Latn"],
         main_score="ndcg_at_1",
-        date=None,
+        date=("2015-04-26", "2022-01-11"),
         form=["written"],
         domains=["News", "Social", "Web"],
         task_subtypes=None,
