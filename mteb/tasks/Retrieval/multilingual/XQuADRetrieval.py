@@ -42,7 +42,7 @@ class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
         date=("2019-05-21", "2019-11-21"),
         form=["written"],
         domains=["Web"],
-        task_subtypes=[],
+        task_subtypes=["Question answering"],
         license="CC BY-SA 4.0",
         socioeconomic_status="mixed",
         annotations_creators="human-annotated",
@@ -85,8 +85,7 @@ class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
             data = data.filter(lambda x: x["answers"]["text"] != "")
 
             question_ids = {
-                question: sha256(question.encode("utf-8")).hexdigest()
-                for question in set(data["question"])
+                question: id for id, question in zip(data["id"], data["question"])
             }
             context_ids = {
                 context: sha256(context.encode("utf-8")).hexdigest()

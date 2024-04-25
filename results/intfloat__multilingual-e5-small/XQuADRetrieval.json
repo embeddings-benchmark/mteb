@@ -188,7 +188,7 @@
       "recall_at_3": 0.98142,
       "recall_at_5": 0.99155
     },
-    "evaluation_time": 15.63,
+    "evaluation_time": 15.56,
     "hi": {
       "map_at_1": 0.90448,
       "map_at_10": 0.93937,
