@@ -54,6 +54,7 @@ TASK_DOMAIN = Literal[
     "Reviews",
     "Social",
     "Spoken",
+    "Subtitles",
     "Web",
     "Programming",
 ]
@@ -244,7 +245,7 @@ class TaskMetadata(BaseModel):
             return set(
                 get_lang(lang) for langs in self.eval_langs.values() for lang in langs
             )
-        return set(get_lang(lang) for lang in self.eval_langs)
+        return set(sorted([get_lang(lang) for lang in self.eval_langs]))
 
     @property
     def scripts(self) -> set[str]:

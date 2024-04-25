@@ -22,6 +22,8 @@ def batched(iterable: Iterable[T], n: int) -> Iterable[tuple[T, ...]]:
 
 
 class SwednClustering(AbsTaskClustering):
+    superseeded_by = "SwednClusteringP2P"
+
     metadata = TaskMetadata(
         name="SwednClustering",
         dataset={
@@ -66,29 +68,31 @@ class SwednClustering(AbsTaskClustering):
         headlines = []
         summaries = []
         articles = []
-        labels = []
+        headline_labels = []
+        sammary_labels = []
+        article_labels = []
         label_col = "article_category"
 
         for split in splits:
             ds_split = self.dataset[split]
             headlines.extend(ds_split["headline"])
-            labels.extend(ds_split[label_col])
+            headline_labels.extend(ds_split[label_col])
 
             summaries.extend(ds_split["summary"])
-            labels.extend(ds_split[label_col])
+            sammary_labels.extend(ds_split[label_col])
 
             articles.extend(ds_split["article"])
-            labels.extend(ds_split[label_col])
+            article_labels.extend(ds_split[label_col])
 
         rng = random.Random(42)  # local only seed
 
         clusters_text = []
         clusters_labels = []
-        doc_types = [summaries, articles]
+        doc_types = [(summaries, sammary_labels), (articles, article_labels)]
         # Note that headlines is excluded:
         # Scores of sample models with headlines: 11.26, 4.27 -removing headlines-> 16.43, 4.31
         # as headlines are soo short it is hard to meaningfully cluster them even for humans.
-        for text in doc_types:
+        for text, labels in doc_types:
             pairs = list(zip(text, labels))
             rng.shuffle(pairs)
             # reduce size of dataset to not have too large datasets in the clustering task

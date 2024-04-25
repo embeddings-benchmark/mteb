@@ -536,7 +536,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
 
         # do the results by query and relevant docs only
         all_results = []
-        for query_id in tqdm.tqdm(list(queries.keys()), leave=True):
+        for query_id in tqdm.tqdm(list(queries.keys()), leave=False, desc="Retrieving"):
             cur_queries = {query_id: queries[query_id]}
             cur_instructions = {queries[query_id]: instructions[queries[query_id]]}
             cur_docs = {
@@ -559,7 +559,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
             "Time taken to retrieve: {:.2f} seconds".format(end_time - start_time)
         )
 
-        if kwargs.get("save_qrels", False):
+        if kwargs.get("save_predictions", False):
             output_folder = kwargs.get("output_folder", "results")
             if not os.path.isdir(output_folder):
                 os.makedirs(output_folder)
@@ -576,12 +576,10 @@ class AbsTaskInstructionRetrieval(AbsTask):
                     }
             if lang is None:
                 qrels_save_path = (
-                    f"{output_folder}/{self.metadata_dict['name']}_qrels.json"
+                    f"{output_folder}/{self.metadata_dict['name']}_predictions.json"
                 )
             else:
-                qrels_save_path = (
-                    f"{output_folder}/{self.metadata_dict['name']}_{lang}_qrels.json"
-                )
+                qrels_save_path = f"{output_folder}/{self.metadata_dict['name']}_{lang}_predictions.json"
 
             with open(qrels_save_path, "w") as f:
                 json.dump(results, f)
