@@ -19,8 +19,9 @@ _LANGUAGES = {
     "arb": ["arb-Arab"],
     "ary": ["ary-Arab"],
     "pan": ["pan-Guru"],
-    "esp": ["esp"],
-    "tel": ["tel"],
+    # gold labels are hidden 
+    #"esp": ["esp"],
+    "tel": ["tel-Telu"],
 }
 
 
