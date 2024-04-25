@@ -19,6 +19,11 @@ from .ell.GreekSentimentClassification import *
 from .eng.AmazonPolarityClassification import *
 from .eng.ArxivClassification import *
 from .eng.Banking77Classification import *
+from .eng.CanadaTaxCourtOutcomesLegalBenchClassification import *
+from .eng.ContractNLIConfidentialityOfAgreementLegalBenchClassification import *
+from .eng.ContractNLIExplicitIdentificationLegalBenchClassification import *
+from .eng.ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification import *
+from .eng.ContractNLILimitedUseLegalBenchClassification import *
 from .eng.EmotionClassification import *
 from .eng.FinancialPhrasebankClassification import *
 from .eng.ImdbClassification import *
