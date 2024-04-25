@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "14aa5773afa135ba835cc5179bbc4a63657a42ae",
+  "mteb_dataset_name": "wisesight_sentiment_classification",
+  "mteb_version": "1.7.17",
+  "test": {
+    "accuracy": 0.374267578125,
+    "accuracy_stderr": 0.027660389391074545,
+    "evaluation_time": 117.94,
+    "f1": 0.3439113310260592,
+    "f1_stderr": 0.024188314643972506,
+    "main_score": 0.3439113310260592
+  }
+}

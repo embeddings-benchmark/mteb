@@ -28,7 +28,7 @@ def author_from_bibtex(bibtex: str | None) -> str:
     return f" ({author_str_w_et_al}, {year_str})"
 
 
-def task_to_markdown_row(task):
+def task_to_markdown_row(task: mteb.AbsTask) -> str:
     name = task.metadata.name
     name_w_reference = (
         f"[{name}]({task.metadata.reference})" if task.metadata.reference else name
@@ -43,10 +43,12 @@ def task_to_markdown_row(task):
 
     name_w_reference += author_from_bibtex(task.metadata.bibtex_citation)
 
-    return f"| {name_w_reference} | {task.metadata.languages} | {task.metadata.type} | {task.metadata.category} | {domains} | {n_samples} | {avg_character_length} |"
+    languages = sorted(list(task.metadata.languages))
+
+    return f"| {name_w_reference} | {languages} | {task.metadata.type} | {task.metadata.category} | {domains} | {n_samples} | {avg_character_length} |"
 
 
-def create_tasks_table(tasks):
+def create_tasks_table(tasks: list[mteb.AbsTask]) -> str:
     table = """
 | Name | Languages | Type | Category | Domains | # Samples | Avg. Length (Char.) |
 |------|-----------|------|----------|---------|-----------|---------------------|
