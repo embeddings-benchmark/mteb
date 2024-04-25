@@ -11,7 +11,6 @@ from .bul.BulgarianSentimentClassification import *
 from .bul.BulgarianStoreReviewSentimentClassfication import *
 from .ces.CzechSubjectivityClassification import *
 from .dan.AngryTweetsClassification import *
-from .dan.DalajClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
 from .dan.DKHateClassification import *
 from .dan.LccSentimentClassification import *
@@ -41,6 +40,7 @@ from .ita.ItalianLinguistAcceptabilityClassification import *
 from .jpn.WRIMEClassification import *
 from .kan.KannadaNewsClassification import *
 from .kur.KurdishSentimentClassification import *
+from .mal.MalayalamNewsClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
 from .mlt.MalteseSentimentClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
@@ -64,10 +64,15 @@ from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
 from .slk.SlovakSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
+from .swe.DalajClassification import *
 from .swe.SweRecClassification import *
+from .tam.TamilNewsClassification import *
+from .tel.TeluguAndhraJyotiNewsClassification import *
+from .tha.wisesight_sentiment_classification import *
 from .tur.TurkishMovieSentimentClassification import *
 from .tur.TurkishProductSentimentClassification import *
 from .uig.UyghurSentimentClassification import *
+from .urd.UrduRomanSentimentClassification import *
 from .vie.VieStudentFeedbackClassification import *
 from .zho.CMTEBClassification import *
 from .zho.YueOpenriceReviewClassification import (
