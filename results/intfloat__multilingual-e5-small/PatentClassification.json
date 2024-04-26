@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "2f38a1dfdecfacee0184d74eaeafd3c0fb49d2a6",
+  "mteb_dataset_name": "PatentClassification",
+  "mteb_version": "1.7.27",
+  "test": {
+    "accuracy": 0.34931640625,
+    "accuracy_stderr": 0.01279296875,
+    "evaluation_time": 57.79,
+    "f1": 0.288228881130181,
+    "f1_stderr": 0.011420845524898027,
+    "main_score": 0.34931640625
+  }
+}
