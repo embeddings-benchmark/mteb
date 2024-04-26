@@ -95,7 +95,6 @@ class MultiHateClassification(MultilingualTask, AbsTaskClassification):
         avg_character_length={"test": 45.9},
     )
 
-
     def dataset_transform(self):
         # for each language perform some transforms
         for lang in self.dataset.keys():

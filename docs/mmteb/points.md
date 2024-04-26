@@ -67,4 +67,4 @@ Please also add your first name and last name are as you want them to appear in 
 | jaygala24         | Jay        | Gala       | jaygala24@gmail.com          | ~Jay_Gala1           | Nilekani Center at AI4Bharat                          |
 | digantamisra      | Diganta    | Misra      | diganta.misra@mila.quebec    | ~Diganta_Misra1       | Mila - Quebec AI Institute                           |
 | PranjalChitale    | Pranjal    | Chitale    | cs21s022@smail.iitm.ac.in    | ~Pranjal_A_Chitale1       | Indian Institute of Technology Madras            |
-| Akash190104 | Akash | Kundu | akashkundu2xx4@gmail.com |~Akash_Kundu2| Heritage Institute of Technology, Kolkata && Apart Research |
+| Akash190104       | Akash      | Kundu      | akashkundu2xx4@gmail.com      |~Akash_Kundu2             | Heritage Institute of Technology, Kolkata && Apart Research |
