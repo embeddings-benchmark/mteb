@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from hashlib import sha256
+
 import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -39,21 +41,36 @@ class GreekCivicsQA(AbsTaskRetrieval):
         if self.data_loaded:
             return
         # fetch both subsets of the dataset
-        data_raw = datasets.load_dataset(**self.metadata_dict["dataset"])
         eval_split = self.metadata_dict["eval_splits"][0]
-        self.queries = {
-            eval_split: {f"q{q['id']}": q["question"] for q in data_raw[eval_split]}
-        }
-        self.corpus = {
-            eval_split: {
-                f"d{d['id']}": {"text": d["answer"]} for d in data_raw[eval_split]
-            }
+        data_raw = datasets.load_dataset(**self.metadata_dict["dataset"])[eval_split]
+
+        queries = {eval_split: {}}
+        corpus = {eval_split: {}}
+        relevant_docs = {eval_split: {}}
+
+        question_ids = {
+            question: str(id) for id, question in zip(data_raw["id"], data_raw["question"])
         }
 
-        self.relevant_docs = {
-            eval_split: {
-                f"q{i+1}": {f"d{i+1}": 1} for i in range(data_raw[eval_split].shape[0])
-            }
+        context_ids = {
+            answer: sha256(answer.encode("utf-8")).hexdigest()
+            for answer in set(data_raw["answer"])
         }
+
+        for row in data_raw:
+            question = row["question"]
+            context = row["answer"]
+            query_id = question_ids[question]
+            queries[eval_split][query_id] = question
+
+            doc_id = context_ids[context]
+            corpus[eval_split][doc_id] = {"text": context}
+            if query_id not in relevant_docs[eval_split]:
+                relevant_docs[eval_split][query_id] = {}
+            relevant_docs[eval_split][query_id][doc_id] = 1
+
+        self.corpus = datasets.DatasetDict(corpus)
+        self.queries = datasets.DatasetDict(queries)
+        self.relevant_docs = datasets.DatasetDict(relevant_docs)
 
         self.data_loaded = True
