@@ -30,7 +30,7 @@ _LANGUAGES = {
     "bam": ["bam-Latn"],
     "pol": ["pol-Latn"],
     # "cym": ["cym-Latn"], # Do not handle this subset since it does not contain a train set required by the evaluation
-    # "hin": ["hin-Deva"], # Do not handle this subset since it does not contain a train set required by the evaluation
+    # "hin": ["hin-Deva"], # Do not handle this subset since it does not contain a test set required by the evaluation
     "ara": ["ara-Arab"],
     "fas": ["fas-Arab"],
 }
