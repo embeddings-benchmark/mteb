@@ -9,6 +9,7 @@ from .deu.GerDaLIRSmallRetrieval import *
 from .deu.GermanDPRRetrieval import *
 from .deu.GermanQuADRetrieval import *
 from .deu.LegalQuADRetrieval import *
+from .ell.GreekCivicsQA import *
 from .eng.AILACasedocsRetrieval import *
 from .eng.AILAStatutesRetrieval import *
 from .eng.ArguAnaRetrieval import *
@@ -67,6 +68,7 @@ from .multilingual.NeuCLIR2022Retrieval import *
 from .multilingual.NeuCLIR2023Retrieval import *
 from .multilingual.XMarketRetrieval import *
 from .multilingual.XPQARetrieval import *
+from .multilingual.XQuADRetrieval import *
 from .nob.norquad import *
 from .nob.snl_retrieval import *
 from .pol.ArguAnaPLRetrieval import *
