@@ -19,15 +19,15 @@ class DBpediaClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=None,
-        form=None,
+        date=("2022-25-01", "2022-25-01"),
+        form="written",
         domains=["Encyclopaedic"],
         task_subtypes=None,
         license="cc-by-sa-3.0",
-        socioeconomic_status=None,
+        socioeconomic_status="low",
         annotations_creators=None,
-        dialect=None,
-        text_creation=None,
+        dialect=[],
+        text_creation="found",
         bibtex_citation="""
             @inproceedings{NIPS2015_250cf8b5,
             author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
@@ -42,20 +42,11 @@ class DBpediaClassification(AbsTaskClassification):
             }
         """,
         n_samples={"test": 70000},
-        avg_character_length=None,
+        avg_character_length={"test": 281.40},
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 4
-        return metadata_dict
-
     def dataset_transform(self):
-        self.dataset = self.dataset.map(
-            lambda examples: {"text": examples["content"]}, remove_columns=["title"]
-        )
-        self.dataset = self.dataset["test"].train_test_split(
-            test_size=2048, train_size=2048, seed=42, stratify_by_column="label"
+        self.dataset = self.dataset.rename_column("content", "text")
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train", "test"]
         )
