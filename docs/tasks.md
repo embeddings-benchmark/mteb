@@ -77,6 +77,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [CzechSubjectivityClassification](https://arxiv.org/abs/2009.08712) | ['ces'] | Classification | s2s | [Reviews] | {'validation': 500, 'test': 2000} | {'validation': 108.2, 'test': 108.3} |
 | [DBPedia](https://github.com/iai-group/DBpedia-Entity/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [DBPedia-PL](https://github.com/iai-group/DBpedia-Entity/) | ['pol'] | Retrieval | s2p |  |  |  |
+| [DBpediaClassification](https://arxiv.org/abs/1509.01626) (Zhang et al., 2015) | ['eng'] | Classification | s2s | [Encyclopaedic] | {'test': 70000} | {'test': 281.4} |
 | [DKHateClassification](https://aclanthology.org/2020.lrec-1.430/) | ['dan'] | Classification | s2s | [Social] | {'test': 329} | {'test': 104.0} |
 | [DalajClassification](https://spraakbanken.gu.se/en/resources/superlim) | ['swe'] | Classification | s2s | [Non-fiction] | {'test': 444} | {'test': 243.8} |
 | [DanFEVER](https://aclanthology.org/2021.nodalida-main.47/) | ['dan'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'train': 8897} | {'train': 124.84} |
