@@ -69,6 +69,7 @@ from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
 from .san.SanskritShlokasClassification import *
 from .slk.SlovakSentimentClassification import *
+from .slv.FrenkSlClassification import *
 from .ssw.SiswatiNewsClassification import *
 from .swe.DalajClassification import *
 from .swe.SweRecClassification import *
