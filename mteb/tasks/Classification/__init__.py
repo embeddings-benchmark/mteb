@@ -24,10 +24,12 @@ from .eng.ContractNLIConfidentialityOfAgreementLegalBenchClassification import *
 from .eng.ContractNLIExplicitIdentificationLegalBenchClassification import *
 from .eng.ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification import *
 from .eng.ContractNLILimitedUseLegalBenchClassification import *
+from .eng.DBpediaClassification import *
 from .eng.EmotionClassification import *
 from .eng.FinancialPhrasebankClassification import *
 from .eng.ImdbClassification import *
 from .eng.NewsClassification import *
+from .eng.PatentClassification import *
 from .eng.ToxicChatClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
