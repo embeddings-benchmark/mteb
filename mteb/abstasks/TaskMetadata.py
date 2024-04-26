@@ -235,17 +235,21 @@ class TaskMetadata(BaseModel):
             )
 
     @property
-    def languages(self) -> set[str]:
+    def languages(self) -> list[str]:
         """Return the languages of the dataset as iso639-3 codes."""
 
         def get_lang(lang: str) -> str:
             return lang.split("-")[0]
 
         if isinstance(self.eval_langs, dict):
-            return set(
-                get_lang(lang) for langs in self.eval_langs.values() for lang in langs
+            return sorted(
+                set(
+                    get_lang(lang)
+                    for langs in self.eval_langs.values()
+                    for lang in langs
+                )
             )
-        return set(sorted([get_lang(lang) for lang in self.eval_langs]))
+        return sorted(set([get_lang(lang) for lang in self.eval_langs]))
 
     @property
     def scripts(self) -> set[str]:
