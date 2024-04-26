@@ -44,7 +44,7 @@ class SinhalaNewsClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        self.dataset = self.dataset.rename_column(
+        self.dataset = self.dataset.rename_columns(
             {"comments": "text", "labels": "label"}
         )
         self.dataset = self.stratified_subsampling(
