@@ -22,10 +22,10 @@ class DBpediaClassification(AbsTaskClassification):
         date=("2022-01-25", "2022-01-25"),
         form=["written"],
         domains=["Encyclopaedic"],
-        task_subtypes=None,
+        task_subtypes=["Ontology Classification"],
         license="cc-by-sa-3.0",
         socioeconomic_status="low",
-        annotations_creators=None,
+        annotations_creators="derived",
         dialect=[],
         text_creation="found",
         bibtex_citation="""
