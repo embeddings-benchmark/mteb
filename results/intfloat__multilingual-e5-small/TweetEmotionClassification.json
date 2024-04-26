@@ -1,13 +1,13 @@
 {
   "dataset_revision": "0ded8ff72cc68cbb7bb5c01b0a9157982b73ddaf",
   "mteb_dataset_name": "TweetEmotionClassification",
-  "mteb_version": "1.6.3",
+  "mteb_version": "1.7.11",
   "train": {
-    "accuracy": 0.50537109375,
-    "accuracy_stderr": 0.024535829153127173,
-    "evaluation_time": 94.61,
-    "f1": 0.4527370483320877,
-    "f1_stderr": 0.03429318720111837,
-    "main_score": 0.50537109375
+    "accuracy": 0.511279296875,
+    "accuracy_stderr": 0.014952013825493344,
+    "evaluation_time": 9.7,
+    "f1": 0.4539676908675275,
+    "f1_stderr": 0.015325531013863846,
+    "main_score": 0.511279296875
   }
 }

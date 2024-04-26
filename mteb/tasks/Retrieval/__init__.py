@@ -59,6 +59,7 @@ from .hun.HunSum2 import *
 from .jpn.JaQuADRetrieval import *
 from .kor.KoMiracl import *
 from .kor.KoStrategyQA import *
+from .multilingual.IndicQARetrieval import *
 from .multilingual.MintakaRetrieval import *
 from .multilingual.MIRACLRetrieval import *
 from .multilingual.MultiLongDocRetrieval import *
@@ -66,6 +67,7 @@ from .multilingual.NeuCLIR2022Retrieval import *
 from .multilingual.NeuCLIR2023Retrieval import *
 from .multilingual.XMarketRetrieval import *
 from .multilingual.XPQARetrieval import *
+from .multilingual.XQuADRetrieval import *
 from .nob.norquad import *
 from .nob.snl_retrieval import *
 from .pol.ArguAnaPLRetrieval import *
@@ -83,6 +85,7 @@ from .spa.SpanishPassageRetrievalS2P import *
 from .spa.SpanishPassageRetrievalS2S import *
 from .swe.swedn_retrieval import *
 from .swe.swefaq_retrieval import *
+from .tur.TurHistQuad import *
 from .vie.VieQuADRetrieval import *
 from .zho.CMTEBRetrieval import *
 from .zho.LeCaRDv2Retrieval import *

@@ -43,8 +43,8 @@ class SciDocsReranking(AbsTaskReranking):
         task_subtypes=["Scientific Reranking"],
         license="cc-by-4.0",
         socioeconomic_status="high",
-        annotations_creators=None,
-        dialect=None,
+        annotations_creators="derived",
+        dialect=[],
         text_creation="found",
         n_samples={"test": 19599},
         avg_character_length={"test": 69.0},
@@ -109,7 +109,7 @@ class VGClustering(AbsTaskClustering):
         license="cc-by-nc",
         socioeconomic_status="high",
         annotations_creators="derived",
-        dialect=None,
+        dialect=[],
         text_creation="found",
         bibtex_citation= ... # removed for brevity
 )
