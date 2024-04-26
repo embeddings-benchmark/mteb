@@ -29,11 +29,11 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
         date=("2015-04-26", "2022-01-11"),
         form=["written"],
         domains=["News", "Social", "Web"],
-        task_subtypes=None,
+        task_subtypes=["Article retrieval"],
         license="openrail",
         socioeconomic_status="mixed",
         annotations_creators="derived",
-        dialect=None,
+        dialect=[],
         text_creation="found",
         bibtex_citation="""
             @inproceedings{OndrejowaSlovakSum24,
