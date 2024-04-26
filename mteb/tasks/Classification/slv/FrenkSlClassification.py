@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-
 from mteb.abstasks import AbsTaskClassification
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class FrenkSlClassification(AbsTaskClassification):
@@ -40,7 +39,7 @@ class FrenkSlClassification(AbsTaskClassification):
         n_samples={"test": 2177},
         avg_character_length={"test": 136.61},
     )
-    
+
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
