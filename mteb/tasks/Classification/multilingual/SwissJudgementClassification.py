@@ -47,13 +47,14 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
         n_samples={"test": 17357},
         avg_character_length={"test": 3411.72},
     )
-    """
+    '''
     def dataset_transform(self):
         for lang in self.langs:
             self.dataset[lang]["test"] = self.dataset[lang]["test"].select(
                 range(min(2048, len(self.dataset[lang]["test"])))
             )
-    """
+    '''
+
 
     def dataset_transform(self):
         for lang in self.langs:
@@ -61,7 +62,7 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
             y = self.dataset[lang]["test"]["label"]
 
             samples_per_label = min(2048, len(X))
-            X_undersampled, y_undersampled, add_info = self._undersample_data(
+            X_undersampled, y_undersampled, _ = self._undersample_data(
                 X, y, samples_per_label
             )
 
