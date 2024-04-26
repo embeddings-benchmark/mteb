@@ -105,6 +105,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [GermanDPR](https://huggingface.co/datasets/deepset/germandpr) | ['deu'] | Retrieval | s2p |  |  |  |
 | [GermanQuAD-Retrieval](https://www.kaggle.com/datasets/GermanQuAD) | ['deu'] | Retrieval | s2p |  |  |  |
 | [GermanSTSBenchmark](https://github.com/t-systems-on-site-services-gmbh/german-STSbenchmark) | ['deu'] | STS | s2s |  |  |  |
+| [GreekCivicsQA](https://huggingface.co/datasets/antoinelb7/alloprof) | ['ell'] | Retrieval | s2p | [Academic] | {'default': 407} | {'default': 2226.85} |
 | [GreekLegalCodeClassification](https://arxiv.org/abs/2109.15298) | ['ell'] | Classification | s2s | [Legal] | {'validation': 2048, 'test': 2048} | {'validation': 4046.8, 'test': 4200.8} |
 | [GreekSentimentClassification](https://huggingface.co/datasets/sepidmnorozy/Greek_sentiment) | ['ell'] | Classification | s2s | [Reviews] | {'validation': 383, 'test': 767} | {'validation': 208.0, 'test': 206.0} |
 | [GujaratiNewsClassification](https://github.com/goru001/nlp-for-gujarati) | ['guj'] | Classification | s2s | [News] | {'train': 5269, 'test': 1318} | {'train': 61.95, 'test': 61.91} |
