@@ -50,9 +50,12 @@ class FinToxicityClassification(AbsTaskClassification):
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("label_toxicity", "label")
         self.dataset = self.dataset.class_encode_column("label")
-        remove_cols = [col for col in self.dataset["test"].column_names if col not in ["text", "label"]]
+        remove_cols = [
+            col
+            for col in self.dataset["test"].column_names
+            if col not in ["text", "label"]
+        ]
         self.dataset = self.dataset.remove_columns(remove_cols)
-        self.dataset = self.stratified_subsampling(self.dataset,
-                                                   seed=self.seed,
-                                                   splits=["train", "test"])
-
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train", "test"]
+        )
