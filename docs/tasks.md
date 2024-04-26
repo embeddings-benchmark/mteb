@@ -77,6 +77,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [CzechSubjectivityClassification](https://arxiv.org/abs/2009.08712) | ['ces'] | Classification | s2s | [Reviews] | {'validation': 500, 'test': 2000} | {'validation': 108.2, 'test': 108.3} |
 | [DBPedia](https://github.com/iai-group/DBpedia-Entity/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [DBPedia-PL](https://github.com/iai-group/DBpedia-Entity/) | ['pol'] | Retrieval | s2p |  |  |  |
+| [DBpediaClassification](https://arxiv.org/abs/1509.01626) (Zhang et al., 2015) | ['eng'] | Classification | s2s | [Encyclopaedic] | {'test': 70000} | {'test': 281.4} |
 | [DKHateClassification](https://aclanthology.org/2020.lrec-1.430/) | ['dan'] | Classification | s2s | [Social] | {'test': 329} | {'test': 104.0} |
 | [DalajClassification](https://spraakbanken.gu.se/en/resources/superlim) | ['swe'] | Classification | s2s | [Non-fiction] | {'test': 444} | {'test': 243.8} |
 | [DanFEVER](https://aclanthology.org/2021.nodalida-main.47/) | ['dan'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'train': 8897} | {'train': 124.84} |
@@ -200,6 +201,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [PAC](https://arxiv.org/pdf/2211.13112.pdf) | ['pol'] | Classification | p2p |  | {'test': 3453} | {'test': 185.3} |
 | [PAWSX](https://aclanthology.org/2021.emnlp-main.357) | ['cmn'] | STS | s2s |  |  |  |
 | [PSC](http://www.lrec-conf.org/proceedings/lrec2014/pdf/1211_Paper.pdf) | ['pol'] | PairClassification | s2s |  |  |  |
+| [PatentClassification](https://aclanthology.org/P19-1212.pdf) | ['eng'] | Classification | s2s | [Legal] | {'test': 5000} | {'test': 18620.44} |
 | [PawsX](https://arxiv.org/abs/1908.11828) | ['cmn', 'deu', 'eng', 'fra', 'jpn', 'kor', 'spa'] | PairClassification | s2s |  |  |  |
 | [PersianFoodSentimentClassification](https://hooshvare.github.io/docs/datasets/sa) (Mehrdad Farahani et al., 2020) | ['fas'] | Classification | s2s | [Reviews] | {'validation': 2048, 'test': 2048} | {'validation': 90.37, 'test': 90.58} |
 | [PolEmo2.0-IN](https://aclanthology.org/K19-1092.pdf) | ['pol'] | Classification | s2s |  |  |  |
@@ -302,6 +304,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [WikiCitiesClustering](https://huggingface.co/datasets/wikipedia) | ['eng'] | Clustering | p2p |  |  |  |
 | XMarket | ['deu', 'eng', 'spa'] | Retrieval | s2p |  |  |  |
 | [XPQARetrieval](https://arxiv.org/abs/2305.09249) | ['ara', 'cmn', 'deu', 'fra', 'hin', 'ita', 'jpn', 'kor', 'pol', 'por', 'spa', 'tam'] | Retrieval | s2p |  |  |  |
+| [XQuADRetrieval](https://huggingface.co/datasets/xquad) (Mikel Artetxe, 2019) | ['arb', 'deu', 'ell', 'eng', 'hin', 'ron', 'rus', 'spa', 'tha', 'tur', 'vie', 'zho'] | Retrieval | s2p | [Web] | {'test': 1190} | {'test': 788.7} |
 | [YelpReviewFullClassification](https://arxiv.org/abs/1509.01626) (Zhang et al., 2015) | ['eng'] | Classification | s2s | [Reviews] | {'test': 50000} |  |
 | [YueOpenriceReviewClassification](https://github.com/Christainx/Dataset_Cantonese_Openrice) (Xiang et al., 2019) | ['yue'] | Classification | s2s | [Reviews] | {'test': 6161} | {'test': 173.0} |
 | [wisesight_sentiment_classification](https://github.com/PyThaiNLP/wisesight-sentiment) | ['tha'] | Classification | s2s | [Social, News] | {'train': 2048} | {'train': 103.42} |

@@ -32,10 +32,12 @@ from .eng.ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassif
 from .eng.ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification import *
 from .eng.ContractNLIReturnOfConfidentialInformationLegalBenchClassification import *
 from .eng.ContractNLISharingWithEmployeesLegalBenchClassification import *
+from .eng.DBpediaClassification import *
 from .eng.EmotionClassification import *
 from .eng.FinancialPhrasebankClassification import *
 from .eng.ImdbClassification import *
 from .eng.NewsClassification import *
+from .eng.PatentClassification import *
 from .eng.ToxicChatClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
