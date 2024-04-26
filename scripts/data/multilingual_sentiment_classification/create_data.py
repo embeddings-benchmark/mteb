@@ -6,7 +6,6 @@ from huggingface_hub import create_repo
 repo_id = "mteb/multilingual-sentiment-classification"
 create_repo(repo_id, repo_type="dataset")
 
-id2label = {0: "negative", 1: "positive"}
 languages = {
     "Urdu": "urd",
     "Vietnamese": "vie",
@@ -42,5 +41,4 @@ languages = {
 
 for lang in languages.keys():
     raw_ds = load_dataset(f"sepidmnorozy/{lang}_sentiment")
-
     raw_ds.push_to_hub(repo_id=repo_id, config_name=languages[lang])

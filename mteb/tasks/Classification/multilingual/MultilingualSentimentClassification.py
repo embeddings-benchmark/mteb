@@ -86,6 +86,6 @@ class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTas
             pages = "89--95",
         }
         """,
-        n_samples={"test": 10000},
-        avg_character_length={"test": 45.9},
+        n_samples={"test": 7000},
+        avg_character_length={"test": 56},
     )
