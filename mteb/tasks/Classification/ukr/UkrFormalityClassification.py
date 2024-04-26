@@ -21,7 +21,7 @@ class UkrFormalityClassification(AbsTaskClassification):
         reference="https://huggingface.co/datasets/ukr-detect/ukr-formality-dataset-translated-gyafc",
         type="Classification",
         category="s2s",
-        eval_splits=["test"],
+        eval_splits=["train", "test"],
         eval_langs=["ukr-Cyrl"],
         main_score="accuracy",
         date=("2018-04-11", "2018-06-20"),
@@ -43,13 +43,13 @@ class UkrFormalityClassification(AbsTaskClassification):
         publisher = "Association for Computational Linguistics",
         url = "https://aclanthology.org/N18-1012",
         }""",
-        n_samples={"test": 4853},
-        avg_character_length={"test": 52.39},
+        n_samples={"train": 2048, "test": 2048},
+        avg_character_length={"train": 52.10, "test": 53.07},
     )
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("labels", "label")
         self.dataset = self.dataset.class_encode_column("label")
-        self.dataset = self.dataset["test"].train_test_split(
-            test_size=0.5, seed=self.seed, stratify_by_column="label"
-        )  # balanced sampling
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train", "test"]
+        )

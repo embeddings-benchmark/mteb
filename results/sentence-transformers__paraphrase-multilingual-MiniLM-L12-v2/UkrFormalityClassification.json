@@ -3,13 +3,23 @@
   "mteb_dataset_name": "UkrFormalityClassification",
   "mteb_version": "1.6.37",
   "test": {
-    "accuracy": 0.5418211784095592,
-    "accuracy_stderr": 0.021184981801566617,
-    "ap": 0.4498895180058852,
-    "ap_stderr": 0.00999045901809457,
-    "evaluation_time": 12.68,
-    "f1": 0.5271718111574957,
-    "f1_stderr": 0.01789014603423859,
-    "main_score": 0.5418211784095592
+    "accuracy": 0.528076171875,
+    "accuracy_stderr": 0.030777409502741826,
+    "ap": 0.4423356000929221,
+    "ap_stderr": 0.010210226392447973,
+    "evaluation_time": 5.95,
+    "f1": 0.5084647911438317,
+    "f1_stderr": 0.022028997054790573,
+    "main_score": 0.528076171875
+  },
+  "train": {
+    "accuracy": 0.515625,
+    "accuracy_stderr": 0.017610646998202893,
+    "ap": 0.5087213333014945,
+    "ap_stderr": 0.009644894062476045,
+    "evaluation_time": 10.27,
+    "f1": 0.5019099055689374,
+    "f1_stderr": 0.014889799683856533,
+    "main_score": 0.515625
   }
 }
