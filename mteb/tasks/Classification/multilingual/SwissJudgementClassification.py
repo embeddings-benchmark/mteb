@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datasets import Dataset
+
 from mteb.abstasks import AbsTaskClassification, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -26,15 +28,12 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
         form=["written"],
         domains=["Legal"],
         task_subtypes=[
-            "Topic classification",
             "Political classification",
-            "Claim verification",
-            "Language identification",
         ],
         license="CC-BY-4.0",
         socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
-        dialect=None,
+        dialect=[],
         text_creation="found",
         bibtex_citation="""@misc{niklaus2022empirical,
     title={An Empirical Study on Cross-X Transfer for Legal Judgment Prediction},
@@ -45,12 +44,27 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
     primaryClass={cs.CL}
 }
 """,
-        n_samples={"train": 59709, "validation": 8208, "test": 17357},
-        avg_character_length=None,
+        n_samples={"test": 17357},
+        avg_character_length={"test": 3411.72},
     )
-
+    """
     def dataset_transform(self):
         for lang in self.langs:
             self.dataset[lang]["test"] = self.dataset[lang]["test"].select(
                 range(min(2048, len(self.dataset[lang]["test"])))
+            )
+    """
+
+    def dataset_transform(self):
+        for lang in self.langs:
+            X = self.dataset[lang]["test"]["text"]
+            y = self.dataset[lang]["test"]["label"]
+
+            samples_per_label = min(2048, len(X))
+            X_undersampled, y_undersampled, add_info = self._undersample_data(
+                X, y, samples_per_label
+            )
+
+            self.dataset[lang]["test"] = Dataset.from_dict(
+                {"text": X_undersampled, "label": y_undersampled}
             )
