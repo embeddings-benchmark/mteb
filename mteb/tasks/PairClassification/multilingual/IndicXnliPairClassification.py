@@ -19,8 +19,6 @@ _LANGUAGES = {
 }
 
 
-
-
 class IndicXnliPairClassification(AbsTaskPairClassification, MultilingualTask):
     metadata = TaskMetadata(
         name="IndicXnliPairClassification",
