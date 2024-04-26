@@ -24,6 +24,7 @@ from .eng.ContractNLIConfidentialityOfAgreementLegalBenchClassification import *
 from .eng.ContractNLIExplicitIdentificationLegalBenchClassification import *
 from .eng.ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification import *
 from .eng.ContractNLILimitedUseLegalBenchClassification import *
+from .eng.DBpediaClassification import *
 from .eng.EmotionClassification import *
 from .eng.FinancialPhrasebankClassification import *
 from .eng.ImdbClassification import *
