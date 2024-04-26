@@ -1,25 +1,25 @@
 {
   "dataset_revision": "1994e9bb7f3ec07518e3f0d9e870cb293e234686",
   "mteb_dataset_name": "FilipinoHateSpeechClassification",
-  "mteb_version": "1.7.0",
+  "mteb_version": "1.7.14",
   "test": {
-    "accuracy": 0.588623046875,
-    "accuracy_stderr": 0.04424121838518151,
-    "ap": 0.5235485680653846,
-    "ap_stderr": 0.0292128856610349,
-    "evaluation_time": 3.28,
-    "f1": 0.5815646745354887,
-    "f1_stderr": 0.04485825288601201,
-    "main_score": 0.588623046875
+    "accuracy": 0.58359375,
+    "accuracy_stderr": 0.04045951590625083,
+    "ap": 0.5183748795941082,
+    "ap_stderr": 0.026155224372107547,
+    "evaluation_time": 7.17,
+    "f1": 0.576893865333713,
+    "f1_stderr": 0.04030538689824078,
+    "main_score": 0.58359375
   },
   "validation": {
-    "accuracy": 0.57958984375,
-    "accuracy_stderr": 0.042122005910901344,
-    "ap": 0.49819582657111905,
-    "ap_stderr": 0.02577058528891724,
-    "evaluation_time": 4.19,
-    "f1": 0.5716219492625749,
-    "f1_stderr": 0.042080406267862754,
-    "main_score": 0.57958984375
+    "accuracy": 0.57998046875,
+    "accuracy_stderr": 0.04052722609169668,
+    "ap": 0.5067390857072789,
+    "ap_stderr": 0.02591176836681942,
+    "evaluation_time": 8.38,
+    "f1": 0.5733334721155943,
+    "f1_stderr": 0.03945981336363871,
+    "main_score": 0.57998046875
   }
 }

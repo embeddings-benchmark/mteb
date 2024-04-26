@@ -1,13 +1,13 @@
 {
   "dataset_revision": "3fb7212c389d7818b8e6179e2cdac762f2e081d9",
   "mteb_dataset_name": "WRIMEClassification",
-  "mteb_version": "1.3.1",
+  "mteb_version": "1.7.14",
   "test": {
-    "accuracy": 0.275634765625,
-    "accuracy_stderr": 0.03008006696500832,
-    "evaluation_time": 13.57,
-    "f1": 0.2609132025671076,
-    "f1_stderr": 0.022753502426129977,
-    "main_score": 0.275634765625
+    "accuracy": 0.27216796875,
+    "accuracy_stderr": 0.02819476481873175,
+    "evaluation_time": 9.15,
+    "f1": 0.257041799648374,
+    "f1_stderr": 0.019803526804976098,
+    "main_score": 0.27216796875
   }
 }
