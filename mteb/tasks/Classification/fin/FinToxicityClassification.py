@@ -49,7 +49,6 @@ class FinToxicityClassification(AbsTaskClassification):
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("label_toxicity", "label")
-        self.dataset = self.dataset.class_encode_column("label")
         remove_cols = [
             col
             for col in self.dataset["test"].column_names
