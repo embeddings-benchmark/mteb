@@ -1,7 +1,7 @@
 {
   "dataset_revision": "a04523a3c83153be07a8945bb1fb351cbbcef90b",
   "default": {
-    "evaluation_time": 1.61,
+    "evaluation_time": 1.63,
     "map_at_1": 0.61671,
     "map_at_10": 0.72518,
     "map_at_100": 0.72872,

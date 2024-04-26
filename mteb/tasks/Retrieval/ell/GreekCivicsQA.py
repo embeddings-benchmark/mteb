@@ -21,7 +21,7 @@ class GreekCivicsQA(AbsTaskRetrieval):
         eval_splits=["default"],
         eval_langs=["ell-Grek"],
         main_score="ndcg_at_10",
-        date=("2023-01-01","2024-04-01"),
+        date=("2023-01-01", "2024-04-01"),
         form=["written"],
         domains=["Academic"],
         task_subtypes=["Question answering"],
@@ -46,10 +46,14 @@ class GreekCivicsQA(AbsTaskRetrieval):
         }
         self.corpus = {
             eval_split: {
-                f"d{d['id']}": {"text": d["answer"], "title": d['answer']} for d in data_raw[eval_split]
+                f"d{d['id']}": {"text": d["answer"]} for d in data_raw[eval_split]
             }
         }
 
-        self.relevant_docs = {eval_split: {f"q{i+1}": {f"d{i+1}": 1} for i in range(data_raw[eval_split].shape[0])}}
+        self.relevant_docs = {
+            eval_split: {
+                f"q{i+1}": {f"d{i+1}": 1} for i in range(data_raw[eval_split].shape[0])
+            }
+        }
 
         self.data_loaded = True
