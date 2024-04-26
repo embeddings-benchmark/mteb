@@ -41,10 +41,7 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
         return metadata_dict
 
     def dataset_transform(self):
-        self.dataset = self.dataset.map(
-            lambda examples: examples,
-            remove_columns=["id", "question_title", "question_content"],
-        )
+        self.dataset = self.dataset.remove_columns(["id", "question_title", "question_content"])
 
         self.dataset = self.dataset.rename_columns(
             {"topic": "label", "best_answer": "text"}
