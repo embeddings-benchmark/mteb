@@ -242,9 +242,13 @@ class TaskMetadata(BaseModel):
             return lang.split("-")[0]
 
         if isinstance(self.eval_langs, dict):
-            return sorted(set(
-                get_lang(lang) for langs in self.eval_langs.values() for lang in langs
-            ))
+            return sorted(
+                set(
+                    get_lang(lang)
+                    for langs in self.eval_langs.values()
+                    for lang in langs
+                )
+            )
         return sorted(set([get_lang(lang) for lang in self.eval_langs]))
 
     @property
