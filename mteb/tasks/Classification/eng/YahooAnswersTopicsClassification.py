@@ -28,7 +28,7 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 60000},
         avg_character_length={"test": 346.35},
     )
