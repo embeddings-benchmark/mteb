@@ -24,6 +24,13 @@ from .eng.ContractNLIConfidentialityOfAgreementLegalBenchClassification import *
 from .eng.ContractNLIExplicitIdentificationLegalBenchClassification import *
 from .eng.ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification import *
 from .eng.ContractNLILimitedUseLegalBenchClassification import *
+from .eng.ContractNLISharingWithThirdPartiesLegalBenchClassification import *
+from .eng.ContractNLISurvivalOfObligationsLegalBenchClassification import *
+from .eng.CorporateLobbyingLegalBenchClassification import *
+from .eng.CUADAffiliateLicenseLicenseeLegalBenchClassification import *
+from .eng.CUADAffiliateLicenseLicensorLegalBenchClassification import *
+from .eng.CUADAntiAssignmentLegalBenchClassification import *
+from .eng.CUADAuditRightsLegalBenchClassification import *
 from .eng.DBpediaClassification import *
 from .eng.EmotionClassification import *
 from .eng.FinancialPhrasebankClassification import *
