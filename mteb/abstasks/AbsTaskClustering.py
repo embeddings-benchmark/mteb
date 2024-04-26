@@ -65,4 +65,4 @@ class AbsTaskClustering(AbsTask):
 
         v_mean = np.mean(v_measures)
         v_std = np.std(v_measures)
-        return {"v_measure": v_mean, "v_measure_std": v_std}
+        return {"v_measure": v_mean, "v_measure_std": v_std, "v_measures": v_measures}
