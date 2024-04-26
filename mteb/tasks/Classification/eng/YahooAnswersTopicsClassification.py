@@ -19,18 +19,18 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=None,
-        form=None,
+        date=("2022-01-25", "2022-01-25"),
+        form=["written"],
         domains=["Web"],
         task_subtypes=None,
-        license=None,
+        license="Not specified",
         socioeconomic_status=None,
         annotations_creators=None,
-        dialect=None,
-        text_creation=None,
+        dialect=[],
+        text_creation="found",
         bibtex_citation=None,
         n_samples={"test": 60000},
-        avg_character_length=None,
+        avg_character_length={"test": 346.35},
     )
 
     @property
@@ -50,6 +50,6 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
             {"topic": "label", "best_answer": "text"}
         )
 
-        self.dataset = self.dataset["test"].train_test_split(
-            test_size=2048, train_size=2048, seed=self.seed, stratify_by_column="label"
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train", "test"]
         )
