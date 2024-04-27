@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from collections import Counter
+from typing import Dict
 
 from mteb.abstasks import AbsTask
 from mteb.abstasks.languages import (
