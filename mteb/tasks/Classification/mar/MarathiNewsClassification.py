@@ -6,12 +6,12 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class MarathiNewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="PunjabiNewsClassification",
-        description="A Punjabi dataset for 2-class classification of Punjabi news articles",
+        name="MarathiNewsClassification",
+        description="A Marathi dataset for 3-class classification of Marathi news articles",
         reference="https://github.com/goru001/nlp-for-punjabi/",
         dataset={
-            "path": "mlexplorer008/punjabi_news_classification",
-            "revision": "cec3923e16519efe51d535497e711932b8f1dc44",
+            "path": "mlexplorer008/marathi_news_classification",
+            "revision": "7640cf8132cca1f99995ac71512a670e3c965cf1",
         },
         type="Classification",
         category="s2s",
