@@ -37,6 +37,7 @@ from .eng.YelpReviewFullClassification import *
 from .est.estonian_valence import *
 from .fas.PersianFoodSentimentClassification import *
 from .fil.FilipinoHateSpeechClassification import *
+from .fin.FinToxicityClassification import *
 from .fra.MovieReviewSentimentClassification import *
 from .guj.GujaratiNewsClassification import *
 from .hin.HindiDiscourseClassification import *
