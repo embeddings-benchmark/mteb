@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "6e7340e6be87124f319e25290778760c14df64d3",
+  "mteb_dataset_name": "FinToxicityClassification",
+  "mteb_version": "1.6.37",
+  "test": {
+    "accuracy": 0.69619140625,
+    "accuracy_stderr": 0.03487422141022974,
+    "ap": 0.1621401210687658,
+    "ap_stderr": 0.012027110082983617,
+    "evaluation_time": 43.1,
+    "f1": 0.5529930772810643,
+    "f1_stderr": 0.02240484685103571,
+    "main_score": 0.5529930772810643
+  }
+}
