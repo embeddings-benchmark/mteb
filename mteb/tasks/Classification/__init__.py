@@ -70,6 +70,8 @@ from .nob.NorwegianParliamentClassification import *
 from .pan.PunjabiNewsClassification import *
 from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
+from .sin.SinhalaNewsClassification import *
+from .sin.SinhalaNewsSourceClassification import *
 from .san.SanskritShlokasClassification import *
 from .slk.SlovakSentimentClassification import *
 from .slv.FrenkSlClassification import *
