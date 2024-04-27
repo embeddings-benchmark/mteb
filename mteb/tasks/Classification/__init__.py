@@ -24,10 +24,12 @@ from .eng.ContractNLIConfidentialityOfAgreementLegalBenchClassification import *
 from .eng.ContractNLIExplicitIdentificationLegalBenchClassification import *
 from .eng.ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification import *
 from .eng.ContractNLILimitedUseLegalBenchClassification import *
+from .eng.DBpediaClassification import *
 from .eng.EmotionClassification import *
 from .eng.FinancialPhrasebankClassification import *
 from .eng.ImdbClassification import *
 from .eng.NewsClassification import *
+from .eng.PatentClassification import *
 from .eng.ToxicChatClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
@@ -71,6 +73,7 @@ from .sin.SinhalaNewsClassification import *
 from .sin.SinhalaNewsSourceClassification import *
 from .san.SanskritShlokasClassification import *
 from .slk.SlovakSentimentClassification import *
+from .slv.FrenkSlClassification import *
 from .ssw.SiswatiNewsClassification import *
 from .swe.DalajClassification import *
 from .swe.SweRecClassification import *
@@ -80,6 +83,7 @@ from .tha.wisesight_sentiment_classification import *
 from .tur.TurkishMovieSentimentClassification import *
 from .tur.TurkishProductSentimentClassification import *
 from .uig.UyghurSentimentClassification import *
+from .ukr.UkrFormalityClassification import *
 from .urd.UrduRomanSentimentClassification import *
 from .vie.VieStudentFeedbackClassification import *
 from .zho.CMTEBClassification import *
