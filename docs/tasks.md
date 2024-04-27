@@ -294,6 +294,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [TwitterHjerneRetrieval](https://huggingface.co/datasets/sorenmulli/da-hashtag-twitterhjerne) (Holm et al., 2024) | ['dan'] | Retrieval | p2p | [Social] | {'train': 340} | {'train': 138.23} |
 | [TwitterSemEval2015](https://alt.qcri.org/semeval2015/task1/) | ['eng'] | PairClassification | s2s |  | {'test': 16777} | {'test': 38.3} |
 | [TwitterURLCorpus](https://languagenet.github.io/) | ['eng'] | PairClassification | s2s |  | {'test': 51534} | {'test': 79.5} |
+| [UkrFormalityClassification](https://huggingface.co/datasets/ukr-detect/ukr-formality-dataset-translated-gyafc) | ['ukr'] | Classification | s2s | [News] | {'train': 2048, 'test': 2048} | {'train': 52.1, 'test': 53.07} |
 | [UrduRomanSentimentClassification](https://archive.ics.uci.edu/dataset/458/roman+urdu+data+set) (Sharf,Zareen, 2018) | ['urd'] | Classification | s2s | [Social] | {'train': 2048} | {'train': 68.248} |
 | [UyghurSentimentClassification](https://arxiv.org/abs/2009.08712) | ['uig'] | Classification | s2s | [Reviews] | {'test': 841} | {'test': 245.2} |
 | [VGClustering](https://huggingface.co/datasets/navjordj/VG_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [News, Non-fiction] | {'test': 2048} | {'test': 1009.65} |
