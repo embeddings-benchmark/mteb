@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import logging
+from collections import Counter
+from functools import wraps
 
 from mteb.abstasks import AbsTask
 from mteb.abstasks.languages import (
@@ -103,8 +105,8 @@ def get_tasks(
 
     Examples:
         >>> get_tasks(languages=["eng", "deu"], script=["Latn"], domains=["Legal"])
-        >>> get_tasks(languages=["eng"], script=["Latn"], task_type="Classification")
-        >>> get_tasks(languages=["eng"], script=["Latn"], task_type="Clustering", exclude_superseeded_datasets=False)
+        >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Classification"])
+        >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Clustering"], exclude_superseeded_datasets=False)
     """
     tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
     tasks = [
@@ -120,11 +122,40 @@ def get_tasks(
         tasks = filter_tasks_by_script(tasks, script)
     if domains:
         tasks = filter_tasks_by_domains(tasks, domains)
-    if exclude_superseeded:
-        tasks = filter_superseeded_datasets(tasks)
     if task_types:
         tasks = filter_tasks_by_task_types(tasks, task_types)
     if categories:
         tasks = filter_task_by_categories(tasks, categories)
+    if exclude_superseeded:
+        tasks = filter_superseeded_datasets(tasks)
 
     return tasks
+
+
+def count_languages(
+    domains: list[TASK_DOMAIN] | None = None,
+    task_types: list[TASK_TYPE] | None = None,
+    categories: list[TASK_CATEGORY] | None = None,
+    exclude_superseeded: bool = True,
+) -> Dict:
+    """Get a summary of language count.
+
+    Args:
+        domains: A list of task domains.
+        task_types: A string specifying the type of task. If None, all tasks are included.
+        categories: A list of task categories these include "s2s" (sentence to sentence), "s2p" (sentence to paragraph) and "p2p" (paragraph to
+            paragraph).
+        exclude_superseeded: A boolean flag to exclude datasets which are superseeded by another.
+
+    Returns:
+        A dictionary with language occurence, per domain, task type, or category.
+
+    Examples:
+        >>> count_languages(task_types=['Clustering'])
+    """
+    
+    tasks = get_tasks(domains=domains, task_types=task_types, categories=categories, exclude_superseeded=exclude_superseeded)
+    langs = []
+    for task in tasks:
+        langs.extend(task.languages)
+    return Counter(langs)
