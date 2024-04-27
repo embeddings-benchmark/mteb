@@ -251,6 +251,8 @@ The following tables gives you an overview of the tasks in MTEB.
 | [SciFact](https://github.com/allenai/scifact) | ['eng'] | Retrieval | s2p |  |  |  |
 | [SciFact-PL](https://github.com/allenai/scifact) | ['pol'] | Retrieval | s2p |  |  |  |
 | [SentimentAnalysisHindi](https://huggingface.co/datasets/OdiaGenAI/sentiment_analysis_hindi) (Shantipriya Parida, 2023) | ['hin'] | Classification | s2s | [Reviews] | {'train': 2497} | {'train': 81.29} |
+| [SinhalaNewsClassification](https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Category-classification) (Nisansa de Silva, 2015) | ['sin'] | Classification | s2s | [News] | {'train': 3327} | {'train': 148.04} |
+| [SinhalaNewsSourceClassification](https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Source-classification) (Dhananjaya et al., 2022) | ['sin'] | Classification | s2s | [News] | {'train': 24094} | {'train': 56.08} |
 | [SiswatiNewsClassification](https://huggingface.co/datasets/dsfsi/za-isizulu-siswati-news) (Madodonga et al., 2023) | ['ssw'] | Classification | s2s | [News] | {'train': 80} | {'train': 354.2} |
 | [SlovakSentimentClassification](https://huggingface.co/datasets/sepidmnorozy/Slovak_sentiment) | ['slk'] | Classification | s2s | [Reviews] | {'validation': 522, 'test': 1040} | {'validation': 84.96, 'test': 91.95} |
 | [SpanishNewsClusteringP2P](https://www.kaggle.com/datasets/kevinmorgado/spanish-news-classification) | ['spa'] | Clustering | p2p |  |  |  |
