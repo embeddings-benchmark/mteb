@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "ContractNLIPermissibleCopyLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.3563218390804598,
+    "accuracy_stderr": 0.0,
+    "ap": 0.1838054187192118,
+    "ap_stderr": 2.7755575615628914e-17,
+    "evaluation_time": 13.87,
+    "f1": 0.3416216216216217,
+    "f1_stderr": 0.0,
+    "main_score": 0.3563218390804598
+  }
+}
