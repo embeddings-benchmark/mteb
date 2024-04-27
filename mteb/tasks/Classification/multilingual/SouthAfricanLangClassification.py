@@ -15,7 +15,7 @@ _LANGUAGES = {
     "tso": ["tso-Latn"],
     "ven": ["ven-Latn"],
     "xho": ["xho-Latn"],
-    "zul": ["zul-latn"],
+    "zul": ["zul-Latn"],
 }
 
 
