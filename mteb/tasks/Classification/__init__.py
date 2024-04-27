@@ -45,6 +45,7 @@ from .eng.YelpReviewFullClassification import *
 from .est.estonian_valence import *
 from .fas.PersianFoodSentimentClassification import *
 from .fil.FilipinoHateSpeechClassification import *
+from .fin.FinToxicityClassification import *
 from .fra.MovieReviewSentimentClassification import *
 from .guj.GujaratiNewsClassification import *
 from .hin.HindiDiscourseClassification import *
@@ -77,8 +78,11 @@ from .nob.NorwegianParliamentClassification import *
 from .pan.PunjabiNewsClassification import *
 from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
+from .sin.SinhalaNewsClassification import *
+from .sin.SinhalaNewsSourceClassification import *
 from .san.SanskritShlokasClassification import *
 from .slk.SlovakSentimentClassification import *
+from .slv.FrenkSlClassification import *
 from .ssw.SiswatiNewsClassification import *
 from .swe.DalajClassification import *
 from .swe.SweRecClassification import *
@@ -88,6 +92,7 @@ from .tha.wisesight_sentiment_classification import *
 from .tur.TurkishMovieSentimentClassification import *
 from .tur.TurkishProductSentimentClassification import *
 from .uig.UyghurSentimentClassification import *
+from .ukr.UkrFormalityClassification import *
 from .urd.UrduRomanSentimentClassification import *
 from .vie.VieStudentFeedbackClassification import *
 from .zho.CMTEBClassification import *
