@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import logging
 from collections import Counter
-from functools import wraps
 
 from mteb.abstasks import AbsTask
 from mteb.abstasks.languages import (
@@ -153,8 +152,12 @@ def count_languages(
     Examples:
         >>> count_languages(task_types=['Clustering'])
     """
-    
-    tasks = get_tasks(domains=domains, task_types=task_types, categories=categories, exclude_superseeded=exclude_superseeded)
+    tasks = get_tasks(
+        domains=domains,
+        task_types=task_types,
+        categories=categories,
+        exclude_superseeded=exclude_superseeded,
+    )
     langs = []
     for task in tasks:
         langs.extend(task.languages)
