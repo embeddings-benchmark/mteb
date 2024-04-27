@@ -1,11 +1,7 @@
 from __future__ import annotations
 
-import random
-from collections import Counter
-
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
- 
 
 
 class OdiaNewsClassification(AbsTaskClassification):
@@ -22,7 +18,7 @@ class OdiaNewsClassification(AbsTaskClassification):
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],
         eval_langs=["ory-Orya"],
-        main_score="accuracy",
+        main_score="f1",
         form=["written"],
         domains=["News"],
         task_subtypes=["Topic classification"],
@@ -31,9 +27,9 @@ class OdiaNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
-        n_samples={"train": 15200, "test": 2048},
-        avg_character_length={"train": 49.47, "test": 49.24},
+        bibtex_citation="",
+        n_samples={"test": 2048},
+        avg_character_length={"test": 49.24},
     )
 
     def dataset_transform(self):

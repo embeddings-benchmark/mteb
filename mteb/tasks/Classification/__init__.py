@@ -66,7 +66,7 @@ from .nep.NepaliNewsClassification import *
 from .nld.DutchBookReviewSentimentClassification import *
 from .nob.NoRecClassification import *
 from .nob.NorwegianParliamentClassification import *
-from .ory.OdiaNewsClassification import * 
+from .ory.OdiaNewsClassification import *
 from .pan.PunjabiNewsClassification import *
 from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
