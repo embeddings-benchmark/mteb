@@ -840,6 +840,7 @@ _LANGUAGES = [
     "zyp_Latn",  # Zyphe Chin
 ]
 
+# train split because validation/test splits are extremely small in a lot of cases
 _SPLIT = ["train"]
 
 _N = 256
@@ -848,15 +849,11 @@ _N = 256
 def extend_lang_pairs_english_centric() -> dict[str, list[str]]:
     # add all language pairs with english as source or target
     hf_lang_subset2isolang = {}
-    for x in _LANGUAGES:
-        if "-" not in x:
-            for y in _LANGUAGES:
-                if x != y and "eng_Latn" in [x, y]:
-                    pair = f"{x}-{y}"
-                    hf_lang_subset2isolang[pair] = [
-                        x.replace("_", "-"),
-                        y.replace("_", "-"),
-                    ]
+    for lang in _LANGUAGES:
+        pair = f"eng_Latn-{lang}"
+        hf_lang_subset2isolang[pair] = ["eng-Latn", lang.replace("_", "-")]
+        pair = f"{lang}-eng_Latn"
+        hf_lang_subset2isolang[pair] = [lang.replace("_", "-"), "eng-Latn"]
     return hf_lang_subset2isolang
 
 
@@ -879,7 +876,8 @@ class BibleNLPBitextMining(AbsTaskBitextMining, CrosslingualTask):
         eval_splits=_SPLIT,
         eval_langs=_LANGUAGES_MAPPING,
         main_score="f1",
-        date=("2023-04-09", "2023-04-09"),
+        # World English Bible (WEB) first draft 1997, finished 2020
+        date=("1997-01-01", "2020-12-31"),
         form=["written"],
         domains=["Religious"],
         task_subtypes=[],
@@ -890,14 +888,12 @@ class BibleNLPBitextMining(AbsTaskBitextMining, CrosslingualTask):
         text_creation="created",
         n_samples={"train": _N},
         avg_character_length={"train": 120},
-        bibtex_citation="""
-@article{akerman2023ebible,
-  title={The eBible Corpus: Data and Model Benchmarks for Bible Translation for Low-Resource Languages},
-  author={Akerman, Vesa and Baines, David and Daspit, Damien and Hermjakob, Ulf and Jang, Taeho and Leong, Colin and Martin, Michael and Mathew, Joel and Robie, Jonathan and Schwarting, Marcus},
-  journal={arXiv preprint arXiv:2304.09919},
-  year={2023}
-}
-""",
+        bibtex_citation="""@article{akerman2023ebible,
+            title={The eBible Corpus: Data and Model Benchmarks for Bible Translation for Low-Resource Languages},
+            author={Akerman, Vesa and Baines, David and Daspit, Damien and Hermjakob, Ulf and Jang, Taeho and Leong, Colin and Martin, Michael and Mathew, Joel and Robie, Jonathan and Schwarting, Marcus},
+            journal={arXiv preprint arXiv:2304.09919},
+            year={2023}
+        }""",
     )
 
     def load_data(self, **kwargs: Any) -> None:
