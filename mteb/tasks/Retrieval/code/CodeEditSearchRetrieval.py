@@ -38,7 +38,7 @@ class CodeEditSearchRetrieval(MultilingualTask, AbsTaskRetrieval):
         eval_splits=[_EVAL_SPLIT],
         eval_langs={lang: [lang + "-Code"] for lang in _LANGS},
         main_score="ndcg_at_10",
-        date=("2019-01-01", "2019-12-31"),
+        date=("2011-02-12", "2016-01-01"),
         form=["written"],
         domains=["Programming"],
         task_subtypes=["Code retrieval"],
