@@ -15,6 +15,7 @@ from .dan.AngryTweetsClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
 from .dan.DKHateClassification import *
 from .dan.LccSentimentClassification import *
+from .deu.GermanPoliticiansTwitterSentimentClassification import *
 from .ell.GreekLegalCodeClassification import *
 from .ell.GreekSentimentClassification import *
 from .eng.AmazonPolarityClassification import *
