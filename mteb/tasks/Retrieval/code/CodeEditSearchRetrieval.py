@@ -62,7 +62,7 @@ class CodeEditSearchRetrieval(MultilingualTask, AbsTaskRetrieval):
         for lang in _LANGS:
             data = datasets.load_dataset(
                 split=self._EVAL_SPLIT,
-                config=lang,
+                data_dir=lang,
                 **self.metadata_dict["dataset"],
             )
             for row in data:
