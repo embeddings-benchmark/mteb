@@ -264,6 +264,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [SinhalaNewsSourceClassification](https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Source-classification) (Dhananjaya et al., 2022) | ['sin'] | Classification | s2s | [News] | {'train': 24094} | {'train': 56.08} |
 | [SiswatiNewsClassification](https://huggingface.co/datasets/dsfsi/za-isizulu-siswati-news) (Madodonga et al., 2023) | ['ssw'] | Classification | s2s | [News] | {'train': 80} | {'train': 354.2} |
 | [SlovakSentimentClassification](https://huggingface.co/datasets/sepidmnorozy/Slovak_sentiment) | ['slk'] | Classification | s2s | [Reviews] | {'validation': 522, 'test': 1040} | {'validation': 84.96, 'test': 91.95} |
+| [SlovakSumRetrieval](https://huggingface.co/datasets/kiviki/SlovakSum) | ['slk'] | Retrieval | s2s | [News, Social, Web] | {'test': 600} | {'test': 238.44} |
 | [SpanishNewsClusteringP2P](https://www.kaggle.com/datasets/kevinmorgado/spanish-news-classification) | ['spa'] | Clustering | p2p |  |  |  |
 | [SpanishPassageRetrievalS2P](https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/) | ['spa'] | Retrieval | s2p |  |  |  |
 | [SpanishPassageRetrievalS2S](https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/) | ['spa'] | Retrieval | s2s |  |  |  |
