@@ -18,7 +18,7 @@ class JaQuADRetrieval(AbsTaskRetrieval):
         category="p2p",
         eval_splits=["validation"],
         eval_langs=["jpn-Jpan"],
-        main_score="ncdg_at_10",
+        main_score="ndcg_at_10",
         date=("2022-01-01", "2022-12-31"),  # approximate guess
         form=["written"],
         domains=["Encyclopaedic", "Non-fiction"],

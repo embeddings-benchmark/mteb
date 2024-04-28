@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "5ccda92ffd7e74fa91fed595a1cbcff1bb68ec2d",
+  "mteb_dataset_name": "SouthAfricanLangClassification",
+  "mteb_version": "1.7.5",
+  "test": {
+    "accuracy": 0.599755859375,
+    "accuracy_stderr": 0.01704940807847639,
+    "evaluation_time": 114.37,
+    "f1": 0.5957959132504811,
+    "f1_stderr": 0.01763903005793623,
+    "main_score": 0.599755859375
+  }
+}
