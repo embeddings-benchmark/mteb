@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .ara.AJGT import *
 from .ara.HotelReviewSentimentClassification import *
 from .ara.RestaurantReviewSentimentClassification import *
 from .ara.TweetEmotionClassification import *
