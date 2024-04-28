@@ -6,8 +6,21 @@ from mteb.abstasks import MultilingualTask
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-_LANGS = ["python", "javascript", "typescript", "go", "ruby",
-          "java", "php", "c", "c++", "rust", "swift", "scala", "shell"]
+_LANGS = [
+    "python",
+    "javascript",
+    "typescript",
+    "go",
+    "ruby",
+    "java",
+    "php",
+    "c",
+    "c++",
+    "rust",
+    "swift",
+    "scala",
+    "shell",
+]
 
 
 class CodeEditSearchRetrieval(MultilingualTask, AbsTaskRetrieval):
@@ -34,11 +47,11 @@ class CodeEditSearchRetrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation="@article{muennighoff2023octopack, title={OctoPack: Instruction Tuning Code Large Language Models}, author={Niklas Muennighoff and Qian Liu and Armel Zebaze and Qinkai Zheng and Binyuan Hui and Terry Yue Zhuo and Swayam Singh and Xiangru Tang and Leandro von Werra and Shayne Longpre}, journal={arXiv preprint arXiv:2308.07124}, year={2023} }",
+        bibtex_citation=None,
         n_samples={
             _EVAL_SPLIT: 1000,
         },
-        avg_character_length={"test": 553.50},
+        avg_character_length={"train": 553.50},
     )
 
     def load_data(self, **kwargs):
@@ -66,14 +79,12 @@ class CodeEditSearchRetrieval(MultilingualTask, AbsTaskRetrieval):
 
             self.queries[lang] = {
                 self._EVAL_SPLIT: {
-                    str(i): row["instruction"]
-                    for i, row in enumerate(sub)
+                    str(i): row["instruction"] for i, row in enumerate(sub)
                 }
             }
             self.corpus[lang] = {
                 self._EVAL_SPLIT: {
-                    str(row["commit"]): {"text": row["diff"]}
-                    for row in sub
+                    str(row["commit"]): {"text": row["diff"]} for row in sub
                 }
             }
             self.relevant_docs[lang] = {
