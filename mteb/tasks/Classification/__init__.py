@@ -24,6 +24,14 @@ from .eng.ContractNLIConfidentialityOfAgreementLegalBenchClassification import *
 from .eng.ContractNLIExplicitIdentificationLegalBenchClassification import *
 from .eng.ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification import *
 from .eng.ContractNLILimitedUseLegalBenchClassification import *
+from .eng.ContractNLINoLicensingLegalBenchClassification import *
+from .eng.ContractNLINoticeOnCompelledDisclosureLegalBenchClassification import *
+from .eng.ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification import *
+from .eng.ContractNLIPermissibleCopyLegalBenchClassification import *
+from .eng.ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification import *
+from .eng.ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification import *
+from .eng.ContractNLIReturnOfConfidentialInformationLegalBenchClassification import *
+from .eng.ContractNLISharingWithEmployeesLegalBenchClassification import *
 from .eng.DBpediaClassification import *
 from .eng.EmotionClassification import *
 from .eng.FinancialPhrasebankClassification import *
@@ -68,6 +76,7 @@ from .nep.NepaliNewsClassification import *
 from .nld.DutchBookReviewSentimentClassification import *
 from .nob.NoRecClassification import *
 from .nob.NorwegianParliamentClassification import *
+from .ory.OdiaNewsClassification import *
 from .pan.PunjabiNewsClassification import *
 from .pol.PolishClassification import *
 from .ron.RomanianSentimentClassification import *
