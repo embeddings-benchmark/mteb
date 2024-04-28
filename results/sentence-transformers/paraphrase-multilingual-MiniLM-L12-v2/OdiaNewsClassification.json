@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "ffb8a34c9637fb20256e8c7be02504d16af4bd6b",
+  "mteb_dataset_name": "OdiaNewsClassification",
+  "mteb_version": "1.7.5",
+  "test": {
+    "accuracy": 0.701171875,
+    "accuracy_stderr": 0.029764336986158216,
+    "evaluation_time": 32.07,
+    "f1": 0.7014107598037894,
+    "f1_stderr": 0.029025391607672067,
+    "main_score": 0.701171875
+  }
+}
