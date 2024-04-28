@@ -106,7 +106,7 @@ def get_tasks(
     Examples:
         >>> get_tasks(languages=["eng", "deu"], script=["Latn"], domains=["Legal"])
         >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Classification"])
-        >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Clustering"], exclude_superseeded_datasets=False)
+        >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Clustering"], exclude_superseeded=False)
     """
     tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
     tasks = [
