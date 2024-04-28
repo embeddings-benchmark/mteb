@@ -19,7 +19,10 @@ class MultiSubsetLoader:
         self.data_loaded = True
 
     def fast_load(self, **kwargs):
-        """Load all subsets at once, then group by language with Polars"""
+        """Load all subsets at once, then group by language with Polars. Using fast loading has two requirements:
+        - Each row in the dataset should have a 'lang' feature giving the corresponding language/language pair
+        - The datasets must have a 'default' config that loads all the subsets of the dataset (see https://huggingface.co/docs/datasets/en/repository_structure#configurations)
+        """
         self.dataset = {}
         merged_dataset = datasets.load_dataset(
             **self.metadata_dict["dataset"]
