@@ -121,6 +121,7 @@ _LANGUAGES = {
 
 
 class TatoebaBitextMining(AbsTaskBitextMining, CrosslingualTask):
+    fast_loading = True
     metadata = TaskMetadata(
         name="Tatoeba",
         dataset={
@@ -147,4 +148,3 @@ class TatoebaBitextMining(AbsTaskBitextMining, CrosslingualTask):
         n_samples={"test": 2000},
         avg_character_length={"test": 39.4},
     )
-    fast_loading = True
