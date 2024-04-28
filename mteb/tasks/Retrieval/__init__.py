@@ -9,6 +9,7 @@ from .deu.GerDaLIRSmallRetrieval import *
 from .deu.GermanDPRRetrieval import *
 from .deu.GermanQuADRetrieval import *
 from .deu.LegalQuADRetrieval import *
+from .ell.GreekCivicsQA import *
 from .eng.AILACasedocsRetrieval import *
 from .eng.AILAStatutesRetrieval import *
 from .eng.ArguAnaRetrieval import *
@@ -81,6 +82,7 @@ from .pol.QuoraPLRetrieval import *
 from .pol.SCIDOCSPLRetrieval import *
 from .pol.SciFactPLRetrieval import *
 from .pol.TRECCOVIDPLRetrieval import *
+from .slk.SlovakSumRetrieval import *
 from .spa.SpanishPassageRetrievalS2P import *
 from .spa.SpanishPassageRetrievalS2S import *
 from .swe.swedn_retrieval import *
