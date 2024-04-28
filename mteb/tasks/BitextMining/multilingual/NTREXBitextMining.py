@@ -214,7 +214,7 @@ _LANGUAGES = {
 _SPLIT = ["test"]
 
 # number of sentences to use for evaluation
-_N = 256
+_N = 1997
 
 
 def extend_lang_pairs() -> dict[str, list[str]]:
@@ -258,7 +258,8 @@ class NTREXBitextMining(AbsTaskBitextMining, CrosslingualTask):
         eval_splits=_SPLIT,
         eval_langs=_EVAL_LANGS,
         main_score="f1",
-        date=("2019-08-01", "2022-11-01"), # publication date newstest19 until publication date NTREX paper
+        # publication date newstest19 until publication date NTREX paper
+        date=("2019-08-01", "2022-11-01"),
         form=["written"],
         domains=["News"],
         task_subtypes=[],
@@ -267,7 +268,7 @@ class NTREXBitextMining(AbsTaskBitextMining, CrosslingualTask):
         annotations_creators="expert-annotated",
         dialect=[],
         text_creation="human-translated and localized",
-        n_samples={"test": _N*len(_EVAL_LANGS)},
+        n_samples={"test": _N * len(_EVAL_LANGS)},
         avg_character_length={"test": 120},
         bibtex_citation="""
 @inproceedings{federmann-etal-2022-ntrex,
