@@ -38,5 +38,5 @@ class AJGT(AbsTaskClassification):
 }
 """,
         n_samples={"train": 1800},
-        avg_character_length={"test": 46.81},
+        avg_character_length={"train": 46.81},
     )
