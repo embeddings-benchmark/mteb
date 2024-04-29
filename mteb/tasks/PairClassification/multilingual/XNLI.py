@@ -62,14 +62,15 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
         location = {Brussels, Belgium},
         }
         """,
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"validation": 2163, "test": 2460},
+        avg_character_length={"validation": 106.5, "test": 106.5},
     )
 
     def dataset_transform(self):
         _dataset = {}
         for lang in self.langs:
             _dataset[lang] = {}
+            self.dataset[lang] = self.stratified_subsampling(self.dataset[lang], seed=self.seed, splits=self.metadata.eval_splits)
             for split in self.metadata.eval_splits:
                 # 0=entailment, 2=contradiction. Filter out neutral to match the task.
                 # Then map entailment as positive (1) and contradiction as negative (0).
