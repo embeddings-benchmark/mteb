@@ -69,7 +69,6 @@ class MultiEURLEXMultilabelClassification(
   url = {https://arxiv.org/abs/2109.00904}
 }
         """,
-        # TODO: count these
-        n_samples={"validation": 0, "test": 0},
-        avg_character_length={"validation": 0, "test": 0},
+        n_samples={"validation": 5000, "test": 5000},
+        avg_character_length={"validation": 8484.82, "test": 12014.41},
     )
