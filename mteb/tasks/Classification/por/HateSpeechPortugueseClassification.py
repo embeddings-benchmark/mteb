@@ -17,7 +17,7 @@ class HateSpeechPortugueseClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         eval_splits=["train"],
-        eval_langs=["prt-Latn"],
+        eval_langs=["por-Latn"],
         main_score="accuracy",
         date=("2017-03-08", "2017-03-09"),
         form=["written"],
@@ -53,3 +53,8 @@ class HateSpeechPortugueseClassification(AbsTaskClassification):
         n_samples={"train": 5670},
         avg_character_length={"train": 101.02},
     )
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"]
+        )

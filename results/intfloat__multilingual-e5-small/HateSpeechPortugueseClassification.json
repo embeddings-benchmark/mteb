@@ -3,13 +3,13 @@
   "mteb_dataset_name": "HateSpeechPortugueseClassification",
   "mteb_version": "1.7.40",
   "train": {
-    "accuracy": 0.5707407407407408,
-    "accuracy_stderr": 0.0752280338829271,
-    "ap": 0.35698149130745577,
-    "ap_stderr": 0.02781354454761876,
-    "evaluation_time": 5.75,
-    "f1": 0.5452658111502081,
-    "f1_stderr": 0.0649898746131606,
-    "main_score": 0.5707407407407408
+    "accuracy": 0.586474609375,
+    "accuracy_stderr": 0.031273985241132105,
+    "ap": 0.3562588495082656,
+    "ap_stderr": 0.01829656314448387,
+    "evaluation_time": 4.36,
+    "f1": 0.5588302127909264,
+    "f1_stderr": 0.028332165140320574,
+    "main_score": 0.586474609375
   }
 }
