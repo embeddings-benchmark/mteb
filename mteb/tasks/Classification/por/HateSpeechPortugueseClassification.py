@@ -50,7 +50,7 @@ class HateSpeechPortugueseClassification(AbsTaskClassification):
                 pages = "94--104",
             }
         """,
-        n_samples={"train": 5670},
+        n_samples={"train": 2048},
         avg_character_length={"train": 101.02},
     )
 
