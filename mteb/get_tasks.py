@@ -90,8 +90,9 @@ def get_tasks(
 
     Args:
         languages: A list of languages either specified as 3 letter languages codes (ISO 639-3, e.g. "eng") or as script languages codes e.g.
-            "eng-Latn".
-        script: A list of script codes (ISO 15924 codes). If None, all scripts are included.
+            "eng-Latn". For multilingual tasks this will also remove languages that are not in the specified list.
+        script: A list of script codes (ISO 15924 codes). If None, all scripts are included. For multilingual tasks this will also remove scripts
+            that are not in the specified list.
         domains: A list of task domains.
         task_types: A string specifying the type of task. If None, all tasks are included.
         categories: A list of task categories these include "s2s" (sentence to sentence), "s2p" (sentence to paragraph) and "p2p" (paragraph to
@@ -108,7 +109,7 @@ def get_tasks(
     """
     tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
     tasks = [
-        cls()
+        cls().filter_languages(languages, script)
         for cat_cls in tasks_categories_cls
         for cls in cat_cls.__subclasses__()
         if cat_cls.__name__.startswith("AbsTask")
