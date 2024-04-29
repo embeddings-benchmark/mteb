@@ -74,6 +74,7 @@ from .multilingual.MultiHateClassification import *
 from .multilingual.NordicLangClassification import *
 from .multilingual.ScalaClassification import *
 from .multilingual.SouthAfricanLangClassification import *
+from .multilingual.TweetSentimentClassification import *
 from .nep.NepaliNewsClassification import *
 from .nld.DutchBookReviewSentimentClassification import *
 from .nob.NoRecClassification import *
