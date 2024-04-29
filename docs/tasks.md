@@ -115,6 +115,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [GerDaLIR](https://github.com/lavis-nlp/GerDaLIR) | ['deu'] | Retrieval | s2p |  |  |  |
 | [GerDaLIRSmall](https://github.com/lavis-nlp/GerDaLIR) | ['deu'] | Retrieval | p2p | [Legal] |  |  |
 | [GermanDPR](https://huggingface.co/datasets/deepset/germandpr) | ['deu'] | Retrieval | s2p |  |  |  |
+| [GermanPoliticiansTwitterSentimentClassification](https://aclanthology.org/2022.konvens-1.9) | ['deu'] | Classification | s2s | [Social, Government] | {'test': 357} | {'test': 302.48} |
 | [GermanQuAD-Retrieval](https://www.kaggle.com/datasets/GermanQuAD) | ['deu'] | Retrieval | s2p |  |  |  |
 | [GermanSTSBenchmark](https://github.com/t-systems-on-site-services-gmbh/german-STSbenchmark) | ['deu'] | STS | s2s |  |  |  |
 | [GreekCivicsQA](https://huggingface.co/datasets/antoinelb7/alloprof) | ['ell'] | Retrieval | s2p | [Academic] | {'default': 407} | {'default': 2226.85} |
@@ -123,6 +124,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [GujaratiNewsClassification](https://github.com/goru001/nlp-for-gujarati) | ['guj'] | Classification | s2s | [News] | {'train': 5269, 'test': 1318} | {'train': 61.95, 'test': 61.91} |
 | [HALClusteringS2S](https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s) | ['fra'] | Clustering | s2s |  |  |  |
 | [HagridRetrieval](https://github.com/project-miracl/hagrid) | ['eng'] | Retrieval | s2p |  |  |  |
+| [HateSpeechPortugueseClassification](https://aclanthology.org/W19-3510) | ['por'] | Classification | s2s | [Social] | {'train': 2048} | {'train': 101.02} |
 | [HindiDiscourseClassification](https://aclanthology.org/2020.lrec-1.149/) | ['hin'] | Classification | s2s | [Fiction, Social] | {'train': 2048} | {'train': 79.23828125} |
 | [HotelReviewSentimentClassification](https://link.springer.com/chapter/10.1007/978-3-319-67056-0_3) (Elnagar et al., 2018) | ['ara'] | Classification | s2s | [Reviews] | {'train': 2048} | {'train': 137.2} |
 | [HotpotQA](https://hotpotqa.github.io/) | ['eng'] | Retrieval | s2p |  |  |  |
@@ -235,6 +237,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [RonSTS](https://openreview.net/forum?id=JH61CD7afTv) (Dumitrescu et al., 2021) | ['ron'] | STS | s2s | [News, Social, Web] | {'test': 1379} | {'test': 60.5} |
 | [SCIDOCS](https://allenai.org/data/scidocs) | ['eng'] | Retrieval | s2p |  |  |  |
 | [SCIDOCS-PL](https://allenai.org/data/scidocs) | ['pol'] | Retrieval | s2p |  |  |  |
+| [SIB200Classification](https://arxiv.org/abs/2309.07445) (Adelani et al., 2023) | ['ace', 'acm', 'acq', 'aeb', 'afr', 'ajp', 'aka', 'als', 'amh', 'apc', 'arb', 'ars', 'ary', 'arz', 'asm', 'ast', 'awa', 'ayr', 'azb', 'azj', 'bak', 'bam', 'ban', 'bel', 'bem', 'ben', 'bho', 'bjn', 'bod', 'bos', 'bug', 'bul', 'cat', 'ceb', 'ces', 'cjk', 'ckb', 'crh', 'cym', 'dan', 'deu', 'dik', 'dyu', 'dzo', 'ell', 'eng', 'epo', 'est', 'eus', 'ewe', 'fao', 'fij', 'fin', 'fon', 'fra', 'fur', 'fuv', 'gaz', 'gla', 'gle', 'glg', 'grn', 'guj', 'hat', 'hau', 'heb', 'hin', 'hne', 'hrv', 'hun', 'hye', 'ibo', 'ilo', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kab', 'kac', 'kam', 'kan', 'kas', 'kat', 'kaz', 'kbp', 'kea', 'khk', 'khm', 'kik', 'kin', 'kir', 'kmb', 'kmr', 'knc', 'kon', 'kor', 'lao', 'lij', 'lim', 'lin', 'lit', 'lmo', 'ltg', 'ltz', 'lua', 'lug', 'luo', 'lus', 'lvs', 'mag', 'mai', 'mal', 'mar', 'min', 'mkd', 'mlt', 'mni', 'mos', 'mri', 'mya', 'nld', 'nno', 'nob', 'npi', 'nqo', 'nso', 'nus', 'nya', 'oci', 'ory', 'pag', 'pan', 'pap', 'pbt', 'pes', 'plt', 'pol', 'por', 'prs', 'quy', 'ron', 'run', 'rus', 'sag', 'san', 'sat', 'scn', 'shn', 'sin', 'slk', 'slv', 'smo', 'sna', 'snd', 'som', 'sot', 'spa', 'srd', 'srp', 'ssw', 'sun', 'swe', 'swh', 'szl', 'tam', 'taq', 'tat', 'tel', 'tgk', 'tgl', 'tha', 'tir', 'tpi', 'tsn', 'tso', 'tuk', 'tum', 'tur', 'twi', 'tzm', 'uig', 'ukr', 'umb', 'urd', 'uzn', 'vec', 'vie', 'war', 'wol', 'xho', 'ydd', 'yor', 'yue', 'zho', 'zsm', 'zul'] | Classification | s2s | [News] | {'train': 701, 'validation': 99, 'test': 204} | {'train': 111.24, 'validation': 97.11, 'test': 135.53} |
 | [SICK-E-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | PairClassification | s2s |  |  |  |
 | [SICK-R](https://aclanthology.org/2020.lrec-1.207) | ['eng'] | STS | s2s |  |  |  |
 | [SICK-R-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | STS | s2s |  | {'test': 9812} | {'test': 42.8} |
@@ -305,6 +308,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [TurkishProductSentimentClassification](https://www.win.tue.nl/~mpechen/publications/pubs/MT_WISDOM2013.pdf) (Erkin Demirtas, 2013) | ['tur'] | Classification | s2s | [Reviews] | {'test': 800} | {'test': 246.85} |
 | [TweetEmotionClassification](https://link.springer.com/chapter/10.1007/978-3-319-77116-8_8) (Al-Khatib et al., 2018) | ['ara'] | Classification | s2s | [Social] | {'train': 2048} | {'train': 78.8} |
 | [TweetSarcasmClassification](https://aclanthology.org/2020.osact-1.5/) | ['ara'] | Classification | s2s | [Social] | {'test': 2110} | {'test': 102.1} |
+| [TweetSentimentClassification](https://aclanthology.org/2022.lrec-1.27) | ['ara', 'deu', 'eng', 'fra', 'hin', 'ita', 'por', 'spa'] | Classification | s2s | [Social] | {'test': 2048} | {'test': 83.51} |
 | [TweetSentimentExtractionClassification](https://www.kaggle.com/competitions/tweet-sentiment-extraction/overview) | ['eng'] | Classification | s2s |  | {'test': 3534} | {'test': 67.8} |
 | [TwentyNewsgroupsClustering](https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html) | ['eng'] | Clustering | s2s |  | {'test': 59545} | {'test': 32.0} |
 | [TwitterHjerneRetrieval](https://huggingface.co/datasets/sorenmulli/da-hashtag-twitterhjerne) (Holm et al., 2024) | ['dan'] | Retrieval | p2p | [Social] | {'train': 340} | {'train': 138.23} |
@@ -322,6 +326,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [Waimai](https://aclanthology.org/2023.nodalida-1.20/) | ['cmn'] | Classification | s2s |  |  |  |
 | [WikiCitiesClustering](https://huggingface.co/datasets/wikipedia) | ['eng'] | Clustering | p2p |  |  |  |
 | XMarket | ['deu', 'eng', 'spa'] | Retrieval | s2p |  |  |  |
+| [XNLI](https://aclanthology.org/D18-1269/) (Conneau et al., 2018) | ['ara', 'bul', 'deu', 'ell', 'eng', 'fra', 'hin', 'rus', 'spa', 'swa', 'tha', 'tur', 'vie', 'zho'] | PairClassification | s2s | [Non-fiction, Fiction, Government] | {'validation': 2163, 'test': 2460} | {'validation': 106.5, 'test': 106.5} |
 | [XPQARetrieval](https://arxiv.org/abs/2305.09249) | ['ara', 'cmn', 'deu', 'fra', 'hin', 'ita', 'jpn', 'kor', 'pol', 'por', 'spa', 'tam'] | Retrieval | s2p |  |  |  |
 | [XQuADRetrieval](https://huggingface.co/datasets/xquad) (Mikel Artetxe, 2019) | ['arb', 'deu', 'ell', 'eng', 'hin', 'ron', 'rus', 'spa', 'tha', 'tur', 'vie', 'zho'] | Retrieval | s2p | [Web] | {'test': 1190} | {'test': 788.7} |
 | [YelpReviewFullClassification](https://arxiv.org/abs/1509.01626) (Zhang et al., 2015) | ['eng'] | Classification | s2s | [Reviews] | {'test': 50000} |  |
