@@ -51,7 +51,7 @@ class GermanPoliticiansTwitterSentimentClassification(AbsTaskClassification):
             }
         """,
         n_samples={"test": 357},
-        avg_character_length={"test": 232},
+        avg_character_length={"test": 302.48},
     )
 
     def dataset_transform(self):

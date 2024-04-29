@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "b0f431acbf8d3865cb7c7b3effb2a9771a618ebc",
+  "mteb_dataset_name": "HateSpeechPortugueseClassification",
+  "mteb_version": "1.7.40",
+  "train": {
+    "accuracy": 0.5586596119929453,
+    "accuracy_stderr": 0.0699646265997118,
+    "ap": 0.3472329553086473,
+    "ap_stderr": 0.026091868770640018,
+    "evaluation_time": 5.37,
+    "f1": 0.5325423479422247,
+    "f1_stderr": 0.05934760812161849,
+    "main_score": 0.5586596119929453
+  }
+}
