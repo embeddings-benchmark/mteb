@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import logging
+from collections import Counter
+from typing import Dict, Set
 
 from mteb.abstasks import AbsTask
 from mteb.abstasks.languages import (
@@ -78,6 +80,57 @@ def filter_task_by_categories(
     return [t for t in tasks if t.metadata.category in _categories]
 
 
+class MTEBTasks(tuple):
+    def __repr__(self):
+        """MTEBTasks repr"""
+        return "MTEBTasks" + super().__repr__()
+
+    @staticmethod
+    def _extract_property_from_task(task, property):
+        if hasattr(task, property):
+            return getattr(task, property)
+        elif property in task.metadata_dict:
+            return task.metadata_dict[property]
+        else:
+            raise KeyError("Property neither in Task attribute or metadata keys.")
+
+    @property
+    def languages(self) -> Set:
+        """Return all languages from tasks"""
+        langs = set()
+        for task in self:
+            for lg in task.languages:
+                langs.add(lg)
+        return langs
+
+    def count_languages(self) -> Dict:
+        """Summarize count of all languages from tasks"""
+        langs = []
+        for task in self:
+            langs.extend(task.languages)
+        return Counter(langs)
+
+    def to_markdown(self, properties: str = ["type", "license", "languages"]) -> str:
+        """Generate markdown table with tasks summary
+
+        Args:
+            properties: list of metadata to summarize from a Task class.
+
+        Returns:
+            string with a markdown table.
+        """
+        markdown_table = "| Task" + "".join([f"| {p} " for p in properties]) + "|\n"
+        _head_sep = "| ---" * len(properties) + " |\n"
+        markdown_table += _head_sep
+        for task in self:
+            markdown_table += f"| {task.metadata.name}"
+            markdown_table += "".join(
+                [f"| {self._extract_property_from_task(task, p)}" for p in properties]
+            )
+            markdown_table += " |\n"
+        return markdown_table
+
+
 def get_tasks(
     languages: list[str] | None = None,
     script: list[str] | None = None,
@@ -85,7 +138,7 @@ def get_tasks(
     task_types: list[TASK_TYPE] | None = None,
     categories: list[TASK_CATEGORY] | None = None,
     exclude_superseeded: bool = True,
-) -> list[AbsTask]:
+) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
 
     Args:
@@ -104,8 +157,8 @@ def get_tasks(
 
     Examples:
         >>> get_tasks(languages=["eng", "deu"], script=["Latn"], domains=["Legal"])
-        >>> get_tasks(languages=["eng"], script=["Latn"], task_type="Classification")
-        >>> get_tasks(languages=["eng"], script=["Latn"], task_type="Clustering", exclude_superseeded_datasets=False)
+        >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Classification"])
+        >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Clustering"], exclude_superseeded=False)
     """
     tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
     tasks = [
@@ -121,11 +174,11 @@ def get_tasks(
         tasks = filter_tasks_by_script(tasks, script)
     if domains:
         tasks = filter_tasks_by_domains(tasks, domains)
-    if exclude_superseeded:
-        tasks = filter_superseeded_datasets(tasks)
     if task_types:
         tasks = filter_tasks_by_task_types(tasks, task_types)
     if categories:
         tasks = filter_task_by_categories(tasks, categories)
+    if exclude_superseeded:
+        tasks = filter_superseeded_datasets(tasks)
 
-    return tasks
+    return MTEBTasks(tasks)
