@@ -40,12 +40,12 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
         date=("2018-01-01", "2018-11-04"),
         form=["written"],
         domains=["Non-fiction", "Fiction", "Government"],
-        task_subtypes=None,  # does not match any.
+        task_subtypes=[],
         license="Not specified",
         socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation=None,
+        text_creation="created",
         bibtex_citation="""@InProceedings{conneau2018xnli,
         author = {Conneau, Alexis
                         and Rinott, Ruty
