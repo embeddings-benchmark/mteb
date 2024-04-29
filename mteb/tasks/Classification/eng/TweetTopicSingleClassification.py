@@ -54,4 +54,3 @@ class TweetTopicSingleClassification(AbsTaskClassification):
 
     def dataset_transform(self):
         self.dataset["train"] = self.dataset["train_2021"]
-        return super().dataset_transform()
