@@ -125,8 +125,8 @@ class TatoebaBitextMining(AbsTaskBitextMining, CrosslingualTask):
     metadata = TaskMetadata(
         name="Tatoeba",
         dataset={
-            "path": "loicmagne/tatoeba-bitext-mining",
-            "revision": "482264e767155e1f8baf2c27815db6cba8e4efa3",
+            "path": "mteb/tatoeba-bitext-mining",
+            "revision": "69e8f12da6e31d59addadda9a9c8a2e601a0e282",
         },
         description="1,000 English-aligned sentence pairs for each language based on the Tatoeba corpus",
         reference="https://github.com/facebookresearch/LASER/tree/main/data/tatoeba/v1",
