@@ -25,7 +25,7 @@ class TweetTopicSingleClassification(AbsTaskClassification):
         main_score="accuracy",
         date=("2019-09-01", "2021-08-31"),
         form=["written"],
-        domains=["News"],
+        domains=["Social", "News"],
         task_subtypes=["Topic classification"],
         license="Other",
         socioeconomic_status="medium",
