@@ -30,7 +30,7 @@ class TweetSentimentClassification(MultilingualTask, AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
-        date=("2022-03-18", "2022-03-20"),
+        date=("2018-05-01", "2020-03-31"),
         form=["written"],
         domains=["Social"],
         task_subtypes=["Sentiment/Hate speech"],
