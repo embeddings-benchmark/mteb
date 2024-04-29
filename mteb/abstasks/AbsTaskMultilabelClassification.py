@@ -106,9 +106,6 @@ class AbsTaskMultilabelClassification(AbsTask):
         # Encode all unique sentences at the indices
         unique_train_indices = list(set(itertools.chain.from_iterable(train_samples)))
         unique_train_sentences = train_split.select(unique_train_indices)["text"]
-        unique_train_sentences = [
-            train_split["text"][idx] for idx in unique_train_indices
-        ]
         unique_train_embeddings = dict(
             zip(unique_train_indices, model.encode(unique_train_sentences))
         )
