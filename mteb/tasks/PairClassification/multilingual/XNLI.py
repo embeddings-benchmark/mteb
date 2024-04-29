@@ -5,7 +5,6 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
-
 _LANGS = {
     "ar": ["ara-Arab"],
     "bg": ["bul-Cyrl"],
@@ -23,6 +22,7 @@ _LANGS = {
     "zh": ["zho-Hans"],
 }
 
+
 class XNLI(MultilingualTask, AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="XNLI",
@@ -31,7 +31,7 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
             "revision": "b8dd5d7af51114dbda02c0e3f6133f332186418e",
         },
         description="",
-        reference="https://arxiv.org/abs/1908.11828",
+        reference="https://aclanthology.org/D18-1269/",
         category="s2s",
         type="PairClassification",
         eval_splits=["test", "validation"],
@@ -40,7 +40,7 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
         date=("2018-01-01", "2018-11-04"),
         form=["written"],
         domains=["Non-fiction", "Fiction", "Government"],
-        task_subtypes=None, #does not match any.
+        task_subtypes=None,  # does not match any.
         license="Not specified",
         socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
@@ -73,8 +73,12 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
             for split in self.metadata.eval_splits:
                 # 0=entailment, 2=contradiction. Filter out neutral to match the task.
                 # Then map entailment as positive (1) and contradiction as negative (0).
-                hf_dataset = self.dataset[lang][split].filter(lambda x: x["label"] in [0, 2])
-                hf_dataset = hf_dataset.map(lambda example: {'label': 0 if example['label']==2 else 1})
+                hf_dataset = self.dataset[lang][split].filter(
+                    lambda x: x["label"] in [0, 2]
+                )
+                hf_dataset = hf_dataset.map(
+                    lambda example: {"label": 0 if example["label"] == 2 else 1}
+                )
 
                 _dataset[lang][split] = [
                     {
