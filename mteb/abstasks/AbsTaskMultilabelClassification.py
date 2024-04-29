@@ -3,6 +3,7 @@ from __future__ import annotations
 import itertools
 import logging
 from collections import defaultdict
+from typing import Iterable
 
 import numpy as np
 from sklearn.preprocessing import MultiLabelBinarizer
@@ -104,6 +105,7 @@ class AbsTaskMultilabelClassification(AbsTask):
             train_samples.append(sample_indices)
         # Encode all unique sentences at the indices
         unique_train_indices = list(set(itertools.chain.from_iterable(train_samples)))
+        unique_train_sentences = train_split.select(unique_train_indices)["text"]
         unique_train_sentences = [
             train_split["text"][idx] for idx in unique_train_indices
         ]
@@ -118,7 +120,7 @@ class AbsTaskMultilabelClassification(AbsTask):
                 + "=" * 10
             )
             X_train = np.stack([unique_train_embeddings[idx] for idx in sample_indices])
-            y_train = [train_split["label"][idx] for idx in sample_indices]
+            y_train = train_split.select(sample_indices)["label"]
             binarizer = MultiLabelBinarizer()
             y_train = binarizer.fit_transform(y_train)
             y_test = binarizer.transform(eval_split["label"])
