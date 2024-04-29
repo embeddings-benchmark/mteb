@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from collections import Counter
-from typing import Dict
+from typing import Dict, Set
 
 from mteb.abstasks import AbsTask
 from mteb.abstasks.languages import (
@@ -80,6 +80,57 @@ def filter_task_by_categories(
     return [t for t in tasks if t.metadata.category in _categories]
 
 
+class MTEBTasks(tuple):
+    def __repr__(self):
+        """MTEBTasks repr"""
+        return "MTEBTasks" + super().__repr__()
+
+    @staticmethod
+    def _extract_property_from_task(task, property):
+        if hasattr(task, property):
+            return getattr(task, property)
+        elif property in task.metadata_dict:
+            return task.metadata_dict[property]
+        else:
+            raise KeyError("Property neither in Task attribute or metadata keys.")
+
+    @property
+    def languages(self) -> Set:
+        """Return all languages from tasks"""
+        langs = set()
+        for task in self:
+            for lg in task.languages:
+                langs.add(lg)
+        return langs
+
+    def count_languages(self) -> Dict:
+        """Summarize count of all languages from tasks"""
+        langs = []
+        for task in self:
+            langs.extend(task.languages)
+        return Counter(langs)
+
+    def to_markdown(self, properties: str = ["type", "license", "languages"]) -> str:
+        """Generate markdown table with tasks summary
+
+        Args:
+            properties: list of metadata to summarize from a Task class.
+
+        Returns:
+            string with a markdown table.
+        """
+        markdown_table = "| Task" + "".join([f"| {p} " for p in properties]) + "|\n"
+        _head_sep = "| ---" * len(properties) + " |\n"
+        markdown_table += _head_sep
+        for task in self:
+            markdown_table += f"| {task.metadata.name}"
+            markdown_table += "".join(
+                [f"| {self._extract_property_from_task(task, p)}" for p in properties]
+            )
+            markdown_table += " |\n"
+        return markdown_table
+
+
 def get_tasks(
     languages: list[str] | None = None,
     script: list[str] | None = None,
@@ -87,7 +138,7 @@ def get_tasks(
     task_types: list[TASK_TYPE] | None = None,
     categories: list[TASK_CATEGORY] | None = None,
     exclude_superseeded: bool = True,
-) -> list[AbsTask]:
+) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
 
     Args:
@@ -129,37 +180,4 @@ def get_tasks(
     if exclude_superseeded:
         tasks = filter_superseeded_datasets(tasks)
 
-    return tasks
-
-
-def count_languages(
-    domains: list[TASK_DOMAIN] | None = None,
-    task_types: list[TASK_TYPE] | None = None,
-    categories: list[TASK_CATEGORY] | None = None,
-    exclude_superseeded: bool = True,
-) -> Dict:
-    """Get a summary of language count.
-
-    Args:
-        domains: A list of task domains.
-        task_types: A string specifying the type of task. If None, all tasks are included.
-        categories: A list of task categories these include "s2s" (sentence to sentence), "s2p" (sentence to paragraph) and "p2p" (paragraph to
-            paragraph).
-        exclude_superseeded: A boolean flag to exclude datasets which are superseeded by another.
-
-    Returns:
-        A dictionary with language occurence, per domain, task type, or category.
-
-    Examples:
-        >>> count_languages(task_types=['Clustering'])
-    """
-    tasks = get_tasks(
-        domains=domains,
-        task_types=task_types,
-        categories=categories,
-        exclude_superseeded=exclude_superseeded,
-    )
-    langs = []
-    for task in tasks:
-        langs.extend(task.languages)
-    return Counter(langs)
+    return MTEBTasks(tasks)
