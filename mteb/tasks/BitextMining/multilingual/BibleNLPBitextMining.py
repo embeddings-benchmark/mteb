@@ -228,7 +228,6 @@ _LANGUAGES = [
     "eko_Latn",  # Kota (Gabon)
     "emi_Latn",  # Mussau-Emira
     "emp_Latn",  # Northern Emberá
-    "eng_Latn",  # English
     "enq_Latn",  # Enga
     "epo_Latn",  # Esperanto
     "eri_Latn",  # Ogea
