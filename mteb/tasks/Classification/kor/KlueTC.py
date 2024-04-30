@@ -19,7 +19,7 @@ class KlueTC(AbsTaskClassification):
         eval_splits=["validation"],
         eval_langs=["kor-Hang"],
         main_score="accuracy",
-        date=("2016-01-01", "2020-12-31"), # from 2016 to 2020
+        date=("2016-01-01", "2020-12-31"),  # from 2016 to 2020
         form=["written"],
         domains=["News"],
         task_subtypes=["Topic classification"],
@@ -42,12 +42,14 @@ class KlueTC(AbsTaskClassification):
 
     def dataset_transform(self):
         def id2str(example):
-            return {'label': label_feature.int2str(example['label_id'])}
-        
-        if 'features' in self.dataset:
-            label_feature = self.dataset.features['label']
+            return {"label": label_feature.int2str(example["label_id"])}
+
+        if "features" in self.dataset:
+            label_feature = self.dataset.features["label"]
         else:
-            label_feature = self.dataset['validation'].features['label']
-        
-        self.dataset = self.dataset.rename_columns({"title": "text", "label": "label_id"})
-        self.dataset = self.dataset.map(id2str)        
+            label_feature = self.dataset["validation"].features["label"]
+
+        self.dataset = self.dataset.rename_columns(
+            {"title": "text", "label": "label_id"}
+        )
+        self.dataset = self.dataset.map(id2str)
