@@ -74,7 +74,10 @@ class CodeEditSearchRetrieval(MultilingualTask, AbsTaskRetrieval):
 
         for lang, sub in lang_subs.items():
             sub = sub[
-                : min(len(sub), self.metadata_dict["n_samples"][self._EVAL_SPLIT] / len(_LANGS))
+                : min(
+                    len(sub),
+                    self.metadata_dict["n_samples"][self._EVAL_SPLIT] / len(_LANGS),
+                )
             ]
 
             self.queries[lang] = {
