@@ -39,7 +39,7 @@ class PlscClusteringS2S(AbsTaskClustering):
     metadata = TaskMetadata(
         name="PlscClusteringS2S",
         description="Clustering of polish article titles from Library of Science (https://bibliotekanauki.pl/), either "
-                    "on the scientific field or discipline.",
+        "on the scientific field or discipline.",
         reference="https://huggingface.co/datasets/rafalposwiata/plsc",
         dataset={
             "path": "PL-MTEB/plsc-clustering-s2s",
@@ -69,7 +69,7 @@ class PlscClusteringP2P(AbsTaskClustering):
     metadata = TaskMetadata(
         name="PlscClusteringP2P",
         description="Clustering of polish article titles+abstracts from Library of Science "
-                    "(https://bibliotekanauki.pl/), either on the scientific field or discipline.",
+        "(https://bibliotekanauki.pl/), either on the scientific field or discipline.",
         reference="https://huggingface.co/datasets/rafalposwiata/plsc",
         dataset={
             "path": "PL-MTEB/plsc-clustering-p2p",
