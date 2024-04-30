@@ -49,7 +49,7 @@ class CodeEditSearchRetrieval(MultilingualTask, AbsTaskRetrieval):
         text_creation="found",
         bibtex_citation="@article{muennighoff2023octopack, title={OctoPack: Instruction Tuning Code Large Language Models}, author={Niklas Muennighoff and Qian Liu and Armel Zebaze and Qinkai Zheng and Binyuan Hui and Terry Yue Zhuo and Swayam Singh and Xiangru Tang and Leandro von Werra and Shayne Longpre}, journal={arXiv preprint arXiv:2308.07124}, year={2023} }",
         n_samples={
-            _EVAL_SPLIT: 1000,
+            _EVAL_SPLIT: 1000 * len(_LANGS),
         },
         avg_character_length={"train": 553.50},
     )
@@ -74,7 +74,7 @@ class CodeEditSearchRetrieval(MultilingualTask, AbsTaskRetrieval):
 
         for lang, sub in lang_subs.items():
             sub = sub[
-                : min(len(sub), self.metadata_dict["n_samples"][self._EVAL_SPLIT])
+                : min(len(sub), self.metadata_dict["n_samples"][self._EVAL_SPLIT] / len(_LANGS))
             ]
 
             self.queries[lang] = {
