@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from .deu.FalseFriendsDeEnPC import *
-from .eng.CitationPredictionLegalBenchPC import *
-from .eng.ConsumerContractsQALegalBenchPC import *
+from .eng.LegalBenchPC import *
 from .eng.SprintDuplicateQuestionsPC import *
 from .eng.TwitterSemEval2015PC import *
 from .eng.TwitterURLCorpusPC import *
