@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "2a6e340e4b59b7c0a78c03a0b79ac27e1b4a2662",
+  "mteb_dataset_name": "SpanishSentimentClassification",
+  "mteb_version": "1.6.36",
+  "test": {
+    "accuracy": 0.8875,
+    "accuracy_stderr": 0.03018123065268773,
+    "ap": 0.9463971088043488,
+    "ap_stderr": 0.012044424657261101,
+    "evaluation_time": 7.64,
+    "f1": 0.8259582434736557,
+    "f1_stderr": 0.033286225542727366,
+    "main_score": 0.8875
+  }
+}

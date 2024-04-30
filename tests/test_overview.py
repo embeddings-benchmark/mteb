@@ -5,6 +5,7 @@ import pytest
 import mteb
 from mteb import get_tasks
 from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
+from mteb.overview import MTEBTasks
 
 
 def test_get_tasks_size_differences():
@@ -52,3 +53,20 @@ def test_get_task(
             assert task.metadata.type in task_types
         if exclude_superseeded_datasets:
             assert task.superseeded_by is None
+
+
+@pytest.mark.parametrize("script", [["Latn"], ["Cyrl"], None])
+@pytest.mark.parametrize("task_types", [["Classification"], ["Clustering"], None])
+def test_MTEBTasks(
+    script: list[str],
+    task_types: list[TASK_TYPE] | None,
+):
+    tasks = mteb.get_tasks(script=script, task_types=task_types)
+    assert isinstance(tasks, MTEBTasks)
+    langs = tasks.languages
+    for t in tasks:
+        len(langs.intersection(t.languages)) > 0
+
+    # check for header of a table
+    n_langs = len(tasks)
+    assert len(tasks.to_markdown().split("\n")) - 3 == n_langs
