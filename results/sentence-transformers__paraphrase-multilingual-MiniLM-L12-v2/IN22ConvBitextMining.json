@@ -1,0 +1,43 @@
+{
+  "conv": {
+    "brx_Deva-eng_Latn": {
+      "accuracy": 0.029451137884872823,
+      "f1": 0.020284572153991612,
+      "main_score": 0.020284572153991612,
+      "precision": 0.019032947047650947,
+      "recall": 0.029451137884872823
+    },
+    "brx_Deva-ory_Orya": {
+      "accuracy": 0.016722408026755852,
+      "f1": 0.009672375091449775,
+      "main_score": 0.009672375091449775,
+      "precision": 0.008638671828327,
+      "recall": 0.016722408026755852
+    },
+    "doi_Deva-eng_Latn": {
+      "accuracy": 0.35093582887700536,
+      "f1": 0.29877745422416263,
+      "main_score": 0.29877745422416263,
+      "precision": 0.2820495530800247,
+      "recall": 0.35093582887700536
+    },
+    "evaluation_time": 8.36,
+    "sat_Olck-eng_Latn": {
+      "accuracy": 0.0006684491978609625,
+      "f1": 3.744813433394748e-06,
+      "main_score": 3.744813433394748e-06,
+      "precision": 1.8776662861262993e-06,
+      "recall": 0.0006684491978609625
+    },
+    "snd_Deva-eng_Latn": {
+      "accuracy": 0.23655913978494625,
+      "f1": 0.1984038110501542,
+      "main_score": 0.1984038110501542,
+      "precision": 0.18710693086133115,
+      "recall": 0.23655913978494625
+    }
+  },
+  "dataset_revision": "189b3d92cfbde4ddb3514223a256eb78b1aca60f",
+  "mteb_dataset_name": "IN22ConvBitextMining",
+  "mteb_version": "1.7.4"
+}

@@ -1,0 +1,25 @@
+{
+  "dataset_revision": "1994e9bb7f3ec07518e3f0d9e870cb293e234686",
+  "mteb_dataset_name": "FilipinoHateSpeechClassification",
+  "mteb_version": "1.7.14",
+  "test": {
+    "accuracy": 0.58359375,
+    "accuracy_stderr": 0.04045951590625083,
+    "ap": 0.5183748795941082,
+    "ap_stderr": 0.026155224372107547,
+    "evaluation_time": 7.17,
+    "f1": 0.576893865333713,
+    "f1_stderr": 0.04030538689824078,
+    "main_score": 0.58359375
+  },
+  "validation": {
+    "accuracy": 0.57998046875,
+    "accuracy_stderr": 0.04052722609169668,
+    "ap": 0.5067390857072789,
+    "ap_stderr": 0.02591176836681942,
+    "evaluation_time": 8.38,
+    "f1": 0.5733334721155943,
+    "f1_stderr": 0.03945981336363871,
+    "main_score": 0.57998046875
+  }
+}

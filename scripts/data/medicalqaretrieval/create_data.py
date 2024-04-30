@@ -9,8 +9,7 @@ from huggingface_hub import create_repo, upload_file
 
 
 def preprocess_data(example: Dict) -> Dict:
-    """
-    Preprocessed the data in a format easier
+    """Preprocessed the data in a format easier
     to handle for the loading of queries and corpus
     ------
     PARAMS
