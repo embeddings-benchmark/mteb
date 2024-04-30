@@ -29,7 +29,8 @@ _LANGUAGES = {
     "uig": ["uig-Hans"],
     "bam": ["bam-Latn"],
     "pol": ["pol-Latn"],
-    # "cym": ["cym-Latn"], # Do not handle this subset since it does not contain a train set required by the evaluation
+    # The train set for this language is created from the test set
+    "cym": ["cym-Latn"],
     # "hin": ["hin-Deva"], # Do not handle this subset since it does not contain a test set required by the evaluation
     "ara": ["ara-Arab"],
     "fas": ["fas-Arab"],
@@ -89,3 +90,16 @@ class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTas
         n_samples={"test": 7000},
         avg_character_length={"test": 56},
     )
+
+    def dataset_transform(self):
+        # create a train set from the test set for Welsh language (cym)
+        lang = "cym"  
+        _dataset = self.dataset[lang]
+        if lang in self.dataset.keys():
+            _dataset = _dataset.class_encode_column("label")
+            _dataset = _dataset["test"].train_test_split(
+                test_size=0.3, seed=self.seed, stratify_by_column="label"
+            )
+            _dataset = self.stratified_subsampling(
+                dataset_dict=_dataset, seed=self.seed, splits=["test"])
+        self.dataset[lang] = _dataset
