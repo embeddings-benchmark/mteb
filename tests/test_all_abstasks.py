@@ -11,16 +11,22 @@ from mteb import MTEB
 from mteb.abstasks import AbsTask
 from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
 
 logging.basicConfig(level=logging.INFO)
 
 
 @pytest.mark.parametrize("task", MTEB().tasks_cls)
 @patch("datasets.load_dataset")
-def test_load_data(mock_load_dataset: Mock, task: AbsTask):
+@patch("datasets.concatenate_datasets")
+def test_load_data(
+    mock_concatenate_datasets: Mock, mock_load_dataset: Mock, task: AbsTask
+):
     # TODO: We skip because this load_data is completely different.
-    if isinstance(task, AbsTaskRetrieval) or isinstance(
-        task, AbsTaskInstructionRetrieval
+    if (
+        isinstance(task, AbsTaskRetrieval)
+        or isinstance(task, AbsTaskInstructionRetrieval)
+        or isinstance(task, MultiSubsetLoader)
     ):
         pytest.skip()
     with patch.object(task, "dataset_transform") as mock_dataset_transform:
