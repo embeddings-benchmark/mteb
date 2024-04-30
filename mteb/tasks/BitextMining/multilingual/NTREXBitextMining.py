@@ -60,9 +60,9 @@ _LANGUAGES = {
     "cym_Latn": {"group": "Celtic/Irish"},
     "dan_Latn": {"group": "Germanic"},
     "deu_Latn": {"group": "Germanic"},
-    # new BitextMining language. Manually added to group (not in M2M100 languages)
+    # Manually added to group (not in M2M100 languages)
     "div_Thaa": {"group": "Indo-Aryan/Tamil/Dravidian"},
-    # new BitextMining language. Manually added to group (not in M2M100 languages)
+    # Manually added to group (not in M2M100 languages)
     "dzo_Tibt": {"group": "Sino-Tibetan/Khmer/Kra-Dai/Mongolic"},
     "ell_Grek": {"group": "Albanian/Armenian/Kartvelian/Hellenic"},
     "eng_Latn": {"group": "Germanic"},
@@ -76,11 +76,11 @@ _LANGUAGES = {
     "fas_Arab": {"group": "Arabic/Semitic/Iranian"},
     # Manually added to group (not in M2M100 languages)
     "fij_Latn": {"group": "Malayo-Polyn/Philippine/Dravidian"},
-    # new BitextMining language. Manually added to group (not in M2M100 languages)
+    # Manually added to group (not in M2M100 languages)
     "fil_Latn": {"group": "Malayo-Polyn/Philippine/Dravidian"},
     "fin_Latn": {"group": "Uralic/Baltic"},
     "fra_Latn": {"group": "Romance"},
-    # new BitextMining language. Manually added to group (not in M2M100 languages)
+    # Manually added to group (not in M2M100 languages)
     "fuc_Latn": {"group": "Niger-Congo/Afro-Asiatic/Cushitic"},
     # Manually added to group (not in M2M100 languages)
     "gle_Latn": {"group": "Celtic/Irish"},
@@ -89,7 +89,7 @@ _LANGUAGES = {
     "hau_Latn": {"group": "Ethiopian/Niger-Congo/Afro-Asiatic/Cushitic"},
     "heb_Hebr": {"group": "Arabic/Semitic/Iranian"},
     "hin_Deva": {"group": "Indo-Aryan/Tamil/Dravidian"},
-    # New BitextMining language. Manually added to group (not in M2M100 languages)
+    # Manually added to group (not in M2M100 languages)
     "hmn_Latn": {"group": "Hmong-Mien"},
     "hrv_Latn": {"group": "Slavic"},
     "hun_Latn": {"group": "Uralic/Baltic"},
@@ -107,7 +107,7 @@ _LANGUAGES = {
     "kin_Latn": {"group": "Niger-Congo/Afro-Asiatic/Cushitic"},
     # Manually added to group (not in M2M100 languages)
     "kir_Cyrl": {"group": "Turkic"},
-    # new BitextMining language. Manually added to group (not in M2M100 languages)
+    # Manually added to group (not in M2M100 languages)
     "kmr_Latn": {"group": "Arabic/Semitic/Iranian"},
     "kor_Hang": {"group": "Japonic/Koreanic/Vietic/Chinese"},
     "lao_Laoo": {"group": "Sino-Tibetan/Khmer/Kra-Dai/Mongolic"},
@@ -118,7 +118,7 @@ _LANGUAGES = {
     "ltz_Latn": {"group": "Germanic"},
     "mal_Mlym": {"group": "Malayo-Polyn/Philippine/Dravidian"},
     "mar_Deva": {"group": "Indo-Aryan/Tamil/Dravidian"},
-    # New BitextMining language. Manually added to group (not in M2M100 languages)
+    # Manually added to group (not in M2M100 languages)
     "mey_Arab": {"group": "Arabic/Semitic/Iranian"},
     "mkd_Cyrl": {"group": "Slavic"},
     # new BitextMining language
@@ -131,7 +131,7 @@ _LANGUAGES = {
     # new BitextMining language
     "msa_Latn": {"group": "Malayo-Polyn/Philippine/Dravidian"},
     "mya_Mymr": {"group": "Sino-Tibetan/Khmer/Kra-Dai/Mongolic"},
-    # New BitextMining language. Manually added to group (not in M2M100 languages)
+    # Manually added to group (not in M2M100 languages)
     "nde_Latn": {"group": "Niger-Congo/Afro-Asiatic/Cushitic"},
     # new BitextMining language
     "nep_Deva": {"group": "Indo-Aryan/Tamil/Dravidian"},
@@ -142,7 +142,7 @@ _LANGUAGES = {
     "nso_Latn": {"group": "Ethiopian/Niger-Congo/Afro-Asiatic/Cushitic"},
     # Manually added to group (not in M2M100 languages)
     "nya_Latn": {"group": "Niger-Congo/Afro-Asiatic/Cushitic"},
-    # new BitextMining language. Manually added to group (not in M2M100 languages)
+    # Manually added to group (not in M2M100 languages)
     "orm_Ethi": {"group": "Ethiopian/Niger-Congo/Afro-Asiatic/Cushitic"},
     "pan_Guru": {"group": "Indo-Aryan/Tamil/Dravidian"},
     "pol_Latn": {"group": "Slavic"},
@@ -153,7 +153,7 @@ _LANGUAGES = {
     "pus_Arab": {"group": "Arabic/Semitic/Iranian"},
     "ron_Latn": {"group": "Romance"},
     "rus_Cyrl": {"group": "Slavic"},
-    # new BitextMining language. Manually added to group (not in M2M100 languages)
+    # Manually added to group (not in M2M100 languages)
     "shi_Arab": {"group": "Arabic/Semitic/Iranian"},
     "sin_Sinh": {"group": "Indo-Aryan/Tamil/Dravidian"},
     "slk_Latn": {"group": "Slavic"},
@@ -175,7 +175,7 @@ _LANGUAGES = {
     # new BitextMining language
     "swa_Latn": {"group": "Ethiopian/Niger-Congo/Afro-Asiatic/Cushitic"},
     "swe_Latn": {"group": "Germanic"},
-    # new BitextMining language. Manually added to group (not in M2M100 languages)
+    # Manually added to group (not in M2M100 languages)
     "tah_Latn": {"group": "Malayo-Polyn/Philippine/Dravidian"},
     "tam_Taml": {"group": "Indo-Aryan/Tamil/Dravidian"},
     # Manually added to group (not in M2M100 languages)
@@ -187,7 +187,7 @@ _LANGUAGES = {
     "tha_Thai": {"group": "Sino-Tibetan/Khmer/Kra-Dai/Mongolic"},
     # Manually added to group (not in M2M100 languages)
     "tir_Ethi": {"group": "Ethiopian/Niger-Congo/Afro-Asiatic/Cushitic"},
-    # new BitextMining language. Manually added to group (not in M2M100 languages)
+    # Manually added to group (not in M2M100 languages)
     "ton_Latn": {"group": "Malayo-Polyn/Philippine/Dravidian"},
     "tsn_Latn": {"group": "Ethiopian/Niger-Congo/Afro-Asiatic/Cushitic"},
     # Manually added to group (not in M2M100 languages)
@@ -198,7 +198,7 @@ _LANGUAGES = {
     "ukr_Cyrl": {"group": "Slavic"},
     "urd_Arab": {"group": "Indo-Aryan/Tamil/Dravidian"},
     "uzb_Latn": {"group": "Turkic"},
-    # new BitextMining language. Manually added to group (not in M2M100 languages)
+    # Manually added to group (not in M2M100 languages)
     "ven_Latn": {"group": "Niger-Congo/Afro-Asiatic/Cushitic"},
     "vie_Latn": {"group": "Japonic/Koreanic/Vietic/Chinese"},
     "wol_Latn": {"group": "Ethiopian/Niger-Congo/Afro-Asiatic/Cushitic"},
