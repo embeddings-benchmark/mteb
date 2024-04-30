@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "349481ec73fff722f88e0453ca05c77a447d967c",
+  "mteb_dataset_name": "KLUE-TC",
+  "mteb_version": "1.7.46",
+  "validation": {
+    "accuracy": 0.3964862193916767,
+    "accuracy_stderr": 0.033988023763239075,
+    "evaluation_time": 11.71,
+    "f1": 0.38968101474507677,
+    "f1_stderr": 0.019454295330807905,
+    "main_score": 0.3964862193916767
+  }
+}
