@@ -274,6 +274,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [SpanishNewsClusteringP2P](https://www.kaggle.com/datasets/kevinmorgado/spanish-news-classification) | ['spa'] | Clustering | p2p |  |  |  |
 | [SpanishPassageRetrievalS2P](https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/) | ['spa'] | Retrieval | s2p |  |  |  |
 | [SpanishPassageRetrievalS2S](https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/) | ['spa'] | Retrieval | s2s |  |  |  |
+| [SpanishSentimentClassification](https://huggingface.co/datasets/sepidmnorozy/Spanish_sentiment) | ['spa'] | Classification | s2s | [Reviews] | {'validation': 147, 'test': 296} | {'validation': 85.02, 'test': 87.91} |
 | [SprintDuplicateQuestions](https://www.aclweb.org/anthology/D18-1131/) | ['eng'] | PairClassification | s2s |  | {'validation': 101000, 'test': 101000} | {'validation': 65.2, 'test': 67.9} |
 | [StackExchangeClustering](https://arxiv.org/abs/2104.07081) | ['eng'] | Clustering | s2s |  | {'test': 373850} | {'test': 57.0} |
 | [StackExchangeClusteringP2P](https://arxiv.org/abs/2104.07081) | ['eng'] | Clustering | p2p |  | {'test': 75000} | {'test': 1090.7} |
