@@ -1,5 +1,4 @@
-"""
-Example script for benchmarking all datasets constituting the MTEB Polish leaderboard & average scores.
+"""Example script for benchmarking all datasets constituting the MTEB Polish leaderboard & average scores.
 For a more elaborate evaluation, we refer to https://github.com/rafalposwiata/pl-mteb.
 """
 
