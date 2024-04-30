@@ -29,7 +29,7 @@ _LANGUAGES = {
     "uig": ["uig-Hans"],
     "bam": ["bam-Latn"],
     "pol": ["pol-Latn"],
-    # The train set for this language is created from the test set
+    # The train set for "cym" language is created from the test set
     "cym": ["cym-Latn"],
     # "hin": ["hin-Deva"], # Do not handle this subset since it does not contain a test set required by the evaluation
     "ara": ["ara-Arab"],
