@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "87b7a0d1c402dbb481db649569c556d9aa27ac05",
+  "mteb_dataset_name": "TweetTopicSingleClassification",
+  "mteb_version": "1.6.37",
+  "test_2021": {
+    "accuracy": 0.650915534554046,
+    "accuracy_stderr": 0.029305678680141934,
+    "evaluation_time": 18.69,
+    "f1": 0.509336096930588,
+    "f1_stderr": 0.02342886885974153,
+    "main_score": 0.650915534554046
+  }
+}
