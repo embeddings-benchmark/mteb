@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "557bf94ac6177cc442f42d0b09b6e4b76e8f47c9",
+  "mteb_dataset_name": "TweetSarcasmClassification",
+  "mteb_version": "1.6.3",
+  "test": {
+    "accuracy": 0.6098578199052133,
+    "accuracy_stderr": 0.052989427508568276,
+    "ap": 0.21492854478500573,
+    "ap_stderr": 0.02064430303688515,
+    "evaluation_time": 267.47,
+    "f1": 0.5339694484176662,
+    "f1_stderr": 0.034135223698889265,
+    "main_score": 0.6098578199052133
+  }
+}

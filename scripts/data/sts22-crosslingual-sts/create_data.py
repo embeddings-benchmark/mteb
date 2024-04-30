@@ -1,5 +1,4 @@
-"""
-Preparation (Scraping the data):
+"""Preparation (Scraping the data):
 pip install semeval_8_2022_ia_downloader
 python3 -m semeval_8_2022_ia_downloader.cli --links_file=semeval-2022_task8_train-data_batch.csv --dump_dir=train
 
@@ -7,13 +6,15 @@ wget https://competitions.codalab.org/my/datasets/download/6798bbee-77fa-452d-bd
 mv 6798bbee-77fa-452d-bde2-96b8631acb5d final_evaluation_data.csv
 python3 -m semeval_8_2022_ia_downloader.cli --links_file=final_evaluation_data.csv --dump_dir=test
 """
+
+from __future__ import annotations
+
 import glob
 import json
 import os
 
 import matplotlib.pyplot as plt
 import pandas as pd
-
 from huggingface_hub import create_repo, upload_file
 
 # Prepare the data
@@ -66,5 +67,10 @@ for lang in df["lang"].unique():
     save_path = lang + "/train.jsonl"
     lang_df.to_json(save_path, orient="records", lines=True)
 
-    upload_file(path_or_fileobj=save_path, path_in_repo=save_path, repo_id="mteb/" + repo_name, repo_type="dataset")
+    upload_file(
+        path_or_fileobj=save_path,
+        path_in_repo=save_path,
+        repo_id="mteb/" + repo_name,
+        repo_type="dataset",
+    )
     os.system(f"rm {save_path}")

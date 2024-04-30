@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "409a4415cce5f6bcfca6d5f3ca3c408211ca00b3",
+  "mteb_dataset_name": "TurkishMovieSentimentClassification",
+  "mteb_version": "1.6.8",
+  "test": {
+    "accuracy": 0.6734493192133132,
+    "accuracy_stderr": 0.031400578406747565,
+    "ap": 0.6180510548208135,
+    "ap_stderr": 0.02801417413993246,
+    "evaluation_time": 38.98,
+    "f1": 0.6720012193966308,
+    "f1_stderr": 0.031585021976440524,
+    "main_score": 0.6734493192133132
+  }
+}

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 import numpy as np
@@ -13,7 +15,17 @@ logger = logging.getLogger(__name__)
 
 
 class kNNClassificationEvaluator(Evaluator):
-    def __init__(self, sentences_train, y_train, sentences_test, y_test, k=1, batch_size=32, limit=None, **kwargs):
+    def __init__(
+        self,
+        sentences_train,
+        y_train,
+        sentences_test,
+        y_test,
+        k=1,
+        batch_size=32,
+        limit=None,
+        **kwargs,
+    ):
         super().__init__(**kwargs)
         if limit is not None:
             sentences_train = sentences_train[:limit]
@@ -34,9 +46,13 @@ class kNNClassificationEvaluator(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
-        X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
+        X_train = np.asarray(
+            model.encode(self.sentences_train, batch_size=self.batch_size)
+        )
         if test_cache is None:
-            X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
+            X_test = np.asarray(
+                model.encode(self.sentences_test, batch_size=self.batch_size)
+            )
             test_cache = X_test
         else:
             X_test = test_cache
@@ -63,7 +79,17 @@ class kNNClassificationEvaluator(Evaluator):
 
 
 class kNNClassificationEvaluatorPytorch(Evaluator):
-    def __init__(self, sentences_train, y_train, sentences_test, y_test, k=1, batch_size=32, limit=None, **kwargs):
+    def __init__(
+        self,
+        sentences_train,
+        y_train,
+        sentences_test,
+        y_test,
+        k=1,
+        batch_size=32,
+        limit=None,
+        **kwargs,
+    ):
         super().__init__(**kwargs)
         if limit is not None:
             sentences_train = sentences_train[:limit]
@@ -85,9 +111,13 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
-        X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
+        X_train = np.asarray(
+            model.encode(self.sentences_train, batch_size=self.batch_size)
+        )
         if test_cache is None:
-            X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
+            X_test = np.asarray(
+                model.encode(self.sentences_test, batch_size=self.batch_size)
+            )
             test_cache = X_test
         else:
             X_test = test_cache
@@ -98,9 +128,13 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
                 distances = self._euclidean_dist(X_test, X_train)
             elif metric == "dot":
                 distances = -self._dot_score(X_test, X_train)
-            neigh_indices = torch.topk(distances, k=self.k, dim=1, largest=False).indices
+            neigh_indices = torch.topk(
+                distances, k=self.k, dim=1, largest=False
+            ).indices
             y_train = torch.tensor(self.y_train)
-            y_pred = torch.mode(y_train[neigh_indices], dim=1).values  # TODO: case where there is no majority
+            y_pred = torch.mode(
+                y_train[neigh_indices], dim=1
+            ).values  # TODO: case where there is no majority
             accuracy = accuracy_score(self.y_test, y_pred)
             f1 = f1_score(self.y_test, y_pred, average="macro")
             scores["accuracy_" + metric] = accuracy
@@ -120,9 +154,10 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 
     @staticmethod
     def _cos_sim(a: Tensor, b: Tensor):
-        """
-        Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
-        :return: Matrix with res[i][j]  = cos_sim(a[i], b[j])
+        """Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
+
+        Return:
+            Matrix with res[i][j]  = cos_sim(a[i], b[j])
         """
         if not isinstance(a, torch.Tensor):
             a = torch.tensor(a)
@@ -142,8 +177,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 
     @staticmethod
     def _euclidean_dist(a: Tensor, b: Tensor):
-        """
-        Computes the euclidean distance euclidean_dist(a[i], b[j]) for all i and j.
+        """Computes the euclidean distance euclidean_dist(a[i], b[j]) for all i and j.
         :return: Matrix with res[i][j]  = euclidean_dist(a[i], b[j])
         """
         if not isinstance(a, torch.Tensor):
@@ -162,8 +196,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 
     @staticmethod
     def _dot_score(a: Tensor, b: Tensor):
-        """
-        Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
+        """Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
         :return: Matrix with res[i][j]  = dot_prod(a[i], b[j])
         """
         if not isinstance(a, torch.Tensor):
@@ -183,7 +216,15 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 
 class logRegClassificationEvaluator(Evaluator):
     def __init__(
-        self, sentences_train, y_train, sentences_test, y_test, max_iter=100, batch_size=32, limit=None, **kwargs
+        self,
+        sentences_train,
+        y_train,
+        sentences_test,
+        y_test,
+        max_iter=100,
+        batch_size=32,
+        limit=None,
+        **kwargs,
     ):
         super().__init__(**kwargs)
         if limit is not None:
@@ -208,10 +249,14 @@ class logRegClassificationEvaluator(Evaluator):
             verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
         )
         logger.info(f"Encoding {len(self.sentences_train)} training sentences...")
-        X_train = np.asarray(model.encode(self.sentences_train, batch_size=self.batch_size))
+        X_train = np.asarray(
+            model.encode(self.sentences_train, batch_size=self.batch_size)
+        )
         logger.info(f"Encoding {len(self.sentences_test)} test sentences...")
         if test_cache is None:
-            X_test = np.asarray(model.encode(self.sentences_test, batch_size=self.batch_size))
+            X_test = np.asarray(
+                model.encode(self.sentences_test, batch_size=self.batch_size)
+            )
             test_cache = X_test
         else:
             X_test = test_cache

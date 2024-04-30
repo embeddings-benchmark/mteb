@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import json
 import random
 from collections import Counter
 
 import pandas as pd
-
 
 df = pd.read_csv("original.csv")
 

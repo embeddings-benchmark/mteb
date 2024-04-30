@@ -1,0 +1,11 @@
+{
+  "dataset_revision": "ddc9ee9242fa65332597f70e967ecc38b9d734fa",
+  "mteb_dataset_name": "WikiCitiesClustering",
+  "mteb_version": "1.2.1.dev0",
+  "test": {
+    "evaluation_time": 24.46,
+    "main_score": 0.5860308296086599,
+    "v_measure": 0.5860308296086599,
+    "v_measure_std": 0.0
+  }
+}

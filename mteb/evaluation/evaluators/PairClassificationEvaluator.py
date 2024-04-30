@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 import numpy as np
@@ -14,8 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class PairClassificationEvaluator(Evaluator):
-    """
-    Evaluate a model based on the similarity of the embeddings by calculating the accuracy of identifying similar and
+    """Evaluate a model based on the similarity of the embeddings by calculating the accuracy of identifying similar and
     dissimilar sentences.
     The metrics are the cosine similarity as well as euclidean and Manhattan distance
     The returned score is the accuracy with a specified metric.
@@ -29,7 +30,9 @@ class PairClassificationEvaluator(Evaluator):
     :param write_csv: Write results to a CSV file
     """
 
-    def __init__(self, sentences1, sentences2, labels, batch_size=32, limit=None, **kwargs):
+    def __init__(
+        self, sentences1, sentences2, labels, batch_size=32, limit=None, **kwargs
+    ):
         super().__init__(**kwargs)
         if limit:
             sentences1 = sentences1[:limit]
@@ -68,7 +71,10 @@ class PairClassificationEvaluator(Evaluator):
 
         embeddings1_np = np.asarray(embeddings1)
         embeddings2_np = np.asarray(embeddings2)
-        dot_scores = [np.dot(embeddings1_np[i], embeddings2_np[i]) for i in range(len(embeddings1_np))]
+        dot_scores = [
+            np.dot(embeddings1_np[i], embeddings2_np[i])
+            for i in range(len(embeddings1_np))
+        ]
 
         logger.info("Computing metrics...")
         labels = np.asarray(self.labels)
@@ -85,8 +91,7 @@ class PairClassificationEvaluator(Evaluator):
 
     @staticmethod
     def _compute_metrics(scores, labels, high_score_more_similar):
-        """
-        Compute the metrics for the given scores and labels.
+        """Compute the metrics for the given scores and labels.
 
         Args:
             scores (`np.ndarray` of shape (n_pairs, )): The similarity/dissimilarity scores for the pairs.
@@ -99,10 +104,14 @@ class PairClassificationEvaluator(Evaluator):
         acc, acc_threshold = PairClassificationEvaluator.find_best_acc_and_threshold(
             scores, labels, high_score_more_similar
         )
-        f1, precision, recall, f1_threshold = PairClassificationEvaluator.find_best_f1_and_threshold(
+        f1, precision, recall, f1_threshold = (
+            PairClassificationEvaluator.find_best_f1_and_threshold(
+                scores, labels, high_score_more_similar
+            )
+        )
+        ap = PairClassificationEvaluator.ap_score(
             scores, labels, high_score_more_similar
         )
-        ap = PairClassificationEvaluator.ap_score(scores, labels, high_score_more_similar)
 
         return {
             "accuracy": acc,
@@ -179,4 +188,6 @@ class PairClassificationEvaluator(Evaluator):
 
     @staticmethod
     def ap_score(scores, labels, high_score_more_similar: bool):
-        return average_precision_score(labels, scores * (1 if high_score_more_similar else -1))
+        return average_precision_score(
+            labels, scores * (1 if high_score_more_similar else -1)
+        )

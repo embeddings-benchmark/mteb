@@ -1,9 +1,12 @@
 """Example script for benchmarking German Context models."""
 
+from __future__ import annotations
+
 import logging
 
-from mteb import MTEB
 from sentence_transformers import SentenceTransformer
+
+from mteb import MTEB
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("main")
@@ -17,9 +20,14 @@ TASK_LIST_CLASSIFICATION = [
     "MassiveScenarioClassification",
 ]
 
-TASK_LIST_CLUSTERING = ["BlurbsClusteringP2P", "BlurbsClusteringS2S", "TenKGnadClusteringP2P", "TenKGnadClusteringS2S"]
+TASK_LIST_CLUSTERING = [
+    "BlurbsClusteringP2P",
+    "BlurbsClusteringS2S",
+    "TenKGnadClusteringP2P",
+    "TenKGnadClusteringS2S",
+]
 
-TASK_LIST_PAIR_CLASSIFICATION = ["PawsX"]
+TASK_LIST_PAIR_CLASSIFICATION = ["FalseFriendsGermanEnglish", "PawsX"]
 
 TASK_LIST_RERANKING = ["MIRACL"]
 
@@ -40,4 +48,8 @@ model_name = "intfloat/multilingual-e5-small"
 model = SentenceTransformer(model_name)
 
 evaluation = MTEB(tasks=TASK_LIST, task_langs=["de"])
-evaluation.run(model, overwrite_results=True, output_folder=f"results/de/{model_name.split('/')[-1]}")
+evaluation.run(
+    model,
+    overwrite_results=True,
+    output_folder=f"results/de/{model_name.split('/')[-1]}",
+)

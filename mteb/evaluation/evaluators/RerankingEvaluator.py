@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 import numpy as np
@@ -12,8 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class RerankingEvaluator(Evaluator):
-    """
-    This class evaluates a SentenceTransformer model for the task of re-ranking.
+    """This class evaluates a SentenceTransformer model for the task of re-ranking.
     Given a query and a list of documents, it computes the score [query, doc_i] for all possible
     documents and sorts them in decreasing order. Then, MRR@10 and MAP is compute to measure the quality of the ranking.
     :param samples: Must be a list and each element is of the form:
@@ -49,7 +50,9 @@ class RerankingEvaluator(Evaluator):
 
         ### Remove sample with empty positive / negative set
         self.samples = [
-            sample for sample in self.samples if len(sample["positive"]) > 0 and len(sample["negative"]) > 0
+            sample
+            for sample in self.samples
+            if len(sample["positive"]) > 0 and len(sample["negative"]) > 0
         ]
 
     def __call__(self, model):
@@ -64,8 +67,7 @@ class RerankingEvaluator(Evaluator):
         )
 
     def compute_metrics_batched(self, model):
-        """
-        Computes the metrices in a batched way, by batching all queries and
+        """Computes the metrices in a batched way, by batching all queries and
         all documents together
         """
         all_mrr_scores = []
@@ -73,21 +75,33 @@ class RerankingEvaluator(Evaluator):
 
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
-        encode_queries_func = model.encode_queries if hasattr(model, 'encode_queries') else model.encode
-        encode_corpus_func = model.encode_corpus if hasattr(model, 'encode_corpus') else model.encode
+        encode_queries_func = (
+            model.encode_queries if hasattr(model, "encode_queries") else model.encode
+        )
+        encode_corpus_func = (
+            model.encode_corpus if hasattr(model, "encode_corpus") else model.encode
+        )
 
         logger.info("Encoding queries...")
         if isinstance(self.samples[0]["query"], str):
-            all_query_embs = np.asarray(encode_queries_func(
-                [sample["query"] for sample in self.samples],
-                batch_size=self.batch_size,
-            ))
+            all_query_embs = np.asarray(
+                encode_queries_func(
+                    [sample["query"] for sample in self.samples],
+                    batch_size=self.batch_size,
+                )
+            )
         elif isinstance(self.samples[0]["query"], list):
             # In case the query is a list of strings, we get the most similar embedding to any of the queries
-            all_query_flattened = [q for sample in self.samples for q in sample["query"]]
-            all_query_embs = np.asarray(encode_queries_func(all_query_flattened, batch_size=self.batch_size))
+            all_query_flattened = [
+                q for sample in self.samples for q in sample["query"]
+            ]
+            all_query_embs = np.asarray(
+                encode_queries_func(all_query_flattened, batch_size=self.batch_size)
+            )
         else:
-            raise ValueError(f"Query must be a string or a list of strings but is {type(self.samples[0]['query'])}")
+            raise ValueError(
+                f"Query must be a string or a list of strings but is {type(self.samples[0]['query'])}"
+            )
 
         logger.info("Encoding candidates...")
         all_docs = []
@@ -95,13 +109,17 @@ class RerankingEvaluator(Evaluator):
             all_docs.extend(sample["positive"])
             all_docs.extend(sample["negative"])
 
-        all_docs_embs = np.asarray(encode_corpus_func(all_docs, batch_size=self.batch_size))
+        all_docs_embs = np.asarray(
+            encode_corpus_func(all_docs, batch_size=self.batch_size)
+        )
 
         # Compute scores
         logger.info("Evaluating...")
         query_idx, docs_idx = 0, 0
         for instance in self.samples:
-            num_subqueries = len(instance["query"]) if isinstance(instance["query"], list) else 1
+            num_subqueries = (
+                len(instance["query"]) if isinstance(instance["query"], list) else 1
+            )
             query_emb = all_query_embs[query_idx : query_idx + num_subqueries]
             query_idx += num_subqueries
 
@@ -125,8 +143,7 @@ class RerankingEvaluator(Evaluator):
         return {"map": mean_ap, "mrr": mean_mrr}
 
     def compute_metrics_individual(self, model):
-        """
-        Embeds every (query, positive, negative) tuple individually.
+        """Embeds every (query, positive, negative) tuple individually.
         Is slower than the batched version, but saves memory as only the
         embeddings for one tuple are needed. Useful when you have
         a really large test set
@@ -136,9 +153,13 @@ class RerankingEvaluator(Evaluator):
 
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
-        encode_queries_func = model.encode_queries if hasattr(model, 'encode_queries') else model.encode
-        encode_corpus_func = model.encode_corpus if hasattr(model, 'encode_corpus') else model.encode
-        
+        encode_queries_func = (
+            model.encode_queries if hasattr(model, "encode_queries") else model.encode
+        )
+        encode_corpus_func = (
+            model.encode_corpus if hasattr(model, "encode_corpus") else model.encode
+        )
+
         for instance in tqdm.tqdm(self.samples, desc="Samples"):
             query = instance["query"]
             positive = list(instance["positive"])
@@ -153,7 +174,9 @@ class RerankingEvaluator(Evaluator):
             if isinstance(query, str):
                 # .encoding interface requires List[str] as input
                 query = [query]
-            query_emb = np.asarray(encode_queries_func(query, batch_size=self.batch_size))
+            query_emb = np.asarray(
+                encode_queries_func(query, batch_size=self.batch_size)
+            )
             docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
 
             scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
@@ -166,8 +189,7 @@ class RerankingEvaluator(Evaluator):
         return {"map": mean_ap, "mrr": mean_mrr}
 
     def _compute_metrics_instance(self, query_emb, docs_emb, is_relevant):
-        """
-        Computes metrics for a single instance = (query, positives, negatives)
+        """Computes metrics for a single instance = (query, positives, negatives)
 
         Args:
             query_emb (`torch.Tensor` of shape `(num_queries, hidden_size)`): Query embedding
@@ -180,7 +202,6 @@ class RerankingEvaluator(Evaluator):
                 - `mrr`: Mean Reciprocal Rank @ `self.mrr_at_k`
                 - `ap`: Average Precision
         """
-
         pred_scores = self.similarity_fct(query_emb, docs_emb)
         if len(pred_scores.shape) > 1:
             pred_scores = torch.amax(pred_scores, dim=0)
@@ -192,17 +213,19 @@ class RerankingEvaluator(Evaluator):
         return {"mrr": mrr, "ap": ap}
 
     @staticmethod
-    def mrr_at_k_score(is_relevant, pred_ranking, k):
-        """
-        Computes MRR@k score
+    def mrr_at_k_score(
+        is_relevant: list[bool], pred_ranking: list[int], k: int
+    ) -> float:
+        """Computes MRR@k score
 
         Args:
-            is_relevant (`List[bool]` of length `num_pos+num_neg`): True if the document is relevant
-            pred_ranking (`List[int]` of length `num_pos+num_neg`): Indices of the documents sorted in decreasing order
+            is_relevant: True if the document is relevant
+            pred_ranking: Indices of the documents sorted in decreasing order
                 of the similarity score
+            k: Top-k documents to consider
 
         Returns:
-            mrr_score (`float`): MRR@k score
+            The MRR@k score
         """
         mrr_score = 0
         for rank, index in enumerate(pred_ranking[:k]):
@@ -214,8 +237,7 @@ class RerankingEvaluator(Evaluator):
 
     @staticmethod
     def ap_score(is_relevant, pred_scores):
-        """
-        Computes AP score
+        """Computes AP score
 
         Args:
             is_relevant (`List[bool]` of length `num_pos+num_neg`): True if the document is relevant

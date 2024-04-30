@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 import numpy as np
@@ -5,11 +7,10 @@ import torch
 import tqdm
 from scipy.stats import pearsonr, spearmanr
 
+from .Evaluator import Evaluator
 from .utils import cos_sim, dot_score
 
 logger = logging.getLogger(__name__)
-
-from .Evaluator import Evaluator
 
 
 class SummarizationEvaluator(Evaluator):
@@ -21,7 +22,7 @@ class SummarizationEvaluator(Evaluator):
         gold_scores=None,
         limit=None,
         batch_size=32,
-        **kwargs
+        **kwargs,
     ):
         # human_summaries shape: (None, num_human_summaries)
         # machine_summaries shape: (None, num_machine_summaries)
@@ -47,22 +48,36 @@ class SummarizationEvaluator(Evaluator):
 
         # Get the human & machine summaries for the text in one go for all
         human_lens = [len(human_summaries) for human_summaries in self.human_summaries]
-        machine_lens = [len(machine_summaries) for machine_summaries in self.machine_summaries]
+        machine_lens = [
+            len(machine_summaries) for machine_summaries in self.machine_summaries
+        ]
 
         logger.info(f"Encoding {sum(human_lens)} human summaries...")
         embs_human_summaries_all = model.encode(
-            [summary for human_summaries in self.human_summaries for summary in human_summaries],
+            [
+                summary
+                for human_summaries in self.human_summaries
+                for summary in human_summaries
+            ],
             batch_size=self.batch_size,
         )
         logger.info(f"Encoding {sum(machine_lens)} machine summaries...")
         embs_machine_summaries_all = model.encode(
-            [summary for machine_summaries in self.machine_summaries for summary in machine_summaries],
+            [
+                summary
+                for machine_summaries in self.machine_summaries
+                for summary in machine_summaries
+            ],
             batch_size=self.batch_size,
         )
 
         # Split the embeddings into the original human & machine summaries
-        embs_human_summaries_all = np.split(embs_human_summaries_all, np.cumsum(human_lens)[:-1])
-        embs_machine_summaries_all = np.split(embs_machine_summaries_all, np.cumsum(machine_lens)[:-1])
+        embs_human_summaries_all = np.split(
+            embs_human_summaries_all, np.cumsum(human_lens)[:-1]
+        )
+        embs_machine_summaries_all = np.split(
+            embs_machine_summaries_all, np.cumsum(machine_lens)[:-1]
+        )
 
         for i, (embs_human_summaries, embs_machine_summaries) in tqdm.tqdm(
             enumerate(zip(embs_human_summaries_all, embs_machine_summaries_all)),

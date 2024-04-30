@@ -1,0 +1,11 @@
+{
+  "all": {
+    "evaluation_time": 25.05,
+    "main_score": 0.1157687326125453,
+    "v_measure": 0.1157687326125453,
+    "v_measure_std": 0.11252734859368345
+  },
+  "dataset_revision": "ef1661775d746e0844b299164773db733bdc0bf6",
+  "mteb_dataset_name": "SwednClustering",
+  "mteb_version": "1.2.1.dev0"
+}

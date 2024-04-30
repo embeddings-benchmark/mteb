@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import random
 from abc import ABC, abstractmethod
 
@@ -6,8 +8,7 @@ import torch
 
 
 class Evaluator(ABC):
-    """
-    Base class for all evaluators
+    """Base class for all evaluators
     Extend this class and implement __call__ for custom evaluators.
     """
 
@@ -20,8 +21,7 @@ class Evaluator(ABC):
 
     @abstractmethod
     def __call__(self, model):
-        """
-        This is called during training to evaluate the model.
+        """This is called during training to evaluate the model.
         It returns scores.
 
         Parameters

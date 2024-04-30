@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "218ce687943a0da435d6d62751a4ab216be6cd40",
+  "mteb_dataset_name": "HindiDiscourseClassification",
+  "mteb_version": "1.5.2",
+  "train": {
+    "accuracy": 0.395263671875,
+    "accuracy_stderr": 0.033557570736593184,
+    "evaluation_time": 18.28,
+    "f1": 0.2846447411185177,
+    "f1_stderr": 0.01963713185357141,
+    "main_score": 0.395263671875
+  }
+}

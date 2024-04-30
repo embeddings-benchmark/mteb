@@ -1,12 +1,5 @@
-.vscode
 .DS_Store
 .idea/
-
-# Result folder
-results/
-
-# BeIR datasets folder
-datasets/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -140,3 +133,7 @@ dmypy.json
 
 # error logs
 error_logs.txt
+
+# tests
+tests/results
+tmp.py

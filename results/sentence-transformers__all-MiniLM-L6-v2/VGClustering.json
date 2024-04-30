@@ -1,0 +1,11 @@
+{
+  "dataset_revision": "d4c5a8ba10ae71224752c727094ac4c46947fa29",
+  "mteb_dataset_name": "VGClustering",
+  "mteb_version": "1.2.1.dev0",
+  "test": {
+    "evaluation_time": 8.61,
+    "main_score": 0.1265854086180265,
+    "v_measure": 0.1265854086180265,
+    "v_measure_std": 0.009509409902242557
+  }
+}

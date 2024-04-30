@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "7b56c6cb1c9c8523249f407044c838660df3811a",
+  "mteb_dataset_name": "VieStudentFeedbackClassification",
+  "mteb_version": "1.7.14",
+  "test": {
+    "accuracy": 0.69921875,
+    "accuracy_stderr": 0.04153089655488241,
+    "evaluation_time": 3.86,
+    "f1": 0.5798524952213155,
+    "f1_stderr": 0.02927366708156554,
+    "main_score": 0.69921875
+  }
+}

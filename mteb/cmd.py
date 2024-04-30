@@ -1,5 +1,5 @@
-"""
-entry point for the library
+"""entry point for the library
+
 example call:
   pip install git+https://github.com/embeddings-benchmark/mteb-draft.git
   mteb -m average_word_embeddings_komninos \
@@ -8,9 +8,12 @@ example call:
        --verbosity 3
 """
 
+from __future__ import annotations
 
 import argparse
+import json
 import logging
+from pathlib import Path
 
 from sentence_transformers import SentenceTransformer
 
@@ -18,6 +21,24 @@ from mteb import MTEB
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
+
+
+def _name_to_path(name: str) -> str:
+    return name.replace("/", "__").replace(" ", "_")
+
+
+def _save_model_metadata(
+    model: SentenceTransformer, model_name: str, output_folder: Path
+) -> None:
+    save_path = output_folder / "model_meta.json"
+
+    model_meta = {
+        "model_name": model_name,
+        "versions": model._model_config.get("__version__", None),
+    }
+
+    with save_path.open("w") as f:
+        json.dump(model_meta, f)
 
 
 def main():
@@ -60,11 +81,24 @@ def main():
         default=None,
         help="List of languages to be evaluated. if not set, all languages will be evaluated.",
     )
-    parser.add_argument("--device", type=int, default=None, help="Device to use for computation")
-    parser.add_argument("--batch_size", type=int, default=32, help="Batch size for computation")
-    parser.add_argument("--seed", type=int, default=42, help="Random seed for computation")
-    parser.add_argument("--output_folder", type=str, default="results", help="Output directory for results")
-    parser.add_argument("-v", "--verbosity", type=int, default=2, help="Verbosity level")
+    parser.add_argument(
+        "--device", type=int, default=None, help="Device to use for computation"
+    )
+    parser.add_argument(
+        "--batch_size", type=int, default=32, help="Batch size for computation"
+    )
+    parser.add_argument(
+        "--seed", type=int, default=42, help="Random seed for computation"
+    )
+    parser.add_argument(
+        "--output_folder",
+        type=str,
+        default=None,
+        help="Output directory for results. Will default to results/{model_name} if not set.",
+    )
+    parser.add_argument(
+        "-v", "--verbosity", type=int, default=2, help="Verbosity level"
+    )
 
     ## evaluation params
     parser.add_argument(
@@ -76,10 +110,23 @@ def main():
     )
 
     ## classification params
-    parser.add_argument("--k", type=int, default=None, help="Number of nearest neighbors to use for classification")
-    parser.add_argument("--n_experiments", type=int, default=None, help="Number of splits for bootstrapping")
     parser.add_argument(
-        "--samples_per_label", type=int, default=None, help="Number of samples per label for bootstrapping"
+        "--k",
+        type=int,
+        default=None,
+        help="Number of nearest neighbors to use for classification",
+    )
+    parser.add_argument(
+        "--n_experiments",
+        type=int,
+        default=None,
+        help="Number of splits for bootstrapping",
+    )
+    parser.add_argument(
+        "--samples_per_label",
+        type=int,
+        default=None,
+        help="Number of samples per label for bootstrapping",
     )
 
     ## retrieval params
@@ -120,12 +167,25 @@ def main():
     if args.model is None:
         raise ValueError("Please specify a model using the -m or --model argument")
 
+    if args.output_folder is None:
+        args.output_folder = f"results/{_name_to_path(args.model)}"
+
     model = SentenceTransformer(args.model, device=args.device)
     eval = MTEB(
-        task_categories=args.task_categories, task_types=args.task_types, task_langs=args.task_langs, tasks=args.tasks
+        task_categories=args.task_categories,
+        task_types=args.task_types,
+        task_langs=args.task_langs,
+        tasks=args.tasks,
     )
 
-    eval.run(model, verbosity=args.verbosity, output_folder=args.output_folder, eval_splits=args.eval_splits)
+    eval.run(
+        model,
+        verbosity=args.verbosity,
+        output_folder=args.output_folder,
+        eval_splits=args.eval_splits,
+    )
+
+    _save_model_metadata(model, args.model, Path(args.output_folder))
 
 
 if __name__ == "__main__":

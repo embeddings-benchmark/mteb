@@ -1,14 +1,12 @@
-"""
-Fetch data from https://api.biorxiv.org/ and keep useful information
-"""
+"""Fetch data from https://api.biorxiv.org/ and keep useful information"""
+
+from __future__ import annotations
 
 import gzip
 
-from tqdm import tqdm
-
 import jsonlines
 import requests
-
+from tqdm import tqdm
 
 api = "https://api.biorxiv.org/details/medrxiv/2021-01-01/2022-05-10/"
 

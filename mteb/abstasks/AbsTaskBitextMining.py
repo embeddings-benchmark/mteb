@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 from ..evaluation.evaluators import BitextMiningEvaluator
@@ -7,6 +9,15 @@ logger = logging.getLogger(__name__)
 
 
 class AbsTaskBitextMining(AbsTask):
+    """Abstract class for BitextMining tasks
+    The similarity is computed between pairs and the results are ranked.
+
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+        id: str
+        sentence1: str
+        sentence2: str
+    """
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -17,11 +28,15 @@ class AbsTaskBitextMining(AbsTask):
         if self.is_crosslingual:
             scores = {}
             for lang in self.dataset:
-                logger.info(f"\nTask: {self.description['name']}, split: {split}, language: {lang}. Running...")
+                logger.info(
+                    f"\nTask: {self.metadata_dict['name']}, split: {split}, language: {lang}. Running..."
+                )
                 data_split = self.dataset[lang][split]
                 scores[lang] = self._evaluate_split(model, data_split, **kwargs)
         else:
-            logger.info(f"\nTask: {self.description['name']}, split: {split}. Running...")
+            logger.info(
+                f"\nTask: {self.metadata_dict['name']}, split: {split}. Running..."
+            )
             data_split = self.dataset[split]
             scores = self._evaluate_split(model, data_split, **kwargs)
 
@@ -58,7 +73,9 @@ class AbsTaskBitextMining(AbsTask):
         return metrics
 
     def _add_main_score(self, scores):
-        if self.description["main_score"] in scores:
-            scores["main_score"] = scores[self.description["main_score"]]
+        if self.metadata_dict["main_score"] in scores:
+            scores["main_score"] = scores[self.metadata_dict["main_score"]]
         else:
-            logger.warn(f"main score {self.description['main_score']} not found in scores {scores.keys()}")
+            logger.warn(
+                f"main score {self.metadata_dict['main_score']} not found in scores {scores.keys()}"
+            )

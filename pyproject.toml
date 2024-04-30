@@ -1,10 +1,98 @@
 [build-system]
-requires = ["pbr>=5.7.0", "setuptools>=36.6.0"]
-build-backend = "pbr.build"
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
 
-[tool.black]
-line-length = 119
-target-version = ['py35']
+[project]
+name = "mteb"
+version = "1.7.47"
+description = "Massive Text Embedding Benchmark"
+readme = "README.md"
+authors = [
+    { name = "MTEB Contributors", email = "niklas@huggingface.co" },
+    { email = "nouamane@huggingface.co" },
+    { email = "info@nils-reimers.de" },
+]
+license = { file = "LICENSE" }
+keywords = ["deep learning", "text embeddings", "benchmark"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "datasets>=2.2.0",
+    "jsonlines",
+    "numpy",
+    "requests>=2.26.0",
+    "scikit_learn>=1.0.2",
+    "scipy",
+    "sentence_transformers>=2.2.0",
+    "torch",
+    "tqdm",
+    "rich",
+    "pytrec-eval-terrier>=0.5.6",
+    "pydantic>=2.0.0",
+    "typing_extensions",
+    "eval_type_backport",
+]
 
-[tool.isort]
-profile = "black"
+
+[project.urls]
+homepage = "https://github.com/embeddings-benchmark/mteb"
+"Huggingface Organization" = "https://huggingface.co/mteb"
+"Source Code" = "https://github.com/embeddings-benchmark/mteb"
+
+[project.scripts]
+mteb = "mteb.cmd:main"
+
+[project.optional-dependencies]
+dev = ["ruff>=0.0.254", "pytest", "pytest-xdist"]
+
+
+[tool.setuptools.packages.find]
+exclude = ["tests", "results"]
+
+[tool.setuptools.package-data]
+"*" = ["*.json"]
+
+[tool.ruff]
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["F", "I", "E", "D"]
+ignore = ["E501",   # line too long 
+        "E741",     # ambiguous variable name
+        "F403",     # undefined import
+        "D100",     # Missing docstring in public module
+        "D101",     # Missing docstring in public class
+        "D102",     # Missing docstring in public method
+        "D103",     # Missing docstring in public function
+        "D104",     # Missing docstring in public package
+        "D107",     # Missing docstring in __init__
+        "D205",     # 1 blank line required between summary line and description
+        "D415",     # First line should end with a period
+]
+ignore-init-module-imports = true
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.flake8-annotations]
+mypy-init-return = true
+suppress-none-returning = true
+
+[tool.semantic_release]
+branch = "main"
+version_toml = ["pyproject.toml:project.version"]
+build_command = "python -m pip install build; python -m build"
+tag_format = "{version}"
+
+[tool.semantic_release.commit_parser_options]
+major_types = ["breaking"]
+minor_types = ["feat"]
+patch_types = ["fix", "perf"]

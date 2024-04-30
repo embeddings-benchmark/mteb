@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import os
+
 from mteb import MTEB
 
 HEADER = "| Name | Hub URL | Description | Type | Category | #Languages | Train #Samples | Dev #Samples | Test #Samples | Avg. chars / train | Avg. chars / dev | Avg. chars / test"
@@ -26,8 +29,7 @@ DATAPATH = "/gpfsscratch/rech/six/commun/commun/experiments/muennighoff/mteb"
 
 
 def load_data(hf_hub_name, subset=None):
-    """
-    Load dataset from Hub via cloning for easy offline usage with HF_DATASETS_OFFLINE=1
+    """Load dataset from Hub via cloning for easy offline usage with HF_DATASETS_OFFLINE=1
     Can be replaced with just `load_dataset(hf_hub_name, subset)` if preferred
     """
     from datasets import load_dataset
@@ -80,14 +82,16 @@ def get_ds_stats_beir(hf_hub_name):
     for split in lens.keys():
         try:
             corpus, queries, relevant_docs = BeirDataLoader(path).load(split=split)
-        except:  # split does not exist
+        except:  # split does not exist  # noqa: E722
             continue
         # + 1 for space added between Title & Text by default in BEIR
         avg_lens_c = [len(v["text"]) + len(v["title"]) + 1 for v in corpus.values()]
         avg_lens_q = [len(v) for v in queries.values()]
         lens[split].extend(avg_lens_c)
         lens[split].extend(avg_lens_q)
-    avg_lens = {k: round(sum(lens[k]) / len(lens[k]), 1) if lens[k] else 0 for k in lens}
+    avg_lens = {
+        k: round(sum(lens[k]) / len(lens[k]), 1) if lens[k] else 0 for k in lens
+    }
     return (
         len(lens["train"]),
         len(lens["dev"]),
@@ -117,7 +121,9 @@ def get_ds_stats(hf_hub_name):
             else:
                 raise ValueError(f"Unknown type {type(ds[split][k])}")
 
-    avg_lens = {k: round(sum(lens[k]) / len(lens[k]), 1) if lens[k] else 0 for k in lens}
+    avg_lens = {
+        k: round(sum(lens[k]) / len(lens[k]), 1) if lens[k] else 0 for k in lens
+    }
     return (
         len(lens["train"]),
         len(lens[dev_key]),
@@ -131,21 +137,21 @@ def get_ds_stats(hf_hub_name):
 # Select all tasks
 for task in MTEB().tasks:
     print("Task: ", task)
-    if "hf_hub_name" in task.description:
-        hub_name = hub_url = task.description.get("hf_hub_name")
+    if "dataset" in task.metadata_dict:
+        hub_name = hub_url = task.metadata_dict["dataset"]["path"]
         ds_stats = get_ds_stats(hub_name.split("/")[-1])
-    elif "beir_name" in task.description:
-        hub_name = hub_url = "BeIR/" + task.description.get("beir_name")
+    elif "beir_name" in task.metadata_dict:
+        hub_name = hub_url = "BeIR/" + task.metadata_dict.get("beir_name")
         ds_stats = get_ds_stats_beir("/".join(hub_name.split("/")[1:]))
         if "cqadupstack" in hub_name:
             hub_url = "BeIR/cqadupstack-qrels"
     TABLE_STRING += "\n" + ONE_LINE.format(
-        f"[{task.description['name']}]({task.description['reference']})",
+        f"[{task.metadata_dict['name']}]({task.metadata_dict['reference']})",
         f"[{hub_name}](https://huggingface.co/datasets/{hub_url})",
-        task.description["description"],
-        task.description["type"],
-        task.description["category"],
-        len(task.description["eval_langs"]),
+        task.metadata_dict["description"],
+        task.metadata_dict["type"],
+        task.metadata_dict["category"],
+        len(task.metadata_dict["eval_langs"]),
         *ds_stats,
     )
 

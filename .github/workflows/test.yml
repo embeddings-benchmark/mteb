@@ -1,0 +1,41 @@
+# This workflow will:
+# 1) install Python dependencies
+# 2) run make test
+
+
+name: Test
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest] #, macos-latest, windows-latest]
+        python-version: ["3.8", "3.9", "3.10"]
+        include:
+          # Add Windows with Python 3.8 only to avoid tests taking too long
+          - os: windows-latest
+            python-version: "3.8"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip"
+        
+      - name: Install dependencies
+        shell: bash
+        run: |
+          make install-for-tests
+
+      - name: Run tests
+        shell: bash
+        run: |
+          make test

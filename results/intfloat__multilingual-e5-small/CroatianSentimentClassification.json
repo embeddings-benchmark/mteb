@@ -1,0 +1,25 @@
+{
+  "dataset_revision": "255da5c6b54c95faf74aba6d6cad9b2e176bf90a",
+  "mteb_dataset_name": "CroatianSentimentClassification",
+  "mteb_version": "1.6.12",
+  "test": {
+    "accuracy": 0.799771167048055,
+    "accuracy_stderr": 0.046977682903828685,
+    "ap": 0.9001937067150981,
+    "ap_stderr": 0.018403106906389386,
+    "evaluation_time": 3.33,
+    "f1": 0.7477748016816385,
+    "f1_stderr": 0.04572549702814684,
+    "main_score": 0.799771167048055
+  },
+  "validation": {
+    "accuracy": 0.8214953271028037,
+    "accuracy_stderr": 0.036244335382552006,
+    "ap": 0.9109813285666689,
+    "ap_stderr": 0.010190251621120913,
+    "evaluation_time": 5.61,
+    "f1": 0.7657761043142386,
+    "f1_stderr": 0.03510624637316594,
+    "main_score": 0.8214953271028037
+  }
+}
