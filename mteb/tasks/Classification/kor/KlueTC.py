@@ -24,7 +24,7 @@ class KlueTC(AbsTaskClassification):
         domains=["News"],
         task_subtypes=["Topic classification"],
         license="CC-BY-SA-4.0",
-        socioeconomic_status=None,
+        socioeconomic_status="high",
         annotations_creators="human-annotated",
         dialect=[],
         text_creation="found",
@@ -44,10 +44,7 @@ class KlueTC(AbsTaskClassification):
         def id2str(example):
             return {"label": label_feature.int2str(example["label_id"])}
 
-        if "features" in self.dataset:
-            label_feature = self.dataset.features["label"]
-        else:
-            label_feature = self.dataset["validation"].features["label"]
+        label_feature = self.dataset[self.eval_splits[0]].features["label"]
 
         self.dataset = self.dataset.rename_columns(
             {"title": "text", "label": "label_id"}
