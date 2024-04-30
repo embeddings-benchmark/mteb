@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .ara.AJGT import *
 from .ara.HotelReviewSentimentClassification import *
 from .ara.RestaurantReviewSentimentClassification import *
 from .ara.TweetEmotionClassification import *
@@ -14,6 +15,7 @@ from .dan.AngryTweetsClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
 from .dan.DKHateClassification import *
 from .dan.LccSentimentClassification import *
+from .deu.GermanPoliticiansTwitterSentimentClassification import *
 from .ell.GreekLegalCodeClassification import *
 from .ell.GreekSentimentClassification import *
 from .eng.AmazonPolarityClassification import *
@@ -71,7 +73,9 @@ from .multilingual.MTOPIntentClassification import *
 from .multilingual.MultiHateClassification import *
 from .multilingual.NordicLangClassification import *
 from .multilingual.ScalaClassification import *
+from .multilingual.SIB200Classification import *
 from .multilingual.SouthAfricanLangClassification import *
+from .multilingual.TweetSentimentClassification import *
 from .nep.NepaliNewsClassification import *
 from .nld.DutchBookReviewSentimentClassification import *
 from .nob.NoRecClassification import *
@@ -79,6 +83,7 @@ from .nob.NorwegianParliamentClassification import *
 from .ory.OdiaNewsClassification import *
 from .pan.PunjabiNewsClassification import *
 from .pol.PolishClassification import *
+from .por.HateSpeechPortugueseClassification import *
 from .ron.RomanianSentimentClassification import *
 from .san.SanskritShlokasClassification import *
 from .sin.SinhalaNewsClassification import *
