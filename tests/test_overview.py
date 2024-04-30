@@ -55,6 +55,20 @@ def test_get_task(
             assert task.superseeded_by is None
 
 
+def test_get_tasks_filtering():
+    """Tests that get_tasks filters tasks for languages within the task, i.e. that a multilingual task returns only relevant subtasks for the
+    specified languages
+    """
+    tasks = get_tasks(languages=["eng"])
+
+    for task in tasks:
+        if task.is_multilingual:
+            assert isinstance(task.metadata.eval_langs, dict)
+
+            for hf_split in task.langs:
+                assert "eng-Latn" in task.metadata.eval_langs[hf_split]
+
+
 @pytest.mark.parametrize("script", [["Latn"], ["Cyrl"], None])
 @pytest.mark.parametrize("task_types", [["Classification"], ["Clustering"], None])
 def test_MTEBTasks(
@@ -65,7 +79,7 @@ def test_MTEBTasks(
     assert isinstance(tasks, MTEBTasks)
     langs = tasks.languages
     for t in tasks:
-        len(langs.intersection(t.languages)) > 0
+        assert len(langs.intersection(t.languages)) > 0
 
     # check for header of a table
     n_langs = len(tasks)
