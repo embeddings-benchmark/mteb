@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "ContractNLISharingWithThirdPartiesLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.5666666666666667,
+    "accuracy_stderr": 0.0,
+    "ap": 0.42693444618327253,
+    "ap_stderr": 5.551115123125783e-17,
+    "evaluation_time": 18.51,
+    "f1": 0.555921052631579,
+    "f1_stderr": 0.0,
+    "main_score": 0.5666666666666667
+  }
+}

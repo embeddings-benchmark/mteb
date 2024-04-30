@@ -141,10 +141,10 @@ class TaskMetadata(BaseModel):
         socioeconomic_status: The socioeconomic status of the data. Includes "high", "medium", "low", "mixed".
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
-        dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag.
+        dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
         text_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
-        bibtex_citation: The BibTeX citation for the dataset.
+        bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
         n_samples: The number of samples in the dataset. This should only be for the splits evaluated on. For retrieval tasks, this should be the
             number of query-document pairs.
         avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on. For
@@ -235,17 +235,21 @@ class TaskMetadata(BaseModel):
             )
 
     @property
-    def languages(self) -> set[str]:
+    def languages(self) -> list[str]:
         """Return the languages of the dataset as iso639-3 codes."""
 
         def get_lang(lang: str) -> str:
             return lang.split("-")[0]
 
         if isinstance(self.eval_langs, dict):
-            return set(
-                get_lang(lang) for langs in self.eval_langs.values() for lang in langs
+            return sorted(
+                set(
+                    get_lang(lang)
+                    for langs in self.eval_langs.values()
+                    for lang in langs
+                )
             )
-        return set(sorted([get_lang(lang) for lang in self.eval_langs]))
+        return sorted(set([get_lang(lang) for lang in self.eval_langs]))
 
     @property
     def scripts(self) -> set[str]:
@@ -259,3 +263,9 @@ class TaskMetadata(BaseModel):
                 get_script(lang) for langs in self.eval_langs.values() for lang in langs
             )
         return set(get_script(lang) for lang in self.eval_langs)
+
+    def is_filled(self) -> bool:
+        """Check if all the metadata fields are filled."""
+        return all(
+            getattr(self, field_name) is not None for field_name in self.model_fields
+        )
