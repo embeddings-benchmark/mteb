@@ -99,7 +99,7 @@ class AbsTask(ABC):
         raise NotImplementedError
 
     @property
-    def languages(self) -> set[str]:
+    def languages(self) -> list[str]:
         """Returns the languages of the task"""
         return self.metadata.languages
 
@@ -110,7 +110,7 @@ class AbsTask(ABC):
         """
         langs = self.languages
         if len(langs) > 3:
-            langs = list(langs)[:3]
+            langs = langs[:3]
             langs.append("...")
         return (
             f"{self.__class__.__name__}(name='{self.metadata.name}', languages={langs})"
