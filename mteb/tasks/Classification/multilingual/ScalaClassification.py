@@ -31,7 +31,7 @@ class MultiScalaClassification(AbsTaskClassification, MultilingualTask):
         domains=None,
         task_subtypes=["Linguistic acceptability"],
         license=None,
-        socioeconomic_status="high",
+        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=None,
         text_creation="created",
