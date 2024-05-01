@@ -7,7 +7,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class CanadaTaxCourtOutcomesLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CanadaTaxCourtOutcomesLegalBenchClassification",
-        description="Canada Tax Court Outcomes LegalBench Classification Dataset",
+        description="The input is an excerpt of text from Tax Court of Canada decisions involving appeals of tax related matters. The task is to classify whether the excerpt includes the outcome of the appeal, and if so, to specify whether the appeal was allowed or dismissed. Partial success (e.g. appeal granted on one tax year but dismissed on another) counts as allowed (with the exception of costs orders which are disregarded). Where the excerpt does not clearly articulate an outcome, the system should indicate other as the outcome. Categorizing case outcomes is a common task that legal researchers complete in order to gather datasets involving outcomes in legal processes for the purposes of quantitative empirical legal research.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -50,7 +50,7 @@ class ContractNLIConfidentialityOfAgreementLegalBenchClassification(
 ):
     metadata = TaskMetadata(
         name="ContractNLIConfidentialityOfAgreementLegalBenchClassification",
-        description="Contract NLI Confidentiality Of Agreement LegalBench Classification Dataset",
+        description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA provides that the Receiving Party shall not disclose the fact that Agreement was agreed or negotiated.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -103,7 +103,7 @@ class ContractNLIConfidentialityOfAgreementLegalBenchClassification(
 class ContractNLIExplicitIdentificationLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ContractNLIExplicitIdentificationLegalBenchClassification",
-        description="Contract NLI Explicit Identification LegalBench Classification Dataset",
+        description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that all Confidential Information shall be expressly identified by the Disclosing Party.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -158,7 +158,7 @@ class ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification(
 ):
     metadata = TaskMetadata(
         name="ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification",
-        description="Contract NLI Inclusion of Verbally Conveyed Information LegalBench Classification Dataset",
+        description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that Confidential Information may include verbally conveyed information.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -211,7 +211,7 @@ class ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification(
 class ContractNLILimitedUseLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ContractNLILimitedUseLegalBenchClassification",
-        description="Contract NLI Limited Use LegalBench Classification Dataset",
+        description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Receiving Party shall not use any Confidential Information for any purpose other than the purposes stated in Agreement.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -264,7 +264,7 @@ class ContractNLILimitedUseLegalBenchClassification(AbsTaskClassification):
 class ContractNLINoLicensingLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ContractNLINoLicensingLegalBenchClassification",
-        description="Contract NLI No Licensing LegalBench Classification Dataset",
+        description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Agreement shall not grant Receiving Party any right to Confidential Information.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -319,7 +319,7 @@ class ContractNLINoticeOnCompelledDisclosureLegalBenchClassification(
 ):
     metadata = TaskMetadata(
         name="ContractNLINoticeOnCompelledDisclosureLegalBenchClassification",
-        description="Contract NLI Notice on Compelled Disclosure LegalBench Classification Dataset",
+        description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Receiving Party shall notify Disclosing Party in case Receiving Party is required by law, regulation or judicial process to disclose any Confidential Information.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -374,7 +374,7 @@ class ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassificat
 ):
     metadata = TaskMetadata(
         name="ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification",
-        description="Contract NLI Permissible Acquirement of Similar Information LegalBench Classification Dataset",
+        description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Receiving Party may acquire information similar to Confidential Information from a third party.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -427,7 +427,7 @@ class ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassificat
 class ContractNLIPermissibleCopyLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ContractNLIPermissibleCopyLegalBenchClassification",
-        description="Contract NLI Permissible Copy LegalBench Classification Dataset",
+        description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Receiving Party may create a copy of some Confidential Information in some circumstances.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -482,7 +482,7 @@ class ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassificat
 ):
     metadata = TaskMetadata(
         name="ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification",
-        description="Contract NLI Permissible Development of Similar Information LegalBench Classification Dataset",
+        description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Receiving Party may independently develop information similar to Confidential Information.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -537,7 +537,7 @@ class ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification(
 ):
     metadata = TaskMetadata(
         name="ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification",
-        description="Contract NLI Permissible Post Agreement Possession LegalBench Classification Dataset",
+        description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Receiving Party may retain some Confidential Information even after the return or destruction of Confidential Information.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -592,7 +592,7 @@ class ContractNLIReturnOfConfidentialInformationLegalBenchClassification(
 ):
     metadata = TaskMetadata(
         name="ContractNLIReturnOfConfidentialInformationLegalBenchClassification",
-        description="Contract NLI Return of Confidential Information LegalBench Classification Dataset",
+        description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Receiving Party shall destroy or return some Confidential Information upon the termination of Agreement.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -645,7 +645,7 @@ class ContractNLIReturnOfConfidentialInformationLegalBenchClassification(
 class ContractNLISharingWithEmployeesLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ContractNLISharingWithEmployeesLegalBenchClassification",
-        description="Contract NLI Sharing With Employees LegalBench Classification Dataset",
+        description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Receiving Party may share some Confidential Information with some of Receiving Party's employees.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -698,7 +698,7 @@ class ContractNLISharingWithEmployeesLegalBenchClassification(AbsTaskClassificat
 class ContractNLISharingWithThirdPartiesLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ContractNLISharingWithThirdPartiesLegalBenchClassification",
-        description="Contract NLI Sharing With Third Parties LegalBench Classification Dataset",
+        description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that the Receiving Party may share some Confidential Information with some third-parties (including consultants, agents and professional advisors).",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -751,7 +751,7 @@ class ContractNLISharingWithThirdPartiesLegalBenchClassification(AbsTaskClassifi
 class ContractNLISurvivalOfObligationsLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ContractNLISurvivalOfObligationsLegalBenchClassification",
-        description="Contract NLI Survival of Obligations LegalBench Classification Dataset",
+        description="This task is a subset of ContractNLI, and consists of determining whether a clause from an NDA clause provides that some obligations of Agreement may survive termination of Agreement.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -804,7 +804,7 @@ class ContractNLISurvivalOfObligationsLegalBenchClassification(AbsTaskClassifica
 class CorporateLobbyingLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CorporateLobbyingLegalBenchClassification",
-        description="Corporate Lobbying LegalBench Classification Dataset",
+        description="The Corporate Lobbying task cosists of determining whether a proposed Congressional bill may be relevant to a company based on a company's self-description in its SEC 10K filing.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -867,7 +867,7 @@ class CorporateLobbyingLegalBenchClassification(AbsTaskClassification):
 class CUADAffiliateLicenseLicenseeLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADAffiliateLicenseLicenseeLegalBenchClassification",
-        description="CUAD Affiliate License-Licensee LegalBench Classification Dataset",
+        description="This task was constructed from the CUAD dataset. It consists of determining if a clause describes a license grant to a licensee (incl. sublicensor) and the affiliates of such licensee/sublicensor.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -921,7 +921,7 @@ class CUADAffiliateLicenseLicenseeLegalBenchClassification(AbsTaskClassification
 class CUADAffiliateLicenseLicensorLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADAffiliateLicenseLicensorLegalBenchClassification",
-        description="CUAD Affiliate License-Licensor LegalBench Classification Dataset",
+        description="This task was constructed from the CUAD dataset. It consists of determining if the clause describes a license grant by affiliates of the licensor or that includes intellectual property of affiliates of the licensor.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -975,7 +975,7 @@ class CUADAffiliateLicenseLicensorLegalBenchClassification(AbsTaskClassification
 class CUADAntiAssignmentLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADAntiAssignmentLegalBenchClassification",
-        description="CUAD Anti-Assignment LegalBench Classification Dataset",
+        description="This task was constructed from the CUAD dataset. It consists of determining if the clause requires consent or notice of a party if the contract is assigned to a third party.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -1029,7 +1029,7 @@ class CUADAntiAssignmentLegalBenchClassification(AbsTaskClassification):
 class CUADAuditRightsLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CUADAuditRightsLegalBenchClassification",
-        description="CUAD Audit Rights LegalBench Classification Dataset",
+        description="This task was constructed from the CUAD dataset. It consists of determining if the clause gives a party the right to audit the books, records, or physical locations of the counterparty to ensure compliance with the contract.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
