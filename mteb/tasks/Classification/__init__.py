@@ -39,7 +39,6 @@ from .hin.HindiDiscourseClassification import *
 from .hin.SentimentAnalysisHindi import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
-from .multilingual.IndicNLPNewsClassification import *
 from .jpn.WRIMEClassification import *
 from .kan.KannadaNewsClassification import *
 from .kur.KurdishSentimentClassification import *
@@ -48,6 +47,7 @@ from .mkd.MacedonianTweetSentimentClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
 from .multilingual.IndicLangClassification import *
+from .multilingual.IndicNLPNewsClassification import *
 from .multilingual.IndicSentimentClassification import *
 from .multilingual.MasakhaNEWSClassification import *
 from .multilingual.MassiveIntentClassification import *

@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from ....abstasks import AbsTaskClassification, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from ....abstasks import AbsTaskClassification, MultilingualTask
 
 _LANGUAGES = {
     "gu": ["guj-Gujr"],
@@ -20,7 +21,7 @@ class IndicNLPNewsClassification(MultilingualTask, AbsTaskClassification):
         name="IndicNLPNewsClassification",
         dataset={
             "path": "Sakshamrzt/IndicNLP-Multilingual",
-            "revision": "ce8e3e3413e1871d2e20da61f2a45033be5d1c17",
+            "revision": "308230fabdcada106869a5196ba11c403d065b07",
         },
         description="A News classification dataset in multiple Indian regional languages.",
         reference="https://github.com/AI4Bharat/indicnlp_corpus/blob/master/ai4bharat-indicnlp-corpus-2020.pdf",
@@ -50,4 +51,12 @@ class IndicNLPNewsClassification(MultilingualTask, AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns({"news": "text", "class": "label"})
+        for lang in self.langs:
+            self.dataset[lang] = self.dataset[lang].rename_columns(
+                {"news": "text", "class": "label"}
+            )
+            if lang == "pa":
+                self.dataset[lang] = self.dataset[lang].remove_columns("headline")
+            self.dataset[lang] = self.stratified_subsampling(
+                self.dataset[lang], n_samples=256, seed=self.seed, splits=["test"]
+            )
