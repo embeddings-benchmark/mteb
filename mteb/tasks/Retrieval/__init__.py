@@ -9,6 +9,7 @@ from .deu.GerDaLIRSmallRetrieval import *
 from .deu.GermanDPRRetrieval import *
 from .deu.GermanQuADRetrieval import *
 from .deu.LegalQuADRetrieval import *
+from .ell.GreekCivicsQA import *
 from .eng.AILACasedocsRetrieval import *
 from .eng.AILAStatutesRetrieval import *
 from .eng.ArguAnaRetrieval import *
@@ -59,6 +60,7 @@ from .hun.HunSum2 import *
 from .jpn.JaQuADRetrieval import *
 from .kor.KoMiracl import *
 from .kor.KoStrategyQA import *
+from .multilingual.IndicQARetrieval import *
 from .multilingual.MintakaRetrieval import *
 from .multilingual.MIRACLRetrieval import *
 from .multilingual.MLQARetrieval import *
@@ -67,6 +69,7 @@ from .multilingual.NeuCLIR2022Retrieval import *
 from .multilingual.NeuCLIR2023Retrieval import *
 from .multilingual.XMarketRetrieval import *
 from .multilingual.XPQARetrieval import *
+from .multilingual.XQuADRetrieval import *
 from .nob.norquad import *
 from .nob.snl_retrieval import *
 from .pol.ArguAnaPLRetrieval import *
@@ -80,6 +83,7 @@ from .pol.QuoraPLRetrieval import *
 from .pol.SCIDOCSPLRetrieval import *
 from .pol.SciFactPLRetrieval import *
 from .pol.TRECCOVIDPLRetrieval import *
+from .slk.SlovakSumRetrieval import *
 from .spa.SpanishPassageRetrievalS2P import *
 from .spa.SpanishPassageRetrievalS2S import *
 from .swe.swedn_retrieval import *

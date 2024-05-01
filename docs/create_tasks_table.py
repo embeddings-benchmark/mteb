@@ -43,9 +43,7 @@ def task_to_markdown_row(task: mteb.AbsTask) -> str:
 
     name_w_reference += author_from_bibtex(task.metadata.bibtex_citation)
 
-    languages = sorted(list(task.metadata.languages))
-
-    return f"| {name_w_reference} | {languages} | {task.metadata.type} | {task.metadata.category} | {domains} | {n_samples} | {avg_character_length} |"
+    return f"| {name_w_reference} | {task.metadata.languages} | {task.metadata.type} | {task.metadata.category} | {domains} | {n_samples} | {avg_character_length} |"
 
 
 def create_tasks_table(tasks: list[mteb.AbsTask]) -> str:

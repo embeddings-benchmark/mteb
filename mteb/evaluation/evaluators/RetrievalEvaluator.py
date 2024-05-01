@@ -3,6 +3,7 @@ from __future__ import annotations
 import heapq
 import json
 import logging
+import os
 from collections import defaultdict
 from typing import Dict, List, Tuple
 
@@ -13,7 +14,7 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
 
 from .Evaluator import Evaluator
-from .utils import cos_sim, dot_score, hole, mrr, recall_cap, top_k_accuracy
+from .utils import cos_sim, dot_score, download, hole, mrr, recall_cap, top_k_accuracy
 
 logger = logging.getLogger(__name__)
 
@@ -171,6 +172,22 @@ class DenseRetrievalExactSearch:
 
     def load_results_file(self):
         # load the first stage results from file in format {qid: {doc_id: score}}
+        if "https://" in self.previous_results:
+            # download the file
+            if not os.path.exists(self.previous_results):
+                url_descriptor = self.previous_results.split("https://")[-1].replace(
+                    "/", "--"
+                )
+                dest_file = os.path.join(
+                    "results", f"cached_predictions--{url_descriptor}"
+                )
+                os.makedirs(os.path.dirname(os.path.abspath(dest_file)), exist_ok=True)
+                download(self.previous_results, dest_file)
+                logger.info(
+                    f"Downloaded the previous results at {self.previous_results} to {dest_file}"
+                )
+            self.previous_results = dest_file
+
         with open(self.previous_results, "r") as f:
             previous_results = json.load(f)
         assert isinstance(previous_results, dict)
@@ -282,11 +299,12 @@ class DRESModel:
                 logger.warning(
                     "Queries will not be truncated. This could lead to memory issues. In that case please lower the batch_size."
                 )
+
         if "instructions" in kwargs:
             if kwargs["instructions"] is not None:
                 queries = [
-                    (query + " " + instruction).strip()
-                    for query, instruction in zip(queries, kwargs["instructions"])
+                    (query + " " + kwargs["instructions"][query]).strip()
+                    for query in queries
                 ]
             new_kwargs = {
                 k: v for k, v in kwargs.items() if k not in ["instructions", "qid"]

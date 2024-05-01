@@ -5,6 +5,8 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class BlurbsClusteringP2P(AbsTaskClustering):
+    superseeded_by = "BlurbsClusteringP2P.v2"
+
     metadata = TaskMetadata(
         name="BlurbsClusteringP2P",
         description="Clustering of book titles+blurbs. Clustering of 28 sets, either on the main or secondary genre.",

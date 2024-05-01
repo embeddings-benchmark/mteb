@@ -8,7 +8,7 @@ from mteb.benchmarks import (
     MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
 )
 from mteb.evaluation import *
-from mteb.get_tasks import get_tasks
+from mteb.overview import get_tasks
 
 __version__ = version("mteb")  # fetch version from install metadata
 
