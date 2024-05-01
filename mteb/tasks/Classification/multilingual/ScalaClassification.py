@@ -4,8 +4,8 @@ from mteb.abstasks import AbsTaskClassification, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = {
-    "Danish": ["dan-Arab"],
-    "Norwegian_b": ["nob-Hans"],
+    "Danish": ["dan-Latn"],
+    "Norwegian_b": ["nob-Latn"],
     "Norwegian_n": ["nno-Latn"],
     "Swedish": ["swe-Latn"],
 }
