@@ -1,0 +1,64 @@
+{
+  "dataset_revision": "308230fabdcada106869a5196ba11c403d065b07",
+  "mteb_dataset_name": "IndicNLPNewsClassification",
+  "mteb_version": "1.5.2",
+  "test": {
+    "evaluation_time": 64.77,
+    "gu": {
+      "accuracy": 0.882421875,
+      "accuracy_stderr": 0.026691437977900793,
+      "f1": 0.881501407236507,
+      "f1_stderr": 0.027165735836055253,
+      "main_score": 0.882421875
+    },
+    "kn": {
+      "accuracy": 0.6890625,
+      "accuracy_stderr": 0.04251177456378997,
+      "f1": 0.6853637444470259,
+      "f1_stderr": 0.04206455989538907,
+      "main_score": 0.6890625
+    },
+    "mal": {
+      "accuracy": 0.58359375,
+      "accuracy_stderr": 0.03619135881843897,
+      "f1": 0.5767081363923059,
+      "f1_stderr": 0.03522509797984127,
+      "main_score": 0.58359375
+    },
+    "mr": {
+      "accuracy": 0.9171875,
+      "accuracy_stderr": 0.024067065313670876,
+      "f1": 0.9172987482150508,
+      "f1_stderr": 0.0240256659282879,
+      "main_score": 0.9171875
+    },
+    "ori": {
+      "accuracy": 0.61171875,
+      "accuracy_stderr": 0.057917978102658245,
+      "f1": 0.6034902953418827,
+      "f1_stderr": 0.0581737299852815,
+      "main_score": 0.61171875
+    },
+    "pa": {
+      "accuracy": 0.683984375,
+      "accuracy_stderr": 0.05207047367285634,
+      "f1": 0.6863874422573452,
+      "f1_stderr": 0.04977116560698522,
+      "main_score": 0.683984375
+    },
+    "ta": {
+      "accuracy": 0.701953125,
+      "accuracy_stderr": 0.047458928069601676,
+      "f1": 0.7022922711259553,
+      "f1_stderr": 0.04691837569755877,
+      "main_score": 0.701953125
+    },
+    "tel": {
+      "accuracy": 0.753515625,
+      "accuracy_stderr": 0.03641203347302407,
+      "f1": 0.753523142704564,
+      "f1_stderr": 0.037937528199247804,
+      "main_score": 0.753515625
+    }
+  }
+}
