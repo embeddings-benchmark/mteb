@@ -26,7 +26,7 @@ class MultiScalaClassification(AbsTaskClassification, MultilingualTask):
         eval_splits=["test"],
         eval_langs=_LANGS,
         main_score="accuracy",
-        date=None,
+        date=("1990-01-01", "2023-01-01") # derived from dependency treebank, this a the best guess
         form=["written"],
         domains=None,
         task_subtypes=["Linguistic acceptability"],
