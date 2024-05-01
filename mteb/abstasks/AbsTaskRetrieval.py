@@ -193,8 +193,7 @@ class HFDataLoader:
 
 
 class AbsTaskRetrieval(AbsTask):
-    """
-    Abstract class for re-ranking experiments.
+    """Abstract class for re-ranking experiments.
 
     Child-classes must implement the following properties:
 
@@ -279,7 +278,7 @@ class AbsTaskRetrieval(AbsTask):
             "Time taken to retrieve: {:.2f} seconds".format(end_time - start_time)
         )
 
-        if kwargs.get("save_qrels", False):
+        if kwargs.get("save_predictions", False):
             output_folder = kwargs.get("output_folder", "results")
             if not os.path.isdir(output_folder):
                 os.makedirs(output_folder)
@@ -296,12 +295,10 @@ class AbsTaskRetrieval(AbsTask):
                     }
             if lang is None:
                 qrels_save_path = (
-                    f"{output_folder}/{self.metadata_dict['name']}_qrels.json"
+                    f"{output_folder}/{self.metadata_dict['name']}_predictions.json"
                 )
             else:
-                qrels_save_path = (
-                    f"{output_folder}/{self.metadata_dict['name']}_{lang}_qrels.json"
-                )
+                qrels_save_path = f"{output_folder}/{self.metadata_dict['name']}_{lang}_predictions.json"
 
             with open(qrels_save_path, "w") as f:
                 json.dump(results, f)
@@ -358,6 +355,9 @@ def calculate_length_and_count(relevant_docs, queries, corpus):
     for query_id, docs in relevant_docs.items():
         query = queries[query_id]
         for doc_id in docs:
+            # not relevant
+            if docs[doc_id] == 0:
+                continue
             doc = corpus[doc_id]
             doc_text = doc["title"] + doc["text"]
             total_length += len(query) + len(doc_text)

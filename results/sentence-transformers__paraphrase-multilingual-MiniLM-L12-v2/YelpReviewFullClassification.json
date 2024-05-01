@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "c1f9ee939b7d05667af864ee1cb066393154bf85",
+  "mteb_dataset_name": "YelpReviewFullClassification",
+  "mteb_version": "1.6.12",
+  "test": {
+    "accuracy": 0.403076171875,
+    "accuracy_stderr": 0.013975851348986046,
+    "evaluation_time": 22.98,
+    "f1": 0.40205124258244246,
+    "f1_stderr": 0.014335948743968159,
+    "main_score": 0.403076171875
+  }
+}

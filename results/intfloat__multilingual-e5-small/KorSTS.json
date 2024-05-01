@@ -1,0 +1,20 @@
+{
+  "dataset_revision": "016f35f9b961daaaa7a352e927084e3da662ac1f",
+  "mteb_dataset_name": "KorSTS",
+  "mteb_version": "1.6.3",
+  "test": {
+    "cos_sim": {
+      "pearson": 0.7523126858440565,
+      "spearman": 0.7451242052419457
+    },
+    "euclidean": {
+      "pearson": 0.74503523721575,
+      "spearman": 0.7451274994032616
+    },
+    "evaluation_time": 1.61,
+    "manhattan": {
+      "pearson": 0.7444275035327651,
+      "spearman": 0.7443553691832091
+    }
+  }
+}

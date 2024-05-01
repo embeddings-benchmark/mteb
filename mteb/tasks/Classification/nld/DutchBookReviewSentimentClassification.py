@@ -28,8 +28,8 @@ class DutchBookReviewSentimentClassification(AbsTaskClassification):
         dialect=[],
         text_creation="found",
         bibtex_citation="""@article{DBLP:journals/corr/abs-1910-00896,
-  author    = {Benjamin van der Burgh and
-               Suzan Verberne},
+  author    = {Benjamin, van der Burgh and
+               Suzan, Verberne},
   title     = {The merits of Universal Language Model Fine-tuning for Small Datasets
                - a case with Dutch book reviews},
   journal   = {CoRR},

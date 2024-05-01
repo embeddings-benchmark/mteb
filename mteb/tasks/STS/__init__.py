@@ -9,11 +9,16 @@ from .eng.STS14STS import *
 from .eng.STS15STS import *
 from .eng.STS16STS import *
 from .eng.STSBenchmarkSTS import *
+from .fin.FinParaSTS import *
 from .fra.SickFrSTS import *
 from .jpn.JSTS import *
+from .kor.KlueSTS import *
+from .kor.KorSTS import *
+from .multilingual.IndicCrosslingualSTS import *
 from .multilingual.STS17CrosslingualSTS import *
 from .multilingual.STS22CrosslingualSTS import *
 from .multilingual.STSBenchmarkMultilingualSTS import *
 from .pol.PolishSTS import *
+from .ron.RonSTS import *
 from .spa.STSES import *
 from .zho.CMTEBSTS import *

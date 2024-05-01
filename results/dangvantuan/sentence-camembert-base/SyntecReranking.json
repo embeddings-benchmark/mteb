@@ -1,0 +1,10 @@
+{
+  "dataset_revision": "b205c5084a0934ce8af14338bf03feb19499c84d",
+  "mteb_dataset_name": "SyntecReranking",
+  "mteb_version": "1.6.16",
+  "test": {
+    "evaluation_time": 87.1,
+    "map": 0.7975,
+    "mrr": 0.7975
+  }
+}

@@ -11,8 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class AbsTaskSummarization(AbsTask):
-    """
-    Abstract class for summarization experiments.
+    """Abstract class for summarization experiments.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
         text: str
