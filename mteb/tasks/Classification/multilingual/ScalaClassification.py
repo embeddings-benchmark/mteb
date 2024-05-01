@@ -11,7 +11,7 @@ _LANGS = {
 }
 
 
-class MultiScalaClassification(AbsTaskClassification, MultilingualTask):
+class ScalaClassification(AbsTaskClassification, MultilingualTask):
     metadata = TaskMetadata(
         name="MultiScalaClassification",
         description="""ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks. 
