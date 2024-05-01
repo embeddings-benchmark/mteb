@@ -30,8 +30,8 @@ class ScalaClassification(AbsTaskClassification, MultilingualTask):
             "1990-01-01",
             "2023-01-01",
         ),  # derived from dependency treebank, this a the best guess
-        form=["fiction", "news", "non-fiction", "spoken", "blog"],
-        domains=None,
+        form=["written"],
+        domains=["fiction", "news", "non-fiction", "spoken", "blog"],
         task_subtypes=["Linguistic acceptability"],
         license="CC BY-SA 4.0",
         socioeconomic_status="mixed",
