@@ -1,0 +1,1538 @@
+[
+  {
+    "text": "fear dot com is so rambling and disconnected it never builds any suspense .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 0
+  },
+  {
+    "text": "nothing about it fits .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 1
+  },
+  {
+    "text": "-lrb- director -rrb- byler may yet have a great movie in him , but charlotte sometimes is only half of one .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 2
+  },
+  {
+    "text": "a woozy , roisterous , exhausting mess , and the off-beat casting of its two leads turns out to be as ill-starred as you might expect .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 3
+  },
+  {
+    "text": "japan 's premier stylist of sex and blood hits audiences with what may be his most demented film to date .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 4
+  },
+  {
+    "text": "it 's an awfully derivative story .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 5
+  },
+  {
+    "text": "oedekerk wrote patch adams , for which he should not be forgiven .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 6
+  },
+  {
+    "text": "propelled not by characters but by caricatures .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 7
+  },
+  {
+    "text": "the movie addresses a hungry need for pg-rated , nonthreatening family movies , but it does n't go too much further .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 8
+  },
+  {
+    "text": "scotland , pa. is a strangely drab romp .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 9
+  },
+  {
+    "text": "it never fails to engage us .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 10
+  },
+  {
+    "text": "the tug-of-war at the core of beijing bicycle becomes weighed down with agonizing contrivances , overheated pathos and long , wistful gazes .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 11
+  },
+  {
+    "text": "shadyac shoots his film like an m. night shyamalan movie , and he frequently maintains the same snail 's pace ; he just forgot to add any genuine tension .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 12
+  },
+  {
+    "text": "reggio falls victim to relying on the very digital technology that he fervently scorns , creating a meandering , inarticulate and ultimately disappointing film .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 13
+  },
+  {
+    "text": "the movie makes absolutely no sense .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 14
+  },
+  {
+    "text": "though certainly original in form , altar boys requires a taste for swamp thing-type animation , doubled with a deafening score .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 15
+  },
+  {
+    "text": "for all its serious sense of purpose ... -lrb- it -rrb- finds a way to lay bare the tragedies of its setting with a good deal of warmth and humor .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 16
+  },
+  {
+    "text": "at about 95 minutes , treasure planet maintains a brisk pace as it races through the familiar story .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 17
+  },
+  {
+    "text": "we miss the quirky amazement that used to come along for an integral part of the ride .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 18
+  },
+  {
+    "text": "as a revenge thriller , the movie is serviceable , but it does n't really deliver the delicious guilty pleasure of the better film versions .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 19
+  },
+  {
+    "text": "alex nohe 's documentary plays like a travelogue for what mostly resembles a real-life , big-budget nc-17 version of tank girl .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 20
+  },
+  {
+    "text": "... a joke at once flaky and resonant , lightweight and bizarrely original .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 21
+  },
+  {
+    "text": "haneke keeps us at arm 's length .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 22
+  },
+  {
+    "text": "the cartoon is about as true to the spirit of the festival of lights as mr. deeds was to that of frank capra .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 23
+  },
+  {
+    "text": "you 're better off staying home and watching the x-files .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 24
+  },
+  {
+    "text": "the movie bounces all over the map .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 25
+  },
+  {
+    "text": "-lrb- i -rrb- f you 've been to more than one indie flick in your life , chances are you 've already seen this kind of thing .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 26
+  },
+  {
+    "text": "just because it really happened to you , honey , does n't mean that it 's interesting to anyone else .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 27
+  },
+  {
+    "text": "but the characters tend to be cliches whose lives are never fully explored .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 28
+  },
+  {
+    "text": "all these developments and challenges facing santa weigh down the plot so heavily that they drain all the film of its energy and needlessly strain credibility .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 29
+  },
+  {
+    "text": "tadpole is emblematic of the witless ageism afflicting films : young is cool , and too young is too cool .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 30
+  },
+  {
+    "text": "at its best , the good girl is a refreshingly adult take on adultery ...",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 31
+  },
+  {
+    "text": "an amazing and incendiary movie that dives straight into the rough waters of contradiction .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 32
+  },
+  {
+    "text": "cuts right through the b.s. giving a big middle-fingered `` shut up '' to those who talk up what is nothing more than two guys beating the hell outta one another .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 33
+  },
+  {
+    "text": "-lrb- it 's -rrb- a prison soccer movie starring charismatic tough guy vinnie jones , but it had too much spitting for me to enjoy .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 34
+  },
+  {
+    "text": "the problem is n't that the movie hits so close to home so much as that it hits close to home while engaging in such silliness as that snake-down-the-throat business and the inevitable shot of schwarzenegger outrunning a fireball .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 35
+  },
+  {
+    "text": "obstacles are too easily overcome and there is n't much in the way of character development in the script .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 36
+  },
+  {
+    "text": "strong setup and ambitious goals fade as the film descends into unsophisticated scare tactics and b-film thuggery .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 37
+  },
+  {
+    "text": "whether kiss is a future cult classic or destined to be completely forgotten is open to question , but the risk-takers in the crowd should check it out and form their own opinion .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 38
+  },
+  {
+    "text": "you 'll be more entertained getting hit by a bus .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 39
+  },
+  {
+    "text": "a highly intriguing thriller , coupled with some ingenious plot devices and some lavishly built settings . .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 40
+  },
+  {
+    "text": "while the mystery surrounding the nature of the boat 's malediction remains intriguing enough to sustain mild interest , the picture refuses to offer much accompanying sustenance in the way of characterization , humor or plain old popcorn fun .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 41
+  },
+  {
+    "text": "if you 're like me , a sucker for a good old fashion romance and someone who shamelessly loves to eat , then mostly martha offers all the perfect ingredients to more than satisfy your appetite .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 42
+  },
+  {
+    "text": "cantet perfectly captures the hotel lobbies , two-lane highways , and roadside cafes that permeate vincent 's days",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 43
+  },
+  {
+    "text": "an absorbing trip into the minds and motivations of people under stress as well as a keen , unsentimental look at variations on the theme of motherhood .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 44
+  },
+  {
+    "text": "kwan makes the mix-and - match metaphors intriguing , while lulling us into torpor with his cultivated allergy to action .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 45
+  },
+  {
+    "text": "hey , who else needs a shower ?",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 46
+  },
+  {
+    "text": "though the plot is predictable , the movie never feels formulaic , because the attention is on the nuances of the emotional development of the delicate characters .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 47
+  },
+  {
+    "text": "fans of the tv series will be disappointed , and everyone else will be slightly bored .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 48
+  },
+  {
+    "text": "jacquot 's tosca is a treat .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 49
+  },
+  {
+    "text": "disturbingly superficial in its approach to the material .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 50
+  },
+  {
+    "text": "obvious politics and rudimentary animation reduce the chances that the appeal of hey arnold !",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 51
+  },
+  {
+    "text": "a morality tale whose thought-provoking potential is hampered by a made-for-tv look , rigid performances and an asinine ` twist ' that brazenly rips off the sixth sense .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 52
+  },
+  {
+    "text": "a standard haunted house tale transplanted to the high seas .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 53
+  },
+  {
+    "text": "a frisky and fresh romantic comedy exporing sexual politics and the challenges of friendships between women .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 54
+  },
+  {
+    "text": "soul is what 's lacking in every character in this movie and , subsequently , the movie itself .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 55
+  },
+  {
+    "text": "a whimsical if predictable time-travel fable marred by a willful single-mindedness .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 56
+  },
+  {
+    "text": "it 's badly acted , blandly directed , and could have been scripted by someone who just graduated from elementary school .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 57
+  },
+  {
+    "text": "plays less like a coming-of-age romance than an infomercial .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 58
+  },
+  {
+    "text": "one of the most haunting , viciously honest coming-of-age films in recent memory .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 59
+  },
+  {
+    "text": "christians sensitive to a reductionist view of their lord as a luv-spreading dr. feelgood or omnipotent slacker will feel vastly more affronted than secularists , who might even praise god for delivering such an instant camp classic .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 60
+  },
+  {
+    "text": "a work of intricate elegance , literary lyricism and profound common sense .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 61
+  },
+  {
+    "text": "only an epic documentary could get it all down , and spike lee 's jim brown : all american at long last gives its subject a movie worthy of his talents .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 62
+  },
+  {
+    "text": "leave it to rohmer , now 82 , to find a way to bend current technique to the service of a vision of the past that is faithful to both architectural glories and commanding open spaces of the city as it was more than two centuries ago .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 63
+  },
+  {
+    "text": "engagingly captures the maddening and magnetic ebb and flow of friendship .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 64
+  },
+  {
+    "text": "a comprehensive and provocative film -- one that pushes the boundaries of biography , and challenges its audience .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 65
+  },
+  {
+    "text": "one groan-inducing familiarity begets another .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 66
+  },
+  {
+    "text": "when it comes to entertainment , children deserve better than pokemon 4ever .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 67
+  },
+  {
+    "text": "truth to tell , if you 've seen more than half-a-dozen horror films , there 's nothing here you have n't seen before .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 68
+  },
+  {
+    "text": "none of these characters resembles anyone you 've ever met in real life , unless you happen to know annoyingly self-involved people who speak in glib sentences that could have only come from the pen of a screenwriter .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 69
+  },
+  {
+    "text": "half of it is composed of snappy patter and pseudo-sophisticated cultural observations , while the remainder ... would be more at home on a daytime television serial .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 70
+  },
+  {
+    "text": "katz uses archival footage , horrifying documents of lynchings , still photographs and charming old reel-to-reel recordings of meeropol entertaining his children to create his song history , but most powerful of all is the song itself",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 71
+  },
+  {
+    "text": "everything that has to do with yvan and charlotte , and everything that has to do with yvan 's rambunctious , jewish sister and her non-jew husband , feels funny and true .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 72
+  },
+  {
+    "text": "the cast is so low-wattage that none of the characters comes off as big ... and the setting remains indistinct .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 73
+  },
+  {
+    "text": "it 's fun , but the code-talk will fly right over everyone 's head",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 74
+  },
+  {
+    "text": "in adobo , ethnicity is not just the spice , but at the heart of more universal concerns .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 75
+  },
+  {
+    "text": "like most sequels , it takes what worked last time , repeats it and adds more characters , more stunts , more stuff in attempt to camouflage its sameness .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 76
+  },
+  {
+    "text": "maybe it 's asking too much , but if a movie is truly going to inspire me , i want a little more than this .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 77
+  },
+  {
+    "text": "an intimate , good-humored ethnic comedy like numerous others but cuts deeper than expected .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 78
+  },
+  {
+    "text": "still , i thought it could have been more .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 79
+  },
+  {
+    "text": "a bowel-curdling , heart-stopping recipe for terror .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 80
+  },
+  {
+    "text": "the director , steven shainberg , has succeeded by focusing intently on his characters , making them quirky individuals rather than figures of fun .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 81
+  },
+  {
+    "text": "there has been much puzzlement among critics about what the election symbolizes .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 82
+  },
+  {
+    "text": "all prints of this film should be sent to and buried on pluto .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 83
+  },
+  {
+    "text": "but here 's the real damn : it is n't funny , either .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 84
+  },
+  {
+    "text": "and in this regard , on guard delivers .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 85
+  },
+  {
+    "text": "director benoit jacquot , making his first opera-to-film translation with tosca , conveys the heaving passion of puccini 's famous love-jealousy - murder-suicide fandango with great cinematic innovation .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 86
+  },
+  {
+    "text": "bears is bad .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 87
+  },
+  {
+    "text": "zhang yimou delivers warm , genuine characters who lie not through dishonesty , but because they genuinely believe it 's the only way to bring happiness to their loved ones .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 88
+  },
+  {
+    "text": "ridiculous .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 89
+  },
+  {
+    "text": "this film is so slick , superficial and trend-hoppy , that it 's easy to imagine that a new software program spit out the screenplay .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 90
+  },
+  {
+    "text": "all ends well , sort of , but the frenzied comic moments never click .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 91
+  },
+  {
+    "text": "so routine , familiar and predictable , it raises the possibility that it wrote itself as a newly automated final draft computer program .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 92
+  },
+  {
+    "text": "a mostly tired retread of several other mob tales .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 93
+  },
+  {
+    "text": "the powers team has fashioned a comedy with more laughs than many , no question .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 94
+  },
+  {
+    "text": "provide -lrb- s -rrb- nail-biting suspense and credible characters without relying on technology-of-the-moment technique or pretentious dialogue .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 95
+  },
+  {
+    "text": "you bet .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 96
+  },
+  {
+    "text": "a picture that extols the virtues of comradeship and community in a spunky , spirited fashion .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 97
+  },
+  {
+    "text": "some , like ballistic , arrive stillborn ... looking like the beaten , well-worn video box cover of seven years into the future .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 98
+  },
+  {
+    "text": "a captivating cross-cultural comedy of manners .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 99
+  },
+  {
+    "text": "what could have been a neat little story about believing in yourself is swamped by heavy-handed melodrama .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 100
+  },
+  {
+    "text": "children may not understand everything that happens -- i 'm not sure even miyazaki himself does -- but they will almost certainly be fascinated , and undoubtedly delighted .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 101
+  },
+  {
+    "text": "the character is too forced and overwritten to be funny or believable much of the time , and clayburgh does n't always improve the over-the-top mix .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 102
+  },
+  {
+    "text": "sound the trumpets : for the first time since desperately seeking susan , madonna does n't suck as an actress .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 103
+  },
+  {
+    "text": "elling , portrayed with quiet fastidiousness by per christian ellefsen , is a truly singular character , one whose frailties are only slightly magnified versions of the ones that vex nearly everyone .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 104
+  },
+  {
+    "text": "even if it ultimately disappoints , the picture does have about a matinee admission 's worth of funny to keep it afloat .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 105
+  },
+  {
+    "text": "the best way to hope for any chance of enjoying this film is by lowering your expectations .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 106
+  },
+  {
+    "text": "for benigni it was n't shakespeare whom he wanted to define his career with but pinocchio .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 107
+  },
+  {
+    "text": "a soggy , shapeless mess ... just a dumb excuse for a waterlogged equivalent of a haunted-house movie .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 108
+  },
+  {
+    "text": "to enjoy this movie 's sharp dialogue and delightful performance by jolie and burns , you have to gloss over the no sense ending .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 109
+  },
+  {
+    "text": "but in 2002 , such revelations wilt .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 110
+  },
+  {
+    "text": "it 's a film that hinges on its casting , and glover really does n't fit the part .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 111
+  },
+  {
+    "text": "an exceedingly clever piece of cinema .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 112
+  },
+  {
+    "text": "this limp gender-bender-baller from a first-time director and rookie screenwriter steals wholesale from that 1982 's tootsie , forgetting only to retain a single laugh .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 113
+  },
+  {
+    "text": "quite funny for the type of movie it is ...",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 114
+  },
+  {
+    "text": "with generic sets and b-grade special effects , jason is about as convincing on the sci-fi front as tv 's defunct cleopatra 2525 .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 115
+  },
+  {
+    "text": "while it would be easy to give crush the new title of two weddings and a funeral , it 's a far more thoughtful film than any slice of hugh grant whimsy .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 116
+  },
+  {
+    "text": "this examination of aquatic life off the shores of the baja california peninsula of mexico offers an engrossing way to demonstrate the virtues of the imax format .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 117
+  },
+  {
+    "text": "most of crush is a clever and captivating romantic comedy with a welcome pinch of tartness .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 118
+  },
+  {
+    "text": "being author wells ' great-grandson , you 'd think filmmaker simon wells would have more reverence for the material .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 119
+  },
+  {
+    "text": "it is risky , intelligent , romantic and rapturous from start to finish .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 120
+  },
+  {
+    "text": "birot 's directorial debut -lrb- she co-wrote the script with christophe honor\u00e9 -rrb- is n't so much bad as it is bland .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 121
+  },
+  {
+    "text": "overall , the film misses the brilliance of jelinek 's novel by some way .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 122
+  },
+  {
+    "text": "it is now .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 123
+  },
+  {
+    "text": "moore 's performance impresses almost as much as her work with haynes in 1995 's safe .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 124
+  },
+  {
+    "text": "immediately .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 125
+  },
+  {
+    "text": "once you get into its rhythm ... the movie becomes a heady experience .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 126
+  },
+  {
+    "text": "on its own cinematic terms , it successfully showcases the passions of both the director and novelist byatt .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 127
+  },
+  {
+    "text": "when not obscured by the booming bass-heavy soundtrack , the conversation presents the kind of linguistic fumbling not heard since macy gray 's game of chinese whispers with mr bean .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 128
+  },
+  {
+    "text": "it has the courage to wonder about big questions with sincerity and devotion .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 129
+  },
+  {
+    "text": "britney has been delivered to the big screen safe and sound , the way we like our 20-year-old superstar girls to travel on the fame freeway .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 130
+  },
+  {
+    "text": "why come up with something even quasi-original , when you can pillage from shirley jackson , richard matheson ... and puke up something like rose red ?",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 131
+  },
+  {
+    "text": "lacking gravitas , macdowell is a placeholder for grief , and ergo this sloppy drama is an empty vessel .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 132
+  },
+  {
+    "text": "theirs is a simple and heart-warming story , full of mirth that should charm all but the most cynical .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 133
+  },
+  {
+    "text": "it would have benefitted the dialogue .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 134
+  },
+  {
+    "text": "more honest about alzheimer 's disease , i think , than iris .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 135
+  },
+  {
+    "text": "rainy days and movies about the disintegration of families always get me down .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 136
+  },
+  {
+    "text": "good for a few unintentional laughs , `` extreme ops '' was obviously made for the `` xxx '' crowd , people who enjoy mindless action without the benefit of decent acting , writing , and direction .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 137
+  },
+  {
+    "text": "ihops do n't pile on this much syrup .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 138
+  },
+  {
+    "text": "... as the story congeals you feel the pieces of the star wars saga falling into place in a way that makes your spine tingle with revelation and excitement .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 139
+  },
+  {
+    "text": "this film , starring anthony hopkins and chris rock , is your typical ` fish out of water ' story .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 140
+  },
+  {
+    "text": "ostensibly celebrates middle-aged girl power , even as it presents friendship between women as pathetic , dysfunctional and destructive .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 141
+  },
+  {
+    "text": "though the controversial korean filmmaker 's latest effort is not for all tastes , it offers gorgeous imagery , effective performances , and an increasingly unsettling sense of foreboding .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 142
+  },
+  {
+    "text": "shot perhaps ` artistically ' with handheld cameras and apparently no movie lights by joaquin baca-asay , the low-budget production swings annoyingly between vertigo and opacity .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 143
+  },
+  {
+    "text": "an enchanting film that presents an audacious tour of the past and takes within its warm embrace the bounties of cultural artifacts inside st. petersburg 's hermitage museum .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 144
+  },
+  {
+    "text": "remains a solid , if somewhat heavy-handed , account of the near-disaster ... done up by howard with a steady , if not very imaginative , hand .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 145
+  },
+  {
+    "text": "it 's all very cute , though not terribly funny if you 're more than six years old .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 146
+  },
+  {
+    "text": "has a plot full of twists upon knots ... and a nonstop parade of mock-tarantino scuzbag types that starts out clever but veers into overkill .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 147
+  },
+  {
+    "text": "cho 's fans are sure to be entertained ; it 's only fair in the interest of full disclosure to say that -- on the basis of this film alone -- i 'm not one of them .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 148
+  },
+  {
+    "text": "a baffling misfire , and possibly the weakest movie -lrb- woody allen -rrb- has made in the last twenty years .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 149
+  },
+  {
+    "text": "or , you can do something fun tonight .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 150
+  },
+  {
+    "text": "a minor picture with a major identity crisis -- it 's sort of true and it 's sort of bogus and it 's ho-hum all the way through .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 151
+  },
+  {
+    "text": "not as distinctive or even as humorous as its needs to be to stand out , but it has clearly been made with affection and care .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 152
+  },
+  {
+    "text": "it took 19 predecessors to get this ?",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 153
+  },
+  {
+    "text": "windtalkers celebrates the human spirit and packs an emotional wallop .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 154
+  },
+  {
+    "text": "gloriously goofy -lrb- and gory -rrb- midnight movie stuff .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 155
+  },
+  {
+    "text": "it suggests the wide-ranging effects of media manipulation , from the kind of reporting that is done by the supposedly liberal media ... to the intimate and ultimately tragic heartache of maverick individuals like hatfield and hicks .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 156
+  },
+  {
+    "text": "but what about the countless other people who 'd merely like to watch a solid tale about a universally interesting soul ?",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 157
+  },
+  {
+    "text": "unlike the nauseating fictions peddled by such ` have-yourself-a-happy-little-holocaust ' movies as life is beautiful and jakob the liar , the grey zone is honest enough to deny the possibility of hope in auschwitz .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 158
+  },
+  {
+    "text": "if kaufman kept cameron diaz a prisoner in a cage with her ape , in his latest , he 'd have them mate .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 159
+  },
+  {
+    "text": "the story itself is uninteresting , and the songs are painfully undistinguished : they might be giants ' so to be one of us may be the most tuneless tune ever composed .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 160
+  },
+  {
+    "text": "... too slow , too boring , and occasionally annoying .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 161
+  },
+  {
+    "text": "marvelous , merry and , yes , melancholy film .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 162
+  },
+  {
+    "text": "watching it is rather like viewing a long soap opera in which only the first episode was any good .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 163
+  },
+  {
+    "text": "all but the most persnickety preteens should enjoy this nonthreatening but thrilling adventure .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 164
+  },
+  {
+    "text": "finds a way to tell a simple story , perhaps the simplest story of all , in a way that seems compelling and even original .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 165
+  },
+  {
+    "text": "effectively feeds our senses with the chilling sights and sounds from within the camp to create a completely numbing experience .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 166
+  },
+  {
+    "text": "the film is really not so much bad as bland .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 167
+  },
+  {
+    "text": "it 's neither as romantic nor as thrilling as it should be .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 168
+  },
+  {
+    "text": "despite its many infuriating flaws -- not the least of which is amy 's self-absorbed personality -- amy 's o 's honesty will win you over .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 169
+  },
+  {
+    "text": "this is a happy throwback to the time when cartoons were cinema 's most idiosyncratic form instead of one of its most predictable .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 170
+  },
+  {
+    "text": "though howard demonstrates a great eye as a director , this southern gothic drama is sadly a tough sit , with an undeveloped narrative and enough flashbacks and heavy-handed metaphors to choke a horse -- or at least slow him down to a canter .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 171
+  },
+  {
+    "text": "so faithful to the doldrums of the not-quite-urban , not-quite-suburban milieu as to have viewers recoiling from the reality check .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 172
+  },
+  {
+    "text": "the marquis de sade could n't have been as dull a person as this film makes him out to be .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 173
+  },
+  {
+    "text": "the pivotal narrative point is so ripe the film ca n't help but go soft and stinky .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 174
+  },
+  {
+    "text": "-lrb- schweiger is -rrb- talented and terribly charismatic , qualities essential to both movie stars and social anarchists .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 175
+  },
+  {
+    "text": "the movie is as far as you can get from racy , to the point where it almost stops the blood flow to your brain ; it has a dull , costumey feel .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 176
+  },
+  {
+    "text": "acting , particularly by tambor , almost makes `` never again '' worthwhile , but -lrb- writer\\/director -rrb- schaeffer should follow his titular advice",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 177
+  },
+  {
+    "text": "no reason for anyone to invest their hard-earned bucks into a movie which obviously did n't invest much into itself either .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 178
+  },
+  {
+    "text": "a well-made , thoughtful , well-acted clunker , but a clunker nonetheless .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 179
+  },
+  {
+    "text": "at first , the sight of a blind man directing a film is hilarious , but as the film goes on , the joke wears thin .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 180
+  },
+  {
+    "text": "this boisterous comedy serves up a cruel reminder of the fate of hundreds of thousands of chinese , one which can only qualify as a terrible tragedy .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 181
+  },
+  {
+    "text": "a well-made thriller with a certain level of intelligence and non-reactionary morality .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 182
+  },
+  {
+    "text": "-lrb- t -rrb- hose same extremes prevent us from taking its message seriously , and the stepford wives mentality does n't work in a modern context .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 183
+  },
+  {
+    "text": "the subject of swinging still seems ripe for a documentary -- just not this one .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 184
+  },
+  {
+    "text": "it 's like a poem .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 185
+  },
+  {
+    "text": "achieves a sort of filmic epiphany that revels in the true potential of the medium .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 186
+  },
+  {
+    "text": "wait for video -- and then do n't rent it .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 187
+  },
+  {
+    "text": "an uneven but intriguing drama that is part homage and part remake of the italian masterpiece .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 188
+  },
+  {
+    "text": "for the most part , i spy was an amusing lark that will probably rank as one of murphy 's better performances in one of his lesser-praised movies .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 189
+  },
+  {
+    "text": "a pleasant ramble through the sort of idoosyncratic terrain that errol morris has often dealt with ... it does possess a loose , lackadaisical charm .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 190
+  },
+  {
+    "text": "there 's no denying the physically spectacular qualities of the film ... or the emotional integrity of the performances .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 191
+  },
+  {
+    "text": "what parents will suspect is that they 're watching a 76-minute commercial .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 192
+  },
+  {
+    "text": "a great idea becomes a not-great movie .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 193
+  },
+  {
+    "text": "city by the sea is the cinematic equivalent of defensive driving : it 's careful , conscientious and makes no major mistakes .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 194
+  },
+  {
+    "text": "this is a good movie in spurts , but when it does n't work , it 's at important times .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 195
+  },
+  {
+    "text": "what jackson has accomplished here is amazing on a technical level .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 196
+  },
+  {
+    "text": "presents an astute appraisal of middle american musical torpor and the desperate struggle to escape it .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 197
+  },
+  {
+    "text": "what makes the movie a comedy is the way it avoids the more serious emotions involved .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 198
+  },
+  {
+    "text": "a simple , sometimes maddeningly slow film that has just enough charm and good acting to make it interesting , but is ultimately pulled under by the pacing and lack of creativity within .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 199
+  },
+  {
+    "text": "-lrb- broomfield -rrb- uncovers a story powerful enough to leave the screen sizzling with intrigue .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 200
+  },
+  {
+    "text": "the actors are forced to grapple with hazy motivations that never come into focus .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 201
+  },
+  {
+    "text": "gosling provides an amazing performance that dwarfs everything else in the film .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 202
+  },
+  {
+    "text": "with recent tensions rekindled by the kathleen soliah trial and the upcoming trial of sla members emily and william harris , not to mention sept. 11 , its difficult these days to appreciate fire 's bright side .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 203
+  },
+  {
+    "text": "aspires for the piquant but only really achieves a sort of ridiculous sourness .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 204
+  },
+  {
+    "text": "grant gets to display his cadness to perfection , but also to show acting range that may surprise some who thought light-hearted comedy was his forte .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 205
+  },
+  {
+    "text": "i whole-heartedly recommend that everyone see this movie -- for its historical significance alone .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 206
+  },
+  {
+    "text": "this is n't my favorite in the series , still i enjoyed it enough to recommend .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 207
+  },
+  {
+    "text": "succeeds in providing a disquiet world the long-dreaded completion of the police academy series .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 208
+  },
+  {
+    "text": "the noble tradition of men in drag hits an all-time low in sorority boys , whose makers apparently believe that women 's clothing can cover up any deficiency in acting , writing or direction .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 209
+  },
+  {
+    "text": "despite the long running time , the pace never feels slack -- there 's no scene that screams `` bathroom break ! ''",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 210
+  },
+  {
+    "text": "just how extreme are these ops ?",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 211
+  },
+  {
+    "text": "nothing denis has made before , like beau travil and nenette et boni , could prepare us for this gory , perverted , sex-soaked riff on the cannibal genre .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 212
+  },
+  {
+    "text": "disturbing and brilliant documentary .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 213
+  },
+  {
+    "text": "the smug , oily demeanor that donovan adopts throughout the stupidly named pipe dream is just repulsive .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 214
+  },
+  {
+    "text": "it 's laughing at us .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 215
+  },
+  {
+    "text": "i like frank the pug , though .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 216
+  },
+  {
+    "text": "the impact of the armenian genocide is diluted by too much stage business in the modern day .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 217
+  },
+  {
+    "text": "purely propaganda , a work of unabashed hero worship , it is nonetheless -- and likely inadvertently -- a timely and invaluable implicit reminder of the role that u.s. foreign policy has played in the rise of castro .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 218
+  },
+  {
+    "text": "offers a breath of the fresh air of true sophistication .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 219
+  },
+  {
+    "text": "the problem with concept films is that if the concept is a poor one , there 's no saving the movie .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 220
+  },
+  {
+    "text": "mr. parker has brilliantly updated his source and grasped its essence , composing a sorrowful and hilarious tone poem about alienated labor , or an absurdist workplace sitcom .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 221
+  },
+  {
+    "text": "the story ... is moldy and obvious .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 222
+  },
+  {
+    "text": "not so much a movie as a picture book for the big screen .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 223
+  },
+  {
+    "text": "kinnear gives a tremendous performance .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 224
+  },
+  {
+    "text": "admirable , certainly , but not much fun to watch .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 225
+  },
+  {
+    "text": "a vivid cinematic portrait .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 226
+  },
+  {
+    "text": "the film is an enjoyable family film -- pretty much aimed at any youngster who loves horses .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 227
+  },
+  {
+    "text": "it is not a mass-market entertainment but an uncompromising attempt by one artist to think about another .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 228
+  },
+  {
+    "text": "i 'm afraid you wo n't get through this frankly fantastical by-the-numbers b-flick with just a suspension of disbelief .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 229
+  },
+  {
+    "text": "john mctiernan 's botched remake may be subtler than norman jewison 's 1975 ultraviolent futuristic corporate-sports saga .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 230
+  },
+  {
+    "text": "enough trivializes an important crisis , reduces it to an almost comic embarrassment .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 231
+  },
+  {
+    "text": "the only thing worse than your substandard , run-of-the-mill hollywood picture is an angst-ridden attempt to be profound .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 232
+  },
+  {
+    "text": "credibility sinks into a mire of sentiment .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 233
+  },
+  {
+    "text": "director nalin pan does n't do much to weigh any arguments one way or the other .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 234
+  },
+  {
+    "text": "but this costly dud is a far cry from either the book or the beloved film .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 235
+  },
+  {
+    "text": "... a cute and sometimes side-splittingly funny blend of legally blonde and drop dead gorgeous , starring piper perabo in what could be her breakthrough role .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 236
+  },
+  {
+    "text": "an unabashedly schmaltzy and thoroughly enjoyable true story .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 237
+  },
+  {
+    "text": "pretentious editing ruins a potentially terrific flick .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 238
+  },
+  {
+    "text": "the filmmakers skillfully evoke the sense of menace that nature holds for many urban dwellers .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 239
+  },
+  {
+    "text": "just what makes us happy , anyway ?",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 240
+  },
+  {
+    "text": "this is n't a narrative film -- i do n't know if it 's possible to make a narrative film about september 11th , though i 'm sure some will try -- but it 's as close as anyone has dared to come .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 241
+  },
+  {
+    "text": "places a slightly believable love triangle in a difficult-to-swallow setting , and then disappointingly moves the story into the realm of an improbable thriller .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 242
+  },
+  {
+    "text": "the master of disaster - it 's a piece of dreck disguised as comedy .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 243
+  },
+  {
+    "text": "excellent acting and direction .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 244
+  },
+  {
+    "text": "a fairly by-the-books blend of action and romance with sprinklings of intentional and unintentional comedy .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 245
+  },
+  {
+    "text": "this dramatically shaky contest of wills only reiterates the old hollywood saw : evil is interesting and good is boring .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 246
+  },
+  {
+    "text": "you 've seen them a million times .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 247
+  },
+  {
+    "text": "there are touching moments in etoiles , but for the most part this is a dull , dour documentary on what ought to be a joyful or at least fascinating subject .",
+    "label": 1,
+    "label_text": "negative",
+    "idx": 248
+  },
+  {
+    "text": "the movie stays afloat thanks to its hallucinatory production design .",
+    "label": 3,
+    "label_text": "positive",
+    "idx": 249
+  },
+  {
+    "text": "the film is like a series of beginnings and middles that never take off .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 250
+  },
+  {
+    "text": "most of the supporting characters in eastwood films are weak , as are most of the subplots .",
+    "label": 0,
+    "label_text": "very negative",
+    "idx": 251
+  },
+  {
+    "text": "it wo n't bust your gut -- and it 's not intended to -- it 's merely a blandly cinematic surgical examination of what makes a joke a joke .",
+    "label": 2,
+    "label_text": "neutral",
+    "idx": 252
+  },
+  {
+    "text": "this is as powerful a set of evidence as you 'll ever find of why art matters , and how it can resonate far beyond museum walls and through to the most painfully marginal lives .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 253
+  },
+  {
+    "text": "awkward but sincere and , ultimately , it wins you over .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 254
+  },
+  {
+    "text": "it is intensely personal and yet -- unlike quills -- deftly shows us the temper of the times .",
+    "label": 4,
+    "label_text": "very positive",
+    "idx": 255
+  }
+]

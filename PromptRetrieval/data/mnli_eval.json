@@ -1,0 +1,1538 @@
+[
+  {
+    "premise": "uh-huh oh yeah i hadn't heard that one let's see i can't oh gosh that that probably wipes out my whole inventory of TV shows other than um PBS i",
+    "hypothesis": "The whole inventory of TV shows was wiped out.",
+    "label": 2,
+    "idx": 0
+  },
+  {
+    "premise": "But by one measure, it seems to have been static.",
+    "hypothesis": "The one measure makes it appear that it is static.",
+    "label": 0,
+    "idx": 1
+  },
+  {
+    "premise": "Figure 1:  Delivery Points to Stops",
+    "hypothesis": "The first figure illustrates delivery points in part",
+    "label": 0,
+    "idx": 2
+  },
+  {
+    "premise": "because uh i know people who eat tons of that kind of stuff and they're just as healthy as can be",
+    "hypothesis": "Some people who eat unhealthy foods are not sick.",
+    "label": 0,
+    "idx": 3
+  },
+  {
+    "premise": "Others are Zao (in Tohoku) and a number of resorts in Joshin-etsu Kogen National Park in the Japan Alps, where there are now splendid facilities thanks to the 1998 Winter Olympic Games in Nagano.",
+    "hypothesis": "The resorts in the national park are the most exclusive in the country.",
+    "label": 1,
+    "idx": 4
+  },
+  {
+    "premise": "Recently, however, I have settled down and become decidedly less experimental.",
+    "hypothesis": "I have lost my experimental nature due to old age.",
+    "label": 1,
+    "idx": 5
+  },
+  {
+    "premise": "Total electricity expenditures increase by about 15% to 30% depending on the year and the scenario (see Table 3, below, and the tables in Appendix 5.2 for more detail on the changing pattern of expenditures).",
+    "hypothesis": "They wanted to make a case for how to save on electricity. ",
+    "label": 1,
+    "idx": 6
+  },
+  {
+    "premise": "i think Buffalo is an up an coming team they're going to they're showing some real promise for the next uh few years",
+    "hypothesis": "The team had some good results in last seasons.",
+    "label": 1,
+    "idx": 7
+  },
+  {
+    "premise": "The Joint Venture which has so amply justified itself by success!\" It was drunk with acclamation.",
+    "hypothesis": "The Joint Venture had justified itself by success.",
+    "label": 0,
+    "idx": 8
+  },
+  {
+    "premise": "To their good fortune, he's proving them right.",
+    "hypothesis": "He is showing that they were correct.",
+    "label": 0,
+    "idx": 9
+  },
+  {
+    "premise": "Very well \u201dbut it's all extremely mysterious. We were running into Tadminster now, and Poirot directed the car to the \"Analytical Chemist.\" Poirot hopped down briskly, and went inside. ",
+    "hypothesis": "Poirot went into the Analytical Chemist.",
+    "label": 0,
+    "idx": 10
+  },
+  {
+    "premise": "Numbers began wafting about on the  I'd say at least five",
+    "hypothesis": "There were less than five of them.",
+    "label": 2,
+    "idx": 11
+  },
+  {
+    "premise": "Concurrent with downsizing, procurement regulations have been modified to allow agencies greater flexibility and choice in selecting contracting methods for acquiring facilities.",
+    "hypothesis": "Agencies have been further restricted and given less choice in selecting contracting methods.",
+    "label": 2,
+    "idx": 12
+  },
+  {
+    "premise": "Major journeys from one part of the country to another, say, from Milan to Rome or down to Naples, is most enjoyed by train buffs and travelers with plenty of time, patience, and curiosity.",
+    "hypothesis": "It takes eight hours to get from Milan to Naples by train.",
+    "label": 1,
+    "idx": 13
+  },
+  {
+    "premise": "But recently, the speculation has subsided.",
+    "hypothesis": "The speculation has been reduced recently.",
+    "label": 0,
+    "idx": 14
+  },
+  {
+    "premise": "you know it took away a lot of of time from them we did go out to you know to the places that you typically take children to and we had a lot of fun but it seems as though the time went by so fast that",
+    "hypothesis": "Time went by so slow and we were extremely bored.",
+    "label": 2,
+    "idx": 15
+  },
+  {
+    "premise": "For example, NIPA excludes capital transfers, like estate tax receipts, which are recorded as revenue in the unified budget, and investment grants-in-aid to state and local governments, which the unified budget records as outlays.",
+    "hypothesis": "NIPA does not exclude capital transfers.",
+    "label": 2,
+    "idx": 16
+  },
+  {
+    "premise": "Favored by the Ancient Egyptians as a source of turquoise, the Sinai was, until recently, famed for only one event but certainly an important one.",
+    "hypothesis": "The Sinai was a source of turquoise for Ancient Egyptians. ",
+    "label": 0,
+    "idx": 17
+  },
+  {
+    "premise": "um yeah we've tried to do that we've paid ours off you know all the way down to where we had everything down to zero and especially right before i i quit work two years ago to stay home with the kids",
+    "hypothesis": "We did not pay ours off at any time.  ",
+    "label": 2,
+    "idx": 18
+  },
+  {
+    "premise": " the winged Victory of Samothrace and the beautifully proportioned Venus de Milo.",
+    "hypothesis": "The Venus de Milo has beautiful proportions.",
+    "label": 0,
+    "idx": 19
+  },
+  {
+    "premise": "right well there's yeah there there's going to be some measure of incentive uh reward or whatever but the reward ultimately ultimately comes down to what you want",
+    "hypothesis": "They need to entice them to get what they want.",
+    "label": 1,
+    "idx": 20
+  },
+  {
+    "premise": "It was still night.",
+    "hypothesis": "The sun hadn't risen yet, for the moon was shining daringly in the sky.",
+    "label": 0,
+    "idx": 21
+  },
+  {
+    "premise": "My body is to me like a crippled rabbit that I don't want to pet, that I forget to feed on time, that I haven't time to play with and get to know, a useless rabbit kept in a cage that it would be cruel to turn loose.",
+    "hypothesis": "I am anorexic.",
+    "label": 1,
+    "idx": 22
+  },
+  {
+    "premise": "Disney CEO Eisner, who's actually underrated as a pop-culture maven (he was responsible for Happy Days and Welcome Back, Kotter ), insists that ABC's downturn is cyclical and that it will soon return to life.",
+    "hypothesis": "Disney's CEO thinks ABC's downturn is cyclical. ",
+    "label": 0,
+    "idx": 23
+  },
+  {
+    "premise": "What have we for lunch? ",
+    "hypothesis": "What are we going to eat for lunch?",
+    "label": 0,
+    "idx": 24
+  },
+  {
+    "premise": "In Loco Parentis Returnus",
+    "hypothesis": "Located in Loco Parentis.",
+    "label": 1,
+    "idx": 25
+  },
+  {
+    "premise": "His failure will endure.",
+    "hypothesis": "The man will always be remembered for his massive success.",
+    "label": 2,
+    "idx": 26
+  },
+  {
+    "premise": "it's so bad wanted to mow today i was off and i wanted to mow the yard but just walking across it it's still so mushy if i took a mower out there i'd tear the sod up so bad",
+    "hypothesis": "I wanted to mow the lawn today but I couldn't because it's so mushy.",
+    "label": 0,
+    "idx": 27
+  },
+  {
+    "premise": "Strange as it may seem to the typical household, capital gains on its existing assets do not contribute to saving as measured in NIPA.",
+    "hypothesis": "NIPA considers cat fur when it defines savings.",
+    "label": 2,
+    "idx": 28
+  },
+  {
+    "premise": "sort of a building season season yeah",
+    "hypothesis": "Kind of a building period.",
+    "label": 0,
+    "idx": 29
+  },
+  {
+    "premise": "Those Creole men and women you'll see dancing it properly have been moving their hips and knees that way since childhood.",
+    "hypothesis": "It is very difficult to learn the dance as an adult.",
+    "label": 1,
+    "idx": 30
+  },
+  {
+    "premise": "Just north of the Shalom Tower is the Yemenite Quarter, its main attractions being the bustling Carmel market and good Oriental restaurants.",
+    "hypothesis": "The Oriental restaurants have authentic cuisine.",
+    "label": 1,
+    "idx": 31
+  },
+  {
+    "premise": "i wish it was as good over here as it is over there but if you're the",
+    "hypothesis": "I am glad it is better here than over there.",
+    "label": 2,
+    "idx": 32
+  },
+  {
+    "premise": "Some bugs are hell to track down.",
+    "hypothesis": "Bugs are always easy to catch.",
+    "label": 2,
+    "idx": 33
+  },
+  {
+    "premise": "In some cases, members initially participated because of an existing trust relationship with individual leaders or sponsors, and it was a challenge to keep them returning until they saw value in participating and had built trust with other members.",
+    "hypothesis": "The trust members built themselves was more important than the trust they made with the leaders.",
+    "label": 1,
+    "idx": 34
+  },
+  {
+    "premise": "8 A stoichiometry of 1.03 is typical when the FGD process is producing gypsum by-product, while a stoichiometry of 1.05 is needed to produce waste suitable for a landfill.",
+    "hypothesis": "A stoichiometry of 1.03 is typical when the FGD process is producing gypsum by-product",
+    "label": 0,
+    "idx": 35
+  },
+  {
+    "premise": "Jon walked back to the town to the smithy.",
+    "hypothesis": "Jon traveled back to his hometown.",
+    "label": 1,
+    "idx": 36
+  },
+  {
+    "premise": "get something from from the Guess Who or",
+    "hypothesis": "Get something from someone or the Guess Who if you really want.",
+    "label": 1,
+    "idx": 37
+  },
+  {
+    "premise": "We have taken a number of steps to empower and invest in our employees.",
+    "hypothesis": "We are sure to invest in our workers.",
+    "label": 0,
+    "idx": 38
+  },
+  {
+    "premise": "apparently apparently the appraisers likes it because our taxes sure is high  isn't it it really is",
+    "hypothesis": "We wished the taxes were lower.",
+    "label": 1,
+    "idx": 39
+  },
+  {
+    "premise": "Mr. Clinton rewards Mr. Knight for his fund raising, Mr. Gore lays the groundwork for his anticipated presidential bid four years from now, and the companies, by hiring Mr. Knight, get the administration's ear.",
+    "hypothesis": "Mr. Clinton appreciated Mr. Knight for his fund raising.",
+    "label": 0,
+    "idx": 40
+  },
+  {
+    "premise": "Can I help you?'",
+    "hypothesis": "I'm not helping you at all.",
+    "label": 2,
+    "idx": 41
+  },
+  {
+    "premise": "The Leland Act  (1) simplify the household definition",
+    "hypothesis": "The Leland Act defines the legal definition of what a household is.",
+    "label": 1,
+    "idx": 42
+  },
+  {
+    "premise": "The Congress also told LSC that it could not continue to fund its grantees presumptively and that it must begin to distribute its funds on a competitive basis.",
+    "hypothesis": "Congress told LSC how to run their business affairs.",
+    "label": 0,
+    "idx": 43
+  },
+  {
+    "premise": "uh and i think even Electric Light Orchestra had some some real um influences by classical music and i'm still still my favorite in fact most of my CDs that i got are classical music",
+    "hypothesis": "I have some CDs of barney songs, but those aren't most of my CDs. ",
+    "label": 2,
+    "idx": 44
+  },
+  {
+    "premise": "True devotees talk shop at even more specialized groups, such as one on Northeastern weather (ne.weather), whose recent conversation topics included the great blizzard of 1978 and the freak snowstorm of May 1977.",
+    "hypothesis": "Participation in specialized groups leads to more in depth understanding. ",
+    "label": 1,
+    "idx": 45
+  },
+  {
+    "premise": "Julius Caesar's nephew Octavian took the name Augustus; Rome ceased to be a republic, and became an empire.",
+    "hypothesis": "Octavian, Julius Caesar's nephew, took the name Augustus; Rome ceased to be a republic, and became an empire.",
+    "label": 0,
+    "idx": 46
+  },
+  {
+    "premise": "well wonderful that'll be a musician",
+    "hypothesis": "That will be a musician but before it was an orange. ",
+    "label": 1,
+    "idx": 47
+  },
+  {
+    "premise": "In most methods, we plan for data collection, then we collect the information, then we analyze it, and then we write the report.",
+    "hypothesis": "information is collected, analyzed, and then a report is written.",
+    "label": 0,
+    "idx": 48
+  },
+  {
+    "premise": "no not it not no it's a it's not something",
+    "hypothesis": "It is something",
+    "label": 2,
+    "idx": 49
+  },
+  {
+    "premise": "Say, man, don't you know you've been given up for dead? ",
+    "hypothesis": "He died of starvation after being left in the desert by his group of friends.",
+    "label": 1,
+    "idx": 50
+  },
+  {
+    "premise": "Although it's hard to disagree with James Surowiecki's roasting of Wade Cook in The Book on Cook, Surowiecki's assertion that the equity stock option market is simply a big casino that contribute[s] nothing to the smooth functioning of capital markets is both wrong and silly.",
+    "hypothesis": "Wade Cook wrote The Book on Cook.",
+    "label": 2,
+    "idx": 51
+  },
+  {
+    "premise": "Marina del Rey is another, where you can also charter a yacht.",
+    "hypothesis": "Marina del Rey is the areas premier dingy rental location.",
+    "label": 2,
+    "idx": 52
+  },
+  {
+    "premise": "The family. ",
+    "hypothesis": "The couple.",
+    "label": 1,
+    "idx": 53
+  },
+  {
+    "premise": "Dole : We ought to agree that somebody else should do it.",
+    "hypothesis": "We don't agree that anyone should do it.",
+    "label": 2,
+    "idx": 54
+  },
+  {
+    "premise": "But if you do, kill them.",
+    "hypothesis": "If the situation is that, you should wait to kill them.",
+    "label": 2,
+    "idx": 55
+  },
+  {
+    "premise": "For example, if Ovitz's five-year deal was worth, say, $100 million, and if the compensation committee had added to that a front-end grant of free Disney shares worth, say, $50 million, then--assuming that Ovitz finished his five-year contract period--the cost to Disney would be $150 million.",
+    "hypothesis": "This is not conjecture.",
+    "label": 1,
+    "idx": 56
+  },
+  {
+    "premise": "Whether you drink beer or alcohol or not, a trip to Dublin isn't complete without a visit to some of its pubs don't miss this experience.",
+    "hypothesis": "Dublin's pubs are beautiful and evocative, worth a trip even if you don't drink",
+    "label": 1,
+    "idx": 57
+  },
+  {
+    "premise": "If she wasn't, how would they have known Jane Finn had got the papers?",
+    "hypothesis": "Who had told them that Jane Finn had acquired the papers?",
+    "label": 1,
+    "idx": 58
+  },
+  {
+    "premise": "He and his wife had lived at Styles Court in every luxury, surrounded by her care and attention. ",
+    "hypothesis": "She lived in poverty and squalor at Styles Court.",
+    "label": 2,
+    "idx": 59
+  },
+  {
+    "premise": "The national award was created to recognize an attorney in practice for less than 10 years for excellence in public interest or pro bono activities.",
+    "hypothesis": "The national award giving to attorneys for excellence in public interest, is given to 10 attorneys annually. ",
+    "label": 1,
+    "idx": 60
+  },
+  {
+    "premise": "Watch for Pagla Jhora, the Mad Torrent, just after Gladstone's Rock (shaped like the statesman's head).",
+    "hypothesis": "The Mad Torrent comes just after Gladstone's Rock.  ",
+    "label": 0,
+    "idx": 61
+  },
+  {
+    "premise": "In fact, European nations need to do some serious fiscal housecleaning.",
+    "hypothesis": "There needs to be some serious fiscal housecleaning by European nations.",
+    "label": 0,
+    "idx": 62
+  },
+  {
+    "premise": "Each one planting itself in the sides of Stark's neck.",
+    "hypothesis": "Stark avoided being hit.",
+    "label": 2,
+    "idx": 63
+  },
+  {
+    "premise": "What are you going to do about it?\" Tuppence frowned severely.",
+    "hypothesis": "Tuppence wanted to know what the plan was?",
+    "label": 1,
+    "idx": 64
+  },
+  {
+    "premise": "Continue along the Quai Saint-Nicolas to the Mus??e Alsacien at num?\u00adber 23, a group of 16th- and 17th-century houses appropriate to the colorful collections of Alsatian folklore.",
+    "hypothesis": "The houses in the 16th century were quite colorful.",
+    "label": 1,
+    "idx": 65
+  },
+  {
+    "premise": "The game of billiards is also hot.",
+    "hypothesis": "People like billiards because it's relaxing.",
+    "label": 1,
+    "idx": 66
+  },
+  {
+    "premise": "I don't know all the answers, fella.",
+    "hypothesis": "Buddy, I just can't answer all those questions.",
+    "label": 0,
+    "idx": 67
+  },
+  {
+    "premise": "when there was the ball that was sort of hit to Buckner to Buckner",
+    "hypothesis": "The ball was hit to Buckner.",
+    "label": 0,
+    "idx": 68
+  },
+  {
+    "premise": "Huntington--like Buchanan--claims not to be a cultural  He is defending the integrity of all cultures, theirs and ours.",
+    "hypothesis": "Huntington and Buchanan both defend others cultures as well as their own.",
+    "label": 0,
+    "idx": 69
+  },
+  {
+    "premise": "Lydians and Persians",
+    "hypothesis": "Persians and Lydians",
+    "label": 0,
+    "idx": 70
+  },
+  {
+    "premise": "Welts grew on each of the man's cheeks.",
+    "hypothesis": "The welt the man got from battle were growing.",
+    "label": 1,
+    "idx": 71
+  },
+  {
+    "premise": "The Drawing Room was partially destroyed by fire in 1941, and its furnishings are faithful reproductions; the huge (repaired) Ming punch bowl is striking.",
+    "hypothesis": "The Ming punch bowl is used at employee parties.",
+    "label": 1,
+    "idx": 72
+  },
+  {
+    "premise": "yeah TI people yeah and so i just figured no it's just this area you know",
+    "hypothesis": "No, I figured is was all areas.",
+    "label": 2,
+    "idx": 73
+  },
+  {
+    "premise": "um-hum yeah i know what that's like uh-huh",
+    "hypothesis": "I am familiar with what that is like.",
+    "label": 0,
+    "idx": 74
+  },
+  {
+    "premise": "The door did not budge.",
+    "hypothesis": "The door didn't move. ",
+    "label": 0,
+    "idx": 75
+  },
+  {
+    "premise": "They were quite, tetanic in character.\"",
+    "hypothesis": "They would get upset whenever anyone would speak to them.",
+    "label": 1,
+    "idx": 76
+  },
+  {
+    "premise": "It has a full program of events, including lectures.",
+    "hypothesis": "There are a full slate of events, including seminars.",
+    "label": 0,
+    "idx": 77
+  },
+  {
+    "premise": "for a change i i got i get sick of winter just looking everything so dead i hate that",
+    "hypothesis": "Everything is dead in winter.",
+    "label": 0,
+    "idx": 78
+  },
+  {
+    "premise": "It has served as a fortress for the Gallo-Romans, the Visigoths, Franks, and medieval French (you can see the layers of their masonry in the ramparts).",
+    "hypothesis": "Various people have used it as a fortress, as can be seen from the layers of masonry.",
+    "label": 0,
+    "idx": 79
+  },
+  {
+    "premise": "Monday's Question (No.",
+    "hypothesis": "There was a question on Monday.",
+    "label": 0,
+    "idx": 80
+  },
+  {
+    "premise": "Prior to 1986, the United States had been a net creditor because its holdings of foreign assets exceeded foreign holdings of U.S. assets.",
+    "hypothesis": "The US wasn't a net creditor until after 1986.",
+    "label": 2,
+    "idx": 81
+  },
+  {
+    "premise": "He touched it and felt his skin swelling and growing hot.",
+    "hypothesis": "He touched a hot rod.",
+    "label": 1,
+    "idx": 82
+  },
+  {
+    "premise": "Well? cried Tommy eagerly.",
+    "hypothesis": "Tommy cried out, waiting for an answer.",
+    "label": 0,
+    "idx": 83
+  },
+  {
+    "premise": "The importer pays duties that are required by law",
+    "hypothesis": "Importer pays taxed that law requires",
+    "label": 0,
+    "idx": 84
+  },
+  {
+    "premise": " Dinghies are available for hire from the marinas at Tel Aviv, Jaffa, Akko, Netanya, and Nahariya.",
+    "hypothesis": "Tel Aviv, Jaffa, Akko, Akko, Netanya, and Nahariya offer no dinghies.",
+    "label": 2,
+    "idx": 85
+  },
+  {
+    "premise": "Last year, Arafat cracked down on Hamas after a string of bombings in Tel Aviv and Jerusalem, arresting more than 1,200 suspected terrorists, destroying Hamas safe houses, and confiscating its weapons caches.",
+    "hypothesis": "Arafat stood back and watched Hamas attack Tel Aviv and Jerusalem.",
+    "label": 2,
+    "idx": 86
+  },
+  {
+    "premise": "you know it's easy to say well yeah let's let's put these old folks in a home but when i think i don't want to do that you know i don't want to be have my little home i always threaten my daughters i say well",
+    "hypothesis": "I already have a nursing home picked out for my mother-in-law. ",
+    "label": 1,
+    "idx": 87
+  },
+  {
+    "premise": "well it's a pleasure talking with you",
+    "hypothesis": "It's been terrible speaking with you. ",
+    "label": 2,
+    "idx": 88
+  },
+  {
+    "premise": "The technical how-tos for these three strategies will be summarized later in this paper.",
+    "hypothesis": "There are three strategies discussed in the paper.",
+    "label": 0,
+    "idx": 89
+  },
+  {
+    "premise": "Summary of Deferred Maintenance as of September 30, 199Z (in Millions of Dollars):",
+    "hypothesis": "The deferred maintenance was a huge number.",
+    "label": 1,
+    "idx": 90
+  },
+  {
+    "premise": "Until the late '60s, the Senate was deferential to the (many fewer) presidential nominees.",
+    "hypothesis": "The Senate was respectful of all eleven nominees.",
+    "label": 1,
+    "idx": 91
+  },
+  {
+    "premise": "Here you'll see the delightful but slowly disappearing indigenous FWI costume madras turban, madras skirt over petticoat, silk peplum, white blouse, and gold earrings, bracelets, and collier-choux necklace.",
+    "hypothesis": "FWI's indigenous costume is disappearing because young people prefer to wear T-shirts and jeans.",
+    "label": 1,
+    "idx": 92
+  },
+  {
+    "premise": "With the gap still of landslide proportions in most polls, Dole has been written off, correctly or otherwise, by the pundits.",
+    "hypothesis": "The pundits had written them off.",
+    "label": 0,
+    "idx": 93
+  },
+  {
+    "premise": "Upon commencement of commercial operation of each new utility unit under subpart 1 of part B, the unit shall comply with the requirements of subsection (a)(1).",
+    "hypothesis": "subsection a1 need also me complied with other a variety of different conditions.",
+    "label": 1,
+    "idx": 94
+  },
+  {
+    "premise": "He watched the river flow.",
+    "hypothesis": "The riverbed was completely dry.",
+    "label": 2,
+    "idx": 95
+  },
+  {
+    "premise": "The first historical mention of Agra is in 1501, when Sultan Sikandar Lodi made it his capital.",
+    "hypothesis": "Agra still exists to this day as a capital.",
+    "label": 1,
+    "idx": 96
+  },
+  {
+    "premise": "but i've lived up here all my life and i'm fifty eight years old so i i could",
+    "hypothesis": "I have moved somewhere else in my life.",
+    "label": 2,
+    "idx": 97
+  },
+  {
+    "premise": "Do you know how long we've been here? he asked one morning as they sat facing each other at breakfast.",
+    "hypothesis": "They were both enjoying a good conversation as they sat with each other at breakfast.  ",
+    "label": 1,
+    "idx": 98
+  },
+  {
+    "premise": "Recently I met a guy at a party over at San Barenakedino's.'",
+    "hypothesis": "I met a woman a the club in Williamsburg. ",
+    "label": 2,
+    "idx": 99
+  },
+  {
+    "premise": "well the first thing for me is i wonder i see a couple of different ways of talking about what privacy is um if privacy is something that disturbs your private state i mean an invasion of privacy is something that disturbs your private state that's one thing and if privacy is something that comes into your private state and extracts information from it in other words finds something out about you that's another and the first kind of invasion of the first type of privacy seems invaded to me in very much everyday in this country but in the second type at least overtly uh where someone comes in and uh finds out information about you that should be private uh does not seem uh um obviously everyday",
+    "hypothesis": "Talking about privacy is a complicated topic, there are a couple different ways of talking about it, for example privacy is something that disturbs your private state...",
+    "label": 0,
+    "idx": 100
+  },
+  {
+    "premise": "Credibility is a vital factor, and Jim Lehrer does, indeed, have it.",
+    "hypothesis": "Everyone would believe whatever Jim Lehrer said.",
+    "label": 1,
+    "idx": 101
+  },
+  {
+    "premise": "By then, the program had added Carroll and Grayson counties and the city of Galax and had five attorneys.",
+    "hypothesis": "The program was expanding quickly.",
+    "label": 1,
+    "idx": 102
+  },
+  {
+    "premise": "uh-huh you can't do that in a skirt  poor thing",
+    "hypothesis": "You cannot do that wearing a skirt.",
+    "label": 0,
+    "idx": 103
+  },
+  {
+    "premise": "2) This particular instance of it stinks.",
+    "hypothesis": "This instance stinks. ",
+    "label": 0,
+    "idx": 104
+  },
+  {
+    "premise": "From the inventories of the initiatives they developed in response to our request, we asked agency officials to identify those agency components and initiatives that, in their view, had successfully involved and empowered employees.",
+    "hypothesis": "Agency officials need to identify the components that helped them.",
+    "label": 0,
+    "idx": 105
+  },
+  {
+    "premise": "yeah i try to no i uh uh try not to use any insecticides at all i try not to even use insecticides on my lawn but i sometimes i can't manage",
+    "hypothesis": "I'd rather not use any insecticides at all, but sometimes I really need to",
+    "label": 0,
+    "idx": 106
+  },
+  {
+    "premise": "and so i have really enjoyed that but but there are i do have friends that watch programs like they want to see a particular program and they are either home watching it or definitely recording it they have some programs that they won't miss",
+    "hypothesis": "Your friends don't watch TV, do they?",
+    "label": 2,
+    "idx": 107
+  },
+  {
+    "premise": "These alone could have valuable uses.",
+    "hypothesis": "They aren't valueable. ",
+    "label": 2,
+    "idx": 108
+  },
+  {
+    "premise": "i am surprised though that we do have so many that are in politics down here",
+    "hypothesis": "I am surprised that a lot of women are interested in politics in this state.",
+    "label": 1,
+    "idx": 109
+  },
+  {
+    "premise": "I will some day, if you ask me, she promised him, smiling. ",
+    "hypothesis": "Her eyes glittered as she promised him that she would.",
+    "label": 1,
+    "idx": 110
+  },
+  {
+    "premise": "i don't know how what it would take to be come up with a true perfect system or if one exists but",
+    "hypothesis": "I don't know if one exists but I will do my best to research the matter.",
+    "label": 1,
+    "idx": 111
+  },
+  {
+    "premise": "It means that they gather and interpret their material fairly and argue about its interpretations rationally.",
+    "hypothesis": "The judge gathers and interprets material fairly and argues about it rationally.",
+    "label": 1,
+    "idx": 112
+  },
+  {
+    "premise": "Why blame her because she had been true to her creed? ",
+    "hypothesis": "Did she deserve to be blamed for following what she believes in?",
+    "label": 0,
+    "idx": 113
+  },
+  {
+    "premise": "Under the budget deal, by 2002, national defense will consume about $273 billion a year compared with $267 billion now.",
+    "hypothesis": "The national defense budget will decrease by 2002.",
+    "label": 2,
+    "idx": 114
+  },
+  {
+    "premise": "and then i got into it and then back out of it and it it just seems like every couple of years i get back in there",
+    "hypothesis": "I plan to get into it on a regular basis.",
+    "label": 1,
+    "idx": 115
+  },
+  {
+    "premise": "The arts also flourished in India during these early times.",
+    "hypothesis": "The arts languished during those early days.",
+    "label": 2,
+    "idx": 116
+  },
+  {
+    "premise": "She  People are rarely indifferent to the magazines I've put out.",
+    "hypothesis": "I've put out non-controversial magazines with a small amount of strong opinions.",
+    "label": 1,
+    "idx": 117
+  },
+  {
+    "premise": "Judge Bailey was chosen because he should be looked at as the representative of all future winners.",
+    "hypothesis": "The judge was an upstanding guy.",
+    "label": 1,
+    "idx": 118
+  },
+  {
+    "premise": "Mr. Erlenborn attended undergraduate courses at the University of Notre Dame, Indiana University, the University of Illinois, and Loyala University of Chicago.",
+    "hypothesis": "Mr. Erlenborn earned all of his undergraduate credits at the University of Notre Dame.",
+    "label": 2,
+    "idx": 119
+  },
+  {
+    "premise": "The order was founded by James VII (James II of England) and continues today.",
+    "hypothesis": "James VII never founded anything that lasted beyond his reign.",
+    "label": 2,
+    "idx": 120
+  },
+  {
+    "premise": "On Menorca, search for more elusive prehistoric sites, or take the cliff paths of the northwest or south coasts.",
+    "hypothesis": "The cliff paths are a pleasant place to walk of Menorca.",
+    "label": 1,
+    "idx": 121
+  },
+  {
+    "premise": "As the double-decker boats get ready to leave the pier, bells ring, the gangplank is raised, deckhands in blue sailor suits man the hawsers, and a couple of hundred commuters begin a seven-minute sightseeing tour.",
+    "hypothesis": "Over a hundred boats are parked at the pier.",
+    "label": 1,
+    "idx": 122
+  },
+  {
+    "premise": "well and i i noticed since we moved down here to Texas my husband is originally from Texas but uh i'm not and that you don't have to have uh such a wide variety of seasonal clothes that you do up north where you have to",
+    "hypothesis": "I've noticed that since I've moved down to Texas, one doesn't need to have a wide variety of seasonal clothes. ",
+    "label": 0,
+    "idx": 123
+  },
+  {
+    "premise": "The national award was created to recognize an attorney in practice for less than 10 years for excellence in public interest or pro bono activities.",
+    "hypothesis": "The national award recognizes attorneys with more than 20 years of experience dealing with pro bono work. ",
+    "label": 2,
+    "idx": 124
+  },
+  {
+    "premise": "I admit I have knowledge of a certain name, but perhaps my knowledge ends there.\"",
+    "hypothesis": "Perhaps a tip would help refresh my memory?",
+    "label": 1,
+    "idx": 125
+  },
+  {
+    "premise": "First, the Comptroller General sends a written request to the agency head for the record that has not been made available to GAO within a reasonable time after an initial request.",
+    "hypothesis": "They only accept electronic submissions and throw away any hand written requests.",
+    "label": 2,
+    "idx": 126
+  },
+  {
+    "premise": "Although all four categories of emissions are down substantially, they only achieve 50-75% of the proposed cap by 2007 (shown as the dotted horizontal line in each of the above figures).",
+    "hypothesis": "There has been a substantial decrease in each of the emission categories.",
+    "label": 0,
+    "idx": 127
+  },
+  {
+    "premise": "The universal credibility problem with polling is that wordsmithing and mathematics don't mix, and never will.",
+    "hypothesis": "Wordsmithing and mathematics are not related enough to go together.",
+    "label": 0,
+    "idx": 128
+  },
+  {
+    "premise": "Extensive documentation of the IPM is available at //www.epa.gov/airmarkets/epa-ipm/index.html.",
+    "hypothesis": "The documents are online.",
+    "label": 0,
+    "idx": 129
+  },
+  {
+    "premise": "Do you think I should be concerned?",
+    "hypothesis": "Do you believe I should be worried?",
+    "label": 0,
+    "idx": 130
+  },
+  {
+    "premise": "yeah i've i wish they'd split that bowling season up into uh three seasons",
+    "hypothesis": "Bowling season would be more fun split into thirds.",
+    "label": 1,
+    "idx": 131
+  },
+  {
+    "premise": "While AILA has joined the ACLU and other organizations in a Freedom of Information Act request to find out who is being detained where and why, Mohammed notes that the reasons for the immigrants' detention were not immediately clear and sometimes had dire consequences.",
+    "hypothesis": "The AILA joined the ACLU in requesting the information to be released immediately.",
+    "label": 1,
+    "idx": 132
+  },
+  {
+    "premise": "Venice and its Repubblica Serena rebounded to turn to the mainland, extending its Veneto territory from Padua across the Po valley as far as Bergamo.",
+    "hypothesis": "Venice did not have a vast amount of territory.",
+    "label": 2,
+    "idx": 133
+  },
+  {
+    "premise": "it'll be a nice little bit of money we're going to",
+    "hypothesis": "We are not going to make any money on new venture.",
+    "label": 2,
+    "idx": 134
+  },
+  {
+    "premise": "The man had probably heard him urinating or maybe even noticed the change of his breath as he awoke.",
+    "hypothesis": "The man probably heard the spatter of his urine or the change in his breathing patterns.",
+    "label": 0,
+    "idx": 135
+  },
+  {
+    "premise": "Click here for Finkelstein's explanation of why this logic is expedient.",
+    "hypothesis": "Select this option for Finkelstein's understanding of why this logic is expedient.",
+    "label": 0,
+    "idx": 136
+  },
+  {
+    "premise": "The conversation he had overheard had stimulated his curiosity.",
+    "hypothesis": "The converstaion made him curious.",
+    "label": 0,
+    "idx": 137
+  },
+  {
+    "premise": "This testing of the marketplace may range from written or telephone contacts with knowledgeable federal and non-federal experts regarding similar or duplicate requirements and the results of any market test recently undertaken, to the more formal sources-sought announcements in pertinent publications (e.g.",
+    "hypothesis": "Sources-sought announcements in pertinent publications are better for the marketplace testing.",
+    "label": 1,
+    "idx": 138
+  },
+  {
+    "premise": "Prior to 1986, the United States had been a net creditor because its holdings of foreign assets exceeded foreign holdings of U.S. assets.",
+    "hypothesis": "The US was a net creditor before 1986 because of its foreign asset holdings.",
+    "label": 0,
+    "idx": 139
+  },
+  {
+    "premise": "Ceter of the national aerosece industry, with a vigorous local culture and bright and breezy street life, this university city has an infectious enthusiasm to it.",
+    "hypothesis": "The city has a staid, stuffy, uninspired feeling to it.",
+    "label": 2,
+    "idx": 140
+  },
+  {
+    "premise": "But we don't rule out regulation in the future if industry fails to do a good job of policing itself.",
+    "hypothesis": "Regulation is a possibility because lawmakers are changing their opinions.",
+    "label": 1,
+    "idx": 141
+  },
+  {
+    "premise": "okay  i guess i'll get back to my laundry",
+    "hypothesis": "I think I will go finish up my laundry. ",
+    "label": 0,
+    "idx": 142
+  },
+  {
+    "premise": "Ickes apparently made calls to donors from his government office, but there is no evidence so far that anyone else solicited funds in a federal building.",
+    "hypothesis": "Ickes may have solicited donors and prostitutes from his government office.",
+    "label": 1,
+    "idx": 143
+  },
+  {
+    "premise": "Extensive documentation of the IPM is available at //www.epa.gov/airmarkets/epa-ipm/index.html.",
+    "hypothesis": "They are not available online.",
+    "label": 2,
+    "idx": 144
+  },
+  {
+    "premise": "So many seemingly contrary and opposing factors combine to make it unique.",
+    "hypothesis": "This does not exist anywhere else on earth.",
+    "label": 1,
+    "idx": 145
+  },
+  {
+    "premise": "To the south, the former fishing villages of Sorrento and Positano spill down the craggy cliffs of the serpentine Amalfi coast, justifiably tauted as one of the world's most beautiful drives.",
+    "hypothesis": "The Amalfi coast is far from Positano.",
+    "label": 2,
+    "idx": 146
+  },
+  {
+    "premise": "I found Steven E. Landsburg's piece Pay Scales in Black and White extremely unconvincing.",
+    "hypothesis": "I asked for my money back, after Landsburg's piece.",
+    "label": 1,
+    "idx": 147
+  },
+  {
+    "premise": " \"So your girl writes that your little farewell activity didn't fare so well, eh?\" he chortled.",
+    "hypothesis": "Your little girl wrote about how well your farewell activity went.",
+    "label": 2,
+    "idx": 148
+  },
+  {
+    "premise": "What idiots girls are! ",
+    "hypothesis": "Girls can put emotions ahead of logical thought, giving the appearance of idiocy.",
+    "label": 1,
+    "idx": 149
+  },
+  {
+    "premise": "If necessary to meeting the restrictions imposed in the preceding sentence, the Administrator shall reduce, pro rata, the basic Phase II allowance allocations for each unit subject to the requirements of section 414.",
+    "hypothesis": "The administrator shall reduce allowance for each unit. ",
+    "label": 0,
+    "idx": 150
+  },
+  {
+    "premise": "At least they're getting stoned first, I rationalized.",
+    "hypothesis": "It's awful that they get stoned first, I argued. ",
+    "label": 2,
+    "idx": 151
+  },
+  {
+    "premise": "At the delta of the Rh??ne, where its two arms spill into the Medi?\u00adter?\u00adra?\u00adnean, the Camargue has been reclaimed from the sea to form a national nature reserve.",
+    "hypothesis": "The Camargue is a national nature reserve that has been reclaimed from the sea.",
+    "label": 0,
+    "idx": 152
+  },
+  {
+    "premise": "So, which one of you ladies wants to go first.",
+    "hypothesis": "It is best if a man goes first.",
+    "label": 2,
+    "idx": 153
+  },
+  {
+    "premise": "although the uh it's uh it we almost one day we painted the house to uh we painted we painted the whole inside and it had all this dark trim we thought uh you know we did the one wall but the other trim i'm trying to think i think i think we left most of it because it gets to be uh they don't do that in the newer houses now we don't the uh mold everything is white in a new house everything is white",
+    "hypothesis": "We painted the house over the duration of one day.",
+    "label": 0,
+    "idx": 154
+  },
+  {
+    "premise": "The Congress, which controls our funding levels, began to include many members who did not support the purpose and goals of a federal civil legal services program.",
+    "hypothesis": "the congress also has different functions, though they are all broad scoping.",
+    "label": 1,
+    "idx": 155
+  },
+  {
+    "premise": "Mr. Clinton rewards Mr. Knight for his fund raising, Mr. Gore lays the groundwork for his anticipated presidential bid four years from now, and the companies, by hiring Mr. Knight, get the administration's ear.",
+    "hypothesis": "Mr. Clinton appreciated Mr. Knight for his fund raising, said the news.",
+    "label": 0,
+    "idx": 156
+  },
+  {
+    "premise": "I hate pigeons.",
+    "hypothesis": "My feelings towards pigeons are filled with animosity.",
+    "label": 0,
+    "idx": 157
+  },
+  {
+    "premise": "Whether a government postal service can engage in these kinds of negotiations deserves serious study.",
+    "hypothesis": "The postal service is very useful.",
+    "label": 1,
+    "idx": 158
+  },
+  {
+    "premise": "Unrest and some political extremism have surfaced from time to time, but since aid from France is so vital, and French customs so ingrained, it seems almost inconceivable that the FWI will seek total independence as other Caribbean islands have done.",
+    "hypothesis": "There is some political extremism.",
+    "label": 0,
+    "idx": 159
+  },
+  {
+    "premise": "2.5 Financial audits are performed under the American Institute of Certified Public Accountants' (AICPA) generally accepted auditing standards for field work and reporting, as well as the related AICPA Statements on Auditing Standards (SASs) which interpret the standards and provide guidance on conducting such work.",
+    "hypothesis": "The AICPA is the American Institute of Certified Public Accountants.",
+    "label": 0,
+    "idx": 160
+  },
+  {
+    "premise": "i'm not opposed to it but when its when the time is right it will probably just kind of happen you know",
+    "hypothesis": "I wish I had more time to think about it.",
+    "label": 1,
+    "idx": 161
+  },
+  {
+    "premise": "I now submit this report to you and the other designated officials.",
+    "hypothesis": "I will not give the report to you or the other officials ",
+    "label": 2,
+    "idx": 162
+  },
+  {
+    "premise": "yes i i always turn on the TV set and it seems like i catch that program in the last five minutes and",
+    "hypothesis": "I often find myself catching only the last five minutes of that program.",
+    "label": 0,
+    "idx": 163
+  },
+  {
+    "premise": "They even smiled at Susan and she smiled back.",
+    "hypothesis": "They smiled at Susan to warn her of the incoming attackers.",
+    "label": 1,
+    "idx": 164
+  },
+  {
+    "premise": "Sandstone and granite were the materials used to build the Baroque church of Bom Jesus, famous for its casket of St. Francis Xavier's relics in the mausoleum to the right of the altar.",
+    "hypothesis": "Sandstone and granite were chosen as the materials for the Baroque church of Bom Jesus because of how sturdy they are.",
+    "label": 1,
+    "idx": 165
+  },
+  {
+    "premise": "Leather Wares",
+    "hypothesis": "The wares are made of cotton and coarse fabric.",
+    "label": 2,
+    "idx": 166
+  },
+  {
+    "premise": "was it bad",
+    "hypothesis": "Was it spoiled?",
+    "label": 1,
+    "idx": 167
+  },
+  {
+    "premise": "Piccadilly Tube station.",
+    "hypothesis": "Euston train station. ",
+    "label": 2,
+    "idx": 168
+  },
+  {
+    "premise": "The tip was hooked towards the edge, the same way the tips are hammered for knives used for slaughter.",
+    "hypothesis": "The tips were made of a hard material.",
+    "label": 1,
+    "idx": 169
+  },
+  {
+    "premise": "have you read Tom Clancy",
+    "hypothesis": "He asked if he read Stephen King.",
+    "label": 2,
+    "idx": 170
+  },
+  {
+    "premise": "so i have to find a way to supplement that",
+    "hypothesis": "That should be enough by itself.",
+    "label": 2,
+    "idx": 171
+  },
+  {
+    "premise": "In about a quarter of an hour the bell rang, and Tuppence repaired to the hall to show the visitor out.",
+    "hypothesis": "After 15 minutes, nothing happened and Tuppence and the visitor decided that it was time to eat some lunch. ",
+    "label": 2,
+    "idx": 172
+  },
+  {
+    "premise": "This one-at-a-time, uncoordinated series of regulatory requirements for the power industry is not the optimal approach for the environment, the power generation sector, or American consumers.",
+    "hypothesis": "It is not the optimal approach.",
+    "label": 0,
+    "idx": 173
+  },
+  {
+    "premise": "there's certain times of the year of course that uh that it probably wouldn't do very well because of the temperature and stuff but but uh the right time of year it works pretty good",
+    "hypothesis": "It works pretty good at the right time of year.",
+    "label": 0,
+    "idx": 174
+  },
+  {
+    "premise": "Specifically, suppose unconstrained competition were allowed but the Postal Service turned out to have sufficient market power in some product areas to allow other products to be priced at or near the level of incremental cost.",
+    "hypothesis": "The Postal Service has a lot of market power.",
+    "label": 0,
+    "idx": 175
+  },
+  {
+    "premise": "and uh uh so i've i've just been real pleased and my step father happens to work at a Ford dealership and that makes things a little easier come car time but",
+    "hypothesis": "My step father just got fired from the Ford dealership.",
+    "label": 2,
+    "idx": 176
+  },
+  {
+    "premise": "On the left of the entrance ramp is the open space once occupied by the Temple of Athena, close to which are the remains of the Pergamene library.",
+    "hypothesis": "The Temple of Athena can no longer be seen, but the remains of the Pergamene library still exist nearby.",
+    "label": 0,
+    "idx": 177
+  },
+  {
+    "premise": "Information  Computer Attacks at Department of Defense Pose Increasing Risks",
+    "hypothesis": "The computer attacks on the Department of Defense are easily mitigated.",
+    "label": 1,
+    "idx": 178
+  },
+  {
+    "premise": "You can either fly on TAP/Air Portugal (15-minute flight) or take the ferry (which leaves daily at 8am; Tel. 291/226 511).",
+    "hypothesis": "Taking the plane will give you more departure timing options than the ferry.",
+    "label": 1,
+    "idx": 179
+  },
+  {
+    "premise": "in each square",
+    "hypothesis": "Inside every square.",
+    "label": 0,
+    "idx": 180
+  },
+  {
+    "premise": "Most traditional reform options involve workers paying more for promised benefits or getting lower benefits.",
+    "hypothesis": "The traditional reform options propose additional benefits for less cost.",
+    "label": 2,
+    "idx": 181
+  },
+  {
+    "premise": "The primary screen must be integrated into the standard intake procedure of the emergency setting and must be the responsibility of the staff to administer to all patients.",
+    "hypothesis": "The primary screen is the vital part of this process.",
+    "label": 1,
+    "idx": 182
+  },
+  {
+    "premise": "After criticizing the GOP openly for weeks, Buchanan announced that he would seek the Reform presidential nomination, which would bring him $12 million in federal funds.",
+    "hypothesis": "Buchanan passed on the opportunity to seek the presidential nomination.",
+    "label": 2,
+    "idx": 183
+  },
+  {
+    "premise": "Dinosaurs poked around the remains; twitchy little scavengers, fighting over scraps.",
+    "hypothesis": "Dinosaurs were all extinct.",
+    "label": 2,
+    "idx": 184
+  },
+  {
+    "premise": "The Kal whistled and Vrenna's eyes sparkled when she saw Jon swing it.",
+    "hypothesis": "Jon is swinging something.",
+    "label": 0,
+    "idx": 185
+  },
+  {
+    "premise": "Abortive countrywide revolts",
+    "hypothesis": "There is no revolt.",
+    "label": 2,
+    "idx": 186
+  },
+  {
+    "premise": "But a list of who's better than other people in some aspect or another is not inevitable and does not make the economy any more prosperous or society any richer in other ways.",
+    "hypothesis": "A listing of those better than others is very helpful to the economy.",
+    "label": 2,
+    "idx": 187
+  },
+  {
+    "premise": "But Fish is not an upbeat pragmatist.",
+    "hypothesis": "Fish is the nickname of a human. ",
+    "label": 1,
+    "idx": 188
+  },
+  {
+    "premise": "Hindus then went on the rampage through Sikh communities, resulting in a round of communal violence.",
+    "hypothesis": "The Hindus peacefully protested against the Sikhs.",
+    "label": 2,
+    "idx": 189
+  },
+  {
+    "premise": "um-hum yeah we're still pretty much you know in winter as far as that goes here",
+    "hypothesis": "It's still pretty much winter here.",
+    "label": 0,
+    "idx": 190
+  },
+  {
+    "premise": "As Russell points out, some 400,000 legal aid cases go unassisted each year.",
+    "hypothesis": "A lot of legal aid cases go unassisted each year.",
+    "label": 0,
+    "idx": 191
+  },
+  {
+    "premise": "At the pictures the crooks always have a restoorant in the Underworld.",
+    "hypothesis": "They were not always crooks.",
+    "label": 1,
+    "idx": 192
+  },
+  {
+    "premise": "and when they get out they should have uh i don't know you know some reasonable amount of money",
+    "hypothesis": "We should give them money for when they get out.",
+    "label": 1,
+    "idx": 193
+  },
+  {
+    "premise": "While the Freedom of Information Act, the Trade Secrets Act, and other statutes may generally protect certain categories of information from disclosure by an agency to the public, this protection does not justify withholding the information from GAO.",
+    "hypothesis": "Although the Freedom of Information Act aims to protect information from being disclosed, information should still not be withheld from the GAO. ",
+    "label": 0,
+    "idx": 194
+  },
+  {
+    "premise": "Cultural festivals are one opportunity, but the better way is at a private wedding or feast day when the performances are set in their true context.",
+    "hypothesis": "Cultural festivals are the best place to have performances.",
+    "label": 2,
+    "idx": 195
+  },
+  {
+    "premise": "Escaped or abandoned raccoons have been breeding in the wild for the past 20 years and have damaged corn crops, watermelon and melon farms, and rainbow trout hatcheries, the paper said.",
+    "hypothesis": "Raccoons, if they are abandoned, tend to damage things- this is what has been happening for the past 20 years.",
+    "label": 0,
+    "idx": 196
+  },
+  {
+    "premise": "In addition, because funding is secured on an",
+    "hypothesis": "Funding has to be secured.",
+    "label": 0,
+    "idx": 197
+  },
+  {
+    "premise": "1) Increased federal enforcement . Before Hoover's death, the FBI did not aggressively investigate the Mafia.",
+    "hypothesis": "Increased federal enforcement is essential to curbing organized crime.",
+    "label": 1,
+    "idx": 198
+  },
+  {
+    "premise": "On the northern slopes of this rocky outcropping is the site of the ancient capital of the island, also called Thira, which dates from the third century b.c. (when the Aegean was under Ptolemaic rule).",
+    "hypothesis": "Is the site of the ancient asteroid impact, also called Thira.",
+    "label": 2,
+    "idx": 199
+  },
+  {
+    "premise": "There were maybe three hundred people present.",
+    "hypothesis": "300 people were there.",
+    "label": 0,
+    "idx": 200
+  },
+  {
+    "premise": "but there's no uh inscriptions or or dates or anything else",
+    "hypothesis": "The dates on it were rubbed off.",
+    "label": 1,
+    "idx": 201
+  },
+  {
+    "premise": "The interior of the palace is very dark, and the use of flash is forbidden, so photographers should think twice before paying the extra fee for bringing in a camera or video equipment.",
+    "hypothesis": "Think hard about whether or not you want to bring a camera, there is an extra fee and no flash allowed.",
+    "label": 0,
+    "idx": 202
+  },
+  {
+    "premise": "In the market proper, spices and grain are piled up in multi-colored mountains; merchants chant as they measure out separate lots of five kilos three, three, three, four, four, four, and five, five, five. ",
+    "hypothesis": "In the market itself, merchants measure out and sell spices and grains in many different colors.",
+    "label": 0,
+    "idx": 203
+  },
+  {
+    "premise": "Trump, who said he would decide by March whether to run for president, would likely spend $100 million to $200 million of his own money on a campaign.",
+    "hypothesis": "In March, Trump decided that he was not suited to run for President.",
+    "label": 1,
+    "idx": 204
+  },
+  {
+    "premise": "Similarly, OIM revised the electronic Grant Renewal Application to accommodate new information sought by LSC and to ensure greater ease for users.",
+    "hypothesis": "Users have since reported finding that the grant application process is much more streamlined.",
+    "label": 1,
+    "idx": 205
+  },
+  {
+    "premise": "The statue was beheaded several years ago by islanders, who blame Josephine for her role in the slavery in Martinique.",
+    "hypothesis": "The statue was erected to remind the populace to stay obedient to their masters.",
+    "label": 2,
+    "idx": 206
+  },
+  {
+    "premise": "Though he abstains from showbizzy campaigning, he markets his virtue and exploits his legend.",
+    "hypothesis": "He is capable to market his virtue, exploiting his legend.",
+    "label": 0,
+    "idx": 207
+  },
+  {
+    "premise": "At the pictures the crooks always have a restoorant in the Underworld.",
+    "hypothesis": "The crooks spent the day at the movies.",
+    "label": 2,
+    "idx": 208
+  },
+  {
+    "premise": "In the ancestral environment a man would be likely to have more offspring if he got his pick of the most fertile-seeming women.",
+    "hypothesis": "Only a man who stayed with one female spread his genes most efficiently.",
+    "label": 2,
+    "idx": 209
+  },
+  {
+    "premise": "All the steps of data reduction and coding are described, along with the basis for transformations in these steps.",
+    "hypothesis": "There were 12 steps in the data reduction.",
+    "label": 1,
+    "idx": 210
+  },
+  {
+    "premise": "There was no longer any  when you wanted some unbridled adult fun, Las Vegas was the place to be.",
+    "hypothesis": "Las Vegas was billed as a fun destination for all ages.",
+    "label": 2,
+    "idx": 211
+  },
+  {
+    "premise": "once you have something and it's like i was watching this program on TV yesterday in nineteen seventy six NASA came up with Three D graphics right",
+    "hypothesis": "I was watching a program about NASA.",
+    "label": 0,
+    "idx": 212
+  },
+  {
+    "premise": "And it needs work too, you know, in case I have to jump out with this parachute from my lil' blue sports plane for real.'",
+    "hypothesis": "It doesn't need to work.",
+    "label": 2,
+    "idx": 213
+  },
+  {
+    "premise": "i know that i didn't much uh-huh oh",
+    "hypothesis": "I might have done a bunch.",
+    "label": 2,
+    "idx": 214
+  },
+  {
+    "premise": "I was to watch for an advertisement in the Times.",
+    "hypothesis": "I was anticipating an ad for cigars in the newspaper. ",
+    "label": 1,
+    "idx": 215
+  },
+  {
+    "premise": "yeah right uh-huh that's right yeah you you have to work on you really do",
+    "hypothesis": "You don't really have to work at it.",
+    "label": 2,
+    "idx": 216
+  },
+  {
+    "premise": "yeah you can also do the same thing using um if you have ground beef just stir fry the ground beef drain off the oil use the same hoi sin sauce and um some of the frozen mixed vegetables",
+    "hypothesis": "So you can fry ground beef, drain it, and then add hoi sin sauce and vegetables.",
+    "label": 0,
+    "idx": 217
+  },
+  {
+    "premise": "While it's probably true that democracies are unlikely to go to war unless they're attacked, sometimes they are the first to take the offensive.",
+    "hypothesis": "Democracies probably won't go to war unless someone attacks them.",
+    "label": 0,
+    "idx": 218
+  },
+  {
+    "premise": "He sat a short distance from them, his eyes on Jon.",
+    "hypothesis": "Looking at Jon, he sat a short distance from them.",
+    "label": 0,
+    "idx": 219
+  },
+  {
+    "premise": "approaches for setting different requirements for sources that pose different levels of hazard (tiering); worst-case releases and other hazard assessment issues; accident information reporting; public participation; inherently safer approaches; and implementation and integration of section 112(r) with state programs, particularly state air permitting programs.",
+    "hypothesis": "Different requirements are required for different levels of hazard.",
+    "label": 0,
+    "idx": 220
+  },
+  {
+    "premise": "5 are highly correlated during summer months in some areas.",
+    "hypothesis": "Nothing is correlated to the summer in all areas.  ",
+    "label": 2,
+    "idx": 221
+  },
+  {
+    "premise": "Just east of the Star Ferry terminal, you'll come to CityHall.",
+    "hypothesis": "The City Hall was built so close to the terminal to help visitors find City Hall easily.",
+    "label": 1,
+    "idx": 222
+  },
+  {
+    "premise": "someone else noticed it and i said well i guess that's true and it was somewhat melodio us in other words it wasn't just you know it was really funny",
+    "hypothesis": "Someone else paid attention to it and it was really funny. ",
+    "label": 0,
+    "idx": 223
+  },
+  {
+    "premise": "As Jon looked at him, Barnam puffed out his chest.",
+    "hypothesis": "Barnam wanted to impress Jon.",
+    "label": 1,
+    "idx": 224
+  },
+  {
+    "premise": "The chart to which Reich refers was actually presented during Saxton's opening statement, hours before Reich testified, and did not look as Reich claims it did.",
+    "hypothesis": "Reich refers to a chart that he misunderstood.",
+    "label": 0,
+    "idx": 225
+  },
+  {
+    "premise": "In the north, the snowcapped Alps and jagged pink pinnacles of the Dolomites; the gleaming Alpine-backed lakes of Como, Garda, and Maggiore; the fertile and industrial plain of the Po, stretching from Turin and Milan across to ancient Verona; the Palladian-villa studded hills of Vicenza; and the romantic canals of Venice.",
+    "hypothesis": "The Alps are covered in snow.",
+    "label": 0,
+    "idx": 226
+  },
+  {
+    "premise": "i have been and uh some of the boy scouts have been up in there they have got some great hiking trails and camping areas up in there",
+    "hypothesis": "Boy scouts always know the best place to camp and hike. ",
+    "label": 1,
+    "idx": 227
+  },
+  {
+    "premise": "The NYT , in its front-page coverage, says the plane was flying far lower than the rules for training missions allow.",
+    "hypothesis": "The NYT reported that training missions did allow for planes to fly that low. ",
+    "label": 2,
+    "idx": 228
+  },
+  {
+    "premise": "I am not aware of any studies comparing the number of words an average person could expect to hear spoken in a typical day 500 years ago vs. the number that can be heard now, but the increase surely is vast.",
+    "hypothesis": "Though I've never read any research regarding how many words people heard back then compared to now, I'm sure the number has gone up.",
+    "label": 0,
+    "idx": 229
+  },
+  {
+    "premise": "Life, unlike Reich's book, is not a series of morality fables.",
+    "hypothesis": "Reich's book is a series of morality fables.",
+    "label": 0,
+    "idx": 230
+  },
+  {
+    "premise": "uh uh yeah that well um the older you get the more convenience you try to bring with you i guess so i'm up to dragging the trailer around which is my next step is going to be probably Winnebago i hope if i only can afford one but that",
+    "hypothesis": "The older you get, the more you want to be spur of the moment.",
+    "label": 1,
+    "idx": 231
+  },
+  {
+    "premise": "We need your help with another new feature that starts next week.",
+    "hypothesis": "We need your assistance with a new feature.",
+    "label": 0,
+    "idx": 232
+  },
+  {
+    "premise": "I thought working on Liddy's campaign would be better than working on Bob's.",
+    "hypothesis": "I thought I would like working on Liddy's campaign the best.",
+    "label": 1,
+    "idx": 233
+  },
+  {
+    "premise": "Now they're telling mothers to deny food to infants all night long once the kids are a few months old.",
+    "hypothesis": "It is better to force infants to eat during the day time.",
+    "label": 1,
+    "idx": 234
+  },
+  {
+    "premise": "This number represents the most reliable, albeit conservative, estimate of cases closed in 1999 by LSC grantees.",
+    "hypothesis": "This estimate is likely to be lower, or conservative.",
+    "label": 1,
+    "idx": 235
+  },
+  {
+    "premise": "As Jon looked at him, Barnam puffed out his chest.",
+    "hypothesis": "Jon never looked at Barnam.",
+    "label": 2,
+    "idx": 236
+  },
+  {
+    "premise": "Black professionals braid their hair to display their ethnic pride.",
+    "hypothesis": "Blacks braid their hair because they're forced to.",
+    "label": 2,
+    "idx": 237
+  },
+  {
+    "premise": "On a December day in 1917, British General Allenby rode up to Jaffa Gate and dismounted from his horse because he would not ride where Jesus walked; he then accepted the surrender of the city after the Ottoman Turks had fled (the flag of surrender was a bed-sheet from the American Colony Hotel).",
+    "hypothesis": "The British General Allenby rode his horse over the road where Jesus walked.",
+    "label": 2,
+    "idx": 238
+  },
+  {
+    "premise": "oh older ones too i know a few of those",
+    "hypothesis": "I don't know any of the older ones.",
+    "label": 2,
+    "idx": 239
+  },
+  {
+    "premise": "Enthusiasm for Disney's Broadway production of The Lion King dwindles.",
+    "hypothesis": "The broadway production of The Lion King is no longer enthusiastically attended.",
+    "label": 0,
+    "idx": 240
+  },
+  {
+    "premise": "If necessary to meeting the restrictions imposed in the preceding sentence, the Administrator shall reduce, pro rata, the basic Phase II allowance allocations for each unit subject to the requirements of section 414.",
+    "hypothesis": "Section 414 helps higher allowance allocations for each unit.",
+    "label": 2,
+    "idx": 241
+  },
+  {
+    "premise": "I think as soon as they get you, they'll come for me.",
+    "hypothesis": "They will come after me first.",
+    "label": 2,
+    "idx": 242
+  },
+  {
+    "premise": "'No one in Large would ever try to harm us.",
+    "hypothesis": "We figured they were all nice people in Large, nobody that would ever lay a finger on somebody in hopes to hurt them, but maybe we're wrong after the news story came out about the violent acts that were committed there just recently.",
+    "label": 1,
+    "idx": 243
+  },
+  {
+    "premise": "So it wasn't Missenhardt's singing--marvelous though that was--that made Osmin's rantings so thrilling.",
+    "hypothesis": "Osmin went off on a rant every day.",
+    "label": 1,
+    "idx": 244
+  },
+  {
+    "premise": "I lay awake waiting until I judged it must be about two o'clock in the morning.",
+    "hypothesis": "I assumed that it was two o'clock in the morning. ",
+    "label": 0,
+    "idx": 245
+  },
+  {
+    "premise": "Economic growth also depends on education to enhance the knowledge and skills of the nation's work",
+    "hypothesis": "Economic growth will continue without regard to the skills of the nation's work.",
+    "label": 2,
+    "idx": 246
+  },
+  {
+    "premise": "Indeed, the Democratic counteroffensive has already begun.",
+    "hypothesis": "Somebody or some group has a beef with another one and considers defensive moves as being 'counteroffensive'",
+    "label": 1,
+    "idx": 247
+  },
+  {
+    "premise": "In 1923, Turkey broke away from the tired Ottoman rulers, and Kemal Ataturk rose to power on a wave of popular support.",
+    "hypothesis": "Turkey was part of the Ottoman Empire until 1923.",
+    "label": 0,
+    "idx": 248
+  },
+  {
+    "premise": "yeah because i was saying to him i said i'm not that heavy i'm not heavy you know maybe ten to fifteen pounds like any other human being",
+    "hypothesis": "i could lose ten or fifteen pounds, like most other people",
+    "label": 0,
+    "idx": 249
+  },
+  {
+    "premise": "On a scale of 0 (strongly disagree) to 7 (strongly agree) the statement alcoholics are difficult to treat received a mean score of 6.25, and the statement alcoholism is a treat-able disease received a mean score of 5.27.",
+    "hypothesis": "Alcoholics are only difficult to treat if they are angry when intoxicated.",
+    "label": 1,
+    "idx": 250
+  },
+  {
+    "premise": " The Romans never really infiltrated Ibiza, and even after the defeat of Hannibal in 202 b.c. during the Second Punic War their influence was restrained.",
+    "hypothesis": "The Romans didn't infiltrate Ibiza because it wasn't valuable.",
+    "label": 1,
+    "idx": 251
+  },
+  {
+    "premise": "go up to state parks with six shelters and little screened in areas and then travel trailers and all the way up to conference center type campings that have uh you know air conditioning like hotels with uh",
+    "hypothesis": "The state parks have six shelters on their grounds.",
+    "label": 0,
+    "idx": 252
+  },
+  {
+    "premise": "She seemed so different  \"",
+    "hypothesis": "She seemed the same as always.",
+    "label": 2,
+    "idx": 253
+  },
+  {
+    "premise": "Good-bye.\" Julius was bending over the car.",
+    "hypothesis": "Julius wouldn't leave the house.",
+    "label": 2,
+    "idx": 254
+  },
+  {
+    "premise": "To savour the full effect of the architect's skill, enter the courtyard through the gate which opens onto the Hippodrome.",
+    "hypothesis": "My family will take your advice as we tour the Hippodrome.",
+    "label": 1,
+    "idx": 255
+  }
+]
