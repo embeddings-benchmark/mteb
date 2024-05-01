@@ -99,15 +99,15 @@ class MLQARetrieval(AbsTaskRetrieval, CrosslingualTask):
         eval_splits=["validation", "test"],
         eval_langs=_EVAL_LANGS,
         main_score="ndcg_at_10",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
+        date=("2019-01-01", "2020-12-31"),
+        form=["written"],
+        domains=["Encyclopaedic"],
+        task_subtypes=["Question answering"],
+        license="cc-by-sa-3.0",
+        socioeconomic_status="mixed",
+        annotations_creators="human-annotated",
+        dialect=[],
+        text_creation="found",
         bibtex_citation="""@article{lewis2019mlqa,
         title = {MLQA: Evaluating Cross-lingual Extractive Question Answering},
         author = {Lewis, Patrick and Oguz, Barlas and Rinott, Ruty and Riedel, Sebastian and Schwenk, Holger},
@@ -115,8 +115,11 @@ class MLQARetrieval(AbsTaskRetrieval, CrosslingualTask):
         year = 2019,
         eid = {arXiv: 1910.07475}
         }""",
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"test": 158083, "validation": 15747},
+        avg_character_length={
+            "test": 37352.28,
+            "validation": 36952.7,
+        },  # avergae context lengths
     )
 
     def load_data(self, **kwargs):
@@ -126,10 +129,13 @@ class MLQARetrieval(AbsTaskRetrieval, CrosslingualTask):
         _dataset_raw = {}
         self.queries, self.corpus, self.relevant_docs = {}, {}, {}
 
-        for lang in _LANGUAGES.keys():
-            lang_pair = _LANGUAGES[lang][0] + "_" + _LANGUAGES[lang][1]
+        for hf_subset, langs in _LANGUAGES.items():
+            lang_pair = (
+                langs[0] + "_" + langs[1]
+            )  # builds language pair separated by an underscore. e.g., "ara-Arab_eng-Latn"
+
             _dataset_raw[lang_pair] = datasets.load_dataset(
-                name=lang,
+                name=hf_subset,
                 **self.metadata_dict["dataset"],
             )
             _dataset_raw[lang_pair] = _dataset_raw[lang_pair].rename_column(
