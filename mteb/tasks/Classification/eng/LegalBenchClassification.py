@@ -1078,3 +1078,437 @@ class CUADAuditRightsLegalBenchClassification(AbsTaskClassification):
             }
         )
         self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class CUADCapOnLiabilityLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="CUADCapOnLiabilityLegalBenchClassification",
+        description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies a cap on liability upon the breach of a party's obligation. This includes time limitation for the counterparty to bring claims or maximum amount for recovery.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "cuad_cap_on_liability",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2023-08-23", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @article{hendrycks2021cuad,
+            title={Cuad: An expert-annotated nlp dataset for legal contract review},
+            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+            journal={arXiv preprint arXiv:2103.06268},
+            year={2021}
+        }
+        """,
+        n_samples={"test": 1216},
+        avg_character_length={"test": 337.14},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class CUADChangeOfControlLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="CUADChangeOfControlLegalBenchClassification",
+        description="This task was constructed from the CUAD dataset. It consists of determining if the clause gives one party the right to terminate or is consent or notice required of the counterparty if such party undergoes a change of control, such as a merger, stock sale, transfer of all or substantially all of its assets or business, or assignment by operation of law.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "cuad_change_of_control",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2023-08-23", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @article{hendrycks2021cuad,
+            title={Cuad: An expert-annotated nlp dataset for legal contract review},
+            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+            journal={arXiv preprint arXiv:2103.06268},
+            year={2021}
+        }
+        """,
+        n_samples={"test": 1216},
+        avg_character_length={"test": 337.14},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class CUADCompetitiveRestrictionExceptionLegalBenchClassification(
+    AbsTaskClassification
+):
+    metadata = TaskMetadata(
+        name="CUADCompetitiveRestrictionExceptionLegalBenchClassification",
+        description="This task was constructed from the CUAD dataset. It consists of determining if the clause mentions exceptions or carveouts to Non-Compete, Exclusivity and No-Solicit of Customers.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "cuad_competitive_restriction_exception",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2023-08-23", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @article{hendrycks2021cuad,
+            title={Cuad: An expert-annotated nlp dataset for legal contract review},
+            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+            journal={arXiv preprint arXiv:2103.06268},
+            year={2021}
+        }
+        """,
+        n_samples={"test": 1216},
+        avg_character_length={"test": 337.14},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class CUADCovenantNotToSueLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="CUADCovenantNotToSueLegalBenchClassification",
+        description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies that a party is restricted from contesting the validity of the counterparty's ownership of intellectual property or otherwise bringing a claim against the counterparty for matters unrelated to the contract.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "cuad_covenant_not_to_sue",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2023-08-23", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @article{hendrycks2021cuad,
+            title={Cuad: An expert-annotated nlp dataset for legal contract review},
+            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+            journal={arXiv preprint arXiv:2103.06268},
+            year={2021}
+        }
+        """,
+        n_samples={"test": 1216},
+        avg_character_length={"test": 337.14},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class CUADEffectiveDateLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="CUADEffectiveDateLegalBenchClassification",
+        description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies the date upon which the agreement becomes effective.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "cuad_effective_date",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2023-08-23", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @article{hendrycks2021cuad,
+            title={Cuad: An expert-annotated nlp dataset for legal contract review},
+            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+            journal={arXiv preprint arXiv:2103.06268},
+            year={2021}
+        }
+        """,
+        n_samples={"test": 1216},
+        avg_character_length={"test": 337.14},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class CUADExclusivityLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="CUADExclusivityLegalBenchClassification",
+        description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies exclusive dealing commitment with the counterparty. This includes a commitment to procure all 'requirements' from one party of certain technology, goods, or services or a prohibition on licensing or selling technology, goods or services to third parties, or a prohibition on collaborating or working with other parties), whether during the contract or after the contract ends (or both).",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "cuad_exclusivity",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2023-08-23", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @article{hendrycks2021cuad,
+            title={Cuad: An expert-annotated nlp dataset for legal contract review},
+            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+            journal={arXiv preprint arXiv:2103.06268},
+            year={2021}
+        }
+        """,
+        n_samples={"test": 1216},
+        avg_character_length={"test": 337.14},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class CUADExpirationDateLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="CUADExpirationDateLegalBenchClassification",
+        description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies the date upon which the initial term expires.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "cuad_expiration_date",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2023-08-23", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @article{hendrycks2021cuad,
+            title={Cuad: An expert-annotated nlp dataset for legal contract review},
+            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+            journal={arXiv preprint arXiv:2103.06268},
+            year={2021}
+        }
+        """,
+        n_samples={"test": 1216},
+        avg_character_length={"test": 337.14},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class CUADGoverningLawLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="CUADGoverningLawLegalBenchClassification",
+        description="This task was constructed from the CUAD dataset. It consists of determining if the clause specifies which state/country’s law governs the contract.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "cuad_governing_law",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2023-08-23", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @article{hendrycks2021cuad,
+            title={Cuad: An expert-annotated nlp dataset for legal contract review},
+            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+            journal={arXiv preprint arXiv:2103.06268},
+            year={2021}
+        }
+        """,
+        n_samples={"test": 1216},
+        avg_character_length={"test": 337.14},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
