@@ -3,7 +3,7 @@
   "mteb_dataset_name": "MLQARetrieval",
   "mteb_version": "1.7.26",
   "test": {
-    "ara-Arab-deu-Latn": {
+    "ara-Arab_deu-Latn": {
       "map_at_1": 0.4057,
       "map_at_10": 0.5011,
       "map_at_100": 0.50885,
@@ -11,13 +11,13 @@
       "map_at_20": 0.50557,
       "map_at_3": 0.47645,
       "map_at_5": 0.49019,
-      "mrr_at_1": 0.40631,
-      "mrr_at_10": 0.50174,
-      "mrr_at_100": 0.50964,
-      "mrr_at_1000": 0.51009,
-      "mrr_at_20": 0.50636,
-      "mrr_at_3": 0.47807,
-      "mrr_at_5": 0.49126,
+      "mrr_at_1": 0.40873,
+      "mrr_at_10": 0.50288,
+      "mrr_at_100": 0.51075,
+      "mrr_at_1000": 0.51119,
+      "mrr_at_20": 0.50747,
+      "mrr_at_3": 0.47898,
+      "mrr_at_5": 0.49195,
       "ndcg_at_1": 0.4057,
       "ndcg_at_10": 0.55011,
       "ndcg_at_100": 0.59075,
@@ -40,10 +40,10 @@
       "recall_at_3": 0.56519,
       "recall_at_5": 0.62462
     },
-    "evaluation_time": 48.81
+    "evaluation_time": 172.22
   },
   "validation": {
-    "ara-Arab-deu-Latn": {
+    "ara-Arab_deu-Latn": {
       "map_at_1": 0.3913,
       "map_at_10": 0.53032,
       "map_at_100": 0.53876,
@@ -51,13 +51,13 @@
       "map_at_20": 0.53609,
       "map_at_3": 0.49356,
       "map_at_5": 0.52279,
-      "mrr_at_1": 0.38164,
-      "mrr_at_10": 0.52867,
-      "mrr_at_100": 0.53715,
-      "mrr_at_1000": 0.53726,
-      "mrr_at_20": 0.53449,
-      "mrr_at_3": 0.48953,
-      "mrr_at_5": 0.52021,
+      "mrr_at_1": 0.39614,
+      "mrr_at_10": 0.533,
+      "mrr_at_100": 0.54137,
+      "mrr_at_1000": 0.54148,
+      "mrr_at_20": 0.53871,
+      "mrr_at_3": 0.49436,
+      "mrr_at_5": 0.52359,
       "ndcg_at_1": 0.3913,
       "ndcg_at_10": 0.59989,
       "ndcg_at_100": 0.63764,
@@ -80,6 +80,6 @@
       "recall_at_3": 0.63285,
       "recall_at_5": 0.75845
     },
-    "evaluation_time": 12.62
+    "evaluation_time": 47.59
   }
 }
