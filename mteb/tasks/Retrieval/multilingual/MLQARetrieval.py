@@ -116,7 +116,7 @@ class MLQARetrieval(AbsTaskRetrieval, CrosslingualTask):
         for hf_subset, langs in _LANGUAGES.items():
             lang_pair = (
                 langs[0] + "_" + langs[1]
-            )  # builds language pair separated by an underscore. e.g., "ara-Arab_eng-Latn"
+            )  # builds a language pair separated by an underscore. e.g., "ara-Arab_eng-Latn"
 
             _dataset_raw[lang_pair] = datasets.load_dataset(
                 name=hf_subset,
