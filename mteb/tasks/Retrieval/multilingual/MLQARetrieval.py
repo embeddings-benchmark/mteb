@@ -9,74 +9,58 @@ _LANGUAGES = {
     "mlqa.ar.es": ["ara-Arab", "spa-Latn"],
     "mlqa.ar.hi": ["ara-Arab", "hin-Deva"],
     "mlqa.ar.vi": ["ara-Arab", "vie-Latn"],
-    "mlqa.ar.zh": ["ara-Arab", "cmn-Hans"],
+    "mlqa.ar.zh": ["ara-Arab", "zho-Hans"],
     "mlqa.de.ar": ["deu-Latn", "ara-Arab"],
     "mlqa.de.de": ["deu-Latn", "deu-Latn"],
     "mlqa.de.en": ["deu-Latn", "eng-Latn"],
     "mlqa.de.es": ["deu-Latn", "spa-Latn"],
     "mlqa.de.hi": ["deu-Latn", "hin-Deva"],
     "mlqa.de.vi": ["deu-Latn", "vie-Latn"],
-    "mlqa.de.zh": ["deu-Latn", "cmn-Hans"],
+    "mlqa.de.zh": ["deu-Latn", "zho-Hans"],
     "mlqa.en.ar": ["eng-Latn", "ara-Arab"],
     "mlqa.en.de": ["eng-Latn", "deu-Latn"],
     "mlqa.en.en": ["eng-Latn", "eng-Latn"],
     "mlqa.en.es": ["eng-Latn", "spa-Latn"],
     "mlqa.en.hi": ["eng-Latn", "hin-Deva"],
     "mlqa.en.vi": ["eng-Latn", "vie-Latn"],
-    "mlqa.en.zh": ["eng-Latn", "cmn-Hans"],
+    "mlqa.en.zh": ["eng-Latn", "zho-Hans"],
     "mlqa.es.ar": ["spa-Latn", "ara-Arab"],
     "mlqa.es.de": ["spa-Latn", "deu-Latn"],
     "mlqa.es.en": ["spa-Latn", "eng-Latn"],
     "mlqa.es.es": ["spa-Latn", "spa-Latn"],
     "mlqa.es.hi": ["spa-Latn", "hin-Deva"],
     "mlqa.es.vi": ["spa-Latn", "vie-Latn"],
-    "mlqa.es.zh": ["spa-Latn", "cln-Hans"],
+    "mlqa.es.zh": ["spa-Latn", "zho-Hans"],
     "mlqa.hi.ar": ["hin-Deva", "ara-Arab"],
     "mlqa.hi.de": ["hin-Deva", "deu-Latn"],
     "mlqa.hi.en": ["hin-Deva", "eng-Latn"],
     "mlqa.hi.es": ["hin-Deva", "spa-Latn"],
     "mlqa.hi.hi": ["hin-Deva", "hin-Deva"],
     "mlqa.hi.vi": ["hin-Deva", "vie-Latn"],
-    "mlqa.hi.zh": ["hin-Deva", "cmn-Hans"],
+    "mlqa.hi.zh": ["hin-Deva", "zho-Hans"],
     "mlqa.vi.ar": ["vie-Latn", "ara-Arab"],
     "mlqa.vi.de": ["vie-Latn", "deu-Latn"],
     "mlqa.vi.en": ["vie-Latn", "eng-Latn"],
     "mlqa.vi.es": ["vie-Latn", "spa-Latn"],
     "mlqa.vi.hi": ["vie-Latn", "hin-Deva"],
     "mlqa.vi.vi": ["vie-Latn", "vie-Latn"],
-    "mlqa.vi.zh": ["vie-Latn", "cmn-Hans"],
-    "mlqa.zh.ar": ["cmn-Hans", "ara-Arab"],
-    "mlqa.zh.de": ["cmn-Hans", "deu-Latn"],
-    "mlqa.zh.en": ["cmn-Hans", "eng-Latn"],
-    "mlqa.zh.es": ["cmn-Hans", "spa-Latn"],
-    "mlqa.zh.hi": ["cmn-Hans", "hin-Deva"],
-    "mlqa.zh.vi": ["cmn-Hans", "vie-Latn"],
-    "mlqa.zh.zh": ["cmn-Hans", "cmn-Hans"],
-}
-
-_ISO6393_to_ISO6391 = {
-    "ara-Arab": "ar",
-    "deu-Latn": "de",
-    "eng-Latn": "en",
-    "spa-Latn": "es",
-    "hin-Deva": "hi",
-    "vie-Latn": "vi",
-    "zho-Hans": "zh",
+    "mlqa.vi.zh": ["vie-Latn", "zho-Hans"],
+    "mlqa.zh.ar": ["zho-Hans", "ara-Arab"],
+    "mlqa.zh.de": ["zho-Hans", "deu-Latn"],
+    "mlqa.zh.en": ["zho-Hans", "eng-Latn"],
+    "mlqa.zh.es": ["zho-Hans", "spa-Latn"],
+    "mlqa.zh.hi": ["zho-Hans", "hin-Deva"],
+    "mlqa.zh.vi": ["zho-Hans", "vie-Latn"],
+    "mlqa.zh.zh": ["zho-Hans", "zho-Hans"],
 }
 
 
 def extend_lang_pairs() -> dict[str, list[str]]:
-    # add all possible language pairs
-    hf_lang_subset2isolang = {}
-    for x in _ISO6393_to_ISO6391.keys():
-        for y in _ISO6393_to_ISO6391.keys():
-            if x != y:
-                pair = f"{x}_{y}"
-                hf_lang_subset2isolang[pair] = [
-                    x,
-                    y,
-                ]
-    return hf_lang_subset2isolang
+    eval_langs = {}
+    for langs in _LANGUAGES.values():
+        lang_pair = langs[0] + "_" + langs[1]
+        eval_langs[lang_pair] = langs
+    return eval_langs
 
 
 _EVAL_LANGS = extend_lang_pairs()
