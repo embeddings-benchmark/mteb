@@ -26,7 +26,10 @@ class ScalaClassification(AbsTaskClassification, MultilingualTask):
         eval_splits=["test"],
         eval_langs=_LANGS,
         main_score="accuracy",
-        date=("1990-01-01", "2023-01-01"), # derived from dependency treebank, this a the best guess
+        date=(
+            "1990-01-01",
+            "2023-01-01",
+        ),  # derived from dependency treebank, this a the best guess
         form=["fiction", "news", "non-fiction", "spoken", "blog"],
         domains=None,
         task_subtypes=["Linguistic acceptability"],
