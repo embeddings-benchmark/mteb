@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import MultilingualTask
-from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
+from mteb.abstasks import MultilingualTask
+from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 _LANGS = {
     "ar": ["ara-Arab"],
@@ -91,3 +91,55 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
                     }
                 ]
         self.dataset = _dataset
+
+104.76+105.329+101.25449+109.518+101.50+103.197+103.018+102.979+106.461+119.27
+_LANGS_2 = {"punjabi" : ["pan-Guru"],
+    "gujrati" : ["guj-Gujr"],
+    "kannada" : ["kan-Knda"],
+    "assamese" : ["asm-Beng"],
+    "bengali" : ["ben-Beng"],
+    "marathi" : ["mar-Deva"],
+    "bhojpuri" : ["bho-Deva"],
+    "odiya" : ["ory-Orya"],
+    "sanskrit" : ["san-Deva"],
+    "tamil" : ["tam-Taml"]
+}
+
+class XNLI2(XNLI):
+    metadata = TaskMetadata(
+        name="XNLI2",
+        dataset={
+            "path": "mteb/xnli2.0-multi-pair",
+            "revision": "1a3794e88c74db2a13aebc5e8abc3dc4312a7543",
+        },
+        description="""
+        This is subset of 'XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding'
+        with languages that were not part of the original XNLI.
+        """,
+        reference="https://arxiv.org/pdf/2301.06527",
+        category="s2s",
+        type="PairClassification",
+        eval_splits=["test"],
+        eval_langs=_LANGS_2,
+        main_score="ap",
+        date=("2018-01-01", "2018-11-04"),
+        form=["written"],
+        domains=["Non-fiction", "Fiction", "Government"],
+        task_subtypes=[],
+        license="Not specified",
+        socioeconomic_status="mixed",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="created",
+        bibtex_citation="""@inproceedings{upadhyay2023xnli,
+            title={XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding (XLU)},
+            author={Upadhyay, Ankit Kumar and Upadhya, Harsit Kumar},
+            booktitle={2023 IEEE 8th International Conference for Convergence in Technology (I2CT)},
+            pages={1--6},
+            year={2023},
+            organization={IEEE}
+            }
+        """,
+        n_samples={"test": 5010},
+        avg_character_length={"test": 105.72}, # average of premise and hypothesis
+    )
