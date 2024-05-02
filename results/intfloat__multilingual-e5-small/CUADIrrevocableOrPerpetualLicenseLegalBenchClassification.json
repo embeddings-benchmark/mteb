@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "CUADIrrevocableOrPerpetualLicenseLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.8857142857142858,
+    "accuracy_stderr": 1.1102230246251565e-16,
+    "ap": 0.8230357142857143,
+    "ap_stderr": 0.0,
+    "evaluation_time": 72.3,
+    "f1": 0.8851282051282052,
+    "f1_stderr": 0.0,
+    "main_score": 0.8857142857142858
+  }
+}
