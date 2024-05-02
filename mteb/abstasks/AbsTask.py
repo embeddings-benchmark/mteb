@@ -101,7 +101,69 @@ class AbsTask(ABC):
     @property
     def languages(self) -> list[str]:
         """Returns the languages of the task"""
+        # check if self.langs is set
+        has_lang_splits = self.is_crosslingual or self.is_multilingual
+        if has_lang_splits and hasattr(self, "langs"):
+            eval_langs = self.metadata.eval_langs
+            languages = []
+
+            for lang in self.langs:
+                if lang in eval_langs:
+                    languages.append(lang)
+
+            return sorted(set(languages))
+
         return self.metadata.languages
+
+    def filter_languages(
+        self, languages: list[str] | None, script: list[str] | None = None
+    ) -> AbsTask:
+        """Filter the languages of the task.
+
+        Args:
+            languages: list of languages to filter the task by can be either a 3-letter langauge code (e.g. "eng") or also include the script
+                (e.g. "eng-Latn")
+            script: list of scripts to filter the task by. Will be ignored if language code specified the script. If None, all scripts are included.
+                If the language code does not specify the script the intersection of the language and script will be used.
+        """
+        lang_script_codes = set()
+        # normalize to 3 letter language codes
+        normalized_langs = set()
+        filter_lang = languages is not None
+
+        if filter_lang:
+            for lang in languages:
+                lang_script = lang.split("-")
+
+                is_lang_script_code = len(lang_script) == 2
+                if is_lang_script_code:
+                    normalized_langs.add(lang_script[0])
+                    lang_script_codes.add(lang)
+                else:
+                    normalized_langs.add(lang)
+
+        filter_scripts = script is not None
+        script_codes: set[str] = set(script) if filter_scripts else set()
+
+        splits_to_keep: list[str] = []
+
+        if not isinstance(self.metadata.eval_langs, dict):
+            self.langs = self.metadata.eval_langs
+            return self
+
+        for hf_lang, langs in self.metadata.eval_langs.items():
+            for langscript in langs:
+                if langscript in lang_script_codes:
+                    splits_to_keep.append(hf_lang)
+                    continue
+
+                _lang, _script = langscript.split("-")
+                if (filter_lang and _lang in normalized_langs) or not filter_lang:
+                    if script is None or _script in script_codes:
+                        splits_to_keep.append(hf_lang)
+
+        self.langs = splits_to_keep
+        return self
 
     def __repr__(self) -> str:
         """Format the representation of the task such that it appears as:
