@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "CUADGoverningLawLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.9714611872146118,
+    "accuracy_stderr": 0.0,
+    "ap": 0.9506461237614282,
+    "ap_stderr": 1.1102230246251565e-16,
+    "evaluation_time": 88.56,
+    "f1": 0.9714528169812724,
+    "f1_stderr": 1.1102230246251565e-16,
+    "main_score": 0.9714611872146118
+  }
+}
