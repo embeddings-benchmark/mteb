@@ -27,6 +27,7 @@ jobs:
         run: python docs/create_tasks_table.py
     
       - name: Push table
+        if: github.event_name == 'push'
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
