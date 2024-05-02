@@ -44,6 +44,10 @@ class KlueTC(AbsTaskClassification):
         def id2str(example):
             return {"label": label_feature.int2str(example["label_id"])}
 
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["validation"]
+        )
+
         label_feature = self.dataset[self.metadata.eval_splits[0]].features["label"]
 
         self.dataset = self.dataset.rename_columns(
