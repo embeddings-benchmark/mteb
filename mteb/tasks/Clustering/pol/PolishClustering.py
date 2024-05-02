@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskClustering import AbsTaskClustering
+from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 
 class EightTagsClustering(AbsTaskClustering):
@@ -35,15 +36,15 @@ class EightTagsClustering(AbsTaskClustering):
     )
 
 
-class PlscClusteringS2S(AbsTaskClustering):
+class PlscClusteringS2S(AbsTaskClusteringFast):
     metadata = TaskMetadata(
         name="PlscClusteringS2S",
-        description="Clustering of polish article titles from Library of Science (https://bibliotekanauki.pl/), either "
+        description="Clustering of Polish article titles from Library of Science (https://bibliotekanauki.pl/), either "
         "on the scientific field or discipline.",
         reference="https://huggingface.co/datasets/rafalposwiata/plsc",
         dataset={
             "path": "PL-MTEB/plsc-clustering-s2s",
-            "revision": "45451181fd30822c844cec1c795b48a5685a1081",
+            "revision": "39bcadbac6b1eddad7c1a0a176119ce58060289a",
         },
         type="Clustering",
         category="s2s",
@@ -60,20 +61,20 @@ class PlscClusteringS2S(AbsTaskClustering):
         dialect=[],
         text_creation="found",
         bibtex_citation="",
-        n_samples={"test": 259764},
-        avg_character_length={"test": 85.25},
+        n_samples={"test": 17534},
+        avg_character_length={"test": 84.34},
     )
 
 
-class PlscClusteringP2P(AbsTaskClustering):
+class PlscClusteringP2P(AbsTaskClusteringFast):
     metadata = TaskMetadata(
         name="PlscClusteringP2P",
-        description="Clustering of polish article titles+abstracts from Library of Science "
+        description="Clustering of Polish article titles+abstracts from Library of Science "
         "(https://bibliotekanauki.pl/), either on the scientific field or discipline.",
         reference="https://huggingface.co/datasets/rafalposwiata/plsc",
         dataset={
             "path": "PL-MTEB/plsc-clustering-p2p",
-            "revision": "cbc0d22dadb3ff596e4cbf200d8725f9023ef773",
+            "revision": "8436dd4c05222778013d6642ee2f3fa1722bca9b",
         },
         type="Clustering",
         category="s2s",
@@ -90,6 +91,6 @@ class PlscClusteringP2P(AbsTaskClustering):
         dialect=[],
         text_creation="found",
         bibtex_citation="",
-        n_samples={"test": 259764},
-        avg_character_length={"test": 960.98},
+        n_samples={"test": 17537},
+        avg_character_length={"test": 1023.21},
     )
