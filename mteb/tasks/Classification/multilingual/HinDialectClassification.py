@@ -19,14 +19,13 @@ _LANGUAGES = {
     "hne": ["hne-Deva"],
     "bra": ["bra-Deva"],
     "raj": ["raj-Deva"],
-    "awa": ["awa-Deva"],  
-    "guj": ["guj-Gujr"], 
-    "ben": ["ben-Beng"], 
-    "bhd" : ["bhd-Deva"],
-    "kfy": ["kfy-Deva"], 
+    "awa": ["awa-Deva"],
+    "guj": ["guj-Gujr"],
+    "ben": ["ben-Beng"],
+    "bhd": ["bhd-Deva"],
+    "kfy": ["kfy-Deva"],
     "mar": ["mar-Deva"],
-    "bjj" : ["bjj-Deva"]
-
+    "bjj": ["bjj-Deva"],
 }
 
 
@@ -35,7 +34,7 @@ class HinDialectClassification(AbsTaskClassification):
         name="HinDialectClassification",
         dataset={
             "path": "mlexplorer008/hin_dialect_classification",
-            "revision": "8b3995ac4ef13e5b444d29003698a58d6338343f",
+            "revision": "944a44cf93932ce62b51e7c07d44d8cc03d6bcae",
         },
         description="HinDialect: 26 Hindi-related languages and dialects of the Indic Continuum in North India",
         reference="https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-4839",
@@ -46,14 +45,14 @@ class HinDialectClassification(AbsTaskClassification):
         main_score="accuracy",
         date=("2010-01-01", "2023-01-01"),
         form=["written"],
-        domains=["Web", "Non-fiction"],
+        domains=["Social", "Spoken"],
         task_subtypes=["Language identification"],
         license="MIT",
         socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
         text_creation="found",
-        bibtex_citation= """
+        bibtex_citation="""
         @misc{11234/1-4839,
         title = {{HinDialect} 1.1: 26 Hindi-related languages and dialects of the Indic Continuum in North India},
         author = {Bafna, Niyati and {\v Z}abokrtsk{\'y}, Zden{\v e}k and Espa{\~n}a-Bonet, Cristina and van Genabith, Josef and Kumar, Lalit "Samyak Lalit" and Suman, Sharda and Shivay, Rahul},
@@ -62,12 +61,11 @@ class HinDialectClassification(AbsTaskClassification):
         copyright = {Creative Commons - Attribution-{NonCommercial}-{ShareAlike} 4.0 International ({CC} {BY}-{NC}-{SA} 4.0)},
         year = {2022} }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 247.49},
+        n_samples={"test": 1152},
+        avg_character_length={"test": 583.82},
     )
 
     def dataset_transform(self) -> None:
         self.dataset = self.dataset.rename_columns(
-            {" text": "text", "lang_id": "label"}
+            {"folksong": "text", "language": "label"}
         )
-        self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
