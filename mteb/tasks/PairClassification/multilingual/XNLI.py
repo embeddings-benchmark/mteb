@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-
 from mteb.abstasks import MultilingualTask
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = {
     "ar": ["ara-Arab"],
@@ -92,18 +91,20 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
                 ]
         self.dataset = _dataset
 
-104.76+105.329+101.25449+109.518+101.50+103.197+103.018+102.979+106.461+119.27
-_LANGS_2 = {"punjabi" : ["pan-Guru"],
-    "gujrati" : ["guj-Gujr"],
-    "kannada" : ["kan-Knda"],
-    "assamese" : ["asm-Beng"],
-    "bengali" : ["ben-Beng"],
-    "marathi" : ["mar-Deva"],
-    "bhojpuri" : ["bho-Deva"],
-    "odiya" : ["ory-Orya"],
-    "sanskrit" : ["san-Deva"],
-    "tamil" : ["tam-Taml"]
+
+_LANGS_2 = {
+    "punjabi": ["pan-Guru"],
+    "gujrati": ["guj-Gujr"],
+    "kannada": ["kan-Knda"],
+    "assamese": ["asm-Beng"],
+    "bengali": ["ben-Beng"],
+    "marathi": ["mar-Deva"],
+    "bhojpuri": ["bho-Deva"],
+    "odiya": ["ory-Orya"],
+    "sanskrit": ["san-Deva"],
+    "tamil": ["tam-Taml"],
 }
+
 
 class XNLI2(XNLI):
     metadata = TaskMetadata(
@@ -141,5 +142,5 @@ class XNLI2(XNLI):
             }
         """,
         n_samples={"test": 5010},
-        avg_character_length={"test": 105.72}, # average of premise and hypothesis
+        avg_character_length={"test": 105.72},  # average of premise and hypothesis
     )
