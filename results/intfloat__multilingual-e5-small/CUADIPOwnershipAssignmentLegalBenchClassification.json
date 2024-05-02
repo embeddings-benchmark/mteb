@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "CUADIPOwnershipAssignmentLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.704861111111111,
+    "accuracy_stderr": 1.1102230246251565e-16,
+    "ap": 0.6397355109739369,
+    "ap_stderr": 0.0,
+    "evaluation_time": 104.08,
+    "f1": 0.7037037037037035,
+    "f1_stderr": 1.1102230246251565e-16,
+    "main_score": 0.704861111111111
+  }
+}
