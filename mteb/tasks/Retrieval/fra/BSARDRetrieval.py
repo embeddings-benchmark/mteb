@@ -20,7 +20,7 @@ class BSARDRetrieval(AbsTaskRetrieval):
         category="s2p",
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
-        main_score="ndcg_at_100",
+        main_score="recall_at_100",
         date=None,
         form=None,
         domains=None,
