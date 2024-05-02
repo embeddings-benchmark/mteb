@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 
 logger = logging.getLogger("main")
 
-TASK_LIST_CLASSIFICATION = []
+TASK_LIST_CLASSIFICATION = ["KLUE-TC"]
 
 TASK_LIST_CLUSTERING = []
 
