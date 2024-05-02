@@ -36,10 +36,9 @@ class ScalaClassification(AbsTaskClassification, MultilingualTask):
         license="CC BY-SA 4.0",
         socioeconomic_status="mixed",
         annotations_creators="human-annotated",
-        dialect=None,
+        dialect=[],
         text_creation="created",
-        bibtex_citation="""
-        @inproceedings{nielsen-2023-scandeval,
+        bibtex_citation="""@inproceedings{nielsen-2023-scandeval,
             title = "{S}cand{E}val: A Benchmark for {S}candinavian Natural Language Processing",
             author = "Nielsen, Dan",
             editor = {Alum{\"a}e, Tanel  and
