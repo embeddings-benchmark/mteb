@@ -28,7 +28,7 @@ class MedicalQARetrieval(AbsTaskRetrieval):
         dialect=[],
         text_creation="found",
         bibtex_citation="""@ARTICLE{BenAbacha-BMC-2019,
-            author    = {Asma {Ben Abacha} and Dina Demner{-}Fushman},
+            author    = {Asma, Ben Abacha and Dina, Demner{-}Fushman},
             title     = {A Question-Entailment Approach to Question Answering},
             journal = {{BMC} Bioinform.},
             volume    = {20},

@@ -1,0 +1,22 @@
+{
+  "dataset_revision": "e92afc34c61104b9b06e4de33cfcaccf6af6a46a",
+  "gen": {
+    "brx_Deva-ory_Orya": {
+      "accuracy": 0.03125,
+      "f1": 0.015481850410618794,
+      "main_score": 0.015481850410618794,
+      "precision": 0.011790597098214286,
+      "recall": 0.03125
+    },
+    "doi_Deva-sat_Olck": {
+      "accuracy": 0.0029296875,
+      "f1": 5.6779857127997226e-05,
+      "main_score": 5.6779857127997226e-05,
+      "precision": 2.877012365616383e-05,
+      "recall": 0.0029296875
+    },
+    "evaluation_time": 4.07
+  },
+  "mteb_dataset_name": "IN22GenBitextMining",
+  "mteb_version": "1.6.24"
+}

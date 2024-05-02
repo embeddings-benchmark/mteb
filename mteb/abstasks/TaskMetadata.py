@@ -54,6 +54,7 @@ TASK_DOMAIN = Literal[
     "Reviews",
     "Social",
     "Spoken",
+    "Subtitles",
     "Web",
     "Programming",
 ]
@@ -83,6 +84,7 @@ TASK_TYPE = Literal[
     "Retrieval",
     "STS",
     "Summarization",
+    "InstructionRetrieval",
 ]
 
 TASK_CATEGORY = Literal[
@@ -108,14 +110,27 @@ SPLIT_NAME = str
 ISO_LANGUAGE_SCRIPT = str
 LANGUAGES = Union[List[ISO_LANGUAGE_SCRIPT], Mapping[str, List[ISO_LANGUAGE_SCRIPT]]]
 
-PROGRAMMING_LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
+PROGRAMMING_LANGS = [
+    "python",
+    "javascript",
+    "typescript",
+    "go",
+    "ruby",
+    "java",
+    "php",
+    "c",
+    "c++",
+    "rust",
+    "swift",
+    "scala",
+    "shell",
+]
 
 logger = logging.getLogger(__name__)
 
 
 class TaskMetadata(BaseModel):
-    """
-    Metadata for a task.
+    """Metadata for a task.
 
     Args:
         dataset: All arguments to pass to datasets.load_dataset to load the dataset for the task. Refer to https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset
@@ -140,10 +155,10 @@ class TaskMetadata(BaseModel):
         socioeconomic_status: The socioeconomic status of the data. Includes "high", "medium", "low", "mixed".
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
-        dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag.
+        dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
         text_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
-        bibtex_citation: The BibTeX citation for the dataset.
+        bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
         n_samples: The number of samples in the dataset. This should only be for the splits evaluated on. For retrieval tasks, this should be the
             number of query-document pairs.
         avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on. For
@@ -180,9 +195,7 @@ class TaskMetadata(BaseModel):
 
     @field_validator("dataset")
     def _check_dataset_path_is_specified(cls, dataset):
-        """
-        This method checks that the dataset path is specified.
-        """
+        """This method checks that the dataset path is specified."""
         if "path" not in dataset or dataset["path"] is None:
             raise ValueError(
                 "You must specify the path to the dataset in the dataset dictionary. "
@@ -205,9 +218,7 @@ class TaskMetadata(BaseModel):
 
     @field_validator("eval_langs")
     def _check_eval_langs(cls, eval_langs):
-        """
-        This method checks that the eval_langs are specified as a list of languages.
-        """
+        """This method checks that the eval_langs are specified as a list of languages."""
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
                 for code in langs:
@@ -219,9 +230,7 @@ class TaskMetadata(BaseModel):
 
     @staticmethod
     def _check_language_code(code):
-        """
-        This method checks that the language code (e.g. "eng-Latn") is valid.
-        """
+        """This method checks that the language code (e.g. "eng-Latn") is valid."""
         lang, script = code.split("-")
         if script == "Code":
             if lang in PROGRAMMING_LANGS:
@@ -240,25 +249,25 @@ class TaskMetadata(BaseModel):
             )
 
     @property
-    def languages(self) -> set[str]:
-        """
-        Return the languages of the dataset as iso639-3 codes.
-        """
+    def languages(self) -> list[str]:
+        """Return the languages of the dataset as iso639-3 codes."""
 
         def get_lang(lang: str) -> str:
             return lang.split("-")[0]
 
         if isinstance(self.eval_langs, dict):
-            return set(
-                get_lang(lang) for langs in self.eval_langs.values() for lang in langs
+            return sorted(
+                set(
+                    get_lang(lang)
+                    for langs in self.eval_langs.values()
+                    for lang in langs
+                )
             )
-        return set(get_lang(lang) for lang in self.eval_langs)
+        return sorted(set([get_lang(lang) for lang in self.eval_langs]))
 
     @property
     def scripts(self) -> set[str]:
-        """
-        Return the scripts of the dataset as iso15924 codes.
-        """
+        """Return the scripts of the dataset as iso15924 codes."""
 
         def get_script(lang: str) -> str:
             return lang.split("-")[1]
@@ -268,3 +277,9 @@ class TaskMetadata(BaseModel):
                 get_script(lang) for langs in self.eval_langs.values() for lang in langs
             )
         return set(get_script(lang) for lang in self.eval_langs)
+
+    def is_filled(self) -> bool:
+        """Check if all the metadata fields are filled."""
+        return all(
+            getattr(self, field_name) is not None for field_name in self.model_fields
+        )

@@ -9,10 +9,10 @@ TOL = 0.0001
 
 class TestRerankingEvaluator:
     def setup_method(self):
-        """setup any state tied to the execution of the given method in a
-        class.  setup_method is invoked for every test method of a class.
-        """
+        """Setup any state tied to the execution of the given method in a class.
 
+        setup_method is invoked for every test method of a class.
+        """
         self.evaluator = RerankingEvaluator([])
 
     def test_mrr_at_k(self):

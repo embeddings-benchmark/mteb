@@ -16,8 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class PairClassificationEvaluator(Evaluator):
-    """
-    Evaluate a model based on the similarity of the embeddings by calculating the accuracy of identifying similar and
+    """Evaluate a model based on the similarity of the embeddings by calculating the accuracy of identifying similar and
     dissimilar sentences.
     The metrics are the cosine similarity as well as euclidean and Manhattan distance
     The returned score is the accuracy with a specified metric.
@@ -92,8 +91,7 @@ class PairClassificationEvaluator(Evaluator):
 
     @staticmethod
     def _compute_metrics(scores, labels, high_score_more_similar):
-        """
-        Compute the metrics for the given scores and labels.
+        """Compute the metrics for the given scores and labels.
 
         Args:
             scores (`np.ndarray` of shape (n_pairs, )): The similarity/dissimilarity scores for the pairs.

@@ -29,8 +29,7 @@ DATAPATH = "/gpfsscratch/rech/six/commun/commun/experiments/muennighoff/mteb"
 
 
 def load_data(hf_hub_name, subset=None):
-    """
-    Load dataset from Hub via cloning for easy offline usage with HF_DATASETS_OFFLINE=1
+    """Load dataset from Hub via cloning for easy offline usage with HF_DATASETS_OFFLINE=1
     Can be replaced with just `load_dataset(hf_hub_name, subset)` if preferred
     """
     from datasets import load_dataset
