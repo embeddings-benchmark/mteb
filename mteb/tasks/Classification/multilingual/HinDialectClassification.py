@@ -47,7 +47,7 @@ class HinDialectClassification(AbsTaskClassification):
         form=["written"],
         domains=["Social", "Spoken"],
         task_subtypes=["Language identification"],
-        license="MIT",
+        license="CC-BY-SA-4.0",
         socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
