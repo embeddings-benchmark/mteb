@@ -10,11 +10,11 @@ _LANGS = {
     "gujrati": ["guj-Gujr"],
     "kannada": ["kan-Knda"],
     "assamese": ["asm-Beng"],
-    "bengali": ["ben-Beng"],  # 503 Server Error
+    "bengali": ["ben-Beng"],
     "marathi": ["mar-Deva"],
-    "bhojpuri": ["bho-Deva"],  # 503 Server Error
-    "odiya": ["ory-Orya"],  # 503 Server Error
-    "sanskrit": ["san-Deva"],  # 503 Server Error
+    "bhojpuri": ["bho-Deva"], 
+    "odiya": ["ory-Orya"],
+    "sanskrit": ["san-Deva"],
     "tamil": ["tam-Taml"],
 }
 
