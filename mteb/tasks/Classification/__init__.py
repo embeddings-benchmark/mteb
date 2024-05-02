@@ -28,6 +28,7 @@ from .eng.PatentClassification import *
 from .eng.ToxicChatClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
+from .eng.YahooAnswersTopicsClassification import *
 from .eng.YelpReviewFullClassification import *
 from .est.estonian_valence import *
 from .fas.PersianFoodSentimentClassification import *
