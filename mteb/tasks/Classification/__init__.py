@@ -46,6 +46,7 @@ from .mal.MalayalamNewsClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
+from .multilingual.HinDialectClassification import *
 from .multilingual.IndicLangClassification import *
 from .multilingual.IndicSentimentClassification import *
 from .multilingual.MasakhaNEWSClassification import *
