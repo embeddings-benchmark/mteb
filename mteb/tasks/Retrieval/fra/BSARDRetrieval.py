@@ -52,7 +52,7 @@ class BSARDRetrieval(AbsTaskRetrieval):
 
         self.queries = {
             self.metadata.eval_splits[0]: {
-                str(q["id"]): q["question"] + q["extra_description"]
+                str(q["id"]): (q["question"] + " " + q["extra_description"]).strip()
                 for q in queries_raw
             }
         }
