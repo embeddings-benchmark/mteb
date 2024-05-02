@@ -76,6 +76,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [ClimateFEVER](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) | ['eng'] | Retrieval | s2p |  |  |  |
 | [CmedqaRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) | ['cmn'] | Retrieval | s2p |  |  |  |
 | [Cmnli](https://huggingface.co/datasets/clue/viewer/cmnli) | ['cmn'] | PairClassification | s2s |  |  |  |
+| [CodeEditSearchRetrieval](https://huggingface.co/datasets/cassanof/CodeEditSearch/viewer) (Niklas Muennighoff, 2023) | ['c', 'c++', 'go', 'java', 'javascript', 'php', 'python', 'ruby', 'rust', 'scala', 'shell', 'swift', 'typescript'] | Retrieval | p2p | [Programming] | {'train': 13000} | {'train': 553.5} |
 | [CodeSearchNetRetrieval](https://huggingface.co/datasets/code_search_net/viewer) (Husain et al., 2019) | ['go', 'java', 'javascript', 'php', 'python', 'ruby'] | Retrieval | p2p | [Programming] | {'test': 1000} | {'test': 1196.4609} |
 | [ContractNLIConfidentialityOfAgreementLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 82} | {'test': 473.17} |
 | [ContractNLIExplicitIdentificationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 109} | {'test': 506.12} |
@@ -134,6 +135,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [HALClusteringS2S](https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s) | ['fra'] | Clustering | s2s |  |  |  |
 | [HagridRetrieval](https://github.com/project-miracl/hagrid) | ['eng'] | Retrieval | s2p |  |  |  |
 | [HateSpeechPortugueseClassification](https://aclanthology.org/W19-3510) | ['por'] | Classification | s2s | [Social] | {'train': 2048} | {'train': 101.02} |
+| [HinDialectClassification](https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-4839) (Bafna et al., 2022) | ['anp', 'awa', 'ben', 'bgc', 'bhb', 'bhd', 'bho', 'bjj', 'bns', 'bra', 'gbm', 'guj', 'hne', 'kfg', 'kfy', 'mag', 'mar', 'mup', 'noe', 'pan', 'raj'] | Classification | s2s | [Social, Spoken] | {'test': 1152} | {'test': 583.82} |
 | [HindiDiscourseClassification](https://aclanthology.org/2020.lrec-1.149/) | ['hin'] | Classification | s2s | [Fiction, Social] | {'train': 2048} | {'train': 79.23828125} |
 | [HotelReviewSentimentClassification](https://link.springer.com/chapter/10.1007/978-3-319-67056-0_3) (Elnagar et al., 2018) | ['ara'] | Classification | s2s | [Reviews] | {'train': 2048} | {'train': 137.2} |
 | [HotpotQA](https://hotpotqa.github.io/) | ['eng'] | Retrieval | s2p |  |  |  |
@@ -342,3 +344,4 @@ The following tables gives you an overview of the tasks in MTEB.
 | [YahooAnswersTopicsClassification](https://huggingface.co/datasets/yahoo_answers_topics) | ['eng'] | Classification | s2s | [Web] | {'test': 60000} | {'test': 346.35} |
 | [YelpReviewFullClassification](https://arxiv.org/abs/1509.01626) (Zhang et al., 2015) | ['eng'] | Classification | s2s | [Reviews] | {'test': 50000} |  |
 | [YueOpenriceReviewClassification](https://github.com/Christainx/Dataset_Cantonese_Openrice) (Xiang et al., 2019) | ['yue'] | Classification | s2s | [Reviews] | {'test': 6161} | {'test': 173.0} |
+<!-- TABLE END -->
