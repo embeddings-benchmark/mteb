@@ -42,7 +42,7 @@ class HinDialectClassification(AbsTaskClassification):
         type="Classification",
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
-        main_score="accuracy",
+        main_score="f1",
         date=("2010-01-01", "2023-01-01"),
         form=["written"],
         domains=["Social", "Spoken"],
