@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from typing import List
 
 import numpy as np
 import torch
@@ -8,6 +9,7 @@ import tqdm
 from sklearn.metrics import average_precision_score
 
 from .Evaluator import Evaluator
+from .RetrievalEvaluator import RetrievalEvaluator
 from .utils import cos_sim
 
 logger = logging.getLogger(__name__)
@@ -32,7 +34,8 @@ class RerankingEvaluator(Evaluator):
         name: str = "",
         similarity_fct=cos_sim,
         batch_size: int = 512,
-        use_batched_encoding: bool = True,
+        # use_batched_encoding: bool = True,
+        use_batched_encoding: bool = False,
         limit: int = None,
         **kwargs,
     ):
@@ -258,6 +261,29 @@ class RerankingEvaluator(Evaluator):
 
 
 class MIRACLRerankingEvaluator(RerankingEvaluator):
+    def __init__(self,
+            samples,
+            mrr_at_k: int = 10,
+            name: str = "",
+            similarity_fct=cos_sim,
+            batch_size: int = 512,
+            use_batched_encoding: bool = True,
+            limit: int = None,
+            k_values: List[int] = [1, 3, 5, 10, 20, 100, 1000],
+            **kwargs
+        ):
+        super().__init__(
+            samples,
+            mrr_at_k,
+            name,
+            similarity_fct,
+            batch_size,
+            use_batched_encoding,
+            limit,
+            **kwargs,
+        )
+        self.k_values = k_values
+
     def compute_metrics_individual(self, model):
         """
         Embeds every (query, positive, negative) tuple individually.
@@ -265,8 +291,6 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         embeddings for one tuple are needed. Useful when you have
         a really large test set
         """
-        all_mrr_scores = []
-        all_ap_scores = []
 
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
@@ -277,18 +301,11 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
             model.encode_corpus if hasattr(model, "encode_corpus") else model.encode
         )
 
-        for instance in tqdm.tqdm(self.samples, desc="Samples"):
+        results, qrels = {}, {}
+        for i, instance in enumerate(tqdm.tqdm(self.samples, desc="Samples")):
             query = instance["query"]
             positive = set(instance["positive"])
             docs = list(instance["candidates"])
-            # negative = list(instance["negative"])
-
-            # if len(positive) == 0 or len(negative) == 0:
-            #     continue
-
-            # docs = positive + negative
-            # is_relevant = [True] * len(positive) + [False] * len(negative)
-            is_relevant = [True if doc in positive else False for doc in docs]
 
             if isinstance(query, str):
                 # .encoding interface requires List[str] as input
@@ -298,11 +315,30 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
             )
             docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
 
-            scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
-            all_mrr_scores.append(scores["mrr"])
-            all_ap_scores.append(scores["ap"])
+            fake_qid = str(i)
+            results[fake_qid] = self.rerank(query_emb, docs_emb)
+            qrels[fake_qid] = [1 if doc in positive else 0 for doc in docs]
 
-        mean_ap = np.mean(all_ap_scores)
-        mean_mrr = np.mean(all_mrr_scores)
+        ndcg, _map, recall, precision = RetrievalEvaluator.evaluate(
+            qrels=qrels, results=results, k_values=self.k_values
+        )
+        return {**ndcg, **_map, **recall, **precision}
 
-        return {"map": mean_ap, "mrr": mean_mrr}
+    def rerank(self, query_emb, docs_emb):
+        """
+        Rerank documents (docs_emb) given the query (query_emb)
+
+        Args:
+            query_emb (`torch.Tensor` of shape `(num_queries, hidden_size)`): Query embedding
+                if `num_queries` > 0: we take the closest document to any of the queries
+            docs_emb (`torch.Tensor` of shape `(num_pos+num_neg, hidden_size)`): Candidates documents embeddings
+
+        Returns:
+            similarity_scores (`Dict[str, float]`):
+        """
+
+        pred_scores = self.similarity_fct(query_emb, docs_emb)
+        if len(pred_scores.shape) > 1:
+            pred_scores = torch.amax(pred_scores, dim=0)
+
+        return {i: score for i, score in enumerate(pred_scores)}
