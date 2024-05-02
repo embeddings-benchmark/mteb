@@ -255,3 +255,54 @@ class RerankingEvaluator(Evaluator):
         # ap = np.mean([np.mean(preds[: k + 1]) for k in range(len(preds)) if preds[k]])
         ap = average_precision_score(is_relevant, pred_scores)
         return ap
+
+
+class MIRACLRerankingEvaluator(RerankingEvaluator):
+    def compute_metrics_individual(self, model):
+        """
+        Embeds every (query, positive, negative) tuple individually.
+        Is slower than the batched version, but saves memory as only the
+        embeddings for one tuple are needed. Useful when you have
+        a really large test set
+        """
+        all_mrr_scores = []
+        all_ap_scores = []
+
+        # using encode_queries and encode_corpus functions if they exists,
+        # which can be defined by users to add different instructions for query and passage conveniently
+        encode_queries_func = (
+            model.encode_queries if hasattr(model, "encode_queries") else model.encode
+        )
+        encode_corpus_func = (
+            model.encode_corpus if hasattr(model, "encode_corpus") else model.encode
+        )
+
+        for instance in tqdm.tqdm(self.samples, desc="Samples"):
+            query = instance["query"]
+            positive = set(instance["positive"])
+            docs = list(instance["candidates"])
+            # negative = list(instance["negative"])
+
+            # if len(positive) == 0 or len(negative) == 0:
+            #     continue
+
+            # docs = positive + negative
+            # is_relevant = [True] * len(positive) + [False] * len(negative)
+            is_relevant = [True if doc in positive else False for doc in docs]
+
+            if isinstance(query, str):
+                # .encoding interface requires List[str] as input
+                query = [query]
+            query_emb = np.asarray(
+                encode_queries_func(query, batch_size=self.batch_size)
+            )
+            docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
+
+            scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
+            all_mrr_scores.append(scores["mrr"])
+            all_ap_scores.append(scores["ap"])
+
+        mean_ap = np.mean(all_ap_scores)
+        mean_mrr = np.mean(all_mrr_scores)
+
+        return {"map": mean_ap, "mrr": mean_mrr}
