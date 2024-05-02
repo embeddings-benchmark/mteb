@@ -107,6 +107,7 @@ class MLQARetrieval(AbsTaskRetrieval, CrosslingualTask):
     )
 
     def load_data(self, **kwargs):
+        """In this retrieval datasets, corpus is in lang XX and queries in lang YY."""
         if self.data_loaded:
             return
 
@@ -116,7 +117,8 @@ class MLQARetrieval(AbsTaskRetrieval, CrosslingualTask):
         for hf_subset, langs in _LANGUAGES.items():
             lang_pair = (
                 langs[0] + "_" + langs[1]
-            )  # builds a language pair separated by an underscore. e.g., "ara-Arab_eng-Latn"
+            )  # builds a language pair separated by an underscore. e.g., "ara-Arab_eng-Latn". 
+            # Corpus is in ara-Arab and queries in eng-Latn
 
             _dataset_raw[lang_pair] = datasets.load_dataset(
                 name=hf_subset,
