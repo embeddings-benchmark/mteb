@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "CUADNoSolicitOfEmployeesLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.9647887323943662,
+    "accuracy_stderr": 0.0,
+    "ap": 0.9579536039768021,
+    "ap_stderr": 1.1102230246251565e-16,
+    "evaluation_time": 55.07,
+    "f1": 0.9647730091788637,
+    "f1_stderr": 1.1102230246251565e-16,
+    "main_score": 0.9647887323943662
+  }
+}

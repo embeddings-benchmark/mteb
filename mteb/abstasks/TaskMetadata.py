@@ -110,7 +110,21 @@ SPLIT_NAME = str
 ISO_LANGUAGE_SCRIPT = str
 LANGUAGES = Union[List[ISO_LANGUAGE_SCRIPT], Mapping[str, List[ISO_LANGUAGE_SCRIPT]]]
 
-PROGRAMMING_LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
+PROGRAMMING_LANGS = [
+    "python",
+    "javascript",
+    "typescript",
+    "go",
+    "ruby",
+    "java",
+    "php",
+    "c",
+    "c++",
+    "rust",
+    "swift",
+    "scala",
+    "shell",
+]
 
 logger = logging.getLogger(__name__)
 
