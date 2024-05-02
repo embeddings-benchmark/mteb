@@ -4,9 +4,9 @@ from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class wisesight_sentiment_classification(AbsTaskClassification):
+class WisesightSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="wisesight_sentiment_classification",
+        name="WisesightSentimentClassification",
         description="Wisesight Sentiment Corpus: Social media messages in Thai language with sentiment label (positive, neutral, negative, question)",
         reference="https://github.com/PyThaiNLP/wisesight-sentiment",
         dataset={
