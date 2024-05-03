@@ -20,7 +20,7 @@ class SNLHierarchicalClustering(AbsTaskClusteringFast):
         },
         description="Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.",
         reference="https://huggingface.co/datasets/navjordj/SNL_summarization",
-        type="HierarchicalClustering",
+        type="Clustering",
         category="s2s",
         eval_splits=["test"],
         eval_langs=["nob-Latn"],
