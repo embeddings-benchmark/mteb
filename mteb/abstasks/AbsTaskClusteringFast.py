@@ -40,12 +40,6 @@ def evaluate_clustering_bootstrapped(
 
     v_measures = defaultdict(list)
 
-    clustering_model = sklearn.cluster.MiniBatchKMeans(
-        n_clusters=len(set(labels)),
-        batch_size=kmean_batch_size,
-        n_init="auto",
-    )
-
     max_depth = min(max_depth, max(map(len, labels)))
     # Evaluate on each level til max depth
     for i_level in range(max_depth):
@@ -60,6 +54,11 @@ def evaluate_clustering_bootstrapped(
         valid_idx = level_labels != -1
         level_labels = level_labels[valid_idx]
         level_embeddings = embeddings[valid_idx]
+        clustering_model = sklearn.cluster.MiniBatchKMeans(
+            n_clusters=len(set(level_labels)),
+            batch_size=kmean_batch_size,
+            n_init="auto",
+        )
         for _ in range(n_clusters):
             # sample N samples from the corpus with replacement
             n_embeddings = len(level_embeddings)
