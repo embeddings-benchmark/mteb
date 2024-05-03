@@ -80,6 +80,9 @@ class AbsTaskClusteringFast(AbsTask):
     The similarity then is calculated using the V-measure metric, which is invariant to the permutation of the labels.
     This approach is then repeated K times.
 
+    If the clustering is hieararchical, and more than one label is specified in order for each observation,
+    V-measures are calculated in the outlined way on each of the levels separately.
+
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset.
     It must contain the following columns:
         sentences: list[str]
@@ -229,8 +232,8 @@ def convert_to_fast(
         if categories is None:
             categories = set(labels)
         else:
-            assert (
-                categories == set(labels)
+            assert categories == set(
+                labels
             ), "The clusters are not sampled from the same distribution as they have different labels."
 
         ds[split] = Dataset.from_dict({"sentences": sentences, "labels": labels})
