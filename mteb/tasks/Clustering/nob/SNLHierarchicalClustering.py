@@ -1,15 +1,17 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskHierarchicalClustering import AbsTaskHierarchicalClustering
+from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 def split_labels(record: dict) -> dict:
     record["labels"] = record["labels"].split(",")
+    # First level is trivial
+    record["labels"] = record["labels"][1:]
     return record
 
 
-class SNLHierarchicalClustering(AbsTaskHierarchicalClustering):
+class SNLHierarchicalClustering(AbsTaskClusteringFast):
     metadata = TaskMetadata(
         name="SNLHierarchicalClustering",
         dataset={
