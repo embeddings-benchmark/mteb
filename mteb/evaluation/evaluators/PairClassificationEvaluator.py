@@ -45,6 +45,8 @@ class PairClassificationEvaluator(Evaluator):
 
         assert len(self.sentences1) == len(self.sentences2)
         assert len(self.sentences1) == len(self.labels)
+
+        # removing this indic xnli is 3-way (entailment, neutral, )
         # for label in labels:
         #     assert label == 0 or label == 1
 
