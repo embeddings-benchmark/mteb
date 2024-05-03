@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-import datasets
 
 
 class BengaliDocumentClassification(AbsTaskClassification):
@@ -49,7 +48,9 @@ class BengaliDocumentClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self) -> None:
-        self.dataset = self.dataset.rename_columns({"article": "text", "category": "label"})
+        self.dataset = self.dataset.rename_columns(
+            {"article": "text", "category": "label"}
+        )
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )

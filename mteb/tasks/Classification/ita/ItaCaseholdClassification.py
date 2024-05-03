@@ -51,6 +51,6 @@ class ItaCaseholdClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        self.dataset = (
-            self.dataset.rename_columns({"summary": "text", "materia": "label"})
+        self.dataset = self.dataset.rename_columns(
+            {"summary": "text", "materia": "label"}
         )

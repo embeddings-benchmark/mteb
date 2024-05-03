@@ -27,6 +27,7 @@ _LANGUAGES = {
     "zh": ["cmn-Hans"],
 }
 
+
 class LanguageClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LanguageClassification",
