@@ -1,0 +1,16 @@
+{
+  "dataset_revision": "3d3d27aa7af8941408cefc3991ada5d12a4273d1",
+  "mteb_dataset_name": "SNLHierarchicalClustering",
+  "mteb_version": "1.6.10",
+  "test": {
+    "evaluation_time": 81.02,
+    "v_measure": 0.6812692470632542,
+    "v_measures": [
+      1.0,
+      0.41677699421003295,
+      0.6134170061330678,
+      0.6816167452468586,
+      0.6945354897263115
+    ]
+  }
+}
