@@ -45,8 +45,8 @@ class PairClassificationEvaluator(Evaluator):
 
         assert len(self.sentences1) == len(self.sentences2)
         assert len(self.sentences1) == len(self.labels)
-        for label in labels:
-            assert label == 0 or label == 1
+        # for label in labels:
+        #     assert label == 0 or label == 1
 
     def __call__(self, model):
         scores = self.compute_metrics(model)

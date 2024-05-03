@@ -49,11 +49,17 @@ class IndicXnliPairClassification(AbsTaskPairClassification, MultilingualTask):
 
     def dataset_transform(self) -> None:
         # Convert to standard format
+        _dataset = {}
         for lang in self.langs:
-            self.dataset[lang] = self.dataset[lang].rename_columns(
-                {"premise": "sent1", "hypothesis": "sent2", "label": "labels"}
-            )
-            self.dataset[lang] = self.stratified_subsampling(
-                self.dataset[lang], n_samples=256, seed=self.seed, label="labels"
-            )
-            print(self.dataset)
+            _dataset[lang] = {}
+            for split in self.metadata.eval_splits:
+                hf_dataset = self.dataset[lang][split]
+
+                _dataset[lang][split] = [
+                    {
+                        "sent1": hf_dataset["premise"],
+                        "sent2": hf_dataset["hypothesis"],
+                        "labels": hf_dataset["label"],
+                    }
+                ]
+        self.dataset = _dataset
