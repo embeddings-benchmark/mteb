@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import itertools
 import logging
 import random
+from collections import defaultdict
 from typing import Any, Dict
 
 import numpy as np
@@ -22,21 +24,21 @@ Scores = Dict[str, Any]
 
 def evaluate_clustering_bootstrapped(
     embeddings: np.ndarray,
-    labels: list[str],
+    labels: list[list[str]],
     n_clusters: int,
     cluster_size: int,
     kmean_batch_size: int,
+    max_depth: int,
     rng_state: random.Random = random.Random(),
-) -> list[float]:
+) -> dict[str, list[float]]:
     """Bootstrapped evaluation of clustering performance using V-measure.
 
     The bootstrapping is done by sampling N samples from the corpus and clustering them. It is done without replacement to get a diverse set of
     samples.
     """
     n_embeddings = embeddings.shape[0]
-    labels_arr = np.array(labels)
 
-    v_measures = []
+    v_measures = defaultdict(list)
 
     clustering_model = sklearn.cluster.MiniBatchKMeans(
         n_clusters=len(set(labels)),
@@ -44,16 +46,30 @@ def evaluate_clustering_bootstrapped(
         n_init="auto",
     )
 
-    for _ in range(n_clusters):
-        # sample N samples from the corpus with replacement
-        cluster_indices = rng_state.choices(range(n_embeddings), k=cluster_size)
+    max_depth = min(max_depth, max(map(len, labels)))
+    # Evaluate on each level til max depth
+    for i_level in range(max_depth):
+        level_labels = []
+        # Assign -1 to gold label if the level is not there
+        for label in labels:
+            if len(label) > i_level:
+                level_labels.append(label[i_level])
+            else:
+                level_labels.append(-1)
+        level_labels = np.array(level_labels)
+        valid_idx = level_labels != -1
+        level_labels = level_labels[valid_idx]
+        level_embeddings = embeddings[valid_idx]
+            for _ in range(n_clusters):
+                # sample N samples from the corpus with replacement
+                n_embeddings = len(level_embeddings)
+                cluster_indices = rng_state.choices(range(n_embeddings), k=cluster_size)
 
-        _embeddings = embeddings[cluster_indices]
-        _labels = labels_arr[cluster_indices]
-        clustering_model.fit(_embeddings)
-        cluster_assignment = clustering_model.labels_
-        v_measure = v_measure_score(_labels, cluster_assignment)
-        v_measures.append(v_measure)
+                _embeddings = level_embeddings[cluster_indices]
+                _labels = level_labels[cluster_indices]
+                cluster_assignment = clustering_model.fit_predict(_embeddings)
+                v_measure = v_measure_score(_labels, cluster_assignment)
+                v_measures[f"Level {i_level}"].append(v_measure)
 
     return v_measures
 
@@ -68,13 +84,14 @@ class AbsTaskClusteringFast(AbsTask):
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset.
     It must contain the following columns:
         sentences: list[str]
-        labels: list[str]
+        labels: list[str] | list[list[str]]
     """
 
     max_documents_to_embed = 16_384
     max_documents_per_cluster = 2048
     n_clusters = 10
     k_mean_batch_size = 512
+    max_depth = 5
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -117,7 +134,7 @@ class AbsTaskClusteringFast(AbsTask):
 
     def _evaluate_monolingual(
         self, model, dataset: DatasetDict, split: Split = "test", **kwargs: Any
-    ) -> dict[str, float | list[float]]:
+    ) -> dict[str, float | dict[str, list[float]]]:
         _dataset = dataset[split]
 
         rng_state = random.Random(self.seed)
@@ -133,6 +150,11 @@ class AbsTaskClusteringFast(AbsTask):
         logger.info(f"Encoding {len(downsampled_dataset)} sentences...")
 
         embeddings = model.encode(downsampled_dataset["sentences"])
+        labels = []
+        for label in downsampled_dataset["labels"]:
+            if not isinstance(label, list):
+                label = [label]
+            labels.append(label)
 
         v_measures = evaluate_clustering_bootstrapped(
             embeddings,
@@ -140,10 +162,13 @@ class AbsTaskClusteringFast(AbsTask):
             n_clusters=self.n_clusters,
             cluster_size=self.max_documents_per_cluster,
             kmean_batch_size=self.k_mean_batch_size,
+            max_depth=self.max_depth,
             rng_state=rng_state,
         )
+        all_v_scores = itertools.chain.from_iterable(v_measures.values())
+        mean_v_measure = np.mean(list(all_v_scores))
 
-        return {"v_measures": v_measures, "v_measure": float(np.mean(v_measures))}
+        return {"v_measures": v_measures, "v_measure": float(mean_v_measure)}
 
 
 def clustering_downsample(
