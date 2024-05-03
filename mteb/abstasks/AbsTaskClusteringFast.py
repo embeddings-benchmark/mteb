@@ -60,16 +60,16 @@ def evaluate_clustering_bootstrapped(
         valid_idx = level_labels != -1
         level_labels = level_labels[valid_idx]
         level_embeddings = embeddings[valid_idx]
-            for _ in range(n_clusters):
-                # sample N samples from the corpus with replacement
-                n_embeddings = len(level_embeddings)
-                cluster_indices = rng_state.choices(range(n_embeddings), k=cluster_size)
+        for _ in range(n_clusters):
+            # sample N samples from the corpus with replacement
+            n_embeddings = len(level_embeddings)
+            cluster_indices = rng_state.choices(range(n_embeddings), k=cluster_size)
 
-                _embeddings = level_embeddings[cluster_indices]
-                _labels = level_labels[cluster_indices]
-                cluster_assignment = clustering_model.fit_predict(_embeddings)
-                v_measure = v_measure_score(_labels, cluster_assignment)
-                v_measures[f"Level {i_level}"].append(v_measure)
+            _embeddings = level_embeddings[cluster_indices]
+            _labels = level_labels[cluster_indices]
+            cluster_assignment = clustering_model.fit_predict(_embeddings)
+            v_measure = v_measure_score(_labels, cluster_assignment)
+            v_measures[f"Level {i_level}"].append(v_measure)
 
     return v_measures
 
@@ -230,8 +230,8 @@ def convert_to_fast(
         if categories is None:
             categories = set(labels)
         else:
-            assert (
-                categories == set(labels)
+            assert categories == set(
+                labels
             ), "The clusters are not sampled from the same distribution as they have different labels."
 
         ds[split] = Dataset.from_dict({"sentences": sentences, "labels": labels})
