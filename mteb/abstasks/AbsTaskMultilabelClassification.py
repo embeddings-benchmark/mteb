@@ -3,19 +3,38 @@ from __future__ import annotations
 import itertools
 import logging
 from collections import defaultdict
-from typing import Iterable
 
 import numpy as np
+from sklearn.metrics import f1_score, label_ranking_average_precision_score
+from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
-from ..evaluation.evaluators import kNNMultiLabelClassificationEvaluator
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 
 
+def evaluate_mlp(
+    embeddings_train: np.ndarray,
+    y_train: np.ndarray,
+    embeddings_test: np.ndarray,
+    y_test: np.ndarray,
+):
+    scores = {}
+    classifier = MLPClassifier()
+    classifier.fit(embeddings_train, y_train)
+    y_pred = classifier.predict(embeddings_test)
+    accuracy = classifier.score(embeddings_test, y_test)
+    f1 = f1_score(y_test, y_pred, average="macro")
+    scores["accuracy"] = accuracy
+    scores["f1"] = f1
+    lrap = label_ranking_average_precision_score(y_test, y_pred)
+    scores["lrap"] = lrap
+    return scores
+
+
 class AbsTaskMultilabelClassification(AbsTask):
-    """Abstract class for kNN multioutput classification tasks
+    """Abstract class for multioutput classification tasks
     The similarity is computed between pairs and the results are ranked.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
@@ -121,14 +140,12 @@ class AbsTaskMultilabelClassification(AbsTask):
             binarizer = MultiLabelBinarizer()
             y_train = binarizer.fit_transform(y_train)
             y_test = binarizer.transform(eval_split["label"])
-            evaluator = kNNMultiLabelClassificationEvaluator(
-                embeddings_train=X_train,
-                y_train=y_train,
-                embeddings_test=test_embeddings,
-                y_test=y_test,
-                **params,
+            scores_exp = evaluate_mlp(
+                X_train,
+                y_train,
+                test_embeddings,
+                y_test,
             )
-            scores_exp, test_cache = evaluator(model)
             scores.append(scores_exp)
 
         if self.n_experiments == 1:
