@@ -229,8 +229,8 @@ def convert_to_fast(
         if categories is None:
             categories = set(labels)
         else:
-            assert categories == set(
-                labels
+            assert (
+                categories == set(labels)
             ), "The clusters are not sampled from the same distribution as they have different labels."
 
         ds[split] = Dataset.from_dict({"sentences": sentences, "labels": labels})
