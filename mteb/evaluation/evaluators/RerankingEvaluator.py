@@ -313,7 +313,7 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
 
             fake_qid = str(i)
             results[fake_qid] = self.rerank(query_emb, docs_emb)
-            qrels[fake_qid] = [1 if doc in positive else 0 for doc in docs]
+            qrels[fake_qid] = {str(i): 1 if doc in positive else 0 for i, doc in enumerate(docs)}
 
         ndcg, _map, recall, precision = RetrievalEvaluator.evaluate(
             qrels=qrels, results=results, k_values=self.k_values
@@ -333,8 +333,14 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
             similarity_scores (`Dict[str, float]`):
         """
 
+        if not query_emb.shape[0]:
+            raise ValueError(f"Empty query embedding")
+        
+        if not docs_emb.shape[0]:
+            return {}
+
         pred_scores = self.similarity_fct(query_emb, docs_emb)
         if len(pred_scores.shape) > 1:
             pred_scores = torch.amax(pred_scores, dim=0)
 
-        return {i: score for i, score in enumerate(pred_scores)}
+        return {str(i): score.detach().numpy().item() for i, score in enumerate(pred_scores)}
