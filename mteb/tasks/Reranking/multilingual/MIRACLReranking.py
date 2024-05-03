@@ -51,7 +51,7 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         reference="https://project-miracl.github.io/",
         dataset={
             "path": "miracl/miracl-reranking",
-            "revision": "",
+            "revision": "328237babff7094b2de40e7aa72107dddfaf5053",
         },
         type="Reranking",
         category="s2s",
