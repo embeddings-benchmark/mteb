@@ -43,6 +43,7 @@ class SNLHierarchicalClustering(AbsTaskClusteringFast):
         n_samples={"test": 2048},
         avg_character_length={"test": 1101.30},
     )
+    max_depth = 5
 
     def dataset_transform(self) -> None:
         self.dataset = self.dataset.rename_columns(
