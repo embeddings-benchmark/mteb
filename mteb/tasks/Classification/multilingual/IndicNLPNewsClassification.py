@@ -21,7 +21,7 @@ class IndicNLPNewsClassification(MultilingualTask, AbsTaskClassification):
         name="IndicNLPNewsClassification",
         dataset={
             "path": "Sakshamrzt/IndicNLP-Multilingual",
-            "revision": "308230fabdcada106869a5196ba11c403d065b07",
+            "revision": "3f23bd4a622a462adfb6989419cfadf7dc778f25",
         },
         description="A News classification dataset in multiple Indian regional languages.",
         reference="https://github.com/AI4Bharat/indicnlp_corpus/blob/master/ai4bharat-indicnlp-corpus-2020.pdf",
