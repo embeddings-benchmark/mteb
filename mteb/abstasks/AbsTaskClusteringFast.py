@@ -4,7 +4,7 @@ import itertools
 import logging
 import random
 from collections import defaultdict
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import numpy as np
 import sklearn
@@ -28,7 +28,7 @@ def evaluate_clustering_bootstrapped(
     n_clusters: int,
     cluster_size: int,
     kmean_batch_size: int,
-    max_depth: int,
+    max_depth: Optional[int],
     rng_state: random.Random = random.Random(),
 ) -> dict[str, list[float]]:
     """Bootstrapped evaluation of clustering performance using V-measure.
@@ -39,8 +39,10 @@ def evaluate_clustering_bootstrapped(
     n_embeddings = embeddings.shape[0]
 
     v_measures = defaultdict(list)
-
-    max_depth = min(max_depth, max(map(len, labels)))
+    if max_depth is not None:
+        max_depth = min(max_depth, max(map(len, labels)))
+    else:
+        max_depth = max(map(len, labels))
     # Evaluate on each level til max depth
     for i_level in range(max_depth):
         level_labels = []
@@ -93,7 +95,7 @@ class AbsTaskClusteringFast(AbsTask):
     max_documents_per_cluster = 2048
     n_clusters = 10
     k_mean_batch_size = 512
-    max_depth = 5
+    max_depth = None
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -232,8 +234,8 @@ def convert_to_fast(
         if categories is None:
             categories = set(labels)
         else:
-            assert (
-                categories == set(labels)
+            assert categories == set(
+                labels
             ), "The clusters are not sampled from the same distribution as they have different labels."
 
         ds[split] = Dataset.from_dict({"sentences": sentences, "labels": labels})
