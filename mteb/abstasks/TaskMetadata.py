@@ -73,7 +73,6 @@ TASK_TYPE = Literal[
     "BitextMining",
     "Classification",
     "Clustering",
-    "HierarchicalClustering",
     "PairClassification",
     "Reranking",
     "Retrieval",
