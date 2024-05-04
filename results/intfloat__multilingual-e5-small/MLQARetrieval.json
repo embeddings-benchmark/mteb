@@ -3,7 +3,7 @@
   "mteb_dataset_name": "MLQARetrieval",
   "mteb_version": "1.7.26",
   "test": {
-    "ara-Arab_deu-Latn": {
+    "ara-deu": {
       "map_at_1": 0.4057,
       "map_at_10": 0.5011,
       "map_at_100": 0.50885,
@@ -43,7 +43,7 @@
     "evaluation_time": 172.22
   },
   "validation": {
-    "ara-Arab_deu-Latn": {
+    "ara-deu": {
       "map_at_1": 0.3913,
       "map_at_10": 0.53032,
       "map_at_100": 0.53876,

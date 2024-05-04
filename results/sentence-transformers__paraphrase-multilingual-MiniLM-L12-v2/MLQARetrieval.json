@@ -3,7 +3,7 @@
   "mteb_dataset_name": "MLQARetrieval",
   "mteb_version": "1.7.26",
   "test": {
-    "ara-Arab_ara-Arab": {
+    "ara-ara": {
       "map_at_1": 0.21387,
       "map_at_10": 0.28649,
       "map_at_100": 0.29635,
@@ -40,7 +40,7 @@
       "recall_at_3": 0.32784,
       "recall_at_5": 0.38519
     },
-    "ara-Arab_deu-Latn": {
+    "ara-deu": {
       "map_at_1": 0.29109,
       "map_at_10": 0.38832,
       "map_at_100": 0.398,
@@ -77,7 +77,7 @@
       "recall_at_3": 0.453,
       "recall_at_5": 0.51304
     },
-    "ara-Arab_eng-Latn": {
+    "ara-eng": {
       "map_at_1": 0.26167,
       "map_at_10": 0.34359,
       "map_at_100": 0.35326,
@@ -114,7 +114,7 @@
       "recall_at_3": 0.39007,
       "recall_at_5": 0.45305
     },
-    "ara-Arab_hin-Deva": {
+    "ara-hin": {
       "map_at_1": 0.25942,
       "map_at_10": 0.34606,
       "map_at_100": 0.3563,
@@ -151,7 +151,7 @@
       "recall_at_3": 0.39487,
       "recall_at_5": 0.45767
     },
-    "ara-Arab_spa-Latn": {
+    "ara-spa": {
       "map_at_1": 0.29221,
       "map_at_10": 0.38749,
       "map_at_100": 0.39667,
@@ -188,7 +188,7 @@
       "recall_at_3": 0.45147,
       "recall_at_5": 0.51618
     },
-    "ara-Arab_vie-Latn": {
+    "ara-vie": {
       "map_at_1": 0.28139,
       "map_at_10": 0.37369,
       "map_at_100": 0.38349,
@@ -225,7 +225,7 @@
       "recall_at_3": 0.43136,
       "recall_at_5": 0.4934
     },
-    "ara-Arab_zho-Hans": {
+    "ara-zho": {
       "map_at_1": 0.28452,
       "map_at_10": 0.37974,
       "map_at_100": 0.3895,
@@ -262,7 +262,7 @@
       "recall_at_3": 0.4409,
       "recall_at_5": 0.50994
     },
-    "deu-Latn_ara-Arab": {
+    "deu-ara": {
       "map_at_1": 0.21953,
       "map_at_10": 0.3007,
       "map_at_100": 0.31201,
@@ -299,7 +299,7 @@
       "recall_at_3": 0.35052,
       "recall_at_5": 0.41055
     },
-    "deu-Latn_deu-Latn": {
+    "deu-deu": {
       "map_at_1": 0.31658,
       "map_at_10": 0.40077,
       "map_at_100": 0.40932,
@@ -336,7 +336,7 @@
       "recall_at_3": 0.45738,
       "recall_at_5": 0.50786
     },
-    "deu-Latn_eng-Latn": {
+    "deu-eng": {
       "map_at_1": 0.33164,
       "map_at_10": 0.41837,
       "map_at_100": 0.42658,
@@ -373,7 +373,7 @@
       "recall_at_3": 0.47067,
       "recall_at_5": 0.53199
     },
-    "deu-Latn_hin-Deva": {
+    "deu-hin": {
       "map_at_1": 0.25385,
       "map_at_10": 0.34526,
       "map_at_100": 0.35559,
@@ -410,7 +410,7 @@
       "recall_at_3": 0.4028,
       "recall_at_5": 0.46713
     },
-    "deu-Latn_spa-Latn": {
+    "deu-spa": {
       "map_at_1": 0.34178,
       "map_at_10": 0.43667,
       "map_at_100": 0.44527,
@@ -447,7 +447,7 @@
       "recall_at_3": 0.49887,
       "recall_at_5": 0.558
     },
-    "deu-Latn_vie-Latn": {
+    "deu-vie": {
       "map_at_1": 0.34985,
       "map_at_10": 0.43539,
       "map_at_100": 0.44534,
@@ -484,7 +484,7 @@
       "recall_at_3": 0.48896,
       "recall_at_5": 0.54925
     },
-    "deu-Latn_zho-Hans": {
+    "deu-zho": {
       "map_at_1": 0.27699,
       "map_at_10": 0.36844,
       "map_at_100": 0.37847,
@@ -521,7 +521,7 @@
       "recall_at_3": 0.42196,
       "recall_at_5": 0.49167
     },
-    "eng-Latn_ara-Arab": {
+    "eng-ara": {
       "map_at_1": 0.20843,
       "map_at_10": 0.27971,
       "map_at_100": 0.28959,
@@ -558,7 +558,7 @@
       "recall_at_3": 0.31978,
       "recall_at_5": 0.37245
     },
-    "eng-Latn_deu-Latn": {
+    "eng-deu": {
       "map_at_1": 0.36352,
       "map_at_10": 0.44866,
       "map_at_100": 0.45663,
@@ -595,7 +595,7 @@
       "recall_at_3": 0.50476,
       "recall_at_5": 0.56276
     },
-    "eng-Latn_eng-Latn": {
+    "eng-eng": {
       "map_at_1": 0.35462,
       "map_at_10": 0.43767,
       "map_at_100": 0.44512,
@@ -632,7 +632,7 @@
       "recall_at_3": 0.49586,
       "recall_at_5": 0.54789
     },
-    "eng-Latn_hin-Deva": {
+    "eng-hin": {
       "map_at_1": 0.23139,
       "map_at_10": 0.31066,
       "map_at_100": 0.32031,
@@ -669,7 +669,7 @@
       "recall_at_3": 0.36234,
       "recall_at_5": 0.41338
     },
-    "eng-Latn_spa-Latn": {
+    "eng-spa": {
       "map_at_1": 0.35351,
       "map_at_10": 0.43845,
       "map_at_100": 0.44595,
@@ -706,7 +706,7 @@
       "recall_at_3": 0.498,
       "recall_at_5": 0.54654
     },
-    "eng-Latn_vie-Latn": {
+    "eng-vie": {
       "map_at_1": 0.31793,
       "map_at_10": 0.39816,
       "map_at_100": 0.40652,
@@ -743,7 +743,7 @@
       "recall_at_3": 0.44877,
       "recall_at_5": 0.50701
     },
-    "eng-Latn_zho-Hans": {
+    "eng-zho": {
       "map_at_1": 0.26027,
       "map_at_10": 0.34607,
       "map_at_100": 0.35612,
@@ -781,7 +781,7 @@
       "recall_at_5": 0.45941
     },
     "evaluation_time": 7307.0,
-    "hin-Deva_ara-Arab": {
+    "hin-ara": {
       "map_at_1": 0.24304,
       "map_at_10": 0.33879,
       "map_at_100": 0.34919,
@@ -818,7 +818,7 @@
       "recall_at_3": 0.3965,
       "recall_at_5": 0.46423
     },
-    "hin-Deva_deu-Latn": {
+    "hin-deu": {
       "map_at_1": 0.33916,
       "map_at_10": 0.43057,
       "map_at_100": 0.43967,
@@ -855,7 +855,7 @@
       "recall_at_3": 0.48112,
       "recall_at_5": 0.54825
     },
-    "hin-Deva_eng-Latn": {
+    "hin-eng": {
       "map_at_1": 0.27084,
       "map_at_10": 0.36271,
       "map_at_100": 0.37232,
@@ -892,7 +892,7 @@
       "recall_at_3": 0.42395,
       "recall_at_5": 0.48719
     },
-    "hin-Deva_hin-Deva": {
+    "hin-hin": {
       "map_at_1": 0.23119,
       "map_at_10": 0.3107,
       "map_at_100": 0.32021,
@@ -929,7 +929,7 @@
       "recall_at_3": 0.36051,
       "recall_at_5": 0.41785
     },
-    "hin-Deva_spa-Latn": {
+    "hin-spa": {
       "map_at_1": 0.30818,
       "map_at_10": 0.41163,
       "map_at_100": 0.42081,
@@ -966,7 +966,7 @@
       "recall_at_3": 0.48346,
       "recall_at_5": 0.54672
     },
-    "hin-Deva_vie-Latn": {
+    "hin-vie": {
       "map_at_1": 0.28711,
       "map_at_10": 0.37949,
       "map_at_100": 0.39017,
@@ -1003,7 +1003,7 @@
       "recall_at_3": 0.434,
       "recall_at_5": 0.50231
     },
-    "hin-Deva_zho-Hans": {
+    "hin-zho": {
       "map_at_1": 0.28749,
       "map_at_10": 0.39272,
       "map_at_100": 0.40185,
@@ -1040,7 +1040,7 @@
       "recall_at_3": 0.45671,
       "recall_at_5": 0.52745
     },
-    "spa-Latn_ara-Arab": {
+    "spa-ara": {
       "map_at_1": 0.25935,
       "map_at_10": 0.35133,
       "map_at_100": 0.36184,
@@ -1077,7 +1077,7 @@
       "recall_at_3": 0.40445,
       "recall_at_5": 0.46866
     },
-    "spa-Latn_deu-Latn": {
+    "spa-deu": {
       "map_at_1": 0.38063,
       "map_at_10": 0.4742,
       "map_at_100": 0.48297,
@@ -1114,7 +1114,7 @@
       "recall_at_3": 0.53435,
       "recall_at_5": 0.59685
     },
-    "spa-Latn_eng-Latn": {
+    "spa-eng": {
       "map_at_1": 0.35446,
       "map_at_10": 0.44787,
       "map_at_100": 0.45595,
@@ -1151,7 +1151,7 @@
       "recall_at_3": 0.5119,
       "recall_at_5": 0.57053
     },
-    "spa-Latn_hin-Deva": {
+    "spa-hin": {
       "map_at_1": 0.26175,
       "map_at_10": 0.35969,
       "map_at_100": 0.36932,
@@ -1188,7 +1188,7 @@
       "recall_at_3": 0.426,
       "recall_at_5": 0.491
     },
-    "spa-Latn_spa-Latn": {
+    "spa-spa": {
       "map_at_1": 0.34742,
       "map_at_10": 0.4368,
       "map_at_100": 0.44483,
@@ -1225,7 +1225,7 @@
       "recall_at_3": 0.49572,
       "recall_at_5": 0.55207
     },
-    "spa-Latn_vie-Latn": {
+    "spa-vie": {
       "map_at_1": 0.36026,
       "map_at_10": 0.45853,
       "map_at_100": 0.46691,
@@ -1262,7 +1262,7 @@
       "recall_at_3": 0.52577,
       "recall_at_5": 0.59613
     },
-    "spa-Latn_zho-Hans": {
+    "spa-zho": {
       "map_at_1": 0.3056,
       "map_at_10": 0.4081,
       "map_at_100": 0.41769,
@@ -1299,7 +1299,7 @@
       "recall_at_3": 0.47098,
       "recall_at_5": 0.55367
     },
-    "vie-Latn_ara-Arab": {
+    "vie-ara": {
       "map_at_1": 0.22472,
       "map_at_10": 0.30812,
       "map_at_100": 0.319,
@@ -1336,7 +1336,7 @@
       "recall_at_3": 0.35418,
       "recall_at_5": 0.41475
     },
-    "vie-Latn_deu-Latn": {
+    "vie-deu": {
       "map_at_1": 0.35701,
       "map_at_10": 0.44398,
       "map_at_100": 0.4536,
@@ -1373,7 +1373,7 @@
       "recall_at_3": 0.50209,
       "recall_at_5": 0.55821
     },
-    "vie-Latn_eng-Latn": {
+    "vie-eng": {
       "map_at_1": 0.32393,
       "map_at_10": 0.40638,
       "map_at_100": 0.4155,
@@ -1410,7 +1410,7 @@
       "recall_at_3": 0.46042,
       "recall_at_5": 0.52102
     },
-    "vie-Latn_hin-Deva": {
+    "vie-hin": {
       "map_at_1": 0.26246,
       "map_at_10": 0.34617,
       "map_at_100": 0.3568,
@@ -1447,7 +1447,7 @@
       "recall_at_3": 0.39343,
       "recall_at_5": 0.45352
     },
-    "vie-Latn_spa-Latn": {
+    "vie-spa": {
       "map_at_1": 0.36224,
       "map_at_10": 0.45241,
       "map_at_100": 0.46054,
@@ -1484,7 +1484,7 @@
       "recall_at_3": 0.5114,
       "recall_at_5": 0.57532
     },
-    "vie-Latn_vie-Latn": {
+    "vie-vie": {
       "map_at_1": 0.31283,
       "map_at_10": 0.38993,
       "map_at_100": 0.39893,
@@ -1521,7 +1521,7 @@
       "recall_at_3": 0.44186,
       "recall_at_5": 0.49172
     },
-    "vie-Latn_zho-Hans": {
+    "vie-zho": {
       "map_at_1": 0.29336,
       "map_at_10": 0.38358,
       "map_at_100": 0.39361,
@@ -1558,7 +1558,7 @@
       "recall_at_3": 0.43695,
       "recall_at_5": 0.50335
     },
-    "zho-Hans_ara-Arab": {
+    "zho-ara": {
       "map_at_1": 0.25785,
       "map_at_10": 0.34415,
       "map_at_100": 0.35516,
@@ -1595,7 +1595,7 @@
       "recall_at_3": 0.39854,
       "recall_at_5": 0.45921
     },
-    "zho-Hans_deu-Latn": {
+    "zho-deu": {
       "map_at_1": 0.31524,
       "map_at_10": 0.40927,
       "map_at_100": 0.41901,
@@ -1632,7 +1632,7 @@
       "recall_at_3": 0.47131,
       "recall_at_5": 0.53547
     },
-    "zho-Hans_eng-Latn": {
+    "zho-eng": {
       "map_at_1": 0.29005,
       "map_at_10": 0.37902,
       "map_at_100": 0.38827,
@@ -1669,7 +1669,7 @@
       "recall_at_3": 0.43294,
       "recall_at_5": 0.4964
     },
-    "zho-Hans_hin-Deva": {
+    "zho-hin": {
       "map_at_1": 0.27278,
       "map_at_10": 0.37289,
       "map_at_100": 0.38303,
@@ -1706,7 +1706,7 @@
       "recall_at_3": 0.43294,
       "recall_at_5": 0.50538
     },
-    "zho-Hans_spa-Latn": {
+    "zho-spa": {
       "map_at_1": 0.31895,
       "map_at_10": 0.41901,
       "map_at_100": 0.4279,
@@ -1743,7 +1743,7 @@
       "recall_at_3": 0.48279,
       "recall_at_5": 0.5547
     },
-    "zho-Hans_vie-Latn": {
+    "zho-vie": {
       "map_at_1": 0.30211,
       "map_at_10": 0.40097,
       "map_at_100": 0.41069,
@@ -1780,7 +1780,7 @@
       "recall_at_3": 0.46269,
       "recall_at_5": 0.53474
     },
-    "zho-Hans_zho-Hans": {
+    "zho-zho": {
       "map_at_1": 0.28888,
       "map_at_10": 0.37945,
       "map_at_100": 0.38854,
@@ -1819,7 +1819,7 @@
     }
   },
   "validation": {
-    "ara-Arab_ara-Arab": {
+    "ara-ara": {
       "map_at_1": 0.35397,
       "map_at_10": 0.4693,
       "map_at_100": 0.47944,
@@ -1856,7 +1856,7 @@
       "recall_at_3": 0.55706,
       "recall_at_5": 0.62669
     },
-    "ara-Arab_deu-Latn": {
+    "ara-deu": {
       "map_at_1": 0.42995,
       "map_at_10": 0.54695,
       "map_at_100": 0.55713,
@@ -1893,7 +1893,7 @@
       "recall_at_3": 0.64251,
       "recall_at_5": 0.71498
     },
-    "ara-Arab_eng-Latn": {
+    "ara-eng": {
       "map_at_1": 0.4352,
       "map_at_10": 0.54922,
       "map_at_100": 0.55676,
@@ -1930,7 +1930,7 @@
       "recall_at_3": 0.62669,
       "recall_at_5": 0.69632
     },
-    "ara-Arab_hin-Deva": {
+    "ara-hin": {
       "map_at_1": 0.41935,
       "map_at_10": 0.54429,
       "map_at_100": 0.55285,
@@ -1967,7 +1967,7 @@
       "recall_at_3": 0.64516,
       "recall_at_5": 0.70968
     },
-    "ara-Arab_spa-Latn": {
+    "ara-spa": {
       "map_at_1": 0.52174,
       "map_at_10": 0.63151,
       "map_at_100": 0.63829,
@@ -2004,7 +2004,7 @@
       "recall_at_3": 0.71429,
       "recall_at_5": 0.77019
     },
-    "ara-Arab_vie-Latn": {
+    "ara-vie": {
       "map_at_1": 0.45399,
       "map_at_10": 0.57528,
       "map_at_100": 0.58128,
@@ -2041,7 +2041,7 @@
       "recall_at_3": 0.65031,
       "recall_at_5": 0.72393
     },
-    "ara-Arab_zho-Hans": {
+    "ara-zho": {
       "map_at_1": 0.46809,
       "map_at_10": 0.59297,
       "map_at_100": 0.59907,
@@ -2078,7 +2078,7 @@
       "recall_at_3": 0.68617,
       "recall_at_5": 0.76064
     },
-    "deu-Latn_ara-Arab": {
+    "deu-ara": {
       "map_at_1": 0.37198,
       "map_at_10": 0.50701,
       "map_at_100": 0.51662,
@@ -2115,7 +2115,7 @@
       "recall_at_3": 0.59903,
       "recall_at_5": 0.69082
     },
-    "deu-Latn_deu-Latn": {
+    "deu-deu": {
       "map_at_1": 0.44922,
       "map_at_10": 0.57236,
       "map_at_100": 0.57816,
@@ -2152,7 +2152,7 @@
       "recall_at_3": 0.6582,
       "recall_at_5": 0.73633
     },
-    "deu-Latn_eng-Latn": {
+    "deu-eng": {
       "map_at_1": 0.45703,
       "map_at_10": 0.57928,
       "map_at_100": 0.58617,
@@ -2189,7 +2189,7 @@
       "recall_at_3": 0.67188,
       "recall_at_5": 0.74414
     },
-    "deu-Latn_hin-Deva": {
+    "deu-hin": {
       "map_at_1": 0.47853,
       "map_at_10": 0.60406,
       "map_at_100": 0.60831,
@@ -2226,7 +2226,7 @@
       "recall_at_3": 0.67485,
       "recall_at_5": 0.76687
     },
-    "deu-Latn_spa-Latn": {
+    "deu-spa": {
       "map_at_1": 0.4949,
       "map_at_10": 0.61741,
       "map_at_100": 0.62389,
@@ -2263,7 +2263,7 @@
       "recall_at_3": 0.71429,
       "recall_at_5": 0.77041
     },
-    "deu-Latn_vie-Latn": {
+    "deu-vie": {
       "map_at_1": 0.44505,
       "map_at_10": 0.56248,
       "map_at_100": 0.57008,
@@ -2300,7 +2300,7 @@
       "recall_at_3": 0.63736,
       "recall_at_5": 0.71429
     },
-    "deu-Latn_zho-Hans": {
+    "deu-zho": {
       "map_at_1": 0.41053,
       "map_at_10": 0.54749,
       "map_at_100": 0.55459,
@@ -2337,7 +2337,7 @@
       "recall_at_3": 0.64737,
       "recall_at_5": 0.74737
     },
-    "eng-Latn_ara-Arab": {
+    "eng-ara": {
       "map_at_1": 0.34816,
       "map_at_10": 0.46324,
       "map_at_100": 0.47167,
@@ -2374,7 +2374,7 @@
       "recall_at_3": 0.53191,
       "recall_at_5": 0.61702
     },
-    "eng-Latn_deu-Latn": {
+    "eng-deu": {
       "map_at_1": 0.51172,
       "map_at_10": 0.61994,
       "map_at_100": 0.6259,
@@ -2411,7 +2411,7 @@
       "recall_at_3": 0.69531,
       "recall_at_5": 0.75195
     },
-    "eng-Latn_eng-Latn": {
+    "eng-eng": {
       "map_at_1": 0.49652,
       "map_at_10": 0.60324,
       "map_at_100": 0.60928,
@@ -2448,7 +2448,7 @@
       "recall_at_3": 0.68467,
       "recall_at_5": 0.73868
     },
-    "eng-Latn_hin-Deva": {
+    "eng-hin": {
       "map_at_1": 0.4359,
       "map_at_10": 0.54581,
       "map_at_100": 0.55221,
@@ -2485,7 +2485,7 @@
       "recall_at_3": 0.62525,
       "recall_at_5": 0.69231
     },
-    "eng-Latn_spa-Latn": {
+    "eng-spa": {
       "map_at_1": 0.504,
       "map_at_10": 0.61212,
       "map_at_100": 0.61837,
@@ -2522,7 +2522,7 @@
       "recall_at_3": 0.692,
       "recall_at_5": 0.756
     },
-    "eng-Latn_vie-Latn": {
+    "eng-vie": {
       "map_at_1": 0.44814,
       "map_at_10": 0.55908,
       "map_at_100": 0.56576,
@@ -2559,7 +2559,7 @@
       "recall_at_3": 0.63992,
       "recall_at_5": 0.70646
     },
-    "eng-Latn_zho-Hans": {
+    "eng-zho": {
       "map_at_1": 0.43849,
       "map_at_10": 0.55145,
       "map_at_100": 0.55914,
@@ -2597,7 +2597,7 @@
       "recall_at_5": 0.7004
     },
     "evaluation_time": 776.46,
-    "hin-Deva_ara-Arab": {
+    "hin-ara": {
       "map_at_1": 0.4086,
       "map_at_10": 0.5446,
       "map_at_100": 0.55293,
@@ -2634,7 +2634,7 @@
       "recall_at_3": 0.64516,
       "recall_at_5": 0.73118
     },
-    "hin-Deva_deu-Latn": {
+    "hin-deu": {
       "map_at_1": 0.53374,
       "map_at_10": 0.65353,
       "map_at_100": 0.65769,
@@ -2671,7 +2671,7 @@
       "recall_at_3": 0.74233,
       "recall_at_5": 0.80368
     },
-    "hin-Deva_eng-Latn": {
+    "hin-eng": {
       "map_at_1": 0.46154,
       "map_at_10": 0.58145,
       "map_at_100": 0.58811,
@@ -2708,7 +2708,7 @@
       "recall_at_3": 0.66469,
       "recall_at_5": 0.7357
     },
-    "hin-Deva_hin-Deva": {
+    "hin-hin": {
       "map_at_1": 0.4142,
       "map_at_10": 0.53463,
       "map_at_100": 0.54108,
@@ -2745,7 +2745,7 @@
       "recall_at_3": 0.61538,
       "recall_at_5": 0.69231
     },
-    "hin-Deva_spa-Latn": {
+    "hin-spa": {
       "map_at_1": 0.50267,
       "map_at_10": 0.63485,
       "map_at_100": 0.6389,
@@ -2782,7 +2782,7 @@
       "recall_at_3": 0.74332,
       "recall_at_5": 0.81283
     },
-    "hin-Deva_vie-Latn": {
+    "hin-vie": {
       "map_at_1": 0.42938,
       "map_at_10": 0.57398,
       "map_at_100": 0.58009,
@@ -2819,7 +2819,7 @@
       "recall_at_3": 0.69492,
       "recall_at_5": 0.76836
     },
-    "hin-Deva_zho-Hans": {
+    "hin-zho": {
       "map_at_1": 0.50794,
       "map_at_10": 0.64587,
       "map_at_100": 0.65147,
@@ -2856,7 +2856,7 @@
       "recall_at_3": 0.7672,
       "recall_at_5": 0.83069
     },
-    "spa-Latn_ara-Arab": {
+    "spa-ara": {
       "map_at_1": 0.44099,
       "map_at_10": 0.56271,
       "map_at_100": 0.57244,
@@ -2893,7 +2893,7 @@
       "recall_at_3": 0.67081,
       "recall_at_5": 0.75776
     },
-    "spa-Latn_deu-Latn": {
+    "spa-deu": {
       "map_at_1": 0.56122,
       "map_at_10": 0.6597,
       "map_at_100": 0.66567,
@@ -2930,7 +2930,7 @@
       "recall_at_3": 0.72959,
       "recall_at_5": 0.78571
     },
-    "spa-Latn_eng-Latn": {
+    "spa-eng": {
       "map_at_1": 0.552,
       "map_at_10": 0.64946,
       "map_at_100": 0.65533,
@@ -2967,7 +2967,7 @@
       "recall_at_3": 0.72,
       "recall_at_5": 0.768
     },
-    "spa-Latn_hin-Deva": {
+    "spa-hin": {
       "map_at_1": 0.46524,
       "map_at_10": 0.6026,
       "map_at_100": 0.60851,
@@ -3004,7 +3004,7 @@
       "recall_at_3": 0.68449,
       "recall_at_5": 0.80214
     },
-    "spa-Latn_spa-Latn": {
+    "spa-spa": {
       "map_at_1": 0.542,
       "map_at_10": 0.64072,
       "map_at_100": 0.64622,
@@ -3041,7 +3041,7 @@
       "recall_at_3": 0.712,
       "recall_at_5": 0.772
     },
-    "spa-Latn_vie-Latn": {
+    "spa-vie": {
       "map_at_1": 0.56085,
       "map_at_10": 0.66754,
       "map_at_100": 0.67274,
@@ -3078,7 +3078,7 @@
       "recall_at_3": 0.75132,
       "recall_at_5": 0.83598
     },
-    "spa-Latn_zho-Hans": {
+    "spa-zho": {
       "map_at_1": 0.58385,
       "map_at_10": 0.68385,
       "map_at_100": 0.68797,
@@ -3115,7 +3115,7 @@
       "recall_at_3": 0.74534,
       "recall_at_5": 0.80745
     },
-    "vie-Latn_ara-Arab": {
+    "vie-ara": {
       "map_at_1": 0.41104,
       "map_at_10": 0.54538,
       "map_at_100": 0.55411,
@@ -3152,7 +3152,7 @@
       "recall_at_3": 0.6319,
       "recall_at_5": 0.72393
     },
-    "vie-Latn_deu-Latn": {
+    "vie-deu": {
       "map_at_1": 0.54945,
       "map_at_10": 0.6629,
       "map_at_100": 0.67015,
@@ -3189,7 +3189,7 @@
       "recall_at_3": 0.76374,
       "recall_at_5": 0.79121
     },
-    "vie-Latn_eng-Latn": {
+    "vie-eng": {
       "map_at_1": 0.49706,
       "map_at_10": 0.60956,
       "map_at_100": 0.6163,
@@ -3226,7 +3226,7 @@
       "recall_at_3": 0.69863,
       "recall_at_5": 0.77299
     },
-    "vie-Latn_hin-Deva": {
+    "vie-hin": {
       "map_at_1": 0.44633,
       "map_at_10": 0.57199,
       "map_at_100": 0.57839,
@@ -3263,7 +3263,7 @@
       "recall_at_3": 0.65537,
       "recall_at_5": 0.72881
     },
-    "vie-Latn_spa-Latn": {
+    "vie-spa": {
       "map_at_1": 0.51852,
       "map_at_10": 0.63394,
       "map_at_100": 0.63918,
@@ -3300,7 +3300,7 @@
       "recall_at_3": 0.71429,
       "recall_at_5": 0.78307
     },
-    "vie-Latn_vie-Latn": {
+    "vie-vie": {
       "map_at_1": 0.44814,
       "map_at_10": 0.56414,
       "map_at_100": 0.57007,
@@ -3337,7 +3337,7 @@
       "recall_at_3": 0.65166,
       "recall_at_5": 0.72798
     },
-    "vie-Latn_zho-Hans": {
+    "vie-zho": {
       "map_at_1": 0.5,
       "map_at_10": 0.61484,
       "map_at_100": 0.62195,
@@ -3374,7 +3374,7 @@
       "recall_at_3": 0.70109,
       "recall_at_5": 0.78804
     },
-    "zho-Hans_ara-Arab": {
+    "zho-ara": {
       "map_at_1": 0.45213,
       "map_at_10": 0.5799,
       "map_at_100": 0.58734,
@@ -3411,7 +3411,7 @@
       "recall_at_3": 0.67021,
       "recall_at_5": 0.76596
     },
-    "zho-Hans_deu-Latn": {
+    "zho-deu": {
       "map_at_1": 0.5,
       "map_at_10": 0.61525,
       "map_at_100": 0.62158,
@@ -3448,7 +3448,7 @@
       "recall_at_3": 0.7,
       "recall_at_5": 0.75789
     },
-    "zho-Hans_eng-Latn": {
+    "zho-eng": {
       "map_at_1": 0.45833,
       "map_at_10": 0.58302,
       "map_at_100": 0.58866,
@@ -3485,7 +3485,7 @@
       "recall_at_3": 0.69048,
       "recall_at_5": 0.75198
     },
-    "zho-Hans_hin-Deva": {
+    "zho-hin": {
       "map_at_1": 0.42328,
       "map_at_10": 0.56248,
       "map_at_100": 0.56938,
@@ -3522,7 +3522,7 @@
       "recall_at_3": 0.65608,
       "recall_at_5": 0.73016
     },
-    "zho-Hans_spa-Latn": {
+    "zho-spa": {
       "map_at_1": 0.5528,
       "map_at_10": 0.66398,
       "map_at_100": 0.66992,
@@ -3559,7 +3559,7 @@
       "recall_at_3": 0.75776,
       "recall_at_5": 0.81988
     },
-    "zho-Hans_vie-Latn": {
+    "zho-vie": {
       "map_at_1": 0.45109,
       "map_at_10": 0.58864,
       "map_at_100": 0.5954,
@@ -3596,7 +3596,7 @@
       "recall_at_3": 0.70109,
       "recall_at_5": 0.77717
     },
-    "zho-Hans_zho-Hans": {
+    "zho-zho": {
       "map_at_1": 0.45635,
       "map_at_10": 0.57494,
       "map_at_100": 0.58143,
