@@ -10,6 +10,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [AILAStatutes](https://zenodo.org/records/4063986) | ['eng'] | Retrieval | p2p | [Legal] |  |  |
 | [AJGT](https://link.springer.com/chapter/10.1007/978-3-319-60042-0_66/) (Alomari et al., 2017) | ['ara'] | Classification | s2s | [Social] | {'train': 1800} | {'train': 46.81} |
 | [ATEC](https://aclanthology.org/2021.emnlp-main.357) | ['cmn'] | STS | s2s |  |  |  |
+| [AfriSentiLangClassification](https://huggingface.co/datasets/HausaNLP/afrisenti-lid-data/) | ['amh', 'arq', 'ary', 'hau', 'ibo', 'kin', 'pcm', 'por', 'swa', 'tso', 'twi', 'yor'] | Classification | s2s | [Social] | {'test': 5754} | {'test': 77.84} |
 | [AllegroReviews](https://aclanthology.org/2020.acl-main.111.pdf) | ['pol'] | Classification | s2s |  | {'test': 1006} | {'test': 477.2} |
 | [AlloProfClusteringP2P](https://huggingface.co/datasets/lyon-nlp/alloprof) | ['fra'] | Clustering | p2p |  |  |  |
 | [AlloProfClusteringS2S](https://huggingface.co/datasets/lyon-nlp/alloprof) | ['fra'] | Clustering | s2s |  |  |  |
