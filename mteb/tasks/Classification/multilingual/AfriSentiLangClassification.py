@@ -16,7 +16,7 @@ class AfriSentiLangClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         eval_splits=["test"],
-        eval_langs={
+        eval_langs=[
             "amh-Ethi",  # Amharic (Ethiopic script)
             "arq-Arab",
             "ary-Arab",  # Moroccan Arabic, Standard Arabic (Arabic script)
@@ -29,7 +29,7 @@ class AfriSentiLangClassification(AbsTaskClassification):
             "twi-Latn",  # Twi (Latin script)
             "tso-Latn",  # Tsonga (Latin script)
             "yor-Latn",  # Yoruba (Latin script)
-        },
+        ],
         main_score="accuracy",
         date=("2023-07-04", "2023-08-04"),
         form=["written"],
