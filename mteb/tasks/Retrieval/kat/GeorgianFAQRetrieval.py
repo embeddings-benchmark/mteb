@@ -22,7 +22,7 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],
-        eval_langs=["kat-Geor"],
+        eval_langs=["kat_Geor"],
         main_score="ndcg_at_10",
     )
 
