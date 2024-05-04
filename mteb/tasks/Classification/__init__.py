@@ -71,8 +71,8 @@ from .multilingual.MTOPIntentClassification import *
 from .multilingual.MultiHateClassification import *
 from .multilingual.NordicLangClassification import *
 from .multilingual.ScalaClassification import *
-from .multilingual.SwissJudgementClassification import *
 from .multilingual.SouthAfricanLangClassification import *
+from .multilingual.SwissJudgementClassification import *
 from .nep.NepaliNewsClassification import *
 from .nld.DutchBookReviewSentimentClassification import *
 from .nob.NoRecClassification import *

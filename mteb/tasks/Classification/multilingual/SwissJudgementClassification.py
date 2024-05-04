@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from datasets import Dataset
-
 from mteb.abstasks import AbsTaskClassification, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -47,24 +45,18 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
         n_samples={"test": 17357},
         avg_character_length={"test": 3411.72},
     )
-    """
-    def dataset_transform(self):
-        for lang in self.langs:
-            self.dataset[lang]["test"] = self.dataset[lang]["test"].select(
-                range(min(2048, len(self.dataset[lang]["test"])))
-            )
-    """
 
     def dataset_transform(self):
         for lang in self.langs:
-            X = self.dataset[lang]["test"]["text"]
-            y = self.dataset[lang]["test"]["label"]
+            dataset = self.dataset[lang]["test"]
+            dataset_dict = {"test": dataset}
 
-            samples_per_label = min(2048, len(X))
-            X_undersampled, y_undersampled, _ = self._undersample_data(
-                X, y, samples_per_label
+            subsampled_dataset_dict = self.stratified_subsampling(
+                dataset_dict=dataset_dict,
+                seed=42,
+                splits=["test"],
+                label="label",
+                n_samples=min(2048, len(dataset["text"])) - 2,
             )
 
-            self.dataset[lang]["test"] = Dataset.from_dict(
-                {"text": X_undersampled, "label": y_undersampled}
-            )
+            self.dataset[lang]["test"] = subsampled_dataset_dict["test"]
