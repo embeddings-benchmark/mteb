@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "52483dba0ff23291271ee9249839865e3c3e7e50",
+  "mteb_dataset_name": "FrenkEnClassification",
+  "mteb_version": "1.6.36",
+  "test": {
+    "accuracy": 0.5859191655801824,
+    "accuracy_stderr": 0.051604698080736,
+    "ap": 0.4370541556861786,
+    "ap_stderr": 0.027031087960816814,
+    "evaluation_time": 16.56,
+    "f1": 0.5708269546549174,
+    "f1_stderr": 0.04631205018193013,
+    "main_score": 0.5859191655801824
+  }
+}
