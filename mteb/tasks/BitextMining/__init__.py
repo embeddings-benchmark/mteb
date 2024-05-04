@@ -14,3 +14,4 @@ from .multilingual.RomaTalesBitextMining import *
 from .multilingual.TatoebaBitextMining import *
 from .srn.SRNCorpusBitextMining import *
 from .vie.VieMedEVBitextMining import *
+from .kat.TbilisiCityHallBitextMining import *
