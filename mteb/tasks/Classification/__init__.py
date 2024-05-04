@@ -39,6 +39,7 @@ from .fra.MovieReviewSentimentClassification import *
 from .guj.GujaratiNewsClassification import *
 from .hin.HindiDiscourseClassification import *
 from .hin.SentimentAnalysisHindi import *
+from .hrv.FrenkHrClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
 from .jpn.WRIMEClassification import *
