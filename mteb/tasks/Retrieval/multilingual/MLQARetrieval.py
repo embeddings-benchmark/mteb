@@ -55,10 +55,15 @@ _LANGUAGES = {
 }
 
 
+def _build_lang_pair(langs: list[str]):
+    """Builds a language pair separated by a dash. e.g., 'eng-deu'."""
+    return langs[0].split("-")[0] + "-" + langs[1].split("-")[0]
+
+
 def extend_lang_pairs() -> dict[str, list[str]]:
     eval_langs = {}
     for langs in _LANGUAGES.values():
-        lang_pair = langs[0] + "_" + langs[1]
+        lang_pair = _build_lang_pair(langs)
         eval_langs[lang_pair] = langs
     return eval_langs
 
@@ -115,10 +120,9 @@ class MLQARetrieval(AbsTaskRetrieval, CrosslingualTask):
         self.queries, self.corpus, self.relevant_docs = {}, {}, {}
 
         for hf_subset, langs in _LANGUAGES.items():
-            lang_pair = (
-                langs[0] + "_" + langs[1]
-            )  # builds a language pair separated by an underscore. e.g., "ara-Arab_eng-Latn". 
+            # Builds a language pair separated by an underscore. e.g., "ara-Arab_eng-Latn".
             # Corpus is in ara-Arab and queries in eng-Latn
+            lang_pair = _build_lang_pair(langs)
 
             _dataset_raw[lang_pair] = datasets.load_dataset(
                 name=hf_subset,
