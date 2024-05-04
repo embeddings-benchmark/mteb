@@ -308,9 +308,6 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         """Computes the metrices in a batched way, by batching all queries and
         all documents together
         """
-        all_mrr_scores = []
-        all_ap_scores = []
-
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
         encode_queries_func = (
@@ -344,7 +341,6 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         logger.info("Encoding candidates...")
         all_docs = []
         for sample in self.samples:
-            # all_docs.extend(sample["positive"])
             all_docs.extend(sample["candidates"])
 
         all_docs_embs = np.asarray(
@@ -364,27 +360,14 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
 
             positive = instance["positive"]
             docs = instance["candidates"]
-            # num_neg = len(instance["negative"])
             num_doc = len(docs)
             docs_emb = all_docs_embs[docs_idx : docs_idx + num_doc]
             docs_idx += num_doc
 
-            # if num_pos == 0 or num_neg == 0:
-            #     continue
-
-            # is_relevant = [True] * num_pos + [False] * num_neg
             fake_qid = str(query_idx)
             results[fake_qid] = self.rerank(query_emb, docs_emb)
             qrels[fake_qid] = {str(i): 1 if doc in positive else 0 for i, doc in enumerate(docs)}
 
-            # scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
-            # all_mrr_scores.append(scores["mrr"])
-            # all_ap_scores.append(scores["ap"])
-
-        # mean_ap = np.mean(all_ap_scores)
-        # mean_mrr = np.mean(all_mrr_scores)
-
-        # return {"map": mean_ap, "mrr": mean_mrr}
         ndcg, _map, recall, precision = RetrievalEvaluator.evaluate(
             qrels=qrels, results=results, k_values=self.k_values
         )
