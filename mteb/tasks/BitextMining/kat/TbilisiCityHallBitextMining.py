@@ -32,18 +32,18 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining, CrosslingualTask):
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_EVAL_LANGS,
         main_score="f1",
+        domains=["News"],
+        text_creation="created",
+        n_samples={_EVAL_SPLIT: 1820},
         date=None,
         form=None,
-        domains=None,
         task_subtypes=None,
         license=None,
         socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
         bibtex_citation=None,
-        n_samples={_EVAL_SPLIT: 1820},
-        avg_character_length={},
+        avg_character_length=None,
     )
 
     def load_data(self, **kwargs) -> None:
