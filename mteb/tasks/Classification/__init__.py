@@ -47,6 +47,7 @@ from .kor.KlueTC import *
 from .kur.KurdishSentimentClassification import *
 from .mal.MalayalamNewsClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
+from .multilingual.AfriSentiLangClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
 from .multilingual.HinDialectClassification import *
