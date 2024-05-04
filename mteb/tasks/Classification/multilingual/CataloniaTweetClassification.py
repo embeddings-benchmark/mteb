@@ -64,7 +64,7 @@ class CataloniaTweetClassification(MultilingualTask, AbsTaskClassification):
             pages = "1368--1375",
             ISBN = "979-10-95546-34-4",
         }""",
-        n_samples={"train": 2000,"test": 2000},
+        n_samples={"train": 2000, "test": 2000},
         avg_character_length={"train": 200.99, "test": 200.49},
     )
 
@@ -74,6 +74,9 @@ class CataloniaTweetClassification(MultilingualTask, AbsTaskClassification):
                 {"TWEET": "text", "LABEL": "label"}
             )
             self.dataset[lang] = self.stratified_subsampling(
-                self.dataset[lang], seed=self.seed, splits=["train", "test"], n_samples=2000
+                self.dataset[lang],
+                seed=self.seed,
+                splits=["train", "test"],
+                n_samples=2000,
             )
             self.dataset[lang] = self.dataset[lang].remove_columns(["id_str"])
