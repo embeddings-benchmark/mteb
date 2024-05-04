@@ -40,6 +40,7 @@ from .hin.HindiDiscourseClassification import *
 from .hin.SentimentAnalysisHindi import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
+from .jav.JavaneseIMDBClassification import *
 from .jpn.WRIMEClassification import *
 from .kan.KannadaNewsClassification import *
 from .kor.KlueTC import *
