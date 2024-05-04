@@ -33,8 +33,7 @@ class RerankingEvaluator(Evaluator):
         name: str = "",
         similarity_fct=cos_sim,
         batch_size: int = 512,
-        # use_batched_encoding: bool = True,
-        use_batched_encoding: bool = False,
+        use_batched_encoding: bool = True,
         limit: int = None,
         **kwargs,
     ):
@@ -280,6 +279,117 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         )
         self.k_values = k_values
 
+    def rerank(self, query_emb, docs_emb):
+        """
+        Rerank documents (docs_emb) given the query (query_emb)
+
+        Args:
+            query_emb (`torch.Tensor` of shape `(num_queries, hidden_size)`): Query embedding
+                if `num_queries` > 0: we take the closest document to any of the queries
+            docs_emb (`torch.Tensor` of shape `(num_pos+num_neg, hidden_size)`): Candidates documents embeddings
+
+        Returns:
+            similarity_scores (`Dict[str, float]`):
+        """
+
+        if not query_emb.shape[0]:
+            raise ValueError(f"Empty query embedding")
+        
+        if not docs_emb.shape[0]:
+            return {}
+
+        pred_scores = self.similarity_fct(query_emb, docs_emb)
+        if len(pred_scores.shape) > 1:
+            pred_scores = torch.amax(pred_scores, dim=0)
+
+        return {str(i): score.detach().numpy().item() for i, score in enumerate(pred_scores)}
+
+    def compute_metrics_batched(self, model):
+        """Computes the metrices in a batched way, by batching all queries and
+        all documents together
+        """
+        all_mrr_scores = []
+        all_ap_scores = []
+
+        # using encode_queries and encode_corpus functions if they exists,
+        # which can be defined by users to add different instructions for query and passage conveniently
+        encode_queries_func = (
+            model.encode_queries if hasattr(model, "encode_queries") else model.encode
+        )
+        encode_corpus_func = (
+            model.encode_corpus if hasattr(model, "encode_corpus") else model.encode
+        )
+
+        logger.info("Encoding queries...")
+        if isinstance(self.samples[0]["query"], str):
+            all_query_embs = np.asarray(
+                encode_queries_func(
+                    [sample["query"] for sample in self.samples],
+                    batch_size=self.batch_size,
+                )
+            )
+        elif isinstance(self.samples[0]["query"], list):
+            # In case the query is a list of strings, we get the most similar embedding to any of the queries
+            all_query_flattened = [
+                q for sample in self.samples for q in sample["query"]
+            ]
+            all_query_embs = np.asarray(
+                encode_queries_func(all_query_flattened, batch_size=self.batch_size)
+            )
+        else:
+            raise ValueError(
+                f"Query must be a string or a list of strings but is {type(self.samples[0]['query'])}"
+            )
+
+        logger.info("Encoding candidates...")
+        all_docs = []
+        for sample in self.samples:
+            # all_docs.extend(sample["positive"])
+            all_docs.extend(sample["candidates"])
+
+        all_docs_embs = np.asarray(
+            encode_corpus_func(all_docs, batch_size=self.batch_size)
+        )
+
+        # Compute scores
+        logger.info("Evaluating...")
+        query_idx, docs_idx = 0, 0
+        results, qrels = {}, {}
+        for instance in self.samples:
+            num_subqueries = (
+                len(instance["query"]) if isinstance(instance["query"], list) else 1
+            )
+            query_emb = all_query_embs[query_idx : query_idx + num_subqueries]
+            query_idx += num_subqueries
+
+            positive = instance["positive"]
+            docs = instance["candidates"]
+            # num_neg = len(instance["negative"])
+            num_doc = len(docs)
+            docs_emb = all_docs_embs[docs_idx : docs_idx + num_doc]
+            docs_idx += num_doc
+
+            # if num_pos == 0 or num_neg == 0:
+            #     continue
+
+            # is_relevant = [True] * num_pos + [False] * num_neg
+            fake_qid = str(query_idx)
+            results[fake_qid] = self.rerank(query_emb, docs_emb)
+            qrels[fake_qid] = {str(i): 1 if doc in positive else 0 for i, doc in enumerate(docs)}
+
+            # scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
+            # all_mrr_scores.append(scores["mrr"])
+            # all_ap_scores.append(scores["ap"])
+
+        # mean_ap = np.mean(all_ap_scores)
+        # mean_mrr = np.mean(all_mrr_scores)
+
+        # return {"map": mean_ap, "mrr": mean_mrr}
+        ndcg, _map, recall, precision = RetrievalEvaluator.evaluate(
+            qrels=qrels, results=results, k_values=self.k_values
+        )
+        return {**ndcg, **_map, **recall, **precision}
+
     def compute_metrics_individual(self, model):
         """
         Embeds every (query, positive, negative) tuple individually.
@@ -319,28 +429,3 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
             qrels=qrels, results=results, k_values=self.k_values
         )
         return {**ndcg, **_map, **recall, **precision}
-
-    def rerank(self, query_emb, docs_emb):
-        """
-        Rerank documents (docs_emb) given the query (query_emb)
-
-        Args:
-            query_emb (`torch.Tensor` of shape `(num_queries, hidden_size)`): Query embedding
-                if `num_queries` > 0: we take the closest document to any of the queries
-            docs_emb (`torch.Tensor` of shape `(num_pos+num_neg, hidden_size)`): Candidates documents embeddings
-
-        Returns:
-            similarity_scores (`Dict[str, float]`):
-        """
-
-        if not query_emb.shape[0]:
-            raise ValueError(f"Empty query embedding")
-        
-        if not docs_emb.shape[0]:
-            return {}
-
-        pred_scores = self.similarity_fct(query_emb, docs_emb)
-        if len(pred_scores.shape) > 1:
-            pred_scores = torch.amax(pred_scores, dim=0)
-
-        return {str(i): score.detach().numpy().item() for i, score in enumerate(pred_scores)}
