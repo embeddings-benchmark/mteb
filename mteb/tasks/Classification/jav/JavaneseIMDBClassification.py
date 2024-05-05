@@ -15,7 +15,7 @@ class JavaneseIMDBClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
-        date=None,
+        date=("2021-06-24", "2021-06-24"),
         eval_splits=["test"],
         eval_langs=["jav-Latn"],
         main_score="accuracy",
