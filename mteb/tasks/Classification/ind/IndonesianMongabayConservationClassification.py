@@ -20,7 +20,7 @@ class IndonesianMongabayConservationClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
-        date=None,
+        date=("2012-01-01", "2023-12-31"),
         eval_splits=["validation", "test"],
         eval_langs=["ind-Latn"],
         main_score="accuracy",
