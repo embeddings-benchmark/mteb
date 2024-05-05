@@ -201,6 +201,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [LegalSummarization](https://github.com/lauramanor/legal_summarization) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
 | [MIRACLReranking](https://project-miracl.github.io/) | ['deu', 'spa'] | Reranking | s2s |  |  |  |
 | MIRACLRetrieval | ['deu', 'spa'] | Retrieval | s2p |  |  |  |
+| [MLQARetrieval](https://huggingface.co/datasets/mlqa) | ['ara', 'deu', 'eng', 'hin', 'spa', 'vie', 'zho'] | Retrieval | s2p | [Encyclopaedic] | {'test': 158083, 'validation': 15747} | {'test': 37352.28, 'validation': 36952.7} |
 | [MLSUMClusteringP2P](https://huggingface.co/datasets/mlsum) (Scialom et al., 2020) | ['deu', 'fra', 'rus', 'spa'] | Clustering | p2p | [News] | {'validation': 38561, 'test': 41206} | {'validation': 4613.0, 'test': 4810.0} |
 | [MLSUMClusteringS2S](https://huggingface.co/datasets/mlsum) (Scialom et al., 2020) | ['deu', 'fra', 'rus', 'spa'] | Clustering | s2s | [News] | {'validation': 38561, 'test': 41206} | {'validation': 4613.0, 'test': 4810.0} |
 | [MMarcoReranking](https://github.com/unicamp-dl/mMARCO) | ['cmn'] | Reranking | s2s |  |  |  |
