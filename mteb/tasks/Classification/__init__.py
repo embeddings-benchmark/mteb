@@ -21,6 +21,7 @@ from .eng.Banking77Classification import *
 from .eng.DBpediaClassification import *
 from .eng.EmotionClassification import *
 from .eng.FinancialPhrasebankClassification import *
+from .eng.FrenkEnClassification import *
 from .eng.ImdbClassification import *
 from .eng.LegalBenchClassification import *
 from .eng.NewsClassification import *
@@ -39,6 +40,7 @@ from .fra.MovieReviewSentimentClassification import *
 from .guj.GujaratiNewsClassification import *
 from .hin.HindiDiscourseClassification import *
 from .hin.SentimentAnalysisHindi import *
+from .hrv.FrenkHrClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
 from .jpn.WRIMEClassification import *
@@ -47,6 +49,7 @@ from .kor.KlueTC import *
 from .kur.KurdishSentimentClassification import *
 from .mal.MalayalamNewsClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
+from .multilingual.AfriSentiLangClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
 from .multilingual.HinDialectClassification import *
