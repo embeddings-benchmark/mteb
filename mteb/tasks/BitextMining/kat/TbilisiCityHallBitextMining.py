@@ -38,7 +38,7 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining, CrosslingualTask):
         date=("2024-05-02", "2024-05-03"),
         form=["written"],
         task_subtypes=[],
-        license="CC-BY-SA-4.0",
+        license="Not specified",
         socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],

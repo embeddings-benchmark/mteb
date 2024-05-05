@@ -31,7 +31,7 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         date=("2024-05-02", "2024-05-03"),
         form=["written"],
         task_subtypes=["Question answering"],
-        license="CC-BY-SA-4.0",
+        license="Not specified",
         socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
