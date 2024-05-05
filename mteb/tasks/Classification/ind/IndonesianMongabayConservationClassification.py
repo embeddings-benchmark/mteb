@@ -56,7 +56,7 @@ class IndonesianMongabayConservationClassification(AbsTaskClassification):
         }
         """,
         n_samples={"validation": 984, "test": 970},
-        avg_character_length=None,
+        avg_character_length={"validation": 1675.8, "test": 1675.5},
     )
 
     def dataset_transform(self):
