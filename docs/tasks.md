@@ -134,6 +134,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [FiQA-PL](https://sites.google.com/view/fiqa/) | ['pol'] | Retrieval | s2p |  |  |  |
 | [FiQA2018](https://sites.google.com/view/fiqa/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [FilipinoHateSpeechClassification](https://pcj.csp.org.ph/index.php/pcj/issue/download/29/PCJ%20V14%20N1%20pp1-14%202019) (Neil Vicente Cabasag et al., 2019) | ['fil'] | Classification | s2s | [Social] | {'validation': 2048, 'test': 2048} | {'validation': 88.1, 'test': 87.4} |
+| [FilipinoShopeeReviewsClassification](https://uijrt.com/articles/v4/i8/UIJRTV4I80009.pdf) | ['fil'] | Classification | s2s | [Social] | {'validation': 2250, 'test': 2250} | {'validation': 143.8, 'test': 145.1} |
 | [FinParaSTS](https://huggingface.co/datasets/TurkuNLP/turku_paraphrase_corpus) | ['fin'] | STS | s2s | [News, Subtitles] | {'test': 1000, 'validation': 1000} | {'test': 59.0, 'validation': 58.8} |
 | [FinToxicityClassification](https://aclanthology.org/2023.nodalida-1.68) | ['fin'] | Classification | s2s | [News] | {'train': 2048, 'test': 2048} | {'train': 432.63, 'test': 401.03} |
 | [FinancialPhrasebankClassification](https://arxiv.org/abs/1307.5336) (P. Malo, 2014) | ['eng'] | Classification | s2s | [News] | {'train': 4840} | {'train': 121.96} |
@@ -176,6 +177,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [JDReview](https://aclanthology.org/2023.nodalida-1.20/) | ['cmn'] | Classification | s2s |  |  |  |
 | [JSTS](https://aclanthology.org/2022.lrec-1.317.pdf#page=2.00) | ['jpn'] | STS | s2s | [Web] | {'valudtion': 1457} | {'valudtion': 46.34} |
 | [JaQuADRetrieval](https://arxiv.org/abs/2202.01764) (ByungHoon So, 2022) | ['jpn'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'validation': 2048} | {'validation': 400.75} |
+| [JavaneseIMDBClassification](https://github.com/w11wo/nlp-datasets#javanese-imdb) (Wongso et al., 2021) | ['jav'] | Classification | s2s | [Reviews] | {'test': 25000} | {'test': 481.83} |
 | [KLUE-STS](https://arxiv.org/abs/2105.09680) (Sungjoon Park, 2021) | ['kor'] | STS | s2s | [Reviews, News, Spoken] | {'validation': 519} | {'validation': 33.178227360308284} |
 | [KLUE-TC](https://arxiv.org/abs/2105.09680) (Sungjoon Park, 2021) | ['kor'] | Classification | s2s | [News] | {'validation': 2048} | {'validation': 27.079609091907326} |
 | [KannadaNewsClassification](https://github.com/goru001/nlp-for-kannada) | ['kan'] | Classification | s2s | [News] | {'train': 6460} | {'train': 65.88} |

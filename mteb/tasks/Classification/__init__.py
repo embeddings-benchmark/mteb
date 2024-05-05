@@ -34,6 +34,7 @@ from .eng.YelpReviewFullClassification import *
 from .est.estonian_valence import *
 from .fas.PersianFoodSentimentClassification import *
 from .fil.FilipinoHateSpeechClassification import *
+from .fil.FilipinoShopeeReviewsClassification import *
 from .fin.FinToxicityClassification import *
 from .fra.MovieReviewSentimentClassification import *
 from .guj.GujaratiNewsClassification import *
@@ -42,6 +43,7 @@ from .hin.SentimentAnalysisHindi import *
 from .hrv.FrenkHrClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
+from .jav.JavaneseIMDBClassification import *
 from .jpn.WRIMEClassification import *
 from .kan.KannadaNewsClassification import *
 from .kor.KlueTC import *
