@@ -59,6 +59,7 @@ from .fra.FQuADRetrieval import *
 from .fra.SyntecRetrieval import *
 from .hun.HunSum2 import *
 from .jpn.JaQuADRetrieval import *
+from .kat.GeorgianFAQRetrieval import *
 from .kor.KoMiracl import *
 from .kor.KoStrategyQA import *
 from .multilingual.IndicQARetrieval import *
