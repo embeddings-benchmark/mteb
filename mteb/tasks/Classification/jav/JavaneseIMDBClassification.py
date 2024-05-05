@@ -27,7 +27,16 @@ class JavaneseIMDBClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="""
+        @inproceedings{wongso2021causal,
+            title={Causal and Masked Language Modeling of Javanese Language using Transformer-based Architectures},
+            author={Wongso, Wilson and Setiawan, David Samuel and Suhartono, Derwin},
+            booktitle={2021 International Conference on Advanced Computer Science and Information Systems (ICACSIS)},
+            pages={1--7},
+            year={2021},
+            organization={IEEE}
+        }
+        """,
         n_samples={"test": 25_000},
         avg_character_length={"test": 481.83},
     )
