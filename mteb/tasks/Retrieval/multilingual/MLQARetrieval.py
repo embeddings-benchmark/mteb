@@ -1,3 +1,5 @@
+from typing import List
+
 import datasets
 
 from mteb.abstasks import AbsTaskRetrieval, CrosslingualTask, TaskMetadata
@@ -55,12 +57,14 @@ _LANGUAGES = {
 }
 
 
-def _build_lang_pair(langs: list[str]):
-    """Builds a language pair separated by a dash. e.g., 'eng-deu'."""
+def _build_lang_pair(langs: List[str]) -> str:
+    """Builds a language pair separated by a dash.
+    e.g., ['eng-Latn', 'deu-Latn'] -> 'eng-deu'.
+    """
     return langs[0].split("-")[0] + "-" + langs[1].split("-")[0]
 
 
-def extend_lang_pairs() -> dict[str, list[str]]:
+def extend_lang_pairs() -> dict[str, List[str]]:
     eval_langs = {}
     for langs in _LANGUAGES.values():
         lang_pair = _build_lang_pair(langs)
