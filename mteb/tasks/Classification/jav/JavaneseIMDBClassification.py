@@ -22,7 +22,7 @@ class JavaneseIMDBClassification(AbsTaskClassification):
         form=["written"],
         domains=["Reviews"],
         task_subtypes=["Sentiment/Hate speech"],
-        license=None,
+        license="MIT",
         socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
