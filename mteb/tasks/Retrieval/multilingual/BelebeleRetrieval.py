@@ -136,7 +136,7 @@ class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
             "revision": "75b399394a9803252cfec289d103de462763db7c",
         },
         description=(
-            "Belebele is a multiple-choice machine reading comprehension (MRC) dataset spanning 122 language variants."
+            "Belebele is a multiple-choice machine reading comprehension (MRC) dataset spanning 115 distinct languages."
         ),
         type="Retrieval",
         category="s2p",
