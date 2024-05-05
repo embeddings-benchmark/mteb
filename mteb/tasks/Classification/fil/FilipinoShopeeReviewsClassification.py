@@ -18,7 +18,7 @@ class FilipinoShopeeReviewsClassification(AbsTaskClassification):
         eval_langs=["fil-Latn"],
         form=["written"],
         domains=["Social"],
-        license=None,
+        license="MPL-2.0",
         socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
