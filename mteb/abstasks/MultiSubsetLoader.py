@@ -35,6 +35,8 @@ class MultiSubsetLoader:
                 self.dataset[lang][split] = datasets.Dataset.from_polars(
                     grouped_by_lang[lang].drop("lang")
                 )  # Remove lang column and convert back to HF datasets, not strictly necessary but better for compatibility
+        for lang in self.langs:
+            self.dataset[lang] = datasets.DatasetDict(self.dataset[lang])
 
     def slow_load(self, **kwargs):
         """Load each subsets iteratively"""
