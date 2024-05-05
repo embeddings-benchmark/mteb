@@ -32,11 +32,12 @@ def categorize_float(float_value):
 
 
 class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
+    fast_loading = True
     metadata = TaskMetadata(
         name="IndicCrosslingualSTS",
         dataset={
-            "path": "jaygala24/indic_sts",
-            "revision": "16abc16bea9e38262a8a3a74fd71ce2da51a5c3b",
+            "path": "mteb/indic_sts",
+            "revision": "91b14b94dab7e75bd82ecfa8c3404c6a88fe3790",
         },
         description="This is a Semantic Textual Similarity testset between English and 12 high-resource Indic languages.",
         reference="https://huggingface.co/datasets/jaygala24/indic_sts",
@@ -77,19 +78,6 @@ class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 5
         return metadata_dict
-
-    def load_data(self, **kwargs):
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-
-        self.dataset = {}
-        for lang in self.langs:
-            self.dataset[lang] = datasets.load_dataset(
-                name=lang, **self.metadata_dict["dataset"]
-            )
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self) -> None:
         # Convert to standard format
