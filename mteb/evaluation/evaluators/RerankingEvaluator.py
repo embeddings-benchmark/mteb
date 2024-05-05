@@ -256,17 +256,18 @@ class RerankingEvaluator(Evaluator):
 
 
 class MIRACLRerankingEvaluator(RerankingEvaluator):
-    def __init__(self,
-            samples,
-            mrr_at_k: int = 10,
-            name: str = "",
-            similarity_fct=cos_sim,
-            batch_size: int = 512,
-            use_batched_encoding: bool = True,
-            limit: int = None,
-            k_values: List[int] = [1, 3, 5, 10, 20, 100, 1000],
-            **kwargs
-        ):
+    def __init__(
+        self,
+        samples,
+        mrr_at_k: int = 10,
+        name: str = "",
+        similarity_fct=cos_sim,
+        batch_size: int = 512,
+        use_batched_encoding: bool = True,
+        limit: int = None,
+        k_values: List[int] = [1, 3, 5, 10, 20, 100, 1000],
+        **kwargs,
+    ):
         super().__init__(
             samples,
             mrr_at_k,
@@ -280,8 +281,7 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         self.k_values = k_values
 
     def rerank(self, query_emb, docs_emb):
-        """
-        Rerank documents (docs_emb) given the query (query_emb)
+        """Rerank documents (docs_emb) given the query (query_emb)
 
         Args:
             query_emb (`torch.Tensor` of shape `(num_queries, hidden_size)`): Query embedding
@@ -291,10 +291,9 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         Returns:
             similarity_scores (`Dict[str, float]`):
         """
-
         if not query_emb.shape[0]:
-            raise ValueError(f"Empty query embedding")
-        
+            raise ValueError("Empty query embedding")
+
         if not docs_emb.shape[0]:
             return {}
 
@@ -302,7 +301,9 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         if len(pred_scores.shape) > 1:
             pred_scores = torch.amax(pred_scores, dim=0)
 
-        return {str(i): score.detach().numpy().item() for i, score in enumerate(pred_scores)}
+        return {
+            str(i): score.detach().numpy().item() for i, score in enumerate(pred_scores)
+        }
 
     def compute_metrics_batched(self, model):
         """Computes the metrices in a batched way, by batching all queries and
@@ -366,7 +367,9 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
 
             fake_qid = str(query_idx)
             results[fake_qid] = self.rerank(query_emb, docs_emb)
-            qrels[fake_qid] = {str(i): 1 if doc in positive else 0 for i, doc in enumerate(docs)}
+            qrels[fake_qid] = {
+                str(i): 1 if doc in positive else 0 for i, doc in enumerate(docs)
+            }
 
         ndcg, _map, recall, precision = RetrievalEvaluator.evaluate(
             qrels=qrels, results=results, k_values=self.k_values
@@ -374,13 +377,11 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         return {**ndcg, **_map, **recall, **precision}
 
     def compute_metrics_individual(self, model):
-        """
-        Embeds every (query, positive, negative) tuple individually.
+        """Embeds every (query, positive, negative) tuple individually.
         Is slower than the batched version, but saves memory as only the
         embeddings for one tuple are needed. Useful when you have
         a really large test set
         """
-
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
         encode_queries_func = (
@@ -406,7 +407,9 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
 
             fake_qid = str(i)
             results[fake_qid] = self.rerank(query_emb, docs_emb)
-            qrels[fake_qid] = {str(i): 1 if doc in positive else 0 for i, doc in enumerate(docs)}
+            qrels[fake_qid] = {
+                str(i): 1 if doc in positive else 0 for i, doc in enumerate(docs)
+            }
 
         ndcg, _map, recall, precision = RetrievalEvaluator.evaluate(
             qrels=qrels, results=results, k_values=self.k_values

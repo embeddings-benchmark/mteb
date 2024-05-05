@@ -4,8 +4,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
-from ....evaluation.evaluators import MIRACLRerankingEvaluator 
-
+from ....evaluation.evaluators import MIRACLRerankingEvaluator
 
 _EVAL_SPLIT = "dev"
 _LANGUAGES = {
@@ -43,6 +42,7 @@ _CITATION = """@article{10.1162/tacl_a_00595,
     url = {https://doi.org/10.1162/tacl\_a\_00595},
     eprint = {https://direct.mit.edu/tacl/article-pdf/doi/10.1162/tacl\_a\_00595/2157340/tacl\_a\_00595.pdf},
 }"""
+
 
 class MIRACLReranking(MultilingualTask, AbsTaskReranking):
     metadata = TaskMetadata(
