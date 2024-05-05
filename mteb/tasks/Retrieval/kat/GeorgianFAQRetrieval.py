@@ -72,5 +72,4 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         self.corpus = DatasetDict(corpus)
         self.queries = DatasetDict(queries)
         self.relevant_docs = DatasetDict(relevant_docs)
-
         self.data_loaded = True
