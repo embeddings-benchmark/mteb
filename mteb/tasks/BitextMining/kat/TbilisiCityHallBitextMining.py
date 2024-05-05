@@ -38,12 +38,12 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining, CrosslingualTask):
         date=("2024-05-02", "2024-05-03"),
         form=["written"],
         task_subtypes=[],
-        license="",
+        license="CC-BY-SA-4.0",
         socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         bibtex_citation="",
-        avg_character_length={},
+        avg_character_length={_EVAL_SPLIT: 78},
     )
 
     def load_data(self, **kwargs) -> None:

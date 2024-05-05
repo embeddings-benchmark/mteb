@@ -31,12 +31,12 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         date=("2024-05-02", "2024-05-03"),
         form=["written"],
         task_subtypes=["Question answering"],
-        license="",
+        license="CC-BY-SA-4.0",
         socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         bibtex_citation="",
-        avg_character_length={},
+        avg_character_length={_EVAL_SPLIT: 572},
     )
 
     def load_data(self, **kwargs):
