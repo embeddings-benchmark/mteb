@@ -28,9 +28,9 @@ class IndonesianMongabayConservationClassification(AbsTaskClassification):
         domains=["Web"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
+        socioeconomic_status="medium",
+        annotations_creators="derived",
+        dialect=[],
         text_creation="found",
         bibtex_citation="""
         @inproceedings{fransiska-etal-2023-utilizing,
