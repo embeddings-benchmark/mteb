@@ -29,7 +29,7 @@ class JavaneseIMDBClassification(AbsTaskClassification):
         text_creation="found",
         bibtex_citation=None,
         n_samples={"test": 25_000},
-        avg_character_length=None,
+        avg_character_length={"test": 481.83},
     )
 
     def dataset_transform(self):
