@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 
 import datasets
 
@@ -64,7 +64,7 @@ def _build_lang_pair(langs: List[str]) -> str:
     return langs[0].split("-")[0] + "-" + langs[1].split("-")[0]
 
 
-def extend_lang_pairs() -> dict[str, List[str]]:
+def extend_lang_pairs() -> Dict[str, List[str]]:
     eval_langs = {}
     for langs in _LANGUAGES.values():
         lang_pair = _build_lang_pair(langs)
