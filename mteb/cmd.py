@@ -1,5 +1,5 @@
-"""
-entry point for the library
+"""entry point for the library
+
 example call:
   pip install git+https://github.com/embeddings-benchmark/mteb-draft.git
   mteb -m average_word_embeddings_komninos \

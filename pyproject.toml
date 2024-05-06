@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.6.36"
+version = "1.8.0"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -25,7 +25,7 @@ classifiers = [
 ]
 requires-python = ">=3.8"
 dependencies = [
-    "datasets>=2.2.0",
+    "datasets>=2.19.0",
     "jsonlines",
     "numpy",
     "requests>=2.26.0",
@@ -39,6 +39,7 @@ dependencies = [
     "pydantic>=2.0.0",
     "typing_extensions",
     "eval_type_backport",
+    "polars>=0.20.22",
 ]
 
 
@@ -64,8 +65,19 @@ exclude = ["tests", "results"]
 target-version = "py38"
 
 [tool.ruff.lint]
-select = ["E4", "E7", "E9", "F", "I"]
-ignore = ["E203", "E501", "E741", "F403"]
+select = ["F", "I", "E", "D"]
+ignore = ["E501",   # line too long 
+        "E741",     # ambiguous variable name
+        "F403",     # undefined import
+        "D100",     # Missing docstring in public module
+        "D101",     # Missing docstring in public class
+        "D102",     # Missing docstring in public method
+        "D103",     # Missing docstring in public function
+        "D104",     # Missing docstring in public package
+        "D107",     # Missing docstring in __init__
+        "D205",     # 1 blank line required between summary line and description
+        "D415",     # First line should end with a period
+]
 ignore-init-module-imports = true
 
 [tool.ruff.lint.pydocstyle]

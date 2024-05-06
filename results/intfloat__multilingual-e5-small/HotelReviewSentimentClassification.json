@@ -1,13 +1,13 @@
 {
   "dataset_revision": "b108d2c32ee4e1f4176ea233e1a5ac17bceb9ef9",
   "mteb_dataset_name": "HotelReviewSentimentClassification",
-  "mteb_version": "1.6.3",
+  "mteb_version": "1.6.12",
   "train": {
-    "accuracy": 0.49384765625,
-    "accuracy_stderr": 0.0286261103385569,
-    "evaluation_time": 154.73,
-    "f1": 0.4810983913374763,
-    "f1_stderr": 0.027300490395013467,
-    "main_score": 0.49384765625
+    "accuracy": 0.494775390625,
+    "accuracy_stderr": 0.03625273727079438,
+    "evaluation_time": 6.62,
+    "f1": 0.4832016216425482,
+    "f1_stderr": 0.03206315367694655,
+    "main_score": 0.494775390625
   }
 }

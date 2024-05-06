@@ -4,14 +4,17 @@ import logging
 from typing import Dict, List, Tuple
 
 import pandas as pd
+import requests
 import torch
+import tqdm
 
 
 def cos_sim(a, b):
-    """
-    Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
-    :return: Matrix with res[i][j]  = cos_sim(a[i], b[j])
-    """
+    """Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
+
+    Return:
+        Matrix with res[i][j]  = cos_sim(a[i], b[j])
+    """  # noqa: D402
     if not isinstance(a, torch.Tensor):
         a = torch.tensor(a)
 
@@ -30,8 +33,7 @@ def cos_sim(a, b):
 
 
 def dot_score(a: torch.Tensor, b: torch.Tensor):
-    """
-    Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
+    """Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
     :return: Matrix with res[i][j]  = dot_prod(a[i], b[j])
     """
     if not isinstance(a, torch.Tensor):
@@ -246,3 +248,19 @@ def rank_score(x: dict[str, float]) -> float:
         return ((1 / x["og_rank"]) / (1 / x["new_rank"])) - 1
     else:
         return 1 - ((1 / x["new_rank"]) / (1 / x["og_rank"]))
+
+
+# https://stackoverflow.com/a/62113293
+def download(url: str, fname: str):
+    resp = requests.get(url, stream=True)
+    total = int(resp.headers.get("content-length", 0))
+    with open(fname, "wb") as file, tqdm.tqdm(
+        desc=fname,
+        total=total,
+        unit="iB",
+        unit_scale=True,
+        unit_divisor=1024,
+    ) as bar:
+        for data in resp.iter_content(chunk_size=1024):
+            size = file.write(data)
+            bar.update(size)

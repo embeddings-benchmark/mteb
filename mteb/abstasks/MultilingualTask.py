@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import datasets
-
 from .AbsTask import AbsTask
+from .MultiSubsetLoader import MultiSubsetLoader
 
 
-class MultilingualTask(AbsTask):
+class MultilingualTask(MultiSubsetLoader, AbsTask):
     def __init__(self, langs=None, **kwargs):
         super().__init__(**kwargs)
         if isinstance(langs, list):
@@ -17,18 +16,3 @@ class MultilingualTask(AbsTask):
         else:
             self.langs = self.metadata_dict["eval_langs"]
         self.is_multilingual = True
-
-    def load_data(self, **kwargs):
-        """
-        Load dataset from HuggingFace hub
-        """
-        if self.data_loaded:
-            return
-        self.dataset = {}
-        for lang in self.langs:
-            self.dataset[lang] = datasets.load_dataset(
-                name=lang,
-                **self.metadata_dict.get("dataset", None),
-            )
-        self.dataset_transform()
-        self.data_loaded = True
