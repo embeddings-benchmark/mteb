@@ -147,7 +147,7 @@ class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
         license="CC-BY-SA-4.0",
         domains=["Web", "News"],
         text_creation="created",
-        n_samples={_EVAL_SPLIT: 900},
+        n_samples={_EVAL_SPLIT: 103500},  # number of languages * 900
         date=("2023-08-31", "2023-08-31"),
         form=["written"],
         task_subtypes=["Question answering"],
@@ -183,10 +183,6 @@ class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
             context_ids = {
                 passage: _id for _id, passage in enumerate(set(ds["flores_passage"]))
             }
-            answers = [
-                row[f"mc_answer{num}"] for row, num in zip(ds, ds["correct_answer_num"])
-            ]
-            answer_ids = {answer: _id for _id, answer in enumerate(set(answers))}
 
             for row in ds:
                 query = row["question"]
@@ -198,16 +194,8 @@ class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
                     "title": "",
                     "text": context,
                 }
-                answer = row[f"mc_answer{row['correct_answer_num']}"]
-                answer_id = f"A{answer_ids[answer]}"
-                self.corpus[lang][_EVAL_SPLIT][answer_id] = {
-                    "title": "",
-                    "text": answer,
-                }
-
-                self.relevant_docs[lang][_EVAL_SPLIT][query_id] = {
-                    context_id: 1,
-                    answer_id: 1,
-                }
+                if query_id not in self.relevant_docs[lang][_EVAL_SPLIT]:
+                    self.relevant_docs[lang][_EVAL_SPLIT][query_id] = {}
+                self.relevant_docs[lang][_EVAL_SPLIT][query_id][context_id] = 1
 
         self.data_loaded = True
