@@ -28,22 +28,18 @@ _LANGUAGES = {
     "th": ["tha-Thai"],
     "yo": ["yor-Latn"],
     "zh": ["zho-Hans"],
-    }
+}
 
 
 def _load_miracl_data(
-    path: str, 
-    langs: list, 
-    splits: str, 
-    cache_dir: str = None, 
-    revision: str = None
+    path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
 ):
     corpus = {lang: {split: None for split in splits} for lang in langs}
     queries = {lang: {split: None for split in splits} for lang in langs}
     relevant_docs = {lang: {split: None for split in splits} for lang in langs}
 
     split = _EVAL_SPLIT
-    
+
     for lang in langs:
         # Load corpus data (Can be several millions for languages)
         corpus_identifier = f"corpus-{lang}"
@@ -60,7 +56,7 @@ def _load_miracl_data(
             doc_title = row["title"]
             doc_text = row["text"]
             corpus[lang][split][docid] = {"title": doc_title, "text": doc_text}
-        
+
         # Load queries data
         queries_identifier = f"queries-{lang}"
         queries_data = datasets.load_dataset(
