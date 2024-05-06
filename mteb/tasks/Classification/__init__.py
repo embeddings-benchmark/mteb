@@ -42,6 +42,7 @@ from .hin.HindiDiscourseClassification import *
 from .hin.SentimentAnalysisHindi import *
 from .hrv.FrenkHrClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
+from .ind.IndonesianMongabayConservationClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
 from .jav.JavaneseIMDBClassification import *
 from .jpn.WRIMEClassification import *
