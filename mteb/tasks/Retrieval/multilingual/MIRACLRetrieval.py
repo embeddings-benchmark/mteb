@@ -10,29 +10,25 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 _EVAL_SPLIT = "dev"
 
 _LANGUAGES = {
+    "ar": ["ara-Arab"],
+    "bn": ["ben-Beng"],
+    "de": ["deu-Latn"],
+    "en": ["eng-Latn"],
+    "es": ["spa-Latn"],
+    "fa": ["fas-Arab"],
+    "fi": ["fin-Latn"],
+    "fr": ["fra-Latn"],
+    "hi": ["hin-Deva"],
+    "id": ["ind-Latn"],
+    "ja": ["jpn-Jpan"],
+    "ko": ["kor-Kore"],
+    "ru": ["rus-Cyrl"],
+    "sw": ["swa-Latn"],
+    "te": ["tel-Telu"],
+    "th": ["tha-Thai"],
     "yo": ["yor-Latn"],
-}
-
-# _LANGUAGES = {
-#     "ar": ["ara-Arab"],
-#     "bn": ["ben-Beng"],
-#     "de": ["deu-Latn"],
-#     "en": ["eng-Latn"],
-#     "es": ["spa-Latn"],
-#     "fa": ["fas-Arab"],
-#     "fi": ["fin-Latn"],
-#     "fr": ["fra-Latn"],
-#     "hi": ["hin-Deva"],
-#     "id": ["ind-Latn"],
-#     "ja": ["jpn-Jpan"],
-#     "ko": ["kor-Kore"],
-#     "ru": ["rus-Cyrl"],
-#     "sw": ["swa-Latn"],
-#     "te": ["tel-Telu"],
-#     "th": ["tha-Thai"],
-#     "yo": ["yor-Latn"],
-#     "zh": ["zho-Hans"],
-#     }
+    "zh": ["zho-Hans"],
+    }
 
 
 def _load_miracl_data(
@@ -152,7 +148,7 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
 
         self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
             path=self.metadata_dict["dataset"]["path"],
-            langs=self.metadata.eval_langs,
+            langs=self.langs,
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
