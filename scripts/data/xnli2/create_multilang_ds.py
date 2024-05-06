@@ -12,7 +12,7 @@ _LANGS = {
     "assamese": ["asm-Beng"],
     "bengali": ["ben-Beng"],
     "marathi": ["mar-Deva"],
-    "bhojpuri": ["bho-Deva"], 
+    "bhojpuri": ["bho-Deva"],
     "odiya": ["ory-Orya"],
     "sanskrit": ["san-Deva"],
     "tamil": ["tam-Taml"],
