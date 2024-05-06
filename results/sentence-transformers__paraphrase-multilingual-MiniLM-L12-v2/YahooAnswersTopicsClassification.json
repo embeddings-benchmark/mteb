@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "78fccffa043240c80e17a6b1da724f5a1057e8e5",
+  "mteb_dataset_name": "YahooAnswersTopicsClassification",
+  "mteb_version": "1.6.36",
+  "test": {
+    "accuracy": 0.47236328125,
+    "accuracy_stderr": 0.011104937003625559,
+    "evaluation_time": 46.7,
+    "f1": 0.4739974459559576,
+    "f1_stderr": 0.012125350025301481,
+    "main_score": 0.47236328125
+  }
+}
