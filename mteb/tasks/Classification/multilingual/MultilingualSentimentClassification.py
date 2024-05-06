@@ -38,11 +38,12 @@ _LANGUAGES = {
 
 
 class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTask):
+    fast_loading = True
     metadata = TaskMetadata(
         name="MultilingualSentimentClassification",
         dataset={
             "path": "mteb/multilingual-sentiment-classification",
-            "revision": "67787ff1c3531563c137e77d0d399f21d9e9065f",
+            "revision": "d95e536f1ad0cb2399abcb3348e6497add177f62",
         },
         description="""Sentiment classification dataset with binary
                        (positive vs negative sentiment) labels. Includes 30 languages and dialects.

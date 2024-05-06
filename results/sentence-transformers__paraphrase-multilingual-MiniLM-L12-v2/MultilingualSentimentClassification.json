@@ -1,7 +1,7 @@
 {
-  "dataset_revision": "67787ff1c3531563c137e77d0d399f21d9e9065f",
+  "dataset_revision": "d95e536f1ad0cb2399abcb3348e6497add177f62",
   "mteb_dataset_name": "MultilingualSentimentClassification",
-  "mteb_version": "1.7.36",
+  "mteb_version": "1.7.61",
   "test": {
     "ara": {
       "accuracy": 0.6473087818696883,
@@ -93,7 +93,7 @@
       "f1_stderr": 0.05795500323867457,
       "main_score": 0.5718061674008811
     },
-    "evaluation_time": 219.62,
+    "evaluation_time": 50.38,
     "fas": {
       "accuracy": 0.7390714285714286,
       "accuracy_stderr": 0.04122230672134411,
