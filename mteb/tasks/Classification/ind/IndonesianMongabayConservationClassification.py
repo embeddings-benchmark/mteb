@@ -23,7 +23,7 @@ class IndonesianMongabayConservationClassification(AbsTaskClassification):
         date=("2012-01-01", "2023-12-31"),
         eval_splits=["validation", "test"],
         eval_langs=["ind-Latn"],
-        main_score="accuracy",
+        main_score="f1",
         form=["written"],
         domains=["Web"],
         task_subtypes=["Sentiment/Hate speech"],
