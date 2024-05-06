@@ -30,7 +30,7 @@ class MultiSubsetLoader:
         for split in merged_dataset.keys():
             df_split = merged_dataset[split].to_polars()
             df_grouped = dict(df_split.group_by("lang"))
-            for lang in set(df_split['lang'].unique()) & set(self.langs):
+            for lang in set(df_split["lang"].unique()) & set(self.langs):
                 self.dataset.setdefault(lang, {})
                 self.dataset[lang][split] = datasets.Dataset.from_polars(
                     df_grouped[lang].drop("lang")
