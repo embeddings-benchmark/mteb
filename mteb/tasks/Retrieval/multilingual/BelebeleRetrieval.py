@@ -154,7 +154,7 @@ class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
         socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        avg_character_length={_EVAL_SPLIT: 329},
+        avg_character_length={_EVAL_SPLIT: 568},
         bibtex_citation="""@article{bandarkar2023belebele,
       title={The Belebele Benchmark: a Parallel Reading Comprehension Dataset in 122 Language Variants}, 
       author={Lucas Bandarkar and Davis Liang and Benjamin Muller and Mikel Artetxe and Satya Narayan Shukla and Donald Husa and Naman Goyal and Abhinandan Krishnan and Luke Zettlemoyer and Madian Khabsa},
