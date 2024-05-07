@@ -66,6 +66,7 @@ TEXT_CREATION_METHOD = Literal[
     "human-translated and localized",
     "machine-translated and verified",
     "machine-translated and localized",
+    "LM-generated and verified",
 ]
 
 SOCIOECONOMIC_STATUS = Literal[
@@ -85,6 +86,7 @@ TASK_TYPE = Literal[
     "STS",
     "Summarization",
     "InstructionRetrieval",
+    "CLSD",
 ]
 
 TASK_CATEGORY = Literal[
@@ -280,6 +282,8 @@ class TaskMetadata(BaseModel):
 
     def is_filled(self) -> bool:
         """Check if all the metadata fields are filled."""
+        if self.name == "CrossLingualSemanticDiscriminationWMT19":
+            print(self)
         return all(
             getattr(self, field_name) is not None for field_name in self.model_fields
         )

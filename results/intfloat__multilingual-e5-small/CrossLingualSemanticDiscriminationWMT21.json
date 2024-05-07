@@ -1,0 +1,14 @@
+{
+  "dataset_revision": "9627fbdb39b827ee5c066011ebe1e947cdb137bd",
+  "mteb_dataset_name": "CrossLingualSemanticDiscriminationWMT21",
+  "mteb_version": "1.8.0",
+  "test": {
+    "deu-fra": {
+      "accuracy": 0.72452
+    },
+    "evaluation_time": 83.35,
+    "fra-deu": {
+      "accuracy": 0.80067
+    }
+  }
+}

@@ -3,6 +3,7 @@ from __future__ import annotations
 from .AbsTask import *
 from .AbsTaskBitextMining import *
 from .AbsTaskClassification import *
+from .AbsTaskCLSD import *
 from .AbsTaskClustering import *
 from .AbsTaskInstructionRetrieval import *
 from .AbsTaskPairClassification import *
