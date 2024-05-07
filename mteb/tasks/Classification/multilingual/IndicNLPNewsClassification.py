@@ -24,7 +24,7 @@ class IndicNLPNewsClassification(MultilingualTask, AbsTaskClassification):
             "revision": "3f23bd4a622a462adfb6989419cfadf7dc778f25",
         },
         description="A News classification dataset in multiple Indian regional languages.",
-        reference="https://github.com/AI4Bharat/indicnlp_corpus/blob/master/ai4bharat-indicnlp-corpus-2020.pdf",
+        reference="https://github.com/AI4Bharat/indicnlp_corpus#indicnlp-news-article-classification-dataset",
         type="Classification",
         category="s2s",
         eval_splits=["test"],
@@ -58,5 +58,5 @@ class IndicNLPNewsClassification(MultilingualTask, AbsTaskClassification):
             if lang == "pa":
                 self.dataset[lang] = self.dataset[lang].remove_columns("headline")
             self.dataset[lang] = self.stratified_subsampling(
-                self.dataset[lang], n_samples=256, seed=self.seed, splits=["test"]
+                self.dataset[lang], n_samples=2048, seed=self.seed, splits=["test"]
             )
