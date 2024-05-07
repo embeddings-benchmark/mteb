@@ -89,6 +89,16 @@ The following tables gives you an overview of the tasks in MTEB.
 | [CUADNoticePeriodToTerminateRenewalLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 222} | {'test': 354.85} |
 | [CUADPostTerminationServicesLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 808} | {'test': 422.53} |
 | [CUADPriceRestrictionsLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 46} | {'test': 324.71} |
+| [CUADRenewalTermLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 386} | {'test': 340.87} |
+| [CUADRevenueProfitSharingLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 774} | {'test': 371.55} |
+| [CUADRofrRofoRofnLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 690} | {'test': 395.46} |
+| [CUADSourceCodeEscrowLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 118} | {'test': 399.18} |
+| [CUADTerminationForConvenienceLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 430} | {'test': 326.3} |
+| [CUADThirdPartyBeneficiaryLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 68} | {'test': 261.04} |
+| [CUADUncappedLiabilityLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 294} | {'test': 441.04} |
+| [CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 48} | {'test': 368.08} |
+| [CUADVolumeRestrictionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 322} | {'test': 306.27} |
+| [CUADWarrantyDurationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 320} | {'test': 352.27} |
 | [CanadaTaxCourtOutcomesLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 244} | {'test': 622.6} |
 | [ClimateFEVER](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) | ['eng'] | Retrieval | s2p |  |  |  |
 | [CmedqaRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) | ['cmn'] | Retrieval | s2p |  |  |  |
