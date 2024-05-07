@@ -57,7 +57,7 @@ class IndicNLPNewsClassification(MultilingualTask, AbsTaskClassification):
             )
             if lang == "pa":
                 self.dataset[lang] = self.dataset[lang].remove_columns("headline")
-            if self.dataset[lang]["test"].num_rows> 2048:
+            if self.dataset[lang]["test"].num_rows > 2048:
                 self.dataset[lang] = self.stratified_subsampling(
                     self.dataset[lang],
                     n_samples=2048,
