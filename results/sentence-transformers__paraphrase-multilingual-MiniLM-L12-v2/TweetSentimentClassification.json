@@ -1,7 +1,7 @@
 {
-  "dataset_revision": "14b13edfbc4046892f6011d114c29c0f83170589",
+  "dataset_revision": "9136186884fac29b7cda6357bb35ddc685dccdb9",
   "mteb_dataset_name": "TweetSentimentClassification",
-  "mteb_version": "1.7.40",
+  "mteb_version": "1.7.62",
   "test": {
     "arabic": {
       "accuracy": 0.428125,
@@ -17,7 +17,7 @@
       "f1_stderr": 0.03476162212189228,
       "main_score": 0.4640625
     },
-    "evaluation_time": 9.35,
+    "evaluation_time": 21.45,
     "french": {
       "accuracy": 0.44765625,
       "accuracy_stderr": 0.03278458634118326,
