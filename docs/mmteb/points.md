@@ -67,3 +67,5 @@ Please also add your first name and last name are as you want them to appear in 
 | jaygala24         | Jay        | Gala       | jaygala24@gmail.com          | ~Jay_Gala1           | Nilekani Center at AI4Bharat                          |
 | digantamisra      | Diganta    | Misra      | diganta.misra@mila.quebec    | ~Diganta_Misra1       | Mila - Quebec AI Institute                           |
 | PranjalChitale    | Pranjal    | Chitale    | cs21s022@smail.iitm.ac.in    | ~Pranjal_A_Chitale1       | Indian Institute of Technology Madras            |
+| dwzhu-pku         | Dawei      | Zhu        | dwzhu@pku.edu.cn             | ~Dawei_Zhu2       | Peking University            |
+| ljvmiranda921     | Lester James | Miranda  | ljm@allenai.org              | ~Lester_James_Validad_Miranda1 | Allen Institute for AI |

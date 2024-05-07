@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "CUADNoticePeriodToTerminateRenewalLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.8873873873873874,
+    "accuracy_stderr": 0.0,
+    "ap": 0.818004571735915,
+    "ap_stderr": 0.0,
+    "evaluation_time": 55.44,
+    "f1": 0.8861655214849758,
+    "f1_stderr": 0.0,
+    "main_score": 0.8873873873873874
+  }
+}
