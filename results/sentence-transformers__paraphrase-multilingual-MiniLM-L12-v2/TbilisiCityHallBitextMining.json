@@ -1,0 +1,22 @@
+{
+  "dataset_revision": "798bb599140565cca2dab8473035fa167e5ee602",
+  "mteb_dataset_name": "TbilisiCityHallBitextMining",
+  "mteb_version": "1.7.60",
+  "test": {
+    "eng_Latn-kat_Geor": {
+      "accuracy": 0.43021978021978025,
+      "f1": 0.36403160771554555,
+      "main_score": 0.36403160771554555,
+      "precision": 0.3422330226664711,
+      "recall": 0.43021978021978025
+    },
+    "evaluation_time": 3.42,
+    "kat_Geor-eng_Latn": {
+      "accuracy": 0.42747252747252745,
+      "f1": 0.3599275175267992,
+      "main_score": 0.3599275175267992,
+      "precision": 0.3381265226403312,
+      "recall": 0.42747252747252745
+    }
+  }
+}

@@ -10,6 +10,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [AILAStatutes](https://zenodo.org/records/4063986) | ['eng'] | Retrieval | p2p | [Legal] |  |  |
 | [AJGT](https://link.springer.com/chapter/10.1007/978-3-319-60042-0_66/) (Alomari et al., 2017) | ['ara'] | Classification | s2s | [Social] | {'train': 1800} | {'train': 46.81} |
 | [ATEC](https://aclanthology.org/2021.emnlp-main.357) | ['cmn'] | STS | s2s |  |  |  |
+| [AfriSentiLangClassification](https://huggingface.co/datasets/HausaNLP/afrisenti-lid-data/) | ['amh', 'arq', 'ary', 'hau', 'ibo', 'kin', 'pcm', 'por', 'swa', 'tso', 'twi', 'yor'] | Classification | s2s | [Social] | {'test': 5754} | {'test': 77.84} |
 | [AllegroReviews](https://aclanthology.org/2020.acl-main.111.pdf) | ['pol'] | Classification | s2s |  | {'test': 1006} | {'test': 477.2} |
 | [AlloProfClusteringP2P](https://huggingface.co/datasets/lyon-nlp/alloprof) | ['fra'] | Clustering | p2p |  |  |  |
 | [AlloProfClusteringS2S](https://huggingface.co/datasets/lyon-nlp/alloprof) | ['fra'] | Clustering | s2s |  |  |  |
@@ -64,10 +65,35 @@ The following tables gives you an overview of the tasks in MTEB.
 | [CUADAffiliateLicenseLicensorLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 88} | {'test': 633.4} |
 | [CUADAntiAssignmentLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 1172} | {'test': 340.81} |
 | [CUADAuditRightsLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 1216} | {'test': 337.14} |
+| [CUADCapOnLiabilityLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 1246} | {'test': 375.74} |
+| [CUADChangeOfControlLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 416} | {'test': 391.96} |
+| [CUADCompetitiveRestrictionExceptionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 220} | {'test': 433.04} |
+| [CUADCovenantNotToSueLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 308} | {'test': 402.97} |
+| [CUADEffectiveDateLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 236} | {'test': 277.62} |
+| [CUADExclusivityLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 762} | {'test': 369.17} |
+| [CUADExpirationDateLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 876} | {'test': 309.27} |
+| [CUADGoverningLawLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 876} | {'test': 289.87} |
+| [CUADIPOwnershipAssignmentLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 576} | {'test': 414.0} |
+| [CUADInsuranceLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 1030} | {'test': 365.54} |
+| [CUADIrrevocableOrPerpetualLicenseLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 280} | {'test': 473.4} |
+| [CUADJointIPOwnershipLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 192} | {'test': 374.17} |
+| [CUADLicenseGrantLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 1396} | {'test': 409.89} |
+| [CUADLiquidatedDamagesLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 220} | {'test': 351.76} |
+| [CUADMinimumCommitmentLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 772} | {'test': 364.16} |
+| [CUADMostFavoredNationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 64} | {'test': 418.75} |
+| [CUADNoSolicitOfCustomersLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 84} | {'test': 392.89} |
+| [CUADNoSolicitOfEmployeesLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 142} | {'test': 417.94} |
+| [CUADNonCompeteLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 442} | {'test': 383.2} |
+| [CUADNonDisparagementLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 100} | {'test': 403.08} |
+| [CUADNonTransferableLicenseLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 542} | {'test': 399.16} |
+| [CUADNoticePeriodToTerminateRenewalLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 222} | {'test': 354.85} |
+| [CUADPostTerminationServicesLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 808} | {'test': 422.53} |
+| [CUADPriceRestrictionsLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 46} | {'test': 324.71} |
 | [CanadaTaxCourtOutcomesLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 244} | {'test': 622.6} |
 | [ClimateFEVER](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) | ['eng'] | Retrieval | s2p |  |  |  |
 | [CmedqaRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) | ['cmn'] | Retrieval | s2p |  |  |  |
 | [Cmnli](https://huggingface.co/datasets/clue/viewer/cmnli) | ['cmn'] | PairClassification | s2s |  |  |  |
+| [CodeEditSearchRetrieval](https://huggingface.co/datasets/cassanof/CodeEditSearch/viewer) (Niklas Muennighoff, 2023) | ['c', 'c++', 'go', 'java', 'javascript', 'php', 'python', 'ruby', 'rust', 'scala', 'shell', 'swift', 'typescript'] | Retrieval | p2p | [Programming] | {'train': 13000} | {'train': 553.5} |
 | [CodeSearchNetRetrieval](https://huggingface.co/datasets/code_search_net/viewer) (Husain et al., 2019) | ['go', 'java', 'javascript', 'php', 'python', 'ruby'] | Retrieval | p2p | [Programming] | {'test': 1000} | {'test': 1196.4609} |
 | [ContractNLIConfidentialityOfAgreementLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 82} | {'test': 473.17} |
 | [ContractNLIExplicitIdentificationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 109} | {'test': 506.12} |
@@ -105,15 +131,20 @@ The following tables gives you an overview of the tasks in MTEB.
 | [FEVER](https://fever.ai/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [FQuADRetrieval](https://huggingface.co/datasets/manu/fquad2_test) | ['fra'] | Retrieval | s2p | [Encyclopaedic] | {'test': 400, 'validation': 100} | {'test': 937.0, 'validation': 930.0} |
 | [FalseFriendsGermanEnglish](https://drive.google.com/file/d/1jgq0nBnV-UiYNxbKNrrr2gxDEHm-DMKH/view?usp=share_link) | ['deu'] | PairClassification | s2s |  | {'test': 1524} | {'test': 40.3} |
+| [FaroeseSTS](https://aclanthology.org/2023.nodalida-1.74.pdf) | ['fao'] | STS | s2s | [News, Web] | {'train': 729} | {'train': 43.6} |
 | [FiQA-PL](https://sites.google.com/view/fiqa/) | ['pol'] | Retrieval | s2p |  |  |  |
 | [FiQA2018](https://sites.google.com/view/fiqa/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [FilipinoHateSpeechClassification](https://pcj.csp.org.ph/index.php/pcj/issue/download/29/PCJ%20V14%20N1%20pp1-14%202019) (Neil Vicente Cabasag et al., 2019) | ['fil'] | Classification | s2s | [Social] | {'validation': 2048, 'test': 2048} | {'validation': 88.1, 'test': 87.4} |
+| [FilipinoShopeeReviewsClassification](https://uijrt.com/articles/v4/i8/UIJRTV4I80009.pdf) | ['fil'] | Classification | s2s | [Social] | {'validation': 2250, 'test': 2250} | {'validation': 143.8, 'test': 145.1} |
 | [FinParaSTS](https://huggingface.co/datasets/TurkuNLP/turku_paraphrase_corpus) | ['fin'] | STS | s2s | [News, Subtitles] | {'test': 1000, 'validation': 1000} | {'test': 59.0, 'validation': 58.8} |
 | [FinToxicityClassification](https://aclanthology.org/2023.nodalida-1.68) | ['fin'] | Classification | s2s | [News] | {'train': 2048, 'test': 2048} | {'train': 432.63, 'test': 401.03} |
 | [FinancialPhrasebankClassification](https://arxiv.org/abs/1307.5336) (P. Malo, 2014) | ['eng'] | Classification | s2s | [News] | {'train': 4840} | {'train': 121.96} |
 | [FloresBitextMining](https://huggingface.co/datasets/facebook/flores) | ['ace', 'acm', 'acq', 'aeb', 'afr', 'ajp', 'aka', 'als', 'amh', 'apc', 'arb', 'ars', 'ary', 'arz', 'asm', 'ast', 'awa', 'ayr', 'azb', 'azj', 'bak', 'bam', 'ban', 'bel', 'bem', 'ben', 'bho', 'bjn', 'bod', 'bos', 'bug', 'bul', 'cat', 'ceb', 'ces', 'cjk', 'ckb', 'crh', 'cym', 'dan', 'deu', 'dik', 'dyu', 'dzo', 'ell', 'eng', 'epo', 'est', 'eus', 'ewe', 'fao', 'fij', 'fin', 'fon', 'fra', 'fur', 'fuv', 'gaz', 'gla', 'gle', 'glg', 'grn', 'guj', 'hat', 'hau', 'heb', 'hin', 'hne', 'hrv', 'hun', 'hye', 'ibo', 'ilo', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kab', 'kac', 'kam', 'kan', 'kas', 'kat', 'kaz', 'kbp', 'kea', 'khk', 'khm', 'kik', 'kin', 'kir', 'kmb', 'kmr', 'knc', 'kon', 'kor', 'lao', 'lij', 'lim', 'lin', 'lit', 'lmo', 'ltg', 'ltz', 'lua', 'lug', 'luo', 'lus', 'lvs', 'mag', 'mai', 'mal', 'mar', 'min', 'mkd', 'mlt', 'mni', 'mos', 'mri', 'mya', 'nld', 'nno', 'nob', 'npi', 'nso', 'nus', 'nya', 'oci', 'ory', 'pag', 'pan', 'pap', 'pbt', 'pes', 'plt', 'pol', 'por', 'prs', 'quy', 'ron', 'run', 'rus', 'sag', 'san', 'sat', 'scn', 'shn', 'sin', 'slk', 'slv', 'smo', 'sna', 'snd', 'som', 'sot', 'spa', 'srd', 'srp', 'ssw', 'sun', 'swe', 'swh', 'szl', 'tam', 'taq', 'tat', 'tel', 'tgk', 'tgl', 'tha', 'tir', 'tpi', 'tsn', 'tso', 'tuk', 'tum', 'tur', 'twi', 'tzm', 'uig', 'ukr', 'umb', 'urd', 'uzn', 'vec', 'vie', 'war', 'wol', 'xho', 'ydd', 'yor', 'yue', 'zho', 'zsm', 'zul'] | BitextMining | s2s |  | {'dev': 997, 'devtest': 1012} |  |
 | [FloresClusteringS2S](https://huggingface.co/datasets/facebook/flores) | ['spa'] | Clustering | s2s |  |  |  |
+| [FrenkEnClassification](https://arxiv.org/abs/1906.02045) (Nikola Ljubešić, 2019) | ['eng'] | Classification | s2s | [Social] | {'test': 2300} | {'test': 188.75} |
+| [FrenkHrClassification](https://arxiv.org/abs/1906.02045) (Nikola Ljubešić, 2019) | ['hrv'] | Classification | s2s | [Social] | {'test': 2120} | {'test': 89.86} |
 | [FrenkSlClassification](https://arxiv.org/pdf/1906.02045) (Nikola Ljubešić, 2019) | ['slv'] | Classification | s2s | [Social] | {'test': 2177} | {'test': 136.61} |
+| [GeorgianFAQRetrieval](https://huggingface.co/datasets/jupyterjazz/georgian-faq) | ['kat'] | Retrieval | s2p | [Web] | {'test': 2566} | {'test': 572.0} |
 | [GerDaLIR](https://github.com/lavis-nlp/GerDaLIR) | ['deu'] | Retrieval | s2p |  |  |  |
 | [GerDaLIRSmall](https://github.com/lavis-nlp/GerDaLIR) | ['deu'] | Retrieval | p2p | [Legal] |  |  |
 | [GermanDPR](https://huggingface.co/datasets/deepset/germandpr) | ['deu'] | Retrieval | s2p |  |  |  |
@@ -126,6 +157,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [HALClusteringS2S](https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s) | ['fra'] | Clustering | s2s |  |  |  |
 | [HagridRetrieval](https://github.com/project-miracl/hagrid) | ['eng'] | Retrieval | s2p |  |  |  |
 | [HateSpeechPortugueseClassification](https://aclanthology.org/W19-3510) | ['por'] | Classification | s2s | [Social] | {'train': 2048} | {'train': 101.02} |
+| [HinDialectClassification](https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-4839) (Bafna et al., 2022) | ['anp', 'awa', 'ben', 'bgc', 'bhb', 'bhd', 'bho', 'bjj', 'bns', 'bra', 'gbm', 'guj', 'hne', 'kfg', 'kfy', 'mag', 'mar', 'mup', 'noe', 'pan', 'raj'] | Classification | s2s | [Social, Spoken] | {'test': 1152} | {'test': 583.82} |
 | [HindiDiscourseClassification](https://aclanthology.org/2020.lrec-1.149/) | ['hin'] | Classification | s2s | [Fiction, Social] | {'train': 2048} | {'train': 79.23828125} |
 | [HotelReviewSentimentClassification](https://link.springer.com/chapter/10.1007/978-3-319-67056-0_3) (Elnagar et al., 2018) | ['ara'] | Classification | s2s | [Reviews] | {'train': 2048} | {'train': 137.2} |
 | [HotpotQA](https://hotpotqa.github.io/) | ['eng'] | Retrieval | s2p |  |  |  |
@@ -141,12 +173,15 @@ The following tables gives you an overview of the tasks in MTEB.
 | [IndicReviewsClusteringP2P](https://arxiv.org/abs/2212.05409) (Sumanth Doddapaneni, 2022) | ['asm', 'ben', 'brx', 'guj', 'hin', 'kan', 'mal', 'mar', 'ory', 'pan', 'tam', 'tel', 'urd'] | Clustering | p2p | [Reviews] | {'test': 1000} | {'test': 137.6} |
 | [IndicSentimentClassification](https://arxiv.org/abs/2212.05409) (Sumanth Doddapaneni, 2022) | ['asm', 'ben', 'brx', 'guj', 'hin', 'kan', 'mal', 'mar', 'ory', 'pan', 'tam', 'tel', 'urd'] | Classification | s2s | [Reviews] | {'test': 1000} | {'test': 137.6} |
 | [IndonesianIdClickbaitClassification](http://www.sciencedirect.com/science/article/pii/S2352340920311252) | ['ind'] | Classification | s2s | [News] | {'train': 2048} | {'train': 64.28} |
+| [IndonesianMongabayConservationClassification](https://aclanthology.org/2023.sealp-1.4/) | ['ind'] | Classification | s2s | [Web] | {'validation': 984, 'test': 970} | {'validation': 1675.8, 'test': 1675.5} |
 | [IsiZuluNewsClassification](https://huggingface.co/datasets/dsfsi/za-isizulu-siswati-news) (Madodonga et al., 2023) | ['zul'] | Classification | s2s | [News] | {'train': 752} | {'train': 43.1} |
 | [Itacola](https://aclanthology.org/2021.findings-emnlp.250/) | ['ita'] | Classification | s2s | [Non-fiction, Spoken] | {'train': 7801, 'test': 975} | {'train': 35.95, 'test': 36.67} |
 | [JDReview](https://aclanthology.org/2023.nodalida-1.20/) | ['cmn'] | Classification | s2s |  |  |  |
 | [JSTS](https://aclanthology.org/2022.lrec-1.317.pdf#page=2.00) | ['jpn'] | STS | s2s | [Web] | {'valudtion': 1457} | {'valudtion': 46.34} |
 | [JaQuADRetrieval](https://arxiv.org/abs/2202.01764) (ByungHoon So, 2022) | ['jpn'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'validation': 2048} | {'validation': 400.75} |
+| [JavaneseIMDBClassification](https://github.com/w11wo/nlp-datasets#javanese-imdb) (Wongso et al., 2021) | ['jav'] | Classification | s2s | [Reviews] | {'test': 25000} | {'test': 481.83} |
 | [KLUE-STS](https://arxiv.org/abs/2105.09680) (Sungjoon Park, 2021) | ['kor'] | STS | s2s | [Reviews, News, Spoken] | {'validation': 519} | {'validation': 33.178227360308284} |
+| [KLUE-TC](https://arxiv.org/abs/2105.09680) (Sungjoon Park, 2021) | ['kor'] | Classification | s2s | [News] | {'validation': 2048} | {'validation': 27.079609091907326} |
 | [KannadaNewsClassification](https://github.com/goru001/nlp-for-kannada) | ['kan'] | Classification | s2s | [News] | {'train': 6460} | {'train': 65.88} |
 | Ko-StrategyQA | ['kor'] | Retrieval | s2p |  |  |  |
 | Ko-miracl | ['kor'] | Retrieval | s2p |  |  |  |
@@ -154,8 +189,8 @@ The following tables gives you an overview of the tasks in MTEB.
 | [KurdishSentimentClassification](https://link.springer.com/article/10.1007/s10579-023-09716-6) (Badawi et al., 2024) | ['kur'] | Classification | s2s | [Web] | {'train': 6000, 'test': 1987} | {'train': 59.38, 'test': 56.11} |
 | [LCQMC](https://aclanthology.org/2021.emnlp-main.357) | ['cmn'] | STS | s2s |  |  |  |
 | [LEMBNarrativeQARetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) | ['eng'] | Retrieval | s2p | [Fiction, Non-fiction] | {'test': 10804} | {'test': 326399.3} |
-| [LEMBNeedleRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) | ['eng'] | Retrieval | s2p | [Academic, Blog] | {'test_256': 150, 'test_512': 150, 'test_1024': 150, 'test_2048': 150, 'test_4096': 150, 'test_8192': 150, 'test_16384': 150, 'test_32768': 150} | {'test_256': 1074.4, 'test_512': 2067.0, 'test_1024': 4129.5, 'test_2048': 8513.4, 'test_4096': 17452.7, 'test_8192': 35261.6, 'test_16384': 72113.7, 'test_32768': 141829.0} |
-| [LEMBPasskeyRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) | ['eng'] | Retrieval | s2p | [Fiction] | {'test_256': 150, 'test_512': 150, 'test_1024': 150, 'test_2048': 150, 'test_4096': 150, 'test_8192': 150, 'test_16384': 150, 'test_32768': 150} | {'test_256': 914.9, 'test_512': 1823.0, 'test_1024': 3644.7, 'test_2048': 7280.0, 'test_4096': 14555.5, 'test_8192': 29108.1, 'test_16384': 58213.9, 'test_32768': 116417.9} |
+| [LEMBNeedleRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) (Zhu et al., 2024) | ['eng'] | Retrieval | s2p | [Academic, Blog] | {'test_256': 150, 'test_512': 150, 'test_1024': 150, 'test_2048': 150, 'test_4096': 150, 'test_8192': 150, 'test_16384': 150, 'test_32768': 150} | {'test_256': 1074.4, 'test_512': 2067.0, 'test_1024': 4129.5, 'test_2048': 8513.4, 'test_4096': 17452.7, 'test_8192': 35261.6, 'test_16384': 72113.7, 'test_32768': 141829.0} |
+| [LEMBPasskeyRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) (Zhu et al., 2024) | ['eng'] | Retrieval | s2p | [Fiction] | {'test_256': 150, 'test_512': 150, 'test_1024': 150, 'test_2048': 150, 'test_4096': 150, 'test_8192': 150, 'test_16384': 150, 'test_32768': 150} | {'test_256': 914.9, 'test_512': 1823.0, 'test_1024': 3644.7, 'test_2048': 7280.0, 'test_4096': 14555.5, 'test_8192': 29108.1, 'test_16384': 58213.9, 'test_32768': 116417.9} |
 | [LEMBQMSumRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) | ['eng'] | Retrieval | s2p | [Spoken] | {'test': 1724} | {'test': 56136.4} |
 | [LEMBSummScreenFDRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) | ['eng'] | Retrieval | s2p | [Spoken] | {'validation': 672} | {'validation': 31445.8} |
 | [LEMBWikimQARetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) (Ho et al., 2020) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'test': 500} | {'test': 37513.0} |
@@ -168,6 +203,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [LegalSummarization](https://github.com/lauramanor/legal_summarization) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
 | [MIRACLReranking](https://project-miracl.github.io/) | ['deu', 'spa'] | Reranking | s2s |  |  |  |
 | MIRACLRetrieval | ['deu', 'spa'] | Retrieval | s2p |  |  |  |
+| [MLQARetrieval](https://huggingface.co/datasets/mlqa) | ['ara', 'deu', 'eng', 'hin', 'spa', 'vie', 'zho'] | Retrieval | s2p | [Encyclopaedic] | {'test': 158083, 'validation': 15747} | {'test': 37352.28, 'validation': 36952.7} |
 | [MLSUMClusteringP2P](https://huggingface.co/datasets/mlsum) (Scialom et al., 2020) | ['deu', 'fra', 'rus', 'spa'] | Clustering | p2p | [News] | {'validation': 38561, 'test': 41206} | {'validation': 4613.0, 'test': 4810.0} |
 | [MLSUMClusteringS2S](https://huggingface.co/datasets/mlsum) (Scialom et al., 2020) | ['deu', 'fra', 'rus', 'spa'] | Clustering | s2s | [News] | {'validation': 38561, 'test': 41206} | {'validation': 4613.0, 'test': 4810.0} |
 | [MMarcoReranking](https://github.com/unicamp-dl/mMARCO) | ['cmn'] | Reranking | s2s |  |  |  |
@@ -199,7 +235,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [NFCorpus-PL](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/) | ['pol'] | Retrieval | s2p |  |  |  |
 | [NQ](https://ai.google.com/research/NaturalQuestions/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [NQ-PL](https://ai.google.com/research/NaturalQuestions/) | ['pol'] | Retrieval | s2p |  |  |  |
-| [NTREXBitextMining](https://huggingface.co/datasets/xianf/NTREX) | ['ara', 'deu', 'eng', 'fra', 'hin', 'ind', 'ita', 'jpn', 'kor', 'por', 'rus', 'spa', 'tha', 'tur', 'vie', 'zho'] | BitextMining | s2s | [News] | {'train': 1997} | {'train': 120.0} |
+| [NTREXBitextMining](https://huggingface.co/datasets/davidstap/NTREX) | ['afr', 'amh', 'arb', 'aze', 'bak', 'bel', 'bem', 'ben', 'bod', 'bos', 'bul', 'cat', 'ces', 'ckb', 'cym', 'dan', 'deu', 'div', 'dzo', 'ell', 'eng', 'eus', 'ewe', 'fao', 'fas', 'fij', 'fil', 'fin', 'fra', 'fuc', 'gle', 'glg', 'guj', 'hau', 'heb', 'hin', 'hmn', 'hrv', 'hun', 'hye', 'ibo', 'ind', 'isl', 'ita', 'jpn', 'kan', 'kat', 'kaz', 'khm', 'kin', 'kir', 'kmr', 'kor', 'lao', 'lav', 'lit', 'ltz', 'mal', 'mar', 'mey', 'mkd', 'mlg', 'mlt', 'mon', 'mri', 'msa', 'mya', 'nde', 'nep', 'nld', 'nno', 'nob', 'nso', 'nya', 'orm', 'pan', 'pol', 'por', 'prs', 'pus', 'ron', 'rus', 'shi', 'sin', 'slk', 'slv', 'smo', 'sna', 'snd', 'som', 'spa', 'sqi', 'srp', 'ssw', 'swa', 'swe', 'tah', 'tam', 'tat', 'tel', 'tgk', 'tha', 'tir', 'ton', 'tsn', 'tuk', 'tur', 'uig', 'ukr', 'urd', 'uzb', 'ven', 'vie', 'wol', 'xho', 'yor', 'yue', 'zho', 'zul'] | BitextMining | s2s | [News] | {'test': 3826252} | {'test': 120.0} |
 | [NarrativeQARetrieval](https://metatext.io/datasets/narrativeqa) | ['eng'] | Retrieval | s2p |  |  |  |
 | [NepaliNewsClassification](https://github.com/goru001/nlp-for-nepali) | ['nep'] | Classification | s2s | [News] | {'train': 5975, 'test': 1495} | {'train': 196.61, 'test': 196.017} |
 | [NeuCLIR2022Retrieval](https://neuclir.github.io/) (Lawrie et al., 2023) | ['fas', 'rus', 'zho'] | Retrieval | s2p | [News] | {'fas': 2232130, 'zho': 3179323, 'rus': 4627657} | {'fas': 3500.5143969099317, 'zho': 2543.1140667919617, 'rus': 3214.755239654659} |
@@ -222,6 +258,8 @@ The following tables gives you an overview of the tasks in MTEB.
 | [PatentClassification](https://aclanthology.org/P19-1212.pdf) | ['eng'] | Classification | s2s | [Legal] | {'test': 5000} | {'test': 18620.44} |
 | [PawsX](https://arxiv.org/abs/1908.11828) | ['cmn', 'deu', 'eng', 'fra', 'jpn', 'kor', 'spa'] | PairClassification | s2s |  |  |  |
 | [PersianFoodSentimentClassification](https://hooshvare.github.io/docs/datasets/sa) (Mehrdad Farahani et al., 2020) | ['fas'] | Classification | s2s | [Reviews] | {'validation': 2048, 'test': 2048} | {'validation': 90.37, 'test': 90.58} |
+| [PlscClusteringP2P](https://huggingface.co/datasets/rafalposwiata/plsc) | ['pol'] | Clustering | s2s | [Academic] | {'test': 17537} | {'test': 1023.21} |
+| [PlscClusteringS2S](https://huggingface.co/datasets/rafalposwiata/plsc) | ['pol'] | Clustering | s2s | [Academic] | {'test': 17534} | {'test': 84.34} |
 | [PolEmo2.0-IN](https://aclanthology.org/K19-1092.pdf) | ['pol'] | Classification | s2s |  |  |  |
 | [PolEmo2.0-OUT](https://aclanthology.org/K19-1092.pdf) | ['pol'] | Classification | s2s |  | {'test': 722} | {'test': 756.2} |
 | [PpcPC](https://arxiv.org/pdf/2207.12759.pdf) | ['pol'] | PairClassification | s2s |  |  |  |
@@ -297,6 +335,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [TV2Nordretrieval](https://huggingface.co/datasets/alexandrainst/nordjylland-news-summarization) | ['dan'] | Retrieval | p2p | [News, Non-fiction] | {'test': 4096} | {'test': 784.11} |
 | [TamilNewsClassification](https://github.com/vanangamudi/tamil-news-classification) | ['tam'] | Classification | s2s | [News] | {'train': 14521, 'test': 3631} | {'train': 56.5, 'test': 56.52} |
 | [Tatoeba](https://github.com/facebookresearch/LASER/tree/main/data/tatoeba/v1) | ['afr', 'amh', 'ang', 'ara', 'arq', 'arz', 'ast', 'awa', 'aze', 'bel', 'ben', 'ber', 'bos', 'bre', 'bul', 'cat', 'cbk', 'ceb', 'ces', 'cha', 'cmn', 'cor', 'csb', 'cym', 'dan', 'deu', 'dsb', 'dtp', 'ell', 'eng', 'epo', 'est', 'eus', 'fao', 'fin', 'fra', 'fry', 'gla', 'gle', 'glg', 'gsw', 'heb', 'hin', 'hrv', 'hsb', 'hun', 'hye', 'ido', 'ile', 'ina', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kab', 'kat', 'kaz', 'khm', 'kor', 'kur', 'kzj', 'lat', 'lfn', 'lit', 'lvs', 'mal', 'mar', 'max', 'mhr', 'mkd', 'mon', 'nds', 'nld', 'nno', 'nob', 'nov', 'oci', 'orv', 'pam', 'pes', 'pms', 'pol', 'por', 'ron', 'rus', 'slk', 'slv', 'spa', 'sqi', 'srp', 'swe', 'swg', 'swh', 'tam', 'tat', 'tel', 'tgl', 'tha', 'tuk', 'tur', 'tzl', 'uig', 'ukr', 'urd', 'uzb', 'vie', 'war', 'wuu', 'xho', 'yid', 'yue', 'zsm'] | BitextMining | s2s |  | {'test': 2000} | {'test': 39.4} |
+| [TbilisiCityHallBitextMining](https://huggingface.co/datasets/jupyterjazz/tbilisi-city-hall-titles) | ['eng', 'kat'] | BitextMining | s2s | [News] | {'test': 1820} | {'test': 78.0} |
 | [TeluguAndhraJyotiNewsClassification](https://github.com/AnushaMotamarri/Telugu-Newspaper-Article-Dataset) | ['tel'] | Classification | s2s | [News] | {'test': 4329} | {'test': 1428.28} |
 | [TenKGnadClusteringP2P.v2](https://tblock.github.io/10kGNAD/) | ['deu'] | Clustering | p2p | [News, Non-fiction] | {'test': 10275} | {'test': 2641.03} |
 | [TenKGnadClusteringS2S.v2](https://tblock.github.io/10kGNAD/) | ['deu'] | Clustering | s2s | [News, Non-fiction] | {'test': 10275} | {'test': 50.96} |
@@ -331,6 +370,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [XNLI](https://aclanthology.org/D18-1269/) (Conneau et al., 2018) | ['ara', 'bul', 'deu', 'ell', 'eng', 'fra', 'hin', 'rus', 'spa', 'swa', 'tha', 'tur', 'vie', 'zho'] | PairClassification | s2s | [Non-fiction, Fiction, Government] | {'validation': 2163, 'test': 2460} | {'validation': 106.5, 'test': 106.5} |
 | [XPQARetrieval](https://arxiv.org/abs/2305.09249) | ['ara', 'cmn', 'deu', 'fra', 'hin', 'ita', 'jpn', 'kor', 'pol', 'por', 'spa', 'tam'] | Retrieval | s2p |  |  |  |
 | [XQuADRetrieval](https://huggingface.co/datasets/xquad) (Mikel Artetxe, 2019) | ['arb', 'deu', 'ell', 'eng', 'hin', 'ron', 'rus', 'spa', 'tha', 'tur', 'vie', 'zho'] | Retrieval | s2p | [Web] | {'test': 1190} | {'test': 788.7} |
+| [YahooAnswersTopicsClassification](https://huggingface.co/datasets/yahoo_answers_topics) | ['eng'] | Classification | s2s | [Web] | {'test': 60000} | {'test': 346.35} |
 | [YelpReviewFullClassification](https://arxiv.org/abs/1509.01626) (Zhang et al., 2015) | ['eng'] | Classification | s2s | [Reviews] | {'test': 50000} |  |
 | [YueOpenriceReviewClassification](https://github.com/Christainx/Dataset_Cantonese_Openrice) (Xiang et al., 2019) | ['yue'] | Classification | s2s | [Reviews] | {'test': 6161} | {'test': 173.0} |
 <!-- TABLE END -->

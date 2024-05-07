@@ -1,0 +1,22 @@
+{
+  "dataset_revision": "cf24d44e517efa534f048e5fc5981f399ed25bee",
+  "mteb_dataset_name": "CataloniaTweetClassification",
+  "mteb_version": "1.6.37",
+  "test": {
+    "catalan": {
+      "accuracy": 0.43600000000000005,
+      "accuracy_stderr": 0.042004761634843256,
+      "f1": 0.4299942765198441,
+      "f1_stderr": 0.04020665730650639,
+      "main_score": 0.43600000000000005
+    },
+    "evaluation_time": 51.82,
+    "spanish": {
+      "accuracy": 0.4932,
+      "accuracy_stderr": 0.021022844717116667,
+      "f1": 0.5019986248830843,
+      "f1_stderr": 0.025770061238838564,
+      "main_score": 0.4932
+    }
+  }
+}
