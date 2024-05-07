@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "CUADWarrantyDurationLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.815625,
+    "accuracy_stderr": 0.0,
+    "ap": 0.753255988023952,
+    "ap_stderr": 0.0,
+    "evaluation_time": 47.81,
+    "f1": 0.8155367314437572,
+    "f1_stderr": 0.0,
+    "main_score": 0.815625
+  }
+}
