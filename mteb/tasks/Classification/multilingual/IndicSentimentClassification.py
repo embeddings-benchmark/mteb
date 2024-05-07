@@ -27,7 +27,7 @@ class IndicSentimentClassification(MultilingualTask, AbsTaskClassification):
         name="IndicSentimentClassification",
         dataset={
             "path": "mteb/IndicSentiment",
-            "revision": "d522bb117c32f5e0207344f69f7075fc9941168b",
+            "revision": "3389cc78b2ffcbd33639e91dfc57e6b6b6496241",
         },
         description="A new, multilingual, and n-way parallel dataset for sentiment analysis in 13 Indic languages.",
         reference="https://arxiv.org/abs/2212.05409",
