@@ -1,5 +1,5 @@
 {
-  "dataset_revision": "e14f2f4f2c9efba0d4478c03daf11a180bf860f6",
+  "dataset_revision": "29afa2569dcedaaa2fe6a3dcfebab33d28b82e8c",
   "dev": {
     "de": {
       "cos_sim": {
@@ -43,7 +43,7 @@
         "spearman": 0.8282685199955223
       }
     },
-    "evaluation_time": 9.66,
+    "evaluation_time": 9.02,
     "fr": {
       "cos_sim": {
         "pearson": 0.832866146398441,
@@ -188,7 +188,7 @@
         "spearman": 0.7945116115971254
       }
     },
-    "evaluation_time": 7.79,
+    "evaluation_time": 8.36,
     "fr": {
       "cos_sim": {
         "pearson": 0.7910661581122347,

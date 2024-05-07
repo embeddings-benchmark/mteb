@@ -43,7 +43,7 @@ class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTas
         name="MultilingualSentimentClassification",
         dataset={
             "path": "mteb/multilingual-sentiment-classification",
-            "revision": "d95e536f1ad0cb2399abcb3348e6497add177f62",
+            "revision": "2b9b4d10fc589af67794141fe8cbd3739de1eb33",
         },
         description="""Sentiment classification dataset with binary
                        (positive vs negative sentiment) labels. Includes 30 languages and dialects.

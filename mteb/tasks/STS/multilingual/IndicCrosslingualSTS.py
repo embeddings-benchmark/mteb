@@ -35,7 +35,7 @@ class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
         name="IndicCrosslingualSTS",
         dataset={
             "path": "mteb/indic_sts",
-            "revision": "91b14b94dab7e75bd82ecfa8c3404c6a88fe3790",
+            "revision": "0ca7b87dda68ef4ebb2f50a20a62b9dbebcac3e4",
         },
         description="This is a Semantic Textual Similarity testset between English and 12 high-resource Indic languages.",
         reference="https://huggingface.co/datasets/jaygala24/indic_sts",

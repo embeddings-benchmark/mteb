@@ -22,7 +22,7 @@ class TweetSentimentClassification(MultilingualTask, AbsTaskClassification):
         name="TweetSentimentClassification",
         dataset={
             "path": "mteb/tweet_sentiment_multilingual",
-            "revision": "9136186884fac29b7cda6357bb35ddc685dccdb9",
+            "revision": "d522bb117c32f5e0207344f69f7075fc9941168b",
         },
         description="A multilingual Sentiment Analysis dataset consisting of tweets in 8 different languages.",
         reference="https://aclanthology.org/2022.lrec-1.27",

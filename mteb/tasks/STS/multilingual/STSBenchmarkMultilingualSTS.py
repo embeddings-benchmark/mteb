@@ -26,7 +26,7 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
         name="STSBenchmarkMultilingualSTS",
         dataset={
             "path": "mteb/stsb_multi_mt",
-            "revision": "e14f2f4f2c9efba0d4478c03daf11a180bf860f6",
+            "revision": "29afa2569dcedaaa2fe6a3dcfebab33d28b82e8c",
         },
         description=(
             "Semantic Textual Similarity Benchmark (STSbenchmark) dataset,"

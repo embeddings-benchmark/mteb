@@ -1,5 +1,5 @@
 {
-  "dataset_revision": "1abfc9658e595d7ba2a506c15879296ea678eb1a",
+  "dataset_revision": "d522bb117c32f5e0207344f69f7075fc9941168b",
   "mteb_dataset_name": "IndicSentimentClassification",
   "mteb_version": "1.7.62",
   "test": {
@@ -30,7 +30,7 @@
       "f1_stderr": 0.03379838457486889,
       "main_score": 0.6477955911823647
     },
-    "evaluation_time": 98.98,
+    "evaluation_time": 14.42,
     "gu": {
       "accuracy": 0.8237474949899799,
       "accuracy_stderr": 0.0343131879880043,
