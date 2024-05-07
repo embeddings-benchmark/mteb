@@ -43,7 +43,7 @@ _HISTORIC_DATASETS = [
     "MTOPDomainClassification",
     "MTOPIntentClassification",
     "NordicLangClassification",
-    "MultiScalaClassification",
+    "ScalaClassification",
     "NoRecClassification",
     "NorwegianParliamentClassification",
     "PunjabiNewsClassification",
