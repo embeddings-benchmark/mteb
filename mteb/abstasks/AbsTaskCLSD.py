@@ -12,7 +12,9 @@ logger = logging.getLogger(__name__)
 
 
 class AbsTaskCLSD(AbsTask):
-    """Abstract class for Cross Lingual Semantic Discrimination Tasks. Initialised from starting code of AbsTaskRetrieval
+    """Abstract class for Cross Lingual Semantic Discrimination Tasks. Initialised from starting code of AbsTaskRetrieval.
+    Short Task pitch: Investigate the capabilities of multilingual embedding models to perform semantic search across languages.
+    Using an original target sentence (DE), we generate (and massively manually validated) adversarial distractors in the target language. Given the parallel sentence (FR), the models are evaluated in terms of their ability to discriminate the original sentence from the adversarial distractors.
 
     Child-classes must implement the following properties:
 
@@ -37,7 +39,7 @@ class AbsTaskCLSD(AbsTask):
         self.corpus: Distractors (Negative) and Parallel (Positive) samples of a search.
         self.queries: The source text to search with.
         self.relevant_docs: Denotes which are the relevant documents (The positive).
-        For an example implementation and layout of the huggingface dataset, please look at the CrossLingualSemanticDiscriminationWMT19.py
+        For an example implementation and load of the huggingface dataset, please look at the mteb/tasks/CLSD/WMT1921/CrossLingualSemanticDiscriminationWMT19.pyCrossLingualSemanticDiscriminationWMT19.py
         """
         raise NotImplementedError
 
