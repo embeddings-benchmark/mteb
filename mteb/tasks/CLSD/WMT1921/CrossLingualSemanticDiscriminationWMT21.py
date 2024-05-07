@@ -42,18 +42,18 @@ class CrossLingualSemanticDiscriminationWMT21(AbsTaskCLSD, CrosslingualTask):
         eval_splits=["test"],
         eval_langs=_EVAL_LANGS,
         main_score="accuracy",
-        date=("2020-01-01", "2023-12-31"),
+        date=("2020-01-01", "2023-12-12"),
         form=["written"],
         domains=["News"],
-        task_subtypes=None,
-        license="CC0",
+        task_subtypes=[],
+        license="CC BY-SA 4.0",
         socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
         text_creation="LM-generated and verified",
-        bibtex_citation=None,  # to update
-        n_samples={"test": 4732},
-        avg_character_length={"test": 160},
+        bibtex_citation="to_update",
+        n_samples={"test": 1786},
+        avg_character_length={"test": 159},
     )
 
     def __init__(self, **kwargs):
