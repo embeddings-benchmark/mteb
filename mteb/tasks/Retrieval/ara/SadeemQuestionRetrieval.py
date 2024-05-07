@@ -35,8 +35,8 @@ class SadeemQuestionRetrieval(AbsTaskRetrieval):
         text_creation="found",
         bibtex_citation="""
             @inproceedings{sadeem-2024-ar-retrieval-questions,
-            title = "{QMS}um: A New Benchmark for Arabic questions-based Articles Searching.",
-            author = "Abu Bakr Soliman | Saddem-ai"
+            title = "SadeemQuestionRetrieval: A New Benchmark for Arabic questions-based Articles Searching.",
+            author = "abubakr.soliman@sadeem.app"
             }
         """,
         n_samples={_EVAL_SPLIT: 22979},
