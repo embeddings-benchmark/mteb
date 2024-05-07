@@ -27,8 +27,8 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="XNLI",
         dataset={
-            "path": "xnli",
-            "revision": "b8dd5d7af51114dbda02c0e3f6133f332186418e",
+            "path": "mteb/xnli",
+            "revision": "09698e0180d87dc247ca447d3a1248b931ac0cdb",
         },
         description="",
         reference="https://aclanthology.org/D18-1269/",
