@@ -3,11 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import os
-from collections import defaultdict
 from time import time
-from typing import Dict, Tuple
-
-from datasets import Features, Value, load_dataset
 
 from ..evaluation.evaluators import RetrievalEvaluator
 from .AbsTask import AbsTask
