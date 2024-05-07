@@ -2,7 +2,7 @@ from typing import Dict, List
 
 import datasets
 
-from mteb.abstasks import AbsTaskCLSD, CrosslingualTask, TaskMetadata
+from mteb.abstasks import AbsTaskRetrieval, CrosslingualTask, TaskMetadata
 
 _LANGUAGES = {
     "wmt19.de.fr": ["deu-Latn", "fra-Latn"],
@@ -28,7 +28,7 @@ def extend_lang_pairs() -> Dict[str, List[str]]:
 _EVAL_LANGS = extend_lang_pairs()
 
 
-class CrossLingualSemanticDiscriminationWMT19(AbsTaskCLSD, CrosslingualTask):
+class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval, CrosslingualTask):
     metadata = TaskMetadata(
         name="CrossLingualSemanticDiscriminationWMT19",
         dataset={
@@ -37,21 +37,21 @@ class CrossLingualSemanticDiscriminationWMT19(AbsTaskCLSD, CrosslingualTask):
         },
         description="Evaluate a multilingual embedding model based on its ability to discriminate against the original parallel pair against challenging distractors - spawning from WMT19 DE-FR test set",
         reference="https://huggingface.co/datasets/Andrianos/clsd_wmt19_21",
-        type="CLSD",
+        type="Retrieval",
         category="s2s",
         eval_splits=["test"],
         eval_langs=_EVAL_LANGS,
-        main_score="accuracy",
+        main_score="recall_at_1",
         date=("2018-01-01", "2023-12-12"),
         form=["written"],
         domains=["News"],
-        task_subtypes=[],
+        task_subtypes=["Cross-Lingual Semantic Discrimination"],
         license="CC BY-SA 4.0",
         socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
         text_creation="LM-generated and verified",
-        bibtex_citation="to_update",
+        bibtex_citation="preprint_coming",
         n_samples={"test": 2946},
         avg_character_length={"test": 161},
     )

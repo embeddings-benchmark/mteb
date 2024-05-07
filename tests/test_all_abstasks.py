@@ -9,7 +9,6 @@ import pytest
 
 from mteb import MTEB
 from mteb.abstasks import AbsTask
-from mteb.abstasks.AbsTaskCLSD import AbsTaskCLSD
 from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
@@ -27,7 +26,6 @@ def test_load_data(
     if (
         isinstance(task, AbsTaskRetrieval)
         or isinstance(task, AbsTaskInstructionRetrieval)
-        or isinstance(task, AbsTaskCLSD)
         or isinstance(task, MultiSubsetLoader)
     ):
         pytest.skip()

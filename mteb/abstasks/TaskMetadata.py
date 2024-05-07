@@ -36,6 +36,7 @@ TASK_SUBTYPE = Literal[
     "Topic classification",
     "Code retrieval",
     "False Friends",
+    "Cross-Lingual Semantic Discrimination",
 ]
 
 TASK_DOMAIN = Literal[
@@ -86,7 +87,6 @@ TASK_TYPE = Literal[
     "STS",
     "Summarization",
     "InstructionRetrieval",
-    "CLSD",
 ]
 
 TASK_CATEGORY = Literal[
