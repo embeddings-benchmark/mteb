@@ -8,6 +8,7 @@ from .ara.TweetSarcasmClassification import *
 from .ben.BengaliHateSpeechClassification import *
 from .ben.BengaliSentimentAnalysis import *
 from .bul.BulgarianStoreReviewSentimentClassfication import *
+from .ces.CzechProductReviewSentimentClassification import *
 from .ces.CzechSubjectivityClassification import *
 from .dan.AngryTweetsClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
