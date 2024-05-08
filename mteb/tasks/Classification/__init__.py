@@ -72,6 +72,7 @@ from .multilingual.NordicLangClassification import *
 from .multilingual.ScalaClassification import *
 from .multilingual.SIB200Classification import *
 from .multilingual.SouthAfricanLangClassification import *
+from .multilingual.SwissJudgementClassification import *
 from .multilingual.TweetSentimentClassification import *
 from .nep.NepaliNewsClassification import *
 from .nld.DutchBookReviewSentimentClassification import *
