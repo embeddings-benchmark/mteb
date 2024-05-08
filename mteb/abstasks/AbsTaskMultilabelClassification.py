@@ -123,14 +123,15 @@ class AbsTaskMultilabelClassification(AbsTask):
         unique_train_embeddings = dict(
             zip(unique_train_indices, model.encode(unique_train_sentences))
         )
-        X_test = model.encode(eval_split["text"])
+        test_text = eval_split["text"]
         binarizer = MultiLabelBinarizer()
         y_test = binarizer.fit_transform(eval_split["label"])
         # Stratified subsampling of test set to 2000 examples.
-        if X_test.shape[0] > 2000:
-            X_test, _, y_test, _ = train_test_split(
-                X_test, y_test, stratify=y_test, train_size=2000
+        if len(test_text) > 2000:
+            test_text, _, y_test, _ = train_test_split(
+                test_text, y_test, stratify=y_test, train_size=2000
             )
+        X_test = model.encode(test_text)
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
                 "=" * 10
