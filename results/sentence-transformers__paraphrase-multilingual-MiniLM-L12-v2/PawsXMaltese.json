@@ -1,0 +1,49 @@
+{
+  "dataset_revision": "632ced95db1e042e3487c9f8ea3ef4187f666299",
+  "mteb_dataset_name": "PawsXMaltese",
+  "mteb_version": "1.7.52",
+  "test": {
+    "cos_sim": {
+      "accuracy": 0.5725,
+      "accuracy_threshold": 0.9790642261505127,
+      "ap": 0.5310433334089725,
+      "f1": 0.6254746289264757,
+      "f1_threshold": 0.4101191759109497,
+      "precision": 0.4552763819095477,
+      "recall": 0.9988974641675854
+    },
+    "dot": {
+      "accuracy": 0.5465,
+      "accuracy_threshold": 19.625829696655273,
+      "ap": 0.4626698138458746,
+      "f1": 0.6244406196213426,
+      "f1_threshold": 1.586690068244934,
+      "precision": 0.45395395395395394,
+      "recall": 1.0
+    },
+    "euclidean": {
+      "accuracy": 0.569,
+      "accuracy_threshold": 0.6147043108940125,
+      "ap": 0.5307153217193683,
+      "f1": 0.62538913870633,
+      "f1_threshold": 3.5841565132141113,
+      "precision": 0.45564516129032256,
+      "recall": 0.9966923925027563
+    },
+    "evaluation_time": 16.01,
+    "manhattan": {
+      "accuracy": 0.57,
+      "accuracy_threshold": 9.666176795959473,
+      "ap": 0.5312739698612479,
+      "f1": 0.625215889464594,
+      "f1_threshold": 60.10087585449219,
+      "precision": 0.4552313883299799,
+      "recall": 0.9977949283351709
+    },
+    "max": {
+      "accuracy": 0.5725,
+      "ap": 0.5312739698612479,
+      "f1": 0.6254746289264757
+    }
+  }
+}
