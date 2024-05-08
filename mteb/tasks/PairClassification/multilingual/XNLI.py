@@ -131,7 +131,7 @@ class XNLI2(XNLI):
         socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="created",
+        text_creation="machine-translated and verified",
         bibtex_citation="""@inproceedings{upadhyay2023xnli,
             title={XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding (XLU)},
             author={Upadhyay, Ankit Kumar and Upadhya, Harsit Kumar},

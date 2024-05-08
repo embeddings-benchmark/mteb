@@ -12,7 +12,7 @@ class XNLITurkishV2(AbsTaskPairClassification):
             "path": "Harsit/xnli2.0_turkish",
             "revision": "dde1ce992ca9090e9b36466c98d017ffad2b294c",
         },
-        description="",
+        description="This is the Turkish subset of 'XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding",
         reference="https://arxiv.org/abs/2301.06527",
         category="s2s",
         type="PairClassification",

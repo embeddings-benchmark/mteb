@@ -12,7 +12,7 @@ class XNLITRussianV2(AbsTaskPairClassification):
             "path": "Harsit/xnli2.0_russian",
             "revision": "a8e505ba944257e3631fcfff2c4ddbb1ba903c0c",
         },
-        description="",
+        description="This is the Russian subset of 'XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding",
         reference="https://arxiv.org/abs/2301.06527",
         category="s2s",
         type="PairClassification",

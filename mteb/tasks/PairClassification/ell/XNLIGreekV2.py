@@ -12,7 +12,7 @@ class XNLIGreekV2(AbsTaskPairClassification):
             "path": "Harsit/xnli2.0_greek",
             "revision": "9d832735c3f3cfb29b4e200fe5d7e886531cf858",
         },
-        description="",
+        description="This is the Greek subset of 'XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding"
         reference="https://arxiv.org/abs/2301.06527",
         category="s2s",
         type="PairClassification",
