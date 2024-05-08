@@ -257,6 +257,11 @@ class RerankingEvaluator(Evaluator):
 
 
 class MIRACLRerankingEvaluator(RerankingEvaluator):
+    """This class evaluates a SentenceTransformer model for the task of re-ranking.
+    MIRACLRerankingEvaluator differs from RerankingEvaluator in two ways:
+    1. it uses the pytrec_eval via RetrievalEvaluator instead of the metrics provided by sklearn;
+    2. it reranks the top-k `candidates` from previous-stage retrieval which may not include all ground-truth `positive` documents
+    """
     def __init__(
         self,
         samples: list[dict],
@@ -269,6 +274,10 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
         **kwargs,
     ):
+        """
+        Args:
+            k_values: ranking cutoff threshold when applicable
+        """
         super().__init__(
             samples,
             mrr_at_k,
@@ -400,10 +409,10 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
 
             if isinstance(query, str):
                 # .encoding interface requires List[str] as input
-            query_emb = np.asarray(
-                encode_queries_func([query], batch_size=self.batch_size)
-            )
-            docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
+                query_emb = np.asarray(
+                    encode_queries_func([query], batch_size=self.batch_size)
+                )
+                docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
 
             fake_qid = str(i)
             results[fake_qid] = self.rerank(query_emb, docs_emb)
