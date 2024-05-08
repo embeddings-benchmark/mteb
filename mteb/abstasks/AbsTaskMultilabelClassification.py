@@ -55,11 +55,9 @@ class AbsTaskMultilabelClassification(AbsTask):
         self.batch_size = batch_size
 
         # Bootstrap parameters
-        self.n_experiments = n_experiments or getattr(
-            self.metadata, "n_experiments", 10
-        )
+        self.n_experiments = n_experiments or getattr(self, "n_experiments", 10)
         self.samples_per_label = samples_per_label or getattr(
-            self.metadata, "samples_per_label", 8
+            self, "samples_per_label", 8
         )
         # kNN parameters
         self.k = k
