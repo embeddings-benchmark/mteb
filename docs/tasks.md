@@ -123,6 +123,8 @@ The following tables gives you an overview of the tasks in MTEB.
 | [Core17InstructionRetrieval](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | InstructionRetrieval | s2p | [News] | {'eng': 39838} | {'eng': 2768.749235474006} |
 | [CorporateLobbyingLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 490} | {'test': 6039.85} |
 | [CovidRetrieval](https://arxiv.org/abs/2203.03367) | ['cmn'] | Retrieval | s2p |  |  |  |
+| [CrossLingualSemanticDiscriminationWMT19](https://huggingface.co/datasets/Andrianos/clsd_wmt19_21) | ['deu', 'fra'] | Retrieval | s2s | [News] | {'test': 2946} | {'test': 161.0} |
+| [CrossLingualSemanticDiscriminationWMT21](https://huggingface.co/datasets/Andrianos/clsd_wmt19_21) | ['deu', 'fra'] | Retrieval | s2s | [News] | {'test': 1786} | {'test': 159.0} |
 | [CzechSubjectivityClassification](https://arxiv.org/abs/2009.08712) | ['ces'] | Classification | s2s | [Reviews] | {'validation': 500, 'test': 2000} | {'validation': 108.2, 'test': 108.3} |
 | [DBPedia](https://github.com/iai-group/DBpedia-Entity/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [DBPedia-PL](https://github.com/iai-group/DBpedia-Entity/) | ['pol'] | Retrieval | s2p |  |  |  |
