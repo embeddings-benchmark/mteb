@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "fafcfc4fee815f7017848e54b26c47ece8ff1626",
+  "mteb_dataset_name": "ItaCaseholdClassification",
+  "mteb_version": "1.7.58",
+  "test": {
+    "accuracy": 0.6597285067873304,
+    "accuracy_stderr": 0.01830203476575264,
+    "evaluation_time": 1123.01,
+    "f1": 0.24080177384190554,
+    "f1_stderr": 0.010213734325948203,
+    "main_score": 0.6597285067873304
+  }
+}
