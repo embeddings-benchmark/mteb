@@ -11,6 +11,7 @@ from sklearn.metrics import average_precision_score
 from .Evaluator import Evaluator
 from .RetrievalEvaluator import RetrievalEvaluator
 from .utils import cos_sim
+from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 
 logger = logging.getLogger(__name__)
 
@@ -78,10 +79,10 @@ class RerankingEvaluator(Evaluator):
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
         encode_queries_func = (
-            model.encode_queries if hasattr(model, "encode_queries") else model.encode
+            model.encode_queries if isinstance(model, EncoderWithQueryCorpusEncode) else model.encode
         )
         encode_corpus_func = (
-            model.encode_corpus if hasattr(model, "encode_corpus") else model.encode
+            model.encode_corpus if isinstance(model, EncoderWithQueryCorpusEncode) else model.encode
         )
 
         logger.info("Encoding queries...")
@@ -258,7 +259,7 @@ class RerankingEvaluator(Evaluator):
 class MIRACLRerankingEvaluator(RerankingEvaluator):
     def __init__(
         self,
-        samples,
+        samples: list[dict],
         mrr_at_k: int = 10,
         name: str = "",
         similarity_fct=cos_sim,
@@ -280,16 +281,16 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         )
         self.k_values = k_values
 
-    def rerank(self, query_emb, docs_emb):
+    def rerank(self, query_emb: torch.Tensor, docs_emb: torch.Tensor) -> dict[str, float]:
         """Rerank documents (docs_emb) given the query (query_emb)
 
         Args:
-            query_emb (`torch.Tensor` of shape `(num_queries, hidden_size)`): Query embedding
+            query_emb: Query embedding of shape `(num_queries, hidden_size)`)
                 if `num_queries` > 0: we take the closest document to any of the queries
-            docs_emb (`torch.Tensor` of shape `(num_pos+num_neg, hidden_size)`): Candidates documents embeddings
+            docs_emb: Candidates documents embeddings of shape `(num_pos+num_neg, hidden_size)`)
 
         Returns:
-            similarity_scores (`Dict[str, float]`):
+            similarity_scores:
         """
         if not query_emb.shape[0]:
             raise ValueError("Empty query embedding")
@@ -305,17 +306,17 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
             str(i): score.detach().numpy().item() for i, score in enumerate(pred_scores)
         }
 
-    def compute_metrics_batched(self, model):
+    def compute_metrics_batched(self, model: Encoder | EncoderWithQueryCorpusEncode):
         """Computes the metrices in a batched way, by batching all queries and
         all documents together
         """
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
         encode_queries_func = (
-            model.encode_queries if hasattr(model, "encode_queries") else model.encode
+            model.encode_queries if isinstance(model, EncoderWithQueryCorpusEncode) else model.encode
         )
         encode_corpus_func = (
-            model.encode_corpus if hasattr(model, "encode_corpus") else model.encode
+            model.encode_corpus if isinstance(model, EncoderWithQueryCorpusEncode) else model.encode
         )
 
         logger.info("Encoding queries...")
