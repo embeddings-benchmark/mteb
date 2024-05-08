@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .deu.FalseFriendsDeEnPC import *
+from .ell.XNLIGreekV2 import *
 from .eng.LegalBenchPC import *
 from .eng.SprintDuplicateQuestionsPC import *
 from .eng.TwitterSemEval2015PC import *
