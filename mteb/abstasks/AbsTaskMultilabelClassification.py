@@ -127,10 +127,13 @@ class AbsTaskMultilabelClassification(AbsTask):
         binarizer = MultiLabelBinarizer()
         y_test = binarizer.fit_transform(eval_split["label"])
         # Stratified subsampling of test set to 2000 examples.
-        if len(test_text) > 2000:
-            test_text, _, y_test, _ = train_test_split(
-                test_text, y_test, stratify=y_test, train_size=2000
-            )
+        try:
+            if len(test_text) > 2000:
+                test_text, _, y_test, _ = train_test_split(
+                    test_text, y_test, stratify=y_test, train_size=2000
+                )
+        except ValueError:
+            logger.warn("Couldn't subsample, continuing with the entire test set.")
         X_test = model.encode(test_text)
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
