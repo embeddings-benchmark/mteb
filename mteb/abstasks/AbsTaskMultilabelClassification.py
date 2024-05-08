@@ -6,6 +6,7 @@ from collections import defaultdict
 
 import numpy as np
 from sklearn.metrics import f1_score, label_ranking_average_precision_score
+from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
@@ -21,7 +22,7 @@ def evaluate_mlp(
     y_test: np.ndarray,
 ):
     scores = {}
-    classifier = MLPClassifier()
+    classifier = MLPClassifier((20,))
     classifier.fit(embeddings_train, y_train)
     y_pred = classifier.predict(embeddings_test)
     accuracy = classifier.score(embeddings_test, y_test)
@@ -128,7 +129,14 @@ class AbsTaskMultilabelClassification(AbsTask):
         unique_train_embeddings = dict(
             zip(unique_train_indices, model.encode(unique_train_sentences))
         )
-        test_embeddings = model.encode(eval_split["text"])
+        X_test = model.encode(eval_split["text"])
+        binarizer = MultiLabelBinarizer()
+        y_test = binarizer.fit_transform(eval_split["label"])
+        # Stratified subsampling of test set to 2000 examples.
+        if X_test.shape[0] > 2000:
+            X_test, _, y_test, _ = train_test_split(
+                X_test, y_test, stratify=y_test, train_size=2000
+            )
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
                 "=" * 10
@@ -137,13 +145,11 @@ class AbsTaskMultilabelClassification(AbsTask):
             )
             X_train = np.stack([unique_train_embeddings[idx] for idx in sample_indices])
             y_train = train_split.select(sample_indices)["label"]
-            binarizer = MultiLabelBinarizer()
-            y_train = binarizer.fit_transform(y_train)
-            y_test = binarizer.transform(eval_split["label"])
+            y_train = binarizer.transform(y_train)
             scores_exp = evaluate_mlp(
                 X_train,
                 y_train,
-                test_embeddings,
+                X_test,
                 y_test,
             )
             scores.append(scores_exp)
