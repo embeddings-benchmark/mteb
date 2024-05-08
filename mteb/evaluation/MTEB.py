@@ -159,6 +159,7 @@ class MTEB:
             for cls in cat_cls.__subclasses__()
             if cat_cls.__name__.startswith("AbsTask")
         ]
+        # self.tasks_cls.append(XNLI2()) # This is a temporary hack I used to run for the results.
 
         # If `task_list` is specified, select list of tasks
         if self._tasks is not None:

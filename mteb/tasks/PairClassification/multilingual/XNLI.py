@@ -103,6 +103,9 @@ _LANGS_2 = {
     "odiya": ["ory-Orya"],
     "sanskrit": ["san-Deva"],
     "tamil": ["tam-Taml"],
+    "turkish": ["tur-Latn"],
+    "greek": ["ell-Grek"],
+    "russian": ["rus-Cyrl"],
 }
 
 
@@ -110,12 +113,12 @@ class XNLI2(XNLI):
     metadata = TaskMetadata(
         name="XNLI2",
         dataset={
-            "path": "mteb/xnli2.0-multi-pair",
-            "revision": "1a3794e88c74db2a13aebc5e8abc3dc4312a7543",
+            "path": "Andrianos/xnli2.0-multi-pair",
+            "revision": "b30fb682b30118cf823469fccb2f154d73b6cede",
         },
         description="""
         This is subset of 'XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding'
-        with languages that were not part of the original XNLI.
+        with languages that were not part of the original XNLI plus three (verified) languages that are not strongly covered in MTEB
         """,
         reference="https://arxiv.org/pdf/2301.06527",
         category="s2s",
@@ -142,5 +145,5 @@ class XNLI2(XNLI):
             }
         """,
         n_samples={"test": 5010},
-        avg_character_length={"test": 105.72},  # average of premise and hypothesis
+        avg_character_length={"test": 80.06},  # average of premise and hypothesis
     )
