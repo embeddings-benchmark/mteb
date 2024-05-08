@@ -105,7 +105,7 @@ class MultiHateClassification(MultilingualTask, AbsTaskClassification):
             _dataset = _dataset["test"].train_test_split(
                 train_size=1000,
                 test_size=1000,
-                seed=42,
+                seed=self.seed,
                 stratify_by_column="functionality",
             )  # balanced sampling across types of hate speech
             _dataset = _dataset.remove_columns(["functionality"])

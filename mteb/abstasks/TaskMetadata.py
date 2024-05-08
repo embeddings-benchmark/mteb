@@ -36,6 +36,7 @@ TASK_SUBTYPE = Literal[
     "Topic classification",
     "Code retrieval",
     "False Friends",
+    "Cross-Lingual Semantic Discrimination",
 ]
 
 TASK_DOMAIN = Literal[
@@ -66,6 +67,7 @@ TEXT_CREATION_METHOD = Literal[
     "human-translated and localized",
     "machine-translated and verified",
     "machine-translated and localized",
+    "LM-generated and verified",
 ]
 
 SOCIOECONOMIC_STATUS = Literal[
@@ -110,7 +112,21 @@ SPLIT_NAME = str
 ISO_LANGUAGE_SCRIPT = str
 LANGUAGES = Union[List[ISO_LANGUAGE_SCRIPT], Mapping[str, List[ISO_LANGUAGE_SCRIPT]]]
 
-PROGRAMMING_LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
+PROGRAMMING_LANGS = [
+    "python",
+    "javascript",
+    "typescript",
+    "go",
+    "ruby",
+    "java",
+    "php",
+    "c",
+    "c++",
+    "rust",
+    "swift",
+    "scala",
+    "shell",
+]
 
 logger = logging.getLogger(__name__)
 

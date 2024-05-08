@@ -20,7 +20,7 @@ class BSARDRetrieval(AbsTaskRetrieval):
         category="s2p",
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
-        main_score="ndcg_at_100",
+        main_score="recall_at_100",
         date=None,
         form=None,
         domains=None,
@@ -52,7 +52,7 @@ class BSARDRetrieval(AbsTaskRetrieval):
 
         self.queries = {
             self.metadata.eval_splits[0]: {
-                str(q["id"]): " ".join((q["question"] + q["extra_description"]))
+                str(q["id"]): (q["question"] + " " + q["extra_description"]).strip()
                 for q in queries_raw
             }
         }
