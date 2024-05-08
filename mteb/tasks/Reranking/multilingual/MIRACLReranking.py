@@ -63,7 +63,7 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         domains=["Encyclopaedic"],
         task_subtypes=[],
         license="CC BY-SA 4.0",
-        socioeconomic_status="low",
+        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
         text_creation="created",
