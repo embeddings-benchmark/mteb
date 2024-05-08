@@ -42,7 +42,7 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
     primaryClass={cs.CL}
 }
 """,
-        n_samples={"test": 17357},
+        n_samples={"test": 2048},
         avg_character_length={"test": 3411.72},
     )
 
