@@ -110,15 +110,11 @@ class AbsTaskMultilabelClassification(AbsTask):
         params.update(kwargs)
 
         scores = []
-        test_cache, idxs = (
-            None,
-            None,
-        )  # we store idxs to make the shuffling reproducible
         # Bootstrap sample indices from training set for each experiment
         train_samples = []
         for _ in range(self.n_experiments):
             sample_indices, _ = self._undersample_data_indices(
-                train_split["label"], self.samples_per_label, idxs
+                train_split["label"], self.samples_per_label, None
             )
             train_samples.append(sample_indices)
         # Encode all unique sentences at the indices
