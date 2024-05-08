@@ -162,7 +162,7 @@ class AbsTaskClusteringFast(AbsTask):
 
         v_measures = evaluate_clustering_bootstrapped(
             embeddings,
-            downsampled_dataset["labels"],
+            labels,
             n_clusters=self.n_clusters,
             cluster_size=self.max_documents_per_cluster,
             kmean_batch_size=self.k_mean_batch_size,
@@ -234,8 +234,8 @@ def convert_to_fast(
         if categories is None:
             categories = set(labels)
         else:
-            assert (
-                categories == set(labels)
+            assert categories == set(
+                labels
             ), "The clusters are not sampled from the same distribution as they have different labels."
 
         ds[split] = Dataset.from_dict({"sentences": sentences, "labels": labels})
