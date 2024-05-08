@@ -265,7 +265,7 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         batch_size: int = 512,
         use_batched_encoding: bool = True,
         limit: int | None = None,
-        k_values: List[int] = [1, 3, 5, 10, 20, 100, 1000],
+        k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
         **kwargs,
     ):
         super().__init__(
