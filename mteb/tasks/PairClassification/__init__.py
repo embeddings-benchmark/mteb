@@ -11,4 +11,6 @@ from .multilingual.OpusparcusPC import *
 from .multilingual.PawsX import *
 from .multilingual.XNLI import *
 from .pol.PolishPC import *
+from .rus.XNLIRussianV2 import *
+from .tur.XNLITurkishV2 import *
 from .zho.CMTEBPairClassification import *

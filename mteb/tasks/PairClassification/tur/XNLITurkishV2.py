@@ -5,19 +5,19 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
-class XNLIGreekV2(AbsTaskPairClassification):
+class XNLITurkishV2(AbsTaskPairClassification):
     metadata = TaskMetadata(
-        name="XNLIGreekV2",
+        name="XNLITurkishV2",
         dataset={
-            "path": "Harsit/xnli2.0_greek",
-            "revision": "9d832735c3f3cfb29b4e200fe5d7e886531cf858",
+            "path": "Harsit/xnli2.0_turkish",
+            "revision": "dde1ce992ca9090e9b36466c98d017ffad2b294c",
         },
         description="",
         reference="https://arxiv.org/abs/2301.06527",
         category="s2s",
         type="PairClassification",
         eval_splits=["test"],
-        eval_langs=["ell-Grek"],
+        eval_langs=["tur-Latn"],
         main_score="ap",
         date=("2012-01-01", "2023-01-01"),
         form=["written"],
@@ -37,7 +37,7 @@ class XNLIGreekV2(AbsTaskPairClassification):
   organization={IEEE}
         """,
         n_samples={"test": 5010},
-        avg_character_length={"test": 88.96},
+        avg_character_length={"test": 77.51},
     )
 
     def dataset_transform(self):
