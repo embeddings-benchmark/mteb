@@ -339,6 +339,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [SwednClusteringP2P](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Clustering | p2p | [News, Non-fiction] | {'all': 2048} | {'all': 1619.71} |
 | [SwednClusteringS2S](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Clustering | s2s | [News, Non-fiction] | {'all': 2048} | {'all': 1619.71} |
 | [SwednRetrieval](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Retrieval | p2p | [News, Non-fiction] | {'test': 2048} | {'test': 1946.35} |
+| [SwissJudgementClassification](https://aclanthology.org/2021.nllp-1.3/) (Joel Niklaus, 2022) | ['deu', 'fra', 'ita'] | Classification | s2s | [Legal] | {'test': 2048} | {'test': 3411.72} |
 | [SyntecReranking](https://huggingface.co/datasets/lyon-nlp/mteb-fr-reranking-syntec-s2p) | ['fra'] | Reranking | s2p |  |  |  |
 | [SyntecRetrieval](https://huggingface.co/datasets/lyon-nlp/mteb-fr-retrieval-syntec-s2p) | ['fra'] | Retrieval | s2p |  | {'test': 90} | {'test': 62.0} |
 | [T2Reranking](https://arxiv.org/abs/2304.03679) | ['cmn'] | Reranking | s2s |  |  |  |
