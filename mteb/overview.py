@@ -19,6 +19,28 @@ from mteb.tasks import *  # import all tasks
 logger = logging.getLogger(__name__)
 
 
+# Create task registry
+
+
+def create_task_list() -> list[Type[AbsTask]]:
+    tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
+    tasks = [
+        cls
+        for cat_cls in tasks_categories_cls
+        for cls in cat_cls.__subclasses__()
+        if cat_cls.__name__.startswith("AbsTask")
+    ]
+    return tasks
+
+
+def create_name_to_task_mapping() -> dict[str, Type[AbsTask]]:
+    tasks = create_task_list()
+    return {cls.metadata.name: cls for cls in tasks}
+
+
+TASKS_REGISTRY = create_name_to_task_mapping()
+
+
 def check_is_valid_script(script: str) -> None:
     if script not in ISO_TO_SCRIPT:
         raise ValueError(
@@ -131,17 +153,6 @@ class MTEBTasks(tuple):
             )
             markdown_table += " |\n"
         return markdown_table
-
-
-def create_task_list() -> list[Type[AbsTask]]:
-    tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
-    tasks = [
-        cls
-        for cat_cls in tasks_categories_cls
-        for cls in cat_cls.__subclasses__()
-        if cat_cls.__name__.startswith("AbsTask")
-    ]
-    return tasks
 
 
 def get_tasks(

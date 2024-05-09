@@ -102,9 +102,9 @@ class AbsTask(ABC):
     @property
     def languages(self) -> list[str]:
         """Returns the languages of the task"""
-        # check if self.langs is set
+        # check if self.hf_subsets is set
         has_lang_splits = self.is_crosslingual or self.is_multilingual
-        if has_lang_splits and hasattr(self, "langs"):
+        if has_lang_splits and hasattr(self, "hf_subsets"):
             eval_langs = self.metadata.eval_langs
             languages = []
 

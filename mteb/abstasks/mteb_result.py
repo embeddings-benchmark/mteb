@@ -1,26 +1,23 @@
 from __future__ import annotations
 
 import json
-from functools import lru_cache
 from pathlib import Path
-from typing import Any, Callable, Dict, Type
+from typing import Any, Callable, Dict
 
 import numpy as np
 from pydantic import BaseModel, field_validator
-from TaskMetadata import ISO_LANGUAGE, ISO_LANGUAGE_SCRIPT, LANGUAGES, HFSubset
 
-from mteb.abstasks import AbsTask
 from mteb.abstasks.languages import LangScriptFilter
-from mteb.overview import create_task_list
+from mteb.abstasks.TaskMetadata import (
+    ISO_LANGUAGE,
+    ISO_LANGUAGE_SCRIPT,
+    LANGUAGES,
+    HFSubset,
+)
+from mteb.overview import TASKS_REGISTRY
 
 Split = str
 Scores = Dict[str, Any]
-
-
-@lru_cache(maxsize=None)
-def create_name_to_task_mapping() -> dict[str, Type[AbsTask]]:
-    tasks = create_task_list()
-    return {cls.metadata.name: cls for cls in tasks}
 
 
 def eval_langs_as_dict(
@@ -131,8 +128,7 @@ class MTEBResults(BaseModel):
         Returns:
             The result of the aggregation function on the scores.
         """
-        name2task = create_name_to_task_mapping()
-        meta = name2task[self.task_name].metadata
+        meta = TASKS_REGISTRY[self.task_name].metadata
         hf_subset2langs = eval_langs_as_dict(meta.eval_langs)
 
         if splits is None:
@@ -149,10 +145,13 @@ class MTEBResults(BaseModel):
 
             for hf_subset, scores in self.scores[split].items():
                 eval_langs = hf_subset2langs[hf_subset]
+                include_subset = False
                 for lang in eval_langs:
                     if lang_script_filter.is_valid_language(lang):
-                        values.append(getter(scores))
+                        include_subset = True
                         break
+                if include_subset:
+                    values.append(getter(scores))
 
             return aggregation(values)
 

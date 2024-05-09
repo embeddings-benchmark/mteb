@@ -54,15 +54,22 @@ class LangScriptFilter:
         )
 
     def is_valid_language(self, language: str) -> bool:
-        passed_lang_script_filter = False
-        passed_language_fitler = False
+        if not self.language_scripts and not self.languages:
+            return True
 
-        if not self.language_scripts or language in self.language_scripts:
-            passed_lang_script_filter = True
-        if not self.languages or language in self.languages:
-            passed_language_fitler = True
+        langscript = language.split("-")
+        is_langscript = len(langscript) == 2
 
-        return passed_lang_script_filter and passed_language_fitler
+        if is_langscript:
+            _lang = langscript[0]
+            if self.language_scripts and language in self.language_scripts:
+                return True
+        else:
+            _lang = language
+
+        if _lang in self.languages:
+            return True
+        return False
 
     def is_valid_script(self, script: str) -> bool:
         if not self.scripts or script in self.scripts:
