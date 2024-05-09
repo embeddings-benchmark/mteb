@@ -95,6 +95,7 @@ from .swe.SweRecClassification import *
 from .tam.TamilNewsClassification import *
 from .tel.TeluguAndhraJyotiNewsClassification import *
 from .tha.WisesightSentimentClassification import *
+from .tsn.TswanaNewsClassification import *
 from .tur.TurkishMovieSentimentClassification import *
 from .tur.TurkishProductSentimentClassification import *
 from .ukr.UkrFormalityClassification import *
