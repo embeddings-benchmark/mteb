@@ -1,6 +1,6 @@
 {
-  "dataset_revision": "b30fb682b30118cf823469fccb2f154d73b6cede",
-  "mteb_dataset_name": "XNLI2",
+  "dataset_revision": "c3a8ffbc19ab5d22b0958961490b4a5654b19d89",
+  "mteb_dataset_name": "XNLIV2",
   "mteb_version": "1.8.0",
   "test": {
     "assamese": {
@@ -132,7 +132,7 @@
         "f1": 0.7062857142857142
       }
     },
-    "evaluation_time": 137.66,
+    "evaluation_time": 174.31,
     "greek": {
       "cos_sim": {
         "accuracy": 0.6490842490842491,
@@ -157,7 +157,7 @@
         "accuracy_threshold": 0.43823719024658203,
         "ap": 0.6865683319774634,
         "f1": 0.6957494407158837,
-        "f1_threshold": 0.5246595144271851,
+        "f1_threshold": 0.5246594548225403,
         "precision": 0.5623869801084991,
         "recall": 0.9120234604105572
       },
@@ -207,7 +207,7 @@
       "manhattan": {
         "accuracy": 0.652014652014652,
         "accuracy_threshold": 8.676246643066406,
-        "ap": 0.7016541736160631,
+        "ap": 0.7016562101100351,
         "f1": 0.7071057192374349,
         "f1_threshold": 9.182065963745117,
         "precision": 0.5834127740705434,
