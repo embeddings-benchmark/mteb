@@ -123,6 +123,8 @@ The following tables gives you an overview of the tasks in MTEB.
 | [Core17InstructionRetrieval](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | InstructionRetrieval | s2p | [News] | {'eng': 39838} | {'eng': 2768.749235474006} |
 | [CorporateLobbyingLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 490} | {'test': 6039.85} |
 | [CovidRetrieval](https://arxiv.org/abs/2203.03367) | ['cmn'] | Retrieval | s2p |  |  |  |
+| [CrossLingualSemanticDiscriminationWMT19](https://huggingface.co/datasets/Andrianos/clsd_wmt19_21) | ['deu', 'fra'] | Retrieval | s2s | [News] | {'test': 2946} | {'test': 161.0} |
+| [CrossLingualSemanticDiscriminationWMT21](https://huggingface.co/datasets/Andrianos/clsd_wmt19_21) | ['deu', 'fra'] | Retrieval | s2s | [News] | {'test': 1786} | {'test': 159.0} |
 | [CzechSubjectivityClassification](https://arxiv.org/abs/2009.08712) | ['ces'] | Classification | s2s | [Reviews] | {'validation': 500, 'test': 2000} | {'validation': 108.2, 'test': 108.3} |
 | [DBPedia](https://github.com/iai-group/DBpedia-Entity/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [DBPedia-PL](https://github.com/iai-group/DBpedia-Entity/) | ['pol'] | Retrieval | s2p |  |  |  |
@@ -186,9 +188,11 @@ The following tables gives you an overview of the tasks in MTEB.
 | [IndicSentimentClassification](https://arxiv.org/abs/2212.05409) (Sumanth Doddapaneni, 2022) | ['asm', 'ben', 'brx', 'guj', 'hin', 'kan', 'mal', 'mar', 'ory', 'pan', 'tam', 'tel', 'urd'] | Classification | s2s | [Reviews] | {'test': 1000} | {'test': 137.6} |
 | [IndonesianIdClickbaitClassification](http://www.sciencedirect.com/science/article/pii/S2352340920311252) | ['ind'] | Classification | s2s | [News] | {'train': 2048} | {'train': 64.28} |
 | [IndonesianMongabayConservationClassification](https://aclanthology.org/2023.sealp-1.4/) | ['ind'] | Classification | s2s | [Web] | {'validation': 984, 'test': 970} | {'validation': 1675.8, 'test': 1675.5} |
+| [InternationalCitizenshipQuestionsLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 2048} | {'test': 206.18} |
 | [IsiZuluNewsClassification](https://huggingface.co/datasets/dsfsi/za-isizulu-siswati-news) (Madodonga et al., 2023) | ['zul'] | Classification | s2s | [News] | {'train': 752} | {'train': 43.1} |
 | [ItaCaseholdClassification](https://doi.org/10.1145/3594536.3595177) (Licari et al., 2023) | ['ita'] | Classification | s2s | [Legal, Government] | {'test': 221} | {'test': 4207.9} |
 | [Itacola](https://aclanthology.org/2021.findings-emnlp.250/) | ['ita'] | Classification | s2s | [Non-fiction, Spoken] | {'train': 7801, 'test': 975} | {'train': 35.95, 'test': 36.67} |
+| [JCrewBlockerLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 54} | {'test': 1092.22} |
 | [JDReview](https://aclanthology.org/2023.nodalida-1.20/) | ['cmn'] | Classification | s2s |  |  |  |
 | [JSTS](https://aclanthology.org/2022.lrec-1.317.pdf#page=2.00) | ['jpn'] | STS | s2s | [Web] | {'valudtion': 1457} | {'valudtion': 46.34} |
 | [JaQuADRetrieval](https://arxiv.org/abs/2202.01764) (ByungHoon So, 2022) | ['jpn'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'validation': 2048} | {'validation': 400.75} |
@@ -210,6 +214,14 @@ The following tables gives you an overview of the tasks in MTEB.
 | [LanguageClassification](https://huggingface.co/datasets/papluca/language-identification) | ['ara', 'bul', 'cmn', 'deu', 'ell', 'eng', 'fra', 'hin', 'ita', 'jpn', 'nld', 'pol', 'por', 'rus', 'spa', 'swa', 'tha', 'tur', 'urd', 'vie'] | Classification | s2s | [Reviews, Web, Non-fiction, Fiction, Government] | {'test': 2048} | {'test': 107.8} |
 | [LccSentimentClassification](https://github.com/fnielsen/lcc-sentiment) | ['dan'] | Classification | s2s | [News, Web] | {'test': 150} | {'test': 118.7} |
 | [LeCaRDv2](https://github.com/THUIR/LeCaRDv2) | ['zho'] | Retrieval | p2p | [Legal] |  |  |
+| [LearnedHandsBenefitsLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 66} | {'test': 1308.44} |
+| [LearnedHandsBusinessLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 174} | {'test': 1144.51} |
+| [LearnedHandsConsumerLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 614} | {'test': 1277.45} |
+| [LearnedHandsCourtsLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 192} | {'test': 1171.02} |
+| [LearnedHandsCrimeLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 688} | {'test': 1212.9} |
+| [LearnedHandsDivorceLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 150} | {'test': 1242.43} |
+| [LearnedHandsDomesticViolenceLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 174} | {'test': 1360.83} |
+| [LearnedHandsEducationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 56} | {'test': 1397.44} |
 | [LegalBenchConsumerContractsQA](https://huggingface.co/datasets/nguha/legalbench/viewer/consumer_contracts_qa) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
 | [LegalBenchCorporateLobbying](https://huggingface.co/datasets/nguha/legalbench/viewer/corporate_lobbying) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
 | [LegalBenchPC](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | PairClassification | s2s | [Legal] | {'test': 584} | {'test': 74.75} |
@@ -311,10 +323,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [STSBenchmarkMultilingualSTS](https://github.com/PhilipMay/stsb-multi-mt/) | ['cmn', 'deu', 'eng', 'fra', 'ita', 'nld', 'pol', 'por', 'rus', 'spa'] | STS | s2s |  |  |  |
 | [STSES](https://huggingface.co/datasets/PlanTL-GOB-ES/sts-es) | ['spa'] | STS | s2s |  |  |  |
 | [SanskritShlokasClassification](https://github.com/goru001/nlp-for-sanskrit) | ['san'] | Classification | s2s | [Religious] | {'train': 383, 'validation': 96} | {'train': 98.415, 'validation': 96.635} |
-| [ScalaDaClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['dan'] | Classification | s2s |  | {'test': 1024} | {'test': 109.4} |
-| [ScalaNbClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['nob'] | Classification | s2s |  | {'test': 1024} | {'test': 98.4} |
-| [ScalaNnClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['nno'] | Classification | s2s |  | {'test': 1024} | {'test': 104.8} |
-| [ScalaSvClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['swe'] | Classification | s2s |  | {'test': 1024} | {'test': 98.3} |
+| [ScalaClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['dan', 'nno', 'nob', 'swe'] | Classification | s2s | [Fiction, News, Non-fiction, Blog, Spoken, Web] | {'test': 4096} | {'test': 102.72} |
 | [SciDocsRR](https://allenai.org/data/scidocs) | ['eng'] | Reranking | s2s | [Academic, Non-fiction] | {'test': 19599} | {'test': 69.0} |
 | [SciFact](https://github.com/allenai/scifact) | ['eng'] | Retrieval | s2p |  |  |  |
 | [SciFact-PL](https://github.com/allenai/scifact) | ['pol'] | Retrieval | s2p |  |  |  |
@@ -340,6 +349,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [SwednClusteringP2P](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Clustering | p2p | [News, Non-fiction] | {'all': 2048} | {'all': 1619.71} |
 | [SwednClusteringS2S](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Clustering | s2s | [News, Non-fiction] | {'all': 2048} | {'all': 1619.71} |
 | [SwednRetrieval](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Retrieval | p2p | [News, Non-fiction] | {'test': 2048} | {'test': 1946.35} |
+| [SwissJudgementClassification](https://aclanthology.org/2021.nllp-1.3/) (Joel Niklaus, 2022) | ['deu', 'fra', 'ita'] | Classification | s2s | [Legal] | {'test': 2048} | {'test': 3411.72} |
 | [SyntecReranking](https://huggingface.co/datasets/lyon-nlp/mteb-fr-reranking-syntec-s2p) | ['fra'] | Reranking | s2p |  |  |  |
 | [SyntecRetrieval](https://huggingface.co/datasets/lyon-nlp/mteb-fr-retrieval-syntec-s2p) | ['fra'] | Retrieval | s2p |  | {'test': 90} | {'test': 62.0} |
 | [T2Reranking](https://arxiv.org/abs/2304.03679) | ['cmn'] | Reranking | s2s |  |  |  |
