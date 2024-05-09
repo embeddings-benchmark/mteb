@@ -3473,7 +3473,7 @@ class LearnedHandsEducationLegalBenchClassification(AbsTaskClassification):
         )
         self.dataset = self.dataset.rename_column("answer", "label")
 
-        
+
 class LearnedHandsEmploymentLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="LearnedHandsEmploymentLegalBenchClassification",
@@ -3974,4 +3974,3 @@ class LegalReasoningCausalityLegalBenchClassification(AbsTaskClassification):
             }
         )
         self.dataset = self.dataset.rename_column("answer", "label")
-        
