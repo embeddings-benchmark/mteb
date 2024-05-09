@@ -5,9 +5,10 @@ import logging
 from collections import defaultdict
 
 import numpy as np
+from sklearn.base import ClassifierMixin, clone
 from sklearn.metrics import f1_score, label_ranking_average_precision_score
 from sklearn.model_selection import train_test_split
-from sklearn.neural_network import MLPClassifier
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
 from .AbsTask import AbsTask
@@ -15,14 +16,15 @@ from .AbsTask import AbsTask
 logger = logging.getLogger(__name__)
 
 
-def evaluate_mlp(
+def evaluate_classifier(
     embeddings_train: np.ndarray,
     y_train: np.ndarray,
     embeddings_test: np.ndarray,
     y_test: np.ndarray,
+    classifier: ClassifierMixin,
 ):
     scores = {}
-    classifier = MLPClassifier((20,))
+    classifier = clone(classifier)
     classifier.fit(embeddings_train, y_train)
     y_pred = classifier.predict(embeddings_test)
     accuracy = classifier.score(embeddings_test, y_test)
@@ -43,11 +45,12 @@ class AbsTaskMultilabelClassification(AbsTask):
         label: list[Hashable]
     """
 
+    classifier = KNeighborsClassifier(n_neighbors=5)
+
     def __init__(
         self,
         n_experiments=None,
         samples_per_label=None,
-        k=3,
         batch_size=32,
         **kwargs,
     ):
@@ -59,8 +62,6 @@ class AbsTaskMultilabelClassification(AbsTask):
         self.samples_per_label = samples_per_label or getattr(
             self, "samples_per_label", 8
         )
-        # kNN parameters
-        self.k = k
         # Run metadata validation by instantiating addressing the attribute
         # This is quite hacky. Ideally, this would be done in the constructor of
         # each concrete task, but then we have to duplicate the __init__ method's
@@ -106,7 +107,11 @@ class AbsTaskMultilabelClassification(AbsTask):
     ):
         train_split = dataset[train_split]
         eval_split = dataset[eval_split]
-        params = {"k": self.k, "batch_size": self.batch_size}
+        params = {
+            "classifier_type": type(self.classifier).__name__,
+            "classifier_params": self.classifier.get_params(),
+            "batch_size": self.batch_size,
+        }
         params.update(kwargs)
 
         scores = []
@@ -144,11 +149,8 @@ class AbsTaskMultilabelClassification(AbsTask):
             X_train = np.stack([unique_train_embeddings[idx] for idx in sample_indices])
             y_train = train_split.select(sample_indices)["label"]
             y_train = binarizer.transform(y_train)
-            scores_exp = evaluate_mlp(
-                X_train,
-                y_train,
-                X_test,
-                y_test,
+            scores_exp = evaluate_classifier(
+                X_train, y_train, X_test, y_test, self.classifier
             )
             scores.append(scores_exp)
 
