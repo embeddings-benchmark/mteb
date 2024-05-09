@@ -18,7 +18,7 @@ class MultiEURLEXMultilabelClassification(
         reference="https://huggingface.co/datasets/coastalcph/multi_eurlex",
         category="p2p",
         type="MultilabelClassification",
-        eval_splits=["validation", "test"],
+        eval_splits=["test"],
         eval_langs={
             "en": ["eng-Latn"],
             "de": ["deu-Latn"],
