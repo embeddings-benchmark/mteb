@@ -222,10 +222,19 @@ The following tables gives you an overview of the tasks in MTEB.
 | [LearnedHandsDivorceLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 150} | {'test': 1242.43} |
 | [LearnedHandsDomesticViolenceLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 174} | {'test': 1360.83} |
 | [LearnedHandsEducationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 56} | {'test': 1397.44} |
+| [LearnedHandsEmploymentLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 710} | {'test': 1262.74} |
+| [LearnedHandsEstatesLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 178} | {'test': 1200.7} |
+| [LearnedHandsFamilyLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 2048} | {'test': 1338.27} |
+| [LearnedHandsHealthLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 226} | {'test': 1472.59} |
+| [LearnedHandsHousingLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 2048} | {'test': 1322.54} |
+| [LearnedHandsImmigrationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 134} | {'test': 1216.31} |
+| [LearnedHandsTortsLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 432} | {'test': 1406.97} |
+| [LearnedHandsTrafficLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 556} | {'test': 1182.91} |
 | [LegalBenchConsumerContractsQA](https://huggingface.co/datasets/nguha/legalbench/viewer/consumer_contracts_qa) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
 | [LegalBenchCorporateLobbying](https://huggingface.co/datasets/nguha/legalbench/viewer/corporate_lobbying) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
 | [LegalBenchPC](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | PairClassification | s2s | [Legal] | {'test': 584} | {'test': 74.75} |
 | [LegalQuAD](https://github.com/Christoph911/AIKE2021_Appendix) | ['deu'] | Retrieval | s2p | [Legal] |  |  |
+| [LegalReasoningCausalityLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 55} | {'test': 1563.76} |
 | [LegalSummarization](https://github.com/lauramanor/legal_summarization) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
 | [MIRACLReranking](https://project-miracl.github.io/) | ['deu', 'spa'] | Reranking | s2s |  |  |  |
 | MIRACLRetrieval | ['deu', 'spa'] | Retrieval | s2p |  |  |  |
