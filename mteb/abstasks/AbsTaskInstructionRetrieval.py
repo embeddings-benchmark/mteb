@@ -333,7 +333,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         results_base = {}
         overall_changed_scores = {}
         if self.is_multilingual:
-            for lang in self.langs:
+            for lang in self.hf_subsets:
                 logger.info(f"Language: {lang}")
                 corpus, queries = self.corpus[lang][split], self.queries[lang][split]
                 og_relevant_docs, changed_relevant_docs = (

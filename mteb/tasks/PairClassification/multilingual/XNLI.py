@@ -67,7 +67,7 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
 
     def dataset_transform(self):
         _dataset = {}
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             _dataset[lang] = {}
             self.dataset[lang] = self.stratified_subsampling(
                 self.dataset[lang], seed=self.seed, splits=self.metadata.eval_splits

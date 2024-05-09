@@ -110,7 +110,10 @@ STR_DATE = Annotated[
 SPLIT_NAME = str
 # a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
 ISO_LANGUAGE_SCRIPT = str
-LANGUAGES = Union[List[ISO_LANGUAGE_SCRIPT], Mapping[str, List[ISO_LANGUAGE_SCRIPT]]]
+ISO_LANGUAGE = str  # a 3-letter ISO 639-3 language code
+ISO_SCRIPT = str  # a 4-letter ISO 15924 script code
+HFSubset = str
+LANGUAGES = Union[List[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, List[ISO_LANGUAGE_SCRIPT]]]
 
 PROGRAMMING_LANGS = [
     "python",
