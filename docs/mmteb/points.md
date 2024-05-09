@@ -70,3 +70,5 @@ Please also add your first name and last name are as you want them to appear in 
 | Akash190104       | Akash      | Kundu      | akashkundu2xx4@gmail.com      |~Akash_Kundu2             | Heritage Institute of Technology, Kolkata && Apart Research |
 | dwzhu-pku         | Dawei      | Zhu        | dwzhu@pku.edu.cn             | ~Dawei_Zhu2       | Peking University            |
 | ljvmiranda921     | Lester James | Miranda  | ljm@allenai.org              | ~Lester_James_Validad_Miranda1 | Allen Institute for AI |
+| Andrian0s     | Andrianos | Michail  | andrianos.michail@cl.uzh.ch         | ~Andrianos_Michail1 | University of Zurich|
+| simon-clematide     | Simon | Clematide  | simon.clematide@cl.uzh.ch         | ~Simon_Clematide1 | University of Zurich|
