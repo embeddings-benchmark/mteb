@@ -145,7 +145,9 @@ class AbsTaskClassification(AbsTask):
             scores_exp, test_cache = evaluator(model, test_cache=test_cache)
             scores.append(scores_exp)
 
-        avg_scores: dict[str, Any] = {k: np.mean([s[k] for s in scores]) for k in scores[0].keys()}
+        avg_scores: dict[str, Any] = {
+            k: np.mean([s[k] for s in scores]) for k in scores[0].keys()
+        }
         avg_scores["scores_per_experiment"] = scores
         return avg_scores
 
