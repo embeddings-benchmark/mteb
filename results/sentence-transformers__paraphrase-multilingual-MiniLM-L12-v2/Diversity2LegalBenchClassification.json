@@ -7,7 +7,7 @@
     "accuracy_stderr": 1.1102230246251565e-16,
     "ap": 0.25333333333333335,
     "ap_stderr": 0.0,
-    "evaluation_time": 17.25,
+    "evaluation_time": 17.29,
     "f1": 0.42748091603053434,
     "f1_stderr": 5.551115123125783e-17,
     "main_score": 0.7466666666666668

@@ -3013,15 +3013,24 @@ class Diversity1LegalBenchClassification(AbsTaskClassification):
         )
         self.dataset = self.dataset.rename_column("answer", "label")
 
+        # Map the boolean columns to readable plaintext
+        _diverse_parties_map = {
+            "True": "The parties are diverse.",
+            "False": "The parties are not diverse.",
+        }
+
+        _amount_in_controversy_map = {
+            "True": "The Amount-in-controversy was met.",
+            "False": "The Amount-in-controversy was not met.",
+        }
+
         self.dataset = self.dataset.map(
             lambda example: {
                 "text": example["text"]
-                + "\n\n"
-                + "Parties are diverse: "
-                + example["parties_are_diverse"]
-                + "\n\n"
-                + "Amount-in-controversy is met: "
-                + example["aic_is_met"]
+                + " "
+                + _diverse_parties_map[example["parties_are_diverse"]]
+                + " "
+                + _amount_in_controversy_map[example["aic_is_met"]]
             }
         )
         self.dataset = self.dataset.remove_columns(
@@ -3076,15 +3085,24 @@ class Diversity2LegalBenchClassification(AbsTaskClassification):
         )
         self.dataset = self.dataset.rename_column("answer", "label")
 
+        # Map the boolean columns to readable plaintext
+        _diverse_parties_map = {
+            "True": "The parties are diverse.",
+            "False": "The parties are not diverse.",
+        }
+
+        _amount_in_controversy_map = {
+            "True": "The Amount-in-controversy was met.",
+            "False": "The Amount-in-controversy was not met.",
+        }
+
         self.dataset = self.dataset.map(
             lambda example: {
                 "text": example["text"]
-                + "\n\n"
-                + "Parties are diverse: "
-                + example["parties_are_diverse"]
-                + "\n\n"
-                + "Amount-in-controversy is met: "
-                + example["aic_is_met"]
+                + " "
+                + _diverse_parties_map[example["parties_are_diverse"]]
+                + " "
+                + _amount_in_controversy_map[example["aic_is_met"]]
             }
         )
         self.dataset = self.dataset.remove_columns(
@@ -3139,15 +3157,24 @@ class Diversity3LegalBenchClassification(AbsTaskClassification):
         )
         self.dataset = self.dataset.rename_column("answer", "label")
 
+        # Map the boolean columns to readable plaintext
+        _diverse_parties_map = {
+            "True": "The parties are diverse.",
+            "False": "The parties are not diverse.",
+        }
+
+        _amount_in_controversy_map = {
+            "True": "The Amount-in-controversy was met.",
+            "False": "The Amount-in-controversy was not met.",
+        }
+
         self.dataset = self.dataset.map(
             lambda example: {
                 "text": example["text"]
-                + "\n\n"
-                + "Parties are diverse: "
-                + example["parties_are_diverse"]
-                + "\n\n"
-                + "Amount-in-controversy is met: "
-                + example["aic_is_met"]
+                + " "
+                + _diverse_parties_map[example["parties_are_diverse"]]
+                + " "
+                + _amount_in_controversy_map[example["aic_is_met"]]
             }
         )
         self.dataset = self.dataset.remove_columns(
@@ -3202,15 +3229,24 @@ class Diversity4LegalBenchClassification(AbsTaskClassification):
         )
         self.dataset = self.dataset.rename_column("answer", "label")
 
+        # Map the boolean columns to readable plaintext
+        _diverse_parties_map = {
+            "True": "The parties are diverse.",
+            "False": "The parties are not diverse.",
+        }
+
+        _amount_in_controversy_map = {
+            "True": "The Amount-in-controversy was met.",
+            "False": "The Amount-in-controversy was not met.",
+        }
+
         self.dataset = self.dataset.map(
             lambda example: {
                 "text": example["text"]
-                + "\n\n"
-                + "Parties are diverse: "
-                + example["parties_are_diverse"]
-                + "\n\n"
-                + "Amount-in-controversy is met: "
-                + example["aic_is_met"]
+                + " "
+                + _diverse_parties_map[example["parties_are_diverse"]]
+                + " "
+                + _amount_in_controversy_map[example["aic_is_met"]]
             }
         )
         self.dataset = self.dataset.remove_columns(
@@ -3265,15 +3301,24 @@ class Diversity5LegalBenchClassification(AbsTaskClassification):
         )
         self.dataset = self.dataset.rename_column("answer", "label")
 
+        # Map the boolean columns to readable plaintext
+        _diverse_parties_map = {
+            "True": "The parties are diverse.",
+            "False": "The parties are not diverse.",
+        }
+
+        _amount_in_controversy_map = {
+            "True": "The Amount-in-controversy was met.",
+            "False": "The Amount-in-controversy was not met.",
+        }
+
         self.dataset = self.dataset.map(
             lambda example: {
                 "text": example["text"]
-                + "\n\n"
-                + "Parties are diverse: "
-                + example["parties_are_diverse"]
-                + "\n\n"
-                + "Amount-in-controversy is met: "
-                + example["aic_is_met"]
+                + " "
+                + _diverse_parties_map[example["parties_are_diverse"]]
+                + " "
+                + _amount_in_controversy_map[example["aic_is_met"]]
             }
         )
         self.dataset = self.dataset.remove_columns(
@@ -3328,15 +3373,24 @@ class Diversity6LegalBenchClassification(AbsTaskClassification):
         )
         self.dataset = self.dataset.rename_column("answer", "label")
 
+        # Map the boolean columns to readable plaintext
+        _diverse_parties_map = {
+            "True": "The parties are diverse.",
+            "False": "The parties are not diverse.",
+        }
+
+        _amount_in_controversy_map = {
+            "True": "The Amount-in-controversy was met.",
+            "False": "The Amount-in-controversy was not met.",
+        }
+
         self.dataset = self.dataset.map(
             lambda example: {
                 "text": example["text"]
-                + "\n\n"
-                + "Parties are diverse: "
-                + example["parties_are_diverse"]
-                + "\n\n"
-                + "Amount-in-controversy is met: "
-                + example["aic_is_met"]
+                + " "
+                + _diverse_parties_map[example["parties_are_diverse"]]
+                + " "
+                + _amount_in_controversy_map[example["aic_is_met"]]
             }
         )
         self.dataset = self.dataset.remove_columns(
@@ -3347,7 +3401,15 @@ class Diversity6LegalBenchClassification(AbsTaskClassification):
 class FunctionOfDecisionSectionLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FunctionOfDecisionSectionLegalBenchClassification",
-        description="Classify the function of different sections of legal written opinions.",
+        description="""The task is to classify a paragraph extracted from a written court decision into one of seven possible categories:
+            1. Facts - The paragraph describes the faction background that led up to the present lawsuit.
+            2. Procedural History - The paragraph describes the course of litigation that led to the current proceeding before the court.
+            3. Issue - The paragraph describes the legal or factual issue that must be resolved by the court.
+            4. Rule - The paragraph describes a rule of law relevant to resolving the issue.
+            5. Analysis - The paragraph analyzes the legal issue by applying the relevant legal principles to the facts of the present dispute.
+            6. Conclusion - The paragraph presents a conclusion of the court.
+            7. Decree - The paragraph constitutes a decree resolving the dispute.
+        """,
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",

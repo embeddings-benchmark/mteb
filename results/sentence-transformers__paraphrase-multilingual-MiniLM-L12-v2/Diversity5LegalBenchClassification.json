@@ -3,13 +3,13 @@
   "mteb_dataset_name": "Diversity5LegalBenchClassification",
   "mteb_version": "1.7.7",
   "test": {
-    "accuracy": 0.5666666666666667,
-    "accuracy_stderr": 0.0,
-    "ap": 0.5823875968992248,
+    "accuracy": 0.5600000000000002,
+    "accuracy_stderr": 1.1102230246251565e-16,
+    "ap": 0.5799574588769143,
     "ap_stderr": 0.0,
-    "evaluation_time": 54.93,
-    "f1": 0.4808030246552001,
-    "f1_stderr": 1.1102230246251565e-16,
-    "main_score": 0.5666666666666667
+    "evaluation_time": 21.45,
+    "f1": 0.4794679005205322,
+    "f1_stderr": 5.551115123125783e-17,
+    "main_score": 0.5600000000000002
   }
 }
