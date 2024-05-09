@@ -19,7 +19,7 @@ class TswanaNewsClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["tsn-Latn"],
         main_score="accuracy",
-        date=None,
+        date=("2015-01-01", "2023-01-01"),
         form=["written"],
         domains=["News"],
         license="CC-BY-SA-4.0",
