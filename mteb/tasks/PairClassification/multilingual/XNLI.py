@@ -113,8 +113,8 @@ class XNLIV2(MultilingualTask, AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="XNLIV2",
         dataset={
-            "path": "mteb/xnli2.0-multi-pair-13",
-            "revision": "c3a8ffbc19ab5d22b0958961490b4a5654b19d89",
+            "path": "mteb/xnli2.0-multi-pair",
+            "revision": "5b7d477a8c62cdd18e2fed7e015497c20b4371ad",
         },
         description="""
         This is subset of 'XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding'
