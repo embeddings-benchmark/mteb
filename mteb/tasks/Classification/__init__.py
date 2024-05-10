@@ -72,6 +72,7 @@ from .multilingual.NordicLangClassification import *
 from .multilingual.ScalaClassification import *
 from .multilingual.SIB200Classification import *
 from .multilingual.SouthAfricanLangClassification import *
+from .multilingual.SwissJudgementClassification import *
 from .multilingual.TweetSentimentClassification import *
 from .nep.NepaliNewsClassification import *
 from .nld.DutchBookReviewSentimentClassification import *
@@ -94,6 +95,7 @@ from .swe.SweRecClassification import *
 from .tam.TamilNewsClassification import *
 from .tel.TeluguAndhraJyotiNewsClassification import *
 from .tha.WisesightSentimentClassification import *
+from .tsn.TswanaNewsClassification import *
 from .tur.TurkishMovieSentimentClassification import *
 from .tur.TurkishProductSentimentClassification import *
 from .ukr.UkrFormalityClassification import *
