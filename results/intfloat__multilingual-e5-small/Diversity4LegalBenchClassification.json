@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "Diversity4LegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.5333333333333333,
+    "accuracy_stderr": 0.0,
+    "ap": 0.5333333333333333,
+    "ap_stderr": 0.0,
+    "evaluation_time": 15.98,
+    "f1": 0.34782608695652184,
+    "f1_stderr": 5.551115123125783e-17,
+    "main_score": 0.5333333333333333
+  }
+}
