@@ -61,10 +61,6 @@ class NusaXSentiClassification(AbsTaskClassification, MultilingualTask):
       primaryClass={cs.CL}
 }
 """,
-        n_samples={"test": 500},
+        n_samples={"test": 4800},
         avg_character_length={"test": 52.4},
     )
-
-    def dataset_transform(self):
-        for lang in self.langs:
-            self.dataset[lang]["test"]

@@ -45,7 +45,7 @@
       "f1_stderr": 0.04209201040545486,
       "main_score": 0.81925
     },
-    "evaluation_time": 370.07,
+    "evaluation_time": 371.4,
     "ind": {
       "accuracy": 0.746,
       "accuracy_stderr": 0.02490481881082455,
