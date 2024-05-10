@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "MAUDFiduciaryExceptionBoardDeterminationStandardLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.3888888888888889,
+    "accuracy_stderr": 0.0,
+    "evaluation_time": 95.19,
+    "f1": 0.19273897188526992,
+    "f1_stderr": 0.0,
+    "main_score": 0.3888888888888889
+  }
+}

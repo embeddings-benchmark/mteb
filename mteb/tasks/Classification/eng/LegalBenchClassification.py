@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datasets import concatenate_datasets
+
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -4561,3 +4563,579 @@ class LegalReasoningCausalityLegalBenchClassification(AbsTaskClassification):
             }
         )
         self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class MAUDCORPermittedWithBoardFiduciaryDeterminationOnlyLegalBenchClassification(
+    AbsTaskClassification
+):
+    metadata = TaskMetadata(
+        name="MAUDCORPermittedWithBoardFiduciaryDeterminationOnlyLegalBenchClassification",
+        description="Given an excerpt from a merger agreement and the task is to answer: is Change of Recommendation permitted as long as the board determines that such change is required to fulfill its fiduciary obligations, amongst the multiple choice options.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "maud_cor_permitted_with_board_fiduciary_determination_only",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2021-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        @article{wang2023maud,
+            title={MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
+            author={Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
+            journal={arXiv preprint arXiv:2301.00876},
+            year={2023}
+        }
+        """,
+        n_samples={"test": 91},
+        avg_character_length={"test": 2012.51},
+    )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("answer", "label")
+        # The train split has one example, so we combine it with the test split and resample
+        self.dataset = concatenate_datasets(
+            [self.dataset["train"], self.dataset["test"]]
+        )
+        self.dataset = self.dataset.class_encode_column("label")
+        self.dataset = self.dataset.train_test_split(
+            train_size=0.1, seed=self.seed, stratify_by_column="label"
+        )
+
+
+class MAUDCORStandardInterveningEventLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="MAUDCORStandardInterveningEventLegalBenchClassification",
+        description="Given an excerpt from a merger agreement and the task is to answer: what standard should the board follow when determining whether to change its recommendation in response to an intervening event, amongst the multiple choice options.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "maud_cor_standard_(intervening_event)",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2021-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        @article{wang2023maud,
+            title={MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
+            author={Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
+            journal={arXiv preprint arXiv:2301.00876},
+            year={2023}
+        }
+        """,
+        n_samples={"test": 77},
+        avg_character_length={"test": 2056.49},
+    )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("answer", "label")
+        # The train split has one example, so we combine it with the test split and resample
+        self.dataset = concatenate_datasets(
+            [self.dataset["train"], self.dataset["test"]]
+        )
+        self.dataset = self.dataset.class_encode_column("label")
+        self.dataset = self.dataset.train_test_split(
+            train_size=0.1, seed=self.seed, stratify_by_column="label"
+        )
+
+
+class MAUDCORStandardSuperiorOfferLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="MAUDCORStandardSuperiorOfferLegalBenchClassification",
+        description="Given an excerpt from a merger agreement and the task is to answer: what standard should the board follow when determining whether to change its recommendation in connection with a superior offer, amongst the multiple choice options.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "maud_cor_standard_(superior_offer)",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2021-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        @article{wang2023maud,
+            title={MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
+            author={Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
+            journal={arXiv preprint arXiv:2301.00876},
+            year={2023}
+        }
+        """,
+        n_samples={"test": 91},
+        avg_character_length={"test": 1756.90},
+    )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("answer", "label")
+        # The train split has one example, so we combine it with the test split and resample
+        self.dataset = concatenate_datasets(
+            [self.dataset["train"], self.dataset["test"]]
+        )
+        self.dataset = self.dataset.class_encode_column("label")
+        self.dataset = self.dataset.train_test_split(
+            train_size=0.1, seed=self.seed, stratify_by_column="label"
+        )
+
+
+class MAUDDefinitionContainsKnowledgeRequirementAnswerLegalBenchClassification(
+    AbsTaskClassification
+):
+    metadata = TaskMetadata(
+        name="MAUDDefinitionContainsKnowledgeRequirementAnswerLegalBenchClassification",
+        description="Given an excerpt from a merger agreement and the task is to answer: what is the knowledge requirement in the definition of “Intervening Event”, amongst the multiple choice options.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "maud_definition_contains_knowledge_requirement_-_answer",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2021-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        @article{wang2023maud,
+            title={MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
+            author={Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
+            journal={arXiv preprint arXiv:2301.00876},
+            year={2023}
+        }
+        """,
+        n_samples={"test": 134},
+        avg_character_length={"test": 1542.55},
+    )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("answer", "label")
+        # The train split has one example, so we combine it with the test split and resample
+        self.dataset = concatenate_datasets(
+            [self.dataset["train"], self.dataset["test"]]
+        )
+        self.dataset = self.dataset.class_encode_column("label")
+        self.dataset = self.dataset.train_test_split(
+            train_size=0.1, seed=self.seed, stratify_by_column="label"
+        )
+
+
+class MAUDDefinitionIncludesAssetDealsLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="MAUDDefinitionIncludesAssetDealsLegalBenchClassification",
+        description="Given an excerpt from a merger agreement and the task is to answer: what qualifies as a superior offer in terms of asset deals, amongst the multiple choice options.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "maud_definition_includes_asset_deals",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2021-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        @article{wang2023maud,
+            title={MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
+            author={Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
+            journal={arXiv preprint arXiv:2301.00876},
+            year={2023}
+        }
+        """,
+        n_samples={"test": 133},
+        avg_character_length={"test": 1969.71},
+    )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("answer", "label")
+        # The train split has one example, so we combine it with the test split and resample
+        self.dataset = concatenate_datasets(
+            [self.dataset["train"], self.dataset["test"]]
+        )
+        self.dataset = self.dataset.class_encode_column("label")
+        self.dataset = self.dataset.train_test_split(
+            train_size=0.1, seed=self.seed, stratify_by_column="label"
+        )
+
+
+class MAUDDefinitionIncludesStockDealsLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="MAUDDefinitionIncludesStockDealsLegalBenchClassification",
+        description="Given an excerpt from a merger agreement and the task is to answer: what qualifies as a superior offer in terms of stock deals, amongst the multiple choice options.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "maud_definition_includes_stock_deals",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2021-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        @article{wang2023maud,
+            title={MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
+            author={Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
+            journal={arXiv preprint arXiv:2301.00876},
+            year={2023}
+        }
+        """,
+        n_samples={"test": 135},
+        avg_character_length={"test": 1884.74},
+    )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("answer", "label")
+        # The train split has one example, so we combine it with the test split and resample
+        self.dataset = concatenate_datasets(
+            [self.dataset["train"], self.dataset["test"]]
+        )
+        self.dataset = self.dataset.class_encode_column("label")
+        self.dataset = self.dataset.train_test_split(
+            train_size=0.1, seed=self.seed, stratify_by_column="label"
+        )
+
+
+class MAUDFiduciaryExceptionBoardDeterminationStandardLegalBenchClassification(
+    AbsTaskClassification
+):
+    metadata = TaskMetadata(
+        name="MAUDFiduciaryExceptionBoardDeterminationStandardLegalBenchClassification",
+        description="Given an excerpt from a merger agreement and the task is to answer: under what circumstances could the Board take actions on a different acquisition proposal notwithstanding the no-shop provision, amongst the multiple choice options.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "maud_fiduciary_exception__board_determination_standard",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2021-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        @article{wang2023maud,
+            title={MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
+            author={Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
+            journal={arXiv preprint arXiv:2301.00876},
+            year={2023}
+        }
+        """,
+        n_samples={"test": 162},
+        avg_character_length={"test": 1577.60},
+    )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("answer", "label")
+        # The train split has one example, so we combine it with the test split and resample
+        self.dataset = concatenate_datasets(
+            [self.dataset["train"], self.dataset["test"]]
+        )
+        self.dataset = self.dataset.class_encode_column("label")
+        self.dataset = self.dataset.train_test_split(
+            train_size=0.1, seed=self.seed, stratify_by_column="label"
+        )
+
+
+class MAUDFiduciaryExceptionBoardDeterminationTriggerNoShopLegalBenchClassification(
+    AbsTaskClassification
+):
+    metadata = TaskMetadata(
+        name="MAUDFiduciaryExceptionBoardDeterminationTriggerNoShopLegalBenchClassification",
+        description="Given an excerpt from a merger agreement and the task is to answer: what type of offer could the Board take actions on notwithstanding the no-shop provision, amongst the multiple choice options.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "maud_fiduciary_exception_board_determination_trigger_(no_shop)",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2021-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        @article{wang2023maud,
+            title={MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
+            author={Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
+            journal={arXiv preprint arXiv:2301.00876},
+            year={2023}
+        }
+        """,
+        n_samples={"test": 162},
+        avg_character_length={"test": 1581.27},
+    )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("answer", "label")
+        # The train split has one example, so we combine it with the test split and resample
+        self.dataset = concatenate_datasets(
+            [self.dataset["train"], self.dataset["test"]]
+        )
+        self.dataset = self.dataset.class_encode_column("label")
+        self.dataset = self.dataset.train_test_split(
+            train_size=0.1, seed=self.seed, stratify_by_column="label"
+        )
+
+
+class MAUDFinancialPointOfViewIsTheSoleConsiderationLegalBenchClassification(
+    AbsTaskClassification
+):
+    metadata = TaskMetadata(
+        name="MAUDFinancialPointOfViewIsTheSoleConsiderationLegalBenchClassification",
+        description="Given an excerpt from a merger agreement and the task is to answer: is “financial point of view” the sole consideration when determining whether an offer is superior, amongst the multiple choice options.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "maud_financial_point_of_view_is_the_sole_consideration",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2021-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        @article{wang2023maud,
+            title={MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
+            author={Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
+            journal={arXiv preprint arXiv:2301.00876},
+            year={2023}
+        }
+        """,
+        n_samples={"test": 102},
+        avg_character_length={"test": 1840.37},
+    )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("answer", "label")
+        # The train split has one example, so we combine it with the test split and resample
+        self.dataset = concatenate_datasets(
+            [self.dataset["train"], self.dataset["test"]]
+        )
+        self.dataset = self.dataset.class_encode_column("label")
+        self.dataset = self.dataset.train_test_split(
+            train_size=0.1, seed=self.seed, stratify_by_column="label"
+        )
+
+
+class MAUDFLSMAEStandardLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="MAUDFLSMAEStandardLegalBenchClassification",
+        description="Given an excerpt from a merger agreement and the task is to answer: what is the Forward Looking Standard (FLS) with respect to Material Adverse Effect (MAE), amongst the multiple choice options.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "maud_fls_(mae)_standard",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2021-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        @article{wang2023maud,
+            title={MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
+            author={Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
+            journal={arXiv preprint arXiv:2301.00876},
+            year={2023}
+        }
+        """,
+        n_samples={"test": 68},
+        avg_character_length={"test": 4423.05},
+    )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("answer", "label")
+        # The train split has one example, so we combine it with the test split and resample
+        self.dataset = concatenate_datasets(
+            [self.dataset["train"], self.dataset["test"]]
+        )
+
+        # The label "A" has only one example and the label "E" has only two examples, so we drop rows with them
+        self.dataset = self.dataset.filter(
+            lambda example: example["label"] not in ["A", "E"]
+        )
+
+        self.dataset = self.dataset.class_encode_column("label")
+        self.dataset = self.dataset.train_test_split(
+            train_size=0.1, seed=self.seed, stratify_by_column="label"
+        )
