@@ -1,17 +1,16 @@
 from __future__ import annotations
 
 import logging
-from typing import List
 
 import numpy as np
 import torch
 import tqdm
 from sklearn.metrics import average_precision_score
 
+from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from .Evaluator import Evaluator
 from .RetrievalEvaluator import RetrievalEvaluator
 from .utils import cos_sim
-from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 
 logger = logging.getLogger(__name__)
 
@@ -79,10 +78,14 @@ class RerankingEvaluator(Evaluator):
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
         encode_queries_func = (
-            model.encode_queries if isinstance(model, EncoderWithQueryCorpusEncode) else model.encode
+            model.encode_queries
+            if isinstance(model, EncoderWithQueryCorpusEncode)
+            else model.encode
         )
         encode_corpus_func = (
-            model.encode_corpus if isinstance(model, EncoderWithQueryCorpusEncode) else model.encode
+            model.encode_corpus
+            if isinstance(model, EncoderWithQueryCorpusEncode)
+            else model.encode
         )
 
         logger.info("Encoding queries...")
@@ -262,6 +265,7 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
     1. it uses the pytrec_eval via RetrievalEvaluator instead of the metrics provided by sklearn;
     2. it reranks the top-k `candidates` from previous-stage retrieval which may not include all ground-truth `positive` documents
     """
+
     def __init__(
         self,
         samples: list[dict],
@@ -274,9 +278,8 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
         **kwargs,
     ):
-        """
-        Args:
-            k_values: ranking cutoff threshold when applicable
+        """Args:
+        k_values: ranking cutoff threshold when applicable
         """
         super().__init__(
             samples,
@@ -290,7 +293,9 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         )
         self.k_values = k_values
 
-    def rerank(self, query_emb: torch.Tensor, docs_emb: torch.Tensor) -> dict[str, float]:
+    def rerank(
+        self, query_emb: torch.Tensor, docs_emb: torch.Tensor
+    ) -> dict[str, float]:
         """Rerank documents (docs_emb) given the query (query_emb)
 
         Args:
@@ -322,10 +327,14 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
         encode_queries_func = (
-            model.encode_queries if isinstance(model, EncoderWithQueryCorpusEncode) else model.encode
+            model.encode_queries
+            if isinstance(model, EncoderWithQueryCorpusEncode)
+            else model.encode
         )
         encode_corpus_func = (
-            model.encode_corpus if isinstance(model, EncoderWithQueryCorpusEncode) else model.encode
+            model.encode_corpus
+            if isinstance(model, EncoderWithQueryCorpusEncode)
+            else model.encode
         )
 
         logger.info("Encoding queries...")
@@ -412,7 +421,9 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
                 query_emb = np.asarray(
                     encode_queries_func([query], batch_size=self.batch_size)
                 )
-                docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
+                docs_emb = np.asarray(
+                    encode_corpus_func(docs, batch_size=self.batch_size)
+                )
 
             fake_qid = str(i)
             results[fake_qid] = self.rerank(query_emb, docs_emb)
