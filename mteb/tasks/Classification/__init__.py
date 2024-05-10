@@ -69,6 +69,7 @@ from .multilingual.MTOPIntentClassification import *
 from .multilingual.MultiHateClassification import *
 from .multilingual.MultilingualSentimentClassification import *
 from .multilingual.NordicLangClassification import *
+from .multilingual.NusaXSenti import *
 from .multilingual.ScalaClassification import *
 from .multilingual.SIB200Classification import *
 from .multilingual.SouthAfricanLangClassification import *
