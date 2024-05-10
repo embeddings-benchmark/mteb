@@ -71,6 +71,5 @@ class TurkicClassification(MultilingualTask, AbsTaskClassification):
             dataset[lang]["train"] = filtered_dataset
 
         self.dataset = dataset
-        print(self.dataset)
         self.dataset_transform()
         self.data_loaded = True
