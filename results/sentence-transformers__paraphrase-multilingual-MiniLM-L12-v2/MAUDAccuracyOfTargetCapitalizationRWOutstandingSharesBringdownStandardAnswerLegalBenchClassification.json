@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "MAUDAccuracyOfTargetCapitalizationRWOutstandingSharesBringdownStandardAnswerLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.8256097560975609,
+    "accuracy_stderr": 0.06000446146410996,
+    "evaluation_time": 57.39,
+    "f1": 0.2278641965977768,
+    "f1_stderr": 0.0037128621400975403,
+    "main_score": 0.8256097560975609
+  }
+}

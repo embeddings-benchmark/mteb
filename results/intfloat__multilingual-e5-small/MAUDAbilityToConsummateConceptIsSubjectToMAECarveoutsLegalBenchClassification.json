@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "MAUDAbilityToConsummateConceptIsSubjectToMAECarveoutsLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.7936507936507936,
+    "accuracy_stderr": 0.0,
+    "ap": 0.20634920634920634,
+    "ap_stderr": 0.0,
+    "evaluation_time": 96.13,
+    "f1": 0.44247787610619477,
+    "f1_stderr": 5.551115123125783e-17,
+    "main_score": 0.7936507936507936
+  }
+}

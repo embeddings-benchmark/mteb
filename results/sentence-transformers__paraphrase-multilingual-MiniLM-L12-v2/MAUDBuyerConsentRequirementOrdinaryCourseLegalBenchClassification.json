@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "MAUDBuyerConsentRequirementOrdinaryCourseLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.9079268292682926,
+    "accuracy_stderr": 0.0018292682926829287,
+    "ap": 0.15083841463414635,
+    "ap_stderr": 0.009375,
+    "evaluation_time": 39.82,
+    "f1": 0.5342119068005446,
+    "f1_stderr": 0.0014876009526308077,
+    "main_score": 0.9079268292682926
+  }
+}
