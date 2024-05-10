@@ -59,6 +59,7 @@ def test_mteb_results():
     )
 
     assert mteb_results.get_main_score() == 0.55
+    assert mteb_results.get_main_score(languages=["eng"]) == 0.55
     assert mteb_results.get_main_score(languages=["fra"]) == 0.6
 
     del TASKS_REGISTRY["dummy_task"]

@@ -20,16 +20,18 @@ with path_to_lang_scripts.open("r") as f:
 
 
 @dataclass
-class LangScriptFilter:
+class LanguageScripts:
     language_scripts: set[str]
     scripts: set[str]
     languages: set[str]
 
     @classmethod
     def from_languages_and_scripts(
-        cls, languages: list[str] | None, scripts: list[str] | None
-    ) -> LangScriptFilter:
+        cls, languages: list[str] | None = None, scripts: list[str] | None = None
+    ) -> LanguageScripts:
         lang_script_codes = set()
+        filter_scripts = scripts is not None
+        script_codes: set[str] = set(scripts) if filter_scripts else set()
         # normalize to 3 letter language codes
         normalized_langs = set()
         filter_lang = languages is not None
@@ -42,18 +44,17 @@ class LangScriptFilter:
                 if is_lang_script_code:
                     normalized_langs.add(lang_script[0])
                     lang_script_codes.add(lang)
+                    script_codes.add(lang_script[1])
                 else:
                     normalized_langs.add(lang)
 
-        filter_scripts = scripts is not None
-        script_codes: set[str] = set(scripts) if filter_scripts else set()
         return cls(
             language_scripts=lang_script_codes,
             scripts=script_codes,
             languages=normalized_langs,
         )
 
-    def is_valid_language(self, language: str) -> bool:
+    def contains_language(self, language: str) -> bool:
         if not self.language_scripts and not self.languages:
             return True
 
@@ -71,7 +72,5 @@ class LangScriptFilter:
             return True
         return False
 
-    def is_valid_script(self, script: str) -> bool:
-        if not self.scripts or script in self.scripts:
-            return True
-        return False
+    def contains_script(self, script: str) -> bool:
+        return script in self.scripts

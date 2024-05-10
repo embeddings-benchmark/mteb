@@ -8,7 +8,7 @@ import datasets
 import numpy as np
 import torch
 
-from mteb.abstasks.languages import LangScriptFilter
+from mteb.abstasks.languages import LanguageScripts
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
@@ -127,9 +127,7 @@ class AbsTask(ABC):
             script: list of scripts to filter the task by. Will be ignored if language code specified the script. If None, all scripts are included.
                 If the language code does not specify the script the intersection of the language and script will be used.
         """
-        lang_script_filter = LangScriptFilter.from_languages_and_scripts(
-            languages, script
-        )
+        lang_scripts = LanguageScripts.from_languages_and_scripts(languages, script)
 
         subsets_to_keep = []
 
@@ -139,7 +137,9 @@ class AbsTask(ABC):
 
         for hf_subset, langs in self.metadata.eval_langs.items():
             for langscript in langs:
-                if lang_script_filter.is_valid_language(langscript):
+                if lang_scripts.contains_language(
+                    langscript
+                ) or lang_scripts.contains_script(langscript):
                     subsets_to_keep.append(hf_subset)
                     break
 

@@ -7,7 +7,7 @@ from typing import Any, Callable, Dict
 import numpy as np
 from pydantic import BaseModel, field_validator
 
-from mteb.abstasks.languages import LangScriptFilter
+from mteb.abstasks.languages import LanguageScripts
 from mteb.abstasks.TaskMetadata import (
     ISO_LANGUAGE,
     ISO_LANGUAGE_SCRIPT,
@@ -134,9 +134,7 @@ class MTEBResults(BaseModel):
         if splits is None:
             splits = list(self.scores.keys())
 
-        lang_script_filter = LangScriptFilter.from_languages_and_scripts(
-            languages, scripts
-        )
+        lang_scripts = LanguageScripts.from_languages_and_scripts(languages, scripts)
 
         values = []
         for split in splits:
@@ -147,7 +145,7 @@ class MTEBResults(BaseModel):
                 eval_langs = hf_subset2langs[hf_subset]
                 include_subset = False
                 for lang in eval_langs:
-                    if lang_script_filter.is_valid_language(lang):
+                    if lang_scripts.contains_language(lang):
                         include_subset = True
                         break
                 if include_subset:
