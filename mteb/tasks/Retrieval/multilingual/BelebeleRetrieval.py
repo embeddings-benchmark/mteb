@@ -143,7 +143,7 @@ class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGS,
         reference="https://arxiv.org/abs/2308.16884",
-        main_score="ndcg_at_20",
+        main_score="ndcg_at_10",
         license="CC-BY-SA-4.0",
         domains=["Web", "News"],
         text_creation="created",
@@ -154,7 +154,7 @@ class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
         socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        avg_character_length={_EVAL_SPLIT: 568},
+        avg_character_length={_EVAL_SPLIT: 568}, # avg length of query-passage pairs
         bibtex_citation="""@article{bandarkar2023belebele,
       title={The Belebele Benchmark: a Parallel Reading Comprehension Dataset in 122 Language Variants}, 
       author={Lucas Bandarkar and Davis Liang and Benjamin Muller and Mikel Artetxe and Satya Narayan Shukla and Donald Husa and Naman Goyal and Abhinandan Krishnan and Luke Zettlemoyer and Madian Khabsa},
