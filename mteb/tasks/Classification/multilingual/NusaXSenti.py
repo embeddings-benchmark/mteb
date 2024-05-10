@@ -3,8 +3,10 @@ from __future__ import annotations
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+from ....abstasks import MultilingualTask
 
-class NusaXSentiClassification(AbsTaskClassification):
+
+class NusaXSentiClassification(AbsTaskClassification, MultilingualTask):
     metadata = TaskMetadata(
         name="NusaX-senti",
         description="NusaX is a high-quality multilingual parallel corpus that covers 12 languages, Indonesian, English, and 10 Indonesian local languages, namely Acehnese, Balinese, Banjarese, Buginese, Madurese, Minangkabau, Javanese, Ngaju, Sundanese, and Toba Batak. NusaX-Senti is a 3-labels (positive, neutral, negative) sentiment analysis dataset for 10 Indonesian local languages + Indonesian and English.",
@@ -33,7 +35,12 @@ class NusaXSentiClassification(AbsTaskClassification):
         main_score="accuracy",
         date=("2022-05-01", "2023-05-08"),
         form=["written"],
-        domains=["Reviews","Web", "Social", "Constructed",],
+        domains=[
+            "Reviews",
+            "Web",
+            "Social",
+            "Constructed",
+        ],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC-BY-SA 4.0",
         socioeconomic_status="mixed",
