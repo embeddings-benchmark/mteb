@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "e42d330f33d65b7b72dfd408883daf1661f06f18",
+  "mteb_dataset_name": "CyrillicTurkicLangClassification",
+  "mteb_version": "1.7.27",
+  "test": {
+    "accuracy": 0.49853515625,
+    "accuracy_stderr": 0.01965536734777989,
+    "evaluation_time": 11.98,
+    "f1": 0.47914528515634325,
+    "f1_stderr": 0.02289443274287253,
+    "main_score": 0.49853515625
+  }
+}
