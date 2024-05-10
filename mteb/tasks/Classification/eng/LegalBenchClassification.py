@@ -804,7 +804,7 @@ class ContractNLISurvivalOfObligationsLegalBenchClassification(AbsTaskClassifica
 class CorporateLobbyingLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CorporateLobbyingLegalBenchClassification",
-        description="The Corporate Lobbying task cosists of determining whether a proposed Congressional bill may be relevant to a company based on a company's self-description in its SEC 10K filing.",
+        description="The Corporate Lobbying task consists of determining whether a proposed Congressional bill may be relevant to a company based on a company's self-description in its SEC 10K filing.",
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -2906,6 +2906,1651 @@ class CUADWarrantyDurationLegalBenchClassification(AbsTaskClassification):
         """,
         n_samples={"test": 320},
         avg_character_length={"test": 352.27},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class DefinitionClassificationLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="DefinitionClassificationLegalBenchClassification",
+        description="This task consists of determining whether or not a sentence from a Supreme Court opinion offers a definition of a term.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "definition_classification",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2000-01-01", "2023-08-23"),  # best guess
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        """,
+        n_samples={"test": 1337},
+        avg_character_length={"test": 253.72},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class Diversity1LegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="Diversity1LegalBenchClassification",
+        description="Given a set of facts about the citizenships of plaintiffs and defendants and the amounts associated with claims, determine if the criteria for diversity jurisdiction have been met (variant 1).",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "diversity_1",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2000-01-01", "2023-08-23"),  # best guess
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        """,
+        n_samples={"test": 300},
+        avg_character_length={"test": 103.21},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+        # Map the boolean columns to readable plaintext
+        _diverse_parties_map = {
+            "True": "The parties are diverse.",
+            "False": "The parties are not diverse.",
+        }
+
+        _amount_in_controversy_map = {
+            "True": "The Amount-in-controversy was met.",
+            "False": "The Amount-in-controversy was not met.",
+        }
+
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "text": example["text"]
+                + " "
+                + _diverse_parties_map[example["parties_are_diverse"]]
+                + " "
+                + _amount_in_controversy_map[example["aic_is_met"]]
+            }
+        )
+        self.dataset = self.dataset.remove_columns(
+            ["parties_are_diverse", "aic_is_met"]
+        )
+
+
+class Diversity2LegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="Diversity2LegalBenchClassification",
+        description="Given a set of facts about the citizenships of plaintiffs and defendants and the amounts associated with claims, determine if the criteria for diversity jurisdiction have been met (variant 2).",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "diversity_2",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2000-01-01", "2023-08-23"),  # best guess
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        """,
+        n_samples={"test": 300},
+        avg_character_length={"test": 0},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+        # Map the boolean columns to readable plaintext
+        _diverse_parties_map = {
+            "True": "The parties are diverse.",
+            "False": "The parties are not diverse.",
+        }
+
+        _amount_in_controversy_map = {
+            "True": "The Amount-in-controversy was met.",
+            "False": "The Amount-in-controversy was not met.",
+        }
+
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "text": example["text"]
+                + " "
+                + _diverse_parties_map[example["parties_are_diverse"]]
+                + " "
+                + _amount_in_controversy_map[example["aic_is_met"]]
+            }
+        )
+        self.dataset = self.dataset.remove_columns(
+            ["parties_are_diverse", "aic_is_met"]
+        )
+
+
+class Diversity3LegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="Diversity3LegalBenchClassification",
+        description="Given a set of facts about the citizenships of plaintiffs and defendants and the amounts associated with claims, determine if the criteria for diversity jurisdiction have been met (variant 3).",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "diversity_3",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2000-01-01", "2023-08-23"),  # best guess
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        """,
+        n_samples={"test": 300},
+        avg_character_length={"test": 135.46},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+        # Map the boolean columns to readable plaintext
+        _diverse_parties_map = {
+            "True": "The parties are diverse.",
+            "False": "The parties are not diverse.",
+        }
+
+        _amount_in_controversy_map = {
+            "True": "The Amount-in-controversy was met.",
+            "False": "The Amount-in-controversy was not met.",
+        }
+
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "text": example["text"]
+                + " "
+                + _diverse_parties_map[example["parties_are_diverse"]]
+                + " "
+                + _amount_in_controversy_map[example["aic_is_met"]]
+            }
+        )
+        self.dataset = self.dataset.remove_columns(
+            ["parties_are_diverse", "aic_is_met"]
+        )
+
+
+class Diversity4LegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="Diversity4LegalBenchClassification",
+        description="Given a set of facts about the citizenships of plaintiffs and defendants and the amounts associated with claims, determine if the criteria for diversity jurisdiction have been met (variant 4).",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "diversity_4",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2000-01-01", "2023-08-23"),  # best guess
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        """,
+        n_samples={"test": 300},
+        avg_character_length={"test": 144.52},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+        # Map the boolean columns to readable plaintext
+        _diverse_parties_map = {
+            "True": "The parties are diverse.",
+            "False": "The parties are not diverse.",
+        }
+
+        _amount_in_controversy_map = {
+            "True": "The Amount-in-controversy was met.",
+            "False": "The Amount-in-controversy was not met.",
+        }
+
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "text": example["text"]
+                + " "
+                + _diverse_parties_map[example["parties_are_diverse"]]
+                + " "
+                + _amount_in_controversy_map[example["aic_is_met"]]
+            }
+        )
+        self.dataset = self.dataset.remove_columns(
+            ["parties_are_diverse", "aic_is_met"]
+        )
+
+
+class Diversity5LegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="Diversity5LegalBenchClassification",
+        description="Given a set of facts about the citizenships of plaintiffs and defendants and the amounts associated with claims, determine if the criteria for diversity jurisdiction have been met (variant 5).",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "diversity_5",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2000-01-01", "2023-08-23"),  # best guess
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        """,
+        n_samples={"test": 300},
+        avg_character_length={"test": 174.77},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+        # Map the boolean columns to readable plaintext
+        _diverse_parties_map = {
+            "True": "The parties are diverse.",
+            "False": "The parties are not diverse.",
+        }
+
+        _amount_in_controversy_map = {
+            "True": "The Amount-in-controversy was met.",
+            "False": "The Amount-in-controversy was not met.",
+        }
+
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "text": example["text"]
+                + " "
+                + _diverse_parties_map[example["parties_are_diverse"]]
+                + " "
+                + _amount_in_controversy_map[example["aic_is_met"]]
+            }
+        )
+        self.dataset = self.dataset.remove_columns(
+            ["parties_are_diverse", "aic_is_met"]
+        )
+
+
+class Diversity6LegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="Diversity6LegalBenchClassification",
+        description="Given a set of facts about the citizenships of plaintiffs and defendants and the amounts associated with claims, determine if the criteria for diversity jurisdiction have been met (variant 6).",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "diversity_6",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2000-01-01", "2023-08-23"),  # best guess
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        """,
+        n_samples={"test": 300},
+        avg_character_length={"test": 301.01},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+        # Map the boolean columns to readable plaintext
+        _diverse_parties_map = {
+            "True": "The parties are diverse.",
+            "False": "The parties are not diverse.",
+        }
+
+        _amount_in_controversy_map = {
+            "True": "The Amount-in-controversy was met.",
+            "False": "The Amount-in-controversy was not met.",
+        }
+
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "text": example["text"]
+                + " "
+                + _diverse_parties_map[example["parties_are_diverse"]]
+                + " "
+                + _amount_in_controversy_map[example["aic_is_met"]]
+            }
+        )
+        self.dataset = self.dataset.remove_columns(
+            ["parties_are_diverse", "aic_is_met"]
+        )
+
+
+class FunctionOfDecisionSectionLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="FunctionOfDecisionSectionLegalBenchClassification",
+        description="""The task is to classify a paragraph extracted from a written court decision into one of seven possible categories:
+            1. Facts - The paragraph describes the faction background that led up to the present lawsuit.
+            2. Procedural History - The paragraph describes the course of litigation that led to the current proceeding before the court.
+            3. Issue - The paragraph describes the legal or factual issue that must be resolved by the court.
+            4. Rule - The paragraph describes a rule of law relevant to resolving the issue.
+            5. Analysis - The paragraph analyzes the legal issue by applying the relevant legal principles to the facts of the present dispute.
+            6. Conclusion - The paragraph presents a conclusion of the court.
+            7. Decree - The paragraph constitutes a decree resolving the dispute.
+        """,
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "function_of_decision_section",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2000-01-01", "2023-08-23"),  # best guess
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        """,
+        n_samples={"test": 367},
+        avg_character_length={"test": 551.07},
+    )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "text": example["Paragraph"]
+                + "\n\n"
+                + "Citation: "
+                + example["Citation"]
+            }
+        )
+
+
+class InsurancePolicyInterpretationLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="InsurancePolicyInterpretationLegalBenchClassification",
+        description="Given an insurance claim and policy, determine whether the claim is covered by the policy.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "insurance_policy_interpretation",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2000-01-01", "2023-08-23"),  # best guess
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        """,
+        n_samples={"test": 133},
+        avg_character_length={"test": 521.88},
+    )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "text": example["policy"] + "\n\n" + "Claim: " + example["claim"]
+            }
+        )
+
+
+class InternationalCitizenshipQuestionsLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="InternationalCitizenshipQuestionsLegalBenchClassification",
+        description="Answer questions about citizenship law from across the world. Dataset was made using the GLOBALCIT citizenship law dataset, by constructing questions about citizenship law as Yes or No questions.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "international_citizenship_questions",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("1960-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @misc{vink2023globalcit,
+            author = {Vink, Maarten and van der Baaren, Luuk and Bauböck, Rainer and Džankić, Jelena and Honohan, Iseult and Manby, Bronwen},
+            title = {GLOBALCIT Citizenship Law Dataset, v2.0, Country-Year-Mode Data (Acquisition)},
+            howpublished = {https://hdl.handle.net/1814/73190},
+            year = {2023},
+            publisher = {Global Citizenship Observatory}
+        }
+        """,
+        n_samples={"test": 2048},
+        avg_character_length={"test": 206.18},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_columns(
+            {"question": "text", "answer": "label"}
+        )
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"]
+        )
+
+
+class JCrewBlockerLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="JCrewBlockerLegalBenchClassification",
+        description="The J.Crew Blocker, also known as the J.Crew Protection, is a provision included in leveraged loan documents to prevent companies from removing security by transferring intellectual property (IP) into new subsidiaries and raising additional debt. The task consists of detemining whether the J.Crew Blocker is present in the document.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "jcrew_blocker",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2016-01-01", "2023-08-23"),  # best guess
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        """,
+        n_samples={"test": 54},
+        avg_character_length={"test": 1092.22},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class LearnedHandsBenefitsLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsBenefitsLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's legal post discusses public benefits and social services that people can get from the government, like for food, disability, old age, housing, medical help, unemployment, child care, or other social needs.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_benefits",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 66},
+        avg_character_length={"test": 1308.44},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class LearnedHandsBusinessLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsBusinessLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's legal question discusses issues faced by people who run small businesses or nonprofits, including around incorporation, licenses, taxes, regulations, and other concerns. It also includes options when there are disasters, bankruptcies, or other problems.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_business",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 174},
+        avg_character_length={"test": 1144.51},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class LearnedHandsConsumerLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsConsumerLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's post discusses issues people face regarding money, insurance, consumer goods and contracts, taxes, and small claims about quality of service.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_consumer",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 614},
+        avg_character_length={"test": 1277.45},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class LearnedHandsCourtsLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsCourtsLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's post discusses the logistics of how a person can interact with a lawyer or the court system. It applies to situations about procedure, rules, how to file lawsuits, how to hire lawyers, how to represent oneself, and other practical matters about dealing with these systems.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_courts",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 192},
+        avg_character_length={"test": 1171.02},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class LearnedHandsCrimeLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsCrimeLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's post discusses issues in the criminal system including when people are charged with crimes, go to a criminal trial, go to prison, or are a victim of a crime.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_crime",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 688},
+        avg_character_length={"test": 1212.90},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class LearnedHandsDivorceLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsDivorceLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's post discusses issues around filing for divorce, separation, or annulment, getting spousal support, splitting money and property, and following the court processes.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_divorce",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 150},
+        avg_character_length={"test": 1242.43},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class LearnedHandsDomesticViolenceLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsDomesticViolenceLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's post discusses dealing with domestic violence and abuse, including getting protective orders, enforcing them, understanding abuse, reporting abuse, and getting resources and status if there is abuse.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_domestic_violence",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 174},
+        avg_character_length={"test": 1360.83},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class LearnedHandsEducationLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsEducationLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's post discusses issues around school, including accommodations for special needs, discrimination, student debt, discipline, and other issues in education.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_education",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 56},
+        avg_character_length={"test": 1397.44},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class LearnedHandsEmploymentLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsEmploymentLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's post discusses issues related to working at a job, including discrimination and harassment, worker's compensation, workers rights, unions, getting paid, pensions, being fired, and more.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_employment",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 710},
+        avg_character_length={"test": 1262.74},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class LearnedHandsEstatesLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsEstatesLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's post discusses planning for end-of-life, possible incapacitation, and other special circumstances that would prevent a person from making decisions about their own well-being, finances, and property. This includes issues around wills, powers of attorney, advance directives, trusts, guardianships, conservatorships, and other estate issues that people and families deal with.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_estates",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 178},
+        avg_character_length={"test": 1200.70},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class LearnedHandsFamilyLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsFamilyLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's post discusses issues that arise within a family, like divorce, adoption, name change, guardianship, domestic violence, child custody, and other issues.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_family",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 2048},
+        avg_character_length={"test": 1338.27},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"]
+        )
+
+
+class LearnedHandsHealthLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsHealthLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's post discusses issues with accessing health services, paying for medical care, getting public benefits for health care, protecting one's rights in medical settings, and other issues related to health.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_health",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 226},
+        avg_character_length={"test": 1472.59},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class LearnedHandsHousingLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsHousingLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's post discusses issues with paying your rent or mortgage, landlord-tenant issues, housing subsidies and public housing, eviction, and other problems with your apartment, mobile home, or house.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_housing",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 2048},
+        avg_character_length={"test": 1322.54},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"]
+        )
+
+
+class LearnedHandsImmigrationLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsImmigrationLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's post discusses visas, asylum, green cards, citizenship, migrant work and benefits, and other issues faced by people who are not full citizens in the US.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_immigration",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 134},
+        avg_character_length={"test": 1216.31},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class LearnedHandsTortsLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsTortsLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's legal question discusses problems that one person has with another person (or animal), like when there is a car accident, a dog bite, bullying or possible harassment, or neighbors treating each other badly.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_torts",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 432},
+        avg_character_length={"test": 1406.97},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class LearnedHandsTrafficLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LearnedHandsTrafficLegalBenchClassification",
+        description="This is a binary classification task in which the model must determine if a user's legal post discusses problems with traffic and parking tickets, fees, driver's licenses, and other issues experienced with the traffic system. It also concerns issues with car accidents and injuries, cars' quality, repairs, purchases, and other contracts.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "learned_hands_traffic",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2022-05-21", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        },
+        @dataset{learned_hands,
+            title = {LearnedHands Dataset},
+            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+            year = {2022},
+            url = {https://spot.suffolklitlab.org/data/#learnedhands},
+            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+            urldate = {2022-05-21}
+        }
+        """,
+        n_samples={"test": 556},
+        avg_character_length={"test": 1182.91},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class LegalReasoningCausalityLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="LegalReasoningCausalityLegalBenchClassification",
+        description="Given an excerpt from a district court opinion, classify if it relies on statistical evidence in its reasoning.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "legal_reasoning_causality",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2020-01-01", "2023-08-23"),  # best guess
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        """,
+        n_samples={"test": 55},
+        avg_character_length={"test": 1563.76},
     )
 
     def dataset_transform(self):
