@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from collections import Counter
+
 import datasets
 from datasets import DatasetDict
-from collections import Counter
 
 from mteb.abstasks import AbsTaskClassification, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -35,7 +36,8 @@ class TurkicClassification(MultilingualTask, AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="""
+        """,
         n_samples={"train": 193056},
         avg_character_length={"train": 1103.13},
     )
@@ -43,7 +45,10 @@ class TurkicClassification(MultilingualTask, AbsTaskClassification):
     def transform_data(self, dataset, lang):
         dataset_lang = DatasetDict()
         label_count = Counter(dataset["train"]["label"])
-        dataset_lang["train"] = dataset["train"].filter(lambda example: example["lang"] == lang and label_count[example["label"]]>=20)
+        dataset_lang["train"] = dataset["train"].filter(
+            lambda example: example["lang"] == lang
+            and label_count[example["label"]] >= 20
+        )
         dataset_lang = self.stratified_subsampling(
             dataset_lang, seed=self.seed, splits=["train"]
         )
@@ -57,12 +62,12 @@ class TurkicClassification(MultilingualTask, AbsTaskClassification):
         metadata = self.metadata_dict.get("dataset", None)
         full_dataset = datasets.load_dataset(**metadata)
         full_dataset = full_dataset.rename_columns(
-                {"processed_text": "text", "category": "label"}
-            )
+            {"processed_text": "text", "category": "label"}
+        )
         for lang in self.langs:
             dataset[lang] = DatasetDict()
             filtered_dataset = self.transform_data(full_dataset, lang)
-            
+
             dataset[lang]["train"] = filtered_dataset
 
         self.dataset = dataset
