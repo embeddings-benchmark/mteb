@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "e7fc9f3d8d6c5640a26679d8a50b1666b02cc41f",
+  "mteb_dataset_name": "FrenkHrClassification",
+  "mteb_version": "1.6.36",
+  "test": {
+    "accuracy": 0.5995280792826805,
+    "accuracy_stderr": 0.046227615287769495,
+    "ap": 0.6267074390774983,
+    "ap_stderr": 0.02852283173296914,
+    "evaluation_time": 16.94,
+    "f1": 0.5936243710790546,
+    "f1_stderr": 0.05138925436058383,
+    "main_score": 0.5995280792826805
+  }
+}

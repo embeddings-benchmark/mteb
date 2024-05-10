@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "JCrewBlockerLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.7037037037037038,
+    "accuracy_stderr": 1.1102230246251565e-16,
+    "ap": 0.8623931623931625,
+    "ap_stderr": 1.1102230246251565e-16,
+    "evaluation_time": 26.36,
+    "f1": 0.5714285714285714,
+    "f1_stderr": 0.0,
+    "main_score": 0.7037037037037038
+  }
+}

@@ -36,6 +36,7 @@ TASK_SUBTYPE = Literal[
     "Topic classification",
     "Code retrieval",
     "False Friends",
+    "Cross-Lingual Semantic Discrimination",
 ]
 
 TASK_DOMAIN = Literal[
@@ -66,6 +67,7 @@ TEXT_CREATION_METHOD = Literal[
     "human-translated and localized",
     "machine-translated and verified",
     "machine-translated and localized",
+    "LM-generated and verified",
 ]
 
 SOCIOECONOMIC_STATUS = Literal[
@@ -110,7 +112,21 @@ SPLIT_NAME = str
 ISO_LANGUAGE_SCRIPT = str
 LANGUAGES = Union[List[ISO_LANGUAGE_SCRIPT], Mapping[str, List[ISO_LANGUAGE_SCRIPT]]]
 
-PROGRAMMING_LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
+PROGRAMMING_LANGS = [
+    "python",
+    "javascript",
+    "typescript",
+    "go",
+    "ruby",
+    "java",
+    "php",
+    "c",
+    "c++",
+    "rust",
+    "swift",
+    "scala",
+    "shell",
+]
 
 logger = logging.getLogger(__name__)
 
@@ -235,17 +251,21 @@ class TaskMetadata(BaseModel):
             )
 
     @property
-    def languages(self) -> set[str]:
+    def languages(self) -> list[str]:
         """Return the languages of the dataset as iso639-3 codes."""
 
         def get_lang(lang: str) -> str:
             return lang.split("-")[0]
 
         if isinstance(self.eval_langs, dict):
-            return set(
-                get_lang(lang) for langs in self.eval_langs.values() for lang in langs
+            return sorted(
+                set(
+                    get_lang(lang)
+                    for langs in self.eval_langs.values()
+                    for lang in langs
+                )
             )
-        return set(sorted([get_lang(lang) for lang in self.eval_langs]))
+        return sorted(set([get_lang(lang) for lang in self.eval_langs]))
 
     @property
     def scripts(self) -> set[str]:

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from .dan.BornholmskBitextMining import *
+from .kat.TbilisiCityHallBitextMining import *
+from .multilingual.BibleNLPBitextMining import *
 from .multilingual.BUCCBitextMining import *
 from .multilingual.DiaBLaBitextMining import *
 from .multilingual.FloresBitextMining import *
