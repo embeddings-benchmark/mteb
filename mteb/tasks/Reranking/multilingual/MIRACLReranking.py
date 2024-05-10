@@ -68,8 +68,8 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         dialect=[],
         text_creation="created",
         bibtex_citation=_CITATION,
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"dev": 44608},
+        avg_character_length={'dev': 506.30},
     )
 
     def evaluate(self, model, split="test", **kwargs):
