@@ -27,6 +27,7 @@ from .eng.ImdbClassification import *
 from .eng.LegalBenchClassification import *
 from .eng.NewsClassification import *
 from .eng.PatentClassification import *
+from .eng.PoemSentimentClassification import *
 from .eng.ToxicChatClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
