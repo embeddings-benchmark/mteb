@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "944a44cf93932ce62b51e7c07d44d8cc03d6bcae",
+  "mteb_dataset_name": "HinDialectClassification",
+  "mteb_version": "1.7.5",
+  "test": {
+    "accuracy": 0.4080729166666667,
+    "accuracy_stderr": 0.022261690482453803,
+    "evaluation_time": 281.28,
+    "f1": 0.23680883800470895,
+    "f1_stderr": 0.0167555265168248,
+    "main_score": 0.4080729166666667
+  }
+}

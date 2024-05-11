@@ -12,7 +12,7 @@ class Robust04InstructionRetrieval(AbsTaskInstructionRetrieval):
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
             "path": "jhu-clsp/robust04-instructions",
-            "revision": "d25e82647b09251f4feaaf5462c9a18445072ba6",
+            "revision": "a5a1c4fe2bc528ac12e83f8cdf82178da85d2f1d",
         },
         type="InstructionRetrieval",
         category="s2p",
@@ -36,6 +36,6 @@ class Robust04InstructionRetrieval(AbsTaskInstructionRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples={"eng": 42645 * 2},
-        avg_character_length={"eng": 2680.043891349965},
+        n_samples={"eng": 47544 * 2},
+        avg_character_length={"eng": 2471.0398058252426},
     )
