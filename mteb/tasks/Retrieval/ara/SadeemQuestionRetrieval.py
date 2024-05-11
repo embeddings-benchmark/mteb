@@ -47,19 +47,13 @@ class SadeemQuestionRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        query_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
-            "queries"
-        ]
+        query_list = datasets.load_dataset(**self.metadata_dict["dataset"])["queries"]
         queries = {row["query-id"]: row["text"] for row in query_list}
 
-        corpus_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
-            "corpus"
-        ]
+        corpus_list = datasets.load_dataset(**self.metadata_dict["dataset"])["corpus"]
         corpus = {row["corpus-id"]: {"text": row["text"]} for row in corpus_list}
 
-        qrels_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
-            "qrels"
-        ]
+        qrels_list = datasets.load_dataset(**self.metadata_dict["dataset"])["qrels"]
         qrels = {row["query-id"]: {row["corpus-id"]: 1} for row in qrels_list}
 
         self.corpus = {self._EVAL_SPLIT: corpus}
