@@ -8,7 +8,7 @@ class MarathiNewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MarathiNewsClassification",
         description="A Marathi dataset for 3-class classification of Marathi news articles",
-        reference="https://github.com/goru001/nlp-for-punjabi/",
+        reference="https://github.com/goru001/nlp-for-marathi",
         dataset={
             "path": "mlexplorer008/marathi_news_classification",
             "revision": "7640cf8132cca1f99995ac71512a670e3c965cf1",
@@ -17,8 +17,8 @@ class MarathiNewsClassification(AbsTaskClassification):
         category="s2s",
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],
-        eval_langs=["pan-Guru"],
-        main_score="accuracy",
+        eval_langs=["mar-Deva"],
+        main_score="f1",
         form=["written"],
         domains=["News"],
         task_subtypes=["Topic classification"],
@@ -27,11 +27,11 @@ class MarathiNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
-        n_samples={"train": 627, "test": 157},
-        avg_character_length={"train": 4222.22, "test": 4115.14},
+        bibtex_citation="""""",
+        n_samples={"test": 2048},
+        avg_character_length={"test": 52.37},
     )
 
     def dataset_transform(self):
-        self.dataset = self.dataset.rename_column("article", "text")
-        self.dataset = self.dataset.rename_column("is_about_politics", "label")
+        self.dataset = self.dataset.rename_columns({"headline": "text"})
+        self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
