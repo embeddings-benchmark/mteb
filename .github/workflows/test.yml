@@ -13,6 +13,7 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest] #, macos-latest, windows-latest]
         python-version: ["3.8", "3.9", "3.10"]
@@ -36,6 +37,20 @@ jobs:
           make install-for-tests
 
       - name: Run tests
+        if: runner.os != 'Windows'
         shell: bash
         run: |
           make test
+
+      - name: Run tests on Windows
+        # Run tests on Windows
+        # this step will run the workflow twice since we have experienced
+        # failures when running on windows when loading the datasets
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          # run the test once and if it fails, run it again
+          # if it fails again, the workflow will fail.
+          # If it passes the first time the test will not run again
+          make test || make test
+

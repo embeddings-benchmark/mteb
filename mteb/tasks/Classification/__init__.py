@@ -5,6 +5,7 @@ from .ara.HotelReviewSentimentClassification import *
 from .ara.RestaurantReviewSentimentClassification import *
 from .ara.TweetEmotionClassification import *
 from .ara.TweetSarcasmClassification import *
+from .ben.BengaliDocumentClassification import *
 from .ben.BengaliHateSpeechClassification import *
 from .ben.BengaliSentimentAnalysis import *
 from .bul.BulgarianStoreReviewSentimentClassfication import *
@@ -36,6 +37,7 @@ from .fas.PersianFoodSentimentClassification import *
 from .fil.FilipinoHateSpeechClassification import *
 from .fil.FilipinoShopeeReviewsClassification import *
 from .fin.FinToxicityClassification import *
+from .fra.FrenchBookReviews import *
 from .fra.MovieReviewSentimentClassification import *
 from .guj.GujaratiNewsClassification import *
 from .hin.HindiDiscourseClassification import *
@@ -43,6 +45,7 @@ from .hin.SentimentAnalysisHindi import *
 from .hrv.FrenkHrClassification import *
 from .ind.IndonesianIdClickbaitClassification import *
 from .ind.IndonesianMongabayConservationClassification import *
+from .ita.ItaCaseholdClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
 from .jav.JavaneseIMDBClassification import *
 from .jpn.WRIMEClassification import *
@@ -57,6 +60,7 @@ from .multilingual.AmazonReviewsClassification import *
 from .multilingual.HinDialectClassification import *
 from .multilingual.IndicLangClassification import *
 from .multilingual.IndicSentimentClassification import *
+from .multilingual.LanguageClassification import *
 from .multilingual.MasakhaNEWSClassification import *
 from .multilingual.MassiveIntentClassification import *
 from .multilingual.MassiveScenarioClassification import *
@@ -68,6 +72,7 @@ from .multilingual.NordicLangClassification import *
 from .multilingual.ScalaClassification import *
 from .multilingual.SIB200Classification import *
 from .multilingual.SouthAfricanLangClassification import *
+from .multilingual.SwissJudgementClassification import *
 from .multilingual.TweetSentimentClassification import *
 from .nep.NepaliNewsClassification import *
 from .nld.DutchBookReviewSentimentClassification import *
@@ -82,6 +87,7 @@ from .san.SanskritShlokasClassification import *
 from .sin.SinhalaNewsClassification import *
 from .sin.SinhalaNewsSourceClassification import *
 from .slv.FrenkSlClassification import *
+from .spa.SpanishNewsClassification import *
 from .spa.SpanishSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
 from .swe.DalajClassification import *
@@ -89,6 +95,7 @@ from .swe.SweRecClassification import *
 from .tam.TamilNewsClassification import *
 from .tel.TeluguAndhraJyotiNewsClassification import *
 from .tha.WisesightSentimentClassification import *
+from .tsn.TswanaNewsClassification import *
 from .tur.TurkishMovieSentimentClassification import *
 from .tur.TurkishProductSentimentClassification import *
 from .ukr.UkrFormalityClassification import *

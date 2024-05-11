@@ -36,6 +36,7 @@ TASK_SUBTYPE = Literal[
     "Topic classification",
     "Code retrieval",
     "False Friends",
+    "Cross-Lingual Semantic Discrimination",
 ]
 
 TASK_DOMAIN = Literal[
@@ -66,6 +67,7 @@ TEXT_CREATION_METHOD = Literal[
     "human-translated and localized",
     "machine-translated and verified",
     "machine-translated and localized",
+    "LM-generated and verified",
 ]
 
 SOCIOECONOMIC_STATUS = Literal[

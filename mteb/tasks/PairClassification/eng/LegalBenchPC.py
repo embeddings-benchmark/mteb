@@ -21,6 +21,12 @@ _DATASET_COLUMN_MAP = [
         "sent2": "contract",
         "labels": "answer",
     },
+    {
+        "name": "hearsay",
+        "sent1": "text",
+        "sent2": "slice",
+        "labels": "answer",
+    },
 ]
 
 
@@ -38,7 +44,7 @@ class LegalBenchPC(AbsTaskPairClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2023-08-23", "2023-08-23"),
+        date=("2000-01-01", "2023-08-23"),  # best guess
         form=["written"],
         domains=["Legal"],
         task_subtypes=[],
@@ -56,8 +62,8 @@ class LegalBenchPC(AbsTaskPairClassification):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
             }""",
-        n_samples={"test": 584},
-        avg_character_length={"test": 74.75},
+        n_samples={"test": 678},
+        avg_character_length={"test": 83.94},
     )
 
     def load_data(self, **kwargs: Any) -> None:
