@@ -33,12 +33,7 @@ class SadeemKeywordRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation="""
-            @inproceedings{sadeem-2024-ar-retrieval-keywords,
-            title = "{QMS}um: A New Benchmark for Arabic Keywoord-based Articles Searching.",
-            author = "Abu Bakr Soliman | Saddem-ai"
-            }
-        """,
+        bibtex_citation=None,
         n_samples={_EVAL_SPLIT: 22979},
         avg_character_length={_EVAL_SPLIT: 500.0},
     )
