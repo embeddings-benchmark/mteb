@@ -48,7 +48,7 @@ The contribution points are computed using the following table:
 
 | Contribution type   | Demand              | Points  | Description                                                                                                       |
 | ------------------- | ------------------- | ------- | ----------------------------------------------------------------------------------------------------------------- |
-| New dataset         | As many as possible | 2+bonus | The first dataset for a language x task gains 4 bonus points. If the number of new languages is >= 12 then contributors gains 50 points (12 * 4 + 2 = 48 + 2 = 50).|
+| New dataset         | As many as possible | 2+bonus | The first dataset for a language x task gains 4 bonus points. If the number of new languages is >= 12 then points for that PR for a new dataset are capped at 50 (12 * 4 + 2 = 48 + 2 = 50).|
 | New task            | If relevant         | 10      | Task 2.                                                                                                           |
 | Dataset annotations | On demand           | 1       | Adding missing dataset annotations to existing datasets.                                                          |
 | Bug fixes            | On demand           | 1-10    | Points depends the effect of code changes. If you want to find issues related to the MMTEB you can find them [here](https://github.com/embeddings-benchmark/mteb/milestone/1), issues marked with "help-wanted" or "good-first-issue" are great places to start. |
