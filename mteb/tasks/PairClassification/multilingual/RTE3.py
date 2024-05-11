@@ -25,7 +25,7 @@ class RTE3(MultilingualTask, AbsTaskPairClassification):
         reference="https://aclanthology.org/W07-1401/",
         category="s2s",
         type="PairClassification",
-        eval_splits=["test", "validation"],
+        eval_splits=["test"],
         eval_langs=_LANGS,
         main_score="ap",
         date=("2023-03-25", "2024-04-15"),
@@ -52,8 +52,8 @@ class RTE3(MultilingualTask, AbsTaskPairClassification):
             pages = "1--9",
         }
         """,
-        n_samples={"validation": 3200, "test": 3200},
-        avg_character_length={"validation": 146.0, "test": 126.1},
+        n_samples={"test": 800},
+        avg_character_length={"test": 126.1},
     )
 
     def load_data(self, **kwargs):
