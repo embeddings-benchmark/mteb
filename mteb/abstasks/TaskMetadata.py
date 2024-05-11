@@ -108,8 +108,7 @@ STR_DATE = Annotated[
 ]  # Allows the type to be a string, but ensures that the string is a valid date
 
 SPLIT_NAME = str
-# a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
-ISO_LANGUAGE_SCRIPT = str
+ISO_LANGUAGE_SCRIPT = str  # a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
 ISO_LANGUAGE = str  # a 3-letter ISO 639-3 language code
 ISO_SCRIPT = str  # a 4-letter ISO 15924 script code
 HFSubset = str
@@ -290,3 +289,10 @@ class TaskMetadata(BaseModel):
         return all(
             getattr(self, field_name) is not None for field_name in self.model_fields
         )
+
+    @property
+    def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISO_LANGUAGE_SCRIPT]]:
+        """Return a dictionary mapping huggingface subsets to languages."""
+        if isinstance(self.eval_langs, dict):
+            return self.eval_langs
+        return {"default": self.eval_langs}  # type: ignore

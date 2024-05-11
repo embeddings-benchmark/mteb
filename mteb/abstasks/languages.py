@@ -30,18 +30,15 @@ class LanguageScripts:
         cls, languages: list[str] | None = None, scripts: list[str] | None = None
     ) -> LanguageScripts:
         lang_script_codes = set()
-        filter_scripts = scripts is not None
-        script_codes: set[str] = set(scripts) if filter_scripts else set()
+        script_codes: set[str] = set(scripts) if (scripts is not None) else set()
         # normalize to 3 letter language codes
         normalized_langs = set()
-        filter_lang = languages is not None
 
-        if filter_lang:
+        if languages is not None:
             for lang in languages:
                 lang_script = lang.split("-")
 
-                is_lang_script_code = len(lang_script) == 2
-                if is_lang_script_code:
+                if len(lang_script) == 2:
                     normalized_langs.add(lang_script[0])
                     lang_script_codes.add(lang)
                     script_codes.add(lang_script[1])

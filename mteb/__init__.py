@@ -17,6 +17,6 @@ __all__ = [
     "MTEB_MAIN_EN",
     "MTEB_RETRIEVAL_LAW",
     "MTEB_RETRIEVAL_WITH_INSTRUCTIONS",
-    "get_tasks",
     "TASKS_REGISTRY",
+    "get_tasks",
 ]

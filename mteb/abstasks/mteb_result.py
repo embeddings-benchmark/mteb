@@ -1,31 +1,24 @@
 from __future__ import annotations
 
 import json
+from collections import defaultdict
+from importlib.metadata import version
 from pathlib import Path
 from typing import Any, Callable, Dict
 
 import numpy as np
 from pydantic import BaseModel, field_validator
 
+from mteb.abstasks import AbsTask
 from mteb.abstasks.languages import LanguageScripts
 from mteb.abstasks.TaskMetadata import (
     ISO_LANGUAGE,
     ISO_LANGUAGE_SCRIPT,
-    LANGUAGES,
     HFSubset,
 )
-from mteb.overview import TASKS_REGISTRY
 
 Split = str
 Scores = Dict[str, Any]
-
-
-def eval_langs_as_dict(
-    eval_langs: LANGUAGES,
-) -> dict[HFSubset, list[ISO_LANGUAGE_SCRIPT]]:
-    if isinstance(eval_langs, list):
-        return {"": eval_langs}
-    return eval_langs  # type: ignore
 
 
 class MTEBResults(BaseModel):
@@ -35,9 +28,9 @@ class MTEBResults(BaseModel):
         task_name: The name of the MTEB task.
         dataset_revision: The revision dataset for the task on HuggingFace dataset hub.
         mteb_version: The version of the MTEB used to evaluate the model.
-        scores: The scores of the model on the dataset. The scores is a dictionary with the following structure; dict[Split, dict[HFSubset, Scores]].
+        scores: The scores of the model on the dataset. The scores is a dictionary with the following structure; dict[Split, list[Scores]].
             Where Scores is a dictionary with the following structure; dict[str, Any]. Where the keys and values are scores. Split is the split of
-            the dataset. HFSubset is the subset name on huggingface e.g. "en-de". HFSubset is set to "" if there is no subsets on huggingface.
+            the dataset.
 
     Example:
         >>> scores = {
@@ -52,39 +45,71 @@ class MTEBResults(BaseModel):
         ...         },
         ...     },
         ... }
-        >>> mteb_results = MTEBResults(
-        ...     dataset_revision="1.0",
-        ...     task_name="sample_task",
-        ...     mteb_version="1.0",
-        ...     scores=scores,
-        ... )
+        >>> sample_task = ... # some MTEB task
+        >>> mteb_results = MTEBResults.from_task_results(sample_task, scores)
         >>> mteb_results.get_main_score()  # get the main score for all languages
         0.55
         >>> mteb_results.get_main_score(languages=["fra"])  # get the main score for French
         0.6
+        >>> mteb_results.to_dict()
+        {'dataset_revision': '1.0', 'task_name': 'sample_task', 'mteb_version': '1.0', 'scores': {'train':
+            [
+                {'main_score': 0.5, 'evaluation_time': 100, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']},
+                {'main_score': 0.6, 'evaluation_time': 200, 'hf_subset': 'en-fr', 'languages': ['eng-Latn', 'fra-Latn']}
+            ]}
+        }
     """
 
     dataset_revision: str
     task_name: str
     mteb_version: str
-    scores: dict[Split, dict[HFSubset, Scores]]
+    scores: dict[Split, list[Scores]]
+
+    @classmethod
+    def from_task_results(
+        cls, task: AbsTask, scores: dict[Split, dict[HFSubset, Scores]]
+    ) -> MTEBResults:
+        task_meta = task.metadata
+        subset2langscripts = task_meta.hf_subsets_to_langscripts
+        flat_scores = defaultdict(list)
+        for split, hf_subset_scores in scores.items():
+            for hf_subset, scores in hf_subset_scores.items():
+                eval_langs = subset2langscripts[hf_subset]
+                _scores = {
+                    **scores,
+                    "hf_subset": hf_subset,
+                    "languages": eval_langs,
+                }
+                flat_scores[split].append(_scores)
+
+        return MTEBResults(
+            dataset_revision=task.metadata.dataset["revision"],
+            task_name=task.metadata.name,
+            mteb_version=version("mteb"),
+            scores=flat_scores,
+        )
 
     @field_validator("scores")
     def _validate_scores(
-        cls, v: dict[Split, dict[HFSubset, Scores]]
-    ) -> dict[Split, dict[HFSubset, Scores]]:
+        cls, v: dict[Split, list[Scores]]
+    ) -> dict[Split, list[Scores]]:
         for split, hf_subset_scores in v.items():
-            for lang, scores in hf_subset_scores.items():
-                cls._validate_scores_dict(scores)
+            for hf_subset_score in hf_subset_scores:
+                if not isinstance(hf_subset_score, dict):
+                    raise ValueError("Scores should be a dictionary")
+                cls._validate_scores_dict(hf_subset_score)
         return v
 
     @staticmethod
     def _validate_scores_dict(scores: Scores) -> None:
-        if "evaluation_time" not in scores:
-            raise ValueError("'evaluation_time' should be in scores")
-
         if "main_score" not in scores:
             raise ValueError("'main_score' should be in scores")
+        if "evaluation_time" not in scores:
+            raise ValueError("'evaluation_time' should be in scores")
+        if "hf_subset" not in scores or not isinstance(scores["hf_subset"], str):
+            raise ValueError("hf_subset should be in scores and should be a string")
+        if "languages" not in scores or not isinstance(scores["languages"], list):
+            raise ValueError("languages should be in scores and should be a list")
 
         # check that it is json serializable
         try:
@@ -128,9 +153,6 @@ class MTEBResults(BaseModel):
         Returns:
             The result of the aggregation function on the scores.
         """
-        meta = TASKS_REGISTRY[self.task_name].metadata
-        hf_subset2langs = eval_langs_as_dict(meta.eval_langs)
-
         if splits is None:
             splits = list(self.scores.keys())
 
@@ -141,15 +163,12 @@ class MTEBResults(BaseModel):
             if split not in self.scores:
                 raise ValueError(f"Split {split} not found in scores")
 
-            for hf_subset, scores in self.scores[split].items():
-                eval_langs = hf_subset2langs[hf_subset]
-                include_subset = False
+            for scores in self.scores[split]:
+                eval_langs = scores["languages"]
                 for lang in eval_langs:
                     if lang_scripts.contains_language(lang):
-                        include_subset = True
+                        values.append(getter(scores))
                         break
-                if include_subset:
-                    values.append(getter(scores))
 
             return aggregation(values)
 

@@ -96,7 +96,6 @@ evaluation = MTEB(task_categories=['S2S']) # Only select sentence2sentence datas
 * by their languages
 
 ```python
-import mteb
 evaluation = MTEB(task_langs=["en", "de"]) # Only select datasets which are "en", "de" or "en-de"
 ```
 

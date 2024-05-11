@@ -51,12 +51,7 @@ def test_mteb_results():
         },
     }
 
-    mteb_results = MTEBResults(
-        dataset_revision="1.0",
-        task_name="dummy_task",
-        mteb_version="1.0",
-        scores=scores,
-    )
+    mteb_results = MTEBResults.from_task_results(task=DummyTask, scores=scores)
 
     assert mteb_results.get_main_score() == 0.55
     assert mteb_results.get_main_score(languages=["eng"]) == 0.55
