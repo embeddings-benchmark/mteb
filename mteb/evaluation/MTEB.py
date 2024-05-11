@@ -257,6 +257,9 @@ class MTEB:
         logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks:")
         self.print_selected_tasks()
         evaluation_results = {}
+        original_tasks = (
+            self.tasks.copy()
+        )  # save them in case we re-use the object (e.g. for reranking)
         while len(self.tasks) > 0:
             task = self.tasks[0]
             logger.info(
@@ -285,6 +288,7 @@ class MTEB:
 
                 # load data
                 logger.info(f"Loading dataset for {task.metadata_dict['name']}")
+                task.check_if_dataset_is_superseeded()
                 task.load_data(eval_splits=task_eval_splits, **kwargs)
 
                 # run evaluation
@@ -333,4 +337,6 @@ class MTEB:
             # empty memory
             del self.tasks[0]
 
+        # restore original tasks
+        self.tasks = original_tasks
         return evaluation_results

@@ -245,6 +245,8 @@ class AbsTaskInstructionRetrieval(AbsTask):
     ):
         super().__init__(**kwargs)
         self.do_length_ablation = kwargs.get("do_length_ablation", False)
+        if self.do_length_ablation:
+            logger.info("Running length ablation also...")
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -286,16 +288,16 @@ class AbsTaskInstructionRetrieval(AbsTask):
             changed_instructions = {
                 query["text"]: query["instruction_changed"] for query in queries
             }
-            queries = {query["id"]: query["text"] for query in queries}
-            corpus = {
-                doc["id"]: {"title": doc["title"], "text": doc["text"]}
-                for doc in corpus
-            }
             if self.do_length_ablation:
                 keywords = {query["text"]: query["keywords"] for query in queries}
                 short_instructions = {
                     query["text"]: query["short_query"] for query in queries
                 }
+            queries = {query["id"]: query["text"] for query in queries}
+            corpus = {
+                doc["id"]: {"title": doc["title"], "text": doc["text"]}
+                for doc in corpus
+            }
             assert (
                 len(top_ranked) == len(queries)
             ), f"Top ranked not loaded properly! Expected {len(self.queries)} but got {len(self.top_ranked)}."
@@ -471,7 +473,6 @@ class AbsTaskInstructionRetrieval(AbsTask):
             overall_changed_scores["individual"] = {
                 "original": scores_og,
                 "changed": scores_changed,
-                "base": scores_base,
             }
 
             if self.do_length_ablation:
@@ -536,7 +537,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
 
         # do the results by query and relevant docs only
         all_results = []
-        for query_id in tqdm.tqdm(list(queries.keys()), leave=True):
+        for query_id in tqdm.tqdm(list(queries.keys()), leave=False, desc="Retrieving"):
             cur_queries = {query_id: queries[query_id]}
             cur_instructions = {queries[query_id]: instructions[queries[query_id]]}
             cur_docs = {
@@ -559,7 +560,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
             "Time taken to retrieve: {:.2f} seconds".format(end_time - start_time)
         )
 
-        if kwargs.get("save_qrels", False):
+        if kwargs.get("save_predictions", False):
             output_folder = kwargs.get("output_folder", "results")
             if not os.path.isdir(output_folder):
                 os.makedirs(output_folder)
@@ -576,12 +577,10 @@ class AbsTaskInstructionRetrieval(AbsTask):
                     }
             if lang is None:
                 qrels_save_path = (
-                    f"{output_folder}/{self.metadata_dict['name']}_qrels.json"
+                    f"{output_folder}/{self.metadata_dict['name']}_predictions.json"
                 )
             else:
-                qrels_save_path = (
-                    f"{output_folder}/{self.metadata_dict['name']}_{lang}_qrels.json"
-                )
+                qrels_save_path = f"{output_folder}/{self.metadata_dict['name']}_{lang}_predictions.json"
 
             with open(qrels_save_path, "w") as f:
                 json.dump(results, f)
@@ -659,6 +658,9 @@ def calculate_length_and_count(relevant_docs, queries, corpus, instructions):
         query = queries[query_id]
         query += " " + instructions[query]
         for doc_id in docs:
+            # not relevant
+            if docs[doc_id] == 0:
+                continue
             doc = corpus[doc_id]
             doc_text = doc["title"] + doc["text"]
             total_length += len(query) + len(doc_text)
