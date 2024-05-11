@@ -28,11 +28,11 @@ class CyrillicTurkicLangClassification(AbsTaskClassification):
             "sah-Cyrl",  # Yakut
         ],
         main_score="accuracy",
-        date=("2012-01-01", "2012-05-01"),
+        date=("1998-01-01", "2012-05-01"),
         form=["written"],
-        domains=["Social"],
+        domains=["Web"],
         task_subtypes=["Language identification"],
-        license="cc",
+        license="CC BY-NC 4.0 DEED",
         socioeconomic_status="low",
         annotations_creators="derived",
         dialect=[],
@@ -45,7 +45,7 @@ class CyrillicTurkicLangClassification(AbsTaskClassification):
         year={2012}
         }
         """,
-        n_samples={"test": 9000},
+        n_samples={"test": 2048},
         avg_character_length={"test": 92.22},
     )
 
