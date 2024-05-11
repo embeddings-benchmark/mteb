@@ -5,6 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 N_SAMPLES = 1024
 
+
 class SwedishSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SwedishSentimentClassification",
@@ -23,12 +24,12 @@ class SwedishSentimentClassification(AbsTaskClassification):
         form=["written"],
         domains=["Reviews"],
         task_subtypes=["Sentiment/Hate speech"],
-        license=None,
+        license="Not specified",
         socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"validation": N_SAMPLES, "test": N_SAMPLES},
         avg_character_length={"validation": 499.3, "test": 498.1},
     )
