@@ -47,12 +47,12 @@ class MTEBResults(BaseModel):
         ... }
         >>> sample_task = ... # some MTEB task
         >>> mteb_results = MTEBResults.from_task_results(sample_task, scores)
-        >>> mteb_results.get_main_score()  # get the main score for all languages
+        >>> mteb_results.get_score()  # get the main score for all languages
         0.55
-        >>> mteb_results.get_main_score(languages=["fra"])  # get the main score for French
+        >>> mteb_results.get_score(languages=["fra"])  # get the main score for French
         0.6
         >>> mteb_results.to_dict()
-        {'dataset_revision': '1.0', 'task_name': 'sample_task', 'mteb_version': '1.0', 'scores': {'train':
+        {'dataset_revision': '1.0', 'task_name': 'sample_task', 'mteb_version': '1.0.0', 'scores': {'train':
             [
                 {'main_score': 0.5, 'evaluation_time': 100, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']},
                 {'main_score': 0.6, 'evaluation_time': 200, 'hf_subset': 'en-fr', 'languages': ['eng-Latn', 'fra-Latn']}
@@ -135,20 +135,20 @@ class MTEBResults(BaseModel):
 
     def get_score(
         self,
-        getter: Callable[[Scores], float],
-        aggregation: Callable[[list[float]], Any],
         splits: list[Split] | None = None,
         languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
         scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
+        getter: Callable[[Scores], float] = lambda scores: scores["main_score"],
+        aggregation: Callable[[list[float]], Any] = np.mean,
     ) -> Any:
         """Get a score for the specified splits, languages, scripts and aggregation function.
 
         Args:
-            getter: A function that takes a scores dictionary and returns a score e.g. "main_score" or "evaluation_time".
-            aggregation: The aggregation function to use.
             splits: The splits to consider.
             languages: The languages to consider. Can be ISO language codes or ISO language script codes.
             scripts: The scripts to consider.
+            getter: A function that takes a scores dictionary and returns a score e.g. "main_score" or "evaluation_time".
+            aggregation: The aggregation function to use.
 
         Returns:
             The result of the aggregation function on the scores.
@@ -171,29 +171,6 @@ class MTEBResults(BaseModel):
                         break
 
             return aggregation(values)
-
-    def get_main_score(
-        self,
-        splits: list[Split] | None = None,
-        languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
-        scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
-        aggregation: Callable[[list[float]], float] = np.mean,
-    ) -> float:
-        """Get the main score for the specified splits, languages, scripts and aggregation function.
-
-        Args:
-            splits: The splits to consider.
-            languages: The languages to consider. Can be ISO language codes or ISO language script codes.
-            scripts: The scripts to consider.
-            aggregation: The aggregation function to use.
-        """
-        return self.get_score(
-            getter=lambda scores: scores["main_score"],
-            aggregation=aggregation,
-            splits=splits,
-            languages=languages,
-            scripts=scripts,
-        )
 
     def __repr__(self) -> str:
         return f"MTEBResults(task_name={self.task_name}, scores=...)"

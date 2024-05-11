@@ -1,7 +1,8 @@
+from importlib.metadata import version
+
 import mteb
 from mteb import AbsTask
 from mteb.abstasks.mteb_result import MTEBResults
-from mteb.overview import TASKS_REGISTRY
 
 
 class DummyTask(AbsTask):
@@ -33,11 +34,12 @@ class DummyTask(AbsTask):
         n_samples={},
     )
 
+    def evaluate(self, model, split: str = "test"):
+        pass
+
 
 def test_mteb_results():
     """Test MTEBResults class (this is the same as the example in the docstring)"""
-    TASKS_REGISTRY["dummy_task"] = DummyTask
-
     scores = {
         "train": {
             "en-de": {
@@ -51,10 +53,30 @@ def test_mteb_results():
         },
     }
 
-    mteb_results = MTEBResults.from_task_results(task=DummyTask, scores=scores)
+    mteb_results = MTEBResults.from_task_results(task=DummyTask(), scores=scores)
 
-    assert mteb_results.get_main_score() == 0.55
-    assert mteb_results.get_main_score(languages=["eng"]) == 0.55
-    assert mteb_results.get_main_score(languages=["fra"]) == 0.6
-
-    del TASKS_REGISTRY["dummy_task"]
+    assert mteb_results.get_score() == 0.55
+    assert mteb_results.get_score(languages=["eng"]) == 0.55
+    assert mteb_results.get_score(languages=["fra"]) == 0.6
+    dict_repr = {
+        "dataset_revision": "1.0",
+        "task_name": "dummy_task",
+        "mteb_version": version("mteb"),
+        "scores": {
+            "train": [
+                {
+                    "main_score": 0.5,
+                    "evaluation_time": 100,
+                    "hf_subset": "en-de",
+                    "languages": ["eng-Latn", "deu-Latn"],
+                },
+                {
+                    "main_score": 0.6,
+                    "evaluation_time": 200,
+                    "hf_subset": "en-fr",
+                    "languages": ["eng-Latn", "fra-Latn"],
+                },
+            ]
+        },
+    }
+    assert mteb_results.to_dict() == dict_repr
