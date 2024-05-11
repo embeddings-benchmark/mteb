@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "8079d24b9f1278c6fbc992921c1271457a1064ff",
+  "mteb_dataset_name": "KorSarcasmClassification",
+  "mteb_version": "1.6.37",
+  "train": {
+    "accuracy": 0.5781999999999999,
+    "accuracy_stderr": 0.031762925822255796,
+    "ap": 0.5457512217836408,
+    "ap_stderr": 0.02140959246454376,
+    "evaluation_time": 25.41,
+    "f1": 0.5735168020145152,
+    "f1_stderr": 0.03413490475078325,
+    "main_score": 0.5781999999999999
+  }
+}

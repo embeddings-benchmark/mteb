@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "bd1a7370caf712125fac1fda375834ca8ddefaca",
+  "mteb_dataset_name": "KorHateClassification",
+  "mteb_version": "1.6.37",
+  "train": {
+    "accuracy": 0.40749746707193524,
+    "accuracy_stderr": 0.022147063223550267,
+    "evaluation_time": 20.79,
+    "f1": 0.39404420537367973,
+    "f1_stderr": 0.01745670332102967,
+    "main_score": 0.40749746707193524
+  }
+}
