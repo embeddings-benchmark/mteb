@@ -33,7 +33,7 @@ class CyrillicTurkicLangClassification(AbsTaskClassification):
         domains=["Web"],
         task_subtypes=["Language identification"],
         license="CC BY-NC 4.0 DEED",
-        socioeconomic_status="low",
+        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
