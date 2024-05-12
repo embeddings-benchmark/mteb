@@ -31,7 +31,7 @@ class RTE3(MultilingualTask, AbsTaskPairClassification):
         date=("2023-03-25", "2024-04-15"),
         form=["written"],
         domains=["News", "Web", "Encyclopaedic"],
-        task_subtypes=["Claim verification"],
+        task_subtypes=["Textual Entailment"],
         license="cc-by-4.0",
         socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
@@ -52,7 +52,7 @@ class RTE3(MultilingualTask, AbsTaskPairClassification):
             pages = "1--9",
         }
         """,
-        n_samples={"test": 800},
+        n_samples={"test": 3200},
         avg_character_length={"test": 126.1},
     )
 
