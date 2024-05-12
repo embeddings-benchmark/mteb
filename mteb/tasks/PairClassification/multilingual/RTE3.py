@@ -52,8 +52,8 @@ class RTE3(MultilingualTask, AbsTaskPairClassification):
             pages = "1--9",
         }
         """,
-        n_samples={"test": 3200},
-        avg_character_length={"test": 126.1},
+        n_samples={"test": 1923},  # sum of 4 languages after neutral filtering
+        avg_character_length={"test": 124.79},
     )
 
     def load_data(self, **kwargs):
