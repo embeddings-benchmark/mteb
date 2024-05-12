@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "MAUDInitialMatchingRightsPeriodFTRLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.55,
+    "accuracy_stderr": 0.0,
+    "evaluation_time": 194.87,
+    "f1": 0.14193548387096772,
+    "f1_stderr": 2.7755575615628914e-17,
+    "main_score": 0.55
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "MAUDOrdinaryCourseEffortsStandardLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.5054878048780488,
+    "accuracy_stderr": 0.005752427519546715,
+    "evaluation_time": 54.46,
+    "f1": 0.41611687671264025,
+    "f1_stderr": 0.005611015030163267,
+    "main_score": 0.5054878048780488
+  }
+}

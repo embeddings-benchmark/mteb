@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "MAUDInterveningEventRequiredToOccurAfterSigningAnswerLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.6768656716417911,
+    "accuracy_stderr": 0.01494401820485133,
+    "ap": 0.33787518436659936,
+    "ap_stderr": 0.02611015705713032,
+    "evaluation_time": 54.53,
+    "f1": 0.6043443190117734,
+    "f1_stderr": 0.030838391132635583,
+    "main_score": 0.6768656716417911
+  }
+}
