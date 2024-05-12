@@ -18,8 +18,8 @@ from mteb.abstasks.TaskMetadata import (
 )
 
 Split = str
-Scores = Dict[str, Any]
-
+ScoresDict = Dict[str, Any]
+Score = Any
 
 class MTEBResults(BaseModel):
     """A class to represent the MTEB result.
@@ -63,11 +63,11 @@ class MTEBResults(BaseModel):
     dataset_revision: str
     task_name: str
     mteb_version: str
-    scores: dict[Split, list[Scores]]
+    scores: dict[Split, list[ScoresDict]]
 
     @classmethod
     def from_task_results(
-        cls, task: AbsTask, scores: dict[Split, dict[HFSubset, Scores]]
+        cls, task: AbsTask, scores: dict[Split, dict[HFSubset, ScoresDict]]
     ) -> MTEBResults:
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
@@ -91,8 +91,8 @@ class MTEBResults(BaseModel):
 
     @field_validator("scores")
     def _validate_scores(
-        cls, v: dict[Split, list[Scores]]
-    ) -> dict[Split, list[Scores]]:
+        cls, v: dict[Split, list[ScoresDict]]
+    ) -> dict[Split, list[ScoresDict]]:
         for split, hf_subset_scores in v.items():
             for hf_subset_score in hf_subset_scores:
                 if not isinstance(hf_subset_score, dict):
@@ -101,7 +101,7 @@ class MTEBResults(BaseModel):
         return v
 
     @staticmethod
-    def _validate_scores_dict(scores: Scores) -> None:
+    def _validate_scores_dict(scores: ScoresDict) -> None:
         if "main_score" not in scores:
             raise ValueError("'main_score' should be in scores")
         if "evaluation_time" not in scores:
@@ -138,8 +138,8 @@ class MTEBResults(BaseModel):
         splits: list[Split] | None = None,
         languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
         scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
-        getter: Callable[[Scores], float] = lambda scores: scores["main_score"],
-        aggregation: Callable[[list[float]], Any] = np.mean,
+        getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
+        aggregation: Callable[[list[Score]], Any] = np.mean,
     ) -> Any:
         """Get a score for the specified splits, languages, scripts and aggregation function.
 
