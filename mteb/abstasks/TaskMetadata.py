@@ -31,6 +31,7 @@ TASK_SUBTYPE = Literal[
     "Code retrieval",
     "False Friends",
     "Cross-Lingual Semantic Discrimination",
+    "Textual Entailment",
 ]
 
 TASK_DOMAIN = Literal[
