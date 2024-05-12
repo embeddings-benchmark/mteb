@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import random
 from abc import ABC, abstractmethod
+from typing import Any
 
 import datasets
 import numpy as np
@@ -10,6 +11,7 @@ import torch
 
 from mteb.abstasks.languages import LanguageScripts
 from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +20,7 @@ class AbsTask(ABC):
     metadata: TaskMetadata
     superseeded_by: None | str = None
 
-    def __init__(self, seed=42, **kwargs):
+    def __init__(self, seed: int = 42, **kwargs: Any):
         self.dataset = None
         self.data_loaded = False
         self.is_multilingual = False
@@ -80,7 +82,7 @@ class AbsTask(ABC):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
+        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
         self.dataset_transform()
         self.data_loaded = True
 
@@ -90,12 +92,16 @@ class AbsTask(ABC):
         return metadata_dict
 
     @abstractmethod
-    def evaluate(self, model, split="test"):
+    def evaluate(
+        self, model: Encoder | EncoderWithQueryCorpusEncode, split: str = "test"
+    ):
         """Evaluates a Sentence Embedding Model on the task.
         Returns a dict (that can be serialized to json).
-        :param model: Sentence embedding method. Implements a encode(sentences) method, that encodes sentences
-        and returns a numpy matrix with the sentence embeddings
-        :param split: Which datasplit to be used.
+
+        Args:
+            model: Sentence embedding method. Implements a encode(sentences) method, that encodes sentences and returns a numpy matrix with the
+                sentence embeddings
+            split: Which datasplit to be used.
         """
         raise NotImplementedError
 
@@ -105,12 +111,16 @@ class AbsTask(ABC):
         # check if self.hf_subsets is set
         has_lang_splits = self.is_crosslingual or self.is_multilingual
         if has_lang_splits and hasattr(self, "hf_subsets"):
+            assert isinstance(
+                self.metadata.eval_langs, dict
+            ), "eval_langs must be dict for multilingual tasks"
             eval_langs = self.metadata.eval_langs
             languages = []
 
             for lang in self.hf_subsets:
-                if lang in eval_langs:
-                    languages.append(lang)
+                for langscript in eval_langs[lang]:
+                    iso_lang, script = langscript.split("-")
+                    languages.append(iso_lang)
 
             return sorted(set(languages))
 
