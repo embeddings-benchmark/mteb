@@ -36,7 +36,7 @@ class RTE3(MultilingualTask, AbsTaskPairClassification):
         socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="created",
+        text_creation="found",
         bibtex_citation="""@inproceedings{giampiccolo-etal-2007-third,
             title = "The Third {PASCAL} Recognizing Textual Entailment Challenge",
             author = "Giampiccolo, Danilo  and
