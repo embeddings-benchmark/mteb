@@ -332,7 +332,8 @@ The following tables gives you an overview of the tasks in MTEB.
 | [SICK-R](https://aclanthology.org/2020.lrec-1.207) | ['eng'] | STS | s2s |  |  |  |
 | [SICK-R-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | STS | s2s |  | {'test': 9812} | {'test': 42.8} |
 | [SICKFr](https://huggingface.co/datasets/Lajavaness/SICK-fr) | ['fra'] | STS | s2s |  |  |  |
-| [SNLClustering](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [Encyclopaedic, Non-fiction] | {'test': 2048} | {'test': 1101.3} |
+| [SNLHierarchicalClusteringP2P](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [Encyclopaedic, Non-fiction] | {'test': 1300} | {'test': 1986.9453846153847} |
+| [SNLHierarchicalClusteringS2S](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | s2s | [Encyclopaedic, Non-fiction] | {'test': 1300} | {'test': 242.22384615384615} |
 | [SNLRetrieval](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'test': 2048} | {'test': 1101.3} |
 | [SRNCorpusBitextMining](https://arxiv.org/abs/2212.06383) (Zwennicker et al., 2022) | ['nld', 'srn'] | BitextMining | s2s | [Social, Web] | {'test': 256} | {'test': 55.0} |
 | [STS12](https://www.aclweb.org/anthology/S12-1051.pdf) | ['eng'] | STS | s2s |  |  |  |
