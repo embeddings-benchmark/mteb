@@ -52,6 +52,13 @@ class VGHierarchicalClusteringP2P(AbsTaskClustering):
             {"article": "sentences", "classes": "labels"}
         )
         self.dataset = self.dataset.map(split_labels)
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            self.seed,
+            self.metadata.eval_splits,
+            label="labels",
+            n_samples=2048,
+        )
 
 
 class VGHierarchicalClusteringS2S(AbsTaskClustering):
@@ -92,3 +99,10 @@ class VGHierarchicalClusteringS2S(AbsTaskClustering):
             {"ingress": "sentences", "classes": "labels"}
         )
         self.dataset = self.dataset.map(split_labels)
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            self.seed,
+            self.metadata.eval_splits,
+            label="labels",
+            n_samples=2048,
+        )
