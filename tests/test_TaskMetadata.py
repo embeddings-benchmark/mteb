@@ -3,7 +3,7 @@ import logging
 import pytest
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
-from mteb.get_tasks import get_tasks
+from mteb.overview import get_tasks
 
 # Historic datasets without filled metadata. Do NOT add new datasets to this list.
 _HISTORIC_DATASETS = [
@@ -43,10 +43,7 @@ _HISTORIC_DATASETS = [
     "MTOPDomainClassification",
     "MTOPIntentClassification",
     "NordicLangClassification",
-    "ScalaDaClassification",
-    "ScalaNbClassification",
-    "ScalaNnClassification",
-    "ScalaSvClassification",
+    "ScalaClassification",
     "NoRecClassification",
     "NorwegianParliamentClassification",
     "PunjabiNewsClassification",
