@@ -1,20 +1,15 @@
 from __future__ import annotations
 
-import random
-from itertools import islice
-from typing import Iterable, TypeVar
-
-import datasets
-
-from mteb.abstasks import AbsTaskClustering, TaskMetadata
+from mteb.abstasks import TaskMetadata
+from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 
 def split_labels(record: dict) -> dict:
-    record["labels"] = record["labels"].split(",")
+    record["labels"] = record["labels"].split(",")[:2]
     return record
 
 
-class VGHierarchicalClusteringP2P(AbsTaskClustering):
+class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
     metadata = TaskMetadata(
         name="VGHierarchicalClusteringP2P",
         dataset={
@@ -59,9 +54,10 @@ class VGHierarchicalClusteringP2P(AbsTaskClustering):
             label="labels",
             n_samples=2048,
         )
+        print(self.dataset)
 
 
-class VGHierarchicalClusteringS2S(AbsTaskClustering):
+class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
     metadata = TaskMetadata(
         name="VGHierarchicalClusteringS2S",
         dataset={
@@ -106,3 +102,4 @@ class VGHierarchicalClusteringS2S(AbsTaskClustering):
             label="labels",
             n_samples=2048,
         )
+        print(self.dataset)
