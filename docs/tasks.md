@@ -309,6 +309,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [PersianFoodSentimentClassification](https://hooshvare.github.io/docs/datasets/sa) (Mehrdad Farahani et al., 2020) | ['fas'] | Classification | s2s | [Reviews] | {'validation': 2048, 'test': 2048} | {'validation': 90.37, 'test': 90.58} |
 | [PlscClusteringP2P](https://huggingface.co/datasets/rafalposwiata/plsc) | ['pol'] | Clustering | s2s | [Academic] | {'test': 17537} | {'test': 1023.21} |
 | [PlscClusteringS2S](https://huggingface.co/datasets/rafalposwiata/plsc) | ['pol'] | Clustering | s2s | [Academic] | {'test': 17534} | {'test': 84.34} |
+| [PoemSentimentClassification](https://arxiv.org/abs/2011.02686) (Emily Sheng, 2020) | ['eng'] | Classification | s2s | [Reviews] | {'validation': 105, 'test': 104} | {'validation': 45.3, 'test': 42.4} |
 | [PolEmo2.0-IN](https://aclanthology.org/K19-1092.pdf) | ['pol'] | Classification | s2s |  |  |  |
 | [PolEmo2.0-OUT](https://aclanthology.org/K19-1092.pdf) | ['pol'] | Classification | s2s |  | {'test': 722} | {'test': 756.2} |
 | [PpcPC](https://arxiv.org/pdf/2207.12759.pdf) | ['pol'] | PairClassification | s2s |  |  |  |
@@ -323,6 +324,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [Robust04InstructionRetrieval](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | InstructionRetrieval | s2p | [News] | {'eng': 95088} | {'eng': 2471.0398058252426} |
 | [RomaTalesBitextMining](https://idoc.pub/documents/idocpub-zpnxm9g35ylv) | ['hun', 'rom'] | BitextMining | s2s | [Fiction] | {'test': 215} | {'test': 316.8046511627907} |
 | [RomaniBibleClustering](https://romani.global.bible/info) | ['rom'] | Clustering | p2p | [Religious] | {'test': 2048} | {'test': 132.2} |
+| [RomanianReviewsSentiment](https://arxiv.org/abs/2101.04197) (Anca Maria Tache, 2021) | ['ron'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 588.6} |
 | [RomanianSentimentClassification](https://arxiv.org/abs/2009.08712) (Dumitrescu et al., 2020) | ['ron'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 67.6} |
 | [RonSTS](https://openreview.net/forum?id=JH61CD7afTv) (Dumitrescu et al., 2021) | ['ron'] | STS | s2s | [News, Social, Web] | {'test': 1379} | {'test': 60.5} |
 | [SCIDOCS](https://allenai.org/data/scidocs) | ['eng'] | Retrieval | s2p |  |  |  |
@@ -371,6 +373,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [SummEvalFr](https://github.com/Yale-LILY/SummEval) | ['fra'] | Summarization | p2p |  |  |  |
 | [SweFaqRetrieval](https://spraakbanken.gu.se/en/resources/superlim) | ['swe'] | Retrieval | s2s | [Government, Non-fiction] | {'test': 1024} | {'test': 195.44} |
 | [SweRecClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['swe'] | Classification | s2s |  | {'test': 1024} | {'test': 318.8} |
+| [SwedishSentimentClassification](https://huggingface.co/datasets/swedish_reviews) | ['swe'] | Classification | s2s | [Reviews] | {'validation': 1024, 'test': 1024} | {'validation': 499.3, 'test': 498.1} |
 | [SwednClusteringP2P](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Clustering | p2p | [News, Non-fiction] | {'all': 2048} | {'all': 1619.71} |
 | [SwednClusteringS2S](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Clustering | s2s | [News, Non-fiction] | {'all': 2048} | {'all': 1619.71} |
 | [SwednRetrieval](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Retrieval | p2p | [News, Non-fiction] | {'test': 2048} | {'test': 1946.35} |
