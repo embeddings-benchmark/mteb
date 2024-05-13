@@ -29,7 +29,7 @@ class MultiSubsetLoader:
         )  # load "default" subset
         for split in self.metadata.eval_splits:
             grouped_by_lang = dict(merged_dataset[split].to_polars().group_by("lang"))
-            for lang in self.langs:
+            for lang in self.hf_subsets:
                 if lang not in self.dataset:
                     self.dataset[lang] = {}
                 self.dataset[lang][split] = datasets.Dataset.from_polars(
@@ -39,7 +39,7 @@ class MultiSubsetLoader:
     def slow_load(self, **kwargs):
         """Load each subsets iteratively"""
         self.dataset = {}
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
                 name=lang,
                 **self.metadata_dict.get("dataset", None),

@@ -47,7 +47,7 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             dataset = self.dataset[lang]["test"]
             dataset_dict = {"test": dataset}
 

@@ -99,14 +99,14 @@ evaluation = MTEB(task_categories=['S2S']) # Only select sentence2sentence datas
 evaluation = MTEB(task_langs=["en", "de"]) # Only select datasets which are "en", "de" or "en-de"
 ```
 
-You can also specify which languages to load for multilingual/crosslingual tasks like below:
+You can also specify which languages to load for multilingual/cross-lingual tasks like below:
 
 ```python
 from mteb.tasks import AmazonReviewsClassification, BUCCBitextMining
 
 evaluation = MTEB(tasks=[
-        AmazonReviewsClassification(langs=["en", "fr"]) # Only load "en" and "fr" subsets of Amazon Reviews
-        BUCCBitextMining(langs=["de-en"]), # Only load "de-en" subset of BUCC
+        AmazonReviewsClassification(hf_subsets=["en", "fr"]) # Only load "en" and "fr" subsets of Amazon Reviews
+        BUCCBitextMining(hf_subsets=["de-en"]), # Only load "de-en" subset of BUCC
 ])
 ```
 
