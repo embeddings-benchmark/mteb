@@ -18,7 +18,7 @@ class PoemSentimentClassification(AbsTaskClassification):
         eval_splits=["validation", "test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2020-01-01", "2021-01-01"),
+        date=("1700-01-01", "1900-01-01"),
         form=["written"],
         domains=["Reviews"],
         task_subtypes=["Sentiment/Hate speech"],

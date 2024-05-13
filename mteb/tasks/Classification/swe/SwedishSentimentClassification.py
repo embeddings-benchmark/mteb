@@ -20,7 +20,7 @@ class SwedishSentimentClassification(AbsTaskClassification):
         eval_splits=["validation", "test"],
         eval_langs=["swe-Latn"],
         main_score="accuracy",
-        date=("1700-01-01", "1900-01-01"),
+        date=("2021-01-01", "2022-01-01"),
         form=["written"],
         domains=["Reviews"],
         task_subtypes=["Sentiment/Hate speech"],
