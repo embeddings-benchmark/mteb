@@ -60,7 +60,7 @@ class TweetSentimentClassification(MultilingualTask, AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang] = self.stratified_subsampling(
                 self.dataset[lang], n_samples=256, seed=self.seed, splits=["test"]
             )

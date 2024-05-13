@@ -40,14 +40,14 @@ class RomaTalesBitextMining(AbsTaskBitextMining, CrosslingualTask):
             return
 
         self.dataset = {}
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(**self.metadata_dict["dataset"])
 
         self.dataset_transform()
         self.data_loaded = True
 
     def dataset_transform(self):
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang] = self.dataset[lang].rename_columns(
                 {"romani": "sentence1", "hungarian": "sentence2"}
             )

@@ -90,7 +90,12 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
             return subset.rename_column("similarity_score", "score")
 
         self.dataset = datasets.DatasetDict(
-            **dict(zip(self.langs, [get_dataset_subset(lang) for lang in self.langs]))
+            **dict(
+                zip(
+                    self.hf_subsets,
+                    [get_dataset_subset(lang) for lang in self.hf_subsets],
+                )
+            )
         )
 
         self.data_loaded = True

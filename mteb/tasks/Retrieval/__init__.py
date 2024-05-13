@@ -62,6 +62,7 @@ from .jpn.JaQuADRetrieval import *
 from .kat.GeorgianFAQRetrieval import *
 from .kor.KoMiracl import *
 from .kor.KoStrategyQA import *
+from .multilingual.BelebeleRetrieval import *
 from .multilingual.IndicQARetrieval import *
 from .multilingual.MintakaRetrieval import *
 from .multilingual.MIRACLRetrieval import *
