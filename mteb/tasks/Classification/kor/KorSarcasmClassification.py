@@ -45,12 +45,12 @@ class KorSarcasmClassification(AbsTaskClassification):
             howpublished = {https://github.com/SpellOnYou/korean-sarcasm}
         }
         """,
-        n_samples={"train": 9000},
-        avg_character_length={"train": 49.24},
+        n_samples={"train": 2048, "test": 301},
+        avg_character_length={"train": 48.45, "test": 46.77},
     )
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_columns({"tokens": "text"})
-        self.dataset = self.dataset["train"].train_test_split(
-            test_size=0.5, seed=self.seed, stratify_by_column="label"
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"]
         )

@@ -43,8 +43,8 @@ class KorHateClassification(AbsTaskClassification):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
-        n_samples={"train": 7896},
-        avg_character_length={"train": 38.72},
+        n_samples={"train": 2048, "test": 471},
+        avg_character_length={"train": 38.57, "test": 38.86},
     )
 
     def dataset_transform(self):
@@ -55,6 +55,6 @@ class KorHateClassification(AbsTaskClassification):
         ]
         self.dataset = self.dataset.rename_columns(rename_dict)
         self.dataset = self.dataset.remove_columns(remove_cols)
-        self.dataset = self.dataset["train"].train_test_split(
-            test_size=0.5, seed=self.seed, stratify_by_column="label"
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"]
         )
