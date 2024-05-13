@@ -54,7 +54,6 @@ class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
             label="labels",
             n_samples=2048,
         )
-        print(self.dataset)
 
 
 class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
@@ -102,4 +101,3 @@ class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
             label="labels",
             n_samples=2048,
         )
-        print(self.dataset)
