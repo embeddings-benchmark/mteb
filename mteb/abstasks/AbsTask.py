@@ -97,7 +97,7 @@ class AbsTask(ABC):
             try:
                 dataset_dict = dataset_dict.class_encode_column(label)
             except ValueError as e:
-                if isinstance(dataset_dict[splits[0]].features[label], Sequence):
+                if isinstance(dataset_dict[splits[0]][label][0], Sequence):
                     return _multilabel_subsampling(
                         dataset_dict, seed, splits, label, n_samples
                     )
