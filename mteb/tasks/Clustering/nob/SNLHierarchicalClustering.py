@@ -40,8 +40,8 @@ class SNLHierarchicalClustering(AbsTaskClusteringFast):
   year={2023},
   school={Norwegian University of Life Sciences, {\AA}s}
 }""",
-        n_samples={"test": 2048},
-        avg_character_length={"test": 1101.30},
+        n_samples={"test": 1300},
+        avg_character_length={"test": 1986.9453846153847},
     )
     max_depth = 5
 
