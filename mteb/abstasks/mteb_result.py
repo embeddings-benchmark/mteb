@@ -21,6 +21,7 @@ Split = str
 ScoresDict = Dict[str, Any]
 Score = Any
 
+
 class MTEBResults(BaseModel):
     """A class to represent the MTEB result.
 
