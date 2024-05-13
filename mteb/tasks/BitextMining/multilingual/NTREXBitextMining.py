@@ -300,7 +300,7 @@ class NTREXBitextMining(AbsTaskBitextMining, CrosslingualTask):
             for l in _LANGUAGES.keys()
         }
 
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             l1, l2 = lang.split("-")
             l1_data = all_data[l1].rename_column("text", "sentence1")
             l2_data = all_data[l2].rename_column("text", "sentence2")

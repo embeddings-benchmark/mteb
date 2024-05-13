@@ -60,7 +60,7 @@ class MasakhaNEWSClusteringP2P(AbsTaskClustering, MultilingualTask):
         if self.data_loaded:
             return
         self.dataset = {}
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
                 name=lang,
                 **self.metadata_dict["dataset"],
