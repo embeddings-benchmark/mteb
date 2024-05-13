@@ -246,7 +246,7 @@ class AbsTaskRetrieval(AbsTask):
         retriever = RetrievalEvaluator(model, **kwargs)
 
         scores = {}
-        if self.is_multilingual:
+        if self.is_crosslingual or self.is_multilingual:
             for lang in self.langs:
                 logger.info(f"Language: {lang}")
                 corpus, queries, relevant_docs = (
@@ -254,7 +254,7 @@ class AbsTaskRetrieval(AbsTask):
                     self.queries[lang][split],
                     self.relevant_docs[lang][split],
                 )
-                scores[lang] = self._evaluate_monolingual(
+                scores[lang] = self._evaluate_split(
                     retriever, corpus, queries, relevant_docs, lang, **kwargs
                 )
         else:
@@ -263,12 +263,12 @@ class AbsTaskRetrieval(AbsTask):
                 self.queries[split],
                 self.relevant_docs[split],
             )
-            scores = self._evaluate_monolingual(
+            scores = self._evaluate_split(
                 retriever, corpus, queries, relevant_docs, None, **kwargs
             )
         return scores
 
-    def _evaluate_monolingual(
+    def _evaluate_split(
         self, retriever, corpus, queries, relevant_docs, lang=None, **kwargs
     ):
         start_time = time()
@@ -355,6 +355,9 @@ def calculate_length_and_count(relevant_docs, queries, corpus):
     for query_id, docs in relevant_docs.items():
         query = queries[query_id]
         for doc_id in docs:
+            # not relevant
+            if docs[doc_id] == 0:
+                continue
             doc = corpus[doc_id]
             doc_text = doc["title"] + doc["text"]
             total_length += len(query) + len(doc_text)

@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "CUADEffectiveDateLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.7542372881355932,
+    "accuracy_stderr": 0.0,
+    "ap": 0.7274754683318465,
+    "ap_stderr": 1.1102230246251565e-16,
+    "evaluation_time": 50.76,
+    "f1": 0.7461989171549359,
+    "f1_stderr": 0.0,
+    "main_score": 0.7542372881355932
+  }
+}
