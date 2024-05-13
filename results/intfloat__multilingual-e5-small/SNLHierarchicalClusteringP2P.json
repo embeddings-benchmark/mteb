@@ -1,9 +1,9 @@
 {
   "dataset_revision": "3d3d27aa7af8941408cefc3991ada5d12a4273d1",
-  "mteb_dataset_name": "SNLHierarchicalClustering",
+  "mteb_dataset_name": "SNLHierarchicalClusteringP2P",
   "mteb_version": "1.6.10",
   "test": {
-    "evaluation_time": 366.1,
+    "evaluation_time": 281.14,
     "v_measure": 0.5648936348151914,
     "v_measures": {
       "Level 0": [
