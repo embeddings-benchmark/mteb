@@ -4,13 +4,7 @@ import logging
 from datetime import date
 from typing import List, Mapping, Union
 
-from pydantic import (
-    AnyUrl,
-    BaseModel,
-    BeforeValidator,
-    TypeAdapter,
-    field_validator,
-)
+from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
 from typing_extensions import Annotated, Literal
 
 from .languages import (
@@ -37,6 +31,7 @@ TASK_SUBTYPE = Literal[
     "Code retrieval",
     "False Friends",
     "Cross-Lingual Semantic Discrimination",
+    "Textual Entailment",
 ]
 
 TASK_DOMAIN = Literal[
@@ -80,6 +75,7 @@ SOCIOECONOMIC_STATUS = Literal[
 TASK_TYPE = Literal[
     "BitextMining",
     "Classification",
+    "MultilabelClassification",
     "Clustering",
     "PairClassification",
     "Reranking",
