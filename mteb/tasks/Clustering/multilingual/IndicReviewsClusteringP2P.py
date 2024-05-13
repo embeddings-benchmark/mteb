@@ -64,7 +64,7 @@ class IndicReviewsClusteringP2P(AbsTaskClustering, MultilingualTask):
         if self.data_loaded:
             return
         self.dataset = {}
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
                 name=f"translation-{lang}",
                 **self.metadata_dict["dataset"],
@@ -73,7 +73,7 @@ class IndicReviewsClusteringP2P(AbsTaskClustering, MultilingualTask):
         self.data_loaded = True
 
     def dataset_transform(self) -> None:
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang].pop("validation")
 
             texts = self.dataset[lang]["test"]["INDIC REVIEW"]

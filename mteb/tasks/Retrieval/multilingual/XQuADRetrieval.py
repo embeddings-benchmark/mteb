@@ -74,11 +74,11 @@ class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         split = "validation"
-        queries = {lang: {split: {}} for lang in self.langs}
-        corpus = {lang: {split: {}} for lang in self.langs}
-        relevant_docs = {lang: {split: {}} for lang in self.langs}
+        queries = {lang: {split: {}} for lang in self.hf_subsets}
+        corpus = {lang: {split: {}} for lang in self.hf_subsets}
+        relevant_docs = {lang: {split: {}} for lang in self.hf_subsets}
 
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             data = datasets.load_dataset(
                 name=f"xquad.{lang}", **self.metadata_dict["dataset"]
             )[split]

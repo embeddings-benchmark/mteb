@@ -53,10 +53,12 @@ from .kan.KannadaNewsClassification import *
 from .kor.KlueTC import *
 from .kur.KurdishSentimentClassification import *
 from .mal.MalayalamNewsClassification import *
+from .mar.MarathiNewsClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
 from .multilingual.AfriSentiLangClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
+from .multilingual.CyrillicTurkicLangClassification import *
 from .multilingual.HinDialectClassification import *
 from .multilingual.IndicLangClassification import *
 from .multilingual.IndicSentimentClassification import *
@@ -69,6 +71,7 @@ from .multilingual.MTOPIntentClassification import *
 from .multilingual.MultiHateClassification import *
 from .multilingual.MultilingualSentimentClassification import *
 from .multilingual.NordicLangClassification import *
+from .multilingual.NusaXSenti import *
 from .multilingual.ScalaClassification import *
 from .multilingual.SIB200Classification import *
 from .multilingual.SouthAfricanLangClassification import *
