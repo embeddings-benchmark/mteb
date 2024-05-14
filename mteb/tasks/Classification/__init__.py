@@ -27,6 +27,7 @@ from .eng.ImdbClassification import *
 from .eng.LegalBenchClassification import *
 from .eng.NewsClassification import *
 from .eng.PatentClassification import *
+from .eng.PoemSentimentClassification import *
 from .eng.ToxicChatClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
@@ -85,6 +86,7 @@ from .ory.OdiaNewsClassification import *
 from .pan.PunjabiNewsClassification import *
 from .pol.PolishClassification import *
 from .por.HateSpeechPortugueseClassification import *
+from .ron.RomanianReviewsSentiment import *
 from .ron.RomanianSentimentClassification import *
 from .san.SanskritShlokasClassification import *
 from .sin.SinhalaNewsClassification import *
@@ -94,6 +96,7 @@ from .spa.SpanishNewsClassification import *
 from .spa.SpanishSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
 from .swe.DalajClassification import *
+from .swe.SwedishSentimentClassification import *
 from .swe.SweRecClassification import *
 from .tam.TamilNewsClassification import *
 from .tel.TeluguAndhraJyotiNewsClassification import *
