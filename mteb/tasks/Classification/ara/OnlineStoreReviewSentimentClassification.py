@@ -29,12 +29,13 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         dialect=["ara-arab-EG", "ara-arab-JO", "ara-arab-LB", "ara-arab-SA"],
         text_creation="found",
         bibtex_citation="""
-@misc{Ruqiya/Arabic_Reviews_of_SHEIN,
-title = {Arabic_Reviews_of_SHEIN},
-author = {Ruqiya Bin Safi},
-howpublished = {https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN},
-year = {2024},
-publisher = {Hugging Face}
+@misc {ruqiya_bin_safi_2024,
+	author       = { {Ruqiya Bin Safi} },
+	title        = { Arabic_Reviews_of_SHEIN (Revision 9eb4068) },
+	year         = 2024,
+	url          = { https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN },
+	doi          = { 10.57967/hf/2232 },
+	publisher    = { Hugging Face }
 }
 """,
         n_samples={"train": N_SAMPLES},
