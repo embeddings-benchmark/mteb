@@ -195,7 +195,6 @@ class AbstentionRerankingEvaluator(RerankingEvaluator):
         **kwargs,
     ):
         super().__init__(*args, **kwargs)
-
     def _compute_metrics_instance(self, query_emb, docs_emb, is_relevant):
         """Computes metrics for a single instance = (query, positives, negatives)
 
@@ -314,10 +313,11 @@ class AbstentionRerankingEvaluator(RerankingEvaluator):
             encode_corpus_func(all_docs, batch_size=self.batch_size)
         )
 
-        # Compute scores
+        # Compute mrr, ap scores and confidence scores
         logger.info("Evaluating...")
         query_idx, docs_idx = 0, 0
-        for instance in self.samples:
+        conf_scores = {}
+        for i, instance in enumerate(self.samples):
             num_subqueries = (
                 len(instance["query"]) if isinstance(instance["query"], list) else 1
             )
@@ -338,7 +338,54 @@ class AbstentionRerankingEvaluator(RerankingEvaluator):
             all_mrr_scores.append(scores["mrr"])
             all_ap_scores.append(scores["ap"])
 
+            # Compute confidence scores on instance (max, std, 1-2)
+            pred_scores = self.similarity_fct(query_emb, docs_emb).cpu().flatten().tolist()
+            pred_scores_sort = sorted(pred_scores)[::-1]
+            pred_scores_mean = sum(pred_scores) / len(pred_scores)
+            conf_scores[i] = {
+                'max': pred_scores_sort[0], 
+                'std': (sum((sc - pred_scores_mean) ** 2 for sc in pred_scores) / len(pred_scores)) ** (1/2),
+                'P1P2': pred_scores_sort[0] - pred_scores_sort[1]
+            }
+
         mean_ap = np.mean(all_ap_scores)
         mean_mrr = np.mean(all_mrr_scores)
 
-        return {"map": mean_ap, "mrr": mean_mrr}
+        # # Compute nAUCs
+        scores = {qid: {'ap': all_ap_scores[qid], 'rr': all_mrr_scores[qid]} for qid in range(len(self.samples))}
+        metrics = list(list(scores.values())[0].keys())
+        abst_funcs = list(list(conf_scores.values())[0].keys())
+        abst_rates = [k/10 for k in range(10)]
+        abst_scores = {}
+
+        # # Evaluate for all abstention functions (max, std, P1P2)
+        for abst_func in abst_funcs:
+            conf_scs = {key: val[abst_func] for key, val in conf_scores.items()}
+            conf_scs_sort = dict(sorted(conf_scs.items(), key=lambda item: item[1])[::-1])
+            evals = {metric: [] for metric in metrics}
+            oracles = {metric: [] for metric in metrics}
+            
+            # Evaluate for all abstention rates
+            for abst_rate in abst_rates:
+                num_kept = len(conf_scs) - int(abst_rate * len(conf_scs))
+                kept_qids = list(conf_scs_sort.keys())[:num_kept]
+
+                # Evaluate for metrics (map and mrr)                
+                for metric in metrics:                    
+                    evals[metric].append(
+                        sum(scores[qid][metric] for qid in kept_qids) / num_kept
+                    )
+                    scs = [scores[qid][metric] for qid in scores.keys()]
+                    scs_sort = sorted(scs)[::-1]
+                    oracles[metric].append(sum(scs_sort[:num_kept]) / num_kept)
+            
+            # Compute nAUCs
+            for metric in metrics:
+                auc = sum(evals[metric]) / len(abst_rates) * max(abst_rates)
+                auc_oracle = sum(oracles[metric]) / len(abst_rates) * max(abst_rates)
+                auc_rand = oracles[metric][0] * max(abst_rates)
+                abst_scores[
+                    f"nAUC_m{metric}_{abst_func}"
+                ] = (auc - auc_rand) / (auc_oracle - auc_rand)
+
+        return {**{"map": mean_ap, "mrr": mean_mrr}, **abst_scores}
