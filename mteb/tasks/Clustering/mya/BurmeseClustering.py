@@ -1,6 +1,9 @@
-from __future__ import annotations
+from __future__ import annotations  # noqa: I001
 
-from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.AbsTaskClusteringFast import (
+    AbsTaskClusteringFast,
+    clustering_downsample,
+)
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -41,9 +44,8 @@ class BurmeseClustering(AbsTaskClusteringFast):
     )
 
     def dataset_transform(self):
+        ds = clustering_downsample(self.dataset, self.seed)
+        self.dataset = ds
         self.dataset = self.dataset.rename_columns(
             {"text": "sentences", "category": "label"}
-        )
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
         )
