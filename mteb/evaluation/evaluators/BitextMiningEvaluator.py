@@ -13,13 +13,15 @@ logger = logging.getLogger(__name__)
 
 
 class BitextMiningEvaluator(Evaluator):
-    def __init__(
-        self, sentences1, sentences2, gold, batch_size=32, limit=None, **kwargs
-    ):
+    def __init__(self, sentences, batch_size=32, limit=None, subsets=None, **kwargs):
         super().__init__(**kwargs)
-        self.gold = gold
-        self.sentences1 = [sentences1[i] for (i, j) in self.gold]
-        self.sentences2 = sentences2
+        # By default, all the columns in sentences will serve for evaluation
+        # Specifying a 'subsets' attribute will limit to certain columns
+        self.subsets = subsets if subsets is not None else sentences.features
+        self.n = len(sentences)
+        self.n_subsets = len(self.subsets)
+        self.sentences = sentences
+        self.gold = list(zip(range(self.n), range(self.n)))
 
         self.batch_size = batch_size
 
@@ -29,13 +31,35 @@ class BitextMiningEvaluator(Evaluator):
 
     def compute_metrics(self, model):
         # Compute embeddings
-        sentences = list(set(self.sentences1 + self.sentences2))
-        logger.info(f"Encoding {len(sentences)} sentences...")
-        embeddings = model.encode(sentences, batch_size=self.batch_size)
-        emb_dict = {sent: emb for sent, emb in zip(sentences, embeddings)}
-        embeddings1 = np.asarray([emb_dict[sent] for sent in self.sentences1])
-        embeddings2 = np.asarray([emb_dict[sent] for sent in self.sentences2])
+        logger.info(f"Encoding {self.n_subsets}x{self.n} sentences...")
+        embeddings = {}
+        for sub in self.subsets:
+            embeddings[sub] = np.asarray(
+                model.encode(self.sentences[sub], batch_size=self.batch_size)
+            )
 
+        if set(self.subsets) == {"sentence1", "sentence2"}:  # Case of a single pair
+            return self._compute_metrics(
+                embeddings["sentence1"], embeddings["sentence2"]
+            )
+
+        # Otherwise evaluate all pairs
+        scores = {}
+        for i in range(self.n_subsets):
+            for j in range(i + 1, self.n_subsets):
+                key1, key2 = self.subsets[i], self.subsets[j]
+                embeddings1 = embeddings[key1]
+                embeddings2 = embeddings[key2]
+                scores[f"{key1}-{key2}"] = self._compute_metrics(
+                    embeddings1, embeddings2
+                )
+        return scores
+
+    def _compute_metrics(
+        self,
+        embeddings1,
+        embeddings2,
+    ):
         # Find nearest neighbors
         logger.info("Finding nearest neighbors...")
         nearest_neighbors = self._similarity_search(embeddings1, embeddings2, top_k=1)

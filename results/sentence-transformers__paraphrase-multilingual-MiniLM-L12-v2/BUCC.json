@@ -1,7 +1,7 @@
 {
   "dataset_revision": "d51519689f32196a32af33b075a01d0e7c51e252",
   "mteb_dataset_name": "BUCC",
-  "mteb_version": "1.2.1.dev0",
+  "mteb_version": "1.7.62",
   "test": {
     "de-en": {
       "accuracy": 0.9736951983298539,
@@ -10,7 +10,7 @@
       "precision": 0.9698329853862213,
       "recall": 0.9736951983298539
     },
-    "evaluation_time": 2589.72,
+    "evaluation_time": 774.07,
     "fr-en": {
       "accuracy": 0.9542152762491746,
       "f1": 0.9499413016362168,
