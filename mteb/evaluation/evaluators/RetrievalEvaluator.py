@@ -286,6 +286,13 @@ class DenseRetrievalExactSearch:
             "You must implement a predict method for your reranker model"
         )
 
+    def encode_conversations(self, conversations: List[List[str]], **kwargs):
+        if is_conv_retrieval_compatible(self.model):
+            return self.model.encode_conversations(conversations, **kwargs)
+        # default implementation
+        queries = ["; ".join(conv) for conv in conversations]
+        return self.encode_queries(queries, **kwargs)
+
 
 class DRESModel:
     """Dense Retrieval Exact Search (DRES) requires an encode_queries & encode_corpus method.
