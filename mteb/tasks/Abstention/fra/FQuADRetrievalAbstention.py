@@ -1,15 +1,8 @@
 from __future__ import annotations
 
-from __future__ import annotations
-
-import json
 import logging
-import os
-from collections import defaultdict
-from time import time
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
 
 logger = logging.getLogger(__name__)
 from ....abstasks.AbsTaskAbstention import AbsTaskAbstention
@@ -17,7 +10,7 @@ from ...Retrieval.fra.FQuADRetrieval import FQuADRetrieval
 
 
 class FQuADRetrievalAbstention(AbsTaskAbstention, FQuADRetrieval):
-
+    abstention_task = "Retrieval"
     _EVAL_SPLITS = ["test", "validation"]
 
     metadata = TaskMetadata(
@@ -28,7 +21,7 @@ class FQuADRetrievalAbstention(AbsTaskAbstention, FQuADRetrieval):
             "path": "manu/fquad2_test",
             "revision": "5384ce827bbc2156d46e6fcba83d75f8e6e1b4a6",
         },
-        type="Retrieval",
+        type="Abstention",
         category="s2p",
         eval_splits=_EVAL_SPLITS,
         eval_langs=["fra-Latn"],
@@ -64,61 +57,3 @@ class FQuADRetrievalAbstention(AbsTaskAbstention, FQuADRetrieval):
         n_samples={"test": 400, "validation": 100},
         avg_character_length={"test": 937, "validation": 930},
     )
-
-    def _evaluate_monolingual(
-        self, retriever, corpus, queries, relevant_docs, lang=None, **kwargs
-    ):
-        """Function to override"""
-        start_time = time()
-        results = retriever(corpus, queries)
-        end_time = time()
-        logger.info(
-            "Time taken to retrieve: {:.2f} seconds".format(end_time - start_time)
-        )
-
-        if kwargs.get("save_predictions", False):
-            output_folder = kwargs.get("output_folder", "results")
-            if not os.path.isdir(output_folder):
-                os.makedirs(output_folder)
-            top_k = kwargs.get("top_k", None)
-            if top_k is not None:
-                for qid in list(results.keys()):
-                    doc_ids = set(
-                        sorted(
-                            results[qid], key=lambda x: results[qid][x], reverse=True
-                        )[:top_k]
-                    )
-                    results[qid] = {
-                        k: v for k, v in results[qid].items() if k in doc_ids
-                    }
-            if lang is None:
-                qrels_save_path = (
-                    f"{output_folder}/{self.metadata_dict['name']}_predictions.json"
-                )
-            else:
-                qrels_save_path = f"{output_folder}/{self.metadata_dict['name']}_{lang}_predictions.json"
-
-            with open(qrels_save_path, "w") as f:
-                json.dump(results, f)
-
-        ndcg, _map, recall, precision = retriever.evaluate(
-            relevant_docs,
-            results,
-            retriever.k_values,
-            ignore_identical_ids=kwargs.get("ignore_identical_ids", True),
-        )
-        mrr = retriever.evaluate_custom(
-            relevant_docs, results, retriever.k_values, "mrr"
-        )
-        abstention = self.abstention_evaluator.compute_abstention_scores_retrieval(
-            relevant_docs, results
-        )
-        scores = {
-            **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
-            **{f"map_at_{k.split('@')[1]}": v for (k, v) in _map.items()},
-            **{f"recall_at_{k.split('@')[1]}": v for (k, v) in recall.items()},
-            **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
-            **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
-            **abstention,
-        }
-        return scores
