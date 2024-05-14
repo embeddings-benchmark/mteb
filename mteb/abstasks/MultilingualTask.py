@@ -1,32 +1,20 @@
 from __future__ import annotations
 
-import datasets
-
 from .AbsTask import AbsTask
+from .MultiSubsetLoader import MultiSubsetLoader
 
 
-class MultilingualTask(AbsTask):
-    def __init__(self, langs=None, **kwargs):
+class MultilingualTask(MultiSubsetLoader, AbsTask):
+    def __init__(self, hf_subsets=None, **kwargs):
         super().__init__(**kwargs)
-        if isinstance(langs, list):
-            langs = [lang for lang in langs if lang in self.metadata_dict["eval_langs"]]
-        if langs is not None and len(langs) > 0:
-            self.langs = (
-                langs  # TODO: case where user provides langs not in the dataset
+        if isinstance(hf_subsets, list):
+            hf_subsets = [
+                lang for lang in hf_subsets if lang in self.metadata_dict["eval_langs"]
+            ]
+        if hf_subsets is not None and len(hf_subsets) > 0:
+            self.hf_subsets = (
+                hf_subsets  # TODO: case where user provides langs not in the dataset
             )
         else:
-            self.langs = self.metadata_dict["eval_langs"]
+            self.hf_subsets = self.metadata_dict["eval_langs"]
         self.is_multilingual = True
-
-    def load_data(self, **kwargs):
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = {}
-        for lang in self.langs:
-            self.dataset[lang] = datasets.load_dataset(
-                name=lang,
-                **self.metadata_dict.get("dataset", None),
-            )
-        self.dataset_transform()
-        self.data_loaded = True
