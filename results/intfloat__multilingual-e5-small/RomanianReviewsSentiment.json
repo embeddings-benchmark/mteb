@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "358bcc95aeddd5d07a4524ee416f03d993099b23",
+  "mteb_dataset_name": "RomanianReviewsSentiment",
+  "mteb_version": "1.6.3",
+  "test": {
+    "accuracy": 0.4638671875,
+    "accuracy_stderr": 0.03539685461865971,
+    "evaluation_time": 195.83,
+    "f1": 0.3897742376229087,
+    "f1_stderr": 0.031796744266197594,
+    "main_score": 0.4638671875
+  }
+}
