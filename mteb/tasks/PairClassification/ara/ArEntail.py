@@ -18,7 +18,7 @@ class ArEntail(AbsTaskPairClassification):
         eval_splits=["test"],
         eval_langs=["ara-Arab"],
         main_score="ap",
-        date=("2024-05-04", "2024-05-04"),
+        date=("2020-01-01", "2024-03-04"), # best guess based on google searching random samples
         form=["written"],
         domains=["News"],
         task_subtypes=["Textual Entailment"],
@@ -36,7 +36,7 @@ class ArEntail(AbsTaskPairClassification):
         publisher={Springer}
         }""",
         n_samples={"test": 1000},
-        avg_character_length={"validation": 65.77},
+        avg_character_length={"test": 65.77},
     )
 
     def dataset_transform(self):
