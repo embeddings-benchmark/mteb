@@ -86,6 +86,7 @@ from .sin.SinhalaNewsSourceClassification import *
 from .slv.FrenkSlClassification import *
 from .spa.SpanishSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
+from .svk.SlovakMovieReviewSentimentClassification import *
 from .swe.DalajClassification import *
 from .swe.SweRecClassification import *
 from .tam.TamilNewsClassification import *
