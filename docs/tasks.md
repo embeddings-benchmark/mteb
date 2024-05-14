@@ -244,7 +244,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [LearnedHandsTrafficLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 556} | {'test': 1182.91} |
 | [LegalBenchConsumerContractsQA](https://huggingface.co/datasets/nguha/legalbench/viewer/consumer_contracts_qa) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
 | [LegalBenchCorporateLobbying](https://huggingface.co/datasets/nguha/legalbench/viewer/corporate_lobbying) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
-| [LegalBenchPC](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | PairClassification | s2s | [Legal] | {'test': 678} | {'test': 83.94} |
+| [LegalBenchPC](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | PairClassification | s2s | [Legal] | {'test': 2048} | {'test': 287.18} |
 | [LegalQuAD](https://github.com/Christoph911/AIKE2021_Appendix) | ['deu'] | Retrieval | s2p | [Legal] |  |  |
 | [LegalReasoningCausalityLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 55} | {'test': 1563.76} |
 | [LegalSummarization](https://github.com/lauramanor/legal_summarization) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
@@ -298,16 +298,24 @@ The following tables gives you an overview of the tasks in MTEB.
 | [NorwegianCourtsBitextMining](https://opus.nlpl.eu/index.php) | ['nno', 'nob'] | BitextMining | s2s |  | {'test': 2050} | {'test': 1884.0} |
 | [NorwegianParliamentClassification](https://huggingface.co/datasets/NbAiLab/norwegian_parliament) | ['nob'] | Classification | s2s |  | {'test': 1200, 'validation': 1200} | {'test': 1884.0, 'validation': 1911.0} |
 | [NusaX-senti](https://arxiv.org/abs/2205.15960) (Winata et al., 2022) | ['ace', 'ban', 'bbc', 'bjn', 'bug', 'eng', 'ind', 'jav', 'mad', 'min', 'nij', 'sun'] | Classification | s2s | [Reviews, Web, Social, Constructed] | {'test': 4800} | {'test': 52.4} |
+| [OPP115PolicyChangeLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 431} | {'test': 200.99} |
+| [OPP115ThirdPartySharingCollectionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 1590} | {'test': 223.64} |
+| [OPP115UserAccessEditAndDeletionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 462} | {'test': 218.59} |
+| [OPP115UserChoiceControlLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 1546} | {'test': 210.62} |
 | [Ocnli](https://arxiv.org/abs/2010.05444) | ['cmn'] | PairClassification | s2s |  |  |  |
 | [OdiaNewsClassification](https://github.com/goru001/nlp-for-odia) | ['ory'] | Classification | s2s | [News] | {'test': 2048} | {'test': 49.24} |
 | [OnlineShopping](https://aclanthology.org/2023.nodalida-1.20/) | ['cmn'] | Classification | s2s |  |  |  |
 | [OpusparcusPC](https://gem-benchmark.com/data_cards/opusparcus) | ['deu', 'eng', 'fin', 'fra', 'rus', 'swe'] | PairClassification | s2s |  |  |  |
+| [OralArgumentQuestionPurposeLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 312} | {'test': 269.71} |
+| [OverrulingLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 2048} | {'test': 167.2} |
 | [PAC](https://arxiv.org/pdf/2211.13112.pdf) | ['pol'] | Classification | p2p |  | {'test': 3453} | {'test': 185.3} |
 | [PAWSX](https://aclanthology.org/2021.emnlp-main.357) | ['cmn'] | STS | s2s |  |  |  |
+| [PROALegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 95} | {'test': 251.73} |
 | [PSC](http://www.lrec-conf.org/proceedings/lrec2014/pdf/1211_Paper.pdf) | ['pol'] | PairClassification | s2s |  |  |  |
 | [PatentClassification](https://aclanthology.org/P19-1212.pdf) | ['eng'] | Classification | s2s | [Legal] | {'test': 5000} | {'test': 18620.44} |
 | [PawsX](https://arxiv.org/abs/1908.11828) | ['cmn', 'deu', 'eng', 'fra', 'jpn', 'kor', 'spa'] | PairClassification | s2s |  |  |  |
 | [PersianFoodSentimentClassification](https://hooshvare.github.io/docs/datasets/sa) (Mehrdad Farahani et al., 2020) | ['fas'] | Classification | s2s | [Reviews] | {'validation': 2048, 'test': 2048} | {'validation': 90.37, 'test': 90.58} |
+| [PersonalJurisdictionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 50} | {'test': 381.14} |
 | [PlscClusteringP2P](https://huggingface.co/datasets/rafalposwiata/plsc) | ['pol'] | Clustering | s2s | [Academic] | {'test': 17537} | {'test': 1023.21} |
 | [PlscClusteringS2S](https://huggingface.co/datasets/rafalposwiata/plsc) | ['pol'] | Clustering | s2s | [Academic] | {'test': 17534} | {'test': 84.34} |
 | [PoemSentimentClassification](https://arxiv.org/abs/2011.02686) (Emily Sheng, 2020) | ['eng'] | Classification | s2s | [Reviews] | {'validation': 105, 'test': 104} | {'validation': 45.3, 'test': 42.4} |
