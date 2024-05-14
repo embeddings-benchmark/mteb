@@ -41,6 +41,7 @@ from .fin.FinToxicityClassification import *
 from .fra.FrenchBookReviews import *
 from .fra.MovieReviewSentimentClassification import *
 from .guj.GujaratiNewsClassification import *
+from .heb.Hebrew_Sentiment_Analysis import *
 from .hin.HindiDiscourseClassification import *
 from .hin.SentimentAnalysisHindi import *
 from .hrv.FrenkHrClassification import *
