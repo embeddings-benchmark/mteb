@@ -1,4 +1,4 @@
-# GitHub action for the task table generation.
+# GitHub action for the dataset table generation.
 
 name: documentation
 
@@ -24,7 +24,7 @@ jobs:
           make install
 
       - name: Create table
-        run: python docs/create_tasks_table.py
+        run: python docs/create_datasets_table.py
     
       - name: Push table
         if: github.event_name == 'push'
@@ -35,8 +35,8 @@ jobs:
           if git diff --quiet; then
             echo "No changes detected"
           else
-            git add docs/tasks.md
-            git commit -m "Update tasks table"
+            git add docs/datasets.md
+            git commit -m "Update datasets table"
             git push
           fi
           
