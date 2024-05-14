@@ -1,0 +1,16 @@
+{
+  "dataset_revision": "b205c5084a0934ce8af14338bf03feb19499c84d",
+  "mteb_dataset_name": "SyntecRerankingAbstention",
+  "mteb_version": "1.6.36",
+  "test": {
+    "evaluation_time": 2.9,
+    "map": 0.6621666666666666,
+    "mrr": 0.6621666666666666,
+    "nAUC_map_P1P2": 0.41814144922234203,
+    "nAUC_map_max": 0.23606317014001602,
+    "nAUC_map_std": 0.33743848175430546,
+    "nAUC_mrr_P1P2": 0.41814144922234203,
+    "nAUC_mrr_max": 0.23606317014001602,
+    "nAUC_mrr_std": 0.33743848175430546
+  }
+}

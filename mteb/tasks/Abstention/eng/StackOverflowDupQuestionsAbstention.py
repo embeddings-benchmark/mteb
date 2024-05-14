@@ -3,8 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskAbstention import AbsTaskAbstention
-from ...Reranking.eng.StackOverflowDupQuestions import \
-    StackOverflowDupQuestions
+from ...Reranking.eng.StackOverflowDupQuestions import StackOverflowDupQuestions
 
 
 class StackOverflowDupQuestionsAbstention(AbsTaskAbstention, StackOverflowDupQuestions):

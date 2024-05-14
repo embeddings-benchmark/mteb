@@ -1,0 +1,16 @@
+{
+  "dataset_revision": "e40c8a63ce02da43200eccb5b0846fcaa888f562",
+  "mteb_dataset_name": "AlloprofRerankingAbstention",
+  "mteb_version": "1.6.36",
+  "test": {
+    "evaluation_time": 172.06,
+    "map": 0.4090660800126129,
+    "mrr": 0.4165014940921677,
+    "nAUC_map_P1P2": 0.21786796206015413,
+    "nAUC_map_max": 0.07099301842411843,
+    "nAUC_map_std": 0.08643784819051409,
+    "nAUC_mrr_P1P2": 0.21557237149342354,
+    "nAUC_mrr_max": 0.07317459805759537,
+    "nAUC_mrr_std": 0.07668752618465653
+  }
+}

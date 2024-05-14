@@ -4,9 +4,10 @@ import logging
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-logger = logging.getLogger(__name__)
 from ....abstasks.AbsTaskAbstention import AbsTaskAbstention
 from ...Retrieval.fra.FQuADRetrieval import FQuADRetrieval
+
+logger = logging.getLogger(__name__)
 
 
 class FQuADRetrievalAbstention(AbsTaskAbstention, FQuADRetrieval):

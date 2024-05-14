@@ -9,9 +9,6 @@ from typing import Dict, List
 import numpy as np
 import pytrec_eval
 
-
-logger = logging.getLogger(__name__)
-
 from .Evaluator import Evaluator
 from .RerankingEvaluator import RerankingEvaluator
 
@@ -47,7 +44,6 @@ class AbstentionRetrievingEvaluator(Evaluator):
         k_values: List[int] = None,
         ignore_identical_ids: bool = True,
     ) -> Dict[str, float]:
-
         if k_values is None:
             k_values = [1, 3, 5, 10]
         # Choose whether to ignore identical ids
