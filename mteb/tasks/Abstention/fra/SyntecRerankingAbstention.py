@@ -2,11 +2,12 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
-from ....evaluation.evaluators import AbstentionRerankingEvaluator
+from ....abstasks.AbsTaskAbstention import AbsTaskAbstention
+from ...Reranking.fra.SyntecReranking import SyntecReranking
 
 
-class SyntecRerankingAbstention(AbsTaskReranking):
+class SyntecRerankingAbstention(AbsTaskAbstention, SyntecReranking):
+    abstention_task = "Reranking"
     metadata = TaskMetadata(
         name="SyntecRerankingAbstention",
         description="This dataset has been built from the Syntec Collective bargaining agreement.",
@@ -33,22 +34,3 @@ class SyntecRerankingAbstention(AbsTaskReranking):
         n_samples=None,
         avg_character_length=None,
     )
-
-
-    def evaluate(self, model, split="test", **kwargs):
-        if not self.data_loaded:
-            self.load_data()
-
-        scores = {}
-        if self.is_multilingual:
-            for lang in self.langs:
-                data_split = self.dataset[lang][split]
-                evaluator = AbstentionRerankingEvaluator(data_split, **kwargs)
-                scores[lang] = evaluator(model)
-        else:
-            data_split = self.dataset[split]
-
-            evaluator = AbstentionRerankingEvaluator(data_split, **kwargs)
-            scores = evaluator(model)
-
-        return dict(scores)

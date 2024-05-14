@@ -9,10 +9,10 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 logger = logging.getLogger(__name__)
 from ....abstasks.AbsTaskAbstention import AbsTaskAbstention
 from ...Retrieval.fra.FQuADRetrieval import FQuADRetrieval
-from ....evaluation.evaluators.AbstentionEvaluator import AbstentionRetrievingEvaluator
 
 
 class FQuADRetrievalAbstention(AbsTaskAbstention, FQuADRetrieval):
+    abstention_task = "Retrieval"
     _EVAL_SPLITS = ["test", "validation"]
 
     metadata = TaskMetadata(
@@ -59,11 +59,3 @@ class FQuADRetrievalAbstention(AbsTaskAbstention, FQuADRetrieval):
         n_samples={"test": 400, "validation": 100},
         avg_character_length={"test": 937, "validation": 930},
     )
-
-    def _evaluate_monolingual(
-            self, retriever, corpus, queries, relevant_docs, lang=None, **kwargs
-    ):
-        """Function to override for retrieval tasks"""
-        return AbstentionRetrievingEvaluator(
-            metadata_dict=self.metadata_dict).evaluate_monolingual_retrieval_abstention(retriever, corpus, queries,
-                                                                                        relevant_docs, lang, **kwargs)
