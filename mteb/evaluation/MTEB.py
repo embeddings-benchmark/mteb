@@ -310,7 +310,12 @@ class MTEB:
                 }
                 for split in task_eval_splits:
                     if co2_tracker:
-                        from codecarbon import EmissionsTracker
+                        try:
+                            from codecarbon import EmissionsTracker
+                        except ImportError:
+                            raise ImportError(
+                                "To use the CO2 emissions tracker, please install codecarbon using 'pip install codecarbon'"
+                            )
 
                         with EmissionsTracker(
                             save_to_file=False, save_to_api=False, logging_logger=logger

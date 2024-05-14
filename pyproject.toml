@@ -40,7 +40,6 @@ dependencies = [
     "typing_extensions",
     "eval_type_backport",
     "polars>=0.20.22",
-    "codecarbon"
 ]
 
 
@@ -54,6 +53,7 @@ mteb = "mteb.cmd:main"
 
 [project.optional-dependencies]
 dev = ["ruff>=0.0.254", "pytest", "pytest-xdist"]
+codecarbon = ["codecarbon"]
 
 
 [tool.setuptools.packages.find]
