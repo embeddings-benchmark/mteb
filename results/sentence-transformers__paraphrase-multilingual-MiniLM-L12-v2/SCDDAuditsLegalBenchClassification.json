@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "SCDDAuditsLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.37203166226912926,
+    "accuracy_stderr": 5.551115123125783e-17,
+    "ap": 0.9142600829956832,
+    "ap_stderr": 1.1102230246251565e-16,
+    "evaluation_time": 191.41,
+    "f1": 0.3353816681402888,
+    "f1_stderr": 0.0,
+    "main_score": 0.37203166226912926
+  }
+}

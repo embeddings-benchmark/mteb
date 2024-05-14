@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "SCDBPVerificationLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.567282321899736,
+    "accuracy_stderr": 1.1102230246251565e-16,
+    "ap": 0.5818764895162168,
+    "ap_stderr": 1.1102230246251565e-16,
+    "evaluation_time": 635.41,
+    "f1": 0.5250626566416041,
+    "f1_stderr": 1.1102230246251565e-16,
+    "main_score": 0.567282321899736
+  }
+}
