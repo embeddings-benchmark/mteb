@@ -44,7 +44,7 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
 
     def dataset_transform(self):
         _dataset = {}
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             _dataset[lang] = {}
             for split in self.metadata.eval_splits:
                 hf_dataset = self.dataset[lang][split]
