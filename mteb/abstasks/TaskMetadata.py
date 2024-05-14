@@ -85,7 +85,7 @@ TASK_TYPE = Literal[
     "STS",
     "Summarization",
     "InstructionRetrieval",
-    "Abstention"
+    "Abstention",
 ]
 
 TASK_CATEGORY = Literal[

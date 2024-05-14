@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import logging
 
-from ..evaluation.evaluators import (AbstentionRerankingEvaluator,
-                                     AbstentionRetrievingEvaluator)
+from ..evaluation.evaluators import (
+    AbstentionRerankingEvaluator,
+    AbstentionRetrievingEvaluator,
+)
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
