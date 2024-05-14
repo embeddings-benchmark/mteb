@@ -4826,12 +4826,12 @@ class SCDBPVerificationLegalBenchClassification(AbsTaskClassification):
         },
         @article{chilton2017limitations,
         title={The limitations of supply chain disclosure regimes},
-        author={Chilton, Adam S and Sarfaty, Galit A},
-        journal={Stan. J. Int'l L.},
-        volume={53},
-        pages={1},
-        year={2017},
-        publisher={HeinOnline}
+            author={Chilton, Adam S and Sarfaty, Galit A},
+            journal={Stan. J. Int'l L.},
+            volume={53},
+            pages={1},
+            year={2017},
+            publisher={HeinOnline}
         }
         """,
         n_samples={"test": 379},
