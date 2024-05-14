@@ -4619,6 +4619,7 @@ class SCDBPAccountabilityLegalBenchClassification(AbsTaskClassification):
         )
         self.dataset = self.dataset.rename_column("answer", "label")
 
+
 class SCDBPAuditsLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SCDBPAuditsLegalBenchClassification",
@@ -4675,6 +4676,7 @@ class SCDBPAuditsLegalBenchClassification(AbsTaskClassification):
         )
         self.dataset = self.dataset.rename_column("answer", "label")
 
+
 class SCDBPCertificationLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SCDBPCertificationLegalBenchClassification",
@@ -4730,6 +4732,7 @@ class SCDBPCertificationLegalBenchClassification(AbsTaskClassification):
             }
         )
         self.dataset = self.dataset.rename_column("answer", "label")
+
 
 class SCDBPTrainingLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -4901,6 +4904,7 @@ class SCDDAccountabilityLegalBenchClassification(AbsTaskClassification):
         )
         self.dataset = self.dataset.rename_column("answer", "label")
 
+
 class SCDDAuditsLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SCDDAuditsLegalBenchClassification",
@@ -4956,6 +4960,7 @@ class SCDDAuditsLegalBenchClassification(AbsTaskClassification):
             }
         )
         self.dataset = self.dataset.rename_column("answer", "label")
+
 
 class SCDDCertificationLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -5013,6 +5018,7 @@ class SCDDCertificationLegalBenchClassification(AbsTaskClassification):
         )
         self.dataset = self.dataset.rename_column("answer", "label")
 
+
 class SCDDTrainingLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SCDDTrainingLegalBenchClassification",
@@ -5068,6 +5074,7 @@ class SCDDTrainingLegalBenchClassification(AbsTaskClassification):
             }
         )
         self.dataset = self.dataset.rename_column("answer", "label")
+
 
 class SCDDVerificationLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
