@@ -38,7 +38,9 @@ class AbsTaskBitextMining(AbsTask):
                         f"\nTask: {self.metadata_dict['name']}, split: {split}, language: {lang}. Running..."
                     )
                     data_split = self.dataset[lang][split]
-                    scores[lang] = self._evaluate_split(model, data_split, **kwargs)
+                    scores[lang] = self._evaluate_split(
+                        model, data_split, subsets=["sentence1", "sentence2"], **kwargs
+                    )
         else:
             logger.info(
                 f"\nTask: {self.metadata_dict['name']}, split: {split}. Running..."
