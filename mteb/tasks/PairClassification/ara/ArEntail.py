@@ -18,7 +18,10 @@ class ArEntail(AbsTaskPairClassification):
         eval_splits=["test"],
         eval_langs=["ara-Arab"],
         main_score="ap",
-        date=("2020-01-01", "2024-03-04"), # best guess based on google searching random samples
+        date=(
+            "2020-01-01",
+            "2024-03-04",
+        ),  # best guess based on google searching random samples
         form=["written"],
         domains=["News"],
         task_subtypes=["Textual Entailment"],
