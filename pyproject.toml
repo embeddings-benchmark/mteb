@@ -53,6 +53,7 @@ mteb = "mteb.cmd:main"
 
 [project.optional-dependencies]
 dev = ["ruff>=0.0.254", "pytest", "pytest-xdist"]
+codecarbon = ["codecarbon"]
 
 
 [tool.setuptools.packages.find]
