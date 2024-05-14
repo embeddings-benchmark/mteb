@@ -32,7 +32,7 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
 @misc{Ruqiya/Arabic_Reviews_of_SHEIN,
 title = {Arabic_Reviews_of_SHEIN},
 author = {Ruqiya Bin Safi},
-howpublished = {\url{https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN}},
+howpublished = {\\url{https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN}},
 year = {2024},
 publisher = {Hugging Face}
 }
