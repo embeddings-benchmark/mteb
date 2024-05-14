@@ -4,12 +4,11 @@ import json
 import logging
 import os
 from time import time
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 import numpy as np
 import pytrec_eval
-import torch
-import tqdm
+
 
 logger = logging.getLogger(__name__)
 
