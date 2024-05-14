@@ -54,23 +54,6 @@ class AbsTaskBitextMining(AbsTask):
         return scores
 
     def _evaluate_split(self, model, data_split, **kwargs):
-        if "gold" in data_split.features:
-            data_split["sentence1"] = data_split["sentence1"][0]
-            data_split["sentence2"] = data_split["sentence2"][0]
-            gold = data_split["gold"]
-            if len(gold) == 1:
-                gold = gold[0]
-            # MTEB currently only loads GOLD labels for BUCC, which is 1-indexed
-            # If a 2nd 0-indexed dataset is added, it'd be cleaner to update BUCC on the Hub to be 0-indexed
-            gold = [(i - 1, j - 1) for (i, j) in gold]
-            assert all(
-                [(i > 0) and (j > 0) for i, j in gold]
-            ), "Found negative gold indices. This may be caused by MTEB expecting 1-indexed gold labels."
-
-            data_split["sentence1"] = [
-                data_split["sentence1"][i] for (i, j) in self.gold
-            ]
-
         evaluator = BitextMiningEvaluator(data_split, **kwargs)
         metrics = evaluator(model)
         self._add_main_score(metrics)
