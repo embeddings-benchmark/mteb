@@ -26,7 +26,7 @@ class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
         date=("2020-01-01", "2024-12-31"),  # best guess
         form=["written"],
         domains=["News", "Non-fiction"],
-        license="not specified",
+        license="CC-BY-NC 4.0",
         socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
@@ -73,7 +73,7 @@ class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
         date=("2020-01-01", "2024-12-31"),  # best guess
         form=["written"],
         domains=["News", "Non-fiction"],
-        license="not specified",
+        license="CC-BY-NC 4.0",
         socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
