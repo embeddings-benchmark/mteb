@@ -4,6 +4,7 @@ import logging
 
 import numpy as np
 import torch
+import tqdm
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from .Evaluator import Evaluator
@@ -17,7 +18,9 @@ class BitextMiningEvaluator(Evaluator):
         super().__init__(**kwargs)
         # By default, all the columns in sentences will serve for evaluation
         # Specifying a 'subsets' attribute will limit to certain columns
-        self.subsets = subsets if subsets is not None else sentences.features
+        self.subsets = (
+            subsets if subsets is not None else list(sentences.features.keys())
+        )
         self.n = len(sentences)
         self.n_subsets = len(self.subsets)
         self.sentences = sentences
@@ -33,7 +36,9 @@ class BitextMiningEvaluator(Evaluator):
         # Compute embeddings
         logger.info(f"Encoding {self.n_subsets}x{self.n} sentences...")
         embeddings = {}
-        for sub in self.subsets:
+        for sub in tqdm.tqdm(
+            self.subsets, desc=f"Encoding {self.n_subsets}x{self.n} sentences..."
+        ):
             embeddings[sub] = np.asarray(
                 model.encode(self.sentences[sub], batch_size=self.batch_size)
             )
@@ -45,7 +50,7 @@ class BitextMiningEvaluator(Evaluator):
 
         # Otherwise evaluate all pairs
         scores = {}
-        for i in range(self.n_subsets):
+        for i in tqdm.tqdm(range(self.n_subsets), desc="Matching sentences"):
             for j in range(i + 1, self.n_subsets):
                 key1, key2 = self.subsets[i], self.subsets[j]
                 embeddings1 = embeddings[key1]
@@ -74,9 +79,13 @@ class BitextMiningEvaluator(Evaluator):
             labels.append(self.gold[i][1])
 
         scores = {
-            "precision": precision_score(labels, predictions, average="weighted"),
-            "recall": recall_score(labels, predictions, average="weighted"),
-            "f1": f1_score(labels, predictions, average="weighted"),
+            "precision": precision_score(
+                labels, predictions, zero_division=0.0, average="weighted"
+            ),
+            "recall": recall_score(
+                labels, predictions, zero_division=0.0, average="weighted"
+            ),
+            "f1": f1_score(labels, predictions, zero_division=0.0, average="weighted"),
             "accuracy": accuracy_score(labels, predictions),
         }
         return scores

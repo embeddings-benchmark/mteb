@@ -30,7 +30,9 @@ class AbsTaskBitextMining(AbsTask):
         )
         if self.is_crosslingual:
             if parallel_subsets:
-                scores = self._evaluate_split(model, self.dataset[split], **kwargs)
+                scores = self._evaluate_split(
+                    model, self.dataset[split], True, **kwargs
+                )
             else:
                 scores = {}
                 for lang in self.dataset:
@@ -53,10 +55,14 @@ class AbsTaskBitextMining(AbsTask):
 
         return scores
 
-    def _evaluate_split(self, model, data_split, **kwargs):
+    def _evaluate_split(self, model, data_split, parallel=False, **kwargs):
         evaluator = BitextMiningEvaluator(data_split, **kwargs)
         metrics = evaluator(model)
-        self._add_main_score(metrics)
+        if parallel:
+            for v in metrics.values():
+                self._add_main_score(v)
+        else:
+            self._add_main_score(metrics)
         return metrics
 
     def _add_main_score(self, scores):
