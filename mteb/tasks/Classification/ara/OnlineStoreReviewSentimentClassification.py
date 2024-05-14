@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-N_SAMPLES = 1297
+N_SAMPLES = 2048
 
 class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -43,5 +43,5 @@ publisher = {Hugging Face}
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"], test_size=100
+            self.dataset, seed=self.seed, splits=["train"]
         )
