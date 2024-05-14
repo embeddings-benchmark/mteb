@@ -78,7 +78,6 @@ from .multilingual.SIB200Classification import *
 from .multilingual.SouthAfricanLangClassification import *
 from .multilingual.SwissJudgementClassification import *
 from .multilingual.TweetSentimentClassification import *
-from .mya.MyanmarNews import *
 from .nep.NepaliNewsClassification import *
 from .nld.DutchBookReviewSentimentClassification import *
 from .nob.NoRecClassification import *
