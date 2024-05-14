@@ -28,31 +28,31 @@ def author_from_bibtex(bibtex: str | None) -> str:
     return f" ({author_str_w_et_al}, {year_str})"
 
 
-def task_to_markdown_row(task: mteb.AbsTask) -> str:
-    name = task.metadata.name
+def dataset_to_markdown_row(dataset: mteb.Absdataset) -> str:
+    name = dataset.metadata.name
     name_w_reference = (
-        f"[{name}]({task.metadata.reference})" if task.metadata.reference else name
+        f"[{name}]({dataset.metadata.reference})" if dataset.metadata.reference else name
     )
     domains = (
-        "[" + ", ".join(task.metadata.domains) + "]" if task.metadata.domains else ""
+        "[" + ", ".join(dataset.metadata.domains) + "]" if dataset.metadata.domains else ""
     )
-    n_samples = task.metadata.n_samples if task.metadata.n_samples else ""
+    n_samples = dataset.metadata.n_samples if dataset.metadata.n_samples else ""
     avg_character_length = (
-        task.metadata.avg_character_length if task.metadata.avg_character_length else ""
+        dataset.metadata.avg_character_length if dataset.metadata.avg_character_length else ""
     )
 
-    name_w_reference += author_from_bibtex(task.metadata.bibtex_citation)
+    name_w_reference += author_from_bibtex(dataset.metadata.bibtex_citation)
 
-    return f"| {name_w_reference} | {task.metadata.languages} | {task.metadata.type} | {task.metadata.category} | {domains} | {n_samples} | {avg_character_length} |"
+    return f"| {name_w_reference} | {dataset.metadata.languages} | {dataset.metadata.type} | {dataset.metadata.category} | {domains} | {n_samples} | {avg_character_length} |"
 
 
-def create_tasks_table(tasks: list[mteb.AbsTask]) -> str:
+def create_datasets_table(datasets: list[mteb.AbsTask]) -> str:
     table = """
-| Name | Languages | Type | Category | Domains | # Samples | Avg. Length (Char.) |
+| Name | Languages | Task | Category | Domains | # Samples | Avg. Length (Char.) |
 |------|-----------|------|----------|---------|-----------|---------------------|
 """
-    for task in tasks:
-        table += task_to_markdown_row(task) + "\n"
+    for dataset in datasets:
+        table += dataset_to_markdown_row(dataset) + "\n"
     return table
 
 
@@ -71,12 +71,12 @@ def insert_table(file_path, table):
 
 
 def main():
-    tasks = mteb.get_tasks()
-    tasks = sorted(tasks, key=lambda x: x.metadata.name)
+    datasets = mteb.get_datasets()
+    datasets = sorted(datasets, key=lambda x: x.metadata.name)
 
-    table = create_tasks_table(tasks)
+    table = create_datasets_table(datasets)
 
-    file_path = Path(__file__).parent / "tasks.md"
+    file_path = Path(__file__).parent / "datasets.md"
 
     insert_table(file_path, table)
 
