@@ -49,6 +49,7 @@ class MTEB:
             tasks: List of tasks to be evaluated. If specified, we filter tasks based on `task_langs` only
             version: Version of the benchmark to use. If None, latest is used
             err_logs_path: Path to save error logs
+            co2_tracker: Whether to enable or disable CO2 emissions tracker
             kwargs: Additional arguments to be passed to the tasks
         """
         if tasks is not None:
@@ -70,9 +71,6 @@ class MTEB:
 
         self._version = version
         self.err_logs_path = err_logs_path
-        self.tracker = EmissionsTracker(
-            save_to_file=False, save_to_api=False, logging_logger=logger
-        )
 
         self.select_tasks(**kwargs)
 
@@ -221,6 +219,13 @@ class MTEB:
             logger.info(f"\n# Loading dataset for {task.metadata_dict['name']}")
             task.load_data()
 
+    @staticmethod
+    def _run_eval(task, model, split, output_folder, **kwargs):
+        tick = time()
+        results = task.evaluate(model, split, output_folder=output_folder, **kwargs)
+        tock = time()
+        return results, tick, tock
+
     def run(
         self,
         model,
@@ -229,6 +234,7 @@ class MTEB:
         eval_splits=None,
         overwrite_results=False,
         raise_error: bool = True,
+        co2_tracker: bool = False,
         **kwargs,
     ):
         """Run the evaluation pipeline on the selected tasks.
@@ -304,19 +310,27 @@ class MTEB:
                     "mteb_dataset_name": task.metadata_dict["name"],
                 }
                 for split in task_eval_splits:
-                    with self.tracker:
-                        tick = time()
-                        results = task.evaluate(
-                            model, split, output_folder=output_folder, **kwargs
+                    if co2_tracker:
+                        with EmissionsTracker(
+                            save_to_file=False, save_to_api=False, logging_logger=logger
+                        ) as tracker:
+                            results, tick, tock = self._run_eval(
+                                task, model, split, output_folder, **kwargs
+                            )
+
+                        results["co2_emissions"] = (
+                            tracker.final_emissions
+                        )  # expressed as kilograms of CO₂-equivalents
+                    else:
+                        results, tick, tock = self._run_eval(
+                            task, model, split, output_folder, **kwargs
                         )
-                        tock = time()
+
                     logger.info(
                         f"Evaluation for {task.metadata_dict['name']} on {split} took {tock - tick:.2f} seconds"
                     )
                     results["evaluation_time"] = round(tock - tick, 2)
-                    results["co2_emissions"] = (
-                        self.tracker.final_emissions
-                    )  # expressed as kilograms of CO₂-equivalents
+
                     task_results[split] = results
                     if verbosity >= 1:
                         logger.info(f"Scores: {results}")

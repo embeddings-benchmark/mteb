@@ -99,6 +99,12 @@ def main():
     parser.add_argument(
         "-v", "--verbosity", type=int, default=2, help="Verbosity level"
     )
+    parser.add_argument(
+        "--co2_tracker",
+        type=bool,
+        default=False,
+        help="Enable CO2 tracker, disabled by default",
+    )
 
     ## evaluation params
     parser.add_argument(
@@ -183,6 +189,7 @@ def main():
         verbosity=args.verbosity,
         output_folder=args.output_folder,
         eval_splits=args.eval_splits,
+        co2_tracker=args.co2_tracker,
     )
 
     _save_model_metadata(model, args.model, Path(args.output_folder))
