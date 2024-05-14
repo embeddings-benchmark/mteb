@@ -31,6 +31,7 @@ from .multilingual.MasakhaNEWSClusteringS2S import *
 from .multilingual.MLSUMClusteringP2P import *
 from .multilingual.MLSUMClusteringS2S import *
 from .nob.snl_clustering import *
+from .nob.SNLHierarchicalClustering import *
 from .nob.vg_clustering import *
 from .pol.PolishClustering import *
 from .rom.RomaniBibleClustering import *
