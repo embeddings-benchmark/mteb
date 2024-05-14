@@ -11,7 +11,7 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         name="OnlineStoreReviewSentimentClassification",
         dataset={
             "path": "Ruqiya/Arabic_Reviews_of_SHEIN",
-            "revision": "3076150b77e0ce1426a857cabb7f52568675d5b3",
+            "revision": "65cc3759ee6bf2506b497484e33347255b0f499d",
         },
         description="This dataset contains Arabic reviews of products from the SHEIN online store.",
         reference="https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN",
@@ -30,14 +30,14 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         dialect=["ara-arab-EG", "ara-arab-JO", "ara-arab-LB", "ara-arab-SA"],
         text_creation="found",
         bibtex_citation="""
-        @misc{Ruqiya/Arabic_Reviews_of_SHEIN,
-        title = {Arabic_Reviews_of_SHEIN},
-        author = {Ruqiya Bin Safi},
-        howpublished = {\url{https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN}},
-        year = {2024},
-        publisher = {Hugging Face}
-        }
-        """,
+@misc{Ruqiya/Arabic_Reviews_of_SHEIN,
+title = {Arabic_Reviews_of_SHEIN},
+author = {Ruqiya Bin Safi},
+howpublished = {\url{https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN}},
+year = {2024},
+publisher = {Hugging Face}
+}
+""",
         n_samples={"train": N_SAMPLES},
         avg_character_length={"train": 137.2},
     )
