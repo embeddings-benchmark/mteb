@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "b899ec06227db3679b0fe3c4188a6b48cc0b65eb",
+  "mteb_dataset_name": "MyanmarNews",
+  "mteb_version": "1.8.9",
+  "train": {
+    "accuracy": 0.68984375,
+    "accuracy_stderr": 0.04150494024447289,
+    "evaluation_time": 165.41,
+    "f1": 0.6901785599622698,
+    "f1_stderr": 0.041317970170793646,
+    "main_score": 0.68984375
+  }
+}
