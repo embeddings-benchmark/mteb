@@ -43,5 +43,5 @@ publisher = {Hugging Face}
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
+            self.dataset, seed=self.seed, splits=["train"], test_size=100
         )
