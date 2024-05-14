@@ -1,0 +1,16 @@
+{
+  "dataset_revision": "e185fbe320c72810689fc5848eb6114e1ef5ec69",
+  "mteb_dataset_name": "StackOverflowDupQuestionsAbstention",
+  "mteb_version": "1.6.36",
+  "test": {
+    "evaluation_time": 69.81,
+    "map": 0.4720331795750485,
+    "mrr": 0.4792425303454716,
+    "nAUC_map_P1P2": 0.35939089548302244,
+    "nAUC_map_max": 0.15675259675251363,
+    "nAUC_map_std": 0.11443718275364041,
+    "nAUC_mrr_P1P2": 0.35948284965963945,
+    "nAUC_mrr_max": 0.16378602992162836,
+    "nAUC_mrr_std": 0.12392812687010744
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "dataset_revision": "d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
+  "mteb_dataset_name": "SciDocsRRAbstention",
+  "mteb_version": "1.6.36",
+  "test": {
+    "evaluation_time": 120.68,
+    "map": 0.7737800983262628,
+    "mrr": 0.9312268069621011,
+    "nAUC_map_P1P2": 0.029350115932065206,
+    "nAUC_map_max": 0.5667878902976559,
+    "nAUC_map_std": 0.7000341277766894,
+    "nAUC_mrr_P1P2": 0.4886292031502046,
+    "nAUC_mrr_max": 0.8133478212457037,
+    "nAUC_mrr_std": 0.7529631574620612
+  }
+}
