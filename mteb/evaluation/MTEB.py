@@ -11,6 +11,7 @@ from time import time
 from typing import List, Union
 
 import datasets
+from codecarbon import EmissionsTracker
 
 from ..abstasks import *
 from ..abstasks import AbsTask, LangMapping
@@ -69,6 +70,9 @@ class MTEB:
 
         self._version = version
         self.err_logs_path = err_logs_path
+        self.tracker = EmissionsTracker(
+            save_to_file=False, save_to_api=False, logging_logger=logger
+        )
 
         self.select_tasks(**kwargs)
 
@@ -300,15 +304,19 @@ class MTEB:
                     "mteb_dataset_name": task.metadata_dict["name"],
                 }
                 for split in task_eval_splits:
-                    tick = time()
-                    results = task.evaluate(
-                        model, split, output_folder=output_folder, **kwargs
-                    )
-                    tock = time()
+                    with self.tracker:
+                        tick = time()
+                        results = task.evaluate(
+                            model, split, output_folder=output_folder, **kwargs
+                        )
+                        tock = time()
                     logger.info(
                         f"Evaluation for {task.metadata_dict['name']} on {split} took {tock - tick:.2f} seconds"
                     )
                     results["evaluation_time"] = round(tock - tick, 2)
+                    results["co2_emissions"] = (
+                        self.tracker.final_emissions
+                    )  # expressed as kilograms of CO₂-equivalents
                     task_results[split] = results
                     if verbosity >= 1:
                         logger.info(f"Scores: {results}")
