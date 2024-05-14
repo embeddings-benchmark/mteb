@@ -27,6 +27,7 @@ from .eng.ImdbClassification import *
 from .eng.LegalBenchClassification import *
 from .eng.NewsClassification import *
 from .eng.PatentClassification import *
+from .eng.PoemSentimentClassification import *
 from .eng.ToxicChatClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
@@ -53,10 +54,12 @@ from .kan.KannadaNewsClassification import *
 from .kor.KlueTC import *
 from .kur.KurdishSentimentClassification import *
 from .mal.MalayalamNewsClassification import *
+from .mar.MarathiNewsClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
 from .multilingual.AfriSentiLangClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
+from .multilingual.CyrillicTurkicLangClassification import *
 from .multilingual.HinDialectClassification import *
 from .multilingual.IndicLangClassification import *
 from .multilingual.IndicSentimentClassification import *
@@ -69,6 +72,7 @@ from .multilingual.MTOPIntentClassification import *
 from .multilingual.MultiHateClassification import *
 from .multilingual.MultilingualSentimentClassification import *
 from .multilingual.NordicLangClassification import *
+from .multilingual.NusaXSenti import *
 from .multilingual.ScalaClassification import *
 from .multilingual.SIB200Classification import *
 from .multilingual.SouthAfricanLangClassification import *
@@ -82,6 +86,7 @@ from .ory.OdiaNewsClassification import *
 from .pan.PunjabiNewsClassification import *
 from .pol.PolishClassification import *
 from .por.HateSpeechPortugueseClassification import *
+from .ron.RomanianReviewsSentiment import *
 from .ron.RomanianSentimentClassification import *
 from .san.SanskritShlokasClassification import *
 from .sin.SinhalaNewsClassification import *
@@ -91,6 +96,7 @@ from .spa.SpanishNewsClassification import *
 from .spa.SpanishSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
 from .swe.DalajClassification import *
+from .swe.SwedishSentimentClassification import *
 from .swe.SweRecClassification import *
 from .tam.TamilNewsClassification import *
 from .tel.TeluguAndhraJyotiNewsClassification import *

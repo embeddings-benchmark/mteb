@@ -5,14 +5,16 @@ from .MultiSubsetLoader import MultiSubsetLoader
 
 
 class MultilingualTask(MultiSubsetLoader, AbsTask):
-    def __init__(self, langs=None, **kwargs):
+    def __init__(self, hf_subsets=None, **kwargs):
         super().__init__(**kwargs)
-        if isinstance(langs, list):
-            langs = [lang for lang in langs if lang in self.metadata_dict["eval_langs"]]
-        if langs is not None and len(langs) > 0:
-            self.langs = (
-                langs  # TODO: case where user provides langs not in the dataset
+        if isinstance(hf_subsets, list):
+            hf_subsets = [
+                lang for lang in hf_subsets if lang in self.metadata_dict["eval_langs"]
+            ]
+        if hf_subsets is not None and len(hf_subsets) > 0:
+            self.hf_subsets = (
+                hf_subsets  # TODO: case where user provides langs not in the dataset
             )
         else:
-            self.langs = self.metadata_dict["eval_langs"]
+            self.hf_subsets = self.metadata_dict["eval_langs"]
         self.is_multilingual = True

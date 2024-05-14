@@ -5,6 +5,17 @@ from typing import Optional
 from jsonlines import Reader
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, conint, constr
 
+commit_exceptions = {
+    "scores_from_old_system",
+    # <100 points: from before max points were enforced
+    "440",
+    "543",
+    "616",
+    "636",
+    # >100 points: from before max points were enforced (reduced to 100 points)
+    "583",
+}
+
 
 # Define a Pydantic model to represent each JSON object
 class JsonObject(BaseModel):
@@ -23,11 +34,18 @@ class JsonObject(BaseModel):
     Coordination: Optional[int] = None
 
 
+def check_max_points(obj: JsonObject, commit_n: str):
+    if obj.new_dataset is not None:
+        if obj.new_dataset > 50 and commit_n not in commit_exceptions:
+            raise ValueError(f"Commit {commit_n} exceeds max points for new_dataset")
+
+
 # Function to validate JSONL files in a folder
 def validate_jsonl_files(folder_path):
     for filename in os.listdir(folder_path):
         if filename.endswith(".jsonl"):
             file_path = os.path.join(folder_path, filename)
+            commit_n = os.path.splitext(filename)[0]
             with open(file_path, "r", encoding="utf-8") as file:
                 try:
                     # Read JSONL file
@@ -39,6 +57,8 @@ def validate_jsonl_files(folder_path):
                         # Validate JSON object against schema
                         x = JsonObject(**line)
                         logging.debug(x)
+                        check_max_points(x, commit_n)
+
                     except ValidationError as e:
                         raise Exception(
                             "Validation Error in file:", file_path, line
