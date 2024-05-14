@@ -9,7 +9,7 @@ from ...Reranking.zho.CMTEBReranking import CMedQAv2, T2Reranking
 class T2RerankingAbstention(AbsTaskAbstention, T2Reranking):
     abstention_task = "Reranking"
     metadata = TaskMetadata(
-        name="T2Reranking",
+        name="T2RerankingAbstention",
         description="T2Ranking: A large-scale Chinese Benchmark for Passage Ranking",
         reference="https://arxiv.org/abs/2304.03679",
         dataset={
