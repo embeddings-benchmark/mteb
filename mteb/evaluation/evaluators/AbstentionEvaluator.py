@@ -195,6 +195,7 @@ class AbstentionRerankingEvaluator(RerankingEvaluator):
         **kwargs,
     ):
         super().__init__(*args, **kwargs)
+
     def _compute_metrics_instance(self, query_emb, docs_emb, is_relevant):
         """Computes metrics for a single instance = (query, positives, negatives)
 

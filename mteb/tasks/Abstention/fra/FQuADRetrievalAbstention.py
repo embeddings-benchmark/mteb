@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from __future__ import annotations
-
 import logging
 
 from mteb.abstasks.TaskMetadata import TaskMetadata

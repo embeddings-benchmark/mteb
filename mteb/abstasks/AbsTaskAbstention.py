@@ -15,7 +15,6 @@ class AbsTaskAbstention(AbsTask):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # self.abstention_task: Optional[TASK_TYPE] = None
 
     def _evaluate_monolingual(
             self, retriever, corpus, queries, relevant_docs, lang=None, **kwargs
