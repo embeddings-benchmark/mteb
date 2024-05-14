@@ -76,3 +76,5 @@ Please also add your first name and last name are as you want them to appear in 
 | mmhamdy     | Mohammed | Hamdy  | mhamdy.res@gmail.com         | ~Mohammed_Hamdy1 | Cohere For AI Community|
 | jupyterjazz       | Saba         | Sturua     | saba.sturua@jina.ai              |     ~Saba_Sturua1      | Jina AI                                                     |
 | kranthigv     | Kranthi Kiran | GV  | kranthi.gv@nyu.edu         | ~Kranthi_Kiran_GV1 | New York University|
+| jupyterjazz       | Saba         | Sturua     | saba.sturua@jina.ai              |     ~Saba_Sturua1      | Jina AI   
+| dipam7 | Dipam | Vasani | dipam44@gmail.com | ~Dipam_Vasani1 | Individual Contributor                                                  |
