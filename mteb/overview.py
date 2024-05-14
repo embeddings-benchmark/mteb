@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from collections import Counter
-from typing import Dict, Set
+from typing import Dict, Set, Type
 
 from mteb.abstasks import AbsTask
 from mteb.abstasks.languages import (
@@ -17,6 +17,28 @@ from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
 from mteb.tasks import *  # import all tasks
 
 logger = logging.getLogger(__name__)
+
+
+# Create task registry
+
+
+def create_task_list() -> list[Type[AbsTask]]:
+    tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
+    tasks = [
+        cls
+        for cat_cls in tasks_categories_cls
+        for cls in cat_cls.__subclasses__()
+        if cat_cls.__name__.startswith("AbsTask")
+    ]
+    return tasks
+
+
+def create_name_to_task_mapping() -> dict[str, Type[AbsTask]]:
+    tasks = create_task_list()
+    return {cls.metadata.name: cls for cls in tasks}
+
+
+TASKS_REGISTRY = create_name_to_task_mapping()
 
 
 def check_is_valid_script(script: str) -> None:
@@ -110,7 +132,9 @@ class MTEBTasks(tuple):
             langs.extend(task.languages)
         return Counter(langs)
 
-    def to_markdown(self, properties: str = ["type", "license", "languages"]) -> str:
+    def to_markdown(
+        self, properties: list[str] = ["type", "license", "languages"]
+    ) -> str:
         """Generate markdown table with tasks summary
 
         Args:
@@ -160,13 +184,8 @@ def get_tasks(
         >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Classification"])
         >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Clustering"], exclude_superseeded=False)
     """
-    tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
-    tasks = [
-        cls().filter_languages(languages, script)
-        for cat_cls in tasks_categories_cls
-        for cls in cat_cls.__subclasses__()
-        if cat_cls.__name__.startswith("AbsTask")
-    ]
+    _tasks = create_task_list()
+    tasks = [cls().filter_languages(languages, script) for cls in _tasks]
 
     if languages:
         tasks = filter_tasks_by_languages(tasks, languages)
