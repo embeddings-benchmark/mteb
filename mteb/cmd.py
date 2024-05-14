@@ -103,7 +103,7 @@ def main():
         "--co2_tracker",
         type=bool,
         default=False,
-        help="Enable CO2 tracker, disabled by default",
+        help="Enable CO₂ tracker, disabled by default",
     )
 
     ## evaluation params

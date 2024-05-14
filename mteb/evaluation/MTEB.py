@@ -11,7 +11,6 @@ from time import time
 from typing import List, Union
 
 import datasets
-from codecarbon import EmissionsTracker
 
 from ..abstasks import *
 from ..abstasks import AbsTask, LangMapping
@@ -311,6 +310,8 @@ class MTEB:
                 }
                 for split in task_eval_splits:
                     if co2_tracker:
+                        from codecarbon import EmissionsTracker
+
                         with EmissionsTracker(
                             save_to_file=False, save_to_api=False, logging_logger=logger
                         ) as tracker:
