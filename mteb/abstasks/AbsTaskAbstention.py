@@ -1,9 +1,11 @@
 from __future__ import annotations
-from typing import Optional
+
 import logging
+
+from ..evaluation.evaluators import (AbstentionRerankingEvaluator,
+                                     AbstentionRetrievingEvaluator)
 from .AbsTask import AbsTask
-from ..abstasks.TaskMetadata import TASK_TYPE
-from ..evaluation.evaluators import AbstentionRetrievingEvaluator, AbstentionRerankingEvaluator
+
 logger = logging.getLogger(__name__)
 
 
@@ -17,13 +19,15 @@ class AbsTaskAbstention(AbsTask):
         super().__init__(**kwargs)
 
     def _evaluate_monolingual(
-            self, retriever, corpus, queries, relevant_docs, lang=None, **kwargs
+        self, retriever, corpus, queries, relevant_docs, lang=None, **kwargs
     ):
         """Function to override for retrieval tasks"""
         if self.abstention_task == "Retrieval":
             return AbstentionRetrievingEvaluator(
-                metadata_dict=self.metadata_dict).evaluate_monolingual_retrieval_abstention(retriever, corpus, queries,
-                                                                                        relevant_docs, lang, **kwargs)
+                metadata_dict=self.metadata_dict
+            ).evaluate_monolingual_retrieval_abstention(
+                retriever, corpus, queries, relevant_docs, lang, **kwargs
+            )
         raise NotImplementedError("Abstention task not defined.")
 
     def evaluate(self, model, split="test", **kwargs):
