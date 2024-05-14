@@ -9,6 +9,7 @@ from .eng.TwitterURLCorpusPC import *
 from .hye.ArmenianParaphrasePC import *
 from .multilingual.OpusparcusPC import *
 from .multilingual.PawsX import *
+from .multilingual.RTE3 import *
 from .multilingual.XNLI import *
 from .pol.PolishPC import *
 from .zho.CMTEBPairClassification import *
