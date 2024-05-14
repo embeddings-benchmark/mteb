@@ -4806,7 +4806,7 @@ class SCDBPVerificationLegalBenchClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2010-01-01", "2015-06-30"),
+        date=("2010-01-01", "2023-08-23"),
         form=["written"],
         domains=["Legal"],
         task_subtypes=[],
