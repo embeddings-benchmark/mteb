@@ -32,6 +32,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [BSARDRetrieval](https://huggingface.co/datasets/maastrichtlawtech/bsard) | ['fra'] | Retrieval | s2p |  |  |  |
 | [BUCC](https://comparable.limsi.fr/bucc2018/bucc2018-task.html) | ['cmn', 'deu', 'eng', 'fra', 'rus'] | BitextMining | s2s |  | {'test': 641684} | {'test': 101.3} |
 | [Banking77Classification](https://arxiv.org/abs/2003.04807) | ['eng'] | Classification | s2s |  | {'test': 3080} | {'test': 54.2} |
+| [BelebeleRetrieval](https://arxiv.org/abs/2308.16884) (Lucas Bandarkar, 2023) | ['acm', 'afr', 'als', 'amh', 'apc', 'arb', 'ars', 'ary', 'arz', 'asm', 'azj', 'bam', 'ben', 'bod', 'bul', 'cat', 'ceb', 'ces', 'ckb', 'dan', 'deu', 'ell', 'eng', 'est', 'eus', 'fin', 'fra', 'fuv', 'gaz', 'grn', 'guj', 'hat', 'hau', 'heb', 'hin', 'hrv', 'hun', 'hye', 'ibo', 'ilo', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kac', 'kan', 'kat', 'kaz', 'kea', 'khk', 'khm', 'kin', 'kir', 'kor', 'lao', 'lin', 'lit', 'lug', 'luo', 'lvs', 'mal', 'mar', 'mkd', 'mlt', 'mri', 'mya', 'nld', 'nob', 'npi', 'nso', 'nya', 'ory', 'pan', 'pbt', 'pes', 'plt', 'pol', 'por', 'ron', 'rus', 'shn', 'sin', 'slk', 'slv', 'sna', 'snd', 'som', 'sot', 'spa', 'srp', 'ssw', 'sun', 'swe', 'swh', 'tam', 'tel', 'tgk', 'tgl', 'tha', 'tir', 'tsn', 'tso', 'tur', 'ukr', 'urd', 'uzn', 'vie', 'war', 'wol', 'xho', 'yor', 'zho', 'zsm', 'zul'] | Retrieval | s2p | [Web, News] | {'test': 103500} | {'test': 568.0} |
 | [BengaliDocumentClassification](https://aclanthology.org/2023.eacl-main.4) | ['ben'] | Classification | s2s | [News] | {'test': 2048} | {'test': 1658.1} |
 | [BengaliHateSpeechClassification](https://huggingface.co/datasets/bn_hate_speech) (Karim et al., 2020) | ['ben'] | Classification | s2s | [News] | {'train': 3418} | {'train': 103.42} |
 | [BengaliSentimentAnalysis](https://data.mendeley.com/datasets/p6zc7krs37/4) (Sazzed et al., 2020) | ['ben'] | Classification | s2s | [Reviews] | {'train': 11807} | {'train': 69.66} |
@@ -207,6 +208,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [JSTS](https://aclanthology.org/2022.lrec-1.317.pdf#page=2.00) | ['jpn'] | STS | s2s | [Web] | {'valudtion': 1457} | {'valudtion': 46.34} |
 | [JaQuADRetrieval](https://arxiv.org/abs/2202.01764) (ByungHoon So, 2022) | ['jpn'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'validation': 2048} | {'validation': 400.75} |
 | [JavaneseIMDBClassification](https://github.com/w11wo/nlp-datasets#javanese-imdb) (Wongso et al., 2021) | ['jav'] | Classification | s2s | [Reviews] | {'test': 25000} | {'test': 481.83} |
+| [KLUE-NLI](https://arxiv.org/abs/2105.09680) (Sungjoon Park, 2021) | ['kor'] | PairClassification | s2s | [News, Encyclopaedic] | {'validation': 2000} | {'validation': 35.01} |
 | [KLUE-STS](https://arxiv.org/abs/2105.09680) (Sungjoon Park, 2021) | ['kor'] | STS | s2s | [Reviews, News, Spoken] | {'validation': 519} | {'validation': 33.178227360308284} |
 | [KLUE-TC](https://arxiv.org/abs/2105.09680) (Sungjoon Park, 2021) | ['kor'] | Classification | s2s | [News] | {'validation': 2048} | {'validation': 27.079609091907326} |
 | [KannadaNewsClassification](https://github.com/goru001/nlp-for-kannada) | ['kan'] | Classification | s2s | [News] | {'train': 6460} | {'train': 65.88} |
@@ -308,6 +310,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [PersianFoodSentimentClassification](https://hooshvare.github.io/docs/datasets/sa) (Mehrdad Farahani et al., 2020) | ['fas'] | Classification | s2s | [Reviews] | {'validation': 2048, 'test': 2048} | {'validation': 90.37, 'test': 90.58} |
 | [PlscClusteringP2P](https://huggingface.co/datasets/rafalposwiata/plsc) | ['pol'] | Clustering | s2s | [Academic] | {'test': 17537} | {'test': 1023.21} |
 | [PlscClusteringS2S](https://huggingface.co/datasets/rafalposwiata/plsc) | ['pol'] | Clustering | s2s | [Academic] | {'test': 17534} | {'test': 84.34} |
+| [PoemSentimentClassification](https://arxiv.org/abs/2011.02686) (Emily Sheng, 2020) | ['eng'] | Classification | s2s | [Reviews] | {'validation': 105, 'test': 104} | {'validation': 45.3, 'test': 42.4} |
 | [PolEmo2.0-IN](https://aclanthology.org/K19-1092.pdf) | ['pol'] | Classification | s2s |  |  |  |
 | [PolEmo2.0-OUT](https://aclanthology.org/K19-1092.pdf) | ['pol'] | Classification | s2s |  | {'test': 722} | {'test': 756.2} |
 | [PpcPC](https://arxiv.org/pdf/2207.12759.pdf) | ['pol'] | PairClassification | s2s |  |  |  |
@@ -315,12 +318,14 @@ The following tables gives you an overview of the tasks in MTEB.
 | [QBQTC](https://github.com/CLUEbenchmark/QBQTC/tree/main/dataset) | ['cmn'] | STS | s2s |  |  |  |
 | [Quora-PL](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) | ['pol'] | Retrieval | s2s |  |  |  |
 | [QuoraRetrieval](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) | ['eng'] | Retrieval | s2s |  |  |  |
+| [RTE3](https://aclanthology.org/W07-1401/) | ['deu', 'eng', 'fra', 'ita'] | PairClassification | s2s | [News, Web, Encyclopaedic] | {'test': 1923} | {'test': 124.79} |
 | [RedditClustering](https://arxiv.org/abs/2104.07081) | ['eng'] | Clustering | s2s |  | {'test': 420464} | {'test': 64.7} |
 | [RedditClusteringP2P](https://arxiv.org/abs/2104.07081) | ['eng'] | Clustering | p2p |  | {'test': 459399} | {'test': 727.7} |
 | [RestaurantReviewSentimentClassification](https://link.springer.com/chapter/10.1007/978-3-319-18117-2_2) (ElSahar et al., 2015) | ['ara'] | Classification | s2s | [Reviews] | {'train': 2048} | {'train': 231.4} |
 | [Robust04InstructionRetrieval](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | InstructionRetrieval | s2p | [News] | {'eng': 95088} | {'eng': 2471.0398058252426} |
 | [RomaTalesBitextMining](https://idoc.pub/documents/idocpub-zpnxm9g35ylv) | ['hun', 'rom'] | BitextMining | s2s | [Fiction] | {'test': 215} | {'test': 316.8046511627907} |
 | [RomaniBibleClustering](https://romani.global.bible/info) | ['rom'] | Clustering | p2p | [Religious] | {'test': 2048} | {'test': 132.2} |
+| [RomanianReviewsSentiment](https://arxiv.org/abs/2101.04197) (Anca Maria Tache, 2021) | ['ron'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 588.6} |
 | [RomanianSentimentClassification](https://arxiv.org/abs/2009.08712) (Dumitrescu et al., 2020) | ['ron'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 67.6} |
 | [RonSTS](https://openreview.net/forum?id=JH61CD7afTv) (Dumitrescu et al., 2021) | ['ron'] | STS | s2s | [News, Social, Web] | {'test': 1379} | {'test': 60.5} |
 | [SCIDOCS](https://allenai.org/data/scidocs) | ['eng'] | Retrieval | s2p |  |  |  |
@@ -330,7 +335,8 @@ The following tables gives you an overview of the tasks in MTEB.
 | [SICK-R](https://aclanthology.org/2020.lrec-1.207) | ['eng'] | STS | s2s |  |  |  |
 | [SICK-R-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | STS | s2s |  | {'test': 9812} | {'test': 42.8} |
 | [SICKFr](https://huggingface.co/datasets/Lajavaness/SICK-fr) | ['fra'] | STS | s2s |  |  |  |
-| [SNLClustering](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [Encyclopaedic, Non-fiction] | {'test': 2048} | {'test': 1101.3} |
+| [SNLHierarchicalClusteringP2P](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [Encyclopaedic, Non-fiction] | {'test': 1300} | {'test': 1986.9453846153847} |
+| [SNLHierarchicalClusteringS2S](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | s2s | [Encyclopaedic, Non-fiction] | {'test': 1300} | {'test': 242.22384615384615} |
 | [SNLRetrieval](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'test': 2048} | {'test': 1101.3} |
 | [SRNCorpusBitextMining](https://arxiv.org/abs/2212.06383) (Zwennicker et al., 2022) | ['nld', 'srn'] | BitextMining | s2s | [Social, Web] | {'test': 256} | {'test': 55.0} |
 | [STS12](https://www.aclweb.org/anthology/S12-1051.pdf) | ['eng'] | STS | s2s |  |  |  |
@@ -368,6 +374,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [SummEvalFr](https://github.com/Yale-LILY/SummEval) | ['fra'] | Summarization | p2p |  |  |  |
 | [SweFaqRetrieval](https://spraakbanken.gu.se/en/resources/superlim) | ['swe'] | Retrieval | s2s | [Government, Non-fiction] | {'test': 1024} | {'test': 195.44} |
 | [SweRecClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['swe'] | Classification | s2s |  | {'test': 1024} | {'test': 318.8} |
+| [SwedishSentimentClassification](https://huggingface.co/datasets/swedish_reviews) | ['swe'] | Classification | s2s | [Reviews] | {'validation': 1024, 'test': 1024} | {'validation': 499.3, 'test': 498.1} |
 | [SwednClusteringP2P](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Clustering | p2p | [News, Non-fiction] | {'all': 2048} | {'all': 1619.71} |
 | [SwednClusteringS2S](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Clustering | s2s | [News, Non-fiction] | {'all': 2048} | {'all': 1619.71} |
 | [SwednRetrieval](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Retrieval | p2p | [News, Non-fiction] | {'test': 2048} | {'test': 1946.35} |

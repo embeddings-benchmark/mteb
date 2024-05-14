@@ -114,7 +114,7 @@ class MTEB:
             console.rule(f"[bold]{name}\n", style="grey15")
         for task_type in self.available_task_types:
             current_type_tasks = list(
-                filter(lambda x: x.metadata_dict["type"] == task_type, task_list)
+                filter(lambda x: x.metadata.type == task_type, task_list)
             )
             if len(current_type_tasks) == 0:
                 continue
@@ -122,15 +122,15 @@ class MTEB:
                 console.print(f"[bold]{task_type}[/]")
                 for task in current_type_tasks:
                     prefix = "    - "
-                    name = f"{task.metadata_dict['name']}"
-                    category = f", [italic grey39]{task.metadata_dict['category']}[/]"
+                    name = f"{task.metadata.name}"
+                    category = f", [italic grey39]{task.metadata.category}[/]"
                     multilingual = (
-                        f", [italic red]multilingual {len(task.langs)} / {len(task.metadata_dict['eval_langs'])} langs[/]"
+                        f", [italic red]multilingual {len(task.hf_subsets)} / {len(task.metadata.eval_langs)} langs[/]"
                         if task.is_multilingual
                         else ""
                     )
                     crosslingual = (
-                        f", [italic cyan]crosslingual {len(task.langs)} / {len(task.metadata_dict['eval_langs'])} pairs[/]"
+                        f", [italic cyan]crosslingual {len(task.hf_subsets)} / {len(task.metadata.eval_langs)} pairs[/]"
                         if task.is_crosslingual
                         else ""
                     )

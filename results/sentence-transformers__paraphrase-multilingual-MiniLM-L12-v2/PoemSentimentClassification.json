@@ -1,0 +1,21 @@
+{
+  "dataset_revision": "329d529d875a00c47ec71954a1a96ae167584770",
+  "mteb_dataset_name": "PoemSentimentClassification",
+  "mteb_version": "1.6.3",
+  "test": {
+    "accuracy": 0.4673076923076923,
+    "accuracy_stderr": 0.05510211069959385,
+    "evaluation_time": 4.89,
+    "f1": 0.3652548419985794,
+    "f1_stderr": 0.03820674904743911,
+    "main_score": 0.4673076923076923
+  },
+  "validation": {
+    "accuracy": 0.4495238095238096,
+    "accuracy_stderr": 0.053672391632782375,
+    "evaluation_time": 17.19,
+    "f1": 0.3506952381698627,
+    "f1_stderr": 0.048524220872037324,
+    "main_score": 0.4495238095238096
+  }
+}
