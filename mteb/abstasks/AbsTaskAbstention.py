@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 from .AbsTask import AbsTask
-from ..evaluation.evaluators.AbstentionEvaluator import AbstentionEvaluator
 logger = logging.getLogger(__name__)
 
 
@@ -14,7 +13,6 @@ class AbsTaskAbstention(AbsTask):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.abstention_evaluator = AbstentionEvaluator()
 
     def _evaluate_monolingual(self, *args, **kwargs):
         raise NotImplementedError("evaluate() must be re-implemented in the concrete task.")

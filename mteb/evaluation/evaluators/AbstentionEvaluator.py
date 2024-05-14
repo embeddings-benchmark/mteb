@@ -1,20 +1,31 @@
 from __future__ import annotations
 
-import logging
+from time import time
+import os
+import json
 from typing import Dict, List, Tuple
 import pytrec_eval
 
+import logging
+
+import torch
+
+logger = logging.getLogger(__name__)
+
 from .Evaluator import Evaluator
+from .RerankingEvaluator import RerankingEvaluator
 
 logger = logging.getLogger(__name__)
 
 
-class AbstentionEvaluator(Evaluator):
+class AbstentionRetrievingEvaluator(Evaluator):
     def __init__(
         self,
+        metadata_dict: dict,
         **kwargs,
     ):
         super().__init__(**kwargs)
+        self.metadata_dict = metadata_dict
 
     def __call__(self, model):
         """This is called during training to evaluate the model.
@@ -57,7 +68,7 @@ class AbstentionEvaluator(Evaluator):
         )
         scores = evaluator.evaluate(results)
       
-        # Compute confidence scores (max, std, 1-2)
+        # Compute confidence scores (max, std, P1P2)
         conf_scores = {}
         for qid in results.keys():
             scs = list(results[qid].values())
@@ -66,7 +77,7 @@ class AbstentionEvaluator(Evaluator):
             conf_scores[qid] = {
                 'max': scs_sort[0], 
                 'std': (sum((sc - scs_mean) ** 2 for sc in scs) / len(scs)) ** (1/2), 
-                '1-2': scs_sort[0] - scs_sort[1]
+                'P1P2': scs_sort[0] - scs_sort[1]
             }
         
         # Compute nAUCs
@@ -75,7 +86,7 @@ class AbstentionEvaluator(Evaluator):
         abst_rates = [k/10 for k in range(10)]
         abst_scores = {}
 
-        # Evaluate for all abstention functions (max, std, 1-2)
+        # Evaluate for all abstention functions (max, std, P1P2)
         for abst_func in abst_funcs:
             conf_scs = {key: val[abst_func] for key, val in conf_scores.items()}
             conf_scs_sort = dict(sorted(conf_scs.items(), key=lambda item: item[1])[::-1])
@@ -106,3 +117,105 @@ class AbstentionEvaluator(Evaluator):
                 ] = (auc - auc_rand) / (auc_oracle - auc_rand)
 
         return abst_scores
+
+    def evaluate_monolingual_retrieval_abstention(
+        self, retriever, corpus, queries, relevant_docs, lang=None, **kwargs
+    ):
+        """Copy of Retrieval Evaluator function with abstention scores added"""
+        start_time = time()
+        results = retriever(corpus, queries)
+        end_time = time()
+        logger.info(
+            "Time taken to retrieve: {:.2f} seconds".format(end_time - start_time)
+        )
+
+        if kwargs.get("save_predictions", False):
+            output_folder = kwargs.get("output_folder", "results")
+            if not os.path.isdir(output_folder):
+                os.makedirs(output_folder)
+            top_k = kwargs.get("top_k", None)
+            if top_k is not None:
+                for qid in list(results.keys()):
+                    doc_ids = set(
+                        sorted(
+                            results[qid], key=lambda x: results[qid][x], reverse=True
+                        )[:top_k]
+                    )
+                    results[qid] = {
+                        k: v for k, v in results[qid].items() if k in doc_ids
+                    }
+            if lang is None:
+                qrels_save_path = (
+                    f"{output_folder}/{self.metadata_dict['name']}_predictions.json"
+                )
+            else:
+                qrels_save_path = f"{output_folder}/{self.metadata_dict['name']}_{lang}_predictions.json"
+
+            with open(qrels_save_path, "w") as f:
+                json.dump(results, f)
+
+        # ndcg, _map, recall, precision = retriever.evaluate(
+        #     relevant_docs,
+        #     results,
+        #     retriever.k_values,
+        #     ignore_identical_ids=kwargs.get("ignore_identical_ids", True),
+        # )
+        # mrr = retriever.evaluate_custom(
+        #     relevant_docs, results, retriever.k_values, "mrr"
+        # )
+        abstention = self.compute_abstention_scores_retrieval(
+            relevant_docs, results
+        )
+        scores = {
+            # **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
+            # **{f"map_at_{k.split('@')[1]}": v for (k, v) in _map.items()},
+            # **{f"recall_at_{k.split('@')[1]}": v for (k, v) in recall.items()},
+            # **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
+            # **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
+            **abstention,
+        }
+        return scores
+
+
+class AbstentionRerankingEvaluator(RerankingEvaluator):
+    """This class evaluates a SentenceTransformer model for the task of re-ranking.
+    Given a query and a list of documents, it computes the score [query, doc_i] for all possible
+    documents and sorts them in decreasing order. Then, MRR@10 and MAP is compute to measure the quality of the ranking.
+    :param samples: Must be a list and each element is of the form:
+        - {'query': '', 'positive': [], 'negative': []}. Query is the search query, positive is a list of positive
+        (relevant) documents, negative is a list of negative (irrelevant) documents.
+        - {'query': [], 'positive': [], 'negative': []}. Where query is a list of strings, which embeddings we average
+        to get the query embedding.
+    """
+
+    def __init__(
+        self,
+        *args,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+
+    def _compute_metrics_instance(self, query_emb, docs_emb, is_relevant):
+        """Computes metrics for a single instance = (query, positives, negatives)
+
+        Args:
+            query_emb (`torch.Tensor` of shape `(num_queries, hidden_size)`): Query embedding
+                if `num_queries` > 0: we take the closest document to any of the queries
+            docs_emb (`torch.Tensor` of shape `(num_pos+num_neg, hidden_size)`): Candidates documents embeddings
+            is_relevant (`List[bool]` of length `num_pos+num_neg`): True if the document is relevant
+
+        Returns:
+            scores (`Dict[str, float]`):
+                - `mrr`: Mean Reciprocal Rank @ `self.mrr_at_k`
+                - `ap`: Average Precision
+        """
+        pred_scores = self.similarity_fct(query_emb, docs_emb)
+        if len(pred_scores.shape) > 1:
+            pred_scores = torch.amax(pred_scores, dim=0)
+
+        pred_scores_argsort = torch.argsort(-pred_scores)  # Sort in decreasing order
+
+        mrr = self.mrr_at_k_score(is_relevant, pred_scores_argsort, self.mrr_at_k)
+        ap = self.ap_score(is_relevant, pred_scores.cpu().tolist())
+        # TODO: Here code the metrics (best would be to use the same fincton as above for the retrieving ?)
+        return {"mrr": mrr, "ap": ap, "Abstention_Placeholder": 0}
