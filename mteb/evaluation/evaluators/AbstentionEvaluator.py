@@ -79,7 +79,6 @@ class AbstentionEvaluator(Evaluator):
         for abst_func in abst_funcs:
             conf_scs = {key: val[abst_func] for key, val in conf_scores.items()}
             conf_scs_sort = dict(sorted(conf_scs.items(), key=lambda item: item[1])[::-1])
-            
             evals = {metric: [] for metric in metrics}
             oracles = {metric: [] for metric in metrics}
 
