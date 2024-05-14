@@ -5,13 +5,8 @@ from pathlib import Path
 from typing import get_args
 
 import mteb
+import polars
 from mteb.abstasks.TaskMetadata import PROGRAMMING_LANGS, TASK_TYPE
-
-
-def is_task_to_skip(task: mteb.AbsTask):
-    if isinstance(task, mteb.CrosslingualTask):
-        return True
-    return False
 
 
 def author_from_bibtex(bibtex: str | None) -> str:
@@ -67,11 +62,7 @@ def create_tasks_table(tasks: list[mteb.AbsTask]) -> str:
 def create_task_lang_table(tasks: list[mteb.AbsTask]) -> str:
     table_dict = {}
     ## Group by language. If it is a multilingual dataset, 1 is added to all languages present.
-    ## For now, we skip cross lingual datasets.
     for task in tasks:
-        if is_task_to_skip(task):
-            continue
-
         for lang in task.metadata.languages:
             if lang in PROGRAMMING_LANGS:
                 lang = "code"
@@ -97,18 +88,16 @@ def create_task_lang_table(tasks: list[mteb.AbsTask]) -> str:
     return table
 
 
-def insert_tables(file_path: str, tables: list[str], tags: list[str] = ["TASKS TABLE"]):
+def insert_tables(file_path: str, tables: list[str], tags: list[str] = ["TASKS TABLE"]) -> None:
     """Insert tables within <!-- TABLE START --> and <!-- TABLE END --> or similar tags."""
-    with open(file_path, "r") as file:
-        md = file.read()
+    md = Path(file_path).read_text()
 
     for table, tag in zip(tables, tags):
         start = f"<!-- {tag} START -->"
         end = f"<!-- {tag} END -->"
         md = md.replace(md[md.index(start) + len(start) : md.index(end)], table)
 
-    with open(file_path, "w") as file:
-        file.write(md)
+    Path(file_path).write_text(md)
 
 
 def main():
