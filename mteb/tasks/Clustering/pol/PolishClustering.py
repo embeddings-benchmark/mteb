@@ -37,6 +37,7 @@ class EightTagsClustering(AbsTaskClustering):
 
 
 class PlscClusteringS2S(AbsTaskClusteringFast):
+    superseeded_by = "PLSCHierarchicalClusteringS2S"
     metadata = TaskMetadata(
         name="PlscClusteringS2S",
         description="Clustering of Polish article titles from Library of Science (https://bibliotekanauki.pl/), either "
@@ -67,6 +68,7 @@ class PlscClusteringS2S(AbsTaskClusteringFast):
 
 
 class PlscClusteringP2P(AbsTaskClusteringFast):
+    superseeded_by = "PLSCHierarchicalClusteringP2P"
     metadata = TaskMetadata(
         name="PlscClusteringP2P",
         description="Clustering of Polish article titles+abstracts from Library of Science "
