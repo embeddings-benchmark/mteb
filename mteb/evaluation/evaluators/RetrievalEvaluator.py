@@ -290,7 +290,7 @@ class DenseRetrievalExactSearch:
         if is_conv_retrieval_compatible(self.model):
             return self.model.encode_conversations(conversations, **kwargs)
         # default implementation
-        queries = ["; ".join(conv) for conv in conversations]
+        queries = convert_conv_history_to_query(conversations)
         return self.encode_queries(queries, **kwargs)
 
 
@@ -378,8 +378,11 @@ class DRESModel:
         if is_conv_retrieval_compatible(self.model):
             return self.model.encode_conversations(conversations, **kwargs)
         # default implementation
-        queries = ["; ".join(conv) for conv in conversations]
+        queries = convert_conv_history_to_query(conversations)
         return self.encode_queries(queries, **kwargs)
+
+def convert_conv_history_to_query(conversations: List[List[str]]) -> str:
+    return ["; ".join(conv) for conv in conversations]
 
 
 def is_conv_retrieval_compatible(model):
