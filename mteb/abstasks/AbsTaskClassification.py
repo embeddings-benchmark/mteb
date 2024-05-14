@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
+from typing import Any
 
 import numpy as np
 
@@ -26,11 +27,11 @@ class AbsTaskClassification(AbsTask):
 
     def __init__(
         self,
-        method="logReg",
-        n_experiments=None,
-        samples_per_label=None,
-        k=3,
-        batch_size=32,
+        method: str = "logReg",
+        n_experiments: int | None = None,
+        samples_per_label: int | None = None,
+        k: int = 3,
+        batch_size: int = 32,
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -38,12 +39,12 @@ class AbsTaskClassification(AbsTask):
         self.method = method
 
         # Bootstrap parameters
-        self.n_experiments = (
+        self.n_experiments: int = (  # type: ignore
             n_experiments
             if n_experiments is not None
             else self.metadata_dict.get("n_experiments", 10)
         )
-        self.samples_per_label = (
+        self.samples_per_label: int = (  # type: ignore
             samples_per_label
             if samples_per_label is not None
             else self.metadata_dict.get("samples_per_label", 8)
@@ -60,11 +61,11 @@ class AbsTaskClassification(AbsTask):
             self.metadata
 
     def _add_main_score(self, scores):
-        if self.metadata_dict["main_score"] in scores:
-            scores["main_score"] = scores[self.metadata_dict["main_score"]]
+        if self.metadata.main_score in scores:
+            scores["main_score"] = scores[self.metadata.main_score]
         else:
             logger.warn(
-                f"main score {self.metadata_dict['main_score']} not found in scores {scores.keys()}"
+                f"main score {self.metadata.main_score} not found in scores {scores.keys()}"
             )
 
     def evaluate(self, model, eval_split="test", train_split="train", **kwargs):
@@ -75,7 +76,7 @@ class AbsTaskClassification(AbsTask):
             scores = {}
             for lang in self.dataset:
                 logger.info(
-                    f"\nTask: {self.metadata_dict['name']}, split: {eval_split}, language: {lang}. Running..."
+                    f"\nTask: {self.metadata.name}, split: {eval_split}, language: {lang}. Running..."
                 )
                 scores[lang] = self._evaluate_monolingual(
                     model, self.dataset[lang], eval_split, train_split, **kwargs
@@ -83,7 +84,7 @@ class AbsTaskClassification(AbsTask):
                 self._add_main_score(scores[lang])
         else:
             logger.info(
-                f"\nTask: {self.metadata_dict['name']}, split: {eval_split}. Running..."
+                f"\nTask: {self.metadata.name}, split: {eval_split}. Running..."
             )
             scores = self._evaluate_monolingual(
                 model, self.dataset, eval_split, train_split, **kwargs
@@ -94,7 +95,7 @@ class AbsTaskClassification(AbsTask):
 
     def _evaluate_monolingual(
         self, model, dataset, eval_split="test", train_split="train", **kwargs
-    ):
+    ) -> dict[str, Any]:
         train_split = dataset[train_split]
         eval_split = dataset[eval_split]
         params = {"k": self.k, "batch_size": self.batch_size}
@@ -144,16 +145,13 @@ class AbsTaskClassification(AbsTask):
             scores_exp, test_cache = evaluator(model, test_cache=test_cache)
             scores.append(scores_exp)
 
-        if self.n_experiments == 1:
-            return scores[0]
-        else:
-            avg_scores = {k: np.mean([s[k] for s in scores]) for k in scores[0].keys()}
-            std_errors = {
-                k + "_stderr": np.std([s[k] for s in scores]) for k in scores[0].keys()
-            }
-            return {**avg_scores, **std_errors}
+        avg_scores: dict[str, Any] = {
+            k: np.mean([s[k] for s in scores]) for k in scores[0].keys()
+        }
+        avg_scores["scores_per_experiment"] = scores
+        return avg_scores
 
-    def _undersample_data(self, X, y, samples_per_label, idxs=None):
+    def _undersample_data(self, X, y, samples_per_label: int, idxs=None):
         """Undersample data to have samples_per_label samples of each label"""
         X_sampled = []
         y_sampled = []

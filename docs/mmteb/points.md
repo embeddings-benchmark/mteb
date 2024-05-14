@@ -62,9 +62,18 @@ Please also add your first name and last name are as you want them to appear in 
 | rbroc             | Roberta    | Rocca      | roberta.rocca@cas.au.dk      | ~Roberta_Rocca1      | Aarhus University, Denmark                            |
 | awinml            | Ashwin     | Mathur     | ashwinxmathur@gmail.com      |                      | N/A                                                   |
 | guangyusong       | Guangyu    | Song       | guangysong@gmail.com         | ~Guangyu_Song1       | N/A                            |
-| davidstap.        | David      | Stap       | dd.stap@gmail.com            | ~David_Stap          | University of Amsterdam.                              |
+| davidstap.        | David      | Stap       | dd.stap@gmail.com            | ~David_Stap          | University of Amsterdam.                         |
 | HLasse            | Lasse      | Hansen     | lasseh0310@gmail.com         | ~Lasse_Hansen2       | Aarhus University, Denmark                            |
 | jaygala24         | Jay        | Gala       | jaygala24@gmail.com          | ~Jay_Gala1           | Nilekani Center at AI4Bharat                          |
 | digantamisra      | Diganta    | Misra      | diganta.misra@mila.quebec    | ~Diganta_Misra1       | Mila - Quebec AI Institute                           |
 | PranjalChitale    | Pranjal    | Chitale    | cs21s022@smail.iitm.ac.in    | ~Pranjal_A_Chitale1       | Indian Institute of Technology Madras            |
+| Akash190104       | Akash      | Kundu      | akashkundu2xx4@gmail.com      |~Akash_Kundu2             | Heritage Institute of Technology, Kolkata && Apart Research |
 | dwzhu-pku         | Dawei      | Zhu        | dwzhu@pku.edu.cn             | ~Dawei_Zhu2       | Peking University            |
+| ljvmiranda921     | Lester James | Miranda  | ljm@allenai.org              | ~Lester_James_Validad_Miranda1 | Allen Institute for AI |
+| Andrian0s     | Andrianos | Michail  | andrianos.michail@cl.uzh.ch         | ~Andrianos_Michail1 | University of Zurich|
+| simon-clematide     | Simon | Clematide  | simon.clematide@cl.uzh.ch         | ~Simon_Clematide1 | University of Zurich|
+| SaitejaUtpala     | Saiteja | Utpala  | saitejautpala@gmail.com         | ~Saiteja_Utpala1 | Microsoft Research|
+| mmhamdy     | Mohammed | Hamdy  | mhamdy.res@gmail.com         | ~Mohammed_Hamdy1 | Cohere For AI Community|
+| jupyterjazz       | Saba         | Sturua     | saba.sturua@jina.ai              |     ~Saba_Sturua1      | Jina AI                                                     |
+| shreeya-dhakal            | Shreeya     | Dhakal     | ssdhakal57@gmail.com      |                      | Individual Contributor                                                   |
+| dipam7 | Dipam | Vasani | dipam44@gmail.com | ~Dipam_Vasani1 | Individual Contributor                                                  |
