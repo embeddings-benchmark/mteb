@@ -13,7 +13,7 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
             "path": "Ruqiya/Arabic_Reviews_of_SHEIN",
             "revision": "3076150b77e0ce1426a857cabb7f52568675d5b3",
         },
-        description="This dataset contains Arabic-language reviews of products from the SHEIN online store.",
+        description="This dataset contains Arabic reviews of products from the SHEIN online store.",
         reference="https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN",
         type="Classification",
         category="s2s",
