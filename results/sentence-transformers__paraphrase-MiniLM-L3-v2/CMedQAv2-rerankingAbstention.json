@@ -1,0 +1,16 @@
+{
+  "dataset_revision": "23d186750531a14a0357ca22cd92d712fd512ea0",
+  "mteb_dataset_name": "CMedQAv2-rerankingAbstention",
+  "mteb_version": "1.6.36",
+  "test": {
+    "evaluation_time": 336.5,
+    "map": 0.0995406139857317,
+    "mrr": 0.10412261904761905,
+    "nAUC_map_P1P2": 0.19902112916154452,
+    "nAUC_map_max": -0.029590670724080552,
+    "nAUC_map_std": -0.008498287833799037,
+    "nAUC_mrr_P1P2": 0.16182413844732058,
+    "nAUC_mrr_max": -0.02974345787465592,
+    "nAUC_mrr_std": -0.026240171473160132
+  }
+}

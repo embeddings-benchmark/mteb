@@ -1,0 +1,16 @@
+{
+  "dataset_revision": "76631901a18387f85eaa53e5450019b87ad58ef9",
+  "dev": {
+    "evaluation_time": 545.21,
+    "map": 0.5805159849190343,
+    "mrr": 0.6514839980225897,
+    "nAUC_map_P1P2": -0.13074875171422984,
+    "nAUC_map_max": -0.0728922333983135,
+    "nAUC_map_std": -0.15663064343931482,
+    "nAUC_mrr_P1P2": -0.1812740097847142,
+    "nAUC_mrr_max": -0.14021168293154287,
+    "nAUC_mrr_std": -0.10353712069919853
+  },
+  "mteb_dataset_name": "T2RerankingAbstention",
+  "mteb_version": "1.6.36"
+}
