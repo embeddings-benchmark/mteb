@@ -4,8 +4,9 @@ import re
 from pathlib import Path
 from typing import get_args
 
+import polars as pl
+
 import mteb
-import polars
 from mteb.abstasks.TaskMetadata import PROGRAMMING_LANGS, TASK_TYPE
 
 
@@ -70,6 +71,15 @@ def create_task_lang_table(tasks: list[mteb.AbsTask]) -> str:
                 table_dict[lang] = {k: 0 for k in sorted(get_args(TASK_TYPE))}
             table_dict[lang][task.metadata.type] += 1
 
+    ## Wrangle for polars
+    pl_table_dict = []
+    for lang, d in table_dict.items():
+        d.update({"lang": lang})
+        pl_table_dict.append(d)
+
+    df = pl.DataFrame(pl_table_dict).sort(by="lang")
+    total = df.sum(axis=0)
+
     task_names_md = " | ".join(sorted(get_args(TASK_TYPE)))
     horizontal_line_md = "---|---" * len(sorted(get_args(TASK_TYPE)))
     table = """
@@ -77,18 +87,24 @@ def create_task_lang_table(tasks: list[mteb.AbsTask]) -> str:
 |{}|
 """.format(task_names_md, horizontal_line_md)
 
-    langs = list(table_dict.keys())
-    langs.sort()
-    for lang in langs:
-        table += f"| {lang} "
-        for _, num in table_dict[lang].items():
+    for row in df.iter_rows():
+        table += f"| {row[-1]} "
+        for num in row[:-1]:
+            table += f"| {num} "
+        table += "|\n"
+
+    for row in total.iter_rows():
+        table += "| Total "
+        for num in row[:-1]:
             table += f"| {num} "
         table += "|\n"
 
     return table
 
 
-def insert_tables(file_path: str, tables: list[str], tags: list[str] = ["TASKS TABLE"]) -> None:
+def insert_tables(
+    file_path: str, tables: list[str], tags: list[str] = ["TASKS TABLE"]
+) -> None:
     """Insert tables within <!-- TABLE START --> and <!-- TABLE END --> or similar tags."""
     md = Path(file_path).read_text()
 
