@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 import re
-from typing import get_args
 from pathlib import Path
+from typing import get_args
 
 import mteb
-
-from mteb.abstasks.TaskMetadata import TASK_TYPE, PROGRAMMING_LANGS
+from mteb.abstasks.TaskMetadata import PROGRAMMING_LANGS, TASK_TYPE
 
 
 def is_task_to_skip(task: mteb.AbsTask):
@@ -66,7 +65,6 @@ def create_tasks_table(tasks: list[mteb.AbsTask]) -> str:
 
 
 def create_task_lang_table(tasks: list[mteb.AbsTask]) -> str:
-    
     table_dict = {}
     ## Group by language. If it is a multilingual dataset, 1 is added to all languages present.
     ## For now, we skip cross lingual datasets.
@@ -80,19 +78,19 @@ def create_task_lang_table(tasks: list[mteb.AbsTask]) -> str:
             if table_dict.get(lang) is None:
                 table_dict[lang] = {k: 0 for k in sorted(get_args(TASK_TYPE))}
             table_dict[lang][task.metadata.type] += 1
-    
+
     task_names_md = " | ".join(sorted(get_args(TASK_TYPE)))
     horizontal_line_md = "---|---" * len(sorted(get_args(TASK_TYPE)))
     table = """
 | Language | {} |
 |{}|
 """.format(task_names_md, horizontal_line_md)
-    
+
     langs = list(table_dict.keys())
     langs.sort()
     for lang in langs:
         table += f"| {lang} "
-        for _ , num in table_dict[lang].items():
+        for _, num in table_dict[lang].items():
             table += f"| {num} "
         table += "|\n"
 
@@ -122,7 +120,11 @@ def main():
 
     file_path = Path(__file__).parent / "tasks.md"
 
-    insert_tables(file_path, tables=[tasks_table, task_lang_table], tags=['TASKS TABLE', 'TASK LANG TABLE'])
+    insert_tables(
+        file_path,
+        tables=[tasks_table, task_lang_table],
+        tags=["TASKS TABLE", "TASK LANG TABLE"],
+    )
 
 
 if __name__ == "__main__":
