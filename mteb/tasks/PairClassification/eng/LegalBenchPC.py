@@ -8,24 +8,47 @@ from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _DATASET_COLUMN_MAP = [
-    {"name": "contract_qa", "sent1": "question", "sent2": "text", "labels": "answer"},
     {
         "name": "citation_prediction_classification",
         "sent1": "citation",
         "sent2": "text",
         "labels": "answer",
+        "mapping": {"yes": 1, "no": 0},
     },
     {
         "name": "consumer_contracts_qa",
         "sent1": "question",
         "sent2": "contract",
         "labels": "answer",
+        "mapping": {"yes": 1, "no": 0},
+    },
+    {
+        "name": "contract_qa",
+        "sent1": "question",
+        "sent2": "text",
+        "labels": "answer",
+        "mapping": {"yes": 1, "no": 0},
     },
     {
         "name": "hearsay",
         "sent1": "text",
         "sent2": "slice",
         "labels": "answer",
+        "mapping": {"yes": 1, "no": 0},
+    },
+    {
+        "name": "privacy_policy_entailment",
+        "sent1": "text",
+        "sent2": "description",
+        "labels": "answer",
+        "mapping": {"correct": 1, "incorrect": 0},
+    },
+    {
+        "name": "privacy_policy_qa",
+        "sent1": "text",
+        "sent2": "question",
+        "labels": "answer",
+        "mapping": {"relevant": 1, "irrelevant": 0},
     },
 ]
 
@@ -33,7 +56,15 @@ _DATASET_COLUMN_MAP = [
 class LegalBenchPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="LegalBenchPC",
-        description="LegalBench Dataset",
+        description="""This LegalBench pair classification task is a combination of the following datasets:
+
+        - Citation Prediction Classification: Given a legal statement and a case citation, determine if the citation is supportive of the legal statement.
+        - Consumer Contracts QA: The task consists of 400 yes/no questions relating to consumer contracts (specifically, online terms of service) and is relevant to the legal skill of contract interpretation.
+        - Contract QA: Answer yes/no questions about whether contractual clauses discuss particular issues like confidentiality requirements, BIPA consent, PII data breaches, breach of contract etc.
+        - Hearsay: Classify if a particular piece of evidence qualifies as hearsay. Each sample in the dataset describes (1) an issue being litigated or an assertion a party wishes to prove, and (2) a piece of evidence a party wishes to introduce. The goal is to determine if—as it relates to the issue—the evidence would be considered hearsay under the definition provided above.
+        - Privacy Policy Entailment: Given a privacy policy clause and a description of the clause, determine if the description is correct. This is a binary classification task in which the LLM is provided with a clause from a privacy policy, and a description of that clause (e.g., “The policy describes collection of the user’s HTTP cookies, flash cookies, pixel tags, or similar identifiers by a party to the contract.”).
+        - Privacy Policy QA: Given a question and a clause from a privacy policy, determine if the clause contains enough information to answer the question. This is a binary classification task in which the LLM is provided with a question (e.g., “do you publish my data”) and a clause from a privacy policy. The LLM must determine if the clause contains an answer to the question, and classify the question-clause pair.
+        """,
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
@@ -61,9 +92,33 @@ class LegalBenchPC(AbsTaskPairClassification):
             eprint={2308.11462},
             archivePrefix={arXiv},
             primaryClass={cs.CL}
-            }""",
-        n_samples={"test": 678},
-        avg_character_length={"test": 83.94},
+            }
+        @article{kolt2022predicting,
+            title={Predicting consumer contracts},
+            author={Kolt, Noam},
+            journal={Berkeley Tech. LJ},
+            volume={37},
+            pages={71},
+            year={2022},
+            publisher={HeinOnline}
+        }
+        @article{zimmeck2019maps,
+            title={Maps: Scaling privacy compliance analysis to a million apps},
+            author={Zimmeck, Sebastian and Story, Peter and Smullen, Daniel and Ravichander, Abhilasha and Wang, Ziqi and Reidenberg, Joel R and Russell, N Cameron and Sadeh, Norman},
+            journal={Proc. Priv. Enhancing Tech.},
+            volume={2019},
+            pages={66},
+            year={2019}
+        }
+        @article{ravichander2019question,
+            title={Question answering for privacy policies: Combining computational and legal perspectives},
+            author={Ravichander, Abhilasha and Black, Alan W and Wilson, Shomir and Norton, Thomas and Sadeh, Norman},
+            journal={arXiv preprint arXiv:1911.00841},
+            year={2019}
+        }
+        """,
+        n_samples={"test": 2048},
+        avg_character_length={"test": 287.18},
     )
 
     def load_data(self, **kwargs: Any) -> None:
@@ -88,7 +143,7 @@ class LegalBenchPC(AbsTaskPairClassification):
                 }
             )
             _dataset = _dataset.select_columns(["labels", "sent1", "sent2"])
-            mapping = {"yes": 1, "no": 0}
+            mapping = dataset_col_map["mapping"]
             _dataset = _dataset.map(
                 lambda example: {
                     "labels": mapping.get(example["labels"].lower(), example["labels"])
@@ -110,6 +165,10 @@ class LegalBenchPC(AbsTaskPairClassification):
         self.data_loaded = True
 
     def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"], label="labels"
+        )
+
         _dataset = {}
         for split in self.metadata.eval_splits:
             hf_dataset = self.dataset[split]
@@ -118,132 +177,6 @@ class LegalBenchPC(AbsTaskPairClassification):
                     "sent1": hf_dataset["sent1"],
                     "sent2": hf_dataset["sent2"],
                     "labels": hf_dataset["labels"],
-                }
-            ]
-        self.dataset = _dataset
-
-
-class PrivacyPolicyEntailmentLegalBenchPC(AbsTaskPairClassification):
-    metadata = TaskMetadata(
-        name="PrivacyPolicyEntailmentLegalBenchPC",
-        description="This is a binary classification task in which the LLM is provided with a clause from a privacy policy, and a description of that clause (e.g., “The policy describes collection of the user's HTTP cookies, flash cookies, pixel tags, or similar identifiers by a party to the contract.”). The LLM must determine if description of the clause is Correct or Incorrect.",
-        reference="https://huggingface.co/datasets/nguha/legalbench",
-        dataset={
-            "path": "nguha/legalbench",
-            "name": "privacy_policy_entailment",
-            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
-        },
-        type="PairClassification",
-        category="s2s",
-        eval_splits=["test"],
-        eval_langs=["eng-Latn"],
-        main_score="accuracy",
-        date=("2018-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
-        task_subtypes=[],
-        license="cc-by-nc-4.0",
-        socioeconomic_status="high",
-        annotations_creators="expert-annotated",
-        dialect=[],
-        text_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-            }
-        @article{zimmeck2019maps,
-            title={Maps: Scaling privacy compliance analysis to a million apps},
-            author={Zimmeck, Sebastian and Story, Peter and Smullen, Daniel and Ravichander, Abhilasha and Wang, Ziqi and Reidenberg, Joel R and Russell, N Cameron and Sadeh, Norman},
-            journal={Proc. Priv. Enhancing Tech.},
-            volume={2019},
-            pages={66},
-            year={2019}
-        }
-        """,
-        n_samples={"test": 1280},
-        avg_character_length={"test": 599.24},
-    )
-
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"], label="answer"
-        )
-
-        _dataset = {}
-        for split in self.metadata.eval_splits:
-            hf_dataset = self.dataset[split]
-            _dataset[split] = [
-                {
-                    "sent1": hf_dataset["text"],
-                    "sent2": hf_dataset["description"],
-                    "labels": hf_dataset["answer"],
-                }
-            ]
-        self.dataset = _dataset
-
-
-class PrivacyPolicyQALegalBenchPC(AbsTaskPairClassification):
-    metadata = TaskMetadata(
-        name="PrivacyPolicyQALegalBenchPC",
-        description="This is a binary classification task in which the LLM is provided with a question (e.g., “do you publish my data”) and a clause from a privacy policy. The LLM must determine if the clause contains an answer to the question, and classify the question-clause pair as Relevant or Irrelevant.",
-        reference="https://huggingface.co/datasets/nguha/legalbench",
-        dataset={
-            "path": "nguha/legalbench",
-            "name": "privacy_policy_qa",
-            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
-        },
-        type="PairClassification",
-        category="s2s",
-        eval_splits=["test"],
-        eval_langs=["eng-Latn"],
-        main_score="accuracy",
-        date=("2018-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
-        task_subtypes=[],
-        license="mit",
-        socioeconomic_status="high",
-        annotations_creators="expert-annotated",
-        dialect=[],
-        text_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-            }
-        @article{ravichander2019question,
-            title={Question answering for privacy policies: Combining computational and legal perspectives},
-            author={Ravichander, Abhilasha and Black, Alan W and Wilson, Shomir and Norton, Thomas and Sadeh, Norman},
-            journal={arXiv preprint arXiv:1911.00841},
-            year={2019}
-        }
-        """,
-        n_samples={"test": 1205},
-        avg_character_length={"test": 178.36},
-    )
-
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"], label="answer"
-        )
-
-        _dataset = {}
-        for split in self.metadata.eval_splits:
-            hf_dataset = self.dataset[split]
-            _dataset[split] = [
-                {
-                    "sent1": hf_dataset["text"],
-                    "sent2": hf_dataset["question"],
-                    "labels": hf_dataset["answer"],
                 }
             ]
         self.dataset = _dataset
