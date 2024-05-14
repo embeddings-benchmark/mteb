@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.9.1"
+version = "1.10.0"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -53,6 +53,7 @@ mteb = "mteb.cmd:main"
 
 [project.optional-dependencies]
 dev = ["ruff>=0.0.254", "pytest", "pytest-xdist"]
+codecarbon = ["codecarbon"]
 
 
 [tool.setuptools.packages.find]
