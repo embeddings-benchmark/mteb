@@ -59,7 +59,7 @@ class IndicSentimentClassification(MultilingualTask, AbsTaskClassification):
     def dataset_transform(self) -> None:
         label_map = {"Negative": 0, "Positive": 1}
         # Convert to standard format
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang] = self.dataset[lang].filter(
                 lambda x: x["LABEL"] is not None
             )

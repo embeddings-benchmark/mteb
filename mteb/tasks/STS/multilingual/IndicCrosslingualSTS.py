@@ -79,7 +79,7 @@ class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
 
     def dataset_transform(self) -> None:
         # Convert to standard format
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang] = self.dataset[lang].rename_columns(
                 {"english_sentence": "sentence1", "indic_sentence": "sentence2"}
             )
