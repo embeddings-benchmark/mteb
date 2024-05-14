@@ -11,6 +11,7 @@ from .deu.TenKGnadClusteringS2SFast import *
 from .eng.ArxivClusteringP2P import *
 from .eng.ArxivClusteringP2PFast import *
 from .eng.ArxivClusteringS2S import *
+from .eng.ArXivHierarchicalClustering import *
 from .eng.BigPatentClustering import *
 from .eng.BiorxivClusteringP2P import *
 from .eng.BiorxivClusteringS2S import *
