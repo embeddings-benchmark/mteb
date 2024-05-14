@@ -246,15 +246,15 @@ class AbsTaskRetrieval(AbsTask):
         retriever = RetrievalEvaluator(model, **kwargs)
 
         scores = {}
-        if self.is_multilingual:
-            for lang in self.langs:
+        if self.is_crosslingual or self.is_multilingual:
+            for lang in self.hf_subsets:
                 logger.info(f"Language: {lang}")
                 corpus, queries, relevant_docs = (
                     self.corpus[lang][split],
                     self.queries[lang][split],
                     self.relevant_docs[lang][split],
                 )
-                scores[lang] = self._evaluate_monolingual(
+                scores[lang] = self._evaluate_split(
                     retriever, corpus, queries, relevant_docs, lang, **kwargs
                 )
         else:
@@ -263,12 +263,12 @@ class AbsTaskRetrieval(AbsTask):
                 self.queries[split],
                 self.relevant_docs[split],
             )
-            scores = self._evaluate_monolingual(
+            scores = self._evaluate_split(
                 retriever, corpus, queries, relevant_docs, None, **kwargs
             )
         return scores
 
-    def _evaluate_monolingual(
+    def _evaluate_split(
         self, retriever, corpus, queries, relevant_docs, lang=None, **kwargs
     ):
         start_time = time()

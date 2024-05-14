@@ -1,4 +1,6 @@
-"""Example script for benchmarking all datasets constituting the MTEB Polish leaderboard & average scores"""
+"""Example script for benchmarking all datasets constituting the MTEB Polish leaderboard & average scores.
+For a more elaborate evaluation, we refer to https://github.com/rafalposwiata/pl-mteb.
+"""
 
 from __future__ import annotations
 
@@ -21,11 +23,11 @@ classification_tasks = [
     "MassiveScenarioClassification",
 ]
 
-clustering_tasks = ["8TagsClustering"]
+clustering_tasks = ["EightTagsClustering", "PlscClusteringS2S", "PlscClusteringP2P"]
 
 pair_classification_tasks = ["SICK-E-PL", "PPC", "CDSC-E", "PSC"]
 
-sts_tasks = ["SICK-R-PL", "CDSC-R", "STS22"]
+sts_tasks = ["SICK-R-PL", "CDSC-R", "STS22", "STSBenchmarkMultilingualSTS"]
 
 tasks = classification_tasks + clustering_tasks + pair_classification_tasks + sts_tasks
 
