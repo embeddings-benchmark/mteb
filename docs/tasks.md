@@ -453,4 +453,5 @@ The following tables gives you an overview of the tasks in MTEB.
 | [YahooAnswersTopicsClassification](https://huggingface.co/datasets/yahoo_answers_topics) | ['eng'] | Classification | s2s | [Web] | {'test': 60000} | {'test': 346.35} |
 | [YelpReviewFullClassification](https://arxiv.org/abs/1509.01626) (Zhang et al., 2015) | ['eng'] | Classification | s2s | [Reviews] | {'test': 50000} |  |
 | [YueOpenriceReviewClassification](https://github.com/Christainx/Dataset_Cantonese_Openrice) (Xiang et al., 2019) | ['yue'] | Classification | s2s | [Reviews] | {'test': 6161} | {'test': 173.0} |
+| [indonli](https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39) | ['ind'] | PairClassification | s2s | [Encyclopaedic, Web, News] | {'test_expert': 2040} | {'test_expert': 145.88} |
 <!-- TABLE END -->
