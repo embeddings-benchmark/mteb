@@ -2,7 +2,7 @@ from mteb.abstasks import AbsTaskClassification  # type: ignore
 from mteb.abstasks.TaskMetadata import TaskMetadata  # type: ignore
 
 
-class MyanmarNews(AbsTaskClassification):
+class Moroco(AbsTaskClassification):
     metadata = TaskMetadata(
         name = "Moroco", 
         dataset= {
@@ -20,7 +20,7 @@ class MyanmarNews(AbsTaskClassification):
         form=["written"],
         domains=["News"],
         task_subtypes=["Topic classification"],
-        license="CC BY-SA 4.0",
+        license="CC BY-4.0",
         socioeconomic_status= "medium",
         annotations_creators= "derived",
         dialect = [],
