@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "2e6fedf42c9c104e83dfd95c3a453721e683e244",
+  "mteb_dataset_name": "CzechProductReviewSentimentClassification",
+  "mteb_version": "1.8.3",
+  "test": {
+    "accuracy": 0.513427734375,
+    "accuracy_stderr": 0.017551316905810053,
+    "evaluation_time": 16.69,
+    "f1": 0.5089843914012989,
+    "f1_stderr": 0.017227192977086348,
+    "main_score": 0.513427734375
+  }
+}
