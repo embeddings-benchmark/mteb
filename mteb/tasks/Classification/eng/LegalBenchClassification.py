@@ -4567,7 +4567,6 @@ class LegalReasoningCausalityLegalBenchClassification(AbsTaskClassification):
         self.dataset = self.dataset.rename_column("answer", "label")
 
 
-<<<<<<< add_legalbench_datasets_14
 _MAUD_DATASET_MAP = [
     {
         "name": "maud_ability_to_consummate_concept_is_subject_to_mae_carveouts",
@@ -4754,16 +4753,6 @@ class MAUDLegalBenchClassification(AbsTaskClassification):
         reference="https://huggingface.co/datasets/nguha/legalbench",
         dataset={
             "path": "nguha/legalbench",
-=======
-class OPP115PolicyChangeLegalBenchClassification(AbsTaskClassification):
-    metadata = TaskMetadata(
-        name="OPP115PolicyChangeLegalBenchClassification",
-        description="Given a clause from a privacy policy, classify if the clause describes if and how users will be informed about changes to the privacy policy.",
-        reference="https://huggingface.co/datasets/nguha/legalbench",
-        dataset={
-            "path": "nguha/legalbench",
-            "name": "opp115_policy_change",
->>>>>>> main
             "revision": "12ca3b695563788fead87a982ad1a068284413f4",
         },
         type="Classification",
@@ -4771,19 +4760,11 @@ class OPP115PolicyChangeLegalBenchClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-<<<<<<< add_legalbench_datasets_14
         date=("2021-01-01", "2023-08-23"),
         form=["written"],
         domains=["Legal"],
         task_subtypes=[],
         license="cc-by-4.0",
-=======
-        date=("2015-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
-        task_subtypes=[],
-        license="cc-by-nc-4.0",
->>>>>>> main
         socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
@@ -4797,7 +4778,6 @@ class OPP115PolicyChangeLegalBenchClassification(AbsTaskClassification):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }
-<<<<<<< add_legalbench_datasets_14
         @article{wang2023maud,
             title={MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
             author={Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
@@ -4883,7 +4863,358 @@ class NYSJudicialEthicsLegalBenchClassification(AbsTaskClassification):
         dataset={
             "path": "nguha/legalbench",
             "name": "nys_judicial_ethics",
-=======
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2010-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="mit",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        """,
+        n_samples={"test": 292},
+        avg_character_length={"test": 159.45},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_columns(
+            {"answer": "label", "question": "text"}
+        )
+
+
+class OPP115DataRetentionLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="OPP115DataRetentionLegalBenchClassification",
+        description="Given a clause from a privacy policy, classify if the clause describes how long user information is stored.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "opp115_data_retention",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2015-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        @inproceedings{wilson2016creation,
+            title={The creation and analysis of a website privacy policy corpus},
+            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
+            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+            pages={1330--1340},
+            year={2016}
+        }
+        """,
+        n_samples={"test": 88},
+        avg_character_length={"test": 195.20},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class OPP115DataSecurityLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="OPP115DataSecurityLegalBenchClassification",
+        description="Given a clause from a privacy policy, classify if the clause describes how user information is protected.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "opp115_data_security",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2015-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        @inproceedings{wilson2016creation,
+            title={The creation and analysis of a website privacy policy corpus},
+            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
+            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+            pages={1330--1340},
+            year={2016}
+        }
+        """,
+        n_samples={"test": 1334},
+        avg_character_length={"test": 246.69},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class OPP115DoNotTrackLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="OPP115DoNotTrackLegalBenchClassification",
+        description="Given a clause from a privacy policy, classify if the clause describes if and how Do Not Track signals for online tracking and advertising are honored.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "opp115_do_not_track",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2015-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        @inproceedings{wilson2016creation,
+            title={The creation and analysis of a website privacy policy corpus},
+            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
+            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+            pages={1330--1340},
+            year={2016}
+        }
+        """,
+        n_samples={"test": 110},
+        avg_character_length={"test": 223.16},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class OPP115FirstPartyCollectionUseLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="OPP115FirstPartyCollectionUseLegalBenchClassification",
+        description="Given a clause from a privacy policy, classify if the clause describes how and why a service provider collects user information.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "opp115_first_party_collection_use",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2015-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        @inproceedings{wilson2016creation,
+            title={The creation and analysis of a website privacy policy corpus},
+            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
+            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+            pages={1330--1340},
+            year={2016}
+        }
+        """,
+        n_samples={"test": 2086},
+        avg_character_length={"test": 204.25},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class OPP115InternationalAndSpecificAudiencesLegalBenchClassification(
+    AbsTaskClassification
+):
+    metadata = TaskMetadata(
+        name="OPP115InternationalAndSpecificAudiencesLegalBenchClassification",
+        description="Given a clause from a privacy policy, classify if the clause describe practices that pertain only to a specific group of users (e.g., children, Europeans, or California residents).",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "opp115_international_and_specific_audiences",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2015-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
+        @inproceedings{wilson2016creation,
+            title={The creation and analysis of a website privacy policy corpus},
+            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
+            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+            pages={1330--1340},
+            year={2016}
+        }
+        """,
+        n_samples={"test": 980},
+        avg_character_length={"test": 327.71},
+    )
+
+    def dataset_transform(self):
+        mapping = {"yes": 1, "no": 0}
+        self.dataset = self.dataset.map(
+            lambda example: {
+                "answer": mapping.get(example["answer"].lower(), example["answer"])
+            }
+        )
+        self.dataset = self.dataset.rename_column("answer", "label")
+
+
+class OPP115PolicyChangeLegalBenchClassification(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="OPP115PolicyChangeLegalBenchClassification",
+        description="Given a clause from a privacy policy, classify if the clause describes if and how users will be informed about changes to the privacy policy.",
+        reference="https://huggingface.co/datasets/nguha/legalbench",
+        dataset={
+            "path": "nguha/legalbench",
+            "name": "opp115_policy_change",
+            "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+        },
+        type="Classification",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2015-01-01", "2023-08-23"),
+        form=["written"],
+        domains=["Legal"],
+        task_subtypes=[],
+        license="cc-by-nc-4.0",
+        socioeconomic_status="high",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+        @misc{guha2023legalbench,
+            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
+            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+            year={2023},
+            eprint={2308.11462},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
         @inproceedings{wilson2016creation,
             title={The creation and analysis of a website privacy policy corpus},
             author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
@@ -4914,7 +5245,6 @@ class OPP115ThirdPartySharingCollectionLegalBenchClassification(AbsTaskClassific
         dataset={
             "path": "nguha/legalbench",
             "name": "opp115_third_party_sharing_collection",
->>>>>>> main
             "revision": "12ca3b695563788fead87a982ad1a068284413f4",
         },
         type="Classification",
@@ -4922,19 +5252,11 @@ class OPP115ThirdPartySharingCollectionLegalBenchClassification(AbsTaskClassific
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-<<<<<<< add_legalbench_datasets_14
-        date=("2010-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
-        task_subtypes=[],
-        license="mit",
-=======
         date=("2015-01-01", "2023-08-23"),
         form=["written"],
         domains=["Legal"],
         task_subtypes=[],
         license="cc-by-nc-4.0",
->>>>>>> main
         socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
@@ -4948,11 +5270,6 @@ class OPP115ThirdPartySharingCollectionLegalBenchClassification(AbsTaskClassific
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }
-<<<<<<< add_legalbench_datasets_14
-        """,
-        n_samples={"test": 292},
-        avg_character_length={"test": 159.45},
-=======
         @inproceedings{wilson2016creation,
             title={The creation and analysis of a website privacy policy corpus},
             author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
@@ -4963,7 +5280,6 @@ class OPP115ThirdPartySharingCollectionLegalBenchClassification(AbsTaskClassific
         """,
         n_samples={"test": 1590},
         avg_character_length={"test": 223.64},
->>>>>>> main
     )
 
     def dataset_transform(self):
@@ -4973,21 +5289,6 @@ class OPP115ThirdPartySharingCollectionLegalBenchClassification(AbsTaskClassific
                 "answer": mapping.get(example["answer"].lower(), example["answer"])
             }
         )
-<<<<<<< add_legalbench_datasets_14
-        self.dataset = self.dataset.rename_columns(
-            {"answer": "label", "question": "text"}
-        )
-
-
-class OPP115DataRetentionLegalBenchClassification(AbsTaskClassification):
-    metadata = TaskMetadata(
-        name="OPP115DataRetentionLegalBenchClassification",
-        description="Given a clause from a privacy policy, classify if the clause describes how long user information is stored.",
-        reference="https://huggingface.co/datasets/nguha/legalbench",
-        dataset={
-            "path": "nguha/legalbench",
-            "name": "opp115_data_retention",
-=======
         self.dataset = self.dataset.rename_column("answer", "label")
 
 
@@ -4999,7 +5300,6 @@ class OPP115UserAccessEditAndDeletionLegalBenchClassification(AbsTaskClassificat
         dataset={
             "path": "nguha/legalbench",
             "name": "opp115_user_access,_edit_and_deletion",
->>>>>>> main
             "revision": "12ca3b695563788fead87a982ad1a068284413f4",
         },
         type="Classification",
@@ -5033,13 +5333,8 @@ class OPP115UserAccessEditAndDeletionLegalBenchClassification(AbsTaskClassificat
             year={2016}
         }
         """,
-<<<<<<< add_legalbench_datasets_14
-        n_samples={"test": 88},
-        avg_character_length={"test": 195.20},
-=======
         n_samples={"test": 462},
         avg_character_length={"test": 218.59},
->>>>>>> main
     )
 
     def dataset_transform(self):
@@ -5052,16 +5347,6 @@ class OPP115UserAccessEditAndDeletionLegalBenchClassification(AbsTaskClassificat
         self.dataset = self.dataset.rename_column("answer", "label")
 
 
-<<<<<<< add_legalbench_datasets_14
-class OPP115DataSecurityLegalBenchClassification(AbsTaskClassification):
-    metadata = TaskMetadata(
-        name="OPP115DataSecurityLegalBenchClassification",
-        description="Given a clause from a privacy policy, classify if the clause describes how user information is protected.",
-        reference="https://huggingface.co/datasets/nguha/legalbench",
-        dataset={
-            "path": "nguha/legalbench",
-            "name": "opp115_data_security",
-=======
 class OPP115UserChoiceControlLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OPP115UserChoiceControlLegalBenchClassification",
@@ -5070,7 +5355,6 @@ class OPP115UserChoiceControlLegalBenchClassification(AbsTaskClassification):
         dataset={
             "path": "nguha/legalbench",
             "name": "opp115_user_choice_control",
->>>>>>> main
             "revision": "12ca3b695563788fead87a982ad1a068284413f4",
         },
         type="Classification",
@@ -5104,13 +5388,8 @@ class OPP115UserChoiceControlLegalBenchClassification(AbsTaskClassification):
             year={2016}
         }
         """,
-<<<<<<< add_legalbench_datasets_14
-        n_samples={"test": 1334},
-        avg_character_length={"test": 246.69},
-=======
         n_samples={"test": 1546},
         avg_character_length={"test": 210.62},
->>>>>>> main
     )
 
     def dataset_transform(self):
@@ -5123,16 +5402,6 @@ class OPP115UserChoiceControlLegalBenchClassification(AbsTaskClassification):
         self.dataset = self.dataset.rename_column("answer", "label")
 
 
-<<<<<<< add_legalbench_datasets_14
-class OPP115DoNotTrackLegalBenchClassification(AbsTaskClassification):
-    metadata = TaskMetadata(
-        name="OPP115DoNotTrackLegalBenchClassification",
-        description="Given a clause from a privacy policy, classify if the clause describes if and how Do Not Track signals for online tracking and advertising are honored.",
-        reference="https://huggingface.co/datasets/nguha/legalbench",
-        dataset={
-            "path": "nguha/legalbench",
-            "name": "opp115_do_not_track",
-=======
 class OralArgumentQuestionPurposeLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OralArgumentQuestionPurposeLegalBenchClassification",
@@ -5149,7 +5418,6 @@ class OralArgumentQuestionPurposeLegalBenchClassification(AbsTaskClassification)
         dataset={
             "path": "nguha/legalbench",
             "name": "oral_argument_question_purpose",
->>>>>>> main
             "revision": "12ca3b695563788fead87a982ad1a068284413f4",
         },
         type="Classification",
@@ -5157,19 +5425,11 @@ class OralArgumentQuestionPurposeLegalBenchClassification(AbsTaskClassification)
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-<<<<<<< add_legalbench_datasets_14
-        date=("2015-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
-        task_subtypes=[],
-        license="cc-by-nc-4.0",
-=======
         date=("2021-01-01", "2023-08-23"),  # best guess
         form=["written"],
         domains=["Legal"],
         task_subtypes=[],
         license="cc-by-4.0",
->>>>>>> main
         socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
@@ -5182,19 +5442,6 @@ class OralArgumentQuestionPurposeLegalBenchClassification(AbsTaskClassification)
             eprint={2308.11462},
             archivePrefix={arXiv},
             primaryClass={cs.CL}
-<<<<<<< add_legalbench_datasets_14
-        }
-        @inproceedings{wilson2016creation,
-            title={The creation and analysis of a website privacy policy corpus},
-            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
-            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
-            pages={1330--1340},
-            year={2016}
-        }
-        """,
-        n_samples={"test": 110},
-        avg_character_length={"test": 223.16},
-=======
         },
         """,
         n_samples={"test": 312},
@@ -5250,7 +5497,6 @@ class OverrulingLegalBenchClassification(AbsTaskClassification):
         """,
         n_samples={"test": 2048},
         avg_character_length={"test": 167.20},
->>>>>>> main
     )
 
     def dataset_transform(self):
@@ -5261,18 +5507,6 @@ class OverrulingLegalBenchClassification(AbsTaskClassification):
             }
         )
         self.dataset = self.dataset.rename_column("answer", "label")
-<<<<<<< add_legalbench_datasets_14
-
-
-class OPP115FirstPartyCollectionUseLegalBenchClassification(AbsTaskClassification):
-    metadata = TaskMetadata(
-        name="OPP115FirstPartyCollectionUseLegalBenchClassification",
-        description="Given a clause from a privacy policy, classify if the clause describes how and why a service provider collects user information.",
-        reference="https://huggingface.co/datasets/nguha/legalbench",
-        dataset={
-            "path": "nguha/legalbench",
-            "name": "opp115_first_party_collection_use",
-=======
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )
@@ -5286,7 +5520,6 @@ class PersonalJurisdictionLegalBenchClassification(AbsTaskClassification):
         dataset={
             "path": "nguha/legalbench",
             "name": "personal_jurisdiction",
->>>>>>> main
             "revision": "12ca3b695563788fead87a982ad1a068284413f4",
         },
         type="Classification",
@@ -5294,19 +5527,11 @@ class PersonalJurisdictionLegalBenchClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-<<<<<<< add_legalbench_datasets_14
-        date=("2015-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
-        task_subtypes=[],
-        license="cc-by-nc-4.0",
-=======
         date=("2000-01-01", "2023-08-23"),  # best guess
         form=["written"],
         domains=["Legal"],
         task_subtypes=[],
         license="cc-by-4.0",
->>>>>>> main
         socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
@@ -5319,19 +5544,6 @@ class PersonalJurisdictionLegalBenchClassification(AbsTaskClassification):
             eprint={2308.11462},
             archivePrefix={arXiv},
             primaryClass={cs.CL}
-<<<<<<< add_legalbench_datasets_14
-        }
-        @inproceedings{wilson2016creation,
-            title={The creation and analysis of a website privacy policy corpus},
-            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
-            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
-            pages={1330--1340},
-            year={2016}
-        }
-        """,
-        n_samples={"test": 2086},
-        avg_character_length={"test": 204.25},
-=======
         },
         """,
         n_samples={"test": 50},
@@ -5441,7 +5653,6 @@ class SCDBPAccountabilityLegalBenchClassification(AbsTaskClassification):
         """,
         n_samples={"test": 379},
         avg_character_length={"test": 3520},
->>>>>>> main
     )
 
     def dataset_transform(self):
@@ -5454,18 +5665,6 @@ class SCDBPAccountabilityLegalBenchClassification(AbsTaskClassification):
         self.dataset = self.dataset.rename_column("answer", "label")
 
 
-<<<<<<< add_legalbench_datasets_14
-class OPP115InternationalAndSpecificAudiencesLegalBenchClassification(
-    AbsTaskClassification
-):
-    metadata = TaskMetadata(
-        name="OPP115InternationalAndSpecificAudiencesLegalBenchClassification",
-        description="Given a clause from a privacy policy, classify if the clause describe practices that pertain only to a specific group of users (e.g., children, Europeans, or California residents).",
-        reference="https://huggingface.co/datasets/nguha/legalbench",
-        dataset={
-            "path": "nguha/legalbench",
-            "name": "opp115_international_and_specific_audiences",
-=======
 class SCDBPAuditsLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SCDBPAuditsLegalBenchClassification",
@@ -5474,7 +5673,6 @@ class SCDBPAuditsLegalBenchClassification(AbsTaskClassification):
         dataset={
             "path": "nguha/legalbench",
             "name": "supply_chain_disclosure_best_practice_audits",
->>>>>>> main
             "revision": "12ca3b695563788fead87a982ad1a068284413f4",
         },
         type="Classification",
@@ -5482,19 +5680,11 @@ class SCDBPAuditsLegalBenchClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-<<<<<<< add_legalbench_datasets_14
-        date=("2015-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
-        task_subtypes=[],
-        license="cc-by-nc-4.0",
-=======
         date=("2010-01-01", "2015-06-30"),
         form=["written"],
         domains=["Legal"],
         task_subtypes=[],
         license="cc-by-4.0",
->>>>>>> main
         socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
@@ -5507,19 +5697,6 @@ class SCDBPAuditsLegalBenchClassification(AbsTaskClassification):
             eprint={2308.11462},
             archivePrefix={arXiv},
             primaryClass={cs.CL}
-<<<<<<< add_legalbench_datasets_14
-        }
-        @inproceedings{wilson2016creation,
-            title={The creation and analysis of a website privacy policy corpus},
-            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
-            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
-            pages={1330--1340},
-            year={2016}
-        }
-        """,
-        n_samples={"test": 980},
-        avg_character_length={"test": 327.71},
-=======
         },
         @article{chilton2017limitations,
         title={The limitations of supply chain disclosure regimes},
@@ -5590,7 +5767,6 @@ class SCDBPCertificationLegalBenchClassification(AbsTaskClassification):
         """,
         n_samples={"test": 378},
         avg_character_length={"test": 3507},
->>>>>>> main
     )
 
     def dataset_transform(self):
@@ -5601,8 +5777,6 @@ class SCDBPCertificationLegalBenchClassification(AbsTaskClassification):
             }
         )
         self.dataset = self.dataset.rename_column("answer", "label")
-<<<<<<< add_legalbench_datasets_14
-=======
 
 
 class SCDBPTrainingLegalBenchClassification(AbsTaskClassification):
@@ -6250,4 +6424,3 @@ class UnfairTOSLegalBenchClassification(AbsTaskClassification):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )
->>>>>>> main
