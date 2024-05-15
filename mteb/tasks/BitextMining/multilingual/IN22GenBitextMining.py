@@ -95,7 +95,7 @@ note={}
         if self.data_loaded:
             return
         self.dataset = {}
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
                 name=lang,
                 **self.metadata_dict["dataset"],
@@ -105,7 +105,7 @@ note={}
 
     def dataset_transform(self) -> None:
         # Convert to standard format
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             lang1 = lang.split("-")[0]
             lang2 = lang.split("-")[1]
             self.dataset[lang] = self.dataset[lang].rename_columns(
