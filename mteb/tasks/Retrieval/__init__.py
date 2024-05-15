@@ -7,6 +7,7 @@ from .dan.t2nord_retrieval import *
 from .dan.twitterhjerne import *
 from .deu.GerDaLIRRetrieval import *
 from .deu.GerDaLIRSmallRetrieval import *
+from .deu.WikipediaRetrievalDE import *
 from .deu.GermanDPRRetrieval import *
 from .deu.GermanQuADRetrieval import *
 from .deu.LegalQuADRetrieval import *

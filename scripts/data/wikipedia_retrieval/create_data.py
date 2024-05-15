@@ -32,9 +32,9 @@ for lang in languages:
 
 
     repo_id = f"ellamind/wikipedia-2023-11-retrieval-{lang}"
-    corpus.push_to_hub(repo_id, config_name="corpus")
-    queries.push_to_hub(repo_id, config_name="queries")
-    qrels.push_to_hub(repo_id, config_name="default")
+    corpus.push_to_hub(repo_id, config_name="corpus", split="test")
+    queries.push_to_hub(repo_id, config_name="queries", split="test")
+    qrels.push_to_hub(repo_id, config_name="default", split="test")
 
     # Download the README from the repository
     readme_path = hf_hub_download(repo_id=repo_id, filename="README.md", repo_type="dataset")
