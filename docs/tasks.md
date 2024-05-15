@@ -20,6 +20,7 @@ The following tables gives you an overview of the tasks in MTEB.
 | [AmazonPolarityClassification](https://huggingface.co/datasets/amazon_polarity) | ['eng'] | Classification | s2s |  | {'test': 400000} | {'test': 431.4} |
 | [AmazonReviewsClassification](https://arxiv.org/abs/2010.02573) | ['cmn', 'deu', 'eng', 'fra', 'jpn', 'spa'] | Classification | s2s |  | {'validation': 30000, 'test': 30000} | {'validation': 159.2, 'test': 160.4} |
 | [AngryTweetsClassification](https://aclanthology.org/2021.nodalida-main.53/) (Pauli et al., 2021) | ['dan'] | Classification | s2s | [Social] | {'test': 1050} | {'test': 156.1} |
+| [ArEntail](https://link.springer.com/article/10.1007/s10579-024-09731-1) (Obeidat et al., 2024) | ['ara'] | PairClassification | s2s | [News] | {'test': 1000} | {'test': 65.77} |
 | [ArguAna](http://argumentation.bplaced.net/arguana/data) | ['eng'] | Retrieval | s2p |  |  |  |
 | [ArguAna-PL](https://huggingface.co/datasets/clarin-knext/arguana-pl) | ['pol'] | Retrieval | s2p |  |  |  |
 | [ArmenianParaphrasePC](https://github.com/ivannikov-lab/arpa-paraphrase-corpus) (Arthur Malajyan, 2020) | ['hye'] | PairClassification | s2s | [News] | {'train': 4023, 'test': 1470} | {'train': 243.81, 'test': 241.37} |
