@@ -23,7 +23,8 @@ class Moroco(AbsTaskClassification):
         license="CC BY-4.0",
         socioeconomic_status= "medium",
         annotations_creators= "derived",
-        dialect = [],
+        dialect = ["ron-Latn-ron",
+                   "ron-Latn-mol"], #Moldavian, or the Romanian dialect used in Moldova, does not have an ISO 639-1 code assigned to it. However, it has been given the three-letter code "mol" under ISO 639-3
         text_creation="found",
         bibtex_citation=""""
         @inproceedings{ Butnaru-ACL-2019,
