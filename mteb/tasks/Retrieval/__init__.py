@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .ben.WikipediaRetrievalBN import *
 from .code.CodeEditSearchRetrieval import *
 from .code.CodeSearchNetRetrieval import *
 from .dan.dan_fever import *

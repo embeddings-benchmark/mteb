@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .ben.WikepediaRerankingBN import *
 from .deu.WikepediaRerankingDE import *
 from .eng.AskUbuntuDupQuestions import *
 from .eng.MindSmallReranking import *

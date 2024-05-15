@@ -3,7 +3,7 @@ from huggingface_hub import hf_hub_download, HfApi
 import io
 from collections import defaultdict
 
-languages = ["de"]
+languages = ["de", "bn"]
 
 def map_corpus_to_query(example, negatives_dict):
     title = example["title"]

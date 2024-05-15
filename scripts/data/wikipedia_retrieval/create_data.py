@@ -2,7 +2,7 @@ from datasets import load_dataset, Dataset, DatasetDict, Features, Value
 from huggingface_hub import hf_hub_download, HfApi
 import io
 
-languages = ["de"]
+languages = ["de", "bn"]
 
 def apply_query_id(example, queries_dict):
     title = example["title"]
