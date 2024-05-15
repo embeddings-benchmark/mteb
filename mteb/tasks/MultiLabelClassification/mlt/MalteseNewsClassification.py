@@ -2,11 +2,56 @@ from __future__ import annotations
 
 from collections import Counter
 
-from mteb.abstasks import AbsTaskClassification
+from mteb.abstasks import AbsTaskMultilabelClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+from skmultilearn.model_selection import IterativeStratification, iterative_train_test_split
 
-class MalteseNewsClassification(AbsTaskClassification):
+import numpy as np
+from datasets import DatasetDict, Dataset
+
+def multihot_encoder(labels):
+    """Convert list of label lists into a 2-D multihot array"""
+    label_set = set()
+    for label_list in labels:
+        label_set = label_set.union(set(label_list))
+    label_set = sorted(label_set)
+
+    multihot_vectors = []
+    for label_list in labels:
+        multihot_vectors.append([1 if x in label_list else 0 for x in label_set])
+
+    return np.array(multihot_vectors)
+
+
+def stratified_multilabel_subsampling(
+    dataset_dict:DatasetDict,
+    splits: list[str] = ["test"],
+    label: str = "label",
+    n_samples: int = 2048) -> DatasetDict:
+    """Multilabel subsamples the dataset with stratification by the supplied label.
+    Returns a datasetDict object.
+
+    Args:
+        dataset_dict: the DatasetDict object.
+        splits: the splits of the dataset.
+        label: the label with which the stratified sampling is based on.
+        n_samples: Optional, number of samples to subsample. Default is max_n_samples.
+    """
+
+    for split in splits:
+        n_split = len(dataset_dict[split])
+        X_np = np.arange(n_split).reshape((-1, 1))
+        labels_np = multihot_encoder(dataset_dict[split][label])
+        _, _, test_idx, _ = iterative_train_test_split(
+            X_np, labels_np,
+            test_size=n_samples/n_split
+        )
+        dataset_dict.update({split: Dataset.from_dict(dataset_dict[split][test_idx])})
+    return dataset_dict
+
+
+class MalteseNewsClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
         name="MalteseNewsClassification",
         description="""A multi-label topic classification dataset for Maltese News
@@ -50,19 +95,12 @@ class MalteseNewsClassification(AbsTaskClassification):
 
     def dataset_transform(self):
         # 80% of categories have just one label, so it's safe to take the first
-        self.dataset = self.dataset["test"].map(lambda x: {"labels": x["labels"][0]})
-        rename_dict = dict(zip(["labels"], ["label"]))
-        self.dataset = self.dataset.rename_columns(rename_dict)
+        self.dataset = self.dataset.rename_columns({"labels" :"label"})
         remove_cols = [
-            col for col in self.dataset.column_names if col not in ["text", "label"]
+            col for col in self.dataset["test"].column_names if col not in ["text", "label"]
         ]
         self.dataset = self.dataset.remove_columns(remove_cols)
-        self.dataset = self.dataset.class_encode_column("label")
-        # find low count labels with lower than 6 occurances
-        label_counts = Counter(self.dataset["label"])
-        low_count_labels = [k for k, v in label_counts.items() if v < 6]
-        self.dataset = self.dataset.filter(lambda x: x["label"] not in low_count_labels)
         # split dataset
-        self.dataset = self.dataset.train_test_split(
-            test_size=0.5, seed=self.seed, stratify_by_column="label"
+        self.dataset = stratified_multilabel_subsampling(
+            self.dataset, splits=["train", "test"], n_samples=2048
         )
