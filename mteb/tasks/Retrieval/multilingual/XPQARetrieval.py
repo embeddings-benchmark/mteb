@@ -151,7 +151,9 @@ class XPQARetrieval(AbsTaskRetrieval, CrosslingualTask):
             }
 
             self.corpus[lang_pair] = {
-                eval_split: {v: {"text": k} for k, v in corpus_to_ids[eval_split].items()}
+                eval_split: {
+                    v: {"text": k} for k, v in corpus_to_ids[eval_split].items()
+                }
                 for eval_split in self.metadata_dict["eval_splits"]
             }
 
