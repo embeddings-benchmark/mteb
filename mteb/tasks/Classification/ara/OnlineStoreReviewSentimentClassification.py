@@ -23,21 +23,12 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         form=["written"],
         domains=["Reviews"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="apache-2.0",
+        license=None,
         socioeconomic_status="mixed",
         annotations_creators="derived",
-        dialect=["ara-arab-EG", "ara-arab-JO", "ara-arab-LB", "ara-arab-SA"],
+        dialect=["ara-Arab-SA"],
         text_creation="found",
-        bibtex_citation="""
-@misc {ruqiya_bin_safi_2024,
-	author       = { {Ruqiya Bin Safi} },
-	title        = { Arabic_Reviews_of_SHEIN (Revision 9eb4068) },
-	year         = 2024,
-	url          = { https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN },
-	doi          = { 10.57967/hf/2232 },
-	publisher    = { Hugging Face }
-}
-""",
+        bibtex_citation=None,
         n_samples={"train": N_SAMPLES},
         avg_character_length={"train": 137.2},
     )
