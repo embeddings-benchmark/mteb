@@ -1,5 +1,5 @@
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification 
-from mteb.abstasks.TaskMetadata import TaskMetadata  
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class ThaiRestaurantRestaReviews(AbsTaskClassification):
