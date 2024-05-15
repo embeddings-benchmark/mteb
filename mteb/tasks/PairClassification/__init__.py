@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .ara.ArEntail import *
+from .ces.CTKFactsNLI import *
 from .deu.FalseFriendsDeEnPC import *
 from .eng.LegalBenchPC import *
 from .eng.SprintDuplicateQuestionsPC import *
@@ -14,4 +15,5 @@ from .multilingual.PawsX import *
 from .multilingual.RTE3 import *
 from .multilingual.XNLI import *
 from .pol.PolishPC import *
+from .por.Assin2RTE import *
 from .zho.CMTEBPairClassification import *
