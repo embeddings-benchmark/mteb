@@ -455,6 +455,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [YahooAnswersTopicsClassification](https://huggingface.co/datasets/yahoo_answers_topics) | ['eng'] | Classification | s2s | [Web] | {'test': 60000} | {'test': 346.35} |
 | [YelpReviewFullClassification](https://arxiv.org/abs/1509.01626) (Zhang et al., 2015) | ['eng'] | Classification | s2s | [Reviews] | {'test': 50000} |  |
 | [YueOpenriceReviewClassification](https://github.com/Christainx/Dataset_Cantonese_Openrice) (Xiang et al., 2019) | ['yue'] | Classification | s2s | [Reviews] | {'test': 6161} | {'test': 173.0} |
+| [indonli](https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39) | ['ind'] | PairClassification | s2s | [Encyclopaedic, Web, News] | {'test_expert': 2040} | {'test_expert': 145.88} |
 <!-- TASKS TABLE END -->
 
 </details>
@@ -529,7 +530,7 @@ The following tables give you an overview of the tasks in MTEB.
 | apu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | apw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | apz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ara | 1 | 11 | 0 | 0 | 0 | 1 | 0 | 4 | 2 | 0 |
+| ara | 1 | 11 | 0 | 0 | 0 | 2 | 0 | 4 | 2 | 0 |
 | arb | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
 | are | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | arl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -743,7 +744,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | 3 | 6 | 0 | 0 | 1 | 2 | 0 | 3 | 0 | 0 |
 | emi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | emp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eng | 10 | 122 | 15 | 3 | 1 | 8 | 4 | 46 | 12 | 1 |
+| eng | 10 | 135 | 15 | 3 | 1 | 8 | 4 | 46 | 12 | 1 |
 | enq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | epo | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | eri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -852,7 +853,7 @@ The following tables give you an overview of the tasks in MTEB.
 | imo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ina | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | inb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ind | 4 | 7 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| ind | 4 | 7 | 0 | 0 | 0 | 1 | 0 | 1 | 0 | 0 |
 | ino | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | iou | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ipi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1506,7 +1507,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1323 | 703 | 88 | 3 | 23 | 57 | 12 | 301 | 68 | 2 |
+| Total | 1323 | 716 | 88 | 3 | 23 | 59 | 12 | 301 | 68 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
