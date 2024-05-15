@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "OPP115FirstPartyCollectionUseLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.6989453499520614,
+    "accuracy_stderr": 0.0,
+    "ap": 0.6428364994242777,
+    "ap_stderr": 0.0,
+    "evaluation_time": 222.58,
+    "f1": 0.6986250946679513,
+    "f1_stderr": 0.0,
+    "main_score": 0.6989453499520614
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "MAUDLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.28916015625,
+    "accuracy_stderr": 0.03300997935750062,
+    "evaluation_time": 399.49,
+    "f1": 0.271406286740288,
+    "f1_stderr": 0.018017592523506317,
+    "main_score": 0.28916015625
+  }
+}
