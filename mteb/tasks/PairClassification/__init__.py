@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .ara.ArEntail import *
+from .ces.CTKFactsNLI import *
 from .deu.FalseFriendsDeEnPC import *
 from .eng.LegalBenchPC import *
 from .eng.SprintDuplicateQuestionsPC import *
