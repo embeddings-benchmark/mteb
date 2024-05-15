@@ -13,26 +13,18 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("main")
 
 TASK_LIST_RETRIEVAL_LAW = [
-    # "LegalSummarization",
-    # "LegalBenchConsumerContractsQA",
-    # "LegalBenchCorporateLobbying",
-    # "AILACasedocs",
-    # "AILAStatutes",
-    # "LeCaRDv2",
-    # "LegalQuAD",
-    # "GerDaLIRSmall",
-    # "WikipediaRetrievalDE",
-    # "WikipediaRerankingDE",
-    "WikipediaRerankingBN",
-    # "WikipediaRetrievalBN",
-    # "SciDocsRR",
+    "LegalSummarization",
+    "LegalBenchConsumerContractsQA",
+    "LegalBenchCorporateLobbying",
+    "AILACasedocs",
+    "AILAStatutes",
+    "LeCaRDv2",
+    "LegalQuAD",
+    "GerDaLIRSmall",
 ]
 
 model_name = "average_word_embeddings_komninos"
-# model_name = "deepset/gbert-base"
-# model_name = "intfloat/e5-base"
 model = SentenceTransformer(model_name)
-# model = SentenceTransformer(model_name, device="cpu")
 
 for task in TASK_LIST_RETRIEVAL_LAW:
     logger.info(f"Running task: {task}")
