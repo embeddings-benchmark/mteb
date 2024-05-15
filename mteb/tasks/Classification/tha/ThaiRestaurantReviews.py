@@ -1,12 +1,10 @@
-from __future__ import annotations
-
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification  # type: ignore
-from mteb.abstasks.TaskMetadata import TaskMetadata  # type: ignore
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification 
+from mteb.abstasks.TaskMetadata import TaskMetadata  
 
 
-class Thai_Restaurant_Reviews(AbsTaskClassification):
+class ThaiRestaurantRestaReviews(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="Thai_Restaurant_Reviews",
+        name="ThaiRestaurantReviews",
         description="Wongnai features over 200,000 restaurants, beauty salons, and spas across Thailand on its platform, with detailed information about each merchant and user reviews. In this dataset there are 5 classes corressponding each star rating",
         reference="https://github.com/wongnai/wongnai-corpus",
         dataset={
@@ -15,7 +13,7 @@ class Thai_Restaurant_Reviews(AbsTaskClassification):
         },
         type="Classification",
         category="p2p",
-        eval_splits=["train"],
+        eval_splits=["test"],
         eval_langs=["tha-Thai"],
         main_score="accuracy",
         date=("2018-01-01", "2018-12-31"),
@@ -38,8 +36,8 @@ class Thai_Restaurant_Reviews(AbsTaskClassification):
             doi     = {10.5281/zenodo.3852912},
             url     = {https://doi.org/10.5281/zenodo.3852912}
         }""",
-        n_samples={"train": 2048},
-        avg_character_length={"train": 540.3717},
+        n_samples={"test": 2048},
+        avg_character_length={"test": 540.3717},
     )
 
     def dataset_transform(self):
@@ -47,5 +45,5 @@ class Thai_Restaurant_Reviews(AbsTaskClassification):
             {"review_body": "text", "star_rating": "label"}
         )
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
+            self.dataset, seed=self.seed, splits=["test"]
         )
