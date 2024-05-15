@@ -14,7 +14,7 @@ class SadeemKeywordRetrieval(AbsTaskRetrieval):
         name="SadeemKeywordRetrieval",
         dataset={
             "path": "sadeem-ai/sadeem-ar-eval-retrieval-keywords",
-            "revision": "6e8b967b0fc44f4cebb34a8cfab0eb7fd9484783",
+            "revision": "b76ba10cc7c6a41f9bd69e7dfa57e5ae17ddd761",
             "name": "test",
         },
         reference="https://huggingface.co/datasets/sadeem-ai/sadeem-ar-eval-retrieval-keywords",
@@ -34,7 +34,7 @@ class SadeemKeywordRetrieval(AbsTaskRetrieval):
         dialect=[],
         text_creation="found",
         bibtex_citation=None,
-        n_samples={_EVAL_SPLIT: 22979},
+        n_samples={_EVAL_SPLIT: 7179},
         avg_character_length={_EVAL_SPLIT: 500.0},
     )
 
