@@ -24,7 +24,7 @@ class GermanGovServiceRetrieval(AbsTaskRetrieval):
         category="s2p",
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["deu-Latn"],
-        main_score="ndcg_at_10",
+        main_score="ndcg_at_5",
         date=("2022-11-01", "2022-11-30"),
         form=["written"],
         domains=["Government"],
