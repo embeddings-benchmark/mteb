@@ -6,7 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class Assin2RTE(AbsTaskPairClassification):
     metadata = TaskMetadata(
-        name="assin2-rte",
+        name="Assin2RTE",
         dataset={
             "path": "assin2",
             "revision": "0ff9c86779e06855536d8775ce5550550e1e5a2d",
