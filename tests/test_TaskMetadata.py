@@ -428,7 +428,10 @@ def test_all_metadata_is_filled():
     unfilled_metadata = []
     for task in all_tasks:
         if task.metadata.name not in _HISTORIC_DATASETS:
-            if not (task.metadata.name.endswith("Abstention") and task.metadata.name[:-10] in _HISTORIC_DATASETS):
+            if not (
+                task.metadata.name.endswith("Abstention")
+                and task.metadata.name[:-10] in _HISTORIC_DATASETS
+            ):
                 if not task.metadata.is_filled():
                     unfilled_metadata.append(task.metadata.name)
     if unfilled_metadata:
