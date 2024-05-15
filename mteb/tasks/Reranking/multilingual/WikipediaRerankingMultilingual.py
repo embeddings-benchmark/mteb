@@ -43,7 +43,7 @@ class WikipediaRerankingMultilingual(AbsTaskReranking):
         socioeconomic_status=None,
         annotations_creators="derived",
         dialect=None,
-        text_creation=["created","LM-generated and verified"],
+        text_creation=["created", "LM-generated and verified"],
         bibtex_citation=None,
         n_samples={
             "en": 1500,

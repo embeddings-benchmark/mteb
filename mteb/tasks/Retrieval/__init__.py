@@ -11,10 +11,10 @@ from .dan.twitterhjerne import *
 from .dan.WikipediaRetrievalDA import *
 from .deu.GerDaLIRRetrieval import *
 from .deu.GerDaLIRSmallRetrieval import *
-from .deu.WikipediaRetrievalDE import *
 from .deu.GermanDPRRetrieval import *
 from .deu.GermanQuADRetrieval import *
 from .deu.LegalQuADRetrieval import *
+from .deu.WikipediaRetrievalDE import *
 from .dut.WikipediaRetrievalNL import *
 from .ell.GreekCivicsQA import *
 from .eng.AILACasedocsRetrieval import *
