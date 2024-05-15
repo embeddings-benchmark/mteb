@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from datasets import concatenate_datasets, load_dataset
+import datasets
+from datasets import concatenate_datasets
 
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -4797,7 +4798,7 @@ class MAUDLegalBenchClassification(AbsTaskClassification):
         _hf_dataset = None
         class_count = 0
         for dataset_col_map in _MAUD_DATASET_MAP:
-            _dataset = load_dataset(
+            _dataset = datasets.load_dataset(
                 self.metadata_dict["dataset"]["path"],
                 dataset_col_map["name"],
                 revision=self.metadata_dict["dataset"]["revision"],
@@ -4830,10 +4831,10 @@ class MAUDLegalBenchClassification(AbsTaskClassification):
             if _hf_dataset is None:
                 _hf_dataset = _dataset
             else:
-                _hf_dataset["train"] = concatenate_datasets(
+                _hf_dataset["train"] = datasets.concatenate_datasets(
                     [_hf_dataset["train"], _dataset["train"]]
                 )
-                _hf_dataset["test"] = concatenate_datasets(
+                _hf_dataset["test"] = datasets.concatenate_datasets(
                     [_hf_dataset["test"], _dataset["test"]]
                 )
 
