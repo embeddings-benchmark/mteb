@@ -1,0 +1,49 @@
+{
+  "dataset_revision": "4da4316c6e3287746ab74ff67dd252ad128fceff",
+  "mteb_dataset_name": "ArEntail",
+  "mteb_version": "1.8.10",
+  "test": {
+    "cos_sim": {
+      "accuracy": 0.734,
+      "accuracy_threshold": 0.9073306322097778,
+      "ap": 0.7938231998979896,
+      "f1": 0.7550675675675675,
+      "f1_threshold": 0.8919888734817505,
+      "precision": 0.6535087719298246,
+      "recall": 0.894
+    },
+    "dot": {
+      "accuracy": 0.734,
+      "accuracy_threshold": 0.9073307514190674,
+      "ap": 0.7938231998979896,
+      "f1": 0.7550675675675675,
+      "f1_threshold": 0.8919887542724609,
+      "precision": 0.6535087719298246,
+      "recall": 0.894
+    },
+    "euclidean": {
+      "accuracy": 0.734,
+      "accuracy_threshold": 0.43050986528396606,
+      "ap": 0.7938231998979896,
+      "f1": 0.7550675675675675,
+      "f1_threshold": 0.464781790971756,
+      "precision": 0.6535087719298246,
+      "recall": 0.894
+    },
+    "evaluation_time": 4.4,
+    "manhattan": {
+      "accuracy": 0.737,
+      "accuracy_threshold": 6.7003984451293945,
+      "ap": 0.789496298019098,
+      "f1": 0.7522768670309654,
+      "f1_threshold": 6.960292816162109,
+      "precision": 0.6906354515050167,
+      "recall": 0.826
+    },
+    "max": {
+      "accuracy": 0.737,
+      "ap": 0.7938231998979896,
+      "f1": 0.7550675675675675
+    }
+  }
+}

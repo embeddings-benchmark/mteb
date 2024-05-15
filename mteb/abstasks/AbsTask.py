@@ -9,6 +9,7 @@ import datasets
 import numpy as np
 import torch
 
+from mteb.abstasks.languages import LanguageScripts
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 
@@ -107,16 +108,16 @@ class AbsTask(ABC):
     @property
     def languages(self) -> list[str]:
         """Returns the languages of the task"""
-        # check if self.langs is set
+        # check if self.hf_subsets is set
         has_lang_splits = self.is_crosslingual or self.is_multilingual
-        if has_lang_splits and hasattr(self, "langs"):
+        if has_lang_splits and hasattr(self, "hf_subsets"):
             assert isinstance(
                 self.metadata.eval_langs, dict
             ), "eval_langs must be dict for multilingual tasks"
             eval_langs = self.metadata.eval_langs
             languages = []
 
-            for lang in self.langs:
+            for lang in self.hf_subsets:
                 for langscript in eval_langs[lang]:
                     iso_lang, script = langscript.split("-")
                     languages.append(iso_lang)
@@ -136,43 +137,23 @@ class AbsTask(ABC):
             script: list of scripts to filter the task by. Will be ignored if language code specified the script. If None, all scripts are included.
                 If the language code does not specify the script the intersection of the language and script will be used.
         """
-        lang_script_codes = set()
-        # normalize to 3 letter language codes
-        normalized_langs = set()
-        filter_lang = languages is not None
+        lang_scripts = LanguageScripts.from_languages_and_scripts(languages, script)
 
-        if filter_lang:
-            for lang in languages:
-                lang_script = lang.split("-")
-
-                is_lang_script_code = len(lang_script) == 2
-                if is_lang_script_code:
-                    normalized_langs.add(lang_script[0])
-                    lang_script_codes.add(lang)
-                else:
-                    normalized_langs.add(lang)
-
-        filter_scripts = script is not None
-        script_codes: set[str] = set(script) if filter_scripts else set()
-
-        splits_to_keep: list[str] = []
+        subsets_to_keep = []
 
         if not isinstance(self.metadata.eval_langs, dict):
-            self.langs = self.metadata.eval_langs
+            self.hf_subsets = self.metadata.eval_langs
             return self
 
-        for hf_lang, langs in self.metadata.eval_langs.items():
+        for hf_subset, langs in self.metadata.eval_langs.items():
             for langscript in langs:
-                if langscript in lang_script_codes:
-                    splits_to_keep.append(hf_lang)
-                    continue
+                if lang_scripts.contains_language(
+                    langscript
+                ) or lang_scripts.contains_script(langscript):
+                    subsets_to_keep.append(hf_subset)
+                    break
 
-                _lang, _script = langscript.split("-")
-                if (filter_lang and _lang in normalized_langs) or not filter_lang:
-                    if script is None or _script in script_codes:
-                        splits_to_keep.append(hf_lang)
-
-        self.langs = splits_to_keep
+        self.hf_subsets = subsets_to_keep
         return self
 
     def __repr__(self) -> str:

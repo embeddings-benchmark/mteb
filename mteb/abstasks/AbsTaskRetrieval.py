@@ -247,7 +247,7 @@ class AbsTaskRetrieval(AbsTask):
 
         scores = {}
         if self.is_crosslingual or self.is_multilingual:
-            for lang in self.langs:
+            for lang in self.hf_subsets:
                 logger.info(f"Language: {lang}")
                 corpus, queries, relevant_docs = (
                     self.corpus[lang][split],
