@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.10.0"
+version = "1.10.1"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
