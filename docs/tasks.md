@@ -68,6 +68,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [CQADupstackUnixRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [CQADupstackWebmastersRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [CQADupstackWordpressRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) | ['eng'] | Retrieval | s2p |  |  |  |
+| [CSFDCZMovieReviewSentimentClassification](https://arxiv.org/abs/2304.01922) (Michal Štefánik, 2023) | ['ces'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 386.5} |
+| [CSFDSKMovieReviewSentimentClassification](https://arxiv.org/abs/2304.01922) (Michal Štefánik, 2023) | ['slk'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 366.2} |
 | [CTKFactsNLI](https://arxiv.org/abs/2201.11115) (Ullrich et al., 2023) | ['ces'] | PairClassification | s2s | [News] | {'test': 375, 'validation': 305} | {'test': 225.62, 'validation': 219.32} |
 | [CUADAffiliateLicenseLicenseeLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 198} | {'test': 484.11} |
 | [CUADAffiliateLicenseLicensorLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 88} | {'test': 633.4} |
@@ -673,7 +675,7 @@ The following tables give you an overview of the tasks in MTEB.
 | cco | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ceb | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | cek | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ces | 4 | 4 | 0 | 0 | 1 | 1 | 0 | 1 | 0 | 0 |
+| ces | 4 | 5 | 0 | 0 | 1 | 1 | 0 | 1 | 0 | 0 |
 | cgc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | cha | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | chd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1280,7 +1282,7 @@ The following tables give you an overview of the tasks in MTEB.
 | sim | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sin | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | sja | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| slk | 3 | 2 | 0 | 0 | 1 | 0 | 0 | 2 | 0 | 0 |
+| slk | 3 | 3 | 0 | 0 | 1 | 0 | 0 | 2 | 0 | 0 |
 | sll | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | slv | 3 | 4 | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 0 |
 | smk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1521,7 +1523,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1323 | 726 | 88 | 3 | 23 | 61 | 12 | 301 | 69 | 2 |
+| Total | 1323 | 728 | 88 | 3 | 23 | 61 | 12 | 301 | 69 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
