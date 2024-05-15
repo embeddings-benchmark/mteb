@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -37,8 +35,11 @@ class MyanmarNews(AbsTaskClassification):
         pages     = {401--408}
         }""",
         n_samples={"train": 2048},
-        avg_character_length={"train": 174.20059142434698},
+        avg_character_length={"train": 174.2},
     )
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_columns({"category": "label"})
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"]
+        )

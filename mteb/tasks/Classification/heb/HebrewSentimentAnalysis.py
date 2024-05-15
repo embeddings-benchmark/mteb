@@ -1,21 +1,20 @@
-from __future__ import annotations
-
 from mteb.abstasks import AbsTaskClassification  # type: ignore
 from mteb.abstasks.TaskMetadata import TaskMetadata  # type: ignore
 
 
-class Hebrew_Sentiment_Analysis(AbsTaskClassification):
+class HebrewSentimentAnalysis(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="Hebrew_Sentiment_Analysis",
+        name="HebrewSentimentAnalysis",
         dataset={
             "path": "hebrew_sentiment",
             "revision": "952c9525954c1dac50d5f95945eb5585bb6464e7",
+            "name" : "morph",
         },
         description="HebrewSentiment is a data set consists of 12,804 user comments to posts on the official Facebook page of Israel’s president, Mr. Reuven Rivlin. In October 2015, we used the open software application Netvizz (Rieder, 2013) to scrape all the comments to all of the president’s posts in the period of June – August 2014, the first three months of Rivlin’s presidency.2 While the president’s posts aimed at reconciling tensions and called for tolerance and empathy, the sentiment expressed in the comments to the president’s posts was polarized between citizens who warmly thanked the president, and citizens that fiercely critiqued his policy.",
         reference="https://huggingface.co/datasets/hebrew_sentiment",
         type="Classification",
         category="s2s",
-        eval_splits=["train"],
+        eval_splits=["test"],
         eval_langs=["heb-Hebr"],
         main_score="accuracy",
         date=("2015-10-01", "2015-10-31"),
@@ -40,11 +39,12 @@ class Hebrew_Sentiment_Analysis(AbsTaskClassification):
             pages = "2242--2252"
         }
         """,
-        n_samples={"train": 2048},
-        avg_character_length={"train": 113.56979695431473},
+        n_samples={"test": 2048},
+        avg_character_length={"test": 113.57},
     )
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
+            self.dataset, seed=self.seed, splits=["test"]
         )
+        

@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from mteb.abstasks import AbsTaskClassification  # type: ignore
 from mteb.abstasks.TaskMetadata import TaskMetadata  # type: ignore
 
@@ -15,7 +13,7 @@ class KorFin(AbsTaskClassification):
         reference="https://huggingface.co/datasets/amphora/korfin-asc",
         type="Classification",
         category="s2s",
-        eval_splits=["train"],
+        eval_splits=["test"],
         eval_langs=["kor-Hang"],
         main_score="accuracy",
         date=(
@@ -38,8 +36,8 @@ class KorFin(AbsTaskClassification):
         year={2023}
         }
         """,
-        n_samples={"train": 2048},
-        avg_character_length={"train": 75.27988205942391},
+        n_samples={"test": 2048},
+        avg_character_length={"test": 75.28},
     )
 
     def dataset_transform(self):
@@ -47,5 +45,5 @@ class KorFin(AbsTaskClassification):
             {"SRC": "text", "SENTIMENT": "label"}
         ).remove_columns(["SID", "TYPE", "ASPECT"])
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
+            self.dataset, seed=self.seed, splits=["test"]
         )

@@ -41,7 +41,7 @@ from .fin.FinToxicityClassification import *
 from .fra.FrenchBookReviews import *
 from .fra.MovieReviewSentimentClassification import *
 from .guj.GujaratiNewsClassification import *
-from .heb.Hebrew_Sentiment_Analysis import *
+from .heb.HebrewSentimentAnalysis import *
 from .hin.HindiDiscourseClassification import *
 from .hin.SentimentAnalysisHindi import *
 from .hrv.FrenkHrClassification import *
@@ -80,7 +80,6 @@ from .multilingual.SIB200Classification import *
 from .multilingual.SouthAfricanLangClassification import *
 from .multilingual.SwissJudgementClassification import *
 from .multilingual.TweetSentimentClassification import *
-from .mya.MyanmarNews import *
 from .nep.NepaliNewsClassification import *
 from .nld.DutchBookReviewSentimentClassification import *
 from .nob.NoRecClassification import *
@@ -89,6 +88,7 @@ from .ory.OdiaNewsClassification import *
 from .pan.PunjabiNewsClassification import *
 from .pol.PolishClassification import *
 from .por.HateSpeechPortugueseClassification import *
+from .ron.Moroco import *
 from .ron.RomanianReviewsSentiment import *
 from .ron.RomanianSentimentClassification import *
 from .san.SanskritShlokasClassification import *
@@ -103,7 +103,6 @@ from .swe.SwedishSentimentClassification import *
 from .swe.SweRecClassification import *
 from .tam.TamilNewsClassification import *
 from .tel.TeluguAndhraJyotiNewsClassification import *
-from .tha.ThaiRestaurantReviews import *
 from .tha.WisesightSentimentClassification import *
 from .tsn.TswanaNewsClassification import *
 from .tur.TurkishMovieSentimentClassification import *
