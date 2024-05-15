@@ -47,6 +47,4 @@ class Assin2STS(AbsTaskSTS):
         return metadata_dict
 
     def dataset_transform(self) -> None:
-        self.dataset = self.dataset.rename_column("premise", "sentence1")
-        self.dataset = self.dataset.rename_column("hypothesis", "sentence2")
-        self.dataset = self.dataset.rename_column("relatedness_score", "score")
+        self.dataset = self.dataset.rename_columns({"premise": "sentence1", "hypothesis": "sentence2", "relatedness_score": "score"})
