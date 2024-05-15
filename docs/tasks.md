@@ -17,9 +17,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [AlloProfClusteringP2P](https://huggingface.co/datasets/lyon-nlp/alloprof) | ['fra'] | Clustering | p2p |  |  |  |
 | [AlloProfClusteringS2S](https://huggingface.co/datasets/lyon-nlp/alloprof) | ['fra'] | Clustering | s2s |  |  |  |
 | [AlloprofReranking](https://huggingface.co/datasets/antoinelb7/alloprof) | ['fra'] | Reranking | s2s |  |  |  |
-| [AlloprofRerankingAbstention](https://huggingface.co/datasets/antoinelb7/alloprof) | ['fra'] | Abstention | s2s |  |  |  |
 | [AlloprofRetrieval](https://huggingface.co/datasets/antoinelb7/alloprof) | ['fra'] | Retrieval | s2p |  |  |  |
-| [AlloprofRetrievalAbstention](https://huggingface.co/datasets/antoinelb7/alloprof) | ['fra'] | Abstention | s2p |  |  |  |
 | [AmazonCounterfactualClassification](https://arxiv.org/abs/2104.06893) | ['deu', 'eng', 'jpn'] | Classification | s2s |  | {'validation': 335, 'test': 670} | {'validation': 109.2, 'test': 106.1} |
 | [AmazonPolarityClassification](https://huggingface.co/datasets/amazon_polarity) | ['eng'] | Classification | s2s |  | {'test': 400000} | {'test': 431.4} |
 | [AmazonReviewsClassification](https://arxiv.org/abs/2010.02573) | ['cmn', 'deu', 'eng', 'fra', 'jpn', 'spa'] | Classification | s2s |  | {'validation': 30000, 'test': 30000} | {'validation': 159.2, 'test': 160.4} |
@@ -58,7 +56,6 @@ The following tables give you an overview of the tasks in MTEB.
 | [CLSClusteringS2S](https://arxiv.org/abs/2209.05034) | ['cmn'] | Clustering | s2s |  |  |  |
 | [CMedQAv1-reranking](https://github.com/zhangsheng93/cMedQA) | ['cmn'] | Reranking | s2s |  |  |  |
 | [CMedQAv2-reranking](https://github.com/zhangsheng93/cMedQA2) | ['cmn'] | Reranking | s2s |  |  |  |
-| [CMedQAv2-rerankingAbstention](https://github.com/zhangsheng93/cMedQA2) | ['cmn'] | Abstention | s2s |  |  |  |
 | [CQADupstackAndroidRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [CQADupstackEnglishRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [CQADupstackGamingRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) | ['eng'] | Retrieval | s2p |  |  |  |
@@ -161,7 +158,6 @@ The following tables give you an overview of the tasks in MTEB.
 | [EstonianValenceClassification](https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054) | ['est'] | Classification | s2s | [News] | {'train': 3270, 'test': 818} | {'train': 226.70642201834863, 'test': 231.5085574572127} |
 | [FEVER](https://fever.ai/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [FQuADRetrieval](https://huggingface.co/datasets/manu/fquad2_test) | ['fra'] | Retrieval | s2p | [Encyclopaedic] | {'test': 400, 'validation': 100} | {'test': 937.0, 'validation': 930.0} |
-| [FQuADRetrievalAbstention](https://huggingface.co/datasets/manu/fquad2_test) | ['fra'] | Abstention | s2p | [Encyclopaedic] | {'test': 400, 'validation': 100} | {'test': 937.0, 'validation': 930.0} |
 | [FalseFriendsGermanEnglish](https://drive.google.com/file/d/1jgq0nBnV-UiYNxbKNrrr2gxDEHm-DMKH/view?usp=share_link) | ['deu'] | PairClassification | s2s |  | {'test': 1524} | {'test': 40.3} |
 | [FaroeseSTS](https://aclanthology.org/2023.nodalida-1.74.pdf) | ['fao'] | STS | s2s | [News, Web] | {'train': 729} | {'train': 43.6} |
 | [FiQA-PL](https://sites.google.com/view/fiqa/) | ['pol'] | Retrieval | s2p |  |  |  |
@@ -181,7 +177,6 @@ The following tables give you an overview of the tasks in MTEB.
 | [GeorgianFAQRetrieval](https://huggingface.co/datasets/jupyterjazz/georgian-faq) | ['kat'] | Retrieval | s2p | [Web] | {'test': 2566} | {'test': 572.0} |
 | [GerDaLIR](https://github.com/lavis-nlp/GerDaLIR) | ['deu'] | Retrieval | s2p |  |  |  |
 | [GerDaLIRSmall](https://github.com/lavis-nlp/GerDaLIR) | ['deu'] | Retrieval | p2p | [Legal] |  |  |
-| [GerDaLIRSmallAbstention](https://github.com/lavis-nlp/GerDaLIR) | ['deu'] | Abstention | p2p | [Legal] |  |  |
 | [GermanDPR](https://huggingface.co/datasets/deepset/germandpr) | ['deu'] | Retrieval | s2p |  |  |  |
 | [GermanPoliticiansTwitterSentimentClassification](https://aclanthology.org/2022.konvens-1.9) | ['deu'] | Classification | s2s | [Social, Government] | {'test': 357} | {'test': 302.48} |
 | [GermanQuAD-Retrieval](https://www.kaggle.com/datasets/GermanQuAD) | ['deu'] | Retrieval | s2p |  |  |  |
@@ -389,10 +384,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [SanskritShlokasClassification](https://github.com/goru001/nlp-for-sanskrit) | ['san'] | Classification | s2s | [Religious] | {'train': 383, 'validation': 96} | {'train': 98.415, 'validation': 96.635} |
 | [ScalaClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['dan', 'nno', 'nob', 'swe'] | Classification | s2s | [Fiction, News, Non-fiction, Blog, Spoken, Web] | {'test': 4096} | {'test': 102.72} |
 | [SciDocsRR](https://allenai.org/data/scidocs) | ['eng'] | Reranking | s2s | [Academic, Non-fiction] | {'test': 19599} | {'test': 69.0} |
-| [SciDocsRRAbstention](https://allenai.org/data/scidocs) | ['eng'] | Abstention | s2s | [Academic, Non-fiction] | {'test': 19599} | {'test': 69.0} |
 | [SciFact](https://github.com/allenai/scifact) | ['eng'] | Retrieval | s2p |  |  |  |
 | [SciFact-PL](https://github.com/allenai/scifact) | ['pol'] | Retrieval | s2p |  |  |  |
-| [SciFactAbstention](https://github.com/allenai/scifact) | ['eng'] | Abstention | s2p |  |  |  |
 | [SentimentAnalysisHindi](https://huggingface.co/datasets/OdiaGenAI/sentiment_analysis_hindi) (Shantipriya Parida, 2023) | ['hin'] | Classification | s2s | [Reviews] | {'train': 2497} | {'train': 81.29} |
 | [SinhalaNewsClassification](https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Category-classification) (Nisansa de Silva, 2015) | ['sin'] | Classification | s2s | [News] | {'train': 3327} | {'train': 148.04} |
 | [SinhalaNewsSourceClassification](https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Source-classification) (Dhananjaya et al., 2022) | ['sin'] | Classification | s2s | [News] | {'train': 24094} | {'train': 56.08} |
@@ -408,7 +401,6 @@ The following tables give you an overview of the tasks in MTEB.
 | [StackExchangeClustering](https://arxiv.org/abs/2104.07081) | ['eng'] | Clustering | s2s |  | {'test': 373850} | {'test': 57.0} |
 | [StackExchangeClusteringP2P](https://arxiv.org/abs/2104.07081) | ['eng'] | Clustering | p2p |  | {'test': 75000} | {'test': 1090.7} |
 | [StackOverflowDupQuestions](https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf) | ['eng'] | Reranking | s2s |  | {'test': 3467} | {'test': 49.8} |
-| [StackOverflowDupQuestionsAbstention](https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf) | ['eng'] | Abstention | s2s |  | {'test': 3467} | {'test': 49.8} |
 | [SummEval](https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html) | ['eng'] | Summarization | p2p |  | {'test': 2800} | {'test': 359.8} |
 | [SummEvalFr](https://github.com/Yale-LILY/SummEval) | ['fra'] | Summarization | p2p |  |  |  |
 | [SweFaqRetrieval](https://spraakbanken.gu.se/en/resources/superlim) | ['swe'] | Retrieval | s2s | [Government, Non-fiction] | {'test': 1024} | {'test': 195.44} |
@@ -419,10 +411,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [SwednRetrieval](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Retrieval | p2p | [News, Non-fiction] | {'test': 2048} | {'test': 1946.35} |
 | [SwissJudgementClassification](https://aclanthology.org/2021.nllp-1.3/) (Joel Niklaus, 2022) | ['deu', 'fra', 'ita'] | Classification | s2s | [Legal] | {'test': 2048} | {'test': 3411.72} |
 | [SyntecReranking](https://huggingface.co/datasets/lyon-nlp/mteb-fr-reranking-syntec-s2p) | ['fra'] | Reranking | s2p |  |  |  |
-| [SyntecRerankingAbstention](https://huggingface.co/datasets/lyon-nlp/mteb-fr-reranking-syntec-s2p) | ['fra'] | Abstention | s2p |  |  |  |
 | [SyntecRetrieval](https://huggingface.co/datasets/lyon-nlp/mteb-fr-retrieval-syntec-s2p) | ['fra'] | Retrieval | s2p |  | {'test': 90} | {'test': 62.0} |
 | [T2Reranking](https://arxiv.org/abs/2304.03679) | ['cmn'] | Reranking | s2s |  |  |  |
-| [T2RerankingAbstention](https://arxiv.org/abs/2304.03679) | ['cmn'] | Abstention | s2s |  |  |  |
 | [T2Retrieval](https://arxiv.org/abs/2304.03679) | ['cmn'] | Retrieval | s2p |  |  |  |
 | [TNews](https://www.cluebenchmarks.com/introduce.html) | ['cmn'] | Classification | s2s |  |  |  |
 | [TRECCOVID](https://ir.nist.gov/covidSubmit/index.html) | ['eng'] | Retrieval | s2p |  |  |  |
