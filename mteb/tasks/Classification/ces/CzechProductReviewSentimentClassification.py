@@ -45,7 +45,7 @@ class CzechProductReviewSentimentClassification(AbsTaskClassification):
             pages = "65--74",
         }
         """,
-        n_samples={"test": 3000},
+        n_samples={"test": 2048},
         avg_character_length={"test": 153.26},
     )
 
