@@ -24,7 +24,7 @@ class IndoNLI(AbsTaskPairClassification):
         task_subtypes=["Textual Entailment"],
         license="CC-BY-SA 4.0",
         socioeconomic_status="mixed",
-        annotations_creators="human-annotated",
+        annotations_creators="expert-annotated",
         dialect=[],
         text_creation="found",
         bibtex_citation="""@inproceedings{mahendra-etal-2021-indonli,
