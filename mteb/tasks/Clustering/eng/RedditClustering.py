@@ -28,7 +28,7 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
         form=["written"],
         domains=["Web", "Social"],
         task_subtypes=["Thematic clustering"],
-        license="Not specified",
+        license="Not specified",  # derived from pushshift
         socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
@@ -46,7 +46,7 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 2048},
+        n_samples={"test": 16000},
         avg_character_length={"test": 64.7},
     )
 
@@ -54,7 +54,9 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
         ds = dict()
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
-            sentences = list(itertools.chain.from_iterable(self.dataset[split]["sentences"]))
+            sentences = list(
+                itertools.chain.from_iterable(self.dataset[split]["sentences"])
+            )
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
         self.dataset = self.stratified_subsampling(
@@ -62,6 +64,7 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
+            n_samples=16000,
         )
 
 
