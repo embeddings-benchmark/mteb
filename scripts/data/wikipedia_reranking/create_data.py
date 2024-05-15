@@ -2,25 +2,25 @@ from datasets import load_dataset, Dataset, DatasetDict, Features, Value
 from huggingface_hub import hf_hub_download, HfApi
 import io
 from collections import defaultdict
+from time import sleep
 
-# languages = [
-#     "de", "bn", "it", "pt",
-# ]
-languages = ["nl", "cs", "ro", "bg", "sr", "fi", "fa", "hi", "da", "en"]
+languages = ["de", "bn", "it", "pt", "nl", "cs", "ro", "bg", "sr", "fi", "fa", "hi", "da", "en"]
 
-# languages = ["de", "bn"]
 
 def map_corpus_to_query(example, negatives_dict):
+    query = example["query"]
     title = example["title"]
     positive = [example["text"]]
     negatives = negatives_dict[title]
-    return {"query": example["text"], "positive": positive, "negative": negatives}
+    return {"query": query, "positive": positive, "negative": negatives}
 
 ds_dict = DatasetDict()
 for lang in languages:
+    sleep(5) # HF hub rate limit
     ds_queries = load_dataset(f"rasdani/cohere-wikipedia-2023-11-{lang}-queries", split="train")
     ds_corpus = load_dataset(f"rasdani/cohere-wikipedia-2023-11-{lang}-1.5k-articles", split="train")
     ds_corpus = ds_corpus.filter(lambda x: x["score"] != 1)
+    sleep(5)
 
     negatives_dict = defaultdict(list)
     for row in ds_corpus:
@@ -28,14 +28,12 @@ for lang in languages:
 
     ds = ds_queries.map( lambda x: map_corpus_to_query(x, negatives_dict), remove_columns=ds_queries.column_names)
 
-# ds_dict[lang] = ds
 
     repo_id = f"ellamind/wikipedia-2023-11-reranking-multilingual"
-    # ds_dict.push_to_hub(repo_id, config_name="corpus", split="test")
-    # ds_dict.push_to_hub(repo_id, config_name=lang)
     ds.push_to_hub(repo_id, config_name=lang, split="test")
 
 # Download the README from the repository
+sleep(5)
 readme_path = hf_hub_download(repo_id=repo_id, filename="README.md", repo_type="dataset")
 
 with open(readme_path, "r") as f:

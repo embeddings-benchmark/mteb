@@ -1,8 +1,9 @@
 from datasets import load_dataset, Dataset, DatasetDict, Features, Value
 from huggingface_hub import hf_hub_download, HfApi
 import io
+from time import sleep
 
-languages = ["de", "bn"]
+languages = ["de", "bn", "it", "pt", "nl", "cs", "ro", "bg", "sr", "fi", "fa", "hi", "da", "en"]
 
 def apply_query_id(example, queries_dict):
     title = example["title"]
@@ -14,6 +15,7 @@ def apply_query_id(example, queries_dict):
 for lang in languages:
     ds_queries = load_dataset(f"rasdani/cohere-wikipedia-2023-11-{lang}-queries", split="train")
     ds_corpus = load_dataset(f"rasdani/cohere-wikipedia-2023-11-{lang}-1.5k-articles", split="train")
+    sleep(5) # HF hub rate limit
 
     queries = ds_queries.map(lambda x: {"_id": "q" + x["_id"], "text": x["query"]}, remove_columns=ds_queries.column_names)
     queries_dict = {row["title"]: "q" + row["_id"] for row in ds_queries}
@@ -37,6 +39,7 @@ for lang in languages:
     qrels.push_to_hub(repo_id, config_name="default", split="test")
 
     # Download the README from the repository
+    sleep(5)
     readme_path = hf_hub_download(repo_id=repo_id, filename="README.md", repo_type="dataset")
 
     with open(readme_path, "r") as f:
