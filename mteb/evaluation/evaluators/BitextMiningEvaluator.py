@@ -24,7 +24,7 @@ class BitextMiningEvaluator(Evaluator):
         self.n = len(sentences)
         self.n_subsets = len(self.subsets)
         self.sentences = sentences
-        self.gold = list(zip(range(self.n), range(self.n)))
+        self.gold = list(zip(range(self.n), range(self.n))) if 'gold' not in sentences else sentences['gold']
 
         self.batch_size = batch_size
 
