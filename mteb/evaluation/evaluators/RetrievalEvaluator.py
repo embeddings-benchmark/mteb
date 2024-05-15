@@ -206,7 +206,7 @@ class DenseRetrievalExactSearch:
     def search_cross_encoder(
         self,
         corpus: Dict[str, Dict[str, str]],
-        queries: Dict[str, str],
+        queries: Dict[str, Union[str, List[str]]],
         top_k: int,
         instructions: Dict[str, str] | None = None,
         **kwargs,
@@ -227,6 +227,7 @@ class DenseRetrievalExactSearch:
             }
             top_n = [k for k, v in list(q_results_sorted.items())[:top_k]]
             query = queries[qid]
+            query = self.convert_conv_history_to_query([query])[0] if isinstance(query, list) else query
             for doc_id in top_n:
                 corpus_item = (
                     corpus[doc_id].get("title", "") + " " + corpus[doc_id]["text"]
@@ -290,8 +291,13 @@ class DenseRetrievalExactSearch:
         if is_conv_retrieval_compatible(self.model):
             return self.model.encode_conversations(conversations, **kwargs)
         # default implementation
-        queries = convert_conv_history_to_query(conversations)
+        queries = self.convert_conv_history_to_query(conversations)
         return self.encode_queries(queries, **kwargs)
+
+    def convert_conv_history_to_query(self, conversations: List[List[str]]) -> str:
+        if callable(getattr(self.model, "convert_conv_history_to_query", None)):
+            return self.model.convert_conv_history_to_query(conversations)
+        return convert_conv_history_to_query(conversations)
 
 
 class DRESModel:
@@ -378,8 +384,13 @@ class DRESModel:
         if is_conv_retrieval_compatible(self.model):
             return self.model.encode_conversations(conversations, **kwargs)
         # default implementation
-        queries = convert_conv_history_to_query(conversations)
+        queries = self.convert_conv_history_to_query(conversations)
         return self.encode_queries(queries, **kwargs)
+
+    def convert_conv_history_to_query(self, conversations: List[List[str]]) -> str:
+        if callable(getattr(self.model, "convert_conv_history_to_query", None)):
+            return self.model.convert_conv_history_to_query(conversations)
+        return convert_conv_history_to_query(conversations)
 
 def convert_conv_history_to_query(conversations: List[List[str]]) -> str:
     return ["; ".join(conv) for conv in conversations]
