@@ -14,6 +14,7 @@ _LANGUAGES = {
 
 _SPLITS = ["test"]
 
+
 class BUCCBitextMiningFast(AbsTaskBitextMining, CrosslingualTask):
     fast_loading = True
     metadata = TaskMetadata(

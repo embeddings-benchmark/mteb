@@ -14,6 +14,7 @@ _LANGUAGES = {
 
 _SPLITS = ["test"]
 
+
 class BUCCBitextMining(AbsTaskBitextMining, CrosslingualTask):
     superseeded_by = "BUCC.v2"
     metadata = TaskMetadata(
@@ -55,11 +56,11 @@ class BUCCBitextMining(AbsTaskBitextMining, CrosslingualTask):
                 sentence1 = data["sentence1"][0]
                 sentence2 = data["sentence2"][0]
                 sentence1 = [sentence1[i] for (i, j) in gold]
-                print(lang,len(gold))
+                print(lang, len(gold))
                 print(len(sentence1), len(sentence2))
                 dataset[lang][split] = {
-                    'sentence1': sentence1,
-                    'sentence2': sentence2,
-                    'gold': gold
+                    "sentence1": sentence1,
+                    "sentence2": sentence2,
+                    "gold": gold,
                 }
         self.dataset = dataset
