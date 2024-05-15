@@ -18,6 +18,7 @@ from .dan.DanishPoliticalCommentsClassification import *
 from .dan.DKHateClassification import *
 from .dan.LccSentimentClassification import *
 from .deu.GermanPoliticiansTwitterSentimentClassification import *
+from .deu.TenKGnadClassification import *
 from .ell.GreekLegalCodeClassification import *
 from .eng.AmazonPolarityClassification import *
 from .eng.ArxivClassification import *
