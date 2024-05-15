@@ -18,7 +18,10 @@ class KorFin(AbsTaskClassification):
         eval_splits=["train"],
         eval_langs=["kor-Hang"],
         main_score="accuracy",
-        date=("2022-01-01", "2022-12-31"),
+        date=(
+            "2022-01-01",
+            "2022-12-31",
+        ),  # Assumed date based on the citations in the paper
         form=["written"],
         domains=["News"],
         task_subtypes=["Sentiment/Hate speech"],
