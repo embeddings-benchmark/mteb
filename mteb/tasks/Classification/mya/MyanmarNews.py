@@ -14,7 +14,7 @@ class MyanmarNews(AbsTaskClassification):
         description="The Myanmar News dataset on Hugging Face contains news articles in Burmese. It is designed for tasks such as text classification, sentiment analysis, and language modeling. The dataset includes a variety of news topics in 4 categorie, providing a rich resource for natural language processing applications involving Burmese which is a low resource language.",
         reference="https://huggingface.co/datasets/myanmar_news",
         type="Classification",
-        category="s2s",
+        category="p2p",
         eval_splits=["train"],
         eval_langs=["mya-Mymr"],
         main_score="accuracy",
@@ -42,6 +42,3 @@ class MyanmarNews(AbsTaskClassification):
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_columns({"category": "label"})
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )

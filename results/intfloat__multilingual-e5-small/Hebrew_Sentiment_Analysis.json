@@ -4,7 +4,7 @@
   "mteb_version": "1.9.2",
   "train": {
     "accuracy": 0.667822265625,
-    "evaluation_time": 145.72,
+    "evaluation_time": 148.81,
     "f1": 0.5304856941973166,
     "main_score": 0.667822265625,
     "scores_per_experiment": [
