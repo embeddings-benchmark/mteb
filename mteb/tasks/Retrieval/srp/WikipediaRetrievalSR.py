@@ -5,19 +5,19 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class WikipediaRetrievalDE(AbsTaskRetrieval):
+class WikipediaRetrievalSR(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="WikipediaRetrievalDE",
+        name="WikipediaRetrievalSR",
         description="The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.",
-        reference="https://huggingface.co/datasets/ellamind/wikipedia-2023-11-retrieval-de",
+        reference="https://huggingface.co/datasets/ellamind/wikipedia-2023-11-retrieval-sr",
         dataset={
-            "path": "ellamind/wikipedia-2023-11-retrieval-de",
-            "revision": "b90d255229ec4d2fed3d65647ea0f82854f4c762",
+            "path": "ellamind/wikipedia-2023-11-retrieval-sr",
+            "revision": "76c4b999346718e7412697a14e18332c02b73cea",
         },
         type="Retrieval",
         category="s2p",
         eval_splits=["test"],
-        eval_langs=["deu-Latn"],
+        eval_langs=["srp-Cyrl"],
         main_score="ndcg_at_10",
         date=("2023-11", "2024-05"),
         form="written",
