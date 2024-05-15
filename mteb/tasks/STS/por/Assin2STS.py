@@ -6,7 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class Assin2STS(AbsTaskSTS):
     metadata = TaskMetadata(
-        name="assin2-sts",
+        name="Assin2STS",
         dataset={
             "path": "assin2",
             "revision": "0ff9c86779e06855536d8775ce5550550e1e5a2d",
@@ -47,4 +47,10 @@ class Assin2STS(AbsTaskSTS):
         return metadata_dict
 
     def dataset_transform(self) -> None:
-        self.dataset = self.dataset.rename_columns({"premise": "sentence1", "hypothesis": "sentence2", "relatedness_score": "score"})
+        self.dataset = self.dataset.rename_columns(
+            {
+                "premise": "sentence1",
+                "hypothesis": "sentence2",
+                "relatedness_score": "score",
+            }
+        )
