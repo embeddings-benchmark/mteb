@@ -76,7 +76,7 @@ class DenseRetrievalExactSearch:
         query_ids = list(queries.keys())
         self.results = {qid: {} for qid in query_ids}
         queries = [queries[qid] for qid in queries]
-        if type(queries[queries.keys()[0]]) == list:
+        if type(queries[0]) == list:
             query_embeddings = self.model.encode_conversations(
                 queries,
                 batch_size=self.batch_size,
