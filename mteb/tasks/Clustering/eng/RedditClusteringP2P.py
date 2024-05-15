@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import itertools
 
-from datasets import Dataset, DatasetDict
 import numpy as np
+from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -87,10 +87,10 @@ class RedditFastClusteringP2P(AbsTaskClusteringFast):
             sentences = list(
                 itertools.chain.from_iterable(self.dataset[split]["sentences"])
             )
-            
+
             # Remove sentences and labels with only 1 label example.
             unique_labels, counts = np.unique(labels, return_counts=True)
-            solo_label_idx = np.where(counts==1)
+            solo_label_idx = np.where(counts == 1)
             solo_labels = unique_labels[solo_label_idx]
             for solo_label in solo_labels:
                 loc = labels.index(solo_label)
