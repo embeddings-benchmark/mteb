@@ -43,7 +43,7 @@ class RomanianReviewsSentiment(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        self.dataset = self.dataset = self.dataset.rename_columns(
+        self.dataset = self.dataset.rename_columns(
             {"content": "text", "starRating": "label"}
         )
         self.dataset = self.stratified_subsampling(
