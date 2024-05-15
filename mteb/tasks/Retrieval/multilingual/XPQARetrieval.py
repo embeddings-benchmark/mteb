@@ -1,69 +1,64 @@
-from __future__ import annotations
-
 import datasets
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTaskRetrieval, CrosslingualTask, TaskMetadata
 
-from ....abstasks import MultilingualTask
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+_EVAL_LANGS = {
+    "ara-ara": ["ara-Arab", "ara-Arab"],
+    "eng-ara": ["eng-Latn", "ara-Arab"],
+    "ara-eng": ["ara-Arab", "eng-Latn"],
+    "deu-deu": ["deu-Latn", "deu-Latn"],
+    "eng-deu": ["eng-Latn", "deu-Latn"],
+    "deu-eng": ["deu-Latn", "eng-Latn"],
+    "spa-spa": ["spa-Latn", "spa-Latn"],
+    "eng-spa": ["eng-Latn", "spa-Latn"],
+    "spa-eng": ["spa-Latn", "eng-Latn"],
+    "fra-fra": ["fra-Latn", "fra-Latn"],
+    "eng-fra": ["eng-Latn", "fra-Latn"],
+    "fra-eng": ["fra-Latn", "eng-Latn"],
+    "hin-hin": ["hin-Deva", "hin-Deva"],
+    "eng-hin": ["eng-Latn", "hin-Deva"],
+    "hin-eng": ["hin-Deva", "eng-Latn"],
+    "ita-ita": ["ita-Latn", "ita-Latn"],
+    "eng-ita": ["eng-Latn", "ita-Latn"],
+    "ita-eng": ["ita-Latn", "eng-Latn"],
+    "jpn-jpn": ["jpn-Hira", "jpn-Hira"],
+    "eng-jpn": ["eng-Latn", "jpn-Hira"],
+    "jpn-eng": ["jpn-Hira", "eng-Latn"],
+    "kor-kor": ["kor-Hang", "kor-Hang"],
+    "eng-kor": ["eng-Latn", "kor-Hang"],
+    "kor-eng": ["kor-Hang", "eng-Latn"],
+    "pol-pol": ["pol-Latn", "pol-Latn"],
+    "eng-pol": ["eng-Latn", "pol-Latn"],
+    "pol-eng": ["pol-Latn", "eng-Latn"],
+    "por-por": ["por-Latn", "por-Latn"],
+    "eng-por": ["eng-Latn", "por-Latn"],
+    "por-eng": ["por-Latn", "eng-Latn"],
+    "tam-tam": ["tam-Taml", "tam-Taml"],
+    "eng-tam": ["eng-Latn", "tam-Taml"],
+    "tam-eng": ["tam-Taml", "eng-Latn"],
+    "cmn-cmn": ["cmn-Hans", "cmn-Hans"],
+    "eng-cmn": ["eng-Latn", "cmn-Hans"],
+    "cmn-eng": ["cmn-Hans", "eng-Latn"],
+}
 
-_EVAL_SPLIT = "test"
-
-_LANGS = {
-    "ar": ["ara-Arab"],
-    "de": ["deu-Latn"],
-    "es": ["spa-Latn"],
-    "fr": ["fra-Latn"],
-    "hi": ["hin-Deva"],
-    "it": ["ita-Latn"],
-    "ja": ["jpn-Hira"],
-    "ko": ["kor-Hang"],
-    "pl": ["pol-Latn"],
-    "pt": ["por-Latn"],
-    "ta": ["tam-Taml"],
-    "zh": ["cmn-Hans"],
+_LANG_CONVERSION = {
+    "ara": "ar",
+    "deu": "de",
+    "spa": "es",
+    "fra": "fr",
+    "hin": "hi",
+    "ita": "it",
+    "jpn": "ja",
+    "kor": "ko",
+    "pol": "pl",
+    "por": "pt",
+    "tam": "ta",
+    "cmn": "zh",
+    "eng": "en",
 }
 
 
-def _load_xpqa_data(
-    path: str, langs: list, split: str, cache_dir: str = None, revision: str = None
-):
-    queries = {lang: {split: {}} for lang in langs}
-    corpus = {lang: {split: {}} for lang in langs}
-    relevant_docs = {lang: {split: {}} for lang in langs}
-
-    for lang in langs:
-        data = datasets.load_dataset(
-            path,
-            lang,
-            split=split,
-            cache_dir=cache_dir,
-            revision=revision,
-        )
-        question_ids = {
-            question: _id for _id, question in enumerate(set(data["question"]))
-        }
-        answer_ids = {answer: _id for _id, answer in enumerate(set(data["answer"]))}
-
-        for row in data:
-            question = row["question"]
-            answer = row["answer"]
-            query_id = f"Q{question_ids[question]}"
-            queries[lang][split][query_id] = question
-            doc_id = f"D{answer_ids[answer]}"
-            corpus[lang][split][doc_id] = {"text": answer}
-            if query_id not in relevant_docs[lang][split]:
-                relevant_docs[lang][split][query_id] = {}
-            relevant_docs[lang][split][query_id][doc_id] = 1
-
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
-
-    return corpus, queries, relevant_docs
-
-
-class XPQARetrieval(MultilingualTask, AbsTaskRetrieval):
+class XPQARetrieval(AbsTaskRetrieval, CrosslingualTask):
     metadata = TaskMetadata(
         name="XPQARetrieval",
         description="XPQARetrieval",
@@ -74,33 +69,105 @@ class XPQARetrieval(MultilingualTask, AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
-        eval_splits=[_EVAL_SPLIT],
-        eval_langs=_LANGS,
+        eval_splits=["test"],
+        eval_langs=_EVAL_LANGS,
         main_score="ndcg_at_10",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
-        n_samples=None,
-        avg_character_length=None,
+        date=("2022-01-01", "2023-07-31"),  # best guess
+        form=["written"],
+        domains=["Reviews"],
+        task_subtypes=["Question answering"],
+        license="CDLA-Sharing-1.0",
+        socioeconomic_status="mixed",
+        annotations_creators="human-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""@inproceedings{shen2023xpqa,
+        title={xPQA: Cross-Lingual Product Question Answering in 12 Languages},
+        author={Shen, Xiaoyu and Asai, Akari and Byrne, Bill and De Gispert, Adria},
+        booktitle={Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 5: Industry Track)},
+        pages={103--115},
+        year={2023}
+        }""",
+        n_samples={"test": 19801},
+        avg_character_length={"test": 104.68},  # answer
     )
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = _load_xpqa_data(
-            path=self.metadata_dict["dataset"]["path"],
-            langs=self.hf_subsets,
-            split=self.metadata_dict["eval_splits"][0],
-            cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+        path = self.metadata_dict["dataset"]["path"]
+        revision = self.metadata_dict["dataset"]["revision"]
+        data_files = {
+            eval_split: f"https://huggingface.co/datasets/{path}/resolve/{revision}/{eval_split}.csv"
+            for eval_split in self.metadata_dict["eval_splits"]
+        }
+        dataset = datasets.load_dataset("csv", data_files=data_files)
+        dataset = dataset.filter(lambda x: x["answer"] is not None)
+        # making sure that the question is not in the context
+        dataset = dataset.map(
+            lambda example: {
+                "context": example["context"][
+                    example["context"].find("<strong>") + len("<strong>") : example[
+                        "context"
+                    ].rfind("</strong>")
+                ]
+            }
         )
+
+        self.queries, self.corpus, self.relevant_docs = {}, {}, {}
+        for lang_pair, _ in self.metadata.eval_langs.items():
+            lang_corpus, lang_question = lang_pair.split("-")
+            lang_not_english = lang_corpus if lang_corpus != "eng" else lang_question
+            dataset_language = dataset.filter(
+                lambda x: x["lang"] == _LANG_CONVERSION.get(lang_not_english)
+            )
+            question_key = "question_en" if lang_question == "eng" else "question"
+            corpus_key = "context" if lang_corpus == "eng" else "answer"
+
+            queries_to_ids = {
+                eval_split: {
+                    q: str(_id)
+                    for _id, q in enumerate(
+                        set(dataset_language[eval_split][question_key])
+                    )
+                }
+                for eval_split in self.metadata_dict["eval_splits"]
+            }
+
+            self.queries[lang_pair] = {
+                eval_split: {v: k for k, v in queries_to_ids[eval_split].items()}
+                for eval_split in self.metadata_dict["eval_splits"]
+            }
+
+            corpus_to_ids = {
+                eval_split: {
+                    document: str(_id)
+                    for _id, document in enumerate(
+                        set(dataset_language[eval_split][corpus_key])
+                    )
+                }
+                for eval_split in self.metadata_dict["eval_splits"]
+            }
+
+            self.corpus[lang_pair] = {
+                eval_split: {v: {"text": k} for k, v in corpus_to_ids[eval_split].items()}
+                for eval_split in self.metadata_dict["eval_splits"]
+            }
+
+            self.relevant_docs[lang_pair] = {}
+            for eval_split in self.metadata_dict["eval_splits"]:
+                self.relevant_docs[lang_pair][eval_split] = {}
+                for example in dataset_language[eval_split]:
+                    query_id = queries_to_ids[eval_split].get(example[question_key])
+                    document_id = corpus_to_ids[eval_split].get(example[corpus_key])
+                    if query_id in self.relevant_docs[lang_pair][eval_split]:
+                        self.relevant_docs[lang_pair][eval_split][query_id][
+                            document_id
+                        ] = 1
+                    else:
+                        self.relevant_docs[lang_pair][eval_split][query_id] = {
+                            document_id: 1
+                        }
 
         self.data_loaded = True
