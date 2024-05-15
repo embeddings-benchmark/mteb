@@ -9,6 +9,8 @@ from .ben.BengaliDocumentClassification import *
 from .ben.BengaliHateSpeechClassification import *
 from .ben.BengaliSentimentAnalysis import *
 from .bul.BulgarianStoreReviewSentimentClassfication import *
+from .ces.CzechProductReviewSentimentClassification import *
+from .ces.CzechSoMeSentimentClassification import *
 from .ces.CzechSubjectivityClassification import *
 from .dan.AngryTweetsClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
@@ -95,6 +97,7 @@ from .slv.FrenkSlClassification import *
 from .spa.SpanishNewsClassification import *
 from .spa.SpanishSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
+from .svk.SlovakMovieReviewSentimentClassification import *
 from .swe.DalajClassification import *
 from .swe.SwedishSentimentClassification import *
 from .swe.SweRecClassification import *
