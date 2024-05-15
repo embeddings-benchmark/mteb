@@ -83,10 +83,10 @@ class IndicSentimentClassification(MultilingualTask, AbsTaskClassification):
         # Convert to standard format
         for lang in self.hf_subsets:
             self.dataset[lang] = self.dataset[lang].filter(
-                lambda x: x["LABEL"] is not None
+                lambda x: x["label"] is not None
             )
             self.dataset[lang] = self.dataset[lang].rename_columns(
-                {"INDIC REVIEW": "text", "LABEL": "label_text"}
+                {"INDIC REVIEW": "text", "label": "label_text"}
             )
             self.dataset[lang] = self.dataset[lang].map(
                 lambda x: {"label": label_map[x["label_text"]]}

@@ -73,6 +73,7 @@ from .multilingual.MTOPDomainClassification import *
 from .multilingual.MTOPIntentClassification import *
 from .multilingual.MultiHateClassification import *
 from .multilingual.MultilingualSentimentClassification import *
+from .multilingual.NaijaSenti import *
 from .multilingual.NordicLangClassification import *
 from .multilingual.NusaXSenti import *
 from .multilingual.ScalaClassification import *

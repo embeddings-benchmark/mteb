@@ -13,7 +13,7 @@ class MyanmarNews(AbsTaskClassification):
         reference = "https://huggingface.co/datasets/moroco",
         type = "Classification",
         category= "s2s",
-        eval_splits= ["train"], 
+        eval_splits= ["test"], 
         eval_langs= ["ron-Latn"],
         main_score = "accuracy",
         date = ("2017-10-01", "2017-10-31"),
