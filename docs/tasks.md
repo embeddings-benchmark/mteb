@@ -133,6 +133,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [CrossLingualSemanticDiscriminationWMT19](https://huggingface.co/datasets/Andrianos/clsd_wmt19_21) | ['deu', 'fra'] | Retrieval | s2s | [News] | {'test': 2946} | {'test': 161.0} |
 | [CrossLingualSemanticDiscriminationWMT21](https://huggingface.co/datasets/Andrianos/clsd_wmt19_21) | ['deu', 'fra'] | Retrieval | s2s | [News] | {'test': 1786} | {'test': 159.0} |
 | [CyrillicTurkicLangClassification](https://huggingface.co/datasets/tatiana-merz/cyrillic_turkic_langs) (Goldhahn et al., 2012) | ['bak', 'chv', 'kaz', 'kir', 'krc', 'rus', 'sah', 'tat', 'tyv'] | Classification | s2s | [Web] | {'test': 2048} | {'test': 92.22} |
+| [CzechProductReviewSentimentClassification](https://aclanthology.org/W13-1609/) | ['ces'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 153.26} |
+| [CzechSoMeSentimentClassification](https://aclanthology.org/W13-1609/) | ['ces'] | Classification | s2s | [Reviews] | {'test': 1000} | {'test': 59.89} |
 | [CzechSubjectivityClassification](https://arxiv.org/abs/2009.08712) | ['ces'] | Classification | s2s | [Reviews] | {'validation': 500, 'test': 2000} | {'validation': 108.2, 'test': 108.3} |
 | [DBPedia](https://github.com/iai-group/DBpedia-Entity/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [DBPedia-PL](https://github.com/iai-group/DBpedia-Entity/) | ['pol'] | Retrieval | s2p |  |  |  |
@@ -254,6 +256,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [LegalQuAD](https://github.com/Christoph911/AIKE2021_Appendix) | ['deu'] | Retrieval | s2p | [Legal] |  |  |
 | [LegalReasoningCausalityLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 55} | {'test': 1563.76} |
 | [LegalSummarization](https://github.com/lauramanor/legal_summarization) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
+| [MAUDLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 2048} | {'test': 1802.93} |
 | [MIRACLReranking](https://project-miracl.github.io/) | ['deu', 'spa'] | Reranking | s2s |  |  |  |
 | MIRACLRetrieval | ['deu', 'spa'] | Retrieval | s2p |  |  |  |
 | [MLQARetrieval](https://huggingface.co/datasets/mlqa) | ['ara', 'deu', 'eng', 'hin', 'spa', 'vie', 'zho'] | Retrieval | s2p | [Encyclopaedic] | {'test': 158083, 'validation': 15747} | {'test': 37352.28, 'validation': 36952.7} |
@@ -291,6 +294,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [NQ](https://ai.google.com/research/NaturalQuestions/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [NQ-PL](https://ai.google.com/research/NaturalQuestions/) | ['pol'] | Retrieval | s2p |  |  |  |
 | [NTREXBitextMining](https://huggingface.co/datasets/davidstap/NTREX) | ['afr', 'amh', 'arb', 'aze', 'bak', 'bel', 'bem', 'ben', 'bod', 'bos', 'bul', 'cat', 'ces', 'ckb', 'cym', 'dan', 'deu', 'div', 'dzo', 'ell', 'eng', 'eus', 'ewe', 'fao', 'fas', 'fij', 'fil', 'fin', 'fra', 'fuc', 'gle', 'glg', 'guj', 'hau', 'heb', 'hin', 'hmn', 'hrv', 'hun', 'hye', 'ibo', 'ind', 'isl', 'ita', 'jpn', 'kan', 'kat', 'kaz', 'khm', 'kin', 'kir', 'kmr', 'kor', 'lao', 'lav', 'lit', 'ltz', 'mal', 'mar', 'mey', 'mkd', 'mlg', 'mlt', 'mon', 'mri', 'msa', 'mya', 'nde', 'nep', 'nld', 'nno', 'nob', 'nso', 'nya', 'orm', 'pan', 'pol', 'por', 'prs', 'pus', 'ron', 'rus', 'shi', 'sin', 'slk', 'slv', 'smo', 'sna', 'snd', 'som', 'spa', 'sqi', 'srp', 'ssw', 'swa', 'swe', 'tah', 'tam', 'tat', 'tel', 'tgk', 'tha', 'tir', 'ton', 'tsn', 'tuk', 'tur', 'uig', 'ukr', 'urd', 'uzb', 'ven', 'vie', 'wol', 'xho', 'yor', 'yue', 'zho', 'zul'] | BitextMining | s2s | [News] | {'test': 3826252} | {'test': 120.0} |
+| [NYSJudicialEthicsLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 292} | {'test': 159.45} |
 | [NarrativeQARetrieval](https://metatext.io/datasets/narrativeqa) | ['eng'] | Retrieval | s2p |  |  |  |
 | [NepaliNewsClassification](https://github.com/goru001/nlp-for-nepali) | ['nep'] | Classification | s2s | [News] | {'train': 5975, 'test': 1495} | {'train': 196.61, 'test': 196.017} |
 | [NeuCLIR2022Retrieval](https://neuclir.github.io/) (Lawrie et al., 2023) | ['fas', 'rus', 'zho'] | Retrieval | s2p | [News] | {'fas': 2232130, 'zho': 3179323, 'rus': 4627657} | {'fas': 3500.5143969099317, 'zho': 2543.1140667919617, 'rus': 3214.755239654659} |
@@ -304,6 +308,11 @@ The following tables give you an overview of the tasks in MTEB.
 | [NorwegianCourtsBitextMining](https://opus.nlpl.eu/index.php) | ['nno', 'nob'] | BitextMining | s2s |  | {'test': 2050} | {'test': 1884.0} |
 | [NorwegianParliamentClassification](https://huggingface.co/datasets/NbAiLab/norwegian_parliament) | ['nob'] | Classification | s2s |  | {'test': 1200, 'validation': 1200} | {'test': 1884.0, 'validation': 1911.0} |
 | [NusaX-senti](https://arxiv.org/abs/2205.15960) (Winata et al., 2022) | ['ace', 'ban', 'bbc', 'bjn', 'bug', 'eng', 'ind', 'jav', 'mad', 'min', 'nij', 'sun'] | Classification | s2s | [Reviews, Web, Social, Constructed] | {'test': 4800} | {'test': 52.4} |
+| [OPP115DataRetentionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 88} | {'test': 195.2} |
+| [OPP115DataSecurityLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 1334} | {'test': 246.69} |
+| [OPP115DoNotTrackLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 110} | {'test': 223.16} |
+| [OPP115FirstPartyCollectionUseLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 2086} | {'test': 204.25} |
+| [OPP115InternationalAndSpecificAudiencesLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 980} | {'test': 327.71} |
 | [OPP115PolicyChangeLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 431} | {'test': 200.99} |
 | [OPP115ThirdPartySharingCollectionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 1590} | {'test': 223.64} |
 | [OPP115UserAccessEditAndDeletionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 462} | {'test': 218.59} |
@@ -383,6 +392,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [SinhalaNewsClassification](https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Category-classification) (Nisansa de Silva, 2015) | ['sin'] | Classification | s2s | [News] | {'train': 3327} | {'train': 148.04} |
 | [SinhalaNewsSourceClassification](https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Source-classification) (Dhananjaya et al., 2022) | ['sin'] | Classification | s2s | [News] | {'train': 24094} | {'train': 56.08} |
 | [SiswatiNewsClassification](https://huggingface.co/datasets/dsfsi/za-isizulu-siswati-news) (Madodonga et al., 2023) | ['ssw'] | Classification | s2s | [News] | {'train': 80} | {'train': 354.2} |
+| [SlovakMovieReviewSentimentClassification](https://arxiv.org/pdf/2304.01922) ({{S, 2023) | ['svk'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 366.17} |
 | [SlovakSumRetrieval](https://huggingface.co/datasets/kiviki/SlovakSum) | ['slk'] | Retrieval | s2s | [News, Social, Web] | {'test': 600} | {'test': 238.44} |
 | [SouthAfricanLangClassification](https://www.kaggle.com/competitions/south-african-language-identification/) | ['afr', 'eng', 'nbl', 'nso', 'sot', 'ssw', 'tsn', 'tso', 'ven', 'xho', 'zul'] | Classification | s2s | [Web, Non-fiction] | {'test': 2048} | {'test': 247.49} |
 | [SpanishNewsClassification](https://huggingface.co/datasets/MarcOrfilaCarreras/spanish-news) | ['spa'] | Classification | s2s | [News] | {'train': 2048} | {'train': 4218.2} |
@@ -663,7 +673,7 @@ The following tables give you an overview of the tasks in MTEB.
 | cco | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ceb | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | cek | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ces | 4 | 2 | 0 | 0 | 1 | 1 | 0 | 1 | 0 | 0 |
+| ces | 4 | 4 | 0 | 0 | 1 | 1 | 0 | 1 | 0 | 0 |
 | cgc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | cha | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | chd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -747,7 +757,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | 3 | 6 | 0 | 0 | 1 | 2 | 0 | 3 | 0 | 0 |
 | emi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | emp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eng | 10 | 135 | 15 | 3 | 1 | 8 | 4 | 46 | 12 | 1 |
+| eng | 10 | 142 | 15 | 3 | 1 | 8 | 4 | 46 | 12 | 1 |
 | enq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | epo | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | eri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1309,6 +1319,7 @@ The following tables give you an overview of the tasks in MTEB.
 | sun | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | sus | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | suz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| svk | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | swa | 1 | 5 | 2 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
 | swe | 4 | 8 | 2 | 0 | 1 | 1 | 0 | 3 | 0 | 0 |
 | swg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1510,7 +1521,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1323 | 716 | 88 | 3 | 23 | 61 | 12 | 301 | 69 | 2 |
+| Total | 1323 | 726 | 88 | 3 | 23 | 61 | 12 | 301 | 69 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
