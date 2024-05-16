@@ -98,32 +98,21 @@ class XPQARetrieval(AbsTaskRetrieval, CrosslingualTask):
 
         path = self.metadata_dict["dataset"]["path"]
         revision = self.metadata_dict["dataset"]["revision"]
-        data_files = {
-            eval_split: f"https://huggingface.co/datasets/{path}/resolve/{revision}/{eval_split}.csv"
-            for eval_split in self.metadata_dict["eval_splits"]
-        }
-        dataset = datasets.load_dataset("csv", data_files=data_files)
-        dataset = dataset.filter(lambda x: x["answer"] is not None)
-        # making sure that the question is not in the context
-        dataset = dataset.map(
-            lambda example: {
-                "context": example["context"][
-                    example["context"].find("<strong>") + len("<strong>") : example[
-                        "context"
-                    ].rfind("</strong>")
-                ]
-            }
-        )
+        eval_splits = self.metadata_dict["eval_splits"]
+        dataset = _load_dataset_csv(path, revision, eval_splits)
 
         self.queries, self.corpus, self.relevant_docs = {}, {}, {}
         for lang_pair, _ in self.metadata.eval_langs.items():
-            lang_corpus, lang_question = lang_pair.split("-")
+            lang_corpus, lang_question = (
+                lang_pair.split("-")[0],
+                lang_pair.split("-")[1],
+            )
             lang_not_english = lang_corpus if lang_corpus != "eng" else lang_question
             dataset_language = dataset.filter(
                 lambda x: x["lang"] == _LANG_CONVERSION.get(lang_not_english)
             )
             question_key = "question_en" if lang_question == "eng" else "question"
-            corpus_key = "context" if lang_corpus == "eng" else "answer"
+            corpus_key = "candidate" if lang_corpus == "eng" else "answer"
 
             queries_to_ids = {
                 eval_split: {
@@ -132,12 +121,12 @@ class XPQARetrieval(AbsTaskRetrieval, CrosslingualTask):
                         set(dataset_language[eval_split][question_key])
                     )
                 }
-                for eval_split in self.metadata_dict["eval_splits"]
+                for eval_split in eval_splits
             }
 
             self.queries[lang_pair] = {
                 eval_split: {v: k for k, v in queries_to_ids[eval_split].items()}
-                for eval_split in self.metadata_dict["eval_splits"]
+                for eval_split in eval_splits
             }
 
             corpus_to_ids = {
@@ -147,18 +136,18 @@ class XPQARetrieval(AbsTaskRetrieval, CrosslingualTask):
                         set(dataset_language[eval_split][corpus_key])
                     )
                 }
-                for eval_split in self.metadata_dict["eval_splits"]
+                for eval_split in eval_splits
             }
 
             self.corpus[lang_pair] = {
                 eval_split: {
                     v: {"text": k} for k, v in corpus_to_ids[eval_split].items()
                 }
-                for eval_split in self.metadata_dict["eval_splits"]
+                for eval_split in eval_splits
             }
 
             self.relevant_docs[lang_pair] = {}
-            for eval_split in self.metadata_dict["eval_splits"]:
+            for eval_split in eval_splits:
                 self.relevant_docs[lang_pair][eval_split] = {}
                 for example in dataset_language[eval_split]:
                     query_id = queries_to_ids[eval_split].get(example[question_key])
@@ -173,3 +162,14 @@ class XPQARetrieval(AbsTaskRetrieval, CrosslingualTask):
                         }
 
         self.data_loaded = True
+
+
+def _load_dataset_csv(path: str, revision: str, eval_splits: list[str]):
+    data_files = {
+        eval_split: f"https://huggingface.co/datasets/{path}/resolve/{revision}/{eval_split}.csv"
+        for eval_split in eval_splits
+    }
+    dataset = datasets.load_dataset("csv", data_files=data_files)
+    dataset = dataset.filter(lambda x: x["answer"] is not None)
+
+    return dataset
