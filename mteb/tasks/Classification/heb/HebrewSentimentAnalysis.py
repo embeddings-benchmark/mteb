@@ -8,7 +8,7 @@ class HebrewSentimentAnalysis(AbsTaskClassification):
         dataset={
             "path": "hebrew_sentiment",
             "revision": "952c9525954c1dac50d5f95945eb5585bb6464e7",
-            "name" : "morph",
+            "name": "morph",
         },
         description="HebrewSentiment is a data set consists of 12,804 user comments to posts on the official Facebook page of Israel’s president, Mr. Reuven Rivlin. In October 2015, we used the open software application Netvizz (Rieder, 2013) to scrape all the comments to all of the president’s posts in the period of June – August 2014, the first three months of Rivlin’s presidency.2 While the president’s posts aimed at reconciling tensions and called for tolerance and empathy, the sentiment expressed in the comments to the president’s posts was polarized between citizens who warmly thanked the president, and citizens that fiercely critiqued his policy.",
         reference="https://huggingface.co/datasets/hebrew_sentiment",
@@ -47,4 +47,3 @@ class HebrewSentimentAnalysis(AbsTaskClassification):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["test"]
         )
-        

@@ -8,29 +8,29 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class NaijaSenti(AbsTaskClassification, MultilingualTask):
     metadata = TaskMetadata(
-        name = "NaijaSenti",
-        description= "NaijaSenti is the first large-scale human-annotated Twitter sentiment dataset for the four most widely spoken languages in Nigeria — Hausa, Igbo, Nigerian-Pidgin, and Yorùbá — consisting of around 30,000 annotated tweets per language, including a significant fraction of code-mixed tweets.",
-        reference= "https://github.com/hausanlp/NaijaSenti",
+        name="NaijaSenti",
+        description="NaijaSenti is the first large-scale human-annotated Twitter sentiment dataset for the four most widely spoken languages in Nigeria — Hausa, Igbo, Nigerian-Pidgin, and Yorùbá — consisting of around 30,000 annotated tweets per language, including a significant fraction of code-mixed tweets.",
+        reference="https://github.com/hausanlp/NaijaSenti",
         dataset={
-            "path":"HausaNLP/NaijaSenti-Twitter",
-            "revision":"a3d0415a828178edf3466246f49cfcd83b946ab3"
+            "path": "HausaNLP/NaijaSenti-Twitter",
+            "revision": "a3d0415a828178edf3466246f49cfcd83b946ab3",
         },
         type="Classification",
         category="s2s",
         eval_splits=["test"],
         eval_langs={
-            "hau":["hau-Latn"],
-            "ibo":["ibo-Latn"],
-            "pcm":["pcm-Latn"],
-            "yor":["yor-Latn"],
+            "hau": ["hau-Latn"],
+            "ibo": ["ibo-Latn"],
+            "pcm": ["pcm-Latn"],
+            "yor": ["yor-Latn"],
         },
         main_score="accuracy",
         date=("2022-05-01", "2023-05-08"),
         form=["written"],
         domains=["Social"],
         task_subtypes=["Sentiment/Hate speech"],
-        license= "CC-BY-4.0 license",
-        socioeconomic_status= "low",
+        license="CC-BY-4.0 license",
+        socioeconomic_status="low",
         annotations_creators="expert-annotated",
         dialect=[],
         text_creation="found",
@@ -57,10 +57,10 @@ class NaijaSenti(AbsTaskClassification, MultilingualTask):
         url = "https://aclanthology.org/2022.lrec-1.63",
         pages = "590--602",
     }""",
-    n_samples={"test": 4800},
-    avg_character_length= {"test" : 72.81 } ,
+        n_samples={"test": 4800},
+        avg_character_length={"test": 72.81},
     )
-    
+
     def load_data(self, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
@@ -83,6 +83,5 @@ class NaijaSenti(AbsTaskClassification, MultilingualTask):
     def dataset_transform(self) -> None:
         for lang in self.hf_subsets:
             self.dataset[lang] = self.dataset[lang].map(
-                lambda example: { "text": example["tweet"] }
+                lambda example: {"text": example["tweet"]}
             )
-            
