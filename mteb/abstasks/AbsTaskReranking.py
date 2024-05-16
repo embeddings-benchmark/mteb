@@ -22,7 +22,7 @@ class AbsTaskReranking(AbsTask):
 
         scores = {}
         if self.is_multilingual:
-            for lang in self.langs:
+            for lang in self.hf_subsets:
                 data_split = self.dataset[lang][split]
                 evaluator = RerankingEvaluator(data_split, **kwargs)
                 scores[lang] = evaluator(model)
