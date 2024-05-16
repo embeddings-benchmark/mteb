@@ -1,0 +1,20 @@
+{
+  "dataset_revision": "43265056790b8f7c59e0139acb4be0a8dad2c8f4",
+  "mteb_dataset_name": "RUParaPhraserSTS",
+  "mteb_version": "1.9.0",
+  "test": {
+    "cos_sim": {
+      "pearson": 0.6558707404884166,
+      "spearman": 0.7144624429385763
+    },
+    "euclidean": {
+      "pearson": 0.6881975018275212,
+      "spearman": 0.7144624423366885
+    },
+    "evaluation_time": 76.07,
+    "manhattan": {
+      "pearson": 0.6868163280138715,
+      "spearman": 0.7125534406847368
+    }
+  }
+}
