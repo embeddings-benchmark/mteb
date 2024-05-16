@@ -37,8 +37,8 @@ class FarsTail(AbsTaskPairClassification):
         publisher={Springer},
         doi={10.1007/s00500-023-08959-3}
         }""",
-        n_samples={"test": 1564},
-        avg_character_length={"test": 126.09},
+        n_samples={"test": 1029},  # after removing neutral
+        avg_character_length={"test": 125.84},
     )
 
     def load_data(self, **kwargs):
@@ -57,12 +57,16 @@ class FarsTail(AbsTaskPairClassification):
 
     def dataset_transform(self):
         _dataset = {}
+        self.dataset = self.dataset.filter(lambda x: x["label"] != "n")
+        self.dataset = self.dataset.map(
+            lambda example: {"label": 1 if example["label"] == "e" else 0}
+        )
         for split in self.metadata.eval_splits:
             _dataset[split] = [
                 {
                     "sent1": self.dataset[split]["premise"],
                     "sent2": self.dataset[split]["hypothesis"],
-                    "labels": self.dataset[split]["hard(overlap)"],
+                    "labels": self.dataset[split]["label"],
                 }
             ]
         self.dataset = _dataset
