@@ -1,0 +1,49 @@
+{
+  "dataset_revision": "349481ec73fff722f88e0453ca05c77a447d967c",
+  "mteb_dataset_name": "KLUE-NLI",
+  "mteb_version": "1.8.10",
+  "validation": {
+    "cos_sim": {
+      "accuracy": 0.57,
+      "accuracy_threshold": 0.9538156986236572,
+      "ap": 0.5981460500275733,
+      "f1": 0.6700370744860128,
+      "f1_threshold": 0.8636583089828491,
+      "precision": 0.505338078291815,
+      "recall": 0.994
+    },
+    "dot": {
+      "accuracy": 0.57,
+      "accuracy_threshold": 0.9538156986236572,
+      "ap": 0.5981467606641606,
+      "f1": 0.6700370744860128,
+      "f1_threshold": 0.8636584281921387,
+      "precision": 0.505338078291815,
+      "recall": 0.994
+    },
+    "euclidean": {
+      "accuracy": 0.57,
+      "accuracy_threshold": 0.30392181873321533,
+      "ap": 0.5981474257349206,
+      "f1": 0.6700370744860128,
+      "f1_threshold": 0.5221905708312988,
+      "precision": 0.505338078291815,
+      "recall": 0.994
+    },
+    "evaluation_time": 7.78,
+    "manhattan": {
+      "accuracy": 0.57,
+      "accuracy_threshold": 4.604890823364258,
+      "ap": 0.5975224833135782,
+      "f1": 0.6700370744860128,
+      "f1_threshold": 8.162545204162598,
+      "precision": 0.505338078291815,
+      "recall": 0.994
+    },
+    "max": {
+      "accuracy": 0.57,
+      "ap": 0.5981474257349206,
+      "f1": 0.6700370744860128
+    }
+  }
+}
