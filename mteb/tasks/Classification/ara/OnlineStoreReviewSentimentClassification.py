@@ -5,6 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 N_SAMPLES = 2048
 
+
 class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="OnlineStoreReviewSentimentClassification",
