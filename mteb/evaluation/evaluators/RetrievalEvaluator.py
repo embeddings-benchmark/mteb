@@ -292,9 +292,10 @@ class DenseRetrievalExactSearch:
         )
 
     def encode_conversations(self, conversations: List[List[str]], **kwargs):
-        if is_conv_retrieval_compatible(self.model):
+        if callable(getattr(self.model, "encode_conversations", None)):
             return self.model.encode_conversations(conversations, **kwargs)
-        # default implementation
+        # otherwise fallback to default implementation
+        # TODO: add a warning here
         queries = self.convert_conv_history_to_query(conversations)
         return self.encode_queries(queries, **kwargs)
 
@@ -385,9 +386,10 @@ class DRESModel:
         return self.model.encode(sentences, **kwargs)
 
     def encode_conversations(self, conversations: List[List[str]], **kwargs):
-        if is_conv_retrieval_compatible(self.model):
+        if callable(getattr(self.model, "encode_conversations", None)):
             return self.model.encode_conversations(conversations, **kwargs)
-        # default implementation
+        # otherwise fallback to default implementation
+        # TODO: add a warning here
         queries = self.convert_conv_history_to_query(conversations)
         return self.encode_queries(queries, **kwargs)
 
@@ -399,13 +401,6 @@ class DRESModel:
 
 def convert_conv_history_to_query(conversations: List[List[str]]) -> str:
     return ["; ".join(conv) for conv in conversations]
-
-
-def is_conv_retrieval_compatible(model):
-    op = getattr(model, "encode_conversations", None)
-    if not (callable(op)):
-        return False
-    return True
 
 
 def is_dres_compatible(model):
