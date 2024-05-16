@@ -1,11 +1,14 @@
 from __future__ import annotations
+import itertools
+
+from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskClustering import AbsTaskClustering
+from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 
-class StackExchangeClustering(AbsTaskClustering):
+class StackExchangeClustering(AbsTaskClusteringFast):
     metadata = TaskMetadata(
         name="StackExchangeClustering",
         description="Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
@@ -32,3 +35,20 @@ class StackExchangeClustering(AbsTaskClustering):
         n_samples={"test": 373850},
         avg_character_length={"test": 57.0},
     )
+
+    def dataset_transform(self):
+        ds = dict()
+        for split in self.metadata.eval_splits:
+            labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
+            sentences = list(
+                itertools.chain.from_iterable(self.dataset[split]["sentences"])
+            )
+            ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
+        self.dataset = DatasetDict(ds)
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            self.seed,
+            self.metadata.eval_splits,
+            label="labels",
+            n_samples=16000,
+        )
