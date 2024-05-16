@@ -59,6 +59,7 @@ VALIDATION_SPLIT = [
     "MSMARCO",
     "MultilingualSentiment",
     "Ocnli",
+    "TopiOCQA",
 ]
 # Use "dev" split instead
 DEV_SPLIT = [

@@ -76,14 +76,14 @@ class DenseRetrievalExactSearch:
         query_ids = list(queries.keys())
         self.results = {qid: {} for qid in query_ids}
         queries = [queries[qid] for qid in queries]
-        if type(queries[0]) == list:
+        if isinstance(queries[0], list):
             query_embeddings = self.model.encode_conversations(
                 queries,
                 batch_size=self.batch_size,
                 show_progress_bar=self.show_progress_bar,
                 convert_to_tensor=self.convert_to_tensor,
                 **kwargs,
-            )  
+            )
         else:
             query_embeddings = self.model.encode_queries(
                 queries,
@@ -227,7 +227,11 @@ class DenseRetrievalExactSearch:
             }
             top_n = [k for k, v in list(q_results_sorted.items())[:top_k]]
             query = queries[qid]
-            query = self.convert_conv_history_to_query([query])[0] if isinstance(query, list) else query
+            query = (
+                self.convert_conv_history_to_query([query])[0]
+                if isinstance(query, list)
+                else query
+            )
             for doc_id in top_n:
                 corpus_item = (
                     corpus[doc_id].get("title", "") + " " + corpus[doc_id]["text"]
@@ -392,6 +396,7 @@ class DRESModel:
             return self.model.convert_conv_history_to_query(conversations)
         return convert_conv_history_to_query(conversations)
 
+
 def convert_conv_history_to_query(conversations: List[List[str]]) -> str:
     return ["; ".join(conv) for conv in conversations]
 
@@ -449,7 +454,9 @@ class RetrievalEvaluator(Evaluator):
         self.score_function = score_function
 
     def __call__(
-        self, corpus: dict[str, dict[str, str]], queries: dict[str, Union[str, List[str]]]
+        self,
+        corpus: dict[str, dict[str, str]],
+        queries: dict[str, Union[str, List[str]]],
     ) -> dict[str, dict[str, float]]:
         if not self.retriever:
             raise ValueError("Model/Technique has not been provided!")
