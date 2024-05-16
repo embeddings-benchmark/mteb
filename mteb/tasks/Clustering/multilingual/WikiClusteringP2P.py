@@ -1,5 +1,10 @@
 from __future__ import annotations
 
+import itertools
+
+import numpy as np
+from datasets import Dataset, DatasetDict
+
 from mteb.abstasks import AbsTaskClustering, MultilingualTask
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -81,10 +86,51 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
     )
 
     def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=2048,
-        )
+        ds = dict()
+        for lang in self.hf_subsets:
+            labels = []
+            sentences = []
+            ds[lang] = dict()
+            lang_dict = dict()
+            for split in self.metadata.eval_splits:
+                labels.extend(
+                    list(
+                        itertools.chain.from_iterable(
+                            self.dataset[lang][split]["labels"]
+                        )
+                    )
+                )
+                sentences.extend(
+                    list(
+                        itertools.chain.from_iterable(
+                            self.dataset[lang][split]["sentences"]
+                        )
+                    )
+                )
+
+                # Remove sentences and labels with only 1 label example.
+                unique_labels, counts = np.unique(labels, return_counts=True)
+                solo_label_idx = np.where(counts == 1)
+                solo_labels = unique_labels[solo_label_idx]
+                for solo_label in solo_labels:
+                    loc = labels.index(solo_label)
+                    labels.pop(loc)
+                    sentences.pop(loc)
+
+                lang_dict.update(
+                    {
+                        split: Dataset.from_dict(
+                            {"labels": labels, "sentences": sentences}
+                        )
+                    }
+                )
+            ds[lang] = DatasetDict(lang_dict)
+        self.dataset = DatasetDict(ds)
+        for lang in self.hf_subsets:
+            self.dataset[lang] = self.stratified_subsampling(
+                self.dataset[lang],
+                self.seed,
+                self.metadata.eval_splits,
+                label="labels",
+                n_samples=2048,
+            )
