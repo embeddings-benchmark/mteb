@@ -94,17 +94,11 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
             lang_dict = dict()
             for split in self.metadata.eval_splits:
                 labels.extend(
-                    list(
-                        itertools.chain.from_iterable(
-                            self.dataset[lang][split]["labels"]
-                        )
-                    )
+                    itertools.chain.from_iterable(self.dataset[lang][split]["labels"])
                 )
                 sentences.extend(
-                    list(
-                        itertools.chain.from_iterable(
-                            self.dataset[lang][split]["sentences"]
-                        )
+                    itertools.chain.from_iterable(
+                        self.dataset[lang][split]["sentences"]
                     )
                 )
 
