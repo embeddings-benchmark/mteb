@@ -351,6 +351,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [Quora-PL](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) | ['pol'] | Retrieval | s2s |  |  |  |
 | [QuoraRetrieval](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) | ['eng'] | Retrieval | s2s |  |  |  |
 | [RTE3](https://aclanthology.org/W07-1401/) | ['deu', 'eng', 'fra', 'ita'] | PairClassification | s2s | [News, Web, Encyclopaedic] | {'test': 1923} | {'test': 124.79} |
+| [RUParaPhraserSTS](https://aclanthology.org/2020.ngt-1.6) (Pivovarova et al., 2017) | ['rus'] | STS | s2s | [News] | {'test': 1924} | {'test': 61.25} |
 | [RedditClustering](https://arxiv.org/abs/2104.07081) | ['eng'] | Clustering | s2s |  | {'test': 420464} | {'test': 64.7} |
 | [RedditClusteringP2P](https://arxiv.org/abs/2104.07081) | ['eng'] | Clustering | p2p |  | {'test': 459399} | {'test': 727.7} |
 | [RestaurantReviewSentimentClassification](https://link.springer.com/chapter/10.1007/978-3-319-18117-2_2) (ElSahar et al., 2015) | ['ara'] | Classification | s2s | [Reviews] | {'train': 2048} | {'train': 231.4} |
@@ -1269,7 +1270,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ruf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | rug | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | run | 1 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| rus | 5 | 6 | 2 | 0 | 0 | 3 | 0 | 5 | 2 | 0 |
+| rus | 5 | 6 | 2 | 0 | 0 | 3 | 0 | 5 | 3 | 0 |
 | rwo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sag | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1532,7 +1533,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1363 | 736 | 88 | 3 | 23 | 61 | 12 | 301 | 69 | 2 |
+| Total | 1363 | 736 | 88 | 3 | 23 | 61 | 12 | 301 | 70 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
