@@ -80,7 +80,7 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
         annotations_creators="derived",
         dialect=[],
         text_creation="created",
-        bibtex_citation=None,  # None exists
+        bibtex_citation="",  # None exists
         n_samples={"test": 2048},
         avg_character_length={"test": 625.3},
     )
