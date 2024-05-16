@@ -106,18 +106,11 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
                 unique_labels, counts = np.unique(labels, return_counts=True)
                 solo_label_idx = np.where(counts == 1)
                 solo_labels = unique_labels[solo_label_idx]
-                for solo_label in solo_labels:
-                    loc = labels.index(solo_label)
-                    labels.pop(loc)
-                    sentences.pop(loc)
-
-                lang_dict.update(
-                    {
-                        split: Dataset.from_dict(
-                            {"labels": labels, "sentences": sentences}
-                        )
-                    }
-                )
+                is_solo = np.isin(labels, solo_labels)
+                split_ds = Dataset.from_dict({"labels": labels, "sentences": sentences})
+                if is_solo.any():
+                    split_ds = split_ds.select(np.nonzero(is_solo == False)[0])
+                lang_dict.update({split: split_ds})
             ds[lang] = DatasetDict(lang_dict)
         self.dataset = DatasetDict(ds)
         for lang in self.hf_subsets:
