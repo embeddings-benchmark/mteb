@@ -1,3 +1,5 @@
+from typing import List
+
 import datasets
 
 from mteb.abstasks import AbsTaskRetrieval, CrosslingualTask, TaskMetadata
@@ -164,7 +166,7 @@ class XPQARetrieval(AbsTaskRetrieval, CrosslingualTask):
         self.data_loaded = True
 
 
-def _load_dataset_csv(path: str, revision: str, eval_splits: list[str]):
+def _load_dataset_csv(path: str, revision: str, eval_splits: List[str]):
     data_files = {
         eval_split: f"https://huggingface.co/datasets/{path}/resolve/{revision}/{eval_split}.csv"
         for eval_split in eval_splits
