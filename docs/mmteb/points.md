@@ -75,3 +75,7 @@ Please also add your first name and last name are as you want them to appear in 
 | SaitejaUtpala     | Saiteja | Utpala  | saitejautpala@gmail.com         | ~Saiteja_Utpala1 | Microsoft Research|
 | mmhamdy     | Mohammed | Hamdy  | mhamdy.res@gmail.com         | ~Mohammed_Hamdy1 | Cohere For AI Community|
 | jupyterjazz       | Saba         | Sturua     | saba.sturua@jina.ai              |     ~Saba_Sturua1      | Jina AI                                                     |
+| rasdani           | Daniel     | Auras      | daniel@ellamind.com          |                        | ellamind, Germany                                   |
+| ShawonAshraf      | Shawon     | Ashraf     | shawon@ellamind.com          |                        | ellamind, Germany                                   |
+| bjoernpl          | Björn      | Plüster    | bjoern@ellamind.com          |                        | ellamind, Germany                                   |
+| jphme             | Jan Philipp| Harries    | jan@ellamind.com             |                        | ellamind, Germany                                   |
