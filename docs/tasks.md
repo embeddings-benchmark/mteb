@@ -200,6 +200,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [IFlyTek](https://www.cluebenchmarks.com/introduce.html) | ['cmn'] | Classification | s2s |  |  |  |
 | [IN22ConvBitextMining](https://huggingface.co/datasets/ai4bharat/IN22-Conv) (Jay Gala, 2023) | ['asm', 'ben', 'brx', 'doi', 'eng', 'gom', 'guj', 'hin', 'kan', 'kas', 'mai', 'mal', 'mar', 'mni', 'npi', 'ory', 'pan', 'san', 'sat', 'snd', 'tam', 'tel', 'urd'] | BitextMining | s2s | [Social, Spoken, Fiction] | {'conv': 1503} | {'conv': 54.3} |
 | [IN22GenBitextMining](https://huggingface.co/datasets/ai4bharat/IN22-Gen) (Jay Gala, 2023) | ['asm', 'ben', 'brx', 'doi', 'eng', 'gom', 'guj', 'hin', 'kan', 'kas', 'mai', 'mal', 'mar', 'mni', 'npi', 'ory', 'pan', 'san', 'sat', 'snd', 'tam', 'tel', 'urd'] | BitextMining | s2s | [Web, Legal, Government, News, Religious, Non-fiction] | {'gen': 1024} | {'gen': 156.7} |
+| [IWSLT2017BitextMining](https://aclanthology.org/2017.iwslt-1.1/) | ['ara', 'cmn', 'deu', 'eng', 'fra', 'ita', 'jpn', 'kor', 'nld', 'ron'] | BitextMining | s2s | [Non-fiction, Fiction] | {'validation': 21928} | {'validation': 95.4} |
 | [ImdbClassification](http://www.aclweb.org/anthology/P11-1015) | ['eng'] | Classification | p2p |  | {'test': 25000} | {'test': 1293.8} |
 | [IndicCrosslingualSTS](https://huggingface.co/datasets/jaygala24/indic_sts) (Ramesh et al., 2022) | ['asm', 'ben', 'eng', 'guj', 'hin', 'kan', 'mal', 'mar', 'ory', 'pan', 'tam', 'tel', 'urd'] | STS | s2s | [News, Non-fiction, Web, Spoken, Government] | {'test': 10020} | {'test': 76.22} |
 | [IndicLangClassification](https://arxiv.org/abs/2305.15814) | ['asm', 'ben', 'brx', 'doi', 'gom', 'guj', 'hin', 'kan', 'kas', 'mai', 'mal', 'mar', 'mni', 'npi', 'ory', 'pan', 'san', 'sat', 'snd', 'tam', 'tel', 'urd'] | Classification | s2s | [Web, Non-fiction] | {'test': 30418} | {'test': 106.5} |
@@ -545,7 +546,7 @@ The following tables give you an overview of the tasks in MTEB.
 | apu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | apw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | apz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ara | 1 | 11 | 0 | 0 | 0 | 2 | 0 | 4 | 2 | 0 |
+| ara | 2 | 11 | 0 | 0 | 0 | 2 | 0 | 4 | 2 | 0 |
 | arb | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
 | are | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | arl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -691,7 +692,7 @@ The following tables give you an overview of the tasks in MTEB.
 | cle | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | clu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | cme | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cmn | 3 | 10 | 4 | 0 | 0 | 3 | 4 | 10 | 9 | 0 |
+| cmn | 4 | 10 | 4 | 0 | 0 | 3 | 4 | 10 | 9 | 0 |
 | cmo | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | cni | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | cnl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -731,7 +732,7 @@ The following tables give you an overview of the tasks in MTEB.
 | dah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | dan | 5 | 9 | 0 | 0 | 1 | 0 | 0 | 4 | 0 | 0 |
 | ded | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| deu | 5 | 13 | 6 | 0 | 1 | 5 | 1 | 15 | 4 | 0 |
+| deu | 6 | 13 | 6 | 0 | 1 | 5 | 1 | 15 | 4 | 0 |
 | dgc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | dgr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | dgz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -759,7 +760,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | 3 | 6 | 0 | 0 | 1 | 2 | 0 | 3 | 0 | 0 |
 | emi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | emp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eng | 10 | 142 | 15 | 3 | 1 | 8 | 4 | 46 | 12 | 1 |
+| eng | 11 | 142 | 15 | 3 | 1 | 8 | 4 | 46 | 12 | 1 |
 | enq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | epo | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | eri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -780,7 +781,7 @@ The following tables give you an overview of the tasks in MTEB.
 | fin | 3 | 5 | 0 | 0 | 1 | 1 | 0 | 1 | 1 | 0 |
 | fon | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | for | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fra | 6 | 13 | 7 | 0 | 1 | 4 | 2 | 10 | 4 | 1 |
+| fra | 7 | 13 | 7 | 0 | 1 | 4 | 2 | 10 | 4 | 1 |
 | fry | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | fuc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | fue | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -874,7 +875,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ipi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | isl | 3 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | isn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ita | 4 | 9 | 0 | 0 | 1 | 1 | 0 | 4 | 3 | 0 |
+| ita | 5 | 9 | 0 | 0 | 1 | 1 | 0 | 4 | 3 | 0 |
 | iws | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ixl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | jac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -885,7 +886,7 @@ The following tables give you an overview of the tasks in MTEB.
 | jid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | jiv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | jni | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| jpn | 4 | 8 | 0 | 0 | 0 | 1 | 0 | 5 | 1 | 0 |
+| jpn | 5 | 8 | 0 | 0 | 0 | 1 | 0 | 5 | 1 | 0 |
 | jvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kab | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kac | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
@@ -941,7 +942,7 @@ The following tables give you an overview of the tasks in MTEB.
 | knj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | knv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kon | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kor | 3 | 5 | 0 | 0 | 0 | 2 | 0 | 5 | 3 | 0 |
+| kor | 4 | 5 | 0 | 0 | 0 | 2 | 0 | 5 | 3 | 0 |
 | kos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kpf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kpg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1144,7 +1145,7 @@ The following tables give you an overview of the tasks in MTEB.
 | nij | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nin | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nko | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nld | 5 | 6 | 0 | 0 | 1 | 0 | 0 | 1 | 2 | 0 |
+| nld | 6 | 6 | 0 | 0 | 1 | 0 | 0 | 1 | 2 | 0 |
 | nlg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nna | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nno | 5 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1252,7 +1253,7 @@ The following tables give you an overview of the tasks in MTEB.
 | rmc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | rmy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | rom | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ron | 4 | 5 | 0 | 0 | 1 | 0 | 0 | 2 | 1 | 0 |
+| ron | 5 | 5 | 0 | 0 | 1 | 0 | 0 | 2 | 1 | 0 |
 | roo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | rop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | row | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1523,7 +1524,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1323 | 728 | 88 | 3 | 23 | 61 | 12 | 301 | 69 | 2 |
+| Total | 1333 | 728 | 88 | 3 | 23 | 61 | 12 | 301 | 69 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
