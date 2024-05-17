@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from .ara.AJGT import *
 from .ara.HotelReviewSentimentClassification import *
+from .ara.OnlineStoreReviewSentimentClassification import *
 from .ara.RestaurantReviewSentimentClassification import *
 from .ara.TweetEmotionClassification import *
 from .ara.TweetSarcasmClassification import *
@@ -44,6 +45,7 @@ from .fin.FinToxicityClassification import *
 from .fra.FrenchBookReviews import *
 from .fra.MovieReviewSentimentClassification import *
 from .guj.GujaratiNewsClassification import *
+from .heb.HebrewSentimentAnalysis import *
 from .hin.HindiDiscourseClassification import *
 from .hin.SentimentAnalysisHindi import *
 from .hrv.FrenkHrClassification import *
@@ -55,6 +57,7 @@ from .jav.JavaneseIMDBClassification import *
 from .jpn.WRIMEClassification import *
 from .kan.KannadaNewsClassification import *
 from .kor.KlueTC import *
+from .kor.KorFin import *
 from .kur.KurdishSentimentClassification import *
 from .mal.MalayalamNewsClassification import *
 from .mar.MarathiNewsClassification import *
@@ -74,6 +77,7 @@ from .multilingual.MTOPDomainClassification import *
 from .multilingual.MTOPIntentClassification import *
 from .multilingual.MultiHateClassification import *
 from .multilingual.MultilingualSentimentClassification import *
+from .multilingual.NaijaSenti import *
 from .multilingual.NordicLangClassification import *
 from .multilingual.NusaXSenti import *
 from .multilingual.ScalaClassification import *
@@ -89,6 +93,7 @@ from .ory.OdiaNewsClassification import *
 from .pan.PunjabiNewsClassification import *
 from .pol.PolishClassification import *
 from .por.HateSpeechPortugueseClassification import *
+from .ron.Moroco import *
 from .ron.RomanianReviewsSentiment import *
 from .ron.RomanianSentimentClassification import *
 from .san.SanskritShlokasClassification import *

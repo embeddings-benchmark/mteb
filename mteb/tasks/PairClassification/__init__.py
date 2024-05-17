@@ -17,4 +17,5 @@ from .multilingual.RTE3 import *
 from .multilingual.XNLI import *
 from .pol.PolishPC import *
 from .por.Assin2RTE import *
+from .por.SickBrPC import *
 from .zho.CMTEBPairClassification import *
