@@ -236,11 +236,12 @@ _LANGUAGES_MAPPING = extend_lang_pairs()
 
 
 class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
+    parallel_subsets = True
     metadata = TaskMetadata(
         name="FloresBitextMining",
         dataset={
-            "path": "facebook/flores",
-            "revision": "80dc3040d19756742c9a18267ab30f54fb8e226b",
+            "path": "mteb/flores",
+            "revision": "e6b647fcb6299a2f686f742f4d4c023e553ea67e",
             "trust_remote_code": True,
         },
         description="FLORES is a benchmark dataset for machine translation between English and low-resource languages.",
@@ -268,24 +269,5 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = {}
-        for lang in self.hf_subsets:
-            self.dataset[lang] = datasets.load_dataset(
-                name=lang,
-                **self.metadata_dict["dataset"],
-            )
-        self.dataset_transform()
+        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
         self.data_loaded = True
-
-    def dataset_transform(self) -> None:
-        # Convert to standard format
-        for lang in self.hf_subsets:
-            lang1 = lang.split("-")[0]
-            lang2 = lang.split("-")[1]
-            for split in _SPLIT:
-                self.dataset[lang][split] = self.dataset[lang][split].rename_column(
-                    "sentence_" + lang1, "sentence1"
-                )
-                self.dataset[lang][split] = self.dataset[lang][split].rename_column(
-                    "sentence_" + lang2, "sentence2"
-                )

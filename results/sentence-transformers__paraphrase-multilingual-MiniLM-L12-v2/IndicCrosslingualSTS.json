@@ -1,176 +1,176 @@
 {
-  "dataset_revision": "16abc16bea9e38262a8a3a74fd71ce2da51a5c3b",
+  "dataset_revision": "0ca7b87dda68ef4ebb2f50a20a62b9dbebcac3e4",
   "mteb_dataset_name": "IndicCrosslingualSTS",
-  "mteb_version": "1.7.15",
+  "mteb_version": "1.7.62",
   "test": {
     "en-as": {
       "cos_sim": {
-        "pearson": -0.06088213131943699,
+        "pearson": -0.06088208047217625,
         "spearman": -0.05977482216064114
       },
       "euclidean": {
-        "pearson": -0.07623700415421902,
+        "pearson": -0.07623692391042776,
         "spearman": -0.031048270911105923
       },
       "manhattan": {
-        "pearson": -0.07071838970122903,
+        "pearson": -0.07071828728530617,
         "spearman": -0.028475749311858166
       }
     },
     "en-bn": {
       "cos_sim": {
-        "pearson": 0.18024421717739145,
+        "pearson": 0.1802442299076063,
         "spearman": 0.19793975798265329
       },
       "euclidean": {
-        "pearson": 0.12361150387351287,
+        "pearson": 0.12361152289621626,
         "spearman": 0.11636202838307261
       },
       "manhattan": {
-        "pearson": 0.12123783325128165,
+        "pearson": 0.12123786628952675,
         "spearman": 0.12043583034371011
       }
     },
     "en-gu": {
       "cos_sim": {
-        "pearson": 0.27242683915088695,
+        "pearson": 0.2724268353621044,
         "spearman": 0.29960364662076633
       },
       "euclidean": {
-        "pearson": 0.2835410300414216,
+        "pearson": 0.28354110491702067,
         "spearman": 0.28857093438989306
       },
       "manhattan": {
-        "pearson": 0.27610477738597605,
+        "pearson": 0.2761048426445989,
         "spearman": 0.28233442498633154
       }
     },
     "en-hi": {
       "cos_sim": {
-        "pearson": 0.5235429588358282,
+        "pearson": 0.5235429333268501,
         "spearman": 0.537548413533158
       },
       "euclidean": {
-        "pearson": 0.46500144708946634,
+        "pearson": 0.46500142582312726,
         "spearman": 0.4930269940689278
       },
       "manhattan": {
-        "pearson": 0.466471617685167,
+        "pearson": 0.46647161983790975,
         "spearman": 0.49428804493607587
       }
     },
     "en-kn": {
       "cos_sim": {
-        "pearson": 0.08647004749077265,
+        "pearson": 0.0864700476563523,
         "spearman": 0.10656794026829958
       },
       "euclidean": {
-        "pearson": 0.07798566597408958,
-        "spearman": 0.09803678908124136
+        "pearson": 0.07798563590729403,
+        "spearman": 0.09803677155062833
       },
       "manhattan": {
-        "pearson": 0.07451440716280408,
-        "spearman": 0.09354126918652209
+        "pearson": 0.07451437335145948,
+        "spearman": 0.09354125245978298
       }
     },
     "en-ml": {
       "cos_sim": {
-        "pearson": 0.2718318561133076,
+        "pearson": 0.27183183107885506,
         "spearman": 0.3010197807296165
       },
       "euclidean": {
-        "pearson": 0.2492466424840298,
+        "pearson": 0.2492466255971762,
         "spearman": 0.2754269926364409
       },
       "manhattan": {
-        "pearson": 0.2436771203714052,
+        "pearson": 0.2436771052661258,
         "spearman": 0.2687055994050274
       }
     },
     "en-mr": {
       "cos_sim": {
-        "pearson": 0.41567205540970215,
+        "pearson": 0.4156719829574603,
         "spearman": 0.43919023155387715
       },
       "euclidean": {
-        "pearson": 0.44530065794748996,
+        "pearson": 0.44530060363303203,
         "spearman": 0.4579600795434591
       },
       "manhattan": {
-        "pearson": 0.44370311153185094,
+        "pearson": 0.4437030339505812,
         "spearman": 0.4559556331985623
       }
     },
     "en-or": {
       "cos_sim": {
-        "pearson": 0.101942256234556,
+        "pearson": 0.10194216428480476,
         "spearman": 0.08280933626013866
       },
       "euclidean": {
-        "pearson": 0.03828127741838551,
+        "pearson": 0.03828121078153245,
         "spearman": 0.05010910936422635
       },
       "manhattan": {
-        "pearson": 0.041932061299376364,
+        "pearson": 0.04193199400351774,
         "spearman": 0.052826940299053306
       }
     },
     "en-pa": {
       "cos_sim": {
-        "pearson": 0.13806898952176472,
+        "pearson": 0.13806891309454195,
         "spearman": 0.1210796089407653
       },
       "euclidean": {
-        "pearson": 0.06991839575452732,
+        "pearson": 0.06991836454243605,
         "spearman": 0.10428902561187713
       },
       "manhattan": {
-        "pearson": 0.06719189668132808,
+        "pearson": 0.06719187447474943,
         "spearman": 0.0967959648644465
       }
     },
     "en-ta": {
       "cos_sim": {
-        "pearson": 0.07112585511420322,
+        "pearson": 0.07112586721792069,
         "spearman": 0.08336587340968805
       },
       "euclidean": {
-        "pearson": 0.016431598659632576,
+        "pearson": 0.016431616894530973,
         "spearman": 0.028802378123133538
       },
       "manhattan": {
-        "pearson": 0.010004398717574463,
+        "pearson": 0.010004394369692464,
         "spearman": 0.020986215525422548
       }
     },
     "en-te": {
       "cos_sim": {
-        "pearson": 0.19428941004598108,
+        "pearson": 0.19428939194419031,
         "spearman": 0.24503462319960792
       },
       "euclidean": {
-        "pearson": 0.16750689821195253,
+        "pearson": 0.16750687439249234,
         "spearman": 0.23625634111779165
       },
       "manhattan": {
-        "pearson": 0.16728760920940355,
+        "pearson": 0.1672875985584249,
         "spearman": 0.23628450588022148
       }
     },
     "en-ur": {
       "cos_sim": {
-        "pearson": 0.02507448541708291,
+        "pearson": 0.02507446250256234,
         "spearman": 0.020292180102626393
       },
       "euclidean": {
-        "pearson": 0.1132353230582772,
+        "pearson": 0.11323531424487926,
         "spearman": 0.1133100003367385
       },
       "manhattan": {
-        "pearson": 0.11420746534193536,
+        "pearson": 0.11420743744761172,
         "spearman": 0.11468202863346062
       }
     },
-    "evaluation_time": 4.38
+    "evaluation_time": 2.47
   }
 }
