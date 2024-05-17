@@ -376,6 +376,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [SCIDOCS](https://allenai.org/data/scidocs) | ['eng'] | Retrieval | s2p |  |  |  |
 | [SCIDOCS-PL](https://allenai.org/data/scidocs) | ['pol'] | Retrieval | s2p |  |  |  |
 | [SIB200Classification](https://arxiv.org/abs/2309.07445) (Adelani et al., 2023) | ['ace', 'acm', 'acq', 'aeb', 'afr', 'ajp', 'aka', 'als', 'amh', 'apc', 'arb', 'ars', 'ary', 'arz', 'asm', 'ast', 'awa', 'ayr', 'azb', 'azj', 'bak', 'bam', 'ban', 'bel', 'bem', 'ben', 'bho', 'bjn', 'bod', 'bos', 'bug', 'bul', 'cat', 'ceb', 'ces', 'cjk', 'ckb', 'crh', 'cym', 'dan', 'deu', 'dik', 'dyu', 'dzo', 'ell', 'eng', 'epo', 'est', 'eus', 'ewe', 'fao', 'fij', 'fin', 'fon', 'fra', 'fur', 'fuv', 'gaz', 'gla', 'gle', 'glg', 'grn', 'guj', 'hat', 'hau', 'heb', 'hin', 'hne', 'hrv', 'hun', 'hye', 'ibo', 'ilo', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kab', 'kac', 'kam', 'kan', 'kas', 'kat', 'kaz', 'kbp', 'kea', 'khk', 'khm', 'kik', 'kin', 'kir', 'kmb', 'kmr', 'knc', 'kon', 'kor', 'lao', 'lij', 'lim', 'lin', 'lit', 'lmo', 'ltg', 'ltz', 'lua', 'lug', 'luo', 'lus', 'lvs', 'mag', 'mai', 'mal', 'mar', 'min', 'mkd', 'mlt', 'mni', 'mos', 'mri', 'mya', 'nld', 'nno', 'nob', 'npi', 'nqo', 'nso', 'nus', 'nya', 'oci', 'ory', 'pag', 'pan', 'pap', 'pbt', 'pes', 'plt', 'pol', 'por', 'prs', 'quy', 'ron', 'run', 'rus', 'sag', 'san', 'sat', 'scn', 'shn', 'sin', 'slk', 'slv', 'smo', 'sna', 'snd', 'som', 'sot', 'spa', 'srd', 'srp', 'ssw', 'sun', 'swe', 'swh', 'szl', 'tam', 'taq', 'tat', 'tel', 'tgk', 'tgl', 'tha', 'tir', 'tpi', 'tsn', 'tso', 'tuk', 'tum', 'tur', 'twi', 'tzm', 'uig', 'ukr', 'umb', 'urd', 'uzn', 'vec', 'vie', 'war', 'wol', 'xho', 'ydd', 'yor', 'yue', 'zho', 'zsm', 'zul'] | Classification | s2s | [News] | {'train': 701, 'validation': 99, 'test': 204} | {'train': 111.24, 'validation': 97.11, 'test': 135.53} |
+| [SICK-BR-PC](https://linux.ime.usp.br/~thalen/SICK_PT.pdf) | ['por'] | PairClassification | s2s | [Web] | {'test': 1000} | {'test': 54.89} |
+| [SICK-BR-STS](https://linux.ime.usp.br/~thalen/SICK_PT.pdf) | ['por'] | STS | s2s | [Web] | {'test': 1000} | {'test': 54.89} |
 | [SICK-E-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | PairClassification | s2s |  |  |  |
 | [SICK-R](https://aclanthology.org/2020.lrec-1.207) | ['eng'] | STS | s2s |  |  |  |
 | [SICK-R-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | STS | s2s |  | {'test': 9812} | {'test': 42.8} |
@@ -1227,7 +1229,7 @@ The following tables give you an overview of the tasks in MTEB.
 | poi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | pol | 4 | 11 | 3 | 0 | 1 | 4 | 0 | 13 | 4 | 0 |
 | pon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| por | 4 | 8 | 0 | 0 | 1 | 1 | 0 | 4 | 2 | 0 |
+| por | 4 | 8 | 0 | 0 | 1 | 2 | 0 | 4 | 3 | 0 |
 | poy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ppo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | prf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1535,7 +1537,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1363 | 736 | 89 | 3 | 23 | 61 | 12 | 302 | 70 | 2 |
+| Total | 1363 | 736 | 89 | 3 | 23 | 62 | 12 | 302 | 71 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
