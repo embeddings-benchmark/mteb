@@ -22,5 +22,6 @@ from .multilingual.STSBenchmarkMultilingualSTS import *
 from .pol.PolishSTS import *
 from .por.Assin2STS import *
 from .ron.RonSTS import *
+from .rus.RUParaPhraserSTS import *
 from .spa.STSES import *
 from .zho.CMTEBSTS import *

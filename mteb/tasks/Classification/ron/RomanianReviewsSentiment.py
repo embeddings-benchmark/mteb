@@ -12,7 +12,7 @@ class RomanianReviewsSentiment(AbsTaskClassification):
         description="LaRoSeDa (A Large Romanian Sentiment Data Set) contains 15,000 reviews written in Romanian",
         reference="https://arxiv.org/abs/2101.04197",
         dataset={
-            "path": "laroseda",
+            "path": "universityofbucharest/laroseda",
             "revision": "358bcc95aeddd5d07a4524ee416f03d993099b23",
         },
         type="Classification",

@@ -191,6 +191,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [HALClusteringS2S](https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s) | ['fra'] | Clustering | s2s |  |  |  |
 | [HagridRetrieval](https://github.com/project-miracl/hagrid) | ['eng'] | Retrieval | s2p |  |  |  |
 | [HateSpeechPortugueseClassification](https://aclanthology.org/W19-3510) | ['por'] | Classification | s2s | [Social] | {'train': 2048} | {'train': 101.02} |
+| [HebrewSentimentAnalysis](https://huggingface.co/datasets/hebrew_sentiment) | ['heb'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 113.57} |
 | [HinDialectClassification](https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-4839) (Bafna et al., 2022) | ['anp', 'awa', 'ben', 'bgc', 'bhb', 'bhd', 'bho', 'bjj', 'bns', 'bra', 'gbm', 'guj', 'hne', 'kfg', 'kfy', 'mag', 'mar', 'mup', 'noe', 'pan', 'raj'] | Classification | s2s | [Social, Spoken] | {'test': 1152} | {'test': 583.82} |
 | [HindiDiscourseClassification](https://aclanthology.org/2020.lrec-1.149/) | ['hin'] | Classification | s2s | [Fiction, Social] | {'train': 2048} | {'train': 79.23828125} |
 | [HotelReviewSentimentClassification](https://link.springer.com/chapter/10.1007/978-3-319-67056-0_3) (Elnagar et al., 2018) | ['ara'] | Classification | s2s | [Reviews] | {'train': 2048} | {'train': 137.2} |
@@ -200,8 +201,10 @@ The following tables give you an overview of the tasks in MTEB.
 | [IFlyTek](https://www.cluebenchmarks.com/introduce.html) | ['cmn'] | Classification | s2s |  |  |  |
 | [IN22ConvBitextMining](https://huggingface.co/datasets/ai4bharat/IN22-Conv) (Jay Gala, 2023) | ['asm', 'ben', 'brx', 'doi', 'eng', 'gom', 'guj', 'hin', 'kan', 'kas', 'mai', 'mal', 'mar', 'mni', 'npi', 'ory', 'pan', 'san', 'sat', 'snd', 'tam', 'tel', 'urd'] | BitextMining | s2s | [Social, Spoken, Fiction] | {'conv': 1503} | {'conv': 54.3} |
 | [IN22GenBitextMining](https://huggingface.co/datasets/ai4bharat/IN22-Gen) (Jay Gala, 2023) | ['asm', 'ben', 'brx', 'doi', 'eng', 'gom', 'guj', 'hin', 'kan', 'kas', 'mai', 'mal', 'mar', 'mni', 'npi', 'ory', 'pan', 'san', 'sat', 'snd', 'tam', 'tel', 'urd'] | BitextMining | s2s | [Web, Legal, Government, News, Religious, Non-fiction] | {'gen': 1024} | {'gen': 156.7} |
+| [IWSLT2017BitextMining](https://aclanthology.org/2017.iwslt-1.1/) | ['ara', 'cmn', 'deu', 'eng', 'fra', 'ita', 'jpn', 'kor', 'nld', 'ron'] | BitextMining | s2s | [Non-fiction, Fiction] | {'validation': 21928} | {'validation': 95.4} |
 | [ImdbClassification](http://www.aclweb.org/anthology/P11-1015) | ['eng'] | Classification | p2p |  | {'test': 25000} | {'test': 1293.8} |
 | [IndicCrosslingualSTS](https://huggingface.co/datasets/jaygala24/indic_sts) (Ramesh et al., 2022) | ['asm', 'ben', 'eng', 'guj', 'hin', 'kan', 'mal', 'mar', 'ory', 'pan', 'tam', 'tel', 'urd'] | STS | s2s | [News, Non-fiction, Web, Spoken, Government] | {'test': 10020} | {'test': 76.22} |
+| [IndicGenBenchFloresBitextMining](https://github.com/google-research-datasets/indic-gen-bench/) (Harman Singh, 2024) | ['asm', 'awa', 'ben', 'bgc', 'bho', 'bod', 'boy', 'eng', 'gbm', 'gom', 'guj', 'hin', 'hne', 'kan', 'mai', 'mal', 'mar', 'mni', 'mup', 'mwr', 'nep', 'ory', 'pan', 'pus', 'raj', 'san', 'sat', 'tam', 'tel', 'urd'] | BitextMining | s2s | [Web, News] | {'validation': 997, 'test': 1012} | {'validation': 126.25, 'test': 130.84} |
 | [IndicLangClassification](https://arxiv.org/abs/2305.15814) | ['asm', 'ben', 'brx', 'doi', 'gom', 'guj', 'hin', 'kan', 'kas', 'mai', 'mal', 'mar', 'mni', 'npi', 'ory', 'pan', 'san', 'sat', 'snd', 'tam', 'tel', 'urd'] | Classification | s2s | [Web, Non-fiction] | {'test': 30418} | {'test': 106.5} |
 | [IndicQARetrieval](https://arxiv.org/abs/2212.05409) (Sumanth Doddapaneni, 2022) | ['asm', 'ben', 'guj', 'hin', 'kan', 'mal', 'mar', 'ory', 'pan', 'tam', 'tel'] | Retrieval | s2p | [Web] | {'test': 18586} | {'test': 930.6} |
 | [IndicReviewsClusteringP2P](https://arxiv.org/abs/2212.05409) (Sumanth Doddapaneni, 2022) | ['asm', 'ben', 'brx', 'guj', 'hin', 'kan', 'mal', 'mar', 'ory', 'pan', 'tam', 'tel', 'urd'] | Clustering | p2p | [Reviews] | {'test': 1000} | {'test': 137.6} |
@@ -224,6 +227,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [KannadaNewsClassification](https://github.com/goru001/nlp-for-kannada) | ['kan'] | Classification | s2s | [News] | {'train': 6460} | {'train': 65.88} |
 | Ko-StrategyQA | ['kor'] | Retrieval | s2p |  |  |  |
 | Ko-miracl | ['kor'] | Retrieval | s2p |  |  |  |
+| [KorFin](https://huggingface.co/datasets/amphora/korfin-asc) (Son et al., 2023) | ['kor'] | Classification | s2s | [News] | {'test': 2048} | {'test': 75.28} |
 | [KorSTS](https://arxiv.org/abs/2004.03289) (Ham et al., 2020) | ['kor'] | STS | s2s | [News, Web] | {'test': 1379} | {'test': 29.279433139534884} |
 | [KurdishSentimentClassification](https://link.springer.com/article/10.1007/s10579-023-09716-6) (Badawi et al., 2024) | ['kur'] | Classification | s2s | [Web] | {'train': 6000, 'test': 1987} | {'train': 59.38, 'test': 56.11} |
 | [LCQMC](https://aclanthology.org/2021.emnlp-main.357) | ['cmn'] | STS | s2s |  |  |  |
@@ -285,6 +289,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [MedrxivClusteringS2S](https://api.medrxiv.org/) | ['eng'] | Clustering | s2s |  | {'test': 375000} | {'test': 114.7} |
 | [MindSmallReranking](https://msnews.github.io/assets/doc/ACL2020_MIND.pdf) | ['eng'] | Reranking | s2s |  | {'test': 107968} | {'test': 70.9} |
 | MintakaRetrieval | ['ara', 'deu', 'fra', 'hin', 'ita', 'jpn', 'por', 'spa'] | Retrieval | s2p |  |  |  |
+| [Moroco](https://huggingface.co/datasets/moroco) (Andrei M. Butnaru, 2019) | ['ron'] | Classification | s2s | [News] | {'test': 2048} | {'test': 1710.94} |
 | [MovieReviewSentimentClassification](https://github.com/TheophileBlard/french-sentiment-analysis-with-bert) (Théophile Blard, 2020) | ['fra'] | Classification | s2s | [Reviews] | {'validation': 1024, 'test': 1024} | {'validation': 550.3, 'test': 558.1} |
 | [MultiEURLEXMultilabelClassification](https://huggingface.co/datasets/coastalcph/multi_eurlex) (Chalkidis et al., 2021) | ['bul', 'ces', 'dan', 'deu', 'ell', 'eng', 'est', 'fin', 'fra', 'hrv', 'hun', 'ita', 'lav', 'lit', 'mlt', 'nld', 'pol', 'por', 'ron', 'slk', 'slv', 'spa', 'swe'] | MultilabelClassification | p2p | [Legal, Government] | {'test': 5000} | {'test': 12014.41} |
 | [MultiHateClassification](https://aclanthology.org/2022.woah-1.15/) | ['ara', 'cmn', 'deu', 'eng', 'fra', 'hin', 'ita', 'nld', 'pol', 'por', 'spa'] | Classification | s2s | [Constructed] | {'test': 10000} | {'test': 45.9} |
@@ -297,6 +302,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [NQ-PL](https://ai.google.com/research/NaturalQuestions/) | ['pol'] | Retrieval | s2p |  |  |  |
 | [NTREXBitextMining](https://huggingface.co/datasets/davidstap/NTREX) | ['afr', 'amh', 'arb', 'aze', 'bak', 'bel', 'bem', 'ben', 'bod', 'bos', 'bul', 'cat', 'ces', 'ckb', 'cym', 'dan', 'deu', 'div', 'dzo', 'ell', 'eng', 'eus', 'ewe', 'fao', 'fas', 'fij', 'fil', 'fin', 'fra', 'fuc', 'gle', 'glg', 'guj', 'hau', 'heb', 'hin', 'hmn', 'hrv', 'hun', 'hye', 'ibo', 'ind', 'isl', 'ita', 'jpn', 'kan', 'kat', 'kaz', 'khm', 'kin', 'kir', 'kmr', 'kor', 'lao', 'lav', 'lit', 'ltz', 'mal', 'mar', 'mey', 'mkd', 'mlg', 'mlt', 'mon', 'mri', 'msa', 'mya', 'nde', 'nep', 'nld', 'nno', 'nob', 'nso', 'nya', 'orm', 'pan', 'pol', 'por', 'prs', 'pus', 'ron', 'rus', 'shi', 'sin', 'slk', 'slv', 'smo', 'sna', 'snd', 'som', 'spa', 'sqi', 'srp', 'ssw', 'swa', 'swe', 'tah', 'tam', 'tat', 'tel', 'tgk', 'tha', 'tir', 'ton', 'tsn', 'tuk', 'tur', 'uig', 'ukr', 'urd', 'uzb', 'ven', 'vie', 'wol', 'xho', 'yor', 'yue', 'zho', 'zul'] | BitextMining | s2s | [News] | {'test': 3826252} | {'test': 120.0} |
 | [NYSJudicialEthicsLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 292} | {'test': 159.45} |
+| [NaijaSenti](https://github.com/hausanlp/NaijaSenti) | ['hau', 'ibo', 'pcm', 'yor'] | Classification | s2s | [Social] | {'test': 4800} | {'test': 72.81} |
 | [NarrativeQARetrieval](https://metatext.io/datasets/narrativeqa) | ['eng'] | Retrieval | s2p |  |  |  |
 | [NepaliNewsClassification](https://github.com/goru001/nlp-for-nepali) | ['nep'] | Classification | s2s | [News] | {'train': 5975, 'test': 1495} | {'train': 196.61, 'test': 196.017} |
 | [NeuCLIR2022Retrieval](https://neuclir.github.io/) (Lawrie et al., 2023) | ['fas', 'rus', 'zho'] | Retrieval | s2p | [News] | {'fas': 2232130, 'zho': 3179323, 'rus': 4627657} | {'fas': 3500.5143969099317, 'zho': 2543.1140667919617, 'rus': 3214.755239654659} |
@@ -322,6 +328,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [Ocnli](https://arxiv.org/abs/2010.05444) | ['cmn'] | PairClassification | s2s |  |  |  |
 | [OdiaNewsClassification](https://github.com/goru001/nlp-for-odia) | ['ory'] | Classification | s2s | [News] | {'test': 2048} | {'test': 49.24} |
 | [OnlineShopping](https://aclanthology.org/2023.nodalida-1.20/) | ['cmn'] | Classification | s2s |  |  |  |
+| [OnlineStoreReviewSentimentClassification](https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN) | ['ara'] | Classification | s2s | [Reviews] | {'train': 2048} | {'train': 137.2} |
 | [OpusparcusPC](https://gem-benchmark.com/data_cards/opusparcus) | ['deu', 'eng', 'fin', 'fra', 'rus', 'swe'] | PairClassification | s2s |  |  |  |
 | [OralArgumentQuestionPurposeLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 312} | {'test': 269.71} |
 | [OverrulingLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 2048} | {'test': 167.2} |
@@ -344,8 +351,10 @@ The following tables give you an overview of the tasks in MTEB.
 | [Quora-PL](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) | ['pol'] | Retrieval | s2s |  |  |  |
 | [QuoraRetrieval](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) | ['eng'] | Retrieval | s2s |  |  |  |
 | [RTE3](https://aclanthology.org/W07-1401/) | ['deu', 'eng', 'fra', 'ita'] | PairClassification | s2s | [News, Web, Encyclopaedic] | {'test': 1923} | {'test': 124.79} |
-| [RedditClustering](https://arxiv.org/abs/2104.07081) | ['eng'] | Clustering | s2s |  | {'test': 420464} | {'test': 64.7} |
+| [RUParaPhraserSTS](https://aclanthology.org/2020.ngt-1.6) (Pivovarova et al., 2017) | ['rus'] | STS | s2s | [News] | {'test': 1924} | {'test': 61.25} |
 | [RedditClusteringP2P](https://arxiv.org/abs/2104.07081) | ['eng'] | Clustering | p2p |  | {'test': 459399} | {'test': 727.7} |
+| [RedditFastClusteringP2P](https://arxiv.org/abs/2104.07081) (Gregor Geigle, 2021) | ['eng'] | Clustering | p2p | [Web, Social] | {'test': 16000} | {'test': 727.7} |
+| [RedditFastClusteringS2S](https://arxiv.org/abs/2104.07081) (Gregor Geigle, 2021) | ['eng'] | Clustering | s2s | [Web, Social] | {'test': 16000} | {'test': 64.7} |
 | [RestaurantReviewSentimentClassification](https://link.springer.com/chapter/10.1007/978-3-319-18117-2_2) (ElSahar et al., 2015) | ['ara'] | Classification | s2s | [Reviews] | {'train': 2048} | {'train': 231.4} |
 | [Robust04InstructionRetrieval](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | InstructionRetrieval | s2p | [News] | {'eng': 95088} | {'eng': 2471.0398058252426} |
 | [RomaTalesBitextMining](https://idoc.pub/documents/idocpub-zpnxm9g35ylv) | ['hun', 'rom'] | BitextMining | s2s | [Fiction] | {'test': 215} | {'test': 316.8046511627907} |
@@ -545,7 +554,7 @@ The following tables give you an overview of the tasks in MTEB.
 | apu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | apw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | apz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ara | 1 | 11 | 0 | 0 | 0 | 2 | 0 | 4 | 2 | 0 |
+| ara | 2 | 12 | 0 | 0 | 0 | 2 | 0 | 4 | 2 | 0 |
 | arb | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
 | are | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | arl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -555,7 +564,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ars | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | ary | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | arz | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| asm | 4 | 3 | 1 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
+| asm | 5 | 3 | 1 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
 | aso | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ast | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ata | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -567,7 +576,7 @@ The following tables give you an overview of the tasks in MTEB.
 | aui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | auy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | avt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| awa | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| awa | 3 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | awb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | awk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | awx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -592,18 +601,18 @@ The following tables give you an overview of the tasks in MTEB.
 | bef | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bel | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bem | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ben | 6 | 9 | 1 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
+| ben | 7 | 9 | 1 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
 | beo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ber | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | beu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bgc | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bgc | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bgs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bgt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bhb | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bhd | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bhg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bhl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bho | 1 | 2 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
+| bho | 2 | 2 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
 | big | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bjj | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bjk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -625,11 +634,12 @@ The following tables give you an overview of the tasks in MTEB.
 | bnp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bns | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | boa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bod | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| bod | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | boj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bos | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | box | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| boy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bpr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bps | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | bqc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -691,7 +701,7 @@ The following tables give you an overview of the tasks in MTEB.
 | cle | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | clu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | cme | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cmn | 3 | 10 | 4 | 0 | 0 | 3 | 4 | 10 | 9 | 0 |
+| cmn | 4 | 10 | 4 | 0 | 0 | 3 | 4 | 10 | 9 | 0 |
 | cmo | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | cni | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | cnl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -731,7 +741,7 @@ The following tables give you an overview of the tasks in MTEB.
 | dah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | dan | 5 | 9 | 0 | 0 | 1 | 0 | 0 | 4 | 0 | 0 |
 | ded | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| deu | 5 | 13 | 6 | 0 | 1 | 5 | 1 | 15 | 4 | 0 |
+| deu | 6 | 13 | 6 | 0 | 1 | 5 | 1 | 15 | 4 | 0 |
 | dgc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | dgr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | dgz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -759,7 +769,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | 3 | 6 | 0 | 0 | 1 | 2 | 0 | 3 | 0 | 0 |
 | emi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | emp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eng | 10 | 142 | 15 | 3 | 1 | 8 | 4 | 46 | 12 | 1 |
+| eng | 12 | 142 | 16 | 3 | 1 | 8 | 4 | 46 | 12 | 1 |
 | enq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | epo | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | eri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -780,7 +790,7 @@ The following tables give you an overview of the tasks in MTEB.
 | fin | 3 | 5 | 0 | 0 | 1 | 1 | 0 | 1 | 1 | 0 |
 | fon | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | for | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fra | 6 | 13 | 7 | 0 | 1 | 4 | 2 | 10 | 4 | 1 |
+| fra | 7 | 13 | 7 | 0 | 1 | 4 | 2 | 10 | 4 | 1 |
 | fry | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | fuc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | fue | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -793,7 +803,7 @@ The following tables give you an overview of the tasks in MTEB.
 | gam | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | gaw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | gaz | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| gbm | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gbm | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | gdn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | gdr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | geb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -808,14 +818,14 @@ The following tables give you an overview of the tasks in MTEB.
 | gnn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | gnw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | gof | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gom | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gom | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | grc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | grn | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | gsw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | gub | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | guh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | gui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| guj | 5 | 5 | 1 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
+| guj | 6 | 5 | 1 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
 | gul | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | gum | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | gun | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -830,19 +840,19 @@ The following tables give you an overview of the tasks in MTEB.
 | gym | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | gyr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | hat | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| hau | 3 | 3 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| hau | 3 | 4 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | haw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | hbo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | hch | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| heb | 4 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| heb | 4 | 5 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | heg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hin | 6 | 12 | 1 | 0 | 0 | 1 | 0 | 7 | 1 | 0 |
+| hin | 7 | 12 | 1 | 0 | 0 | 1 | 0 | 7 | 1 | 0 |
 | hix | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | hla | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | hlt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | hmn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | hmo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hne | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hne | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | hns | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | hop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | hot | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -858,7 +868,7 @@ The following tables give you an overview of the tasks in MTEB.
 | hvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | hye | 3 | 3 | 0 | 0 | 0 | 1 | 0 | 1 | 0 | 0 |
 | ian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ibo | 2 | 3 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| ibo | 2 | 4 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | ido | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ign | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ikk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -874,7 +884,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ipi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | isl | 3 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | isn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ita | 4 | 9 | 0 | 0 | 1 | 1 | 0 | 4 | 3 | 0 |
+| ita | 5 | 9 | 0 | 0 | 1 | 1 | 0 | 4 | 3 | 0 |
 | iws | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ixl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | jac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -885,12 +895,12 @@ The following tables give you an overview of the tasks in MTEB.
 | jid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | jiv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | jni | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| jpn | 4 | 8 | 0 | 0 | 0 | 1 | 0 | 5 | 1 | 0 |
+| jpn | 5 | 8 | 0 | 0 | 0 | 1 | 0 | 5 | 1 | 0 |
 | jvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kab | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kac | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | kam | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kan | 5 | 6 | 1 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
+| kan | 6 | 6 | 1 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
 | kaq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kas | 3 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kat | 4 | 3 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
@@ -941,7 +951,7 @@ The following tables give you an overview of the tasks in MTEB.
 | knj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | knv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kon | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kor | 3 | 5 | 0 | 0 | 0 | 2 | 0 | 5 | 3 | 0 |
+| kor | 4 | 6 | 0 | 0 | 0 | 2 | 0 | 5 | 3 | 0 |
 | kos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kpf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kpg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1007,12 +1017,12 @@ The following tables give you an overview of the tasks in MTEB.
 | maa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mad | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mag | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mai | 3 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mai | 4 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | maj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mal | 6 | 6 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 |
+| mal | 7 | 6 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 |
 | mam | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | maq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mar | 6 | 5 | 1 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
+| mar | 7 | 5 | 1 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
 | mau | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | max | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1070,7 +1080,7 @@ The following tables give you an overview of the tasks in MTEB.
 | mmo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mmx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mna | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mni | 3 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mni | 4 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mon | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mos | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1093,7 +1103,7 @@ The following tables give you an overview of the tasks in MTEB.
 | msy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mti | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mto | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mup | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mup | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mux | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | muy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mva | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1102,6 +1112,7 @@ The following tables give you an overview of the tasks in MTEB.
 | mwe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mwf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mwp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mwr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mxb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mxp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mxq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1127,7 +1138,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ndg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ndj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nds | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nep | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nep | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nfa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ngp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ngu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1144,7 +1155,7 @@ The following tables give you an overview of the tasks in MTEB.
 | nij | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nin | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nko | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nld | 5 | 6 | 0 | 0 | 1 | 0 | 0 | 1 | 2 | 0 |
+| nld | 6 | 6 | 0 | 0 | 1 | 0 | 0 | 1 | 2 | 0 |
 | nlg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nna | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nno | 5 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1183,7 +1194,7 @@ The following tables give you an overview of the tasks in MTEB.
 | opm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | orm | 1 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | orv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ory | 4 | 4 | 1 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
+| ory | 5 | 4 | 1 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
 | ote | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | otm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | otn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1194,11 +1205,11 @@ The following tables give you an overview of the tasks in MTEB.
 | pag | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | pah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | pam | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pan | 5 | 5 | 1 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
+| pan | 6 | 5 | 1 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
 | pao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | pap | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | pbt | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| pcm | 0 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pcm | 0 | 3 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | pes | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | pib | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | pio | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1223,7 +1234,7 @@ The following tables give you an overview of the tasks in MTEB.
 | prs | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ptp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ptu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pus | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pus | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | pwg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | qub | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | quc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1245,14 +1256,14 @@ The following tables give you an overview of the tasks in MTEB.
 | qxn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | qxo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | rai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| raj | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| raj | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | reg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | rgu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | rkb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | rmc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | rmy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | rom | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ron | 4 | 5 | 0 | 0 | 1 | 0 | 0 | 2 | 1 | 0 |
+| ron | 5 | 6 | 0 | 0 | 1 | 0 | 0 | 2 | 1 | 0 |
 | roo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | rop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | row | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1260,13 +1271,13 @@ The following tables give you an overview of the tasks in MTEB.
 | ruf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | rug | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | run | 1 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| rus | 5 | 6 | 2 | 0 | 0 | 3 | 0 | 5 | 2 | 0 |
+| rus | 5 | 6 | 2 | 0 | 0 | 3 | 0 | 5 | 3 | 0 |
 | rwo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sag | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sah | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| san | 4 | 3 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
-| sat | 3 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| san | 5 | 3 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
+| sat | 4 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sbe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sbk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sbs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1332,7 +1343,7 @@ The following tables give you an overview of the tasks in MTEB.
 | tac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | tah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | taj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tam | 6 | 6 | 1 | 0 | 0 | 1 | 0 | 3 | 1 | 0 |
+| tam | 7 | 6 | 1 | 0 | 0 | 1 | 0 | 3 | 1 | 0 |
 | taq | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | tat | 3 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | tav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1347,7 +1358,7 @@ The following tables give you an overview of the tasks in MTEB.
 | tcz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | tdt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | tee | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tel | 6 | 6 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 |
+| tel | 7 | 6 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 |
 | ter | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | tet | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | tew | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1416,7 +1427,7 @@ The following tables give you an overview of the tasks in MTEB.
 | upv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ura | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | urb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| urd | 6 | 8 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 |
+| urd | 7 | 8 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 |
 | uri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | urt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | urw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1479,7 +1490,7 @@ The following tables give you an overview of the tasks in MTEB.
 | yle | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | yml | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | yon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yor | 3 | 3 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| yor | 3 | 4 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | yrb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | yre | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | yss | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1523,7 +1534,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1323 | 728 | 88 | 3 | 23 | 61 | 12 | 301 | 69 | 2 |
+| Total | 1363 | 736 | 89 | 3 | 23 | 61 | 12 | 301 | 70 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
