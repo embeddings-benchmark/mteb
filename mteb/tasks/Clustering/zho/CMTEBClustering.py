@@ -194,7 +194,7 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
         date=("2006-01-01", "2007-01-01"),
         form=["written"],
         domains=["News"],
-        task_subtypes=['Thematic clustering', 'Topic classification'],
+        task_subtypes=["Thematic clustering", "Topic classification"],
         license="Not specified",
         socioeconomic_status="mixed",
         annotations_creators="derived",
@@ -240,7 +240,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
         date=("2006-01-01", "2007-01-01"),
         form=["written"],
         domains=["News"],
-        task_subtypes=['Thematic clustering', 'Topic classification'],
+        task_subtypes=["Thematic clustering", "Topic classification"],
         license="Not specified",
         socioeconomic_status="mixed",
         annotations_creators="derived",
@@ -267,6 +267,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
             label="labels",
             n_samples=NUM_SAMPLES,
         )
+
 
 class ThuNewsClusteringS2S(AbsTaskClustering):
     superseeded_by = "ThuNewsClusteringFastS2S"
