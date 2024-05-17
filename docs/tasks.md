@@ -182,6 +182,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [GerDaLIR](https://github.com/lavis-nlp/GerDaLIR) | ['deu'] | Retrieval | s2p |  |  |  |
 | [GerDaLIRSmall](https://github.com/lavis-nlp/GerDaLIR) | ['deu'] | Retrieval | p2p | [Legal] |  |  |
 | [GermanDPR](https://huggingface.co/datasets/deepset/germandpr) | ['deu'] | Retrieval | s2p |  |  |  |
+| [GermanGovServiceRetrieval](https://huggingface.co/datasets/it-at-m/LHM-Dienstleistungen-QA) | ['deu'] | Retrieval | s2p | [Government] | {'test': 357} | {'test': 1211.69} |
 | [GermanPoliticiansTwitterSentimentClassification](https://aclanthology.org/2022.konvens-1.9) | ['deu'] | Classification | s2s | [Social, Government] | {'test': 357} | {'test': 302.48} |
 | [GermanQuAD-Retrieval](https://www.kaggle.com/datasets/GermanQuAD) | ['deu'] | Retrieval | s2p |  |  |  |
 | [GermanSTSBenchmark](https://github.com/t-systems-on-site-services-gmbh/german-STSbenchmark) | ['deu'] | STS | s2s |  |  |  |
@@ -741,7 +742,7 @@ The following tables give you an overview of the tasks in MTEB.
 | dah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | dan | 5 | 9 | 0 | 0 | 1 | 0 | 0 | 4 | 0 | 0 |
 | ded | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| deu | 6 | 13 | 6 | 0 | 1 | 5 | 1 | 15 | 4 | 0 |
+| deu | 6 | 13 | 6 | 0 | 1 | 5 | 1 | 16 | 4 | 0 |
 | dgc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | dgr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | dgz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1534,7 +1535,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1363 | 736 | 89 | 3 | 23 | 61 | 12 | 301 | 70 | 2 |
+| Total | 1363 | 736 | 89 | 3 | 23 | 61 | 12 | 302 | 70 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
