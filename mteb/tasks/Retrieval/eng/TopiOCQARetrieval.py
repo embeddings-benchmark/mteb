@@ -4,6 +4,12 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
+CORPUS_HF_NAME, CORPUS_HF_VERSION, CORPUS_HF_SPLIT = (
+    "McGill-NLP/TopiOCQA-wiki-corpus",
+    "50ae3b82713b1a935190def03ce7e7e75a318636",
+    "train",
+)
+
 
 class TopiOCQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -28,10 +34,10 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
         domains=["Encyclopaedic"],
         task_subtypes=["Conversational retrieval"],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status=None,  # TODO: Not sure that this refers to
+        socioeconomic_status="mixed",  # TODO: Not sure that this refers to
         annotations_creators="human-annotated",
         dialect=None,
-        text_creation=None,  # TODO: Not sure what to put here, queries are "created", documents are "found"
+        text_creation="found",  # TODO: Not sure what to put here, queries are "created", documents are "found"
         bibtex_citation="""
             @inproceedings{adlakha2022topiocqa,
             title={Topi{OCQA}: Open-domain Conversational Question Answering with Topic Switching},
@@ -80,12 +86,17 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
             query_id = f"{sample['Conversation_no']}-{sample['Turn_no']}"
             query = sample["Context"] + [sample["Question"]]
             doc_id = sample["Gold_passage"]["id"]
-            doc = {
-                "title": "; ".join(sample["Gold_passage"]["title"].split(" [SEP] ")),
-                "text": sample["Gold_passage"]["text"],
-            }
             queries[query_id] = query
-            corpus[doc_id] = doc
             qrels[query_id] = {doc_id: 1}
+
+        corpus_ds = load_dataset(
+            CORPUS_HF_NAME, revision=CORPUS_HF_VERSION, split=CORPUS_HF_SPLIT
+        )
+        for doc in corpus_ds:
+            doc_id = doc["id"]
+            corpus[doc_id] = {
+                "title": "; ".join([doc["title"], doc["sub_title"]]),
+                "text": doc["contents"],
+            }
 
         return corpus, queries, qrels
