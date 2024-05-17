@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskSTS, MultilingualTask
@@ -23,11 +21,12 @@ _SPLITS = ["dev", "test"]
 
 
 class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
+    fast_loading = True
     metadata = TaskMetadata(
         name="STSBenchmarkMultilingualSTS",
         dataset={
-            "path": "PhilipMay/stsb_multi_mt",
-            "revision": "93d57ef91790589e3ce9c365164337a8a78b7632",
+            "path": "mteb/stsb_multi_mt",
+            "revision": "29afa2569dcedaaa2fe6a3dcfebab33d28b82e8c",
         },
         description=(
             "Semantic Textual Similarity Benchmark (STSbenchmark) dataset,"
@@ -60,42 +59,6 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
         metadata_dict["max_score"] = 5
         return metadata_dict
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        def get_dataset_subset(lang: str):
-            """For a specified subset (=language)
-            only get the splits listed in _SPLIT
-            and rename column "score"
-
-            Args:
-                lang (str): _description_
-
-            Returns:
-                datasets.DatasetDict: the dataset of the specified language
-            """
-            subset = datasets.DatasetDict(
-                **dict(
-                    zip(
-                        _SPLITS,
-                        datasets.load_dataset(
-                            name=lang,
-                            split=_SPLITS,
-                            **self.metadata_dict["dataset"],
-                        ),
-                    )
-                )
-            )
-            return subset.rename_column("similarity_score", "score")
-
-        self.dataset = datasets.DatasetDict(
-            **dict(
-                zip(
-                    self.hf_subsets,
-                    [get_dataset_subset(lang) for lang in self.hf_subsets],
-                )
-            )
-        )
-
-        self.data_loaded = True
+    def dataset_transform(self) -> None:
+        for lang, subset in self.dataset.items():
+            self.dataset[lang] = subset.rename_column("similarity_score", "score")

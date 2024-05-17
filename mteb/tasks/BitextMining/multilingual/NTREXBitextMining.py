@@ -244,11 +244,12 @@ _EVAL_LANGS = extend_lang_pairs()
 
 
 class NTREXBitextMining(AbsTaskBitextMining, CrosslingualTask):
+    parallel_subsets = True
     metadata = TaskMetadata(
         name="NTREXBitextMining",
         dataset={
-            "path": "davidstap/NTREX",
-            "revision": "fd20d54141b6da952d5c68a2989472892489da0f",
+            "path": "mteb/NTREX",
+            "revision": "ed9a4403ed4adbfaf4aab56d5b2709e9f6c3ba33",
             "trust_remote_code": True,
         },
         description="NTREX is a News Test References dataset for Machine Translation Evaluation, covering translation from English into 128 languages. We select language pairs according to the M2M-100 language grouping strategy, resulting in 1916 directions.",
@@ -289,24 +290,5 @@ class NTREXBitextMining(AbsTaskBitextMining, CrosslingualTask):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = {}
-
-        all_data = {
-            l: datasets.load_dataset(
-                name=l,
-                split=f"test[:{_N}]",
-                **self.metadata_dict["dataset"],
-            )
-            for l in _LANGUAGES.keys()
-        }
-
-        for lang in self.hf_subsets:
-            l1, l2 = lang.split("-")
-            l1_data = all_data[l1].rename_column("text", "sentence1")
-            l2_data = all_data[l2].rename_column("text", "sentence2")
-            assert l1_data.num_rows == l2_data.num_rows
-            # Combine languages
-            data = l1_data.add_column("sentence2", l2_data["sentence2"])
-            self.dataset[lang] = datasets.DatasetDict({"test": data})
-
+        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
         self.data_loaded = True
