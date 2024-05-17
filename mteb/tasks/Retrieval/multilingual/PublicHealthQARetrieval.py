@@ -94,7 +94,7 @@ class PublicHealthQARetrieval(MultilingualTask, AbsTaskRetrieval):
 }
 """,
         n_samples=888,
-        avg_character_length=778.1655,
+        avg_character_length={"test": 778.1655},
     )
 
     def load_data(self, **kwargs):
