@@ -387,5 +387,6 @@ def test_reranker_same_ndcg1():
         stage2 = json.load(f)
 
     assert (
-        stage1["test"]["ndcg_at_1"] == stage2["test"]["ndcg_at_1"]
-    ), f"{stage1['test']['ndcg_at_1']} != {stage2['test']['ndcg_at_1']}"
+        stage1["scores"]["test"][0]["ndcg_at_1"]
+        == stage2["scores"]["test"][0]["ndcg_at_1"]
+    )

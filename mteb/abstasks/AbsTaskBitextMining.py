@@ -4,6 +4,7 @@ import logging
 
 from ..evaluation.evaluators import BitextMiningEvaluator
 from .AbsTask import AbsTask
+from .MTEBResults import ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -21,28 +22,7 @@ class AbsTaskBitextMining(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def evaluate(self, model, split, **kwargs):
-        if not self.data_loaded:
-            self.load_data()
-
-        if self.is_crosslingual:
-            scores = {}
-            for lang in self.dataset:
-                logger.info(
-                    f"\nTask: {self.metadata_dict['name']}, split: {split}, language: {lang}. Running..."
-                )
-                data_split = self.dataset[lang][split]
-                scores[lang] = self._evaluate_split(model, data_split, **kwargs)
-        else:
-            logger.info(
-                f"\nTask: {self.metadata_dict['name']}, split: {split}. Running..."
-            )
-            data_split = self.dataset[split]
-            scores = self._evaluate_split(model, data_split, **kwargs)
-
-        return scores
-
-    def _evaluate_split(self, model, data_split, **kwargs):
+    def _evaluate_subset(self, model, data_split, **kwargs) -> ScoresDict:
         if len(data_split["sentence1"]) == 1:
             sentence1 = data_split["sentence1"][0]
         else:
@@ -72,10 +52,5 @@ class AbsTaskBitextMining(AbsTask):
         self._add_main_score(metrics)
         return metrics
 
-    def _add_main_score(self, scores):
-        if self.metadata_dict["main_score"] in scores:
-            scores["main_score"] = scores[self.metadata_dict["main_score"]]
-        else:
-            logger.warn(
-                f"main score {self.metadata_dict['main_score']} not found in scores {scores.keys()}"
-            )
+    def _add_main_score(self, scores) -> None:
+        scores["main_score"] = scores[self.metadata.main_score]

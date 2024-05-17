@@ -3,8 +3,11 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 
+from ..encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from ..evaluation.evaluators import PairClassificationEvaluator
 from .AbsTask import AbsTask
+from .MTEBResults import ScoresDict
+from datasets import Dataset
 
 logger = logging.getLogger(__name__)
 
@@ -23,8 +26,16 @@ class AbsTaskPairClassification(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def _evaluate_monolingual(self, model, dataset, split="test", **kwargs):
-        data_split = dataset[split][0]
+    def _add_main_score(self, scores) -> None:
+        scores["main_score"] = scores["max"][self.metadata.main_score]
+
+    def _evaluate_subset(
+        self,
+        model: Encoder | EncoderWithQueryCorpusEncode,
+        dataset: Dataset,
+        **kwargs,
+    ) -> ScoresDict:
+        data_split = dataset[0]
         logging.getLogger(
             "sentence_transformers.evaluation.PairClassificationEvaluator"
         ).setLevel(logging.WARN)
@@ -43,27 +54,6 @@ class AbsTaskPairClassification(AbsTask):
             max_scores[metric] = max(max_scores[metric])
 
         scores["max"] = dict(max_scores)
-
+ 
+        self._add_main_score(scores)
         return scores
-
-    def evaluate(self, model, split="test", **kwargs):
-        if not self.data_loaded:
-            self.load_data()
-        if self.is_multilingual:
-            scores = dict()
-            print("loaded langs:", self.dataset.keys())
-            for lang, monolingual_dataset in self.dataset.items():
-                logger.info(
-                    f"\nTask: {self.metadata_dict['name']}, split: {split}, language: {lang}. Running..."
-                )
-                scores[lang] = self._evaluate_monolingual(
-                    model, monolingual_dataset, split=split, **kwargs
-                )
-            return scores
-        else:
-            logger.info(
-                f"\nTask: {self.metadata_dict['name']}, split: {split}. Running..."
-            )
-            return self._evaluate_monolingual(
-                model, self.dataset, split=split, **kwargs
-            )

@@ -346,7 +346,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 )
 
                 top_ranked = self.top_ranked[lang][split]
-                scores_og[lang], results_og[lang] = self._evaluate_monolingual(
+                scores_og[lang], results_og[lang] = self._evaluate_subset(
                     retriever,
                     corpus,
                     queries,
@@ -357,18 +357,16 @@ class AbsTaskInstructionRetrieval(AbsTask):
                     lang,
                     **kwargs,
                 )
-                scores_changed[lang], results_changed[lang] = (
-                    self._evaluate_monolingual(
-                        retriever,
-                        corpus,
-                        queries,
-                        changed_relevant_docs,
-                        "changed",
-                        changed_instructions,
-                        top_ranked,
-                        lang,
-                        **kwargs,
-                    )
+                scores_changed[lang], results_changed[lang] = self._evaluate_subset(
+                    retriever,
+                    corpus,
+                    queries,
+                    changed_relevant_docs,
+                    "changed",
+                    changed_instructions,
+                    top_ranked,
+                    lang,
+                    **kwargs,
                 )
 
                 newly_irrelevant_qrels = self.create_qrel_diff(
@@ -389,7 +387,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
                         self.keywords[lang][split],
                         self.short_instructions[lang][split],
                     )
-                    scores_base[lang], results_base[lang] = self._evaluate_monolingual(
+                    scores_base[lang], results_base[lang] = self._evaluate_subset(
                         retriever,
                         corpus,
                         queries,
@@ -400,7 +398,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
                         lang,
                         **kwargs,
                     )
-                    scores_w_keywords = self._evaluate_monolingual(
+                    scores_w_keywords = self._evaluate_subset(
                         retriever,
                         corpus,
                         queries,
@@ -411,7 +409,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
                         lang,
                         **kwargs,
                     )
-                    scores_w_short_instr = self._evaluate_monolingual(
+                    scores_w_short_instr = self._evaluate_subset(
                         retriever,
                         corpus,
                         queries,
@@ -427,7 +425,8 @@ class AbsTaskInstructionRetrieval(AbsTask):
                         "short_instructions": scores_w_short_instr,
                         "base": scores_base[lang],
                     }
-        else:
+        else:  # seems like these two can be combined into one (with the new lang="default")
+            lang = "default"
             corpus, queries = self.corpus[split], self.queries[split]
             og_relevant_docs, changed_relevant_docs = (
                 self.og_relevant_docs[split],
@@ -439,7 +438,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
             )
             top_ranked = self.top_ranked[split]
 
-            scores_og, results_og = self._evaluate_monolingual(
+            scores_og, results_og = self._evaluate_subset(
                 retriever,
                 corpus,
                 queries,
@@ -451,7 +450,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 **kwargs,
             )
 
-            scores_changed, results_changed = self._evaluate_monolingual(
+            scores_changed, results_changed = self._evaluate_subset(
                 retriever,
                 corpus,
                 queries,
@@ -466,11 +465,11 @@ class AbsTaskInstructionRetrieval(AbsTask):
             newly_irrelevant_qrels = self.create_qrel_diff(
                 self.og_relevant_docs[split], self.changed_relevant_docs[split]
             )
-            overall_changed_scores = utils.evaluate_change(
+            overall_changed_scores[lang] = utils.evaluate_change(
                 results_og, results_changed, newly_irrelevant_qrels
             )
 
-            overall_changed_scores["individual"] = {
+            overall_changed_scores[lang]["individual"] = {
                 "original": scores_og,
                 "changed": scores_changed,
             }
@@ -480,7 +479,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
                     self.keywords[split],
                     self.short_instructions[split],
                 )
-                scores_w_keywords = self._evaluate_monolingual(
+                scores_w_keywords = self._evaluate_subset(
                     retriever,
                     corpus,
                     queries,
@@ -491,7 +490,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
                     None,
                     **kwargs,
                 )
-                scores_w_short_instr = self._evaluate_monolingual(
+                scores_w_short_instr = self._evaluate_subset(
                     retriever,
                     corpus,
                     queries,
@@ -502,7 +501,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
                     None,
                     **kwargs,
                 )
-                scores_base, results_base = self._evaluate_monolingual(
+                scores_base, results_base = self._evaluate_subset(
                     retriever,
                     corpus,
                     queries,
@@ -513,7 +512,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
                     None,
                     **kwargs,
                 )
-                overall_changed_scores["length_ablation"] = {
+                overall_changed_scores[lang]["length_ablation"] = {
                     "keywords": scores_w_keywords,
                     "short_instructions": scores_w_short_instr,
                     "base": scores_base,
@@ -521,13 +520,13 @@ class AbsTaskInstructionRetrieval(AbsTask):
 
         return overall_changed_scores
 
-    def _evaluate_monolingual(
+    def _evaluate_subset(
         self,
         retriever: InstructionRetrievalEvaluator,
         corpus: Dict[str, Dict[str, str]],
         queries: Dict[str, str],
         relevant_docs: Dict[str, Dict[str, int]],
-        qrels_name: str,
+        qrels_name: str,  # this is currently unused (potential bug?)
         instructions: Dict[str, str],
         top_ranked: Dict[str, List[str]],
         lang=None,
