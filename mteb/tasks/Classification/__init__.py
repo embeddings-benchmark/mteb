@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from .ara.AJGT import *
 from .ara.HotelReviewSentimentClassification import *
+from .ara.OnlineStoreReviewSentimentClassification import *
 from .ara.RestaurantReviewSentimentClassification import *
 from .ara.TweetEmotionClassification import *
 from .ara.TweetSarcasmClassification import *
@@ -9,6 +10,9 @@ from .ben.BengaliDocumentClassification import *
 from .ben.BengaliHateSpeechClassification import *
 from .ben.BengaliSentimentAnalysis import *
 from .bul.BulgarianStoreReviewSentimentClassfication import *
+from .ces.CSFDCZMovieReviewSentimentClassification import *
+from .ces.CzechProductReviewSentimentClassification import *
+from .ces.CzechSoMeSentimentClassification import *
 from .ces.CzechSubjectivityClassification import *
 from .dan.AngryTweetsClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
@@ -27,6 +31,7 @@ from .eng.ImdbClassification import *
 from .eng.LegalBenchClassification import *
 from .eng.NewsClassification import *
 from .eng.PatentClassification import *
+from .eng.PoemSentimentClassification import *
 from .eng.ToxicChatClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
@@ -40,6 +45,7 @@ from .fin.FinToxicityClassification import *
 from .fra.FrenchBookReviews import *
 from .fra.MovieReviewSentimentClassification import *
 from .guj.GujaratiNewsClassification import *
+from .heb.HebrewSentimentAnalysis import *
 from .hin.HindiDiscourseClassification import *
 from .hin.SentimentAnalysisHindi import *
 from .hrv.FrenkHrClassification import *
@@ -51,6 +57,7 @@ from .jav.JavaneseIMDBClassification import *
 from .jpn.WRIMEClassification import *
 from .kan.KannadaNewsClassification import *
 from .kor.KlueTC import *
+from .kor.KorFin import *
 from .kur.KurdishSentimentClassification import *
 from .mal.MalayalamNewsClassification import *
 from .mar.MarathiNewsClassification import *
@@ -70,6 +77,7 @@ from .multilingual.MTOPDomainClassification import *
 from .multilingual.MTOPIntentClassification import *
 from .multilingual.MultiHateClassification import *
 from .multilingual.MultilingualSentimentClassification import *
+from .multilingual.NaijaSenti import *
 from .multilingual.NordicLangClassification import *
 from .multilingual.NusaXSenti import *
 from .multilingual.ScalaClassification import *
@@ -85,15 +93,20 @@ from .ory.OdiaNewsClassification import *
 from .pan.PunjabiNewsClassification import *
 from .pol.PolishClassification import *
 from .por.HateSpeechPortugueseClassification import *
+from .ron.Moroco import *
+from .ron.RomanianReviewsSentiment import *
 from .ron.RomanianSentimentClassification import *
 from .san.SanskritShlokasClassification import *
 from .sin.SinhalaNewsClassification import *
 from .sin.SinhalaNewsSourceClassification import *
+from .slk.CSFDSKMovieReviewSentimentClassification import *
 from .slv.FrenkSlClassification import *
 from .spa.SpanishNewsClassification import *
 from .spa.SpanishSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
+from .svk.SlovakMovieReviewSentimentClassification import *
 from .swe.DalajClassification import *
+from .swe.SwedishSentimentClassification import *
 from .swe.SweRecClassification import *
 from .tam.TamilNewsClassification import *
 from .tel.TeluguAndhraJyotiNewsClassification import *
