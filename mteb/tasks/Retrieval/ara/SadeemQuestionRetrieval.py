@@ -26,7 +26,7 @@ class SadeemQuestionRetrieval(AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=("2024-01-01", "2024-04-01"),
         form=["written"],
-        domains=["written"],
+        domains=["Blog"],
         task_subtypes=["Article retrieval"],
         license="Not specified",
         socioeconomic_status="medium",
