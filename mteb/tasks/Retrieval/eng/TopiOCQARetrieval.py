@@ -29,15 +29,15 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
         eval_splits=["validation"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("2021-03-01", "2021-07-31"),
         form=["written"],
         domains=["Encyclopaedic"],
         task_subtypes=["Conversational retrieval"],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="mixed",  # TODO: Not sure that this refers to
+        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
-        dialect=None,
-        text_creation="found",  # TODO: Not sure what to put here, queries are "created", documents are "found"
+        dialect=[],
+        text_creation="found",
         bibtex_citation="""
             @inproceedings{adlakha2022topiocqa,
             title={Topi{OCQA}: Open-domain Conversational Question Answering with Topic Switching},
@@ -55,7 +55,7 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
             }
         """,
         n_samples={"dev": 2514},
-        avg_character_length=None,  # TODO: calculate and update
+        avg_character_length={"validation": 708},
     )
 
     # TODO: Will be removed if curated and added to mteb HF
