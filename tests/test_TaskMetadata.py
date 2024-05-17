@@ -17,6 +17,7 @@ _HISTORIC_DATASETS = [
     "RomaTalesBitextMining",
     "Tatoeba",
     "HotelReviewSentimentClassification",
+    "OnlineStoreReviewSentimentClassification",
     "RestaurantReviewSentimentClassification",
     "TweetEmotionClassification",
     "AngryTweetsClassification",

@@ -125,11 +125,11 @@ class AbsTaskClusteringFast(AbsTask):
                 logger.info(
                     f"\nTask: {self.metadata.name}, split: {split}, language: {lang}. Running..."
                 )
-                _ds = multilingual_ds[lang]
                 multilingual_scores[lang] = self._evaluate_monolingual(
                     model, multilingual_ds[lang], split, **kwargs
                 )
-                return multilingual_scores
+                self._add_main_score(multilingual_scores[lang])
+            return multilingual_scores
         logger.info(f"\nTask: {self.metadata.name}, split: {split}. Running...")
 
         ds = self.dataset  # type: ignore
