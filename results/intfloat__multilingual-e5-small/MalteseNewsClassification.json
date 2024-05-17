@@ -3,11 +3,13 @@
   "mteb_dataset_name": "MalteseNewsClassification",
   "mteb_version": "1.6.37",
   "test": {
-    "accuracy": 0.48141361256544507,
-    "accuracy_stderr": 0.0319282309457474,
-    "evaluation_time": 130.5,
-    "f1": 0.29882384820677016,
-    "f1_stderr": 0.022138603244994767,
-    "main_score": 0.48141361256544507
+    "accuracy": 0.2266869830213322,
+    "accuracy_stderr": 0.02263575385876514,
+    "evaluation_time": 161.74,
+    "f1": 0.2281811500943983,
+    "f1_stderr": 0.019025670776051662,
+    "lrap": 0.3279256333210852,
+    "lrap_stderr": 0.03015123586760265,
+    "main_score": 0.2266869830213322
   }
 }
