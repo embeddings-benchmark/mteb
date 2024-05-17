@@ -75,7 +75,7 @@ class PublicHealthQARetrieval(MultilingualTask, AbsTaskRetrieval):
         main_score="ndcg_at_10",
         reference="https://huggingface.co/datasets/xhluca/publichealth-qa",
         date=("2020-01-01", "2020-04-15"),
-        form="written",
+        form=["written"],
         domains=["Medical", "Government", "Web"],
         task_subtypes=["Question answering"],
         license="CC BY-NC-SA 3.0",
