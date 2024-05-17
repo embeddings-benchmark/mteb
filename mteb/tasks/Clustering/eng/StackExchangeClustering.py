@@ -6,8 +6,8 @@ from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from ....abstasks.AbsTaskClustering import AbsTaskClustering
+from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 
 class StackExchangeClusteringFast(AbsTaskClusteringFast):
@@ -54,6 +54,7 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
             label="labels",
             n_samples=16000,
         )
+
 
 class StackExchangeClustering(AbsTaskClustering):
     superseeded_by = "StackExchangeClusteringFast"
