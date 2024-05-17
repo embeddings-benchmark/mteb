@@ -3,10 +3,51 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 
-from ..evaluation.evaluators import PairClassificationEvaluator
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, average_precision_score, f1_score
+
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
+
+
+def _undersample_data(X, y, samples_per_label: int, idxs=None):
+    X_sampled = []
+    y_sampled = []
+    if idxs is None:
+        idxs = np.arange(len(y))
+    np.random.shuffle(idxs)
+    label_counter = defaultdict(int)
+    for i in idxs:
+        if label_counter[y[i]] < samples_per_label:
+            X_sampled.append(X[i])
+            y_sampled.append(y[i])
+            label_counter[y[i]] += 1
+    return X_sampled, y_sampled, idxs
+
+
+def _prepare_features(
+    dataset, model, eval_split="test", train_split="train", samples_per_label: int = 8
+):
+    test_sent1 = dataset[eval_split]["sent1"]
+    test_sent2 = dataset[eval_split]["sent1"]
+    test_emb1 = model.encode(test_sent1)
+    test_emb2 = model.encode(test_sent2)
+    y_test = dataset[eval_split]["labels"]
+    X_test = np.concatenate(
+        (test_emb1, test_emb2, np.abs(test_emb1 - test_emb2)), axis=1
+    )
+    train_sent1 = dataset[train_split]["sent1"]
+    train_sent2 = dataset[train_split]["sent1"]
+    train_emb1 = model.encode(train_sent1)
+    train_emb2 = model.encode(train_sent2)
+    y_train = dataset[train_split]["labels"]
+    X_train = np.concatenate(
+        (train_emb1, train_emb2, np.abs(train_emb1 - train_emb2)), axis=1
+    )
+    X_train, y_train, _ = _undersample_data(X_train, y_train, samples_per_label)
+    return X_train, X_test, y_train, y_test
 
 
 class AbsTaskPairClassification(AbsTask):
@@ -23,27 +64,19 @@ class AbsTaskPairClassification(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def _evaluate_monolingual(self, model, dataset, split="test", **kwargs):
-        data_split = dataset[split][0]
-        logging.getLogger(
-            "sentence_transformers.evaluation.PairClassificationEvaluator"
-        ).setLevel(logging.WARN)
-        evaluator = PairClassificationEvaluator(
-            data_split["sent1"], data_split["sent2"], data_split["labels"], **kwargs
+    def _evaluate_monolingual(
+        self, model, dataset, eval_split="test", train_split="train", **kwargs
+    ):
+        X_train, X_test, y_train, y_test = _prepare_features(
+            dataset, model, eval_split, train_split
         )
-        scores = evaluator.compute_metrics(model)
-
-        # Compute max
-        max_scores = defaultdict(list)
-        for sim_fct in scores:
-            for metric in ["accuracy", "f1", "ap"]:
-                max_scores[metric].append(scores[sim_fct][metric])
-
-        for metric in max_scores:
-            max_scores[metric] = max(max_scores[metric])
-
-        scores["max"] = dict(max_scores)
-
+        classifier = LogisticRegression().fit(X_train, y_train)
+        y_pred = classifier.predict(X_test)
+        scores = {
+            "f1": f1_score(y_test, y_pred),
+            "accuracy": accuracy_score(y_test, y_pred),
+            "ap": average_precision_score(y_test, y_pred),
+        }
         return scores
 
     def evaluate(self, model, split="test", **kwargs):
@@ -59,11 +92,22 @@ class AbsTaskPairClassification(AbsTask):
                 scores[lang] = self._evaluate_monolingual(
                     model, monolingual_dataset, split=split, **kwargs
                 )
+                self._add_main_score(scores[lang])
             return scores
         else:
             logger.info(
                 f"\nTask: {self.metadata_dict['name']}, split: {split}. Running..."
             )
-            return self._evaluate_monolingual(
+            scores = self._evaluate_monolingual(
                 model, self.dataset, split=split, **kwargs
+            )
+            self._add_main_score(scores)
+            return scores
+
+    def _add_main_score(self, scores):
+        if self.metadata.main_score in scores:
+            scores["main_score"] = scores[self.metadata.main_score]
+        else:
+            logger.warn(
+                f"main score {self.metadata.main_score} not found in scores {scores.keys()}"
             )
