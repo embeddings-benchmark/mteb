@@ -28,8 +28,8 @@ class MasakhaNEWSClassification(AbsTaskClassification, MultilingualTask):
     metadata = TaskMetadata(
         name="MasakhaNEWSClassification",
         dataset={
-            "path": "masakhane/masakhanews",
-            "revision": "8ccc72e69e65f40c70e117d8b3c08306bb788b60",
+            "path": "mteb/masakhanews",
+            "revision": "18193f187b92da67168c655c9973a165ed9593dd",
         },
         description="MasakhaNEWS is the largest publicly available dataset for news topic classification in 16 languages widely spoken in Africa. The train/validation/test sets are available for all the 16 languages.",
         reference="https://arxiv.org/abs/2304.09972",
@@ -51,3 +51,9 @@ class MasakhaNEWSClassification(AbsTaskClassification, MultilingualTask):
         n_samples={"test": 422},
         avg_character_length={"test": 5116.6},
     )
+
+    def dataset_transform(self):
+        for lang in self.dataset.keys():
+            self.dataset[lang] = self.dataset[lang].rename_columns(
+                {"category": "label"}
+            )

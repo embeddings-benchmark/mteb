@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskClassification, MultilingualTask
@@ -26,11 +22,12 @@ _LANGUAGES = {
 
 
 class IndicSentimentClassification(MultilingualTask, AbsTaskClassification):
+    fast_loading = True
     metadata = TaskMetadata(
         name="IndicSentimentClassification",
         dataset={
-            "path": "ai4bharat/IndicSentiment",
-            "revision": "ccb472517ce32d103bba9d4f5df121ed5a6592a4",
+            "path": "mteb/IndicSentiment",
+            "revision": "3389cc78b2ffcbd33639e91dfc57e6b6b6496241",
         },
         description="A new, multilingual, and n-way parallel dataset for sentiment analysis in 13 Indic languages.",
         reference="https://arxiv.org/abs/2212.05409",
@@ -58,25 +55,6 @@ class IndicSentimentClassification(MultilingualTask, AbsTaskClassification):
         n_samples={"test": 1000},
         avg_character_length={"test": 137.6},
     )
-
-    def load_data(self, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = {}
-        for lang in self.hf_subsets:
-            self.dataset[lang] = datasets.load_dataset(
-                name=f"translation-{lang}",
-                **self.metadata_dict["dataset"],
-            )
-            self.dataset[lang] = datasets.DatasetDict(
-                {
-                    "train": self.dataset[lang]["validation"],
-                    "test": self.dataset[lang]["test"],
-                }
-            )
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self) -> None:
         label_map = {"Negative": 0, "Positive": 1}
