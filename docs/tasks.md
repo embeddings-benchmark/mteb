@@ -409,7 +409,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [SinhalaNewsSourceClassification](https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Source-classification) (Dhananjaya et al., 2022) | ['sin'] | Classification | s2s | [News] | {'train': 24094} | {'train': 56.08} |
 | [SiswatiNewsClassification](https://huggingface.co/datasets/dsfsi/za-isizulu-siswati-news) (Madodonga et al., 2023) | ['ssw'] | Classification | s2s | [News] | {'train': 80} | {'train': 354.2} |
 | [SlovakMovieReviewSentimentClassification](https://arxiv.org/pdf/2304.01922) ({{S, 2023) | ['svk'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 366.17} |
-| [SlovakSumRetrieval](https://huggingface.co/datasets/kiviki/SlovakSum) | ['slk'] | Retrieval | s2s | [News, Social, Web] | {'test': 600} | {'test': 238.44} |
+| [SlovakSumRetrieval](https://huggingface.co/datasets/NaiveNeuron/slovaksum) | ['slk'] | Retrieval | s2s | [News, Social, Web] | {'test': 600} | {'test': 238.44} |
 | [SouthAfricanLangClassification](https://www.kaggle.com/competitions/south-african-language-identification/) | ['afr', 'eng', 'nbl', 'nso', 'sot', 'ssw', 'tsn', 'tso', 'ven', 'xho', 'zul'] | Classification | s2s | [Web, Non-fiction] | {'test': 2048} | {'test': 247.49} |
 | [SpanishNewsClassification](https://huggingface.co/datasets/MarcOrfilaCarreras/spanish-news) | ['spa'] | Classification | s2s | [News] | {'train': 2048} | {'train': 4218.2} |
 | [SpanishNewsClusteringP2P](https://www.kaggle.com/datasets/kevinmorgado/spanish-news-classification) | ['spa'] | Clustering | p2p |  |  |  |
