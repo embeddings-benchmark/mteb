@@ -23,7 +23,7 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         date=("2024-05-01", "2024-05-15"),
         form=["written"],
         domains=["Reviews"],
-        task_subtypes=["Sentiment/Hate speech"],
+        task_subtypes=[],
         license=None,
         socioeconomic_status="mixed",
         annotations_creators="derived",
