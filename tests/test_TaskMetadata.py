@@ -422,15 +422,15 @@ def test_filled_metadata_is_filled():
     )
 
 
-# def test_all_metadata_is_filled():
-#     all_tasks = get_tasks()
+def test_all_metadata_is_filled():
+    all_tasks = get_tasks()
 
-#     unfilled_metadata = []
-#     for task in all_tasks:
-#         if task.metadata.name not in _HISTORIC_DATASETS:
-#             if not task.metadata.is_filled():
-#                 unfilled_metadata.append(task.metadata.name)
-#     if unfilled_metadata:
-#         raise ValueError(
-#             f"The metadata of the following datasets is not filled: {unfilled_metadata}"
-#         )
+    unfilled_metadata = []
+    for task in all_tasks:
+        if task.metadata.name not in _HISTORIC_DATASETS:
+            if not task.metadata.is_filled():
+                unfilled_metadata.append(task.metadata.name)
+    if unfilled_metadata:
+        raise ValueError(
+            f"The metadata of the following datasets is not filled: {unfilled_metadata}"
+        )
