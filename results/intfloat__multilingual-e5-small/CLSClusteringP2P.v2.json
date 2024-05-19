@@ -1,6 +1,6 @@
 {
   "dataset_revision": "4b6227591c6c1a73bc76b1055f3b7f3588e72476",
-  "mteb_dataset_name": "CLSClusteringFastP2P",
+  "mteb_dataset_name": "CLSClusteringP2P.v2",
   "mteb_version": "1.8.3",
   "test": {
     "evaluation_time": 5.24,

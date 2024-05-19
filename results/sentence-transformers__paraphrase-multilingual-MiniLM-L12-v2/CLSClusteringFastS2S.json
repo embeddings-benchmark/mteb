@@ -1,6 +1,6 @@
 {
   "dataset_revision": "e458b3f5414b62b7f9f83499ac1f5497ae2e869f",
-  "mteb_dataset_name": "CLSClusteringFastS2S",
+  "mteb_dataset_name": "CLSClusteringS2S.v2",
   "mteb_version": "1.8.3",
   "test": {
     "evaluation_time": 2.44,
