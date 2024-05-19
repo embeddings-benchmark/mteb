@@ -109,7 +109,7 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
                 is_solo = np.isin(labels, solo_labels)
                 split_ds = Dataset.from_dict({"labels": labels, "sentences": sentences})
                 if is_solo.any():
-                    split_ds = split_ds.select(np.nonzero(is_solo == False)[0])
+                    split_ds = split_ds.select(np.nonzero(is_solo == False)[0])  # noqa: E712
                 lang_dict.update({split: split_ds})
             ds[lang] = DatasetDict(lang_dict)
         self.dataset = DatasetDict(ds)
