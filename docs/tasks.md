@@ -52,8 +52,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [CBD](http://2019.poleval.pl/files/poleval2019.pdf) | ['pol'] | Classification | s2s |  | {'test': 1000} | {'test': 93.2} |
 | [CDSC-E](https://aclanthology.org/P17-1073.pdf) | ['pol'] | PairClassification | s2s |  |  |  |
 | [CDSC-R](https://aclanthology.org/P17-1073.pdf) | ['pol'] | STS | s2s |  |  |  |
-| [CLSClusteringP2P](https://arxiv.org/abs/2209.05034) | ['cmn'] | Clustering | p2p |  |  |  |
-| [CLSClusteringS2S](https://arxiv.org/abs/2209.05034) | ['cmn'] | Clustering | s2s |  |  |  |
+| [CLSClusteringP2P.v2](https://arxiv.org/abs/2209.05034) (Yudong Li, 2022) | ['cmn'] | Clustering | p2p | [Academic] | {'test': 2048} |  |
+| [CLSClusteringS2S.v2](https://arxiv.org/abs/2209.05034) (Yudong Li, 2022) | ['cmn'] | Clustering | s2s | [Academic] | {'test': 2048} |  |
 | [CMedQAv1-reranking](https://github.com/zhangsheng93/cMedQA) | ['cmn'] | Reranking | s2s |  |  |  |
 | [CMedQAv2-reranking](https://github.com/zhangsheng93/cMedQA2) | ['cmn'] | Reranking | s2s |  |  |  |
 | [CQADupstackAndroidRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) | ['eng'] | Retrieval | s2p |  |  |  |
@@ -446,8 +446,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [TenKGnadClusteringS2S.v2](https://tblock.github.io/10kGNAD/) | ['deu'] | Clustering | s2s | [News, Non-fiction] | {'test': 10275} | {'test': 50.96} |
 | [TextualismToolDictionariesLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 107} | {'test': 943.23} |
 | [TextualismToolPlainLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 165} | {'test': 997.97} |
-| [ThuNewsClusteringP2P](http://thuctc.thunlp.org/) | ['cmn'] | Clustering | p2p |  |  |  |
-| [ThuNewsClusteringS2S](http://thuctc.thunlp.org/) | ['cmn'] | Clustering | s2s |  |  |  |
+| [ThuNewsClusteringP2P.v2](http://thuctc.thunlp.org/) | ['cmn'] | Clustering | p2p | [News] | {'test': 2048} |  |
+| [ThuNewsClusteringS2S.v2](http://thuctc.thunlp.org/) | ['cmn'] | Clustering | s2s | [News] | {'test': 2048} |  |
 | [Touche2020](https://webis.de/events/touche-20/shared-task-1.html) | ['eng'] | Retrieval | s2p |  |  |  |
 | [ToxicChatClassification](https://aclanthology.org/2023.findings-emnlp.311/) (Zi Lin, 2023) | ['eng'] | Classification | s2s | [Constructed] | {'test': 1427} | {'test': 189.4} |
 | [ToxicConversationsClassification](https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/overview) | ['eng'] | Classification | s2s |  | {'test': 50000} | {'test': 296.6} |
