@@ -28,7 +28,14 @@ class CLSClusteringS2S(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""
+@article{li2022csl,
+  title={CSL: A large-scale Chinese scientific literature dataset},
+  author={Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
+  journal={arXiv preprint arXiv:2209.05034},
+  year={2022}
+}
+""",
         n_samples=None,
         avg_character_length=None,
     )
@@ -86,7 +93,21 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""
+@inproceedings{eisner2007proceedings,
+  title={Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
+  author={Eisner, Jason},
+  booktitle={Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)},
+  year={2007}
+}
+@inproceedings{li2006comparison,
+  title={A comparison and semi-quantitative analysis of words and character-bigrams as features in chinese text categorization},
+  author={Li, Jingyang and Sun, Maosong and Zhang, Xian},
+  booktitle={proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},
+  pages={545--552},
+  year={2006}
+}
+""",
         n_samples=None,
         avg_character_length=None,
     )
@@ -115,7 +136,21 @@ class ThuNewsClusteringP2P(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""
+@inproceedings{eisner2007proceedings,
+  title={Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
+  author={Eisner, Jason},
+  booktitle={Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)},
+  year={2007}
+}
+@inproceedings{li2006comparison,
+  title={A comparison and semi-quantitative analysis of words and character-bigrams as features in chinese text categorization},
+  author={Li, Jingyang and Sun, Maosong and Zhang, Xian},
+  booktitle={proceedings of the 21st international conference on computational linguistics and 44th annual meeting of the association for computational linguistics},
+  pages={545--552},
+  year={2006}
+}
+""",
         n_samples=None,
         avg_character_length=None,
     )
