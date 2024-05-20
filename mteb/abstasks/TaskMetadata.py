@@ -16,6 +16,7 @@ from .languages import (
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
+    "Conversational retrieval",
     "Dialect pairing",
     "Dialog Systems",
     "Discourse coherence",
