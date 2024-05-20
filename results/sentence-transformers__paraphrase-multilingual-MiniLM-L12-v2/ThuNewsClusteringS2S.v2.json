@@ -1,6 +1,6 @@
 {
   "dataset_revision": "8a8b2caeda43f39e13c4bc5bea0f8a667896e10d",
-  "mteb_dataset_name": "ThuNewsClusteringFastS2S",
+  "mteb_dataset_name": "ThuNewsClusteringS2S.v2",
   "mteb_version": "1.8.3",
   "test": {
     "evaluation_time": 2.58,
