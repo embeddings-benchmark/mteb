@@ -12,6 +12,7 @@ from ..evaluation.evaluators import (
     logRegClassificationEvaluator,
 )
 from .AbsTask import AbsTask
+from .MTEBResults import HFSubset, ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,8 @@ class AbsTaskClassification(AbsTask):
     """Abstract class for kNN classification tasks
     The similarity is computed between pairs and the results are ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It
+    must contain the following columns:
         text: str
         label: int
     """
@@ -60,42 +62,37 @@ class AbsTaskClassification(AbsTask):
         if hasattr(self, "metadata"):
             self.metadata
 
-    def _add_main_score(self, scores):
-        if self.metadata.main_score in scores:
-            scores["main_score"] = scores[self.metadata.main_score]
-        else:
-            logger.warn(
-                f"main score {self.metadata.main_score} not found in scores {scores.keys()}"
-            )
+    def _add_main_score(self, scores: dict[HFSubset, ScoresDict]) -> None:
+        scores["main_score"] = scores[self.metadata.main_score]
 
-    def evaluate(self, model, eval_split="test", train_split="train", **kwargs):
+    def evaluate(
+        self, model, eval_split="test", train_split="train", **kwargs
+    ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
             self.load_data()
 
-        if self.is_multilingual:
-            scores = {}
-            for lang in self.dataset:
-                logger.info(
-                    f"\nTask: {self.metadata.name}, split: {eval_split}, language: {lang}. Running..."
-                )
-                scores[lang] = self._evaluate_monolingual(
-                    model, self.dataset[lang], eval_split, train_split, **kwargs
-                )
-                self._add_main_score(scores[lang])
-        else:
+        scores = {}
+        hf_subsets = [l for l in self.dataset] if self.is_multilingual else ["default"]
+
+        for hf_subset in hf_subsets:
             logger.info(
-                f"\nTask: {self.metadata.name}, split: {eval_split}. Running..."
+                f"\nTask: {self.metadata.name}, split: {eval_split}, subset: {hf_subset}. Running..."
             )
-            scores = self._evaluate_monolingual(
-                model, self.dataset, eval_split, train_split, **kwargs
+
+            if hf_subset not in self.dataset and hf_subset == "default":
+                ds = self.dataset
+            else:
+                ds = self.dataset[hf_subset]
+            scores[hf_subset] = self._evaluate_subset(
+                model, ds, eval_split, train_split, **kwargs
             )
-            self._add_main_score(scores)
+            self._add_main_score(scores[hf_subset])
 
         return scores
 
-    def _evaluate_monolingual(
+    def _evaluate_subset(
         self, model, dataset, eval_split="test", train_split="train", **kwargs
-    ) -> dict[str, Any]:
+    ) -> ScoresDict:
         train_split = dataset[train_split]
         eval_split = dataset[eval_split]
         params = {"k": self.k, "batch_size": self.batch_size}
