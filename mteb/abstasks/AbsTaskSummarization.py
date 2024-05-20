@@ -52,7 +52,6 @@ class AbsTaskSummarization(AbsTask):
         self._add_main_score(scores)
         return scores
 
-
     def _add_main_score(self, scores: ScoresDict) -> None:
         m_score = self.metadata.main_score
         dist, metric = m_score.split("_")

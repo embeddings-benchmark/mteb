@@ -156,8 +156,10 @@ class MTEBResults(BaseModel):
             try:
                 return cls.model_validate(data)
             except Exception as e:
-                raise ValueError(f"Error loading MTEBResults from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}")
-        
+                raise ValueError(
+                    f"Error loading MTEBResults from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
+                )
+
         err: str = ""
         try:
             return cls.model_validate(data)
