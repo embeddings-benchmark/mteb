@@ -46,7 +46,11 @@ class AbsTaskBitextMining(AbsTask):
                 logger.info(
                     f"\nTask: {self.metadata_dict['name']}, split: {split}, subset: {hf_subet}. Running..."
                 )
-                data_split = self.dataset[hf_subet][split]
+
+                if hf_subet not in self.dataset and hf_subet == "default":
+                    data_split = self.dataset[split]
+                else:
+                    data_split = self.dataset[hf_subet][split]
                 scores[hf_subet] = self._evaluate_subset(
                     model, data_split, subsets=["sentence1", "sentence2"], **kwargs
                 )
