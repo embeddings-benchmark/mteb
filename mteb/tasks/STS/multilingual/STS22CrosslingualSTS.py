@@ -27,11 +27,12 @@ _LANGUAGES = {
 
 
 class STS22CrosslingualSTS(AbsTaskSTS, CrosslingualTask):
+    fast_loading = True
     metadata = TaskMetadata(
         name="STS22",
         dataset={
             "path": "mteb/sts22-crosslingual-sts",
-            "revision": "eea2b4fe26a775864c896887d910b76a8098ad3f",
+            "revision": "de9d86b3b84231dc21f76c7b7af1f28e2f57f6e3",
         },
         description="SemEval 2022 Task 8: Multilingual News Article Similarity",
         reference="https://competitions.codalab.org/competitions/33835",

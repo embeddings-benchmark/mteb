@@ -8,6 +8,7 @@ from .dan.twitterhjerne import *
 from .deu.GerDaLIRRetrieval import *
 from .deu.GerDaLIRSmallRetrieval import *
 from .deu.GermanDPRRetrieval import *
+from .deu.GermanGovServiceRetrieval import *
 from .deu.GermanQuADRetrieval import *
 from .deu.LegalQuADRetrieval import *
 from .ell.GreekCivicsQA import *
@@ -70,6 +71,7 @@ from .multilingual.MLQARetrieval import *
 from .multilingual.MultiLongDocRetrieval import *
 from .multilingual.NeuCLIR2022Retrieval import *
 from .multilingual.NeuCLIR2023Retrieval import *
+from .multilingual.PublicHealthQARetrieval import *
 from .multilingual.XMarketRetrieval import *
 from .multilingual.XPQARetrieval import *
 from .multilingual.XQuADRetrieval import *
