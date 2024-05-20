@@ -30,6 +30,7 @@ from .multilingual.MasakhaNEWSClusteringP2P import *
 from .multilingual.MasakhaNEWSClusteringS2S import *
 from .multilingual.MLSUMClusteringP2P import *
 from .multilingual.MLSUMClusteringS2S import *
+from .multilingual.SIB200ClusteringS2S import *
 from .multilingual.WikiClusteringP2P import *
 from .nob.snl_clustering import *
 from .nob.SNLHierarchicalClustering import *
