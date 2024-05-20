@@ -67,15 +67,3 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
         self.dataset = self.dataset.train_test_split(
             train_size=2048, test_size=2048, seed=self.seed
         )
-
-
-if __name__ == "__main__":
-    from sentence_transformers import SentenceTransformer
-
-    from mteb import MTEB
-
-    # intfloat/multilingual-e5-small
-    model_name = "intfloat/multilingual-e5-small"
-    model = SentenceTransformer(model_name)
-    evaluation = MTEB(tasks=[BrazilianToxicTweetsClassification()])
-    evaluation.run(model)
