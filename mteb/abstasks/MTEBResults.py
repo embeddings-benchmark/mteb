@@ -142,7 +142,7 @@ class MTEBResults(BaseModel):
             f.write(self.model_dump_json())
 
     @classmethod
-    def from_disk(cls, path: Path, load_historic_data: bool = False) -> MTEBResults:
+    def from_disk(cls, path: Path, load_historic_data: bool = True) -> MTEBResults:
         """Load MTEBResults from disk.
 
         Args:
