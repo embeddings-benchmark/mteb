@@ -68,7 +68,7 @@ class SRNCorpusBitextMining(AbsTaskBitextMining, CrosslingualTask):
             """Clean dataset features"""
             return {key: [s.strip("\r") for s in batch[key]] for key in keys}
 
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             l1, l2 = lang.split("-")
             dataset = datasets.load_dataset(
                 name="srn-nl_other",

@@ -51,7 +51,7 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining, CrosslingualTask):
             return
         self.dataset = {}
 
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             l1, l2 = lang.split("-")
             dataset = load_dataset(
                 self.metadata_dict["dataset"]["path"],

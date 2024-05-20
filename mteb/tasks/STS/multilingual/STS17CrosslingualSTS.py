@@ -20,11 +20,12 @@ _LANGUAGES = {
 
 
 class STS17Crosslingual(AbsTaskSTS, CrosslingualTask):
+    fast_loading = True
     metadata = TaskMetadata(
         name="STS17",
         dataset={
             "path": "mteb/sts17-crosslingual-sts",
-            "revision": "af5e6fb845001ecf41f4c1e033ce921939a2a68d",
+            "revision": "faeb762787bd10488a50c8b5be4a3b82e411949c",
         },
         description="STS 2017 dataset",
         reference="http://alt.qcri.org/semeval2016/task1/",
