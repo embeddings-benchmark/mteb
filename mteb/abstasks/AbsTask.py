@@ -53,7 +53,7 @@ class AbsTask(ABC):
         self,
         model: Encoder | EncoderWithQueryCorpusEncode,
         split: str = "test",
-        **kwargs,
+        **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluates a Sentence Embedding Model on the task.
         Returns a dict (that can be serialized to json).
@@ -62,6 +62,7 @@ class AbsTask(ABC):
             model: Sentence embedding method. Implements a encode(sentences) method, that encodes sentences and returns a numpy matrix with the
                 sentence embeddings
             split: Which datasplit to be used.
+            kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
         """
         if not self.data_loaded:
             self.load_data()

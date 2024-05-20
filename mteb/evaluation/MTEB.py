@@ -247,7 +247,11 @@ class MTEB:
                 1: print tasks tqdm progress bar and scores
                 2: print everything (including datasets loading)
             output_folder: Folder where the results will be saved
+            eval_splits: List of splits to evaluate on. If None, the splits are taken from the task metadata.
+            overwrite_results: Whether to overwrite existing results.
             raise_error: Whether to raise an error if an exception occurs during evaluation.
+            co2_tracker: Whether to enable or disable CO2 emissions tracker using codecarbon.
+            kwargs: Additional arguments to be passed to `_run_eval` method and task.load_data.
 
         Returns:
             A list of MTEBResults objects, one for each task evaluated.

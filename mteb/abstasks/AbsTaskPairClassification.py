@@ -3,11 +3,12 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 
+from datasets import Dataset
+
 from ..encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from ..evaluation.evaluators import PairClassificationEvaluator
 from .AbsTask import AbsTask
 from .MTEBResults import ScoresDict
-from datasets import Dataset
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +55,6 @@ class AbsTaskPairClassification(AbsTask):
             max_scores[metric] = max(max_scores[metric])
 
         scores["max"] = dict(max_scores)
- 
+
         self._add_main_score(scores)
         return scores
