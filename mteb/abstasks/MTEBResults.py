@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import json
+import logging
 from collections import defaultdict
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any, Callable, Dict
+from typing import Any, Callable, Dict, Type
 
 import numpy as np
+from packaging.version import Version
 from pydantic import BaseModel, field_validator
 
 from mteb.abstasks import AbsTask
@@ -21,6 +23,8 @@ Split = str
 ScoresDict = Dict[str, Any]
 # ^ e.g {'main_score': 0.5, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']}
 Score = Any
+
+logger = logging.getLogger(__name__)
 
 
 class MTEBResults(BaseModel):
@@ -73,7 +77,7 @@ class MTEBResults(BaseModel):
     @classmethod
     def from_task_results(
         cls,
-        task: AbsTask,
+        task: AbsTask | Type[AbsTask],
         scores: dict[Split, dict[HFSubset, ScoresDict]],
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
@@ -82,10 +86,10 @@ class MTEBResults(BaseModel):
         subset2langscripts = task_meta.hf_subsets_to_langscripts
         flat_scores = defaultdict(list)
         for split, hf_subset_scores in scores.items():
-            for hf_subset, scores in hf_subset_scores.items():
+            for hf_subset, hf_scores in hf_subset_scores.items():
                 eval_langs = subset2langscripts[hf_subset]
                 _scores = {
-                    **scores,
+                    **hf_scores,
                     "hf_subset": hf_subset,
                     "languages": eval_langs,
                 }
@@ -138,9 +142,92 @@ class MTEBResults(BaseModel):
             f.write(self.model_dump_json())
 
     @classmethod
-    def from_disk(cls, path: Path) -> MTEBResults:
+    def from_disk(cls, path: Path, load_historic_data: bool = False) -> MTEBResults:
+        """Load MTEBResults from disk.
+
+        Args:
+            path: The path to the file to load.
+            load_historic_data: Whether to attempt to load historic data from before v1.11.0.
+        """
         with path.open("r") as f:
-            return cls.model_validate(json.load(f))
+            data = json.load(f)
+
+        if not load_historic_data:
+            try:
+                return cls.model_validate(data)
+            except Exception as e:
+                raise ValueError(f"Error loading MTEBResults from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}")
+        
+        err: str = ""
+        try:
+            return cls.model_validate(data)
+        except Exception as e:
+            err = f"Error loading MTEBResults from disk: {e}"
+        try:
+            if "mteb_version" in data and Version(data["mteb_version"]) < Version(
+                "1.11.0"
+            ):
+                logger.info(
+                    f"Could not load MTEBResults from disk, got error: {err}. Attempting to load from disk using format from before v1.10.0"
+                )
+                return cls._convert_from_before_v1_11_0(data)
+        except Exception as historic_err:
+            err += f"\nAttempted to load as historic data but got the error: {historic_err}"
+        raise ValueError(err)
+
+    @classmethod
+    def _convert_from_before_v1_11_0(cls, data: dict) -> MTEBResults:
+        from mteb.overview import TASKS_REGISTRY
+
+        scores = {**data}
+
+        dataset_revision = scores.pop("dataset_revision")
+        task_name = scores.pop("mteb_dataset_name")
+        mteb_version = scores.pop("mteb_version")
+
+        # calculate evaluation time across all splits (move to top level)
+        evaluation_time = 0
+        for split, split_score in scores.items():
+            if "evaluation_time" in split_score:
+                evaluation_time += split_score.pop("evaluation_time")
+
+        # normalize the scores to always be {split: {hf_subset: scores}}
+        contains_hf_subset = any(
+            isinstance(hf_subset_scores, dict)
+            for split_scores in scores.values()
+            for k, hf_subset_scores in split_scores.items()
+            if k
+            not in {"v_measures", "cos_sim", "euclidean", "manhattan", "dot", "max"}
+        )
+        if not contains_hf_subset:
+            for split, split_score in scores.items():
+                scores[split] = {"default": split_score.copy()}
+
+        # make sure that main score exists
+        task = TASKS_REGISTRY[task_name]
+        main_score = task.metadata.main_score
+        for split, split_score in scores.items():
+            for hf_subset, hf_subset_scores in split_score.items():
+                if "main_score" not in hf_subset_scores:
+                    if main_score in hf_subset_scores:
+                        hf_subset_scores["main_score"] = hf_subset_scores[main_score]
+                    elif main_score == "cosine_spearman":
+                        hf_subset_scores["main_score"] = hf_subset_scores["cos_sim"][
+                            "spearman"
+                        ]
+                    else:
+                        logger.warning(f"Main score {main_score} not found in scores")
+                        hf_subset_scores["main_score"] = None
+
+        result = MTEBResults.from_task_results(
+            task,
+            scores,
+            evaluation_time,
+            kg_co2_emissions=None,
+        )
+        result.dataset_revision = dataset_revision
+        result.mteb_version = mteb_version
+        return result
 
     def get_score(
         self,

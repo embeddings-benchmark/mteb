@@ -23,10 +23,7 @@ class VieMedEVBitextMining(AbsTaskBitextMining):
         type="BitextMining",
         category="s2s",
         eval_splits=["test"],
-        eval_langs={
-            "en-vie": ["eng-Latn", "vie-Latn"],
-            "vie-en": ["vie-Latn", "eng-Latn"],
-        },
+        eval_langs=["eng-Latn", "vie-Latn"],
         main_score="f1",
         date=("2024-08-28", "2022-03-28"),
         form=["written"],
