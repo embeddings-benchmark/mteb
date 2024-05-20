@@ -19,11 +19,12 @@ _LANGUAGES = {
 
 
 class MultiHateClassification(MultilingualTask, AbsTaskClassification):
+    fast_loading = True
     metadata = TaskMetadata(
         name="MultiHateClassification",
         dataset={
             "path": "mteb/multi-hatecheck",
-            "revision": "ef137ea2b7c719183f8f60edf536b50f56d1365b",
+            "revision": "8f95949846bb9e33c6aaf730ccfdb8fe6bcfb7a9",
         },
         description="""Hate speech detection dataset with binary
                        (hateful vs non-hateful) labels. Includes 25+ distinct types of hate

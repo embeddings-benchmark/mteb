@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import logging
 
+from datasets import Dataset
+
 from ..evaluation.evaluators import BitextMiningEvaluator
 from .AbsTask import AbsTask
-from .MTEBResults import ScoresDict
+from .MTEBResults import HFSubset, ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -19,37 +21,48 @@ class AbsTaskBitextMining(AbsTask):
         sentence2: str
     """
 
+    parallel_subsets = False
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def _evaluate_subset(self, model, data_split, **kwargs) -> ScoresDict:
-        if len(data_split["sentence1"]) == 1:
-            sentence1 = data_split["sentence1"][0]
-        else:
-            sentence1 = data_split["sentence1"]
-        if len(data_split["sentence2"]) == 1:
-            sentence2 = data_split["sentence2"][0]
-        else:
-            sentence2 = data_split["sentence2"]
+    def evaluate(self, model, split, **kwargs) -> dict[HFSubset, ScoresDict]:
+        if not self.data_loaded:
+            self.load_data()
 
-        if "gold" not in data_split.features:
-            assert len(sentence1) == len(sentence2), "Wrong dataset format"
-            n = len(sentence1)
-            gold = list(zip(range(n), range(n)))
-        else:
-            gold = data_split["gold"]
-            if len(gold) == 1:
-                gold = gold[0]
-            # MTEB currently only loads GOLD labels for BUCC, which is 1-indexed
-            # If a 2nd 0-indexed dataset is added, it'd be cleaner to update BUCC on the Hub to be 0-indexed
-            gold = [(i - 1, j - 1) for (i, j) in gold]
-            assert all(
-                [(i > 0) and (j > 0) for i, j in gold]
-            ), "Found negative gold indices. This may be caused by MTEB expecting 1-indexed gold labels."
+        hf_subsets = (
+            [l for l in self.dataset]
+            if self.is_multilingual or self.is_crosslingual
+            else ["default"]
+        )
 
-        evaluator = BitextMiningEvaluator(sentence1, sentence2, gold, **kwargs)
+        scores = {}
+        if self.parallel_subsets:
+            scores["default"] = self._evaluate_subset(
+                model, self.dataset[split], parallel=True, **kwargs
+            )
+        else:
+            for hf_subet in hf_subsets:
+                logger.info(
+                    f"\nTask: {self.metadata_dict['name']}, split: {split}, subset: {hf_subet}. Running..."
+                )
+                data_split = self.dataset[hf_subet][split]
+                scores[hf_subet] = self._evaluate_subset(
+                    model, data_split, subsets=["sentence1", "sentence2"], **kwargs
+                )
+
+        return scores
+
+    def _evaluate_subset(
+        self, model, data_split: Dataset, parallel=False, **kwargs
+    ) -> ScoresDict:
+        evaluator = BitextMiningEvaluator(data_split, **kwargs)
         metrics = evaluator(model)
-        self._add_main_score(metrics)
+        if parallel:
+            for v in metrics.values():
+                self._add_main_score(v)
+        else:
+            self._add_main_score(metrics)
         return metrics
 
     def _add_main_score(self, scores) -> None:
