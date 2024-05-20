@@ -124,7 +124,7 @@ class HFDataLoaderInstructions(HFDataLoader):
             self.top_ranked,
         )
 
-    def load_top_ranked(self) -> Dict[str, Dict[str, str]]:
+    def load_top_ranked(self) -> None:
         if self.hf_repo:
             top_ranked_ds = load_dataset(
                 self.hf_repo,

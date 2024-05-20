@@ -349,7 +349,7 @@ def test_mteb_rerank():
     os.remove("tmp.json")
 
     # read in the results
-    with open("tests/results/SciFact_predictions.json") as f:
+    with open("tests/results/SciFact_default_predictions.json") as f:
         results = json.load(f)
 
     # check that only the top two results are re-orderd
@@ -373,7 +373,7 @@ def test_reranker_same_ndcg1():
         ce,
         output_folder="tests/results/stage2",
         overwrite_results=True,
-        previous_results="tests/results/stage1/SciFact_predictions.json",
+        previous_results="tests/results/stage1/SciFact_default_predictions.json",
         save_predictions=False,
         eval_splits=["test"],
         top_k=1,  # don't allow it to rerank more than 1 so we can check for top_1 being the same
