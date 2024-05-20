@@ -170,7 +170,7 @@ class MTEBResults(BaseModel):
                 "1.11.0"
             ):
                 logger.info(
-                    f"Could not load MTEBResults from disk, got error: {err}. Attempting to load from disk using format from before v1.10.0"
+                    f"Could not load MTEBResults from disk, got error: {err}. Attempting to load from disk using format from before v1.11.0"
                 )
                 return cls._convert_from_before_v1_11_0(data)
         except Exception as historic_err:
