@@ -220,6 +220,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [Itacola](https://aclanthology.org/2021.findings-emnlp.250/) | ['ita'] | Classification | s2s | [Non-fiction, Spoken] | {'train': 7801, 'test': 975} | {'train': 35.95, 'test': 36.67} |
 | [JCrewBlockerLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 54} | {'test': 1092.22} |
 | [JDReview](https://aclanthology.org/2023.nodalida-1.20/) | ['cmn'] | Classification | s2s |  |  |  |
+| [JSICK](https://github.com/sbintuitions/JMTEB) (Yanaka et al., 2022) | ['jpn'] | STS | s2s | [Web] | {'test': 1986} | {'test': 21.47} |
 | [JSTS](https://aclanthology.org/2022.lrec-1.317.pdf#page=2.00) | ['jpn'] | STS | s2s | [Web] | {'valudtion': 1457} | {'valudtion': 46.34} |
 | [JaQuADRetrieval](https://arxiv.org/abs/2202.01764) (ByungHoon So, 2022) | ['jpn'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'validation': 2048} | {'validation': 400.75} |
 | [JavaneseIMDBClassification](https://github.com/w11wo/nlp-datasets#javanese-imdb) (Wongso et al., 2021) | ['jav'] | Classification | s2s | [Reviews] | {'test': 25000} | {'test': 481.83} |
@@ -903,7 +904,7 @@ The following tables give you an overview of the tasks in MTEB.
 | jid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | jiv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | jni | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| jpn | 5 | 9 | 0 | 0 | 0 | 1 | 0 | 5 | 1 | 0 |
+| jpn | 5 | 9 | 0 | 0 | 0 | 1 | 0 | 5 | 2 | 0 |
 | jvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kab | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kac | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
@@ -1544,7 +1545,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1363 | 933 | 103 | 3 | 23 | 63 | 12 | 310 | 71 | 2 |
+| Total | 1363 | 933 | 103 | 3 | 23 | 63 | 12 | 310 | 72 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
