@@ -3,9 +3,6 @@ from __future__ import annotations
 from mteb.abstasks import AbsTaskMultilabelClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from sklearn.preprocessing import MultiLabelBinarizer
-from sklearn.model_selection import train_test_split
-
 
 class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
@@ -51,37 +48,34 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
             eprint    = {2010.04543},
             timestamp = {Tue, 15 Dec 2020 16:10:16 +0100},
             }""",
-        n_samples={"train": 10784, "test": 2297},
-        avg_character_length={"train": 1595.63, "test": 1752.1},
+        n_samples={"train": 2048, "test": 2048},
+        avg_character_length={"train": 88.45, "test": 85.05},
     )
 
     def dataset_transform(self):
-        cols_ = ['homophobia', 'obscene', 'insult', 'racism', 'misogyny', 'xenophobia']
-        n_size = len(self.dataset['train'])
-        labels = [[] for _ in  range(n_size)]
+        cols_ = ["homophobia", "obscene", "insult", "racism", "misogyny", "xenophobia"]
+        n_size = len(self.dataset["train"])
+        labels = [[] for _ in range(n_size)]
         for c in cols_:
-            col_list = self.dataset['train'][c]
+            col_list = self.dataset["train"][c]
             for i in range(n_size):
                 if col_list[i] > 0:
                     labels[i].append(c)
-        self.dataset = self.dataset['train'].add_column("label", labels)
+        self.dataset = self.dataset["train"].add_column("label", labels)
         del labels
         self.dataset = self.dataset.remove_columns(cols_)
-
-        binarizer = MultiLabelBinarizer()
-        y_bin = binarizer.fit_transform(self.dataset["label"])
-        test_text, train_text, y_test, y_train = train_test_split(
-            self.dataset["text"], y_bin, stratify=y_bin, train_size=2000
+        self.dataset = self.dataset.train_test_split(
+            train_size=2048, test_size=2048, seed=self.seed
         )
-        breakpoint()
-
 
 
 if __name__ == "__main__":
     from sentence_transformers import SentenceTransformer
+
     from mteb import MTEB
+
     # intfloat/multilingual-e5-small
-    model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+    model_name = "intfloat/multilingual-e5-small"
     model = SentenceTransformer(model_name)
     evaluation = MTEB(tasks=[BrazilianToxicTweetsClassification()])
     evaluation.run(model)
