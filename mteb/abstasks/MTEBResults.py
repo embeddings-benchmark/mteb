@@ -19,6 +19,7 @@ from mteb.abstasks.TaskMetadata import (
 
 Split = str
 ScoresDict = Dict[str, Any]
+# ^ e.g {'main_score': 0.5, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']}
 Score = Any
 
 
@@ -32,17 +33,18 @@ class MTEBResults(BaseModel):
         scores: The scores of the model on the dataset. The scores is a dictionary with the following structure; dict[Split, list[Scores]].
             Where Scores is a dictionary with the following structure; dict[str, Any]. Where the keys and values are scores. Split is the split of
             the dataset.
+        evaluation_time: The time taken to evaluate the model.
+        kg_co2_emissions: The kg of CO2 emissions produced by the model during evaluation.
 
     Example:
         >>> scores = {
+        ...     "evaluation_time": 100,
         ...     "train": {
         ...         "en-de": {
         ...             "main_score": 0.5,
-        ...             "evaluation_time": 100,
         ...         },
         ...         "en-fr": {
         ...             "main_score": 0.6,
-        ...             "evaluation_time": 200,
         ...         },
         ...     },
         ... }
@@ -53,10 +55,10 @@ class MTEBResults(BaseModel):
         >>> mteb_results.get_score(languages=["fra"])  # get the main score for French
         0.6
         >>> mteb_results.to_dict()
-        {'dataset_revision': '1.0', 'task_name': 'sample_task', 'mteb_version': '1.0.0', 'scores': {'train':
+        {'dataset_revision': '1.0', 'task_name': 'sample_task', 'mteb_version': '1.0.0', 'evaluation_time': 100, 'scores': {'train':
             [
-                {'main_score': 0.5, 'evaluation_time': 100, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']},
-                {'main_score': 0.6, 'evaluation_time': 200, 'hf_subset': 'en-fr', 'languages': ['eng-Latn', 'fra-Latn']}
+                {'main_score': 0.5, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']},
+                {'main_score': 0.6, 'hf_subset': 'en-fr', 'languages': ['eng-Latn', 'fra-Latn']}
             ]}
         }
     """
@@ -65,10 +67,16 @@ class MTEBResults(BaseModel):
     task_name: str
     mteb_version: str
     scores: dict[Split, list[ScoresDict]]
+    evaluation_time: float
+    kg_co2_emissions: float | None = None
 
     @classmethod
     def from_task_results(
-        cls, task: AbsTask, scores: dict[Split, dict[HFSubset, ScoresDict]]
+        cls,
+        task: AbsTask,
+        scores: dict[Split, dict[HFSubset, ScoresDict]],
+        evaluation_time: float,
+        kg_co2_emissions: float | None = None,
     ) -> MTEBResults:
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
@@ -88,6 +96,8 @@ class MTEBResults(BaseModel):
             task_name=task.metadata.name,
             mteb_version=version("mteb"),
             scores=flat_scores,
+            evaluation_time=evaluation_time,
+            kg_co2_emissions=kg_co2_emissions,
         )
 
     @field_validator("scores")
@@ -105,8 +115,6 @@ class MTEBResults(BaseModel):
     def _validate_scores_dict(scores: ScoresDict) -> None:
         if "main_score" not in scores:
             raise ValueError("'main_score' should be in scores")
-        if "evaluation_time" not in scores:
-            raise ValueError("'evaluation_time' should be in scores")
         if "hf_subset" not in scores or not isinstance(scores["hf_subset"], str):
             raise ValueError("hf_subset should be in scores and should be a string")
         if "languages" not in scores or not isinstance(scores["languages"], list):
