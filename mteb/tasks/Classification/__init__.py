@@ -73,6 +73,7 @@ from .multilingual.CataloniaTweetClassification import *
 from .multilingual.CyrillicTurkicLangClassification import *
 from .multilingual.HinDialectClassification import *
 from .multilingual.IndicLangClassification import *
+from .multilingual.IndicNLPNewsClassification import *
 from .multilingual.IndicSentimentClassification import *
 from .multilingual.LanguageClassification import *
 from .multilingual.MasakhaNEWSClassification import *
