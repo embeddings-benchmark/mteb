@@ -7,16 +7,20 @@ from unittest.mock import Mock, patch
 import aiohttp
 import pytest
 
+import mteb
 from mteb import MTEB
 from mteb.abstasks import AbsTask
 from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
+from mteb.overview import TASKS_REGISTRY
 
 logging.basicConfig(level=logging.INFO)
 
+tasks = MTEB().tasks_cls
 
-@pytest.mark.parametrize("task", MTEB().tasks_cls)
+
+@pytest.mark.parametrize("task", tasks)
 @patch("datasets.load_dataset")
 @patch("datasets.concatenate_datasets")
 def test_load_data(
@@ -76,3 +80,12 @@ def test_dataset_availability():
     """Checks if the datasets are available on Hugging Face using both their name and revision."""
     tasks = MTEB().tasks_cls
     asyncio.run(check_datasets_are_available_on_hf(tasks))
+
+
+def test_superseeded_dataset_exists():
+    tasks = mteb.get_tasks(exclude_superseeded=False)
+    for task in tasks:
+        if task.superseeded_by:
+            assert (
+                task.superseeded_by in TASKS_REGISTRY
+            ), f"{task} is superseeded by {task.superseeded_by} but {task.superseeded_by} is not in the TASKS_REGISTRY"

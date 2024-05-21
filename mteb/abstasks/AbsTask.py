@@ -135,8 +135,7 @@ class AbsTask(ABC):
 
     @property
     def metadata_dict(self) -> dict[str, Any]:
-        metadata_dict = dict(self.metadata)
-        return metadata_dict
+        return dict(self.metadata)
 
     @property
     def languages(self) -> list[str]:

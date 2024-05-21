@@ -35,6 +35,7 @@ from .eng.PoemSentimentClassification import *
 from .eng.ToxicChatClassification import *
 from .eng.ToxicConversationsClassification import *
 from .eng.TweetSentimentExtractionClassification import *
+from .eng.TweetTopicSingleClassification import *
 from .eng.YahooAnswersTopicsClassification import *
 from .eng.YelpReviewFullClassification import *
 from .est.estonian_valence import *
@@ -58,13 +59,17 @@ from .jpn.WRIMEClassification import *
 from .kan.KannadaNewsClassification import *
 from .kor.KlueTC import *
 from .kor.KorFin import *
+from .kor.KorHateClassification import *
+from .kor.KorSarcasmClassification import *
 from .kur.KurdishSentimentClassification import *
 from .mal.MalayalamNewsClassification import *
 from .mar.MarathiNewsClassification import *
 from .mkd.MacedonianTweetSentimentClassification import *
+from .multilingual.AfriSentiClassification import *
 from .multilingual.AfriSentiLangClassification import *
 from .multilingual.AmazonCounterfactualClassification import *
 from .multilingual.AmazonReviewsClassification import *
+from .multilingual.CataloniaTweetClassification import *
 from .multilingual.CyrillicTurkicLangClassification import *
 from .multilingual.HinDialectClassification import *
 from .multilingual.IndicLangClassification import *
@@ -85,6 +90,7 @@ from .multilingual.SIB200Classification import *
 from .multilingual.SouthAfricanLangClassification import *
 from .multilingual.SwissJudgementClassification import *
 from .multilingual.TweetSentimentClassification import *
+from .mya.MyanmarNews import *
 from .nep.NepaliNewsClassification import *
 from .nld.DutchBookReviewSentimentClassification import *
 from .nob.NoRecClassification import *

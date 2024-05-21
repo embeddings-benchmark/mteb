@@ -110,6 +110,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [CUADVolumeRestrictionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 322} | {'test': 306.27} |
 | [CUADWarrantyDurationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 320} | {'test': 352.27} |
 | [CanadaTaxCourtOutcomesLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 244} | {'test': 622.6} |
+| [CataloniaTweetClassification](https://aclanthology.org/2020.lrec-1.171/) | ['cat', 'spa'] | Classification | s2s | [Social, Government] | {'validation': 2000, 'test': 2000} | {'validation': 202.61, 'test': 200.49} |
 | [ClimateFEVER](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) | ['eng'] | Retrieval | s2p |  |  |  |
 | [CmedqaRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) | ['cmn'] | Retrieval | s2p |  |  |  |
 | [Cmnli](https://huggingface.co/datasets/clue/viewer/cmnli) | ['cmn'] | PairClassification | s2s |  |  |  |
@@ -231,7 +232,9 @@ The following tables give you an overview of the tasks in MTEB.
 | Ko-StrategyQA | ['kor'] | Retrieval | s2p |  |  |  |
 | Ko-miracl | ['kor'] | Retrieval | s2p |  |  |  |
 | [KorFin](https://huggingface.co/datasets/amphora/korfin-asc) (Son et al., 2023) | ['kor'] | Classification | s2s | [News] | {'test': 2048} | {'test': 75.28} |
+| [KorHateClassification](https://paperswithcode.com/dataset/korean-hatespeech-dataset) (Jihyung Moon, 2020) | ['kor'] | Classification | s2s | [Social] | {'train': 2048, 'test': 471} | {'train': 38.57, 'test': 38.86} |
 | [KorSTS](https://arxiv.org/abs/2004.03289) (Ham et al., 2020) | ['kor'] | STS | s2s | [News, Web] | {'test': 1379} | {'test': 29.279433139534884} |
+| [KorSarcasmClassification](https://github.com/SpellOnYou/korean-sarcasm) (Kim et al., 2019) | ['kor'] | Classification | s2s | [Social] | {'train': 2048, 'test': 301} | {'train': 48.45, 'test': 46.77} |
 | [KurdishSentimentClassification](https://link.springer.com/article/10.1007/s10579-023-09716-6) (Badawi et al., 2024) | ['kur'] | Classification | s2s | [Web] | {'train': 6000, 'test': 1987} | {'train': 59.38, 'test': 56.11} |
 | [LCQMC](https://aclanthology.org/2021.emnlp-main.357) | ['cmn'] | STS | s2s |  |  |  |
 | [LEMBNarrativeQARetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) | ['eng'] | Retrieval | s2p | [Fiction, Non-fiction] | {'test': 10804} | {'test': 326399.3} |
@@ -281,6 +284,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [MTOPIntentClassification](https://arxiv.org/pdf/2008.09335.pdf) | ['deu', 'eng', 'fra', 'hin', 'spa', 'tha'] | Classification | s2s |  | {'validation': 2235, 'test': 4386} | {'validation': 36.5, 'test': 36.8} |
 | [MacedonianTweetSentimentClassification](https://aclanthology.org/R15-1034/) | ['mkd'] | Classification | s2s | [Social] | {'test': 1139} | {'test': 67.6} |
 | [MalayalamNewsClassification](https://github.com/goru001/nlp-for-malyalam) | ['mal'] | Classification | s2s | [News] | {'train': 5036, 'test': 1260} | {'train': 79.48, 'test': 80.44} |
+| [MalteseNewsClassification](https://huggingface.co/datasets/MLRS/maltese_news_categories) | ['mlt'] | Classification | s2s | [Constructed] | {'train': 10784, 'test': 2297} | {'train': 1595.63, 'test': 1752.1} |
 | [MarathiNewsClassification](https://github.com/goru001/nlp-for-marathi) | ['mar'] | Classification | s2s | [News] | {'test': 2048} | {'test': 52.37} |
 | [MasakhaNEWSClassification](https://arxiv.org/abs/2304.09972) | ['amh', 'eng', 'fra', 'hau', 'ibo', 'lin', 'lug', 'orm', 'pcm', 'run', 'sna', 'som', 'swa', 'tir', 'xho', 'yor'] | Classification | s2s |  | {'test': 422} | {'test': 5116.6} |
 | [MasakhaNEWSClusteringP2P](https://huggingface.co/datasets/masakhane/masakhanews) | ['amh', 'eng', 'fra', 'hau', 'ibo', 'lin', 'lug', 'orm', 'pcm', 'run', 'sna', 'som', 'swa', 'tir', 'xho', 'yor'] | Clustering | p2p |  |  |  |
@@ -301,6 +305,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [MultiLongDocRetrieval](https://arxiv.org/abs/2402.03216) (Jianlv Chen, 2024) | ['ara', 'cmn', 'deu', 'eng', 'fra', 'hin', 'ita', 'jpn', 'kor', 'por', 'rus', 'spa', 'tha'] | Retrieval | s2p |  |  |  |
 | [MultilingualSentiment](https://github.com/tyqiangz/multilingual-sentiment-datasets) | ['cmn'] | Classification | s2s |  |  |  |
 | [MultilingualSentimentClassification](https://huggingface.co/datasets/mteb/multilingual-sentiment-classification) | ['ara', 'bam', 'bul', 'cmn', 'cym', 'deu', 'dza', 'ell', 'eng', 'eus', 'fas', 'fin', 'heb', 'hrv', 'ind', 'jpn', 'kor', 'mlt', 'nor', 'pol', 'rus', 'slk', 'spa', 'tha', 'tur', 'uig', 'urd', 'vie', 'zho'] | Classification | s2s | [Reviews] | {'test': 7000} | {'test': 56.0} |
+| [MyanmarNews](https://huggingface.co/datasets/myanmar_news) (A. H. Khine, 2017) | ['mya'] | Classification | p2p | [News] | {'train': 2048} | {'train': 174.2} |
 | [NFCorpus](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [NFCorpus-PL](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/) | ['pol'] | Retrieval | s2p |  |  |  |
 | [NQ](https://ai.google.com/research/NaturalQuestions/) | ['eng'] | Retrieval | s2p |  |  |  |
@@ -464,6 +469,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [TweetSarcasmClassification](https://aclanthology.org/2020.osact-1.5/) | ['ara'] | Classification | s2s | [Social] | {'test': 2110} | {'test': 102.1} |
 | [TweetSentimentClassification](https://aclanthology.org/2022.lrec-1.27) | ['ara', 'deu', 'eng', 'fra', 'hin', 'ita', 'por', 'spa'] | Classification | s2s | [Social] | {'test': 2048} | {'test': 83.51} |
 | [TweetSentimentExtractionClassification](https://www.kaggle.com/competitions/tweet-sentiment-extraction/overview) | ['eng'] | Classification | s2s |  | {'test': 3534} | {'test': 67.8} |
+| [TweetTopicSingleClassification](https://arxiv.org/abs/2209.09824) | ['eng'] | Classification | s2s | [Social, News] | {'test_2021': 1693} | {'test_2021': 167.66} |
 | [TwentyNewsgroupsClustering](https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html) | ['eng'] | Clustering | s2s |  | {'test': 59545} | {'test': 32.0} |
 | [TwitterHjerneRetrieval](https://huggingface.co/datasets/sorenmulli/da-hashtag-twitterhjerne) (Holm et al., 2024) | ['dan'] | Retrieval | p2p | [Social] | {'train': 340} | {'train': 138.23} |
 | [TwitterSemEval2015](https://alt.qcri.org/semeval2015/task1/) | ['eng'] | PairClassification | s2s |  | {'test': 16777} | {'test': 38.3} |
@@ -682,7 +688,7 @@ The following tables give you an overview of the tasks in MTEB.
 | cao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | cap | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | car | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cat | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| cat | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | cav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | cax | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | cbc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -780,7 +786,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | 3 | 7 | 0 | 0 | 1 | 2 | 0 | 3 | 0 | 0 |
 | emi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | emp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eng | 12 | 143 | 16 | 3 | 1 | 8 | 4 | 48 | 12 | 1 |
+| eng | 12 | 144 | 16 | 3 | 1 | 8 | 4 | 48 | 12 | 1 |
 | enq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | epo | 3 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | eri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -963,7 +969,7 @@ The following tables give you an overview of the tasks in MTEB.
 | knj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | knv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kon | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kor | 4 | 7 | 0 | 0 | 0 | 2 | 0 | 6 | 3 | 0 |
+| kor | 4 | 9 | 0 | 0 | 0 | 2 | 0 | 6 | 3 | 0 |
 | kos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kpf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kpg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1088,7 +1094,7 @@ The following tables give you an overview of the tasks in MTEB.
 | mlg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mlh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mlp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mlt | 2 | 3 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 |
+| mlt | 2 | 4 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 |
 | mmo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mmx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mna | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1129,7 +1135,7 @@ The following tables give you an overview of the tasks in MTEB.
 | mxp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mxq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mxt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mya | 3 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| mya | 3 | 5 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | myk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | myu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | myw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1322,7 +1328,7 @@ The following tables give you an overview of the tasks in MTEB.
 | soq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sot | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | soy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| spa | 4 | 13 | 4 | 0 | 1 | 2 | 1 | 11 | 4 | 0 |
+| spa | 4 | 14 | 4 | 0 | 1 | 2 | 1 | 11 | 4 | 0 |
 | spl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | spm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | spp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1548,7 +1554,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1363 | 933 | 105 | 3 | 23 | 63 | 12 | 311 | 72 | 2 |
+| Total | 1363 | 940 | 105 | 3 | 23 | 63 | 12 | 311 | 72 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
