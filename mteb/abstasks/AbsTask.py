@@ -81,10 +81,11 @@ class AbsTask(ABC):
                 f"\nTask: {self.metadata_dict['name']}, split: {split}, subset: {hf_subset}. Running..."
             )
             if hf_subset not in self.dataset and hf_subset == "default":
-                data_split = self.dataset[split]
+                data_split = self.dataset
             else:
                 data_split = self.dataset[hf_subset][split]
             scores[hf_subset] = self._evaluate_subset(model, data_split, **kwargs)
+            self._add_main_score(scores[hf_subset])
         return scores
 
     @abstractmethod

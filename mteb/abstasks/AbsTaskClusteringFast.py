@@ -111,7 +111,6 @@ class AbsTaskClusteringFast(AbsTask):
         self, model, dataset: DatasetDict, split: Split = "test", **kwargs: Any
     ) -> dict[str, float | dict[str, list[float]]]:
         _dataset = dataset[split]
-
         rng_state = random.Random(self.seed)
 
         if len(_dataset) > self.max_documents_to_embed:
