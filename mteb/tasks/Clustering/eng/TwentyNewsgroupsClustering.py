@@ -3,14 +3,14 @@ from __future__ import annotations
 import itertools
 
 from datasets import Dataset, DatasetDict
-from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class TwentyNewsgroupsClustering(AbsTaskClustering):
-    superseeded_by="TwentyNewsgroupsClustering.v2"
+    superseeded_by = "TwentyNewsgroupsClustering.v2"
     metadata = TaskMetadata(
         name="TwentyNewsgroupsClustering",
         description="Clustering of the 20 Newsgroups dataset (subject only).",
@@ -26,7 +26,7 @@ class TwentyNewsgroupsClustering(AbsTaskClustering):
         main_score="v_measure",
         date=("1995-01-01", "1995-01-01"),
         form=["written"],
-        domains=['News'],
+        domains=["News"],
         task_subtypes=["Thematic clustering"],
         license="Not specified",
         socioeconomic_status="mixed",
@@ -68,7 +68,7 @@ class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
         main_score="v_measure",
         date=("1995-01-01", "1995-01-01"),
         form=["written"],
-        domains=['News'],
+        domains=["News"],
         task_subtypes=["Thematic clustering"],
         license="Not specified",
         socioeconomic_status="mixed",
@@ -97,13 +97,14 @@ class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
         ds = dict()
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
-            sentences = list(itertools.chain.from_iterable(self.dataset[split]["sentences"]))
+            sentences = list(
+                itertools.chain.from_iterable(self.dataset[split]["sentences"])
+            )
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
         self.dataset = self.stratified_subsampling(
             self.dataset,
             self.seed,
-            self.metadata.eval_splits,
             label="labels",
             n_samples=2048,
         )

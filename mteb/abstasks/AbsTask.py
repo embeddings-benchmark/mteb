@@ -90,7 +90,7 @@ class AbsTask(ABC):
     @abstractmethod
     def _evaluate_subset(self, model, data_split, **kwargs) -> ScoresDict:
         raise NotImplementedError(
-            "If you are usign the default evaluate method, you must implement _evaluate_subset method."
+            "If you are using the default evaluate method, you must implement _evaluate_subset method."
         )
 
     @staticmethod
