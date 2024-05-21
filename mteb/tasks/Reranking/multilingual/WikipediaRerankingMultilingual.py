@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 _EVAL_LANGS = {
@@ -22,7 +23,7 @@ _EVAL_LANGS = {
 }
 _CONFIG_LIST = list(_EVAL_LANGS.keys())
 
-class WikipediaRerankingMultilingual(AbsTaskReranking):
+class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
     metadata = TaskMetadata(
         name="WikipediaRerankingMultilingual",
         description="The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.",
@@ -31,7 +32,6 @@ class WikipediaRerankingMultilingual(AbsTaskReranking):
         dataset={
             "path": "ellamind/wikipedia-2023-11-reranking-multilingual",
             "revision": "b20adcd11a02dc0226edbe8b5951e99ee0bb091c",
-            # "config": _CONFIG_LIST,
         },
         type="Reranking",
         category="s2p",
@@ -66,11 +66,3 @@ class WikipediaRerankingMultilingual(AbsTaskReranking):
         },
         avg_character_length={"test": 452},
     )
-
-    def load_data(self, config: str, **kwargs):
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = datasets.load_dataset(config=config, **self.metadata_dict["dataset"])  # type: ignore
-        self.dataset_transform()
-        self.data_loaded = True
