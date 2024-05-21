@@ -90,6 +90,7 @@ from .multilingual.ScalaClassification import *
 from .multilingual.SIB200Classification import *
 from .multilingual.SouthAfricanLangClassification import *
 from .multilingual.SwissJudgementClassification import *
+from .multilingual.TurkicClassification import *
 from .multilingual.TweetSentimentClassification import *
 from .mya.MyanmarNews import *
 from .nep.NepaliNewsClassification import *
