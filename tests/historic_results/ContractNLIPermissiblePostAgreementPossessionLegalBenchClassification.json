@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.4414414414414415,
+    "accuracy_stderr": 5.551115123125783e-17,
+    "ap": 0.27566577566577566,
+    "ap_stderr": 0.0,
+    "evaluation_time": 28.5,
+    "f1": 0.4403057905009759,
+    "f1_stderr": 0.0,
+    "main_score": 0.4414414414414415
+  }
+}
