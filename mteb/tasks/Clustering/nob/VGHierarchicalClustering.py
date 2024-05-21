@@ -52,7 +52,7 @@ class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
         # Subsampling the dataset
         self.dataset["test"] = self.dataset["test"].train_test_split(
             test_size=N_SAMPLES, seed=self.seed
-        )
+        )["test"]
 
 
 class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
@@ -96,4 +96,4 @@ class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
         # Subsampling the dataset
         self.dataset["test"] = self.dataset["test"].train_test_split(
             test_size=N_SAMPLES, seed=self.seed
-        )
+        )["test"]
