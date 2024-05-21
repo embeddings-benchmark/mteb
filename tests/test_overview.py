@@ -4,8 +4,8 @@ import pytest
 
 import mteb
 from mteb import get_tasks
-from mteb.overview import MTEBTasks
 from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
+from mteb.overview import MTEBTasks
 
 
 def test_get_tasks_size_differences():

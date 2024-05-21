@@ -10,9 +10,9 @@ import numpy as np
 import torch
 from datasets import DatasetDict
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.languages import LanguageScripts
-from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ..MTEBResults import HFSubset, ScoresDict
 
