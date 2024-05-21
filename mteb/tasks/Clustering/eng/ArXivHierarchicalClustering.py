@@ -46,8 +46,10 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClusteringFast):
     def dataset_transform(self):
         ds = dict()
         for split in self.metadata.eval_splits:
-            labels = itertools.chain.from_iterable(self.dataset[split]["labels"])
-            sentences = itertools.chain.from_iterable(self.dataset[split]["sentences"])
+            labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
+            sentences = list(
+                itertools.chain.from_iterable(self.dataset[split]["sentences"])
+            )
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
         self.dataset = self.dataset.map(split_labels)
@@ -87,8 +89,10 @@ class ArXivHierarchicalClusteringS2S(AbsTaskClusteringFast):
     def dataset_transform(self):
         ds = dict()
         for split in self.metadata.eval_splits:
-            labels = itertools.chain.from_iterable(self.dataset[split]["labels"])
-            sentences = itertools.chain.from_iterable(self.dataset[split]["sentences"])
+            labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
+            sentences = list(
+                itertools.chain.from_iterable(self.dataset[split]["sentences"])
+            )
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
         self.dataset = self.dataset.map(split_labels)
