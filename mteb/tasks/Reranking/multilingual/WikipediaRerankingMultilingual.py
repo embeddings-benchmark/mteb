@@ -21,7 +21,6 @@ _EVAL_LANGS = {
     "ro": ["ron-Latn"],
     "sr": ["srp-Cyrl"],
 }
-_CONFIG_LIST = list(_EVAL_LANGS.keys())
 
 class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
     metadata = TaskMetadata(
