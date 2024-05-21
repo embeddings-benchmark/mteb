@@ -4,6 +4,7 @@ import logging
 
 from ..evaluation.evaluators import STSEvaluator
 from .AbsTask import AbsTask
+from .MTEBResults import ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -21,35 +22,14 @@ class AbsTaskSTS(AbsTask):
         super().__init__(**kwargs)
 
     @property
-    def min_score(self):
+    def min_score(self) -> int:
         return self.metadata_dict["min_score"]
 
     @property
-    def max_score(self):
+    def max_score(self) -> int:
         return self.metadata_dict["max_score"]
 
-    def evaluate(self, model, split, **kwargs):
-        if not self.data_loaded:
-            self.load_data()
-
-        if self.is_crosslingual or self.is_multilingual:
-            scores = {}
-            for lang in self.dataset:
-                logger.info(
-                    f"Task: {self.metadata_dict['name']}, split: {split}, language: {lang}. Running..."
-                )
-                data_split = self.dataset[lang][split]
-                scores[lang] = self._evaluate_split(model, data_split, **kwargs)
-        else:
-            logger.info(
-                f"\nTask: {self.metadata_dict['name']}, split: {split}. Running..."
-            )
-            data_split = self.dataset[split]
-            scores = self._evaluate_split(model, data_split, **kwargs)
-
-        return scores
-
-    def _evaluate_split(self, model, data_split, **kwargs):
+    def _evaluate_subset(self, model, data_split, **kwargs) -> ScoresDict:
         def normalize(x):
             return (x - self.min_score) / (self.max_score - self.min_score)
 
@@ -60,5 +40,13 @@ class AbsTaskSTS(AbsTask):
             normalized_scores,
             **kwargs,
         )
-        metrics = evaluator(model)
-        return metrics
+        scores = evaluator(model)
+
+        self._add_main_score(scores)
+        return scores
+
+    def _add_main_score(self, scores: ScoresDict) -> None:
+        m_score = self.metadata.main_score
+        dist, metric = m_score.split("_")
+        dist_mapping = {"cosine": "cos_sim"}
+        scores["main_score"] = scores[dist_mapping.get(dist, dist)][metric]

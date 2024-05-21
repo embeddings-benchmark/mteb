@@ -2,8 +2,12 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+from typing import get_args
+
+import polars as pl
 
 import mteb
+from mteb.abstasks.TaskMetadata import PROGRAMMING_LANGS, TASK_TYPE
 
 
 def author_from_bibtex(bibtex: str | None) -> str:
@@ -56,29 +60,76 @@ def create_tasks_table(tasks: list[mteb.AbsTask]) -> str:
     return table
 
 
-def insert_table(file_path, table):
-    """Insert table in the in <!-- TABLE START --> and <!-- TABLE END -->"""
-    with open(file_path, "r") as file:
-        md = file.read()
+def create_task_lang_table(tasks: list[mteb.AbsTask]) -> str:
+    table_dict = {}
+    ## Group by language. If it is a multilingual dataset, 1 is added to all languages present.
+    for task in tasks:
+        for lang in task.metadata.languages:
+            if lang in PROGRAMMING_LANGS:
+                lang = "code"
+            if table_dict.get(lang) is None:
+                table_dict[lang] = {k: 0 for k in sorted(get_args(TASK_TYPE))}
+            table_dict[lang][task.metadata.type] += 1
 
-    start = "<!-- TABLE START -->"
-    end = "<!-- TABLE END -->"
+    ## Wrangle for polars
+    pl_table_dict = []
+    for lang, d in table_dict.items():
+        d.update({"lang": lang})
+        pl_table_dict.append(d)
 
-    md = md.replace(md[md.index(start) + len(start) : md.index(end)], table)
+    df = pl.DataFrame(pl_table_dict).sort(by="lang")
+    total = df.sum(axis=0)
 
-    with open(file_path, "w") as file:
-        file.write(md)
+    task_names_md = " | ".join(sorted(get_args(TASK_TYPE)))
+    horizontal_line_md = "---|---" * len(sorted(get_args(TASK_TYPE)))
+    table = """
+| Language | {} |
+|{}|
+""".format(task_names_md, horizontal_line_md)
+
+    for row in df.iter_rows():
+        table += f"| {row[-1]} "
+        for num in row[:-1]:
+            table += f"| {num} "
+        table += "|\n"
+
+    for row in total.iter_rows():
+        table += "| Total "
+        for num in row[:-1]:
+            table += f"| {num} "
+        table += "|\n"
+
+    return table
+
+
+def insert_tables(
+    file_path: str, tables: list[str], tags: list[str] = ["TASKS TABLE"]
+) -> None:
+    """Insert tables within <!-- TABLE START --> and <!-- TABLE END --> or similar tags."""
+    md = Path(file_path).read_text()
+
+    for table, tag in zip(tables, tags):
+        start = f"<!-- {tag} START -->"
+        end = f"<!-- {tag} END -->"
+        md = md.replace(md[md.index(start) + len(start) : md.index(end)], table)
+
+    Path(file_path).write_text(md)
 
 
 def main():
     tasks = mteb.get_tasks()
     tasks = sorted(tasks, key=lambda x: x.metadata.name)
 
-    table = create_tasks_table(tasks)
+    tasks_table = create_tasks_table(tasks)
+    task_lang_table = create_task_lang_table(tasks)
 
     file_path = Path(__file__).parent / "tasks.md"
 
-    insert_table(file_path, table)
+    insert_tables(
+        file_path,
+        tables=[tasks_table, task_lang_table],
+        tags=["TASKS TABLE", "TASK LANG TABLE"],
+    )
 
 
 if __name__ == "__main__":

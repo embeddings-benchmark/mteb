@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskSTS, MultilingualTask
@@ -32,11 +30,12 @@ def categorize_float(float_value):
 
 
 class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
+    fast_loading = True
     metadata = TaskMetadata(
         name="IndicCrosslingualSTS",
         dataset={
-            "path": "jaygala24/indic_sts",
-            "revision": "16abc16bea9e38262a8a3a74fd71ce2da51a5c3b",
+            "path": "mteb/indic_sts",
+            "revision": "0ca7b87dda68ef4ebb2f50a20a62b9dbebcac3e4",
         },
         description="This is a Semantic Textual Similarity testset between English and 12 high-resource Indic languages.",
         reference="https://huggingface.co/datasets/jaygala24/indic_sts",
@@ -78,22 +77,9 @@ class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
         metadata_dict["max_score"] = 5
         return metadata_dict
 
-    def load_data(self, **kwargs):
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-
-        self.dataset = {}
-        for lang in self.langs:
-            self.dataset[lang] = datasets.load_dataset(
-                name=lang, **self.metadata_dict["dataset"]
-            )
-        self.dataset_transform()
-        self.data_loaded = True
-
     def dataset_transform(self) -> None:
         # Convert to standard format
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang] = self.dataset[lang].rename_columns(
                 {"english_sentence": "sentence1", "indic_sentence": "sentence2"}
             )

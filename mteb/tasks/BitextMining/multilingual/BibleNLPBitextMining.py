@@ -902,7 +902,7 @@ class BibleNLPBitextMining(AbsTaskBitextMining, CrosslingualTask):
 
         self.dataset = {}
         seen_pairs = []
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             # e.g. 'aai_Latn-eng_Latn' -> 'eng-aai'
             hf_lang_name = self._transform_lang_name_hf(lang)
 
@@ -921,7 +921,7 @@ class BibleNLPBitextMining(AbsTaskBitextMining, CrosslingualTask):
 
     def dataset_transform(self) -> None:
         # Convert to standard format
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             l1, l2 = [l.split("_")[0] for l in lang.split("-")]
 
             self.dataset[lang] = self.dataset[lang].rename_columns(

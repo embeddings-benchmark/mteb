@@ -9,6 +9,7 @@ from mteb.overview import get_tasks
 _HISTORIC_DATASETS = [
     "BornholmBitextMining",
     "BUCC",
+    "BUCC.v2",
     "DiaBlaBitextMining",
     "FloresBitextMining",
     "NorwegianCourtsBitextMining",
@@ -16,6 +17,7 @@ _HISTORIC_DATASETS = [
     "RomaTalesBitextMining",
     "Tatoeba",
     "HotelReviewSentimentClassification",
+    "OnlineStoreReviewSentimentClassification",
     "RestaurantReviewSentimentClassification",
     "TweetEmotionClassification",
     "AngryTweetsClassification",

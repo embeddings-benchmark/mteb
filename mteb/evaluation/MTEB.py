@@ -6,14 +6,16 @@ import os
 import pathlib
 import traceback
 from datetime import datetime
-from importlib.metadata import version
 from time import time
 from typing import List, Union
 
 import datasets
 
+from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+
 from ..abstasks import *
 from ..abstasks import AbsTask, LangMapping
+from ..abstasks.MTEBResults import MTEBResults
 from ..tasks import *
 
 logger = logging.getLogger(__name__)
@@ -48,6 +50,7 @@ class MTEB:
             tasks: List of tasks to be evaluated. If specified, we filter tasks based on `task_langs` only
             version: Version of the benchmark to use. If None, latest is used
             err_logs_path: Path to save error logs
+            co2_tracker: Whether to enable or disable CO2 emissions tracker
             kwargs: Additional arguments to be passed to the tasks
         """
         if tasks is not None:
@@ -114,7 +117,7 @@ class MTEB:
             console.rule(f"[bold]{name}\n", style="grey15")
         for task_type in self.available_task_types:
             current_type_tasks = list(
-                filter(lambda x: x.metadata_dict["type"] == task_type, task_list)
+                filter(lambda x: x.metadata.type == task_type, task_list)
             )
             if len(current_type_tasks) == 0:
                 continue
@@ -122,15 +125,15 @@ class MTEB:
                 console.print(f"[bold]{task_type}[/]")
                 for task in current_type_tasks:
                     prefix = "    - "
-                    name = f"{task.metadata_dict['name']}"
-                    category = f", [italic grey39]{task.metadata_dict['category']}[/]"
+                    name = f"{task.metadata.name}"
+                    category = f", [italic grey39]{task.metadata.category}[/]"
                     multilingual = (
-                        f", [italic red]multilingual {len(task.langs)} / {len(task.metadata_dict['eval_langs'])} langs[/]"
+                        f", [italic red]multilingual {len(task.hf_subsets)} / {len(task.metadata.eval_langs)} langs[/]"
                         if task.is_multilingual
                         else ""
                     )
                     crosslingual = (
-                        f", [italic cyan]crosslingual {len(task.langs)} / {len(task.metadata_dict['eval_langs'])} pairs[/]"
+                        f", [italic cyan]crosslingual {len(task.hf_subsets)} / {len(task.metadata.eval_langs)} pairs[/]"
                         if task.is_crosslingual
                         else ""
                     )
@@ -217,32 +220,41 @@ class MTEB:
             logger.info(f"\n# Loading dataset for {task.metadata_dict['name']}")
             task.load_data()
 
+    @staticmethod
+    def _run_eval(task, model, split, output_folder, **kwargs):
+        tick = time()
+        results = task.evaluate(model, split, output_folder=output_folder, **kwargs)
+        tock = time()
+        return results, tick, tock
+
     def run(
         self,
-        model,
-        verbosity=1,
+        model: Encoder | EncoderWithQueryCorpusEncode,
+        verbosity: int = 1,
         output_folder="results/result",
         eval_splits=None,
-        overwrite_results=False,
+        overwrite_results: bool = False,
         raise_error: bool = True,
+        co2_tracker: bool = False,
         **kwargs,
     ):
         """Run the evaluation pipeline on the selected tasks.
 
-        Parameters
-        ----------
-        model:
-            Model to be used for evaluation
-        verbosity: int
-            Verbosity level. Default is 1.
-            0: print tasks tqdm progress bar
-            1: print tasks tqdm progress bar and scores
-            2: print everything (including datasets loading)
-        output_folder: str
-            Folder where the results will be saved
-        raise_error: bool
-            Whether to raise an error if an exception occurs during evaluation.
-        :return: Returns a dictionary of task names and corresponding metrics results.
+        Args:
+            model: Model to be used for evaluation
+            verbosity: Verbosity level. Default is 1.
+                0: print tasks tqdm progress bar
+                1: print tasks tqdm progress bar and scores
+                2: print everything (including datasets loading)
+            output_folder: Folder where the results will be saved
+            eval_splits: List of splits to evaluate on. If None, the splits are taken from the task metadata.
+            overwrite_results: Whether to overwrite existing results.
+            raise_error: Whether to raise an error if an exception occurs during evaluation.
+            co2_tracker: Whether to enable or disable CO2 emissions tracker using codecarbon.
+            kwargs: Additional arguments to be passed to `_run_eval` method and task.load_data.
+
+        Returns:
+            A list of MTEBResults objects, one for each task evaluated.
         """
         # Set logging
         if verbosity < 2:
@@ -256,7 +268,7 @@ class MTEB:
         # Run selected tasks
         logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks:")
         self.print_selected_tasks()
-        evaluation_results = {}
+        evaluation_results = []
         original_tasks = (
             self.tasks.copy()
         )  # save them in case we re-use the object (e.g. for reranking)
@@ -292,33 +304,57 @@ class MTEB:
                 task.load_data(eval_splits=task_eval_splits, **kwargs)
 
                 # run evaluation
-                task_results = {
-                    "mteb_version": version("mteb"),  # noqa: F405
-                    "dataset_revision": task.metadata_dict["dataset"].get(
-                        "revision", None
-                    ),
-                    "mteb_dataset_name": task.metadata_dict["name"],
-                }
+                task_results = {}
+                evaluation_time = 0
+                kg_co2_emissions: int | None = 0 if co2_tracker else None
                 for split in task_eval_splits:
-                    tick = time()
-                    results = task.evaluate(
-                        model, split, output_folder=output_folder, **kwargs
-                    )
-                    tock = time()
+                    if co2_tracker:
+                        try:
+                            from codecarbon import EmissionsTracker
+                        except ImportError:
+                            raise ImportError(
+                                "To use the CO2 emissions tracker, please install codecarbon using 'pip install codecarbon'"
+                            )
+
+                        with EmissionsTracker(
+                            save_to_file=False, save_to_api=False, logging_logger=logger
+                        ) as tracker:
+                            results, tick, tock = self._run_eval(
+                                task, model, split, output_folder, **kwargs
+                            )
+
+                        kg_co2_emissions += (
+                            tracker.emissions
+                        )  # expressed as kilograms of CO₂-equivalents
+                    else:
+                        results, tick, tock = self._run_eval(
+                            task, model, split, output_folder, **kwargs
+                        )
+
                     logger.info(
                         f"Evaluation for {task.metadata_dict['name']} on {split} took {tock - tick:.2f} seconds"
                     )
-                    results["evaluation_time"] = round(tock - tick, 2)
+                    evaluation_time += tock - tick
+
                     task_results[split] = results
                     if verbosity >= 1:
                         logger.info(f"Scores: {results}")
 
+                mteb_task_result = MTEBResults.from_task_results(
+                    task,
+                    task_results,
+                    evaluation_time=evaluation_time,
+                    kg_co2_emissions=kg_co2_emissions,
+                )
+
                 # save results
                 if output_folder is not None:
                     with open(save_path, "w") as f_out:
-                        json.dump(task_results, f_out, indent=2, sort_keys=True)
+                        json.dump(
+                            mteb_task_result.to_dict(), f_out, indent=2, sort_keys=True
+                        )
 
-                evaluation_results[task.metadata_dict["name"]] = task_results
+                evaluation_results.append(mteb_task_result)
 
             except Exception as e:
                 logger.error(

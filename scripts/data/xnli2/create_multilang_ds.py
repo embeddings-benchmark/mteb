@@ -16,6 +16,9 @@ _LANGS = {
     "odiya": ["ory-Orya"],
     "sanskrit": ["san-Deva"],
     "tamil": ["tam-Taml"],
+    "turkish": ["tur-Latn"],
+    "greek": ["ell-Grek"],
+    "russian": ["rus-Cyrl"],
 }
 
 for lang in _LANGS.keys():
