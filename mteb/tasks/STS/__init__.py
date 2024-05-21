@@ -12,6 +12,7 @@ from .eng.STSBenchmarkSTS import *
 from .fao.FaroeseSTS import *
 from .fin.FinParaSTS import *
 from .fra.SickFrSTS import *
+from .jpn.JSICK import *
 from .jpn.JSTS import *
 from .kor.KlueSTS import *
 from .kor.KorSTS import *

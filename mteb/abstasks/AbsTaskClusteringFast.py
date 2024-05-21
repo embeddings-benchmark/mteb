@@ -13,13 +13,12 @@ from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 
 from .AbsTask import AbsTask
+from .MTEBResults import HFSubset, Split
 
 logger = logging.getLogger(__name__)
 
-Split = str
-HFLang = str
-MultilingualDataset = Dict[HFLang, DatasetDict]
-Scores = Dict[str, Any]
+
+MultilingualDataset = Dict[HFSubset, DatasetDict]
 
 
 def evaluate_clustering_bootstrapped(
@@ -108,35 +107,7 @@ class AbsTaskClusteringFast(AbsTask):
                 f"main score {self.metadata_dict['main_score']} not found in scores {scores.keys()}"
             )
 
-    def evaluate(self, model, split="test", **kwargs) -> Scores | Dict[HFLang, Scores]:
-        lang: HFLang
-        multilingual_ds: MultilingualDataset
-        self.dataset: MultilingualDataset | DatasetDict
-        ds: DatasetDict
-
-        if not self.data_loaded:
-            self.load_data()
-
-        if self.is_multilingual:
-            multilingual_ds = self.dataset  # type: ignore
-
-            multilingual_scores: dict[HFLang, Scores] = {}
-            for lang in self.dataset:  # type: ignore
-                logger.info(
-                    f"\nTask: {self.metadata.name}, split: {split}, language: {lang}. Running..."
-                )
-                multilingual_scores[lang] = self._evaluate_monolingual(
-                    model, multilingual_ds[lang], split, **kwargs
-                )
-                self._add_main_score(multilingual_scores[lang])
-            return multilingual_scores
-        logger.info(f"\nTask: {self.metadata.name}, split: {split}. Running...")
-
-        ds = self.dataset  # type: ignore
-        scores = self._evaluate_monolingual(model, ds, split, **kwargs)
-        return scores
-
-    def _evaluate_monolingual(
+    def _evaluate_subset(
         self, model, dataset: DatasetDict, split: Split = "test", **kwargs: Any
     ) -> dict[str, float | dict[str, list[float]]]:
         _dataset = dataset[split]
