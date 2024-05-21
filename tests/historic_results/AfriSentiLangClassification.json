@@ -1,0 +1,13 @@
+{
+  "dataset_revision": "f17cb5f3ec522ac604601fd09db9fd644ac66ca5",
+  "mteb_dataset_name": "AfriSentiLangClassification",
+  "mteb_version": "1.7.27",
+  "test": {
+    "accuracy": 0.681982421875,
+    "accuracy_stderr": 0.017141453878552912,
+    "evaluation_time": 19.8,
+    "f1": 0.6560546800984801,
+    "f1_stderr": 0.017047608952243772,
+    "main_score": 0.681982421875
+  }
+}

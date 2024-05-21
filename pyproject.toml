@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.8.0"
+version = "1.11.3"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -53,6 +53,7 @@ mteb = "mteb.cmd:main"
 
 [project.optional-dependencies]
 dev = ["ruff>=0.0.254", "pytest", "pytest-xdist"]
+codecarbon = ["codecarbon"]
 
 
 [tool.setuptools.packages.find]
@@ -73,6 +74,7 @@ ignore = ["E501",   # line too long
         "D101",     # Missing docstring in public class
         "D102",     # Missing docstring in public method
         "D103",     # Missing docstring in public function
+        "D105",     # Missing docstring in magic method
         "D104",     # Missing docstring in public package
         "D107",     # Missing docstring in __init__
         "D205",     # 1 blank line required between summary line and description

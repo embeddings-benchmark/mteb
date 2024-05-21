@@ -75,7 +75,7 @@ class IndicLangClassification(AbsTaskClassification):
         category="s2s",
         type="Classification",
         eval_splits=["test"],
-        eval_langs=_LANGUAGES,
+        eval_langs=[l for langs in _LANGUAGES.values() for l in langs],
         main_score="accuracy",
         date=("2022-08-01", "2023-01-01"),
         form=["written"],

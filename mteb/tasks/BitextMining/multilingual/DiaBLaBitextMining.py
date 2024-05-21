@@ -45,7 +45,7 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
 
         self.dataset = {}
 
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(**self.metadata_dict["dataset"])
 
         self.dataset_transform()
@@ -64,5 +64,5 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
             return row
 
         # Convert to standard format
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang] = self.dataset[lang].map(create_columns)

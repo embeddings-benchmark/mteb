@@ -4,6 +4,7 @@ from .BitextMining import *
 from .Classification import *
 from .Clustering import *
 from .InstructionRetrieval import *
+from .MultiLabelClassification import *
 from .PairClassification import *
 from .Reranking import *
 from .Retrieval import *

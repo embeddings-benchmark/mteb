@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "LearnedHandsHousingLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.84521484375,
+    "accuracy_stderr": 0.0,
+    "ap": 0.7840534924372146,
+    "ap_stderr": 0.0,
+    "evaluation_time": 539.9,
+    "f1": 0.8450285885608041,
+    "f1_stderr": 0.0,
+    "main_score": 0.84521484375
+  }
+}
