@@ -85,7 +85,6 @@ class AbsTask(ABC):
             else:
                 data_split = self.dataset[hf_subset][split]
             scores[hf_subset] = self._evaluate_subset(model, data_split, **kwargs)
-            self._add_main_score(scores[hf_subset])
         return scores
 
     @abstractmethod

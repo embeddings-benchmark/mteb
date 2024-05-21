@@ -111,6 +111,7 @@ class AbsTaskClusteringFast(AbsTask):
         self, model, dataset: DatasetDict, split: Split = "test", **kwargs: Any
     ) -> dict[str, float | dict[str, list[float]]]:
         _dataset = dataset[split]
+        
         rng_state = random.Random(self.seed)
 
         if len(_dataset) > self.max_documents_to_embed:
@@ -141,8 +142,9 @@ class AbsTaskClusteringFast(AbsTask):
         )
         all_v_scores = itertools.chain.from_iterable(v_measures.values())
         mean_v_measure = np.mean(list(all_v_scores))
-
-        return {"v_measures": v_measures, "v_measure": float(mean_v_measure)}
+        scores = {"v_measures": v_measures, "v_measure": float(mean_v_measure)}
+        self._add_main_score(scores)
+        return scores
 
 
 def clustering_downsample(
