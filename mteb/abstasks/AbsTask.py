@@ -81,7 +81,7 @@ class AbsTask(ABC):
                 f"\nTask: {self.metadata_dict['name']}, split: {split}, subset: {hf_subset}. Running..."
             )
             if hf_subset not in self.dataset and hf_subset == "default":
-                data_split = self.dataset
+                data_split = self.dataset[split]
             else:
                 data_split = self.dataset[hf_subset][split]
             scores[hf_subset] = self._evaluate_subset(model, data_split, **kwargs)
