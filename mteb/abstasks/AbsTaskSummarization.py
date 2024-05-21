@@ -4,7 +4,7 @@ import logging
 
 import numpy as np
 
-from mteb.abstasks.MTEBResults import ScoresDict
+from mteb.MTEBResults import ScoresDict
 
 from ..evaluation.evaluators import SummarizationEvaluator
 from .AbsTask import AbsTask

@@ -10,11 +10,11 @@ import numpy as np
 import torch
 from datasets import DatasetDict
 
-from mteb.abstasks.languages import LanguageScripts
-from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.languages import LanguageScripts
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from .MTEBResults import HFSubset, ScoresDict
+from ..MTEBResults import HFSubset, ScoresDict
 
 logger = logging.getLogger(__name__)
 

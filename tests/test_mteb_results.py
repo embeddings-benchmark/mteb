@@ -2,7 +2,7 @@ from importlib.metadata import version
 
 import mteb
 from mteb import AbsTask
-from mteb.abstasks.MTEBResults import MTEBResults
+from mteb.MTEBResults import MTEBResults
 
 
 class DummyTask(AbsTask):

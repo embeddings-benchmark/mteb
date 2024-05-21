@@ -7,7 +7,7 @@ from collections import Counter
 from typing import Dict, Set, Type
 
 from mteb.abstasks import AbsTask
-from mteb.abstasks.languages import (
+from mteb.languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
     path_to_lang_codes,

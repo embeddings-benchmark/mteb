@@ -10,7 +10,7 @@ import numpy as np
 from pydantic import BaseModel, field_validator
 
 from mteb.abstasks import AbsTask
-from mteb.abstasks.languages import LanguageScripts
+from mteb.languages import LanguageScripts
 from mteb.abstasks.TaskMetadata import (
     ISO_LANGUAGE,
     ISO_LANGUAGE_SCRIPT,
