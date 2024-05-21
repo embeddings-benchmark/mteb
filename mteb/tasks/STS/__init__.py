@@ -12,6 +12,7 @@ from .eng.STSBenchmarkSTS import *
 from .fao.FaroeseSTS import *
 from .fin.FinParaSTS import *
 from .fra.SickFrSTS import *
+from .jpn.JSICK import *
 from .jpn.JSTS import *
 from .kor.KlueSTS import *
 from .kor.KorSTS import *
@@ -21,6 +22,8 @@ from .multilingual.STS22CrosslingualSTS import *
 from .multilingual.STSBenchmarkMultilingualSTS import *
 from .pol.PolishSTS import *
 from .por.Assin2STS import *
+from .por.SickBrSTS import *
 from .ron.RonSTS import *
+from .rus.RUParaPhraserSTS import *
 from .spa.STSES import *
 from .zho.CMTEBSTS import *
