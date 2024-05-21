@@ -46,6 +46,7 @@ Please also add your first name and last name are as you want them to appear in 
 | MathieuCiancone   | Mathieu    | Ciancone   |                              |                      |  Wikit, Lyon, France                                  |
 | MartinBernstorff  | Martin     | Bernstorff | martinbernstorff@gmail.com   | ~Martin_Bernstorff1  |  Aarhus University, Denmark                           |
 | staoxiao          | Shitao     | Xiao       | 2906698981@qq.com            | ~Shitao_Xiao1        |  Beijing Academy of Artificial Intelligence           |
+| ZhengLiu101       | Zheng     | Liu         | zhengliu1026@gmail.com       | ~Zheng_Liu4          |  Beijing Academy of Artificial Intelligence           |
 | achibb            | Aaron      | Chibb      |                              |                      | N/A                                                   |
 | cassanof          | Federico   | Cassano    | federico.cassanno@federico.codes | ~Federico_Cassano1 | Northeastern University, Boston, USA                |
 | taidnguyen        | Nguyen     | Tai        | taing@seas.upenn.edu         | ~Nguyen_Tai1         |  University of Pennsylvania                           |
@@ -70,12 +71,17 @@ Please also add your first name and last name are as you want them to appear in 
 | Akash190104       | Akash      | Kundu      | akashkundu2xx4@gmail.com      |~Akash_Kundu2             | Heritage Institute of Technology, Kolkata && Apart Research |
 | dwzhu-pku         | Dawei      | Zhu        | dwzhu@pku.edu.cn             | ~Dawei_Zhu2       | Peking University            |
 | ljvmiranda921     | Lester James | Miranda  | ljm@allenai.org              | ~Lester_James_Validad_Miranda1 | Allen Institute for AI |
+| Sakshamrzt        | Saksham    | Thakur     | sthakur5@alumni.ncsu.edu     | ~Saksham_Thakur1     | N/A                                                   |
 | Andrian0s     | Andrianos | Michail  | andrianos.michail@cl.uzh.ch         | ~Andrianos_Michail1 | University of Zurich|
 | simon-clematide     | Simon | Clematide  | simon.clematide@cl.uzh.ch         | ~Simon_Clematide1 | University of Zurich|
 | SaitejaUtpala     | Saiteja | Utpala  | saitejautpala@gmail.com         | ~Saiteja_Utpala1 | Microsoft Research|
 | mmhamdy     | Mohammed | Hamdy  | mhamdy.res@gmail.com         | ~Mohammed_Hamdy1 | Cohere For AI Community|
 | jupyterjazz       | Saba         | Sturua     | saba.sturua@jina.ai              |     ~Saba_Sturua1      | Jina AI                                                     |
+| Ruqyai       | Ruqiya         | Bin Safi     | ruqiya.binsafi@libfstudy.ac.uk           |    ~Ruqiya_Bin_Safi1       | LIBF : The London Institute of Banking & Finance                                                    |
 | kranthigv     | Kranthi Kiran | GV  | kranthi.gv@nyu.edu         | ~Kranthi_Kiran_GV1 | New York University|
 | jupyterjazz       | Saba         | Sturua     | saba.sturua@jina.ai              |     ~Saba_Sturua1      | Jina AI   
 | shreeya-dhakal            | Shreeya     | Dhakal     | ssdhakal57@gmail.com      |                      | Individual Contributor                                                   |
 | dipam7 | Dipam | Vasani | dipam44@gmail.com | ~Dipam_Vasani1 | Individual Contributor                                                  |
+| Art3mis07 | Gayatri | K | gayatrikrishnakumar0707@gmail.com | ~Gayatri_K1 | R. V. College of Engineering, Bengaluru | 
+| jankounchained    | Jan        | Kostkan    | jan.kostkan@cas.au.dk | ~Jan_Kostkan1        | Aarhus University, Denmark                            |
+| bp-high           | Bhavish       | Pahwa      | t-bpahwa@microsoft.com           | ~Bhavish_Pahwa1 | Microsoft Research                              |

@@ -30,6 +30,7 @@ def test_two_mteb_tasks():
     [
         BornholmBitextMining(),
         "TwentyNewsgroupsClustering",
+        "TwentyNewsgroupsClustering.v2",
         "Banking77Classification",
         "SciDocsRR",
         "SprintDuplicateQuestions",
