@@ -3,6 +3,8 @@ from __future__ import annotations
 from mteb.abstasks import TaskMetadata
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
+N_SAMPLES = 2048
+
 
 def split_labels(record: dict) -> dict:
     record["labels"] = record["labels"].split(",")[:2]
@@ -38,7 +40,7 @@ class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
     year={2023},
     school={Norwegian University of Life Sciences, {\AA}s}
 }""",
-        n_samples={"test": 18763},
+        n_samples={"test": N_SAMPLES},
         avg_character_length={"test": 2670.3243084794544},
     )
 
@@ -47,12 +49,9 @@ class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
             {"article": "sentences", "classes": "labels"}
         )
         self.dataset = self.dataset.map(split_labels)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=2048,
+        # Subsampling the dataset
+        self.dataset["test"] = self.dataset["test"].train_test_split(
+            test_size=N_SAMPLES, seed=self.seed
         )
 
 
@@ -85,7 +84,7 @@ class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
     year={2023},
     school={Norwegian University of Life Sciences, {\AA}s}
 }""",
-        n_samples={"test": 18763},
+        n_samples={"test": N_SAMPLES},
         avg_character_length={"test": 139.31247668283325},
     )
 
@@ -94,10 +93,7 @@ class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
             {"ingress": "sentences", "classes": "labels"}
         )
         self.dataset = self.dataset.map(split_labels)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=2048,
+        # Subsampling the dataset
+        self.dataset["test"] = self.dataset["test"].train_test_split(
+            test_size=N_SAMPLES, seed=self.seed
         )
