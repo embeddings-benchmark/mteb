@@ -8,10 +8,13 @@ from typing import Any
 import datasets
 import numpy as np
 import torch
+from datasets import DatasetDict
 
 from mteb.abstasks.languages import LanguageScripts
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+
+from .MTEBResults import HFSubset, ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +48,50 @@ class AbsTask(ABC):
         Override this method if your dataset requires any transformation.
         """
         pass
+
+    def evaluate(
+        self,
+        model: Encoder | EncoderWithQueryCorpusEncode,
+        split: str = "test",
+        **kwargs: Any,
+    ) -> dict[HFSubset, ScoresDict]:
+        """Evaluates a Sentence Embedding Model on the task.
+        Returns a dict (that can be serialized to json).
+
+        Args:
+            model: Sentence embedding method. Implements a encode(sentences) method, that encodes sentences and returns a numpy matrix with the
+                sentence embeddings
+            split: Which datasplit to be used.
+            kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
+        """
+        if not self.data_loaded:
+            self.load_data()
+
+        self.dataset: dict[HFSubset, DatasetDict]
+
+        scores = {}
+        hf_subsets = (
+            [l for l in self.dataset.keys()]
+            if self.is_crosslingual or self.is_multilingual
+            else ["default"]
+        )
+
+        for hf_subset in hf_subsets:
+            logger.info(
+                f"\nTask: {self.metadata_dict['name']}, split: {split}, subset: {hf_subset}. Running..."
+            )
+            if hf_subset not in self.dataset and hf_subset == "default":
+                data_split = self.dataset[split]
+            else:
+                data_split = self.dataset[hf_subset][split]
+            scores[hf_subset] = self._evaluate_subset(model, data_split, **kwargs)
+        return scores
+
+    @abstractmethod
+    def _evaluate_subset(self, model, data_split, **kwargs) -> ScoresDict:
+        raise NotImplementedError(
+            "If you are using the default evaluate method, you must implement _evaluate_subset method."
+        )
 
     @staticmethod
     def stratified_subsampling(
@@ -87,23 +134,8 @@ class AbsTask(ABC):
         self.data_loaded = True
 
     @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
-        return metadata_dict
-
-    @abstractmethod
-    def evaluate(
-        self, model: Encoder | EncoderWithQueryCorpusEncode, split: str = "test"
-    ):
-        """Evaluates a Sentence Embedding Model on the task.
-        Returns a dict (that can be serialized to json).
-
-        Args:
-            model: Sentence embedding method. Implements a encode(sentences) method, that encodes sentences and returns a numpy matrix with the
-                sentence embeddings
-            split: Which datasplit to be used.
-        """
-        raise NotImplementedError
+    def metadata_dict(self) -> dict[str, Any]:
+        return dict(self.metadata)
 
     @property
     def languages(self) -> list[str]:
