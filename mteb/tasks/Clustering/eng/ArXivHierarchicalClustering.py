@@ -7,6 +7,8 @@ from datasets import Dataset, DatasetDict
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+N_SAMPLES = 2048
+
 
 def split_labels(record: dict) -> dict:
     record["labels"] = record["labels"].split(".")
@@ -37,7 +39,7 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClusteringFast):
         dialect=["Thematic clustering"],
         text_creation="found",
         bibtex_citation="@misc{arXiv.org e-Print archive, url={https://arxiv.org/} }",
-        n_samples={"test": 250_000},
+        n_samples={"test": N_SAMPLES},
         avg_character_length={"test": 1009.98},
     )
 
@@ -49,13 +51,9 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClusteringFast):
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
         self.dataset = self.dataset.map(split_labels)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=2048,
-        )
+        self.dataset["test"] = self.dataset["test"].train_test_split(
+            test_size=N_SAMPLES, seed=self.seed
+        )["test"]
 
 
 class ArXivHierarchicalClusteringS2S(AbsTaskClusteringFast):
@@ -82,7 +80,7 @@ class ArXivHierarchicalClusteringS2S(AbsTaskClusteringFast):
         dialect=[],
         text_creation="found",
         bibtex_citation="@misc{arXiv.org e-Print archive, url={https://arxiv.org/} }",
-        n_samples={"test": 250_000},
+        n_samples={"test": N_SAMPLES},
         avg_character_length={"test": 1009.98},
     )
 
@@ -94,10 +92,6 @@ class ArXivHierarchicalClusteringS2S(AbsTaskClusteringFast):
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
         self.dataset = self.dataset.map(split_labels)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=2048,
-        )
+        self.dataset["test"] = self.dataset["test"].train_test_split(
+            test_size=N_SAMPLES, seed=self.seed
+        )["test"]
