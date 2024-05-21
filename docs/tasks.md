@@ -421,8 +421,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [SpanishPassageRetrievalS2S](https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/) | ['spa'] | Retrieval | s2s |  |  |  |
 | [SpanishSentimentClassification](https://huggingface.co/datasets/sepidmnorozy/Spanish_sentiment) | ['spa'] | Classification | s2s | [Reviews] | {'validation': 147, 'test': 296} | {'validation': 85.02, 'test': 87.91} |
 | [SprintDuplicateQuestions](https://www.aclweb.org/anthology/D18-1131/) | ['eng'] | PairClassification | s2s |  | {'validation': 101000, 'test': 101000} | {'validation': 65.2, 'test': 67.9} |
-| [StackExchangeClustering](https://arxiv.org/abs/2104.07081) | ['eng'] | Clustering | s2s |  | {'test': 373850} | {'test': 57.0} |
-| [StackExchangeClusteringP2P](https://arxiv.org/abs/2104.07081) | ['eng'] | Clustering | p2p |  | {'test': 75000} | {'test': 1090.7} |
+| [StackExchangeClusteringFast](https://arxiv.org/abs/2104.07081) (Gregor Geigle, 2021) | ['eng'] | Clustering | s2s | [Web] | {'test': 16000} | {'test': 57.0} |
+| [StackExchangeClusteringP2PFast](https://arxiv.org/abs/2104.07081) (Gregor Geigle, 2021) | ['eng'] | Clustering | p2p | [Web] | {'test': 16000} | {'test': 1090.7} |
 | [StackOverflowDupQuestions](https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf) | ['eng'] | Reranking | s2s |  | {'test': 3467} | {'test': 49.8} |
 | [SummEval](https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html) | ['eng'] | Summarization | p2p |  | {'test': 2800} | {'test': 359.8} |
 | [SummEvalFr](https://github.com/Yale-LILY/SummEval) | ['fra'] | Summarization | p2p |  |  |  |
@@ -452,6 +452,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [TextualismToolPlainLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 165} | {'test': 997.97} |
 | [ThuNewsClusteringP2P.v2](http://thuctc.thunlp.org/) | ['cmn'] | Clustering | p2p | [News] | {'test': 2048} |  |
 | [ThuNewsClusteringS2S.v2](http://thuctc.thunlp.org/) | ['cmn'] | Clustering | s2s | [News] | {'test': 2048} |  |
+| [TopiOCQA](https://mcgill-nlp.github.io/topiocqa) (Adlakha et al., 2022) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'dev': 2514} | {'validation': 708.0} |
 | [Touche2020](https://webis.de/events/touche-20/shared-task-1.html) | ['eng'] | Retrieval | s2p |  |  |  |
 | [ToxicChatClassification](https://aclanthology.org/2023.findings-emnlp.311/) (Zi Lin, 2023) | ['eng'] | Classification | s2s | [Constructed] | {'test': 1427} | {'test': 189.4} |
 | [ToxicConversationsClassification](https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/overview) | ['eng'] | Classification | s2s |  | {'test': 50000} | {'test': 296.6} |
@@ -779,7 +780,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | 3 | 7 | 0 | 0 | 1 | 2 | 0 | 3 | 0 | 0 |
 | emi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | emp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eng | 12 | 143 | 16 | 3 | 1 | 8 | 4 | 47 | 12 | 1 |
+| eng | 12 | 143 | 16 | 3 | 1 | 8 | 4 | 48 | 12 | 1 |
 | enq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | epo | 3 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | eri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1547,7 +1548,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1363 | 933 | 105 | 3 | 23 | 63 | 12 | 310 | 72 | 2 |
+| Total | 1363 | 933 | 105 | 3 | 23 | 63 | 12 | 311 | 72 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>

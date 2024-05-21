@@ -51,6 +51,7 @@ from .eng.NQRetrieval import *
 from .eng.QuoraRetrieval import *
 from .eng.SCIDOCSRetrieval import *
 from .eng.SciFactRetrieval import *
+from .eng.TopiOCQARetrieval import *
 from .eng.Touche2020Retrieval import *
 from .eng.TRECCOVIDRetrieval import *
 from .est.estqa import *
