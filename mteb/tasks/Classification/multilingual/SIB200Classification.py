@@ -215,8 +215,8 @@ class SIB200Classification(MultilingualTask, AbsTaskClassification):
         """,
         reference="https://arxiv.org/abs/2309.07445",
         dataset={
-            "path": "Davlan/sib200",
-            "revision": "38977a667f6fc264d5c26ec57a01e16db040b358",
+            "path": "mteb/sib200",
+            "revision": "a74d7350ea12af010cfb1c21e34f1f81fd2e615b",
         },
         type="Classification",
         category="s2s",
