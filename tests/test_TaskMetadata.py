@@ -149,7 +149,6 @@ _HISTORIC_DATASETS = [
     "MIRACLRetrieval",
     "MultiLongDocRetrieval",
     "XMarket",
-    "XPQARetrieval",
     "SNLRetrieval",
     "ArguAna-PL",
     "DBPedia-PL",
