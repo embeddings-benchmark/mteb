@@ -6,7 +6,7 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class ArxivClusteringP2P(AbsTaskClustering):
-    superseeded_by = "ArxivClusteringP2P.v2"
+    superseeded_by = "ArxivClusteringP2P.v3"
 
     metadata = TaskMetadata(
         name="ArxivClusteringP2P",

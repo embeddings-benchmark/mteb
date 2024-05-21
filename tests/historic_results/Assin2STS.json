@@ -1,0 +1,20 @@
+{
+  "dataset_revision": "0ff9c86779e06855536d8775ce5550550e1e5a2d",
+  "mteb_dataset_name": "Assin2STS",
+  "mteb_version": "1.10.1",
+  "test": {
+    "cos_sim": {
+      "pearson": 0.7850110407527892,
+      "spearman": 0.7427006440920785
+    },
+    "euclidean": {
+      "pearson": 0.7593265640458398,
+      "spearman": 0.7427010358407259
+    },
+    "evaluation_time": 9.93,
+    "manhattan": {
+      "pearson": 0.758345533166906,
+      "spearman": 0.7414923674546785
+    }
+  }
+}

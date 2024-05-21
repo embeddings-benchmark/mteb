@@ -13,7 +13,7 @@ class MindSmallReranking(AbsTaskReranking):
         hf_hub_name="mteb/mind_small",
         dataset={
             "path": "mteb/mind_small",
-            "revision": "3bdac13927fdc888b903db93b2ffdbd90b295a69",
+            "revision": "59042f120c80e8afa9cdbb224f67076cec0fc9a7",
         },
         type="Reranking",
         category="s2s",

@@ -49,7 +49,7 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
         if self.data_loaded:
             return
         self.dataset = {}
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
                 lang=lang,
                 quality=100,
