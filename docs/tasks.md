@@ -52,7 +52,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [BulgarianStoreReviewSentimentClassfication](https://doi.org/10.7910/DVN/TXIK9P) (Georgieva-Trifonova et al., 2018) | ['bul'] | Classification | s2s | [Reviews] | {'test': 182} | {'test': 316.7} |
 | [CBD](http://2019.poleval.pl/files/poleval2019.pdf) | ['pol'] | Classification | s2s |  | {'test': 1000} | {'test': 93.2} |
 | [CDSC-E](https://aclanthology.org/P17-1073.pdf) | ['pol'] | PairClassification | s2s |  |  |  |
-| [CDSC-R](https://aclanthology.org/P17-1073.pdf) | ['pol'] | STS | s2s |  |  |  |
+| [CDSC-R](https://aclanthology.org/P17-1073.pdf) | ['pol'] | STS | s2s | [Web] | {'test': 1000} | {'test': 75.24} |
 | [CLSClusteringP2P.v2](https://arxiv.org/abs/2209.05034) (Yudong Li, 2022) | ['cmn'] | Clustering | p2p | [Academic] | {'test': 2048} |  |
 | [CLSClusteringS2S.v2](https://arxiv.org/abs/2209.05034) (Yudong Li, 2022) | ['cmn'] | Clustering | s2s | [Academic] | {'test': 2048} |  |
 | [CMedQAv1-reranking](https://github.com/zhangsheng93/cMedQA) | ['cmn'] | Reranking | s2s |  |  |  |
@@ -393,7 +393,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [SICK-BR-STS](https://linux.ime.usp.br/~thalen/SICK_PT.pdf) | ['por'] | STS | s2s | [Web] | {'test': 1000} | {'test': 54.89} |
 | [SICK-E-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | PairClassification | s2s |  |  |  |
 | [SICK-R](https://aclanthology.org/2020.lrec-1.207) | ['eng'] | STS | s2s |  |  |  |
-| [SICK-R-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | STS | s2s |  | {'test': 9812} | {'test': 42.8} |
+| [SICK-R-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | STS | s2s | [Web] | {'test': 9812} | {'test': 42.8} |
 | [SICKFr](https://huggingface.co/datasets/Lajavaness/SICK-fr) | ['fra'] | STS | s2s |  |  |  |
 | [SNLHierarchicalClusteringP2P](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [Encyclopaedic, Non-fiction] | {'test': 1300} | {'test': 1986.9453846153847} |
 | [SNLHierarchicalClusteringS2S](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | s2s | [Encyclopaedic, Non-fiction] | {'test': 1300} | {'test': 242.22384615384615} |
