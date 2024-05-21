@@ -16,9 +16,9 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
             Originally intended as a summarization task, but since no human annotations were provided
             here reformulated to a retrieval task.
         """,
-        reference="https://huggingface.co/datasets/kiviki/SlovakSum",
+        reference="https://huggingface.co/datasets/NaiveNeuron/slovaksum",
         dataset={
-            "path": "kiviki/SlovakSum",
+            "path": "NaiveNeuron/slovaksum",
             "revision": "85d6b32f2762313714618171b9d1a65eb7408835",
         },
         type="Retrieval",
