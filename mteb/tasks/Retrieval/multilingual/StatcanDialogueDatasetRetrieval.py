@@ -67,10 +67,10 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
         description="A Dataset for Retrieving Data Tables through Conversations with Genuine Intents, available in English and French.",
         dataset={
             "path": "McGill-NLP/statcan-dialogue-dataset-retrieval",
-            "revision": "main",
+            "revision": "v1.0",
         },
         type="Retrieval",
-        category=None,  # TBD
+        category='s2p',
         eval_splits=_EVAL_SPLITS,
         eval_langs=_LANGS,
         main_score="recall_at_10",
@@ -78,7 +78,7 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
         date=("2020-01-01", "2020-04-15"),
         form=["written"],
         domains=["Government", "Web"],
-        task_subtypes=[],  # TBD
+        task_subtypes=["Conversational retrieval"],
         license="https://huggingface.co/datasets/McGill-NLP/statcan-dialogue-dataset-retrieval/blob/main/LICENSE.md",
         socioeconomic_status="high",
         annotations_creators="derived",
@@ -109,7 +109,7 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
 
         self.corpus, self.queries, self.relevant_docs = _load_statcan_data(
             path=self.metadata_dict["dataset"]["path"],
-            langs=self.hf_subsets,
+            langs=list(_LANGS.keys()),
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
