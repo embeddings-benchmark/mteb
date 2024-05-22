@@ -28,7 +28,7 @@ class KannadaNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"train": 6460},
         avg_character_length={"train": 65.88},
     )
