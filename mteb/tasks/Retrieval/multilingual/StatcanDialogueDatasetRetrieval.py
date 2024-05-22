@@ -99,8 +99,30 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
     pages = "2799--2829",
 }
 """,
-        n_samples={"test": 888},
-        avg_character_length={"test": 778.1655},
+        n_samples={
+            "english": {
+                "dev": 799,
+                "test": 870,
+                "corpus": 5907
+            },
+            "french": {
+                "dev": 201,
+                "test": 141,
+                "corpus": 5907
+            }
+        },
+        avg_character_length={
+            "english": {
+                "dev": 746.19,
+                "test": 862.55,
+                "corpus": 6535.87
+            },
+            "french": {
+                "dev": 897.36,
+                "test": 823.68,
+                "corpus": 7078.07
+            }
+        },
     )
 
     def load_data(self, **kwargs):
