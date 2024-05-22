@@ -158,7 +158,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [DuRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) | ['cmn'] | Retrieval | s2p |  |  |  |
 | [DutchBookReviewSentimentClassification](https://github.com/benjaminvdb/DBRD) (Benjamin et al., 2019) | ['nld'] | Classification | s2s | [Reviews] | {'test': 2224} | {'test': 1443.0} |
 | [EcomRetrieval](https://arxiv.org/abs/2203.03367) | ['cmn'] | Retrieval | s2p |  |  |  |
-| [EightTagsClustering](https://aclanthology.org/2020.lrec-1.207.pdf) | ['pol'] | Clustering | s2s |  |  |  |
+| [EightTagsClustering.v2](https://aclanthology.org/2020.lrec-1.207.pdf) | ['pol'] | Clustering | s2s | [Social] | {'test': 2048} | {'test': 78.73} |
 | [EmotionClassification](https://www.aclweb.org/anthology/D18-1404) | ['eng'] | Classification | s2s | [Social] | {'validation': 2000, 'test': 2000} | {'validation': 95.3, 'test': 95.6} |
 | [EstQA](https://www.semanticscholar.org/paper/Extractive-Question-Answering-for-Estonian-Language-182912IAPM-Alum%C3%A4e/ea4f60ab36cadca059c880678bc4c51e293a85d6?utm_source=direct_link) | ['est'] | Retrieval | s2p | [Encyclopaedic] | {'test': 603} | {'test': 772.5331950207469} |
 | [EstonianValenceClassification](https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054) | ['est'] | Classification | s2s | [News] | {'train': 3270, 'test': 818} | {'train': 226.70642201834863, 'test': 231.5085574572127} |
@@ -351,8 +351,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [PawsX](https://arxiv.org/abs/1908.11828) | ['cmn', 'deu', 'eng', 'fra', 'jpn', 'kor', 'spa'] | PairClassification | s2s |  |  |  |
 | [PersianFoodSentimentClassification](https://hooshvare.github.io/docs/datasets/sa) (Mehrdad Farahani et al., 2020) | ['fas'] | Classification | s2s | [Reviews] | {'validation': 2048, 'test': 2048} | {'validation': 90.37, 'test': 90.58} |
 | [PersonalJurisdictionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 50} | {'test': 381.14} |
-| [PlscClusteringP2P](https://huggingface.co/datasets/rafalposwiata/plsc) | ['pol'] | Clustering | s2s | [Academic] | {'test': 17537} | {'test': 1023.21} |
-| [PlscClusteringS2S](https://huggingface.co/datasets/rafalposwiata/plsc) | ['pol'] | Clustering | s2s | [Academic] | {'test': 17534} | {'test': 84.34} |
+| [PlscClusteringP2P.v2](https://huggingface.co/datasets/rafalposwiata/plsc) | ['pol'] | Clustering | s2s | [Academic] | {'test': 2048} | {'test': 1023.21} |
+| [PlscClusteringS2S.v2](https://huggingface.co/datasets/rafalposwiata/plsc) | ['pol'] | Clustering | s2s | [Academic] | {'test': 2048} | {'test': 84.34} |
 | [PoemSentimentClassification](https://arxiv.org/abs/2011.02686) (Emily Sheng, 2020) | ['eng'] | Classification | s2s | [Reviews] | {'validation': 105, 'test': 104} | {'validation': 45.3, 'test': 42.4} |
 | [PolEmo2.0-IN](https://aclanthology.org/K19-1092.pdf) | ['pol'] | Classification | s2s |  |  |  |
 | [PolEmo2.0-OUT](https://aclanthology.org/K19-1092.pdf) | ['pol'] | Classification | s2s |  | {'test': 722} | {'test': 756.2} |
