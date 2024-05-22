@@ -33,6 +33,7 @@ TASK_SUBTYPE = Literal[
     "False Friends",
     "Cross-Lingual Semantic Discrimination",
     "Textual Entailment",
+    "Counterfactual Detection",
 ]
 
 TASK_DOMAIN = Literal[
@@ -61,6 +62,7 @@ TEXT_CREATION_METHOD = Literal[
     "created",
     "machine-translated",
     "human-translated and localized",
+    "human-translated",
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",
