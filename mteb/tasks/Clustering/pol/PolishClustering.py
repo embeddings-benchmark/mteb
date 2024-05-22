@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from itertools import chain
 
+import numpy as np
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+N_SAMPLES = 2048
 
 class EightTagsClustering(AbsTaskClustering):
     superseeded_by = "EightTagsClustering.v2"
@@ -123,7 +125,7 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
             language = "English",
             ISBN = "979-10-95546-34-4",
         }""",
-        n_samples={"test": 2048},
+        n_samples={"test": N_SAMPLES},
         avg_character_length={"test": 78.73},
     )
 
@@ -139,11 +141,12 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=2048,
+            n_samples=N_SAMPLES,
         )
 
 
 class PlscClusteringS2S(AbsTaskClusteringFast):
+    superseeded_by = "PlscClusteringS2S.v2"
     metadata = TaskMetadata(
         name="PlscClusteringS2S",
         description="Clustering of Polish article titles from Library of Science (https://bibliotekanauki.pl/), either "
@@ -173,7 +176,61 @@ class PlscClusteringS2S(AbsTaskClusteringFast):
     )
 
 
+class PlscClusteringS2SFast(AbsTaskClusteringFast):
+    metadata = TaskMetadata(
+        name="PlscClusteringS2S.v2",
+        description="Clustering of Polish article titles from Library of Science (https://bibliotekanauki.pl/), either "
+        "on the scientific field or discipline.",
+        reference="https://huggingface.co/datasets/rafalposwiata/plsc",
+        dataset={
+            "path": "PL-MTEB/plsc-clustering-s2s",
+            "revision": "39bcadbac6b1eddad7c1a0a176119ce58060289a",
+        },
+        type="Clustering",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["pol-Latn"],
+        main_score="v_measure",
+        date=("2022-04-04", "2023-09-12"),
+        form=["written"],
+        domains=["Academic"],
+        task_subtypes=["Topic classification"],
+        license="cc0-1.0",
+        socioeconomic_status="high",
+        annotations_creators="derived",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="",
+        n_samples={"test": N_SAMPLES},
+        avg_character_length={"test": 84.34},
+    )
+
+    def dataset_transform(self):
+        ds = dict()
+        for split in self.metadata.eval_splits:
+            labels = self.dataset[split]["labels"]
+            sentences = self.dataset[split]["sentences"]
+            # Remove sentences and labels with only 1 label example.
+            unique_labels, counts = np.unique(labels, return_counts=True)
+            solo_label_idx = np.where(counts == 1)
+            solo_labels = unique_labels[solo_label_idx]
+            is_solo = np.isin(labels, solo_labels)
+            split_ds = Dataset.from_dict({"labels": labels, "sentences": sentences})
+            if is_solo.any():
+                split_ds = split_ds.select(np.nonzero(is_solo == False)[0])  # noqa: E712
+            ds[split] = split_ds
+        self.dataset = DatasetDict(ds)
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            self.seed,
+            self.metadata.eval_splits,
+            label="labels",
+            n_samples=N_SAMPLES,
+        )
+
+
 class PlscClusteringP2P(AbsTaskClusteringFast):
+    superseeded_by = "PlscClusteringP2P.v2"
     metadata = TaskMetadata(
         name="PlscClusteringP2P",
         description="Clustering of Polish article titles+abstracts from Library of Science "
@@ -201,3 +258,56 @@ class PlscClusteringP2P(AbsTaskClusteringFast):
         n_samples={"test": 17537},
         avg_character_length={"test": 1023.21},
     )
+
+
+class PlscClusteringP2PFast(AbsTaskClusteringFast):
+    metadata = TaskMetadata(
+        name="PlscClusteringP2P.v2",
+        description="Clustering of Polish article titles+abstracts from Library of Science "
+        "(https://bibliotekanauki.pl/), either on the scientific field or discipline.",
+        reference="https://huggingface.co/datasets/rafalposwiata/plsc",
+        dataset={
+            "path": "PL-MTEB/plsc-clustering-p2p",
+            "revision": "8436dd4c05222778013d6642ee2f3fa1722bca9b",
+        },
+        type="Clustering",
+        category="s2s",
+        eval_splits=["test"],
+        eval_langs=["pol-Latn"],
+        main_score="v_measure",
+        date=("2022-04-04", "2023-09-12"),
+        form=["written"],
+        domains=["Academic"],
+        task_subtypes=["Topic classification"],
+        license="cc0-1.0",
+        socioeconomic_status="high",
+        annotations_creators="derived",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="",
+        n_samples={"test": N_SAMPLES},
+        avg_character_length={"test": 1023.21},
+    )
+
+    def dataset_transform(self):
+        ds = dict()
+        for split in self.metadata.eval_splits:
+            labels = self.dataset[split]["labels"]
+            sentences = self.dataset[split]["sentences"]
+            # Remove sentences and labels with only 1 label example.
+            unique_labels, counts = np.unique(labels, return_counts=True)
+            solo_label_idx = np.where(counts == 1)
+            solo_labels = unique_labels[solo_label_idx]
+            is_solo = np.isin(labels, solo_labels)
+            split_ds = Dataset.from_dict({"labels": labels, "sentences": sentences})
+            if is_solo.any():
+                split_ds = split_ds.select(np.nonzero(is_solo == False)[0])  # noqa: E712
+            ds[split] = split_ds
+        self.dataset = DatasetDict(ds)
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            self.seed,
+            self.metadata.eval_splits,
+            label="labels",
+            n_samples=N_SAMPLES,
+        )
