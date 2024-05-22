@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -41,7 +43,7 @@ def _load_statcan_data(
             )
 
             for row in query_table:
-                query = row["query"]
+                query = json.loads(row["query"])
                 query_id = row["query_id"]
                 doc_id = row["doc_id"]
                 queries[lang][split][query_id] = query
@@ -70,7 +72,7 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
             "revision": "v1.0",
         },
         type="Retrieval",
-        category='s2p',
+        category="s2p",
         eval_splits=_EVAL_SPLITS,
         eval_langs=_LANGS,
         main_score="recall_at_10",
@@ -99,30 +101,8 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
     pages = "2799--2829",
 }
 """,
-        n_samples={
-            "english": {
-                "dev": 799,
-                "test": 870,
-                "corpus": 5907
-            },
-            "french": {
-                "dev": 201,
-                "test": 141,
-                "corpus": 5907
-            }
-        },
-        avg_character_length={
-            "english": {
-                "dev": 746.19,
-                "test": 862.55,
-                "corpus": 6535.87
-            },
-            "french": {
-                "dev": 897.36,
-                "test": 823.68,
-                "corpus": 7078.07
-            }
-        },
+        n_samples={"dev": 1000, "test": 1011, "corpus": 5907},
+        avg_character_length={"dev": 776.58, "test": 857.13, "corpus": 6806.97},
     )
 
     def load_data(self, **kwargs):
