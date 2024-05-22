@@ -14,9 +14,10 @@ import datasets
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 
 from ..abstasks import *
-from ..abstasks import AbsTask, LangMapping
-from ..abstasks.MTEBResults import MTEBResults
+from ..abstasks import AbsTask
+from ..MTEBResults import MTEBResults
 from ..tasks import *
+from . import LangMapping
 
 logger = logging.getLogger(__name__)
 

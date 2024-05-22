@@ -5,7 +5,7 @@ import pytest
 
 import mteb
 from mteb import AbsTask
-from mteb.abstasks.MTEBResults import MTEBResults
+from mteb.MTEBResults import MTEBResults
 
 tests_folder = Path(__file__).parent
 

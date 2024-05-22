@@ -6,8 +6,8 @@ import numpy as np
 import tqdm
 from datasets import Dataset
 
-from mteb.abstasks.MTEBResults import ScoresDict
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.MTEBResults import ScoresDict
 
 from ..evaluation.evaluators import ClusteringEvaluator
 from .AbsTask import AbsTask
