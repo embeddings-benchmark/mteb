@@ -82,7 +82,7 @@ Please also add your first name and last name are as you want them to appear in 
 | shreeya-dhakal            | Shreeya     | Dhakal     | ssdhakal57@gmail.com      |                      | Individual Contributor                                                   |
 | dipam7 | Dipam | Vasani | dipam44@gmail.com | ~Dipam_Vasani1 | Individual Contributor                                                  |
 | jankounchained    | Jan        | Kostkan    | jan.kostkan@cas.au.dk | ~Jan_Kostkan1        | Aarhus University, Denmark                            |
-| rasdani           | Daniel     | Auras      | daniel@ellamind.com          |                        | ellamind, Germany                                   |
-| ShawonAshraf      | Shawon     | Ashraf     | shawon@ellamind.com          |                        | ellamind, Germany                                   |
-| bjoernpl          | Björn      | Plüster    | bjoern@ellamind.com          |                        | ellamind, Germany                                   |
-| jphme             | Jan Philipp| Harries    | jan@ellamind.com             |                        | ellamind, Germany                                   |
+| rasdani           | Daniel     | Auras      | daniel@ellamind.com          |   ~Daniel_Auras1     | ellamind, Germany                                   |
+| ShawonAshraf      | Shawon     | Ashraf     | shawon@ellamind.com          |   ~Shawon_Ashraf1    | ellamind, Germany                                   |
+| bjoernpl          | Björn      | Plüster    | bjoern@ellamind.com          |  ~Björn_Plüster1     | ellamind, Germany                                   |
+| jphme             | Jan Philipp| Harries    | jan@ellamind.com             |~Jan_Philipp_Harries1 | ellamind, Germany                                   |
