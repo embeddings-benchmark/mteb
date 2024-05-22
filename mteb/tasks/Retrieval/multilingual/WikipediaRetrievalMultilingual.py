@@ -41,7 +41,6 @@ def _load_data(
     qrels = {lang: {split: {}} for lang in langs}
 
     for lang in langs:
-        print(f"LOADING {lang}")
         queries_path = path
         corpus_path = path.replace("queries", "corpus")
         qrels_path = path.replace("queries", "qrels")
