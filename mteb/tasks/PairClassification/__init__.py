@@ -7,6 +7,7 @@ from .eng.LegalBenchPC import *
 from .eng.SprintDuplicateQuestionsPC import *
 from .eng.TwitterSemEval2015PC import *
 from .eng.TwitterURLCorpusPC import *
+from .fas.FarsTail import *
 from .hye.ArmenianParaphrasePC import *
 from .ind.IndoNLI import *
 from .kor.KlueNLI import *
@@ -17,4 +18,5 @@ from .multilingual.XNLI import *
 from .multilingual.XStance import *
 from .pol.PolishPC import *
 from .por.Assin2RTE import *
+from .por.SickBrPC import *
 from .zho.CMTEBPairClassification import *

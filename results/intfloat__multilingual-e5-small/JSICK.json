@@ -1,0 +1,20 @@
+{
+  "dataset_revision": "e4af6c73182bebb41d94cb336846e5a452454ea7",
+  "mteb_dataset_name": "JSICK",
+  "mteb_version": "1.10.15",
+  "test": {
+    "cos_sim": {
+      "pearson": 0.8232856351782462,
+      "spearman": 0.8142035348371416
+    },
+    "euclidean": {
+      "pearson": 0.8245193389195556,
+      "spearman": 0.8142035348371416
+    },
+    "evaluation_time": 63.94,
+    "manhattan": {
+      "pearson": 0.8251562891758272,
+      "spearman": 0.8150269183741669
+    }
+  }
+}

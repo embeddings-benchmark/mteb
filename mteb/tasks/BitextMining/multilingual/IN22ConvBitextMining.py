@@ -33,7 +33,7 @@ _LANGUAGES = [
     "tel_Telu",
     "urd_Arab",
 ]
-_SPLIT = ["conv"]
+_SPLIT = ["test"]
 
 
 def extend_lang_pairs() -> dict[str, list[str]]:
@@ -68,11 +68,12 @@ def check_uniques(example, uniques):
 
 
 class IN22ConvBitextMining(AbsTaskBitextMining, CrosslingualTask):
+    parallel_subsets = True
     metadata = TaskMetadata(
         name="IN22ConvBitextMining",
         dataset={
-            "path": "ai4bharat/IN22-Conv",
-            "revision": "189b3d92cfbde4ddb3514223a256eb78b1aca60f",
+            "path": "mteb/IN22-Conv",
+            "revision": "16f46f059d56eac7c65c3c9581a45e40199eb140",
             "trust_remote_code": True,
         },
         description="IN22-Conv is a n-way parallel conversation domain benchmark dataset for machine translation spanning English and 22 Indic languages.",
@@ -100,46 +101,13 @@ year={2023},
 url={https://openreview.net/forum?id=vfT4YuzAYA},
 note={}
 }""",
-        n_samples={"conv": 1503},
-        avg_character_length={"conv": 54.3},
+        n_samples={"test": 1503},
+        avg_character_length={"test": 54.3},
     )
 
     def load_data(self, **kwargs: Any) -> None:
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = {}
-        for lang in self.hf_subsets:
-            self.dataset[lang] = datasets.load_dataset(
-                name=lang,
-                **self.metadata_dict["dataset"],
-            )
-        self.dataset_transform()
+        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
         self.data_loaded = True
-
-    def dataset_transform(self) -> None:
-        # Convert to standard format
-        for lang in self.hf_subsets:
-            lang1 = lang.split("-")[0]
-            lang2 = lang.split("-")[1]
-            self.dataset[lang] = self.dataset[lang].rename_columns(
-                {f"sentence_{lang1}": "sentence1", f"sentence_{lang2}": "sentence2"}
-            )
-
-            self.dataset[lang] = self.dataset[lang].map(
-                lambda x: get_hash(x["sentence1"])
-            )
-            uniques = set(self.dataset[lang]["conv"].unique("hash"))
-            self.dataset[lang] = self.dataset[lang].filter(
-                check_uniques, fn_kwargs={"uniques": uniques}
-            )
-
-            self.dataset[lang] = self.dataset[lang].map(
-                lambda x: get_hash(x["sentence2"])
-            )
-            uniques = set(self.dataset[lang]["gen"].unique("hash"))
-            self.dataset[lang] = self.dataset[lang].filter(
-                check_uniques, fn_kwargs={"uniques": uniques}
-            )
-
-            self.dataset[lang] = self.dataset[lang].remove_columns(["hash"])
