@@ -1,8 +1,13 @@
 from importlib.metadata import version
+from pathlib import Path
+
+import pytest
 
 import mteb
 from mteb import AbsTask
 from mteb.MTEBResults import MTEBResults
+
+tests_folder = Path(__file__).parent
 
 
 class DummyTask(AbsTask):
@@ -85,3 +90,11 @@ def test_mteb_results():
         },
     }
     assert mteb_results.to_dict() == dict_repr
+
+
+@pytest.mark.parametrize(
+    "path", list((tests_folder / "historic_results").glob("*.json"))
+)
+def test_mteb_results_from_historic(path: Path):
+    mteb_result = MTEBResults.from_disk(path, load_historic_data=True)
+    assert isinstance(mteb_result, MTEBResults)

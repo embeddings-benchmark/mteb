@@ -90,7 +90,7 @@ class AbsTask(ABC):
     @abstractmethod
     def _evaluate_subset(self, model, data_split, **kwargs) -> ScoresDict:
         raise NotImplementedError(
-            "If you are usign the default evaluate method, you must implement _evaluate_subset method."
+            "If you are using the default evaluate method, you must implement _evaluate_subset method."
         )
 
     @staticmethod
@@ -135,8 +135,7 @@ class AbsTask(ABC):
 
     @property
     def metadata_dict(self) -> dict[str, Any]:
-        metadata_dict = dict(self.metadata)
-        return metadata_dict
+        return dict(self.metadata)
 
     @property
     def languages(self) -> list[str]:

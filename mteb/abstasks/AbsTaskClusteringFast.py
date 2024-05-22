@@ -14,6 +14,7 @@ from sklearn.metrics.cluster import v_measure_score
 
 from ..MTEBResults import HFSubset, Split
 from .AbsTask import AbsTask
+from .MTEBResults import HFSubset
 
 logger = logging.getLogger(__name__)
 
@@ -108,19 +109,17 @@ class AbsTaskClusteringFast(AbsTask):
             )
 
     def _evaluate_subset(
-        self, model, dataset: DatasetDict, split: Split = "test", **kwargs: Any
+        self, model, dataset: DatasetDict, **kwargs: Any
     ) -> dict[str, float | dict[str, list[float]]]:
-        _dataset = dataset[split]
-
         rng_state = random.Random(self.seed)
 
-        if len(_dataset) > self.max_documents_to_embed:
+        if len(dataset) > self.max_documents_to_embed:
             example_indices = rng_state.sample(
-                range(len(_dataset)), k=self.max_documents_to_embed
+                range(len(dataset)), k=self.max_documents_to_embed
             )
-            downsampled_dataset = _dataset.select(example_indices)
+            downsampled_dataset = dataset.select(example_indices)
         else:
-            downsampled_dataset = _dataset
+            downsampled_dataset = dataset
 
         logger.info(f"Encoding {len(downsampled_dataset)} sentences...")
 
@@ -142,8 +141,9 @@ class AbsTaskClusteringFast(AbsTask):
         )
         all_v_scores = itertools.chain.from_iterable(v_measures.values())
         mean_v_measure = np.mean(list(all_v_scores))
-
-        return {"v_measures": v_measures, "v_measure": float(mean_v_measure)}
+        scores = {"v_measures": v_measures, "v_measure": float(mean_v_measure)}
+        self._add_main_score(scores)
+        return scores
 
 
 def clustering_downsample(
