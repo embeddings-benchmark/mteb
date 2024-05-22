@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datasets import load_dataset
+
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import MultilingualTask
@@ -48,30 +50,60 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
         avg_character_length={"test": 152.41},  # length of`sent1` + `sent2`
     )
 
-    def dataset_transform(self):
+    def load_data(self, **kwargs):
+        """Load dataset from HuggingFace hub"""
+        if self.data_loaded:
+            return
+
         max_n_samples = 2048
-        _dataset = {}
-        for lang in self.hf_subsets:
-            _dataset[lang] = {}
-            for split in self.metadata.eval_splits:
-                # hf config does not support selection by language, use manual filter instead
-                hf_dataset = self.dataset["de"][split].filter(
+        self.dataset = {}
+        path = self.metadata_dict["dataset"]["path"]
+        revision = self.metadata_dict["dataset"]["revision"]
+        raw_dataset = load_dataset(path, revision=revision)
+
+        def convert_example(example):
+            return {
+                "sent1": example["question"],
+                "sent2": example["comment"],
+                "labels": 1 if example["label"] == "FAVOR" else 0,
+            }
+
+        for lang in self.metadata.eval_langs:
+            self.dataset[lang] = {}
+            for split in self.metadata_dict["eval_splits"]:
+                # filter by language
+                self.dataset[lang][split] = raw_dataset[split].filter(
                     lambda row: row["language"] == lang
                 )
 
-                if len(hf_dataset) > max_n_samples:
+                # reduce samples
+                if len(self.dataset[lang][split]) > max_n_samples:
                     # only de + fr are larger than 2048 samples
-                    hf_dataset = hf_dataset.select(range(max_n_samples))
+                    self.dataset[lang][split] = self.dataset[lang][split].select(
+                        range(max_n_samples)
+                    )
 
+                # convert examples
+                self.dataset[lang][split] = self.dataset[lang][split].map(
+                    convert_example,
+                    remove_columns=self.dataset[lang][split].column_names,
+                )
+
+        self.dataset_transform()
+        self.data_loaded = True
+
+    def dataset_transform(self):
+        """Transform dataset into sentence-pair format"""
+        _dataset = {}
+
+        for lang in self.metadata.eval_langs:
+            _dataset[lang] = {}
+            for split in self.metadata.eval_splits:
                 _dataset[lang][split] = [
                     {
-                        "sent1": hf_dataset["question"],
-                        "sent2": hf_dataset["comment"],
-                        # convert categorical labels into numerical ones
-                        "labels": [
-                            1 if label == "FAVOR" else 0
-                            for label in hf_dataset["label"]
-                        ],
+                        "sent1": self.dataset[lang][split]["sent1"],
+                        "sent2": self.dataset[lang][split]["sent2"],
+                        "labels": self.dataset[lang][split]["labels"],
                     }
                 ]
         self.dataset = _dataset
