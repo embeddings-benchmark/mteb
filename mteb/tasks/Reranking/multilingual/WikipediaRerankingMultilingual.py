@@ -22,6 +22,7 @@ _EVAL_LANGS = {
     "sr": ["srp-Cyrl"],
 }
 
+
 class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
     metadata = TaskMetadata(
         name="WikipediaRerankingMultilingual",

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from datasets import load_dataset, DatasetDict
-
+from datasets import load_dataset
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import MultilingualTask
@@ -23,13 +22,19 @@ _EVAL_LANGS = {
     "ro": ["ron-Latn"],
     "sr": ["srp-Cyrl"],
     "no": ["nor-Latn"],
-    "sv": ["swe-Latn"]
+    "sv": ["swe-Latn"],
 }
 
 
 # adapted from MIRACLRetrieval
 def _load_data(
-    path: str, langs: list, split: str, cache_dir: str = None, revision_queries: str = None, revision_corpus: str = None, revision_qrels: str = None
+    path: str,
+    langs: list,
+    split: str,
+    cache_dir: str = None,
+    revision_queries: str = None,
+    revision_corpus: str = None,
+    revision_qrels: str = None,
 ):
     queries = {lang: {split: {}} for lang in langs}
     corpus = {lang: {split: {}} for lang in langs}
@@ -63,7 +68,9 @@ def _load_data(
         )
         # don't pass on titles to make task harder
         corpus_lang_dict = {doc["_id"]: {"text": doc["text"]} for doc in corpus_lang}
-        queries_lang_dict = {query["_id"]: {"text": query["text"]} for query in queries_lang}
+        queries_lang_dict = {
+            query["_id"]: {"text": query["text"]} for query in queries_lang
+        }
         # qrels_lang_dict = {qrel["query-id"]: {qrel["corpus-id"]: qrel["score"]} for qrel in qrels_lang}
 
         qrels_lang_dict = {}
@@ -81,6 +88,7 @@ def _load_data(
 
     return corpus, queries, qrels
 
+
 class WikipediaRetrievalMultilingual(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WikipediaRetrievalMultilingual",
@@ -88,9 +96,9 @@ class WikipediaRetrievalMultilingual(MultilingualTask, AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/ellamind/wikipedia-2023-11-retrieval-pt",
         dataset={
             "path": "ellamind/wikipedia-2023-11-retrieval-multilingual-queries",
-            "revision": "3b6ea595c94bac3448a2ad167ca2e06abd340d6e", # avoid validation error
+            "revision": "3b6ea595c94bac3448a2ad167ca2e06abd340d6e",  # avoid validation error
             "revision_corpus": "f20ac0c449c85358d3d5c72a95f92f1eddc98aa5",
-            "revision_qrels": "ec88a7bb2da034d538e98e3122d2c98530ca1c8d"
+            "revision_qrels": "ec88a7bb2da034d538e98e3122d2c98530ca1c8d",
         },
         type="Retrieval",
         category="s2p",

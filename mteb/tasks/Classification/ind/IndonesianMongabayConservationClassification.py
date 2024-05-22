@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import ast
 
-import datasets
 import numpy as np
 
+import datasets
 from mteb.abstasks import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 

@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 from datasets import Dataset
-
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.MTEBResults import ScoresDict
 

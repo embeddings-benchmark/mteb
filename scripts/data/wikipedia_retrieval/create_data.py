@@ -1,7 +1,8 @@
 from time import sleep
 
-from datasets import DatasetDict, Features, Value, load_dataset
 from huggingface_hub import HfApi, hf_hub_download
+
+from datasets import DatasetDict, Features, Value, load_dataset
 
 languages = [
     # "de",
@@ -19,7 +20,7 @@ languages = [
     "da",
     "en",
     "no",
-    "sv"
+    "sv",
 ]
 
 
@@ -73,13 +74,13 @@ for lang in languages:
     ds_dict = DatasetDict({"corpus": corpus, "queries": queries, "qrels": qrels})
 
     # repo_id = f"ellamind/wikipedia-2023-11-retrieval-{lang}"
-    repo_id = f"ellamind/wikipedia-2023-11-retrieval-multilingual"
+    repo_id = "ellamind/wikipedia-2023-11-retrieval-multilingual"
     # corpus.push_to_hub(repo_id, config_name="corpus", split="test")
     # queries.push_to_hub(repo_id, config_name="queries", split="test")
     # qrels.push_to_hub(repo_id, config_name="default", split="test")
-    corpus.push_to_hub(repo_id+"-corpus", config_name=lang, split="test")
-    queries.push_to_hub(repo_id+"-queries", config_name=lang, split="test")
-    qrels.push_to_hub(repo_id+"-qrels", config_name=lang, split="test")
+    corpus.push_to_hub(repo_id + "-corpus", config_name=lang, split="test")
+    queries.push_to_hub(repo_id + "-queries", config_name=lang, split="test")
+    qrels.push_to_hub(repo_id + "-qrels", config_name=lang, split="test")
 
     # Download the README from the repository
     sleep(5)
