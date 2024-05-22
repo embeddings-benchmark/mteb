@@ -43,7 +43,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
         task_subtypes=[],
         license="cc-by-sa-3.0",
         socioeconomic_status="mixed",
-        annotations_creators="derived",
+        annotations_creators="LM-generated",
         dialect=[],
         text_creation="LM-generated and verified",
         bibtex_citation="",

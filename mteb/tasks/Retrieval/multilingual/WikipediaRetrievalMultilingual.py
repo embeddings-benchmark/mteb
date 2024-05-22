@@ -7,29 +7,25 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
-# _EVAL_LANGS = {
-#     "bg": ["bul-Cyrl"],
-#     "bn": ["ben-Beng"],
-#     "cs": ["ces-Latn"],
-#     # "da": ["dan-Latn"],
-#     "de": ["deu-Latn"],
-#     # "en": ["eng-Latn"],
-#     # "fa": ["fas-Arab"],
-#     # "fi": ["fin-Latn"],
-#     # "hi": ["hin-Deva"],
-#     "it": ["ita-Latn"],
-#     "nl": ["nld-Latn"],
-#     "pt": ["por-Latn"],
-#     "ro": ["ron-Latn"],
-#     "sr": ["srp-Cyrl"],
-#     # "no": ["nor-Latn"],
-#     # "sv": ["swe-Latn"]
-# }
-
 _EVAL_LANGS = {
     "bg": ["bul-Cyrl"],
     "bn": ["ben-Beng"],
+    "cs": ["ces-Latn"],
+    "da": ["dan-Latn"],
+    "de": ["deu-Latn"],
+    "en": ["eng-Latn"],
+    "fa": ["fas-Arab"],
+    "fi": ["fin-Latn"],
+    "hi": ["hin-Deva"],
+    "it": ["ita-Latn"],
+    "nl": ["nld-Latn"],
+    "pt": ["por-Latn"],
+    "ro": ["ron-Latn"],
+    "sr": ["srp-Cyrl"],
+    "no": ["nor-Latn"],
+    "sv": ["swe-Latn"]
 }
+
 
 # adapted from MIRACLRetrieval
 def _load_data(
@@ -51,7 +47,6 @@ def _load_data(
             cache_dir=cache_dir,
             revision=revision_queries,
         )
-        # ).to_list()
         corpus_lang = load_dataset(
             corpus_path,
             lang,
@@ -59,7 +54,6 @@ def _load_data(
             cache_dir=cache_dir,
             revision=revision_corpus,
         )
-        # .to_list()
         qrels_lang = load_dataset(
             qrels_path,
             lang,
@@ -67,15 +61,11 @@ def _load_data(
             cache_dir=cache_dir,
             revision=revision_qrels,
         )
-        # .to_list()
-        # breakpoint()
-        # don't pass on titles for extra diffculty
-        # corpus_lang_dict = {doc["_id"]: {"text": doc["text"]} for doc in corpus_lang}
-        # queries_lang_dict = {query["_id"]: {"text": query["text"]} for query in queries_lang}
-        # qrels_lang_dict = {qrel["query-id"]: {qrel["corpus-id"]: qrel["score"]} for qrel in qrels_lang}
-        corpus_lang_dict = {doc["_id"]: {"text": doc["text"], "title": doc["title"]} for doc in corpus_lang}
+        # don't pass on titles to make task harder
+        corpus_lang_dict = {doc["_id"]: {"text": doc["text"]} for doc in corpus_lang}
         queries_lang_dict = {query["_id"]: {"text": query["text"]} for query in queries_lang}
         # qrels_lang_dict = {qrel["query-id"]: {qrel["corpus-id"]: qrel["score"]} for qrel in qrels_lang}
+
         qrels_lang_dict = {}
         for qrel in qrels_lang:
             if qrel["score"] == 0.5:
@@ -84,17 +74,10 @@ def _load_data(
             # score = int(score)
             score = int(qrel["score"])
             qrels_lang_dict[qrel["query-id"]] = {qrel["corpus-id"]: score}
-        # breakpoint()
+
         corpus[lang][split] = corpus_lang_dict
         queries[lang][split] = queries_lang_dict
         qrels[lang][split] = qrels_lang_dict
-        # corpus[lang][split] = corpus_lang
-        # queries[lang][split] = queries_lang
-        # qrels[lang][split] = qrels_lang
-
-    # corpus = DatasetDict(corpus)
-    # queries = DatasetDict(queries)
-    # qrels = DatasetDict(qrels)
 
     return corpus, queries, qrels
 
@@ -105,10 +88,9 @@ class WikipediaRetrievalMultilingual(MultilingualTask, AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/ellamind/wikipedia-2023-11-retrieval-pt",
         dataset={
             "path": "ellamind/wikipedia-2023-11-retrieval-multilingual-queries",
-            "revision": "7389b05119b949bdc032c6cb07c6f51d7adc076a", # avoid validation error
-            "revision_queries": "7389b05119b949bdc032c6cb07c6f51d7adc076a",
-            "revision_corpus": "9b66888cd2cd65b60dd9d0a79da3fc497ad38eb2",
-            "revision_qrels": "c6aa67a562dd670eb0bd37a72f2e705b6a4d93e1"
+            "revision": "3b6ea595c94bac3448a2ad167ca2e06abd340d6e", # avoid validation error
+            "revision_corpus": "f20ac0c449c85358d3d5c72a95f92f1eddc98aa5",
+            "revision_qrels": "ec88a7bb2da034d538e98e3122d2c98530ca1c8d"
         },
         type="Retrieval",
         category="s2p",
@@ -121,7 +103,7 @@ class WikipediaRetrievalMultilingual(MultilingualTask, AbsTaskRetrieval):
         task_subtypes=["Question answering", "Article retrieval"],
         license="cc-by-sa-3.0",
         socioeconomic_status="mixed",
-        annotations_creators="derived",
+        annotations_creators="LM-generated",
         dialect=[],
         text_creation="LM-generated and verified",
         bibtex_citation="",
@@ -138,10 +120,9 @@ class WikipediaRetrievalMultilingual(MultilingualTask, AbsTaskRetrieval):
             langs=self.hf_subsets,
             split=self.metadata_dict["eval_splits"][0],
             cache_dir=kwargs.get("cache_dir", None),
-            revision_queries=self.metadata_dict["dataset"]["revision_queries"],
+            revision_queries=self.metadata_dict["dataset"]["revision"],
             revision_corpus=self.metadata_dict["dataset"]["revision_corpus"],
             revision_qrels=self.metadata_dict["dataset"]["revision_qrels"],
         )
-
 
         self.data_loaded = True

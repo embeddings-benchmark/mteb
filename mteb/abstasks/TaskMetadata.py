@@ -91,7 +91,7 @@ TASK_CATEGORY = Literal[
     "p2p",  # Paragraph-to-paragraph
 ]
 
-ANNOTATOR_TYPE = Literal["expert-annotated", "human-annotated", "derived"]
+ANNOTATOR_TYPE = Literal["expert-annotated", "human-annotated", "derived", "LM-generated"]
 
 http_url_adapter = TypeAdapter(AnyUrl)
 STR_URL = Annotated[
