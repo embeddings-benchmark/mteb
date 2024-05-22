@@ -157,7 +157,7 @@ class MTEB:
         # Get all existing tasks
         tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
         self.tasks_cls = [
-            cls(langs=self._task_langs, **kwargs)
+            cls(hf_subsets=self._task_langs, **kwargs)
             for cat_cls in tasks_categories_cls
             for cls in cat_cls.__subclasses__()
             if cat_cls.__name__.startswith("AbsTask")
