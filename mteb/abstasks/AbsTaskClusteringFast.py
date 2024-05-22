@@ -12,7 +12,7 @@ import sklearn.cluster
 from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 
-from ..MTEBResults import HFSubset, Split
+from ..MTEBResults import HFSubset
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)

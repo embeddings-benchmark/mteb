@@ -4,14 +4,13 @@ from itertools import chain
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class EightTagsClustering(AbsTaskClustering):
-    superseeded_by="EightTagsClustering.v2"
+    superseeded_by = "EightTagsClustering.v2"
     metadata = TaskMetadata(
         name="EightTagsClustering",
         description="Clustering of headlines from social media posts in Polish belonging to 8 categories: film, history, "
@@ -66,7 +65,7 @@ class EightTagsClustering(AbsTaskClustering):
             ISBN = "979-10-95546-34-4",
         }""",
         n_samples={"test": 49373},
-        avg_character_length={'test': 78.23},
+        avg_character_length={"test": 78.23},
     )
 
 
