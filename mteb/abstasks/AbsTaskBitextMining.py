@@ -5,8 +5,8 @@ import logging
 from datasets import Dataset
 
 from ..evaluation.evaluators import BitextMiningEvaluator
+from ..MTEBResults import HFSubset, ScoresDict
 from .AbsTask import AbsTask
-from .MTEBResults import HFSubset, ScoresDict
 
 logger = logging.getLogger(__name__)
 

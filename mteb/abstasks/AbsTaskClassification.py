@@ -11,8 +11,8 @@ from ..evaluation.evaluators import (
     kNNClassificationEvaluatorPytorch,
     logRegClassificationEvaluator,
 )
+from ..MTEBResults import HFSubset, ScoresDict
 from .AbsTask import AbsTask
-from .MTEBResults import HFSubset, ScoresDict
 
 logger = logging.getLogger(__name__)
 

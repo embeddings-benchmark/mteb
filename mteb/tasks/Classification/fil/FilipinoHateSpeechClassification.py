@@ -24,7 +24,7 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
         form=["written"],
         domains=["Social"],
         task_subtypes=["Sentiment/Hate speech"],
-        license=None,
+        license="Not specified",
         socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],

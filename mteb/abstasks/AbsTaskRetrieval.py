@@ -11,8 +11,8 @@ from typing import Dict, Tuple
 from datasets import Features, Value, load_dataset
 
 from ..evaluation.evaluators import RetrievalEvaluator
+from ..MTEBResults import ScoresDict
 from .AbsTask import AbsTask
-from .MTEBResults import ScoresDict
 
 logger = logging.getLogger(__name__)
 

@@ -19,7 +19,10 @@ class NewsClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=None,
+        date=(
+            "2004-01-01",
+            "2015-12-31",
+        ),  # Estimated range for the collection of news articles
         form=["written"],
         domains=["News"],
         task_subtypes=["Topic classification"],
@@ -28,7 +31,7 @@ class NewsClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=["eng-Latn-US", "en-Latn-GB", "en-Latn-AU"],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 7600},
         avg_character_length={"test": 235.29},
     )
