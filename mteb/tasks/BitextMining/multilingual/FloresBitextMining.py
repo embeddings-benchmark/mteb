@@ -236,11 +236,12 @@ _LANGUAGES_MAPPING = extend_lang_pairs()
 
 
 class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
+    parallel_subsets = True
     metadata = TaskMetadata(
         name="FloresBitextMining",
         dataset={
-            "path": "facebook/flores",
-            "revision": "80dc3040d19756742c9a18267ab30f54fb8e226b",
+            "path": "mteb/flores",
+            "revision": "e6b647fcb6299a2f686f742f4d4c023e553ea67e",
             "trust_remote_code": True,
         },
         description="FLORES is a benchmark dataset for machine translation between English and low-resource languages.",
@@ -250,16 +251,24 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
         eval_splits=_SPLIT,
         eval_langs=_LANGUAGES_MAPPING,
         main_score="f1",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
+        date=("2022-01-01", "2022-12-31"),
+        form=["written"],
+        domains=["Non-fiction", "Encyclopaedic"],
+        task_subtypes=[],
+        license="CC BY-SA 4.0",
+        socioeconomic_status="mixed",
+        annotations_creators="human-annotated",
+        dialect=[],
+        text_creation="created",
+        bibtex_citation="""
+        @inproceedings{goyal2022flores,
+        title={The FLORES-101 Evaluation Benchmark for Low-Resource and Multilingual Machine Translation},
+        author={Goyal, Naman and Gao, Cynthia and Chaudhary, Vishrav and Chen, Peng-Jen and Wenzek, Guillaume and Ju, Da and Krishnan, Sanjana and Ranzato, Marc'Aurelio and Guzm{\'a}n, Francisco},
+        booktitle={Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies},
+        pages={19--35},
+        year={2022}
+        }
+        """,
         n_samples={"dev": 997, "devtest": 1012},
         avg_character_length={},
     )
@@ -268,24 +277,5 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = {}
-        for lang in self.hf_subsets:
-            self.dataset[lang] = datasets.load_dataset(
-                name=lang,
-                **self.metadata_dict["dataset"],
-            )
-        self.dataset_transform()
+        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
         self.data_loaded = True
-
-    def dataset_transform(self) -> None:
-        # Convert to standard format
-        for lang in self.hf_subsets:
-            lang1 = lang.split("-")[0]
-            lang2 = lang.split("-")[1]
-            for split in _SPLIT:
-                self.dataset[lang][split] = self.dataset[lang][split].rename_column(
-                    "sentence_" + lang1, "sentence1"
-                )
-                self.dataset[lang][split] = self.dataset[lang][split].rename_column(
-                    "sentence_" + lang2, "sentence2"
-                )

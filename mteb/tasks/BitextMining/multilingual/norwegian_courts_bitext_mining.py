@@ -25,7 +25,7 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
         annotations_creators="derived",  # best guess
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 456},
         avg_character_length={"test": 82.11},
     )

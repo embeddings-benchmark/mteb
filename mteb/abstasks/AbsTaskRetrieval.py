@@ -4,12 +4,14 @@ import json
 import logging
 import os
 from collections import defaultdict
+from pathlib import Path
 from time import time
 from typing import Dict, Tuple
 
 from datasets import Features, Value, load_dataset
 
 from ..evaluation.evaluators import RetrievalEvaluator
+from ..MTEBResults import ScoresDict
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -19,10 +21,10 @@ logger = logging.getLogger(__name__)
 class HFDataLoader:
     def __init__(
         self,
-        hf_repo: str = None,
-        hf_repo_qrels: str = None,
-        data_folder: str = None,
-        prefix: str = None,
+        hf_repo: str | None = None,
+        hf_repo_qrels: str | None = None,
+        data_folder: str | None = None,
+        prefix: str | None = None,
         corpus_file: str = "corpus.jsonl",
         query_file: str = "queries.jsonl",
         qrels_folder: str = "qrels",
@@ -201,9 +203,10 @@ class AbsTaskRetrieval(AbsTask):
         Semantically, it should contain dict[split_name, dict[sample_id, dict[str, str]]]
         E.g. {"test": {"document_one": {"_id": "d1", "title": "title", "text": "text"}}}
 
-    self.queries: dict[str, dict[str, str]]
-        Semantically, it should contain dict[split_name, dict[sample_id, str]]
+    self.queries: dict[str, dict[str, Union[str, List[str]]]]
+        Semantically, it should contain dict[split_name, dict[sample_id, str]] or dict[split_name, dict[sample_id, List[str]]] for conversations
         E.g. {"test": {"q1": "query"}}
+        or {"test": {"q1": ["turn1", "turn2", "turn3"]}}
 
     self.relevant_docs: dict[str, dict[str, dict[str, int]]]
         Semantically, it should contain dict[split_name, dict[sample_id, dict[doc_id, score]]]
@@ -246,30 +249,34 @@ class AbsTaskRetrieval(AbsTask):
         retriever = RetrievalEvaluator(model, **kwargs)
 
         scores = {}
-        if self.is_crosslingual or self.is_multilingual:
-            for lang in self.hf_subsets:
-                logger.info(f"Language: {lang}")
+        hf_subsets = (
+            [l for l in self.hf_subsets]
+            if (self.is_multilingual or self.is_crosslingual)
+            else ["default"]
+        )
+
+        for hf_subset in hf_subsets:
+            logger.info(f"Subset: {hf_subset}")
+
+            if hf_subset == "default":
                 corpus, queries, relevant_docs = (
-                    self.corpus[lang][split],
-                    self.queries[lang][split],
-                    self.relevant_docs[lang][split],
+                    self.corpus[split],
+                    self.queries[split],
+                    self.relevant_docs[split],
                 )
-                scores[lang] = self._evaluate_split(
-                    retriever, corpus, queries, relevant_docs, lang, **kwargs
+            else:
+                corpus, queries, relevant_docs = (
+                    self.corpus[hf_subset][split],
+                    self.queries[hf_subset][split],
+                    self.relevant_docs[hf_subset][split],
                 )
-        else:
-            corpus, queries, relevant_docs = (
-                self.corpus[split],
-                self.queries[split],
-                self.relevant_docs[split],
-            )
-            scores = self._evaluate_split(
-                retriever, corpus, queries, relevant_docs, None, **kwargs
+            scores[hf_subset] = self._evaluate_subset(
+                retriever, corpus, queries, relevant_docs, hf_subset, **kwargs
             )
         return scores
 
-    def _evaluate_split(
-        self, retriever, corpus, queries, relevant_docs, lang=None, **kwargs
+    def _evaluate_subset(
+        self, retriever, corpus, queries, relevant_docs, hf_subset: str, **kwargs
     ):
         start_time = time()
         results = retriever(corpus, queries)
@@ -279,7 +286,7 @@ class AbsTaskRetrieval(AbsTask):
         )
 
         if kwargs.get("save_predictions", False):
-            output_folder = kwargs.get("output_folder", "results")
+            output_folder = Path(kwargs.get("output_folder", "results"))
             if not os.path.isdir(output_folder):
                 os.makedirs(output_folder)
             top_k = kwargs.get("top_k", None)
@@ -293,12 +300,10 @@ class AbsTaskRetrieval(AbsTask):
                     results[qid] = {
                         k: v for k, v in results[qid].items() if k in doc_ids
                     }
-            if lang is None:
-                qrels_save_path = (
-                    f"{output_folder}/{self.metadata_dict['name']}_predictions.json"
-                )
-            else:
-                qrels_save_path = f"{output_folder}/{self.metadata_dict['name']}_{lang}_predictions.json"
+            qrels_save_path = (
+                output_folder
+                / f"{self.metadata_dict['name']}_{hf_subset}_predictions.json"
+            )
 
             with open(qrels_save_path, "w") as f:
                 json.dump(results, f)
@@ -319,7 +324,11 @@ class AbsTaskRetrieval(AbsTask):
             **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
             **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
         }
+        self._add_main_score(scores)
         return scores
+
+    def _add_main_score(self, scores: ScoresDict) -> None:
+        scores["main_score"] = scores[self.metadata.main_score]
 
     def calculate_metadata_metrics(self) -> None:
         self.load_data()

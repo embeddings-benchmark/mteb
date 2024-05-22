@@ -7,7 +7,7 @@ from typing import List, Mapping, Union
 from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
 from typing_extensions import Annotated, Literal
 
-from .languages import (
+from ..languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
     path_to_lang_codes,
@@ -16,6 +16,7 @@ from .languages import (
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
+    "Conversational retrieval",
     "Dialect pairing",
     "Dialog Systems",
     "Discourse coherence",
@@ -32,6 +33,7 @@ TASK_SUBTYPE = Literal[
     "False Friends",
     "Cross-Lingual Semantic Discrimination",
     "Textual Entailment",
+    "Counterfactual Detection",
 ]
 
 TASK_DOMAIN = Literal[
@@ -60,6 +62,7 @@ TEXT_CREATION_METHOD = Literal[
     "created",
     "machine-translated",
     "human-translated and localized",
+    "human-translated",
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",

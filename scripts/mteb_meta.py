@@ -59,6 +59,7 @@ VALIDATION_SPLIT = [
     "MSMARCO",
     "MultilingualSentiment",
     "Ocnli",
+    "TopiOCQA",
 ]
 # Use "dev" split instead
 DEV_SPLIT = [
@@ -87,7 +88,7 @@ META_STRING = "\n".join([MARKER, TAGS, MTEB_TAG, HEADER, MODEL, RES])
 
 ONE_TASK = "  - task:\n      type: {}\n    dataset:\n      type: {}\n      name: {}\n      config: {}\n      split: {}\n      revision: {}\n    metrics:"
 ONE_METRIC = "    - type: {}\n      value: {}"
-SKIP_KEYS = ["std", "evaluation_time", "main_score", "threshold"]
+SKIP_KEYS = ["std", "evaluation_time", "main_score", "threshold", "v_measures"]
 
 for ds_name, res_dict in sorted(all_results.items()):
     mteb_desc = (
