@@ -26,7 +26,7 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
         date=("2021-01-01", "2021-03-31"),
         form=["written"],
         domains=["Encyclopaedic"],
-        task_subtypes=[""], # TODO: change
+        task_subtypes=["Article retrieval"],
         license="cc-by-nc-sa-4.0",
         socioeconomic_status="mixed",
         annotations_creators="human-annotated",
@@ -49,9 +49,9 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
                 abstract = "In this work, we introduce back-training, an alternative to self-training for unsupervised domain adaptation (UDA). While self-training generates synthetic training data where natural inputs are aligned with noisy outputs, back-training results in natural outputs aligned with noisy inputs. This significantly reduces the gap between target domain and synthetic data distribution, and reduces model overfitting to source domain. We run UDA experiments on question generation and passage retrieval from the Natural Questions domain to machine learning and biomedical domains. We find that back-training vastly outperforms self-training by a mean improvement of 7.8 BLEU-4 points on generation, and 17.6{\%} top-20 retrieval accuracy across both domains. We further propose consistency filters to remove low-quality synthetic data before training. We also release a new domain-adaptation dataset - MLQuestions containing 35K unaligned questions, 50K unaligned passages, and 3K aligned question-passage pairs.",
             }
         """,
-        # TODO: Add n_samples and avg_character_length
-        # n_samples={"dev": 2514},
-        # avg_character_length={"validation": 708},
+        n_samples={"dev": 1500, "test": 1500},
+        # TODO
+        avg_character_length={},
     )
 
     def load_data(self, **kwargs):
@@ -60,7 +60,7 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         dataset_path = self.metadata_dict["dataset"]["path"]
         revision = self.metadata_dict["dataset"].get("revision", None)
-        download_dir = snapshot_download(repo_id="McGill-NLP/mlquestions", repo_type="dataset", revision=revision)
+        download_dir = snapshot_download(repo_id=dataset_path, repo_type="dataset", revision=revision)
         for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
             corpus, queries, qrels = self._load_data_for_split(download_dir, split)
             self.corpus[split], self.queries[split], self.relevant_docs[split] = (
