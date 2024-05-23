@@ -10,7 +10,6 @@ from time import time
 from typing import List, Union
 
 import datasets
-
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 
 from ..abstasks import *
@@ -325,7 +324,7 @@ class MTEB:
                             )
 
                         kg_co2_emissions += (
-                            tracker.emissions
+                            tracker.final_emissions
                         )  # expressed as kilograms of CO₂-equivalents
                     else:
                         results, tick, tock = self._run_eval(

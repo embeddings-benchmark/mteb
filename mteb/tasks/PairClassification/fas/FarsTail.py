@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import datasets
-
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 

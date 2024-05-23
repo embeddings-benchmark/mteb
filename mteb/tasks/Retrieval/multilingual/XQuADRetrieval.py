@@ -3,7 +3,6 @@ from __future__ import annotations
 from hashlib import sha256
 
 import datasets
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import MultilingualTask
@@ -29,7 +28,7 @@ class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="XQuADRetrieval",
         dataset={
-            "path": "xquad",
+            "path": "google/xquad",
             "revision": "51adfef1c1287aab1d2d91b5bead9bcfb9c68583",
         },
         description="XQuAD is a benchmark dataset for evaluating cross-lingual question answering performance. It is repurposed retrieving relevant context for each question.",

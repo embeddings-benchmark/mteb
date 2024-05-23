@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import datasets
-
 from mteb.abstasks import AbsTaskBitextMining, CrosslingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 

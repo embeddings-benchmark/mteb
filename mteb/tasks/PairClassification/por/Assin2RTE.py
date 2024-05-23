@@ -8,7 +8,7 @@ class Assin2RTE(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="Assin2RTE",
         dataset={
-            "path": "assin2",
+            "path": "nilc-nlp/assin2",
             "revision": "0ff9c86779e06855536d8775ce5550550e1e5a2d",
         },
         description="Recognizing Textual Entailment part of the ASSIN 2, an evaluation shared task collocated with STIL 2019.",
