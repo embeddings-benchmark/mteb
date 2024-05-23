@@ -92,12 +92,8 @@ class RerankingEvaluator(Evaluator):
             )
         elif isinstance(self.samples[0]["query"], list):
             # In case the query is a list of strings, we get the most similar embedding to any of the queries
-            all_query_flattened = [
-                q for sample in self.samples for q in sample["query"]
-            ]
-            all_query_embs = self._encode_unqiue_texts(
-                all_query_flattened, encode_corpus_func
-            )
+            all_query_flattened = [q for sample in self.samples for q in sample["query"]]
+            all_query_embs = self._encode_unqiue_texts(all_query_flattened, encode_corpus_func)
         else:
             raise ValueError(
                 f"Query must be a string or a list of strings but is {type(self.samples[0]['query'])}"
@@ -115,9 +111,7 @@ class RerankingEvaluator(Evaluator):
         logger.info("Evaluating...")
         query_idx, docs_idx = 0, 0
         for instance in self.samples:
-            num_subqueries = (
-                len(instance["query"]) if isinstance(instance["query"], list) else 1
-            )
+            num_subqueries = len(instance["query"]) if isinstance(instance["query"], list) else 1
             query_emb = all_query_embs[query_idx : query_idx + num_subqueries]
             query_idx += num_subqueries
 
@@ -172,9 +166,7 @@ class RerankingEvaluator(Evaluator):
             if isinstance(query, str):
                 # .encoding interface requires List[str] as input
                 query = [query]
-            query_emb = np.asarray(
-                encode_queries_func(query, batch_size=self.batch_size)
-            )
+            query_emb = np.asarray(encode_queries_func(query, batch_size=self.batch_size))
             docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
 
             scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
@@ -186,7 +178,7 @@ class RerankingEvaluator(Evaluator):
 
         return {"map": mean_ap, "mrr": mean_mrr}
 
-    def _encode_unqiue_texts(self, all_texts, encode_queries_func):
+    def _encode_unique_texts(self, all_texts, encode_queries_func):
         index_map, all_unique_texts, all_texts_indexes = {}, [], []
         for text in all_texts:
             text_hash = hash(text)
@@ -224,9 +216,7 @@ class RerankingEvaluator(Evaluator):
         return {"mrr": mrr, "ap": ap}
 
     @staticmethod
-    def mrr_at_k_score(
-        is_relevant: list[bool], pred_ranking: list[int], k: int
-    ) -> float:
+    def mrr_at_k_score(is_relevant: list[bool], pred_ranking: list[int], k: int) -> float:
         """Computes MRR@k score
 
         Args:
