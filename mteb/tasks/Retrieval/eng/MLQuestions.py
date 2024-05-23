@@ -1,4 +1,3 @@
-from datasets import load_dataset
 from huggingface_hub import snapshot_download
 import csv
 
@@ -50,8 +49,7 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
             }
         """,
         n_samples={"dev": 1500, "test": 1500},
-        # TODO
-        avg_character_length={},
+        avg_character_length={"dev": 305, "test": 307}
     )
 
     def load_data(self, **kwargs):
