@@ -10,7 +10,7 @@ class WisesightSentimentClassification(AbsTaskClassification):
         description="Wisesight Sentiment Corpus: Social media messages in Thai language with sentiment label (positive, neutral, negative, question)",
         reference="https://github.com/PyThaiNLP/wisesight-sentiment",
         dataset={
-            "path": "wisesight_sentiment",
+            "path": "pythainlp/wisesight_sentiment",
             "revision": "14aa5773afa135ba835cc5179bbc4a63657a42ae",
         },
         type="Classification",
