@@ -8,7 +8,7 @@ class AJGT(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AJGT",
         dataset={
-            "path": "ajgt_twitter_ar",
+            "path": "komari6/ajgt_twitter_ar",
             "revision": "af3f2fa5462ac461b696cb300d66e07ad366057f",
         },
         description="Arabic Jordanian General Tweets (AJGT) Corpus consisted of 1,800 tweets annotated as positive and negative. Modern Standard Arabic (MSA) or Jordanian dialect.",

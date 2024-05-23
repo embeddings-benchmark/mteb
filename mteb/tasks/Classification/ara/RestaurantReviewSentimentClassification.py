@@ -10,7 +10,7 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="RestaurantReviewSentimentClassification",
         dataset={
-            "path": "ar_res_reviews",
+            "path": "hadyelsahar/ar_res_reviews",
             "revision": "d51bf2435d030e0041344f576c5e8d7154828977",
         },
         description="Dataset of 8364 restaurant reviews from qaym.com in Arabic for sentiment analysis",
