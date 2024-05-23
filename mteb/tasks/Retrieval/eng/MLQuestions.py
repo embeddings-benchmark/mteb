@@ -1,9 +1,11 @@
-from huggingface_hub import snapshot_download
 import csv
+
+from huggingface_hub import snapshot_download
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+
 
 class MLQuestionsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -49,7 +51,7 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
             }
         """,
         n_samples={"dev": 1500, "test": 1500},
-        avg_character_length={"dev": 305, "test": 307}
+        avg_character_length={"dev": 305, "test": 307},
     )
 
     def load_data(self, **kwargs):
@@ -58,7 +60,9 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         dataset_path = self.metadata_dict["dataset"]["path"]
         revision = self.metadata_dict["dataset"].get("revision", None)
-        download_dir = snapshot_download(repo_id=dataset_path, repo_type="dataset", revision=revision)
+        download_dir = snapshot_download(
+            repo_id=dataset_path, repo_type="dataset", revision=revision
+        )
         for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
             corpus, queries, qrels = self._load_data_for_split(download_dir, split)
             self.corpus[split], self.queries[split], self.relevant_docs[split] = (
