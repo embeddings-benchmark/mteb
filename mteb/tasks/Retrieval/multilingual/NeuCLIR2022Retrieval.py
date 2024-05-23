@@ -3,7 +3,6 @@ from __future__ import annotations
 from collections import defaultdict
 
 import datasets
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskRetrieval, MultilingualTask

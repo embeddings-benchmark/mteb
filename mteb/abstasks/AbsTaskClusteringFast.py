@@ -9,8 +9,9 @@ from typing import Any, Dict, Optional
 import numpy as np
 import sklearn
 import sklearn.cluster
-from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
+
+from datasets import Dataset, DatasetDict
 
 from ..MTEBResults import HFSubset
 from .AbsTask import AbsTask
