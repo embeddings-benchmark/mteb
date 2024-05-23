@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import datasets
-
 from mteb.abstasks import AbsTaskBitextMining, CrosslingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -20,16 +19,19 @@ class RomaTalesBitextMining(AbsTaskBitextMining, CrosslingualTask):
         eval_splits=["test"],
         eval_langs={"rom-hun": ["rom-Latn", "hun-Latn"]},
         main_score="f1",
-        date=None,  # Unknown, these are folk tales
+        date=(
+            "1800-01-01",
+            "1950-12-31",
+        ),  # Broad historical range for the creation of folk tales
         form=["written"],
         domains=["Fiction"],
-        task_subtypes=[],  # Didn't fit any
+        task_subtypes=[],
         license="Not specified",
         socioeconomic_status="low",
         annotations_creators="expert-annotated",
         dialect=["Lovari"],
         text_creation="created",
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"test": 215},
         avg_character_length={"test": 316.8046511627907},
     )

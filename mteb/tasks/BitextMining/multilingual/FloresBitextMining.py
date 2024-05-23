@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import datasets
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskBitextMining, CrosslingualTask
@@ -251,16 +250,24 @@ class FloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
         eval_splits=_SPLIT,
         eval_langs=_LANGUAGES_MAPPING,
         main_score="f1",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
+        date=("2022-01-01", "2022-12-31"),
+        form=["written"],
+        domains=["Non-fiction", "Encyclopaedic"],
+        task_subtypes=[],
+        license="CC BY-SA 4.0",
+        socioeconomic_status="mixed",
+        annotations_creators="human-annotated",
+        dialect=[],
+        text_creation="created",
+        bibtex_citation="""
+        @inproceedings{goyal2022flores,
+        title={The FLORES-101 Evaluation Benchmark for Low-Resource and Multilingual Machine Translation},
+        author={Goyal, Naman and Gao, Cynthia and Chaudhary, Vishrav and Chen, Peng-Jen and Wenzek, Guillaume and Ju, Da and Krishnan, Sanjana and Ranzato, Marc'Aurelio and Guzm{\'a}n, Francisco},
+        booktitle={Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies},
+        pages={19--35},
+        year={2022}
+        }
+        """,
         n_samples={"dev": 997, "devtest": 1012},
         avg_character_length={},
     )

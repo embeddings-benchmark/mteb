@@ -4,9 +4,10 @@ import gzip
 import os
 import random
 
-import datasets
 import jsonlines
 import numpy as np
+
+import datasets
 
 SEED = 42
 NUM_SETS = 10

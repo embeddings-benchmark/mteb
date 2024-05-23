@@ -10,13 +10,13 @@ from time import time
 from typing import List, Union
 
 import datasets
-
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 
 from ..abstasks import *
-from ..abstasks import AbsTask, LangMapping
-from ..abstasks.MTEBResults import MTEBResults
+from ..abstasks import AbsTask
+from ..MTEBResults import MTEBResults
 from ..tasks import *
+from . import LangMapping
 
 logger = logging.getLogger(__name__)
 
@@ -157,7 +157,7 @@ class MTEB:
         # Get all existing tasks
         tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
         self.tasks_cls = [
-            cls(langs=self._task_langs, **kwargs)
+            cls(hf_subsets=self._task_langs, **kwargs)
             for cat_cls in tasks_categories_cls
             for cls in cat_cls.__subclasses__()
             if cat_cls.__name__.startswith("AbsTask")
@@ -324,7 +324,7 @@ class MTEB:
                             )
 
                         kg_co2_emissions += (
-                            tracker.emissions
+                            tracker.final_emissions
                         )  # expressed as kilograms of CO₂-equivalents
                     else:
                         results, tick, tock = self._run_eval(

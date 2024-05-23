@@ -40,7 +40,6 @@ from .nob.vg_clustering import *
 from .nob.VGHierarchicalClustering import *
 from .pol.PolishClustering import *
 from .rom.RomaniBibleClustering import *
-from .spa.FloresClusteringS2S import *
 from .spa.SpanishNewsClusteringP2P import *
 from .swe.swedn_clustering import *
 from .swe.SwednClustering import *

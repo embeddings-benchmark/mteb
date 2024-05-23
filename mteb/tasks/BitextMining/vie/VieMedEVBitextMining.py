@@ -3,7 +3,6 @@ from __future__ import annotations
 import random
 
 import datasets
-
 from mteb.abstasks import AbsTaskBitextMining
 from mteb.abstasks.TaskMetadata import TaskMetadata
 

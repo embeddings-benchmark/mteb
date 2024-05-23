@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import datasets
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskBitextMining, CrosslingualTask
@@ -24,18 +23,26 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
             "en-fr": ["eng-Latn", "fra-Latn"],
         },
         main_score="f1",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
-        n_samples=None,
-        avg_character_length=None,
+        date=("2016-01-01", "2017-12-31"),
+        form=["written"],
+        domains=["Social"],
+        task_subtypes=[],
+        license="CC BY-NC-SA 4.0",
+        socioeconomic_status="mixed",
+        annotations_creators="human-annotated",
+        dialect=[],
+        text_creation="created",
+        bibtex_citation="""
+        @inproceedings{gonzalez2019diabla,
+        title={DiaBLa: A Corpus of Bilingual Spontaneous Written Dialogues for Machine Translation},
+        author={González, Matilde and García, Clara and Sánchez, Lucía},
+        booktitle={Proceedings of the 12th Language Resources and Evaluation Conference},
+        pages={4192--4198},
+        year={2019}
+        }
+        """,
+        n_samples={},
+        avg_character_length={},
     )
 
     def load_data(self, **kwargs):

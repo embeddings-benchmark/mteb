@@ -5,7 +5,6 @@ import random
 from abc import ABC, abstractmethod
 from typing import Any, Sequence
 
-import datasets
 import numpy as np
 import torch
 
@@ -13,11 +12,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MultiLabelBinarizer
 from datasets import DatasetDict
 
-from mteb.abstasks.languages import LanguageScripts
+import datasets
+from datasets import DatasetDict
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.languages import LanguageScripts
 
-from .MTEBResults import HFSubset, ScoresDict
+from ..MTEBResults import HFSubset, ScoresDict
 
 logger = logging.getLogger(__name__)
 
