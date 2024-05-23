@@ -12,7 +12,7 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="XStance",
         dataset={
-            "path": "x_stance",
+            "path": "ZurichNLP/x_stance",
             "revision": "810604b9ad3aafdc6144597fdaa40f21a6f5f3de",
         },
         description="A Multilingual Multi-Target Dataset for Stance Detection in French, German, and Italian.",
