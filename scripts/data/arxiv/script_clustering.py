@@ -4,10 +4,11 @@ import gzip
 import os
 from collections import Counter
 
-import datasets
 import jsonlines
 import numpy as np
 from tqdm import tqdm
+
+import datasets
 
 np.random.seed(28042000)
 

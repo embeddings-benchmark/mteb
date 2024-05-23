@@ -1,7 +1,6 @@
 from typing import Any
 
 import datasets
-
 from mteb.abstasks import AbsTaskClassification, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 

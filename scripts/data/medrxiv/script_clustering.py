@@ -3,10 +3,11 @@ from __future__ import annotations
 import gzip
 import os
 
-import datasets
 import jsonlines
 import numpy as np
 from tqdm import tqdm
+
+import datasets
 
 np.random.seed(28042000)
 
