@@ -59,6 +59,7 @@ from .fra.BSARDRetrieval import *
 from .fra.FQuADRetrieval import *
 from .fra.SyntecRetrieval import *
 from .hun.HunSum2 import *
+from .jpn.JaGovFaqsRetrieval import *
 from .jpn.JaQuADRetrieval import *
 from .kat.GeorgianFAQRetrieval import *
 from .kor.KoMiracl import *
