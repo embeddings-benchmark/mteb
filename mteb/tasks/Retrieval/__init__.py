@@ -61,6 +61,9 @@ from .fra.SyntecRetrieval import *
 from .hun.HunSum2 import *
 from .jpn.JaGovFaqsRetrieval import *
 from .jpn.JaQuADRetrieval import *
+from .jpn.NLPJournalAbsIntroRetrieval import *
+from .jpn.NLPJournalTitleAbsRetrieval import *
+from .jpn.NLPJournalTitleIntroRetrieval import *
 from .kat.GeorgianFAQRetrieval import *
 from .kor.KoMiracl import *
 from .kor.KoStrategyQA import *
