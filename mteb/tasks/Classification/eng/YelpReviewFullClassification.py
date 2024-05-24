@@ -42,7 +42,7 @@ class YelpReviewFullClassification(AbsTaskClassification):
         }
         """,
         n_samples={"test": 50000},
-        avg_character_length=None,
+        avg_character_length={},
     )
 
     @property

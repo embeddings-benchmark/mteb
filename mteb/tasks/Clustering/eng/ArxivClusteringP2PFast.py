@@ -6,6 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class ArxivClusteringP2PFast(AbsTaskClustering):
+    superseeded_by = "ArXivHierarchicalClusteringP2P"
     # a faster version of the dataset, since it does not sample from the same distribution we can't use the AbsTaskClusteringFast, instead we
     # simply downsample each cluster.
 
