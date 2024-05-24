@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
-from ..MTEBResults import ScoresDict
+from ..MTEBResults import HFSubset, ScoresDict
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -73,6 +73,31 @@ class AbsTaskMultilabelClassification(AbsTask):
 
     def _add_main_score(self, scores):
         scores["main_score"] = scores[self.metadata.main_score]
+
+    def evaluate(
+        self, model, eval_split="test", train_split="train", **kwargs
+    ) -> dict[HFSubset, ScoresDict]:
+        if not self.data_loaded:
+            self.load_data()
+
+        scores = {}
+        hf_subsets = [l for l in self.dataset] if self.is_multilingual else ["default"]
+
+        for hf_subset in hf_subsets:
+            logger.info(
+                f"\nTask: {self.metadata.name}, split: {eval_split}, subset: {hf_subset}. Running..."
+            )
+
+            if hf_subset not in self.dataset and hf_subset == "default":
+                ds = self.dataset
+            else:
+                ds = self.dataset[hf_subset]
+            scores[hf_subset] = self._evaluate_subset(
+                model, ds, eval_split, train_split, **kwargs
+            )
+            self._add_main_score(scores[hf_subset])
+
+        return scores
 
     def _evaluate_subset(
         self, model, dataset, eval_split="test", train_split="train", **kwargs
