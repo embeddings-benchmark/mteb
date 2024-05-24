@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import os
 
-from huggingface_hub import create_repo, upload_file
-
 from datasets import load_dataset
+from huggingface_hub import create_repo, upload_file
 
 _LANGUAGES = {
     "de": "German",

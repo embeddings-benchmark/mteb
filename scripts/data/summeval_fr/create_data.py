@@ -3,10 +3,9 @@ from __future__ import annotations
 import json
 import os
 
+import datasets
 import requests
 from huggingface_hub import create_repo, upload_file
-
-import datasets
 
 # API key DeepL to set before running the script with the command 'export DEEPL_API_KEY=***'
 DEEPL_API_KEY = os.environ.get("DEEPL_AUTH_KEY")
