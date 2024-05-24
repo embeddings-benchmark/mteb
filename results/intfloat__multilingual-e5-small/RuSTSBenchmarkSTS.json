@@ -1,0 +1,72 @@
+{
+  "dataset_revision": "7cf24f325c6da6195df55bef3d86b5e0616f3018",
+  "evaluation_time": 2.9129486083984375,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.11.6",
+  "scores": {
+    "test": [
+      {
+        "cos_sim": {
+          "pearson": 0.7804893678286633,
+          "spearman": 0.7772461027539413
+        },
+        "euclidean": {
+          "pearson": 0.7688724664736094,
+          "spearman": 0.7772461027539413
+        },
+        "hf_subset": "default",
+        "languages": [
+          "rus-Cyrl"
+        ],
+        "main_score": 0.7772461027539413,
+        "manhattan": {
+          "pearson": 0.7672934089369625,
+          "spearman": 0.7758844882898225
+        }
+      }
+    ],
+    "train": [
+      {
+        "cos_sim": {
+          "pearson": 0.7978802401575843,
+          "spearman": 0.7781758504177039
+        },
+        "euclidean": {
+          "pearson": 0.7786276295006407,
+          "spearman": 0.7781731374641703
+        },
+        "hf_subset": "default",
+        "languages": [
+          "rus-Cyrl"
+        ],
+        "main_score": 0.7781758504177039,
+        "manhattan": {
+          "pearson": 0.7785232719634329,
+          "spearman": 0.7775080206948711
+        }
+      }
+    ],
+    "validation": [
+      {
+        "cos_sim": {
+          "pearson": 0.8230354096147491,
+          "spearman": 0.8244747741010346
+        },
+        "euclidean": {
+          "pearson": 0.8118130979247168,
+          "spearman": 0.8244747741010346
+        },
+        "hf_subset": "default",
+        "languages": [
+          "rus-Cyrl"
+        ],
+        "main_score": 0.8244747741010346,
+        "manhattan": {
+          "pearson": 0.8114795850180648,
+          "spearman": 0.8241630998227286
+        }
+      }
+    ]
+  },
+  "task_name": "RuSTSBenchmarkSTS"
+}

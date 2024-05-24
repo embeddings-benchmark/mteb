@@ -1,0 +1,53 @@
+{
+  "dataset_revision": "18d1c2b1ab2a7e8920614329e19ab4c513113d7e",
+  "evaluation_time": 5528.388280630112,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.11.6",
+  "scores": {
+    "dev": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "rus-Cyrl"
+        ],
+        "main_score": 0.28082,
+        "map_at_1": 0.14021,
+        "map_at_10": 0.22886,
+        "map_at_100": 0.24022,
+        "map_at_1000": 0.24096,
+        "map_at_20": 0.23568,
+        "map_at_3": 0.19892,
+        "map_at_5": 0.2155,
+        "mrr_at_1": 0.14435,
+        "mrr_at_10": 0.23293,
+        "mrr_at_100": 0.2441,
+        "mrr_at_1000": 0.24479,
+        "mrr_at_20": 0.23978,
+        "mrr_at_3": 0.20303,
+        "mrr_at_5": 0.21966,
+        "ndcg_at_1": 0.14435,
+        "ndcg_at_10": 0.28082,
+        "ndcg_at_100": 0.33788,
+        "ndcg_at_1000": 0.35838,
+        "ndcg_at_20": 0.30552,
+        "ndcg_at_3": 0.21925,
+        "ndcg_at_5": 0.24894,
+        "precision_at_1": 0.14435,
+        "precision_at_10": 0.04616,
+        "precision_at_100": 0.0075,
+        "precision_at_1000": 0.00093,
+        "precision_at_20": 0.02818,
+        "precision_at_3": 0.09466,
+        "precision_at_5": 0.07182,
+        "recall_at_1": 0.14021,
+        "recall_at_10": 0.44217,
+        "recall_at_100": 0.71052,
+        "recall_at_1000": 0.87136,
+        "recall_at_20": 0.53845,
+        "recall_at_3": 0.27413,
+        "recall_at_5": 0.34533
+      }
+    ]
+  },
+  "task_name": "RuMMarcoRetrieval"
+}

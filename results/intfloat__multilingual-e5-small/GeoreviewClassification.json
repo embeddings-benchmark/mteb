@@ -1,0 +1,62 @@
+{
+  "dataset_revision": "3765c0d1de6b7d264bc459433c45e5a75513839c",
+  "evaluation_time": 15.669439792633057,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.11.6",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 0.41904,
+        "f1": 0.40292348540107337,
+        "hf_subset": "default",
+        "languages": [
+          "rus-Cyrl"
+        ],
+        "main_score": 0.41904,
+        "scores_per_experiment": [
+          {
+            "accuracy": 0.411,
+            "f1": 0.3928318478049264
+          },
+          {
+            "accuracy": 0.4246,
+            "f1": 0.41875134731430447
+          },
+          {
+            "accuracy": 0.4316,
+            "f1": 0.4027451272640956
+          },
+          {
+            "accuracy": 0.447,
+            "f1": 0.425627940731658
+          },
+          {
+            "accuracy": 0.3944,
+            "f1": 0.38064524661195753
+          },
+          {
+            "accuracy": 0.4076,
+            "f1": 0.3986492952787144
+          },
+          {
+            "accuracy": 0.4124,
+            "f1": 0.3960854031159166
+          },
+          {
+            "accuracy": 0.432,
+            "f1": 0.42863585110751046
+          },
+          {
+            "accuracy": 0.3824,
+            "f1": 0.37616986314412426
+          },
+          {
+            "accuracy": 0.4474,
+            "f1": 0.4090929316375262
+          }
+        ]
+      }
+    ]
+  },
+  "task_name": "GeoreviewClassification"
+}
