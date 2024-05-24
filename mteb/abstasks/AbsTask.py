@@ -5,15 +5,20 @@ import random
 from abc import ABC, abstractmethod
 from typing import Any, Sequence
 
+import datasets
 import numpy as np
 import torch
+<<<<<<< vg-hierarchical
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MultiLabelBinarizer
 from datasets import DatasetDict
 
 import datasets
+=======
+>>>>>>> main
 from datasets import DatasetDict
+
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.languages import LanguageScripts

@@ -5,6 +5,7 @@ from itertools import islice
 from typing import Iterable, TypeVar
 
 import datasets
+
 from mteb.abstasks import AbsTaskClustering, TaskMetadata
 
 T = TypeVar("T")

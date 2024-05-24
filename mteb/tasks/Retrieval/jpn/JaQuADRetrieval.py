@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datasets import load_dataset
+
 from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
 
 

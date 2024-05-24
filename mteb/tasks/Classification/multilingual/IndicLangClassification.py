@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 import datasets
+
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskClassification
