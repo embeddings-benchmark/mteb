@@ -30,12 +30,12 @@ class ModelMeta(BaseModel):
     Attributes:
         loader: the function that loads the model. If None it will just default to loading the model using the sentence transformer library.
         name: The name of the model, ideally the name on huggingface.
-        n_parameters: The number of parameters in the model. Can be None if the the number of parameters is not known (e.g. for proprietary models) or
+        n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the the number of parameters is not known (e.g. for proprietary models) or
             if the loader returns a SentenceTransformer model from which it can be derived.
         memory_usage: The amount of memory the model uses in GB. Can be None if the memory usage is not known (e.g. for proprietary models).
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
-        embedding_dimension: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
+        embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
         revision: The revision number of the model.
         release_date: The date the model's revision was released.
         license: The license under which the model is released. Required if open_source is True.
