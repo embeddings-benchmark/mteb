@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import datasets
+
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
@@ -12,7 +14,7 @@ class SyntecReranking(AbsTaskReranking):
         reference="https://huggingface.co/datasets/lyon-nlp/mteb-fr-reranking-syntec-s2p",
         dataset={
             "path": "lyon-nlp/mteb-fr-reranking-syntec-s2p",
-            "revision": "b205c5084a0934ce8af14338bf03feb19499c84d",
+            "revision": "d99977875bf70d85753cebd7fcb61bef330ceec9",
         },
         type="Reranking",
         category="s2p",
@@ -29,6 +31,35 @@ class SyntecReranking(AbsTaskReranking):
         dialect=None,
         text_creation=None,
         bibtex_citation=None,
-        n_samples=None,
+        n_samples={"test": 100},
         avg_character_length=None,
     )
+
+    def load_data(self):
+
+        if self.data_loaded:
+            return
+
+        self.dataset = datasets.load_dataset(
+            name="queries",
+            **self.metadata_dict["dataset"],
+            split=self.metadata["eval_splits"][0]
+        )
+        self.documents = datasets.load_dataset(
+            name="documents",
+            **self.metadata_dict["dataset"],
+            split="test"
+        )
+        # replace documents ids in positive and negative column by their respective texts
+        self.dataset = self.dataset.map(lambda x: {
+            "positive": [
+                self.documents["text"][self.documents["doc_id"].index(docid)]
+                for docid in x["positive"]
+            ],
+            "negative": [
+                self.documents["text"][self.documents["doc_id"].index(docid)]
+                for docid in x["negative"]
+            ]
+        })
+
+        self.data_loaded = True
