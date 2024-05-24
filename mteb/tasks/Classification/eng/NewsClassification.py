@@ -10,7 +10,7 @@ class NewsClassification(AbsTaskClassification):
         name="NewsClassification",
         description="Large News Classification Dataset",
         dataset={
-            "path": "ag_news",
+            "path": "fancyzhx/ag_news",
             "revision": "eb185aade064a813bc0b7f42de02595523103ca4",
         },
         reference="https://arxiv.org/abs/1509.01626",

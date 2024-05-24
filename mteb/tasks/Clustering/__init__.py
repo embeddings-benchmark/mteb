@@ -11,6 +11,7 @@ from .deu.TenKGnadClusteringS2SFast import *
 from .eng.ArxivClusteringP2P import *
 from .eng.ArxivClusteringP2PFast import *
 from .eng.ArxivClusteringS2S import *
+from .eng.ArXivHierarchicalClustering import *
 from .eng.BigPatentClustering import *
 from .eng.BiorxivClusteringP2P import *
 from .eng.BiorxivClusteringS2S import *
@@ -37,6 +38,7 @@ from .multilingual.WikiClusteringP2P import *
 from .nob.snl_clustering import *
 from .nob.SNLHierarchicalClustering import *
 from .nob.vg_clustering import *
+from .nob.VGHierarchicalClustering import *
 from .pol.PolishClustering import *
 from .rom.RomaniBibleClustering import *
 from .spa.SpanishNewsClusteringP2P import *

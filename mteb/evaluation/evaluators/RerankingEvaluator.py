@@ -95,8 +95,8 @@ class RerankingEvaluator(Evaluator):
             all_query_flattened = [
                 q for sample in self.samples for q in sample["query"]
             ]
-            all_query_embs = np.asarray(
-                encode_queries_func(all_query_flattened, batch_size=self.batch_size)
+            all_query_embs = self._encode_unique_texts(
+                all_query_flattened, encode_corpus_func
             )
         else:
             raise ValueError(
@@ -109,9 +109,7 @@ class RerankingEvaluator(Evaluator):
             all_docs.extend(sample["positive"])
             all_docs.extend(sample["negative"])
 
-        all_docs_embs = np.asarray(
-            encode_corpus_func(all_docs, batch_size=self.batch_size)
-        )
+        all_docs_embs = self._encode_unique_texts(all_docs, encode_corpus_func)
 
         # Compute scores
         logger.info("Evaluating...")
@@ -187,6 +185,22 @@ class RerankingEvaluator(Evaluator):
         mean_mrr = np.mean(all_mrr_scores)
 
         return {"map": mean_ap, "mrr": mean_mrr}
+
+    def _encode_unique_texts(self, all_texts, encode_queries_func):
+        index_map, all_unique_texts, all_texts_indexes = {}, [], []
+        for text in all_texts:
+            text_hash = hash(text)
+            if text_hash not in index_map:
+                index_map[text_hash] = len(all_unique_texts)
+                all_unique_texts.append(text)
+            all_texts_indexes.append(index_map[text_hash])
+        logger.warning(
+            f"A total on {len(all_texts) - len(all_unique_texts)} duplicate texts were found during encoding. Only encoding unique text and duplicating embeddings across."
+        )
+        all_unique_texts_embs = np.asarray(
+            encode_queries_func(all_unique_texts, batch_size=self.batch_size)
+        )
+        return all_unique_texts_embs[all_texts_indexes]
 
     def _compute_metrics_instance(self, query_emb, docs_emb, is_relevant):
         """Computes metrics for a single instance = (query, positives, negatives)
