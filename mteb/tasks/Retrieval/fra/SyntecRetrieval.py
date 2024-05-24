@@ -21,7 +21,7 @@ class SyntecRetrieval(AbsTaskRetrieval):
         category="s2p",
         eval_splits=_EVAL_SPLITS,
         eval_langs=["fra-Latn"],
-        main_score="map",
+        main_score="ndcg_at_10",
         date=None,
         form=None,
         domains=None,
