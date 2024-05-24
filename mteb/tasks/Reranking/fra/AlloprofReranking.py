@@ -21,7 +21,7 @@ class AlloprofReranking(AbsTaskReranking):
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="map",
-        date=("2022-12-01", "2022-12-02"), # TODO update
+        date=("2020-01-01", "2023-04-14"), # supposition
         form=["written"],
         domains=["Web", "Academic"],
         task_subtypes=None,
