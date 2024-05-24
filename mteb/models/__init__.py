@@ -1,4 +1,4 @@
-import sentence_transformers_models
+from . import sentence_transformers_models
 
 from mteb.model_meta import ModelMeta
 
