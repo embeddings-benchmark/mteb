@@ -84,4 +84,8 @@ Please also add your first name and last name are as you want them to appear in 
 | Art3mis07 | Gayatri | K | gayatrikrishnakumar0707@gmail.com | ~Gayatri_K1 | R. V. College of Engineering, Bengaluru | 
 | jankounchained    | Jan        | Kostkan    | jan.kostkan@cas.au.dk | ~Jan_Kostkan1        | Aarhus University, Denmark                            |
 | bp-high           | Bhavish       | Pahwa      | t-bpahwa@microsoft.com           | ~Bhavish_Pahwa1 | Microsoft Research                              |
+| rasdani           | Daniel     | Auras      | daniel@ellamind.com          |   ~Daniel_Auras1     | ellamind, Germany                                   |
+| ShawonAshraf      | Shawon     | Ashraf     | shawon@ellamind.com          |   ~Shawon_Ashraf1    | ellamind, Germany                                   |
+| bjoernpl          | Björn      | Plüster    | bjoern@ellamind.com          |  ~Björn_Plüster1     | ellamind, Germany                                   |
+| jphme             | Jan Philipp| Harries    | jan@ellamind.com             |~Jan_Philipp_Harries1 | ellamind, Germany                                   |
 | malteos           | Malte       | Ostendorff      | malte@occiglot.eu           | ~Malte_Ostendorff1| Occiglot                             |

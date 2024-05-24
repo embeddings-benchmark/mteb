@@ -1,10 +1,50 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
+class BiorxivClusteringP2PFast(AbsTaskClusteringFast):
+    metadata = TaskMetadata(
+        name="BiorxivClusteringP2P.v2",
+        description="Clustering of titles+abstract from biorxiv across 26 categories.",
+        reference="https://api.biorxiv.org/",
+        dataset={
+            "path": "mteb/biorxiv-clustering-p2p",
+            "revision": "f5dbc242e11dd8e24def4c4268607a49e02946dc",
+        },
+        type="Clustering",
+        category="p2p",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="v_measure",
+        date=("2021-01-01", "2022-05-10"),
+        form=["written"],
+        domains=["Academic"],
+        task_subtypes=["Thematic clustering"],
+        license="https://www.biorxiv.org/content/about-biorxiv",
+        socioeconomic_status="high",
+        annotations_creators="derived",
+        dialect=[],
+        text_creation="created",
+        bibtex_citation="",
+        n_samples={"test": 2048},
+        avg_character_length={"test": 1664.0},
+    )
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            self.seed,
+            self.metadata.eval_splits,
+            label="labels",
+            n_samples=2048,
+        )
+
+
 class BiorxivClusteringP2P(AbsTaskClustering):
+    superseeded_by = "BiorxivClusteringP2P.v2"
     metadata = TaskMetadata(
         name="BiorxivClusteringP2P",
         description="Clustering of titles+abstract from biorxiv. Clustering of 10 sets, based on the main category.",
@@ -18,16 +58,16 @@ class BiorxivClusteringP2P(AbsTaskClustering):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
+        date=("2021-01-01", "2022-05-10"),
+        form=["written"],
+        domains=["Academic"],
+        task_subtypes=["Thematic clustering"],
+        license="https://www.biorxiv.org/content/about-biorxiv",
+        socioeconomic_status="high",
+        annotations_creators="derived",
+        dialect=[],
+        text_creation="created",
+        bibtex_citation="",
         n_samples={"test": 75000},
         avg_character_length={"test": 1666.2},
     )

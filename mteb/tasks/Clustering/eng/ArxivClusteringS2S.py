@@ -6,6 +6,7 @@ from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
 class ArxivClusteringS2S(AbsTaskClustering):
+    superseeded_by = "ArXivHierarchicalClusteringS2S"
     metadata = TaskMetadata(
         name="ArxivClusteringS2S",
         description="Clustering of titles from arxiv. Clustering of 30 sets, either on the main or secondary category",

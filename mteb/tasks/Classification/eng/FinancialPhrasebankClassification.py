@@ -11,7 +11,7 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
         description="Polar sentiment dataset of sentences from financial news, categorized by sentiment into positive, negative, or neutral.",
         reference="https://arxiv.org/abs/1307.5336",
         dataset={
-            "path": "financial_phrasebank",
+            "path": "takala/financial_phrasebank",
             "revision": "1484d06fe7af23030c7c977b12556108d1f67039",
             "name": "sentences_allagree",
         },
