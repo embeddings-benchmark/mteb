@@ -36,31 +36,26 @@ class SyntecReranking(AbsTaskReranking):
     )
 
     def load_data(self, **kwargs):
-
         if self.data_loaded:
             return
 
         self.dataset = datasets.load_dataset(
             name="queries",
             **self.metadata_dict["dataset"],
-            split=self.metadata.eval_splits[0]
+            split=self.metadata.eval_splits[0],
         )
         documents = datasets.load_dataset(
-            name="documents",
-            **self.metadata_dict["dataset"],
-            split="test"
+            name="documents", **self.metadata_dict["dataset"], split="test"
         )
         # replace documents ids in positive and negative column by their respective texts
         doc_id2txt = dict(list(zip(documents["doc_id"], documents["text"])))
 
-        self.dataset = self.dataset.map(lambda x: {
-            "positive": [
-                doc_id2txt[docid] for docid in x["positive"]
-            ],
-            "negative": [
-                doc_id2txt[docid] for docid in x["negative"]
-            ]
-        })
+        self.dataset = self.dataset.map(
+            lambda x: {
+                "positive": [doc_id2txt[docid] for docid in x["positive"]],
+                "negative": [doc_id2txt[docid] for docid in x["negative"]],
+            }
+        )
         self.dataset = datasets.DatasetDict({"test": self.dataset})
 
         self.data_loaded = True
