@@ -1,6 +1,6 @@
-from . import sentence_transformers_models
-
 from mteb.model_meta import ModelMeta
+
+from . import sentence_transformers_models
 
 
 def get_model(model_name: str) -> ModelMeta:
