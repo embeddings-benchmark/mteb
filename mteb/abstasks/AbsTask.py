@@ -5,11 +5,11 @@ import random
 from abc import ABC, abstractmethod
 from typing import Any
 
+import datasets
 import numpy as np
 import torch
-
-import datasets
 from datasets import DatasetDict
+
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.languages import LanguageScripts

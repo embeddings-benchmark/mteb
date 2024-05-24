@@ -4,8 +4,8 @@ import logging
 
 import numpy as np
 import tqdm
-
 from datasets import Dataset
+
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.MTEBResults import ScoresDict
 

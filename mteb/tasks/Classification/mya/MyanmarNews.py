@@ -6,7 +6,7 @@ class MyanmarNews(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MyanmarNews",
         dataset={
-            "path": "myanmar_news",
+            "path": "ayehninnkhine/myanmar_news",
             "revision": "b899ec06227db3679b0fe3c4188a6b48cc0b65eb",
         },
         description="The Myanmar News dataset on Hugging Face contains news articles in Burmese. It is designed for tasks such as text classification, sentiment analysis, and language modeling. The dataset includes a variety of news topics in 4 categorie, providing a rich resource for natural language processing applications involving Burmese which is a low resource language.",
