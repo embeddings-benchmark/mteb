@@ -35,6 +35,7 @@ def test_two_mteb_tasks():
         "SciDocsRR",
         "SprintDuplicateQuestions",
         "NFCorpus",
+        "MalteseNewsClassification",
         "STS12",
         "SummEval",
     ],
