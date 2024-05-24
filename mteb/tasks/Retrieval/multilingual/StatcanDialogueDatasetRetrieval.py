@@ -69,7 +69,7 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
         description="A Dataset for Retrieving Data Tables through Conversations with Genuine Intents, available in English and French.",
         dataset={
             "path": "McGill-NLP/statcan-dialogue-dataset-retrieval",
-            "revision": "v1.0",
+            "revision": "7a26938c93e99e0759a1df416896bb72527e2f33",
         },
         type="Retrieval",
         category="s2p",
