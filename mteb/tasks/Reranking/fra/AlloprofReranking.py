@@ -71,7 +71,3 @@ class AlloprofReranking(AbsTaskReranking):
 
         self.data_loaded = True
 
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
-        )
