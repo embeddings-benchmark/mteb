@@ -10,6 +10,7 @@ from time import time
 from typing import List, Union
 
 import datasets
+
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 
 from ..abstasks import *

@@ -1,9 +1,8 @@
 from collections import defaultdict
 from time import sleep
 
-from huggingface_hub import HfApi, hf_hub_download
-
 from datasets import DatasetDict, load_dataset
+from huggingface_hub import HfApi, hf_hub_download
 
 languages = [
     "de",
