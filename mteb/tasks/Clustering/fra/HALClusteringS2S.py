@@ -11,6 +11,8 @@ NUM_SAMPLES = 2048
 
 
 class HALClusteringS2S(AbsTaskClustering):
+    superseeded_by = "HALClusteringS2SFast"
+
     metadata = TaskMetadata(
         name="HALClusteringS2S",
         description="Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s)",
