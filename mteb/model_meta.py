@@ -32,15 +32,15 @@ class ModelMeta(BaseModel):
         name: The name of the model, ideally the name on huggingface.
         n_parameters: The number of parameters in the model. Can be None if the the number of parameters is not known (e.g. for proprietary models) or
             if the loader returns a SentenceTransformer model from which it can be derived.
-        memory_usage: The amount of memory the model uses. Can be None if the memory usage is not known (e.g. for proprietary models).
+        memory_usage: The amount of memory the model uses in GB. Can be None if the memory usage is not known (e.g. for proprietary models).
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
         embedding_dimension: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
         revision: The revision number of the model.
-        release_date: The date the model was released.
+        release_date: The date the model's revision was released.
         license: The license under which the model is released. Required if open_source is True.
         open_source: Whether the model is open source or proprietary.
-        framework: The framework the model is implemented in, can be a list of frameworks.
+        framework: The framework the model is implemented in, can be a list of frameworks e.g. `["Sentence Transformers", "PyTorch"]`.
         languages: The languages the model is intended for specified as a 3 letter language code followed by a script code e.g. "eng-Latn" for English
             in the Latin script.
     """
@@ -53,7 +53,7 @@ class ModelMeta(BaseModel):
     n_parameters: int | None = None
     memory_usage: float | None = None
     max_tokens: int | None = None
-    embedding_dimension: int | None = None
+    embed_dim: int | None = None
     license: str | None = None
     open_source: bool | None = None
     framework: list[Frameworks] = []
