@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from typing import Any
 
-import datasets
 import numpy as np
 
+import datasets
 from mteb.abstasks import AbsTaskClustering, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 

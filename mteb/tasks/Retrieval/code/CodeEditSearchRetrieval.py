@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import datasets
-
 from mteb.abstasks import MultilingualTask
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata

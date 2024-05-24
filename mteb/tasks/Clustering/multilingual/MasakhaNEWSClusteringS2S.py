@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import datasets
 import numpy as np
 
+import datasets
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskClustering, MultilingualTask

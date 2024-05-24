@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from datasets import load_dataset
 from huggingface_hub import create_repo
+
+from datasets import load_dataset
 
 repo_id = "mteb/multilingual-scala-classification"
 create_repo(repo_id, repo_type="dataset")

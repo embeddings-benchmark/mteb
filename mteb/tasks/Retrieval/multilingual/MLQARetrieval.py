@@ -1,7 +1,6 @@
 from typing import Dict, List
 
 import datasets
-
 from mteb.abstasks import AbsTaskRetrieval, CrosslingualTask, TaskMetadata
 
 _LANGUAGES = {
