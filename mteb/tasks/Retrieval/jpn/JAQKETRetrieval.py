@@ -25,11 +25,11 @@ class JAQKETRetrieval(AbsTaskRetrieval):
         date=("2000-01-01", "2020-12-31"),
         form=["written"],
         domains=["Academic"],
-        task_subtypes=None,
+        task_subtypes=[],
         license="cc-by-sa-4.0",
         socioeconomic_status="high",
         annotations_creators="derived",
-        dialect=None,
+        dialect=[],
         text_creation="found",
         bibtex_citation="""
         @inproceedings{suzuki2020jaqket,
