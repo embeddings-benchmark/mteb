@@ -11,7 +11,7 @@ _EVAL_SPLIT = "test"
 class NLPJournalAbsIntroRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NLPJournalAbsIntroRetrieval",
-        description="This datasets was created with the Japanese NLP Journal LaTeX Corpus. The titles, abstracts and introductions of the academic papers were shuffled, and the goal is to find the corresponding introduction with the given abstract.",
+        description="This dataset was created from the Japanese NLP Journal LaTeX Corpus. The titles, abstracts and introductions of the academic papers were shuffled. The goal is to find the corresponding introduction with the given abstract.",
         reference="https://github.com/sbintuitions/JMTEB",
         dataset={
             "path": "sbintuitions/JMTEB",
