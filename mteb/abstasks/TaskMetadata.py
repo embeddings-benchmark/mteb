@@ -7,7 +7,7 @@ from typing import List, Mapping, Union
 from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
 from typing_extensions import Annotated, Literal
 
-from .languages import (
+from ..languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
     path_to_lang_codes,
@@ -33,6 +33,7 @@ TASK_SUBTYPE = Literal[
     "False Friends",
     "Cross-Lingual Semantic Discrimination",
     "Textual Entailment",
+    "Counterfactual Detection",
 ]
 
 TASK_DOMAIN = Literal[
@@ -61,6 +62,7 @@ TEXT_CREATION_METHOD = Literal[
     "created",
     "machine-translated",
     "human-translated and localized",
+    "human-translated",
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",
@@ -92,7 +94,9 @@ TASK_CATEGORY = Literal[
     "p2p",  # Paragraph-to-paragraph
 ]
 
-ANNOTATOR_TYPE = Literal["expert-annotated", "human-annotated", "derived"]
+ANNOTATOR_TYPE = Literal[
+    "expert-annotated", "human-annotated", "derived", "LM-generated"
+]
 
 http_url_adapter = TypeAdapter(AnyUrl)
 STR_URL = Annotated[

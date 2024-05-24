@@ -3,8 +3,8 @@ from __future__ import annotations
 import logging
 
 from ..evaluation.evaluators import STSEvaluator
+from ..MTEBResults import ScoresDict
 from .AbsTask import AbsTask
-from .MTEBResults import ScoresDict
 
 logger = logging.getLogger(__name__)
 
