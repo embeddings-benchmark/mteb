@@ -6,7 +6,6 @@ from time import time
 from typing import Dict, List, Tuple
 
 import tqdm
-
 from datasets import Features, Value, load_dataset
 
 from ..evaluation.evaluators import utils
