@@ -88,3 +88,4 @@ Please also add your first name and last name are as you want them to appear in 
 | ShawonAshraf      | Shawon     | Ashraf     | shawon@ellamind.com          |   ~Shawon_Ashraf1    | ellamind, Germany                                   |
 | bjoernpl          | Björn      | Plüster    | bjoern@ellamind.com          |  ~Björn_Plüster1     | ellamind, Germany                                   |
 | jphme             | Jan Philipp| Harries    | jan@ellamind.com             |~Jan_Philipp_Harries1 | ellamind, Germany                                   |
+| malteos           | Malte       | Ostendorff      | malte@occiglot.eu           | ~Malte_Ostendorff1| Occiglot                             |
