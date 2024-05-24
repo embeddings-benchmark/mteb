@@ -70,4 +70,3 @@ class AlloprofReranking(AbsTaskReranking):
         self.dataset_transform()
 
         self.data_loaded = True
-
