@@ -39,6 +39,9 @@ from .nob.SNLHierarchicalClustering import *
 from .nob.vg_clustering import *
 from .pol.PolishClustering import *
 from .rom.RomaniBibleClustering import *
+from .rus.GeoreviewClusteringP2P import *
+from .rus.RuSciBenchGRNTIClusteringP2P import *
+from .rus.RuSciBenchOECDClusteringP2P import *
 from .spa.FloresClusteringS2S import *
 from .spa.SpanishNewsClusteringP2P import *
 from .swe.swedn_clustering import *

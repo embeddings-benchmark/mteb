@@ -18,4 +18,5 @@ from .multilingual.XNLI import *
 from .pol.PolishPC import *
 from .por.Assin2RTE import *
 from .por.SickBrPC import *
+from .rus.TERRa import *
 from .zho.CMTEBPairClassification import *
