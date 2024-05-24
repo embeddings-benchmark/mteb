@@ -5,6 +5,7 @@ from itertools import islice
 from typing import Iterable, TypeVar
 
 import datasets
+
 from mteb.abstasks import AbsTaskClustering, TaskMetadata
 
 T = TypeVar("T")
@@ -20,6 +21,7 @@ def batched(iterable: Iterable[T], n: int) -> Iterable[tuple[T, ...]]:
 
 
 class VGClustering(AbsTaskClustering):
+    superseeded_by = "VGHierarchicalClusteringP2P"
     metadata = TaskMetadata(
         name="VGClustering",
         dataset={

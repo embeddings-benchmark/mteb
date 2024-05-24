@@ -44,11 +44,12 @@ The following tables give you an overview of the tasks in MTEB.
 | [BengaliSentimentAnalysis](https://data.mendeley.com/datasets/p6zc7krs37/4) (Sazzed et al., 2020) | ['ben'] | Classification | s2s | [Reviews] | {'train': 11807} | {'train': 69.66} |
 | [BibleNLPBitextMining](https://arxiv.org/abs/2304.09919) (Akerman et al., 2023) | ['aai', 'aak', 'aau', 'aaz', 'abt', 'abx', 'aby', 'acf', 'acr', 'acu', 'adz', 'aer', 'aey', 'agd', 'agg', 'agm', 'agn', 'agr', 'agt', 'agu', 'aia', 'aii', 'aka', 'ake', 'alp', 'alq', 'als', 'aly', 'ame', 'amf', 'amk', 'amm', 'amn', 'amo', 'amp', 'amr', 'amu', 'amx', 'anh', 'anv', 'aoi', 'aoj', 'aom', 'aon', 'apb', 'ape', 'apn', 'apr', 'apu', 'apw', 'apz', 'arb', 'are', 'arl', 'arn', 'arp', 'asm', 'aso', 'ata', 'atb', 'atd', 'atg', 'att', 'auc', 'aui', 'auy', 'avt', 'awb', 'awk', 'awx', 'azb', 'azg', 'azz', 'bao', 'bba', 'bbb', 'bbr', 'bch', 'bco', 'bdd', 'bea', 'bef', 'bel', 'ben', 'beo', 'beu', 'bgs', 'bgt', 'bhg', 'bhl', 'big', 'bjk', 'bjp', 'bjr', 'bjv', 'bjz', 'bkd', 'bki', 'bkq', 'bkx', 'blw', 'blz', 'bmh', 'bmk', 'bmr', 'bmu', 'bnp', 'boa', 'boj', 'bon', 'box', 'bpr', 'bps', 'bqc', 'bqp', 'bre', 'bsj', 'bsn', 'bsp', 'bss', 'buk', 'bus', 'bvd', 'bvr', 'bxh', 'byr', 'byx', 'bzd', 'bzh', 'bzj', 'caa', 'cab', 'cac', 'caf', 'cak', 'cao', 'cap', 'car', 'cav', 'cax', 'cbc', 'cbi', 'cbk', 'cbr', 'cbs', 'cbt', 'cbu', 'cbv', 'cco', 'ceb', 'cek', 'ces', 'cgc', 'cha', 'chd', 'chf', 'chk', 'chq', 'chz', 'cjo', 'cjv', 'ckb', 'cle', 'clu', 'cme', 'cmn', 'cni', 'cnl', 'cnt', 'cof', 'con', 'cop', 'cot', 'cpa', 'cpb', 'cpc', 'cpu', 'cpy', 'crn', 'crx', 'cso', 'csy', 'cta', 'cth', 'ctp', 'ctu', 'cub', 'cuc', 'cui', 'cuk', 'cut', 'cux', 'cwe', 'cya', 'daa', 'dad', 'dah', 'dan', 'ded', 'deu', 'dgc', 'dgr', 'dgz', 'dhg', 'dif', 'dik', 'dji', 'djk', 'djr', 'dob', 'dop', 'dov', 'dwr', 'dww', 'dwy', 'ebk', 'eko', 'emi', 'emp', 'eng', 'enq', 'epo', 'eri', 'ese', 'esk', 'etr', 'ewe', 'faa', 'fai', 'far', 'ffm', 'for', 'fra', 'fue', 'fuf', 'fuh', 'gah', 'gai', 'gam', 'gaw', 'gdn', 'gdr', 'geb', 'gfk', 'ghs', 'glk', 'gmv', 'gng', 'gnn', 'gnw', 'gof', 'grc', 'gub', 'guh', 'gui', 'guj', 'gul', 'gum', 'gun', 'guo', 'gup', 'gux', 'gvc', 'gvf', 'gvn', 'gvs', 'gwi', 'gym', 'gyr', 'hat', 'hau', 'haw', 'hbo', 'hch', 'heb', 'heg', 'hin', 'hix', 'hla', 'hlt', 'hmo', 'hns', 'hop', 'hot', 'hrv', 'hto', 'hub', 'hui', 'hun', 'hus', 'huu', 'huv', 'hvn', 'ian', 'ign', 'ikk', 'ikw', 'ilo', 'imo', 'inb', 'ind', 'ino', 'iou', 'ipi', 'isn', 'ita', 'iws', 'ixl', 'jac', 'jae', 'jao', 'jic', 'jid', 'jiv', 'jni', 'jpn', 'jvn', 'kan', 'kaq', 'kbc', 'kbh', 'kbm', 'kbq', 'kdc', 'kde', 'kdl', 'kek', 'ken', 'kew', 'kgf', 'kgk', 'kgp', 'khs', 'khz', 'kik', 'kiw', 'kiz', 'kje', 'kjs', 'kkc', 'kkl', 'klt', 'klv', 'kmg', 'kmh', 'kmk', 'kmo', 'kms', 'kmu', 'kne', 'knf', 'knj', 'knv', 'kos', 'kpf', 'kpg', 'kpj', 'kpr', 'kpw', 'kpx', 'kqa', 'kqc', 'kqf', 'kql', 'kqw', 'ksd', 'ksj', 'ksr', 'ktm', 'kto', 'kud', 'kue', 'kup', 'kvg', 'kvn', 'kwd', 'kwf', 'kwi', 'kwj', 'kyc', 'kyf', 'kyg', 'kyq', 'kyz', 'kze', 'lac', 'lat', 'lbb', 'lbk', 'lcm', 'leu', 'lex', 'lgl', 'lid', 'lif', 'lin', 'lit', 'llg', 'lug', 'luo', 'lww', 'maa', 'maj', 'mal', 'mam', 'maq', 'mar', 'mau', 'mav', 'maz', 'mbb', 'mbc', 'mbh', 'mbj', 'mbl', 'mbs', 'mbt', 'mca', 'mcb', 'mcd', 'mcf', 'mco', 'mcp', 'mcq', 'mcr', 'mdy', 'med', 'mee', 'mek', 'meq', 'met', 'meu', 'mgc', 'mgh', 'mgw', 'mhl', 'mib', 'mic', 'mie', 'mig', 'mih', 'mil', 'mio', 'mir', 'mit', 'miz', 'mjc', 'mkj', 'mkl', 'mkn', 'mks', 'mle', 'mlh', 'mlp', 'mmo', 'mmx', 'mna', 'mop', 'mox', 'mph', 'mpj', 'mpm', 'mpp', 'mps', 'mpt', 'mpx', 'mqb', 'mqj', 'msb', 'msc', 'msk', 'msm', 'msy', 'mti', 'mto', 'mux', 'muy', 'mva', 'mvn', 'mwc', 'mwe', 'mwf', 'mwp', 'mxb', 'mxp', 'mxq', 'mxt', 'mya', 'myk', 'myu', 'myw', 'myy', 'mzz', 'nab', 'naf', 'nak', 'nas', 'nbq', 'nca', 'nch', 'ncj', 'ncl', 'ncu', 'ndg', 'ndj', 'nfa', 'ngp', 'ngu', 'nhe', 'nhg', 'nhi', 'nho', 'nhr', 'nhu', 'nhw', 'nhy', 'nif', 'nii', 'nin', 'nko', 'nld', 'nlg', 'nna', 'nnq', 'noa', 'nop', 'not', 'nou', 'npi', 'npl', 'nsn', 'nss', 'ntj', 'ntp', 'ntu', 'nuy', 'nvm', 'nwi', 'nya', 'nys', 'nyu', 'obo', 'okv', 'omw', 'ong', 'ons', 'ood', 'opm', 'ory', 'ote', 'otm', 'otn', 'otq', 'ots', 'pab', 'pad', 'pah', 'pan', 'pao', 'pes', 'pib', 'pio', 'pir', 'piu', 'pjt', 'pls', 'plu', 'pma', 'poe', 'poh', 'poi', 'pol', 'pon', 'por', 'poy', 'ppo', 'prf', 'pri', 'ptp', 'ptu', 'pwg', 'qub', 'quc', 'quf', 'quh', 'qul', 'qup', 'qvc', 'qve', 'qvh', 'qvm', 'qvn', 'qvs', 'qvw', 'qvz', 'qwh', 'qxh', 'qxn', 'qxo', 'rai', 'reg', 'rgu', 'rkb', 'rmc', 'rmy', 'ron', 'roo', 'rop', 'row', 'rro', 'ruf', 'rug', 'rus', 'rwo', 'sab', 'san', 'sbe', 'sbk', 'sbs', 'seh', 'sey', 'sgb', 'sgz', 'shj', 'shp', 'sim', 'sja', 'sll', 'smk', 'snc', 'snn', 'snp', 'snx', 'sny', 'som', 'soq', 'soy', 'spa', 'spl', 'spm', 'spp', 'sps', 'spy', 'sri', 'srm', 'srn', 'srp', 'srq', 'ssd', 'ssg', 'ssx', 'stp', 'sua', 'sue', 'sus', 'suz', 'swe', 'swh', 'swp', 'sxb', 'tac', 'taj', 'tam', 'tav', 'taw', 'tbc', 'tbf', 'tbg', 'tbo', 'tbz', 'tca', 'tcs', 'tcz', 'tdt', 'tee', 'tel', 'ter', 'tet', 'tew', 'tfr', 'tgk', 'tgl', 'tgo', 'tgp', 'tha', 'tif', 'tim', 'tiw', 'tiy', 'tke', 'tku', 'tlf', 'tmd', 'tna', 'tnc', 'tnk', 'tnn', 'tnp', 'toc', 'tod', 'tof', 'toj', 'ton', 'too', 'top', 'tos', 'tpa', 'tpi', 'tpt', 'tpz', 'trc', 'tsw', 'ttc', 'tte', 'tuc', 'tue', 'tuf', 'tuo', 'tur', 'tvk', 'twi', 'txq', 'txu', 'tzj', 'tzo', 'ubr', 'ubu', 'udu', 'uig', 'ukr', 'uli', 'ulk', 'upv', 'ura', 'urb', 'urd', 'uri', 'urt', 'urw', 'usa', 'usp', 'uvh', 'uvl', 'vid', 'vie', 'viv', 'vmy', 'waj', 'wal', 'wap', 'wat', 'wbi', 'wbp', 'wed', 'wer', 'wim', 'wiu', 'wiv', 'wmt', 'wmw', 'wnc', 'wnu', 'wol', 'wos', 'wrk', 'wro', 'wrs', 'wsk', 'wuv', 'xav', 'xbi', 'xed', 'xla', 'xnn', 'xon', 'xsi', 'xtd', 'xtm', 'yaa', 'yad', 'yal', 'yap', 'yaq', 'yby', 'ycn', 'yka', 'yle', 'yml', 'yon', 'yor', 'yrb', 'yre', 'yss', 'yuj', 'yut', 'yuw', 'yva', 'zaa', 'zab', 'zac', 'zad', 'zai', 'zaj', 'zam', 'zao', 'zap', 'zar', 'zas', 'zat', 'zav', 'zaw', 'zca', 'zga', 'zia', 'ziw', 'zlm', 'zos', 'zpc', 'zpl', 'zpm', 'zpo', 'zpq', 'zpu', 'zpv', 'zpz', 'zsr', 'ztq', 'zty', 'zyp'] | BitextMining | s2s | [Religious] | {'train': 256} | {'train': 120.0} |
 | [BigPatentClustering](https://www.kaggle.com/datasets/big_patent) | ['eng'] | Clustering | s2s |  |  |  |
-| [BiorxivClusteringP2P](https://api.biorxiv.org/) | ['eng'] | Clustering | p2p |  | {'test': 75000} | {'test': 1666.2} |
-| [BiorxivClusteringS2S](https://api.biorxiv.org/) | ['eng'] | Clustering | s2s |  | {'test': 75000} | {'test': 101.6} |
+| [BiorxivClusteringP2P.v2](https://api.biorxiv.org/) | ['eng'] | Clustering | p2p | [Academic] | {'test': 2048} | {'test': 1664.0} |
+| [BiorxivClusteringS2S.v2](https://api.biorxiv.org/) | ['eng'] | Clustering | s2s | [Academic] | {'test': 2048} | {'test': 101.7} |
 | [BlurbsClusteringP2P.v2](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html) (Steffen Remus, 2019) | ['deu'] | Clustering | p2p | [Fiction] | {'test': 50268} | {'test': 664.09} |
 | [BlurbsClusteringS2S.v2](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html) (Steffen Remus, 2019) | ['deu'] | Clustering | s2s | [Fiction] | {'test': 50268} | {'test': 23.02} |
 | [BornholmBitextMining](https://aclanthology.org/W19-6138/) | ['dan'] | BitextMining | s2s | [Web, Social, Fiction] | {'test': 500} | {'test': 89.7} |
+| [BrazilianToxicTweetsClassification](https://paperswithcode.com/dataset/told-br) (Joao Augusto Leite and                         Diego F. Silva and                         Kalina Bontcheva and                         Carolina Scarton, 2020) | ['por'] | MultilabelClassification | s2s | [Constructed] | {'test': 2048} | {'test': 85.05} |
 | [BulgarianStoreReviewSentimentClassfication](https://doi.org/10.7910/DVN/TXIK9P) (Georgieva-Trifonova et al., 2018) | ['bul'] | Classification | s2s | [Reviews] | {'test': 182} | {'test': 316.7} |
 | [CBD](http://2019.poleval.pl/files/poleval2019.pdf) | ['pol'] | Classification | s2s |  | {'test': 1000} | {'test': 93.2} |
 | [CDSC-E](https://aclanthology.org/P17-1073.pdf) | ['pol'] | PairClassification | s2s |  |  |  |
@@ -285,7 +286,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [MTOPIntentClassification](https://arxiv.org/pdf/2008.09335.pdf) | ['deu', 'eng', 'fra', 'hin', 'spa', 'tha'] | Classification | s2s |  | {'validation': 2235, 'test': 4386} | {'validation': 36.5, 'test': 36.8} |
 | [MacedonianTweetSentimentClassification](https://aclanthology.org/R15-1034/) | ['mkd'] | Classification | s2s | [Social] | {'test': 1139} | {'test': 67.6} |
 | [MalayalamNewsClassification](https://github.com/goru001/nlp-for-malyalam) | ['mal'] | Classification | s2s | [News] | {'train': 5036, 'test': 1260} | {'train': 79.48, 'test': 80.44} |
-| [MalteseNewsClassification](https://huggingface.co/datasets/MLRS/maltese_news_categories) | ['mlt'] | Classification | s2s | [Constructed] | {'train': 10784, 'test': 2297} | {'train': 1595.63, 'test': 1752.1} |
+| [MalteseNewsClassification](https://huggingface.co/datasets/MLRS/maltese_news_categories) | ['mlt'] | MultilabelClassification | s2s | [Constructed] | {'train': 10784, 'test': 2297} | {'train': 1595.63, 'test': 1752.1} |
 | [MarathiNewsClassification](https://github.com/goru001/nlp-for-marathi) | ['mar'] | Classification | s2s | [News] | {'test': 2048} | {'test': 52.37} |
 | [MasakhaNEWSClassification](https://arxiv.org/abs/2304.09972) | ['amh', 'eng', 'fra', 'hau', 'ibo', 'lin', 'lug', 'orm', 'pcm', 'run', 'sna', 'som', 'swa', 'tir', 'xho', 'yor'] | Classification | s2s |  | {'test': 422} | {'test': 5116.6} |
 | [MasakhaNEWSClusteringP2P](https://huggingface.co/datasets/masakhane/masakhanews) | ['amh', 'eng', 'fra', 'hau', 'ibo', 'lin', 'lug', 'orm', 'pcm', 'run', 'sna', 'som', 'swa', 'tir', 'xho', 'yor'] | Clustering | p2p |  |  |  |
@@ -294,8 +295,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [MassiveScenarioClassification](https://arxiv.org/abs/2204.08582#:~:text=MASSIVE%20contains%201M%20realistic%2C%20parallel,diverse%20languages%20from%2029%20genera.) | ['afr', 'amh', 'ara', 'aze', 'ben', 'cmo', 'cym', 'dan', 'deu', 'ell', 'eng', 'fas', 'fin', 'fra', 'heb', 'hin', 'hun', 'hye', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kan', 'kat', 'khm', 'kor', 'lav', 'mal', 'mon', 'msa', 'mya', 'nld', 'nob', 'pol', 'por', 'ron', 'rus', 'slv', 'spa', 'sqi', 'swa', 'swe', 'tam', 'tel', 'tgl', 'tha', 'tur', 'urd', 'vie'] | Classification | s2s |  | {'validation': 2033, 'test': 2974} | {'validation': 34.8, 'test': 34.6} |
 | [MedicalQARetrieval](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-019-3119-4) (Asma et al., 2019) | ['eng'] | Retrieval | s2s | [Medical] | {'test': 2048} | {'test': 1205.9619140625} |
 | [MedicalRetrieval](https://arxiv.org/abs/2203.03367) | ['cmn'] | Retrieval | s2p |  |  |  |
-| [MedrxivClusteringP2P](https://api.medrxiv.org/) | ['eng'] | Clustering | p2p |  | {'test': 375000} | {'test': 1981.2} |
-| [MedrxivClusteringS2S](https://api.medrxiv.org/) | ['eng'] | Clustering | s2s |  | {'test': 375000} | {'test': 114.7} |
+| [MedrxivClusteringP2P.v2](https://api.medrxiv.org/) | ['eng'] | Clustering | p2p | [Academic, Medical] | {'test': 2048} | {'test': 1984.7} |
+| [MedrxivClusteringS2S.v2](https://api.medrxiv.org/) | ['eng'] | Clustering | s2s | [Academic, Medical] | {'test': 2048} | {'test': 114.9} |
 | [MewsC16JaClustering](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Clustering | s2s | [News] | {'test': 992} | {'test': 95.0} |
 | [MindSmallReranking](https://msnews.github.io/assets/doc/ACL2020_MIND.pdf) | ['eng'] | Reranking | s2s |  | {'test': 107968} | {'test': 70.9} |
 | MintakaRetrieval | ['ara', 'deu', 'fra', 'hin', 'ita', 'jpn', 'por', 'spa'] | Retrieval | s2p |  |  |  |
@@ -481,7 +482,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [UkrFormalityClassification](https://huggingface.co/datasets/ukr-detect/ukr-formality-dataset-translated-gyafc) | ['ukr'] | Classification | s2s | [News] | {'train': 2048, 'test': 2048} | {'train': 52.1, 'test': 53.07} |
 | [UnfairTOSLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 2048} | {'test': 184.69} |
 | [UrduRomanSentimentClassification](https://archive.ics.uci.edu/dataset/458/roman+urdu+data+set) (Sharf,Zareen, 2018) | ['urd'] | Classification | s2s | [Social] | {'train': 2048} | {'train': 68.248} |
-| [VGClustering](https://huggingface.co/datasets/navjordj/VG_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [News, Non-fiction] | {'test': 2048} | {'test': 1009.65} |
+| [VGHierarchicalClusteringP2P](https://huggingface.co/datasets/navjordj/VG_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [News, Non-fiction] | {'test': 2048} | {'test': 2670.3243084794544} |
+| [VGHierarchicalClusteringS2S](https://huggingface.co/datasets/navjordj/VG_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [News, Non-fiction] | {'test': 2048} | {'test': 139.31247668283325} |
 | [VideoRetrieval](https://arxiv.org/abs/2203.03367) | ['cmn'] | Retrieval | s2p |  |  |  |
 | [VieMedEVBitextMining](https://aclanthology.org/2015.iwslt-evaluation.11/) (Nhu Vo, 2024) | ['eng', 'vie'] | BitextMining | s2s | [Medical] | {'test': 2048} | {'test': 139.23} |
 | [VieQuADRetrieval](https://aclanthology.org/2020.coling-main.233.pdf) | ['vie'] | Retrieval | s2p | [Encyclopaedic, Non-fiction] | {'validation': 2048} | {'validation': 790.24} |
@@ -1100,7 +1102,7 @@ The following tables give you an overview of the tasks in MTEB.
 | mlg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mlh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mlp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mlt | 2 | 4 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 |
+| mlt | 2 | 3 | 1 | 0 | 2 | 0 | 0 | 1 | 0 | 0 |
 | mmo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mmx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | mna | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1185,7 +1187,7 @@ The following tables give you an overview of the tasks in MTEB.
 | nno | 5 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nnq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | noa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nob | 5 | 8 | 3 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
+| nob | 5 | 8 | 4 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
 | noe | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nor | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
@@ -1251,7 +1253,7 @@ The following tables give you an overview of the tasks in MTEB.
 | poi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | pol | 4 | 12 | 3 | 0 | 1 | 4 | 0 | 13 | 4 | 0 |
 | pon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| por | 4 | 10 | 0 | 0 | 1 | 2 | 1 | 5 | 3 | 0 |
+| por | 4 | 10 | 0 | 0 | 2 | 2 | 1 | 5 | 3 | 0 |
 | poy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ppo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | prf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1561,7 +1563,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1363 | 964 | 104 | 3 | 23 | 66 | 26 | 328 | 72 | 2 |
+| Total | 1363 | 963 | 105 | 3 | 25 | 66 | 26 | 328 | 72 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>

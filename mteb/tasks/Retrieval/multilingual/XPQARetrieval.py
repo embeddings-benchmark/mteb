@@ -1,6 +1,7 @@
 from typing import List
 
 import datasets
+
 from mteb.abstasks import AbsTaskRetrieval, CrosslingualTask, TaskMetadata
 
 _EVAL_LANGS = {

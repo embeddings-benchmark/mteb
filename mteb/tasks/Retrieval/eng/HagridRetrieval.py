@@ -4,6 +4,7 @@ import uuid
 from typing import Dict, List
 
 import datasets
+
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
