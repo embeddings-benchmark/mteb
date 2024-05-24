@@ -18,7 +18,7 @@ class MalteseNewsClassification(AbsTaskMultilabelClassification):
             "path": "MLRS/maltese_news_categories",
             "revision": "6bb0321659c4f07c4c2176c30c98c971be6571b4",
         },
-        type="Classification",
+        type="MultilabelClassification",
         category="s2s",
         eval_splits=["test"],
         eval_langs=["mlt-Latn"],
@@ -47,7 +47,6 @@ class MalteseNewsClassification(AbsTaskMultilabelClassification):
     )
 
     def dataset_transform(self):
-        # 80% of categories have just one label, so it's safe to take the first
         self.dataset = self.dataset.rename_columns({"labels": "label"})
         remove_cols = [
             col
