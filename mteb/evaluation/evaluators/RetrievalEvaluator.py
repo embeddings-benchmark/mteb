@@ -407,7 +407,7 @@ def convert_conv_history_to_query(conversations: List[List[Union[str, dict]]]) -
     for conversation in conversations:
         # if it's a list of strings, just join them
         if isinstance(conversation[0], str):
-            conv_str = "; ".join(conversations)
+            conv_str = "; ".join(conversation)
         # otherwise, it's a list of dictionaries, which we need to convert to strings
         elif isinstance(conversation[0], dict):
             conv = []
