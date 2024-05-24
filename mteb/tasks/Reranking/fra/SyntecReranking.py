@@ -58,4 +58,6 @@ class SyntecReranking(AbsTaskReranking):
         )
         self.dataset = datasets.DatasetDict({"test": self.dataset})
 
+        self.dataset_transform()
+
         self.data_loaded = True

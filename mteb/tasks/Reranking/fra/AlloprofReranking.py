@@ -67,10 +67,11 @@ class AlloprofReranking(AbsTaskReranking):
         )
         self.dataset = datasets.DatasetDict({"test": self.dataset})
 
+        self.dataset_transform()
+
         self.data_loaded = True
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(
-            self.dataset,
-            seed=self.seed,
+            self.dataset, seed=self.seed, splits=["test"]
         )
