@@ -11,7 +11,7 @@ NUM_SAMPLES = 2048
 
 
 class HALClusteringS2S(AbsTaskClustering):
-    superseeded_by = "HALClusteringS2SFast"
+    superseeded_by = "HALClusteringS2S.v2"
 
     metadata = TaskMetadata(
         name="HALClusteringS2S",
@@ -54,7 +54,7 @@ class HALClusteringS2S(AbsTaskClustering):
 
 class HALClusteringS2SFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="HALClusteringS2SFast",
+        name="HALClusteringS2S.v2",
         description="Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s)",
         reference="https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s",
         dataset={
@@ -72,7 +72,7 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
         task_subtypes=["Thematic clustering"],
         license="Apache-2.0",
         socioeconomic_status="medium",
-        annotations_creators="derived",
+        annotations_creators="human-annotated",
         dialect=[],
         text_creation="found",
         bibtex_citation="",
@@ -88,7 +88,7 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
         )
         labels_count = Counter(self.dataset["test"]["labels"])
 
-        # leave classes with more than 2 samples after stratified_subsampling
+        # keep classes with more than 2 samples after stratified_subsampling
         frequent_labels = set(
             label
             for label, count in labels_count.items()
