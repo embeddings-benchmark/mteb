@@ -60,3 +60,9 @@ class WikiInstructionRetrieval(AbsTaskInstructionRetrieval):
         
         self.queries = {row["answer_id"]: row["title"] for row in dataset}
 
+        # Create qrels with answer_id as keys and a dictionary of relevant document IDs as values
+        self.qrels = {}
+        for row in dataset:
+            if row["answer_id"] not in self.qrels:
+                self.qrels[row["answer_id"]] = {}
+            self.qrels[row["answer_id"]][row["_id"]] = 1 
