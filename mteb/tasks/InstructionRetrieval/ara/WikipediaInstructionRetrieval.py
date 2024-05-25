@@ -25,7 +25,7 @@ class WikipediaInstructionRetrieval(AbsTaskInstructionRetrieval):
         task_subtypes=[],
         license="Not specified",
         socioeconomic_status="medium",
-        annotations_creators="expert-generated",
+        annotations_creators="expert-annotated",
         dialect=[],
         text_creation="found",
         bibtex_citation=""" """,
