@@ -48,35 +48,27 @@ class WikiInstructionRetrieval(AbsTaskInstructionRetrieval):
         if "test" not in dataset:
             raise KeyError("Dataset 'test' does not exist in loaded data.")
 
-        # Map answer_id strings to unique integer IDs
-        unique_answer_ids = {id: idx for idx, id in enumerate(dataset["test"]["answer_id"])}
-        dataset = dataset["test"].map(
-            lambda x: {"answer_id_index": unique_answer_ids[x["answer_id"]]}
+        dataset = dataset["test"]
+
+        dataset = dataset.map(
+            lambda x: {
+                "question": x["question"],
+                "answer": x["answer"],
+            }
         )
 
-        dataset = dataset.select(
-            [
-                "answer_id_index",  # Select based on the new integer index
-                "answer_id",       # Keep the original answer_id for reference
-                "question",
-                "answer",
-            ]
-        )
-        dataset = dataset.rename_column("question", "title")
-        dataset = dataset.rename_column("answer", "text")
-
-        # Use the integer index to create mappings
+        # Use the incremented ID to create mappings
         self.corpus = {
-            row["answer_id_index"]: {"text": row["text"], "answer_id": row["answer_id"]}
-            for row in dataset
+            idx: {"text": row["answer"], "answer_id": row["answer_id"]}
+            for idx, row in enumerate(dataset)
         }
         self.queries = {
-            row["answer_id_index"]: row["title"] for row in dataset
-        }  # Use the integer index for queries
+            idx: row["question"] for idx, row in enumerate(dataset)
+        }  # Use the incremented ID for queries
         self.qrels = {}
-        for row in dataset:
-            answer_id_index = row["answer_id_index"]
-            if answer_id_index not in self.qrels:
-                self.qrels[answer_id_index] = {}
-            self.qrels[answer_id_index][row["_id"]] = 1
+        for idx, row in enumerate(dataset):
+            if idx not in self.qrels:
+                self.qrels[idx] = {}
+            self.qrels[idx][idx] = 1
+
  
