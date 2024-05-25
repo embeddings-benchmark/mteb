@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
+from datasets import load_dataset
 
 
 class WikipediaInstructionRetrieval(AbsTaskInstructionRetrieval):
@@ -13,7 +14,6 @@ class WikipediaInstructionRetrieval(AbsTaskInstructionRetrieval):
         dataset={
             "path": "Cohere/wikipedia-22-12-ar-embeddings",
             "revision": "ea5f00014bd7626aa55affb07de57d519ab3309a",
-            "name": "default" 
         },
         type="InstructionRetrieval",
         category="s2p",
@@ -33,4 +33,7 @@ class WikipediaInstructionRetrieval(AbsTaskInstructionRetrieval):
         n_samples={"ara": 3113764},
         avg_character_length={"ara": 2768.749235474006},
     )
-   
+    def dataset_transform(self):
+        self.dataset = load_dataset("Cohere/wikipedia-22-12-ar-embeddings", name="default")
+        self.dataset = self.dataset.rename_columns({"text": "text", "title": "title"})
+        self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
