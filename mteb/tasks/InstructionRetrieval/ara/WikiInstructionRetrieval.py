@@ -16,7 +16,7 @@ class WikiInstructionRetrieval(AbsTaskInstructionRetrieval):
         },
         type="InstructionRetrieval",
         category="s2p",
-        eval_splits=["test", "validation", "train"],
+        eval_splits=["test"],
         eval_langs=["ara-Arab"],
         main_score="p-MRR",
         date=("2023-01-14", "2024-03-22"),
@@ -41,10 +41,6 @@ class WikiInstructionRetrieval(AbsTaskInstructionRetrieval):
             trust_remote_code=True,
         )
 
-        if "test" not in dataset:
-            raise KeyError("Dataset 'test' does not exist in loaded data.")
-
-        dataset = dataset["test"]
 
         dataset = dataset.map(
             lambda x: {
