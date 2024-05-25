@@ -48,15 +48,35 @@ class WikiInstructionRetrieval(AbsTaskInstructionRetrieval):
         if "test" not in dataset:
             raise KeyError("Dataset 'test' does not exist in loaded data.")
 
-        dataset = dataset["test"].select(["answer_id", "question", "answer"])
+        # Map answer_id strings to unique integer IDs
+        unique_answer_ids = {id: idx for idx, id in enumerate(dataset["test"]["answer_id"])}
+        dataset = dataset["test"].map(
+            lambda x: {"answer_id_index": unique_answer_ids[x["answer_id"]]}
+        )
+
+        dataset = dataset.select(
+            [
+                "answer_id_index",  # Select based on the new integer index
+                "answer_id",       # Keep the original answer_id for reference
+                "question",
+                "answer",
+            ]
+        )
         dataset = dataset.rename_column("question", "title")
         dataset = dataset.rename_column("answer", "text")
 
-        self.corpus = {row["answer_id"]: {"text": row["text"]} for row in dataset}
-        self.queries = {row["answer_id"]: row["title"] for row in dataset}
+        # Use the integer index to create mappings
+        self.corpus = {
+            row["answer_id_index"]: {"text": row["text"], "answer_id": row["answer_id"]}
+            for row in dataset
+        }
+        self.queries = {
+            row["answer_id_index"]: row["title"] for row in dataset
+        }  # Use the integer index for queries
         self.qrels = {}
-
         for row in dataset:
-            if row["answer_id"] not in self.qrels:
-                self.qrels[row["answer_id"]] = {}
-            self.qrels[row["answer_id"]][row["_id"]] = 1  
+            answer_id_index = row["answer_id_index"]
+            if answer_id_index not in self.qrels:
+                self.qrels[answer_id_index] = {}
+            self.qrels[answer_id_index][row["_id"]] = 1
+ 
