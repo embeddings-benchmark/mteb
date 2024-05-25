@@ -15,8 +15,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [AfriSentiClassification](https://arxiv.org/abs/2302.08956) | ['amh', 'arq', 'ary', 'hau', 'ibo', 'kin', 'pcm', 'por', 'swa', 'tso', 'twi', 'yor'] | Classification | s2s | [Social] | {'test': 2048} | {'test': 74.77} |
 | [AfriSentiLangClassification](https://huggingface.co/datasets/HausaNLP/afrisenti-lid-data/) | ['amh', 'arq', 'ary', 'hau', 'ibo', 'kin', 'pcm', 'por', 'swa', 'tso', 'twi', 'yor'] | Classification | s2s | [Social] | {'test': 5754} | {'test': 77.84} |
 | [AllegroReviews](https://aclanthology.org/2020.acl-main.111.pdf) | ['pol'] | Classification | s2s |  | {'test': 1006} | {'test': 477.2} |
-| [AlloProfClusteringP2P](https://huggingface.co/datasets/lyon-nlp/alloprof) | ['fra'] | Clustering | p2p |  |  |  |
-| [AlloProfClusteringS2S](https://huggingface.co/datasets/lyon-nlp/alloprof) | ['fra'] | Clustering | s2s |  |  |  |
+| [AlloProfClusteringP2P.v2](https://huggingface.co/datasets/lyon-nlp/alloprof) (Lefebvre-Brossard et al., 2023) | ['fra'] | Clustering | p2p | [Encyclopaedic] | {'test': 2556} | {'test': 3539.5} |
+| [AlloProfClusteringS2S.v2](https://huggingface.co/datasets/lyon-nlp/alloprof) (Lefebvre-Brossard et al., 2023) | ['fra'] | Clustering | s2s | [Encyclopaedic] | {'test': 2556} | {'test': 32.8} |
 | [AlloprofReranking](https://huggingface.co/datasets/antoinelb7/alloprof) (Lefebvre-Brossard et al., 2023) | ['fra'] | Reranking | s2p | [Web, Academic] | {'test': 2316, 'train': 9264} |  |
 | [AlloprofRetrieval](https://huggingface.co/datasets/antoinelb7/alloprof) | ['fra'] | Retrieval | s2p |  |  |  |
 | [AmazonCounterfactualClassification](https://arxiv.org/abs/2104.06893) | ['deu', 'eng', 'jpn'] | Classification | s2s | [Reviews] | {'validation': 335, 'test': 670} | {'validation': 109.2, 'test': 106.1} |
