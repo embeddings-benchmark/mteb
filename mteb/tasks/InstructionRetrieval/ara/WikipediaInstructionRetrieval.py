@@ -33,3 +33,6 @@ class WikipediaInstructionRetrieval(AbsTaskInstructionRetrieval):
         avg_character_length={"ara": 2768.749235474006},
     )
    
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_columns({"text": "text", "topic": "label"})
+        self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
