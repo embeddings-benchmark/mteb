@@ -38,13 +38,18 @@ class WikiInstructionRetrieval(AbsTaskInstructionRetrieval):
 
 
     def load_data(self, **kwargs):
+
         dataset = load_dataset(
             self.metadata.dataset["path"],
             name=self.metadata.dataset["name"],
-            revision=self.metadata.dataset["revision"]
+            revision=self.metadata.dataset["revision"],
+            trust_remote_code=True
         )
-
-        dataset = dataset["test"].select_columns(["question", "answer"])
+        if "test" not in dataset:
+            raise KeyError("Dataset 'test' does not exist in loaded data.")
+        dataset = dataset["test"].select(["question_id", "question", "answer"])
         dataset = dataset.rename_column("question", "title")
         dataset = dataset.rename_column("answer", "text")
         self.corpus = dataset.to_dict()
+        self.queries = {entry["question_id"]: entry["title"] for entry in dataset}
+        self.qrels = {entry["question_id"]: {entry["document_id"]: int(entry["label"])} for entry in dataset}
