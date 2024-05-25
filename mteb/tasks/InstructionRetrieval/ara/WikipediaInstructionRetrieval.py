@@ -107,9 +107,9 @@ class WikipediaInstructionRetrieval(AbsTaskInstructionRetrieval):
         n_samples=None,
         avg_character_length=None,
     )
-    
-    def __init__(self):
-        super().__init__()
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)  
         self.langs = list(_LANGUAGES.keys())
 
     def load_data(self, **kwargs):
