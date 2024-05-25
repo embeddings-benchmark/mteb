@@ -49,9 +49,8 @@ class WikiInstructionRetrieval(AbsTaskInstructionRetrieval):
             }
         )
 
-        # Use the incremented ID to create mappings
         self.corpus = {
-            idx: {"text": row["answer"], "answer_id": row["answer_id"]}
+            idx: {"text": row["answer"]}
             for idx, row in enumerate(dataset)
         }
         self.queries = {
