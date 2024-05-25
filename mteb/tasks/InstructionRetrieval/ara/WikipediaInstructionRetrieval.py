@@ -99,7 +99,7 @@ class WikipediaInstructionRetrieval(AbsTaskInstructionRetrieval):
         domains=["Web"],
         task_subtypes=[],
         license="Not specified",
-        socioeconomic_status="medium",
+        socioeconomic_status="low",
         annotations_creators="expert-annotated",
         dialect=[],
         text_creation="found",
@@ -107,7 +107,10 @@ class WikipediaInstructionRetrieval(AbsTaskInstructionRetrieval):
         n_samples=None,
         avg_character_length=None,
     )
-
+    
+    def __init__(self):
+        super().__init__()
+        self.langs = list(_LANGUAGES.keys())
 
     def load_data(self, **kwargs):
         if self.data_loaded:
