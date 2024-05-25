@@ -48,21 +48,15 @@ class WikiInstructionRetrieval(AbsTaskInstructionRetrieval):
         if "test" not in dataset:
             raise KeyError("Dataset 'test' does not exist in loaded data.")
 
-        # Convert `answer_id` to integers for selection
-        dataset = dataset["test"].map(lambda x: {"answer_id": int(x["answer_id"])})
-        dataset = dataset.select(["answer_id", "question", "answer"])
-
+        dataset = dataset["test"].select(["answer_id", "question", "answer"])
         dataset = dataset.rename_column("question", "title")
         dataset = dataset.rename_column("answer", "text")
-        
-        # Use a dictionary comprehension for efficiency
-        self.corpus = {row["answer_id"]: {"text": row["text"]} for row in dataset}
-        
-        self.queries = {row["answer_id"]: row["title"] for row in dataset}
 
-        # Create qrels with answer_id as keys and a dictionary of relevant document IDs as values
+        self.corpus = {row["answer_id"]: {"text": row["text"]} for row in dataset}
+        self.queries = {row["answer_id"]: row["title"] for row in dataset}
         self.qrels = {}
+
         for row in dataset:
             if row["answer_id"] not in self.qrels:
                 self.qrels[row["answer_id"]] = {}
-            self.qrels[row["answer_id"]][row["_id"]] = 1 
+            self.qrels[row["answer_id"]][row["_id"]] = 1  
