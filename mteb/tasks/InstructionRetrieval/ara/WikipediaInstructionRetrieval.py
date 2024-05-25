@@ -13,11 +13,10 @@ class WikipediaInstructionRetrieval(AbsTaskInstructionRetrieval):
         dataset={
             "path": "Cohere/wikipedia-22-12-ar-embeddings",
             "revision": "ea5f00014bd7626aa55affb07de57d519ab3309a",
-            "config_name": ["default"]
         },
         type="InstructionRetrieval",
         category="s2p",
-        eval_splits=["train"],
+        eval_splits=["default"],
         eval_langs=["ara-Arab"],
         main_score="p-MRR",
         date=("2023-01-14", "2024-03-22"),
