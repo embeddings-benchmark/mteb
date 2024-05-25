@@ -17,7 +17,7 @@ class WikipediaInstructionRetrieval(AbsTaskInstructionRetrieval):
         type="InstructionRetrieval",
         category="s2p",
         eval_splits=["train"],
-        eval_langs=["ara-Arap"],
+        eval_langs=["ara-Arab"],
         main_score="p-MRR",
         date=("2023-01-14", "2024-03-22"),
         form=["written"],
