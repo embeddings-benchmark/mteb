@@ -12,11 +12,11 @@ class WikiInstructionRetrieval(AbsTaskInstructionRetrieval):
         reference="https://huggingface.co/datasets/Ruqiya/wiki_qa_ar/",
         dataset={
             "path": "Ruqiya/wiki_qa_ar",
-            "revision": "0a0730791bd24d8196acbbfcf23190b8de4ec0a8",
+            "revision": "c712b13b938a9b22017a09a268a6c09d810a1182",
         },
         type="InstructionRetrieval",
         category="s2p",
-        eval_splits=["test", "validation", "train"],
+        eval_splits=["test"],
         eval_langs=["ara-Arab"],
         main_score="p-MRR",
         date=("2023-01-14", "2024-03-22"),
