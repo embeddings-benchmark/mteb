@@ -13,6 +13,7 @@ class WikipediaInstructionRetrieval(AbsTaskInstructionRetrieval):
         dataset={
             "path": "Cohere/wikipedia-22-12-ar-embeddings",
             "revision": "ea5f00014bd7626aa55affb07de57d519ab3309a",
+            "config_name": "default"
         },
         type="InstructionRetrieval",
         category="s2p",
