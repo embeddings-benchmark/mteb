@@ -13,6 +13,7 @@ class WikipediaInstructionRetrieval(AbsTaskInstructionRetrieval):
         dataset={
             "path": "Cohere/wikipedia-22-12-ar-embeddings",
             "revision": "ea5f00014bd7626aa55affb07de57d519ab3309a",
+            "name": "default" 
         },
         type="InstructionRetrieval",
         category="s2p",
@@ -33,6 +34,3 @@ class WikipediaInstructionRetrieval(AbsTaskInstructionRetrieval):
         avg_character_length={"ara": 2768.749235474006},
     )
    
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns({"text": "text", "topic": "label"})
-        self.dataset = self.stratified_subsampling(self.dataset, seed=self.seed)
