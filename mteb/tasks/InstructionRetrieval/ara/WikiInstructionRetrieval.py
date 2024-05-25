@@ -1,7 +1,7 @@
 from __future__ import annotations
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
-
+from datasets import load_dataset
 
 TEST_SAMPLES = 1000 
 
@@ -13,6 +13,7 @@ class WikiInstructionRetrieval(AbsTaskInstructionRetrieval):
         dataset={
             "path": "wiki_qa_ar",
             "revision": "90f1673b95f7ca68ffc7d8bd1451f8e304819f49",
+            "config": "plain_text",  # Ensure the correct configuration is used
         },
         type="InstructionRetrieval",
         category="s2p",
@@ -33,4 +34,13 @@ class WikiInstructionRetrieval(AbsTaskInstructionRetrieval):
         avg_character_length={"ara": 2768.749235474006},
     )
 
+    def load_data(self, **kwargs):
+        dataset_path = self.metadata.dataset["path"]
+        dataset_revision = self.metadata.dataset["revision"]
+        dataset_config = self.metadata.dataset["config"]
+        
+        # Load the dataset with the specified path, revision, and config
+        dataset = load_dataset(dataset_path, name=dataset_config, revision=dataset_revision)
+        
+        return dataset
 
