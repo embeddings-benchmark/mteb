@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "LearnedHandsHealthLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.6814159292035399,
+    "accuracy_stderr": 1.1102230246251565e-16,
+    "ap": 0.6147016842706251,
+    "ap_stderr": 0.0,
+    "evaluation_time": 197.74,
+    "f1": 0.6700194678780013,
+    "f1_stderr": 0.0,
+    "main_score": 0.6814159292035399
+  }
+}

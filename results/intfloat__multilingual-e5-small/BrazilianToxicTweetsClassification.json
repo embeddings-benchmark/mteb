@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "fb4f11a5bc68b99891852d20f1ec074be6289768",
+  "mteb_dataset_name": "BrazilianToxicTweetsClassification",
+  "mteb_version": "1.6.37",
+  "test": {
+    "accuracy": 0.1974609375,
+    "accuracy_stderr": 0.032037501771757904,
+    "evaluation_time": 13.99,
+    "f1": 0.1439324381422593,
+    "f1_stderr": 0.014226827880498744,
+    "lrap": 0.7822367350260451,
+    "lrap_stderr": 0.016519441537547915,
+    "main_score": 0.1974609375
+  }
+}

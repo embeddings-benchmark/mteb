@@ -17,11 +17,12 @@ _LANGUAGES = {
 
 
 class TweetSentimentClassification(MultilingualTask, AbsTaskClassification):
+    fast_loading = True
     metadata = TaskMetadata(
         name="TweetSentimentClassification",
         dataset={
-            "path": "cardiffnlp/tweet_sentiment_multilingual",
-            "revision": "14b13edfbc4046892f6011d114c29c0f83170589",
+            "path": "mteb/tweet_sentiment_multilingual",
+            "revision": "d522bb117c32f5e0207344f69f7075fc9941168b",
         },
         description="A multilingual Sentiment Analysis dataset consisting of tweets in 8 different languages.",
         reference="https://aclanthology.org/2022.lrec-1.27",
@@ -60,8 +61,7 @@ class TweetSentimentClassification(MultilingualTask, AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang] = self.stratified_subsampling(
                 self.dataset[lang], n_samples=256, seed=self.seed, splits=["test"]
             )
-            print(self.dataset)
