@@ -11,7 +11,7 @@ class ArxivClusteringP2PFast(AbsTaskClustering):
     # simply downsample each cluster.
 
     metadata = TaskMetadata(
-        name="ArxivClusteringP2P.v3",
+        name="ArxivClusteringP2P.v2",
         description="Clustering of titles+abstract from arxiv. Clustering of 30 sets, either on the main or secondary category",
         reference="https://www.kaggle.com/Cornell-University/arxiv",
         dataset={
