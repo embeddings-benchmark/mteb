@@ -66,10 +66,7 @@ class JAQKETRetrieval(AbsTaskRetrieval):
             **self.metadata_dict["dataset"],
         )
 
-        corpus = {
-            str(row["docid"]): {"title": row["title"], "text": row["text"]}
-            for row in corpus_list
-        }
+        corpus = {str(row["docid"]): {"text": row["text"]} for row in corpus_list}
 
         self.corpus = {_EVAL_SPLIT: corpus}
         self.queries = {_EVAL_SPLIT: queries}
