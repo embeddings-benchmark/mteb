@@ -46,8 +46,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [BigPatentClustering.v2](https://huggingface.co/datasets/NortheasternUniversity/big_patent) (Eva Sharma and                Chen Li and                Lu Wang, 2019) | ['eng'] | Clustering | p2p | [Legal] | {'test': 2048} | {'test': 30995.5} |
 | [BiorxivClusteringP2P.v2](https://api.biorxiv.org/) | ['eng'] | Clustering | p2p | [Academic] | {'test': 2048} | {'test': 1664.0} |
 | [BiorxivClusteringS2S.v2](https://api.biorxiv.org/) | ['eng'] | Clustering | s2s | [Academic] | {'test': 2048} | {'test': 101.7} |
-| [BlurbsClusteringP2P.v2](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html) (Steffen Remus, 2019) | ['deu'] | Clustering | p2p | [Fiction] | {'test': 50268} | {'test': 664.09} |
-| [BlurbsClusteringS2S.v2](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html) (Steffen Remus, 2019) | ['deu'] | Clustering | s2s | [Fiction] | {'test': 50268} | {'test': 23.02} |
+| [BlurbsClusteringP2P.v2](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html) (Steffen Remus, 2019) | ['deu'] | Clustering | p2p | [Fiction] | {'test': 2048} | {'test': 664.09} |
+| [BlurbsClusteringS2S.v2](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html) (Steffen Remus, 2019) | ['deu'] | Clustering | s2s | [Fiction] | {'test': 2048} | {'test': 23.02} |
 | [BornholmBitextMining](https://aclanthology.org/W19-6138/) | ['dan'] | BitextMining | s2s | [Web, Social, Fiction] | {'test': 500} | {'test': 89.7} |
 | [BrazilianToxicTweetsClassification](https://paperswithcode.com/dataset/told-br) (Joao Augusto Leite and                         Diego F. Silva and                         Kalina Bontcheva and                         Carolina Scarton, 2020) | ['por'] | MultilabelClassification | s2s | [Constructed] | {'test': 2048} | {'test': 85.05} |
 | [BulgarianStoreReviewSentimentClassfication](https://doi.org/10.7910/DVN/TXIK9P) (Georgieva-Trifonova et al., 2018) | ['bul'] | Classification | s2s | [Reviews] | {'test': 182} | {'test': 316.7} |
