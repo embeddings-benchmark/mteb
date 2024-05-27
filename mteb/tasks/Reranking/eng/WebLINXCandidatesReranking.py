@@ -25,7 +25,7 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
         task_subtypes=['Code retrieval', 'Conversational retrieval'],
         license="CC BY-NC-SA 4.0",
         socioeconomic_status="mixed",
-        annotations_creators='export-annotated',
+        annotations_creators='expert-annotated',
         dialect=[],
         text_creation="created",
         bibtex_citation="""
