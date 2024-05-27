@@ -1,15 +1,10 @@
 from __future__ import annotations
 
 from .deu.BlurbsClusteringP2P import *
-from .deu.BlurbsClusteringP2PFast import *
 from .deu.BlurbsClusteringS2S import *
-from .deu.BlurbsClusteringS2SFast import *
 from .deu.TenKGnadClusteringP2P import *
-from .deu.TenKGnadClusteringP2PFast import *
 from .deu.TenKGnadClusteringS2S import *
-from .deu.TenKGnadClusteringS2SFast import *
 from .eng.ArxivClusteringP2P import *
-from .eng.ArxivClusteringP2PFast import *
 from .eng.ArxivClusteringS2S import *
 from .eng.ArXivHierarchicalClustering import *
 from .eng.BigPatentClustering import *
