@@ -2,15 +2,16 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskClustering import AbsTaskClustering
+from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 
-class RuSciBenchGRNTIClusteringP2P(AbsTaskClustering):
+class RuSciBenchGRNTIClusteringP2P(AbsTaskClusteringFast):
     metadata = TaskMetadata(
         name="RuSciBenchGRNTIClusteringP2P",
         dataset={
-            "path": "ai-forever/ru-scibench-grnti-clustering-p2p",
-            "revision": "5add37c2d5028dda82cf115a659b56153580c203",
+            # here we use the same split for clustering
+            "path": "ai-forever/ru-scibench-grnti-classification",
+            "revision": "673a610d6d3dd91a547a0d57ae1b56f37ebbf6a1",
         },
         description="Clustering of scientific papers (title+abstract) by rubric",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench/",
@@ -29,6 +30,14 @@ class RuSciBenchGRNTIClusteringP2P(AbsTaskClustering):
         dialect=[],
         text_creation="found",
         bibtex_citation="""""",
-        n_samples={"test": 31080},
-        avg_character_length={"test": 863.3},
+        n_samples={"test": 2772},
+        avg_character_length={"test": 890.1},
     )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_columns(
+            {"label": "labels", "text": "sentences"}
+        )
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"], label="labels"
+        )
