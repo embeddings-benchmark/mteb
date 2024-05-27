@@ -144,7 +144,7 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
 
         self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
             path=self.metadata_dict["dataset"]["path"],
-            langs=self.langs,
+            langs=self.hf_subsets,
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
