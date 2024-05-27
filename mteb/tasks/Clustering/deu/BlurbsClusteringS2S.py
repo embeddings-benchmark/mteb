@@ -1,9 +1,15 @@
 from __future__ import annotations
 
+import itertools
+
+import numpy as np
+from datasets import Dataset, DatasetDict
+
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.AbsTaskClusteringFast import clustering_downsample
+from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+NUM_SAMPLES = 2048
 
 class BlurbsClusteringS2S(AbsTaskClustering):
     superseeded_by = "BlurbsClusteringS2S.v2"
@@ -36,7 +42,7 @@ class BlurbsClusteringS2S(AbsTaskClustering):
     )
 
 
-class BlurbsClusteringS2SFast(AbsTaskClustering):
+class BlurbsClusteringS2SFast(AbsTaskClusteringFast):
     # a faster version of the task, since it does not sample from the same distribution we can't use the AbsTaskClusteringFast, instead we
     # simply downsample each cluster.
 
@@ -72,10 +78,33 @@ class BlurbsClusteringS2SFast(AbsTaskClustering):
   year={2019},
   url={https://api.semanticscholar.org/CorpusID:208334484}
 }""",
-        n_samples={"test": 50268},
+        n_samples={"test": NUM_SAMPLES},
         avg_character_length={"test": 23.02},
     )
 
     def dataset_transform(self):
-        ds = clustering_downsample(self.dataset, self.seed)
-        self.dataset = ds
+        ds = dict()
+        for split in self.metadata.eval_splits:
+            labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
+            sentences = list(
+                itertools.chain.from_iterable(self.dataset[split]["sentences"])
+            )
+
+            # Remove sentences and labels with only 1 label example.
+            unique_labels, counts = np.unique(labels, return_counts=True)
+            solo_label_idx = np.where(counts == 1)
+            solo_labels = unique_labels[solo_label_idx]
+            for solo_label in solo_labels:
+                loc = labels.index(solo_label)
+                labels.pop(loc)
+                sentences.pop(loc)
+            ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
+
+        self.dataset = DatasetDict(ds)
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            self.seed,
+            self.metadata.eval_splits,
+            label="labels",
+            n_samples=NUM_SAMPLES,
+        )
