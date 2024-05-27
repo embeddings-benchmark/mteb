@@ -9,8 +9,8 @@ from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-
 NUM_SAMPLES = 2048
+
 
 class BlurbsClusteringP2P(AbsTaskClustering):
     superseeded_by = "BlurbsClusteringP2P.v2"
