@@ -8,7 +8,7 @@ NUM_SAMPLES = 2048
 
 
 class BigPatentClustering(AbsTaskClustering):
-    superseeded_by = "BigPatentClusteringFast"
+    superseeded_by = "BigPatentClustering.v2"
 
     metadata = TaskMetadata(
         name="BigPatentClustering",
@@ -42,7 +42,7 @@ class BigPatentClustering(AbsTaskClustering):
 class BigPatentClusteringFast(AbsTaskClusteringFast):
     max_depth = 1
     metadata = TaskMetadata(
-        name="BigPatentClusteringFast",
+        name="BigPatentClustering.v2",
         description="Clustering of documents from the Big Patent dataset. Test set only includes documents"
         "belonging to a single category, with a total of 9 categories.",
         reference="https://huggingface.co/datasets/NortheasternUniversity/big_patent",

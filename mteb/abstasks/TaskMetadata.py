@@ -8,6 +8,7 @@ from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_vali
 from typing_extensions import Annotated, Literal
 
 from ..languages import (
+    ISO_LANGUAGE_SCRIPT,
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
     path_to_lang_codes,
@@ -109,9 +110,6 @@ STR_DATE = Annotated[
 ]  # Allows the type to be a string, but ensures that the string is a valid date
 
 SPLIT_NAME = str
-ISO_LANGUAGE_SCRIPT = str  # a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
-ISO_LANGUAGE = str  # a 3-letter ISO 639-3 language code
-ISO_SCRIPT = str  # a 4-letter ISO 15924 script code
 HFSubset = str
 LANGUAGES = Union[
     List[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, List[ISO_LANGUAGE_SCRIPT]]
