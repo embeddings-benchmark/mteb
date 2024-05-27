@@ -14,7 +14,16 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
 
 from .Evaluator import Evaluator
-from .utils import cos_sim, dot_score, download, hole, mrr, recall_cap, top_k_accuracy, convert_conv_history_to_query
+from .utils import (
+    convert_conv_history_to_query,
+    cos_sim,
+    dot_score,
+    download,
+    hole,
+    mrr,
+    recall_cap,
+    top_k_accuracy,
+)
 
 logger = logging.getLogger(__name__)
 
