@@ -32,3 +32,8 @@ class RuSciBenchGRNTIClassification(AbsTaskClassification):
         n_samples={"test": 2772},
         avg_character_length={"test": 890.1},
     )
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"]
+        )

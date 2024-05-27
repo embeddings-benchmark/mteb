@@ -16,7 +16,7 @@ class InappropriatenessClassification(AbsTaskClassification):
         reference="https://aclanthology.org/2021.bsnlp-1.4",
         type="Classification",
         category="s2s",
-        eval_splits=["validation", "test"],
+        eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
         main_score="accuracy",
         date=("2006-01-01", "2021-04-01"),
@@ -56,6 +56,11 @@ class InappropriatenessClassification(AbsTaskClassification):
         pages = "26--36",
         abstract = "Not all topics are equally {``}flammable{''} in terms of toxicity: a calm discussion of turtles or fishing less often fuels inappropriate toxic dialogues than a discussion of politics or sexual minorities. We define a set of sensitive topics that can yield inappropriate and toxic messages and describe the methodology of collecting and labelling a dataset for appropriateness. While toxicity in user-generated data is well-studied, we aim at defining a more fine-grained notion of inappropriateness. The core of inappropriateness is that it can harm the reputation of a speaker. This is different from toxicity in two respects: (i) inappropriateness is topic-related, and (ii) inappropriate message is not toxic but still unacceptable. We collect and release two datasets for Russian: a topic-labelled dataset and an appropriateness-labelled dataset. We also release pre-trained classification models trained on this data.",
         }""",
-        n_samples={"validation": 4000, "test": 10000},
-        avg_character_length={"validation": 96.8, "test": 97.7},
+        n_samples={"test": 10000},
+        avg_character_length={"test": 97.7},
     )
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"]
+        )

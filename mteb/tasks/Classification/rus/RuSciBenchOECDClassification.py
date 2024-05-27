@@ -32,3 +32,8 @@ class RuSciBenchOECDClassification(AbsTaskClassification):
         n_samples={"test": 3219},
         avg_character_length={"test": 838.9},
     )
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"]
+        )

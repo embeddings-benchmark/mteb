@@ -29,6 +29,11 @@ class GeoreviewClassification(AbsTaskClassification):
         dialect=[],
         text_creation="found",
         bibtex_citation="""""",
-        n_samples={"validation": 5000, "test": 5000},
-        avg_character_length={"validation": 412.9, "test": 409.0},
+        n_samples={"test": 5000},
+        avg_character_length={"test": 409.0},
     )
+
+    def dataset_transform(self):
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"]
+        )
