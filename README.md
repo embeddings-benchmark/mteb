@@ -97,7 +97,7 @@ tasks = mteb.get_tasks(categories=["s2s", "p2p"]) # Only select sentence2sentenc
 * by their languages
 
 ```python
-tasks = mteb.get_tasks(languages=["eng", "deu"]) # Only select datasets which contain "eng" or "deu"
+tasks = mteb.get_tasks(languages=["eng", "deu"]) # Only select datasets which contain "eng" or "deu" (iso 639-3 codes)
 ```
 
 You can also specify which languages to load for multilingual/cross-lingual tasks like below:
@@ -117,6 +117,7 @@ evaluation = mteb.MTEB(tasks=[
         AmazonReviewsClassification(hf_subsets=["en", "fr"]) # Only load "en" and "fr" subsets of Amazon Reviews
         BUCCBitextMining(hf_subsets=["de-en"]), # Only load "de-en" subset of BUCC
 ])
+# for an example of a HF subset see "Subset" in the dataset viewer at: https://huggingface.co/datasets/mteb/bucc-bitext-mining
 ```
 
 There are also presets available for certain task collections, e.g. to select the 56 English datasets that form the "Overall MTEB English leaderboard":
