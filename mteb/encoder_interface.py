@@ -26,6 +26,7 @@ class Encoder(Protocol):
         ...
 
 
+@runtime_checkable
 class EncoderWithQueryCorpusEncode(Encoder, Protocol):
     """The interface for an encoder that supports encoding queries and a corpus."""
 

@@ -4,19 +4,41 @@ from __future__ import annotations
 
 import logging
 from collections import Counter
-from typing import Dict, Set
+from typing import Dict, Set, Type
 
 from mteb.abstasks import AbsTask
-from mteb.abstasks.languages import (
+from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
+from mteb.languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
     path_to_lang_codes,
     path_to_lang_scripts,
 )
-from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
 from mteb.tasks import *  # import all tasks
 
 logger = logging.getLogger(__name__)
+
+
+# Create task registry
+
+
+def create_task_list() -> list[Type[AbsTask]]:
+    tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
+    tasks = [
+        cls
+        for cat_cls in tasks_categories_cls
+        for cls in cat_cls.__subclasses__()
+        if cat_cls.__name__.startswith("AbsTask")
+    ]
+    return tasks
+
+
+def create_name_to_task_mapping() -> dict[str, Type[AbsTask]]:
+    tasks = create_task_list()
+    return {cls.metadata.name: cls for cls in tasks}
+
+
+TASKS_REGISTRY = create_name_to_task_mapping()
 
 
 def check_is_valid_script(script: str) -> None:
@@ -110,7 +132,9 @@ class MTEBTasks(tuple):
             langs.extend(task.languages)
         return Counter(langs)
 
-    def to_markdown(self, properties: str = ["type", "license", "languages"]) -> str:
+    def to_markdown(
+        self, properties: list[str] = ["type", "license", "languages"]
+    ) -> str:
         """Generate markdown table with tasks summary
 
         Args:
@@ -137,6 +161,7 @@ def get_tasks(
     domains: list[TASK_DOMAIN] | None = None,
     task_types: list[TASK_TYPE] | None = None,
     categories: list[TASK_CATEGORY] | None = None,
+    tasks: list[str] | None = None,
     exclude_superseeded: bool = True,
 ) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
@@ -150,6 +175,7 @@ def get_tasks(
         task_types: A string specifying the type of task. If None, all tasks are included.
         categories: A list of task categories these include "s2s" (sentence to sentence), "s2p" (sentence to paragraph) and "p2p" (paragraph to
             paragraph).
+        tasks: A list of task names to include. If None, all tasks which pass the filters are included.
         exclude_superseeded: A boolean flag to exclude datasets which are superseeded by another.
 
     Returns:
@@ -160,25 +186,45 @@ def get_tasks(
         >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Classification"])
         >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Clustering"], exclude_superseeded=False)
     """
-    tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
-    tasks = [
-        cls().filter_languages(languages, script)
-        for cat_cls in tasks_categories_cls
-        for cls in cat_cls.__subclasses__()
-        if cat_cls.__name__.startswith("AbsTask")
-    ]
+    if tasks:
+        _tasks = [get_task(task, languages, script) for task in tasks]
+        return MTEBTasks(_tasks)
+
+    _tasks = [cls().filter_languages(languages, script) for cls in create_task_list()]
 
     if languages:
-        tasks = filter_tasks_by_languages(tasks, languages)
+        _tasks = filter_tasks_by_languages(_tasks, languages)
     if script:
-        tasks = filter_tasks_by_script(tasks, script)
+        _tasks = filter_tasks_by_script(_tasks, script)
     if domains:
-        tasks = filter_tasks_by_domains(tasks, domains)
+        _tasks = filter_tasks_by_domains(_tasks, domains)
     if task_types:
-        tasks = filter_tasks_by_task_types(tasks, task_types)
+        _tasks = filter_tasks_by_task_types(_tasks, task_types)
     if categories:
-        tasks = filter_task_by_categories(tasks, categories)
+        _tasks = filter_task_by_categories(_tasks, categories)
     if exclude_superseeded:
-        tasks = filter_superseeded_datasets(tasks)
+        _tasks = filter_superseeded_datasets(_tasks)
 
-    return MTEBTasks(tasks)
+    return MTEBTasks(_tasks)
+
+
+def get_task(
+    task_name: str,
+    languages: list[str] | None = None,
+    script: list[str] | None = None,
+) -> AbsTask:
+    """Get a task by name.
+
+    Args:
+        task_name: The name of the task to fetch.
+        languages: A list of languages either specified as 3 letter languages codes (ISO 639-3, e.g. "eng") or as script languages codes e.g.
+            "eng-Latn". For multilingual tasks this will also remove languages that are not in the specified list.
+        script: A list of script codes (ISO 15924 codes). If None, all scripts are included. For multilingual tasks this will also remove scripts
+
+    Returns:
+        An initialized task object.
+
+    Examples:
+        >>> get_task("BornholmBitextMining")
+    """
+    return TASKS_REGISTRY[task_name]().filter_languages(languages, script)

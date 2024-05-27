@@ -1,0 +1,15 @@
+{
+  "dataset_revision": "12ca3b695563788fead87a982ad1a068284413f4",
+  "mteb_dataset_name": "LearnedHandsEducationLegalBenchClassification",
+  "mteb_version": "1.7.7",
+  "test": {
+    "accuracy": 0.875,
+    "accuracy_stderr": 0.0,
+    "ap": 0.8068181818181819,
+    "ap_stderr": 0.0,
+    "evaluation_time": 32.93,
+    "f1": 0.8739954998392798,
+    "f1_stderr": 1.1102230246251565e-16,
+    "main_score": 0.875
+  }
+}

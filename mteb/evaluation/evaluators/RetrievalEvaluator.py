@@ -5,7 +5,7 @@ import json
 import logging
 import os
 from collections import defaultdict
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
 
 import pytrec_eval
 import torch
@@ -56,7 +56,7 @@ class DenseRetrievalExactSearch:
     def search(
         self,
         corpus: dict[str, dict[str, str]],
-        queries: dict[str, str],
+        queries: dict[str, Union[str, List[str]]],
         top_k: int,
         score_function: str,
         return_sorted: bool = False,
@@ -76,13 +76,22 @@ class DenseRetrievalExactSearch:
         query_ids = list(queries.keys())
         self.results = {qid: {} for qid in query_ids}
         queries = [queries[qid] for qid in queries]
-        query_embeddings = self.model.encode_queries(
-            queries,
-            batch_size=self.batch_size,
-            show_progress_bar=self.show_progress_bar,
-            convert_to_tensor=self.convert_to_tensor,
-            **kwargs,
-        )
+        if isinstance(queries[0], list):
+            query_embeddings = self.model.encode_conversations(
+                queries,
+                batch_size=self.batch_size,
+                show_progress_bar=self.show_progress_bar,
+                convert_to_tensor=self.convert_to_tensor,
+                **kwargs,
+            )
+        else:
+            query_embeddings = self.model.encode_queries(
+                queries,
+                batch_size=self.batch_size,
+                show_progress_bar=self.show_progress_bar,
+                convert_to_tensor=self.convert_to_tensor,
+                **kwargs,
+            )
 
         logger.info("Sorting Corpus by document length (Longest first)...")
         corpus_ids = sorted(
@@ -196,7 +205,7 @@ class DenseRetrievalExactSearch:
     def search_cross_encoder(
         self,
         corpus: Dict[str, Dict[str, str]],
-        queries: Dict[str, str],
+        queries: Dict[str, Union[str, List[str]]],
         top_k: int,
         instructions: Dict[str, str] | None = None,
         **kwargs,
@@ -217,6 +226,11 @@ class DenseRetrievalExactSearch:
             }
             top_n = [k for k, v in list(q_results_sorted.items())[:top_k]]
             query = queries[qid]
+            query = (
+                self.convert_conv_history_to_query([query])[0]
+                if isinstance(query, list)
+                else query
+            )
             for doc_id in top_n:
                 corpus_item = (
                     corpus[doc_id].get("title", "") + " " + corpus[doc_id]["text"]
@@ -275,6 +289,19 @@ class DenseRetrievalExactSearch:
         raise NotImplementedError(
             "You must implement a predict method for your reranker model"
         )
+
+    def encode_conversations(self, conversations: List[List[str]], **kwargs):
+        if callable(getattr(self.model, "encode_conversations", None)):
+            return self.model.encode_conversations(conversations, **kwargs)
+        # otherwise fallback to default implementation
+        # TODO: add a warning here
+        queries = self.convert_conv_history_to_query(conversations)
+        return self.encode_queries(queries, **kwargs)
+
+    def convert_conv_history_to_query(self, conversations: List[List[str]]) -> str:
+        if callable(getattr(self.model, "convert_conv_history_to_query", None)):
+            return self.model.convert_conv_history_to_query(conversations)
+        return convert_conv_history_to_query(conversations)
 
 
 class DRESModel:
@@ -357,6 +384,23 @@ class DRESModel:
     def encode(self, sentences: List[str], **kwargs):
         return self.model.encode(sentences, **kwargs)
 
+    def encode_conversations(self, conversations: List[List[str]], **kwargs):
+        if callable(getattr(self.model, "encode_conversations", None)):
+            return self.model.encode_conversations(conversations, **kwargs)
+        # otherwise fallback to default implementation
+        # TODO: add a warning here
+        queries = self.convert_conv_history_to_query(conversations)
+        return self.encode_queries(queries, **kwargs)
+
+    def convert_conv_history_to_query(self, conversations: List[List[str]]) -> str:
+        if callable(getattr(self.model, "convert_conv_history_to_query", None)):
+            return self.model.convert_conv_history_to_query(conversations)
+        return convert_conv_history_to_query(conversations)
+
+
+def convert_conv_history_to_query(conversations: List[List[str]]) -> str:
+    return ["; ".join(conv) for conv in conversations]
+
 
 def is_dres_compatible(model):
     for method in ["encode_queries", "encode_corpus"]:
@@ -404,7 +448,9 @@ class RetrievalEvaluator(Evaluator):
         self.score_function = score_function
 
     def __call__(
-        self, corpus: dict[str, dict[str, str]], queries: dict[str, str]
+        self,
+        corpus: dict[str, dict[str, str]],
+        queries: dict[str, Union[str, List[str]]],
     ) -> dict[str, dict[str, float]]:
         if not self.retriever:
             raise ValueError("Model/Technique has not been provided!")
