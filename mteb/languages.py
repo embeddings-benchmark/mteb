@@ -8,6 +8,13 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 
+# Language typings
+ISO_LANGUAGE_SCRIPT = str  # a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
+ISO_LANGUAGE = str  # a 3-letter ISO 639-3 language code
+ISO_SCRIPT = str  # a 4-letter ISO 15924 script code
+
+
+# Language mappings
 path_to_lang_codes = Path(__file__).parent / "iso_639_3_to_language.json"
 path_to_lang_scripts = Path(__file__).parent / "iso_15924_to_script.json"
 

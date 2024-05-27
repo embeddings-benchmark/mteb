@@ -41,7 +41,7 @@ pip install mteb
 * Using a python script (see [scripts/run_mteb_english.py](https://github.com/embeddings-benchmark/mteb/blob/main/scripts/run_mteb_english.py) and [mteb/mtebscripts](https://github.com/embeddings-benchmark/mtebscripts) for more):
 
 ```python
-from mteb import MTEB
+import mteb
 from sentence_transformers import SentenceTransformer
 
 # Define the sentence-transformers model name
@@ -50,7 +50,8 @@ model_name = "average_word_embeddings_komninos"
 # model_name = "sentence-transformers/all-MiniLM-L6-v2"
 
 model = SentenceTransformer(model_name)
-evaluation = MTEB(tasks=["Banking77Classification"])
+tasks = mteb.get_tasks(tasks=["Banking77Classification"])
+evaluation = mteb.MTEB(tasks=tasks)
 results = evaluation.run(model, output_folder=f"results/{model_name}")
 ```
 
@@ -84,37 +85,46 @@ Datasets can be selected by providing the list of datasets, but also
 * by their task (e.g. "Clustering" or "Classification")
 
 ```python
-evaluation = MTEB(task_types=['Clustering', 'Retrieval']) # Only select clustering and retrieval tasks
+tasks = mteb.get_tasks(task_types=["Clustering", "Retrieval"]) # Only select clustering and retrieval tasks
 ```
 
-* by their categories e.g. "S2S" (sentence to sentence) or "P2P" (paragraph to paragraph)
+* by their categories e.g. "s2s" (sentence to sentence) or "p2p" (paragraph to paragraph)
 
 ```python
-evaluation = MTEB(task_categories=['S2S']) # Only select sentence2sentence datasets
+tasks = mteb.get_tasks(categories=["s2s", "p2p"]) # Only select sentence2sentence and paragraph2paragraph datasets
 ```
 
 * by their languages
 
 ```python
-evaluation = MTEB(task_langs=["en", "de"]) # Only select datasets which are "en", "de" or "en-de"
+tasks = mteb.get_tasks(languages=["eng", "deu"]) # Only select datasets which contain "eng" or "deu" (iso 639-3 codes)
 ```
 
 You can also specify which languages to load for multilingual/cross-lingual tasks like below:
 
 ```python
+import mteb
+
+tasks = [
+    mteb.get_task("AmazonReviewsClassification", languages = ["eng", "fra"]),
+    mteb.get_task("BUCCBitextMining", languages = ["deu"]), # all subsets containing "deu"
+]
+
+# or you can select specific huggingface subsets like this:
 from mteb.tasks import AmazonReviewsClassification, BUCCBitextMining
 
-evaluation = MTEB(tasks=[
+evaluation = mteb.MTEB(tasks=[
         AmazonReviewsClassification(hf_subsets=["en", "fr"]) # Only load "en" and "fr" subsets of Amazon Reviews
         BUCCBitextMining(hf_subsets=["de-en"]), # Only load "de-en" subset of BUCC
 ])
+# for an example of a HF subset see "Subset" in the dataset viewer at: https://huggingface.co/datasets/mteb/bucc-bitext-mining
 ```
 
 There are also presets available for certain task collections, e.g. to select the 56 English datasets that form the "Overall MTEB English leaderboard":
 
 ```python
 from mteb import MTEB_MAIN_EN
-evaluation = MTEB(tasks=MTEB_MAIN_EN, task_langs=["en"])
+evaluation = mteb.MTEB(tasks=MTEB_MAIN_EN, task_langs=["en"])
 ```
 
 
@@ -148,7 +158,8 @@ class MyModel():
         pass
 
 model = MyModel()
-evaluation = MTEB(tasks=["Banking77Classification"])
+tasks = mteb.get_task("Banking77Classification")
+evaluation = MTEB(tasks=tasks)
 evaluation.run(model)
 ```
 

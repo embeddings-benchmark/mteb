@@ -51,9 +51,12 @@ class MTEB:
             tasks: List of tasks to be evaluated. If specified, we filter tasks based on `task_langs` only
             version: Version of the benchmark to use. If None, latest is used
             err_logs_path: Path to save error logs
-            co2_tracker: Whether to enable or disable CO2 emissions tracker
             kwargs: Additional arguments to be passed to the tasks
         """
+        self.deprecation_warning(
+            task_types, task_categories, task_langs, tasks, version
+        )
+
         if tasks is not None:
             self._tasks = tasks
             assert (
@@ -75,6 +78,36 @@ class MTEB:
         self.err_logs_path = err_logs_path
 
         self.select_tasks(**kwargs)
+
+    def deprecation_warning(
+        self, task_types, task_categories, task_langs, tasks, version
+    ):
+        if task_types is not None:
+            logger.warning(
+                "The `task_types` argument is deprecated and will be removed in the next release. "
+                + "Please use `tasks = mteb.get_tasks(... task_types = [...])` to filter tasks instead."
+            )
+        if task_categories is not None:
+            logger.warning(
+                "The `task_categories` argument is deprecated and will be removed in the next release. "
+                + "Please use `tasks = mteb.get_tasks(... categories = [...])` to filter tasks instead."
+            )
+        if task_langs is not None:
+            logger.warning(
+                "The `task_langs` argument is deprecated and will be removed in the next release. "
+                + "Please use `tasks = mteb.get_tasks(... languages = [...])` to filter tasks instead. "
+                + "Note that this uses 3 letter language codes (ISO 639-3)."
+            )
+        if version is not None:
+            logger.warning(
+                "The `version` argument is deprecated and will be removed in the next release."
+            )
+        task_contains_strings = any(isinstance(x, str) for x in tasks or [])
+        if task_contains_strings:
+            logger.warning(
+                "Passing task names as strings is deprecated and will be removed in the next release. "
+                + "Please use `tasks = mteb.get_tasks(tasks=[...])` method to get tasks instead."
+            )
 
     @property
     def available_tasks(self):
