@@ -12,7 +12,7 @@ from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 class StackExchangeClusteringFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="StackExchangeClusteringFast",
+        name="StackExchangeClustering.v2",
         description="Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
         reference="https://arxiv.org/abs/2104.07081",
         dataset={
@@ -69,7 +69,7 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
 
 
 class StackExchangeClustering(AbsTaskClustering):
-    superseeded_by = "StackExchangeClusteringFast"
+    superseeded_by = "StackExchangeClustering.v2"
     metadata = TaskMetadata(
         name="StackExchangeClustering",
         description="Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
