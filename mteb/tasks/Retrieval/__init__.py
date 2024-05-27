@@ -75,6 +75,7 @@ from .multilingual.MultiLongDocRetrieval import *
 from .multilingual.NeuCLIR2022Retrieval import *
 from .multilingual.NeuCLIR2023Retrieval import *
 from .multilingual.PublicHealthQARetrieval import *
+from .multilingual.StatcanDialogueDatasetRetrieval import *
 from .multilingual.WikipediaRetrievalMultilingual import *
 from .multilingual.XMarketRetrieval import *
 from .multilingual.XPQARetrieval import *
