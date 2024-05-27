@@ -38,6 +38,7 @@ from .multilingual.WikiClusteringP2P import *
 from .nob.snl_clustering import *
 from .nob.SNLHierarchicalClustering import *
 from .nob.vg_clustering import *
+from .nob.VGHierarchicalClustering import *
 from .pol.PolishClustering import *
 from .rom.RomaniBibleClustering import *
 from .spa.SpanishNewsClusteringP2P import *

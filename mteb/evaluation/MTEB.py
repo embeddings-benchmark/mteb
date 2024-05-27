@@ -85,18 +85,18 @@ class MTEB:
         if task_types is not None:
             logger.warning(
                 "The `task_types` argument is deprecated and will be removed in the next release. "
-                + "Please use the `tasks = mteb.get_tasks(... task_types = [...])` to filter tasks instead."
+                + "Please use `tasks = mteb.get_tasks(... task_types = [...])` to filter tasks instead."
             )
         if task_categories is not None:
             logger.warning(
                 "The `task_categories` argument is deprecated and will be removed in the next release. "
-                + "Please use the `tasks = mteb.get_tasks(... categories = [...])` to filter tasks instead."
+                + "Please use `tasks = mteb.get_tasks(... categories = [...])` to filter tasks instead."
             )
         if task_langs is not None:
             logger.warning(
                 "The `task_langs` argument is deprecated and will be removed in the next release. "
-                + "Please use the `tasks = mteb.get_tasks(... languages = [...])` to filter tasks instead. "
-                + "Note that this uses 3 letter language codes."
+                + "Please use `tasks = mteb.get_tasks(... languages = [...])` to filter tasks instead. "
+                + "Note that this uses 3 letter language codes (ISO 639-3)."
             )
         if version is not None:
             logger.warning(
@@ -106,7 +106,7 @@ class MTEB:
         if task_contains_strings:
             logger.warning(
                 "Passing task names as strings is deprecated and will be removed in the next release. "
-                + "Please use the `tasks = mteb.get_tasks(tasks=[...])` method to get tasks instead."
+                + "Please use `tasks = mteb.get_tasks(tasks=[...])` method to get tasks instead."
             )
 
     @property
