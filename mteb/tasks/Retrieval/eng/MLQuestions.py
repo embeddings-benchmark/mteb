@@ -27,7 +27,7 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
         date=("2021-01-01", "2021-03-31"), # The period here is for both wiki articles and queries
         form=["written"],
         domains=["Encyclopaedic", "Academic"],
-        task_subtypes=["Question Answering"],
+        task_subtypes=["Question answering"],
         license="cc-by-nc-sa-4.0",
         socioeconomic_status="mixed",
         annotations_creators="human-annotated",
