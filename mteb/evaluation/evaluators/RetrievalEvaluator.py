@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import heapq
 import json
 import logging
@@ -163,15 +164,14 @@ class DenseRetrievalExactSearch:
                     cos_scores_top_k_idx[query_itr], cos_scores_top_k_values[query_itr]
                 ):
                     corpus_id = corpus_ids[corpus_start_idx + sub_corpus_id]
-                    if corpus_id != query_id:
-                        if len(result_heaps[query_id]) < top_k:
-                            # Push item on the heap
-                            heapq.heappush(result_heaps[query_id], (score, corpus_id))
-                        else:
-                            # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
-                            heapq.heappushpop(
-                                result_heaps[query_id], (score, corpus_id)
-                            )
+                    if len(result_heaps[query_id]) < top_k:
+                        # Push item on the heap
+                        heapq.heappush(result_heaps[query_id], (score, corpus_id))
+                    else:
+                        # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
+                        heapq.heappushpop(
+                            result_heaps[query_id], (score, corpus_id)
+                        )
 
         for qid in result_heaps:
             for score, corpus_id in result_heaps[qid]:
@@ -470,23 +470,25 @@ class RetrievalEvaluator(Evaluator):
         k_values: List[int],
         ignore_identical_ids: bool = True,
     ) -> Tuple[Dict[str, float], dict[str, float], dict[str, float], dict[str, float]]:
+        
         if ignore_identical_ids:
             logger.info(
                 "For evaluation, we ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=False`` to ignore this."
             )
-            popped = []
+            results_wo_identical_ids = copy.deepcopy(results)
             for qid, rels in results.items():
                 for pid in list(rels):
                     if qid == pid:
-                        results[qid].pop(pid)
-                        popped.append(pid)
+                        results_wo_identical_ids[qid].pop(pid)
 
         ndcg = {}
         _map = {}
         recall = {}
         precision = {}
+        ndcg_no_self = {}
 
         for k in k_values:
+            ndcg_no_self[f"NDCG (no self)@{k}"] = 0.0
             ndcg[f"NDCG@{k}"] = 0.0
             _map[f"MAP@{k}"] = 0.0
             recall[f"Recall@{k}"] = 0.0
@@ -494,6 +496,7 @@ class RetrievalEvaluator(Evaluator):
 
         map_string = "map_cut." + ",".join([str(k) for k in k_values])
         ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
+        ndcg_string_no_self = "ndcg_cut." + ",".join([str(k) for k in k_values])
         recall_string = "recall." + ",".join([str(k) for k in k_values])
         precision_string = "P." + ",".join([str(k) for k in k_values])
         evaluator = pytrec_eval.RelevanceEvaluator(
@@ -501,18 +504,35 @@ class RetrievalEvaluator(Evaluator):
         )
         scores = evaluator.evaluate(results)
 
+        # if ignore_identical_ids is True, we evaluate the results without the self-identical ids
+        if ignore_identical_ids:
+            evaluator_no_self = pytrec_eval.RelevanceEvaluator(
+                qrels, {ndcg_string_no_self}
+            )
+            scores_wo_identical_ids = evaluator_no_self.evaluate(
+                results_wo_identical_ids)
+        
+
         for query_id in scores.keys():
             for k in k_values:
                 ndcg[f"NDCG@{k}"] += scores[query_id]["ndcg_cut_" + str(k)]
                 _map[f"MAP@{k}"] += scores[query_id]["map_cut_" + str(k)]
                 recall[f"Recall@{k}"] += scores[query_id]["recall_" + str(k)]
                 precision[f"P@{k}"] += scores[query_id]["P_" + str(k)]
+                if ignore_identical_ids:
+                    ndcg_no_self[f"NDCG (no self)@{k}"] += scores_wo_identical_ids[query_id]["ndcg_cut_" + str(k)]
 
         for k in k_values:
             ndcg[f"NDCG@{k}"] = round(ndcg[f"NDCG@{k}"] / len(scores), 5)
             _map[f"MAP@{k}"] = round(_map[f"MAP@{k}"] / len(scores), 5)
             recall[f"Recall@{k}"] = round(recall[f"Recall@{k}"] / len(scores), 5)
             precision[f"P@{k}"] = round(precision[f"P@{k}"] / len(scores), 5)
+            if ignore_identical_ids:
+                ndcg_no_self[f"NDCG (no self)@{k}"] = round(ndcg_no_self[f"NDCG (no self)@{k}"] / len(scores), 5)
+        
+        # merge ndcg and ndcg_no_self together
+        if ignore_identical_ids:
+            ndcg = {**ndcg, **ndcg_no_self}
 
         for eval in [ndcg, _map, recall, precision]:
             logger.info("\n")
