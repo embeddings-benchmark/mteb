@@ -24,7 +24,7 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
         eval_splits=["dev", "test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=("2021-01-01", "2021-03-31"),
+        date=("2021-01-01", "2021-03-31"), # The period here is for both wiki articles and queries
         form=["written"],
         domains=["Encyclopaedic", "Academic"],
         task_subtypes=["Question Answering"],
