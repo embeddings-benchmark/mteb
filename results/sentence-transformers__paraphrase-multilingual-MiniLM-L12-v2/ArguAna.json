@@ -1,0 +1,53 @@
+{
+  "dataset_revision": "c22ab2a51041ffd869aaddef7af8d8215647e41a",
+  "evaluation_time": 66.07393789291382,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.1",
+  "scores": {
+    "test": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.44878,
+        "map_at_1": 0.0,
+        "map_at_10": 0.21885,
+        "map_at_100": 0.23264,
+        "map_at_1000": 0.23283,
+        "map_at_20": 0.22922,
+        "map_at_3": 0.15766,
+        "map_at_5": 0.19571,
+        "mrr_at_1": 0.0,
+        "mrr_at_10": 0.21885,
+        "mrr_at_100": 0.23264,
+        "mrr_at_1000": 0.23283,
+        "mrr_at_20": 0.22922,
+        "mrr_at_3": 0.15766,
+        "mrr_at_5": 0.19571,
+        "ndcg_at_1": 0.22262,
+        "ndcg_at_10": 0.44878,
+        "ndcg_at_100": 0.50379,
+        "ndcg_at_1000": 0.5083,
+        "ndcg_at_20": 0.48171,
+        "ndcg_at_3": 0.35194,
+        "ndcg_at_5": 0.3985,
+        "precision_at_1": 0.0,
+        "precision_at_10": 0.06942,
+        "precision_at_100": 0.00957,
+        "precision_at_1000": 0.00099,
+        "precision_at_20": 0.04189,
+        "precision_at_3": 0.11878,
+        "precision_at_5": 0.10441,
+        "recall_at_1": 0.0,
+        "recall_at_10": 0.69417,
+        "recall_at_100": 0.95733,
+        "recall_at_1000": 0.99147,
+        "recall_at_20": 0.83784,
+        "recall_at_3": 0.35633,
+        "recall_at_5": 0.52205
+      }
+    ]
+  },
+  "task_name": "ArguAna"
+}

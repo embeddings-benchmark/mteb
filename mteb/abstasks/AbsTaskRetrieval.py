@@ -195,7 +195,7 @@ class HFDataLoader:
 
 
 class AbsTaskRetrieval(AbsTask):
-    """Abstract class for re-ranking experiments.
+    """Abstract class for retrieval experiments.
 
     Child-classes must implement the following properties:
 
@@ -213,6 +213,8 @@ class AbsTaskRetrieval(AbsTask):
         E.g.: {"test": {"q1": {"document_one": 1}}}
     """
 
+    ignore_identical_ids: bool = False
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -312,7 +314,7 @@ class AbsTaskRetrieval(AbsTask):
             relevant_docs,
             results,
             retriever.k_values,
-            ignore_identical_ids=kwargs.get("ignore_identical_ids", True),
+            ignore_identical_ids=self.ignore_identical_ids,
         )
         mrr = retriever.evaluate_custom(
             relevant_docs, results, retriever.k_values, "mrr"
