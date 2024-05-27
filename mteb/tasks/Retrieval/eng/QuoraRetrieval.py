@@ -6,8 +6,8 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class QuoraRetrieval(AbsTaskRetrieval):
-    ignore_identical_ids=True
-    
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="QuoraRetrieval",
         dataset={

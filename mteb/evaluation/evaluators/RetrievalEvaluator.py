@@ -169,9 +169,7 @@ class DenseRetrievalExactSearch:
                         heapq.heappush(result_heaps[query_id], (score, corpus_id))
                     else:
                         # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
-                        heapq.heappushpop(
-                            result_heaps[query_id], (score, corpus_id)
-                        )
+                        heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
 
         for qid in result_heaps:
             for score, corpus_id in result_heaps[qid]:
@@ -470,7 +468,6 @@ class RetrievalEvaluator(Evaluator):
         k_values: List[int],
         ignore_identical_ids: bool = False,
     ) -> Tuple[Dict[str, float], dict[str, float], dict[str, float], dict[str, float]]:
-        
         if ignore_identical_ids:
             logger.info(
                 "For evaluation, we ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=False`` to ignore this."
@@ -510,8 +507,8 @@ class RetrievalEvaluator(Evaluator):
                 qrels, {ndcg_string_no_self}
             )
             scores_wo_identical_ids = evaluator_no_self.evaluate(
-                results_wo_identical_ids)
-        
+                results_wo_identical_ids
+            )
 
         for query_id in scores.keys():
             for k in k_values:
@@ -520,7 +517,9 @@ class RetrievalEvaluator(Evaluator):
                 recall[f"Recall@{k}"] += scores[query_id]["recall_" + str(k)]
                 precision[f"P@{k}"] += scores[query_id]["P_" + str(k)]
                 if ignore_identical_ids:
-                    ndcg_no_self[f"NDCG (no self)@{k}"] += scores_wo_identical_ids[query_id]["ndcg_cut_" + str(k)]
+                    ndcg_no_self[f"NDCG (no self)@{k}"] += scores_wo_identical_ids[
+                        query_id
+                    ]["ndcg_cut_" + str(k)]
 
         for k in k_values:
             ndcg[f"NDCG@{k}"] = round(ndcg[f"NDCG@{k}"] / len(scores), 5)
@@ -528,8 +527,10 @@ class RetrievalEvaluator(Evaluator):
             recall[f"Recall@{k}"] = round(recall[f"Recall@{k}"] / len(scores), 5)
             precision[f"P@{k}"] = round(precision[f"P@{k}"] / len(scores), 5)
             if ignore_identical_ids:
-                ndcg_no_self[f"NDCG (no self)@{k}"] = round(ndcg_no_self[f"NDCG (no self)@{k}"] / len(scores), 5)
-        
+                ndcg_no_self[f"NDCG (no self)@{k}"] = round(
+                    ndcg_no_self[f"NDCG (no self)@{k}"] / len(scores), 5
+                )
+
         # merge ndcg and ndcg_no_self together
         if ignore_identical_ids:
             ndcg = {**ndcg, **ndcg_no_self}
