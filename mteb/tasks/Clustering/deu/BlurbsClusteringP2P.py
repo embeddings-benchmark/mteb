@@ -79,7 +79,7 @@ class BlurbsClusteringP2PFast(AbsTaskClusteringFast):
   year={2019},
   url={https://api.semanticscholar.org/CorpusID:208334484}
 }""",
-        n_samples={"test": 50268},
+        n_samples={"test": NUM_SAMPLES},
         avg_character_length={"test": 664.09},
     )
 
