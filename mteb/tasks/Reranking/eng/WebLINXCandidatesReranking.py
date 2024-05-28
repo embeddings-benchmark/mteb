@@ -15,7 +15,7 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
         dataset={
             "path": "McGill-NLP/WebLINX",
             "name": "reranking",
-            "revision": "f3c18563a49fa8ef4559eb8f2b2e2c9845f71bf8",
+            "revision": "ed1c933c2b3617e5700d8a7ebe07f5975969a453",
         },
         type="Reranking",
         category="p2p",
@@ -28,7 +28,7 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
             "test_web",
         ],
         eval_langs=["eng-Latn"],
-        main_score="recall_at_10",
+        main_score="mrr",
         date=("2023-03-01", "2023-10-30"),
         form=["written"],
         domains=["Academic", "Web"],
