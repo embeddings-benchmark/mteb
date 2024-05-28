@@ -52,11 +52,11 @@ class HeadlineClassification(AbsTaskClassification):
         pages = "54--59",
         abstract = "The article is focused on automatic development and ranking of a large corpus for Russian paraphrase generation which proves to be the first corpus of such type in Russian computational linguistics. Existing manually annotated paraphrase datasets for Russian are limited to small-sized ParaPhraser corpus and ParaPlag which are suitable for a set of NLP tasks, such as paraphrase and plagiarism detection, sentence similarity and relatedness estimation, etc. Due to size restrictions, these datasets can hardly be applied in end-to-end text generation solutions. Meanwhile, paraphrase generation requires a large amount of training data. In our study we propose a solution to the problem: we collect, rank and evaluate a new publicly available headline paraphrase corpus (ParaPhraser Plus), and then perform text generation experiments with manual evaluation on automatically ranked corpora using the Universal Transformer architecture.",
         }""",
-        n_samples={"test": 12000},
+        n_samples={"test": 2048},
         avg_character_length={"test": 61.6},
     )
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
+            self.dataset, seed=self.seed, n_samples=2048, splits=["test"]
         )

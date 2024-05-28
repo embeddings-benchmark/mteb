@@ -29,8 +29,8 @@ class RuSciBenchOECDClusteringP2P(AbsTaskClusteringFast):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation="""""",
-        n_samples={"test": 3219},
+        bibtex_citation="",
+        n_samples={"test": 2048},
         avg_character_length={"test": 838.9},
     )
 
@@ -38,6 +38,11 @@ class RuSciBenchOECDClusteringP2P(AbsTaskClusteringFast):
         self.dataset = self.dataset.rename_columns(
             {"label": "labels", "text": "sentences"}
         )
+
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"], label="labels"
+            self.dataset,
+            seed=self.seed,
+            splits=["test"],
+            n_samples=2048,
+            label="labels",
         )

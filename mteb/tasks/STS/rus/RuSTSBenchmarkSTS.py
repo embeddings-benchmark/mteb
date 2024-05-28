@@ -17,7 +17,7 @@ class RuSTSBenchmarkSTS(AbsTaskSTS):
         reference="https://github.com/PhilipMay/stsb-multi-mt/",
         type="STS",
         category="s2s",
-        eval_splits=["validation", "test"],
+        eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
         main_score="cosine_spearman",
         date=("2012-01-01", "2018-01-01"),
@@ -29,9 +29,9 @@ class RuSTSBenchmarkSTS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         text_creation="machine-translated and verified",
-        bibtex_citation="""""",
-        n_samples={"validation": 1336, "test": 1264},
-        avg_character_length={"validation": 65.4, "test": 54.2},
+        bibtex_citation="",
+        n_samples={"test": 1264},
+        avg_character_length={"test": 54.2},
     )
 
     @property

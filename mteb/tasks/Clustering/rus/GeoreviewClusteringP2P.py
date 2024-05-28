@@ -28,7 +28,7 @@ class GeoreviewClusteringP2P(AbsTaskClusteringFast):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation="""""",
+        bibtex_citation="",
         n_samples={"test": 2000},
         avg_character_length={"test": 384.5},
     )

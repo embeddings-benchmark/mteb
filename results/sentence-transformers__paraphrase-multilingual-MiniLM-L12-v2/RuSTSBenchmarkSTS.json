@@ -24,48 +24,6 @@
           "spearman": 0.7725759998467114
         }
       }
-    ],
-    "train": [
-      {
-        "cos_sim": {
-          "pearson": 0.8167225483626231,
-          "spearman": 0.8004316378621577
-        },
-        "euclidean": {
-          "pearson": 0.814022124536146,
-          "spearman": 0.7983481288726039
-        },
-        "hf_subset": "default",
-        "languages": [
-          "rus-Cyrl"
-        ],
-        "main_score": 0.8004316378621577,
-        "manhattan": {
-          "pearson": 0.81379986366986,
-          "spearman": 0.7983336550748988
-        }
-      }
-    ],
-    "validation": [
-      {
-        "cos_sim": {
-          "pearson": 0.8405088639041084,
-          "spearman": 0.8429697776337159
-        },
-        "euclidean": {
-          "pearson": 0.8170485377169829,
-          "spearman": 0.8225506394065449
-        },
-        "hf_subset": "default",
-        "languages": [
-          "rus-Cyrl"
-        ],
-        "main_score": 0.8429697776337159,
-        "manhattan": {
-          "pearson": 0.815989675052089,
-          "spearman": 0.820892726176619
-        }
-      }
     ]
   },
   "task_name": "RuSTSBenchmarkSTS"

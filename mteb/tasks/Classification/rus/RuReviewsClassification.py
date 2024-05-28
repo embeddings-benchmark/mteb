@@ -40,11 +40,11 @@ class RuReviewsClassification(AbsTaskClassification):
         ISSN={2378-1963},
         month={July}
         }""",
-        n_samples={"test": 15000},
+        n_samples={"test": 2048},
         avg_character_length={"test": 133.2},
     )
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
+            self.dataset, seed=self.seed, n_samples=2048, splits=["test"]
         )
