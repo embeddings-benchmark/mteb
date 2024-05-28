@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import datasets
+
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
@@ -11,9 +13,9 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
         description="WEBLINX is a large-scale benchmark of 100K interactions across 2300 expert demonstrations of conversational web navigation. The reranking task focuses on finding relevant elements at every given step in the trajectory.",
         reference="https://mcgill-nlp.github.io/weblinx",
         dataset={
-            "path": "McGill-NLP/WebLINX",  # TODO: change to the actual path
+            "path": "McGill-NLP/WebLINX",
             "name": "reranking",
-            "revision": "4d5db43bcd72c036b8f8dd0740d9ed2cee71d09b",  # TODO: change to commit hash
+            "revision": "f3c18563a49fa8ef4559eb8f2b2e2c9845f71bf8",
         },
         type="Reranking",
         category="p2p",
@@ -63,3 +65,22 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
             "test_geo": 1742.66,
         },
     )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        self._datasets = {}
+
+        for split in self.metadata.eval_splits:
+            self._datasets[split] = datasets.load_dataset(
+                split=split, **self.metadata_dict["dataset"]
+            )
+
+        self.dataset = datasets.DatasetDict(
+            {split: self._datasets[split] for split in self.metadata.eval_splits}
+        )
+
+        self.dataset_transform()
+
+        self.data_loaded = True
