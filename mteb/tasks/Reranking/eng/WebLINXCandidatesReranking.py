@@ -10,7 +10,7 @@ from ....abstasks.AbsTaskReranking import AbsTaskReranking
 class WebLINXCandidatesReranking(AbsTaskReranking):
     metadata = TaskMetadata(
         name="WebLINXCandidatesReranking",
-        description="WEBLINX is a large-scale benchmark of 100K interactions across 2300 expert demonstrations of conversational web navigation. The reranking task focuses on finding relevant elements at every given step in the trajectory.",
+        description="WebLINX is a large-scale benchmark of 100K interactions across 2300 expert demonstrations of conversational web navigation. The reranking task focuses on finding relevant elements at every given step in the trajectory.",
         reference="https://mcgill-nlp.github.io/weblinx",
         dataset={
             "path": "McGill-NLP/WebLINX",
