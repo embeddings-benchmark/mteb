@@ -54,6 +54,7 @@ class E5Wrapper:
 
 
 e5_mult_small = ModelMeta(
+    loader=lambda: E5Wrapper("intfloat/multilingual-e5-small"), # type: ignore
     name="intfloat/multilingual-e5-small",
     languages=[],  # TODO: missing
     open_source=True,
