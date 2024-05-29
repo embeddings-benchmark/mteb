@@ -7,6 +7,7 @@ from collections import defaultdict
 from time import time
 from typing import Dict, Tuple
 
+import torch
 from datasets import Features, Value, load_dataset
 
 from ..evaluation.evaluators import RetrievalEvaluator
@@ -303,22 +304,28 @@ class AbsTaskRetrieval(AbsTask):
             with open(qrels_save_path, "w") as f:
                 json.dump(results, f)
 
-        ndcg, _map, recall, precision = retriever.evaluate(
+        all_ndcgs, all_aps, all_recalls, all_precisions = retriever.evaluate(
             relevant_docs,
             results,
             retriever.k_values,
             ignore_identical_ids=kwargs.get("ignore_identical_ids", True),
-        )
-        mrr = retriever.evaluate_custom(
+        ) 
+        all_rrs = retriever.evaluate_custom(
             relevant_docs, results, retriever.k_values, "mrr"
         )
-        scores = {
-            **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
-            **{f"map_at_{k.split('@')[1]}": v for (k, v) in _map.items()},
-            **{f"recall_at_{k.split('@')[1]}": v for (k, v) in recall.items()},
-            **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
-            **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
+        all_metric_scores = {
+            **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in all_ndcgs.items()},
+            **{f"map_at_{k.split('@')[1]}": v for (k, v) in all_aps.items()},
+            **{f"recall_at_{k.split('@')[1]}": v for (k, v) in all_recalls.items()},
+            **{f"precision_at_{k.split('@')[1]}": v for (k, v) in all_precisions.items()},
+            **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in all_rrs.items()},
         }
+        naucs = retriever.evaluate_abstention(results, all_metric_scores)
+        scores = {
+            **{k: sum(v) / len(v) for k, v in all_metric_scores.items()},
+            **naucs,
+        }
+
         return scores
 
     def calculate_metadata_metrics(self) -> None:
