@@ -310,7 +310,9 @@ class MTEB:
                 if model_revision is None:
                     logger.warning("Please supply model revision.")
                     return []
-            pathlib.Path(os.path.join(output_folder, model_revision)).mkdir(parents=True, exist_ok=True)
+            pathlib.Path(os.path.join(output_folder, model_revision)).mkdir(
+                parents=True, exist_ok=True
+            )
 
         # Run selected tasks
         logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks:")
