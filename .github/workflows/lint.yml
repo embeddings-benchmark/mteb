@@ -22,7 +22,7 @@ jobs:
         uses: actions/cache@v4
         id: pip-cache
         with:
-          path: /opt/hostedtoolcache/Python/3.8.18/x64/site-packages
+          path: /opt/hostedtoolcache/Python/3.8.18/site-packages
           key: lint-packages-${{ hashFiles('pyproject.toml') }}
           restore-keys: lint-packages-
 
