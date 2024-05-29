@@ -15,14 +15,14 @@ jobs:
 
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.8.18"
+          python-version: "3.8"
           cache: "pip"
       
       - name: Restore pip packages cache
         uses: actions/cache@v4
         id: pip-cache
         with:
-          path: /opt/hostedtoolcache/Python/3.8.18/site-packages
+          path: /usr/local/lib/python3.8/site-packages
           key: lint-packages-${{ hashFiles('pyproject.toml') }}
           restore-keys: lint-packages-
 
