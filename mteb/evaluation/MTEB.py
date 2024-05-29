@@ -270,6 +270,7 @@ class MTEB:
         overwrite_results: bool = False,
         raise_error: bool = True,
         co2_tracker: bool = False,
+        model_revision: str = None,
         **kwargs,
     ):
         """Run the evaluation pipeline on the selected tasks.
@@ -285,6 +286,7 @@ class MTEB:
             overwrite_results: Whether to overwrite existing results.
             raise_error: Whether to raise an error if an exception occurs during evaluation.
             co2_tracker: Whether to enable or disable CO2 emissions tracker using codecarbon.
+            model_revision: Revision of the model. If model.model_card_data.base_model_revision is empty, this will be used.
             kwargs: Additional arguments to be passed to `_run_eval` method and task.load_data.
 
         Returns:
@@ -297,7 +299,18 @@ class MTEB:
 
         # Create output folder
         if output_folder is not None:
-            pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
+            # check for model revision. For SentenceTransformers, this is available from sentence-transformers==3.0.0.
+            # if not found, check for supplied model revision.
+            try:
+                model_revision = model.model_card_data.base_model_revision
+            except AttributeError:
+                logger.warning(
+                    f"model.model_card_data.base_model_revision not found. Using supplied model revision: {model_revision}."
+                )
+                if model_revision is None:
+                    logger.warning("Please supply model revision.")
+                    return []
+            pathlib.Path(os.path.join(output_folder, model_revision)).mkdir(parents=True, exist_ok=True)
 
         # Run selected tasks
         logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks:")
@@ -316,6 +329,7 @@ class MTEB:
             if output_folder is not None:
                 save_path = os.path.join(
                     output_folder,
+                    model_revision,
                     f"{task.metadata_dict['name']}{task.save_suffix}.json",
                 )
                 if os.path.exists(save_path) and overwrite_results is False:

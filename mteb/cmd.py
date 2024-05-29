@@ -151,6 +151,14 @@ def main():
         help="Display the available tasks",
     )
 
+    ## model revision
+    parser.add_argument(
+        "--model_revision",
+        type=str,
+        default=None,
+        help="Revision of the model. Revisions are automatically read if the model is loaded from huggingface. ",
+    )
+
     # TODO: check what prams are useful to add
     args = parser.parse_args()
 
@@ -190,6 +198,7 @@ def main():
         output_folder=args.output_folder,
         eval_splits=args.eval_splits,
         co2_tracker=args.co2_tracker,
+        model_revision=args.model_revision,
     )
 
     _save_model_metadata(model, args.model, Path(args.output_folder))
