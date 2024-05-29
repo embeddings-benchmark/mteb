@@ -7,15 +7,25 @@ import os
 from collections import defaultdict
 from typing import Dict, List, Tuple
 
-import pytrec_eval
 import numpy as np
+import pytrec_eval
 import torch
 import tqdm
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
 
 from .Evaluator import Evaluator
-from .utils import cos_sim, dot_score, download, hole, mrr, recall_cap, top_k_accuracy, confidence_scores, nAUC
+from .utils import (
+    confidence_scores,
+    cos_sim,
+    dot_score,
+    download,
+    hole,
+    mrr,
+    nAUC,
+    recall_cap,
+    top_k_accuracy,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -418,8 +428,8 @@ class RetrievalEvaluator(Evaluator):
                 corpus, queries, self.top_k, self.score_function
             )
 
-    @staticmethod
     def evaluate(
+        self,
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
         k_values: List[int],
@@ -436,8 +446,8 @@ class RetrievalEvaluator(Evaluator):
                         results[qid].pop(pid)
                         popped.append(pid)
 
-        all_ndcgs, all_aps, all_recalls, all_precisions = {}, {}, {}, {} 
-        
+        all_ndcgs, all_aps, all_recalls, all_precisions = {}, {}, {}, {}
+
         for k in k_values:
             all_ndcgs[f"NDCG@{k}"] = []
             all_aps[f"MAP@{k}"] = []
@@ -460,10 +470,27 @@ class RetrievalEvaluator(Evaluator):
                 all_recalls[f"Recall@{k}"].append(scores[query_id]["recall_" + str(k)])
                 all_precisions[f"P@{k}"].append(scores[query_id]["P_" + str(k)])
 
-        return all_ndcgs, all_aps, all_recalls, all_precisions
+        ndcg, _map, recall, precision = (
+            all_ndcgs.copy(),
+            all_aps.copy(),
+            all_recalls.copy(),
+            all_precisions.copy(),
+        )
 
-    @staticmethod
+        for k in k_values:
+            ndcg[f"NDCG@{k}"] = round(sum(ndcg[f"NDCG@{k}"]) / len(scores), 5)
+            _map[f"MAP@{k}"] = round(sum(_map[f"MAP@{k}"]) / len(scores), 5)
+            recall[f"Recall@{k}"] = round(sum(recall[f"Recall@{k}"]) / len(scores), 5)
+            precision[f"P@{k}"] = round(sum(precision[f"P@{k}"]) / len(scores), 5)
+
+        naucs = self.evaluate_abstention(
+            results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
+        )
+
+        return ndcg, _map, recall, precision, naucs
+
     def evaluate_custom(
+        self,
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
         k_values: List[int],
@@ -471,11 +498,14 @@ class RetrievalEvaluator(Evaluator):
         output_type: str = "all",
     ) -> Tuple[Dict[str, float]]:
         if metric.lower() in ["mrr", "mrr@k", "mrr_cut"]:
-            return mrr(qrels, results, k_values, output_type)
+            metric_scores = mrr(qrels, results, k_values, output_type)
+
         elif metric.lower() in ["recall_cap", "r_cap", "r_cap@k"]:
-            return recall_cap(qrels, results, k_values, output_type)
+            metric_scores = recall_cap(qrels, results, k_values, output_type)
+
         elif metric.lower() in ["hole", "hole@k"]:
-            return hole(qrels, results, k_values, output_type)
+            metric_scores = hole(qrels, results, k_values, output_type)
+
         elif metric.lower() in [
             "acc",
             "top_k_acc",
@@ -483,21 +513,31 @@ class RetrievalEvaluator(Evaluator):
             "accuracy@k",
             "top_k_accuracy",
         ]:
-            return top_k_accuracy(qrels, results, k_values, output_type)
-        
+            metric_scores = top_k_accuracy(qrels, results, k_values, output_type)
+
+        naucs = self.evaluate_abstention(results, metric_scores)
+        metric_scores_avg = {k: sum(v) / len(v) for k, v in metric_scores.items()}
+
+        return metric_scores_avg, naucs
+
     @staticmethod
     def evaluate_abstention(
         results: dict[str, dict[str, float]],
         metric_scores: dict[str, list[float]],
     ) -> Dict[str, float]:
-        
-        all_sim_scores = [torch.tensor(list(results[qid].values())) for qid in list(results.keys())]
-        all_conf_scores = [confidence_scores(sim_scores) for sim_scores in all_sim_scores]
+        all_sim_scores = [
+            torch.tensor(list(results[qid].values())) for qid in list(results.keys())
+        ]
+        all_conf_scores = [
+            confidence_scores(sim_scores) for sim_scores in all_sim_scores
+        ]
         conf_fcts = list(all_conf_scores[0].keys())
-        all_conf_scores = {fct: np.array([x[fct] for x in all_conf_scores]) for fct in conf_fcts}
+        all_conf_scores = {
+            fct: np.array([x[fct] for x in all_conf_scores]) for fct in conf_fcts
+        }
         metric_scores = {k: np.array(v) for k, v in metric_scores.items()}
         naucs = {}
-        
+
         for metric_name, scores in metric_scores.items():
             for fct, conf_scores in all_conf_scores.items():
                 naucs[f"nAUC_{metric_name}_{fct}"] = nAUC(conf_scores, scores)

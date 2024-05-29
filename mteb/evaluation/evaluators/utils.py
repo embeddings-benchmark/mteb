@@ -8,7 +8,6 @@ import pandas as pd
 import requests
 import torch
 import tqdm
-
 from sklearn.metrics import auc
 
 
@@ -90,7 +89,7 @@ def mrr(
         for k in k_values:
             MRR[f"MRR@{k}"] = round(sum(MRR[f"MRR@{k}"]) / len(qrels), 5)
             logging.info("MRR@{}: {:.4f}".format(k, MRR[f"MRR@{k}"]))
-    
+
     elif output_type == "all":
         pass
 
@@ -127,7 +126,9 @@ def recall_cap(
 
     if output_type == "mean":
         for k in k_values:
-            capped_recall[f"R_cap@{k}"] = round(sum(capped_recall[f"R_cap@{k}"]) / len(qrels), 5)
+            capped_recall[f"R_cap@{k}"] = round(
+                sum(capped_recall[f"R_cap@{k}"]) / len(qrels), 5
+            )
             logging.info("R_cap@{}: {:.4f}".format(k, capped_recall[f"R_cap@{k}"]))
 
     elif output_type == "all":
@@ -169,7 +170,7 @@ def hole(
         for k in k_values:
             Hole[f"Hole@{k}"] = round(Hole[f"Hole@{k}"] / len(qrels), 5)
             logging.info("Hole@{}: {:.4f}".format(k, Hole[f"Hole@{k}"]))
-    
+
     elif output_type == "all":
         pass
 
@@ -210,7 +211,9 @@ def top_k_accuracy(
 
     if output_type == "mean":
         for k in k_values:
-            top_k_acc[f"Accuracy@{k}"] = round(top_k_acc[f"Accuracy@{k}"] / len(qrels), 5)
+            top_k_acc[f"Accuracy@{k}"] = round(
+                top_k_acc[f"Accuracy@{k}"] / len(qrels), 5
+            )
             logging.info("Accuracy@{}: {:.4f}".format(k, top_k_acc[f"Accuracy@{k}"]))
 
     elif output_type == "all":
@@ -293,7 +296,7 @@ def download(url: str, fname: str):
 
 def confidence_scores(sim_scores):
     """Computes confidence scores for a single instance = (query, positives, negatives)
-    
+
     Args:
         sim_scores (`torch.Tensor of shape `(num_pos+num_neg,)`): Query-documents similarity scores
 
@@ -307,13 +310,13 @@ def confidence_scores(sim_scores):
     conf_scores = {
         "max": sim_scores_sorted[0].item(),
         "std": sim_scores.std().item(),
-        "diff1": (sim_scores_sorted[0] - sim_scores_sorted[1]).item()
+        "diff1": (sim_scores_sorted[0] - sim_scores_sorted[1]).item(),
     }
-    
+
     return conf_scores
 
 
-def abstention_curve(conf_scores, metrics, abstention_rates=np.linspace(0,1,11)[:-1]):
+def abstention_curve(conf_scores, metrics, abstention_rates=np.linspace(0, 1, 11)[:-1]):
     strat_eval = np.zeros(len(abstention_rates))
     abstention_thresholds = np.quantile(conf_scores, abstention_rates)
 
@@ -323,7 +326,7 @@ def abstention_curve(conf_scores, metrics, abstention_rates=np.linspace(0,1,11)[
     return strat_eval
 
 
-def oracle_curve(metrics, abstention_rates=np.linspace(0,1,11)[:-1]):
+def oracle_curve(metrics, abstention_rates=np.linspace(0, 1, 11)[:-1]):
     metrics_argsort = np.argsort(metrics)
     oracle_eval = np.zeros(len(abstention_rates))
 
@@ -333,15 +336,15 @@ def oracle_curve(metrics, abstention_rates=np.linspace(0,1,11)[:-1]):
     return oracle_eval
 
 
-def nAUC(conf_scores, metrics, abstention_rates=np.linspace(0,1,11)[:-1]):
+def nAUC(conf_scores, metrics, abstention_rates=np.linspace(0, 1, 11)[:-1]):
     abst_curve = abstention_curve(conf_scores, metrics, abstention_rates)
     or_curve = oracle_curve(metrics, abstention_rates)
     abst_auc = auc(abstention_rates, abst_curve)
     or_auc = auc(abstention_rates, or_curve)
     flat_auc = or_curve[0] * (abstention_rates[-1] - abstention_rates[0])
-    
+
     if or_auc == flat_auc:
-        abst_nauc=np.nan
+        abst_nauc = np.nan
     else:
         abst_nauc = (abst_auc - flat_auc) / (or_auc - flat_auc)
 

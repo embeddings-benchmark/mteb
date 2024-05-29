@@ -8,7 +8,7 @@ import tqdm
 from sklearn.metrics import average_precision_score
 
 from .Evaluator import Evaluator
-from .utils import cos_sim, confidence_scores, nAUC
+from .utils import confidence_scores, cos_sim, nAUC
 
 logger = logging.getLogger(__name__)
 
@@ -137,7 +137,7 @@ class RerankingEvaluator(Evaluator):
             sim_scores = self._compute_sim_scores_instance(query_emb, docs_emb)
             scores = self._compute_metrics_instance(sim_scores, is_relevant)
             conf_scores = confidence_scores(sim_scores)
-            
+
             all_mrr_scores.append(scores["mrr"])
             all_ap_scores.append(scores["ap"])
             all_conf_scores.append(conf_scores)
@@ -192,14 +192,14 @@ class RerankingEvaluator(Evaluator):
             sim_scores = self._compute_sim_scores_instance(query_emb, docs_emb)
             scores = self._compute_metrics_instance(sim_scores, is_relevant)
             conf_scores = confidence_scores(sim_scores)
-            
+
             all_mrr_scores.append(scores["mrr"])
             all_ap_scores.append(scores["ap"])
             all_conf_scores.append(conf_scores)
 
         mean_ap = np.mean(all_ap_scores)
         mean_mrr = np.mean(all_mrr_scores)
-    
+
         # Compute nAUCs
         naucs_map = self._compute_nAUCs(all_conf_scores, all_ap_scores, "map")
         naucs_mrr = self._compute_nAUCs(all_conf_scores, all_mrr_scores, "mrr")
@@ -216,13 +216,13 @@ class RerankingEvaluator(Evaluator):
 
         Returns:
             sim_scores (`torch.Tensor of shape `(num_pos+num_neg,)`): Query-documents similarity scores
-        """  
-        sim_scores = self.similarity_fct(query_emb, docs_emb)  
+        """
+        sim_scores = self.similarity_fct(query_emb, docs_emb)
         if len(sim_scores.shape) > 1:
             sim_scores = torch.amax(sim_scores, dim=0)
-        
+
         return sim_scores
-        
+
     def _compute_metrics_instance(self, sim_scores, is_relevant):
         """Computes metrics for a single instance = (query, positives, negatives)
 
@@ -239,8 +239,8 @@ class RerankingEvaluator(Evaluator):
         mrr = self.mrr_at_k_score(is_relevant, pred_scores_argsort, self.mrr_at_k)
         ap = self.ap_score(is_relevant, sim_scores.cpu().tolist())
         return {"mrr": mrr, "ap": ap}
-    
-    def _compute_nAUCs(self, all_conf_scores, metrics, metric_name):        
+
+    def _compute_nAUCs(self, all_conf_scores, metrics, metric_name):
         """Computes nAUCs given confidence scores and evaluation metrics all samples
 
         Args:
@@ -252,12 +252,17 @@ class RerankingEvaluator(Evaluator):
             metric_name (`str`): Name of the metric (mrr or ap)
 
         Returns:
-            naucs (`Dict[str, float]`): nAUCs for each confidence function      
+            naucs (`Dict[str, float]`): nAUCs for each confidence function
         """
         conf_fcts = list(all_conf_scores[0].keys())
-        all_conf_scores = {fct: np.array([x[fct] for x in all_conf_scores]) for fct in conf_fcts}
+        all_conf_scores = {
+            fct: np.array([x[fct] for x in all_conf_scores]) for fct in conf_fcts
+        }
         metrics = np.array(metrics)
-        naucs = {f"nAUC_{metric_name}_{fct}": nAUC(all_conf_scores[fct], metrics) for fct in conf_fcts}        
+        naucs = {
+            f"nAUC_{metric_name}_{fct}": nAUC(all_conf_scores[fct], metrics)
+            for fct in conf_fcts
+        }
         return naucs
 
     @staticmethod
