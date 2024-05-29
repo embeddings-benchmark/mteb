@@ -17,6 +17,7 @@ from pathlib import Path
 
 from sentence_transformers import SentenceTransformer
 
+import mteb
 from mteb import MTEB
 
 logging.basicConfig(level=logging.WARNING)
@@ -59,7 +60,7 @@ def main():
         help="List of task types (Clustering, Retrieval..) to be evaluated. If None, all tasks will be evaluated",
     )
     parser.add_argument(
-        "--task_categories",
+        "--categories",
         nargs="+",
         type=str,
         default=None,
@@ -75,7 +76,7 @@ def main():
     )
     parser.add_argument(
         "-l",
-        "--task-langs",
+        "--languages",
         nargs="*",
         type=str,
         default=None,
@@ -83,12 +84,6 @@ def main():
     )
     parser.add_argument(
         "--device", type=int, default=None, help="Device to use for computation"
-    )
-    parser.add_argument(
-        "--batch_size", type=int, default=32, help="Batch size for computation"
-    )
-    parser.add_argument(
-        "--seed", type=int, default=42, help="Random seed for computation"
     )
     parser.add_argument(
         "--output_folder",
@@ -115,34 +110,6 @@ def main():
         help="Evaluation splits to use (train, dev, test..). If None, all splits will be used",
     )
 
-    ## classification params
-    parser.add_argument(
-        "--k",
-        type=int,
-        default=None,
-        help="Number of nearest neighbors to use for classification",
-    )
-    parser.add_argument(
-        "--n_experiments",
-        type=int,
-        default=None,
-        help="Number of splits for bootstrapping",
-    )
-    parser.add_argument(
-        "--samples_per_label",
-        type=int,
-        default=None,
-        help="Number of samples per label for bootstrapping",
-    )
-
-    ## retrieval params
-    parser.add_argument(
-        "--corpus_chunk_size",
-        type=int,
-        default=None,
-        help="Number of sentences to use for each corpus chunk. If None, a convenient number is suggested",
-    )
-
     ## display tasks
     parser.add_argument(
         "--available_tasks",
@@ -159,7 +126,6 @@ def main():
         help="Revision of the model. Revisions are automatically read if the model is loaded from huggingface. ",
     )
 
-    # TODO: check what prams are useful to add
     args = parser.parse_args()
 
     # set logging based on verbosity level
@@ -185,12 +151,14 @@ def main():
         args.output_folder = f"results/{_name_to_path(args.model)}"
 
     model = SentenceTransformer(args.model, device=args.device)
-    eval = MTEB(
-        task_categories=args.task_categories,
+
+    tasks = mteb.get_tasks(
+        categories=args.categories,
         task_types=args.task_types,
-        task_langs=args.task_langs,
+        languages=args.languages,
         tasks=args.tasks,
     )
+    eval = MTEB(tasks=tasks)
 
     eval.run(
         model,

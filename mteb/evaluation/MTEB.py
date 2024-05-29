@@ -7,7 +7,7 @@ import pathlib
 import traceback
 from datetime import datetime
 from time import time
-from typing import List, Union
+from typing import List, Sequence
 
 import datasets
 
@@ -28,7 +28,7 @@ class MTEB:
         task_types: List[str] | None = None,
         task_categories: List[str] | None = None,
         task_langs: List[str] | None = None,
-        tasks: List[Union[str, AbsTask]] | None = None,
+        tasks: Sequence[str | AbsTask] | None = None,
         version=None,
         err_logs_path="error_logs.txt",
         **kwargs,
