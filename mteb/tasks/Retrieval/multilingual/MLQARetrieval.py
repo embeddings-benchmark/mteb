@@ -84,7 +84,7 @@ class MLQARetrieval(AbsTaskRetrieval, CrosslingualTask):
         4 different languages on average.""",
         reference="https://huggingface.co/datasets/mlqa",
         dataset={
-            "path": "mlqa",
+            "path": "facebook/mlqa",
             "revision": "397ed406c1a7902140303e7faf60fff35b58d285",
         },
         type="Retrieval",
