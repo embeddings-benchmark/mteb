@@ -150,7 +150,7 @@ def main():
     if args.output_folder is None:
         args.output_folder = f"results/{_name_to_path(args.model)}"
 
-    model = SentenceTransformer(args.model, device=args.device)
+    model = SentenceTransformer(args.model, device=args.device, revision=args.revision)
 
     tasks = mteb.get_tasks(
         categories=args.categories,
