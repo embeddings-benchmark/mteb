@@ -16,11 +16,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest] #, macos-latest, windows-latest]
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.8.18", "3.9.19", "3.10.14"]
         include:
           # Add Windows with Python 3.8 only to avoid tests taking too long
           - os: windows-latest
-            python-version: "3.8"
+            python-version: "3.8.10"
 
     steps:
       - uses: actions/checkout@v3
@@ -30,8 +30,17 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: "pip"
-        
+      
+      - name: Restore pip packages cache
+        uses: actions/cache@v4
+        id: pip-cache
+        with:
+          path: /opt/hostedtoolcache/Python/3.8.18/x64/site-packages
+          key: test-packages-${{ hashFiles('pyproject.toml') }}
+          restore-keys: test-packages-
+
       - name: Install dependencies
+        if: steps.pip-cache.outputs.cache-hit != 'true'
         shell: bash
         run: |
           make install-for-tests
