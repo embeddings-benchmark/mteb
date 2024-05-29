@@ -24,7 +24,7 @@ class TestRetrievalEvaluator:
             "1": {"0": 0.0, "1": 1.0, "2": 0.0},
         }
 
-        ndcg, _map, recall, precision = self.evaluator.evaluate(
+        ndcg, _map, recall, precision, _ = self.evaluator.evaluate(
             relevant_docs,
             results,
             [1, 2, 3],
