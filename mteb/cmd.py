@@ -123,7 +123,7 @@ def main():
         "--model_revision",
         type=str,
         default=None,
-        help="Revision of the model. Revisions are automatically read if the model is loaded from huggingface. ",
+        help="Revision of the model to be loaded. Revisions are automatically read if the model is loaded from huggingface. ",
     )
 
     args = parser.parse_args()
@@ -150,7 +150,7 @@ def main():
     if args.output_folder is None:
         args.output_folder = f"results/{_name_to_path(args.model)}"
 
-    model = SentenceTransformer(args.model, device=args.device, revision=args.revision)
+    model = SentenceTransformer(args.model, device=args.device, revision=args.model_revision)
 
     tasks = mteb.get_tasks(
         categories=args.categories,
@@ -166,7 +166,6 @@ def main():
         output_folder=args.output_folder,
         eval_splits=args.eval_splits,
         co2_tracker=args.co2_tracker,
-        model_revision=args.model_revision,
     )
 
     _save_model_metadata(model, args.model, Path(args.output_folder))

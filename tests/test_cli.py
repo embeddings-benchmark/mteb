@@ -22,7 +22,7 @@ def test_run_task(
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
 
-    path = Path(f"tests/results/test_model")
+    path = Path("tests/results/test_model")
     results_path = Path(f"tests/results/test_model/{model_revision}")
     assert results_path.exists(), "Output folder not created"
     assert "model_meta.json" in [
