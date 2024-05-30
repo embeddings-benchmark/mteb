@@ -26,7 +26,7 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
         socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        text_creation="created",
         bibtex_citation="""
 @inproceedings{li-etal-2022-using,
     title = "Using Interactive Feedback to Improve the Accuracy and Explainability of Question Answering Systems Post-Deployment",
