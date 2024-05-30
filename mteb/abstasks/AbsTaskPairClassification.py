@@ -7,6 +7,11 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, average_precision_score, f1_score
 
+
+from datasets import Dataset
+
+from ..encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from ..MTEBResults import ScoresDict
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -64,9 +69,9 @@ class AbsTaskPairClassification(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def _evaluate_monolingual(
-        self, model, dataset, eval_split="test", train_split="train", **kwargs
-    ):
+    def _evaluate_subset(
+        self, model: Encoder | EncoderWithQueryCorpusEncode, dataset: Dataset, eval_split="test", train_split="train", **kwargs
+    ) -> ScoresDict:
         X_train, X_test, y_train, y_test = _prepare_features(
             dataset, model, eval_split, train_split
         )

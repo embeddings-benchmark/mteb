@@ -43,6 +43,7 @@ from .eng.LEMBQMSumRetrieval import *
 from .eng.LEMBSummScreenFDRetrieval import *
 from .eng.LEMBWikimQARetrieval import *
 from .eng.MedicalQARetrieval import *
+from .eng.MLQuestions import *
 from .eng.MSMARCORetrieval import *
 from .eng.MSMARCOv2Retrieval import *
 from .eng.NarrativeQARetrieval import *
@@ -51,6 +52,7 @@ from .eng.NQRetrieval import *
 from .eng.QuoraRetrieval import *
 from .eng.SCIDOCSRetrieval import *
 from .eng.SciFactRetrieval import *
+from .eng.TopiOCQARetrieval import *
 from .eng.Touche2020Retrieval import *
 from .eng.TRECCOVIDRetrieval import *
 from .est.estqa import *
@@ -64,6 +66,8 @@ from .kat.GeorgianFAQRetrieval import *
 from .kor.KoMiracl import *
 from .kor.KoStrategyQA import *
 from .multilingual.BelebeleRetrieval import *
+from .multilingual.CrossLingualSemanticDiscriminationWMT19 import *
+from .multilingual.CrossLingualSemanticDiscriminationWMT21 import *
 from .multilingual.IndicQARetrieval import *
 from .multilingual.MintakaRetrieval import *
 from .multilingual.MIRACLRetrieval import *
@@ -71,6 +75,9 @@ from .multilingual.MLQARetrieval import *
 from .multilingual.MultiLongDocRetrieval import *
 from .multilingual.NeuCLIR2022Retrieval import *
 from .multilingual.NeuCLIR2023Retrieval import *
+from .multilingual.PublicHealthQARetrieval import *
+from .multilingual.StatcanDialogueDatasetRetrieval import *
+from .multilingual.WikipediaRetrievalMultilingual import *
 from .multilingual.XMarketRetrieval import *
 from .multilingual.XPQARetrieval import *
 from .multilingual.XQuADRetrieval import *

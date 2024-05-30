@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import logging
 
+from datasets import Dataset
+
 from ..evaluation.evaluators import BitextMiningEvaluator
+from ..MTEBResults import HFSubset, ScoresDict
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -18,44 +21,45 @@ class AbsTaskBitextMining(AbsTask):
         sentence2: str
     """
 
+    parallel_subsets = False
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def evaluate(self, model, split, **kwargs):
+    def evaluate(self, model, split, **kwargs) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
             self.load_data()
 
-        parallel_subsets = (
-            self.parallel_subsets if hasattr(self, "parallel_subsets") else False
+        hf_subsets = (
+            [l for l in self.dataset]
+            if self.is_multilingual or self.is_crosslingual
+            else ["default"]
         )
-        if self.is_crosslingual:
-            if parallel_subsets:
-                scores = self._evaluate_split(
-                    model, self.dataset[split], True, **kwargs
-                )
-            else:
-                scores = {}
-                for lang in self.dataset:
-                    logger.info(
-                        f"\nTask: {self.metadata_dict['name']}, split: {split}, language: {lang}. Running..."
-                    )
-                    data_split = self.dataset[lang][split]
-                    scores[lang] = self._evaluate_split(
-                        model, data_split, subsets=["sentence1", "sentence2"], **kwargs
-                    )
+
+        scores = {}
+        if self.parallel_subsets:
+            scores["default"] = self._evaluate_subset(
+                model, self.dataset[split], parallel=True, **kwargs
+            )
         else:
-            logger.info(
-                f"\nTask: {self.metadata_dict['name']}, split: {split}. Running..."
-            )
-            data_split = self.dataset[split]
-            print(data_split)
-            scores = self._evaluate_split(
-                model, data_split, subsets=["sentence1", "sentence2"], **kwargs
-            )
+            for hf_subet in hf_subsets:
+                logger.info(
+                    f"\nTask: {self.metadata_dict['name']}, split: {split}, subset: {hf_subet}. Running..."
+                )
+
+                if hf_subet not in self.dataset and hf_subet == "default":
+                    data_split = self.dataset[split]
+                else:
+                    data_split = self.dataset[hf_subet][split]
+                scores[hf_subet] = self._evaluate_subset(
+                    model, data_split, subsets=["sentence1", "sentence2"], **kwargs
+                )
 
         return scores
 
-    def _evaluate_split(self, model, data_split, parallel=False, **kwargs):
+    def _evaluate_subset(
+        self, model, data_split: Dataset, parallel=False, **kwargs
+    ) -> ScoresDict:
         evaluator = BitextMiningEvaluator(data_split, **kwargs)
         metrics = evaluator(model)
         if parallel:
@@ -65,10 +69,5 @@ class AbsTaskBitextMining(AbsTask):
             self._add_main_score(metrics)
         return metrics
 
-    def _add_main_score(self, scores):
-        if self.metadata_dict["main_score"] in scores:
-            scores["main_score"] = scores[self.metadata_dict["main_score"]]
-        else:
-            logger.warn(
-                f"main score {self.metadata_dict['main_score']} not found in scores {scores.keys()}"
-            )
+    def _add_main_score(self, scores) -> None:
+        scores["main_score"] = scores[self.metadata.main_score]

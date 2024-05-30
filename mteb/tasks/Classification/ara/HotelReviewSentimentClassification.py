@@ -10,7 +10,7 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HotelReviewSentimentClassification",
         dataset={
-            "path": "hard",
+            "path": "Elnagara/hard",
             "revision": "b108d2c32ee4e1f4176ea233e1a5ac17bceb9ef9",
         },
         description="HARD is a dataset of Arabic hotel reviews collected from the Booking.com website.",
@@ -24,7 +24,7 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
         form=["written"],
         domains=["Reviews"],
         task_subtypes=["Sentiment/Hate speech"],
-        license=None,
+        license="Not specified",
         socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=["ara-arab-EG", "ara-arab-JO", "ara-arab-LB", "ara-arab-SA"],

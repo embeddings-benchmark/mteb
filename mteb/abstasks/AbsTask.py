@@ -3,17 +3,48 @@ from __future__ import annotations
 import logging
 import random
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Sequence
 
 import datasets
 import numpy as np
 import torch
+from datasets import DatasetDict
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MultiLabelBinarizer
 
-from mteb.abstasks.languages import LanguageScripts
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.languages import LanguageScripts
+
+from ..MTEBResults import HFSubset, ScoresDict
 
 logger = logging.getLogger(__name__)
+
+
+def _multilabel_subsampling(
+    dataset_dict: datasets.DatasetDict,
+    seed: int,
+    splits: list[str] = ["test"],
+    label: str = "label",
+    n_samples: int = 2048,
+) -> datasets.DatasetDict:
+    """Startified subsampling for multilabel problems."""
+    for split in splits:
+        labels = dataset_dict[split][label]
+        encoded_labels = MultiLabelBinarizer().fit_transform(labels)
+        idxs = np.arange(len(labels))
+        try:
+            idxs, *_ = train_test_split(
+                idxs,
+                encoded_labels,
+                stratify=encoded_labels,
+                random_state=seed,
+                train_size=n_samples,
+            )
+        except ValueError:
+            logger.warn("Couldn't subsample, continuing with full split.")
+        dataset_dict.update({split: dataset_dict[split].select(idxs)})
+    return dataset_dict
 
 
 class AbsTask(ABC):
@@ -46,6 +77,50 @@ class AbsTask(ABC):
         """
         pass
 
+    def evaluate(
+        self,
+        model: Encoder | EncoderWithQueryCorpusEncode,
+        split: str = "test",
+        **kwargs: Any,
+    ) -> dict[HFSubset, ScoresDict]:
+        """Evaluates a Sentence Embedding Model on the task.
+        Returns a dict (that can be serialized to json).
+
+        Args:
+            model: Sentence embedding method. Implements a encode(sentences) method, that encodes sentences and returns a numpy matrix with the
+                sentence embeddings
+            split: Which datasplit to be used.
+            kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
+        """
+        if not self.data_loaded:
+            self.load_data()
+
+        self.dataset: dict[HFSubset, DatasetDict]
+
+        scores = {}
+        hf_subsets = (
+            [l for l in self.dataset.keys()]
+            if self.is_crosslingual or self.is_multilingual
+            else ["default"]
+        )
+
+        for hf_subset in hf_subsets:
+            logger.info(
+                f"\nTask: {self.metadata_dict['name']}, split: {split}, subset: {hf_subset}. Running..."
+            )
+            if hf_subset not in self.dataset and hf_subset == "default":
+                data_split = self.dataset[split]
+            else:
+                data_split = self.dataset[hf_subset][split]
+            scores[hf_subset] = self._evaluate_subset(model, data_split, **kwargs)
+        return scores
+
+    @abstractmethod
+    def _evaluate_subset(self, model, data_split, **kwargs) -> ScoresDict:
+        raise NotImplementedError(
+            "If you are using the default evaluate method, you must implement _evaluate_subset method."
+        )
+
     @staticmethod
     def stratified_subsampling(
         dataset_dict: datasets.DatasetDict,
@@ -66,7 +141,15 @@ class AbsTask(ABC):
         """
         ## Can only do this if the label column is of ClassLabel.
         if not isinstance(dataset_dict[splits[0]].features[label], datasets.ClassLabel):
-            dataset_dict = dataset_dict.class_encode_column(label)
+            try:
+                dataset_dict = dataset_dict.class_encode_column(label)
+            except ValueError as e:
+                if isinstance(dataset_dict[splits[0]][label][0], Sequence):
+                    return _multilabel_subsampling(
+                        dataset_dict, seed, splits, label, n_samples
+                    )
+                else:
+                    raise e
 
         for split in splits:
             dataset_dict.update(
@@ -87,23 +170,8 @@ class AbsTask(ABC):
         self.data_loaded = True
 
     @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
-        return metadata_dict
-
-    @abstractmethod
-    def evaluate(
-        self, model: Encoder | EncoderWithQueryCorpusEncode, split: str = "test"
-    ):
-        """Evaluates a Sentence Embedding Model on the task.
-        Returns a dict (that can be serialized to json).
-
-        Args:
-            model: Sentence embedding method. Implements a encode(sentences) method, that encodes sentences and returns a numpy matrix with the
-                sentence embeddings
-            split: Which datasplit to be used.
-        """
-        raise NotImplementedError
+    def metadata_dict(self) -> dict[str, Any]:
+        return dict(self.metadata)
 
     @property
     def languages(self) -> list[str]:
