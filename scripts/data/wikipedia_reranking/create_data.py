@@ -19,6 +19,8 @@ languages = [
     "hi",
     "da",
     "en",
+    "no",
+    "sv",
 ]
 
 
