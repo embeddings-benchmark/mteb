@@ -68,6 +68,26 @@ MTEB_MAIN_EN = [
     "TwitterURLCorpus",
 ]
 
+MTEB_MAIN_RU = [
+    "GeoreviewClassification",
+    "GeoreviewClusteringP2P",
+    "HeadlineClassification",
+    "InappropriatenessClassification",
+    "KinopoiskClassification",
+    "MassiveIntentClassification",
+    "MassiveScenarioClassification",
+    "RiaNewsRetrieval",
+    "RuBQRetrieval",
+    "RuReviewsClassification",
+    "RuSciBenchGRNTIClassification",
+    "RuSciBenchGRNTIClusteringP2P",
+    "RuSciBenchOECDClassification",
+    "RuSciBenchOECDClusteringP2P",
+    "RuSTSBenchmarkSTS",
+    "STS22",
+    "TERRa",
+]
+
 MTEB_RETRIEVAL_WITH_INSTRUCTIONS = [
     "Robust04InstructionRetrieval",
     "News21InstructionRetrieval",
