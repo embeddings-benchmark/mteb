@@ -4,6 +4,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
+
 class FeedbackQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="FeedbackQARetrieval",
@@ -18,11 +19,11 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="precision_at_1",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
+        date=("2020-01-01", "2022-04-01"),
+        form=["written"],
+        domains=["Web", "Government", "Medical"],
+        task_subtypes=["Question answering"],
+        license="Apache-2.0",
         socioeconomic_status=None,
         annotations_creators=None,
         dialect=[],
@@ -47,7 +48,7 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
     doi = "10.18653/v1/2022.findings-acl.75",
     pages = "926--937"
 }
-"""
+""",
         n_samples=None,
         avg_character_length=None,
     )
