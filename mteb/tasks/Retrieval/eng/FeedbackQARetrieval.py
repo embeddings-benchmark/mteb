@@ -25,7 +25,7 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
         license=None,
         socioeconomic_status=None,
         annotations_creators=None,
-        dialect=None,
+        dialect=[],
         text_creation="created",
         bibtex_citation="""
 @inproceedings{li-etal-2022-using,
