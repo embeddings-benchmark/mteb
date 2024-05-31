@@ -298,10 +298,10 @@ def confidence_scores(sim_scores: List[float]) -> Dict[str, float]:
     """Computes confidence scores for a single instance = (query, positives, negatives)
 
     Args:
-        sim_scores (`List[float]` of shape `(num_pos+num_neg,)`): Query-documents similarity scores
+        sim_scores: Query-documents similarity scores with length `num_pos+num_neg`
 
     Returns:
-        conf_scores (`Dict[str, float]`):
+        conf_scores:
             - `max`: Maximum similarity score
             - `std`: Standard deviation of similarity scores
             - `diff1`: Difference between highest and second highest similarity scores
@@ -323,7 +323,7 @@ def confidence_scores(sim_scores: List[float]) -> Dict[str, float]:
 def nAUC(
     conf_scores: np.ndarray,
     metrics: np.ndarray,
-    abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
+    abstention_rates: np.ndarray = np.linspace(0,1,11)[:-1],
 ) -> float:
     """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
     1/ Computes the raw abstention curve, i.e., the average evaluation metric at different abstention rates determined by the confidence scores
@@ -333,28 +333,28 @@ def nAUC(
     5/ Finally scales the raw AUC between the oracle and the flat AUCs to get normalized AUC
 
     Args:
-        conf_scores: Instance confidence scores used for abstention thresholding
-        metrics: Metric evaluations at instance-level (e.g.: average precision, NDCG...)
+        conf_scores: Instance confidence scores used for abstention thresholding, with shape `(num_test_instances,)`
+        metrics: Metric evaluations at instance-level (e.g.: average precision, NDCG...), with shape `(num_test_instances,)`
         abstention_rates: Target rates for the computation of the abstention curve
 
     Returns:
-        abst_nauc: normalized area under the abstention curve (upper-bounded by 1)
+        abst_nauc: Normalized area under the abstention curve (upper-bounded by 1)
     """
 
     def abstention_curve(
         conf_scores: np.ndarray,
         metrics: np.ndarray,
-        abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
+        abstention_rates: np.ndarray = np.linspace(0,1,11)[:-1],
     ) -> np.ndarray:
         """Computes the raw abstention curve for a given set of evaluated instances and corresponding confidence scores
 
         Args:
-            conf_scores: Instance confidence scores used for abstention thresholding
-            metrics: Metric evaluations at instance-level (e.g.: average precision, NDCG...)
+            conf_scores: Instance confidence scores used for abstention thresholding, with shape `(num_test_instances,)`
+            metrics: Metric evaluations at instance-level (e.g.: average precision, NDCG...), with shape `(num_test_instances,)`
             abstention_rates: Target rates for the computation of the abstention curve
 
         Returns:
-            abst_curve: abstention curve of length `len(abstention_rates)`
+            abst_curve: Abstention curve of length `len(abstention_rates)`
         """
         abst_curve = np.zeros(len(abstention_rates))
         abstention_thresholds = np.quantile(conf_scores, abstention_rates)
@@ -365,16 +365,16 @@ def nAUC(
         return abst_curve
 
     def oracle_curve(
-        metrics: np.ndaray, abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1]
+        metrics: np.ndaray, abstention_rates: np.ndarray = np.linspace(0,1,11)[:-1]
     ) -> np.ndarray:
         """Computes the oracle curve for a given set of evaluated instances
 
         Args:
-            metrics: Metric evaluations at instance-level
+            metrics: Metric evaluations at instance-level, with shape `(num_test_instances,)`
             abstention_rates: Target rates for the computation of the abstention curve
 
         Returns:
-            or_curve: oracle curve of length `len(abstention_rates)`
+            or_curve: Oracle curve of length `len(abstention_rates)`
         """
         metrics_argsort = np.argsort(metrics)
         or_curve = np.zeros(len(abstention_rates))

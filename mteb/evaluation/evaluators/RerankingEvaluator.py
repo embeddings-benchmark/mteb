@@ -227,12 +227,12 @@ class RerankingEvaluator(Evaluator):
         """Computes similarity scores for a single instance = (query, positives, negatives)
 
         Args:
-            query_emb (`torch.Tensor` of shape `(num_queries, hidden_size)`): Query embedding
+            query_emb: Query embedding, with shape `(num_queries, hidden_size)`
                 if `num_queries` > 0: we take the closest document to any of the queries
-            docs_emb (`torch.Tensor` of shape `(num_pos+num_neg, hidden_size)`): Candidates documents embeddings
+            docs_emb: Candidates documents embeddings, with shape `(num_pos+num_neg, hidden_size)`
 
         Returns:
-            sim_scores (`torch.Tensor of shape `(num_pos+num_neg,)`): Query-documents similarity scores
+            sim_scores: Query-documents similarity scores, with shape `(num_pos+num_neg,)`
         """
         sim_scores = self.similarity_fct(query_emb, docs_emb)
         if len(sim_scores.shape) > 1:
@@ -246,11 +246,11 @@ class RerankingEvaluator(Evaluator):
         """Computes metrics for a single instance = (query, positives, negatives)
 
         Args:
-            sim_scores (`torch.Tensor of shape `(num_pos+num_neg,)`): Query-documents similarity scores
-            is_relevant (`List[bool]` of length `num_pos+num_neg`): True if the document is relevant
+            sim_scores: Query-documents similarity scores, with shape `(num_pos+num_neg,)`
+            is_relevant: True if the document is relevant, with length `num_pos+num_neg`
 
         Returns:
-            scores (`Dict[str, float]`):
+            scores:
                 - `mrr`: Mean Reciprocal Rank @ `self.mrr_at_k`
                 - `ap`: Average Precision
         """
@@ -264,10 +264,10 @@ class RerankingEvaluator(Evaluator):
         """Computes confidence scores for a single instance = (query, positives, negatives)
 
         Args:
-            sim_scores (`List[float]` of shape `(num_pos+num_neg,)`): Query-documents similarity scores
+            sim_scores: Query-documents similarity scores, with shape `(num_pos+num_neg,)`
 
         Returns:
-            conf_scores (`Dict[str, float]`):
+            conf_scores:
                 - `max`: Maximum similarity score
                 - `std`: Standard deviation of similarity scores
                 - `diff1`: Difference between highest and second highest similarity scores
@@ -283,15 +283,12 @@ class RerankingEvaluator(Evaluator):
         """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
 
         Args:
-            all_conf_scores (`Dict[str, List[float]]`):
-                - `max`: Maximum similarity scores
-                - `std`: Standard deviations of similarity scores
-                - `diff1`: Differences between highest and second highest similarity scores
-            metrics (`List[float]` of length `len(samples)`): True if the document is relevant
-            metric_name (`str`): Name of the metric (mrr or ap)
+            all_conf_scores: Confidence scores for all instances, with length `len(samples)` 
+            metrics: Metric scores for all instances, with length `len(samples)`
+            metric_name: Name of the metric (mrr or ap)
 
         Returns:
-            naucs (`Dict[str, float]`): nAUCs for each confidence function
+            naucs: nAUCs for each confidence function
         """
         conf_fcts = list(all_conf_scores[0].keys())
         all_conf_scores = {
