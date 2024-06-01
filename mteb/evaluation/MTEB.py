@@ -306,7 +306,7 @@ class MTEB:
                     model_revision = model.model_card_data.base_model_revision
                 except AttributeError:
                     logger.warning("Please supply model revision.")
-                    return []
+                    model_revision = "no_revision_available"
             pathlib.Path(os.path.join(output_folder, model_revision)).mkdir(
                 parents=True, exist_ok=True
             )
