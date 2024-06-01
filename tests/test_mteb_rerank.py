@@ -380,10 +380,10 @@ def test_reranker_same_ndcg1():
     )
 
     # read in stage 1 and stage two and check ndcg@1 is the same
-    with open("tests/results/stage1/SciFact.json") as f:
+    with open("tests/results/stage1/21eec43590414cb8e3a6f654857abed0483ae36e/SciFact.json") as f:
         stage1 = json.load(f)
 
-    with open("tests/results/stage2/SciFact.json") as f:
+    with open("tests/results/stage2/no_revision_available/SciFact.json") as f:
         stage2 = json.load(f)
 
     assert (
