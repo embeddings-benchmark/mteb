@@ -494,8 +494,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [Waimai](https://aclanthology.org/2023.nodalida-1.20/) | ['cmn'] | Classification | s2s |  |  |  |
 | [WikiCitiesClustering](https://huggingface.co/datasets/wikipedia) | ['eng'] | Clustering | p2p |  |  |  |
 | [WikiClusteringFastP2P](https://github.com/Rysias/wiki-clustering) | ['bos', 'cat', 'ces', 'dan', 'eus', 'glv', 'ilo', 'kur', 'lav', 'min', 'mlt', 'sco', 'sqi', 'wln'] | Clustering | p2p | [Encyclopaedic] | {'test': 2048} | {'test': 625.3} |
-| [WikipediaRerankingMultilingual](https://huggingface.co/datasets/ellamind/wikipedia-2023-11-reranking-multilingual) | ['ben', 'bul', 'ces', 'dan', 'deu', 'eng', 'fas', 'fin', 'hin', 'ita', 'nld', 'por', 'ron', 'srp'] | Reranking | s2p | [Encyclopaedic] | {'en': 1500, 'de': 1500, 'it': 1500, 'pt': 1500, 'nl': 1500, 'cs': 1500, 'ro': 1500, 'bg': 1500, 'sr': 1500, 'fi': 1500, 'da': 1500, 'fa': 1500, 'hi': 1500, 'bn': 1500} | {'test': 452.0} |
-| [WikipediaRetrievalMultilingual](https://huggingface.co/datasets/ellamind/wikipedia-2023-11-retrieval-pt) | ['ben', 'bul', 'ces', 'dan', 'deu', 'eng', 'fas', 'fin', 'hin', 'ita', 'nld', 'nor', 'por', 'ron', 'srp', 'swe'] | Retrieval | s2p | [Encyclopaedic] | {'test': 1500} | {'test': 452.0} |
+| [WikipediaRerankingMultilingual](https://huggingface.co/datasets/ellamind/wikipedia-2023-11-reranking-multilingual) | ['ben', 'bul', 'ces', 'dan', 'deu', 'eng', 'fas', 'fin', 'hin', 'ita', 'nld', 'nor', 'por', 'ron', 'srp', 'swe'] | Reranking | s2p | [Encyclopaedic] | {'en': 1500, 'de': 1500, 'it': 1500, 'pt': 1500, 'nl': 1500, 'cs': 1500, 'ro': 1500, 'bg': 1500, 'sr': 1500, 'fi': 1500, 'da': 1500, 'fa': 1500, 'hi': 1500, 'bn': 1500, 'no': 1500, 'sv': 1500} | {'test': 452.0} |
+| [WikipediaRetrievalMultilingual](https://huggingface.co/datasets/ellamind/wikipedia-2023-11-retrieval-pt) | ['ben', 'bul', 'ces', 'dan', 'deu', 'eng', 'fas', 'fin', 'hin', 'ita', 'nld', 'nor', 'por', 'ron', 'srp', 'swe'] | Retrieval | s2p | [Encyclopaedic] | {'en': 1500, 'de': 1500, 'it': 1500, 'pt': 1500, 'nl': 1500, 'cs': 1500, 'ro': 1500, 'bg': 1500, 'sr': 1500, 'fi': 1500, 'da': 1500, 'fa': 1500, 'hi': 1500, 'bn': 1500, 'no': 1500, 'sv': 1500} | {'test': 452.0} |
 | [WisesightSentimentClassification](https://github.com/PyThaiNLP/wisesight-sentiment) | ['tha'] | Classification | s2s | [Social, News] | {'train': 2048} | {'train': 103.42} |
 | XMarket | ['deu', 'eng', 'spa'] | Retrieval | s2p |  |  |  |
 | [XNLI](https://aclanthology.org/D18-1269/) (Conneau et al., 2018) | ['ara', 'bul', 'deu', 'ell', 'eng', 'fra', 'hin', 'rus', 'spa', 'swa', 'tha', 'tur', 'vie', 'zho'] | PairClassification | s2s | [Non-fiction, Fiction, Government] | {'validation': 2163, 'test': 2460} | {'validation': 106.5, 'test': 106.5} |
@@ -1192,7 +1192,7 @@ The following tables give you an overview of the tasks in MTEB.
 | nob | 5 | 8 | 4 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
 | noe | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nor | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| nor | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
 | not | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nou | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nov | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1364,7 +1364,7 @@ The following tables give you an overview of the tasks in MTEB.
 | suz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | svk | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | swa | 1 | 6 | 2 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
-| swe | 4 | 9 | 2 | 0 | 1 | 1 | 0 | 4 | 0 | 0 |
+| swe | 4 | 9 | 2 | 0 | 1 | 1 | 1 | 4 | 0 | 0 |
 | swg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | swh | 3 | 2 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | swp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1565,7 +1565,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1363 | 963 | 105 | 3 | 25 | 66 | 26 | 331 | 72 | 2 |
+| Total | 1363 | 963 | 105 | 3 | 25 | 66 | 28 | 331 | 72 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
