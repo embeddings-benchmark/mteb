@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.model_meta import ModelMeta
 
+from . import e5_models
 from . import sentence_transformers_models
 
 
@@ -30,7 +31,7 @@ def get_model_meta(model_name: str) -> ModelMeta:
     return models[model_name]
 
 
-model_modules = [sentence_transformers_models]
+model_modules = [e5_models, sentence_transformers_models]
 models = {}
 
 
