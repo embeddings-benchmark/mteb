@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 
 import numpy as np
+import pytrec_eval
 import torch
 import tqdm
 from sklearn.metrics import average_precision_score
@@ -111,10 +112,17 @@ class RerankingEvaluator(Evaluator):
 
         all_docs_embs = self._encode_unique_texts(all_docs, encode_corpus_func)
 
+        # Initialize dictionaries for pytrec_eval
+        qrels = {}
+        relevance_scores = {}
+
         # Compute scores
         logger.info("Evaluating...")
         query_idx, docs_idx = 0, 0
-        for instance in self.samples:
+        for idx, instance in enumerate(self.samples):
+            query_id = f"Q{idx + 1}"
+            qrels[query_id] = {}
+            relevance_scores[query_id] = {}
             num_subqueries = (
                 len(instance["query"]) if isinstance(instance["query"], list) else 1
             )
@@ -129,16 +137,37 @@ class RerankingEvaluator(Evaluator):
             if num_pos == 0 or num_neg == 0:
                 continue
 
+            for doc in instance["positive"]:
+                qrels[query_id][doc] = 1
+            for doc in instance["negative"]:
+                qrels[query_id][doc] = 0
+
             is_relevant = [True] * num_pos + [False] * num_neg
 
-            scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
+            scores, doc_scores = self._compute_metrics_instance(
+                query_emb, docs_emb, is_relevant
+            )
+            docs = instance["positive"] + instance["negative"]
+
+            for doc, doc_score in zip(docs, doc_scores):
+                relevance_scores[query_id][doc] = doc_score
+
             all_mrr_scores.append(scores["mrr"])
             all_ap_scores.append(scores["ap"])
 
         mean_ap = np.mean(all_ap_scores)
         mean_mrr = np.mean(all_mrr_scores)
 
-        return {"map": mean_ap, "mrr": mean_mrr}
+        evaluator = pytrec_eval.RelevanceEvaluator(qrels, {"ndcg_cut.10"})
+        ndcg_results = evaluator.evaluate(relevance_scores)
+
+        all_ndcg_scores = []
+        for query_id, query_measures in ndcg_results.items():
+            ndcg_10 = query_measures["ndcg_cut_10"]
+            all_ndcg_scores.append(ndcg_10)
+
+        mean_ndcg = np.mean(all_ndcg_scores)
+        return {"map": mean_ap, "mrr": mean_mrr, "ndcg_at_10": mean_ndcg}
 
     def compute_metrics_individual(self, model):
         """Embeds every (query, positive, negative) tuple individually.
@@ -149,6 +178,9 @@ class RerankingEvaluator(Evaluator):
         all_mrr_scores = []
         all_ap_scores = []
 
+        qrels = {}
+        relevance_scores = {}
+
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
         encode_queries_func = (
@@ -158,7 +190,10 @@ class RerankingEvaluator(Evaluator):
             model.encode_corpus if hasattr(model, "encode_corpus") else model.encode
         )
 
-        for instance in tqdm.tqdm(self.samples, desc="Samples"):
+        for idx, instance in enumerate(tqdm.tqdm(self.samples, desc="Samples")):
+            query_id = f"Q{idx + 1}"
+            qrels[query_id] = {}
+            relevance_scores[query_id] = {}
             query = instance["query"]
             positive = list(instance["positive"])
             negative = list(instance["negative"])
@@ -167,6 +202,11 @@ class RerankingEvaluator(Evaluator):
                 continue
 
             docs = positive + negative
+            for doc in positive:
+                qrels[query_id][doc] = 1
+            for doc in negative:
+                qrels[query_id][doc] = 0
+
             is_relevant = [True] * len(positive) + [False] * len(negative)
 
             if isinstance(query, str):
@@ -177,14 +217,30 @@ class RerankingEvaluator(Evaluator):
             )
             docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
 
-            scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
+            scores, doc_scores = self._compute_metrics_instance(
+                query_emb, docs_emb, is_relevant
+            )
+
+            for doc, doc_score in zip(docs, doc_scores):
+                relevance_scores[query_id][doc] = doc_score
+
             all_mrr_scores.append(scores["mrr"])
             all_ap_scores.append(scores["ap"])
 
         mean_ap = np.mean(all_ap_scores)
         mean_mrr = np.mean(all_mrr_scores)
 
-        return {"map": mean_ap, "mrr": mean_mrr}
+        evaluator = pytrec_eval.RelevanceEvaluator(qrels, {"ndcg_cut.10"})
+
+        ndcg_results = evaluator.evaluate(relevance_scores)
+
+        all_ndcg_scores = []
+        for query_id, query_measures in ndcg_results.items():
+            ndcg_10 = query_measures["ndcg_cut_10"]
+            all_ndcg_scores.append(ndcg_10)
+
+        mean_ndcg = np.mean(all_ndcg_scores)
+        return {"map": mean_ap, "mrr": mean_mrr, "ndcg_at_10": mean_ndcg}
 
     def _encode_unique_texts(self, all_texts, encode_queries_func):
         index_map, all_unique_texts, all_texts_indexes = {}, [], []
@@ -224,7 +280,7 @@ class RerankingEvaluator(Evaluator):
 
         mrr = self.mrr_at_k_score(is_relevant, pred_scores_argsort, self.mrr_at_k)
         ap = self.ap_score(is_relevant, pred_scores.cpu().tolist())
-        return {"mrr": mrr, "ap": ap}
+        return {"mrr": mrr, "ap": ap}, pred_scores.cpu().tolist()
 
     @staticmethod
     def mrr_at_k_score(

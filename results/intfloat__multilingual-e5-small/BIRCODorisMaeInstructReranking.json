@@ -1,0 +1,21 @@
+{
+  "dataset_revision": "b71e754ad70b63fdf902f4f99ca151524c8a80c6",
+  "evaluation_time": 5514.337198257446,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.5",
+  "scores": {
+    "test": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.35969630580669426,
+        "map": 0.34772798116231435,
+        "mrr": 0.5664328231292517,
+        "ndcg_at_10": 0.35969630580669426
+      }
+    ]
+  },
+  "task_name": "BIRCODorisMaeInstructReranking"
+}
