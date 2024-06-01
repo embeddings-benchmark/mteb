@@ -485,7 +485,7 @@ class RetrievalEvaluator(Evaluator):
         ndcg_no_self = {}
 
         for k in k_values:
-            ndcg_no_self[f"NDCG (no self)@{k}"] = 0.0
+            ndcg_no_self[f"NDCG(no self)@{k}"] = 0.0
             ndcg[f"NDCG@{k}"] = 0.0
             _map[f"MAP@{k}"] = 0.0
             recall[f"Recall@{k}"] = 0.0
@@ -517,7 +517,7 @@ class RetrievalEvaluator(Evaluator):
                 recall[f"Recall@{k}"] += scores[query_id]["recall_" + str(k)]
                 precision[f"P@{k}"] += scores[query_id]["P_" + str(k)]
                 if ignore_identical_ids:
-                    ndcg_no_self[f"NDCG (no self)@{k}"] += scores_wo_identical_ids[
+                    ndcg_no_self[f"NDCG(no self)@{k}"] += scores_wo_identical_ids[
                         query_id
                     ]["ndcg_cut_" + str(k)]
 
@@ -527,8 +527,8 @@ class RetrievalEvaluator(Evaluator):
             recall[f"Recall@{k}"] = round(recall[f"Recall@{k}"] / len(scores), 5)
             precision[f"P@{k}"] = round(precision[f"P@{k}"] / len(scores), 5)
             if ignore_identical_ids:
-                ndcg_no_self[f"NDCG (no self)@{k}"] = round(
-                    ndcg_no_self[f"NDCG (no self)@{k}"] / len(scores), 5
+                ndcg_no_self[f"NDCG(no self)@{k}"] = round(
+                    ndcg_no_self[f"NDCG(no self)@{k}"] / len(scores), 5
                 )
 
         # merge ndcg and ndcg_no_self together

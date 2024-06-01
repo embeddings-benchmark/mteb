@@ -19,10 +19,10 @@ class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
     metadata = TaskMetadata(
         name="MLSUMClusteringP2P",
         description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",
-        reference="https://huggingface.co/datasets/mlsum",
+        reference="https://huggingface.co/datasets/reciTAL/mlsum",
         dataset={
-            "path": "mlsum",
-            "revision": "b5d54f8f3b61ae17845046286940f03c6bc79bc7",
+            "path": "reciTAL/mlsum",
+            "revision": "af3364b62ec221e795846b704a6a31740ece7303",
             "trust_remote_code": True,
         },
         type="Clustering",
