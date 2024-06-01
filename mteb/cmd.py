@@ -118,6 +118,14 @@ def main():
         help="Display the available tasks",
     )
 
+    ## model revision
+    parser.add_argument(
+        "--model_revision",
+        type=str,
+        default=None,
+        help="Revision of the model to be loaded. Revisions are automatically read if the model is loaded from huggingface. ",
+    )
+
     args = parser.parse_args()
 
     # set logging based on verbosity level
@@ -142,7 +150,9 @@ def main():
     if args.output_folder is None:
         args.output_folder = f"results/{_name_to_path(args.model)}"
 
-    model = SentenceTransformer(args.model, device=args.device)
+    model = SentenceTransformer(
+        args.model, device=args.device, revision=args.model_revision
+    )
 
     tasks = mteb.get_tasks(
         categories=args.categories,
