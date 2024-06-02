@@ -283,7 +283,7 @@ class RerankingEvaluator(Evaluator):
         """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
 
         Args:
-            all_conf_scores: Confidence scores for all instances, with length `len(samples)` 
+            all_conf_scores: Confidence scores for all instances, with length `len(samples)`
             metrics: Metric scores for all instances, with length `len(samples)`
             metric_name: Name of the metric (mrr or ap)
 

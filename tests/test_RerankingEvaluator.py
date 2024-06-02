@@ -47,7 +47,9 @@ class TestRerankingEvaluator:
             [0.5, 0.4, 0.5, 0.2],
         ]
 
-        ap_scores = [self.evaluator.ap_score(y, x) for x, y in zip(pred_scores, is_relevant)]
+        ap_scores = [
+            self.evaluator.ap_score(y, x) for x, y in zip(pred_scores, is_relevant)
+        ]
         conf_scores = [self.evaluator.conf_scores(x) for x in pred_scores]
         nauc_scores_map = self.evaluator.nAUC_scores(conf_scores, ap_scores, "map")
 

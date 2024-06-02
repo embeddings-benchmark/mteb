@@ -307,13 +307,13 @@ def confidence_scores(sim_scores: List[float]) -> Dict[str, float]:
             - `diff1`: Difference between highest and second highest similarity scores
     """
     sim_scores_sorted = sorted(sim_scores)[::-1]
-    
+
     cs_max = sim_scores_sorted[0]
     cs_std = np.std(sim_scores)
     if len(sim_scores) > 1:
         cs_diff1 = sim_scores_sorted[0] - sim_scores_sorted[1]
     elif len(sim_scores) == 1:
-        cs_diff1 = 0.
+        cs_diff1 = 0.0
 
     conf_scores = {"max": cs_max, "std": cs_std, "diff1": cs_diff1}
 
@@ -323,7 +323,7 @@ def confidence_scores(sim_scores: List[float]) -> Dict[str, float]:
 def nAUC(
     conf_scores: np.ndarray,
     metrics: np.ndarray,
-    abstention_rates: np.ndarray = np.linspace(0,1,11)[:-1],
+    abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
 ) -> float:
     """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
     1/ Computes the raw abstention curve, i.e., the average evaluation metric at different abstention rates determined by the confidence scores
@@ -344,7 +344,7 @@ def nAUC(
     def abstention_curve(
         conf_scores: np.ndarray,
         metrics: np.ndarray,
-        abstention_rates: np.ndarray = np.linspace(0,1,11)[:-1],
+        abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
     ) -> np.ndarray:
         """Computes the raw abstention curve for a given set of evaluated instances and corresponding confidence scores
 
@@ -365,7 +365,7 @@ def nAUC(
         return abst_curve
 
     def oracle_curve(
-        metrics: np.ndaray, abstention_rates: np.ndarray = np.linspace(0,1,11)[:-1]
+        metrics: np.ndaray, abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1]
     ) -> np.ndarray:
         """Computes the oracle curve for a given set of evaluated instances
 
