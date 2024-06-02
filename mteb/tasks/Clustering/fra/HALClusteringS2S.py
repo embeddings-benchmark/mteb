@@ -4,7 +4,10 @@ import datasets
 import numpy as np
 
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.AbsTaskClusteringFast import (
+    AbsTaskClusteringFast,
+    check_label_distribution,
+)
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 NUM_SAMPLES = 2048
@@ -103,6 +106,8 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
                 labels=datasets.ClassLabel(names=sorted(list(frequent_labels))),
             )
         )
+        for split in self.metadata.eval_splits:
+            check_label_distribution(self.dataset[split])
 
         self.dataset = self.stratified_subsampling(
             self.dataset,

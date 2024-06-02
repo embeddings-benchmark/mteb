@@ -2,7 +2,10 @@ import datasets
 import numpy as np
 
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.AbsTaskClusteringFast import (
+    AbsTaskClusteringFast,
+    check_label_distribution,
+)
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -108,3 +111,5 @@ class AlloProfClusteringS2SFast(AbsTaskClusteringFast):
                 labels=datasets.ClassLabel(names=unique_labels),
             )
         )
+        for split in self.metadata.eval_splits:
+            check_label_distribution(self.dataset[split])
