@@ -230,7 +230,10 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         ndcg, _map, recall, precision = RetrievalEvaluator.evaluate(
             qrels=qrels, results=results, k_values=self.k_values
         )
-        return {**ndcg, **_map, **recall, **precision}
+        scores = {**ndcg, **_map, **recall, **precision}
+        scores_miracl = {f"{k}(MIRACL)": v for k, v in scores.items()}
+        return scores_miracl
+
 
     def compute_metrics_individual(self, model):
         """Embeds every (query, positive, negative) tuple individually.
