@@ -26,13 +26,13 @@ class E5Wrapper:
     ):
         return self.encode_queries(sentences, batch_size=batch_size, **kwargs)
 
-    def encode_queries(self, queries: list[str], batch_size: int, **kwargs: Any):
+    def encode_queries(self, queries: list[str], batch_size: int = 32, **kwargs: Any):
         sentences = ["query: " + sentence for sentence in queries]
         emb = self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
         return emb
 
     def encode_corpus(
-        self, corpus: list[dict[str, str]], batch_size: int, **kwargs: Any
+        self, corpus: list[dict[str, str]], batch_size: int = 32, **kwargs: Any
     ):
         if isinstance(corpus, dict):
             sentences = [
