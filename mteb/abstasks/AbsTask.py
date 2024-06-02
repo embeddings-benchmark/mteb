@@ -150,10 +150,12 @@ class AbsTask(ABC):
                     )
                 else:
                     raise e
-        
+
         for split in splits:
             if len(dataset_dict[split][label]) < n_samples:
-                n_samples = len(dataset_dict[split][label]) - len(set(dataset_dict[split][label]))
+                n_samples = len(dataset_dict[split][label]) - len(
+                    set(dataset_dict[split][label])
+                )
             dataset_dict.update(
                 {
                     split: dataset_dict[split].train_test_split(
