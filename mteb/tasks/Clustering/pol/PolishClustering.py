@@ -6,7 +6,10 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.AbsTaskClusteringFast import (
+    AbsTaskClusteringFast,
+    check_label_distribution,
+)
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 N_SAMPLES = 2048
@@ -135,6 +138,8 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
         for split in self.metadata.eval_splits:
             labels = list(chain.from_iterable(self.dataset[split]["labels"]))
             sentences = list(chain.from_iterable(self.dataset[split]["sentences"]))
+            check_label_distribution(self.dataset[split])
+
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
         self.dataset = self.stratified_subsampling(
@@ -211,6 +216,9 @@ class PlscClusteringS2SFast(AbsTaskClusteringFast):
         for split in self.metadata.eval_splits:
             labels = self.dataset[split]["labels"]
             sentences = self.dataset[split]["sentences"]
+
+            check_label_distribution(self.dataset[split])
+
             # Remove sentences and labels with only 1 label example.
             unique_labels, counts = np.unique(labels, return_counts=True)
             solo_label_idx = np.where(counts == 1)
@@ -295,6 +303,9 @@ class PlscClusteringP2PFast(AbsTaskClusteringFast):
         for split in self.metadata.eval_splits:
             labels = self.dataset[split]["labels"]
             sentences = self.dataset[split]["sentences"]
+
+            check_label_distribution(self.dataset[split])
+
             # Remove sentences and labels with only 1 label example.
             unique_labels, counts = np.unique(labels, return_counts=True)
             solo_label_idx = np.where(counts == 1)
