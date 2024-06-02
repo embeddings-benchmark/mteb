@@ -1,0 +1,51 @@
+{
+  "dataset_revision": "0e9a3d792e7efffc5d7f393bea9abadb29259db3",
+  "evaluation_time": 328.44370770454407,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.7",
+  "scores": {
+    "test": [
+      {
+        "cos_sim": {
+          "pearson": 0.7041699302857576,
+          "spearman": 0.7094791156381444
+        },
+        "euclidean": {
+          "pearson": 0.6966242599718911,
+          "spearman": 0.6925797372622226
+        },
+        "hf_subset": "default",
+        "languages": [
+          "ara-Arab"
+        ],
+        "main_score": 0.7094791156381444,
+        "manhattan": {
+          "pearson": 0.6952399562230598,
+          "spearman": 0.6916623194242272
+        }
+      }
+    ],
+    "validation": [
+      {
+        "cos_sim": {
+          "pearson": 0.7513328043387305,
+          "spearman": 0.7514072863609352
+        },
+        "euclidean": {
+          "pearson": 0.7302755973343675,
+          "spearman": 0.7338186885009172
+        },
+        "hf_subset": "default",
+        "languages": [
+          "ara-Arab"
+        ],
+        "main_score": 0.7514072863609352,
+        "manhattan": {
+          "pearson": 0.7291902089013564,
+          "spearman": 0.7321617976483081
+        }
+      }
+    ]
+  },
+  "task_name": "ArabicSTSBenchmarkSTS"
+}
