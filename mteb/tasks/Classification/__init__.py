@@ -105,6 +105,13 @@ from .por.HateSpeechPortugueseClassification import *
 from .ron.Moroco import *
 from .ron.RomanianReviewsSentiment import *
 from .ron.RomanianSentimentClassification import *
+from .rus.GeoreviewClassification import *
+from .rus.HeadlineClassification import *
+from .rus.InappropriatenessClassification import *
+from .rus.KinopoiskClassification import *
+from .rus.RuReviewsClassification import *
+from .rus.RuSciBenchGRNTIClassification import *
+from .rus.RuSciBenchOECDClassification import *
 from .san.SanskritShlokasClassification import *
 from .sin.SinhalaNewsClassification import *
 from .sin.SinhalaNewsSourceClassification import *

@@ -36,3 +36,23 @@ class TestRerankingEvaluator:
         assert self.evaluator.ap_score(is_relevant, pred_scores) == pytest.approx(
             0.86666, TOL
         )
+
+    def test_nAUC(self):
+        is_relevant = [[1, 1, 0, 0, 0], [1, 0, 0], [1, 1, 1, 0], [1, 0], [1, 1, 0, 0]]
+        pred_scores = [
+            [0.8, 0.3, 0.4, 0.6, 0.5],
+            [0.5, 0.8, 0.4],
+            [0.9, 0.3, 0.3, 0.1],
+            [0.1, 0.2],
+            [0.5, 0.4, 0.5, 0.2],
+        ]
+
+        ap_scores = [
+            self.evaluator.ap_score(y, x) for x, y in zip(pred_scores, is_relevant)
+        ]
+        conf_scores = [self.evaluator.conf_scores(x) for x in pred_scores]
+        nauc_scores_map = self.evaluator.nAUC_scores(conf_scores, ap_scores, "map")
+
+        assert nauc_scores_map["nAUC_map_max"] == pytest.approx(0.69555, TOL)
+        assert nauc_scores_map["nAUC_map_std"] == pytest.approx(0.86172, TOL)
+        assert nauc_scores_map["nAUC_map_diff1"] == pytest.approx(0.68961, TOL)

@@ -3,10 +3,12 @@ from __future__ import annotations
 import logging
 from typing import Dict, List, Tuple
 
+import numpy as np
 import pandas as pd
 import requests
 import torch
 import tqdm
+from sklearn.metrics import auc
 
 
 def cos_sim(a, b):
@@ -56,11 +58,12 @@ def mrr(
     qrels: dict[str, dict[str, int]],
     results: dict[str, dict[str, float]],
     k_values: List[int],
+    output_type: str = "mean",
 ) -> Tuple[Dict[str, float]]:
     MRR = {}
 
     for k in k_values:
-        MRR[f"MRR@{k}"] = 0.0
+        MRR[f"MRR@{k}"] = []
 
     k_max, top_hits = max(k_values), {}
     logging.info("\n")
@@ -75,14 +78,20 @@ def mrr(
             [doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0]
         )
         for k in k_values:
+            rr = 0
             for rank, hit in enumerate(top_hits[query_id][0:k]):
                 if hit[0] in query_relevant_docs:
-                    MRR[f"MRR@{k}"] += 1.0 / (rank + 1)
+                    rr = 1.0 / (rank + 1)
                     break
+            MRR[f"MRR@{k}"].append(rr)
 
-    for k in k_values:
-        MRR[f"MRR@{k}"] = round(MRR[f"MRR@{k}"] / len(qrels), 5)
-        logging.info("MRR@{}: {:.4f}".format(k, MRR[f"MRR@{k}"]))
+    if output_type == "mean":
+        for k in k_values:
+            MRR[f"MRR@{k}"] = round(sum(MRR[f"MRR@{k}"]) / len(qrels), 5)
+            logging.info("MRR@{}: {:.4f}".format(k, MRR[f"MRR@{k}"]))
+
+    elif output_type == "all":
+        pass
 
     return MRR
 
@@ -91,11 +100,12 @@ def recall_cap(
     qrels: dict[str, dict[str, int]],
     results: dict[str, dict[str, float]],
     k_values: List[int],
+    output_type: str = "mean",
 ) -> Tuple[Dict[str, float]]:
     capped_recall = {}
 
     for k in k_values:
-        capped_recall[f"R_cap@{k}"] = 0.0
+        capped_recall[f"R_cap@{k}"] = []
 
     k_max = max(k_values)
     logging.info("\n")
@@ -112,11 +122,17 @@ def recall_cap(
                 row[0] for row in top_hits[0:k] if qrels[query_id].get(row[0], 0) > 0
             ]
             denominator = min(len(query_relevant_docs), k)
-            capped_recall[f"R_cap@{k}"] += len(retrieved_docs) / denominator
+            capped_recall[f"R_cap@{k}"].append(len(retrieved_docs) / denominator)
 
-    for k in k_values:
-        capped_recall[f"R_cap@{k}"] = round(capped_recall[f"R_cap@{k}"] / len(qrels), 5)
-        logging.info("R_cap@{}: {:.4f}".format(k, capped_recall[f"R_cap@{k}"]))
+    if output_type == "mean":
+        for k in k_values:
+            capped_recall[f"R_cap@{k}"] = round(
+                sum(capped_recall[f"R_cap@{k}"]) / len(qrels), 5
+            )
+            logging.info("R_cap@{}: {:.4f}".format(k, capped_recall[f"R_cap@{k}"]))
+
+    elif output_type == "all":
+        pass
 
     return capped_recall
 
@@ -125,11 +141,12 @@ def hole(
     qrels: dict[str, dict[str, int]],
     results: dict[str, dict[str, float]],
     k_values: List[int],
+    output_type: str = "mean",
 ) -> Tuple[Dict[str, float]]:
     Hole = {}
 
     for k in k_values:
-        Hole[f"Hole@{k}"] = 0.0
+        Hole[f"Hole@{k}"] = []
 
     annotated_corpus = set()
     for _, docs in qrels.items():
@@ -147,11 +164,15 @@ def hole(
             hole_docs = [
                 row[0] for row in top_hits[0:k] if row[0] not in annotated_corpus
             ]
-            Hole[f"Hole@{k}"] += len(hole_docs) / k
+            Hole[f"Hole@{k}"].append(len(hole_docs) / k)
 
-    for k in k_values:
-        Hole[f"Hole@{k}"] = round(Hole[f"Hole@{k}"] / len(qrels), 5)
-        logging.info("Hole@{}: {:.4f}".format(k, Hole[f"Hole@{k}"]))
+    if output_type == "mean":
+        for k in k_values:
+            Hole[f"Hole@{k}"] = round(Hole[f"Hole@{k}"] / len(qrels), 5)
+            logging.info("Hole@{}: {:.4f}".format(k, Hole[f"Hole@{k}"]))
+
+    elif output_type == "all":
+        pass
 
     return Hole
 
@@ -160,11 +181,12 @@ def top_k_accuracy(
     qrels: dict[str, dict[str, int]],
     results: dict[str, dict[str, float]],
     k_values: List[int],
+    output_type: str = "mean",
 ) -> Tuple[Dict[str, float]]:
     top_k_acc = {}
 
     for k in k_values:
-        top_k_acc[f"Accuracy@{k}"] = 0.0
+        top_k_acc[f"Accuracy@{k}"] = []
 
     k_max, top_hits = max(k_values), {}
     logging.info("\n")
@@ -184,12 +206,18 @@ def top_k_accuracy(
         for k in k_values:
             for relevant_doc_id in query_relevant_docs:
                 if relevant_doc_id in top_hits[query_id][0:k]:
-                    top_k_acc[f"Accuracy@{k}"] += 1.0
+                    top_k_acc[f"Accuracy@{k}"].append(1.0)
                     break
 
-    for k in k_values:
-        top_k_acc[f"Accuracy@{k}"] = round(top_k_acc[f"Accuracy@{k}"] / len(qrels), 5)
-        logging.info("Accuracy@{}: {:.4f}".format(k, top_k_acc[f"Accuracy@{k}"]))
+    if output_type == "mean":
+        for k in k_values:
+            top_k_acc[f"Accuracy@{k}"] = round(
+                top_k_acc[f"Accuracy@{k}"] / len(qrels), 5
+            )
+            logging.info("Accuracy@{}: {:.4f}".format(k, top_k_acc[f"Accuracy@{k}"]))
+
+    elif output_type == "all":
+        pass
 
     return top_k_acc
 
@@ -264,3 +292,107 @@ def download(url: str, fname: str):
         for data in resp.iter_content(chunk_size=1024):
             size = file.write(data)
             bar.update(size)
+
+
+def confidence_scores(sim_scores: List[float]) -> Dict[str, float]:
+    """Computes confidence scores for a single instance = (query, positives, negatives)
+
+    Args:
+        sim_scores: Query-documents similarity scores with length `num_pos+num_neg`
+
+    Returns:
+        conf_scores:
+            - `max`: Maximum similarity score
+            - `std`: Standard deviation of similarity scores
+            - `diff1`: Difference between highest and second highest similarity scores
+    """
+    sim_scores_sorted = sorted(sim_scores)[::-1]
+
+    cs_max = sim_scores_sorted[0]
+    cs_std = np.std(sim_scores)
+    if len(sim_scores) > 1:
+        cs_diff1 = sim_scores_sorted[0] - sim_scores_sorted[1]
+    elif len(sim_scores) == 1:
+        cs_diff1 = 0.0
+
+    conf_scores = {"max": cs_max, "std": cs_std, "diff1": cs_diff1}
+
+    return conf_scores
+
+
+def nAUC(
+    conf_scores: np.ndarray,
+    metrics: np.ndarray,
+    abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
+) -> float:
+    """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
+    1/ Computes the raw abstention curve, i.e., the average evaluation metric at different abstention rates determined by the confidence scores
+    2/ Computes the oracle abstention curve, i.e., the best theoretical abstention curve (e.g.: at a 10% abstention rate, the oracle abstains on the bottom-10% instances with regard to the evaluation metric)
+    3/ Computes the flat abstention curve, i.e., the one remains flat for all abstention rates (ineffective abstention)
+    4/ Computes the area under the three curves
+    5/ Finally scales the raw AUC between the oracle and the flat AUCs to get normalized AUC
+
+    Args:
+        conf_scores: Instance confidence scores used for abstention thresholding, with shape `(num_test_instances,)`
+        metrics: Metric evaluations at instance-level (e.g.: average precision, NDCG...), with shape `(num_test_instances,)`
+        abstention_rates: Target rates for the computation of the abstention curve
+
+    Returns:
+        abst_nauc: Normalized area under the abstention curve (upper-bounded by 1)
+    """
+
+    def abstention_curve(
+        conf_scores: np.ndarray,
+        metrics: np.ndarray,
+        abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1],
+    ) -> np.ndarray:
+        """Computes the raw abstention curve for a given set of evaluated instances and corresponding confidence scores
+
+        Args:
+            conf_scores: Instance confidence scores used for abstention thresholding, with shape `(num_test_instances,)`
+            metrics: Metric evaluations at instance-level (e.g.: average precision, NDCG...), with shape `(num_test_instances,)`
+            abstention_rates: Target rates for the computation of the abstention curve
+
+        Returns:
+            abst_curve: Abstention curve of length `len(abstention_rates)`
+        """
+        abst_curve = np.zeros(len(abstention_rates))
+        abstention_thresholds = np.quantile(conf_scores, abstention_rates)
+
+        for i, abstention_threshold in enumerate(abstention_thresholds):
+            abst_curve[i] = metrics[conf_scores >= abstention_threshold].mean()
+
+        return abst_curve
+
+    def oracle_curve(
+        metrics: np.ndaray, abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1]
+    ) -> np.ndarray:
+        """Computes the oracle curve for a given set of evaluated instances
+
+        Args:
+            metrics: Metric evaluations at instance-level, with shape `(num_test_instances,)`
+            abstention_rates: Target rates for the computation of the abstention curve
+
+        Returns:
+            or_curve: Oracle curve of length `len(abstention_rates)`
+        """
+        metrics_argsort = np.argsort(metrics)
+        or_curve = np.zeros(len(abstention_rates))
+
+        for i, rate in enumerate(abstention_rates):
+            or_curve[i] = metrics[metrics_argsort[round(rate * len(metrics)) :]].mean()
+
+        return or_curve
+
+    abst_curve = abstention_curve(conf_scores, metrics, abstention_rates)
+    or_curve = oracle_curve(metrics, abstention_rates)
+    abst_auc = auc(abstention_rates, abst_curve)
+    or_auc = auc(abstention_rates, or_curve)
+    flat_auc = or_curve[0] * (abstention_rates[-1] - abstention_rates[0])
+
+    if or_auc == flat_auc:
+        abst_nauc = np.nan
+    else:
+        abst_nauc = (abst_auc - flat_auc) / (or_auc - flat_auc)
+
+    return abst_nauc

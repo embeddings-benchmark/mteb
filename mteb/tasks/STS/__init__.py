@@ -25,5 +25,6 @@ from .por.Assin2STS import *
 from .por.SickBrSTS import *
 from .ron.RonSTS import *
 from .rus.RUParaPhraserSTS import *
+from .rus.RuSTSBenchmarkSTS import *
 from .spa.STSES import *
 from .zho.CMTEBSTS import *
