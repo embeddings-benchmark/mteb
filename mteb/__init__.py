@@ -8,9 +8,8 @@ from mteb.benchmarks import (
     MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
 )
 from mteb.evaluation import *
+from mteb.models import get_model, get_model_meta
 from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
-
-from .models import get_model, get_model_meta
 
 __version__ = version("mteb")  # fetch version from install metadata
 

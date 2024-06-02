@@ -1,9 +1,5 @@
 import mteb
-
-
-def _name_to_path(name: str) -> str:
-    return name.replace("/", "__").replace(" ", "_")
-
+from mteb.cmd import name_to_path
 
 baseline_models = [
     "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
@@ -16,4 +12,4 @@ tasks = mteb.get_tasks()
 for model_name in baseline_models:
     model = mteb.get_model(model_name)
     evaluation = mteb.MTEB(tasks=tasks)
-    evaluation.run(model, output_folder=f"results/{_name_to_path(model_name)}")
+    evaluation.run(model, output_folder=f"results/{name_to_path(model_name)}")
