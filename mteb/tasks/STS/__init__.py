@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .ara.ArabicSTSBenchmarkSTS import *
 from .deu.GermanSTSBenchmarkSTS import *
 from .eng.BiossesSTS import *
 from .eng.SickrSTS import *

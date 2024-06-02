@@ -7,9 +7,9 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 
 class ArabicSTSBenchmarkSTS(AbsTaskSTS):
     metadata = TaskMetadata(
-        name="ArabicSTSBenchmark",
+        name="ArabicSTSBenchmarkSTS",
         dataset={
-            "path": "jinaai/german-STSbenchmark",
+            "path": "Ruqiya/stsbenchmark-sts-ar",
             "revision": "44228871f6671288a0580db6e7e12831b4d16d3b",
         },
         description="Semantic Textual Similarity Benchmark (STSbenchmark) dataset translated into Arabic. "
