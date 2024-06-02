@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.AbsTaskClusteringFast import clustering_downsample
+from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast, convert_to_fast
 from mteb.abstasks.TaskMetadata import TaskMetadata
+
+NUM_SAMPLES = 2048
 
 
 class BlurbsClusteringP2P(AbsTaskClustering):
@@ -36,7 +38,7 @@ class BlurbsClusteringP2P(AbsTaskClustering):
     )
 
 
-class BlurbsClusteringP2PFast(AbsTaskClustering):
+class BlurbsClusteringP2PFast(AbsTaskClusteringFast):
     # a faster version of BlurbsClusteringP2P, since it does not sample from the same distribution we can't use the AbsTaskClusteringFast, instead we
     # simply downsample each cluster.
 
@@ -72,10 +74,9 @@ class BlurbsClusteringP2PFast(AbsTaskClustering):
   year={2019},
   url={https://api.semanticscholar.org/CorpusID:208334484}
 }""",
-        n_samples={"test": 50268},
+        n_samples={"test": NUM_SAMPLES},
         avg_character_length={"test": 664.09},
     )
 
     def dataset_transform(self):
-        ds = clustering_downsample(self.dataset, self.seed)
-        self.dataset = ds
+        self.dataset = convert_to_fast(self.dataset, self.seed)  # type: ignore

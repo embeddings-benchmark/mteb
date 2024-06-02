@@ -43,6 +43,7 @@ from .eng.LEMBQMSumRetrieval import *
 from .eng.LEMBSummScreenFDRetrieval import *
 from .eng.LEMBWikimQARetrieval import *
 from .eng.MedicalQARetrieval import *
+from .eng.MLQuestions import *
 from .eng.MSMARCORetrieval import *
 from .eng.MSMARCOv2Retrieval import *
 from .eng.NarrativeQARetrieval import *
@@ -75,6 +76,7 @@ from .multilingual.MultiLongDocRetrieval import *
 from .multilingual.NeuCLIR2022Retrieval import *
 from .multilingual.NeuCLIR2023Retrieval import *
 from .multilingual.PublicHealthQARetrieval import *
+from .multilingual.StatcanDialogueDatasetRetrieval import *
 from .multilingual.WikipediaRetrievalMultilingual import *
 from .multilingual.XMarketRetrieval import *
 from .multilingual.XPQARetrieval import *
@@ -92,6 +94,8 @@ from .pol.QuoraPLRetrieval import *
 from .pol.SCIDOCSPLRetrieval import *
 from .pol.SciFactPLRetrieval import *
 from .pol.TRECCOVIDPLRetrieval import *
+from .rus.RiaNewsRetrieval import *
+from .rus.RuBQRetrieval import *
 from .slk.SlovakSumRetrieval import *
 from .spa.SpanishPassageRetrievalS2P import *
 from .spa.SpanishPassageRetrievalS2S import *

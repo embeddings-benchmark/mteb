@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Dict, List
 
 import numpy as np
 import torch
@@ -9,7 +10,7 @@ from sklearn.metrics import average_precision_score
 
 from ...encoder_interface import EncoderWithQueryCorpusEncode
 from .Evaluator import Evaluator
-from .utils import cos_sim
+from .utils import confidence_scores, cos_sim, nAUC
 
 logger = logging.getLogger(__name__)
 
@@ -73,6 +74,7 @@ class RerankingEvaluator(Evaluator):
         """
         all_mrr_scores = []
         all_ap_scores = []
+        all_conf_scores = []
 
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
@@ -116,7 +118,7 @@ class RerankingEvaluator(Evaluator):
 
         all_docs_embs = self._encode_unique_texts(all_docs, encode_corpus_func)
 
-        # Compute scores
+        # Compute scores and confidence scores
         logger.info("Evaluating...")
         query_idx, docs_idx = 0, 0
         for instance in self.samples:
@@ -136,14 +138,22 @@ class RerankingEvaluator(Evaluator):
 
             is_relevant = [True] * num_pos + [False] * num_neg
 
-            scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
+            sim_scores = self._compute_sim_scores_instance(query_emb, docs_emb)
+            scores = self._compute_metrics_instance(sim_scores, is_relevant)
+            conf_scores = self.conf_scores(sim_scores.tolist())
+
             all_mrr_scores.append(scores["mrr"])
             all_ap_scores.append(scores["ap"])
+            all_conf_scores.append(conf_scores)
 
         mean_ap = np.mean(all_ap_scores)
         mean_mrr = np.mean(all_mrr_scores)
 
-        return {"map": mean_ap, "mrr": mean_mrr}
+        # Compute nAUCs
+        naucs_map = self.nAUC_scores(all_conf_scores, all_ap_scores, "map")
+        naucs_mrr = self.nAUC_scores(all_conf_scores, all_mrr_scores, "mrr")
+
+        return {**{"map": mean_ap, "mrr": mean_mrr}, **naucs_map, **naucs_mrr}
 
     def compute_metrics_individual(self, model):
         """Embeds every (query, positive, negative) tuple individually.
@@ -153,6 +163,7 @@ class RerankingEvaluator(Evaluator):
         """
         all_mrr_scores = []
         all_ap_scores = []
+        all_conf_scores = []
 
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
@@ -182,14 +193,22 @@ class RerankingEvaluator(Evaluator):
             )
             docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
 
-            scores = self._compute_metrics_instance(query_emb, docs_emb, is_relevant)
+            sim_scores = self._compute_sim_scores_instance(query_emb, docs_emb)
+            scores = self._compute_metrics_instance(sim_scores, is_relevant)
+            conf_scores = self.conf_scores(sim_scores.tolist())
+
             all_mrr_scores.append(scores["mrr"])
             all_ap_scores.append(scores["ap"])
+            all_conf_scores.append(conf_scores)
 
         mean_ap = np.mean(all_ap_scores)
         mean_mrr = np.mean(all_mrr_scores)
 
-        return {"map": mean_ap, "mrr": mean_mrr}
+        # Compute nAUCs
+        naucs_map = self.nAUC_scores(all_conf_scores, all_ap_scores, "map")
+        naucs_mrr = self.nAUC_scores(all_conf_scores, all_mrr_scores, "mrr")
+
+        return {**{"map": mean_ap, "mrr": mean_mrr}, **naucs_map, **naucs_mrr}
 
     def _encode_unique_texts(self, all_texts, encode_queries_func):
         index_map, all_unique_texts, all_texts_indexes = {}, [], []
@@ -207,29 +226,85 @@ class RerankingEvaluator(Evaluator):
         )
         return all_unique_texts_embs[all_texts_indexes]
 
-    def _compute_metrics_instance(self, query_emb, docs_emb, is_relevant):
+    def _compute_sim_scores_instance(
+        self, query_emb: torch.Tensor, docs_emb: torch.Tensor
+    ) -> torch.Tensor:
+        """Computes similarity scores for a single instance = (query, positives, negatives)
+
+        Args:
+            query_emb: Query embedding, with shape `(num_queries, hidden_size)`
+                if `num_queries` > 0: we take the closest document to any of the queries
+            docs_emb: Candidates documents embeddings, with shape `(num_pos+num_neg, hidden_size)`
+
+        Returns:
+            sim_scores: Query-documents similarity scores, with shape `(num_pos+num_neg,)`
+        """
+        sim_scores = self.similarity_fct(query_emb, docs_emb)
+        if len(sim_scores.shape) > 1:
+            sim_scores = torch.amax(sim_scores, dim=0)
+
+        return sim_scores
+
+    def _compute_metrics_instance(
+        self, sim_scores: torch.Tensor, is_relevant: List[bool]
+    ) -> Dict[str, float]:
         """Computes metrics for a single instance = (query, positives, negatives)
 
         Args:
-            query_emb (`torch.Tensor` of shape `(num_queries, hidden_size)`): Query embedding
-                if `num_queries` > 0: we take the closest document to any of the queries
-            docs_emb (`torch.Tensor` of shape `(num_pos+num_neg, hidden_size)`): Candidates documents embeddings
-            is_relevant (`List[bool]` of length `num_pos+num_neg`): True if the document is relevant
+            sim_scores: Query-documents similarity scores, with shape `(num_pos+num_neg,)`
+            is_relevant: True if the document is relevant, with length `num_pos+num_neg`
 
         Returns:
-            scores (`Dict[str, float]`):
+            scores:
                 - `mrr`: Mean Reciprocal Rank @ `self.mrr_at_k`
                 - `ap`: Average Precision
         """
-        pred_scores = self.similarity_fct(query_emb, docs_emb)
-        if len(pred_scores.shape) > 1:
-            pred_scores = torch.amax(pred_scores, dim=0)
-
-        pred_scores_argsort = torch.argsort(-pred_scores)  # Sort in decreasing order
-
+        pred_scores_argsort = torch.argsort(-sim_scores)  # Sort in decreasing order
         mrr = self.mrr_at_k_score(is_relevant, pred_scores_argsort, self.mrr_at_k)
-        ap = self.ap_score(is_relevant, pred_scores.cpu().tolist())
+        ap = self.ap_score(is_relevant, sim_scores.cpu().tolist())
         return {"mrr": mrr, "ap": ap}
+
+    @staticmethod
+    def conf_scores(sim_scores: torch.Tensor) -> Dict[str, float]:
+        """Computes confidence scores for a single instance = (query, positives, negatives)
+
+        Args:
+            sim_scores: Query-documents similarity scores, with shape `(num_pos+num_neg,)`
+
+        Returns:
+            conf_scores:
+                - `max`: Maximum similarity score
+                - `std`: Standard deviation of similarity scores
+                - `diff1`: Difference between highest and second highest similarity scores
+        """
+        return confidence_scores(sim_scores)
+
+    @staticmethod
+    def nAUC_scores(
+        all_conf_scores: List[Dict[str, float]],
+        metrics: List[float],
+        metric_name: str,
+    ) -> Dict[str, float]:
+        """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997
+
+        Args:
+            all_conf_scores: Confidence scores for all instances, with length `len(samples)`
+            metrics: Metric scores for all instances, with length `len(samples)`
+            metric_name: Name of the metric (mrr or ap)
+
+        Returns:
+            naucs: nAUCs for each confidence function
+        """
+        conf_fcts = list(all_conf_scores[0].keys())
+        all_conf_scores = {
+            fct: np.array([x[fct] for x in all_conf_scores]) for fct in conf_fcts
+        }
+        metrics = np.array(metrics)
+        naucs = {
+            f"nAUC_{metric_name}_{fct}": nAUC(all_conf_scores[fct], metrics)
+            for fct in conf_fcts
+        }
+        return naucs
 
     @staticmethod
     def mrr_at_k_score(

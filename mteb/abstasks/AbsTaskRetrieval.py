@@ -308,13 +308,13 @@ class AbsTaskRetrieval(AbsTask):
             with open(qrels_save_path, "w") as f:
                 json.dump(results, f)
 
-        ndcg, _map, recall, precision = retriever.evaluate(
+        ndcg, _map, recall, precision, naucs = retriever.evaluate(
             relevant_docs,
             results,
             retriever.k_values,
             ignore_identical_ids=kwargs.get("ignore_identical_ids", True),
         )
-        mrr = retriever.evaluate_custom(
+        mrr, naucs_mrr = retriever.evaluate_custom(
             relevant_docs, results, retriever.k_values, "mrr"
         )
         scores = {
@@ -323,6 +323,14 @@ class AbsTaskRetrieval(AbsTask):
             **{f"recall_at_{k.split('@')[1]}": v for (k, v) in recall.items()},
             **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
             **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
+            **{
+                k.replace("@", "_at_").replace("_P", "_precision").lower(): v
+                for k, v in naucs.items()
+            },
+            **{
+                k.replace("@", "_at_").replace("_P", "_precision").lower(): v
+                for k, v in naucs_mrr.items()
+            },
         }
         self._add_main_score(scores)
         return scores
