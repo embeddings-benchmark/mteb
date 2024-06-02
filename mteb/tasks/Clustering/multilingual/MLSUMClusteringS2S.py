@@ -16,6 +16,8 @@ _LANGUAGES = {
 # Did not include turkish (tu) samples because all `topics` values are set to "unknown".
 # Which results in a v-measure of 1 as all texts are considered to be in one cluster.
 
+N_SAMPLES = 2048
+
 
 class MLSUMClusteringS2S(AbsTaskClustering, MultilingualTask):
     superseeded_by = "MLSUMClusteringS2S.v2"
@@ -114,7 +116,7 @@ class MLSUMClusteringS2SFast(AbsTaskClusteringFast, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        n_samples={"validation": 38561, "test": 41206},
+        n_samples={"validation": N_SAMPLES, "test": N_SAMPLES},
         avg_character_length={"validation": 4613, "test": 4810},
     )
 
@@ -160,5 +162,5 @@ class MLSUMClusteringS2SFast(AbsTaskClusteringFast, MultilingualTask):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=2048,
+            n_samples=N_SAMPLES,
         )

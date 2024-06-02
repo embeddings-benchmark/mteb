@@ -15,6 +15,8 @@ _LANGUAGES = {
 # Did not include turkish (tu) samples because all `topics` values are set to "unknown".
 # Which results in a v-measure of 1 as all texts are considered to be in one cluster.
 
+N_SAMPLES = 2048
+
 
 class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
     superseeded_by = "MLSUMClusteringP2P.v2"
@@ -118,7 +120,7 @@ class MLSUMClusteringP2PFast(AbsTaskClustering, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        n_samples={"validation": 38561, "test": 41206},
+        n_samples={"validation": N_SAMPLES, "test": N_SAMPLES},
         avg_character_length={"validation": 4613, "test": 4810},
     )
 
