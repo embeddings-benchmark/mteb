@@ -285,12 +285,14 @@ class AbsTaskRetrieval(AbsTask):
             "Time taken to retrieve: {:.2f} seconds".format(end_time - start_time)
         )
 
-        if kwargs.get("save_predictions", False) or kwargs.get("export_errors", False):
+        save_predictions = kwargs.get("save_predictions", False)
+        export_errors = kwargs.get("export_errors", False)
+        if save_predictions or export_errors:
             output_folder = Path(kwargs.get("output_folder", "results"))
             if not os.path.isdir(output_folder):
                 os.makedirs(output_folder)
 
-        if kwargs.get("save_predictions", False):
+        if save_predictions:
             top_k = kwargs.get("top_k", None)
             if top_k is not None:
                 for qid in list(results.keys()):
@@ -328,7 +330,7 @@ class AbsTaskRetrieval(AbsTask):
         }
         self._add_main_score(scores)
 
-        if kwargs.get("export_errors", False):
+        if export_errors:
             errors = {}
 
             top_k = kwargs.get("top_k", 1)
