@@ -228,7 +228,10 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
             }
 
         ndcg, _map, recall, precision, naucs = RetrievalEvaluator.evaluate(
-            qrels=qrels, results=results, k_values=self.k_values, ignore_identical_ids=False,
+            qrels=qrels,
+            results=results,
+            k_values=self.k_values,
+            ignore_identical_ids=False,
         )
         scores = {**ndcg, **_map, **recall, **precision, **naucs}
         scores_miracl = {f"{k}(MIRACL)": v for k, v in scores.items()}
@@ -271,7 +274,10 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
             }
 
         ndcg, _map, recall, precision, naucs = RetrievalEvaluator.evaluate(
-            qrels=qrels, results=results, k_values=self.k_values, ignore_identical_ids=False,
+            qrels=qrels,
+            results=results,
+            k_values=self.k_values,
+            ignore_identical_ids=False,
         )
         scores = {**ndcg, **_map, **recall, **precision, **naucs}
         scores_miracl = {f"{k}(MIRACL)": v for k, v in scores.items()}

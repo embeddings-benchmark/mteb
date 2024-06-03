@@ -80,7 +80,6 @@ ignore = ["E501",   # line too long
         "D205",     # 1 blank line required between summary line and description
         "D415",     # First line should end with a period
 ]
-ignore-init-module-imports = true
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
