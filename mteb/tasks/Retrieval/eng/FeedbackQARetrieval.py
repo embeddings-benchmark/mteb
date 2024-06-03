@@ -24,7 +24,7 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
         domains=["Web", "Government", "Medical"],
         task_subtypes=["Question answering"],
         license="Apache-2.0",
-        socioeconomic_status=None,
+        socioeconomic_status="mixed",
         annotations_creators=None,
         dialect=[],
         text_creation="created",
