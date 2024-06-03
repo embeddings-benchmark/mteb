@@ -8,7 +8,7 @@ class KlueTC(AbsTaskClassification):
     metadata = TaskMetadata(
         name="KLUE-TC",
         dataset={
-            "path": "klue",
+            "path": "klue/klue",
             "name": "ynat",
             "revision": "349481ec73fff722f88e0453ca05c77a447d967c",
         },
