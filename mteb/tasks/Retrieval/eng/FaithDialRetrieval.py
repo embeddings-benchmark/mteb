@@ -47,8 +47,8 @@ class FaithDialRetrieval(AbsTaskRetrieval):
             doi={10.1162/tacl_a_00529}
             }
         """,
-        n_samples=None,  # TODO: Add n_samples
-        avg_character_length=None,  # TODO: Add avg_character_length
+        n_samples={"validation": 1903, "test": 2042},
+        avg_character_length={"validation": 73, "test": 74},
     )
 
     # TODO: Will be removed if curated and added to mteb HF
