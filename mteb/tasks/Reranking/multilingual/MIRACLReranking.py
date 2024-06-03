@@ -89,7 +89,7 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         data_split: Dataset,
         **kwargs: Any,
     ) -> ScoresDict:
-        evaluator = RerankingEvaluator(data_split, **kwargs)
+        evaluator = MIRACLRerankingEvaluator(data_split, **kwargs)
         scores = evaluator(model)
 
         self._add_main_score(scores)
@@ -147,7 +147,7 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
             raise ValueError("Empty query embedding")
 
         if not docs_emb.shape[0]:
-            return {}
+            return {"empty-docid": 0}
 
         pred_scores = self.similarity_fct(query_emb, docs_emb)
         if len(pred_scores.shape) > 1:
@@ -227,13 +227,12 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
                 str(i): 1 if doc in positive else 0 for i, doc in enumerate(docs)
             }
 
-        ndcg, _map, recall, precision = RetrievalEvaluator.evaluate(
-            qrels=qrels, results=results, k_values=self.k_values
+        ndcg, _map, recall, precision, naucs = RetrievalEvaluator.evaluate(
+            qrels=qrels, results=results, k_values=self.k_values, ignore_identical_ids=False,
         )
-        scores = {**ndcg, **_map, **recall, **precision}
+        scores = {**ndcg, **_map, **recall, **precision, **naucs}
         scores_miracl = {f"{k}(MIRACL)": v for k, v in scores.items()}
         return scores_miracl
-
 
     def compute_metrics_individual(self, model):
         """Embeds every (query, positive, negative) tuple individually.
@@ -271,9 +270,9 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
                 str(i): 1 if doc in positive else 0 for i, doc in enumerate(docs)
             }
 
-        ndcg, _map, recall, precision = RetrievalEvaluator.evaluate(
-            qrels=qrels, results=results, k_values=self.k_values
+        ndcg, _map, recall, precision, naucs = RetrievalEvaluator.evaluate(
+            qrels=qrels, results=results, k_values=self.k_values, ignore_identical_ids=False,
         )
-        scores = {**ndcg, **_map, **recall, **precision}
+        scores = {**ndcg, **_map, **recall, **precision, **naucs}
         scores_miracl = {f"{k}(MIRACL)": v for k, v in scores.items()}
         return scores_miracl
