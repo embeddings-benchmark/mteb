@@ -49,6 +49,6 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
     pages = "926--937"
 }
 """,
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"test": 1992},
+        avg_character_length={"test": 1175}
     )
