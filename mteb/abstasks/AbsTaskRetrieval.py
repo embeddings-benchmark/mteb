@@ -285,10 +285,12 @@ class AbsTaskRetrieval(AbsTask):
             "Time taken to retrieve: {:.2f} seconds".format(end_time - start_time)
         )
 
-        if kwargs.get("save_predictions", False):
+        if kwargs.get("save_predictions", False) or kwargs.get("export_errors", False):
             output_folder = Path(kwargs.get("output_folder", "results"))
             if not os.path.isdir(output_folder):
                 os.makedirs(output_folder)
+
+        if kwargs.get("save_predictions", False):
             top_k = kwargs.get("top_k", None)
             if top_k is not None:
                 for qid in list(results.keys()):
@@ -325,6 +327,39 @@ class AbsTaskRetrieval(AbsTask):
             **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
         }
         self._add_main_score(scores)
+
+        if kwargs.get("export_errors", False):
+            errors = {}
+
+            top_k = kwargs.get("top_k", 1)
+            if not kwargs.get("save_predictions", False) and top_k == 1:
+                for qid in results.keys():
+                    doc_scores = results[qid]
+                    sorted_docs = sorted(
+                        doc_scores.items(), key=lambda x: x[1], reverse=True
+                    )[:top_k]
+                    results[qid] = {doc_id: score for doc_id, score in sorted_docs}
+            for qid, retrieved_docs in results.items():
+                expected_docs = relevant_docs[qid]
+                false_positives = [
+                    doc for doc in retrieved_docs if doc not in expected_docs
+                ]
+                false_negatives = [
+                    doc for doc in expected_docs if doc not in retrieved_docs
+                ]
+                if false_positives or false_negatives:
+                    errors[qid] = {
+                        "query": queries[qid],
+                        "false_positives": false_positives,
+                        "false_negatives": false_negatives,
+                    }
+
+            errors_save_path = (
+                output_folder / f"{self.metadata_dict['name']}_{hf_subset}_errors.json"
+            )
+            with open(errors_save_path, "w") as f:
+                json.dump(errors, f)
+
         return scores
 
     def _add_main_score(self, scores: ScoresDict) -> None:
