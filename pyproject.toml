@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.12.3"
+version = "1.12.14"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -31,7 +31,7 @@ dependencies = [
     "requests>=2.26.0",
     "scikit_learn>=1.0.2",
     "scipy",
-    "sentence_transformers>=2.2.0",
+    "sentence_transformers>=3.0.0",
     "torch",
     "tqdm",
     "rich",

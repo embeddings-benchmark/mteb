@@ -4,10 +4,12 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
+from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskClusteringFast import (
+    AbsTaskClusteringFast,
+    check_label_distribution,
+)
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks.AbsTaskClustering import AbsTaskClustering
-from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 
 class StackExchangeClusteringFast(AbsTaskClusteringFast):
@@ -57,6 +59,9 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
             sentences = list(
                 itertools.chain.from_iterable(self.dataset[split]["sentences"])
             )
+
+            check_label_distribution(self.dataset[split])
+
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
         self.dataset = self.stratified_subsampling(

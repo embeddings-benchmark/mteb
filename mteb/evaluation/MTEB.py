@@ -7,7 +7,7 @@ import pathlib
 import traceback
 from datetime import datetime
 from time import time
-from typing import List, Union
+from typing import List, Sequence
 
 import datasets
 
@@ -28,7 +28,7 @@ class MTEB:
         task_types: List[str] | None = None,
         task_categories: List[str] | None = None,
         task_langs: List[str] | None = None,
-        tasks: List[Union[str, AbsTask]] | None = None,
+        tasks: Sequence[str | AbsTask] | None = None,
         version=None,
         err_logs_path="error_logs.txt",
         **kwargs,
@@ -297,7 +297,19 @@ class MTEB:
 
         # Create output folder
         if output_folder is not None:
-            pathlib.Path(output_folder).mkdir(parents=True, exist_ok=True)
+            # check for model revision. For SentenceTransformers, this is available from sentence-transformers==3.0.0.
+            # if not found, check for supplied model revision.
+            if hasattr(model, "revision"):
+                model_revision = model.revision
+            else:
+                try:
+                    model_revision = model.model_card_data.base_model_revision
+                except AttributeError:
+                    logger.warning("Please supply model revision.")
+                    model_revision = "no_revision_available"
+            pathlib.Path(os.path.join(output_folder, model_revision)).mkdir(
+                parents=True, exist_ok=True
+            )
 
         # Run selected tasks
         logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks:")
@@ -316,6 +328,7 @@ class MTEB:
             if output_folder is not None:
                 save_path = os.path.join(
                     output_folder,
+                    model_revision,
                     f"{task.metadata_dict['name']}{task.save_suffix}.json",
                 )
                 if os.path.exists(save_path) and overwrite_results is False:

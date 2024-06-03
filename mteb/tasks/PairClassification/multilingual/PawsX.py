@@ -10,7 +10,7 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PawsX",
         dataset={
-            "path": "paws-x",
+            "path": "google-research-datasets/paws-x",
             "revision": "8a04d940a42cd40658986fdd8e3da561533a3646",
         },
         description="",
