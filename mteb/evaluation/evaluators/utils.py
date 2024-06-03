@@ -332,7 +332,8 @@ def convert_conv_history_to_query(conversations: List[List[Union[str, dict]]]) -
         conversations_converted.append(conv_str)
 
     return conversations_converted
-  
+
+
 def confidence_scores(sim_scores: List[float]) -> Dict[str, float]:
     """Computes confidence scores for a single instance = (query, positives, negatives)
 

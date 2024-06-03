@@ -16,8 +16,8 @@ from sentence_transformers.models import Transformer, WordEmbeddings
 
 from .Evaluator import Evaluator
 from .utils import (
-    convert_conv_history_to_query,
     confidence_scores,
+    convert_conv_history_to_query,
     cos_sim,
     dot_score,
     download,
