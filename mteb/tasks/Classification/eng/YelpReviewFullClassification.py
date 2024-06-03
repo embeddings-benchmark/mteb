@@ -11,7 +11,7 @@ class YelpReviewFullClassification(AbsTaskClassification):
         description="Yelp Review Full is a dataset for sentiment analysis, containing 5 classes corresponding to ratings 1-5.",
         reference="https://arxiv.org/abs/1509.01626",
         dataset={
-            "path": "yelp_review_full",
+            "path": "Yelp/yelp_review_full",
             "revision": "c1f9ee939b7d05667af864ee1cb066393154bf85",
         },
         type="Classification",
