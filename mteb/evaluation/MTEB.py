@@ -433,8 +433,9 @@ class MTEB:
                     languages=None,
                 )
 
-        model_name = meta.name if meta.name else "no_model_name_available"
-        model_path_name = model_name.replace("/", "__").replace(" ", "_")
+        model_path_name = (
+            meta.model_name_as_path() if meta.name else "no_model_name_available"
+        )
 
         model_revision = meta.revision if meta.revision else "no_revision_available"
         output_path = Path(output_folder) / model_path_name / model_revision

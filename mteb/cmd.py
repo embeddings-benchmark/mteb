@@ -24,9 +24,11 @@ logger = logging.getLogger(__name__)
 
 
 def _save_model_metadata(model: Encoder, output_folder: Path) -> None:
-    save_path = output_folder / "model_meta.json"
-
     meta = model.mteb_model_meta  # type: ignore
+
+    save_path = (
+        output_folder / meta.model_name_as_path() / meta.revision / "model_meta.json"
+    )
 
     with save_path.open("w") as f:
         json.dump(meta.to_dict(), f)

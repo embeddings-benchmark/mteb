@@ -81,3 +81,8 @@ class ModelMeta(BaseModel):
 
         model: Encoder | EncoderWithQueryCorpusEncode = loader(**kwargs)  # type: ignore
         return model
+
+    def model_name_as_path(self) -> str:
+        if self.name is None:
+            raise ValueError("Model name is not set")
+        return self.name.replace("/", "__").replace(" ", "_")
