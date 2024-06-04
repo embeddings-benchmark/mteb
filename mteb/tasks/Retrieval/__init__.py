@@ -30,6 +30,7 @@ from .eng.CQADupstackWebmastersRetrieval import *
 from .eng.CQADupstackWordpressRetrieval import *
 from .eng.DBPediaRetrieval import *
 from .eng.FeedbackQARetrieval import *
+from .eng.FaithDialRetrieval import *
 from .eng.FEVERRetrieval import *
 from .eng.FiQA2018Retrieval import *
 from .eng.HagridRetrieval import *
