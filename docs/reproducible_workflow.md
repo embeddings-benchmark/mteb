@@ -14,7 +14,7 @@ import mteb
 model_name = "intfloat/multilingual-e5-small"
 revision = "4dc6d853a804b9c8886ede6dda8a073b7dc08a81"
 
-model = mteb.get_model("intfloat/multilingual-e5-small", revision_id=revision)
+model = mteb.get_model("intfloat/multilingual-e5-small", revision_id=revision) # load model using registry implementation if available, otherwise use SentenceTransformers
 
 tasks = mteb.get_tasks(tasks = ["MIRACLReranking"], languages = ["eng"])
 
@@ -22,11 +22,11 @@ evaluation = mteb.MTEB(tasks=tasks)
 results = evaluation.run(model)
 ```
 
-This workflow should produce the produces the same results as the original run. The results are by default stored in `results/{model_name}/{revision_id}/{task_name}.json`.
+This workflow should produce the produces the same results as the original run. The results are by default stored in `results/{model_name}/{revision_id}/{task_name}.json`. This approach is equivalent to using the CLI.
 
-## Adding a model to the model repository
+## Adding a model to the model registry
 
-To add a model to the model repository, the following steps should be followed:
+To add a model to the model registry, the following steps should be followed:
 
 1. **Add a ModelMeta**
 
@@ -44,4 +44,8 @@ Additionally specify the `loader` in the ModelMeta object. This is a function th
 
 1. **Submit a pull request**
 
-Submit a pull request with the new model. The model will be reviewed and added to the model repository.
+Submit a pull request with the new model. The model will be reviewed and added to the model repository. Please include the checklist in the pull request:
+
+- [ ] I have filled out the ModelMeta object to the extent possible
+- [ ] I have ensure that my model can be loaded using `mteb.get_model(model_name, revision_id)` and `mteb.get_model_meta(model_name, revision_id)`
+- [ ] I have tested the implementation works of a representative set of tasks.
