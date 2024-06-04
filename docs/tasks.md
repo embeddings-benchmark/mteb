@@ -117,7 +117,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [CmedqaRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) | ['cmn'] | Retrieval | s2p |  |  |  |
 | [Cmnli](https://huggingface.co/datasets/clue/viewer/cmnli) | ['cmn'] | PairClassification | s2s |  |  |  |
 | [CodeEditSearchRetrieval](https://huggingface.co/datasets/cassanof/CodeEditSearch/viewer) (Niklas Muennighoff, 2023) | ['c', 'c++', 'go', 'java', 'javascript', 'php', 'python', 'ruby', 'rust', 'scala', 'shell', 'swift', 'typescript'] | Retrieval | p2p | [Programming] | {'train': 13000} | {'train': 553.5} |
-| [CodeSearchNetRetrieval](https://huggingface.co/datasets/code_search_net/viewer) (Husain et al., 2019) | ['go', 'java', 'javascript', 'php', 'python', 'ruby'] | Retrieval | p2p | [Programming] | {'test': 1000} | {'test': 1196.4609} |
+| [CodeSearchNetRetrieval](https://huggingface.co/datasets/code_search_net/) (Husain et al., 2019) | ['go', 'java', 'javascript', 'php', 'python', 'ruby'] | Retrieval | p2p | [Programming] | {'test': 1000} | {'test': 1196.4609} |
 | [ContractNLIConfidentialityOfAgreementLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 82} | {'test': 473.17} |
 | [ContractNLIExplicitIdentificationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 109} | {'test': 506.12} |
 | [ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 139} | {'test': 525.75} |
@@ -168,6 +168,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [FalseFriendsGermanEnglish](https://drive.google.com/file/d/1jgq0nBnV-UiYNxbKNrrr2gxDEHm-DMKH/view?usp=share_link) | ['deu'] | PairClassification | s2s |  | {'test': 1524} | {'test': 40.3} |
 | [FaroeseSTS](https://aclanthology.org/2023.nodalida-1.74.pdf) | ['fao'] | STS | s2s | [News, Web] | {'train': 729} | {'train': 43.6} |
 | [FarsTail](https://link.springer.com/article/10.1007/s00500-023-08959-3) (Amirkhani et al., 2023) | ['fas'] | PairClassification | s2s | [Academic] | {'test': 1029} | {'test': 125.84} |
+| [FeedbackQARetrieval](https://arxiv.org/abs/2204.03025) | ['eng'] | Retrieval | s2p | [Web, Government, Medical] | {'test': 1992} | {'test': 1175.0} |
 | [FiQA-PL](https://sites.google.com/view/fiqa/) | ['pol'] | Retrieval | s2p |  |  |  |
 | [FiQA2018](https://sites.google.com/view/fiqa/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [FilipinoHateSpeechClassification](https://pcj.csp.org.ph/index.php/pcj/issue/download/29/PCJ%20V14%20N1%20pp1-14%202019) (Neil Vicente Cabasag et al., 2019) | ['fil'] | Classification | s2s | [Social] | {'validation': 2048, 'test': 2048} | {'validation': 88.1, 'test': 87.4} |
@@ -809,7 +810,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | 3 | 7 | 0 | 0 | 1 | 2 | 0 | 3 | 0 | 0 |
 | emi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | emp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eng | 12 | 144 | 15 | 3 | 1 | 8 | 6 | 52 | 12 | 1 |
+| eng | 12 | 144 | 15 | 3 | 1 | 8 | 6 | 53 | 12 | 1 |
 | enq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | epo | 3 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | eri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1578,7 +1579,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1363 | 970 | 107 | 3 | 25 | 67 | 44 | 333 | 73 | 2 |
+| Total | 1363 | 970 | 107 | 3 | 25 | 67 | 44 | 334 | 73 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
