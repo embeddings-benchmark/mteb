@@ -1,0 +1,62 @@
+{
+  "dataset_revision": "fb63ba1255f57054d411fe02bb5cec25cd6b150c",
+  "evaluation_time": 207.44641995429993,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.10",
+  "scores": {
+    "train": [
+      {
+        "accuracy": 0.3216796875,
+        "f1": 0.2564298876984432,
+        "hf_subset": "default",
+        "languages": [
+          "ara-Arab"
+        ],
+        "main_score": 0.3216796875,
+        "scores_per_experiment": [
+          {
+            "accuracy": 0.3603515625,
+            "f1": 0.26374569456499436
+          },
+          {
+            "accuracy": 0.271484375,
+            "f1": 0.2361295865670539
+          },
+          {
+            "accuracy": 0.3125,
+            "f1": 0.2383151409510204
+          },
+          {
+            "accuracy": 0.31396484375,
+            "f1": 0.25389224561667956
+          },
+          {
+            "accuracy": 0.3447265625,
+            "f1": 0.2511582229075707
+          },
+          {
+            "accuracy": 0.298828125,
+            "f1": 0.25550128258248966
+          },
+          {
+            "accuracy": 0.287109375,
+            "f1": 0.24395111454962812
+          },
+          {
+            "accuracy": 0.33935546875,
+            "f1": 0.2743473196638177
+          },
+          {
+            "accuracy": 0.31591796875,
+            "f1": 0.2655101197225399
+          },
+          {
+            "accuracy": 0.37255859375,
+            "f1": 0.2817481498586377
+          }
+        ]
+      }
+    ]
+  },
+  "task_name": "OnlineStoreReviewSentimentClassification"
+}

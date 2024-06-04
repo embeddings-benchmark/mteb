@@ -30,7 +30,7 @@ class LEMBPasskeyRetrieval(AbsTaskRetrieval):
         category="s2p",
         eval_splits=_EVAL_SPLIT,
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
+        main_score="ndcg_at_1",
         date=("2000-01-01", "2023-12-31"),
         form=["written"],
         domains=["Fiction"],

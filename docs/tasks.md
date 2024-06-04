@@ -281,8 +281,8 @@ The following tables give you an overview of the tasks in MTEB.
 | MIRACLRetrieval | ['deu', 'spa'] | Retrieval | s2p |  |  |  |
 | [MLQARetrieval](https://huggingface.co/datasets/mlqa) | ['ara', 'deu', 'eng', 'hin', 'spa', 'vie', 'zho'] | Retrieval | s2p | [Encyclopaedic] | {'test': 158083, 'validation': 15747} | {'test': 37352.28, 'validation': 36952.7} |
 | [MLQuestions](https://github.com/McGill-NLP/MLQuestions) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Academic] | {'dev': 1500, 'test': 1500} | {'dev': 305.0, 'test': 307.0} |
-| [MLSUMClusteringP2P](https://huggingface.co/datasets/mlsum) (Scialom et al., 2020) | ['deu', 'fra', 'rus', 'spa'] | Clustering | p2p | [News] | {'validation': 38561, 'test': 41206} | {'validation': 4613.0, 'test': 4810.0} |
-| [MLSUMClusteringS2S](https://huggingface.co/datasets/mlsum) (Scialom et al., 2020) | ['deu', 'fra', 'rus', 'spa'] | Clustering | s2s | [News] | {'validation': 38561, 'test': 41206} | {'validation': 4613.0, 'test': 4810.0} |
+| [MLSUMClusteringP2P.v2](https://huggingface.co/datasets/mlsum) (Scialom et al., 2020) | ['deu', 'fra', 'rus', 'spa'] | Clustering | p2p | [News] | {'validation': 2048, 'test': 2048} | {'validation': 4613.0, 'test': 4810.0} |
+| [MLSUMClusteringS2S.v2](https://huggingface.co/datasets/mlsum) (Scialom et al., 2020) | ['deu', 'fra', 'rus', 'spa'] | Clustering | s2s | [News] | {'validation': 2048, 'test': 2048} | {'validation': 4613.0, 'test': 4810.0} |
 | [MMarcoReranking](https://github.com/unicamp-dl/mMARCO) | ['cmn'] | Reranking | s2s |  |  |  |
 | [MMarcoRetrieval](https://arxiv.org/abs/2309.07597) | ['cmn'] | Retrieval | s2p |  |  |  |
 | [MSMARCO](https://microsoft.github.io/msmarco/) | ['eng'] | Retrieval | s2p |  |  |  |
