@@ -22,6 +22,7 @@ from mteb.encoder_interface import Encoder
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
+
 def _save_model_metadata(model: Encoder, output_folder: Path) -> None:
     save_path = output_folder / "model_meta.json"
 

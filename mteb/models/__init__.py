@@ -20,6 +20,7 @@ def get_model(
     Args:
         model_name: Name of the model to fetch
         revision: Revision of the model to fetch
+        **kwargs: Additional keyword arguments to pass to the model loader
 
     Returns:
         A model object
