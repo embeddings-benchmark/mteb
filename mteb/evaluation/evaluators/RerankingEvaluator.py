@@ -8,6 +8,7 @@ import torch
 import tqdm
 from sklearn.metrics import average_precision_score
 
+from ...encoder_interface import EncoderWithQueryCorpusEncode
 from .Evaluator import Evaluator
 from .utils import confidence_scores, cos_sim, nAUC
 
@@ -33,7 +34,7 @@ class RerankingEvaluator(Evaluator):
         similarity_fct=cos_sim,
         batch_size: int = 512,
         use_batched_encoding: bool = True,
-        limit: int = None,
+        limit: int | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -78,10 +79,14 @@ class RerankingEvaluator(Evaluator):
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
         encode_queries_func = (
-            model.encode_queries if hasattr(model, "encode_queries") else model.encode
+            model.encode_queries
+            if isinstance(model, EncoderWithQueryCorpusEncode)
+            else model.encode
         )
         encode_corpus_func = (
-            model.encode_corpus if hasattr(model, "encode_corpus") else model.encode
+            model.encode_corpus
+            if isinstance(model, EncoderWithQueryCorpusEncode)
+            else model.encode
         )
 
         logger.info("Encoding queries...")

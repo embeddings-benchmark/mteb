@@ -512,8 +512,8 @@ class RetrievalEvaluator(Evaluator):
                 corpus, queries, self.top_k, self.score_function
             )
 
+    @staticmethod
     def evaluate(
-        self,
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
         k_values: List[int],
@@ -567,14 +567,14 @@ class RetrievalEvaluator(Evaluator):
             recall[f"Recall@{k}"] = round(sum(recall[f"Recall@{k}"]) / len(scores), 5)
             precision[f"P@{k}"] = round(sum(precision[f"P@{k}"]) / len(scores), 5)
 
-        naucs = self.evaluate_abstention(
+        naucs = RetrievalEvaluator.evaluate_abstention(
             results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
         )
 
         return ndcg, _map, recall, precision, naucs
 
+    @staticmethod
     def evaluate_custom(
-        self,
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
         k_values: List[int],
@@ -599,7 +599,7 @@ class RetrievalEvaluator(Evaluator):
         ]:
             metric_scores = top_k_accuracy(qrels, results, k_values, output_type)
 
-        naucs = self.evaluate_abstention(results, metric_scores)
+        naucs = RetrievalEvaluator.evaluate_abstention(results, metric_scores)
         metric_scores_avg = {k: sum(v) / len(v) for k, v in metric_scores.items()}
 
         return metric_scores_avg, naucs
