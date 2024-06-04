@@ -56,8 +56,8 @@ class FaithDialRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        dataset_path = self.metadata_dict["dataset"]["path"]
-        for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
+        dataset_path = self.metadata.dataset["path"]
+        for split in kwargs.get("eval_splits", self.metadata.eval_splits):
             corpus, queries, qrels = self._load_data_for_split(dataset_path, split)
             self.corpus[split], self.queries[split], self.relevant_docs[split] = (
                 corpus,
@@ -68,7 +68,7 @@ class FaithDialRetrieval(AbsTaskRetrieval):
         self.data_loaded = True
 
     def _load_data_for_split(self, dataset_path, split):
-        revision = self.metadata_dict["dataset"].get("revision", None)
+        revision = self.metadata.dataset["revision"]
         ds = load_dataset(
             dataset_path,
             split=split,
