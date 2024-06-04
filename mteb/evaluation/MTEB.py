@@ -3,15 +3,17 @@ from __future__ import annotations
 import json
 import logging
 import os
-import pathlib
 import traceback
 from datetime import datetime
+from pathlib import Path
 from time import time
 from typing import List, Sequence
 
 import datasets
 
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.model_meta import ModelMeta
+from mteb.models import model_meta_from_sentence_transformers
 
 from ..abstasks import *
 from ..abstasks import AbsTask
@@ -265,7 +267,7 @@ class MTEB:
         self,
         model: Encoder | EncoderWithQueryCorpusEncode,
         verbosity: int = 1,
-        output_folder="results/result",
+        output_folder: str | None = "results",
         eval_splits=None,
         overwrite_results: bool = False,
         raise_error: bool = True,
@@ -280,7 +282,8 @@ class MTEB:
                 0: print tasks tqdm progress bar
                 1: print tasks tqdm progress bar and scores
                 2: print everything (including datasets loading)
-            output_folder: Folder where the results will be saved
+            output_folder: Folder where the results will be saved. Default to 'results'. Where it will save the results in the format:
+                `{output_folder}/{model_name}/{model_revision}/{task_name}.json`.
             eval_splits: List of splits to evaluate on. If None, the splits are taken from the task metadata.
             overwrite_results: Whether to overwrite existing results.
             raise_error: Whether to raise an error if an exception occurs during evaluation.
@@ -295,21 +298,7 @@ class MTEB:
             datasets.logging.set_verbosity(40)
             datasets.logging.disable_progress_bar()
 
-        # Create output folder
-        if output_folder is not None:
-            # check for model revision. For SentenceTransformers, this is available from sentence-transformers==3.0.0.
-            # if not found, check for supplied model revision.
-            if hasattr(model, "revision"):
-                model_revision = model.revision
-            else:
-                try:
-                    model_revision = model.model_card_data.base_model_revision
-                except AttributeError:
-                    logger.warning("Please supply model revision.")
-                    model_revision = "no_revision_available"
-            pathlib.Path(os.path.join(output_folder, model_revision)).mkdir(
-                parents=True, exist_ok=True
-            )
+        output_path = self.create_output_folder(model, output_folder)
 
         # Run selected tasks
         logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks:")
@@ -321,23 +310,18 @@ class MTEB:
         while len(self.tasks) > 0:
             task = self.tasks[0]
             logger.info(
-                f"\n\n********************** Evaluating {task.metadata_dict['name']} **********************"
+                f"\n\n********************** Evaluating {task.metadata.name} **********************"
             )
 
             # skip evaluation if results folder exists and overwrite_results is False
-            if output_folder is not None:
-                save_path = os.path.join(
-                    output_folder,
-                    model_revision,
-                    f"{task.metadata_dict['name']}{task.save_suffix}.json",
-                )
-                if os.path.exists(save_path) and overwrite_results is False:
+            if output_path:
+                save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
+                if save_path.exists() and not overwrite_results:
                     logger.warning(
-                        f"WARNING: {task.metadata_dict['name']} results already exists. Skipping."
+                        f"WARNING: {task.metadata.name} results already exists. Skipping."
                     )
                     del self.tasks[0]
                     continue
-
             try:
                 task_eval_splits = (
                     eval_splits
@@ -395,7 +379,7 @@ class MTEB:
                 )
 
                 # save results
-                if output_folder is not None:
+                if output_path:
                     with open(save_path, "w") as f_out:
                         json.dump(
                             mteb_task_result.to_dict(), f_out, indent=2, sort_keys=True
@@ -423,3 +407,36 @@ class MTEB:
         # restore original tasks
         self.tasks = original_tasks
         return evaluation_results
+
+    def create_output_folder(
+        self, model: Encoder, output_folder: str | None
+    ) -> Path | None:
+        """Create output folder for the results."""
+        if output_folder is None:
+            return None
+
+        if hasattr(model, "mteb_model_meta"):
+            meta = model.mteb_model_meta  # type: ignore
+        else:
+            try:
+                meta = model_meta_from_sentence_transformers(model)  # type: ignore
+            except AttributeError:
+                logger.warning(
+                    "Could not find model metadata. Please set the model.mteb_model_meta attribute or if you are using "
+                    + "SentenceTransformers, please upgrade to version 3.0.0 to ensure that the model.mteb_model_meta "
+                    + "attribute is available."
+                )
+                meta = ModelMeta(
+                    name=None,
+                    revision=None,
+                    release_date=None,
+                    languages=None,
+                )
+
+        model_name = meta.name if meta.name else "no_model_name_available"
+        model_path_name = model_name.replace("/", "__").replace(" ", "_")
+
+        model_revision = meta.revision if meta.revision else "no_revision_available"
+        output_path = Path(output_folder) / model_path_name / model_revision
+        output_path.mkdir(parents=True, exist_ok=True)
+        return output_path

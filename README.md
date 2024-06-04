@@ -220,10 +220,11 @@ evaluation.run(model)
 | 📋 [Tasks] | Overview of available tasks |
 | 📈 [Leaderboard] | The interactive leaderboard of the benchmark |
 | 🤖 [Adding a model] | Information related to how to submit a model to the leaderboard |
+| 👩‍🔬 [Reproducible workflows] | Information related to how to reproduce and create reproducible workflows with MTEB |
 | 👩‍💻 [Adding a dataset] | How to add a new task/dataset to MTEB | 
 | 👩‍💻 [Adding a leaderboard tab] | How to add a new leaderboard tab to MTEB | 
 | 🤝  [Contributing] | How to contribute to MTEB and set it up for development |
-<!-- | 🌐 [MMTEB] | An open-source effort to extend MTEB to cover a broad set of languages |   -->
+| 🌐 [MMTEB] | An open-source effort to extend MTEB to cover a broad set of languages |  
 
 [Tasks]: docs/tasks.md
 [Contributing]: CONTRIBUTING.md
@@ -232,6 +233,7 @@ evaluation.run(model)
 [Adding a leaderboard tab]: docs/adding_a_leaderboard_tab.md
 [Leaderboard]: https://huggingface.co/spaces/mteb/leaderboard
 [MMTEB]: docs/mmteb/readme.md
+[Reproducible workflows]: docs/reproducible_workflow.md
 
 ## Citing
 

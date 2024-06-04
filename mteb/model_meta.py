@@ -36,7 +36,7 @@ class ModelMeta(BaseModel):
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
-        revision: The revision number of the model.
+        revision: The revision number of the model. If None it is assumed that the metadata (including the loader) is valid for all revisions of the model.
         release_date: The date the model's revision was released.
         license: The license under which the model is released. Required if open_source is True.
         open_source: Whether the model is open source or proprietary.
@@ -45,10 +45,10 @@ class ModelMeta(BaseModel):
             in the Latin script.
     """
 
-    name: str
-    revision: str
-    release_date: STR_DATE
-    languages: list[ISO_LANGUAGE_SCRIPT]
+    name: str | None
+    revision: str | None
+    release_date: STR_DATE | None
+    languages: list[ISO_LANGUAGE_SCRIPT] | None
     loader: Callable[..., Encoder | EncoderWithQueryCorpusEncode] | None = None
     n_parameters: int | None = None
     memory_usage: float | None = None

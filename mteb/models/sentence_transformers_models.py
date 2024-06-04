@@ -6,7 +6,7 @@ all_MiniLM_L6_v2 = ModelMeta(
     name="sentence-transformers/all-MiniLM-L6-v2",
     languages=["eng-Latn"],
     open_source=True,
-    revision="e4ce9877abf3edfe10b0d82785e83bdcb973e22e",
+    revision=None,  # can be any
     release_date="2021-08-30",
 )
 
@@ -68,6 +68,6 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
         "zho_Hant",
     ],
     open_source=True,
-    revision="bf3bf13ab40c3157080a7ab344c831b9ad18b5eb",
+    revision=None,  # can be any
     release_date="2019-11-01",  # release date of paper
 )
