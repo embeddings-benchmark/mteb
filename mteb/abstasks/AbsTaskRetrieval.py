@@ -334,7 +334,7 @@ class AbsTaskRetrieval(AbsTask):
             errors = {}
 
             top_k = kwargs.get("top_k", 1)
-            if not kwargs.get("save_predictions", False) and top_k == 1:
+            if not save_predictions and top_k == 1:
                 for qid in results.keys():
                     doc_scores = results[qid]
                     sorted_docs = sorted(
