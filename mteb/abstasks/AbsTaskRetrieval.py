@@ -305,8 +305,7 @@ class AbsTaskRetrieval(AbsTask):
                         k: v for k, v in results[qid].items() if k in doc_ids
                     }
             qrels_save_path = (
-                output_folder
-                / f"{self.metadata_dict['name']}_{hf_subset}_predictions.json"
+                output_folder / f"{self.metadata.name}_{hf_subset}_predictions.json"
             )
 
             with open(qrels_save_path, "w") as f:
@@ -357,7 +356,7 @@ class AbsTaskRetrieval(AbsTask):
                     }
 
             errors_save_path = (
-                output_folder / f"{self.metadata_dict['name']}_{hf_subset}_errors.json"
+                output_folder / f"{self.metadata.name}_{hf_subset}_errors.json"
             )
             with open(errors_save_path, "w") as f:
                 json.dump(errors, f)
