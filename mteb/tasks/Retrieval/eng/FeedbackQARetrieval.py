@@ -25,7 +25,7 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
         task_subtypes=["Question answering"],
         license="Apache-2.0",
         socioeconomic_status="mixed",
-        annotations_creators='human-annotated',
+        annotations_creators="human-annotated",
         dialect=[],
         text_creation="created",
         bibtex_citation="""
@@ -50,5 +50,5 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
 }
 """,
         n_samples={"test": 1992},
-        avg_character_length={"test": 1175}
+        avg_character_length={"test": 1175},
     )
