@@ -165,6 +165,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [EstonianValenceClassification](https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054) | ['est'] | Classification | s2s | [News] | {'train': 3270, 'test': 818} | {'train': 226.70642201834863, 'test': 231.5085574572127} |
 | [FEVER](https://fever.ai/) | ['eng'] | Retrieval | s2p |  |  |  |
 | [FQuADRetrieval](https://huggingface.co/datasets/manu/fquad2_test) | ['fra'] | Retrieval | s2p | [Encyclopaedic] | {'test': 400, 'validation': 100} | {'test': 937.0, 'validation': 930.0} |
+| [FaithDial](https://mcgill-nlp.github.io/FaithDial) (Dziri et al., 2022) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'test': 2042} | {'test': 74.0} |
 | [FalseFriendsGermanEnglish](https://drive.google.com/file/d/1jgq0nBnV-UiYNxbKNrrr2gxDEHm-DMKH/view?usp=share_link) | ['deu'] | PairClassification | s2s |  | {'test': 1524} | {'test': 40.3} |
 | [FaroeseSTS](https://aclanthology.org/2023.nodalida-1.74.pdf) | ['fao'] | STS | s2s | [News, Web] | {'train': 729} | {'train': 43.6} |
 | [FarsTail](https://link.springer.com/article/10.1007/s00500-023-08959-3) (Amirkhani et al., 2023) | ['fas'] | PairClassification | s2s | [Academic] | {'test': 1029} | {'test': 125.84} |
@@ -810,7 +811,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | 3 | 7 | 0 | 0 | 1 | 2 | 0 | 3 | 0 | 0 |
 | emi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | emp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eng | 12 | 144 | 15 | 3 | 1 | 8 | 6 | 53 | 12 | 1 |
+| eng | 12 | 144 | 15 | 3 | 1 | 8 | 6 | 54 | 12 | 1 |
 | enq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | epo | 3 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | eri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1579,7 +1580,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1363 | 970 | 107 | 3 | 25 | 67 | 44 | 334 | 73 | 2 |
+| Total | 1363 | 970 | 107 | 3 | 25 | 67 | 44 | 335 | 73 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
