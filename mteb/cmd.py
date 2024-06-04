@@ -140,7 +140,6 @@ def main():
                 value = value.lower() == "true"
             kwargs[key] = value
 
-
     # set logging based on verbosity level
     if args.verbosity == 0:
         logging.getLogger("mteb").setLevel(logging.CRITICAL)
