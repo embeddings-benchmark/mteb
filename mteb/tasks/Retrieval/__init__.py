@@ -29,6 +29,8 @@ from .eng.CQADupstackUnixRetrieval import *
 from .eng.CQADupstackWebmastersRetrieval import *
 from .eng.CQADupstackWordpressRetrieval import *
 from .eng.DBPediaRetrieval import *
+from .eng.FeedbackQARetrieval import *
+from .eng.FaithDialRetrieval import *
 from .eng.FEVERRetrieval import *
 from .eng.FiQA2018Retrieval import *
 from .eng.HagridRetrieval import *
@@ -94,6 +96,8 @@ from .pol.QuoraPLRetrieval import *
 from .pol.SCIDOCSPLRetrieval import *
 from .pol.SciFactPLRetrieval import *
 from .pol.TRECCOVIDPLRetrieval import *
+from .rus.RiaNewsRetrieval import *
+from .rus.RuBQRetrieval import *
 from .slk.SlovakSumRetrieval import *
 from .spa.SpanishPassageRetrievalS2P import *
 from .spa.SpanishPassageRetrievalS2S import *

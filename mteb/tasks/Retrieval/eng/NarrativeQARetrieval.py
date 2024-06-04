@@ -13,7 +13,7 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NarrativeQARetrieval",
         dataset={
-            "path": "narrativeqa",
+            "path": "deepmind/narrativeqa",
             "revision": "2e643e7363944af1c33a652d1c87320d0871c4e4",
         },
         reference="https://metatext.io/datasets/narrativeqa",

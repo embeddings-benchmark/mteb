@@ -11,7 +11,7 @@ class HateSpeechPortugueseClassification(AbsTaskClassification):
         description="HateSpeechPortugueseClassification is a dataset of Portuguese tweets categorized with their sentiment (2 classes).",
         reference="https://aclanthology.org/W19-3510",
         dataset={
-            "path": "hate_speech_portuguese",
+            "path": "hate-speech-portuguese/hate_speech_portuguese",
             "revision": "b0f431acbf8d3865cb7c7b3effb2a9771a618ebc",
         },
         type="Classification",

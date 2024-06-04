@@ -5,13 +5,16 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
+from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskClusteringFast import (
+    AbsTaskClusteringFast,
+    check_label_distribution,
+)
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks.AbsTaskClustering import AbsTaskClustering
-from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 
 class RedditClusteringP2P(AbsTaskClustering):
+    superseeded_by = "RedditClusteringP2P.v2"
     metadata = TaskMetadata(
         name="RedditClusteringP2P",
         description="Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs.",
@@ -42,7 +45,7 @@ class RedditClusteringP2P(AbsTaskClustering):
 
 class RedditFastClusteringP2P(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="RedditFastClusteringP2P",
+        name="RedditClusteringP2P.v2",
         description="Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs.",
         reference="https://arxiv.org/abs/2104.07081",
         dataset={
@@ -87,6 +90,8 @@ class RedditFastClusteringP2P(AbsTaskClusteringFast):
             sentences = list(
                 itertools.chain.from_iterable(self.dataset[split]["sentences"])
             )
+
+            check_label_distribution(self.dataset[split])
 
             # Remove sentences and labels with only 1 label example.
             unique_labels, counts = np.unique(labels, return_counts=True)

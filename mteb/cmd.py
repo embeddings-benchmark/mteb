@@ -24,7 +24,7 @@ logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
-def _name_to_path(name: str) -> str:
+def name_to_path(name: str) -> str:
     return name.replace("/", "__").replace(" ", "_")
 
 
@@ -118,6 +118,14 @@ def main():
         help="Display the available tasks",
     )
 
+    ## model revision
+    parser.add_argument(
+        "--model_revision",
+        type=str,
+        default=None,
+        help="Revision of the model to be loaded. Revisions are automatically read if the model is loaded from huggingface. ",
+    )
+
     args, additional_kwargs = parser.parse_known_args()
 
     kwargs = {}
@@ -131,6 +139,7 @@ def main():
             ]:
                 value = value.lower() == "true"
             kwargs[key] = value
+
 
     # set logging based on verbosity level
     if args.verbosity == 0:
@@ -152,9 +161,11 @@ def main():
         raise ValueError("Please specify a model using the -m or --model argument")
 
     if args.output_folder is None:
-        args.output_folder = f"results/{_name_to_path(args.model)}"
+        args.output_folder = f"results/{name_to_path(args.model)}"
 
-    model = SentenceTransformer(args.model, device=args.device)
+    model = SentenceTransformer(
+        args.model, device=args.device, revision=args.model_revision
+    )
 
     tasks = mteb.get_tasks(
         categories=args.categories,

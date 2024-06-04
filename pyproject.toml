@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.12.5"
+version = "1.12.17"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -31,7 +31,7 @@ dependencies = [
     "requests>=2.26.0",
     "scikit_learn>=1.0.2",
     "scipy",
-    "sentence_transformers>=2.2.0",
+    "sentence_transformers>=3.0.0",
     "torch",
     "tqdm",
     "rich",
@@ -80,7 +80,6 @@ ignore = ["E501",   # line too long
         "D205",     # 1 blank line required between summary line and description
         "D415",     # First line should end with a period
 ]
-ignore-init-module-imports = true
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"

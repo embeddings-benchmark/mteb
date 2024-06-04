@@ -38,10 +38,10 @@ class BitextMiningEvaluator(Evaluator):
 
     def compute_metrics(self, model):
         # Compute embeddings
-        logger.info(f"Encoding {self.n_subsets}x{self.n} sentences...")
+        logger.info(f"Encoding {self.n_subsets}x{self.n} sentences")
         embeddings = {}
         for sub in tqdm.tqdm(
-            self.subsets, desc=f"Encoding {self.n_subsets}x{self.n} sentences..."
+            self.subsets, desc=f"Encoding {self.n_subsets}x{self.n} sentences"
         ):
             embeddings[sub] = np.asarray(
                 model.encode(self.sentences[sub], batch_size=self.batch_size)

@@ -1,0 +1,53 @@
+{
+  "dataset_revision": "1ee1cd0",
+  "evaluation_time": 6.346739292144775,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.5",
+  "scores": {
+    "test": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.46787,
+        "map_at_1": 0.46787,
+        "map_at_10": 0.57031,
+        "map_at_100": 0.57713,
+        "map_at_1000": 0.57738,
+        "map_at_20": 0.57474,
+        "map_at_3": 0.54267,
+        "map_at_5": 0.55868,
+        "mrr_at_1": 0.46787,
+        "mrr_at_10": 0.57031,
+        "mrr_at_100": 0.57713,
+        "mrr_at_1000": 0.57738,
+        "mrr_at_20": 0.57474,
+        "mrr_at_3": 0.54267,
+        "mrr_at_5": 0.55868,
+        "ndcg_at_1": 0.46787,
+        "ndcg_at_10": 0.62365,
+        "ndcg_at_100": 0.65684,
+        "ndcg_at_1000": 0.66259,
+        "ndcg_at_20": 0.63978,
+        "ndcg_at_3": 0.56692,
+        "ndcg_at_5": 0.59582,
+        "precision_at_1": 0.46787,
+        "precision_at_10": 0.07927,
+        "precision_at_100": 0.00948,
+        "precision_at_1000": 0.00099,
+        "precision_at_20": 0.04282,
+        "precision_at_3": 0.21235,
+        "precision_at_5": 0.14147,
+        "recall_at_1": 0.46787,
+        "recall_at_10": 0.79267,
+        "recall_at_100": 0.94779,
+        "recall_at_1000": 0.99147,
+        "recall_at_20": 0.85643,
+        "recall_at_3": 0.63705,
+        "recall_at_5": 0.70733
+      }
+    ]
+  },
+  "task_name": "FeedbackQARetrieval"
+}

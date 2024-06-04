@@ -1,0 +1,33 @@
+{
+  "dataset_revision": "392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
+  "evaluation_time": 30.774710178375244,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.8.3",
+  "scores": {
+    "test": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "fra-Latn"
+        ],
+        "main_score": 0.6232956899464197,
+        "v_measure": 0.6232956899464197,
+        "v_measures": {
+          "Level 0": [
+            0.612445369130527,
+            0.6303040208047157,
+            0.6090431112358441,
+            0.615437800814248,
+            0.6480495782337757,
+            0.634866318821418,
+            0.6351721637847682,
+            0.6121700218008482,
+            0.6229169614630541,
+            0.6125515533749979
+          ]
+        }
+      }
+    ]
+  },
+  "task_name": "AlloProfClusteringP2P.v2"
+}

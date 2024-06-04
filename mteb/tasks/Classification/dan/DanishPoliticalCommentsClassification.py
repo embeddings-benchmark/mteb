@@ -8,7 +8,7 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DanishPoliticalCommentsClassification",
         dataset={
-            "path": "danish_political_comments",
+            "path": "community-datasets/danish_political_comments",
             "revision": "edbb03726c04a0efab14fc8c3b8b79e4d420e5a1",
         },
         description="A dataset of Danish political comments rated for sentiment",
