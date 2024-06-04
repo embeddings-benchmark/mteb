@@ -11,7 +11,7 @@ class TenKGnadClassification(AbsTaskClassification):
         description="10k German News Articles Dataset (10kGNAD) contains news articles from the online Austrian newspaper website DER Standard with their topic classification (9 classes).",
         reference="https://tblock.github.io/10kGNAD/",
         dataset={
-            "path": "gnad10",
+            "path": "community-datasets/gnad10",
             "revision": "0798affe9b3f88cfda4267b6fbc50fac67046ee5",
         },
         type="Classification",

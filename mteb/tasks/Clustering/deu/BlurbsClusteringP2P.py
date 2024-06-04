@@ -1,12 +1,7 @@
 from __future__ import annotations
 
-import itertools
-
-import numpy as np
-from datasets import Dataset, DatasetDict
-
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast, convert_to_fast
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 NUM_SAMPLES = 2048
@@ -84,28 +79,4 @@ class BlurbsClusteringP2PFast(AbsTaskClusteringFast):
     )
 
     def dataset_transform(self):
-        ds = dict()
-        for split in self.metadata.eval_splits:
-            labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
-            sentences = list(
-                itertools.chain.from_iterable(self.dataset[split]["sentences"])
-            )
-
-            # Remove sentences and labels with only 1 label example.
-            unique_labels, counts = np.unique(labels, return_counts=True)
-            solo_label_idx = np.where(counts == 1)
-            solo_labels = unique_labels[solo_label_idx]
-            for solo_label in solo_labels:
-                loc = labels.index(solo_label)
-                labels.pop(loc)
-                sentences.pop(loc)
-            ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
-
-        self.dataset = DatasetDict(ds)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=NUM_SAMPLES,
-        )
+        self.dataset = convert_to_fast(self.dataset, self.seed)  # type: ignore
