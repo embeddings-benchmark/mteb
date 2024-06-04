@@ -103,8 +103,7 @@ def filter_task_by_categories(
 
 
 class MTEBTasks(tuple):
-    def __repr__(self):
-        """MTEBTasks repr"""
+    def __repr__(self) -> str:
         return "MTEBTasks" + super().__repr__()
 
     @staticmethod
