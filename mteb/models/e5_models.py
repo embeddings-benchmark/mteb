@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import partial
 from typing import Any
 
 import torch
@@ -114,7 +115,7 @@ xlmr_languages = [
 class E5Wrapper:
     """following the implementation within the Scandinavian Embedding Benchmark and the intfloat/multilingual-e5-small documentation."""
 
-    def __init__(self, model_name: str, sep: str = " "):
+    def __init__(self, model_name: str, sep: str = " ", **kwargs: Any):
         self.model_name = model_name
         self.mdl = SentenceTransformer(model_name)
         self.sep = sep
@@ -159,7 +160,7 @@ class E5Wrapper:
 
 
 e5_mult_small = ModelMeta(
-    loader=lambda: E5Wrapper("intfloat/multilingual-e5-small"),  # type: ignore
+    loader=partial(E5Wrapper, model_name="intfloat/multilingual-e5-small"),  # type: ignore
     name="intfloat/multilingual-e5-small",
     languages=xlmr_languages,
     open_source=True,
@@ -168,7 +169,7 @@ e5_mult_small = ModelMeta(
 )
 
 e5_mult_base = ModelMeta(
-    loader=lambda: E5Wrapper("intfloat/multilingual-e5-base"),  # type: ignore
+    loader=partial(E5Wrapper, model_name="intfloat/multilingual-e5-base"),  # type: ignore
     name="intfloat/multilingual-e5-small",
     languages=xlmr_languages,
     open_source=True,
@@ -178,7 +179,7 @@ e5_mult_base = ModelMeta(
 
 
 e5_mult_large = ModelMeta(
-    loader=lambda: E5Wrapper("intfloat/multilingual-e5-large"),  # type: ignore
+    loader=partial(E5Wrapper, model_name="intfloat/multilingual-e5-large"),  # type: ignore
     name="intfloat/multilingual-e5-small",
     languages=xlmr_languages,
     open_source=True,

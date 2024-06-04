@@ -20,8 +20,12 @@ STR_DATE = Annotated[
 ]  # Allows the type to be a string, but ensures that the string is a valid date
 
 
-def sentence_transformers_loader(model_name: str, revision: str) -> SentenceTransformer:
-    return SentenceTransformer(model_name_or_path=model_name, revision=revision)
+def sentence_transformers_loader(
+    model_name: str, revision: str, **kwargs
+) -> SentenceTransformer:
+    return SentenceTransformer(
+        model_name_or_path=model_name, revision=revision, **kwargs
+    )
 
 
 class ModelMeta(BaseModel):
@@ -70,6 +74,7 @@ class ModelMeta(BaseModel):
                 sentence_transformers_loader,
                 model_name=self.name,
                 revision=self.revision,
+                **kwargs,
             )
         else:
             loader = self.loader
