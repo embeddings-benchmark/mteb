@@ -126,7 +126,19 @@ def main():
         help="Revision of the model to be loaded. Revisions are automatically read if the model is loaded from huggingface. ",
     )
 
-    args = parser.parse_args()
+    args, additional_kwargs = parser.parse_known_args()
+
+    kwargs = {}
+    if additional_kwargs:
+        for i in range(0, len(additional_kwargs), 2):
+            key = additional_kwargs[i].lstrip("-")
+            value = additional_kwargs[i + 1]
+            if value.lower() in [
+                "true",
+                "false",
+            ]:
+                value = value.lower() == "true"
+            kwargs[key] = value
 
     # set logging based on verbosity level
     if args.verbosity == 0:
@@ -168,6 +180,7 @@ def main():
         output_folder=args.output_folder,
         eval_splits=args.eval_splits,
         co2_tracker=args.co2_tracker,
+        **kwargs,
     )
 
     _save_model_metadata(model, args.model, Path(args.output_folder))
