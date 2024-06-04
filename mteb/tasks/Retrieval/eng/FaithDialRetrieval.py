@@ -22,7 +22,7 @@ class FaithDialRetrieval(AbsTaskRetrieval):
         ),
         type="Retrieval",
         category="s2p",
-        eval_splits=["validation", "test"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2022-01-01", "2022-03-31"),
@@ -47,8 +47,8 @@ class FaithDialRetrieval(AbsTaskRetrieval):
             doi={10.1162/tacl_a_00529}
             }
         """,
-        n_samples={"validation": 1903, "test": 2042},
-        avg_character_length={"validation": 73, "test": 74},
+        n_samples={"test": 2042},
+        avg_character_length={"test": 74},
     )
 
     # TODO: Will be removed if curated and added to mteb HF
