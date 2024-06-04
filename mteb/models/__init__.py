@@ -75,7 +75,9 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             framework=["Sentence Transformers"],
         )
     except AttributeError as e:
-        logger.warning(f"Failed to extract metadata from model: {e}. Upgrading to sentence-transformers v3.0.0 or above is recommended.")
+        logger.warning(
+            f"Failed to extract metadata from model: {e}. Upgrading to sentence-transformers v3.0.0 or above is recommended."
+        )
         meta = ModelMeta(
             name=None,
             revision=None,
