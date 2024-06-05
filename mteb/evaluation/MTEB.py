@@ -7,7 +7,7 @@ import traceback
 from datetime import datetime
 from pathlib import Path
 from time import time
-from typing import List, Sequence
+from typing import Iterable
 
 import datasets
 
@@ -27,32 +27,27 @@ logger = logging.getLogger(__name__)
 class MTEB:
     def __init__(
         self,
-        task_types: List[str] | None = None,
-        task_categories: List[str] | None = None,
-        task_langs: List[str] | None = None,
-        tasks: Sequence[str | AbsTask] | None = None,
+        tasks: Iterable[str | AbsTask] | None = None,
+        *,
+        task_types: list[str] | None = None,
+        task_categories: list[str] | None = None,
+        task_langs: list[str] | None = None,
         version=None,
-        err_logs_path="error_logs.txt",
+        err_logs_path: str = "error_logs.txt",
         **kwargs,
     ):
-        """Create an Evaluation pipeline. The tasks selected
-        depends on the parameters. One can specify the tasks types
-        they want to evaluate (e.g. Clustering, Retrieval, etc.)
-        the categories of tasks they want (e.g. Sentence2Sentence,
-        Sentence2Paragraph, etc.) and the version of the benchmark.
-        The selected tasks will be the tasks satisfying conditions
-        from the 3 arguments. Alternatively, one can specify a list
-        of tasks to be evaluated with the `tasks` argument. If
-        `tasks` is specified, we filter tasks based on `task_langs`
+        """Create an Evaluation pipeline, based on the provided tasks.
 
         Args:
-            task_types: List of task types (Clustering, Retrieval..) to be evaluated. If None, all tasks will be evaluated
-            task_categories: List of task categories (s2s, p2p..) to be evaluated. If None, all tasks will be evaluated
-            task_langs: List of languages to be evaluated. if None, all languages will be evaluated. ["eng-Latn", "deu_Latn"] will evaluate on all tasks
-                with these languages.
-            tasks: List of tasks to be evaluated. If specified, we filter tasks based on `task_langs` only
-            version: Version of the benchmark to use. If None, latest is used
-            err_logs_path: Path to save error logs
+            tasks: List of tasks to be evaluated.
+            task_types: Will be deprecated we recommend that you use `mteb.get_tasks()` to filter tasks. List of task types (Clustering, Retrieval..) to be
+                evaluated. If None, all tasks will be evaluated
+            task_categories: Will be deprecated we recommend that you use `mteb.get_tasks()` to filter tasks. List of task categories (s2s, p2p..) to be
+                evaluated. If None, all tasks will be evaluated
+            task_langs: Will be deprecated we recommend that you use `mteb.get_tasks()` to filter tasks. List of languages to be evaluated. if None, all
+                languages will be evaluated. ["eng-Latn", "deu_Latn"] will evaluate on all tasks with these languages.
+            version: Will be deprecated. Version of the benchmark to use. If None, latest is used
+            err_logs_path: Path to save error logs.
             kwargs: Additional arguments to be passed to the tasks
         """
         self.deprecation_warning(
