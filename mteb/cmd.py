@@ -126,19 +126,25 @@ def main():
         help="Revision of the model to be loaded. Revisions are automatically read if the model is loaded from huggingface. ",
     )
 
-    args, additional_kwargs = parser.parse_known_args()
+    parser.add_argument(
+        "--save_predictions",
+        action="store_true",
+        default=False,
+        help="Save predictions in the output folder",
+    )
 
-    kwargs = {}
-    if additional_kwargs:
-        for i in range(0, len(additional_kwargs), 2):
-            key = additional_kwargs[i].lstrip("-")
-            value = additional_kwargs[i + 1]
-            if value.lower() in [
-                "true",
-                "false",
-            ]:
-                value = value.lower() == "true"
-            kwargs[key] = value
+    parser.add_argument(
+        "--export_errors",
+        action="store_true",
+        default=False,
+        help="Export errors to the output folder",
+    )
+
+    args = parser.parse_args()
+
+    kwargs = {
+        key: True for key in ["save_predictions", "export_errors"] if getattr(args, key)
+    }
 
     # set logging based on verbosity level
     if args.verbosity == 0:
