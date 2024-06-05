@@ -135,7 +135,7 @@ class AbsTaskMultilabelClassification(AbsTask):
                     test_text, y_test, stratify=y_test, train_size=2000
                 )
         except ValueError:
-            logger.warn("Couldn't subsample, continuing with the entire test set.")
+            logger.warning("Couldn't subsample, continuing with the entire test set.")
         X_test = model.encode(test_text)
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(

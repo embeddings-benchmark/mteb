@@ -42,7 +42,7 @@ def _multilabel_subsampling(
                 train_size=n_samples,
             )
         except ValueError:
-            logger.warn("Couldn't subsample, continuing with full split.")
+            logger.warning("Couldn't subsample, continuing with full split.")
         dataset_dict.update({split: dataset_dict[split].select(idxs)})
     return dataset_dict
 
