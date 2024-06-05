@@ -10,7 +10,9 @@ try:
     from gritlm import GritLM
 
     gritlm7b = ModelMeta(
-        loader=partial(GritLM, "GritLM/GritLM-7B", mode="embedding", torch_dtype="auto"),
+        loader=partial(
+            GritLM, "GritLM/GritLM-7B", mode="embedding", torch_dtype="auto"
+        ),
         name="GritLM/GritLM-7B",
         languages=[],
         open_source=True,
@@ -18,7 +20,9 @@ try:
         release_date="2024-02-15",
     )
     gritlm8x7b = ModelMeta(
-        loader=partial(GritLM, "GritLM/GritLM-8x7B", mode="embedding", torch_dtype="auto"),
+        loader=partial(
+            GritLM, "GritLM/GritLM-8x7B", mode="embedding", torch_dtype="auto"
+        ),
         name="GritLM/GritLM-8x7B",
         languages=[],
         open_source=True,
