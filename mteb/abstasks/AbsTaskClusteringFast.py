@@ -103,7 +103,7 @@ class AbsTaskClusteringFast(AbsTask):
         if self.metadata_dict["main_score"] in scores:
             scores["main_score"] = scores[self.metadata_dict["main_score"]]
         else:
-            logger.warn(
+            logger.warning(
                 f"main score {self.metadata_dict['main_score']} not found in scores {scores.keys()}"
             )
 
