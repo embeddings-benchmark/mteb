@@ -189,7 +189,7 @@ class CovidRetrieval(AbsTaskRetrieval):
 class CmedqaRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CmedqaRetrieval",
-        description="Online medical consultation text",
+        description="Online medical consultation text. Used the CMedQAv2 as its underlying dataset.",
         reference="https://aclanthology.org/2022.emnlp-main.357.pdf",
         dataset={
             "path": "C-MTEB/CmedqaRetrieval",
