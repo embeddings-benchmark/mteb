@@ -27,6 +27,12 @@ def get_model(
     """
     meta = get_model_meta(model_name, revision)
     model = meta.load_model(**kwargs)
+
+    # If revision not available in the modelmeta, try to extract it from sentence-transformers
+    if meta.revision is None and isinstance(model, SentenceTransformer):
+        _meta = model_meta_from_sentence_transformers(model)
+        meta.revision = _meta.revision if _meta.revision else meta.revision
+
     model.mteb_model_meta = meta  # type: ignore
     return model
 
@@ -63,15 +69,20 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
 def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMeta:
     try:
         name = (
-            model.mteb_model_meta.name
-            if model.mteb_model_meta.name
-            else model.mteb_model_meta.base_model_name
+            model.model_card_data.model_name
+            if model.model_card_data.model_name
+            else model.model_card_data.base_model
+        )
+        languages = (
+            [model.model_card_data.language]
+            if isinstance(model.model_card_data.language, str)
+            else model.model_card_data.language
         )
         meta = ModelMeta(
             name=name,
             revision=model.model_card_data.base_model_revision,
             release_date=None,
-            languages=model.mteb_model_meta.languages,
+            languages=languages,
             framework=["Sentence Transformers"],
         )
     except AttributeError as e:

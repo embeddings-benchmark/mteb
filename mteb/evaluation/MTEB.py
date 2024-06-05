@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import traceback
+from copy import copy
 from datetime import datetime
 from pathlib import Path
 from time import time
@@ -293,7 +294,11 @@ class MTEB:
             datasets.logging.set_verbosity(40)
             datasets.logging.disable_progress_bar()
 
-        output_path = self.create_output_folder(model, output_folder)
+        meta = self.create_model_meta(model)
+        output_path = self.create_output_folder(meta, output_folder)
+
+        if output_path:
+            self._save_model_metadata(meta, output_path)
 
         # Run selected tasks
         logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks:")
@@ -403,13 +408,8 @@ class MTEB:
         self.tasks = original_tasks
         return evaluation_results
 
-    def create_output_folder(
-        self, model: Encoder, output_folder: str | None
-    ) -> Path | None:
-        """Create output folder for the results."""
-        if output_folder is None:
-            return None
-
+    @staticmethod
+    def create_model_meta(model: Encoder) -> ModelMeta:
         if hasattr(model, "mteb_model_meta"):
             meta = model.mteb_model_meta  # type: ignore
         else:
@@ -428,11 +428,30 @@ class MTEB:
                     languages=None,
                 )
 
-        model_path_name = (
-            meta.model_name_as_path() if meta.name else "no_model_name_available"
-        )
+        # create a copy of the meta to avoid modifying the original object
+        meta = copy(meta)
+        meta.revision = meta.revision or "no_revision_available"
+        meta.name = meta.name or "no_model_name_available"
 
-        model_revision = meta.revision if meta.revision else "no_revision_available"
+        return meta
+
+    def create_output_folder(
+        self, model_meta: ModelMeta, output_folder: str | None
+    ) -> Path | None:
+        """Create output folder for the results."""
+        if output_folder is None:
+            return None
+
+        model_revision: str = model_meta.revision  # type: ignore
+        model_path_name = model_meta.model_name_as_path()
+
         output_path = Path(output_folder) / model_path_name / model_revision
         output_path.mkdir(parents=True, exist_ok=True)
         return output_path
+
+    @staticmethod
+    def _save_model_metadata(model_meta: ModelMeta, output_folder: Path) -> None:
+        save_path = output_folder / "model_meta.json"
+
+        with save_path.open("w") as f:
+            json.dump(model_meta.to_dict(), f)
