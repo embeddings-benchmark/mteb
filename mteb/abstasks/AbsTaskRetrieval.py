@@ -358,7 +358,6 @@ class AbsTaskRetrieval(AbsTask):
                 ]
                 if false_positives or false_negatives:
                     errors[qid] = {
-                        "query": queries[qid],
                         "false_positives": false_positives,
                         "false_negatives": false_negatives,
                     }
