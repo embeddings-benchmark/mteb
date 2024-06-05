@@ -8,10 +8,10 @@ from typing import Any, Sequence
 import datasets
 import numpy as np
 import torch
-from datasets import DatasetDict
-from sklearn.model_selection import train_test_split
+from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 
+from mteb.abstasks.stratification import _iterative_train_test_split
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.languages import LanguageScripts
@@ -22,28 +22,31 @@ logger = logging.getLogger(__name__)
 
 
 def _multilabel_subsampling(
-    dataset_dict: datasets.DatasetDict,
+    dataset_dict: DatasetDict,
     seed: int,
     splits: list[str] = ["test"],
     label: str = "label",
     n_samples: int = 2048,
-) -> datasets.DatasetDict:
-    """Startified subsampling for multilabel problems."""
+) -> DatasetDict:
+    """Multilabel subsampling the dataset with stratification by the supplied label.
+    Returns a DatasetDict object.
+
+    Args:
+        dataset_dict: the DatasetDict object.
+        seed: the random seed.
+        splits: the splits of the dataset.
+        label: the label with which the stratified sampling is based on.
+        n_samples: Optional, number of samples to subsample. Default is max_n_samples.
+    """
     for split in splits:
-        labels = dataset_dict[split][label]
-        encoded_labels = MultiLabelBinarizer().fit_transform(labels)
-        idxs = np.arange(len(labels))
-        try:
-            idxs, *_ = train_test_split(
-                idxs,
-                encoded_labels,
-                stratify=encoded_labels,
-                random_state=seed,
-                train_size=n_samples,
-            )
-        except ValueError:
-            logger.warning("Couldn't subsample, continuing with full split.")
-        dataset_dict.update({split: dataset_dict[split].select(idxs)})
+        n_split = len(dataset_dict[split])
+        X_np = np.arange(n_split).reshape((-1, 1))
+        binarizer = MultiLabelBinarizer()
+        labels_np = binarizer.fit_transform(dataset_dict[split][label])
+        _, test_idx = _iterative_train_test_split(
+            X_np, labels_np, test_size=n_samples / n_split, random_state=seed
+        )
+        dataset_dict.update({split: Dataset.from_dict(dataset_dict[split][test_idx])})
     return dataset_dict
 
 
@@ -152,10 +155,6 @@ class AbsTask(ABC):
                     raise e
 
         for split in splits:
-            if len(dataset_dict[split][label]) < n_samples:
-                n_samples = len(dataset_dict[split][label]) - len(
-                    set(dataset_dict[split][label])
-                )
             dataset_dict.update(
                 {
                     split: dataset_dict[split].train_test_split(
