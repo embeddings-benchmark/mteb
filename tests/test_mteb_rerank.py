@@ -3,8 +3,6 @@ from __future__ import annotations
 import json
 import logging
 import os
-import shutil
-from pathlib import Path
 
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
@@ -339,9 +337,6 @@ def test_mteb_rerank():
                 }
             )
         )
-    # clear path
-    if Path("tests/results").exists():
-        shutil.rmtree("tests/results")
 
     eval.run(
         model,
@@ -365,10 +360,6 @@ def test_mteb_rerank():
 
 
 def test_reranker_same_ndcg1():
-    # clear path before test
-    if Path("tests/results").exists():
-        shutil.rmtree("tests/results")
-
     de_name = "average_word_embeddings_komninos"
     revision = "21eec43590414cb8e3a6f654857abed0483ae36e"
     de = SentenceTransformer(de_name, revision=revision)
