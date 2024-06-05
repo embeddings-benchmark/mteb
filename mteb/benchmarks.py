@@ -217,5 +217,5 @@ SEB = Benchmark(
       eprint={2406.02396},
       archivePrefix={arXiv},
       primaryClass={cs.CL}
-}""", 
+}""",
 )

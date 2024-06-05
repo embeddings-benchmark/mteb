@@ -25,8 +25,6 @@ def test_two_mteb_tasks():
     eval.run(model, output_folder="tests/results", overwrite_results=True)
 
 
-
-
 @pytest.mark.parametrize(
     "task",
     [
