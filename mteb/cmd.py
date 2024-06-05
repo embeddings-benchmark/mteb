@@ -15,31 +15,23 @@ import json
 import logging
 from pathlib import Path
 
-from sentence_transformers import SentenceTransformer
-
 import mteb
 from mteb import MTEB
+from mteb.encoder_interface import Encoder
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
-def name_to_path(name: str) -> str:
-    return name.replace("/", "__").replace(" ", "_")
+def _save_model_metadata(model: Encoder, output_folder: Path) -> None:
+    meta = model.mteb_model_meta  # type: ignore
 
-
-def _save_model_metadata(
-    model: SentenceTransformer, model_name: str, output_folder: Path
-) -> None:
-    save_path = output_folder / "model_meta.json"
-
-    model_meta = {
-        "model_name": model_name,
-        "versions": model._model_config.get("__version__", None),
-    }
+    save_path = (
+        output_folder / meta.model_name_as_path() / meta.revision / "model_meta.json"
+    )
 
     with save_path.open("w") as f:
-        json.dump(model_meta, f)
+        json.dump(meta.to_dict(), f)
 
 
 def main():
@@ -147,12 +139,7 @@ def main():
     if args.model is None:
         raise ValueError("Please specify a model using the -m or --model argument")
 
-    if args.output_folder is None:
-        args.output_folder = f"results/{name_to_path(args.model)}"
-
-    model = SentenceTransformer(
-        args.model, device=args.device, revision=args.model_revision
-    )
+    model = mteb.get_model(args.model, args.model_revision, device=args.device)
 
     tasks = mteb.get_tasks(
         categories=args.categories,
@@ -170,7 +157,7 @@ def main():
         co2_tracker=args.co2_tracker,
     )
 
-    _save_model_metadata(model, args.model, Path(args.output_folder))
+    _save_model_metadata(model, Path(args.output_folder))
 
 
 if __name__ == "__main__":

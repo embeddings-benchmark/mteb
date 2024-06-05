@@ -20,8 +20,12 @@ STR_DATE = Annotated[
 ]  # Allows the type to be a string, but ensures that the string is a valid date
 
 
-def sentence_transformers_loader(model_name: str, revision: str) -> SentenceTransformer:
-    return SentenceTransformer(model_name_or_path=model_name, revision=revision)
+def sentence_transformers_loader(
+    model_name: str, revision: str, **kwargs
+) -> SentenceTransformer:
+    return SentenceTransformer(
+        model_name_or_path=model_name, revision=revision, **kwargs
+    )
 
 
 class ModelMeta(BaseModel):
@@ -36,7 +40,7 @@ class ModelMeta(BaseModel):
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
-        revision: The revision number of the model.
+        revision: The revision number of the model. If None it is assumed that the metadata (including the loader) is valid for all revisions of the model.
         release_date: The date the model's revision was released.
         license: The license under which the model is released. Required if open_source is True.
         open_source: Whether the model is open source or proprietary.
@@ -45,10 +49,10 @@ class ModelMeta(BaseModel):
             in the Latin script.
     """
 
-    name: str
-    revision: str
-    release_date: STR_DATE
-    languages: list[ISO_LANGUAGE_SCRIPT]
+    name: str | None
+    revision: str | None
+    release_date: STR_DATE | None
+    languages: list[ISO_LANGUAGE_SCRIPT] | None
     loader: Callable[..., Encoder | EncoderWithQueryCorpusEncode] | None = None
     n_parameters: int | None = None
     memory_usage: float | None = None
@@ -70,9 +74,15 @@ class ModelMeta(BaseModel):
                 sentence_transformers_loader,
                 model_name=self.name,
                 revision=self.revision,
+                **kwargs,
             )
         else:
             loader = self.loader
 
         model: Encoder | EncoderWithQueryCorpusEncode = loader(**kwargs)  # type: ignore
         return model
+
+    def model_name_as_path(self) -> str:
+        if self.name is None:
+            raise ValueError("Model name is not set")
+        return self.name.replace("/", "__").replace(" ", "_")
