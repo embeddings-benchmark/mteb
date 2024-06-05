@@ -1,6 +1,6 @@
 # Reproducible Workflows
 
-This section introduce how to MTEB uses reproducible workflows. The main goal is to make the results reproducible and transparent. The workflow is based on the following principles:
+This section introduces how MTEB uses reproducible workflows. The main goal is to make the results reproducible and transparent. The workflow is based on the following principles:
 
 1. **Version control**: Both code and data are versioned using git revision IDs.
 2. **Model Repository**: MTEB includes a model registry of models run on MTEB since June 2024. These implementations are stored in `mteb/models/`. This is to ensure that the model run is transparent, documented, and reproducible. Note that models which are simply loaded and run using SentenceTransformers are not documented, as referring only to the revision ID of the model is sufficient to reproduce the results.
@@ -30,15 +30,15 @@ To add a model to the model registry, the following steps should be followed:
 
 1. **Add a ModelMeta**
 
-Add a ModelMeta object to `mteb/models/*`. This object among other things contain:
+Add a ModelMeta object to `mteb/models/*`. This object among other things contains:
     - `model_name`: The name of the model, e.g. "sentence-transformers/all-MiniLM-L6-v2".
     - `revision`: The revision id of the model
     - `languages`: The list of languages the model is trained on.
     - ...
   
-You might addionally want to specify additional parameters like whether the model is open source, framework, etc.
+You may additionally want to specify parameters like whether the model is open-source, framework, etc.
 
-2. **If you model is not a SentenceTransformer compatible**
+2. **If your model is not compatible with SentenceTransformer**
 
 Additionally specify the `loader` in the ModelMeta object. This is a function that loads the model and returns a mteb compatible `Encoder` model. For the `Encoder` class, see `mteb/encoder_interface.py`.
 
@@ -47,5 +47,5 @@ Additionally specify the `loader` in the ModelMeta object. This is a function th
 Submit a pull request with the new model. The model will be reviewed and added to the model repository. Please include the checklist in the pull request:
 
 - [ ] I have filled out the ModelMeta object to the extent possible
-- [ ] I have ensure that my model can be loaded using `mteb.get_model(model_name, revision_id)` and `mteb.get_model_meta(model_name, revision_id)`
-- [ ] I have tested the implementation works of a representative set of tasks.
+- [ ] I have ensured that my model can be loaded using `mteb.get_model(model_name, revision_id)` and `mteb.get_model_meta(model_name, revision_id)`
+- [ ] I have tested the implementation works for a representative set of tasks.

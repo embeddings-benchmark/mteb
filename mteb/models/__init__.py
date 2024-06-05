@@ -69,7 +69,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
         )
         meta = ModelMeta(
             name=name,
-            revision=mdl.model_card_data.base_model_revision,
+            revision=model.model_card_data.base_model_revision,
             release_date=None,
             languages=model.mteb_model_meta.languages,
             framework=["Sentence Transformers"],

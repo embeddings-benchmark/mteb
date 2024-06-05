@@ -170,7 +170,7 @@ e5_mult_small = ModelMeta(
 
 e5_mult_base = ModelMeta(
     loader=partial(E5Wrapper, model_name="intfloat/multilingual-e5-base"),  # type: ignore
-    name="intfloat/multilingual-e5-small",
+    name="intfloat/multilingual-e5-base",
     languages=xlmr_languages,
     open_source=True,
     revision="d13f1b27baf31030b7fd040960d60d909913633f",
@@ -180,7 +180,7 @@ e5_mult_base = ModelMeta(
 
 e5_mult_large = ModelMeta(
     loader=partial(E5Wrapper, model_name="intfloat/multilingual-e5-large"),  # type: ignore
-    name="intfloat/multilingual-e5-small",
+    name="intfloat/multilingual-e5-large",
     languages=xlmr_languages,
     open_source=True,
     revision="4dc6d853a804b9c8886ede6dda8a073b7dc08a81",
