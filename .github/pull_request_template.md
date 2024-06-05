@@ -11,7 +11,7 @@
 - [ ] Run the formatter to format the code using `make lint`. 
 
 
-## Adding datasets checklist
+### Adding datasets checklist
 <!-- see also https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_dataset.md -->
 
 **Reason for dataset addition**: ... <!-- Add reason for adding dataset here. E.g. it covers task/language/domain previously not covered -->
@@ -26,7 +26,7 @@
 - [ ] Run the formatter to format the code using `make lint`. 
 
 
-## Adding a model checklist
+### Adding a model checklist
 <!-- 
 When adding a model to the model registry
 see also https://github.com/embeddings-benchmark/mteb/blob/main/docs/reproducible_workflow.md
