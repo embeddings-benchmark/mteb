@@ -54,6 +54,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [CBD](http://2019.poleval.pl/files/poleval2019.pdf) | ['pol'] | Classification | s2s |  | {'test': 1000} | {'test': 93.2} |
 | [CDSC-E](https://aclanthology.org/P17-1073.pdf) | ['pol'] | PairClassification | s2s |  |  |  |
 | [CDSC-R](https://aclanthology.org/P17-1073.pdf) | ['pol'] | STS | s2s | [Web] | {'test': 1000} | {'test': 75.24} |
+| [CEDRClassification](https://www.sciencedirect.com/science/article/pii/S1877050921013247) (Sboev et al., 2021) | ['rus'] | MultilabelClassification | s2s | [Web, Social, Blog] | {'test': 1882} | {'test': 91.2} |
 | [CLSClusteringP2P.v2](https://arxiv.org/abs/2209.05034) (Yudong Li, 2022) | ['cmn'] | Clustering | p2p | [Academic] | {'test': 2048} |  |
 | [CLSClusteringS2S.v2](https://arxiv.org/abs/2209.05034) (Yudong Li, 2022) | ['cmn'] | Clustering | s2s | [Academic] | {'test': 2048} |  |
 | [CMedQAv1-reranking](https://github.com/zhangsheng93/cMedQA) | ['cmn'] | Reranking | s2s |  |  |  |
@@ -382,6 +383,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [RomanianReviewsSentiment](https://arxiv.org/abs/2101.04197) (Anca Maria Tache, 2021) | ['ron'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 588.6} |
 | [RomanianSentimentClassification](https://arxiv.org/abs/2009.08712) (Dumitrescu et al., 2020) | ['ron'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 67.6} |
 | [RonSTS](https://openreview.net/forum?id=JH61CD7afTv) (Dumitrescu et al., 2021) | ['ron'] | STS | s2s | [News, Social, Web] | {'test': 1379} | {'test': 60.5} |
+| [RuBQReranking](https://openreview.net/pdf?id=P5UQFFoQ4PJ) (Ivan Rybin, 2021) | ['rus'] | Reranking | s2p | [Encyclopaedic] | {'test': 1551} | {'test': 499.9} |
 | [RuBQRetrieval](https://openreview.net/pdf?id=P5UQFFoQ4PJ) (Ivan Rybin, 2021) | ['rus'] | Retrieval | s2p | [Encyclopaedic] | {'test': 2845} | {'test': 509.5} |
 | [RuReviewsClassification](https://github.com/sismetanin/rureviews) (Sergey Smetanin, 2019) | ['rus'] | Classification | p2p | [Reviews] | {'test': 2048} | {'test': 133.2} |
 | [RuSTSBenchmarkSTS](https://github.com/PhilipMay/stsb-multi-mt/) | ['rus'] | STS | s2s | [News, Social, Web] | {'test': 1264} | {'test': 54.2} |
@@ -429,6 +431,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [SciDocsRR](https://allenai.org/data/scidocs) | ['eng'] | Reranking | s2s | [Academic, Non-fiction] | {'test': 19599} | {'test': 69.0} |
 | [SciFact](https://github.com/allenai/scifact) | ['eng'] | Retrieval | s2p |  |  |  |
 | [SciFact-PL](https://github.com/allenai/scifact) | ['pol'] | Retrieval | s2p |  |  |  |
+| [SensitiveTopicsClassification](https://aclanthology.org/2021.bsnlp-1.4) | ['rus'] | MultilabelClassification | s2s | [Web, Social] | {'test': 2048} | {'test': 95.3} |
 | [SentimentAnalysisHindi](https://huggingface.co/datasets/OdiaGenAI/sentiment_analysis_hindi) (Shantipriya Parida, 2023) | ['hin'] | Classification | s2s | [Reviews] | {'train': 2497} | {'train': 81.29} |
 | [SinhalaNewsClassification](https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Category-classification) (Nisansa de Silva, 2015) | ['sin'] | Classification | s2s | [News] | {'train': 3327} | {'train': 148.04} |
 | [SinhalaNewsSourceClassification](https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Source-classification) (Dhananjaya et al., 2022) | ['sin'] | Classification | s2s | [News] | {'train': 24094} | {'train': 56.08} |
@@ -1314,7 +1317,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ruf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | rug | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | run | 1 | 3 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| rus | 5 | 14 | 5 | 0 | 0 | 4 | 1 | 8 | 4 | 0 |
+| rus | 5 | 14 | 5 | 0 | 2 | 4 | 2 | 8 | 4 | 0 |
 | rwo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sag | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1579,7 +1582,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1361 | 970 | 107 | 3 | 25 | 67 | 44 | 335 | 73 | 2 |
+| Total | 1361 | 970 | 107 | 3 | 27 | 67 | 45 | 335 | 73 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
