@@ -332,7 +332,6 @@ The following tables give you an overview of the tasks in MTEB.
 | [NoRecClassification](https://aclanthology.org/L18-1661/) | ['nob'] | Classification | s2s |  | {'test': 2050} | {'test': 82.0} |
 | [NorQuadRetrieval](https://aclanthology.org/2023.nodalida-1.17/) | ['nob'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'test': 2602} | {'test': 502.19} |
 | [NordicLangClassification](https://aclanthology.org/2021.vardial-1.8/) | ['dan', 'fao', 'isl', 'nno', 'nob', 'swe'] | Classification | s2s |  | {'test': 3000} | {'test': 78.2} |
-| [NorwegianCourtsBitextMining](https://opus.nlpl.eu/ELRC-Courts_Norway-v1.php) | ['nno', 'nob'] | BitextMining | s2s | [Spoken, Legal] | {'test': 456} | {'test': 82.11} |
 | [NorwegianCourtsBitextMining](https://opus.nlpl.eu/index.php) (Tiedemann et al., 2020) | ['nno', 'nob'] | BitextMining | s2s | [Legal] | {'test': 2050} | {'test': 1884.0} |
 | [NorwegianParliamentClassification](https://huggingface.co/datasets/NbAiLab/norwegian_parliament) | ['nob'] | Classification | s2s |  | {'test': 1200, 'validation': 1200} | {'test': 1884.0, 'validation': 1911.0} |
 | [NusaX-senti](https://arxiv.org/abs/2205.15960) (Winata et al., 2022) | ['ace', 'ban', 'bbc', 'bjn', 'bug', 'eng', 'ind', 'jav', 'mad', 'min', 'nij', 'sun'] | Classification | s2s | [Reviews, Web, Social, Constructed] | {'test': 4800} | {'test': 52.4} |
@@ -1201,10 +1200,10 @@ The following tables give you an overview of the tasks in MTEB.
 | nld | 6 | 7 | 0 | 0 | 1 | 0 | 1 | 2 | 2 | 0 |
 | nlg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nna | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nno | 5 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nno | 4 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nnq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | noa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nob | 5 | 8 | 4 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
+| nob | 4 | 8 | 4 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
 | noe | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | nor | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
@@ -1580,7 +1579,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1363 | 970 | 107 | 3 | 25 | 67 | 44 | 335 | 73 | 2 |
+| Total | 1361 | 970 | 107 | 3 | 25 | 67 | 44 | 335 | 73 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
