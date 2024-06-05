@@ -7,7 +7,12 @@ from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.model_meta import ModelMeta
-from mteb.models import e5_models, sentence_transformers_models
+from mteb.models import (
+    e5_models,
+    openai_models,
+    sentence_transformers_models,
+    voyage_models,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -98,7 +103,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
     return meta
 
 
-model_modules = [e5_models, sentence_transformers_models]
+model_modules = [e5_models, sentence_transformers_models, openai_models, voyage_models]
 models = {}
 
 
