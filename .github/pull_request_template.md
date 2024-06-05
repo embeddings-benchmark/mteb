@@ -4,13 +4,14 @@
 <!-- add additional description, question etc. related to the new dataset -->
 
 
-## General Checklist
+## Checklist
+<!-- Please do not delete this -->
 
 - [ ] Run tests locally to make sure nothing is broken using `make test`. 
 - [ ] Run the formatter to format the code using `make lint`. 
 
 
-## Checklist for adding datasets
+## Adding datasets checklist
 <!-- see also https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_dataset.md -->
 
 **Reason for dataset addition**: ... <!-- Add reason for adding dataset here. E.g. it covers task/language/domain previously not covered -->
@@ -25,8 +26,11 @@
 - [ ] Run the formatter to format the code using `make lint`. 
 
 
-## Checklist for adding a model to the model registry
-<!-- see also https://github.com/embeddings-benchmark/mteb/blob/main/docs/reproducible_workflow.md -->
+## Adding a model checklist
+<!-- 
+When adding a model to the model registry
+see also https://github.com/embeddings-benchmark/mteb/blob/main/docs/reproducible_workflow.md
+-->
 
  - [ ] I have filled out the ModelMeta object to the extent possible
  - [ ] I have ensured that my model can be loaded using
