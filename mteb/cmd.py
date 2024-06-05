@@ -126,25 +126,7 @@ def main():
         help="Revision of the model to be loaded. Revisions are automatically read if the model is loaded from huggingface. ",
     )
 
-    parser.add_argument(
-        "--save_predictions",
-        action="store_true",
-        default=False,
-        help="Save predictions in the output folder",
-    )
-
-    parser.add_argument(
-        "--export_errors",
-        action="store_true",
-        default=False,
-        help="Export errors to the output folder",
-    )
-
     args = parser.parse_args()
-
-    kwargs = {
-        key: True for key in ["save_predictions", "export_errors"] if getattr(args, key)
-    }
 
     # set logging based on verbosity level
     if args.verbosity == 0:
@@ -186,7 +168,6 @@ def main():
         output_folder=args.output_folder,
         eval_splits=args.eval_splits,
         co2_tracker=args.co2_tracker,
-        **kwargs,
     )
 
     _save_model_metadata(model, args.model, Path(args.output_folder))
