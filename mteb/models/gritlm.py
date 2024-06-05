@@ -14,7 +14,7 @@ try:
             GritLM, "GritLM/GritLM-7B", mode="embedding", torch_dtype="auto"
         ),
         name="GritLM/GritLM-7B",
-        languages=[],
+        languages=["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
         open_source=True,
         revision="13f00a0e36500c80ce12870ea513846a066004af",
         release_date="2024-02-15",
