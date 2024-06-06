@@ -108,6 +108,6 @@ models = {}
 
 
 for module in model_modules:
-    for mdl in module.__dict__.values():
+    for mdl in vars(module).values():
         if isinstance(mdl, ModelMeta):
             models[mdl.name] = mdl

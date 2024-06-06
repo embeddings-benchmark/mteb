@@ -7,7 +7,7 @@ import torch
 from sentence_transformers import SentenceTransformer
 
 from mteb.model_meta import ModelMeta
-from mteb.models.utils import corpus_to_texts
+from mteb.models.text_formatting_utils import corpus_to_texts
 
 e5_paper_release_date = "2024-02-08"
 xlmr_languages = [

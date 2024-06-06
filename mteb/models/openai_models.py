@@ -5,17 +5,16 @@ from functools import partial
 from typing import Any
 
 import numpy as np
-import torch
 
-from mteb.import_utils import requires_package
 from mteb.model_meta import ModelMeta
-from mteb.models.utils import corpus_to_texts
+from mteb.models.text_formatting_utils import corpus_to_texts
+from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
 
 class OpenAIWrapper:
-    def __init__(self, model_name: str, embed_dim: int | None = None) -> None:
+    def __init__(self, model_name: str, embed_dim: int | None = None, **kwargs) -> None:
         requires_package(self, "openai", "Openai text embedding")
         from openai import OpenAI
 
@@ -23,7 +22,7 @@ class OpenAIWrapper:
         self._model_name = model_name
         self._embed_dim = embed_dim
 
-    def encode(self, sentences: list[str], **kwargs: Any) -> torch.Tensor | np.ndarray:
+    def encode(self, sentences: list[str], **kwargs: Any) -> np.ndarray:
         requires_package(self, "openai", "Openai text embedding")
         from openai import NotGiven
 
@@ -41,14 +40,12 @@ class OpenAIWrapper:
             )
         )
 
-    def encode_queries(
-        self, queries: list[str], **kwargs: Any
-    ) -> torch.Tensor | np.ndarray:
+    def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
         return self.encode(["query: " + q for q in queries], **kwargs)
 
     def encode_corpus(
         self, corpus: list[dict[str, str]] | dict[str, list[str]], **kwargs: Any
-    ) -> torch.Tensor | np.ndarray:
+    ) -> np.ndarray:
         sentences = corpus_to_texts(corpus)
         return self.encode(sentences, **kwargs)
 
@@ -60,7 +57,7 @@ text_embedding_3_small = ModelMeta(
     name="text-embedding-3-small",
     revision="1",
     release_date="2024-01-25",
-    languages=["eng-Latn"],
+    languages=None,  # supported languages not specified
     loader=partial(OpenAIWrapper, model_name="text-embedding-3-small"),
     max_tokens=8191,
     embed_dim=1536,
@@ -70,7 +67,7 @@ text_embedding_3_large = ModelMeta(
     name="text-embedding-3-large",
     revision="1",
     release_date="2024-01-25",
-    languages=["eng-Latn"],
+    languages=None,  # supported languages not specified
     loader=partial(OpenAIWrapper, model_name="text-embedding-3-large"),
     max_tokens=8191,
     embed_dim=3072,
@@ -80,7 +77,7 @@ text_embedding_ada_002 = ModelMeta(
     name="text-embedding-ada-002",
     revision="1",
     release_date="2022-12-15",
-    languages=["eng-Latn"],
+    languages=None,  # supported languages not specified
     loader=partial(OpenAIWrapper, model_name="text-embedding-ada-002"),
     max_tokens=8191,
     embed_dim=1536,
