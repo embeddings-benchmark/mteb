@@ -13,7 +13,7 @@ class TestRetrievalEvaluator:
 
         setup_method is invoked for every test method of a class.
         """
-        self.evaluator = RetrievalEvaluator()
+        self.evaluator = RetrievalEvaluator(task_name="test")
 
     def test_metrics_at_k(self):
         # Qid: {Docid: Relevance}

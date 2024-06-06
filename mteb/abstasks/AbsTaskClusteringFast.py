@@ -12,6 +12,7 @@ import sklearn.cluster
 from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 
+from ..evaluation.evaluators.normalize_encode import model_encode
 from ..MTEBResults import HFSubset
 from .AbsTask import AbsTask
 
@@ -116,13 +117,16 @@ class AbsTaskClusteringFast(AbsTask):
             example_indices = rng_state.sample(
                 range(len(dataset)), k=self.max_documents_to_embed
             )
-            downsampled_dataset = dataset.select(example_indices)
+            downsampled_dataset = dataset.select(example_indices)  # type: ignore
         else:
             downsampled_dataset = dataset
 
-        logger.info(f"Encoding {len(downsampled_dataset)} sentences...")
+        embeddings = model_encode(
+            downsampled_dataset["sentences"],  # type: ignore
+            model=model,
+            task_name=self.metadata.name,
+        )
 
-        embeddings = model.encode(downsampled_dataset["sentences"])
         labels = []
         for label in downsampled_dataset["labels"]:
             if not isinstance(label, list):

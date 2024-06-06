@@ -7,7 +7,7 @@ from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.model_meta import ModelMeta
-from mteb.models import e5_models, sentence_transformers_models
+from mteb.models import e5_instruct, e5_models, sentence_transformers_models
 
 logger = logging.getLogger(__name__)
 
@@ -48,7 +48,7 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
         A model metadata object
     """
     if model_name in models:
-        if not models[model_name].revision == revision:
+        if revision and (not models[model_name].revision == revision):
             raise ValueError(f"Model {revision} not found for model {model_name}")
         return models[model_name]
     else:  # assume it is a sentence-transformers model
@@ -98,7 +98,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
     return meta
 
 
-model_modules = [e5_models, sentence_transformers_models]
+model_modules = [e5_models, sentence_transformers_models, e5_instruct]
 models = {}
 
 

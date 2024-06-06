@@ -11,13 +11,21 @@ from sklearn.metrics.pairwise import (
 )
 
 from .Evaluator import Evaluator
+from .normalize_encode import model_encode
 
 logger = logging.getLogger(__name__)
 
 
 class STSEvaluator(Evaluator):
     def __init__(
-        self, sentences1, sentences2, gold_scores, batch_size=64, limit=None, **kwargs
+        self,
+        sentences1,
+        sentences2,
+        gold_scores,
+        task_name: str,
+        batch_size: int = 64,
+        limit: int | None = None,
+        **kwargs,
     ):
         super().__init__(**kwargs)
         if limit is not None:
@@ -28,15 +36,18 @@ class STSEvaluator(Evaluator):
         self.sentences2 = sentences2
         self.gold_scores = gold_scores
         self.batch_size = batch_size
+        self.task_name = task_name
 
     def __call__(self, model):
-        logger.info(f"Encoding {len(self.sentences1)} sentences1...")
-        embeddings1 = np.asarray(
-            model.encode(self.sentences1, batch_size=self.batch_size)
+        embeddings1 = model_encode(
+            self.sentences1, 
+            model=model, 
+            task_name=self.task_name, batch_size=self.batch_size
         )
-        logger.info(f"Encoding {len(self.sentences2)} sentences2...")
-        embeddings2 = np.asarray(
-            model.encode(self.sentences2, batch_size=self.batch_size)
+        embeddings2 = model_encode(
+            self.sentences2, 
+            model=model, 
+            task_name=self.task_name, batch_size=self.batch_size
         )
 
         logger.info("Evaluating...")

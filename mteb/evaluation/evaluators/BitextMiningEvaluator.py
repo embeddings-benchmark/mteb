@@ -2,19 +2,21 @@ from __future__ import annotations
 
 import logging
 
-import numpy as np
 import torch
 import tqdm
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
+from mteb.encoder_interface import Encoder
+
 from .Evaluator import Evaluator
+from .normalize_encode import model_encode
 from .utils import cos_sim
 
 logger = logging.getLogger(__name__)
 
 
 class BitextMiningEvaluator(Evaluator):
-    def __init__(self, sentences, batch_size=32, limit=None, subsets=None, **kwargs):
+    def __init__(self, sentences, task_name: str, subsets=None, **kwargs):
         super().__init__(**kwargs)
         # By default, all the columns in sentences will serve for evaluation
         # Specifying a 'subsets' attribute will limit to certain columns
@@ -29,22 +31,23 @@ class BitextMiningEvaluator(Evaluator):
             if "gold" not in sentences
             else sentences["gold"]
         )
+        self.task_name = task_name
 
-        self.batch_size = batch_size
-
-    def __call__(self, model):
+    def __call__(self, model: Encoder):
         scores = self.compute_metrics(model)
         return scores
 
-    def compute_metrics(self, model):
+    def compute_metrics(self, model: Encoder):
         # Compute embeddings
         logger.info(f"Encoding {self.n_subsets}x{self.n} sentences")
         embeddings = {}
         for sub in tqdm.tqdm(
             self.subsets, desc=f"Encoding {self.n_subsets}x{self.n} sentences"
         ):
-            embeddings[sub] = np.asarray(
-                model.encode(self.sentences[sub], batch_size=self.batch_size)
+            embeddings[sub] = model_encode(
+                self.sentences[sub], 
+                model=model, 
+                task_name=self.task_name
             )
 
         if set(self.subsets) == {"sentence1", "sentence2"}:  # Case of a single pair
@@ -84,12 +87,12 @@ class BitextMiningEvaluator(Evaluator):
 
         scores = {
             "precision": precision_score(
-                labels, predictions, zero_division=0.0, average="weighted"
+                labels, predictions, zero_division=0, average="weighted"
             ),
             "recall": recall_score(
-                labels, predictions, zero_division=0.0, average="weighted"
+                labels, predictions, zero_division=0, average="weighted"
             ),
-            "f1": f1_score(labels, predictions, zero_division=0.0, average="weighted"),
+            "f1": f1_score(labels, predictions, zero_division=0, average="weighted"),
             "accuracy": accuracy_score(labels, predictions),
         }
         return scores
@@ -98,20 +101,24 @@ class BitextMiningEvaluator(Evaluator):
         self,
         query_embeddings,
         corpus_embeddings,
-        query_chunk_size=100,
-        corpus_chunk_size=500000,
-        top_k=10,
+        query_chunk_size: int = 100,
+        corpus_chunk_size: int = 500000,
+        top_k: int = 10,
         score_function=cos_sim,
     ):
         """This function performs a cosine similarity search between a list of query embeddings  and a list of corpus embeddings.
         It can be used for Information Retrieval / Semantic Search for corpora up to about 1 Million entries.
-        :param query_embeddings: A 2 dimensional tensor with the query embeddings.
-        :param corpus_embeddings: A 2 dimensional tensor with the corpus embeddings.
-        :param query_chunk_size: Process 100 queries simultaneously. Increasing that value increases the speed, but requires more memory.
-        :param corpus_chunk_size: Scans the corpus 100k entries at a time. Increasing that value increases the speed, but requires more memory.
-        :param top_k: Retrieve top k matching entries.
-        :param score_function: Function for computing scores. By default, cosine similarity.
-        :return: Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by decreasing cosine similarity scores.
+
+        Args:
+            query_embeddings: A 2 dimensional tensor with the query embeddings.
+            corpus_embeddings: A 2 dimensional tensor with the corpus embeddings.
+            query_chunk_size: Process 100 queries simultaneously. Increasing that value increases the speed, but requires more memory.
+            corpus_chunk_size: Scans the corpus 100k entries at a time. Increasing that value increases the speed, but requires more memory.
+            top_k: Retrieve top k matching entries.
+            score_function: Function for computing scores. By default, cosine similarity.
+
+        Returns:
+            Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by decreasing cosine similarity scores.
         """
         query_embeddings = torch.from_numpy(query_embeddings)
         corpus_embeddings = torch.from_numpy(corpus_embeddings)

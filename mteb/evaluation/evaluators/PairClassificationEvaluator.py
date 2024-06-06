@@ -10,7 +10,11 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
+from mteb.encoder_interface import Encoder
+from mteb.evaluation.evaluators.normalize_encode import model_encode
+
 from .Evaluator import Evaluator
+from .normalize_encode import model_encode
 
 logger = logging.getLogger(__name__)
 
@@ -22,16 +26,25 @@ class PairClassificationEvaluator(Evaluator):
     The returned score is the accuracy with a specified metric.
     The results are written in a CSV. If a CSV already exists, then values are appended.
     The labels need to be 0 for dissimilar pairs and 1 for similar pairs.
-    :param sentences1: The first column of sentences
-    :param sentences2: The second column of sentences
-    :param labels: labels[i] is the label for the pair (sentences1[i], sentences2[i]). Must be 0 or 1
-    :param name: Name for the output
-    :param batch_size: Batch size used to compute embeddings
-    :param write_csv: Write results to a CSV file
+
+    Args:
+        sentences1: The first column of sentences
+        sentences2: The second column of sentences
+        labels: labels[i] is the label for the pair (sentences1[i], sentences2[i]). Must be 0 or 1
+        name: Name for the output
+        batch_size: Batch size used to compute embeddings
+        write_csv: Write results to a CSV file
     """
 
     def __init__(
-        self, sentences1, sentences2, labels, batch_size=32, limit=None, **kwargs
+        self,
+        sentences1,
+        sentences2,
+        labels,
+        task_name: str,
+        batch_size: int = 32,
+        limit: int | None = None,
+        **kwargs,
     ):
         super().__init__(**kwargs)
         if limit:
@@ -42,13 +55,14 @@ class PairClassificationEvaluator(Evaluator):
         self.sentences2 = sentences2
         self.labels = labels
         self.batch_size = batch_size
+        self.task_name = task_name
 
         assert len(self.sentences1) == len(self.sentences2)
         assert len(self.sentences1) == len(self.labels)
         for label in labels:
             assert label == 0 or label == 1
 
-    def __call__(self, model):
+    def __call__(self, model: Encoder):
         scores = self.compute_metrics(model)
 
         # Main score is the max of Average Precision (AP)
@@ -56,15 +70,25 @@ class PairClassificationEvaluator(Evaluator):
         scores["main_score"] = main_score
         return scores
 
-    def compute_metrics(self, model):
+    def compute_metrics(self, model: Encoder):
         sentences = list(set(self.sentences1 + self.sentences2))
-        logger.info(f"Encoding {len(sentences)} sentences...")
-        embeddings = np.asarray(model.encode(sentences, batch_size=self.batch_size))
+
+        total_sents = len(self.sentences1) + len(self.sentences2)
+        n_duplicates = total_sents - len(sentences)
+        if n_duplicates:
+            logger.warning(
+                f"Found {n_duplicates}/{total_sents} duplicates in the input data. Only encoding unique sentences."
+            )
+        embeddings = model_encode(
+            sentences, 
+            model=model, 
+            task_name=self.task_name, batch_size=self.batch_size
+        )
         emb_dict = {sent: emb for sent, emb in zip(sentences, embeddings)}
         embeddings1 = [emb_dict[sent] for sent in self.sentences1]
         embeddings2 = [emb_dict[sent] for sent in self.sentences2]
 
-        logger.info("Computing similarity distances...")
+        logger.info("Computing similarity distances.")
         cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)
         manhattan_distances = paired_manhattan_distances(embeddings1, embeddings2)
         euclidean_distances = paired_euclidean_distances(embeddings1, embeddings2)

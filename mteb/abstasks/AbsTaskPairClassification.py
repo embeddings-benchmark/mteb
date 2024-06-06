@@ -41,7 +41,7 @@ class AbsTaskPairClassification(AbsTask):
             "sentence_transformers.evaluation.PairClassificationEvaluator"
         ).setLevel(logging.WARN)
         evaluator = PairClassificationEvaluator(
-            data_split["sent1"], data_split["sent2"], data_split["labels"], **kwargs
+            data_split["sent1"], data_split["sent2"], data_split["labels"], task_name=self.metadata.name, **kwargs
         )
         scores = evaluator.compute_metrics(model)
 
