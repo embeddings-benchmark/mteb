@@ -16,7 +16,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from torch import Tensor
 
 from mteb.encoder_interface import Encoder
-from mteb.evaluation.evaluators.normalize_encode import model_encode
+from mteb.evaluation.evaluators.model_encode import model_encode
 
 from .Evaluator import Evaluator
 
@@ -359,14 +359,13 @@ class logRegClassificationEvaluator(Evaluator):
         clf.fit(X_train, self.y_train)
         logger.info("Evaluating...")
         y_pred = clf.predict(X_test)
-        accuracy = accuracy_score(self.y_test, y_pred)
-        f1 = f1_score(self.y_test, y_pred, average="macro")
-        scores["accuracy"] = accuracy
-        scores["f1"] = f1
+        scores["accuracy"] = accuracy_score(self.y_test, y_pred)
+        scores["f1"] = f1_score(self.y_test, y_pred, average="macro")
+        scores["f1_weighted"] = f1_score(self.y_test, y_pred, average="weighted")
 
         # if binary classification
         if len(np.unique(self.y_train)) == 2:
-            ap = average_precision_score(self.y_test, y_pred)
-            scores["ap"] = ap
+            scores["ap"] = average_precision_score(self.y_test, y_pred, average="macro")
+            scores["ap_weighted"] = average_precision_score(self.y_test, y_pred, average="weighted")
 
         return scores, test_cache

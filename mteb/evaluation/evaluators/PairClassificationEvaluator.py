@@ -11,7 +11,7 @@ from sklearn.metrics.pairwise import (
 )
 
 from mteb.encoder_interface import Encoder
-from mteb.evaluation.evaluators.normalize_encode import model_encode
+from mteb.evaluation.evaluators.model_encode import model_encode
 
 from .Evaluator import Evaluator
 

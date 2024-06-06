@@ -10,7 +10,7 @@ from scipy.stats import pearsonr, spearmanr
 from mteb.encoder_interface import Encoder
 
 from .Evaluator import Evaluator
-from .normalize_encode import model_encode
+from .model_encode import model_encode
 from .utils import cos_sim, dot_score
 
 logger = logging.getLogger(__name__)

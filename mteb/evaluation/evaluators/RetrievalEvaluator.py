@@ -17,7 +17,7 @@ from sentence_transformers.models import Transformer, WordEmbeddings
 from mteb.encoder_interface import EncoderWithQueryCorpusEncode
 
 from .Evaluator import Evaluator
-from .normalize_encode import model_encode
+from .model_encode import model_encode
 from .utils import (
     confidence_scores,
     cos_sim,

@@ -12,7 +12,7 @@ import sklearn.cluster
 from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 
-from ..evaluation.evaluators.normalize_encode import model_encode
+from ..evaluation.evaluators.model_encode import model_encode
 from ..MTEBResults import HFSubset
 from .AbsTask import AbsTask
 

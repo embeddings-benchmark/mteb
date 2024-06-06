@@ -12,7 +12,7 @@ from datasets import Dataset
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.evaluation.evaluators import RerankingEvaluator
-from mteb.evaluation.evaluators.normalize_encode import model_encode
+from mteb.evaluation.evaluators.model_encode import model_encode
 from mteb.evaluation.evaluators.RetrievalEvaluator import RetrievalEvaluator
 from mteb.evaluation.evaluators.utils import cos_sim
 from mteb.MTEBResults import ScoresDict

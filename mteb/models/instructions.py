@@ -13,6 +13,7 @@ DEFAULT_PROMPTS = {
     "Clustering": "Identify categories in user passages",
     "Reranking": "Retrieve text based on user query.",
     "Retrieval": "Retrieve text based on user query.",
+    "PairClassification": "Retrieve text that are semantically similar to the given text",
 }
 
 

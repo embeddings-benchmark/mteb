@@ -11,7 +11,7 @@ from sklearn.metrics import average_precision_score
 
 from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from .Evaluator import Evaluator
-from .normalize_encode import model_encode
+from .model_encode import model_encode
 from .utils import confidence_scores, cos_sim, nAUC
 
 logger = logging.getLogger(__name__)

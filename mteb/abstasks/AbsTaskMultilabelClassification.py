@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
-from ..evaluation.evaluators.normalize_encode import model_encode
+from ..evaluation.evaluators.model_encode import model_encode
 from ..MTEBResults import HFSubset, ScoresDict
 from .AbsTask import AbsTask
 
