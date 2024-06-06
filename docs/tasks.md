@@ -243,6 +243,7 @@ The following tables give you an overview of the tasks in MTEB.
 | Ko-miracl | ['kor'] | Retrieval | s2p |  |  |  |
 | [KorFin](https://huggingface.co/datasets/amphora/korfin-asc) (Son et al., 2023) | ['kor'] | Classification | s2s | [News] | {'test': 2048} | {'test': 75.28} |
 | [KorHateClassification](https://paperswithcode.com/dataset/korean-hatespeech-dataset) (Jihyung Moon, 2020) | ['kor'] | Classification | s2s | [Social] | {'train': 2048, 'test': 471} | {'train': 38.57, 'test': 38.86} |
+| [KorHateSpeechMLClassification](https://paperswithcode.com/dataset/korean-multi-label-hate-speech-dataset) | ['kor'] | MultilabelClassification | s2s | [Social] | {'train': 8192, 'test': 2048} | {'train': 33.67, 'test': 34.67} |
 | [KorSTS](https://arxiv.org/abs/2004.03289) (Ham et al., 2020) | ['kor'] | STS | s2s | [News, Web] | {'test': 1379} | {'test': 29.279433139534884} |
 | [KorSarcasmClassification](https://github.com/SpellOnYou/korean-sarcasm) (Kim et al., 2019) | ['kor'] | Classification | s2s | [Social] | {'train': 2048, 'test': 301} | {'train': 48.45, 'test': 46.77} |
 | [KurdishSentimentClassification](https://link.springer.com/article/10.1007/s10579-023-09716-6) (Badawi et al., 2024) | ['kur'] | Classification | s2s | [Web] | {'train': 6000, 'test': 1987} | {'train': 59.38, 'test': 56.11} |
@@ -996,7 +997,7 @@ The following tables give you an overview of the tasks in MTEB.
 | knj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | knv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kon | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kor | 4 | 9 | 0 | 0 | 0 | 2 | 1 | 6 | 3 | 0 |
+| kor | 4 | 9 | 0 | 0 | 1 | 2 | 1 | 6 | 3 | 0 |
 | kos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kpf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kpg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1582,7 +1583,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1361 | 970 | 107 | 3 | 27 | 67 | 45 | 335 | 73 | 2 |
+| Total | 1361 | 970 | 107 | 3 | 28 | 67 | 45 | 335 | 73 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
