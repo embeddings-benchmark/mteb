@@ -15,7 +15,7 @@ class Evaluator(ABC):
     Extend this class and implement __call__ for custom evaluators.
     """
 
-    def __init__(self, seed: int=42, **kwargs: Any):
+    def __init__(self, seed: int = 42, **kwargs: Any):
         self.seed = seed
         random.seed(self.seed)
         np.random.seed(self.seed)

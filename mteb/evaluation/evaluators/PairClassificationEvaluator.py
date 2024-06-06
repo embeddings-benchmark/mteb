@@ -14,7 +14,6 @@ from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.normalize_encode import model_encode
 
 from .Evaluator import Evaluator
-from .normalize_encode import model_encode
 
 logger = logging.getLogger(__name__)
 
@@ -80,9 +79,7 @@ class PairClassificationEvaluator(Evaluator):
                 f"Found {n_duplicates}/{total_sents} duplicates in the input data. Only encoding unique sentences."
             )
         embeddings = model_encode(
-            sentences, 
-            model=model, 
-            task_name=self.task_name, batch_size=self.batch_size
+            sentences, model=model, task_name=self.task_name, batch_size=self.batch_size
         )
         emb_dict = {sent: emb for sent, emb in zip(sentences, embeddings)}
         embeddings1 = [emb_dict[sent] for sent in self.sentences1]

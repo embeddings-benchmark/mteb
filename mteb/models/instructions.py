@@ -41,7 +41,6 @@ TASKNAME2INSTRUCTIONS = {
     "Banking77Classification": "Given a online banking query, find the corresponding intents",
     "EmotionClassification": "Classify the emotion expressed in the given Twitter message into one of the six emotions: anger, fear, joy, love, sadness, and surprise",
     "ImdbClassification": "Classify the sentiment expressed in the given movie review text from the IMDB dataset",
-    "MassiveIntentClassification": "Given a user utterance as query, find the user intents",
     "MassiveScenarioClassification": "Given a user utterance as query, find the user scenarios",
     "MTOPDomainClassification": "Classify the intent domain of the given utterance in task-oriented conversation",
     "MTOPIntentClassification": "Classify the intent of the given utterance in task-oriented conversation",

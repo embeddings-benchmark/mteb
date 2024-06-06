@@ -112,7 +112,9 @@ class E5InstructWrapper(Encoder):
         return torch.cat(batched_embeddings).to("cpu").detach().numpy()
 
     def encode_corpus(
-        self, corpus: list[dict[str, str]] | dict[str, list[str]] | list[str], **kwargs: Any
+        self,
+        corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
+        **kwargs: Any,
     ) -> np.ndarray:
         sep = " "
         if isinstance(corpus, dict):

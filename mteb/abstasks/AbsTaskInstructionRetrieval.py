@@ -24,10 +24,10 @@ logger = logging.getLogger(__name__)
 class HFDataLoaderInstructions(HFDataLoader):
     def __init__(
         self,
-        hf_repo: str | None= None,
+        hf_repo: str | None = None,
         hf_repo_qrels: str | None = None,
-        data_folder: str | None= None,
-        prefix: str| None = None,
+        data_folder: str | None = None,
+        prefix: str | None = None,
         corpus_file: str = "corpus.jsonl",
         query_file: str = "queries.jsonl",
         qrels_folder: str = "qrels",
@@ -325,7 +325,9 @@ class AbsTaskInstructionRetrieval(AbsTask):
         self.data_loaded = True
 
     def evaluate(self, model, split="test", **kwargs):
-        retriever = InstructionRetrievalEvaluator(model=model, task_name=self.metadata.name, **kwargs)
+        retriever = InstructionRetrievalEvaluator(
+            model=model, task_name=self.metadata.name, **kwargs
+        )
 
         scores_og = {}
         scores_changed = {}

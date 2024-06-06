@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 
-import numpy as np
 from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics.pairwise import (
     paired_cosine_distances,
@@ -40,14 +39,16 @@ class STSEvaluator(Evaluator):
 
     def __call__(self, model):
         embeddings1 = model_encode(
-            self.sentences1, 
-            model=model, 
-            task_name=self.task_name, batch_size=self.batch_size
+            self.sentences1,
+            model=model,
+            task_name=self.task_name,
+            batch_size=self.batch_size,
         )
         embeddings2 = model_encode(
-            self.sentences2, 
-            model=model, 
-            task_name=self.task_name, batch_size=self.batch_size
+            self.sentences2,
+            model=model,
+            task_name=self.task_name,
+            batch_size=self.batch_size,
         )
 
         logger.info("Evaluating...")

@@ -37,9 +37,10 @@ class ClusteringEvaluator(Evaluator):
 
     def __call__(self, model: Encoder):
         corpus_embeddings = model_encode(
-            self.sentences, 
-            model=model, 
-            task_name=self.task_name, batch_size=self.batch_size
+            self.sentences,
+            model=model,
+            task_name=self.task_name,
+            batch_size=self.batch_size,
         )
 
         logger.info("Fitting Mini-Batch K-Means model...")

@@ -545,7 +545,11 @@ class RetrievalEvaluator(Evaluator):
             return self.retriever.search_cross_encoder(corpus, queries, self.top_k)
         else:
             return self.retriever.search(
-                corpus, queries, self.top_k, self.score_function, task_name=self.task_name
+                corpus,
+                queries,
+                self.top_k,
+                self.score_function,
+                task_name=self.task_name,
             )
 
     @staticmethod

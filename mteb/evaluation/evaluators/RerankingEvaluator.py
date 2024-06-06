@@ -11,11 +11,10 @@ from sklearn.metrics import average_precision_score
 
 from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from .Evaluator import Evaluator
+from .normalize_encode import model_encode
 from .utils import confidence_scores, cos_sim, nAUC
 
 logger = logging.getLogger(__name__)
-
-from .normalize_encode import model_encode
 
 
 class RerankingEvaluator(Evaluator):
@@ -248,9 +247,7 @@ class RerankingEvaluator(Evaluator):
             f"A total on {len(all_texts) - len(all_unique_texts)}/{len(all_texts)} duplicate texts were found during encoding. Only encoding unique text and duplicating embeddings across."
         )
         all_unique_texts_embs = np.asarray(
-            encode_fn(
-                all_unique_texts, task_name=task_name, batch_size=batch_size
-            )
+            encode_fn(all_unique_texts, task_name=task_name, batch_size=batch_size)
         )
         return all_unique_texts_embs[all_texts_indexes]
 

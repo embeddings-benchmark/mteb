@@ -10,7 +10,9 @@ class TestInstructionRetrievalEvaluator:
         setup_method is invoked for every test method of a class.
         """
         # checks that it loads
-        self.evaluator = InstructionRetrievalEvaluator.InstructionRetrievalEvaluator(task_name="test")
+        self.evaluator = InstructionRetrievalEvaluator.InstructionRetrievalEvaluator(
+            task_name="test"
+        )
 
     def test_p_mrr(self):
         changed_qrels = {

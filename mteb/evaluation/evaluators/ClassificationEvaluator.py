@@ -263,7 +263,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
     @staticmethod
     def _euclidean_dist(a: Tensor, b: Tensor):
         """Computes the euclidean distance euclidean_dist(a[i], b[j]) for all i and j.
-        
+
         Returns:
             Matrix with res[i][j]  = euclidean_dist(a[i], b[j])
         """
