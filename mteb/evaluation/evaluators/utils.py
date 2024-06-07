@@ -360,8 +360,10 @@ def nAUC(
         abst_curve = np.zeros(len(abstention_rates))
 
         for i, rate in enumerate(abstention_rates):
-            num_instances_abst = min(round(rate * len(conf_scores_argsort)), len(conf_scores) - 1)
-            abst_curve[i] = metrics[conf_scores_argsort[num_instances_abst :]].mean()
+            num_instances_abst = min(
+                round(rate * len(conf_scores_argsort)), len(conf_scores) - 1
+            )
+            abst_curve[i] = metrics[conf_scores_argsort[num_instances_abst:]].mean()
 
         return abst_curve
 
