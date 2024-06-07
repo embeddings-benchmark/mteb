@@ -466,7 +466,7 @@ class RetrievalEvaluator(Evaluator):
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
         k_values: List[int],
-        ignore_identical_ids: bool = False,
+        ignore_identical_ids: bool = True,
     ) -> Tuple[Dict[str, float], dict[str, float], dict[str, float], dict[str, float]]:
         if ignore_identical_ids:
             logger.info(
