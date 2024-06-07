@@ -8,7 +8,7 @@ from pathlib import Path
 from scipy import stats
 
 from mteb import get_model_meta
-from mteb.models.e5_models import e5_mult_base, e5_mult_small
+from mteb.models.e5_models import e5_mult_base, e5_mult_small, e5_mult_large
 from mteb.MTEBResults import MTEBResults
 
 logging.basicConfig(level=logging.INFO)
@@ -31,7 +31,7 @@ TASK_LIST_CLUSTERING = [
 
 TASK_LIST = [x + ".v2" for x in TASK_LIST_CLUSTERING] + TASK_LIST_CLUSTERING
 
-MODELS = [e5_mult_small, e5_mult_base, e5_mult_small]
+MODELS = [e5_mult_small, e5_mult_base, e5_mult_large]
 
 for model in MODELS:
     model_name = model.name

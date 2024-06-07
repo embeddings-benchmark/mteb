@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 
 from mteb import MTEB, get_model
+from mteb.models.e5_models import e5_mult_base, e5_mult_small, e5_mult_large
 
 logging.basicConfig(level=logging.INFO)
 
@@ -26,15 +27,22 @@ TASK_LIST_CLUSTERING = [
 
 TASK_LIST = [x + ".v2" for x in TASK_LIST_CLUSTERING] + TASK_LIST_CLUSTERING
 
-model = get_model(
-    model_name="intfloat/multilingual-e5-base",
-    revision="d13f1b27baf31030b7fd040960d60d909913633f",
-)
+MODELS = [
+    e5_mult_small, 
+    # e5_mult_base, 
+    e5_mult_large,
+]
 
-eval_splits = ["test"]
-evaluation = MTEB(
-    tasks=TASK_LIST_CLUSTERING, task_langs=["en"]
-)  # Remove "en" for running all languages
-evaluation.run(
-    model, output_folder="results", eval_splits=eval_splits, overwrite_results=True
-)
+for model in MODELS:
+    model_name = model.name
+    revision = model.revision
+
+    model = get_model(model_name=model_name, revision=revision)
+
+    eval_splits = ["test"]
+    evaluation = MTEB(
+        tasks=TASK_LIST_CLUSTERING, task_langs=["en"]
+    )  # Remove "en" for running all languages
+    evaluation.run(
+        model, output_folder="results", eval_splits=eval_splits, overwrite_results=True
+    )
