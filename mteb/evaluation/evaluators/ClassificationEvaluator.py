@@ -366,6 +366,8 @@ class logRegClassificationEvaluator(Evaluator):
         # if binary classification
         if len(np.unique(self.y_train)) == 2:
             scores["ap"] = average_precision_score(self.y_test, y_pred, average="macro")
-            scores["ap_weighted"] = average_precision_score(self.y_test, y_pred, average="weighted")
+            scores["ap_weighted"] = average_precision_score(
+                self.y_test, y_pred, average="weighted"
+            )
 
         return scores, test_cache
