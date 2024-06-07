@@ -138,9 +138,14 @@ class AbsTaskClusteringFast(AbsTask):
             max_depth=self.max_depth,
             rng_state=rng_state,
         )
-        all_v_scores = itertools.chain.from_iterable(v_measures.values())
-        mean_v_measure = np.mean(list(all_v_scores))
-        scores = {"v_measures": v_measures, "v_measure": float(mean_v_measure)}
+        all_v_scores = list(itertools.chain.from_iterable(v_measures.values()))
+        mean_v_measure = np.mean(all_v_scores)
+        v_std = np.std(all_v_scores)
+        scores = {
+            "v_measures": v_measures,
+            "v_measure": float(mean_v_measure),
+            "v_measure_std": v_std,
+        }
         self._add_main_score(scores)
         return scores
 

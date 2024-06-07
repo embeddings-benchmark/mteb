@@ -65,7 +65,7 @@ class ModelMeta(BaseModel):
     def to_dict(self):
         dict_repr = self.model_dump()
         loader = dict_repr.pop("loader", None)
-        dict_repr["loader"] = loader.__name__ if loader is not None else None
+        dict_repr["loader"] = loader.func.__name__ if loader is not None else None
         return dict_repr
 
     def load_model(self, **kwargs: Any) -> Encoder | EncoderWithQueryCorpusEncode:
