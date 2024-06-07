@@ -8,7 +8,7 @@ from pathlib import Path
 from scipy import stats
 
 from mteb import get_model_meta
-from mteb.models.e5_models import e5_mult_base, e5_mult_small, e5_mult_large
+from mteb.models.e5_models import e5_mult_base, e5_mult_large, e5_mult_small
 from mteb.MTEBResults import MTEBResults
 
 logging.basicConfig(level=logging.INFO)
@@ -31,7 +31,11 @@ TASK_LIST_CLUSTERING = [
 
 TASK_LIST = [x + ".v2" for x in TASK_LIST_CLUSTERING] + TASK_LIST_CLUSTERING
 
-MODELS = [e5_mult_small, e5_mult_base, e5_mult_large]
+MODELS = [
+    e5_mult_small,
+    e5_mult_base,
+    e5_mult_large,
+]
 
 for model in MODELS:
     model_name = model.name
@@ -39,6 +43,8 @@ for model in MODELS:
 
     main_scores = []
     main_scores_fast = []
+    times = []
+    times_fast = []
     for task in TASK_LIST:
         model_meta = get_model_meta(model_name=model_name, revision=revision)
         model_path_name = model_meta.model_name_as_path()
@@ -46,11 +52,18 @@ for model in MODELS:
         results_path = output_path / f"{task}.json"
         res = MTEBResults.from_disk(path=results_path, load_historic_data=False)
         main_score = res.scores["test"][0]["main_score"]
+        eval_time = res.evaluation_time
         if "v2" in res.task_name:
             main_scores_fast.append(main_score)
+            times_fast.append(eval_time)
         else:
             main_scores.append(main_score)
+            times.append(eval_time)
 
-    ## intfloat/multilingual-e5-base = 0.8333
+    ## Spearman score
     print(f"{model_name} | {revision}")
-    print(stats.spearmanr(main_scores, main_scores_fast).statistic, "\n")
+    print(stats.spearmanr(main_scores, main_scores_fast).statistic)
+
+    ## speed up
+    speedup = sum(times) / sum(times_fast)
+    print(f"Speedup: {speedup:.2f}x\n")
