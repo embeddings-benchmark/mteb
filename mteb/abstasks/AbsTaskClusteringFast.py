@@ -91,7 +91,7 @@ class AbsTaskClusteringFast(AbsTask):
     """
 
     max_documents_to_embed = 2048
-    max_documents_per_cluster = 16_384
+    max_documents_per_cluster = 65_536
     n_clusters = 10
     k_mean_batch_size = 512
     max_depth = None

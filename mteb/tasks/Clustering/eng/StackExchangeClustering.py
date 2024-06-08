@@ -14,7 +14,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class StackExchangeClusteringFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="StackExchangeClustering.v3-1",
+        name="StackExchangeClustering.v3-2",
         description="Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
         reference="https://arxiv.org/abs/2104.07081",
         dataset={

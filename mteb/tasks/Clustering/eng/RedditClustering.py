@@ -14,7 +14,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class RedditFastClusteringS2S(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="RedditClustering.v3-1",
+        name="RedditClustering.v3-2",
         description="Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
         reference="https://arxiv.org/abs/2104.07081",
         dataset={
