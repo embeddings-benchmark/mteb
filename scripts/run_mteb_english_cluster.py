@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 
 from mteb import MTEB, get_model
-from mteb.models.e5_models import e5_mult_base, e5_mult_large, e5_mult_small
+from mteb.models.e5_models import e5_mult_base, e5_mult_large
 
 logging.basicConfig(level=logging.INFO)
 
@@ -25,11 +25,11 @@ TASK_LIST_CLUSTERING = [
     "TwentyNewsgroupsClustering",
 ]
 
-TASK_LIST = [x + ".v3" for x in TASK_LIST_CLUSTERING]# + TASK_LIST_CLUSTERING
+TASK_LIST = [x + ".v3-1" for x in TASK_LIST_CLUSTERING]  # + TASK_LIST_CLUSTERING
 
 MODELS = [
-    e5_mult_small,
-    # e5_mult_base,
+    # e5_mult_small,
+    e5_mult_base,
     e5_mult_large,
 ]
 

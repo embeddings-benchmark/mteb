@@ -16,7 +16,7 @@ from ....abstasks.AbsTaskClusteringFast import (
 
 class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="StackExchangeClusteringP2P.v3",
+        name="StackExchangeClusteringP2P.v3-1",
         description="Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragraphs and 5 sets of 5k paragraphs.",
         reference="https://arxiv.org/abs/2104.07081",
         dataset={

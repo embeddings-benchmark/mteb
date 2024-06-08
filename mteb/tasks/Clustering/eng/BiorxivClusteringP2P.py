@@ -10,7 +10,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class BiorxivClusteringP2PFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="BiorxivClusteringP2P.v3",
+        name="BiorxivClusteringP2P.v3-1",
         description="Clustering of titles+abstract from biorxiv across 26 categories.",
         reference="https://api.biorxiv.org/",
         dataset={

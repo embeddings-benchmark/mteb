@@ -57,7 +57,7 @@ class TwentyNewsgroupsClustering(AbsTaskClustering):
 
 class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="TwentyNewsgroupsClustering.v3",
+        name="TwentyNewsgroupsClustering.v3-1",
         description="Clustering of the 20 Newsgroups dataset (subject only).",
         reference="https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html",
         dataset={

@@ -29,7 +29,7 @@ TASK_LIST_CLUSTERING = [
     "TwentyNewsgroupsClustering",
 ]
 
-version = "v3"
+version = "v3-1"
 TASK_LIST = [x + f".{version}" for x in TASK_LIST_CLUSTERING] + TASK_LIST_CLUSTERING
 
 MODELS = [

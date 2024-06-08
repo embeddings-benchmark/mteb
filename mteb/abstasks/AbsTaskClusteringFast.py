@@ -7,15 +7,12 @@ from collections import defaultdict
 from typing import Any, Dict, Optional
 
 import numpy as np
-import tqdm
 import sklearn
 import sklearn.cluster
-from datasets import ClassLabel, Dataset, DatasetDict
+from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 
 from ..MTEBResults import HFSubset
-from ..evaluation.evaluators import ClusteringEvaluator
-
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -93,8 +90,8 @@ class AbsTaskClusteringFast(AbsTask):
         labels: list[str] | list[list[str]]
     """
 
-    max_documents_to_embed = 16_384
-    max_documents_per_cluster = 2048
+    max_documents_to_embed = 2048
+    max_documents_per_cluster = 16_384
     n_clusters = 10
     k_mean_batch_size = 512
     max_depth = None
@@ -114,27 +111,30 @@ class AbsTaskClusteringFast(AbsTask):
         self, model, dataset: DatasetDict, **kwargs: Any
     ) -> dict[str, float | dict[str, list[float]]]:
         rng_state = random.Random(self.seed)
-        label = "labels"
-        if not isinstance(dataset.features[label], ClassLabel):
-            dataset = dataset.class_encode_column(label)
-        v_measures = []
-        for _ in tqdm.tqdm(range(self.n_clusters), desc="Clustering"):
-            downsampled_dataset = dataset.train_test_split(
-                        test_size=2048, stratify_by_column=label
-                    )["test"]
-            n_embeddings = len(downsampled_dataset[label])
-            cluster_indices = rng_state.choices(range(n_embeddings), k=self.max_documents_per_cluster)
-            downsampled_dataset = downsampled_dataset.select(cluster_indices)
-            
-            _sentences = downsampled_dataset['sentences']
-            _labels = downsampled_dataset['labels']
-            evaluator = ClusteringEvaluator(
-                _sentences,  # type: ignore
-                _labels,  # type: ignore
-                **kwargs,
+        if len(dataset) > self.max_documents_to_embed:
+            example_indices = rng_state.sample(
+                range(len(dataset)), k=self.max_documents_to_embed
             )
-            metrics = evaluator(model)
-            v_measures.append(metrics["v_measure"])
+            downsampled_dataset = dataset.select(example_indices)
+        else:
+            downsampled_dataset = dataset
+        embeddings = model.encode(downsampled_dataset["sentences"])
+        labels = []
+        for label in downsampled_dataset["labels"]:
+            if not isinstance(label, list):
+                label = [label]
+            labels.append(label)
+
+        all_v_scores = evaluate_clustering_bootstrapped(
+            embeddings,
+            labels,
+            n_clusters=self.n_clusters,
+            cluster_size=self.max_documents_per_cluster,
+            kmean_batch_size=self.k_mean_batch_size,
+            max_depth=self.max_depth,
+            rng_state=rng_state,
+        )
+        v_measures = list(itertools.chain.from_iterable(all_v_scores.values()))
 
         mean_v_measure = np.mean(v_measures)
         v_std = np.std(v_measures)
