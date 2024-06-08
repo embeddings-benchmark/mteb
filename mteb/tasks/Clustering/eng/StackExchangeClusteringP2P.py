@@ -16,7 +16,7 @@ from ....abstasks.AbsTaskClusteringFast import (
 
 class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="StackExchangeClusteringP2P.v2",
+        name="StackExchangeClusteringP2P.v3",
         description="Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragraphs and 5 sets of 5k paragraphs.",
         reference="https://arxiv.org/abs/2104.07081",
         dataset={
@@ -75,13 +75,6 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
 
         self.dataset = DatasetDict(ds)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=16000,
-        )
 
 
 class StackExchangeClusteringP2P(AbsTaskClustering):

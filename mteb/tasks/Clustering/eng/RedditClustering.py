@@ -14,7 +14,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class RedditFastClusteringS2S(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="RedditClustering.v2",
+        name="RedditClustering.v3",
         description="Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
         reference="https://arxiv.org/abs/2104.07081",
         dataset={
@@ -62,13 +62,6 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
             check_label_distribution(self.dataset[split])
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=16000,
-        )
 
 
 class RedditClustering(AbsTaskClustering):

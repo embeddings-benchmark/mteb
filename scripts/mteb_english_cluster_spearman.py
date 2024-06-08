@@ -29,7 +29,8 @@ TASK_LIST_CLUSTERING = [
     "TwentyNewsgroupsClustering",
 ]
 
-TASK_LIST = [x + ".v2" for x in TASK_LIST_CLUSTERING] + TASK_LIST_CLUSTERING
+version = "v3"
+TASK_LIST = [x + f".{version}" for x in TASK_LIST_CLUSTERING] + TASK_LIST_CLUSTERING
 
 MODELS = [
     e5_mult_small,
@@ -53,7 +54,7 @@ for model in MODELS:
         res = MTEBResults.from_disk(path=results_path, load_historic_data=False)
         main_score = res.scores["test"][0]["main_score"]
         eval_time = res.evaluation_time
-        if "v2" in res.task_name:
+        if version in res.task_name:
             main_scores_fast.append(main_score)
             times_fast.append(eval_time)
         else:

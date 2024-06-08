@@ -45,7 +45,7 @@ class RedditClusteringP2P(AbsTaskClustering):
 
 class RedditFastClusteringP2P(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="RedditClusteringP2P.v2",
+        name="RedditClusteringP2P.v3",
         description="Clustering of title+posts from reddit. Clustering of 10 sets of 50k paragraphs and 40 sets of 10k paragraphs.",
         reference="https://arxiv.org/abs/2104.07081",
         dataset={
@@ -104,10 +104,3 @@ class RedditFastClusteringP2P(AbsTaskClusteringFast):
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
 
         self.dataset = DatasetDict(ds)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=16000,
-        )

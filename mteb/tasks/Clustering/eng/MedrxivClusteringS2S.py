@@ -10,7 +10,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class MedrxivClusteringS2SFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="MedrxivClusteringS2S.v2",
+        name="MedrxivClusteringS2S.v3",
         description="Clustering of titles from medrxiv across 51 categories.",
         reference="https://api.medrxiv.org/",
         dataset={
@@ -39,13 +39,6 @@ class MedrxivClusteringS2SFast(AbsTaskClusteringFast):
     def dataset_transform(self):
         for split in self.metadata.eval_splits:
             check_label_distribution(self.dataset[split])
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=2048,
-        )
 
 
 class MedrxivClusteringS2S(AbsTaskClustering):

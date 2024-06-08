@@ -57,7 +57,7 @@ class TwentyNewsgroupsClustering(AbsTaskClustering):
 
 class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="TwentyNewsgroupsClustering.v2",
+        name="TwentyNewsgroupsClustering.v3",
         description="Clustering of the 20 Newsgroups dataset (subject only).",
         reference="https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html",
         dataset={
@@ -108,9 +108,3 @@ class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
 
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            label="labels",
-            n_samples=2048,
-        )

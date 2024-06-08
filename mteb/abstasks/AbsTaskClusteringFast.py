@@ -7,12 +7,15 @@ from collections import defaultdict
 from typing import Any, Dict, Optional
 
 import numpy as np
+import tqdm
 import sklearn
 import sklearn.cluster
-from datasets import Dataset, DatasetDict
+from datasets import ClassLabel, Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 
 from ..MTEBResults import HFSubset
+from ..evaluation.evaluators import ClusteringEvaluator
+
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -81,7 +84,7 @@ class AbsTaskClusteringFast(AbsTask):
     The similarity then is calculated using the V-measure metric, which is invariant to the permutation of the labels.
     This approach is then repeated K times.
 
-    If the clustering is hieararchical, and more than one label is specified in order for each observation,
+    If the clustering is hierarchical, and more than one label is specified in order for each observation,
     V-measures are calculated in the outlined way on each of the levels separately.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset.
@@ -111,36 +114,30 @@ class AbsTaskClusteringFast(AbsTask):
         self, model, dataset: DatasetDict, **kwargs: Any
     ) -> dict[str, float | dict[str, list[float]]]:
         rng_state = random.Random(self.seed)
-
-        if len(dataset) > self.max_documents_to_embed:
-            example_indices = rng_state.sample(
-                range(len(dataset)), k=self.max_documents_to_embed
+        label = "labels"
+        if not isinstance(dataset.features[label], ClassLabel):
+            dataset = dataset.class_encode_column(label)
+        v_measures = []
+        for _ in tqdm.tqdm(range(self.n_clusters), desc="Clustering"):
+            downsampled_dataset = dataset.train_test_split(
+                        test_size=2048, stratify_by_column=label
+                    )["test"]
+            n_embeddings = len(downsampled_dataset[label])
+            cluster_indices = rng_state.choices(range(n_embeddings), k=self.max_documents_per_cluster)
+            downsampled_dataset = downsampled_dataset.select(cluster_indices)
+            
+            _sentences = downsampled_dataset['sentences']
+            _labels = downsampled_dataset['labels']
+            evaluator = ClusteringEvaluator(
+                _sentences,  # type: ignore
+                _labels,  # type: ignore
+                **kwargs,
             )
-            downsampled_dataset = dataset.select(example_indices)
-        else:
-            downsampled_dataset = dataset
+            metrics = evaluator(model)
+            v_measures.append(metrics["v_measure"])
 
-        logger.info(f"Encoding {len(downsampled_dataset)} sentences...")
-
-        embeddings = model.encode(downsampled_dataset["sentences"])
-        labels = []
-        for label in downsampled_dataset["labels"]:
-            if not isinstance(label, list):
-                label = [label]
-            labels.append(label)
-
-        v_measures = evaluate_clustering_bootstrapped(
-            embeddings,
-            labels,
-            n_clusters=self.n_clusters,
-            cluster_size=self.max_documents_per_cluster,
-            kmean_batch_size=self.k_mean_batch_size,
-            max_depth=self.max_depth,
-            rng_state=rng_state,
-        )
-        all_v_scores = list(itertools.chain.from_iterable(v_measures.values()))
-        mean_v_measure = np.mean(all_v_scores)
-        v_std = np.std(all_v_scores)
+        mean_v_measure = np.mean(v_measures)
+        v_std = np.std(v_measures)
         scores = {
             "v_measures": v_measures,
             "v_measure": float(mean_v_measure),

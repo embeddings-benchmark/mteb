@@ -25,11 +25,11 @@ TASK_LIST_CLUSTERING = [
     "TwentyNewsgroupsClustering",
 ]
 
-TASK_LIST = [x + ".v2" for x in TASK_LIST_CLUSTERING] + TASK_LIST_CLUSTERING
+TASK_LIST = [x + ".v3" for x in TASK_LIST_CLUSTERING]# + TASK_LIST_CLUSTERING
 
 MODELS = [
     e5_mult_small,
-    e5_mult_base,
+    # e5_mult_base,
     e5_mult_large,
 ]
 

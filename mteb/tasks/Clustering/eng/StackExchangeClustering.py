@@ -14,7 +14,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class StackExchangeClusteringFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="StackExchangeClustering.v2",
+        name="StackExchangeClustering.v3",
         description="Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
         reference="https://arxiv.org/abs/2104.07081",
         dataset={
@@ -64,13 +64,6 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
 
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=16000,
-        )
 
 
 class StackExchangeClustering(AbsTaskClustering):
