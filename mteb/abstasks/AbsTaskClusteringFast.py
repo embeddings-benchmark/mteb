@@ -119,9 +119,9 @@ class AbsTaskClusteringFast(AbsTask):
             downsampled_dataset = dataset.select(example_indices)
         else:
             downsampled_dataset = dataset
-        
+
         logger.info(f"Encoding {len(downsampled_dataset)} sentences...")
-        
+
         embeddings = model.encode(downsampled_dataset["sentences"])
         labels = []
         for label in downsampled_dataset["labels"]:
