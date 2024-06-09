@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 
-from mteb import MTEB, get_model
+from mteb import MTEB, get_model, get_tasks
 from mteb.models.e5_models import e5_mult_base, e5_mult_large, e5_mult_small
 
 logging.basicConfig(level=logging.INFO)
@@ -40,9 +40,8 @@ for model in MODELS:
     model = get_model(model_name=model_name, revision=revision)
 
     eval_splits = ["test"]
-    evaluation = MTEB(
-        tasks=TASK_LIST, task_langs=["en"]
-    )  # Remove "en" for running all languages
+    tasks = get_tasks(tasks=TASK_LIST, languages = ["eng"])
+    evaluation = MTEB(tasks=tasks)
     evaluation.run(
         model, output_folder="results", eval_splits=eval_splits, overwrite_results=True
     )
