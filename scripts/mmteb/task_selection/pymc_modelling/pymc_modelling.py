@@ -1,32 +1,9 @@
-"""For this section we seek to create a (PyMC3) model to predict the performance on an unseen task $t_i$.
-
-We denote the performance on the unseen task $S_{t_i}$ and the performance on the seen tasks $S_{t_j}$, where $t_j \in T_{-t_i}$.
-
-The model takes the general form:
-
-$S_{t_i} \sim Beta(\alpha_{t_i}, \beta_{t_i})$
-
-Where $\alpha_{t_i}$ and $\beta_{t_i}$ are the parameters of the Beta distribution, defined as:
-
-$\alpha_{t_i} = y_{-t_i} * \phi$
-$\beta_{t_i} = (1 - y_{-t_i}) * \phi$
-
-Where $\phi$ is the concentration parameter, and $y_{-t_i}$ takes the general form:
-
-$y_{-t_i} = f(S_{t_{j \neq t_i}}; \theta)$
-
-For which we assume a linear combination of the performances on the seen tasks, where $\theta_{t_i}$ is the weight of the seen tasks in the prediction of the unseen task:
-
-$y_{-t_i} = \sum_{t_j \in T_{-t_i}} \beta_{t_j} * S_{t_j}$
-
-Where $\beta_{t_j} \in \theta$.
-
+"""For more on the description of this see the corresponding markdown
 
 Requires:
-
-pip install pymc
-pip install graphviz
-(plus the graphviz library installed on your system, e.g. installed using `brew install graphviz`)
+    pip install pymc
+    pip install graphviz
+    (plus the graphviz library installed on your system, e.g. installed using `brew install graphviz`)
 """
 
 # first we create the simplle example where we predict the performance of task C, given the performances on tasks A and B
@@ -88,7 +65,7 @@ pm.model_to_graphviz(model)
 # Inference / Model fitting
 with model:
     # Inference
-    idata = pm.sample(1000, tune=1000, cores=4)
+    idata = pm.sample(1000, tune=1000)
 
 # Summarize the trace
 az.plot_trace(idata)
