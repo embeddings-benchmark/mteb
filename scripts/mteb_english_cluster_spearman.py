@@ -29,42 +29,45 @@ TASK_LIST_CLUSTERING = [
     "TwentyNewsgroupsClustering",
 ]
 
-version = "v3-2"
-TASK_LIST = [x + f".{version}" for x in TASK_LIST_CLUSTERING] + TASK_LIST_CLUSTERING
-
 MODELS = [
     e5_mult_small,
     e5_mult_base,
     e5_mult_large,
 ]
 
-for model in MODELS:
-    model_name = model.name
-    revision = model.revision
+versions = ["v2", "v3", "v3-1", "v3-2"]
 
-    main_scores = []
-    main_scores_fast = []
-    times = []
-    times_fast = []
-    for task in TASK_LIST:
-        model_meta = get_model_meta(model_name=model_name, revision=revision)
-        model_path_name = model_meta.model_name_as_path()
-        output_path = Path("./results") / model_path_name / revision
-        results_path = output_path / f"{task}.json"
-        res = MTEBResults.from_disk(path=results_path, load_historic_data=False)
-        main_score = res.scores["test"][0]["main_score"]
-        eval_time = res.evaluation_time
-        if version in res.task_name:
-            main_scores_fast.append(main_score)
-            times_fast.append(eval_time)
-        else:
-            main_scores.append(main_score)
-            times.append(eval_time)
+for version in versions:
+    task_list = [(x, x + f".{version}") for x in TASK_LIST_CLUSTERING]
 
-    ## Spearman score
-    print(f"{model_name} | {revision}")
-    print(stats.spearmanr(main_scores, main_scores_fast).statistic)
+    print(f"\n### {version}")
+    print("""|  Model    | Spearman | Speedup |\n|-----------|----------|---------|""")
 
-    ## speed up
-    speedup = sum(times) / sum(times_fast)
-    print(f"Speedup: {speedup:.2f}x\n")
+    for task_pair in task_list:
+        main_scores = []
+        main_scores_fast = []
+        times = []
+        times_fast = []
+        for task in task_pair:
+            for model in MODELS:
+                model_name = model.name
+                revision = model.revision
+                model_meta = get_model_meta(model_name=model_name, revision=revision)
+                model_path_name = model_meta.model_name_as_path()
+                output_path = Path("./results") / model_path_name / revision
+                results_path = output_path / f"{task}.json"
+                res = MTEBResults.from_disk(path=results_path, load_historic_data=False)
+                main_score = res.scores["test"][0]["main_score"]
+                eval_time = res.evaluation_time
+
+                if version in res.task_name:
+                    main_scores_fast.append(main_score)
+                    times_fast.append(eval_time)
+                else:
+                    main_scores.append(main_score)
+                    times.append(eval_time)
+
+        ## Spearman score and speed up
+        spearman = stats.spearmanr(main_scores, main_scores_fast).statistic
+        speedup = sum(times) / sum(times_fast)
+        print(f"| {task_pair[0]:<27} | {spearman} | {speedup:.2f}x")

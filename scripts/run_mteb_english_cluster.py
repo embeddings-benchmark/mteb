@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 
 from mteb import MTEB, get_model
-from mteb.models.e5_models import e5_mult_small, e5_mult_base, e5_mult_large
+from mteb.models.e5_models import e5_mult_base, e5_mult_large, e5_mult_small
 
 logging.basicConfig(level=logging.INFO)
 
