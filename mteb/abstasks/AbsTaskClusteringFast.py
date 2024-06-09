@@ -111,6 +111,7 @@ class AbsTaskClusteringFast(AbsTask):
         self, model, dataset: DatasetDict, **kwargs: Any
     ) -> dict[str, float | dict[str, list[float]]]:
         rng_state = random.Random(self.seed)
+
         if len(dataset) > self.max_documents_to_embed:
             example_indices = rng_state.sample(
                 range(len(dataset)), k=self.max_documents_to_embed
@@ -118,6 +119,9 @@ class AbsTaskClusteringFast(AbsTask):
             downsampled_dataset = dataset.select(example_indices)
         else:
             downsampled_dataset = dataset
+        
+        logger.info(f"Encoding {len(downsampled_dataset)} sentences...")
+        
         embeddings = model.encode(downsampled_dataset["sentences"])
         labels = []
         for label in downsampled_dataset["labels"]:
