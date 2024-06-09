@@ -11,19 +11,50 @@ from mteb.models.text_formatting_utils import corpus_to_texts
 from mteb.requires_package import requires_package
 
 
-def rate_limit(max_rpm: int):
-    interval = 60 / max_rpm
+def token_limit(max_tpm: int, interval: int = 60):
+    limit_interval_start_ts = time.time()
+    used_tokens = 0
+
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            nonlocal limit_interval_start_ts, used_tokens
+
+            result = func(*args, **kwargs)
+            used_tokens += result.total_tokens
+
+            current_time = time.time()
+            if current_time - limit_interval_start_ts > interval:
+                limit_interval_start_ts = current_time
+                used_tokens = 0
+
+            if used_tokens > max_tpm:
+                time.sleep(interval - (current_time - limit_interval_start_ts))
+                used_tokens = 0
+            return result
+
+        return wrapper
+
+    return decorator
+
+
+def rate_limit(max_rpm: int, interval: int = 60):
+    request_interval = interval / max_rpm
+    previous_call_ts: float | None = None
 
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             current_time = time.time()
+            nonlocal previous_call_ts
+            if (
+                previous_call_ts is not None
+                and current_time - previous_call_ts < request_interval
+            ):
+                time.sleep(request_interval - (current_time - previous_call_ts))
 
             result = func(*args, **kwargs)
-
-            elapsed_time = current_time - time.time()
-            if elapsed_time < interval:
-                time.sleep(interval - elapsed_time)
+            previous_call_ts = time.time()
             return result
 
         return wrapper
@@ -36,15 +67,17 @@ class VoyageWrapper:
         self,
         model_name: str,
         max_retries: int = 5,
-        max_rpm: int = 3,
+        max_rpm: int = 300,
+        max_tpm: int = 1_000_000,
         **kwargs,
     ) -> None:
         requires_package(self, "voyageai", "Voyage")
         import voyageai
 
         self._client = voyageai.Client(max_retries=max_retries)
+        self._embed_func = rate_limit(max_rpm)(token_limit(max_tpm)(self._client.embed))
         self._model_name = model_name
-        self._max_rpm = max_rpm
+        self._max_tpm = max_tpm
 
     def encode(
         self, sentences: list[str], *, batch_size: int = 32, **kwargs: Any
@@ -72,16 +105,27 @@ class VoyageWrapper:
         batch_size: int,
         input_type: Literal["query", "document"],
     ) -> np.ndarray:
-        embeddings = []
+        embeddings, index = [], 0
 
-        for i in range(0, len(sentences), batch_size):
+        while index < len(sentences) - 1:
+            batch, batch_tokens = [], 0
+            while (
+                index < len(sentences)
+                and len(batch) < batch_size
+                and batch_tokens < self._max_tpm
+            ):
+                batch_tokens += len(self._client.tokenize([sentences[index]]))
+                batch.append(sentences[index])
+                index += 1
+
             embeddings.extend(
-                rate_limit(self._max_rpm)(self._client.embed)(
-                    sentences[i : i + batch_size],
+                self._embed_func(
+                    texts=batch,
                     model=self._model_name,
                     input_type=input_type,
                 ).embeddings
             )
+
         return np.array(embeddings)
 
 

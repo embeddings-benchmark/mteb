@@ -41,7 +41,7 @@ class OpenAIWrapper:
         )
 
     def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
-        return self.encode(["query: " + q for q in queries], **kwargs)
+        return self.encode(queries, **kwargs)
 
     def encode_corpus(
         self, corpus: list[dict[str, str]] | dict[str, list[str]], **kwargs: Any
