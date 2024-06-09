@@ -87,16 +87,18 @@ def compute_significant_rank(scores: dict, threshold=0.05):
     return ranks
 
 
-scores = {
-    "model1": np.random.normal(1, 1, 10),  # 1 and 2 are similar
-    "model2": np.random.normal(1.1, 1, 10),
-    "model3": np.random.normal(5, 1, 10),  # 3 is much better
-}
-ranks = compute_significant_rank(scores)
-assert ranks == {
-    "models": ["model3", "model2", "model1"],
-    "rank": [1, 2, 3],
-    "significant rank": [1, 2, 2],
-}
+if __name__ == "__main__":
 
-# we can then to spearman(ranks["significant rank"], ranks_from_another_task["significant rank"])
+    scores = {
+        "model1": np.random.normal(1, 1, 10),  # 1 and 2 are similar
+        "model2": np.random.normal(1.1, 1, 10),
+        "model3": np.random.normal(5, 1, 10),  # 3 is much better
+    }
+    ranks = compute_significant_rank(scores)
+    assert ranks == {
+        "models": ["model3", "model2", "model1"],
+        "rank": [1, 2, 3],
+        "significant rank": [1, 2, 2],
+    }
+
+    # we can then to spearman(ranks["significant rank"], ranks_from_another_task["significant rank"])
