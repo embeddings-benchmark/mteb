@@ -91,7 +91,7 @@ class AbsTaskClusteringFast(AbsTask):
     """
 
     max_documents_to_embed = 2048
-    max_documents_per_cluster = 65_536
+    max_documents_per_cluster = 16_384
     n_clusters = 10
     k_mean_batch_size = 512
     max_depth = None
@@ -143,7 +143,7 @@ class AbsTaskClusteringFast(AbsTask):
         mean_v_measure = np.mean(v_measures)
         v_std = np.std(v_measures)
         scores = {
-            "v_measures": v_measures,
+            "v_measures": all_v_scores,
             "v_measure": float(mean_v_measure),
             "v_measure_std": v_std,
         }

@@ -25,7 +25,7 @@ TASK_LIST_CLUSTERING = [
     "TwentyNewsgroupsClustering",
 ]
 
-TASK_LIST = [x + ".v3-2" for x in TASK_LIST_CLUSTERING]  # + TASK_LIST_CLUSTERING
+TASK_LIST = [x + ".v2" for x in TASK_LIST_CLUSTERING] + TASK_LIST_CLUSTERING
 
 MODELS = [
     e5_mult_small,
@@ -40,7 +40,7 @@ for model in MODELS:
     model = get_model(model_name=model_name, revision=revision)
 
     eval_splits = ["test"]
-    tasks = get_tasks(tasks=TASK_LIST, languages = ["eng"])
+    tasks = get_tasks(tasks=TASK_LIST, languages=["eng"])
     evaluation = MTEB(tasks=tasks)
     evaluation.run(
         model, output_folder="results", eval_splits=eval_splits, overwrite_results=True
