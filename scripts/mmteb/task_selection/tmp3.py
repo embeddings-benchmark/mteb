@@ -43,9 +43,9 @@ pytensor.config.optimizer = "None"  # type: ignore
 # columns = tasks, rows = embedding methods
 data = pd.DataFrame(
     {
-        "task_A": [0.8, 0.7, 0.6, 0.5],
-        "task_B": [0.6, 0.6, 0.6, 0.6],
-        "task_C": [0.9, 0.8, 0.7, 0.6],
+        "task_A": [0.8, 0.7, 0.6, 0.5, 0.7, 0.6, 0.5],
+        "task_B": [0.6, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6],
+        "task_C": [0.9, 0.8, 0.7, 0.6, 0.8, 0.7, 0.6],
     }
 )
 
@@ -69,20 +69,18 @@ with pm.Model(coords=coords) as model:
     )  # task performance on unseen task (to be predicted)
 
     # Priors
-    beta = pm.Normal("beta", mu=0, sigma=1, dims="coeffs")
+    beta = pm.Normal("beta", mu=0, sigma=10, dims="coeffs")
 
     # Linear combination of inputs
     mu_linear = pm.math.dot(X, beta)  # type: ignore
 
     # Logit link function to ensure mu is between 0 and 1
-    mu = pm.Deterministic("mu", pm.math.invlogit(mu_linear))  # type: ignore
-
+    mu = pm.math.invlogit(mu_linear)
     # Precision parameter (optional to estimate or set as a constant)
     phi = pm.Gamma("phi", alpha=2, beta=2)
 
     # Likelihood
-    y_obs = pm.Beta("y_obs", mu=mu, sigma=phi, observed=y)
-    # y_obs = pm.Beta("y_obs", alpha=pm.math.exp(mu_linear), beta=pm.math.exp(-mu_linear), observed=y)  # works i guess
+    y_obs = pm.Beta("y_obs", alpha=mu * phi, beta=(1 - mu) * phi, observed=y)
 
 pm.model_to_graphviz(model)
 
@@ -97,11 +95,10 @@ az.plot_trace(idata)
 az.summary(idata, hdi_prob=0.95)
 
 
-# # generate out-of-sample predictions
+# generate out-of-sample predictions
 with model:
-    pm.set_data({"t_o": x_test, "t_u": y_test})
+    pm.set_data({"Task Performance (Observed)": x_test, "Task Performance (Unobserved)": y_test})
     idata.extend(pm.sample_posterior_predictive(idata))
 
-
-
-# plot beta 
+# Plot the predictions
+az.plot_ppc(idata)
