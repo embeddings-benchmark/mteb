@@ -68,6 +68,6 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
         "zho_Hant",
     ],
     open_source=True,
-    revision=None,  # can be any
+    revision="bf3bf13ab40c3157080a7ab344c831b9ad18b5eb",  # can be any
     release_date="2019-11-01",  # release date of paper
 )

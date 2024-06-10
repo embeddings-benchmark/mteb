@@ -10,6 +10,9 @@ from scipy import stats
 
 from mteb import get_model_meta
 from mteb.models.e5_models import e5_mult_base, e5_mult_large, e5_mult_small
+from mteb.models.sentence_transformers_models import (
+    paraphrase_multilingual_MiniLM_L12_v2,
+)
 from mteb.MTEBResults import MTEBResults
 
 logging.basicConfig(level=logging.INFO)
@@ -31,6 +34,7 @@ TASK_LIST_CLUSTERING = [
 ]
 
 MODELS = [
+    paraphrase_multilingual_MiniLM_L12_v2,
     e5_mult_small,
     e5_mult_base,
     e5_mult_large,
@@ -47,6 +51,14 @@ def test_significance(
     """Test if two distributions are significantly different using a bootstrapping method.
 
     n_samples: Number of bootstrap samples
+
+    # sanity check:
+    # should be significant
+    test_significance(np.random.normal(1, 1, 10), np.random.normal(4, 1, 10), n_samples=10_000)
+    >>> 0.0
+    # should not be significant
+    test_significance(np.random.normal(1, 1, 10), np.random.normal(1, 1, 10), n_samples=10_000)
+    >>> 0.8735
     """
     # Set the random seed for reproducibility
     np.random.seed(42)
@@ -74,6 +86,50 @@ def test_significance(
     return np.mean(bootstrap_diff >= diff)
 
 
+def compute_significant_rank(scores: dict, threshold=0.05):
+    """Compute significant rank for models.
+
+    Example:
+        ```
+        scores = {"model1": np.random.normal(1, 1, 10) # 1 and 2 are similar
+                "model2": np.random.normal(1.1, 1, 10)
+                "model3": np.random.normal(5, 1, 10) # 3 is much better
+        ranks = compute_significant_rank(scores)
+        print(ranks)
+        # {
+        "models": ["model3", "model2", "model1"],
+        # "significant rank": [1, 2, 2],
+        # "rank": [1, 2, 3],
+        # }
+        ```
+    """
+    ranks = {}
+    mean_scores = [(m, np.mean(s)) for m, s in scores.items()]
+    mean_scores = sorted(mean_scores, key=lambda x: -x[1])  # higher is first
+
+    ranks["models"], _ = zip(*mean_scores)
+    ranks["models"] = list(ranks["models"])
+    ranks["rank"] = list(range(1, len(ranks["models"]) + 1))
+
+    pairs = [
+        (ranks["models"][i], ranks["models"][i + 1])
+        for i in range(len(mean_scores) - 1)
+    ]
+
+    rank = 1
+    ranks["significant_rank"] = [rank]  # first model always get rank 1
+    for p1, p2 in pairs:
+        # test if the two models are significantly different
+        p_value = test_significance(scores[p1], scores[p2])
+
+        if p_value < threshold:
+            rank += 1
+
+        ranks["significant_rank"].append(rank)
+
+    return ranks
+
+
 for version in versions:
     task_list = [(x, x + f".{version}") for x in TASK_LIST_CLUSTERING]
 
@@ -81,15 +137,15 @@ for version in versions:
 
     model_p_val_str = " | ".join([str(model.name).split("/")[-1] for model in MODELS])
     print(f"|  Model    | Spearman | Speedup | {model_p_val_str} |")
-    print("|-----------" * 6 + "|")
+    print("|-----------" * (3 + len(MODELS)) + "|")
 
     for task_pair in task_list:
+        scores = {}
+        scores_fast = {}
         main_scores = []
         main_scores_fast = []
         times = []
         times_fast = []
-        orig_v_measures = []
-        v2_v_measures = []
         for task in task_pair:
             for model in MODELS:
                 model_name = model.name
@@ -99,22 +155,24 @@ for version in versions:
                 output_path = Path("./results") / model_path_name / revision
                 results_path = output_path / f"{task}.json"
                 res = MTEBResults.from_disk(path=results_path, load_historic_data=False)
-                v_measures = res.scores["test"][0]["v_measures"]["Level 0"]
                 main_score = res.scores["test"][0]["main_score"]
                 eval_time = res.evaluation_time
 
                 if version in res.task_name:
                     main_scores_fast.append(main_score)
                     times_fast.append(eval_time)
-                    v2_v_measures.append(v_measures)
+                    scores_fast.update({str(model.name).split("/")[-1]: res.scores["test"][0]["v_measures"]["Level 0"]})
                 else:
                     main_scores.append(main_score)
                     times.append(eval_time)
-                    orig_v_measures.append(v_measures)
+                    scores.update({str(model.name).split("/")[-1]: res.scores["test"][0]["v_measures"]})
+
 
         p_value_string = ""
         for i, _ in enumerate(MODELS):
-            p_val = test_significance(orig_v_measures[i], v2_v_measures[i])
+            ranks = compute_significant_rank(scores)
+            ranks_fast = compute_significant_rank(scores_fast)
+            p_val = test_significance(ranks["significant_rank"], ranks_fast["significant_rank"])
             p_value_string += f" {p_val:.4f} |"
 
         ## Spearman score and speed up
