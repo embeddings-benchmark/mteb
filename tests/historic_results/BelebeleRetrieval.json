@@ -3,7 +3,7 @@
   "mteb_dataset_name": "BelebeleRetrieval",
   "mteb_version": "1.7.60",
   "test": {
-    "acm-Arab-acm-Arab": {
+    "acm": {
       "map_at_1": 0.67,
       "map_at_10": 0.73936,
       "map_at_100": 0.74376,
@@ -40,7 +40,7 @@
       "recall_at_3": 0.79333,
       "recall_at_5": 0.82556
     },
-    "afr-Latn-afr-Latn": {
+    "afr": {
       "map_at_1": 0.71778,
       "map_at_10": 0.77793,
       "map_at_100": 0.78146,
@@ -77,7 +77,7 @@
       "recall_at_3": 0.82556,
       "recall_at_5": 0.85444
     },
-    "als-Latn-als-Latn": {
+    "als": {
       "map_at_1": 0.73889,
       "map_at_10": 0.79954,
       "map_at_100": 0.80289,
@@ -114,7 +114,7 @@
       "recall_at_3": 0.83889,
       "recall_at_5": 0.87333
     },
-    "amh-Ethi-amh-Ethi": {
+    "amh": {
       "map_at_1": 0.52778,
       "map_at_10": 0.6155,
       "map_at_100": 0.62202,
@@ -151,7 +151,7 @@
       "recall_at_3": 0.67667,
       "recall_at_5": 0.72889
     },
-    "apc-Arab-apc-Arab": {
+    "apc": {
       "map_at_1": 0.68778,
       "map_at_10": 0.75455,
       "map_at_100": 0.7582,
@@ -188,7 +188,7 @@
       "recall_at_3": 0.80444,
       "recall_at_5": 0.84222
     },
-    "arb-Arab-arb-Arab": {
+    "arb": {
       "map_at_1": 0.81,
       "map_at_10": 0.85544,
       "map_at_100": 0.85714,
@@ -225,7 +225,7 @@
       "recall_at_3": 0.88778,
       "recall_at_5": 0.91889
     },
-    "ars-Arab-ars-Arab": {
+    "ars": {
       "map_at_1": 0.72222,
       "map_at_10": 0.78076,
       "map_at_100": 0.78394,
@@ -262,7 +262,7 @@
       "recall_at_3": 0.82333,
       "recall_at_5": 0.85889
     },
-    "ary-Arab-ary-Arab": {
+    "ary": {
       "map_at_1": 0.41203,
       "map_at_10": 0.50075,
       "map_at_100": 0.51158,
@@ -299,7 +299,7 @@
       "recall_at_3": 0.549,
       "recall_at_5": 0.62806
     },
-    "arz-Arab-arz-Arab": {
+    "arz": {
       "map_at_1": 0.64778,
       "map_at_10": 0.7143,
       "map_at_100": 0.7197,
@@ -336,7 +336,7 @@
       "recall_at_3": 0.75778,
       "recall_at_5": 0.80667
     },
-    "asm-Beng-asm-Beng": {
+    "asm": {
       "map_at_1": 0.47111,
       "map_at_10": 0.55968,
       "map_at_100": 0.5684,
@@ -373,7 +373,7 @@
       "recall_at_3": 0.62333,
       "recall_at_5": 0.67333
     },
-    "azj-Latn-azj-Latn": {
+    "azj": {
       "map_at_1": 0.68222,
       "map_at_10": 0.74823,
       "map_at_100": 0.7528,
@@ -410,7 +410,7 @@
       "recall_at_3": 0.79667,
       "recall_at_5": 0.83444
     },
-    "bam-Latn-bam-Latn": {
+    "bam": {
       "map_at_1": 0.32333,
       "map_at_10": 0.40214,
       "map_at_100": 0.41173,
@@ -447,7 +447,7 @@
       "recall_at_3": 0.45333,
       "recall_at_5": 0.49444
     },
-    "ben-Beng-ben-Beng": {
+    "ben": {
       "map_at_1": 0.70333,
       "map_at_10": 0.77283,
       "map_at_100": 0.77689,
@@ -484,7 +484,7 @@
       "recall_at_3": 0.82778,
       "recall_at_5": 0.86667
     },
-    "bod-Tibt-bod-Tibt": {
+    "bod": {
       "map_at_1": 0.03222,
       "map_at_10": 0.04016,
       "map_at_100": 0.04573,
@@ -521,7 +521,7 @@
       "recall_at_3": 0.04556,
       "recall_at_5": 0.05111
     },
-    "bul-Cyrl-bul-Cyrl": {
+    "bul": {
       "map_at_1": 0.82333,
       "map_at_10": 0.87,
       "map_at_100": 0.87197,
@@ -558,7 +558,7 @@
       "recall_at_3": 0.91333,
       "recall_at_5": 0.92667
     },
-    "cat-Latn-cat-Latn": {
+    "cat": {
       "map_at_1": 0.82667,
       "map_at_10": 0.87435,
       "map_at_100": 0.87593,
@@ -595,7 +595,7 @@
       "recall_at_3": 0.91444,
       "recall_at_5": 0.93667
     },
-    "ceb-Latn-ceb-Latn": {
+    "ceb": {
       "map_at_1": 0.62222,
       "map_at_10": 0.69215,
       "map_at_100": 0.69676,
@@ -632,7 +632,7 @@
       "recall_at_3": 0.73889,
       "recall_at_5": 0.77889
     },
-    "ces-Latn-ces-Latn": {
+    "ces": {
       "map_at_1": 0.83111,
       "map_at_10": 0.87305,
       "map_at_100": 0.87515,
@@ -669,7 +669,7 @@
       "recall_at_3": 0.90889,
       "recall_at_5": 0.92889
     },
-    "ckb-Arab-ckb-Arab": {
+    "ckb": {
       "map_at_1": 0.26222,
       "map_at_10": 0.35448,
       "map_at_100": 0.36574,
@@ -706,7 +706,7 @@
       "recall_at_3": 0.40889,
       "recall_at_5": 0.48
     },
-    "dan-Latn-dan-Latn": {
+    "dan": {
       "map_at_1": 0.82,
       "map_at_10": 0.86946,
       "map_at_100": 0.87082,
@@ -743,7 +743,7 @@
       "recall_at_3": 0.90889,
       "recall_at_5": 0.93111
     },
-    "deu-Latn-deu-Latn": {
+    "deu": {
       "map_at_1": 0.86889,
       "map_at_10": 0.90434,
       "map_at_100": 0.90575,
@@ -780,7 +780,7 @@
       "recall_at_3": 0.93444,
       "recall_at_5": 0.95111
     },
-    "ell-Grek-ell-Grek": {
+    "ell": {
       "map_at_1": 0.78111,
       "map_at_10": 0.83937,
       "map_at_100": 0.84114,
@@ -817,7 +817,7 @@
       "recall_at_3": 0.88556,
       "recall_at_5": 0.91667
     },
-    "eng-Latn-eng-Latn": {
+    "eng": {
       "map_at_1": 0.90111,
       "map_at_10": 0.93111,
       "map_at_100": 0.93194,
@@ -854,7 +854,7 @@
       "recall_at_3": 0.95444,
       "recall_at_5": 0.96889
     },
-    "est-Latn-est-Latn": {
+    "est": {
       "map_at_1": 0.72222,
       "map_at_10": 0.78709,
       "map_at_100": 0.79027,
@@ -891,7 +891,7 @@
       "recall_at_3": 0.83778,
       "recall_at_5": 0.87667
     },
-    "eus-Latn-eus-Latn": {
+    "eus": {
       "map_at_1": 0.71333,
       "map_at_10": 0.77259,
       "map_at_100": 0.77641,
@@ -929,7 +929,7 @@
       "recall_at_5": 0.84444
     },
     "evaluation_time": 145.73,
-    "fin-Latn-fin-Latn": {
+    "fin": {
       "map_at_1": 0.81667,
       "map_at_10": 0.85362,
       "map_at_100": 0.8561,
@@ -966,7 +966,7 @@
       "recall_at_3": 0.87778,
       "recall_at_5": 0.90667
     },
-    "fra-Latn-fra-Latn": {
+    "fra": {
       "map_at_1": 0.83556,
       "map_at_10": 0.87541,
       "map_at_100": 0.87763,
@@ -1003,7 +1003,7 @@
       "recall_at_3": 0.9,
       "recall_at_5": 0.92222
     },
-    "fuv-Latn-fuv-Latn": {
+    "fuv": {
       "map_at_1": 0.21333,
       "map_at_10": 0.26585,
       "map_at_100": 0.27662,
@@ -1040,7 +1040,7 @@
       "recall_at_3": 0.29222,
       "recall_at_5": 0.33
     },
-    "gaz-Latn-gaz-Latn": {
+    "gaz": {
       "map_at_1": 0.18667,
       "map_at_10": 0.23767,
       "map_at_100": 0.25149,
@@ -1077,7 +1077,7 @@
       "recall_at_3": 0.26111,
       "recall_at_5": 0.3
     },
-    "grn-Latn-grn-Latn": {
+    "grn": {
       "map_at_1": 0.32111,
       "map_at_10": 0.39795,
       "map_at_100": 0.4079,
@@ -1114,7 +1114,7 @@
       "recall_at_3": 0.44556,
       "recall_at_5": 0.49889
     },
-    "guj-Gujr-guj-Gujr": {
+    "guj": {
       "map_at_1": 0.54889,
       "map_at_10": 0.63319,
       "map_at_100": 0.64029,
@@ -1151,7 +1151,7 @@
       "recall_at_3": 0.68889,
       "recall_at_5": 0.74667
     },
-    "hat-Latn-hat-Latn": {
+    "hat": {
       "map_at_1": 0.46667,
       "map_at_10": 0.55475,
       "map_at_100": 0.56228,
@@ -1188,7 +1188,7 @@
       "recall_at_3": 0.61556,
       "recall_at_5": 0.66333
     },
-    "hau-Latn-hau-Latn": {
+    "hau": {
       "map_at_1": 0.34333,
       "map_at_10": 0.42091,
       "map_at_100": 0.43123,
@@ -1225,7 +1225,7 @@
       "recall_at_3": 0.47222,
       "recall_at_5": 0.51778
     },
-    "heb-Hebr-heb-Hebr": {
+    "heb": {
       "map_at_1": 0.74333,
       "map_at_10": 0.79999,
       "map_at_100": 0.80328,
@@ -1262,7 +1262,7 @@
       "recall_at_3": 0.84778,
       "recall_at_5": 0.87889
     },
-    "hin-Deva-hin-Deva": {
+    "hin": {
       "map_at_1": 0.77,
       "map_at_10": 0.8208,
       "map_at_100": 0.82396,
@@ -1299,7 +1299,7 @@
       "recall_at_3": 0.86222,
       "recall_at_5": 0.88222
     },
-    "hrv-Latn-hrv-Latn": {
+    "hrv": {
       "map_at_1": 0.77556,
       "map_at_10": 0.83314,
       "map_at_100": 0.83525,
@@ -1336,7 +1336,7 @@
       "recall_at_3": 0.87444,
       "recall_at_5": 0.91222
     },
-    "hun-Latn-hun-Latn": {
+    "hun": {
       "map_at_1": 0.79333,
       "map_at_10": 0.84559,
       "map_at_100": 0.84788,
@@ -1373,7 +1373,7 @@
       "recall_at_3": 0.89111,
       "recall_at_5": 0.91556
     },
-    "hye-Armn-hye-Armn": {
+    "hye": {
       "map_at_1": 0.51111,
       "map_at_10": 0.60058,
       "map_at_100": 0.60702,
@@ -1410,7 +1410,7 @@
       "recall_at_3": 0.65778,
       "recall_at_5": 0.72556
     },
-    "ibo-Latn-ibo-Latn": {
+    "ibo": {
       "map_at_1": 0.31313,
       "map_at_10": 0.38898,
       "map_at_100": 0.40181,
@@ -1447,7 +1447,7 @@
       "recall_at_3": 0.43103,
       "recall_at_5": 0.48888
     },
-    "ilo-Latn-ilo-Latn": {
+    "ilo": {
       "map_at_1": 0.57778,
       "map_at_10": 0.65301,
       "map_at_100": 0.65851,
@@ -1484,7 +1484,7 @@
       "recall_at_3": 0.71444,
       "recall_at_5": 0.75111
     },
-    "ind-Latn-ind-Latn": {
+    "ind": {
       "map_at_1": 0.82333,
       "map_at_10": 0.86804,
       "map_at_100": 0.86994,
@@ -1521,7 +1521,7 @@
       "recall_at_3": 0.90111,
       "recall_at_5": 0.93222
     },
-    "isl-Latn-isl-Latn": {
+    "isl": {
       "map_at_1": 0.61111,
       "map_at_10": 0.70113,
       "map_at_100": 0.70565,
@@ -1558,7 +1558,7 @@
       "recall_at_3": 0.77222,
       "recall_at_5": 0.82333
     },
-    "ita-Latn-ita-Latn": {
+    "ita": {
       "map_at_1": 0.87,
       "map_at_10": 0.90214,
       "map_at_100": 0.9035,
@@ -1595,7 +1595,7 @@
       "recall_at_3": 0.92444,
       "recall_at_5": 0.94556
     },
-    "jav-Latn-jav-Latn": {
+    "jav": {
       "map_at_1": 0.63,
       "map_at_10": 0.70134,
       "map_at_100": 0.70659,
@@ -1632,7 +1632,7 @@
       "recall_at_3": 0.75556,
       "recall_at_5": 0.79889
     },
-    "jpn-Jpan-jpn-Jpan": {
+    "jpn": {
       "map_at_1": 0.81444,
       "map_at_10": 0.86936,
       "map_at_100": 0.87075,
@@ -1669,7 +1669,7 @@
       "recall_at_3": 0.91667,
       "recall_at_5": 0.94444
     },
-    "kac-Latn-kac-Latn": {
+    "kac": {
       "map_at_1": 0.198,
       "map_at_10": 0.2506,
       "map_at_100": 0.25996,
@@ -1706,7 +1706,7 @@
       "recall_at_3": 0.28142,
       "recall_at_5": 0.32147
     },
-    "kan-Knda-kan-Knda": {
+    "kan": {
       "map_at_1": 0.71,
       "map_at_10": 0.77814,
       "map_at_100": 0.7815,
@@ -1743,7 +1743,7 @@
       "recall_at_3": 0.83333,
       "recall_at_5": 0.87
     },
-    "kat-Geor-kat-Geor": {
+    "kat": {
       "map_at_1": 0.54444,
       "map_at_10": 0.62713,
       "map_at_100": 0.63334,
@@ -1780,7 +1780,7 @@
       "recall_at_3": 0.68667,
       "recall_at_5": 0.73667
     },
-    "kaz-Cyrl-kaz-Cyrl": {
+    "kaz": {
       "map_at_1": 0.64889,
       "map_at_10": 0.72307,
       "map_at_100": 0.72812,
@@ -1817,7 +1817,7 @@
       "recall_at_3": 0.77778,
       "recall_at_5": 0.82333
     },
-    "kea-Latn-kea-Latn": {
+    "kea": {
       "map_at_1": 0.40667,
       "map_at_10": 0.49034,
       "map_at_100": 0.50074,
@@ -1854,7 +1854,7 @@
       "recall_at_3": 0.54222,
       "recall_at_5": 0.60111
     },
-    "khk-Cyrl-khk-Cyrl": {
+    "khk": {
       "map_at_1": 0.52556,
       "map_at_10": 0.61301,
       "map_at_100": 0.62099,
@@ -1891,7 +1891,7 @@
       "recall_at_3": 0.67778,
       "recall_at_5": 0.73
     },
-    "khm-Khmr-khm-Khmr": {
+    "khm": {
       "map_at_1": 0.37556,
       "map_at_10": 0.48072,
       "map_at_100": 0.4905,
@@ -1928,7 +1928,7 @@
       "recall_at_3": 0.55,
       "recall_at_5": 0.61667
     },
-    "kin-Latn-kin-Latn": {
+    "kin": {
       "map_at_1": 0.50056,
       "map_at_10": 0.57103,
       "map_at_100": 0.57891,
@@ -1965,7 +1965,7 @@
       "recall_at_3": 0.61735,
       "recall_at_5": 0.66852
     },
-    "kir-Cyrl-kir-Cyrl": {
+    "kir": {
       "map_at_1": 0.62556,
       "map_at_10": 0.6972,
       "map_at_100": 0.70238,
@@ -2002,7 +2002,7 @@
       "recall_at_3": 0.74444,
       "recall_at_5": 0.79333
     },
-    "kor-Hang-kor-Hang": {
+    "kor": {
       "map_at_1": 0.84111,
       "map_at_10": 0.87849,
       "map_at_100": 0.88045,
@@ -2039,7 +2039,7 @@
       "recall_at_3": 0.90556,
       "recall_at_5": 0.92778
     },
-    "lao-Laoo-lao-Laoo": {
+    "lao": {
       "map_at_1": 0.37667,
       "map_at_10": 0.45758,
       "map_at_100": 0.46811,
@@ -2076,7 +2076,7 @@
       "recall_at_3": 0.49778,
       "recall_at_5": 0.56111
     },
-    "lin-Latn-lin-Latn": {
+    "lin": {
       "map_at_1": 0.45434,
       "map_at_10": 0.5302,
       "map_at_100": 0.53831,
@@ -2113,7 +2113,7 @@
       "recall_at_3": 0.57517,
       "recall_at_5": 0.62862
     },
-    "lit-Latn-lit-Latn": {
+    "lit": {
       "map_at_1": 0.76889,
       "map_at_10": 0.82361,
       "map_at_100": 0.82593,
@@ -2150,7 +2150,7 @@
       "recall_at_3": 0.86889,
       "recall_at_5": 0.89556
     },
-    "lug-Latn-lug-Latn": {
+    "lug": {
       "map_at_1": 0.32258,
       "map_at_10": 0.39132,
       "map_at_100": 0.40172,
@@ -2187,7 +2187,7 @@
       "recall_at_3": 0.43493,
       "recall_at_5": 0.47775
     },
-    "luo-Latn-luo-Latn": {
+    "luo": {
       "map_at_1": 0.33556,
       "map_at_10": 0.39561,
       "map_at_100": 0.40556,
@@ -2224,7 +2224,7 @@
       "recall_at_3": 0.42889,
       "recall_at_5": 0.47222
     },
-    "lvs-Latn-lvs-Latn": {
+    "lvs": {
       "map_at_1": 0.73667,
       "map_at_10": 0.79434,
       "map_at_100": 0.79738,
@@ -2261,7 +2261,7 @@
       "recall_at_3": 0.84,
       "recall_at_5": 0.87444
     },
-    "mal-Mlym-mal-Mlym": {
+    "mal": {
       "map_at_1": 0.74444,
       "map_at_10": 0.8074,
       "map_at_100": 0.81074,
@@ -2298,7 +2298,7 @@
       "recall_at_3": 0.85778,
       "recall_at_5": 0.88778
     },
-    "mar-Deva-mar-Deva": {
+    "mar": {
       "map_at_1": 0.7525,
       "map_at_10": 0.80674,
       "map_at_100": 0.80995,
@@ -2335,7 +2335,7 @@
       "recall_at_3": 0.83815,
       "recall_at_5": 0.87375
     },
-    "mkd-Cyrl-mkd-Cyrl": {
+    "mkd": {
       "map_at_1": 0.77333,
       "map_at_10": 0.82924,
       "map_at_100": 0.83195,
@@ -2372,7 +2372,7 @@
       "recall_at_3": 0.87667,
       "recall_at_5": 0.91
     },
-    "mlt-Latn-mlt-Latn": {
+    "mlt": {
       "map_at_1": 0.43444,
       "map_at_10": 0.51028,
       "map_at_100": 0.52036,
@@ -2409,7 +2409,7 @@
       "recall_at_3": 0.55556,
       "recall_at_5": 0.60556
     },
-    "mri-Latn-mri-Latn": {
+    "mri": {
       "map_at_1": 0.24333,
       "map_at_10": 0.30503,
       "map_at_100": 0.3156,
@@ -2446,7 +2446,7 @@
       "recall_at_3": 0.33889,
       "recall_at_5": 0.38111
     },
-    "mya-Mymr-mya-Mymr": {
+    "mya": {
       "map_at_1": 0.38556,
       "map_at_10": 0.48083,
       "map_at_100": 0.49123,
@@ -2483,7 +2483,7 @@
       "recall_at_3": 0.53222,
       "recall_at_5": 0.61667
     },
-    "nld-Latn-nld-Latn": {
+    "nld": {
       "map_at_1": 0.86111,
       "map_at_10": 0.90082,
       "map_at_100": 0.90173,
@@ -2520,7 +2520,7 @@
       "recall_at_3": 0.92889,
       "recall_at_5": 0.95333
     },
-    "nob-Latn-nob-Latn": {
+    "nob": {
       "map_at_1": 0.84778,
       "map_at_10": 0.89076,
       "map_at_100": 0.8922,
@@ -2557,7 +2557,7 @@
       "recall_at_3": 0.93222,
       "recall_at_5": 0.94111
     },
-    "npi-Deva-npi-Deva": {
+    "npi": {
       "map_at_1": 0.71889,
       "map_at_10": 0.77849,
       "map_at_100": 0.78197,
@@ -2594,7 +2594,7 @@
       "recall_at_3": 0.81778,
       "recall_at_5": 0.85333
     },
-    "nso-Latn-nso-Latn": {
+    "nso": {
       "map_at_1": 0.35778,
       "map_at_10": 0.44531,
       "map_at_100": 0.4542,
@@ -2631,7 +2631,7 @@
       "recall_at_3": 0.49333,
       "recall_at_5": 0.56333
     },
-    "nya-Latn-nya-Latn": {
+    "nya": {
       "map_at_1": 0.39,
       "map_at_10": 0.47281,
       "map_at_100": 0.48179,
@@ -2668,7 +2668,7 @@
       "recall_at_3": 0.52111,
       "recall_at_5": 0.58222
     },
-    "ory-Orya-ory-Orya": {
+    "ory": {
       "map_at_1": 0.70667,
       "map_at_10": 0.7758,
       "map_at_100": 0.77951,
@@ -2705,7 +2705,7 @@
       "recall_at_3": 0.83444,
       "recall_at_5": 0.86333
     },
-    "pan-Guru-pan-Guru": {
+    "pan": {
       "map_at_1": 0.64667,
       "map_at_10": 0.71221,
       "map_at_100": 0.7173,
@@ -2742,7 +2742,7 @@
       "recall_at_3": 0.76,
       "recall_at_5": 0.79333
     },
-    "pbt-Arab-pbt-Arab": {
+    "pbt": {
       "map_at_1": 0.42,
       "map_at_10": 0.5059,
       "map_at_100": 0.51625,
@@ -2779,7 +2779,7 @@
       "recall_at_3": 0.55889,
       "recall_at_5": 0.62333
     },
-    "pes-Arab-pes-Arab": {
+    "pes": {
       "map_at_1": 0.85667,
       "map_at_10": 0.89593,
       "map_at_100": 0.8971,
@@ -2816,7 +2816,7 @@
       "recall_at_3": 0.92556,
       "recall_at_5": 0.94556
     },
-    "plt-Latn-plt-Latn": {
+    "plt": {
       "map_at_1": 0.38556,
       "map_at_10": 0.46067,
       "map_at_100": 0.47009,
@@ -2853,7 +2853,7 @@
       "recall_at_3": 0.50778,
       "recall_at_5": 0.56
     },
-    "pol-Latn-pol-Latn": {
+    "pol": {
       "map_at_1": 0.82667,
       "map_at_10": 0.87396,
       "map_at_100": 0.87572,
@@ -2890,7 +2890,7 @@
       "recall_at_3": 0.91222,
       "recall_at_5": 0.93222
     },
-    "por-Latn-por-Latn": {
+    "por": {
       "map_at_1": 0.85222,
       "map_at_10": 0.8926,
       "map_at_100": 0.89379,
@@ -2927,7 +2927,7 @@
       "recall_at_3": 0.92667,
       "recall_at_5": 0.94556
     },
-    "ron-Latn-ron-Latn": {
+    "ron": {
       "map_at_1": 0.85222,
       "map_at_10": 0.88902,
       "map_at_100": 0.89013,
@@ -2964,7 +2964,7 @@
       "recall_at_3": 0.91556,
       "recall_at_5": 0.93778
     },
-    "rus-Cyrl-rus-Cyrl": {
+    "rus": {
       "map_at_1": 0.85778,
       "map_at_10": 0.89578,
       "map_at_100": 0.8971,
@@ -3001,7 +3001,7 @@
       "recall_at_3": 0.92333,
       "recall_at_5": 0.94444
     },
-    "shn-Mymr-shn-Mymr": {
+    "shn": {
       "map_at_1": 0.21667,
       "map_at_10": 0.26065,
       "map_at_100": 0.27055,
@@ -3038,7 +3038,7 @@
       "recall_at_3": 0.28333,
       "recall_at_5": 0.31889
     },
-    "sin-Latn-sin-Latn": {
+    "sin": {
       "map_at_1": 0.08111,
       "map_at_10": 0.12085,
       "map_at_100": 0.13253,
@@ -3075,7 +3075,7 @@
       "recall_at_3": 0.13222,
       "recall_at_5": 0.16889
     },
-    "slk-Latn-slk-Latn": {
+    "slk": {
       "map_at_1": 0.81444,
       "map_at_10": 0.85767,
       "map_at_100": 0.85981,
@@ -3112,7 +3112,7 @@
       "recall_at_3": 0.88667,
       "recall_at_5": 0.91444
     },
-    "slv-Latn-slv-Latn": {
+    "slv": {
       "map_at_1": 0.74111,
       "map_at_10": 0.79727,
       "map_at_100": 0.80017,
@@ -3149,7 +3149,7 @@
       "recall_at_3": 0.83333,
       "recall_at_5": 0.86556
     },
-    "sna-Latn-sna-Latn": {
+    "sna": {
       "map_at_1": 0.42825,
       "map_at_10": 0.5097,
       "map_at_100": 0.51816,
@@ -3186,7 +3186,7 @@
       "recall_at_3": 0.55951,
       "recall_at_5": 0.63181
     },
-    "snd-Arab-snd-Arab": {
+    "snd": {
       "map_at_1": 0.52222,
       "map_at_10": 0.59992,
       "map_at_100": 0.60644,
@@ -3223,7 +3223,7 @@
       "recall_at_3": 0.64667,
       "recall_at_5": 0.70667
     },
-    "som-Latn-som-Latn": {
+    "som": {
       "map_at_1": 0.26222,
       "map_at_10": 0.32729,
       "map_at_100": 0.33953,
@@ -3260,7 +3260,7 @@
       "recall_at_3": 0.35333,
       "recall_at_5": 0.42222
     },
-    "sot-Latn-sot-Latn": {
+    "sot": {
       "map_at_1": 0.40444,
       "map_at_10": 0.48689,
       "map_at_100": 0.49567,
@@ -3297,7 +3297,7 @@
       "recall_at_3": 0.54222,
       "recall_at_5": 0.59444
     },
-    "spa-Latn-spa-Latn": {
+    "spa": {
       "map_at_1": 0.86556,
       "map_at_10": 0.90249,
       "map_at_100": 0.90352,
@@ -3334,7 +3334,7 @@
       "recall_at_3": 0.92889,
       "recall_at_5": 0.95
     },
-    "srp-Cyrl-srp-Cyrl": {
+    "srp": {
       "map_at_1": 0.82369,
       "map_at_10": 0.86634,
       "map_at_100": 0.86821,
@@ -3371,7 +3371,7 @@
       "recall_at_3": 0.89711,
       "recall_at_5": 0.92158
     },
-    "ssw-Latn-ssw-Latn": {
+    "ssw": {
       "map_at_1": 0.35333,
       "map_at_10": 0.43079,
       "map_at_100": 0.43973,
@@ -3408,7 +3408,7 @@
       "recall_at_3": 0.48444,
       "recall_at_5": 0.54111
     },
-    "sun-Latn-sun-Latn": {
+    "sun": {
       "map_at_1": 0.50222,
       "map_at_10": 0.58292,
       "map_at_100": 0.58964,
@@ -3445,7 +3445,7 @@
       "recall_at_3": 0.63889,
       "recall_at_5": 0.68333
     },
-    "swe-Latn-swe-Latn": {
+    "swe": {
       "map_at_1": 0.85667,
       "map_at_10": 0.89469,
       "map_at_100": 0.89615,
@@ -3482,7 +3482,7 @@
       "recall_at_3": 0.92333,
       "recall_at_5": 0.94222
     },
-    "swh-Latn-swh-Latn": {
+    "swh": {
       "map_at_1": 0.71,
       "map_at_10": 0.77509,
       "map_at_100": 0.77824,
@@ -3519,7 +3519,7 @@
       "recall_at_3": 0.82222,
       "recall_at_5": 0.85667
     },
-    "tam-Taml-tam-Taml": {
+    "tam": {
       "map_at_1": 0.71111,
       "map_at_10": 0.7823,
       "map_at_100": 0.78498,
@@ -3556,7 +3556,7 @@
       "recall_at_3": 0.83667,
       "recall_at_5": 0.88
     },
-    "tel-Telu-tel-Telu": {
+    "tel": {
       "map_at_1": 0.62111,
       "map_at_10": 0.71223,
       "map_at_100": 0.71611,
@@ -3593,7 +3593,7 @@
       "recall_at_3": 0.79111,
       "recall_at_5": 0.82889
     },
-    "tgk-Cyrl-tgk-Cyrl": {
+    "tgk": {
       "map_at_1": 0.41444,
       "map_at_10": 0.49698,
       "map_at_100": 0.50646,
@@ -3630,7 +3630,7 @@
       "recall_at_3": 0.54778,
       "recall_at_5": 0.60889
     },
-    "tgl-Latn-tgl-Latn": {
+    "tgl": {
       "map_at_1": 0.74333,
       "map_at_10": 0.79631,
       "map_at_100": 0.80011,
@@ -3667,7 +3667,7 @@
       "recall_at_3": 0.83444,
       "recall_at_5": 0.87111
     },
-    "tha-Thai-tha-Thai": {
+    "tha": {
       "map_at_1": 0.76111,
       "map_at_10": 0.81716,
       "map_at_100": 0.81916,
@@ -3704,7 +3704,7 @@
       "recall_at_3": 0.85444,
       "recall_at_5": 0.89667
     },
-    "tir-Ethi-tir-Ethi": {
+    "tir": {
       "map_at_1": 0.19333,
       "map_at_10": 0.26662,
       "map_at_100": 0.27958,
@@ -3741,7 +3741,7 @@
       "recall_at_3": 0.30333,
       "recall_at_5": 0.37556
     },
-    "tsn-Latn-tsn-Latn": {
+    "tsn": {
       "map_at_1": 0.38444,
       "map_at_10": 0.46981,
       "map_at_100": 0.47877,
@@ -3778,7 +3778,7 @@
       "recall_at_3": 0.51667,
       "recall_at_5": 0.59333
     },
-    "tso-Latn-tso-Latn": {
+    "tso": {
       "map_at_1": 0.37778,
       "map_at_10": 0.46287,
       "map_at_100": 0.47197,
@@ -3815,7 +3815,7 @@
       "recall_at_3": 0.52556,
       "recall_at_5": 0.57556
     },
-    "tur-Latn-tur-Latn": {
+    "tur": {
       "map_at_1": 0.85111,
       "map_at_10": 0.88569,
       "map_at_100": 0.88774,
@@ -3852,7 +3852,7 @@
       "recall_at_3": 0.91556,
       "recall_at_5": 0.92556
     },
-    "ukr-Cyrl-ukr-Cyrl": {
+    "ukr": {
       "map_at_1": 0.82556,
       "map_at_10": 0.8708,
       "map_at_100": 0.87241,
@@ -3889,7 +3889,7 @@
       "recall_at_3": 0.90444,
       "recall_at_5": 0.92667
     },
-    "urd-Arab-urd-Arab": {
+    "urd": {
       "map_at_1": 0.70333,
       "map_at_10": 0.77112,
       "map_at_100": 0.77502,
@@ -3926,7 +3926,7 @@
       "recall_at_3": 0.81556,
       "recall_at_5": 0.85889
     },
-    "uzn-Latn-uzn-Latn": {
+    "uzn": {
       "map_at_1": 0.61222,
       "map_at_10": 0.69397,
       "map_at_100": 0.69875,
@@ -3963,7 +3963,7 @@
       "recall_at_3": 0.74889,
       "recall_at_5": 0.80778
     },
-    "vie-Latn-vie-Latn": {
+    "vie": {
       "map_at_1": 0.84333,
       "map_at_10": 0.88547,
       "map_at_100": 0.88743,
@@ -4000,7 +4000,7 @@
       "recall_at_3": 0.91667,
       "recall_at_5": 0.94
     },
-    "war-Latn-war-Latn": {
+    "war": {
       "map_at_1": 0.64333,
       "map_at_10": 0.70962,
       "map_at_100": 0.71448,
@@ -4037,7 +4037,7 @@
       "recall_at_3": 0.75111,
       "recall_at_5": 0.79778
     },
-    "wol-Latn-wol-Latn": {
+    "wol": {
       "map_at_1": 0.27667,
       "map_at_10": 0.34387,
       "map_at_100": 0.35583,
@@ -4074,7 +4074,7 @@
       "recall_at_3": 0.38,
       "recall_at_5": 0.42556
     },
-    "xho-Latn-xho-Latn": {
+    "xho": {
       "map_at_1": 0.43444,
       "map_at_10": 0.50874,
       "map_at_100": 0.51742,
@@ -4111,7 +4111,7 @@
       "recall_at_3": 0.55111,
       "recall_at_5": 0.61
     },
-    "yor-Latn-yor-Latn": {
+    "yor": {
       "map_at_1": 0.23333,
       "map_at_10": 0.29561,
       "map_at_100": 0.30608,
@@ -4148,7 +4148,7 @@
       "recall_at_3": 0.33222,
       "recall_at_5": 0.37333
     },
-    "zho-Hans-zho-Hans": {
+    "zho": {
       "map_at_1": 0.87667,
       "map_at_10": 0.91162,
       "map_at_100": 0.91266,
@@ -4185,7 +4185,7 @@
       "recall_at_3": 0.93889,
       "recall_at_5": 0.95667
     },
-    "zsm-Latn-zsm-Latn": {
+    "zsm": {
       "map_at_1": 0.81444,
       "map_at_10": 0.85849,
       "map_at_100": 0.86091,
@@ -4222,7 +4222,7 @@
       "recall_at_3": 0.88667,
       "recall_at_5": 0.91889
     },
-    "zul-Latn-zul-Latn": {
+    "zul": {
       "map_at_1": 0.43556,
       "map_at_10": 0.51792,
       "map_at_100": 0.52673,
