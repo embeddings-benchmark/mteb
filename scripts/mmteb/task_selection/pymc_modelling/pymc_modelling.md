@@ -38,3 +38,29 @@ $y_{-t_i} = \sigma(\sum_{t_j \in T_{-t_i}} \beta_{{t_j}, {t_i}} \cdot S_{t_j})$
 
 
 $\beta_{t_1}$ ~= 0 --> task $t_1$ ikke er prediktiv for prediktion generelt 
+
+
+
+# An hiearchical approach
+
+Alternatively we can think of the generative process
+
+We assume that a model have some generalization factor $g$ such that for the score of a task $t_i$ we assume that
+
+$t_i \sim Beta(\alpha, \beta)$
+
+Where 
+
+$\alpha = \phi * g$
+
+$\beta = \phi * (1 - g)$
+
+Where $\phi$ is the concentration parameter.
+
+We assume that the generalization factor $g$ is drawn from a normal distribution
+
+$g \sim Normal(0, 1)$
+
+However we often believe that a $g$ might be decomposed into specific segments and thus we c
+
+---
