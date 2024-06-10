@@ -1,4 +1,4 @@
-"""This specifies the default instruction for tasks within MTEB. These are optional to use and some models might want to use their own instructions."""
+"""This specifies the default instructions for tasks within MTEB. These are optional to use and some models might want to use their own instructions."""
 
 import mteb
 
