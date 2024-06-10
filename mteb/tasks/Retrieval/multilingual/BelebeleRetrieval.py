@@ -169,11 +169,11 @@ class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
 
         self.dataset = load_dataset(**self.metadata_dict["dataset"])
 
-        self.queries = {lang: {_EVAL_SPLIT: {}} for lang in self.langs}
-        self.corpus = {lang: {_EVAL_SPLIT: {}} for lang in self.langs}
-        self.relevant_docs = {lang: {_EVAL_SPLIT: {}} for lang in self.langs}
+        self.queries = {lang: {_EVAL_SPLIT: {}} for lang in self.hf_subsets}
+        self.corpus = {lang: {_EVAL_SPLIT: {}} for lang in self.hf_subsets}
+        self.relevant_docs = {lang: {_EVAL_SPLIT: {}} for lang in self.hf_subsets}
 
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             belebele_lang = _LANGS[lang][0].replace("-", "_")
             ds = self.dataset[belebele_lang]
 
