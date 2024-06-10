@@ -148,7 +148,14 @@ def get_lang_pairs() -> dict[str, list[str]]:
             lang_pairs[pair] = ["eng-Latn", lang]
 
     # add pairs for languages with a base script and a Latn script
-    lang_base_scripts = ["arb-Arab", "ben-Beng", "hin-Deva", "npi-Deva", "sin-Sinh", "urd-Arab"]
+    lang_base_scripts = [
+        "arb-Arab",
+        "ben-Beng",
+        "hin-Deva",
+        "npi-Deva",
+        "sin-Sinh",
+        "urd-Arab",
+    ]
     for lang_base_script in lang_base_scripts:
         lang = lang_base_script.split("-")[0]
         lang_latn_script = f"{lang}-Latn"
