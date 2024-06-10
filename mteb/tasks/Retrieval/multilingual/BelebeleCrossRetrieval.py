@@ -133,14 +133,30 @@ _LANGUAGES = [
 
 
 def get_lang_pairs() -> dict[str, list[str]]:
-    # add all possible language pairs
+    # add pairs with same langauge as the source and target
+    # add pairs with english as source or target
     lang_pairs = {}
     for x in _LANGUAGES:
-        for y in _LANGUAGES:
-            xx = x.replace("_", "-")
-            yy = y.replace("_", "-")
-            pair = f"{xx}-{yy}"
-            lang_pairs[pair] = [xx, yy]
+        lang = x.replace("_", "-")
+        pair = f"{lang}-{lang}"
+        lang_pairs[pair] = [lang, lang]
+
+        if x != "eng_Latn":
+            pair = f"{lang}-eng-Latn"
+            lang_pairs[pair] = [lang, "eng-Latn"]
+            pair = f"eng-Latn-{lang}"
+            lang_pairs[pair] = ["eng-Latn", lang]
+
+    # add pairs for languages with a base script and a Latn script
+    lang_base_scripts = ["arb-Arab", "ben-Beng", "hin-Deva", "npi-Deva", "sin-Sinh", "urd-Arab"]
+    for lang_base_script in lang_base_scripts:
+        lang = lang_base_script.split("-")[0]
+        lang_latn_script = f"{lang}-Latn"
+        pair = f"{lang_base_script}-{lang_latn_script}"
+        lang_pairs[pair] = [lang_base_script, lang_latn_script]
+        pair = f"{lang_latn_script}-{lang_base_script}"
+        lang_pairs[pair] = [lang_latn_script, lang_base_script]
+
     return lang_pairs
 
 
@@ -148,7 +164,6 @@ _LANGUAGES_MAPPING = get_lang_pairs()
 
 
 class BelebeleCrossRetrieval(CrosslingualTask, AbsTaskRetrieval):
-
     metadata = TaskMetadata(
         name="BelebeleCrossRetrieval",
         dataset={
