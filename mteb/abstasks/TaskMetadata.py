@@ -7,7 +7,8 @@ from typing import List, Mapping, Union
 from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
 from typing_extensions import Annotated, Literal
 
-from .languages import (
+from ..languages import (
+    ISO_LANGUAGE_SCRIPT,
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
     path_to_lang_codes,
@@ -33,6 +34,7 @@ TASK_SUBTYPE = Literal[
     "False Friends",
     "Cross-Lingual Semantic Discrimination",
     "Textual Entailment",
+    "Counterfactual Detection",
 ]
 
 TASK_DOMAIN = Literal[
@@ -61,6 +63,7 @@ TEXT_CREATION_METHOD = Literal[
     "created",
     "machine-translated",
     "human-translated and localized",
+    "human-translated",
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",
@@ -92,7 +95,9 @@ TASK_CATEGORY = Literal[
     "p2p",  # Paragraph-to-paragraph
 ]
 
-ANNOTATOR_TYPE = Literal["expert-annotated", "human-annotated", "derived"]
+ANNOTATOR_TYPE = Literal[
+    "expert-annotated", "human-annotated", "derived", "LM-generated"
+]
 
 http_url_adapter = TypeAdapter(AnyUrl)
 STR_URL = Annotated[
@@ -105,9 +110,6 @@ STR_DATE = Annotated[
 ]  # Allows the type to be a string, but ensures that the string is a valid date
 
 SPLIT_NAME = str
-ISO_LANGUAGE_SCRIPT = str  # a 3-letter ISO 639-3 language code followed by a 4-letter ISO 15924 script code (e.g. "eng-Latn")
-ISO_LANGUAGE = str  # a 3-letter ISO 639-3 language code
-ISO_SCRIPT = str  # a 4-letter ISO 15924 script code
 HFSubset = str
 LANGUAGES = Union[
     List[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, List[ISO_LANGUAGE_SCRIPT]]

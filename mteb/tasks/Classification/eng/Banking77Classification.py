@@ -19,16 +19,42 @@ class Banking77Classification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
+        date=(
+            "2019-01-01",
+            "2019-12-31",
+        ),  # Estimated range for the collection of queries
+        form=["written"],
+        domains=[],
+        task_subtypes=[],
+        license="MIT",
+        socioeconomic_status="mixed",
+        annotations_creators="human-annotated",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""@inproceedings{casanueva-etal-2020-efficient,
+    title = "Efficient Intent Detection with Dual Sentence Encoders",
+    author = "Casanueva, I{\~n}igo  and
+      Tem{\v{c}}inas, Tadas  and
+      Gerz, Daniela  and
+      Henderson, Matthew  and
+      Vuli{\'c}, Ivan",
+    editor = "Wen, Tsung-Hsien  and
+      Celikyilmaz, Asli  and
+      Yu, Zhou  and
+      Papangelis, Alexandros  and
+      Eric, Mihail  and
+      Kumar, Anuj  and
+      Casanueva, I{\~n}igo  and
+      Shah, Rushin",
+    booktitle = "Proceedings of the 2nd Workshop on Natural Language Processing for Conversational AI",
+    month = jul,
+    year = "2020",
+    address = "Online",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2020.nlp4convai-1.5",
+    doi = "10.18653/v1/2020.nlp4convai-1.5",
+    pages = "38--45",
+}""",
         n_samples={"test": 3080},
         avg_character_length={"test": 54.2},
     )

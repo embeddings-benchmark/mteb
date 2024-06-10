@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from ..evaluation.LangMapping import *
 from .AbsTask import *
 from .AbsTaskBitextMining import *
 from .AbsTaskClassification import *
@@ -12,5 +13,4 @@ from .AbsTaskRetrieval import *
 from .AbsTaskSTS import *
 from .AbsTaskSummarization import *
 from .CrosslingualTask import *
-from .LangMapping import *
 from .MultilingualTask import *

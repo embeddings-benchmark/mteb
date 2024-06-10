@@ -15,7 +15,9 @@ from .multilingual.OpusparcusPC import *
 from .multilingual.PawsX import *
 from .multilingual.RTE3 import *
 from .multilingual.XNLI import *
+from .multilingual.XStance import *
 from .pol.PolishPC import *
 from .por.Assin2RTE import *
 from .por.SickBrPC import *
+from .rus.TERRa import *
 from .zho.CMTEBPairClassification import *

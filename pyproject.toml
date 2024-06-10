@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.11.4"
+version = "1.12.24"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -15,7 +15,7 @@ authors = [
 license = { file = "LICENSE" }
 keywords = ["deep learning", "text embeddings", "benchmark"]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
@@ -26,19 +26,18 @@ classifiers = [
 requires-python = ">=3.8"
 dependencies = [
     "datasets>=2.19.0",
-    "jsonlines",
-    "numpy",
+    "numpy>=1.0.0",
     "requests>=2.26.0",
     "scikit_learn>=1.0.2",
-    "scipy",
-    "sentence_transformers>=2.2.0",
-    "torch",
-    "tqdm",
-    "rich",
+    "scipy>=0.0.0",
+    "sentence_transformers>=3.0.0",
+    "torch>1.0.0",
+    "tqdm>1.0.0",
+    "rich>=0.0.0",
     "pytrec-eval-terrier>=0.5.6",
     "pydantic>=2.0.0",
-    "typing_extensions",
-    "eval_type_backport",
+    "typing_extensions>=0.0.0",
+    "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
 ]
 
@@ -49,7 +48,7 @@ homepage = "https://github.com/embeddings-benchmark/mteb"
 "Source Code" = "https://github.com/embeddings-benchmark/mteb"
 
 [project.scripts]
-mteb = "mteb.cmd:main"
+mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
 dev = ["ruff>=0.0.254", "pytest", "pytest-xdist"]
@@ -80,7 +79,6 @@ ignore = ["E501",   # line too long
         "D205",     # 1 blank line required between summary line and description
         "D415",     # First line should end with a period
 ]
-ignore-init-module-imports = true
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"

@@ -7,8 +7,8 @@ from datasets import Dataset
 
 from ..encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from ..evaluation.evaluators import PairClassificationEvaluator
+from ..MTEBResults import ScoresDict
 from .AbsTask import AbsTask
-from .MTEBResults import ScoresDict
 
 logger = logging.getLogger(__name__)
 

@@ -14,9 +14,9 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeSearchNetRetrieval",
         description="The dataset is a collection of code snippets and their corresponding natural language queries. The task is to retrieve the most relevant code snippet for a given query.",
-        reference="https://huggingface.co/datasets/code_search_net/viewer",
+        reference="https://huggingface.co/datasets/code_search_net/",
         dataset={
-            "path": "code_search_net",
+            "path": "code-search-net/code_search_net",
             "revision": "fdc6a9e39575768c27eb8a2a5f702bf846eb4759",
         },
         type="Retrieval",

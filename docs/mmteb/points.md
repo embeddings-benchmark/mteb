@@ -65,7 +65,7 @@ Please also add your first name and last name are as you want them to appear in 
 | guangyusong       | Guangyu    | Song       | guangysong@gmail.com         | ~Guangyu_Song1       | N/A                            |
 | davidstap.        | David      | Stap       | dd.stap@gmail.com            | ~David_Stap          | University of Amsterdam.                         |
 | HLasse            | Lasse      | Hansen     | lasseh0310@gmail.com         | ~Lasse_Hansen2       | Aarhus University, Denmark                            |
-| jaygala24         | Jay        | Gala       | jaygala24@gmail.com          | ~Jay_Gala1           | Nilekani Center at AI4Bharat                          |
+| jaygala24         | Jay        | Gala       | jaygala24@gmail.com          | ~Jay_Gala1           | MBZUAI                          |
 | digantamisra      | Diganta    | Misra      | diganta.misra@mila.quebec    | ~Diganta_Misra1       | Mila - Quebec AI Institute                           |
 | PranjalChitale    | Pranjal    | Chitale    | cs21s022@smail.iitm.ac.in    | ~Pranjal_A_Chitale1       | Indian Institute of Technology Madras            |
 | Akash190104       | Akash      | Kundu      | akashkundu2xx4@gmail.com      |~Akash_Kundu2             | Heritage Institute of Technology, Kolkata && Apart Research |
@@ -79,9 +79,16 @@ Please also add your first name and last name are as you want them to appear in 
 | jupyterjazz       | Saba         | Sturua     | saba.sturua@jina.ai              |     ~Saba_Sturua1      | Jina AI                                                     |
 | Ruqyai       | Ruqiya         | Bin Safi     | ruqiya.binsafi@libfstudy.ac.uk           |    ~Ruqiya_Bin_Safi1       | LIBF : The London Institute of Banking & Finance                                                    |
 | kranthigv     | Kranthi Kiran | GV  | kranthi.gv@nyu.edu         | ~Kranthi_Kiran_GV1 | New York University|
-| jupyterjazz       | Saba         | Sturua     | saba.sturua@jina.ai              |     ~Saba_Sturua1      | Jina AI   
 | shreeya-dhakal            | Shreeya     | Dhakal     | ssdhakal57@gmail.com      |                      | Individual Contributor                                                   |
 | dipam7 | Dipam | Vasani | dipam44@gmail.com | ~Dipam_Vasani1 | Individual Contributor                                                  |
 | Art3mis07 | Gayatri | K | gayatrikrishnakumar0707@gmail.com | ~Gayatri_K1 | R. V. College of Engineering, Bengaluru | 
 | jankounchained    | Jan        | Kostkan    | jan.kostkan@cas.au.dk | ~Jan_Kostkan1        | Aarhus University, Denmark                            |
 | bp-high           | Bhavish       | Pahwa      | t-bpahwa@microsoft.com           | ~Bhavish_Pahwa1 | Microsoft Research                              |
+| rasdani           | Daniel     | Auras      | daniel@ellamind.com          |   ~Daniel_Auras1     | ellamind, Germany                                   |
+| ShawonAshraf      | Shawon     | Ashraf     | shawon@ellamind.com          |   ~Shawon_Ashraf1    | ellamind, Germany                                   |
+| bjoernpl          | Björn      | Plüster    | bjoern@ellamind.com          |  ~Björn_Plüster1     | ellamind, Germany                                   |
+| jphme             | Jan Philipp| Harries    | jan@ellamind.com             |~Jan_Philipp_Harries1 | ellamind, Germany                                   |
+| malteos           | Malte       | Ostendorff      | malte@occiglot.eu           | ~Malte_Ostendorff1| Occiglot                             |
+| ManuelFay         | Manuel        | Faysse     | manuel.faysse@centralesupelec.fr |              ~Manuel_Faysse1        | CentraleSupélec & Illuin Technology                  |
+| hgissbkh          | Hippolyte     | Gisserot-Boukhlef    | hippolyte.gisserot-boukhlef@centralesupelec.fr        |   ~Hippolyte_Gisserot-Boukhlef1                   | CentraleSupélec & Artefact Research Center   |
+| sted97          | Simone     | Tedeschi    | tedeschi@diag.uniroma1.it        |   ~Simone_Tedeschi1                   | Sapienza University of Rome   |

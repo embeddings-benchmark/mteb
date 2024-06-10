@@ -8,7 +8,7 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="DanishPoliticalCommentsClassification",
         dataset={
-            "path": "danish_political_comments",
+            "path": "community-datasets/danish_political_comments",
             "revision": "edbb03726c04a0efab14fc8c3b8b79e4d420e5a1",
         },
         description="A dataset of Danish political comments rated for sentiment",
@@ -18,16 +18,19 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
         eval_splits=["train"],
         eval_langs=["dan-Latn"],
         main_score="accuracy",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
+        date=(
+            "2000-01-01",
+            "2022-12-31",
+        ),  # Estimated range for the collection of comments
+        form=["written"],
+        domains=["Social"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="Not specified",
+        socioeconomic_status="mixed",
+        annotations_creators="derived",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="",
         n_samples={"train": 9010},
         avg_character_length={"train": 69.9},
     )

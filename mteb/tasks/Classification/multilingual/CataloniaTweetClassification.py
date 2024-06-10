@@ -20,7 +20,7 @@ class CataloniaTweetClassification(MultilingualTask, AbsTaskClassification):
         """,
         reference="https://aclanthology.org/2020.lrec-1.171/",
         dataset={
-            "path": "catalonia_independence",
+            "path": "community-datasets/catalonia_independence",
             "revision": "cf24d44e517efa534f048e5fc5981f399ed25bee",
         },
         type="Classification",

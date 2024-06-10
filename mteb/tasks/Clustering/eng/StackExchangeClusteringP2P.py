@@ -8,12 +8,15 @@ from datasets import Dataset, DatasetDict
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskClustering import AbsTaskClustering
-from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from ....abstasks.AbsTaskClusteringFast import (
+    AbsTaskClusteringFast,
+    check_label_distribution,
+)
 
 
 class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="StackExchangeClusteringP2PFast",
+        name="StackExchangeClusteringP2P.v2",
         description="Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragraphs and 5 sets of 5k paragraphs.",
         reference="https://arxiv.org/abs/2104.07081",
         dataset={
@@ -59,6 +62,8 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
                 itertools.chain.from_iterable(self.dataset[split]["sentences"])
             )
 
+            check_label_distribution(self.dataset[split])
+
             # Remove sentences and labels with only 1 label example.
             unique_labels, counts = np.unique(labels, return_counts=True)
             solo_label_idx = np.where(counts == 1)
@@ -80,7 +85,7 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
 
 
 class StackExchangeClusteringP2P(AbsTaskClustering):
-    superseeded_by = "StackExchangeClusteringP2PFast"
+    superseeded_by = "StackExchangeClusteringP2P.v2"
     metadata = TaskMetadata(
         name="StackExchangeClusteringP2P",
         description="Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragraphs and 5 sets of 5k paragraphs.",

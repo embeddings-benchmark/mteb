@@ -11,7 +11,7 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         name="OnlineStoreReviewSentimentClassification",
         dataset={
             "path": "Ruqiya/Arabic_Reviews_of_SHEIN",
-            "revision": "8ea114aa27b82a52373203830dc2f5b540b6fcac",
+            "revision": "fb63ba1255f57054d411fe02bb5cec25cd6b150c",
         },
         description="This dataset contains Arabic reviews of products from the SHEIN online store.",
         reference="https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN",
@@ -24,12 +24,12 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         form=["written"],
         domains=["Reviews"],
         task_subtypes=["Sentiment/Hate speech"],
-        license=None,
+        license="Not specified",
         socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=["ara-Arab-SA"],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="",
         n_samples={"train": N_SAMPLES},
         avg_character_length={"train": 137.2},
     )

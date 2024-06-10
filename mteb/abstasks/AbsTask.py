@@ -3,20 +3,51 @@ from __future__ import annotations
 import logging
 import random
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Sequence
 
 import datasets
 import numpy as np
 import torch
-from datasets import DatasetDict
+from datasets import Dataset, DatasetDict
+from sklearn.preprocessing import MultiLabelBinarizer
 
-from mteb.abstasks.languages import LanguageScripts
+from mteb.abstasks.stratification import _iterative_train_test_split
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.languages import LanguageScripts
 
-from .MTEBResults import HFSubset, ScoresDict
+from ..MTEBResults import HFSubset, ScoresDict
 
 logger = logging.getLogger(__name__)
+
+
+def _multilabel_subsampling(
+    dataset_dict: DatasetDict,
+    seed: int,
+    splits: list[str] = ["test"],
+    label: str = "label",
+    n_samples: int = 2048,
+) -> DatasetDict:
+    """Multilabel subsampling the dataset with stratification by the supplied label.
+    Returns a DatasetDict object.
+
+    Args:
+        dataset_dict: the DatasetDict object.
+        seed: the random seed.
+        splits: the splits of the dataset.
+        label: the label with which the stratified sampling is based on.
+        n_samples: Optional, number of samples to subsample. Default is max_n_samples.
+    """
+    for split in splits:
+        n_split = len(dataset_dict[split])
+        X_np = np.arange(n_split).reshape((-1, 1))
+        binarizer = MultiLabelBinarizer()
+        labels_np = binarizer.fit_transform(dataset_dict[split][label])
+        _, test_idx = _iterative_train_test_split(
+            X_np, labels_np, test_size=n_samples / n_split, random_state=seed
+        )
+        dataset_dict.update({split: Dataset.from_dict(dataset_dict[split][test_idx])})
+    return dataset_dict
 
 
 class AbsTask(ABC):
@@ -113,7 +144,15 @@ class AbsTask(ABC):
         """
         ## Can only do this if the label column is of ClassLabel.
         if not isinstance(dataset_dict[splits[0]].features[label], datasets.ClassLabel):
-            dataset_dict = dataset_dict.class_encode_column(label)
+            try:
+                dataset_dict = dataset_dict.class_encode_column(label)
+            except ValueError as e:
+                if isinstance(dataset_dict[splits[0]][label][0], Sequence):
+                    return _multilabel_subsampling(
+                        dataset_dict, seed, splits, label, n_samples
+                    )
+                else:
+                    raise e
 
         for split in splits:
             dataset_dict.update(

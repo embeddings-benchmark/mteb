@@ -4,15 +4,17 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
+from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskClusteringFast import (
+    AbsTaskClusteringFast,
+    check_label_distribution,
+)
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks.AbsTaskClustering import AbsTaskClustering
-from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 
 class StackExchangeClusteringFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="StackExchangeClusteringFast",
+        name="StackExchangeClustering.v2",
         description="Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
         reference="https://arxiv.org/abs/2104.07081",
         dataset={
@@ -57,6 +59,9 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
             sentences = list(
                 itertools.chain.from_iterable(self.dataset[split]["sentences"])
             )
+
+            check_label_distribution(self.dataset[split])
+
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
         self.dataset = self.stratified_subsampling(
@@ -69,7 +74,7 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
 
 
 class StackExchangeClustering(AbsTaskClustering):
-    superseeded_by = "StackExchangeClusteringFast"
+    superseeded_by = "StackExchangeClustering.v2"
     metadata = TaskMetadata(
         name="StackExchangeClustering",
         description="Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",

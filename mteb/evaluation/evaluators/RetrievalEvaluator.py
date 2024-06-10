@@ -7,6 +7,7 @@ import os
 from collections import defaultdict
 from typing import Dict, List, Tuple, Union
 
+import numpy as np
 import pytrec_eval
 import torch
 import tqdm
@@ -14,7 +15,17 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
 
 from .Evaluator import Evaluator
-from .utils import cos_sim, dot_score, download, hole, mrr, recall_cap, top_k_accuracy
+from .utils import (
+    confidence_scores,
+    cos_sim,
+    dot_score,
+    download,
+    hole,
+    mrr,
+    nAUC,
+    recall_cap,
+    top_k_accuracy,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -385,13 +396,15 @@ class DRESModel:
     def encode(self, sentences: List[str], **kwargs):
         return self.model.encode(sentences, **kwargs)
 
-    def encode_conversations(self, conversations: List[List[str]], **kwargs):
+    def encode_conversations(
+        self, conversations: List[List[str]], batch_size: int, **kwargs
+    ):
         if callable(getattr(self.model, "encode_conversations", None)):
             return self.model.encode_conversations(conversations, **kwargs)
         # otherwise fallback to default implementation
         # TODO: add a warning here
         queries = self.convert_conv_history_to_query(conversations)
-        return self.encode_queries(queries, **kwargs)
+        return self.encode_queries(queries, batch_size=batch_size, **kwargs)
 
     def convert_conv_history_to_query(self, conversations: List[List[str]]) -> str:
         if callable(getattr(self.model, "convert_conv_history_to_query", None)):
@@ -399,8 +412,44 @@ class DRESModel:
         return convert_conv_history_to_query(conversations)
 
 
-def convert_conv_history_to_query(conversations: List[List[str]]) -> str:
-    return ["; ".join(conv) for conv in conversations]
+def convert_conv_history_to_query(conversations: List[List[Union[str, dict]]]) -> str:
+    conversations_converted = []
+
+    for conversation in conversations:
+        # if it's a list of strings, just join them
+        if isinstance(conversation[0], str):
+            conv_str = "; ".join(conversation)
+        # otherwise, it's a list of dictionaries, which we need to convert to strings
+        elif isinstance(conversation[0], dict):
+            conv = []
+            for i, turn in enumerate(conversation):
+                error_msg = (
+                    "When converting conversations lists of dictionary to string, each turn in the conversation "
+                    "must be a dictionary with 'role' and 'content' keys"
+                )
+                if not isinstance(turn, dict):
+                    raise ValueError(f"Turn {i} is not a dictionary. " + error_msg)
+
+                # check for keys 'role' and 'content' in the dictionary, if not found, raise an error
+                if "role" not in turn:
+                    raise ValueError(
+                        "Key 'role' not found in the dictionary. " + error_msg
+                    )
+                if "content" not in turn:
+                    raise ValueError(
+                        "Key 'content' not found in the dictionary. " + error_msg
+                    )
+
+                conv.append(f"{turn['role']}: {turn['content']}")
+            conv_str = "; ".join(conv)
+        else:
+            raise ValueError(
+                "Conversations must be a list consisting of strings or dictionaries with 'role' and 'content' keys"
+            )
+
+        conversations_converted.append(conv_str)
+
+    return conversations_converted
 
 
 def is_dres_compatible(model):
@@ -481,16 +530,13 @@ class RetrievalEvaluator(Evaluator):
                         results[qid].pop(pid)
                         popped.append(pid)
 
-        ndcg = {}
-        _map = {}
-        recall = {}
-        precision = {}
+        all_ndcgs, all_aps, all_recalls, all_precisions = {}, {}, {}, {}
 
         for k in k_values:
-            ndcg[f"NDCG@{k}"] = 0.0
-            _map[f"MAP@{k}"] = 0.0
-            recall[f"Recall@{k}"] = 0.0
-            precision[f"P@{k}"] = 0.0
+            all_ndcgs[f"NDCG@{k}"] = []
+            all_aps[f"MAP@{k}"] = []
+            all_recalls[f"Recall@{k}"] = []
+            all_precisions[f"P@{k}"] = []
 
         map_string = "map_cut." + ",".join([str(k) for k in k_values])
         ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
@@ -503,23 +549,29 @@ class RetrievalEvaluator(Evaluator):
 
         for query_id in scores.keys():
             for k in k_values:
-                ndcg[f"NDCG@{k}"] += scores[query_id]["ndcg_cut_" + str(k)]
-                _map[f"MAP@{k}"] += scores[query_id]["map_cut_" + str(k)]
-                recall[f"Recall@{k}"] += scores[query_id]["recall_" + str(k)]
-                precision[f"P@{k}"] += scores[query_id]["P_" + str(k)]
+                all_ndcgs[f"NDCG@{k}"].append(scores[query_id]["ndcg_cut_" + str(k)])
+                all_aps[f"MAP@{k}"].append(scores[query_id]["map_cut_" + str(k)])
+                all_recalls[f"Recall@{k}"].append(scores[query_id]["recall_" + str(k)])
+                all_precisions[f"P@{k}"].append(scores[query_id]["P_" + str(k)])
+
+        ndcg, _map, recall, precision = (
+            all_ndcgs.copy(),
+            all_aps.copy(),
+            all_recalls.copy(),
+            all_precisions.copy(),
+        )
 
         for k in k_values:
-            ndcg[f"NDCG@{k}"] = round(ndcg[f"NDCG@{k}"] / len(scores), 5)
-            _map[f"MAP@{k}"] = round(_map[f"MAP@{k}"] / len(scores), 5)
-            recall[f"Recall@{k}"] = round(recall[f"Recall@{k}"] / len(scores), 5)
-            precision[f"P@{k}"] = round(precision[f"P@{k}"] / len(scores), 5)
+            ndcg[f"NDCG@{k}"] = round(sum(ndcg[f"NDCG@{k}"]) / len(scores), 5)
+            _map[f"MAP@{k}"] = round(sum(_map[f"MAP@{k}"]) / len(scores), 5)
+            recall[f"Recall@{k}"] = round(sum(recall[f"Recall@{k}"]) / len(scores), 5)
+            precision[f"P@{k}"] = round(sum(precision[f"P@{k}"]) / len(scores), 5)
 
-        for eval in [ndcg, _map, recall, precision]:
-            logger.info("\n")
-            for k in eval.keys():
-                logger.info("{}: {:.4f}".format(k, eval[k]))
+        naucs = RetrievalEvaluator.evaluate_abstention(
+            results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
+        )
 
-        return ndcg, _map, recall, precision
+        return ndcg, _map, recall, precision, naucs
 
     @staticmethod
     def evaluate_custom(
@@ -527,13 +579,17 @@ class RetrievalEvaluator(Evaluator):
         results: dict[str, dict[str, float]],
         k_values: List[int],
         metric: str,
+        output_type: str = "all",
     ) -> Tuple[Dict[str, float]]:
         if metric.lower() in ["mrr", "mrr@k", "mrr_cut"]:
-            return mrr(qrels, results, k_values)
+            metric_scores = mrr(qrels, results, k_values, output_type)
+
         elif metric.lower() in ["recall_cap", "r_cap", "r_cap@k"]:
-            return recall_cap(qrels, results, k_values)
+            metric_scores = recall_cap(qrels, results, k_values, output_type)
+
         elif metric.lower() in ["hole", "hole@k"]:
-            return hole(qrels, results, k_values)
+            metric_scores = hole(qrels, results, k_values, output_type)
+
         elif metric.lower() in [
             "acc",
             "top_k_acc",
@@ -541,4 +597,32 @@ class RetrievalEvaluator(Evaluator):
             "accuracy@k",
             "top_k_accuracy",
         ]:
-            return top_k_accuracy(qrels, results, k_values)
+            metric_scores = top_k_accuracy(qrels, results, k_values, output_type)
+
+        naucs = RetrievalEvaluator.evaluate_abstention(results, metric_scores)
+        metric_scores_avg = {k: sum(v) / len(v) for k, v in metric_scores.items()}
+
+        return metric_scores_avg, naucs
+
+    @staticmethod
+    def evaluate_abstention(
+        results: dict[str, dict[str, float]],
+        metric_scores: dict[str, list[float]],
+    ) -> Dict[str, float]:
+        """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997"""
+        all_sim_scores = [list(results[qid].values()) for qid in list(results.keys())]
+        all_conf_scores = [
+            confidence_scores(sim_scores) for sim_scores in all_sim_scores
+        ]
+        conf_fcts = list(all_conf_scores[0].keys())
+        all_conf_scores = {
+            fct: np.array([x[fct] for x in all_conf_scores]) for fct in conf_fcts
+        }
+        metric_scores = {k: np.array(v) for k, v in metric_scores.items()}
+        naucs = {}
+
+        for metric_name, scores in metric_scores.items():
+            for fct, conf_scores in all_conf_scores.items():
+                naucs[f"nAUC_{metric_name}_{fct}"] = nAUC(conf_scores, scores)
+
+        return naucs

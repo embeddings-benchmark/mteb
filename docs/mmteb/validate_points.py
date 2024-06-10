@@ -21,7 +21,7 @@ commit_exceptions = {
 class JsonObject(BaseModel):
     model_config = ConfigDict(extra="forbid")
     GitHub: constr(min_length=1)
-    new_dataset: Optional[conint(ge=2)] = Field(alias="New dataset", default=None)
+    new_dataset: Optional[conint(ge=1)] = Field(alias="New dataset", default=None)
     new_task: Optional[conint(ge=2)] = Field(alias="New task", default=None)
     dataset_annotations: Optional[conint(ge=1)] = Field(
         alias="Dataset annotations", default=None

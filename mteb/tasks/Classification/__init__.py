@@ -19,6 +19,7 @@ from .dan.DanishPoliticalCommentsClassification import *
 from .dan.DKHateClassification import *
 from .dan.LccSentimentClassification import *
 from .deu.GermanPoliticiansTwitterSentimentClassification import *
+from .deu.TenKGnadClassification import *
 from .ell.GreekLegalCodeClassification import *
 from .eng.AmazonPolarityClassification import *
 from .eng.ArxivClassification import *
@@ -90,6 +91,7 @@ from .multilingual.ScalaClassification import *
 from .multilingual.SIB200Classification import *
 from .multilingual.SouthAfricanLangClassification import *
 from .multilingual.SwissJudgementClassification import *
+from .multilingual.TurkicClassification import *
 from .multilingual.TweetSentimentClassification import *
 from .mya.MyanmarNews import *
 from .nep.NepaliNewsClassification import *
@@ -103,6 +105,13 @@ from .por.HateSpeechPortugueseClassification import *
 from .ron.Moroco import *
 from .ron.RomanianReviewsSentiment import *
 from .ron.RomanianSentimentClassification import *
+from .rus.GeoreviewClassification import *
+from .rus.HeadlineClassification import *
+from .rus.InappropriatenessClassification import *
+from .rus.KinopoiskClassification import *
+from .rus.RuReviewsClassification import *
+from .rus.RuSciBenchGRNTIClassification import *
+from .rus.RuSciBenchOECDClassification import *
 from .san.SanskritShlokasClassification import *
 from .sin.SinhalaNewsClassification import *
 from .sin.SinhalaNewsSourceClassification import *
