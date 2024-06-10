@@ -128,7 +128,7 @@ _LANGUAGES = [
     "zho_Hans",
     "zho_Hant",
     "zsm_Latn",
-    "zul_Latn"
+    "zul_Latn",
 ]
 
 
@@ -137,8 +137,8 @@ def get_lang_pairs() -> dict[str, list[str]]:
     lang_pairs = {}
     for x in _LANGUAGES:
         for y in _LANGUAGES:
-            xx = x.replace('_', '-')
-            yy = y.replace('_', '-')
+            xx = x.replace("_", "-")
+            yy = y.replace("_", "-")
             pair = f"{xx}-{yy}"
             lang_pairs[pair] = [xx, yy]
     return lang_pairs
@@ -190,27 +190,33 @@ class BelebeleRetrieval(CrosslingualTask, AbsTaskRetrieval):
 
         self.queries = {lang_pair: {_EVAL_SPLIT: {}} for lang_pair in self.hf_subsets}
         self.corpus = {lang_pair: {_EVAL_SPLIT: {}} for lang_pair in self.hf_subsets}
-        self.relevant_docs = {lang_pair: {_EVAL_SPLIT: {}} for lang_pair in self.hf_subsets}
+        self.relevant_docs = {
+            lang_pair: {_EVAL_SPLIT: {}} for lang_pair in self.hf_subsets
+        }
 
         for lang_pair in self.hf_subsets:
             languages = self.metadata_dict["eval_langs"][lang_pair]
-            lang_corpus, lang_question = languages[0].replace("-", "_"), languages[1].replace("-", "_")
+            lang_corpus, lang_question = (
+                languages[0].replace("-", "_"),
+                languages[1].replace("-", "_"),
+            )
             ds_corpus = self.dataset[lang_corpus]
             ds_question = self.dataset[lang_question]
 
             question_ids = {
-                question: _id for _id, question in enumerate(set(ds_question["question"]))
+                question: _id
+                for _id, question in enumerate(set(ds_question["question"]))
             }
 
             link_to_context_id = {}
             context_idx = 0
             for row in ds_corpus:
-                if row['link'] not in link_to_context_id:
+                if row["link"] not in link_to_context_id:
                     context_id = f"C{context_idx}"
-                    link_to_context_id[row['link']] = context_id
+                    link_to_context_id[row["link"]] = context_id
                     self.corpus[lang_pair][_EVAL_SPLIT][context_id] = {
                         "title": "",
-                        "text": row['flores_passage']
+                        "text": row["flores_passage"],
                     }
                     context_idx = context_idx + 1
 
