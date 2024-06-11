@@ -132,31 +132,32 @@ class MLQARetrieval(AbsTaskRetrieval, CrosslingualTask):
                 name=hf_subset,
                 **self.metadata_dict["dataset"],
             )
-            _dataset_raw[lang_pair] = _dataset_raw[lang_pair].rename_column(
-                "context", "text"
-            )
 
-            self.queries[lang_pair] = {
-                eval_split: {
-                    str(i): q["question"]
-                    for i, q in enumerate(_dataset_raw[lang_pair][eval_split])
-                }
-                for eval_split in self.metadata_dict["eval_splits"]
-            }
+            self.queries[lang_pair] = {}
+            self.corpus[lang_pair] = {}
+            self.relevant_docs[lang_pair] = {}
 
-            self.corpus[lang_pair] = {
-                eval_split: {
-                    str(row["id"]): row for row in _dataset_raw[lang_pair][eval_split]
-                }
-                for eval_split in self.metadata_dict["eval_splits"]
-            }
+            for eval_split in self.metadata_dict["eval_splits"]:
+                self.queries[lang_pair][eval_split] = {}
+                self.corpus[lang_pair][eval_split] = {}
+                self.relevant_docs[lang_pair][eval_split] = {}
 
-            self.relevant_docs[lang_pair] = {
-                eval_split: {
-                    str(i): {str(q["id"]): 1}
-                    for i, q in enumerate(_dataset_raw[lang_pair][eval_split])
+                split_data = _dataset_raw[lang_pair][eval_split]
+                context_ids = {
+                    text: i for i, text in enumerate(set(split_data["context"]))
                 }
-                for eval_split in self.metadata_dict["eval_splits"]
-            }
+
+                for i, row in enumerate(split_data):
+                    query_id = str(i)
+                    context = row["context"]
+                    context_id = context_ids[context]
+                    self.queries[lang_pair][eval_split][query_id] = row["question"]
+                    self.corpus[lang_pair][eval_split][context_id] = {
+                        "title": "",
+                        "text": context,
+                    }
+                    if query_id not in self.relevant_docs[lang_pair][eval_split]:
+                        self.relevant_docs[lang_pair][eval_split][query_id] = {}
+                    self.relevant_docs[lang_pair][eval_split][query_id][context_id] = 1
 
         self.data_loaded = True
