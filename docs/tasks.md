@@ -416,16 +416,16 @@ The following tables give you an overview of the tasks in MTEB.
 | [SNLHierarchicalClusteringS2S](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | s2s | [Encyclopaedic, Non-fiction] | {'test': 1300} | {'test': 242.22384615384615} |
 | [SNLRetrieval](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'test': 2048} | {'test': 1101.3} |
 | [SRNCorpusBitextMining](https://arxiv.org/abs/2212.06383) (Zwennicker et al., 2022) | ['nld', 'srn'] | BitextMining | s2s | [Social, Web] | {'test': 256} | {'test': 55.0} |
-| [STS12](https://www.aclweb.org/anthology/S12-1051.pdf) (Agirre et al., 2012) | ['eng'] | STS | s2s |  |  |  |
+| [STS12](https://www.aclweb.org/anthology/S12-1051.pdf) (Agirre et al., 2012) | ['eng'] | STS | s2s | [Encyclopaedic, News] | {'test': 6216} | {'test': 64.7} |
 | [STS13](https://www.aclweb.org/anthology/S13-1004/) (Eneko Agirre, 2013) | ['eng'] | STS | s2s |  |  |  |
 | [STS14](https://www.aclweb.org/anthology/S14-1002) | ['eng'] | STS | s2s |  |  |  |
 | [STS15](https://www.aclweb.org/anthology/S15-2010) | ['eng'] | STS | s2s |  |  |  |
 | [STS16](https://www.aclweb.org/anthology/S16-1001) | ['eng'] | STS | s2s |  |  |  |
-| [STS17](http://alt.qcri.org/semeval2016/task1/) | ['ara', 'deu', 'eng', 'fra', 'ita', 'kor', 'nld', 'spa', 'tur'] | STS | s2s |  | {'test': 500} | {'test': 43.3} |
-| [STS22](https://competitions.codalab.org/competitions/33835) | ['ara', 'cmn', 'deu', 'eng', 'fra', 'ita', 'pol', 'rus', 'spa', 'tur'] | STS | p2p |  | {'test': 8060} | {'train': 1992.8} |
+| [STS17](https://alt.qcri.org/semeval2017/task1/) | ['ara', 'deu', 'eng', 'fra', 'ita', 'kor', 'nld', 'spa', 'tur'] | STS | s2s | [News, Web] | {'test': 500} | {'test': 43.3} |
+| [STS22](https://competitions.codalab.org/competitions/33835) | ['ara', 'cmn', 'deu', 'eng', 'fra', 'ita', 'pol', 'rus', 'spa', 'tur'] | STS | p2p | [News] | {'test': 8056} | {'test': 1993.6} |
 | [STSB](https://aclanthology.org/2021.emnlp-main.357) | ['cmn'] | STS | s2s |  |  |  |
 | [STSBenchmark](https://github.com/PhilipMay/stsb-multi-mt/) (Philip May, 2021) | ['eng'] | STS | s2s |  |  |  |
-| [STSBenchmarkMultilingualSTS](https://github.com/PhilipMay/stsb-multi-mt/) (Philip May, 2021) | ['cmn', 'deu', 'eng', 'fra', 'ita', 'nld', 'pol', 'por', 'rus', 'spa'] | STS | s2s |  |  |  |
+| [STSBenchmarkMultilingualSTS](https://github.com/PhilipMay/stsb-multi-mt/) (Philip May, 2021) | ['cmn', 'deu', 'eng', 'fra', 'ita', 'nld', 'pol', 'por', 'rus', 'spa'] | STS | s2s | [News, Social, Web] | {'dev': 30000, 'test': 27580} | {'dev': 66.5, 'test': 56.1} |
 | [STSES](https://huggingface.co/datasets/PlanTL-GOB-ES/sts-es) (Agirre et al., 2015) | ['spa'] | STS | s2s |  |  |  |
 | [SanskritShlokasClassification](https://github.com/goru001/nlp-for-sanskrit) | ['san'] | Classification | s2s | [Religious] | {'train': 383, 'validation': 96} | {'train': 98.415, 'validation': 96.635} |
 | [ScalaClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['dan', 'nno', 'nob', 'swe'] | Classification | s2s | [Fiction, News, Non-fiction, Blog, Spoken, Web] | {'test': 4096} | {'test': 102.72} |
