@@ -67,7 +67,6 @@ from .jpn.JaQuADRetrieval import *
 from .kat.GeorgianFAQRetrieval import *
 from .kor.KoMiracl import *
 from .kor.KoStrategyQA import *
-from .multilingual.BelebeleCrossRetrieval import *
 from .multilingual.BelebeleRetrieval import *
 from .multilingual.CrossLingualSemanticDiscriminationWMT19 import *
 from .multilingual.CrossLingualSemanticDiscriminationWMT21 import *
