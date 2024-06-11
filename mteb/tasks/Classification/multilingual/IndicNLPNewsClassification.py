@@ -51,7 +51,7 @@ class IndicNLPNewsClassification(MultilingualTask, AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             self.dataset[lang] = self.dataset[lang].rename_columns(
                 {"news": "text", "class": "label"}
             )
