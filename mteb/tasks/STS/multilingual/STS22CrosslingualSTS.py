@@ -50,12 +50,34 @@ class STS22CrosslingualSTS(AbsTaskSTS, CrosslingualTask):
         annotations_creators="human-annotated",
         dialect=[],
         text_creation="found",
-        bibtex_citation="""@article{chen2022semeval,
-        title={SemEval-2022 Task 8: Multilingual news article similarity},
-        author={Chen, Xi and Zeynali, Ali and Camargo, Chico Q and Fl{\"o}ck, Fabian and Gaffney, Devin and Grabowicz, Przemyslaw A and Hale, Scott A and Jurgens, David and Samory, Mattia},
-        year={2022},
-        publisher={ACL Anthology}
-        }""",
+        bibtex_citation="""@inproceedings{chen-etal-2022-semeval,
+    title = "{S}em{E}val-2022 Task 8: Multilingual news article similarity",
+    author = {Chen, Xi  and
+      Zeynali, Ali  and
+      Camargo, Chico  and
+      Fl{\"o}ck, Fabian  and
+      Gaffney, Devin  and
+      Grabowicz, Przemyslaw  and
+      Hale, Scott  and
+      Jurgens, David  and
+      Samory, Mattia},
+    editor = "Emerson, Guy  and
+      Schluter, Natalie  and
+      Stanovsky, Gabriel  and
+      Kumar, Ritesh  and
+      Palmer, Alexis  and
+      Schneider, Nathan  and
+      Singh, Siddharth  and
+      Ratan, Shyam",
+    booktitle = "Proceedings of the 16th International Workshop on Semantic Evaluation (SemEval-2022)",
+    month = jul,
+    year = "2022",
+    address = "Seattle, United States",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2022.semeval-1.155",
+    doi = "10.18653/v1/2022.semeval-1.155",
+    pages = "1094--1106",
+}""",
         n_samples={"test": 8056},
         avg_character_length={"test": 1993.6},
     )
