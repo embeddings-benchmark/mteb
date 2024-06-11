@@ -137,21 +137,25 @@ class MLQARetrieval(AbsTaskRetrieval, CrosslingualTask):
             self.corpus[lang_pair] = {}
             self.relevant_docs[lang_pair] = {}
 
-            for eval_split in self.metadata_dict["eval_splits"]:
+            for eval_split in self.metadata.eval_splits:
                 self.queries[lang_pair][eval_split] = {}
                 self.corpus[lang_pair][eval_split] = {}
                 self.relevant_docs[lang_pair][eval_split] = {}
 
                 split_data = _dataset_raw[lang_pair][eval_split]
+                query_ids = {
+                    query: i for i, query in enumerate(set(split_data["question"]))
+                }
                 context_ids = {
                     text: i for i, text in enumerate(set(split_data["context"]))
                 }
 
-                for i, row in enumerate(split_data):
-                    query_id = str(i)
+                for row in split_data:
+                    query = row["question"]
                     context = row["context"]
+                    query_id = query_ids[query]
                     context_id = context_ids[context]
-                    self.queries[lang_pair][eval_split][query_id] = row["question"]
+                    self.queries[lang_pair][eval_split][query_id] = query
                     self.corpus[lang_pair][eval_split][context_id] = {
                         "title": "",
                         "text": context,
