@@ -9,9 +9,9 @@ import numpy as np
 from scipy import stats
 
 from mteb import get_model_meta
-from mteb.models.e5_models import e5_mult_base, e5_mult_large, e5_mult_small
+from mteb.models.e5_models import e5_mult_base, e5_mult_large, e5_mult_small, e5_eng_small, e5_eng_small_v2
 from mteb.models.sentence_transformers_models import (
-    paraphrase_multilingual_MiniLM_L12_v2,
+    paraphrase_multilingual_MiniLM_L12_v2, all_MiniLM_L6_v2
 )
 from mteb.MTEBResults import MTEBResults
 
@@ -35,6 +35,9 @@ TASK_LIST_CLUSTERING = [
 
 MODELS = [
     paraphrase_multilingual_MiniLM_L12_v2,
+    all_MiniLM_L6_v2,
+    e5_eng_small,
+    e5_eng_small_v2,
     e5_mult_small,
     e5_mult_base,
     e5_mult_large,
@@ -45,26 +48,23 @@ versions = [
 ]
 
 
-def test_significance(
-    orig_scores: list[float], v2_scores: list[float], n_samples: int = 10000
-):
-    """Test if two distributions are significantly different using a bootstrapping method.
-
-    n_samples: Number of bootstrap samples
+def test_significance(dist1, dist2, n_samples=10_000):
+    """Test if two distributions are significantly different using a bootstrapping method
 
     # sanity check:
     # should be significant
-    test_significance(np.random.normal(1, 1, 10), np.random.normal(4, 1, 10), n_samples=10_000)
-    >>> 0.0
+    dist1=np.random.normal(1, 1, 10)
+    dist2=np.random.normal(4, 1, 10)
+    n_samples=10_000
+    test_significance(dist1, dist2, n_samples)
     # should not be significant
     test_significance(np.random.normal(1, 1, 10), np.random.normal(1, 1, 10), n_samples=10_000)
-    >>> 0.8735
     """
-    # Set the random seed for reproducibility
-    np.random.seed(42)
+    # Compute the difference between the two distributions
+    diff = abs(np.mean(dist1) - np.mean(dist2))
 
     # Concatenate the two distributions
-    concat = np.concatenate([v2_scores, orig_scores])
+    concat = np.concatenate([dist1, dist2])
 
     # Initialize the bootstrap samples
     bootstrap_diff = np.zeros(n_samples)
@@ -75,15 +75,18 @@ def test_significance(
         bootstrap_sample = np.random.choice(concat, size=len(concat), replace=True)
 
         # Compute the difference between the two bootstrap samples
-        bootstrap_diff[i] = np.mean(bootstrap_sample[: len(v2_scores)]) - np.mean(
-            bootstrap_sample[len(v2_scores) :]
+        bootstrap_diff[i] = abs(
+            np.mean(bootstrap_sample[: len(dist1)])
+            - np.mean(bootstrap_sample[len(dist1) :])
         )
 
     # Compute the p-value
     # I.e. what is the probability of observing a difference as extreme as the one we observed
     # given that the null hypothesis is true (i.e. the two distributions are the same)
-    diff = np.mean(v2_scores) - np.mean(orig_scores)
-    return np.mean(bootstrap_diff >= diff)
+    p_value = np.mean(bootstrap_diff >= diff)
+    # print(f"The p-value is: {p_value}")
+
+    return p_value
 
 
 def compute_significant_rank(scores: dict, threshold=0.05):
@@ -126,7 +129,6 @@ def compute_significant_rank(scores: dict, threshold=0.05):
             rank += 1
 
         ranks["significant_rank"].append(rank)
-
     return ranks
 
 
@@ -135,15 +137,12 @@ for version in versions:
 
     print(f"\n### {version}")
 
-    model_p_val_str = " | ".join([str(model.name).split("/")[-1] for model in MODELS])
-    print(f"|  Model    | Spearman | Speedup | {model_p_val_str} |")
-    print("|-----------" * (3 + len(MODELS)) + "|")
+    print("| Model | Spearman | Significant Spearman | Speedup |")
+    print("| --- | --- | --- | --- |")
 
     for task_pair in task_list:
         scores = {}
         scores_fast = {}
-        main_scores = []
-        main_scores_fast = []
         times = []
         times_fast = []
         for task in task_pair:
@@ -159,23 +158,44 @@ for version in versions:
                 eval_time = res.evaluation_time
 
                 if version in res.task_name:
-                    main_scores_fast.append(main_score)
                     times_fast.append(eval_time)
-                    scores_fast.update({str(model.name).split("/")[-1]: res.scores["test"][0]["v_measures"]["Level 0"]})
+                    scores_fast.update(
+                        {
+                            str(model.name).split("/")[-1]: res.scores["test"][0][
+                                "v_measures"
+                            ]["Level 0"]
+                        }
+                    )
                 else:
-                    main_scores.append(main_score)
                     times.append(eval_time)
-                    scores.update({str(model.name).split("/")[-1]: res.scores["test"][0]["v_measures"]})
-
-
-        p_value_string = ""
-        for i, _ in enumerate(MODELS):
-            ranks = compute_significant_rank(scores)
-            ranks_fast = compute_significant_rank(scores_fast)
-            p_val = test_significance(ranks["significant_rank"], ranks_fast["significant_rank"])
-            p_value_string += f" {p_val:.4f} |"
+                    scores.update(
+                        {
+                            str(model.name).split("/")[-1]: res.scores["test"][0][
+                                "v_measures"
+                            ]
+                        }
+                    )
 
         ## Spearman score and speed up
-        spearman = stats.spearmanr(main_scores, main_scores_fast).statistic
+        main_score_sig_rank = compute_significant_rank(scores)
+        main_score_fast_sig_rank = compute_significant_rank(scores_fast)
+
+        sig_rank = []
+        sig_rank_fast = []
+        rank = []
+        rank_fast = []
+
+        # ensure they are the same order
+        for model in scores:
+            sig_rank.append(main_score_sig_rank["significant_rank"][main_score_sig_rank["models"].index(model)])
+            sig_rank_fast.append(main_score_fast_sig_rank["significant_rank"][main_score_fast_sig_rank["models"].index(model)])
+            rank.append(main_score_sig_rank["rank"][main_score_sig_rank["models"].index(model)])
+            rank_fast.append(main_score_fast_sig_rank["rank"][main_score_fast_sig_rank["models"].index(model)])
+
+        spearman = stats.spearmanr(rank, rank_fast).statistic
+        sig_spearman = stats.spearmanr(sig_rank, sig_rank_fast).statistic
         speedup = sum(times) / sum(times_fast)
-        print(f"| {task_pair[0]:<27} | {spearman} | {speedup:.2f}x | {p_value_string}")
+        print(f"| {task_pair[0]:<27} | {spearman:.4f} | {sig_spearman:.4f} | {speedup:.2f}x |")
+
+        # print(f'classic | rank: {main_score_sig_rank["rank"]} | sig_rank: {main_score_sig_rank["significant_rank"]}')
+        # print(f'fast    | rank: {main_score_fast_sig_rank["rank"]} | sig_rank: {main_score_fast_sig_rank["significant_rank"]}')

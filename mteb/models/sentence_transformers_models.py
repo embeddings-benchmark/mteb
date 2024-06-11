@@ -6,7 +6,7 @@ all_MiniLM_L6_v2 = ModelMeta(
     name="sentence-transformers/all-MiniLM-L6-v2",
     languages=["eng-Latn"],
     open_source=True,
-    revision=None,  # can be any
+    revision="8b3219a92973c328a8e22fadcfa821b5dc75636a",  # can be any
     release_date="2021-08-30",
 )
 

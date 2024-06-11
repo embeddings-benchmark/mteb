@@ -5,9 +5,9 @@ from __future__ import annotations
 import logging
 
 from mteb import MTEB, get_model, get_tasks
-from mteb.models.e5_models import e5_mult_base, e5_mult_large, e5_mult_small
+from mteb.models.e5_models import e5_mult_base, e5_mult_large, e5_mult_small, e5_eng_small, e5_eng_small_v2
 from mteb.models.sentence_transformers_models import (
-    paraphrase_multilingual_MiniLM_L12_v2,
+    paraphrase_multilingual_MiniLM_L12_v2, all_MiniLM_L6_v2
 )
 
 logging.basicConfig(level=logging.INFO)
@@ -32,6 +32,9 @@ TASK_LIST = [x + ".v2" for x in TASK_LIST_CLUSTERING] + TASK_LIST_CLUSTERING
 
 MODELS = [
     paraphrase_multilingual_MiniLM_L12_v2,
+    all_MiniLM_L6_v2,
+    e5_eng_small,
+    e5_eng_small_v2,
     e5_mult_small,
     e5_mult_base,
     e5_mult_large,

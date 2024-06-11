@@ -1,0 +1,34 @@
+{
+  "dataset_revision": "6125ec4e24fa026cec8a478383ee943acfbd5449",
+  "evaluation_time": 3.1515049934387207,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.22",
+  "scores": {
+    "test": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.4622358293330244,
+        "v_measure": 0.4622358293330244,
+        "v_measure_std": 0.01583263537913988,
+        "v_measures": {
+          "Level 0": [
+            0.45920434225185164,
+            0.44217259223132577,
+            0.49189748921975557,
+            0.47145178918670877,
+            0.4476597510984637,
+            0.43982078996216184,
+            0.4756933919082861,
+            0.45458072198301946,
+            0.46460108598219874,
+            0.4752763395064718
+          ]
+        }
+      }
+    ]
+  },
+  "task_name": "TwentyNewsgroupsClustering.v2"
+}

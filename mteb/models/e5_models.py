@@ -186,3 +186,21 @@ e5_mult_large = ModelMeta(
     revision="4dc6d853a804b9c8886ede6dda8a073b7dc08a81",
     release_date=e5_paper_release_date,
 )
+
+e5_eng_small_v2 = ModelMeta(
+    loader=partial(E5Wrapper, model_name="intfloat/e5-small-v2"),  # type: ignore
+    name="intfloat/e5-small-v2",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="dca8b1a9dae0d4575df2bf423a5edb485a431236",
+    release_date=e5_paper_release_date,
+)
+
+e5_eng_small = ModelMeta(
+    loader=partial(E5Wrapper, model_name="intfloat/e5-small"),  # type: ignore
+    name="intfloat/e5-small",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="e272f3049e853b47cb5ca3952268c6662abda68f",
+    release_date=e5_paper_release_date,
+)
