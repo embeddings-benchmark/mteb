@@ -28,7 +28,22 @@ class STS15STS(AbsTaskSTS):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@inproceedings{bicici-2015-rtm,
+    title = "{RTM}-{DCU}: Predicting Semantic Similarity with Referential Translation Machines",
+    author = "Bi{\c{c}}ici, Ergun",
+    editor = "Nakov, Preslav  and
+      Zesch, Torsten  and
+      Cer, Daniel  and
+      Jurgens, David",
+    booktitle = "Proceedings of the 9th International Workshop on Semantic Evaluation ({S}em{E}val 2015)",
+    month = jun,
+    year = "2015",
+    address = "Denver, Colorado",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/S15-2010",
+    doi = "10.18653/v1/S15-2010",
+    pages = "56--63",
+}""",
         n_samples=None,
         avg_character_length=None,
     )

@@ -32,7 +32,13 @@ class BlurbsClusteringP2P(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@inproceedings{Remus2019GermEval2T,
+  title={GermEval 2019 Task 1: Hierarchical Classification of Blurbs},
+  author={Steffen Remus and Rami Aly and Chris Biemann},
+  booktitle={Conference on Natural Language Processing},
+  year={2019},
+  url={https://api.semanticscholar.org/CorpusID:208334484}
+}""",
         n_samples={"test": 174637},
         avg_character_length={"test": 664.09},
     )

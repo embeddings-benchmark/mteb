@@ -30,7 +30,12 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation="",
+        bibtex_citation="""@techreport{SAMsentiment,
+  author={Mads Guldborg Kjeldgaard Kongsbak and Steffan Eybye Christensen and Lucas Høyberg Puvis~de~Chavannes and Peter Due Jensen},
+  title={Sentiment Analysis Multitool, SAM},
+  year={2019},
+  institution={IT University of Copenhagen},
+}""",
         n_samples={"train": 9010},
         avg_character_length={"train": 69.9},
     )
