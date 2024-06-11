@@ -56,7 +56,7 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
         n_samples={"dev": 30000, "test": 27580},
         avg_character_length={"dev": 66.5, "test": 56.1},
     )
-    
+
     @property
     def metadata_dict(self) -> dict[str, str]:
         metadata_dict = super().metadata_dict
