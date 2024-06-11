@@ -81,7 +81,7 @@ class STS22CrosslingualSTS(AbsTaskSTS, CrosslingualTask):
         n_samples={"test": 8056},
         avg_character_length={"test": 1993.6},
     )
-    
+
     @property
     def metadata_dict(self) -> dict[str, str]:
         metadata_dict = super().metadata_dict
