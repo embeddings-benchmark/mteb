@@ -31,7 +31,29 @@ class SpanishPassageRetrievalS2S(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@InProceedings{10.1007/978-3-030-15719-7_19,
+author="Kamateri, Eleni
+and Tsikrika, Theodora
+and Symeonidis, Spyridon
+and Vrochidis, Stefanos
+and Minker, Wolfgang
+and Kompatsiaris, Yiannis",
+editor="Azzopardi, Leif
+and Stein, Benno
+and Fuhr, Norbert
+and Mayr, Philipp
+and Hauff, Claudia
+and Hiemstra, Djoerd",
+title="A Test Collection for Passage Retrieval Evaluation of Spanish Health-Related Resources",
+booktitle="Advances in Information Retrieval",
+year="2019",
+publisher="Springer International Publishing",
+address="Cham",
+pages="148--154",
+abstract="This paper describes a new test collection for passage retrieval from health-related Web resources in Spanish. The test collection contains 10,037 health-related documents in Spanish, 37 topics representing complex information needs formulated in a total of 167 natural language questions, and manual relevance assessments of text passages, pooled from multiple systems. This test collection is the first to combine search in a language beyond English, passage retrieval, and health-related resources and topics targeting the general public.",
+isbn="978-3-030-15719-7"
+}
+""",
         n_samples=None,
         avg_character_length=None,
     )

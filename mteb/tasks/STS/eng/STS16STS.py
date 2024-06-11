@@ -28,7 +28,28 @@ class STS16STS(AbsTaskSTS):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@inproceedings{nakov-etal-2016-semeval,
+    title = "{S}em{E}val-2016 Task 4: Sentiment Analysis in {T}witter",
+    author = "Nakov, Preslav  and
+      Ritter, Alan  and
+      Rosenthal, Sara  and
+      Sebastiani, Fabrizio  and
+      Stoyanov, Veselin",
+    editor = "Bethard, Steven  and
+      Carpuat, Marine  and
+      Cer, Daniel  and
+      Jurgens, David  and
+      Nakov, Preslav  and
+      Zesch, Torsten",
+    booktitle = "Proceedings of the 10th International Workshop on Semantic Evaluation ({S}em{E}val-2016)",
+    month = jun,
+    year = "2016",
+    address = "San Diego, California",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/S16-1001",
+    doi = "10.18653/v1/S16-1001",
+    pages = "1--18",
+}""",
         n_samples=None,
         avg_character_length=None,
     )

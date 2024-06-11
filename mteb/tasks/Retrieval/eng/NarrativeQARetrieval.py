@@ -35,7 +35,14 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@misc{kočiský2017narrativeqa,
+      title={The NarrativeQA Reading Comprehension Challenge}, 
+      author={Tomáš Kočiský and Jonathan Schwarz and Phil Blunsom and Chris Dyer and Karl Moritz Hermann and Gábor Melis and Edward Grefenstette},
+      year={2017},
+      eprint={1712.07040},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
         n_samples=None,
         avg_character_length=None,
     )

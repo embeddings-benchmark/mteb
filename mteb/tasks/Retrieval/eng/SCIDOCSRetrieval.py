@@ -31,7 +31,12 @@ class SCIDOCS(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@inproceedings{specter2020cohan,
+  title={SPECTER: Document-level Representation Learning using Citation-informed Transformers},
+  author={Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
+  booktitle={ACL},
+  year={2020}
+}""",
         n_samples=None,
         avg_character_length=None,
     )
