@@ -35,7 +35,14 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@misc{keung2020multilingual,
+      title={The Multilingual Amazon Reviews Corpus}, 
+      author={Phillip Keung and Yichao Lu and György Szarvas and Noah A. Smith},
+      year={2020},
+      eprint={2010.02573},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
         n_samples={"validation": 30000, "test": 30000},
         avg_character_length={"validation": 159.2, "test": 160.4},
     )

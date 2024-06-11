@@ -28,7 +28,14 @@ class ClimateFEVER(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@misc{diggelmann2021climatefever,
+      title={CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims}, 
+      author={Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
+      year={2021},
+      eprint={2012.00614},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
         n_samples=None,
         avg_character_length=None,
     )

@@ -28,7 +28,36 @@ class NoRecClassification(AbsTaskClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@inproceedings{velldal-etal-2018-norec,
+    title = "{N}o{R}e{C}: The {N}orwegian Review Corpus",
+    author = "Velldal, Erik  and
+      {\O}vrelid, Lilja  and
+      Bergem, Eivind Alexander  and
+      Stadsnes, Cathrine  and
+      Touileb, Samia  and
+      J{\o}rgensen, Fredrik",
+    editor = "Calzolari, Nicoletta  and
+      Choukri, Khalid  and
+      Cieri, Christopher  and
+      Declerck, Thierry  and
+      Goggi, Sara  and
+      Hasida, Koiti  and
+      Isahara, Hitoshi  and
+      Maegaard, Bente  and
+      Mariani, Joseph  and
+      Mazo, H{\'e}l{\`e}ne  and
+      Moreno, Asuncion  and
+      Odijk, Jan  and
+      Piperidis, Stelios  and
+      Tokunaga, Takenobu",
+    booktitle = "Proceedings of the Eleventh International Conference on Language Resources and Evaluation ({LREC} 2018)",
+    month = may,
+    year = "2018",
+    address = "Miyazaki, Japan",
+    publisher = "European Language Resources Association (ELRA)",
+    url = "https://aclanthology.org/L18-1661",
+}
+""",
         n_samples={"test": 2050},
         avg_character_length={"test": 82},
     )

@@ -83,7 +83,14 @@ class MassiveIntentClassification(MultilingualTask, AbsTaskClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@misc{fitzgerald2022massive,
+      title={MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages}, 
+      author={Jack FitzGerald and Christopher Hench and Charith Peris and Scott Mackie and Kay Rottmann and Ana Sanchez and Aaron Nash and Liam Urbach and Vishesh Kakarala and Richa Singh and Swetha Ranganath and Laurie Crist and Misha Britan and Wouter Leeuwis and Gokhan Tur and Prem Natarajan},
+      year={2022},
+      eprint={2204.08582},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
         n_samples={"validation": 2033, "test": 2974},
         avg_character_length={"validation": 34.8, "test": 34.6},
     )

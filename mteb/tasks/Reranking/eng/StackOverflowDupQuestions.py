@@ -28,7 +28,13 @@ class StackOverflowDupQuestions(AbsTaskReranking):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@article{Liu2018LinkSOAD,
+  title={LinkSO: a dataset for learning to retrieve similar question answer pairs on software development forums},
+  author={Xueqing Liu and Chi Wang and Yue Leng and ChengXiang Zhai},
+  journal={Proceedings of the 4th ACM SIGSOFT International Workshop on NLP for Software Engineering},
+  year={2018},
+  url={https://api.semanticscholar.org/CorpusID:53111679}
+}""",
         n_samples={"test": 3467},
         avg_character_length={"test": 49.8},
     )

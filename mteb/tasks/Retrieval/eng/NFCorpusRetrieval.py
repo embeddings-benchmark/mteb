@@ -28,7 +28,16 @@ class NFCorpus(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@inproceedings{boteva2016,
+  author = {Boteva, Vera and Gholipour, Demian and Sokolov, Artem and Riezler, Stefan},
+  title = {A Full-Text Learning to Rank Dataset for Medical Information Retrieval},
+  journal = {Proceedings of the 38th European Conference on Information Retrieval},
+  journal-abbrev = {ECIR},
+  year = {2016},
+  city = {Padova},
+  country = {Italy},
+  url = {http://www.cl.uni-heidelberg.de/~riezler/publications/papers/ECIR2016.pdf}
+}""",
         n_samples=None,
         avg_character_length=None,
     )
