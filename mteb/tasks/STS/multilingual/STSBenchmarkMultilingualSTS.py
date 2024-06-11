@@ -47,7 +47,12 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
         annotations_creators="human-annotated",
         dialect=[],
         text_creation="machine-translated",
-        bibtex_citation="",
+        bibtex_citation="""@InProceedings{huggingface:dataset:stsb_multi_mt,
+        title = {Machine translated multilingual STS benchmark dataset.},
+        author={Philip May},
+        year={2021},
+        url={https://github.com/PhilipMay/stsb-multi-mt}
+        }""",
         n_samples={"dev": 30000, "test": 27580},
         avg_character_length={"dev": 66.5, "test": 56.1},
     )
