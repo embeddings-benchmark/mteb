@@ -8,6 +8,8 @@ import torch
 import tqdm
 from sklearn.metrics import average_precision_score
 
+from mteb.evaluation.evaluators.RetrievalEvaluator import RetrievalEvaluator
+
 from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from .Evaluator import Evaluator
 from .utils import confidence_scores, cos_sim, nAUC
@@ -76,8 +78,6 @@ class RerankingEvaluator(Evaluator):
         """Computes the metrices in a batched way, by batching all queries and
         all documents together
         """
-
-
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
         encode_queries_func = (
@@ -118,22 +118,59 @@ class RerankingEvaluator(Evaluator):
             )
         
         if self.evaluator_type == "standard":
-            results = self.encode_candidates(all_query_embs)
+            results = self.encode_candidates(all_query_embs,encode_corpus_func,True)
         elif self.evaluator_type == "miracl":
-            results = self.rerank_candidates(all_query_embs)
+            results = self.encode_candidates_miracl(all_query_embs, encode_corpus_func)
+        return results
+    
+    def compute_metrics_individual(self, model):
+        """Embeds every (query, positive, negative) tuple individually.
+        Is slower than the batched version, but saves memory as only the
+        embeddings for one tuple are needed. Useful when you have
+        a really large test set
+        """
+
+
+        # using encode_queries and encode_corpus functions if they exists,
+        # which can be defined by users to add different instructions for query and passage conveniently
+        encode_queries_func = (
+            model.encode_queries if hasattr(model, "encode_queries") else model.encode
+        )
+        encode_corpus_func = (
+            model.encode_corpus if hasattr(model, "encode_corpus") else model.encode
+        )
+        if self.evaluator_type == "standard":
+            results = self.encode_candidates(encode_queries_func, encode_corpus_func,False,encode_corpus_func=encode_corpus_func)
+        elif self.evaluator_type == "miracl":
+            results = self.encode_candidates_miracl_individual(encode_queries_func,encode_corpus_func)
         return results
 
-    def encode_candidates(self, all_query_embs):
+    def encode_candidates(self, all_query_embs,encode_corpus_func,batched,encode_queries_func=None):
         all_mrr_scores = []
         all_ap_scores = []
         all_conf_scores = []
         logger.info("Encoding candidates...")
+        if batched:
+            self.encode_candidates_batched(all_query_embs, encode_corpus_func,all_mrr_scores, all_ap_scores, all_conf_scores)
+        else:
+            self.encode_candidates_individual(encode_queries_func, encode_corpus_func,all_mrr_scores, all_ap_scores, all_conf_scores)
+        mean_ap = np.mean(all_ap_scores)
+        mean_mrr = np.mean(all_mrr_scores)
+
+        # Compute nAUCs
+        naucs_map = self.nAUC_scores(all_conf_scores, all_ap_scores, "map")
+        naucs_mrr = self.nAUC_scores(all_conf_scores, all_mrr_scores, "mrr")
+
+        return {**{"map": mean_ap, "mrr": mean_mrr}, **naucs_map, **naucs_mrr}
+
+
+    def encode_candidates_batched(self, all_query_embs, encode_corpus_func,all_mrr_scores, all_ap_scores, all_conf_scores):
         all_docs = []
         for sample in self.samples:
             all_docs.extend(sample["positive"])
             all_docs.extend(sample["negative"])
 
-        all_docs_embs = self._encode_unique_texts(all_docs, encode_corpus_func)
+        all_docs_embs = self._encode_unique_texts(all_docs, encode_corpus_func,)
 
         # Compute scores and confidence scores
         logger.info("Evaluating...")
@@ -152,45 +189,11 @@ class RerankingEvaluator(Evaluator):
 
             if num_pos == 0 or num_neg == 0:
                 continue
-
             is_relevant = [True] * num_pos + [False] * num_neg
-
-            sim_scores = self._compute_sim_scores_instance(query_emb, docs_emb)
-            scores = self._compute_metrics_instance(sim_scores, is_relevant)
-            conf_scores = self.conf_scores(sim_scores.tolist())
-
-            all_mrr_scores.append(scores["mrr"])
-            all_ap_scores.append(scores["ap"])
-            all_conf_scores.append(conf_scores)
-
-        mean_ap = np.mean(all_ap_scores)
-        mean_mrr = np.mean(all_mrr_scores)
-
-        # Compute nAUCs
-        naucs_map = self.nAUC_scores(all_conf_scores, all_ap_scores, "map")
-        naucs_mrr = self.nAUC_scores(all_conf_scores, all_mrr_scores, "mrr")
-
-        return {**{"map": mean_ap, "mrr": mean_mrr}, **naucs_map, **naucs_mrr}
-
-    def compute_metrics_individual(self, model):
-        """Embeds every (query, positive, negative) tuple individually.
-        Is slower than the batched version, but saves memory as only the
-        embeddings for one tuple are needed. Useful when you have
-        a really large test set
-        """
-        all_mrr_scores = []
-        all_ap_scores = []
-        all_conf_scores = []
-
-        # using encode_queries and encode_corpus functions if they exists,
-        # which can be defined by users to add different instructions for query and passage conveniently
-        encode_queries_func = (
-            model.encode_queries if hasattr(model, "encode_queries") else model.encode
-        )
-        encode_corpus_func = (
-            model.encode_corpus if hasattr(model, "encode_corpus") else model.encode
-        )
-
+            self.apply_sim_scores(query_emb, docs_emb, is_relevant, all_mrr_scores, all_ap_scores, all_conf_scores)
+            
+        
+    def encode_candidates_individual(self, encode_queries_func, encode_corpus_func,all_mrr_scores, all_ap_scores, all_conf_scores):
         for instance in tqdm.tqdm(self.samples, desc="Samples"):
             query = instance["query"]
             positive = list(instance["positive"])
@@ -209,24 +212,88 @@ class RerankingEvaluator(Evaluator):
                 encode_queries_func(query, batch_size=self.batch_size)
             )
             docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
+            self.apply_sim_scores(query_emb, docs_emb, is_relevant, all_mrr_scores, all_ap_scores, all_conf_scores)
 
-            sim_scores = self._compute_sim_scores_instance(query_emb, docs_emb)
-            scores = self._compute_metrics_instance(sim_scores, is_relevant)
-            conf_scores = self.conf_scores(sim_scores.tolist())
+    def apply_sim_scores(self,query_emb, docs_emb, is_relevant, all_mrr_scores, all_ap_scores, all_conf_scores):
+        sim_scores = self._compute_sim_scores_instance(query_emb, docs_emb)
+        scores = self._compute_metrics_instance(sim_scores, is_relevant)
+        conf_scores = self.conf_scores(sim_scores.tolist())
 
-            all_mrr_scores.append(scores["mrr"])
-            all_ap_scores.append(scores["ap"])
-            all_conf_scores.append(conf_scores)
+        all_mrr_scores.append(scores["mrr"])
+        all_ap_scores.append(scores["ap"])
+        all_conf_scores.append(conf_scores)
+            
+    def encode_candidates_miracl(self, all_query_embs, encode_corpus_func):
+        all_docs = []
+        for sample in self.samples:
+            all_docs.extend(sample["candidates"])
 
-        mean_ap = np.mean(all_ap_scores)
-        mean_mrr = np.mean(all_mrr_scores)
+        all_docs_embs = np.asarray(
+            encode_corpus_func(all_docs, batch_size=self.batch_size)
+        )
 
-        # Compute nAUCs
-        naucs_map = self.nAUC_scores(all_conf_scores, all_ap_scores, "map")
-        naucs_mrr = self.nAUC_scores(all_conf_scores, all_mrr_scores, "mrr")
+        # Compute scores
+        logger.info("Evaluating...")
+        query_idx, docs_idx = 0, 0
+        results, qrels = {}, {}
+        for instance in self.samples:
+            num_subqueries = (
+                len(instance["query"]) if isinstance(instance["query"], list) else 1
+            )
+            query_emb = all_query_embs[query_idx : query_idx + num_subqueries]
+            query_idx += num_subqueries
 
-        return {**{"map": mean_ap, "mrr": mean_mrr}, **naucs_map, **naucs_mrr}
+            positive = instance["positive"]
+            docs = instance["candidates"]
+            num_doc = len(docs)
+            docs_emb = all_docs_embs[docs_idx : docs_idx + num_doc]
+            docs_idx += num_doc
+
+            fake_qid = str(query_idx)
+            results[fake_qid] = self.rerank(query_emb, docs_emb)
+            qrels[fake_qid] = {
+                str(i): 1 if doc in positive else 0 for i, doc in enumerate(docs)
+            }
+
+        scores_miracl = self.collect_miracl_results(results, qrels)
+        return scores_miracl
+
+    def encode_candidates_miracl_individual(self, encode_queries_func, encode_corpus_func):
+        results, qrels = {}, {}
+        for i, instance in enumerate(tqdm.tqdm(self.samples, desc="Samples")):
+            query = instance["query"]
+            positive = set(instance["positive"])
+            docs = list(instance["candidates"])
+
+            if isinstance(query, str):
+                # .encoding interface requires List[str] as input
+                query_emb = np.asarray(
+                    encode_queries_func([query], batch_size=self.batch_size)
+                )
+                docs_emb = np.asarray(
+                    encode_corpus_func(docs, batch_size=self.batch_size)
+                )
+
+            fake_qid = str(i)
+            results[fake_qid] = self.rerank(query_emb, docs_emb)
+            qrels[fake_qid] = {
+                str(i): 1 if doc in positive else 0 for i, doc in enumerate(docs)
+            }
+
+        scores_miracl = self.collect_miracl_results(results, qrels)
+        return scores_miracl
     
+    def collect_miracl_results(self, results, qrels):
+        ndcg, _map, recall, precision, naucs = RetrievalEvaluator.evaluate(
+            qrels=qrels,
+            results=results,
+            k_values=self.k_values,
+            ignore_identical_ids=False,
+        )
+        scores = {**ndcg, **_map, **recall, **precision, **naucs}
+        scores_miracl = {f"{k}(MIRACL)": v for k, v in scores.items()}
+        return scores_miracl
+
     def rerank(
         self, query_emb: torch.Tensor, docs_emb: torch.Tensor
     ) -> dict[str, float]:
