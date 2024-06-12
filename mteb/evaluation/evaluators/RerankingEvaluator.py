@@ -8,7 +8,7 @@ import torch
 import tqdm
 from sklearn.metrics import average_precision_score
 
-from ...encoder_interface import EncoderWithQueryCorpusEncode
+from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from .Evaluator import Evaluator
 from .utils import confidence_scores, cos_sim, nAUC
 
@@ -28,13 +28,15 @@ class RerankingEvaluator(Evaluator):
 
     def __init__(
         self,
-        samples,
+        samples: list[dict],
         mrr_at_k: int = 10,
         name: str = "",
         similarity_fct=cos_sim,
         batch_size: int = 512,
         use_batched_encoding: bool = True,
         limit: int | None = None,
+        k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
+        evaluator_type:  str = "standard"
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -46,6 +48,8 @@ class RerankingEvaluator(Evaluator):
         self.similarity_fct = similarity_fct
         self.batch_size = batch_size
         self.use_batched_encoding = use_batched_encoding
+        self.k_values = k_values
+        self.evaluator_type = evaluator_type
 
         if isinstance(self.samples, dict):
             self.samples = list(self.samples.values())
@@ -68,13 +72,11 @@ class RerankingEvaluator(Evaluator):
             else self.compute_metrics_individual(model)
         )
 
-    def compute_metrics_batched(self, model):
+    def compute_metrics_batched(self, model: Encoder | EncoderWithQueryCorpusEncode):
         """Computes the metrices in a batched way, by batching all queries and
         all documents together
         """
-        all_mrr_scores = []
-        all_ap_scores = []
-        all_conf_scores = []
+
 
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
@@ -102,14 +104,29 @@ class RerankingEvaluator(Evaluator):
             all_query_flattened = [
                 q for sample in self.samples for q in sample["query"]
             ]
-            all_query_embs = self._encode_unique_texts(
-                all_query_flattened, encode_corpus_func
-            )
+            if self.evaluator_type == "standard":
+                all_query_embs = self._encode_unique_texts(
+                    all_query_flattened, encode_corpus_func
+                )
+            elif self.evaluator_type == "miracl":
+                all_query_embs = np.asarray(
+                    encode_queries_func(all_query_flattened, batch_size=self.batch_size)
+                )
         else:
             raise ValueError(
                 f"Query must be a string or a list of strings but is {type(self.samples[0]['query'])}"
             )
+        
+        if self.evaluator_type == "standard":
+            results = self.encode_candidates(all_query_embs)
+        elif self.evaluator_type == "miracl":
+            results = self.rerank_candidates(all_query_embs)
+        return results
 
+    def encode_candidates(self, all_query_embs):
+        all_mrr_scores = []
+        all_ap_scores = []
+        all_conf_scores = []
         logger.info("Encoding candidates...")
         all_docs = []
         for sample in self.samples:
@@ -209,6 +226,33 @@ class RerankingEvaluator(Evaluator):
         naucs_mrr = self.nAUC_scores(all_conf_scores, all_mrr_scores, "mrr")
 
         return {**{"map": mean_ap, "mrr": mean_mrr}, **naucs_map, **naucs_mrr}
+    
+    def rerank(
+        self, query_emb: torch.Tensor, docs_emb: torch.Tensor
+    ) -> dict[str, float]:
+        """Rerank documents (docs_emb) given the query (query_emb)
+
+        Args:
+            query_emb: Query embedding of shape `(num_queries, hidden_size)`)
+                if `num_queries` > 0: we take the closest document to any of the queries
+            docs_emb: Candidates documents embeddings of shape `(num_pos+num_neg, hidden_size)`)
+
+        Returns:
+            similarity_scores:
+        """
+        if not query_emb.shape[0]:
+            raise ValueError("Empty query embedding")
+
+        if not docs_emb.shape[0]:
+            return {"empty-docid": 0}
+
+        pred_scores = self.similarity_fct(query_emb, docs_emb)
+        if len(pred_scores.shape) > 1:
+            pred_scores = torch.amax(pred_scores, dim=0)
+
+        return {
+            str(i): score.detach().numpy().item() for i, score in enumerate(pred_scores)
+        }
 
     def _encode_unique_texts(self, all_texts, encode_queries_func):
         index_map, all_unique_texts, all_texts_indexes = {}, [], []
