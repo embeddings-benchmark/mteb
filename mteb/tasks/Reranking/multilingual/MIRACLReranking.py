@@ -3,16 +3,11 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import numpy as np
-import torch
-import tqdm
 from datasets import Dataset
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.evaluation.evaluators import RerankingEvaluator
-from mteb.evaluation.evaluators.RetrievalEvaluator import RetrievalEvaluator
-from mteb.evaluation.evaluators.utils import cos_sim
 from mteb.MTEBResults import ScoresDict
 
 from ....abstasks import MultilingualTask
@@ -89,10 +84,8 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         data_split: Dataset,
         **kwargs: Any,
     ) -> ScoresDict:
-        evaluator = RerankingEvaluator(data_split, evaluator_type='miracl',**kwargs)
+        evaluator = RerankingEvaluator(data_split, evaluator_type="miracl", **kwargs)
         scores = evaluator(model)
 
         self._add_main_score(scores)
         return scores
-
-
