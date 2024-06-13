@@ -48,7 +48,7 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 16000},
+        n_samples={"test": 32768},
         avg_character_length={"test": 57.0},
     )
 
@@ -64,6 +64,15 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
 
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            self.seed,
+            self.metadata.eval_splits,
+            label="labels",
+            n_samples=32768,
+        )
+        self.use_dataset_as_is = True
+
 
 
 class StackExchangeClustering(AbsTaskClustering):
