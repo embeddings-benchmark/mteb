@@ -1,44 +1,39 @@
 from __future__ import annotations
 
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskBitextMining, CrosslingualTask
 
-_LANGUAGES = [
-    "eng-ace": ["eng","ace"],
-    "eng-ban": ["eng","ban"],
-    "eng-bbc": ["eng","bbc"],
-    "eng-bjn": ["eng","bjn"],
-    "eng-bug": ["eng","bug"],
-    "eng-ind": ["eng","ind"],
-    "eng-jav": ["eng","jav"],
-    "eng-mad": ["eng","mad"],
-    "eng-min": ["eng","min"],
-    "eng-nij": ["eng","nij"],
-    "eng-sun": ["eng","sun"]
-]
+_LANGUAGES = {
+    "eng-ace": ["eng-Latn", "ace-Latn"],
+    "eng-ban": ["eng-Latn", "ban-Latn"],
+    "eng-bbc": ["eng-Latn", "bbc-Latn"],
+    "eng-bjn": ["eng-Latn", "bjn-Latn"],
+    "eng-bug": ["eng-Latn", "bug-Latn"],
+    "eng-ind": ["eng-Latn", "ind-Latn"],
+    "eng-jav": ["eng-Latn", "jav-Latn"],
+    "eng-mad": ["eng-Latn", "mad-Latn"],
+    "eng-min": ["eng-Latn", "min-Latn"],
+    "eng-nij": ["eng-Latn", "nij-Latn"],
+    "eng-sun": ["eng-Latn", "sun-Latn"],
+}
+
 
 class NusaXBitextMining(AbsTaskBitextMining, CrosslingualTask):
-    parallel_subsets = True
     metadata = TaskMetadata(
         name="NusaXBitextMining",
         dataset={
             "path": "gentaiscool/bitext_nusax",
-            "revision": "01feaeded353a31a27e010b7818bc9a3db82af40",
-            "trust_remote_code": True,
+            "revision": "fba4f2cfe2592641056f7a274c9aa8453b27a4a8",
         },
         description="NusaX is a parallel dataset for machine translation and sentiment analysis on 11 Indonesia languages and English.",
-        reference="https://huggingface.co/datasets/facebook/flores",
+        reference="https://huggingface.co/datasets/indonlp/NusaX-senti/",
         type="BitextMining",
         category="s2s",
-        eval_splits=["test"],
+        eval_splits=["train"],
         eval_langs=_LANGUAGES,
         main_score="f1",
-        date=("2023-01-01"),
+        date=("2023-01-01", "2023-03-01"),
         form=["written"],
         domains=["Reviews"],
         task_subtypes=[],
@@ -56,6 +51,6 @@ class NusaXBitextMining(AbsTaskBitextMining, CrosslingualTask):
         year={2023}
         }
         """,
-        n_samples={"test":5500},
+        n_samples={"train": 500},
         avg_character_length={},
     )
