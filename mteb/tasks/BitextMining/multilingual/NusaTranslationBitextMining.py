@@ -23,7 +23,7 @@ class NusaTranslationBitextMining(AbsTaskBitextMining, CrosslingualTask):
     metadata = TaskMetadata(
         name="NusaTranslationBitextMining",
         dataset={
-            "path": "gentaiscool/bitext_nusatranslation",
+            "path": "gentaiscool/bitext_nusatranslation_miners",
             "revision": "ba52e9d114a4a145d79b4293afab31304a999a4c",
         },
         description="NusaTranslation is a parallel dataset for machine translation on 11 Indonesia languages and English.",
