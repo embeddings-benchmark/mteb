@@ -34,7 +34,7 @@ class T2Retrieval(AbsTaskRetrieval):
         dataset={
             "path": "C-MTEB/T2Retrieval",
             "revision": "8731a845f1bf500a4f111cf1070785c793d10e64",
-            "qrel_revision":"1c83b8d1544e529875e3f6930f3a1fcf749a8e97"
+            "qrel_revision": "1c83b8d1544e529875e3f6930f3a1fcf749a8e97",
         },
         type="Retrieval",
         category="s2p",
@@ -83,7 +83,7 @@ class MMarcoRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "C-MTEB/MMarcoRetrieval",
             "revision": "539bbde593d947e2a124ba72651aafc09eb33fc2",
-            "qrel_revision":"bae08bb7bddbedb96c7e7db52018a55167b67f89"
+            "qrel_revision": "bae08bb7bddbedb96c7e7db52018a55167b67f89",
         },
         type="Retrieval",
         category="s2p",
@@ -132,7 +132,7 @@ class DuRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "C-MTEB/DuRetrieval",
             "revision": "a1a333e290fe30b10f3f56498e3a0d911a693ced",
-            "qrel_revision":"497b7bd1bbb25cb3757ff34d95a8be50a3de2279"
+            "qrel_revision": "497b7bd1bbb25cb3757ff34d95a8be50a3de2279",
         },
         type="Retrieval",
         category="s2p",
@@ -181,7 +181,7 @@ class CovidRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "C-MTEB/CovidRetrieval",
             "revision": "1271c7809071a13532e05f25fb53511ffce77117",
-            "qrel_revision":"a9f41b7cdf24785531d12417ce0d1157ed4b39ca"
+            "qrel_revision": "a9f41b7cdf24785531d12417ce0d1157ed4b39ca",
         },
         type="Retrieval",
         category="s2p",
@@ -223,7 +223,7 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "C-MTEB/CmedqaRetrieval",
             "revision": "cd540c506dae1cf9e9a59c3e06f42030d54e7301",
-            "qrel_revision":"279d737f36c731c8ff6e2b055f31fe02216fa23d"
+            "qrel_revision": "279d737f36c731c8ff6e2b055f31fe02216fa23d",
         },
         type="Retrieval",
         category="s2p",
@@ -265,7 +265,7 @@ class EcomRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "C-MTEB/EcomRetrieval",
             "revision": "687de13dc7294d6fd9be10c6945f9e8fec8166b9",
-            "qrel_revision":"39c90699b034ec22ac45b3abf5b0bbb5ffd421f9"
+            "qrel_revision": "39c90699b034ec22ac45b3abf5b0bbb5ffd421f9",
         },
         type="Retrieval",
         category="s2p",
@@ -307,7 +307,7 @@ class MedicalRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "C-MTEB/MedicalRetrieval",
             "revision": "2039188fb5800a9803ba5048df7b76e6fb151fc6",
-            "qrel_revision":"37b8efec53c54c3d9c6af212f6710b62ccdf895c"
+            "qrel_revision": "37b8efec53c54c3d9c6af212f6710b62ccdf895c",
         },
         type="Retrieval",
         category="s2p",
@@ -349,7 +349,7 @@ class VideoRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "C-MTEB/VideoRetrieval",
             "revision": "58c2597a5943a2ba48f4668c3b90d796283c5639",
-            "qrel_revision":"faa71382b6a29cf1778d1f436b963e75cb5b927c"
+            "qrel_revision": "faa71382b6a29cf1778d1f436b963e75cb5b927c",
         },
         type="Retrieval",
         category="s2p",
