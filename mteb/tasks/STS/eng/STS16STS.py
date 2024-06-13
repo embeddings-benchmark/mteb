@@ -24,7 +24,7 @@ class STS16STS(AbsTaskSTS):
         domains=["Blog", "Web"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="",
+        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
         text_creation="created",
