@@ -90,7 +90,7 @@ class AbsTaskClusteringFast(AbsTask):
         labels: list[str] | list[list[str]]
     """
 
-    max_documents_to_embed = 2048
+    max_documents_to_embed = 4096
     max_documents_per_cluster = 16_384
     n_clusters = 10
     k_mean_batch_size = 512
