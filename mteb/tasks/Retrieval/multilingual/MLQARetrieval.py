@@ -144,10 +144,11 @@ class MLQARetrieval(AbsTaskRetrieval, CrosslingualTask):
 
                 split_data = _dataset_raw[lang_pair][eval_split]
                 query_ids = {
-                    query: i for i, query in enumerate(set(split_data["question"]))
+                    query: f"Q{i}"
+                    for i, query in enumerate(set(split_data["question"]))
                 }
                 context_ids = {
-                    text: i for i, text in enumerate(set(split_data["context"]))
+                    text: f"C{i}" for i, text in enumerate(set(split_data["context"]))
                 }
 
                 for row in split_data:
