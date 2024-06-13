@@ -137,32 +137,37 @@ def get_lang_pairs() -> dict[str, list[str]]:
     # add pairs with english as source or target
     lang_pairs = {}
     for x in _LANGUAGES:
-        lang = x.replace("_", "-")
-        pair = f"{lang}-{lang}"
-        lang_pairs[pair] = [lang, lang]
+        pair = f"{x}-{x}"
+        lang_pairs[pair] = [x.replace("_", "-"), x.replace("_", "-")]
 
         if x != "eng_Latn":
-            pair = f"{lang}-eng-Latn"
-            lang_pairs[pair] = [lang, "eng-Latn"]
-            pair = f"eng-Latn-{lang}"
-            lang_pairs[pair] = ["eng-Latn", lang]
+            pair = f"{x}-eng_Latn"
+            lang_pairs[pair] = [x.replace("_", "-"), "eng-Latn"]
+            pair = f"eng_Latn-{x}"
+            lang_pairs[pair] = ["eng-Latn", x.replace("_", "-")]
 
     # add pairs for languages with a base script and a Latn script
     lang_base_scripts = [
-        "arb-Arab",
-        "ben-Beng",
-        "hin-Deva",
-        "npi-Deva",
-        "sin-Sinh",
-        "urd-Arab",
+        "arb_Arab",
+        "ben_Beng",
+        "hin_Deva",
+        "npi_Deva",
+        "sin_Sinh",
+        "urd_Arab",
     ]
     for lang_base_script in lang_base_scripts:
-        lang = lang_base_script.split("-")[0]
-        lang_latn_script = f"{lang}-Latn"
+        lang = lang_base_script.split("_")[0]
+        lang_latn_script = f"{lang}_Latn"
         pair = f"{lang_base_script}-{lang_latn_script}"
-        lang_pairs[pair] = [lang_base_script, lang_latn_script]
+        lang_pairs[pair] = [
+            lang_base_script.replace("_", "-"),
+            lang_latn_script.replace("_", "-"),
+        ]
         pair = f"{lang_latn_script}-{lang_base_script}"
-        lang_pairs[pair] = [lang_latn_script, lang_base_script]
+        lang_pairs[pair] = [
+            lang_latn_script.replace("_", "-"),
+            lang_base_script.replace("_", "-"),
+        ]
 
     return lang_pairs
 
@@ -210,7 +215,7 @@ class BelebeleRetrieval(CrosslingualTask, AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.dataset = load_dataset(**self.metadata_dict["dataset"])
+        self.dataset = load_dataset(**self.metadata.dataset)
 
         self.queries = {lang_pair: {_EVAL_SPLIT: {}} for lang_pair in self.hf_subsets}
         self.corpus = {lang_pair: {_EVAL_SPLIT: {}} for lang_pair in self.hf_subsets}
@@ -219,7 +224,7 @@ class BelebeleRetrieval(CrosslingualTask, AbsTaskRetrieval):
         }
 
         for lang_pair in self.hf_subsets:
-            languages = self.metadata_dict["eval_langs"][lang_pair]
+            languages = self.metadata.eval_langs[lang_pair]
             lang_corpus, lang_question = (
                 languages[0].replace("-", "_"),
                 languages[1].replace("-", "_"),
