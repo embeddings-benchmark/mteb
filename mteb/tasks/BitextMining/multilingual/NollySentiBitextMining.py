@@ -20,7 +20,7 @@ class NollySentiBitextMining(AbsTaskBitextMining, CrosslingualTask):
             "revision": "d48254fbdb51af1ae7f20831aab0bccf0b70a19c",
         },
         description="NollySenti is Nollywood movie reviews for five languages widely spoken in Nigeria (English, Hausa, Igbo, Nigerian-Pidgin, and Yoruba.",
-        reference="https://huggingface.co/datasets/indonlp/nusatranslation_mt",
+        reference="https://github.com/IyanuSh/NollySenti",
         type="BitextMining",
         category="s2s",
         eval_splits=["train"],
