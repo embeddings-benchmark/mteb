@@ -417,10 +417,10 @@ The following tables give you an overview of the tasks in MTEB.
 | [SNLRetrieval](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'test': 2048} | {'test': 1101.3} |
 | [SRNCorpusBitextMining](https://arxiv.org/abs/2212.06383) (Zwennicker et al., 2022) | ['nld', 'srn'] | BitextMining | s2s | [Social, Web] | {'test': 256} | {'test': 55.0} |
 | [STS12](https://www.aclweb.org/anthology/S12-1051.pdf) (Agirre et al., 2012) | ['eng'] | STS | s2s | [Encyclopaedic, News] | {'test': 6216} | {'test': 64.7} |
-| [STS13](https://www.aclweb.org/anthology/S13-1004/) (Eneko Agirre, 2013) | ['eng'] | STS | s2s |  |  |  |
-| [STS14](https://www.aclweb.org/anthology/S14-1002) | ['eng'] | STS | s2s |  |  |  |
-| [STS15](https://www.aclweb.org/anthology/S15-2010) | ['eng'] | STS | s2s |  |  |  |
-| [STS16](https://www.aclweb.org/anthology/S16-1001) | ['eng'] | STS | s2s |  |  |  |
+| [STS13](https://www.aclweb.org/anthology/S13-1004/) (Eneko Agirre, 2013) | ['eng'] | STS | s2s | [Web, News, Non-fiction] | {'test': 3000} | {'test': 54.0} |
+| [STS14](https://www.aclweb.org/anthology/S14-1002) | ['eng'] | STS | s2s | [Blog, Web] | {'test': 7500} | {'test': 54.3} |
+| [STS15](https://www.aclweb.org/anthology/S15-2010) | ['eng'] | STS | s2s | [Blog, News, Web] | {'test': 6000} | {'test': 57.7} |
+| [STS16](https://www.aclweb.org/anthology/S16-1001) | ['eng'] | STS | s2s | [Blog, Web] | {'test': 2372} | {'test': 65.3} |
 | [STS17](https://alt.qcri.org/semeval2017/task1/) | ['ara', 'deu', 'eng', 'fra', 'ita', 'kor', 'nld', 'spa', 'tur'] | STS | s2s | [News, Web] | {'test': 500} | {'test': 43.3} |
 | [STS22](https://competitions.codalab.org/competitions/33835) | ['ara', 'cmn', 'deu', 'eng', 'fra', 'ita', 'pol', 'rus', 'spa', 'tur'] | STS | p2p | [News] | {'test': 8056} | {'test': 1993.6} |
 | [STSB](https://aclanthology.org/2021.emnlp-main.357) | ['cmn'] | STS | s2s |  |  |  |
