@@ -12,6 +12,7 @@ from .multilingual.IN22GenBitextMining import *
 from .multilingual.IndicGenBenchFloresBitextMining import *
 from .multilingual.IWSLT2017BitextMinig import *
 from .multilingual.NorwegianCourtsBitextMining import *
+from .multilingual.NusaTranslationBitextMining import *
 from .multilingual.NTREXBitextMining import *
 from .multilingual.RomaTalesBitextMining import *
 from .multilingual.TatoebaBitextMining import *
