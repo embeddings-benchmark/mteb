@@ -33,7 +33,7 @@ class NusaXBitextMining(AbsTaskBitextMining, CrosslingualTask):
         eval_splits=["train"],
         eval_langs=_LANGUAGES,
         main_score="f1",
-        date=("2023-01-01", "2023-03-01"),
+        date=("2021-08-01", "2022-07-01"),
         form=["written"],
         domains=["Reviews"],
         task_subtypes=[],
@@ -59,6 +59,6 @@ class NusaXBitextMining(AbsTaskBitextMining, CrosslingualTask):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"train": 500},
-        avg_character_length={},
+        n_samples={"train": 5500},
+        avg_character_length={"train": 5.97},
     )
