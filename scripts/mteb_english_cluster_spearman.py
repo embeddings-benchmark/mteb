@@ -121,14 +121,17 @@ def compute_significant_rank(scores: dict, threshold=0.05):
 
     rank = 1
     ranks["significant_rank"] = [rank]  # first model always get rank 1
+    best_in_group = scores[pairs[0][0]]
     for p1, p2 in pairs:
         # test if the two models are significantly different
-        p_value = test_significance(scores[p1], scores[p2])
+        p_value = test_significance(best_in_group, scores[p2])
 
         if p_value < threshold:
             rank += 1
+            best_in_group = scores[p2]
 
         ranks["significant_rank"].append(rank)
+
     return ranks
 
 
