@@ -50,6 +50,14 @@ class NusaXBitextMining(AbsTaskBitextMining, CrosslingualTask):
         pages={815--834},
         year={2023}
         }
+        @misc{winata2024miners,
+            title={MINERS: Multilingual Language Models as Semantic Retrievers}, 
+            author={Genta Indra Winata and Ruochen Zhang and David Ifeoluwa Adelani},
+            year={2024},
+            eprint={2406.07424},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
         """,
         n_samples={"train": 500},
         avg_character_length={},
