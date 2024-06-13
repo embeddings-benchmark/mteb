@@ -9,9 +9,16 @@ import numpy as np
 from scipy import stats
 
 from mteb import get_model_meta
-from mteb.models.e5_models import e5_mult_base, e5_mult_large, e5_mult_small, e5_eng_small, e5_eng_small_v2
+from mteb.models.e5_models import (
+    e5_eng_small,
+    e5_eng_small_v2,
+    e5_mult_base,
+    e5_mult_large,
+    e5_mult_small,
+)
 from mteb.models.sentence_transformers_models import (
-    paraphrase_multilingual_MiniLM_L12_v2, all_MiniLM_L6_v2
+    all_MiniLM_L6_v2,
+    paraphrase_multilingual_MiniLM_L12_v2,
 )
 from mteb.MTEBResults import MTEBResults
 
@@ -143,6 +150,10 @@ for version in versions:
     print("| Model | Spearman | Significant Spearman | Speedup |")
     print("| --- | --- | --- | --- |")
 
+    spearman_scores = []
+    speedup_scores = []
+    sig_spearman_scores = []
+
     for task_pair in task_list:
         scores = {}
         scores_fast = {}
@@ -190,15 +201,40 @@ for version in versions:
 
         # ensure they are the same order
         for model in scores:
-            sig_rank.append(main_score_sig_rank["significant_rank"][main_score_sig_rank["models"].index(model)])
-            sig_rank_fast.append(main_score_fast_sig_rank["significant_rank"][main_score_fast_sig_rank["models"].index(model)])
-            rank.append(main_score_sig_rank["rank"][main_score_sig_rank["models"].index(model)])
-            rank_fast.append(main_score_fast_sig_rank["rank"][main_score_fast_sig_rank["models"].index(model)])
+            sig_rank.append(
+                main_score_sig_rank["significant_rank"][
+                    main_score_sig_rank["models"].index(model)
+                ]
+            )
+            sig_rank_fast.append(
+                main_score_fast_sig_rank["significant_rank"][
+                    main_score_fast_sig_rank["models"].index(model)
+                ]
+            )
+            rank.append(
+                main_score_sig_rank["rank"][main_score_sig_rank["models"].index(model)]
+            )
+            rank_fast.append(
+                main_score_fast_sig_rank["rank"][
+                    main_score_fast_sig_rank["models"].index(model)
+                ]
+            )
 
         spearman = stats.spearmanr(rank, rank_fast).statistic
         sig_spearman = stats.spearmanr(sig_rank, sig_rank_fast).statistic
         speedup = sum(times) / sum(times_fast)
-        print(f"| {task_pair[0]:<27} | {spearman:.4f} | {sig_spearman:.4f} | {speedup:.2f}x |")
+        print(
+            f"| {task_pair[0]:<27} | {spearman:.4f} | {sig_spearman:.4f} | {speedup:.2f}x |"
+        )
+
+        spearman_scores.append(spearman)
+        speedup_scores.append(speedup)
+        sig_spearman_scores.append(sig_spearman)
 
         # print(f'classic | rank: {main_score_sig_rank["rank"]} | sig_rank: {main_score_sig_rank["significant_rank"]}')
         # print(f'fast    | rank: {main_score_fast_sig_rank["rank"]} | sig_rank: {main_score_fast_sig_rank["significant_rank"]}')
+
+    # create avg scores
+    print(
+        f"| {'Average':<27} | {np.mean(spearman_scores):.4f} | {np.mean(sig_spearman_scores):.4f} | {np.mean(speedup_scores):.2f}x |"
+    )
