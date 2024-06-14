@@ -57,6 +57,7 @@ class STSIDMT(AbsTaskSTS):
         return metadata_dict
 
     def dataset_transform(self) -> None:
+        self.dataset = self.dataset.remove_columns("score")
         self.dataset = self.dataset.rename_column("correlation", "score")
         self.dataset = self.dataset.rename_column("text_1", "sentence1")
         self.dataset = self.dataset.rename_column("text_2", "sentence2")
