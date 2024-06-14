@@ -15,7 +15,7 @@ class STSMTSV(AbsTaskSTS):
             "revision": "ed6ac3f11354fadbc1d23d44b737fce3c889ce50",
             "trust_remote_code": True,
         },
-        description="Spanish test sets from SemEval-2014 (Agirre et al., 2014) and SemEval-2015 (Agirre et al., 2015)",
+        # description="Spanish test sets from SemEval-2014 (Agirre et al., 2014) and SemEval-2015 (Agirre et al., 2015)",
         description="STSbenchmark English dataset translated using Google machine translation API to swedish.",
         reference="https://huggingface.co/datasets/timpal0l/stsb_mt_sv",
         type="STS",
