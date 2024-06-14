@@ -6,7 +6,7 @@ from ....abstasks import AbsTaskBitextMining, CrosslingualTask
 
 _LANGUAGES = {
     "ind-abs": ["ind-Latn", "abs-Latn"],
-    "ind-btk": ["ind-Latn", "btk-Latn"],
+    "ind-btk": ["ind-Latn", "bbc-Latn"],
     "ind-bew": ["ind-Latn", "bew-Latn"],
     "ind-bhp": ["ind-Latn", "bhp-Latn"],
     "ind-jav": ["ind-Latn", "jav-Latn"],
