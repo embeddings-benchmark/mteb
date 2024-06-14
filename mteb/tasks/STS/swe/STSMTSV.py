@@ -23,7 +23,7 @@ class STSMTSV(AbsTaskSTS):
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["swe-Latn"],
         main_score="cosine_spearman",
-        date=("2012-01-01", "2020-9-7"),
+        date=("2012-01-01", "2020-09-07"),
         form=["spoken", "written"],
         domains=["News", "Social", "Web"],
         task_subtypes=[],
