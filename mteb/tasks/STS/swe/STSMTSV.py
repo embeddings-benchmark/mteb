@@ -15,7 +15,6 @@ class STSMTSV(AbsTaskSTS):
             "revision": "ed6ac3f11354fadbc1d23d44b737fce3c889ce50",
             "trust_remote_code": True,
         },
-        # description="Spanish test sets from SemEval-2014 (Agirre et al., 2014) and SemEval-2015 (Agirre et al., 2015)",
         description="STSbenchmark English dataset translated using Google machine translation API to swedish.",
         reference="https://huggingface.co/datasets/timpal0l/stsb_mt_sv",
         type="STS",
@@ -50,8 +49,3 @@ class STSMTSV(AbsTaskSTS):
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 5
         return metadata_dict
-
-    # def dataset_transform(self):
-    #     data = self.dataset[_EVAL_SPLIT]
-    #     data = data.add_column("score", [d["label"] for d in data])
-    #     self.dataset = {_EVAL_SPLIT: data}
