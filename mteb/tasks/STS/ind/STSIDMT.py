@@ -58,6 +58,9 @@ class STSIDMT(AbsTaskSTS):
 
     def dataset_transform(self) -> None:
         self.dataset = self.dataset.remove_columns("score")
+        type_cast = self.dataset.features.copy()
+        type_cast["correlation"] = Value("int64")
+        self.dataset = self.dataset.cast(new_features)
         self.dataset = self.dataset.rename_column("correlation", "score")
         self.dataset = self.dataset.rename_column("text_1", "sentence1")
         self.dataset = self.dataset.rename_column("text_2", "sentence2")
