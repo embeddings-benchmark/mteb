@@ -116,7 +116,9 @@ class AbsTaskClusteringFast(AbsTask):
         if self.use_dataset_as_is:
             downsampled_dataset = dataset
         else:
-            max_documents_to_embed = int(self.max_fraction_of_documents_to_embed * len(dataset))
+            max_documents_to_embed = int(
+                self.max_fraction_of_documents_to_embed * len(dataset)
+            )
             example_indices = rng_state.sample(
                 range(len(dataset)), k=max_documents_to_embed
             )

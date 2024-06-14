@@ -74,7 +74,6 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
         self.use_dataset_as_is = True
 
 
-
 class StackExchangeClustering(AbsTaskClustering):
     superseeded_by = "StackExchangeClustering.v2"
     metadata = TaskMetadata(

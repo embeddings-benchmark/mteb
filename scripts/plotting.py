@@ -60,8 +60,6 @@ for version in versions:
     for task_pair in task_list:
         scores = {}
         scores_fast = {}
-        times = []
-        times_fast = []
         for task in task_pair:
             for model in MODELS:
                 model_name = model.name
@@ -74,10 +72,8 @@ for version in versions:
                 results_path = output_path / f"{task}.json"
                 res = MTEBResults.from_disk(path=results_path, load_historic_data=False)
                 main_score = res.scores["test"][0]["main_score"]
-                eval_time = res.evaluation_time
 
                 if version in res.task_name:
-                    times_fast.append(eval_time)
                     scores_fast.update(
                         {
                             str(model.name).split("/")[-1]: res.scores["test"][0][
@@ -86,7 +82,6 @@ for version in versions:
                         }
                     )
                 else:
-                    times.append(eval_time)
                     scores.update(
                         {
                             str(model.name).split("/")[-1]: res.scores["test"][0][
@@ -107,7 +102,6 @@ for version in versions:
         df_fast["Model"] = df_fast.index
 
         # plot the scores
-
         import seaborn as sns
 
         sns.set_theme(style="whitegrid")
@@ -133,10 +127,7 @@ for version in versions:
             dodge=True,
             alpha=0.5,
         )
-        # title
         plt.title(f"{task_pair[0]}")
-
-        # with xticks rotated
         plt.xticks(rotation=85)
         plt.tight_layout()
         # plt.show()
