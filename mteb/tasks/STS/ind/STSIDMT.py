@@ -58,7 +58,7 @@ class STSIDMT(AbsTaskSTS):
 
     def dataset_transform(self) -> None:
         self.dataset = self.dataset.remove_columns("score")
-        type_cast = self.dataset.features.copy()
+        # type_cast = self.dataset.features.copy()
         type_cast["correlation"] = Value("int64")
         self.dataset = self.dataset.cast(type_cast)
         # print(self.dataset)
