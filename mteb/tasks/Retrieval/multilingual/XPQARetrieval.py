@@ -374,7 +374,7 @@ class XPQARetrieval(AbsTaskRetrieval, MultilingualTask):
 
             queries_to_ids = {
                 eval_split: {
-                    q: str(_id)
+                    q: f"Q{str(_id)}"
                     for _id, q in enumerate(
                         set(dataset_language[eval_split][question_key])
                     )
@@ -389,7 +389,7 @@ class XPQARetrieval(AbsTaskRetrieval, MultilingualTask):
 
             corpus_to_ids = {
                 eval_split: {
-                    document: str(_id)
+                    document: f"C{str(_id)}"
                     for _id, document in enumerate(
                         set(dataset_language[eval_split][corpus_key])
                     )
