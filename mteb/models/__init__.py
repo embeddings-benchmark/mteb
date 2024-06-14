@@ -106,10 +106,10 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
 
 model_modules = [
     e5_models,
-    sentence_transformers_models,
-    openai_models,
-    voyage_models,
     gritlm,
+    openai_models,
+    sentence_transformers_models,
+    voyage_models,
 ]
 models = {}
 
