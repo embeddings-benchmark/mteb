@@ -30,7 +30,7 @@ class RerankingEvaluator(Evaluator):
 
     def __init__(
         self,
-        samples: list[dict],
+        samples,
         mrr_at_k: int = 10,
         name: str = "",
         similarity_fct=cos_sim,
