@@ -28,6 +28,16 @@ def sentence_transformers_loader(
     )
 
 
+def get_loader_name(
+    loader: Callable[..., Encoder | EncoderWithQueryCorpusEncode] | None,
+) -> str | None:
+    if loader is None:
+        return None
+    if hasattr(loader, "func"):  # partial class wrapper
+        return loader.func.__name__
+    return loader.__name__
+
+
 class ModelMeta(BaseModel):
     """The model metadata object.
 

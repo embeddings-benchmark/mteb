@@ -42,7 +42,13 @@ class SouthAfricanLangClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         text_creation="found",
-        bibtex_citation="",
+        bibtex_citation="""@misc{south-african-language-identification,
+    author = {ExploreAI Academy, Joanne M},
+    title = {South African Language Identification},
+    publisher = {Kaggle},
+    year = {2022},
+    url = {https://kaggle.com/competitions/south-african-language-identification}
+}""",
         n_samples={"test": 2048},
         avg_character_length={"test": 247.49},
     )

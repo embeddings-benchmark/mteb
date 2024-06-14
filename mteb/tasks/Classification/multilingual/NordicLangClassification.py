@@ -35,7 +35,26 @@ class NordicLangClassification(AbsTaskClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@inproceedings{haas-derczynski-2021-discriminating,
+    title = "Discriminating Between Similar {N}ordic Languages",
+    author = "Haas, Ren{\'e}  and
+      Derczynski, Leon",
+    editor = {Zampieri, Marcos  and
+      Nakov, Preslav  and
+      Ljube{\v{s}}i{\'c}, Nikola  and
+      Tiedemann, J{\"o}rg  and
+      Scherrer, Yves  and
+      Jauhiainen, Tommi},
+    booktitle = "Proceedings of the Eighth Workshop on NLP for Similar Languages, Varieties and Dialects",
+    month = apr,
+    year = "2021",
+    address = "Kiyv, Ukraine",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2021.vardial-1.8",
+    pages = "67--75",
+    abstract = "Automatic language identification is a challenging problem. Discriminating between closely related languages is especially difficult. This paper presents a machine learning approach for automatic language identification for the Nordic languages, which often suffer miscategorisation by existing state-of-the-art tools. Concretely we will focus on discrimination between six Nordic languages: Danish, Swedish, Norwegian (Nynorsk), Norwegian (Bokm{\aa}l), Faroese and Icelandic.",
+}
+""",
         n_samples={"test": 3000},
         avg_character_length={"test": 78.2},
     )

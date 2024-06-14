@@ -96,7 +96,19 @@ class RedditClustering(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@article{geigle:2021:arxiv,
+        author    = {Gregor Geigle and 
+                        Nils Reimers and 
+                        Andreas R{\"u}ckl{\'e} and
+                        Iryna Gurevych},
+        title     = {TWEAC: Transformer with Extendable QA Agent Classifiers},
+        journal   = {arXiv preprint},
+        volume    = {abs/2104.07081},
+        year      = {2021},
+        url       = {http://arxiv.org/abs/2104.07081},
+        archivePrefix = {arXiv},
+        eprint    = {2104.07081}
+        }""",
         n_samples={"test": 420464},
         avg_character_length={"test": 64.7},
     )

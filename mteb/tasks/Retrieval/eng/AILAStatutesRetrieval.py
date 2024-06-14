@@ -28,7 +28,21 @@ class AILAStatutes(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=None,
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="""@dataset{paheli_bhattacharya_2020_4063986,
+  author       = {Paheli Bhattacharya and
+                  Kripabandhu Ghosh and
+                  Saptarshi Ghosh and
+                  Arindam Pal and
+                  Parth Mehta and
+                  Arnab Bhattacharya and
+                  Prasenjit Majumder},
+  title        = {AILA 2019 Precedent \& Statute Retrieval Task},
+  month        = oct,
+  year         = 2020,
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.4063986},
+  url          = {https://doi.org/10.5281/zenodo.4063986}
+}""",
         n_samples=None,
         avg_character_length=None,
     )

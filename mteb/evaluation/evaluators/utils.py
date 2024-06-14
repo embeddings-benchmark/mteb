@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -294,6 +294,46 @@ def download(url: str, fname: str):
             bar.update(size)
 
 
+def convert_conv_history_to_query(conversations: List[List[Union[str, dict]]]) -> str:
+    conversations_converted = []
+
+    for conversation in conversations:
+        # if it's a list of strings, just join them
+        if isinstance(conversation[0], str):
+            conv_str = "; ".join(conversation)
+        # otherwise, it's a list of dictionaries, which we need to convert to strings
+        elif isinstance(conversation[0], dict):
+            conv = []
+            for i, turn in enumerate(conversation):
+                error_msg = (
+                    "When converting conversations lists of dictionary to string, each turn in the conversation "
+                    "must be a dictionary with 'role' and 'content' keys"
+                )
+                if not isinstance(turn, dict):
+                    raise ValueError(f"Turn {i} is not a dictionary. " + error_msg)
+
+                # check for keys 'role' and 'content' in the dictionary, if not found, raise an error
+                if "role" not in turn:
+                    raise ValueError(
+                        "Key 'role' not found in the dictionary. " + error_msg
+                    )
+                if "content" not in turn:
+                    raise ValueError(
+                        "Key 'content' not found in the dictionary. " + error_msg
+                    )
+
+                conv.append(f"{turn['role']}: {turn['content']}")
+            conv_str = "; ".join(conv)
+        else:
+            raise ValueError(
+                "Conversations must be a list consisting of strings or dictionaries with 'role' and 'content' keys"
+            )
+
+        conversations_converted.append(conv_str)
+
+    return conversations_converted
+
+
 def confidence_scores(sim_scores: List[float]) -> Dict[str, float]:
     """Computes confidence scores for a single instance = (query, positives, negatives)
 
@@ -356,36 +396,19 @@ def nAUC(
         Returns:
             abst_curve: Abstention curve of length `len(abstention_rates)`
         """
+        conf_scores_argsort = np.argsort(conf_scores)
         abst_curve = np.zeros(len(abstention_rates))
-        abstention_thresholds = np.quantile(conf_scores, abstention_rates)
 
-        for i, abstention_threshold in enumerate(abstention_thresholds):
-            abst_curve[i] = metrics[conf_scores >= abstention_threshold].mean()
+        for i, rate in enumerate(abstention_rates):
+            num_instances_abst = min(
+                round(rate * len(conf_scores_argsort)), len(conf_scores) - 1
+            )
+            abst_curve[i] = metrics[conf_scores_argsort[num_instances_abst:]].mean()
 
         return abst_curve
 
-    def oracle_curve(
-        metrics: np.ndaray, abstention_rates: np.ndarray = np.linspace(0, 1, 11)[:-1]
-    ) -> np.ndarray:
-        """Computes the oracle curve for a given set of evaluated instances
-
-        Args:
-            metrics: Metric evaluations at instance-level, with shape `(num_test_instances,)`
-            abstention_rates: Target rates for the computation of the abstention curve
-
-        Returns:
-            or_curve: Oracle curve of length `len(abstention_rates)`
-        """
-        metrics_argsort = np.argsort(metrics)
-        or_curve = np.zeros(len(abstention_rates))
-
-        for i, rate in enumerate(abstention_rates):
-            or_curve[i] = metrics[metrics_argsort[round(rate * len(metrics)) :]].mean()
-
-        return or_curve
-
     abst_curve = abstention_curve(conf_scores, metrics, abstention_rates)
-    or_curve = oracle_curve(metrics, abstention_rates)
+    or_curve = abstention_curve(metrics, metrics, abstention_rates)
     abst_auc = auc(abstention_rates, abst_curve)
     or_auc = auc(abstention_rates, or_curve)
     flat_auc = or_curve[0] * (abstention_rates[-1] - abstention_rates[0])

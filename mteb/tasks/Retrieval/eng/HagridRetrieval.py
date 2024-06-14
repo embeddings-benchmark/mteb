@@ -37,7 +37,12 @@ class HagridRetrieval(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@article{hagrid,
+      title={{HAGRID}: A Human-LLM Collaborative Dataset for Generative Information-Seeking with Attribution}, 
+      author={Ehsan Kamalloo and Aref Jafari and Xinyu Zhang and Nandan Thakur and Jimmy Lin},
+      year={2023},
+      journal={arXiv:2307.16883},
+}""",
         n_samples=None,
         avg_character_length=None,
     )

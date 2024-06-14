@@ -27,7 +27,12 @@ class MarathiNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation="""""",
+        bibtex_citation="""@article{kunchukuttan2020indicnlpcorpus,
+    title={AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
+    author={Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
+    year={2020},
+    journal={arXiv preprint arXiv:2005.00085},
+}""",
         n_samples={"test": 2048},
         avg_character_length={"test": 52.37},
     )
