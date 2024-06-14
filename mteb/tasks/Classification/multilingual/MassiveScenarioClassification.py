@@ -74,7 +74,7 @@ class MassiveScenarioClassification(MultilingualTask, AbsTaskClassification):
         eval_splits=["validation", "test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
-        date=('2022-01-01','2022-04-22'),
+        date=("2022-01-01", "2022-04-22"),
         form=["spoken"],
         domains=["Spoken"],
         task_subtypes=[],
