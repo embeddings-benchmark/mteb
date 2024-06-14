@@ -147,7 +147,7 @@ for version in versions:
 
     print(f"\n### {version}")
 
-    print("| Model | Spearman | Significant Spearman | Speedup |")
+    print("| Task | Spearman | Significant Spearman | Speedup |")
     print("| --- | --- | --- | --- |")
 
     spearman_scores = []

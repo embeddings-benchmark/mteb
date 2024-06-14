@@ -32,7 +32,7 @@ class BiorxivClusteringP2PFast(AbsTaskClusteringFast):
         dialect=[],
         text_creation="created",
         bibtex_citation="",
-        n_samples={"test": 3000},
+        n_samples={"test": 2151},
         avg_character_length={"test": 1664.0},
     )
 

@@ -6,6 +6,7 @@ import logging
 
 from mteb import MTEB, get_model, get_tasks
 from mteb.models.e5_models import (
+    e5_eng_large_v2,
     e5_eng_small,
     e5_eng_small_v2,
     e5_mult_base,
@@ -15,6 +16,7 @@ from mteb.models.e5_models import (
 from mteb.models.sentence_transformers_models import (
     all_MiniLM_L6_v2,
     paraphrase_multilingual_MiniLM_L12_v2,
+    paraphrase_multilingual_mpnet_base_v2,
 )
 
 logging.basicConfig(level=logging.INFO)
@@ -45,6 +47,8 @@ MODELS = [
     e5_mult_small,
     e5_mult_base,
     e5_mult_large,
+    paraphrase_multilingual_mpnet_base_v2,
+    e5_eng_large_v2,
 ]
 
 for model in MODELS:

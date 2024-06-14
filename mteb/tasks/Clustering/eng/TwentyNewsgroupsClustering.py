@@ -92,7 +92,7 @@ class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
         author = {Ken Lang},
         }
         """,
-        n_samples={"test": 2382},
+        n_samples={"test": 2381},
         avg_character_length={"test": 32.0},
     )
 
