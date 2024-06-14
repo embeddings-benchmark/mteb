@@ -92,3 +92,4 @@ Please also add your first name and last name are as you want them to appear in 
 | ManuelFay         | Manuel        | Faysse     | manuel.faysse@centralesupelec.fr |              ~Manuel_Faysse1        | CentraleSupélec & Illuin Technology                  |
 | hgissbkh          | Hippolyte     | Gisserot-Boukhlef    | hippolyte.gisserot-boukhlef@centralesupelec.fr        |   ~Hippolyte_Gisserot-Boukhlef1                   | CentraleSupélec & Artefact Research Center   |
 | sted97          | Simone     | Tedeschi    | tedeschi@diag.uniroma1.it        |   ~Simone_Tedeschi1                   | Sapienza University of Rome   |
+| henilp105       | Henil      | Panchal     | henilp105@gmail.com              |   ~Henil_Shalin_Panchal1              | Nirma University              |
