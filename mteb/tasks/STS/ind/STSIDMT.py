@@ -45,7 +45,7 @@ class STSIDMT(AbsTaskSTS):
   url          = {https://doi.org/10.5281/zenodo.10983756}
 }
 """,
-        n_samples={"test":},
+        n_samples={"test":1380},
         avg_character_length={"test":3.45},
     )
 
