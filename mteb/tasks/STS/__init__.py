@@ -28,3 +28,4 @@ from .rus.RUParaPhraserSTS import *
 from .rus.RuSTSBenchmarkSTS import *
 from .spa.STSES import *
 from .zho.CMTEBSTS import *
+from .swe.STSMTSV import *
