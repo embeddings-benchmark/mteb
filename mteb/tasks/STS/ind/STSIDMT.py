@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from datasets import Value
 
 _EVAL_SPLIT = "test"
 
@@ -59,8 +60,9 @@ class STSIDMT(AbsTaskSTS):
     def dataset_transform(self) -> None:
         self.dataset = self.dataset.remove_columns("score")
         # type_cast = self.dataset.features.copy()
-        type_cast["correlation"] = Value("int64")
-        self.dataset = self.dataset.cast(type_cast)
+        # type_cast["correlation"] = Value("int64")
+        # self.dataset = self.dataset.cast(type_cast)
+        self.dataset = self.dataset.cast_column("correlation",Value("int64"))
         # print(self.dataset)
         self.dataset = self.dataset.rename_column("correlation", "score")
         self.dataset = self.dataset.rename_column("text_1", "sentence1")
