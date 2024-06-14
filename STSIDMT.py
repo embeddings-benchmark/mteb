@@ -1,5 +1,6 @@
-import mteb
 from sentence_transformers import SentenceTransformer
+
+import mteb
 
 # Define the sentence-transformers model name
 # model_name = "average_word_embeddings_komninos"

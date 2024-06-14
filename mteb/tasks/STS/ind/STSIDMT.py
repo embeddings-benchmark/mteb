@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from datasets import Value
+
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskSTS import AbsTaskSTS
-from datasets import Value
 
 _EVAL_SPLIT = "test"
 
@@ -23,15 +24,15 @@ class STSIDMT(AbsTaskSTS):
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["ind-Latn"],
         main_score="cosine_spearman",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
+        date=("2012-01-01", "2024-01-04"),  # rough estimate,
+        form=["spoken", "written"],
+        domains=["News", "Social", "Web"],
+        task_subtypes=[],
+        license="apache-2.0",
+        socioeconomic_status="mixed",
+        annotations_creators="human-annotated",
+        dialect=[],
+        text_creation="machine-translated",
         bibtex_citation="""@software{wongso_2024_10983756,
   author       = {Wongso, Wilson and
                   Joyoadikusumo, Ananto and
@@ -46,8 +47,8 @@ class STSIDMT(AbsTaskSTS):
   url          = {https://doi.org/10.5281/zenodo.10983756}
 }
 """,
-        n_samples={"test":1380},
-        avg_character_length={"test":3.45},
+        n_samples={"test": 1379},
+        avg_character_length={"test": 61.26},
     )
 
     @property
@@ -59,12 +60,7 @@ class STSIDMT(AbsTaskSTS):
 
     def dataset_transform(self) -> None:
         self.dataset = self.dataset.remove_columns("score")
-        # type_cast = self.dataset.features.copy()
-        # type_cast["correlation"] = Value("int64")
-        # self.dataset = self.dataset.cast(type_cast)
-        self.dataset = self.dataset.cast_column("correlation",Value("float64"))
-        # print(self.dataset)
+        self.dataset = self.dataset.cast_column("correlation", Value("float64"))
         self.dataset = self.dataset.rename_column("correlation", "score")
         self.dataset = self.dataset.rename_column("text_1", "sentence1")
         self.dataset = self.dataset.rename_column("text_2", "sentence2")
-        # raise Exception("Done")

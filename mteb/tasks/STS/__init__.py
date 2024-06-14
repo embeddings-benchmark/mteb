@@ -12,6 +12,7 @@ from .eng.STSBenchmarkSTS import *
 from .fao.FaroeseSTS import *
 from .fin.FinParaSTS import *
 from .fra.SickFrSTS import *
+from .ind.STSIDMT import *
 from .jpn.JSICK import *
 from .jpn.JSTS import *
 from .kor.KlueSTS import *
@@ -28,4 +29,3 @@ from .rus.RUParaPhraserSTS import *
 from .rus.RuSTSBenchmarkSTS import *
 from .spa.STSES import *
 from .zho.CMTEBSTS import *
-from .ind.STSIDMT import *
