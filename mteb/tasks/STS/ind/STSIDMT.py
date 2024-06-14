@@ -62,7 +62,7 @@ class STSIDMT(AbsTaskSTS):
         # type_cast = self.dataset.features.copy()
         # type_cast["correlation"] = Value("int64")
         # self.dataset = self.dataset.cast(type_cast)
-        self.dataset = self.dataset.cast_column("correlation",Value("int64"))
+        self.dataset = self.dataset.cast_column("correlation",Value("float64"))
         # print(self.dataset)
         self.dataset = self.dataset.rename_column("correlation", "score")
         self.dataset = self.dataset.rename_column("text_1", "sentence1")
