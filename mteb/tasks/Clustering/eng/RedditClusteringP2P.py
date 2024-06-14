@@ -79,7 +79,7 @@ class RedditFastClusteringP2P(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 16000},
+        n_samples={"test": 18376},
         avg_character_length={"test": 727.7},
     )
 

@@ -50,7 +50,7 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 16000},
+        n_samples={"test": 3000},
         avg_character_length={"test": 1090.7},
     )
 

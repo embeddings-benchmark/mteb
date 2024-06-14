@@ -36,7 +36,7 @@ class MedrxivClusteringP2PFast(AbsTaskClusteringFast):
         dialect=[],
         text_creation="created",
         bibtex_citation="",
-        n_samples={"test": 32768},
+        n_samples={"test": 1500},
         avg_character_length={"test": 1984.7},
     )
 
@@ -50,14 +50,6 @@ class MedrxivClusteringP2PFast(AbsTaskClusteringFast):
             check_label_distribution(self.dataset[split])
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=32768,
-        )
-        self.use_dataset_as_is = True
 
 
 class MedrxivClusteringP2P(AbsTaskClustering):
@@ -85,6 +77,6 @@ class MedrxivClusteringP2P(AbsTaskClustering):
         dialect=[],
         text_creation="created",
         bibtex_citation="",
-        n_samples={"test": 375000},
+        n_samples={"test": 37500},
         avg_character_length={"test": 1981.2},
     )
