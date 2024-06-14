@@ -38,7 +38,7 @@ class NusaTranslationTopicClassification(MultilingualTask, AbsTaskClassification
         task_subtypes=None,
         license="Apache 2.0",
         socioeconomic_status="mixed",
-        annotations_creators="",
+        annotations_creators="human-annotated",
         dialect=None,
         text_creation=None,
         bibtex_citation="""@inproceedings{cahyawijaya-etal-2023-nusawrites,
