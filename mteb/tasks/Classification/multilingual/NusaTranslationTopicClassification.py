@@ -5,7 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks import AbsTaskClassification, MultilingualTask
 
 _LANGUAGES = {
-    "btk": ["btk-Latn"],
+    "btk": ["bbc-Latn"],
     "bew": ["bew-Latn"],
     "bug": ["bug-Latn"],
     "jav": ["jav-Latn"],
