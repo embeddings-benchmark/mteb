@@ -12,7 +12,7 @@ class STSIDMT(AbsTaskSTS):
         name="STSIDMT",
         dataset={
             "path": "LazarusNLP/stsb_mt_id",
-            "revision": "0912bb6c9393c76d62a7c5ee81c4c817ff47c9f4",
+            "revision": "d0095a14faeaad923263a0ce2d301f8163b94106",
             "trust_remote_code": True,
         },
         description="Indonesian test sets from STS-B translated using Google Translate API",
