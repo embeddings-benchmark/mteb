@@ -118,7 +118,12 @@ class RerankingEvaluator(Evaluator):
             )
 
         if self.evaluator_type == "standard":
-            results = self._encode_candidates(all_query_embs, encode_corpus_func, True)
+            results = self._encode_candidates(
+                encode_corpus_func=encode_corpus_func,
+                batched=True,
+                all_query_embs=all_query_embs,
+                encode_queries_func=encode_queries_func,
+            )
         elif self.evaluator_type == "miracl":
             results = self._encode_candidates_miracl(all_query_embs, encode_corpus_func)
         return results
