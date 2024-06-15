@@ -17,7 +17,7 @@ _LANGUAGES = {
     "tel": ["tel-Telu"],
 }
 
-_SPLITS = ["dev", "test"]
+_SPLITS = ["test"]
 
 
 class SemRel24STS(AbsTaskSTS, MultilingualTask):
