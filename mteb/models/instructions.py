@@ -24,6 +24,7 @@ TASKNAME2INSTRUCTIONS = {
     # BitextMining
     "BornholmBitextMining": "Retrieve parallel sentences in Danish and Bornholmsk",
     "NorwegianCourtsBitextMining ": "Retrieve parallel sentences in Norwegian Bokmål and Nynorsk",
+    "NusaXBitextMining": "Retrieve parallel sentences.",
     # Classification
     "AngryTweetsClassification": "Classify Danish tweets by sentiment. (positive, negative, neutral)",
     "DKHateClassification": "Classify Danish tweets based on offensiveness (offensive, not offensive)",
