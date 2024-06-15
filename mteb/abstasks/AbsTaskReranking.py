@@ -29,7 +29,9 @@ class AbsTaskReranking(AbsTask):
         data_split: Dataset,
         **kwargs: Any,
     ) -> ScoresDict:
-        evaluator = RerankingEvaluator(data_split, **kwargs)
+        evaluator = RerankingEvaluator(
+            data_split, task_name=self.metadata.name, **kwargs
+        )
         scores = evaluator(model)
 
         self._add_main_score(scores)
