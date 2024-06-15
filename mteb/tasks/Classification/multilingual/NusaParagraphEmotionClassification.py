@@ -25,7 +25,7 @@ class NusaParagraphEmotionClassification(MultilingualTask, AbsTaskClassification
             "path": "gentaiscool/nusaparagraph_emot",
             "revision": "c61e8c3ee47d2dce296e9601195916b54c21d575",
         },
-        description="NusaParagraphEmotionClassification is a multi-class emotion classification on 10 Indonesian languages.",
+        description="NusaParagraphEmotionClassification is a multi-class emotion classification on 10 Indonesian languages from the NusaParagraph dataset.",
         reference="https://github.com/IndoNLP/nusa-writes",
         category="s2s",
         type="Classification",
