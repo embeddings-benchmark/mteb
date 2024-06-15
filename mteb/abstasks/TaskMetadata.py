@@ -35,6 +35,7 @@ TASK_SUBTYPE = Literal[
     "Cross-Lingual Semantic Discrimination",
     "Textual Entailment",
     "Counterfactual Detection",
+    "Emotion classification",
 ]
 
 TASK_DOMAIN = Literal[
