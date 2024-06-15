@@ -53,5 +53,5 @@ class NusaTranslationBitextMining(AbsTaskBitextMining, CrosslingualTask):
 
         """,
         n_samples={"train": 50200},
-        avg_character_length={"train": 5.62},
+        avg_character_length={"train": 147.01},
     )
