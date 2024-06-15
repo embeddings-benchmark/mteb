@@ -19,7 +19,7 @@ class WinoGrande(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("2021-01-01", "2021-12-31"),
         form=["written"],
         domains=["Encyclopaedic"],
         task_subtypes=[],
@@ -45,6 +45,6 @@ class WinoGrande(AbsTaskRetrieval):
   publisher={ACM New York, NY, USA}
 }
 """,
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"test": 0},
+        avg_character_length={"test": 0.0},
     )

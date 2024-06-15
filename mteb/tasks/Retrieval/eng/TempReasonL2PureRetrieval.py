@@ -19,7 +19,7 @@ class TempReasonL2Pure(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("2023-01-01", "2023-12-31"),
         form=["written"],
         domains=["Encyclopaedic"],
         task_subtypes=[],
@@ -41,6 +41,6 @@ class TempReasonL2Pure(AbsTaskRetrieval):
   year={2023}
 }
 """,
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"test": 0},
+        avg_character_length={"test": 0.0},
     )

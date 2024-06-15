@@ -19,7 +19,7 @@ class Quail(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("2020-01-01", "2020-12-31"),
         form=["written"],
         domains=["Encyclopaedic"],
         task_subtypes=[],
@@ -44,6 +44,6 @@ class Quail(AbsTaskRetrieval):
   year={2020}
 }
 """,
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"test": 0},
+        avg_character_length={"test": 0.0},
     )
