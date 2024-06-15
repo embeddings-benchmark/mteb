@@ -9,8 +9,8 @@ from sentence_transformers import SentenceTransformer
 from mteb.model_meta import ModelMeta
 from mteb.models.text_formatting_utils import corpus_to_texts
 
-e5_paper_release_date = "2024-02-08"
-xlmr_languages = [
+E5_PAPER_RELEASE_DATE = "2024-02-08"
+XLMR_LANGUAGES = [
     "afr_Latn",
     "amh_Latn",
     "ara_Latn",
@@ -153,27 +153,27 @@ class E5Wrapper:
 e5_mult_small = ModelMeta(
     loader=partial(E5Wrapper, model_name="intfloat/multilingual-e5-small"),  # type: ignore
     name="intfloat/multilingual-e5-small",
-    languages=xlmr_languages,
+    languages=XLMR_LANGUAGES,
     open_source=True,
     revision="e4ce9877abf3edfe10b0d82785e83bdcb973e22e",
-    release_date=e5_paper_release_date,
+    release_date=E5_PAPER_RELEASE_DATE,
 )
 
 e5_mult_base = ModelMeta(
     loader=partial(E5Wrapper, model_name="intfloat/multilingual-e5-base"),  # type: ignore
     name="intfloat/multilingual-e5-base",
-    languages=xlmr_languages,
+    languages=XLMR_LANGUAGES,
     open_source=True,
     revision="d13f1b27baf31030b7fd040960d60d909913633f",
-    release_date=e5_paper_release_date,
+    release_date=E5_PAPER_RELEASE_DATE,
 )
 
 
 e5_mult_large = ModelMeta(
     loader=partial(E5Wrapper, model_name="intfloat/multilingual-e5-large"),  # type: ignore
     name="intfloat/multilingual-e5-large",
-    languages=xlmr_languages,
+    languages=XLMR_LANGUAGES,
     open_source=True,
     revision="4dc6d853a804b9c8886ede6dda8a073b7dc08a81",
-    release_date=e5_paper_release_date,
+    release_date=E5_PAPER_RELEASE_DATE,
 )

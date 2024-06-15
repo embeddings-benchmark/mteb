@@ -12,6 +12,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
+from ..evaluation.evaluators.model_encode import model_encode
 from ..MTEBResults import HFSubset, ScoresDict
 from .AbsTask import AbsTask
 
@@ -122,8 +123,12 @@ class AbsTaskMultilabelClassification(AbsTask):
         # Encode all unique sentences at the indices
         unique_train_indices = list(set(itertools.chain.from_iterable(train_samples)))
         unique_train_sentences = train_split.select(unique_train_indices)["text"]
+
+        _unique_train_embeddings = model_encode(
+            unique_train_sentences, model=model, task_name=self.metadata.name
+        )
         unique_train_embeddings = dict(
-            zip(unique_train_indices, model.encode(unique_train_sentences))
+            zip(unique_train_indices, _unique_train_embeddings)
         )
         test_text = eval_split["text"]
         binarizer = MultiLabelBinarizer()
@@ -136,7 +141,8 @@ class AbsTaskMultilabelClassification(AbsTask):
                 )
         except ValueError:
             logger.warning("Couldn't subsample, continuing with the entire test set.")
-        X_test = model.encode(test_text)
+
+        X_test = model_encode(test_text, model=model, task_name=self.metadata.name)
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
                 "=" * 10

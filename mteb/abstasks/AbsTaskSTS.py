@@ -38,6 +38,7 @@ class AbsTaskSTS(AbsTask):
             data_split["sentence1"],
             data_split["sentence2"],
             normalized_scores,
+            task_name=self.metadata.name,
             **kwargs,
         )
         scores = evaluator(model)

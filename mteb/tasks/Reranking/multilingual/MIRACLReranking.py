@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from functools import partial
 from typing import Any
 
 import numpy as np
@@ -11,6 +12,7 @@ from datasets import Dataset
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.evaluation.evaluators import RerankingEvaluator
+from mteb.evaluation.evaluators.model_encode import model_encode
 from mteb.evaluation.evaluators.RetrievalEvaluator import RetrievalEvaluator
 from mteb.evaluation.evaluators.utils import cos_sim
 from mteb.MTEBResults import ScoresDict
@@ -89,7 +91,9 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         data_split: Dataset,
         **kwargs: Any,
     ) -> ScoresDict:
-        evaluator = MIRACLRerankingEvaluator(data_split, **kwargs)
+        evaluator = MIRACLRerankingEvaluator(
+            samples=data_split, task_name=self.metadata.name, **kwargs
+        )
         scores = evaluator(model)
 
         self._add_main_score(scores)
@@ -106,6 +110,7 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
     def __init__(
         self,
         samples: list[dict],
+        task_name: str,
         mrr_at_k: int = 10,
         name: str = "",
         similarity_fct=cos_sim,
@@ -115,17 +120,15 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
         **kwargs,
     ):
-        """Args:
-        k_values: ranking cutoff threshold when applicable
-        """
         super().__init__(
             samples,
-            mrr_at_k,
-            name,
-            similarity_fct,
-            batch_size,
-            use_batched_encoding,
-            limit,
+            task_name=task_name,
+            mrr_at_k=mrr_at_k,
+            name=name,
+            similarity_fct=similarity_fct,
+            batch_size=batch_size,
+            use_batched_encoding=use_batched_encoding,
+            limit=limit,
             **kwargs,
         )
         self.k_values = k_values
@@ -166,12 +169,12 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         encode_queries_func = (
             model.encode_queries
             if isinstance(model, EncoderWithQueryCorpusEncode)
-            else model.encode
+            else partial(model_encode, model=model)
         )
         encode_corpus_func = (
             model.encode_corpus
             if isinstance(model, EncoderWithQueryCorpusEncode)
-            else model.encode
+            else partial(model_encode, model=model)
         )
 
         logger.info("Encoding queries...")
@@ -180,6 +183,7 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
                 encode_queries_func(
                     [sample["query"] for sample in self.samples],
                     batch_size=self.batch_size,
+                    task_name=self.task_name,
                 )
             )
         elif isinstance(self.samples[0]["query"], list):
@@ -188,7 +192,11 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
                 q for sample in self.samples for q in sample["query"]
             ]
             all_query_embs = np.asarray(
-                encode_queries_func(all_query_flattened, batch_size=self.batch_size)
+                encode_queries_func(
+                    all_query_flattened,
+                    batch_size=self.batch_size,
+                    task_name=self.task_name,
+                )
             )
         else:
             raise ValueError(
@@ -201,7 +209,9 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
             all_docs.extend(sample["candidates"])
 
         all_docs_embs = np.asarray(
-            encode_corpus_func(all_docs, batch_size=self.batch_size)
+            encode_corpus_func(
+                all_docs, batch_size=self.batch_size, task_name=self.task_name
+            )
         )
 
         # Compute scores
@@ -246,10 +256,14 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
         encode_queries_func = (
-            model.encode_queries if hasattr(model, "encode_queries") else model.encode
+            model.encode_queries
+            if hasattr(model, "encode_queries")
+            else partial(model_encode, model=model)
         )
         encode_corpus_func = (
-            model.encode_corpus if hasattr(model, "encode_corpus") else model.encode
+            model.encode_corpus
+            if hasattr(model, "encode_corpus")
+            else partial(model_encode, model=model)
         )
 
         results, qrels = {}, {}
@@ -261,10 +275,14 @@ class MIRACLRerankingEvaluator(RerankingEvaluator):
             if isinstance(query, str):
                 # .encoding interface requires List[str] as input
                 query_emb = np.asarray(
-                    encode_queries_func([query], batch_size=self.batch_size)
+                    encode_queries_func(
+                        [query], batch_size=self.batch_size, task_name=self.task_name
+                    )
                 )
                 docs_emb = np.asarray(
-                    encode_corpus_func(docs, batch_size=self.batch_size)
+                    encode_corpus_func(
+                        docs, batch_size=self.batch_size, task_name=self.task_name
+                    )
                 )
 
             fake_qid = str(i)
