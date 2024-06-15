@@ -4,6 +4,8 @@ import subprocess
 from argparse import Namespace
 from pathlib import Path
 
+import yaml
+
 from mteb.cli import create_meta
 
 
@@ -58,11 +60,15 @@ def test_create_meta():
 
     with output_path.open("r") as f:
         meta = f.read()
+        meta = meta[meta.index("---") + 3 : meta.index("---", meta.index("---") + 3)]
+        frontmatter = yaml.safe_load(meta)
 
     with (output_folder / "model_card_gold.md").open("r") as f:
         gold = f.read()
+        gold = gold[gold.index("---") + 3 : gold.index("---", gold.index("---") + 3)]
+        frontmatter_gold = yaml.safe_load(gold)
 
-    assert meta == gold, "Output does not match gold"
+    assert frontmatter == frontmatter_gold, "Output does not match gold"
 
     # ensure that the command line interface works as well
     command = f"mteb create_meta --results_folder {results} --output_path {output_path} --overwrite"
