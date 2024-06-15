@@ -72,8 +72,9 @@ def test_create_meta():
     for key in frontmatter_gold:
         assert key in frontmatter, f"Key {key} not found in output"
 
-
-        assert frontmatter[key] == frontmatter_gold[key], f"Value for {key} does not match"
+        assert (
+            frontmatter[key] == frontmatter_gold[key]
+        ), f"Value for {key} does not match"
 
     # ensure that the command line interface works as well
     command = f"mteb create_meta --results_folder {results} --output_path {output_path} --overwrite"
