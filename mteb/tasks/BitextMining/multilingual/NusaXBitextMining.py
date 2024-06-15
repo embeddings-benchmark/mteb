@@ -60,5 +60,5 @@ class NusaXBitextMining(AbsTaskBitextMining, CrosslingualTask):
         }
         """,
         n_samples={"train": 5500},
-        avg_character_length={"train": 5.00},
+        avg_character_length={"train": 157.15},
     )
