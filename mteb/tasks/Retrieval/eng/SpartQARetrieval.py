@@ -33,7 +33,14 @@ class SpartQA(AbsTaskRetrieval):
   author={Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
   journal={arXiv preprint arXiv:2404.06347},
   year={2024}
-}""",
+}
+@article{mirzaee2021spartqa,
+  title={Spartqa:: A textual question answering benchmark for spatial reasoning},
+  author={Mirzaee, Roshanak and Faghihi, Hossein Rajaby and Ning, Qiang and Kordjmashidi, Parisa},
+  journal={arXiv preprint arXiv:2104.05832},
+  year={2021}
+}
+""",
         n_samples=None,
         avg_character_length=None,
     )

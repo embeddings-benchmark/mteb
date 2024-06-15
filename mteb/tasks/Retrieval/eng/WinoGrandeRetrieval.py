@@ -33,7 +33,18 @@ class WinoGrande(AbsTaskRetrieval):
   author={Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
   journal={arXiv preprint arXiv:2404.06347},
   year={2024}
-}""",
+}
+@article{sakaguchi2021winogrande,
+  title={Winogrande: An adversarial winograd schema challenge at scale},
+  author={Sakaguchi, Keisuke and Bras, Ronan Le and Bhagavatula, Chandra and Choi, Yejin},
+  journal={Communications of the ACM},
+  volume={64},
+  number={9},
+  pages={99--106},
+  year={2021},
+  publisher={ACM New York, NY, USA}
+}
+""",
         n_samples=None,
         avg_character_length=None,
     )
