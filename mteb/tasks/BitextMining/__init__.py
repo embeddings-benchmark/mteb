@@ -11,8 +11,11 @@ from .multilingual.IN22ConvBitextMining import *
 from .multilingual.IN22GenBitextMining import *
 from .multilingual.IndicGenBenchFloresBitextMining import *
 from .multilingual.IWSLT2017BitextMinig import *
+from .multilingual.NollySentiBitextMining import *
 from .multilingual.NorwegianCourtsBitextMining import *
 from .multilingual.NTREXBitextMining import *
+from .multilingual.NusaTranslationBitextMining import *
+from .multilingual.NusaXBitextMining import *
 from .multilingual.RomaTalesBitextMining import *
 from .multilingual.TatoebaBitextMining import *
 from .srn.SRNCorpusBitextMining import *
