@@ -1,0 +1,58 @@
+from __future__ import annotations
+
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+
+
+class RARbMath(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="RARbMath",
+        description="Reasoning as Retrieval (RAR-b) format: Whether Answers to Queries in Reasoning Tasks can be retrieved as top.",
+        reference="https://arxiv.org/abs/2404.06347",
+        dataset={
+            "path": "RAR-b/math-pooled",
+            "revision": "2393603c0221ff52f448d12dd75f0856103c6cca",
+        },
+        type="Retrieval",
+        category="s2p",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        date=None,
+        form=["written"],
+        domains=["Encyclopaedic"],
+        task_subtypes=[],
+        license="MIT",
+        socioeconomic_status="medium",
+        annotations_creators="derived",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""@article{xiao2024rar,
+  title={RAR-b: Reasoning as Retrieval Benchmark},
+  author={Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
+  journal={arXiv preprint arXiv:2404.06347},
+  year={2024}
+}
+@article{hendrycks2021measuring,
+  title={Measuring mathematical problem solving with the math dataset},
+  author={Hendrycks, Dan and Burns, Collin and Kadavath, Saurav and Arora, Akul and Basart, Steven and Tang, Eric and Song, Dawn and Steinhardt, Jacob},
+  journal={arXiv preprint arXiv:2103.03874},
+  year={2021}
+}
+@article{cobbe2021training,
+  title={Training verifiers to solve math word problems},
+  author={Cobbe, Karl and Kosaraju, Vineet and Bavarian, Mohammad and Chen, Mark and Jun, Heewoo and Kaiser, Lukasz and Plappert, Matthias and Tworek, Jerry and Hilton, Jacob and Nakano, Reiichiro and others},
+  journal={arXiv preprint arXiv:2110.14168},
+  year={2021}
+}
+@article{yu2023metamath,
+  title={Metamath: Bootstrap your own mathematical questions for large language models},
+  author={Yu, Longhui and Jiang, Weisen and Shi, Han and Yu, Jincheng and Liu, Zhengying and Zhang, Yu and Kwok, James T and Li, Zhenguo and Weller, Adrian and Liu, Weiyang},
+  journal={arXiv preprint arXiv:2309.12284},
+  year={2023}
+}
+""",
+        n_samples=None,
+        avg_character_length=None,
+    )
