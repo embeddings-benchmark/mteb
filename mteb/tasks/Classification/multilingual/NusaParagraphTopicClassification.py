@@ -56,5 +56,5 @@ class NusaParagraphTopicClassification(MultilingualTask, AbsTaskClassification):
         }
         """,
         n_samples={"train": 15516, "validation": 2948, "test": 6250},
-        avg_character_length={"train": 5.51, "validation": 5.49, "test": 5.45},
+        avg_character_length={"train": 740.24, "validation": 740.66, "test": 740.71},
     )
