@@ -1,0 +1,259 @@
+{
+    "test": {
+        "ar": {
+            "cos_sim": {
+                "pearson": 0.05006610360999117,
+                "spearman": 0.2263866797712348
+            },
+            "euclidean": {
+                "pearson": 0.13082283087945362,
+                "spearman": 0.2263866797712348
+            },
+            "manhattan": {
+                "pearson": 0.13260328120447723,
+                "spearman": 0.22340169287120717
+            }
+        },
+        "de": {
+            "cos_sim": {
+                "pearson": 0.26596033966146115,
+                "spearman": 0.31044353994772356
+            },
+            "euclidean": {
+                "pearson": 0.2151728902500591,
+                "spearman": 0.31044353994772356
+            },
+            "manhattan": {
+                "pearson": 0.21718468273577896,
+                "spearman": 0.311979155955977
+            }
+        },
+        "de-en": {
+            "cos_sim": {
+                "pearson": 0.47545312366545117,
+                "spearman": 0.44038685024247604
+            },
+            "euclidean": {
+                "pearson": 0.4846975590869453,
+                "spearman": 0.44038685024247604
+            },
+            "manhattan": {
+                "pearson": 0.4810217367438755,
+                "spearman": 0.44442850465339095
+            }
+        },
+        "de-fr": {
+            "cos_sim": {
+                "pearson": 0.26472844763068937,
+                "spearman": 0.3006758748207823
+            },
+            "euclidean": {
+                "pearson": 0.26872307920750726,
+                "spearman": 0.3006758748207823
+            },
+            "manhattan": {
+                "pearson": 0.25808959063835424,
+                "spearman": 0.27996294873002153
+            }
+        },
+        "de-pl": {
+            "cos_sim": {
+                "pearson": 0.0702656697163116,
+                "spearman": 0.04927056559940413
+            },
+            "euclidean": {
+                "pearson": 0.06729027056926624,
+                "spearman": 0.04927056559940413
+            },
+            "manhattan": {
+                "pearson": 0.0901762174854638,
+                "spearman": 0.07359790736410993
+            }
+        },
+        "en": {
+            "cos_sim": {
+                "pearson": 0.6709882753030891,
+                "spearman": 0.6721465212910986
+            },
+            "euclidean": {
+                "pearson": 0.6821374069918402,
+                "spearman": 0.6721465212910986
+            },
+            "manhattan": {
+                "pearson": 0.6841388868877885,
+                "spearman": 0.6783615682571867
+            }
+        },
+        "es": {
+            "cos_sim": {
+                "pearson": 0.4433815143022264,
+                "spearman": 0.5477772552456677
+            },
+            "euclidean": {
+                "pearson": 0.48483578263920635,
+                "spearman": 0.5477772552456677
+            },
+            "manhattan": {
+                "pearson": 0.4929424073081744,
+                "spearman": 0.5525969655269095
+            }
+        },
+        "es-en": {
+            "cos_sim": {
+                "pearson": 0.4993601240112664,
+                "spearman": 0.5341895837272506
+            },
+            "euclidean": {
+                "pearson": 0.5016469746986203,
+                "spearman": 0.5341895837272506
+            },
+            "manhattan": {
+                "pearson": 0.4986265183075983,
+                "spearman": 0.5310065931046005
+            }
+        },
+        "es-it": {
+            "cos_sim": {
+                "pearson": 0.42568537775842247,
+                "spearman": 0.44269936659450304
+            },
+            "euclidean": {
+                "pearson": 0.4356982813703426,
+                "spearman": 0.44269936659450304
+            },
+            "manhattan": {
+                "pearson": 0.43954212787242286,
+                "spearman": 0.4432159550471527
+            }
+        },
+        "fr": {
+            "cos_sim": {
+                "pearson": 0.7064344773137496,
+                "spearman": 0.7700398643056744
+            },
+            "euclidean": {
+                "pearson": 0.71583201999231,
+                "spearman": 0.7700398643056744
+            },
+            "manhattan": {
+                "pearson": 0.7164373853764818,
+                "spearman": 0.7671158725879226
+            }
+        },
+        "fr-pl": {
+            "cos_sim": {
+                "pearson": 0.5430555900396821,
+                "spearman": 0.50709255283711
+            },
+            "euclidean": {
+                "pearson": 0.5300660084455784,
+                "spearman": 0.50709255283711
+            },
+            "manhattan": {
+                "pearson": 0.5233784187543788,
+                "spearman": 0.50709255283711
+            }
+        },
+        "it": {
+            "cos_sim": {
+                "pearson": 0.574312835830767,
+                "spearman": 0.6039610834515271
+            },
+            "euclidean": {
+                "pearson": 0.5781507077373551,
+                "spearman": 0.6039610834515271
+            },
+            "manhattan": {
+                "pearson": 0.5783823485037898,
+                "spearman": 0.6037493826031753
+            }
+        },
+        "pl": {
+            "cos_sim": {
+                "pearson": 0.08000336595206134,
+                "spearman": 0.26768906191975933
+            },
+            "euclidean": {
+                "pearson": 0.014181188576056134,
+                "spearman": 0.26768906191975933
+            },
+            "manhattan": {
+                "pearson": 0.01588769366202155,
+                "spearman": 0.2676300987426348
+            }
+        },
+        "pl-en": {
+            "cos_sim": {
+                "pearson": 0.3508730015173829,
+                "spearman": 0.32797912957778136
+            },
+            "euclidean": {
+                "pearson": 0.3454132550386404,
+                "spearman": 0.32797912957778136
+            },
+            "manhattan": {
+                "pearson": 0.36273935331272256,
+                "spearman": 0.3588704294252439
+            }
+        },
+        "ru": {
+            "cos_sim": {
+                "pearson": 0.0003100716792233671,
+                "spearman": 0.14721380413194854
+            },
+            "euclidean": {
+                "pearson": 0.04871526064730011,
+                "spearman": 0.14721380413194854
+            },
+            "manhattan": {
+                "pearson": 0.057576102223040736,
+                "spearman": 0.1508182690716095
+            }
+        },
+        "tr": {
+            "cos_sim": {
+                "pearson": 0.20597902459466386,
+                "spearman": 0.3369451080773859
+            },
+            "euclidean": {
+                "pearson": 0.2696486278754096,
+                "spearman": 0.3369451080773859
+            },
+            "manhattan": {
+                "pearson": 0.2753029492621081,
+                "spearman": 0.3374254435313719
+            }
+        },
+        "zh": {
+            "cos_sim": {
+                "pearson": 0.2312788511141443,
+                "spearman": 0.4492964024177277
+            },
+            "euclidean": {
+                "pearson": 0.31061639313469924,
+                "spearman": 0.4492964024177277
+            },
+            "manhattan": {
+                "pearson": 0.3177656358573927,
+                "spearman": 0.44964763982886374
+            }
+        },
+        "zh-en": {
+            "cos_sim": {
+                "pearson": 0.37411117415851225,
+                "spearman": 0.41643997417444484
+            },
+            "euclidean": {
+                "pearson": 0.36831609277110533,
+                "spearman": 0.41643997417444484
+            },
+            "manhattan": {
+                "pearson": 0.3571015224548175,
+                "spearman": 0.4146055167345605
+            }
+        }
+    },
+    "mteb_version": "0.0.2",
+    "mteb_dataset_name": "STS22",
+    "dataset_revision": "2de6ce8c1921b71a755b262c6b57fef195dd7906"
+}
