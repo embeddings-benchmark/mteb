@@ -22,7 +22,7 @@ class Quail(AbsTaskRetrieval):
         date=("2020-01-01", "2020-12-31"),
         form=["written"],
         domains=["Encyclopaedic"],
-        task_subtypes=[],
+        task_subtypes=["Reasoning as Retrieval"],
         license="CC BY-NC-SA 4.0",
         socioeconomic_status="medium",
         annotations_creators="derived",

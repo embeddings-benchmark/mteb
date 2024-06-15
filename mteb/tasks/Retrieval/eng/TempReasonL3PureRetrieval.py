@@ -22,7 +22,7 @@ class TempReasonL3Pure(AbsTaskRetrieval):
         date=("2023-01-01", "2023-12-31"),
         form=["written"],
         domains=["Encyclopaedic"],
-        task_subtypes=[],
+        task_subtypes=["Reasoning as Retrieval"],
         license="CC BY-SA 3.0",
         socioeconomic_status="medium",
         annotations_creators="derived",

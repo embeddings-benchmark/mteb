@@ -22,7 +22,7 @@ class HellaSwag(AbsTaskRetrieval):
         date=("2019-01-01", "2019-12-31"),
         form=["written"],
         domains=["Encyclopaedic"],
-        task_subtypes=[],
+        task_subtypes=["Reasoning as Retrieval"],
         license="MIT",
         socioeconomic_status="medium",
         annotations_creators="derived",
