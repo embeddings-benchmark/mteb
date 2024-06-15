@@ -71,7 +71,7 @@ class ModelMeta(BaseModel):
     embed_dim: int | None = None
     license: str | None = None
     open_source: bool | None = None
-    distance_metric: str | None = None
+    similarity_fn_name: str | None = None
     framework: list[Frameworks] = []
 
     def to_dict(self):
