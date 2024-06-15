@@ -261,10 +261,10 @@ def create_meta(args: argparse.Namespace) -> None:
                         "split": split,
                         "revision": task_result.dataset_revision,
                     },
-                    "metric": {
+                    "metrics": [{
                         "type": task.metadata.main_score,
                         "value": hf_subset_score["main_score"],
-                    },
+                    }],
                 }
                 yaml_results.append(yaml_result)
 
