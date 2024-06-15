@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
 
 import numpy as np
 from sklearn.metrics import average_precision_score
@@ -113,7 +112,7 @@ class PairClassificationEvaluator(Evaluator):
         labels = np.asarray(self.labels)
         output_scores = {}
         for short_name, name, scores, reverse in [
-            ["", "Similarity", similarity_scores, True],
+            ["similarity", "Model-Specified Similarity", similarity_scores, True],
             ["cosine", "Cosine-Similarity", cosine_scores, True],
             ["manhattan", "Manhattan-Distance", manhattan_distances, False],
             ["euclidean", "Euclidean-Distance", euclidean_distances, False],
@@ -126,16 +125,16 @@ class PairClassificationEvaluator(Evaluator):
     @staticmethod
     def _compute_metrics(
         scores: np.ndarray, labels: np.ndarray, high_score_more_similar: bool
-    ) -> dict[str, Any]:
+    ) -> dict[str, float]:
         """Compute the metrics for the given scores and labels.
 
         Args:
-            scores (`np.ndarray` of shape (n_pairs, )): The similarity/dissimilarity scores for the pairs.
-            labels (`np.ndarray` of shape (n_pairs, )): The labels for the pairs.
-            high_score_more_similar (`bool`): If true, then the higher the score, the more similar the pairs are.
+            scores: The similarity/dissimilarity scores for the pairs, specified as an array of shape (n_pairs, ).
+            labels: The labels for the pairs, specified as an array of shape (n_pairs, ).
+            high_score_more_similar: If true, then the higher the score, the more similar the pairs are.
 
         Returns:
-            `dict`: The metrics for the given scores and labels.
+            The metrics for the given scores and labels.
         """
         acc, acc_threshold = PairClassificationEvaluator.find_best_acc_and_threshold(
             scores, labels, high_score_more_similar
@@ -150,13 +149,13 @@ class PairClassificationEvaluator(Evaluator):
         )
 
         return {
-            "accuracy": acc,
-            "accuracy_threshold": acc_threshold,
-            "f1": f1,
-            "f1_threshold": f1_threshold,
-            "precision": precision,
-            "recall": recall,
-            "ap": ap,
+            "accuracy": float(acc),
+            "accuracy_threshold": float(acc_threshold),
+            "f1": float(f1),
+            "f1_threshold": float(f1_threshold),
+            "precision": float(precision),
+            "recall": float(recall),
+            "ap": float(ap),
         }
 
     @staticmethod

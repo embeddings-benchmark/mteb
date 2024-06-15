@@ -4,7 +4,7 @@ model-index:
   results:
   - dataset:
       config: default
-      name: MTEB BSARDRetrieval
+      name: MTEB BSARDRetrieval (default)
       revision: 5effa1b9b5fa3b0f9e12523e6e43e5f86a6e6d59
       split: test
       type: maastrichtlawtech/bsard
@@ -75,7 +75,7 @@ model-index:
       type: Retrieval
   - dataset:
       config: default
-      name: MTEB BornholmBitextMining
+      name: MTEB BornholmBitextMining (default)
       revision: 3bc5cfb4ec514264fe2db5615fac9016f7251552
       split: test
       type: strombergnlp/bornholmsk_parallel
@@ -94,7 +94,7 @@ model-index:
       type: BitextMining
   - dataset:
       config: ar
-      name: MTEB STS22
+      name: MTEB STS22 (ar)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -117,7 +117,7 @@ model-index:
       type: STS
   - dataset:
       config: de
-      name: MTEB STS22
+      name: MTEB STS22 (de)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -140,7 +140,7 @@ model-index:
       type: STS
   - dataset:
       config: de-en
-      name: MTEB STS22
+      name: MTEB STS22 (de-en)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -163,7 +163,7 @@ model-index:
       type: STS
   - dataset:
       config: de-fr
-      name: MTEB STS22
+      name: MTEB STS22 (de-fr)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -186,7 +186,7 @@ model-index:
       type: STS
   - dataset:
       config: de-pl
-      name: MTEB STS22
+      name: MTEB STS22 (de-pl)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -209,7 +209,7 @@ model-index:
       type: STS
   - dataset:
       config: en
-      name: MTEB STS22
+      name: MTEB STS22 (en)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -232,7 +232,7 @@ model-index:
       type: STS
   - dataset:
       config: es
-      name: MTEB STS22
+      name: MTEB STS22 (es)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -255,7 +255,7 @@ model-index:
       type: STS
   - dataset:
       config: es-en
-      name: MTEB STS22
+      name: MTEB STS22 (es-en)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -278,7 +278,7 @@ model-index:
       type: STS
   - dataset:
       config: es-it
-      name: MTEB STS22
+      name: MTEB STS22 (es-it)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -301,7 +301,7 @@ model-index:
       type: STS
   - dataset:
       config: fr
-      name: MTEB STS22
+      name: MTEB STS22 (fr)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -324,7 +324,7 @@ model-index:
       type: STS
   - dataset:
       config: fr-pl
-      name: MTEB STS22
+      name: MTEB STS22 (fr-pl)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -347,7 +347,7 @@ model-index:
       type: STS
   - dataset:
       config: it
-      name: MTEB STS22
+      name: MTEB STS22 (it)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -370,7 +370,7 @@ model-index:
       type: STS
   - dataset:
       config: pl
-      name: MTEB STS22
+      name: MTEB STS22 (pl)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -393,7 +393,7 @@ model-index:
       type: STS
   - dataset:
       config: pl-en
-      name: MTEB STS22
+      name: MTEB STS22 (pl-en)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -416,7 +416,7 @@ model-index:
       type: STS
   - dataset:
       config: ru
-      name: MTEB STS22
+      name: MTEB STS22 (ru)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -439,7 +439,7 @@ model-index:
       type: STS
   - dataset:
       config: tr
-      name: MTEB STS22
+      name: MTEB STS22 (tr)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -462,7 +462,7 @@ model-index:
       type: STS
   - dataset:
       config: zh
-      name: MTEB STS22
+      name: MTEB STS22 (zh)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
@@ -485,7 +485,7 @@ model-index:
       type: STS
   - dataset:
       config: zh-en
-      name: MTEB STS22
+      name: MTEB STS22 (zh-en)
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
       split: test
       type: mteb/sts22-crosslingual-sts
