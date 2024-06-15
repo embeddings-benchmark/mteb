@@ -7,6 +7,7 @@ import torch
 from sentence_transformers import SentenceTransformer
 
 from mteb.model_meta import ModelMeta
+from mteb.models.text_formatting_utils import corpus_to_texts
 
 E5_PAPER_RELEASE_DATE = "2024-02-08"
 XLMR_LANGUAGES = [
@@ -138,22 +139,12 @@ class E5Wrapper:
         return emb
 
     def encode_corpus(
-        self, corpus: list[dict[str, str]], batch_size: int = 32, **kwargs: Any
+        self,
+        corpus: list[dict[str, str]] | dict[str, list[str]],
+        batch_size: int = 32,
+        **kwargs: Any,
     ):
-        if isinstance(corpus, dict):
-            sentences = [
-                (corpus["title"][i] + self.sep + corpus["text"][i]).strip()  # type: ignore
-                if "title" in corpus
-                else corpus["text"][i].strip()  # type: ignore
-                for i in range(len(corpus["text"]))  # type: ignore
-            ]
-        else:
-            sentences = [
-                (doc["title"] + self.sep + doc["text"]).strip()
-                if "title" in doc
-                else doc["text"].strip()
-                for doc in corpus
-            ]
+        sentences = corpus_to_texts(corpus)
         sentences = ["passage: " + sentence for sentence in sentences]
         emb = self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
         return emb

@@ -29,7 +29,12 @@ class RuSTSBenchmarkSTS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         text_creation="machine-translated and verified",
-        bibtex_citation="",
+        bibtex_citation="""@InProceedings{huggingface:dataset:stsb_multi_mt,
+title = {Machine translated multilingual STS benchmark dataset.},
+author={Philip May},
+year={2021},
+url={https://github.com/PhilipMay/stsb-multi-mt}
+}""",
         n_samples={"test": 1264},
         avg_character_length={"test": 54.2},
     )

@@ -27,7 +27,12 @@ class SummEvalFrSummarization(AbsTaskSummarization):
         annotations_creators=None,
         dialect=None,
         text_creation="machine-translated",
-        bibtex_citation=None,
+        bibtex_citation="""@article{fabbri2020summeval,
+  title={SummEval: Re-evaluating Summarization Evaluation},
+  author={Fabbri, Alexander R and Kry{\'s}ci{\'n}ski, Wojciech and McCann, Bryan and Xiong, Caiming and Socher, Richard and Radev, Dragomir},
+  journal={arXiv preprint arXiv:2007.12626},
+  year={2020}
+}""",
         n_samples=None,
         avg_character_length=None,
     )

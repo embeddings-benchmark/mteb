@@ -28,7 +28,12 @@ class KoStrategyQA(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@article{geva2021strategyqa,
+  title = {{Did Aristotle Use a Laptop? A Question Answering Benchmark with Implicit Reasoning Strategies}},
+  author = {Geva, Mor and Khashabi, Daniel and Segal, Elad and Khot, Tushar and Roth, Dan and Berant, Jonathan},
+  journal = {Transactions of the Association for Computational Linguistics (TACL)},
+  year = {2021},
+}""",
         n_samples=None,
         avg_character_length=None,
     )
