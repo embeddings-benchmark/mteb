@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 import numpy as np
 from sklearn.metrics import average_precision_score
@@ -10,7 +11,7 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
-from mteb.encoder_interface import Encoder
+from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 from mteb.evaluation.evaluators.model_encode import model_encode
 
 from .Evaluator import Evaluator
@@ -61,7 +62,7 @@ class PairClassificationEvaluator(Evaluator):
         for label in labels:
             assert label == 0 or label == 1
 
-    def __call__(self, model: Encoder):
+    def __call__(self, model: Encoder | EncoderWithSimilarity):
         scores = self.compute_metrics(model)
 
         # Main score is the max of Average Precision (AP)
@@ -69,7 +70,7 @@ class PairClassificationEvaluator(Evaluator):
         scores["main_score"] = main_score
         return scores
 
-    def compute_metrics(self, model: Encoder):
+    def compute_metrics(self, model: Encoder | EncoderWithSimilarity):
         sentences = list(set(self.sentences1 + self.sentences2))
 
         total_sents = len(self.sentences1) + len(self.sentences2)
@@ -90,6 +91,17 @@ class PairClassificationEvaluator(Evaluator):
         manhattan_distances = paired_manhattan_distances(embeddings1, embeddings2)
         euclidean_distances = paired_euclidean_distances(embeddings1, embeddings2)
 
+        if hasattr(model, "similarity_pairwise"):
+            similarity_scores = model.similarity_pairwise(embeddings1, embeddings2)  # type: ignore
+        elif hasattr(model, "similarity"):
+            _similarity_scores = [
+                float(model.similarity(e1, e2))  # type: ignore
+                for e1, e2 in zip(embeddings1, embeddings2)
+            ]
+            similarity_scores = np.array(_similarity_scores)
+        else:
+            similarity_scores = cosine_scores  # Default to cosine similarity
+
         embeddings1_np = np.asarray(embeddings1)
         embeddings2_np = np.asarray(embeddings2)
         dot_scores = [
@@ -101,7 +113,8 @@ class PairClassificationEvaluator(Evaluator):
         labels = np.asarray(self.labels)
         output_scores = {}
         for short_name, name, scores, reverse in [
-            ["cos_sim", "Cosine-Similarity", cosine_scores, True],
+            ["", "Similarity", similarity_scores, True],
+            ["cosine", "Cosine-Similarity", cosine_scores, True],
             ["manhattan", "Manhattan-Distance", manhattan_distances, False],
             ["euclidean", "Euclidean-Distance", euclidean_distances, False],
             ["dot", "Dot-Product", dot_scores, True],
@@ -111,7 +124,9 @@ class PairClassificationEvaluator(Evaluator):
         return output_scores
 
     @staticmethod
-    def _compute_metrics(scores, labels, high_score_more_similar):
+    def _compute_metrics(
+        scores: np.ndarray, labels: np.ndarray, high_score_more_similar: bool
+    ) -> dict[str, Any]:
         """Compute the metrics for the given scores and labels.
 
         Args:
