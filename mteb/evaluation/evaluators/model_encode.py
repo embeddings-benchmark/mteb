@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def model_encode(
-    sentences: Sequence[str], *, model: Encoder, task_name: str, **kwargs
+    sentences: Sequence[str], *, model: Encoder, task_name: str | None, **kwargs
 ) -> np.ndarray:
     kwargs["prompt_name"] = task_name
     if hasattr(model, "prompts") and task_name not in model.prompts:  # type: ignore

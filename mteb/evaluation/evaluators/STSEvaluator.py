@@ -21,7 +21,7 @@ class STSEvaluator(Evaluator):
         sentences1,
         sentences2,
         gold_scores,
-        task_name: str,
+        task_name: str | None = None,
         batch_size: int = 64,
         limit: int | None = None,
         **kwargs,

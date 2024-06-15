@@ -34,7 +34,7 @@ class kNNMultiLabelClassificationEvaluator(Evaluator):
         y_train,
         embeddings_test,
         y_test,
-        task_name: str,
+        task_name: str | None,
         k: int = 1,
         batch_size: int = 32,
         limit: int | None = None,

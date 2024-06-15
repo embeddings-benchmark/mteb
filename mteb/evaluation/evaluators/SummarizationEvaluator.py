@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 class SummarizationEvaluator(Evaluator):
     def __init__(
         self,
-        task_name: str,
+        task_name: str | None,
         human_summaries=None,
         machine_summaries=None,
         texts=None,

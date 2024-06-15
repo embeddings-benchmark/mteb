@@ -502,8 +502,8 @@ def is_cross_encoder_compatible(model):
 class RetrievalEvaluator(Evaluator):
     def __init__(
         self,
-        task_name: str,
         retriever=None,
+        task_name: str | None = None,
         k_values: List[int] = [1, 3, 5, 10, 20, 100, 1000],
         score_function: str = "cos_sim",
         **kwargs,

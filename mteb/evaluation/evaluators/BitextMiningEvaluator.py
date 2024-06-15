@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class BitextMiningEvaluator(Evaluator):
-    def __init__(self, sentences, task_name: str, subsets=None, **kwargs):
+    def __init__(self, sentences, task_name: str | None = None, subsets=None, **kwargs):
         super().__init__(**kwargs)
         # By default, all the columns in sentences will serve for evaluation
         # Specifying a 'subsets' attribute will limit to certain columns

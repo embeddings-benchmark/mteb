@@ -40,7 +40,7 @@ class PairClassificationEvaluator(Evaluator):
         sentences1,
         sentences2,
         labels,
-        task_name: str,
+        task_name: str | None = None,
         batch_size: int = 32,
         limit: int | None = None,
         **kwargs,

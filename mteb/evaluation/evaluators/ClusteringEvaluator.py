@@ -19,7 +19,7 @@ class ClusteringEvaluator(Evaluator):
         self,
         sentences,
         labels,
-        task_name: str,
+        task_name: str | None = None,
         clustering_batch_size: int = 500,
         batch_size: int = 32,
         limit: int | None = None,
