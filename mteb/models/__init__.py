@@ -91,6 +91,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             release_date=None,
             languages=languages,
             framework=["Sentence Transformers"],
+            distance_metric=model.similarity_fn_name,
         )
     except AttributeError as e:
         logger.warning(
