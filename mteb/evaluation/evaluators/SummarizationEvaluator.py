@@ -7,7 +7,10 @@ import torch
 import tqdm
 from scipy.stats import pearsonr, spearmanr
 
+from mteb.encoder_interface import Encoder
+
 from .Evaluator import Evaluator
+from .model_encode import model_encode
 from .utils import cos_sim, dot_score
 
 logger = logging.getLogger(__name__)
@@ -16,12 +19,13 @@ logger = logging.getLogger(__name__)
 class SummarizationEvaluator(Evaluator):
     def __init__(
         self,
+        task_name: str | None,
         human_summaries=None,
         machine_summaries=None,
         texts=None,
         gold_scores=None,
-        limit=None,
-        batch_size=32,
+        limit: int | None = None,
+        batch_size: int = 32,
         **kwargs,
     ):
         # human_summaries shape: (None, num_human_summaries)
@@ -39,8 +43,9 @@ class SummarizationEvaluator(Evaluator):
         self.texts = texts
         self.gold_scores = gold_scores
         self.batch_size = batch_size
+        self.task_name = task_name
 
-    def __call__(self, model):
+    def __call__(self, model: Encoder):
         cosine_spearman_scores = []
         cosine_pearson_scores = []
         dot_spearman_scores = []
@@ -52,22 +57,27 @@ class SummarizationEvaluator(Evaluator):
             len(machine_summaries) for machine_summaries in self.machine_summaries
         ]
 
-        logger.info(f"Encoding {sum(human_lens)} human summaries...")
-        embs_human_summaries_all = model.encode(
+        logger.info("Encoding human summaries...")
+        embs_human_summaries_all = model_encode(
             [
                 summary
                 for human_summaries in self.human_summaries
                 for summary in human_summaries
             ],
+            model=model,
+            task_name=self.task_name,
             batch_size=self.batch_size,
         )
-        logger.info(f"Encoding {sum(machine_lens)} machine summaries...")
-        embs_machine_summaries_all = model.encode(
+
+        logger.info("Encoding machine summaries...")
+        embs_machine_summaries_all = model_encode(
             [
                 summary
                 for machine_summaries in self.machine_summaries
                 for summary in machine_summaries
             ],
+            model=model,
+            task_name=self.task_name,
             batch_size=self.batch_size,
         )
 
