@@ -1,0 +1,1467 @@
+{
+    "AFQMC": [
+        "STS",
+        [
+            "cmn-Hans"
+        ]
+    ],
+
+    "ATEC": [
+        "STS",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "AllegroReviews": [
+        "Classification",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "AlloprofReranking": [
+        "Reranking",
+        [
+            "fra-Latn"
+        ]
+    ],
+    "AlloprofRetrieval": [
+        "Retrieval",
+        [
+            "fra-Latn"
+        ]
+    ],
+    "AmazonReviewsClassification": [
+        "Classification",
+        {
+            "en": [
+                "eng-Latn"
+            ],
+            "de": [
+                "deu-Latn"
+            ],
+            "es": [
+                "spa-Latn"
+            ],
+            "fr": [
+                "fra-Latn"
+            ],
+            "ja": [
+                "jpn-Jpan"
+            ],
+            "zh": [
+                "cmn-Hans"
+            ]
+        }
+    ],
+    "ArguAna": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "ArguAna-PL": [
+        "Retrieval",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "AskUbuntuDupQuestions": [
+        "Reranking",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "BIOSSES": [
+        "STS",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "BQ": [
+        "STS",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "BSARDRetrieval": [
+        "Retrieval",
+        [
+            "fra-Latn"
+        ]
+    ],
+    "CBD": [
+        "Classification",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "CDSC-E": [
+        "PairClassification",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "CMedQAv1-reranking": [
+        "Reranking",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "CMedQAv2-reranking": [
+        "Reranking",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "CQADupstackAndroidRetrieval": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "CQADupstackEnglishRetrieval": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "CQADupstackGamingRetrieval": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "CQADupstackGisRetrieval": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "CQADupstackMathematicaRetrieval": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "CQADupstackPhysicsRetrieval": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "CQADupstackProgrammersRetrieval": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "CQADupstackStatsRetrieval": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "CQADupstackTexRetrieval": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "CQADupstackUnixRetrieval": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "CQADupstackWebmastersRetrieval": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "CQADupstackWordpressRetrieval": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "ClimateFEVER": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "CmedqaRetrieval": [
+        "Retrieval",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "Cmnli": [
+        "PairClassification",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "CovidRetrieval": [
+        "Retrieval",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "DBPedia": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "DBPedia-PL": [
+        "Retrieval",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "DuRetrieval": [
+        "Retrieval",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "EcomRetrieval": [
+        "Retrieval",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "FEVER": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "FiQA-PL": [
+        "Retrieval",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "FiQA2018": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "FinParaSTS": [
+        "STS",
+        [
+            "fin-Latn"
+        ]
+    ],
+    "GerDaLIR": [
+        "Retrieval",
+        [
+            "deu-Latn"
+        ]
+    ],
+    "GerDaLIRSmall": [
+        "Retrieval",
+        [
+            "deu-Latn"
+        ]
+    ],
+    "GermanDPR": [
+        "Retrieval",
+        [
+            "deu-Latn"
+        ]
+    ],
+    "GermanQuAD-Retrieval": [
+        "Retrieval",
+        [
+            "deu-Latn"
+        ]
+    ],
+    "GermanSTSBenchmark": [
+        "STS",
+        [
+            "deu-Latn"
+        ]
+    ],
+    "HagridRetrieval": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "HotpotQA": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "HotpotQA-PL": [
+        "Retrieval",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "IFlyTek": [
+        "Classification",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "JDReview": [
+        "Classification",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "JaQuADRetrieval": [
+        "Retrieval",
+        [
+            "jpn-Jpan"
+        ]
+    ],
+    "KLUE-STS": [
+        "STS",
+        [
+            "kor-Hang"
+        ]
+    ],
+    "Ko-StrategyQA": [
+        "Retrieval",
+        [
+            "kor-Hang"
+        ]
+    ],
+    "Ko-miracl": [
+        "Retrieval",
+        [
+            "kor-Hang"
+        ]
+    ],
+    "KorSTS": [
+        "STS",
+        [
+            "kor-Hang"
+        ]
+    ],
+    "LCQMC": [
+        "STS",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "LeCaRDv2": [
+        "Retrieval",
+        [
+            "zho-Hans"
+        ]
+    ],
+    "LegalBenchConsumerContractsQA": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "LegalBenchCorporateLobbying": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "LegalQuAD": [
+        "Retrieval",
+        [
+            "deu-Latn"
+        ]
+    ],
+    "LegalSummarization": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "MIRACLRetrieval": [
+        "Retrieval",
+        {
+            "de": [
+                "deu-Latn"
+            ],
+            "es": [
+                "spa-Latn"
+            ]
+        }
+    ],
+    "MMarcoReranking": [
+        "Reranking",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "MMarcoRetrieval": [
+        "Retrieval",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "MSMARCO": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "MSMARCO-PL": [
+        "Retrieval",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "MSMARCOv2": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "MTOPDomainClassification": [
+        "Classification",
+        {
+            "en": [
+                "eng-Latn"
+            ],
+            "de": [
+                "deu-Latn"
+            ],
+            "es": [
+                "spa-Latn"
+            ],
+            "fr": [
+                "fra-Latn"
+            ],
+            "hi": [
+                "hin-Deva"
+            ],
+            "th": [
+                "tha-Thai"
+            ]
+        }
+    ],
+    "MTOPIntentClassification": [
+        "Classification",
+        {
+            "en": [
+                "eng-Latn"
+            ],
+            "de": [
+                "deu-Latn"
+            ],
+            "es": [
+                "spa-Latn"
+            ],
+            "fr": [
+                "fra-Latn"
+            ],
+            "hi": [
+                "hin-Deva"
+            ],
+            "th": [
+                "tha-Thai"
+            ]
+        }
+    ],
+    "MasakhaNEWSClassification": [
+        "Classification",
+        {
+            "amh": [
+                "amh-Ethi"
+            ],
+            "eng": [
+                "eng-Latn"
+            ],
+            "fra": [
+                "fra-Latn"
+            ],
+            "hau": [
+                "hau-Latn"
+            ],
+            "ibo": [
+                "ibo-Latn"
+            ],
+            "lin": [
+                "lin-Latn"
+            ],
+            "lug": [
+                "lug-Latn"
+            ],
+            "orm": [
+                "orm-Ethi"
+            ],
+            "pcm": [
+                "pcm-Latn"
+            ],
+            "run": [
+                "run-Latn"
+            ],
+            "sna": [
+                "sna-Latn"
+            ],
+            "som": [
+                "som-Latn"
+            ],
+            "swa": [
+                "swa-Latn"
+            ],
+            "tir": [
+                "tir-Ethi"
+            ],
+            "xho": [
+                "xho-Latn"
+            ],
+            "yor": [
+                "yor-Latn"
+            ]
+        }
+    ],
+    "MasakhaNEWSClusteringP2P": [
+        "Clustering",
+        {
+            "amh": [
+                "amh-Ethi"
+            ],
+            "eng": [
+                "eng-Latn"
+            ],
+            "fra": [
+                "fra-Latn"
+            ],
+            "hau": [
+                "hau-Latn"
+            ],
+            "ibo": [
+                "ibo-Latn"
+            ],
+            "lin": [
+                "lin-Latn"
+            ],
+            "lug": [
+                "lug-Latn"
+            ],
+            "orm": [
+                "orm-Ethi"
+            ],
+            "pcm": [
+                "pcm-Latn"
+            ],
+            "run": [
+                "run-Latn"
+            ],
+            "sna": [
+                "sna-Latn"
+            ],
+            "som": [
+                "som-Latn"
+            ],
+            "swa": [
+                "swa-Latn"
+            ],
+            "tir": [
+                "tir-Ethi"
+            ],
+            "xho": [
+                "xho-Latn"
+            ],
+            "yor": [
+                "yor-Latn"
+            ]
+        }
+    ],
+    "MasakhaNEWSClusteringS2S": [
+        "Clustering",
+        {
+            "amh": [
+                "amh-Ethi"
+            ],
+            "eng": [
+                "eng-Latn"
+            ],
+            "fra": [
+                "fra-Latn"
+            ],
+            "hau": [
+                "hau-Latn"
+            ],
+            "ibo": [
+                "ibo-Latn"
+            ],
+            "lin": [
+                "lin-Latn"
+            ],
+            "lug": [
+                "lug-Latn"
+            ],
+            "orm": [
+                "orm-Ethi"
+            ],
+            "pcm": [
+                "pcm-Latn"
+            ],
+            "run": [
+                "run-Latn"
+            ],
+            "sna": [
+                "sna-Latn"
+            ],
+            "som": [
+                "som-Latn"
+            ],
+            "swa": [
+                "swa-Latn"
+            ],
+            "tir": [
+                "tir-Ethi"
+            ],
+            "xho": [
+                "xho-Latn"
+            ],
+            "yor": [
+                "yor-Latn"
+            ]
+        }
+    ],
+    "MassiveIntentClassification": [
+        "Classification",
+        {
+            "af": [
+                "afr-Latn"
+            ],
+            "am": [
+                "amh-Ethi"
+            ],
+            "ar": [
+                "ara-Arab"
+            ],
+            "az": [
+                "aze-Latn"
+            ],
+            "bn": [
+                "ben-Beng"
+            ],
+            "cy": [
+                "cym-Latn"
+            ],
+            "da": [
+                "dan-Latn"
+            ],
+            "de": [
+                "deu-Latn"
+            ],
+            "el": [
+                "ell-Grek"
+            ],
+            "en": [
+                "eng-Latn"
+            ],
+            "es": [
+                "spa-Latn"
+            ],
+            "fa": [
+                "fas-Arab"
+            ],
+            "fi": [
+                "fin-Latn"
+            ],
+            "fr": [
+                "fra-Latn"
+            ],
+            "he": [
+                "heb-Hebr"
+            ],
+            "hi": [
+                "hin-Deva"
+            ],
+            "hu": [
+                "hun-Latn"
+            ],
+            "hy": [
+                "hye-Armn"
+            ],
+            "id": [
+                "ind-Latn"
+            ],
+            "is": [
+                "isl-Latn"
+            ],
+            "it": [
+                "ita-Latn"
+            ],
+            "ja": [
+                "jpn-Jpan"
+            ],
+            "jv": [
+                "jav-Latn"
+            ],
+            "ka": [
+                "kat-Geor"
+            ],
+            "km": [
+                "khm-Khmr"
+            ],
+            "kn": [
+                "kan-Knda"
+            ],
+            "ko": [
+                "kor-Kore"
+            ],
+            "lv": [
+                "lav-Latn"
+            ],
+            "ml": [
+                "mal-Mlym"
+            ],
+            "mn": [
+                "mon-Cyrl"
+            ],
+            "ms": [
+                "msa-Latn"
+            ],
+            "my": [
+                "mya-Mymr"
+            ],
+            "nb": [
+                "nob-Latn"
+            ],
+            "nl": [
+                "nld-Latn"
+            ],
+            "pl": [
+                "pol-Latn"
+            ],
+            "pt": [
+                "por-Latn"
+            ],
+            "ro": [
+                "ron-Latn"
+            ],
+            "ru": [
+                "rus-Cyrl"
+            ],
+            "sl": [
+                "slv-Latn"
+            ],
+            "sq": [
+                "sqi-Latn"
+            ],
+            "sv": [
+                "swe-Latn"
+            ],
+            "sw": [
+                "swa-Latn"
+            ],
+            "ta": [
+                "tam-Taml"
+            ],
+            "te": [
+                "tel-Telu"
+            ],
+            "th": [
+                "tha-Thai"
+            ],
+            "tl": [
+                "tgl-Latn"
+            ],
+            "tr": [
+                "tur-Latn"
+            ],
+            "ur": [
+                "urd-Arab"
+            ],
+            "vi": [
+                "vie-Latn"
+            ],
+            "zh-CN": [
+                "cmo-Hans"
+            ],
+            "zh-TW": [
+                "cmo-Hant"
+            ]
+        }
+    ],
+    "MassiveScenarioClassification": [
+        "Classification",
+        {
+            "af": [
+                "afr-Latn"
+            ],
+            "am": [
+                "amh-Ethi"
+            ],
+            "ar": [
+                "ara-Arab"
+            ],
+            "az": [
+                "aze-Latn"
+            ],
+            "bn": [
+                "ben-Beng"
+            ],
+            "cy": [
+                "cym-Latn"
+            ],
+            "da": [
+                "dan-Latn"
+            ],
+            "de": [
+                "deu-Latn"
+            ],
+            "el": [
+                "ell-Grek"
+            ],
+            "en": [
+                "eng-Latn"
+            ],
+            "es": [
+                "spa-Latn"
+            ],
+            "fa": [
+                "fas-Arab"
+            ],
+            "fi": [
+                "fin-Latn"
+            ],
+            "fr": [
+                "fra-Latn"
+            ],
+            "he": [
+                "heb-Hebr"
+            ],
+            "hi": [
+                "hin-Deva"
+            ],
+            "hu": [
+                "hun-Latn"
+            ],
+            "hy": [
+                "hye-Armn"
+            ],
+            "id": [
+                "ind-Latn"
+            ],
+            "is": [
+                "isl-Latn"
+            ],
+            "it": [
+                "ita-Latn"
+            ],
+            "ja": [
+                "jpn-Jpan"
+            ],
+            "jv": [
+                "jav-Latn"
+            ],
+            "ka": [
+                "kat-Geor"
+            ],
+            "km": [
+                "khm-Khmr"
+            ],
+            "kn": [
+                "kan-Knda"
+            ],
+            "ko": [
+                "kor-Kore"
+            ],
+            "lv": [
+                "lav-Latn"
+            ],
+            "ml": [
+                "mal-Mlym"
+            ],
+            "mn": [
+                "mon-Cyrl"
+            ],
+            "ms": [
+                "msa-Latn"
+            ],
+            "my": [
+                "mya-Mymr"
+            ],
+            "nb": [
+                "nob-Latn"
+            ],
+            "nl": [
+                "nld-Latn"
+            ],
+            "pl": [
+                "pol-Latn"
+            ],
+            "pt": [
+                "por-Latn"
+            ],
+            "ro": [
+                "ron-Latn"
+            ],
+            "ru": [
+                "rus-Cyrl"
+            ],
+            "sl": [
+                "slv-Latn"
+            ],
+            "sq": [
+                "sqi-Latn"
+            ],
+            "sv": [
+                "swe-Latn"
+            ],
+            "sw": [
+                "swa-Latn"
+            ],
+            "ta": [
+                "tam-Taml"
+            ],
+            "te": [
+                "tel-Telu"
+            ],
+            "th": [
+                "tha-Thai"
+            ],
+            "tl": [
+                "tgl-Latn"
+            ],
+            "tr": [
+                "tur-Latn"
+            ],
+            "ur": [
+                "urd-Arab"
+            ],
+            "vi": [
+                "vie-Latn"
+            ],
+            "zh-CN": [
+                "cmo-Hans"
+            ],
+            "zh-TW": [
+                "cmo-Hant"
+            ]
+        }
+    ],
+    "MedicalRetrieval": [
+        "Retrieval",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "MindSmallReranking": [
+        "Reranking",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "MintakaRetrieval": [
+        "Retrieval",
+        {
+            "ar": [
+                "ara-Arab"
+            ],
+            "de": [
+                "deu-Latn"
+            ],
+            "es": [
+                "spa-Latn"
+            ],
+            "fr": [
+                "fra-Latn"
+            ],
+            "hi": [
+                "hin-Deva"
+            ],
+            "it": [
+                "ita-Latn"
+            ],
+            "ja": [
+                "jpn-Hira"
+            ],
+            "pt": [
+                "por-Latn"
+            ]
+        }
+    ],
+    "MultiLongDocRetrieval": [
+        "Retrieval",
+        {
+            "ar": [
+                "ara-Arab"
+            ],
+            "de": [
+                "deu-Latn"
+            ],
+            "en": [
+                "eng-Latn"
+            ],
+            "es": [
+                "spa-Latn"
+            ],
+            "fr": [
+                "fra-Latn"
+            ],
+            "hi": [
+                "hin-Deva"
+            ],
+            "it": [
+                "ita-Latn"
+            ],
+            "ja": [
+                "jpn-Jpan"
+            ],
+            "ko": [
+                "kor-Hang"
+            ],
+            "pt": [
+                "por-Latn"
+            ],
+            "ru": [
+                "rus-Cyrl"
+            ],
+            "th": [
+                "tha-Thai"
+            ],
+            "zh": [
+                "cmn-Hans"
+            ]
+        }
+    ],
+    "MultilingualSentiment": [
+        "Classification",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "NFCorpus": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "NFCorpus-PL": [
+        "Retrieval",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "NQ": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "NQ-PL": [
+        "Retrieval",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "NarrativeQARetrieval": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "NoRecClassification": [
+        "Classification",
+        [
+            "nob-Latn"
+        ]
+    ],
+    "NordicLangClassification": [
+        "Classification",
+        [
+            "nob-Latn",
+            "nno-Latn",
+            "dan-Latn",
+            "swe-Latn",
+            "isl-Latn",
+            "fao-Latn"
+        ]
+    ],
+    "NorwegianParliamentClassification": [
+        "Classification",
+        [
+            "nob-Latn"
+        ]
+    ],
+    "Ocnli": [
+        "PairClassification",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "OnlineShopping": [
+        "Classification",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "OpusparcusPC": [
+        "PairClassification",
+        {
+            "de": [
+                "deu-Latn"
+            ],
+            "en": [
+                "eng-Latn"
+            ],
+            "fi": [
+                "fin-Latn"
+            ],
+            "fr": [
+                "fra-Latn"
+            ],
+            "ru": [
+                "rus-Cyrl"
+            ],
+            "sv": [
+                "swe-Latn"
+            ]
+        }
+    ],
+    "PAC": [
+        "Classification",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "PAWSX": [
+        "STS",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "PSC": [
+        "PairClassification",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "PawsX": [
+        "PairClassification",
+        {
+            "de": [
+                "deu-Latn"
+            ],
+            "en": [
+                "eng-Latn"
+            ],
+            "es": [
+                "spa-Latn"
+            ],
+            "fr": [
+                "fra-Latn"
+            ],
+            "ja": [
+                "jpn-Hira"
+            ],
+            "ko": [
+                "kor-Hang"
+            ],
+            "zh": [
+                "cmn-Hans"
+            ]
+        }
+    ],
+    "PolEmo2.0-IN": [
+        "Classification",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "PolEmo2.0-OUT": [
+        "Classification",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "PpcPC": [
+        "PairClassification",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "QBQTC": [
+        "STS",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "Quora-PL": [
+        "Retrieval",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "QuoraRetrieval": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "RomaniBibleClustering": [
+        "Clustering",
+        [
+            "rom-Latn"
+        ]
+    ],
+    "RonSTS": [
+        "STS",
+        [
+            "ron-Latn"
+        ]
+    ],
+    "SCIDOCS": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "SCIDOCS-PL": [
+        "Retrieval",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "SICK-E-PL": [
+        "PairClassification",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "SICK-R": [
+        "STS",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "SICKFr": [
+        "STS",
+        [
+            "fra-Latn"
+        ]
+    ],
+    "SNLRetrieval": [
+        "Retrieval",
+        [
+            "nob-Latn"
+        ]
+    ],
+    "STSB": [
+        "STS",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "STSBenchmark": [
+        "STS",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "STSES": [
+        "STS",
+        [
+            "spa-Latn"
+        ]
+    ],
+    "SciDocsRR": [
+        "Reranking",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "SciFact": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "SciFact-PL": [
+        "Retrieval",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "SpanishNewsClusteringP2P": [
+        "Clustering",
+        [
+            "spa-Latn"
+        ]
+    ],
+    "SpanishPassageRetrievalS2P": [
+        "Retrieval",
+        [
+            "spa-Latn"
+        ]
+    ],
+    "SpanishPassageRetrievalS2S": [
+        "Retrieval",
+        [
+            "spa-Latn"
+        ]
+    ],
+    "SprintDuplicateQuestions": [
+        "PairClassification",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "StackOverflowDupQuestions": [
+        "Reranking",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "SummEval": [
+        "Summarization",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "SummEvalFr": [
+        "Summarization",
+        [
+            "fra-Latn"
+        ]
+    ],
+    "SweFaqRetrieval": [
+        "Retrieval",
+        [
+            "swe-Latn"
+        ]
+    ],
+    "SweRecClassification": [
+        "Classification",
+        [
+            "swe-Latn"
+        ]
+    ],
+    "SwednClusteringP2P": [
+        "Clustering",
+        [
+            "swe-Latn"
+        ]
+    ],
+    "SwednClusteringS2S": [
+        "Clustering",
+        [
+            "swe-Latn"
+        ]
+    ],
+    "SyntecReranking": [
+        "Reranking",
+        [
+            "fra-Latn"
+        ]
+    ],
+    "SyntecRetrieval": [
+        "Retrieval",
+        [
+            "fra-Latn"
+        ]
+    ],
+    "T2Reranking": [
+        "Reranking",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "T2Retrieval": [
+        "Retrieval",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "TNews": [
+        "Classification",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "TRECCOVID": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "TRECCOVID-PL": [
+        "Retrieval",
+        [
+            "pol-Latn"
+        ]
+    ],
+    "TenKGnadClusteringP2P.v2": [
+        "Clustering",
+        [
+            "deu-Latn"
+        ]
+    ],
+    "TenKGnadClusteringS2S.v2": [
+        "Clustering",
+        [
+            "deu-Latn"
+        ]
+    ],
+    "Touche2020": [
+        "Retrieval",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "TwitterHjerneRetrieval": [
+        "Retrieval",
+        [
+            "dan-Latn"
+        ]
+    ],
+    "TwitterSemEval2015": [
+        "PairClassification",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "TwitterURLCorpus": [
+        "PairClassification",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "VideoRetrieval": [
+        "Retrieval",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "Waimai": [
+        "Classification",
+        [
+            "cmn-Hans"
+        ]
+    ],
+    "WikiCitiesClustering": [
+        "Clustering",
+        [
+            "eng-Latn"
+        ]
+    ],
+    "XMarket": [
+        "Retrieval",
+        {
+            "de": [
+                "deu-Latn"
+            ],
+            "en": [
+                "eng-Latn"
+            ],
+            "es": [
+                "spa-Latn"
+            ]
+        }
+    ]
+}
