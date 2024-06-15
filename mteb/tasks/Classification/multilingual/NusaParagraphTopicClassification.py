@@ -29,7 +29,7 @@ class NusaParagraphTopicClassification(MultilingualTask, AbsTaskClassification):
         reference="https://github.com/IndoNLP/nusa-writes",
         category="s2s",
         type="Classification",
-        eval_splits=["train", "validation", "test"],
+        eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="f1",
         date=("2021-08-01", "2022-07-01"),
