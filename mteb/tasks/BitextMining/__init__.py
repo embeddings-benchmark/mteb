@@ -14,6 +14,7 @@ from .multilingual.IWSLT2017BitextMinig import *
 from .multilingual.NorwegianCourtsBitextMining import *
 from .multilingual.NTREXBitextMining import *
 from .multilingual.NusaTranslationBitextMining import *
+from .multilingual.NusaXBitextMining import *
 from .multilingual.RomaTalesBitextMining import *
 from .multilingual.TatoebaBitextMining import *
 from .srn.SRNCorpusBitextMining import *
