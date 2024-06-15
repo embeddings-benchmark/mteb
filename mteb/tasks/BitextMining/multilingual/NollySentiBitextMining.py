@@ -45,5 +45,5 @@ class NollySentiBitextMining(AbsTaskBitextMining, CrosslingualTask):
         }
         """,
         n_samples={"train": 1640},
-        avg_character_length={"train": 4.46},
+        avg_character_length={"train": 135.91},
     )
