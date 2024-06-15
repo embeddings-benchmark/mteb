@@ -98,7 +98,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
     return meta
 
 
-model_modules = [e5_models, sentence_transformers_models, e5_instruct]
+model_modules = [e5_instruct, e5_models, sentence_transformers_models]
 models = {}
 
 
