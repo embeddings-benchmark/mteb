@@ -245,6 +245,7 @@ def create_meta(args: argparse.Namespace) -> None:
     ]
 
     task_results = [MTEBResults.from_disk(path) for path in json_files]
+    task_results = sorted(task_results, key=lambda x: x.task_name)
 
     yaml_results = []
     for task_result in task_results:

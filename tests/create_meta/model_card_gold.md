@@ -74,6 +74,25 @@ model-index:
     task:
       type: Retrieval
   - dataset:
+      config: default
+      name: MTEB BornholmBitextMining
+      revision: 3bc5cfb4ec514264fe2db5615fac9016f7251552
+      split: test
+      type: strombergnlp/bornholmsk_parallel
+    metrics:
+    - type: accuracy
+      value: 0.36
+    - type: f1
+      value: 0.2968132161955691
+    - type: main_score
+      value: 0.2968132161955691
+    - type: precision
+      value: 0.27690919913419915
+    - type: recall
+      value: 0.36
+    task:
+      type: BitextMining
+  - dataset:
       config: ar
       name: MTEB STS22
       revision: 2de6ce8c1921b71a755b262c6b57fef195dd7906
@@ -487,25 +506,6 @@ model-index:
       value: 0.41643997417444484
     task:
       type: STS
-  - dataset:
-      config: default
-      name: MTEB BornholmBitextMining
-      revision: 3bc5cfb4ec514264fe2db5615fac9016f7251552
-      split: test
-      type: strombergnlp/bornholmsk_parallel
-    metrics:
-    - type: accuracy
-      value: 0.36
-    - type: f1
-      value: 0.2968132161955691
-    - type: main_score
-      value: 0.2968132161955691
-    - type: precision
-      value: 0.27690919913419915
-    - type: recall
-      value: 0.36
-    task:
-      type: BitextMining
 tags:
 - mteb
 ---

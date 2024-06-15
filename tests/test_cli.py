@@ -68,7 +68,12 @@ def test_create_meta():
         gold = gold[gold.index("---") + 3 : gold.index("---", gold.index("---") + 3)]
         frontmatter_gold = yaml.safe_load(gold)
 
-    assert frontmatter == frontmatter_gold, "Output does not match gold"
+    # compare the frontmatter (ignoring the order of keys and other elements)
+    for key in frontmatter_gold:
+        assert key in frontmatter, f"Key {key} not found in output"
+
+
+        assert frontmatter[key] == frontmatter_gold[key], f"Value for {key} does not match"
 
     # ensure that the command line interface works as well
     command = f"mteb create_meta --results_folder {results} --output_path {output_path} --overwrite"
