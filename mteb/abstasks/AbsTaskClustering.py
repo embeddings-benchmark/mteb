@@ -38,6 +38,7 @@ class AbsTaskClustering(AbsTask):
             evaluator = ClusteringEvaluator(
                 cluster_set["sentences"],  # type: ignore
                 cluster_set["labels"],  # type: ignore
+                task_name=self.metadata.name,
                 **kwargs,
             )
             metrics = evaluator(model)

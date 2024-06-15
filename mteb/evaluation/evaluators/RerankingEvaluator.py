@@ -1,15 +1,17 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, List
+from functools import partial
+from typing import Callable, Dict, List
 
 import numpy as np
 import torch
 import tqdm
 from sklearn.metrics import average_precision_score
 
-from ...encoder_interface import EncoderWithQueryCorpusEncode
+from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from .Evaluator import Evaluator
+from .model_encode import model_encode
 from .utils import confidence_scores, cos_sim, nAUC
 
 logger = logging.getLogger(__name__)
@@ -29,6 +31,7 @@ class RerankingEvaluator(Evaluator):
     def __init__(
         self,
         samples,
+        task_name: str | None,
         mrr_at_k: int = 10,
         name: str = "",
         similarity_fct=cos_sim,
@@ -46,6 +49,7 @@ class RerankingEvaluator(Evaluator):
         self.similarity_fct = similarity_fct
         self.batch_size = batch_size
         self.use_batched_encoding = use_batched_encoding
+        self.task_name = task_name
 
         if isinstance(self.samples, dict):
             self.samples = list(self.samples.values())
@@ -68,7 +72,7 @@ class RerankingEvaluator(Evaluator):
             else self.compute_metrics_individual(model)
         )
 
-    def compute_metrics_batched(self, model):
+    def compute_metrics_batched(self, model: Encoder | EncoderWithQueryCorpusEncode):
         """Computes the metrices in a batched way, by batching all queries and
         all documents together
         """
@@ -81,12 +85,12 @@ class RerankingEvaluator(Evaluator):
         encode_queries_func = (
             model.encode_queries
             if isinstance(model, EncoderWithQueryCorpusEncode)
-            else model.encode
+            else partial(model_encode, model=model)
         )
         encode_corpus_func = (
             model.encode_corpus
             if isinstance(model, EncoderWithQueryCorpusEncode)
-            else model.encode
+            else partial(model_encode, model=model)
         )
 
         logger.info("Encoding queries...")
@@ -94,6 +98,7 @@ class RerankingEvaluator(Evaluator):
             all_query_embs = np.asarray(
                 encode_queries_func(
                     [sample["query"] for sample in self.samples],
+                    task_name=self.task_name,
                     batch_size=self.batch_size,
                 )
             )
@@ -103,7 +108,10 @@ class RerankingEvaluator(Evaluator):
                 q for sample in self.samples for q in sample["query"]
             ]
             all_query_embs = self._encode_unique_texts(
-                all_query_flattened, encode_corpus_func
+                all_query_flattened,
+                encode_queries_func,
+                task_name=self.task_name,
+                batch_size=self.batch_size,
             )
         else:
             raise ValueError(
@@ -116,7 +124,12 @@ class RerankingEvaluator(Evaluator):
             all_docs.extend(sample["positive"])
             all_docs.extend(sample["negative"])
 
-        all_docs_embs = self._encode_unique_texts(all_docs, encode_corpus_func)
+        all_docs_embs = self._encode_unique_texts(
+            all_docs,
+            encode_corpus_func,
+            task_name=self.task_name,
+            batch_size=self.batch_size,
+        )
 
         # Compute scores and confidence scores
         logger.info("Evaluating...")
@@ -189,9 +202,15 @@ class RerankingEvaluator(Evaluator):
                 # .encoding interface requires List[str] as input
                 query = [query]
             query_emb = np.asarray(
-                encode_queries_func(query, batch_size=self.batch_size)
+                encode_queries_func(
+                    query, task_name=self.task_name, batch_size=self.batch_size
+                )
             )
-            docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
+            docs_emb = np.asarray(
+                encode_corpus_func(
+                    docs, task_name=self.task_name, batch_size=self.batch_size
+                )
+            )
 
             sim_scores = self._compute_sim_scores_instance(query_emb, docs_emb)
             scores = self._compute_metrics_instance(sim_scores, is_relevant)
@@ -210,7 +229,13 @@ class RerankingEvaluator(Evaluator):
 
         return {**{"map": mean_ap, "mrr": mean_mrr}, **naucs_map, **naucs_mrr}
 
-    def _encode_unique_texts(self, all_texts, encode_queries_func):
+    @staticmethod
+    def _encode_unique_texts(
+        all_texts: list[str],
+        encode_fn: Callable,
+        task_name: str,
+        batch_size: int,
+    ):
         index_map, all_unique_texts, all_texts_indexes = {}, [], []
         for text in all_texts:
             text_hash = hash(text)
@@ -219,10 +244,10 @@ class RerankingEvaluator(Evaluator):
                 all_unique_texts.append(text)
             all_texts_indexes.append(index_map[text_hash])
         logger.warning(
-            f"A total on {len(all_texts) - len(all_unique_texts)} duplicate texts were found during encoding. Only encoding unique text and duplicating embeddings across."
+            f"A total on {len(all_texts) - len(all_unique_texts)}/{len(all_texts)} duplicate texts were found during encoding. Only encoding unique text and duplicating embeddings across."
         )
         all_unique_texts_embs = np.asarray(
-            encode_queries_func(all_unique_texts, batch_size=self.batch_size)
+            encode_fn(all_unique_texts, task_name=task_name, batch_size=batch_size)
         )
         return all_unique_texts_embs[all_texts_indexes]
 
