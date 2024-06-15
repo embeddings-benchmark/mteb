@@ -18,14 +18,14 @@ _LANGUAGES = {
 }
 
 
-class NusaTranslationEmotionClassification(MultilingualTask, AbsTaskClassification):
+class NusaParagraphEmotionClassification(MultilingualTask, AbsTaskClassification):
     metadata = TaskMetadata(
-        name="NusaTranslationEmotionClassification",
+        name="NusaParagraphEmotionClassification",
         dataset={
-            "path": "gentaiscool/nusatranslation_emot",
+            "path": "gentaiscool/nusaparagraph_emot",
             "revision": "c61e8c3ee47d2dce296e9601195916b54c21d575",
         },
-        description="NusaTranslationEmotionClassification is a multi-class emotion classification on 10 Indonesian languages.",
+        description="NusaParagraphEmotionClassification is a multi-class emotion classification on 10 Indonesian languages.",
         reference="https://github.com/IndoNLP/nusa-writes",
         category="s2s",
         type="Classification",
