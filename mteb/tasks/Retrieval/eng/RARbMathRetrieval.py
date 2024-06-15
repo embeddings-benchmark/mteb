@@ -53,6 +53,6 @@ class RARbMath(AbsTaskRetrieval):
   year={2023}
 }
 """,
-        n_samples={"test": 0},
-        avg_character_length={"test": 0.0},
+        n_samples={"test": 6319},
+        avg_character_length={"test": 682.9},
     )

@@ -44,6 +44,6 @@ class PIQA(AbsTaskRetrieval):
   year={2020}
 }
 """,
-        n_samples={"test": 0},
-        avg_character_length={"test": 0.0},
+        n_samples={"test": 1838},
+        avg_character_length={"test": 134.3},
     )

@@ -52,6 +52,6 @@ class RARbCode(AbsTaskRetrieval):
   year={2019}
 }
 """,
-        n_samples={"test": 0},
-        avg_character_length={"test": 0.0},
+        n_samples={"test": 1484},
+        avg_character_length={"test": 621.2},
     )

@@ -41,6 +41,6 @@ class TempReasonL2Pure(AbsTaskRetrieval):
   year={2023}
 }
 """,
-        n_samples={"test": 0},
-        avg_character_length={"test": 0.0},
+        n_samples={"test": 5397},
+        avg_character_length={"test": 80.0},
     )

@@ -42,6 +42,6 @@ class AlphaNLI(AbsTaskRetrieval):
   year={2019}
 }
 """,
-        n_samples={"test": 0},
-        avg_character_length={"test": 0.0},
+        n_samples={"test": 1532},
+        avg_character_length={"test": 147.8},
     )

@@ -41,6 +41,6 @@ class HellaSwag(AbsTaskRetrieval):
   year={2019}
 }
 """,
-        n_samples={"test": 0},
-        avg_character_length={"test": 0.0},
+        n_samples={"test": 10042},
+        avg_character_length={"test": 366.1},
     )
