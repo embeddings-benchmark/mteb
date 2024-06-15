@@ -18,14 +18,14 @@ _LANGUAGES = {
 }
 
 
-class NusaTranslationTopicClassification(MultilingualTask, AbsTaskClassification):
+class NusaParagraphTopicClassification(MultilingualTask, AbsTaskClassification):
     metadata = TaskMetadata(
-        name="NusaTranslationTopicClassification",
+        name="NusaParagraphTopicClassification",
         dataset={
-            "path": "gentaiscool/nusatranslation_topic",
-            "revision": "b53e037dabc0b2301bf328ca6c43cd23c030f779",
+            "path": "gentaiscool/nusaparagraph_topic",
+            "revision": "abb43f8d5b9510b8724b48283aca26c4733eac5d",
         },
-        description="NusaTranslationTopicClassification is a multi-class topic classification on 10 Indonesian languages.",
+        description="NusaParagraphTopicClassification is a multi-class topic classification on 10 Indonesian languages.",
         reference="https://github.com/IndoNLP/nusa-writes",
         category="s2s",
         type="Classification",

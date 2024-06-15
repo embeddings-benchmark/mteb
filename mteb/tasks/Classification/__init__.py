@@ -86,7 +86,7 @@ from .multilingual.MultiHateClassification import *
 from .multilingual.MultilingualSentimentClassification import *
 from .multilingual.NaijaSenti import *
 from .multilingual.NordicLangClassification import *
-from .multilingual.NusaTranslationTopicClassification import *
+from .multilingual.NusaParagraphTopicClassification import *
 from .multilingual.NusaXSenti import *
 from .multilingual.ScalaClassification import *
 from .multilingual.SIB200Classification import *
