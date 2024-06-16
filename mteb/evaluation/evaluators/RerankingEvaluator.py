@@ -104,19 +104,14 @@ class RerankingEvaluator(Evaluator):
             all_query_flattened = [
                 q for sample in self.samples for q in sample["query"]
             ]
-            if self.evaluator_type == "standard":
-                all_query_embs = self._encode_unique_texts(
-                    all_query_flattened, encode_corpus_func
-                )
-            elif self.evaluator_type == "miracl":
-                all_query_embs = np.asarray(
-                    encode_queries_func(all_query_flattened, batch_size=self.batch_size)
-                )
+            all_query_embs = self._encode_unique_texts(
+                all_query_flattened, encode_corpus_func
+            )
+
         else:
             raise ValueError(
                 f"Query must be a string or a list of strings but is {type(self.samples[0]['query'])}"
             )
-
         if self.evaluator_type == "standard":
             results = self._encode_candidates(
                 encode_corpus_func=encode_corpus_func,
@@ -178,14 +173,8 @@ class RerankingEvaluator(Evaluator):
                 all_ap_scores=all_ap_scores,
                 all_conf_scores=all_conf_scores,
             )
-        mean_ap = np.mean(all_ap_scores)
-        mean_mrr = np.mean(all_mrr_scores)
-
-        # Compute nAUCs
-        naucs_map = self.nAUC_scores(all_conf_scores, all_ap_scores, "map")
-        naucs_mrr = self.nAUC_scores(all_conf_scores, all_mrr_scores, "mrr")
-
-        return {**{"map": mean_ap, "mrr": mean_mrr}, **naucs_map, **naucs_mrr}
+        scores = self._collect_results(all_mrr_scores, all_ap_scores, all_conf_scores)
+        return scores
 
     def _encode_candidates_batched(
         self,
@@ -345,6 +334,16 @@ class RerankingEvaluator(Evaluator):
 
         scores_miracl = self._collect_miracl_results(results, qrels)
         return scores_miracl
+
+    def _collect_results(self, all_mrr_scores, all_ap_scores, all_conf_scores):
+        mean_ap = np.mean(all_ap_scores)
+        mean_mrr = np.mean(all_mrr_scores)
+
+        # Compute nAUCs
+        naucs_map = self.nAUC_scores(all_conf_scores, all_ap_scores, "map")
+        naucs_mrr = self.nAUC_scores(all_conf_scores, all_mrr_scores, "mrr")
+
+        return {**{"map": mean_ap, "mrr": mean_mrr}, **naucs_map, **naucs_mrr}
 
     def _collect_miracl_results(self, results, qrels):
         ndcg, _map, recall, precision, naucs = RetrievalEvaluator.evaluate(
