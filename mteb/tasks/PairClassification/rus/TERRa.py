@@ -4,7 +4,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
-
+# TODO sentence1
 class TERRa(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="TERRa",

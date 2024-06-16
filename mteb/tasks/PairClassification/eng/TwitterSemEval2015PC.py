@@ -4,7 +4,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
-
+# TODO sentence1
 class TwitterSemEval2015PC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="TwitterSemEval2015",

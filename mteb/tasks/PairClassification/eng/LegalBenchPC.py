@@ -137,12 +137,12 @@ class LegalBenchPC(AbsTaskPairClassification):
 
             _dataset = _dataset.rename_columns(
                 {
-                    dataset_col_map["sent1"]: "sent1",
-                    dataset_col_map["sent2"]: "sent2",
+                    dataset_col_map["sent1"]: "sentence1",
+                    dataset_col_map["sent2"]: "sentence2",
                     dataset_col_map["labels"]: "labels",
                 }
             )
-            _dataset = _dataset.select_columns(["labels", "sent1", "sent2"])
+            _dataset = _dataset.select_columns(["labels", "sentence1", "sentence2"])
             mapping = dataset_col_map["mapping"]
             _dataset = _dataset.map(
                 lambda example: {
@@ -174,8 +174,8 @@ class LegalBenchPC(AbsTaskPairClassification):
             hf_dataset = self.dataset[split]
             _dataset[split] = [
                 {
-                    "sent1": hf_dataset["sent1"],
-                    "sent2": hf_dataset["sent2"],
+                    "sentence1": hf_dataset["sentence1"],
+                    "sentence2": hf_dataset["sentence2"],
                     "labels": hf_dataset["labels"],
                 }
             ]
