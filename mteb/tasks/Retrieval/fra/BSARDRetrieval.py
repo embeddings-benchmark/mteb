@@ -21,7 +21,7 @@ class BSARDRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="recall_at_100",
-        date=('2021-05-01','2021-08-26'),
+        date=("2021-05-01", "2021-08-26"),
         form=["spoken"],
         domains=["Legal"],
         task_subtypes=[],
@@ -42,8 +42,8 @@ class BSARDRetrieval(AbsTaskRetrieval):
   doi = {10.18653/v1/2022.acl-long.468},
   pages = {6789–6803},
 }""",
-        n_samples={"test":222},
-        avg_character_length={"test":123}, # get this
+        n_samples={"test": 222},
+        avg_character_length={"test": 123},  # get this
     )
 
     def load_data(self, **kwargs):

@@ -90,7 +90,7 @@ class CMedQAv1(AbsTaskReranking):
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="map",
-        date=('2017-01-01','2017-07-26'),
+        date=("2017-01-01", "2017-07-26"),
         form=["written"],
         domains=["Medical"],
         task_subtypes=[],
@@ -98,7 +98,7 @@ class CMedQAv1(AbsTaskReranking):
         socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation='found',
+        text_creation="found",
         bibtex_citation="""@article{zhang2017chinese,
   title={Chinese Medical Question Answer Matching Using End-to-End Character-Level Multi-Scale CNNs},
   author={Zhang, Sheng and Zhang, Xin and Wang, Hui and Cheng, Jiajun and Li, Pei and Ding, Zhaoyun},
@@ -109,8 +109,8 @@ class CMedQAv1(AbsTaskReranking):
   year={2017},
   publisher={Multidisciplinary Digital Publishing Institute}
 }""",
-        n_samples={'test':2000},
-        avg_character_length={'test':165},
+        n_samples={"test": 2000},
+        avg_character_length={"test": 165},
     )
 
 

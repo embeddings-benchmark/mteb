@@ -38,9 +38,9 @@ class MasakhaNEWSClassification(AbsTaskClassification, MultilingualTask):
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
-        date=("2023-01-01","2023-04-19"), # rough estimate
-        form=['written'],
-        domains=['News'],
+        date=("2023-01-01", "2023-04-19"),  # rough estimate
+        form=["written"],
+        domains=["News"],
         task_subtypes=[],
         license="cc-by-nc-4.0",
         socioeconomic_status="high",

@@ -28,12 +28,12 @@ class HagridRetrieval(AbsTaskRetrieval):
         eval_splits=["dev"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=('2019-02-01','2022-10-18'),
-        form=['written'],
-        domains=['Encyclopaedic'],
+        date=("2019-02-01", "2022-10-18"),
+        form=["written"],
+        domains=["Encyclopaedic"],
         task_subtypes=[],
         license="apache-2.0",
-        socioeconomic_status='mixed',
+        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
         text_creation="found",
@@ -43,8 +43,8 @@ class HagridRetrieval(AbsTaskRetrieval):
       year={2023},
       journal={arXiv:2307.16883},
 }""",
-        n_samples={'train':1922},
-        avg_character_length={'train':14.53},
+        n_samples={"train": 1922},
+        avg_character_length={"train": 14.53},
     )
 
     def load_data(self, **kwargs):

@@ -23,12 +23,12 @@ class SyntecRetrieval(AbsTaskRetrieval):
         eval_splits=_EVAL_SPLITS,
         eval_langs=["fra-Latn"],
         main_score="ndcg_at_10",
-        date=None, # not specified
-        form=['written'],
+        date=None,  # not specified
+        form=["written"],
         domains=["Legal"],
         task_subtypes=[],
         license="not specified.",
-        socioeconomic_status='high',
+        socioeconomic_status="high",
         annotations_creators="human-annotated",
         dialect=[],
         text_creation="created",

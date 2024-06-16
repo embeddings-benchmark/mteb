@@ -1,6 +1,6 @@
 import json
+
 # from pathlib import Path
-from datasets import load_dataset,get_dataset_split_names,get_dataset_infos
 import mteb
 
 
@@ -14,15 +14,19 @@ def extract_bibtex_to_file(tasks: list[mteb.AbsTask]) -> None:
     c = dict()
     for task in tasks:
         data = task.metadata.dataset
-        if not task.metadata.is_filled():
+        if not task.metadata.is_filled() and (
+            "arxiv" in task.metadata.reference
+            if task.metadata.reference is not None
+            else ""
+        ):
             # c.append(task.metadata.name)
             if task.metadata.avg_character_length is None:
-                c[task.metadata.name] = [task.metadata.type,task.metadata.eval_langs]
+                c[task.metadata.name] = [task.metadata.type, task.metadata.eval_langs]
 
         # if data.get('trust_remote_code',None): c+=1
         # continue
         # try:
-        #     # if not data['revision']: 
+        #     # if not data['revision']:
         #     dataset = get_dataset_infos(**data)
         #     # print(dataset)
         #     # else:
@@ -32,9 +36,8 @@ def extract_bibtex_to_file(tasks: list[mteb.AbsTask]) -> None:
         #     print(str(e), data)
         #     break
     # print(c)
-    with open("tasks_verified_d.json",'w') as f:
-        json.dump(c,f,indent=4)
-
+    with open("tasks_verified_d.json", "w") as f:
+        json.dump(c, f, indent=4)
 
 
 def main():
@@ -46,9 +49,8 @@ def main():
     # print(len(tasks)) # 505 dont have them.
 
 
-
 if __name__ == "__main__":
-    main()  #AmazonCounterfactualClassification
+    main()  # AmazonCounterfactualClassification
 
 # import mteb
 # dataset = load_dataset("mteb/amazon_counterfactual",trust_remote_code=False)
@@ -63,5 +65,3 @@ if __name__ == "__main__":
 # tasks = mteb.get_tasks(tasks=["AmazonCounterfactualClassification"])
 # evaluation = mteb.MTEB(tasks=tasks)
 # results = evaluation.run(model, output_folder=f"results/{model_name}")
-
-
