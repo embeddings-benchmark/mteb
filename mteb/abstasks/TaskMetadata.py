@@ -36,6 +36,7 @@ TASK_SUBTYPE = Literal[
     "Textual Entailment",
     "Counterfactual Detection",
     "Emotion classification",
+    "Reasoning as Retrieval",
 ]
 
 TASK_DOMAIN = Literal[
