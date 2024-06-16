@@ -60,7 +60,6 @@ from .fra.FQuADRetrieval import *
 from .fra.SyntecRetrieval import *
 from .hun.HunSum2 import *
 from .jpn.JaGovFaqsRetrieval import *
-from .jpn.JAQKETRetrieval import *
 from .jpn.JaQuADRetrieval import *
 from .jpn.NLPJournalAbsIntroRetrieval import *
 from .jpn.NLPJournalTitleAbsRetrieval import *
