@@ -93,3 +93,4 @@ Please also add your first name and last name are as you want them to appear in 
 | hgissbkh          | Hippolyte     | Gisserot-Boukhlef    | hippolyte.gisserot-boukhlef@centralesupelec.fr        |   ~Hippolyte_Gisserot-Boukhlef1                   | CentraleSupélec & Artefact Research Center   |
 | sted97          | Simone     | Tedeschi    | tedeschi@diag.uniroma1.it        |   ~Simone_Tedeschi1                   | Sapienza University of Rome   |
 | gentaiscool          | Genta Indra     | Winata    | genta.winata@capitalone.com        |   ~Genta_Indra_Winata1                   | Capital One   |
+| henilp105 | Henil | Panchal | henilp105@gmail.com | ~Henil_Shalin_Panchal1 | Nirma University |
