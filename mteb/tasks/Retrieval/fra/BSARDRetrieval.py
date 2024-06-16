@@ -43,7 +43,7 @@ class BSARDRetrieval(AbsTaskRetrieval):
   pages = {6789–6803},
 }""",
         n_samples={"test": 222},
-        avg_character_length={"test": 123},  # get this
+        avg_character_length={"test": 71.94},
     )
 
     def load_data(self, **kwargs):
