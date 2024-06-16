@@ -271,7 +271,7 @@ def create_meta(args: argparse.Namespace) -> None:
                     "dataset": {
                         "type": task.metadata.dataset["path"],
                         "name": f"MTEB {task.metadata.name} ({hf_subset_score['hf_subset']})",
-                        "config": hf_subset_score["hf_subset"], 
+                        "config": hf_subset_score["hf_subset"],
                         "split": split,
                         "revision": task_result.dataset_revision,
                     },

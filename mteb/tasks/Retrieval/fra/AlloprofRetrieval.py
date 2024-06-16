@@ -21,15 +21,15 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="ndcg_at_10",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
+        date=None,  # no date specified.
+        form=["written"],
+        domains=["Encyclopaedic"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="mixed",
+        annotations_creators="human-annotated",
+        dialect=[],
+        text_creation="found",
         bibtex_citation="""@misc{lef23,
   doi = {10.48550/ARXIV.2302.07738},
   url = {https://arxiv.org/abs/2302.07738},
@@ -40,8 +40,8 @@ class AlloprofRetrieval(AbsTaskRetrieval):
   year = {2023},
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"train": 2048},
+        avg_character_length=None,  # unable to extract due to invalid hf dataset
     )
 
     def load_data(self, **kwargs):
