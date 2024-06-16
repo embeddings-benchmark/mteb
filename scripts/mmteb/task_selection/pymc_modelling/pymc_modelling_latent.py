@@ -47,6 +47,20 @@ X_test = X_test / 100
 # where g -> task_performance but it unobserved
 coords = {"coeffs": labels}
 with pm.Model(coords=coords) as model:
+
+    population_g = pm.Normal("population_g", mu=0, sigma=1)
+
+    for model in labels:
+        model_g = pm.Normal(f"{model}_g", mu=population_g, sigma=1)
+        model_intercept = pm.Normal(f"{model}_intercept", mu=0, sigma=1)
+
+        for task in labels:
+            phi = pm.Gamma(f"{task}_phi", alpha=2, beta=2)
+
+            
+
+
+
     g = pm.Normal("g", mu=0, sigma=1)
     phi = pm.Gamma("phi", alpha=2, beta=2)
     
@@ -58,7 +72,7 @@ with pm.Model(coords=coords) as model:
         task_intercept = pm.Normal(f"{task}_intercept", mu=0, sigma=1)
 
         mu_linear = g + task_intercept
-        mu = pm.math.invlogit(mu_linear)
+        mu = pm.math.invlogit(mu_linear)  # type: ignore
 
         alpha = mu * phi
         beta = (1 - mu) * phi
@@ -72,13 +86,16 @@ model.debug()
 # Inference / Model fitting
 with model:
     # Inference
-    idata = pm.sample(draws=1000, tune=1000, cores=4)
+    idata = pm.sample(draws=1000, tune=1000, cores=4, target_accept=0.95)
 
 
 # Summarize the trace
 az.plot_trace(idata)
 az.summary(idata, hdi_prob=0.95)
 
+
+g_posterior_samples = idata.posterior["g"]
+g_posterior_samples.shape
 
 # generate predictions
 observed_labels = [col for col in labels if col != task_to_predict]
