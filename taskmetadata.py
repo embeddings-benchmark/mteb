@@ -16,7 +16,7 @@ def extract_bibtex_to_file(tasks: list[mteb.AbsTask]) -> None:
         data = task.metadata.dataset
         if not task.metadata.is_filled():
             # c.append(task.metadata.name)
-            if task.metadata.avg_character_length is not None:
+            if task.metadata.avg_character_length is None:
                 c[task.metadata.name] = [task.metadata.type,task.metadata.eval_langs]
 
         # if data.get('trust_remote_code',None): c+=1
@@ -32,7 +32,7 @@ def extract_bibtex_to_file(tasks: list[mteb.AbsTask]) -> None:
         #     print(str(e), data)
         #     break
     # print(c)
-    with open("tasks_verified.json",'w') as f:
+    with open("tasks_verified_d.json",'w') as f:
         json.dump(c,f,indent=4)
 
 
