@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class Quail(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Quail",
-        description="Reasoning as Retrieval (RAR-b) format: Whether Answers to Queries in Reasoning Tasks can be retrieved as top.",
+        description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on Quail.",
         reference="https://text-machine.cs.uml.edu/lab2/projects/quail/",
         dataset={
             "path": "RAR-b/quail",

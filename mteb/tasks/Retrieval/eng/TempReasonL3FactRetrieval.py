@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class TempReasonL3Fact(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="TempReasonL3Fact",
-        description="Reasoning as Retrieval (RAR-b) format: Whether Answers to Queries in Reasoning Tasks can be retrieved as top.",
+        description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on TempReason l3-fact.",
         reference="https://github.com/DAMO-NLP-SG/TempReason",
         dataset={
             "path": "RAR-b/TempReason-l3-fact",

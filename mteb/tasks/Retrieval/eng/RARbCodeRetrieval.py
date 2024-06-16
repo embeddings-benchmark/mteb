@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class RARbCode(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="RARbCode",
-        description="Reasoning as Retrieval (RAR-b) format: Whether Answers to Queries in Reasoning Tasks can be retrieved as top.",
+        description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on RAR-b code-pooled dataset.",
         reference="https://arxiv.org/abs/2404.06347",
         dataset={
             "path": "RAR-b/humanevalpack-mbpp-pooled",

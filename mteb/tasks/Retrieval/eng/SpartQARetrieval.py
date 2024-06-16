@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class SpartQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SpartQA",
-        description="Reasoning as Retrieval (RAR-b) format: Whether Answers to Queries in Reasoning Tasks can be retrieved as top.",
+        description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on SpartQA.",
         reference="https://github.com/HLR/SpartQA_generation",
         dataset={
             "path": "RAR-b/spartqa",

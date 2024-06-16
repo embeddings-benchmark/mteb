@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class ARCChallenge(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ARCChallenge",
-        description="Reasoning as Retrieval (RAR-b) format: Whether Answers to Queries in Reasoning Tasks can be retrieved as top.",
+        description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on ARC-Challenge.",
         reference="https://allenai.org/data/arc",
         dataset={
             "path": "RAR-b/ARC-Challenge",
@@ -22,7 +22,7 @@ class ARCChallenge(AbsTaskRetrieval):
         date=("2018-01-01", "2018-12-31"),
         form=["written"],
         domains=["Encyclopaedic"],
-        task_subtypes=[],
+        task_subtypes=["Reasoning as Retrieval"],
         license="CC BY-SA 4.0",
         socioeconomic_status="medium",
         annotations_creators="derived",

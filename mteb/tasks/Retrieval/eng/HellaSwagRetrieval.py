@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class HellaSwag(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HellaSwag",
-        description="Reasoning as Retrieval (RAR-b) format: Whether Answers to Queries in Reasoning Tasks can be retrieved as top.",
+        description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on HellaSwag.",
         reference="https://rowanzellers.com/hellaswag/",
         dataset={
             "path": "RAR-b/hellaswag",

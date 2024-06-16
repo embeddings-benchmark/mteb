@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class AlphaNLI(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AlphaNLI",
-        description="Reasoning as Retrieval (RAR-b) format: Whether Answers to Queries in Reasoning Tasks can be retrieved as top.",
+        description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on AlphaNLI.",
         reference="https://leaderboard.allenai.org/anli/submissions/get-started",
         dataset={
             "path": "RAR-b/alphanli",

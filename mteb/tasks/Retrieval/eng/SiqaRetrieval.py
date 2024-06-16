@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class SIQA(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SIQA",
-        description="Reasoning as Retrieval (RAR-b) format: Whether Answers to Queries in Reasoning Tasks can be retrieved as top.",
+        description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on SIQA.",
         reference="https://leaderboard.allenai.org/socialiqa/submissions/get-started",
         dataset={
             "path": "RAR-b/siqa",

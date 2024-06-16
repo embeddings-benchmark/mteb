@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class WinoGrande(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WinoGrande",
-        description="Reasoning as Retrieval (RAR-b) format: Whether Answers to Queries in Reasoning Tasks can be retrieved as top.",
+        description="Measuring the ability to retrieve the groundtruth answers to reasoning task queries on winogrande.",
         reference="https://winogrande.allenai.org/",
         dataset={
             "path": "RAR-b/winogrande",
