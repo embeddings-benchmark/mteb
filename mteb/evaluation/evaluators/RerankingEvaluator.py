@@ -114,13 +114,18 @@ class RerankingEvaluator(Evaluator):
             )
         if self.evaluator_type == "standard":
             results = self._encode_candidates(
+                encode_queries_func=encode_queries_func,
                 encode_corpus_func=encode_corpus_func,
                 batched=True,
                 all_query_embs=all_query_embs,
-                encode_queries_func=encode_queries_func,
             )
         elif self.evaluator_type == "miracl":
-            results = self._encode_candidates_miracl(all_query_embs, encode_corpus_func)
+            results = self._encode_candidates_miracl(
+                encode_queries_func=encode_queries_func,
+                encode_corpus_func=encode_corpus_func,
+                batched=True,
+                all_query_embs=all_query_embs,
+            )
         return results
 
     def compute_metrics_individual(self, model):
@@ -139,14 +144,15 @@ class RerankingEvaluator(Evaluator):
         )
         if self.evaluator_type == "standard":
             results = self._encode_candidates(
-                encode_corpus_func=encode_corpus_func,
                 encode_queries_func=encode_queries_func,
+                encode_corpus_func=encode_corpus_func,
                 batched=False,
             )
         elif self.evaluator_type == "miracl":
-            results = self._encode_candidates_miracl_individual(
+            results = self._encode_candidates_miracl(
                 encode_queries_func=encode_queries_func,
                 encode_corpus_func=encode_corpus_func,
+                batched=False,
             )
         return results
 
@@ -159,8 +165,8 @@ class RerankingEvaluator(Evaluator):
         logger.info("Encoding candidates...")
         if batched:
             self._encode_candidates_batched(
-                all_query_embs=all_query_embs,
                 encode_corpus_func=encode_corpus_func,
+                all_query_embs=all_query_embs,
                 all_mrr_scores=all_mrr_scores,
                 all_ap_scores=all_ap_scores,
                 all_conf_scores=all_conf_scores,
@@ -256,24 +262,34 @@ class RerankingEvaluator(Evaluator):
                 all_conf_scores,
             )
 
-    def _apply_sim_scores(
+    def _collect_results(self, all_mrr_scores, all_ap_scores, all_conf_scores):
+        mean_ap = np.mean(all_ap_scores)
+        mean_mrr = np.mean(all_mrr_scores)
+
+        # Compute nAUCs
+        naucs_map = self.nAUC_scores(all_conf_scores, all_ap_scores, "map")
+        naucs_mrr = self.nAUC_scores(all_conf_scores, all_mrr_scores, "mrr")
+
+        return {**{"map": mean_ap, "mrr": mean_mrr}, **naucs_map, **naucs_mrr}
+
+    def _encode_candidates_miracl(
         self,
-        query_emb,
-        docs_emb,
-        is_relevant,
-        all_mrr_scores,
-        all_ap_scores,
-        all_conf_scores,
+        encode_corpus_func,
+        encode_queries_func,
+        batched,
+        all_query_embs=None,
     ):
-        sim_scores = self._compute_sim_scores_instance(query_emb, docs_emb)
-        scores = self._compute_metrics_instance(sim_scores, is_relevant)
-        conf_scores = self.conf_scores(sim_scores.tolist())
+        if batched:
+            return self._encode_candidates_miracl_batched(
+                all_query_embs=all_query_embs, encode_corpus_func=encode_corpus_func
+            )
+        else:
+            return self._encode_candidates_miracl_individual(
+                encode_queries_func=encode_queries_func,
+                encode_corpus_func=encode_corpus_func,
+            )
 
-        all_mrr_scores.append(scores["mrr"])
-        all_ap_scores.append(scores["ap"])
-        all_conf_scores.append(conf_scores)
-
-    def _encode_candidates_miracl(self, all_query_embs, encode_corpus_func):
+    def _encode_candidates_miracl_batched(self, all_query_embs, encode_corpus_func):
         all_docs = []
         for sample in self.samples:
             all_docs.extend(sample["candidates"])
@@ -335,16 +351,6 @@ class RerankingEvaluator(Evaluator):
         scores_miracl = self._collect_miracl_results(results, qrels)
         return scores_miracl
 
-    def _collect_results(self, all_mrr_scores, all_ap_scores, all_conf_scores):
-        mean_ap = np.mean(all_ap_scores)
-        mean_mrr = np.mean(all_mrr_scores)
-
-        # Compute nAUCs
-        naucs_map = self.nAUC_scores(all_conf_scores, all_ap_scores, "map")
-        naucs_mrr = self.nAUC_scores(all_conf_scores, all_mrr_scores, "mrr")
-
-        return {**{"map": mean_ap, "mrr": mean_mrr}, **naucs_map, **naucs_mrr}
-
     def _collect_miracl_results(self, results, qrels):
         ndcg, _map, recall, precision, naucs = RetrievalEvaluator.evaluate(
             qrels=qrels,
@@ -382,6 +388,23 @@ class RerankingEvaluator(Evaluator):
         return {
             str(i): score.detach().numpy().item() for i, score in enumerate(pred_scores)
         }
+
+    def _apply_sim_scores(
+        self,
+        query_emb,
+        docs_emb,
+        is_relevant,
+        all_mrr_scores,
+        all_ap_scores,
+        all_conf_scores,
+    ):
+        sim_scores = self._compute_sim_scores_instance(query_emb, docs_emb)
+        scores = self._compute_metrics_instance(sim_scores, is_relevant)
+        conf_scores = self.conf_scores(sim_scores.tolist())
+
+        all_mrr_scores.append(scores["mrr"])
+        all_ap_scores.append(scores["ap"])
+        all_conf_scores.append(conf_scores)
 
     def _encode_unique_texts(self, all_texts, encode_queries_func):
         index_map, all_unique_texts, all_texts_indexes = {}, [], []
