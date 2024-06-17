@@ -88,12 +88,3 @@ class IndicXnliPairClassification(AbsTaskPairClassification, MultilingualTask):
                 }
             ]
         self.dataset = _dataset
-
-if __name__ == "__main__":
-    from sentence_transformers import SentenceTransformer
-    from mteb import MTEB
-    # intfloat/multilingual-e5-small
-    model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-    model = SentenceTransformer(model_name)
-    evaluation = MTEB(tasks=[IndicXnliPairClassification()])
-    evaluation.run(model)
