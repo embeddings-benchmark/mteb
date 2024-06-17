@@ -1,0 +1,75 @@
+{
+  "dataset_revision": "ed1c933c2b3617e5700d8a7ebe07f5975969a453",
+  "evaluation_time": 2109.559848546982,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.10.5",
+  "scores": {
+    "test_cat": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.07047697075084716,
+        "map": 0.08766760521765773,
+        "mrr": 0.07047697075084716
+      }
+    ],
+    "test_geo": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.11243534232244566,
+        "map": 0.12957035919045082,
+        "mrr": 0.11243534232244566
+      }
+    ],
+    "test_iid": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.08344371591937655,
+        "map": 0.09986625899051035,
+        "mrr": 0.08344371591937655
+      }
+    ],
+    "test_vis": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.08690805754792165,
+        "map": 0.10420068870684673,
+        "mrr": 0.08690805754792165
+      }
+    ],
+    "test_web": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.09001398481360313,
+        "map": 0.10642936562369888,
+        "mrr": 0.09001398481360313
+      }
+    ],
+    "validation": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.11569458170149946,
+        "map": 0.1317950329836689,
+        "mrr": 0.11569458170149946
+      }
+    ]
+  },
+  "task_name": "WebLINXCandidatesReranking"
+}

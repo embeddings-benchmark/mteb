@@ -245,8 +245,10 @@ class AbsTaskRetrieval(AbsTask):
 
         self.data_loaded = True
 
-    def evaluate(self, model, split="test", **kwargs):
-        retriever = RetrievalEvaluator(model, **kwargs)
+    def evaluate(self, model, split: str = "test", **kwargs):
+        retriever = RetrievalEvaluator(
+            retriever=model, task_name=self.metadata.name, **kwargs
+        )
 
         scores = {}
         hf_subsets = (

@@ -118,6 +118,7 @@ class AbsTaskClassification(AbsTask):
                     y_sampled,
                     eval_split["text"],
                     eval_split["label"],
+                    task_name=self.metadata.name,
                     **params,
                 )
             elif self.method == "kNN-pytorch":
@@ -126,6 +127,7 @@ class AbsTaskClassification(AbsTask):
                     y_sampled,
                     eval_split["text"],
                     eval_split["label"],
+                    task_name=self.metadata.name,
                     **params,
                 )
             elif self.method == "logReg":
@@ -134,6 +136,7 @@ class AbsTaskClassification(AbsTask):
                     y_sampled,
                     eval_split["text"],
                     eval_split["label"],
+                    task_name=self.metadata.name,
                     **params,
                 )
             else:
