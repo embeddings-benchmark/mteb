@@ -84,7 +84,9 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         data_split: Dataset,
         **kwargs: Any,
     ) -> ScoresDict:
-        evaluator = RerankingEvaluator(data_split, evaluator_type="miracl", **kwargs)
+        evaluator = RerankingEvaluator(
+            data_split, evaluator_type="miracl", task_name=self.metadata.name, **kwargs
+        )
         scores = evaluator(model)
 
         self._add_main_score(scores)
