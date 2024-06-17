@@ -206,6 +206,8 @@ class RerankingEvaluator(Evaluator):
         all_docs_embs = self._encode_unique_texts(
             all_docs,
             encode_corpus_func,
+            task_name=self.task_name,
+            batch_size=self.batch_size,
         )
 
         # Compute scores and confidence scores
@@ -258,9 +260,14 @@ class RerankingEvaluator(Evaluator):
                 # .encoding interface requires List[str] as input
                 query = [query]
             query_emb = np.asarray(
-                encode_queries_func(query, batch_size=self.batch_size)
+                encode_queries_func(
+                    query, task_name=self.task_name, batch_size=self.batch_size
+                ))
+            docs_emb = np.asarray(
+                encode_corpus_func(
+                    docs, task_name=self.task_name, batch_size=self.batch_size
+                )
             )
-            docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
             self._apply_sim_scores(
                 query_emb,
                 docs_emb,
