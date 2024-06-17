@@ -196,6 +196,15 @@ e5_eng_small = ModelMeta(
     release_date=e5_paper_release_date,
 )
 
+e5_eng_base_v2 = ModelMeta(
+    loader=partial(E5Wrapper, model_name="intfloat/e5-base-v2"),  # type: ignore
+    name="intfloat/e5-base-v2",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="1c644c92ad3ba1efdad3f1451a637716616a20e8",
+    release_date=e5_paper_release_date,
+)
+
 e5_eng_large_v2 = ModelMeta(
     loader=partial(E5Wrapper, model_name="intfloat/e5-large-v2"),  # type: ignore
     name="intfloat/e5-large-v2",

@@ -12,6 +12,8 @@ from mteb.models import (
     openai_models,
     sentence_transformers_models,
     voyage_models,
+    bge_models,
+    mxbai_models,
 )
 
 logger = logging.getLogger(__name__)
@@ -65,7 +67,7 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
         logger.info(
             f"Attempting to extract metadata by loading the model ({model_name}) using sentence-transformers."
         )
-        model = SentenceTransformer(model_name, revision=revision)
+        model = SentenceTransformer(model_name, revision=revision, trust_remote_code=True)
         meta = model_meta_from_sentence_transformers(model)
 
         meta.revision = revision
@@ -105,7 +107,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
     return meta
 
 
-model_modules = [e5_models, sentence_transformers_models, openai_models, voyage_models]
+model_modules = [e5_models, sentence_transformers_models, openai_models, voyage_models, bge_models, mxbai_models]
 models = {}
 
 

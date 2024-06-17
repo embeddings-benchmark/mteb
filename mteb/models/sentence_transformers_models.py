@@ -81,3 +81,11 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     revision="79f2382ceacceacdf38563d7c5d16b9ff8d725d6",  # can be any
     release_date="2019-11-01",  # release date of paper
 )
+
+labse = ModelMeta(
+    name="sentence-transformers/LaBSE",
+    languages=paraphrase_langs,
+    open_source=True,
+    revision="e34fab64a3011d2176c99545a93d5cbddc9a91b7",  # can be any
+    release_date="2019-11-01",  # release date of paper
+)
