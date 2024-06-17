@@ -5,24 +5,23 @@ from __future__ import annotations
 import logging
 
 from mteb import MTEB, get_model, get_tasks
+from mteb.models.bge_models import bge_base_en_v1_5
 from mteb.models.e5_models import (
+    e5_eng_base_v2,
     e5_eng_large_v2,
     e5_eng_small,
     e5_eng_small_v2,
     e5_mult_base,
     e5_mult_large,
     e5_mult_small,
-    e5_eng_base_v2,
 )
+from mteb.models.mxbai_models import mxbai_embed_large_v1
 from mteb.models.sentence_transformers_models import (
     all_MiniLM_L6_v2,
+    labse,
     paraphrase_multilingual_MiniLM_L12_v2,
     paraphrase_multilingual_mpnet_base_v2,
-    labse,
 )
-
-from mteb.models.mxbai_models import mxbai_embed_large_v1
-from mteb.models.bge_models import bge_base_en_v1_5
 
 logging.basicConfig(level=logging.INFO)
 
@@ -69,6 +68,4 @@ for model in MODELS:
     eval_splits = ["test"]
     tasks = get_tasks(tasks=TASK_LIST, languages=["eng"])
     evaluation = MTEB(tasks=tasks)
-    evaluation.run(
-        model, output_folder="results", eval_splits=eval_splits
-    )
+    evaluation.run(model, output_folder="results", eval_splits=eval_splits)

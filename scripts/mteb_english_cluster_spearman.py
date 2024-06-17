@@ -9,24 +9,23 @@ import numpy as np
 from scipy import stats
 
 from mteb import get_model_meta
+from mteb.models.bge_models import bge_base_en_v1_5
 from mteb.models.e5_models import (
+    e5_eng_base_v2,
     e5_eng_large_v2,
     e5_eng_small,
     e5_eng_small_v2,
     e5_mult_base,
     e5_mult_large,
     e5_mult_small,
-    e5_eng_base_v2,
 )
+from mteb.models.mxbai_models import mxbai_embed_large_v1
 from mteb.models.sentence_transformers_models import (
     all_MiniLM_L6_v2,
+    labse,
     paraphrase_multilingual_MiniLM_L12_v2,
     paraphrase_multilingual_mpnet_base_v2,
-    labse,
 )
-
-from mteb.models.mxbai_models import mxbai_embed_large_v1
-from mteb.models.bge_models import bge_base_en_v1_5
 from mteb.MTEBResults import MTEBResults
 
 logging.basicConfig(level=logging.INFO)

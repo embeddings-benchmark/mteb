@@ -9,6 +9,7 @@ from sentence_transformers import SentenceTransformer
 from mteb.model_meta import ModelMeta
 from mteb.models.text_formatting_utils import corpus_to_texts
 
+
 class MxbaiWrapper:
     """following the hf model card documentation."""
 
@@ -29,7 +30,10 @@ class MxbaiWrapper:
         return self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
 
     def encode_queries(self, queries: list[str], batch_size: int = 32, **kwargs: Any):
-        sentences = ["Represent this sentence for searching relevant passages: " + sentence for sentence in queries]
+        sentences = [
+            "Represent this sentence for searching relevant passages: " + sentence
+            for sentence in queries
+        ]
         emb = self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
         return emb
 
