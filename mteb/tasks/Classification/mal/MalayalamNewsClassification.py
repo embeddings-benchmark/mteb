@@ -27,7 +27,12 @@ class MalayalamNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="""@article{kunchukuttan2020indicnlpcorpus,
+    title={AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
+    author={Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
+    year={2020},
+    journal={arXiv preprint arXiv:2005.00085},
+}""",
         n_samples={"train": 5036, "test": 1260},
         avg_character_length={"train": 79.48, "test": 80.44},
     )

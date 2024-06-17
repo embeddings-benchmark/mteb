@@ -39,7 +39,14 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@misc{creutz2018open,
+      title={Open Subtitles Paraphrase Corpus for Six Languages}, 
+      author={Mathias Creutz},
+      year={2018},
+      eprint={1809.06142},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
         n_samples=None,
         avg_character_length=None,
     )

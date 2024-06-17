@@ -35,7 +35,16 @@ class AlloProfClusteringP2P(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@misc{lef23,
+  doi = {10.48550/ARXIV.2302.07738},
+  url = {https://arxiv.org/abs/2302.07738},
+  author = {Lefebvre-Brossard, Antoine and Gazaille, Stephane and Desmarais, Michel C.},
+  keywords = {Computation and Language (cs.CL), Information Retrieval (cs.IR), Machine Learning (cs.LG), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  title = {Alloprof: a new French question-answer education dataset and its use in an information retrieval case study},
+  publisher = {arXiv},
+  year = {2023},
+  copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
+}""",
         n_samples=None,
         avg_character_length=None,
     )

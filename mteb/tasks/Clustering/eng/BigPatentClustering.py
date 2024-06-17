@@ -36,7 +36,22 @@ class BigPatentClustering(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@article{DBLP:journals/corr/abs-1906-03741,
+  author    = {Eva Sharma and
+               Chen Li and
+               Lu Wang},
+  title     = {{BIGPATENT:} {A} Large-Scale Dataset for Abstractive and Coherent
+               Summarization},
+  journal   = {CoRR},
+  volume    = {abs/1906.03741},
+  year      = {2019},
+  url       = {http://arxiv.org/abs/1906.03741},
+  eprinttype = {arXiv},
+  eprint    = {1906.03741},
+  timestamp = {Wed, 26 Jun 2019 07:14:58 +0200},
+  biburl    = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}""",
         n_samples=None,
         avg_character_length=None,
     )

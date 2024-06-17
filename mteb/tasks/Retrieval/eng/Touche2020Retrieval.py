@@ -28,7 +28,23 @@ class Touche2020(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@dataset{potthast_2022_6862281,
+  author       = {Potthast, Martin and
+                  Gienapp, Lukas and
+                  Wachsmuth, Henning and
+                  Hagen, Matthias and
+                  Fröbe, Maik and
+                  Bondarenko, Alexander and
+                  Ajjour, Yamen and
+                  Stein, Benno},
+  title        = {{Touché20-Argument-Retrieval-for-Controversial- 
+                   Questions}},
+  month        = jul,
+  year         = 2022,
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.6862281},
+  url          = {https://doi.org/10.5281/zenodo.6862281}
+}""",
         n_samples=None,
         avg_character_length=None,
     )

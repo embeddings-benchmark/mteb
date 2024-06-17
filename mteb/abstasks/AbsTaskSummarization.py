@@ -46,6 +46,7 @@ class AbsTaskSummarization(AbsTask):
             human_summaries=data_split["human_summaries"],
             texts=data_split["text"],
             gold_scores=normalized_scores,
+            task_name=self.metadata.name,
             **kwargs,
         )
         scores = evaluator(model)
@@ -53,7 +54,4 @@ class AbsTaskSummarization(AbsTask):
         return scores
 
     def _add_main_score(self, scores: ScoresDict) -> None:
-        m_score = self.metadata.main_score
-        dist, metric = m_score.split("_")
-        dist_mapping = {"cosine": "cos_sim"}
-        scores["main_score"] = scores[dist_mapping.get(dist, dist)][metric]
+        scores["main_score"] = scores[self.metadata.main_score]

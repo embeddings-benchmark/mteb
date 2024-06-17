@@ -245,6 +245,7 @@ def create_meta(args: argparse.Namespace) -> None:
     ]
 
     task_results = [MTEBResults.from_disk(path) for path in json_files]
+    task_results = sorted(task_results, key=lambda x: x.task_name)
 
     yaml_results = []
     for task_result in task_results:
@@ -252,19 +253,29 @@ def create_meta(args: argparse.Namespace) -> None:
 
         for split, hf_subset_scores in task_result.scores.items():
             for hf_subset_score in hf_subset_scores:
+                metrics = [
+                    {
+                        "type": k,
+                        "value": v,
+                    }
+                    for k, v in hf_subset_score.items()
+                    if isinstance(v, (int, float))
+                ]
+                if task.metadata.main_score not in hf_subset_score:
+                    raise ValueError(
+                        f"Main score {task.metadata.main_score} not found in metrics or is not a number."
+                    )
+
                 yaml_result = {
                     "task": {"type": task.metadata.type},
                     "dataset": {
                         "type": task.metadata.dataset["path"],
-                        "name": f"MTEB {task.metadata.name}",
+                        "name": f"MTEB {task.metadata.name} ({hf_subset_score['hf_subset']})",
                         "config": hf_subset_score["hf_subset"],
                         "split": split,
                         "revision": task_result.dataset_revision,
                     },
-                    "metric": {
-                        "type": task.metadata.main_score,
-                        "value": hf_subset_score["main_score"],
-                    },
+                    "metrics": metrics,
                 }
                 yaml_results.append(yaml_result)
 

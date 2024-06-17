@@ -187,7 +187,12 @@ class CLSClusteringP2P(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@article{li2022csl,
+  title={CSL: A large-scale Chinese scientific literature dataset},
+  author={Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
+  journal={arXiv preprint arXiv:2209.05034},
+  year={2022}
+}""",
         n_samples={"test": 100000},
         avg_character_length=None,
     )
@@ -216,7 +221,14 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation="",
+        bibtex_citation="""@software{THUCTC,
+  author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
+  title = {THUCTC: An Efficient Chinese Text Classifier},
+  year = {2016},
+  note = {THU Chinese Text Classification Toolkit},
+  publisher = {THU Natural Language Processing Lab},
+  url = {https://github.com/thunlp/THUCTC}
+}""",
         n_samples={"test": NUM_SAMPLES},
         avg_character_length={},
     )
@@ -265,7 +277,14 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation="",
+        bibtex_citation="""@software{THUCTC,
+  author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
+  title = {THUCTC: An Efficient Chinese Text Classifier},
+  year = {2016},
+  note = {THU Chinese Text Classification Toolkit},
+  publisher = {THU Natural Language Processing Lab},
+  url = {https://github.com/thunlp/THUCTC}
+}""",
         n_samples={"test": NUM_SAMPLES},
         avg_character_length={},
     )
