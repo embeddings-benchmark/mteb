@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-
 from mteb.abstasks import AbsTaskPairClassification, MultilingualTask
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
     "as": ["asm-Beng"],
@@ -74,9 +73,7 @@ class IndicXnliPairClassification(AbsTaskPairClassification, MultilingualTask):
             hf_dataset = self.dataset[lang]
             # 0=entailment, 2=contradiction. Filter out neutral to match the task.
             # Then map entailment as positive (1) and contradiction as negative (0).
-            hf_dataset = self.dataset[lang].filter(
-                lambda x: x["label"] in [0, 2]
-            )
+            hf_dataset = self.dataset[lang].filter(lambda x: x["label"] in [0, 2])
             hf_dataset = hf_dataset.map(
                 lambda example: {"label": 0 if example["label"] == 2 else 1}
             )
