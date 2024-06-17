@@ -213,7 +213,7 @@ class AbsTaskRetrieval(AbsTask):
         E.g.: {"test": {"q1": {"document_one": 1}}}
     """
 
-    ignore_identical_ids: bool = True
+    ignore_identical_ids: bool = False
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
