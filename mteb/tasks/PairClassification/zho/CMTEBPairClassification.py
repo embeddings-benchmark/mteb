@@ -27,7 +27,14 @@ class Ocnli(AbsTaskPairClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@misc{hu2020ocnli,
+      title={OCNLI: Original Chinese Natural Language Inference}, 
+      author={Hai Hu and Kyle Richardson and Liang Xu and Lu Li and Sandra Kuebler and Lawrence S. Moss},
+      year={2020},
+      eprint={2010.05444},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
         n_samples=None,
         avg_character_length=None,
     )
@@ -56,7 +63,49 @@ class Cmnli(AbsTaskPairClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@inproceedings{xu-etal-2020-clue,
+    title = "{CLUE}: A {C}hinese Language Understanding Evaluation Benchmark",
+    author = "Xu, Liang  and
+      Hu, Hai  and
+      Zhang, Xuanwei  and
+      Li, Lu  and
+      Cao, Chenjie  and
+      Li, Yudong  and
+      Xu, Yechen  and
+      Sun, Kai  and
+      Yu, Dian  and
+      Yu, Cong  and
+      Tian, Yin  and
+      Dong, Qianqian  and
+      Liu, Weitang  and
+      Shi, Bo  and
+      Cui, Yiming  and
+      Li, Junyi  and
+      Zeng, Jun  and
+      Wang, Rongzhao  and
+      Xie, Weijian  and
+      Li, Yanting  and
+      Patterson, Yina  and
+      Tian, Zuoyu  and
+      Zhang, Yiwen  and
+      Zhou, He  and
+      Liu, Shaoweihua  and
+      Zhao, Zhe  and
+      Zhao, Qipeng  and
+      Yue, Cong  and
+      Zhang, Xinrui  and
+      Yang, Zhengliang  and
+      Richardson, Kyle  and
+      Lan, Zhenzhong",
+    booktitle = "Proceedings of the 28th International Conference on Computational Linguistics",
+    month = dec,
+    year = "2020",
+    address = "Barcelona, Spain (Online)",
+    publisher = "International Committee on Computational Linguistics",
+    url = "https://aclanthology.org/2020.coling-main.419",
+    doi = "10.18653/v1/2020.coling-main.419",
+    pages = "4762--4772",
+}""",
         n_samples=None,
         avg_character_length=None,
     )

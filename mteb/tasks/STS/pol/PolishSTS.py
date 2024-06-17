@@ -18,16 +18,46 @@ class SickrPLSTS(AbsTaskSTS):
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="cosine_spearman",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
+        date=("2018-01-01", "2019-09-01"),  # rough estimate
+        form=["written"],
+        domains=["Web"],
+        task_subtypes=["Textual Entailment"],
+        license="CC-BY-NC-SA-3.0",
+        socioeconomic_status="mixed",
+        annotations_creators="human-annotated",
+        dialect=[],
+        text_creation="human-translated and localized",
+        bibtex_citation="""
+@inproceedings{dadas-etal-2020-evaluation,
+    title = "Evaluation of Sentence Representations in {P}olish",
+    author = "Dadas, Slawomir  and
+      Pere{\l}kiewicz, Micha{\l}  and
+      Po{\'s}wiata, Rafa{\l}",
+    editor = "Calzolari, Nicoletta  and
+      B{\'e}chet, Fr{\'e}d{\'e}ric  and
+      Blache, Philippe  and
+      Choukri, Khalid  and
+      Cieri, Christopher  and
+      Declerck, Thierry  and
+      Goggi, Sara  and
+      Isahara, Hitoshi  and
+      Maegaard, Bente  and
+      Mariani, Joseph  and
+      Mazo, H{\'e}l{\`e}ne  and
+      Moreno, Asuncion  and
+      Odijk, Jan  and
+      Piperidis, Stelios",
+    booktitle = "Proceedings of the Twelfth Language Resources and Evaluation Conference",
+    month = may,
+    year = "2020",
+    address = "Marseille, France",
+    publisher = "European Language Resources Association",
+    url = "https://aclanthology.org/2020.lrec-1.207",
+    pages = "1674--1680",
+    language = "English",
+    ISBN = "979-10-95546-34-4",
+}
+        """,
         n_samples={"test": 9812},
         avg_character_length={"test": 42.8},
     )
@@ -54,18 +84,35 @@ class CdscrSTS(AbsTaskSTS):
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="cosine_spearman",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
-        n_samples=None,
-        avg_character_length=None,
+        date=("2016-01-01", "2017-04-01"),  # rough estimate
+        form=["written"],
+        domains=["Web"],
+        task_subtypes=["Textual Entailment"],
+        license="CC-BY-NC-SA-4.0",
+        socioeconomic_status="mixed",
+        annotations_creators="human-annotated",
+        dialect=[],
+        text_creation="human-translated and localized",
+        bibtex_citation="""
+@inproceedings{wroblewska-krasnowska-kieras-2017-polish,
+    title = "{P}olish evaluation dataset for compositional distributional semantics models",
+    author = "Wr{\'o}blewska, Alina  and
+      Krasnowska-Kiera{\'s}, Katarzyna",
+    editor = "Barzilay, Regina  and
+      Kan, Min-Yen",
+    booktitle = "Proceedings of the 55th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = jul,
+    year = "2017",
+    address = "Vancouver, Canada",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/P17-1073",
+    doi = "10.18653/v1/P17-1073",
+    pages = "784--792",
+}
+
+        """,
+        n_samples={"test": 1000},
+        avg_character_length={"test": 75.24},
     )
 
     @property

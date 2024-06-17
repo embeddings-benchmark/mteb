@@ -1,0 +1,53 @@
+{
+  "dataset_revision": "e19b6ffa60b3bc248e0b41f4cc37c26a55c2a67b",
+  "evaluation_time": 35.930275678634644,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.11.6",
+  "scores": {
+    "test": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "rus-Cyrl"
+        ],
+        "main_score": 0.6635,
+        "map_at_1": 0.39342,
+        "map_at_10": 0.58223,
+        "map_at_100": 0.59224,
+        "map_at_1000": 0.59259,
+        "map_at_20": 0.58905,
+        "map_at_3": 0.5259,
+        "map_at_5": 0.56096,
+        "mrr_at_1": 0.5656,
+        "mrr_at_10": 0.67727,
+        "mrr_at_100": 0.68071,
+        "mrr_at_1000": 0.68082,
+        "mrr_at_20": 0.67956,
+        "mrr_at_3": 0.65317,
+        "mrr_at_5": 0.66836,
+        "ndcg_at_1": 0.56383,
+        "ndcg_at_10": 0.6635,
+        "ndcg_at_100": 0.69628,
+        "ndcg_at_1000": 0.70337,
+        "ndcg_at_20": 0.681,
+        "ndcg_at_3": 0.58575,
+        "ndcg_at_5": 0.62663,
+        "precision_at_1": 0.56383,
+        "precision_at_10": 0.1318,
+        "precision_at_100": 0.01557,
+        "precision_at_1000": 0.00164,
+        "precision_at_20": 0.07151,
+        "precision_at_3": 0.31836,
+        "precision_at_5": 0.22754,
+        "recall_at_1": 0.39342,
+        "recall_at_10": 0.80586,
+        "recall_at_100": 0.93322,
+        "recall_at_1000": 0.98254,
+        "recall_at_20": 0.86433,
+        "recall_at_3": 0.61409,
+        "recall_at_5": 0.70917
+      }
+    ]
+  },
+  "task_name": "RuBQRetrieval"
+}

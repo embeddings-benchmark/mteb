@@ -8,7 +8,7 @@ class IndoNLI(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="indonli",
         dataset={
-            "path": "indonli",
+            "path": "afaji/indonli",
             "revision": "3c976110fc13596004dc36279fc4c453ff2c18aa",
         },
         description="IndoNLI is the first human-elicited Natural Language Inference (NLI) dataset for Indonesian. IndoNLI is annotated by both crowd workers and experts.",

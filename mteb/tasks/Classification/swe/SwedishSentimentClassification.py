@@ -12,7 +12,7 @@ class SwedishSentimentClassification(AbsTaskClassification):
         description="Dataset of Swedish reviews scarped from various public available websites",
         reference="https://huggingface.co/datasets/swedish_reviews",
         dataset={
-            "path": "swedish_reviews",
+            "path": "timpal0l/swedish_reviews",
             "revision": "105ba6b3cb99b9fd64880215be469d60ebf44a1b",
         },
         type="Classification",

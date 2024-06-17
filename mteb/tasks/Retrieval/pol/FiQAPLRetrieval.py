@@ -28,7 +28,14 @@ class FiQAPLRetrieval(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@inproceedings{
+thakur2021beir,
+title={{BEIR}: A Heterogeneous Benchmark for Zero-shot Evaluation of Information Retrieval Models},
+author={Nandan Thakur and Nils Reimers and Andreas R{\"u}ckl{\'e} and Abhishek Srivastava and Iryna Gurevych},
+booktitle={Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
+year={2021},
+url={https://openreview.net/forum?id=wCu6T5xFjeJ}
+}""",
         n_samples=None,
         avg_character_length=None,
     )

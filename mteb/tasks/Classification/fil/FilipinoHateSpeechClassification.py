@@ -12,7 +12,7 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
         description="Filipino Twitter dataset for sentiment classification.",
         reference="https://pcj.csp.org.ph/index.php/pcj/issue/download/29/PCJ%20V14%20N1%20pp1-14%202019",
         dataset={
-            "path": "hate_speech_filipino",
+            "path": "hate-speech-filipino/hate_speech_filipino",
             "revision": "1994e9bb7f3ec07518e3f0d9e870cb293e234686",
         },
         type="Classification",
@@ -24,7 +24,7 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
         form=["written"],
         domains=["Social"],
         task_subtypes=["Sentiment/Hate speech"],
-        license=None,
+        license="Not specified",
         socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],

@@ -4,6 +4,8 @@ import logging
 
 import numpy as np
 
+from mteb.MTEBResults import ScoresDict
+
 from ..evaluation.evaluators import SummarizationEvaluator
 from .AbsTask import AbsTask
 
@@ -31,28 +33,7 @@ class AbsTaskSummarization(AbsTask):
     def max_score(self):
         return self.metadata_dict["max_score"]
 
-    def evaluate(self, model, split, **kwargs):
-        if not self.data_loaded:
-            self.load_data()
-
-        if self.is_crosslingual:
-            scores = {}
-            for lang in self.dataset:
-                logger.info(
-                    f"\nTask: {self.metadata_dict['name']}, split: {split}, language: {lang}. Running..."
-                )
-                data_split = self.dataset[lang][split]
-                scores[lang] = self._evaluate_split(model, data_split, **kwargs)
-        else:
-            logger.info(
-                f"\nTask: {self.metadata_dict['name']}, split: {split}. Running..."
-            )
-            data_split = self.dataset[split]
-            scores = self._evaluate_split(model, data_split, **kwargs)
-
-        return scores
-
-    def _evaluate_split(self, model, data_split, **kwargs):
+    def _evaluate_subset(self, model, data_split, **kwargs) -> ScoresDict:
         normalized_scores = list(
             map(
                 lambda x: (np.array(x) - self.min_score)
@@ -65,7 +46,12 @@ class AbsTaskSummarization(AbsTask):
             human_summaries=data_split["human_summaries"],
             texts=data_split["text"],
             gold_scores=normalized_scores,
+            task_name=self.metadata.name,
             **kwargs,
         )
-        metrics = evaluator(model)
-        return metrics
+        scores = evaluator(model)
+        self._add_main_score(scores)
+        return scores
+
+    def _add_main_score(self, scores: ScoresDict) -> None:
+        scores["main_score"] = scores[self.metadata.main_score]

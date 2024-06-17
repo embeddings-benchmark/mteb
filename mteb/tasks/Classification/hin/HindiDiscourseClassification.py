@@ -8,7 +8,7 @@ class HindiDiscourseClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HindiDiscourseClassification",
         dataset={
-            "path": "hindi_discourse",
+            "path": "midas/hindi_discourse",
             "revision": "218ce687943a0da435d6d62751a4ab216be6cd40",
         },
         description="A Hindi Discourse dataset in Hindi with values for coherence.",

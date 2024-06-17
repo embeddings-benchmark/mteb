@@ -10,7 +10,7 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PawsX",
         dataset={
-            "path": "paws-x",
+            "path": "google-research-datasets/paws-x",
             "revision": "8a04d940a42cd40658986fdd8e3da561533a3646",
         },
         description="",
@@ -37,7 +37,14 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@misc{yang2019pawsx,
+      title={PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification}, 
+      author={Yinfei Yang and Yuan Zhang and Chris Tar and Jason Baldridge},
+      year={2019},
+      eprint={1908.11828},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
         n_samples=None,
         avg_character_length=None,
     )

@@ -10,7 +10,7 @@ class UrduRomanSentimentClassification(AbsTaskClassification):
         description="The Roman Urdu dataset is a data corpus comprising of more than 20000 records tagged for sentiment (Positive, Negative, Neutral)",
         reference="https://archive.ics.uci.edu/dataset/458/roman+urdu+data+set",
         dataset={
-            "path": "roman_urdu",
+            "path": "community-datasets/roman_urdu",
             "revision": "566be6449bb30b9b9f2b59173391647fe0ca3224",
         },
         type="Classification",

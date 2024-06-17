@@ -10,7 +10,7 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
         description="The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles collected from various Bengali media sources and categorized based on the type of hate in the text.",
         reference="https://huggingface.co/datasets/bn_hate_speech",
         dataset={
-            "path": "bn_hate_speech",
+            "path": "rezacsedu/bn_hate_speech",
             "revision": "99612296bc093f0720cac7d7cbfcb67eecf1ca2f",
         },
         type="Classification",

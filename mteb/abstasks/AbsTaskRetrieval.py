@@ -4,12 +4,14 @@ import json
 import logging
 import os
 from collections import defaultdict
+from pathlib import Path
 from time import time
 from typing import Dict, Tuple
 
 from datasets import Features, Value, load_dataset
 
 from ..evaluation.evaluators import RetrievalEvaluator
+from ..MTEBResults import ScoresDict
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -19,10 +21,10 @@ logger = logging.getLogger(__name__)
 class HFDataLoader:
     def __init__(
         self,
-        hf_repo: str = None,
-        hf_repo_qrels: str = None,
-        data_folder: str = None,
-        prefix: str = None,
+        hf_repo: str | None = None,
+        hf_repo_qrels: str | None = None,
+        data_folder: str | None = None,
+        prefix: str | None = None,
         corpus_file: str = "corpus.jsonl",
         query_file: str = "queries.jsonl",
         qrels_folder: str = "qrels",
@@ -201,9 +203,10 @@ class AbsTaskRetrieval(AbsTask):
         Semantically, it should contain dict[split_name, dict[sample_id, dict[str, str]]]
         E.g. {"test": {"document_one": {"_id": "d1", "title": "title", "text": "text"}}}
 
-    self.queries: dict[str, dict[str, str]]
-        Semantically, it should contain dict[split_name, dict[sample_id, str]]
+    self.queries: dict[str, dict[str, Union[str, List[str]]]]
+        Semantically, it should contain dict[split_name, dict[sample_id, str]] or dict[split_name, dict[sample_id, List[str]]] for conversations
         E.g. {"test": {"q1": "query"}}
+        or {"test": {"q1": ["turn1", "turn2", "turn3"]}}
 
     self.relevant_docs: dict[str, dict[str, dict[str, int]]]
         Semantically, it should contain dict[split_name, dict[sample_id, dict[doc_id, score]]]
@@ -242,34 +245,40 @@ class AbsTaskRetrieval(AbsTask):
 
         self.data_loaded = True
 
-    def evaluate(self, model, split="test", **kwargs):
-        retriever = RetrievalEvaluator(model, **kwargs)
+    def evaluate(self, model, split: str = "test", **kwargs):
+        retriever = RetrievalEvaluator(
+            retriever=model, task_name=self.metadata.name, **kwargs
+        )
 
         scores = {}
-        if self.is_crosslingual or self.is_multilingual:
-            for lang in self.hf_subsets:
-                logger.info(f"Language: {lang}")
+        hf_subsets = (
+            [l for l in self.hf_subsets]
+            if (self.is_multilingual or self.is_crosslingual)
+            else ["default"]
+        )
+
+        for hf_subset in hf_subsets:
+            logger.info(f"Subset: {hf_subset}")
+
+            if hf_subset == "default":
                 corpus, queries, relevant_docs = (
-                    self.corpus[lang][split],
-                    self.queries[lang][split],
-                    self.relevant_docs[lang][split],
+                    self.corpus[split],
+                    self.queries[split],
+                    self.relevant_docs[split],
                 )
-                scores[lang] = self._evaluate_split(
-                    retriever, corpus, queries, relevant_docs, lang, **kwargs
+            else:
+                corpus, queries, relevant_docs = (
+                    self.corpus[hf_subset][split],
+                    self.queries[hf_subset][split],
+                    self.relevant_docs[hf_subset][split],
                 )
-        else:
-            corpus, queries, relevant_docs = (
-                self.corpus[split],
-                self.queries[split],
-                self.relevant_docs[split],
-            )
-            scores = self._evaluate_split(
-                retriever, corpus, queries, relevant_docs, None, **kwargs
+            scores[hf_subset] = self._evaluate_subset(
+                retriever, corpus, queries, relevant_docs, hf_subset, **kwargs
             )
         return scores
 
-    def _evaluate_split(
-        self, retriever, corpus, queries, relevant_docs, lang=None, **kwargs
+    def _evaluate_subset(
+        self, retriever, corpus, queries, relevant_docs, hf_subset: str, **kwargs
     ):
         start_time = time()
         results = retriever(corpus, queries)
@@ -278,10 +287,14 @@ class AbsTaskRetrieval(AbsTask):
             "Time taken to retrieve: {:.2f} seconds".format(end_time - start_time)
         )
 
-        if kwargs.get("save_predictions", False):
-            output_folder = kwargs.get("output_folder", "results")
+        save_predictions = kwargs.get("save_predictions", False)
+        export_errors = kwargs.get("export_errors", False)
+        if save_predictions or export_errors:
+            output_folder = Path(kwargs.get("output_folder", "results"))
             if not os.path.isdir(output_folder):
                 os.makedirs(output_folder)
+
+        if save_predictions:
             top_k = kwargs.get("top_k", None)
             if top_k is not None:
                 for qid in list(results.keys()):
@@ -293,23 +306,20 @@ class AbsTaskRetrieval(AbsTask):
                     results[qid] = {
                         k: v for k, v in results[qid].items() if k in doc_ids
                     }
-            if lang is None:
-                qrels_save_path = (
-                    f"{output_folder}/{self.metadata_dict['name']}_predictions.json"
-                )
-            else:
-                qrels_save_path = f"{output_folder}/{self.metadata_dict['name']}_{lang}_predictions.json"
+            qrels_save_path = (
+                output_folder / f"{self.metadata.name}_{hf_subset}_predictions.json"
+            )
 
             with open(qrels_save_path, "w") as f:
                 json.dump(results, f)
 
-        ndcg, _map, recall, precision = retriever.evaluate(
+        ndcg, _map, recall, precision, naucs = retriever.evaluate(
             relevant_docs,
             results,
             retriever.k_values,
             ignore_identical_ids=kwargs.get("ignore_identical_ids", True),
         )
-        mrr = retriever.evaluate_custom(
+        mrr, naucs_mrr = retriever.evaluate_custom(
             relevant_docs, results, retriever.k_values, "mrr"
         )
         scores = {
@@ -318,8 +328,52 @@ class AbsTaskRetrieval(AbsTask):
             **{f"recall_at_{k.split('@')[1]}": v for (k, v) in recall.items()},
             **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
             **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
+            **{
+                k.replace("@", "_at_").replace("_P", "_precision").lower(): v
+                for k, v in naucs.items()
+            },
+            **{
+                k.replace("@", "_at_").replace("_P", "_precision").lower(): v
+                for k, v in naucs_mrr.items()
+            },
         }
+        self._add_main_score(scores)
+
+        if export_errors:
+            errors = {}
+
+            top_k = kwargs.get("top_k", 1)
+            if not save_predictions and top_k == 1:
+                for qid in results.keys():
+                    doc_scores = results[qid]
+                    sorted_docs = sorted(
+                        doc_scores.items(), key=lambda x: x[1], reverse=True
+                    )[:top_k]
+                    results[qid] = {doc_id: score for doc_id, score in sorted_docs}
+            for qid, retrieved_docs in results.items():
+                expected_docs = relevant_docs[qid]
+                false_positives = [
+                    doc for doc in retrieved_docs if doc not in expected_docs
+                ]
+                false_negatives = [
+                    doc for doc in expected_docs if doc not in retrieved_docs
+                ]
+                if false_positives or false_negatives:
+                    errors[qid] = {
+                        "false_positives": false_positives,
+                        "false_negatives": false_negatives,
+                    }
+
+            errors_save_path = (
+                output_folder / f"{self.metadata.name}_{hf_subset}_errors.json"
+            )
+            with open(errors_save_path, "w") as f:
+                json.dump(errors, f)
+
         return scores
+
+    def _add_main_score(self, scores: ScoresDict) -> None:
+        scores["main_score"] = scores[self.metadata.main_score]
 
     def calculate_metadata_metrics(self) -> None:
         self.load_data()

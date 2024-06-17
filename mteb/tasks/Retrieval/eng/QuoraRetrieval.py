@@ -31,7 +31,13 @@ class QuoraRetrieval(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@misc{quora-question-pairs,
+    author = {DataCanary, hilfialkaff, Lili Jiang, Meg Risdal, Nikhil Dandekar, tomtung},
+    title = {Quora Question Pairs},
+    publisher = {Kaggle},
+    year = {2017},
+    url = {https://kaggle.com/competitions/quora-question-pairs}
+}""",
         n_samples=None,
         avg_character_length=None,
     )

@@ -27,7 +27,7 @@ class GujaratiNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="",  # none found
         n_samples={"train": 5269, "test": 1318},
         avg_character_length={"train": 61.95, "test": 61.91},
     )

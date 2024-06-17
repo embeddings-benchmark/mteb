@@ -28,7 +28,14 @@ class LeCaRDv2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=None,
         text_creation="found",
-        bibtex_citation=None,
+        bibtex_citation="""@misc{li2023lecardv2,
+      title={LeCaRDv2: A Large-Scale Chinese Legal Case Retrieval Dataset}, 
+      author={Haitao Li and Yunqiu Shao and Yueyue Wu and Qingyao Ai and Yixiao Ma and Yiqun Liu},
+      year={2023},
+      eprint={2310.17609},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
         n_samples=None,
         avg_character_length=None,
     )

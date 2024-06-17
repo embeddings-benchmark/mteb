@@ -135,16 +135,22 @@ class TatoebaBitextMining(AbsTaskBitextMining, CrosslingualTask):
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="f1",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
+        date=("2006-01-01", "2021-12-31"),  # Estimated range
+        form=["written"],
+        domains=[],  # Tatoeba corpus includes a wide range of topics and domains
+        task_subtypes=[],
+        license="CC BY 2.0",
+        socioeconomic_status="mixed",
+        annotations_creators="human-annotated",
+        dialect=[],  # No specific dialect mentioned
+        text_creation="found",
+        bibtex_citation="""
+        @misc{tatoeba,
+        author = {Tatoeba community},
+        title = {Tatoeba: Collection of sentences and translations},
+        year = {2021},
+        }
+        """,
         n_samples={"test": 2000},
         avg_character_length={"test": 39.4},
     )

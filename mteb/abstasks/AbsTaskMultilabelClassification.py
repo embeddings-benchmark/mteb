@@ -3,6 +3,7 @@ from __future__ import annotations
 import itertools
 import logging
 from collections import defaultdict
+from typing import Any
 
 import numpy as np
 from sklearn.base import ClassifierMixin, clone
@@ -11,6 +12,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
+from ..evaluation.evaluators.model_encode import model_encode
+from ..MTEBResults import HFSubset, ScoresDict
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -70,41 +73,36 @@ class AbsTaskMultilabelClassification(AbsTask):
             self.metadata
 
     def _add_main_score(self, scores):
-        if self.metadata.main_score in scores:
-            scores["main_score"] = scores[self.metadata.main_score]
-        else:
-            logger.warn(
-                f"main score {self.metadata.main_score} not found in scores {scores.keys()}"
-            )
+        scores["main_score"] = scores[self.metadata.main_score]
 
-    def evaluate(self, model, eval_split="test", train_split="train", **kwargs):
+    def evaluate(
+        self, model, eval_split="test", train_split="train", **kwargs
+    ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
             self.load_data()
 
-        if self.is_multilingual:
-            scores = {}
-            for lang in self.dataset:
-                logger.info(
-                    f"\nTask: {self.metadata.name}, split: {eval_split}, language: {lang}. Running..."
-                )
-                scores[lang] = self._evaluate_monolingual(
-                    model, self.dataset[lang], eval_split, train_split, **kwargs
-                )
-                self._add_main_score(scores[lang])
-        else:
+        scores = {}
+        hf_subsets = [l for l in self.dataset] if self.is_multilingual else ["default"]
+
+        for hf_subset in hf_subsets:
             logger.info(
-                f"\nTask: {self.metadata.name}, split: {eval_split}. Running..."
+                f"\nTask: {self.metadata.name}, split: {eval_split}, subset: {hf_subset}. Running..."
             )
-            scores = self._evaluate_monolingual(
-                model, self.dataset, eval_split, train_split, **kwargs
+
+            if hf_subset not in self.dataset and hf_subset == "default":
+                ds = self.dataset
+            else:
+                ds = self.dataset[hf_subset]
+            scores[hf_subset] = self._evaluate_subset(
+                model, ds, eval_split, train_split, **kwargs
             )
-            self._add_main_score(scores)
+            self._add_main_score(scores[hf_subset])
 
         return scores
 
-    def _evaluate_monolingual(
+    def _evaluate_subset(
         self, model, dataset, eval_split="test", train_split="train", **kwargs
-    ):
+    ) -> ScoresDict:
         train_split = dataset[train_split]
         eval_split = dataset[eval_split]
         params = {
@@ -125,8 +123,12 @@ class AbsTaskMultilabelClassification(AbsTask):
         # Encode all unique sentences at the indices
         unique_train_indices = list(set(itertools.chain.from_iterable(train_samples)))
         unique_train_sentences = train_split.select(unique_train_indices)["text"]
+
+        _unique_train_embeddings = model_encode(
+            unique_train_sentences, model=model, task_name=self.metadata.name
+        )
         unique_train_embeddings = dict(
-            zip(unique_train_indices, model.encode(unique_train_sentences))
+            zip(unique_train_indices, _unique_train_embeddings)
         )
         test_text = eval_split["text"]
         binarizer = MultiLabelBinarizer()
@@ -138,8 +140,9 @@ class AbsTaskMultilabelClassification(AbsTask):
                     test_text, y_test, stratify=y_test, train_size=2000
                 )
         except ValueError:
-            logger.warn("Couldn't subsample, continuing with the entire test set.")
-        X_test = model.encode(test_text)
+            logger.warning("Couldn't subsample, continuing with the entire test set.")
+
+        X_test = model_encode(test_text, model=model, task_name=self.metadata.name)
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
                 "=" * 10
@@ -154,14 +157,12 @@ class AbsTaskMultilabelClassification(AbsTask):
             )
             scores.append(scores_exp)
 
-        if self.n_experiments == 1:
-            return scores[0]
-        else:
-            avg_scores = {k: np.mean([s[k] for s in scores]) for k in scores[0].keys()}
-            std_errors = {
-                k + "_stderr": np.std([s[k] for s in scores]) for k in scores[0].keys()
-            }
-            return {**avg_scores, **std_errors}
+        avg_scores: dict[str, Any] = {
+            k: np.mean([s[k] for s in scores]) for k in scores[0].keys()
+        }
+        avg_scores["scores_per_experiment"] = scores
+
+        return avg_scores
 
     def _undersample_data_indices(self, y, samples_per_label, idxs=None):
         """Undersample data to have samples_per_label samples of each label"""

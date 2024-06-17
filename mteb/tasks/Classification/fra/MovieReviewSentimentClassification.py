@@ -10,7 +10,7 @@ class MovieReviewSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MovieReviewSentimentClassification",
         dataset={
-            "path": "allocine",
+            "path": "tblard/allocine",
             "revision": "a4654f4896408912913a62ace89614879a549287",
         },
         description="The Allociné dataset is a French-language dataset for sentiment analysis that contains movie reviews produced by the online community of the Allociné.fr website.",

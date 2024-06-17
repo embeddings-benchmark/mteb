@@ -19,16 +19,37 @@ class ImdbClassification(AbsTaskClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
+        date=(
+            "2000-01-01",
+            "2010-12-31",
+        ),  # Estimated range for the collection of movie reviews
+        form=["written"],
+        domains=["Reviews"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="Not specified",
+        socioeconomic_status="mixed",
+        annotations_creators="derived",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""@inproceedings{maas-etal-2011-learning,
+    title = "Learning Word Vectors for Sentiment Analysis",
+    author = "Maas, Andrew L.  and
+      Daly, Raymond E.  and
+      Pham, Peter T.  and
+      Huang, Dan  and
+      Ng, Andrew Y.  and
+      Potts, Christopher",
+    editor = "Lin, Dekang  and
+      Matsumoto, Yuji  and
+      Mihalcea, Rada",
+    booktitle = "Proceedings of the 49th Annual Meeting of the Association for Computational Linguistics: Human Language Technologies",
+    month = jun,
+    year = "2011",
+    address = "Portland, Oregon, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/P11-1015",
+    pages = "142--150",
+}""",
         n_samples={"test": 25000},
         avg_character_length={"test": 1293.8},
     )

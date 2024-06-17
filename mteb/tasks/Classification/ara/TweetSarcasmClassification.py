@@ -8,7 +8,7 @@ class TweetSarcasmClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TweetSarcasmClassification",
         dataset={
-            "path": "ar_sarcasm",
+            "path": "iabufarha/ar_sarcasm",
             "revision": "557bf94ac6177cc442f42d0b09b6e4b76e8f47c9",
         },
         description="Arabic sarcasm detection dataset, which was created through the reannotation of available Arabic sentiment analysis datasets.",

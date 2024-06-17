@@ -8,7 +8,7 @@ class KlueNLI(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="KLUE-NLI",
         dataset={
-            "path": "klue",
+            "path": "klue/klue",
             "name": "nli",
             "revision": "349481ec73fff722f88e0453ca05c77a447d967c",
         },

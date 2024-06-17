@@ -4,15 +4,17 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
+from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskClusteringFast import (
+    AbsTaskClusteringFast,
+    check_label_distribution,
+)
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks.AbsTaskClustering import AbsTaskClustering
-from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 
 class RedditFastClusteringS2S(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="RedditFastClusteringS2S",
+        name="RedditClusteringS2S.v2",
         description="Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
         reference="https://arxiv.org/abs/2104.07081",
         dataset={
@@ -57,6 +59,7 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
             sentences = list(
                 itertools.chain.from_iterable(self.dataset[split]["sentences"])
             )
+            check_label_distribution(self.dataset[split])
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
         self.dataset = self.stratified_subsampling(
@@ -69,7 +72,7 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
 
 
 class RedditClustering(AbsTaskClustering):
-    superseeded_by = "RedditFastClusteringS2S"
+    superseeded_by = "RedditClusteringS2S.v2"
     metadata = TaskMetadata(
         name="RedditClustering",
         description="Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
@@ -92,7 +95,19 @@ class RedditClustering(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@article{geigle:2021:arxiv,
+        author    = {Gregor Geigle and 
+                        Nils Reimers and 
+                        Andreas R{\"u}ckl{\'e} and
+                        Iryna Gurevych},
+        title     = {TWEAC: Transformer with Extendable QA Agent Classifiers},
+        journal   = {arXiv preprint},
+        volume    = {abs/2104.07081},
+        year      = {2021},
+        url       = {http://arxiv.org/abs/2104.07081},
+        archivePrefix = {arXiv},
+        eprint    = {2104.07081}
+        }""",
         n_samples={"test": 420464},
         avg_character_length={"test": 64.7},
     )

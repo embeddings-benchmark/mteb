@@ -9,7 +9,7 @@ class KlueSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="KLUE-STS",
         dataset={
-            "path": "klue",
+            "path": "klue/klue",
             "name": "sts",
             "revision": "349481ec73fff722f88e0453ca05c77a447d967c",
         },

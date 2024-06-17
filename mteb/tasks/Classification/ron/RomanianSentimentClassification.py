@@ -12,7 +12,7 @@ class RomanianSentimentClassification(AbsTaskClassification):
         description="An Romanian dataset for sentiment classification.",
         reference="https://arxiv.org/abs/2009.08712",
         dataset={
-            "path": "ro_sent",
+            "path": "dumitrescustefan/ro_sent",
             "revision": "155048684cea7a6d6af1ddbfeb9a04820311ce93",
         },
         type="Classification",

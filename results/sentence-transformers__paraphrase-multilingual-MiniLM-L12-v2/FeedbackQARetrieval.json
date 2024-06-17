@@ -1,0 +1,53 @@
+{
+  "dataset_revision": "1ee1cd0",
+  "evaluation_time": 4.812594175338745,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.5",
+  "scores": {
+    "test": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.39709,
+        "map_at_1": 0.39709,
+        "map_at_10": 0.4986,
+        "map_at_100": 0.50671,
+        "map_at_1000": 0.50705,
+        "map_at_20": 0.50349,
+        "map_at_3": 0.4698,
+        "map_at_5": 0.48744,
+        "mrr_at_1": 0.39709,
+        "mrr_at_10": 0.4986,
+        "mrr_at_100": 0.50671,
+        "mrr_at_1000": 0.50705,
+        "mrr_at_20": 0.50349,
+        "mrr_at_3": 0.4698,
+        "mrr_at_5": 0.48744,
+        "ndcg_at_1": 0.39709,
+        "ndcg_at_10": 0.55184,
+        "ndcg_at_100": 0.59234,
+        "ndcg_at_1000": 0.60164,
+        "ndcg_at_20": 0.56946,
+        "ndcg_at_3": 0.49294,
+        "ndcg_at_5": 0.52476,
+        "precision_at_1": 0.39709,
+        "precision_at_10": 0.07209,
+        "precision_at_100": 0.00913,
+        "precision_at_1000": 0.00099,
+        "precision_at_20": 0.03951,
+        "precision_at_3": 0.18658,
+        "precision_at_5": 0.12741,
+        "recall_at_1": 0.39709,
+        "recall_at_10": 0.72088,
+        "recall_at_100": 0.91265,
+        "recall_at_1000": 0.98594,
+        "recall_at_20": 0.79016,
+        "recall_at_3": 0.55974,
+        "recall_at_5": 0.63705
+      }
+    ]
+  },
+  "task_name": "FeedbackQARetrieval"
+}

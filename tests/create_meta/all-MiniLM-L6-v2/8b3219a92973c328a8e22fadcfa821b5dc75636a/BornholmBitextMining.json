@@ -1,0 +1,22 @@
+{
+  "dataset_revision": "3bc5cfb4ec514264fe2db5615fac9016f7251552",
+  "evaluation_time": 6.043440818786621,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.18",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 0.36,
+        "f1": 0.2968132161955691,
+        "hf_subset": "default",
+        "languages": [
+          "dan-Latn"
+        ],
+        "main_score": 0.2968132161955691,
+        "precision": 0.27690919913419915,
+        "recall": 0.36
+      }
+    ]
+  },
+  "task_name": "BornholmBitextMining"
+}
