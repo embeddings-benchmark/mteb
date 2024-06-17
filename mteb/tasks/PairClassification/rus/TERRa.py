@@ -4,7 +4,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
-# TODO sentence1
+
 class TERRa(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="TERRa",
@@ -47,3 +47,7 @@ class TERRa(AbsTaskPairClassification):
         n_samples={"dev": 307},
         avg_character_length={"dev": 138.2},
     )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("sent1", "sentence1")
+        self.dataset = self.dataset.rename_column("sent2", "sentence2")

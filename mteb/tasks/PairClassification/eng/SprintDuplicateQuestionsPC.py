@@ -4,7 +4,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
-# TODO sentence1
+
 class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="SprintDuplicateQuestions",
@@ -52,3 +52,7 @@ class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
         n_samples={"validation": 101000, "test": 101000},
         avg_character_length={"validation": 65.2, "test": 67.9},
     )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("sent1", "sentence1")
+        self.dataset = self.dataset.rename_column("sent2", "sentence2")
