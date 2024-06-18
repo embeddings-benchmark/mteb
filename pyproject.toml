@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.12.25"
+version = "1.12.38"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -26,7 +26,7 @@ classifiers = [
 requires-python = ">=3.8"
 dependencies = [
     "datasets>=2.19.0",
-    "numpy>=1.0.0",
+    "numpy>=1.0.0,<2.0.0",  # until https://github.com/huggingface/datasets/pull/6976 is merged
     "requests>=2.26.0",
     "scikit_learn>=1.0.2",
     "scipy>=0.0.0",
