@@ -180,6 +180,7 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
     tasks=[
         "BUCCBitextMining",
         "LinceMTBitextMining",
+        "NollySentiBitextMining",
         "NusaXBitextMining",
         "NusaTranslationBitextMining",
         "PhincBitextMining",
