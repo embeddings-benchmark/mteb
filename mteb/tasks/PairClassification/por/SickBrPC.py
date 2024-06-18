@@ -30,25 +30,25 @@ class SickBrPC(AbsTaskPairClassification):
         dialect=[],
         text_creation="human-translated and localized",
         bibtex_citation="""
-@inproceedings{real18,
-  author="Real, Livy
-    and Rodrigues, Ana
-    and Vieira e Silva, Andressa
-    and Albiero, Beatriz
-    and Thalenberg, Bruna
-    and Guide, Bruno
-    and Silva, Cindy
-    and de Oliveira Lima, Guilherme
-    and C{\^a}mara, Igor C. S.
-    and Stanojevi{\'{c}}, Milo{\v{s}}
-    and Souza, Rodrigo
-    and de Paiva, Valeria"
-  year ="2018",
-  title="SICK-BR: A Portuguese Corpus for Inference",
-  booktitle="Computational Processing of the Portuguese Language. PROPOR 2018.",
-  doi ="10.1007/978-3-319-99722-3_31",
-  isbn="978-3-319-99722-3"
-}
+        @inproceedings{real18,
+        author="Real, Livy
+            and Rodrigues, Ana
+            and Vieira e Silva, Andressa
+            and Albiero, Beatriz
+            and Thalenberg, Bruna
+            and Guide, Bruno
+            and Silva, Cindy
+            and de Oliveira Lima, Guilherme
+            and C{\^a}mara, Igor C. S.
+            and Stanojevi{\'{c}}, Milo{\v{s}}
+            and Souza, Rodrigo
+            and de Paiva, Valeria"
+        year ="2018",
+        title="SICK-BR: A Portuguese Corpus for Inference",
+        booktitle="Computational Processing of the Portuguese Language. PROPOR 2018.",
+        doi ="10.1007/978-3-319-99722-3_31",
+        isbn="978-3-319-99722-3"
+        }
         """,
         n_samples={"test": N_SAMPLES},
         avg_character_length={"test": 54.89},
@@ -80,8 +80,8 @@ class SickBrPC(AbsTaskPairClassification):
             )
             _dataset[split] = [
                 {
-                    "sent1": hf_dataset["sentence_A"],
-                    "sent2": hf_dataset["sentence_B"],
+                    "sentence1": hf_dataset["sentence_A"],
+                    "sentence2": hf_dataset["sentence_B"],
                     "labels": hf_dataset["label"],
                 }
             ]

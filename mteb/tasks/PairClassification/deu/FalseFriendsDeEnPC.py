@@ -48,8 +48,8 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
 
             _dataset[split] = [
                 {
-                    "sent1": hf_dataset["sent1"],
-                    "sent2": hf_dataset["sent2"],
+                    "sentence1": hf_dataset["sent1"],
+                    "sentence2": hf_dataset["sent2"],
                     "labels": hf_dataset["labels"],
                 }
             ]
