@@ -198,7 +198,7 @@ def add_run_parser(subparsers) -> None:
     parser.add_argument(
         "--output_folder",
         type=str,
-        default=None,
+        default="results",
         help="Output directory for results. Will default to results/{model_name} if not set.",
     )
     parser.add_argument(
