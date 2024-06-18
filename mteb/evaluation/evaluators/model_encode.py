@@ -12,12 +12,12 @@ logger = logging.getLogger(__name__)
 
 
 def model_encode(
-    sentences: Sequence[str], *, model: Encoder, task_name: str | None, **kwargs
+    sentences: Sequence[str], *, model: Encoder, prompt_name: str | None, **kwargs
 ) -> np.ndarray:
-    kwargs["prompt_name"] = task_name
-    if hasattr(model, "prompts") and task_name not in model.prompts:  # type: ignore
+    kwargs["prompt_name"] = prompt_name
+    if hasattr(model, "prompts") and prompt_name not in model.prompts:  # type: ignore
         logger.info(
-            f"Prompt {task_name} not found in model prompts. Removing prompt_name argument."
+            f"Prompt {prompt_name} not found in model prompts. Removing prompt_name argument."
         )
         kwargs.pop("prompt_name")
 
