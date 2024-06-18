@@ -56,7 +56,7 @@ def dataset_transform(self):
 
 class SwednClusteringP2P(AbsTaskClusteringFast):
     max_document_to_embed = 2048
-    
+
     metadata = TaskMetadata(
         name="SwednClusteringP2P",
         dataset={
