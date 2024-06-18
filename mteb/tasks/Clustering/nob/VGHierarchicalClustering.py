@@ -12,6 +12,7 @@ def split_labels(record: dict) -> dict:
 
 
 class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
+    max_document_to_embed = N_SAMPLES
     metadata = TaskMetadata(
         name="VGHierarchicalClusteringP2P",
         dataset={
@@ -56,6 +57,7 @@ class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
 
 
 class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
+    max_document_to_embed = N_SAMPLES
     metadata = TaskMetadata(
         name="VGHierarchicalClusteringS2S",
         dataset={

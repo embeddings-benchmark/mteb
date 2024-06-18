@@ -6,6 +6,8 @@ from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 
 class RuSciBenchGRNTIClusteringP2P(AbsTaskClusteringFast):
+    max_document_to_embed = 2048
+
     metadata = TaskMetadata(
         name="RuSciBenchGRNTIClusteringP2P",
         dataset={

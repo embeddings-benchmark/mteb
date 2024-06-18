@@ -63,6 +63,7 @@ class HALClusteringS2S(AbsTaskClustering):
 
 
 class HALClusteringS2SFast(AbsTaskClusteringFast):
+    max_document_to_embed = NUM_SAMPLES
     metadata = TaskMetadata(
         name="HALClusteringS2S.v2",
         description="Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s)",
