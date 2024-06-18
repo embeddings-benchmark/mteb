@@ -84,8 +84,8 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
 
                 _dataset[lang][split] = [
                     {
-                        "sent1": hf_dataset["premise"],
-                        "sent2": hf_dataset["hypothesis"],
+                        "sentence1": hf_dataset["premise"],
+                        "sentence2": hf_dataset["hypothesis"],
                         "labels": hf_dataset["label"],
                     }
                 ]
@@ -150,7 +150,7 @@ class XNLIV2(MultilingualTask, AbsTaskPairClassification):
 
     def dataset_transform(self):
         _dataset = {}
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             _dataset[lang] = {}
             self.dataset[lang] = self.stratified_subsampling(
                 self.dataset[lang], seed=self.seed, splits=self.metadata.eval_splits
@@ -166,8 +166,8 @@ class XNLIV2(MultilingualTask, AbsTaskPairClassification):
                 )
                 _dataset[lang][split] = [
                     {
-                        "sent1": hf_dataset["premise"],
-                        "sent2": hf_dataset["hypothesis"],
+                        "sentence1": hf_dataset["premise"],
+                        "sentence2": hf_dataset["hypothesis"],
                         "labels": hf_dataset["label"],
                     }
                 ]

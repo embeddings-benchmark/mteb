@@ -1,0 +1,23 @@
+{
+  "dataset_revision": "483f2494f76fdc04acbbdbbac129de1925b34215",
+  "evaluation_time": 7.631641149520874,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.38",
+  "scores": {
+    "train": [
+      {
+        "accuracy": 0.42449435413823056,
+        "f1": 0.33978823864880014,
+        "hf_subset": "eng-eng_hin",
+        "languages": [
+          "eng-Latn",
+          "hin-Latn"
+        ],
+        "main_score": 0.33978823864880014,
+        "precision": 0.30865409574441327,
+        "recall": 0.42449435413823056
+      }
+    ]
+  },
+  "task_name": "LinceMTBitextMining"
+}
