@@ -25,7 +25,7 @@ class PhincBitextMining(AbsTaskBitextMining, CrosslingualTask):
         main_score="f1",
         date=("2019-01-01", "2020-01-01"),
         form=["written"],
-        domains=["Social Media"],
+        domains=["Social"],
         task_subtypes=[],
         license="CC BY 4.0",
         socioeconomic_status="mixed",
