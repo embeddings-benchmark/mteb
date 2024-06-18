@@ -508,7 +508,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [TextualismToolPlainLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 165} | {'test': 997.97} |
 | [ThuNewsClusteringP2P.v2](http://thuctc.thunlp.org/) (Sun et al., 2016) | ['cmn'] | Clustering | p2p | [News] | {'test': 2048} |  |
 | [ThuNewsClusteringS2S.v2](http://thuctc.thunlp.org/) (Sun et al., 2016) | ['cmn'] | Clustering | s2s | [News] | {'test': 2048} |  |
-| [TopiOCQA](https://mcgill-nlp.github.io/topiocqa) (Adlakha et al., 2022) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'dev': 2514} | {'validation': 708.0} |
+| [TopiOCQA](https://mcgill-nlp.github.io/topiocqa) (Vaibhav Adlakha, 2022) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'dev': 2514} | {'validation': 708.0} |
 | [Touche2020](https://webis.de/events/touche-20/shared-task-1.html) | ['eng'] | Retrieval | s2p |  |  |  |
 | [ToxicChatClassification](https://aclanthology.org/2023.findings-emnlp.311/) (Zi Lin, 2023) | ['eng'] | Classification | s2s | [Constructed] | {'test': 1427} | {'test': 189.4} |
 | [ToxicConversationsClassification](https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/overview) (cjadams et al., 2019) | ['eng'] | Classification | s2s | [Social] | {'test': 50000} | {'test': 296.6} |
