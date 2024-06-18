@@ -5,7 +5,7 @@
 # --task_types BitextMining Classification Clustering InstructionRetrieval MultilabelClassification PairClassification Reranking Retrieval STS Summarization
 
 models=("intfloat/multilingual-e5-small" "intfloat/multilingual-e5-base" "intfloat/multilingual-e5-large")
-results_folder="{project_root}/results"
+results_folder="results"
 
 for model in "${models[@]}"
 do
@@ -14,5 +14,5 @@ do
     -m $model \
     --task_types BitextMining Classification MultilabelClassification PairClassification Reranking STS Summarization \
     --output_folder $results_folder \
-    --co2_tracker
+    --co2_tracker true
 done
