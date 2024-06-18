@@ -6,7 +6,7 @@ class HebrewSentimentAnalysis(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HebrewSentimentAnalysis",
         dataset={
-            "path": "hebrew_sentiment",
+            "path": "omilab/hebrew_sentiment",
             "revision": "952c9525954c1dac50d5f95945eb5585bb6464e7",
             "name": "morph",
         },

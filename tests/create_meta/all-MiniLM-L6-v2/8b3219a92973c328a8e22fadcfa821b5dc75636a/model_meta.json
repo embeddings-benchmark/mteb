@@ -1,0 +1,1 @@
+{"name": "all-MiniLM-L6-v2", "revision": "8b3219a92973c328a8e22fadcfa821b5dc75636a", "release_date": null, "languages": [], "n_parameters": null, "memory_usage": null, "max_tokens": null, "embed_dim": null, "license": null, "open_source": null, "framework": ["Sentence Transformers"], "loader": null}

@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.AbsTaskClusteringFast import (
+    AbsTaskClusteringFast,
+    check_label_distribution,
+)
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -34,6 +37,8 @@ class BiorxivClusteringP2PFast(AbsTaskClusteringFast):
     )
 
     def dataset_transform(self):
+        for split in self.metadata.eval_splits:
+            check_label_distribution(self.dataset[split])
         self.dataset = self.stratified_subsampling(
             self.dataset,
             self.seed,

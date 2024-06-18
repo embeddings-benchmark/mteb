@@ -29,7 +29,14 @@ class ArxivClusteringS2S(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@misc{arxiv_org_submitters_2024,
+    title={arXiv Dataset},
+    url={https://www.kaggle.com/dsv/7548853},
+    DOI={10.34740/KAGGLE/DSV/7548853},
+    publisher={Kaggle},
+    author={arXiv.org submitters},
+    year={2024}
+}""",
         n_samples={"test": 732723},
         avg_character_length={"test": 74},
     )

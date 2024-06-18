@@ -8,7 +8,7 @@ class KlueNLI(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="KLUE-NLI",
         dataset={
-            "path": "klue",
+            "path": "klue/klue",
             "name": "nli",
             "revision": "349481ec73fff722f88e0453ca05c77a447d967c",
         },
@@ -50,8 +50,8 @@ class KlueNLI(AbsTaskPairClassification):
             )
             _dataset[split] = [
                 {
-                    "sent1": hf_dataset["premise"],
-                    "sent2": hf_dataset["hypothesis"],
+                    "sentence1": hf_dataset["premise"],
+                    "sentence2": hf_dataset["hypothesis"],
                     "labels": hf_dataset["label"],
                 }
             ]

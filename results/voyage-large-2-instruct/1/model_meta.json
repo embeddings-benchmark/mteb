@@ -1,0 +1,1 @@
+{"name": "voyage-large-2-instruct", "revision": "1", "release_date": "2024-05-05", "languages": null, "n_parameters": null, "memory_usage": null, "max_tokens": 16000, "embed_dim": 1024, "license": null, "open_source": false, "framework": [], "loader": "VoyageWrapper"}

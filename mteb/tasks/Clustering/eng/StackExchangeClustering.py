@@ -4,10 +4,12 @@ import itertools
 
 from datasets import Dataset, DatasetDict
 
+from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskClusteringFast import (
+    AbsTaskClusteringFast,
+    check_label_distribution,
+)
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks.AbsTaskClustering import AbsTaskClustering
-from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 
 class StackExchangeClusteringFast(AbsTaskClusteringFast):
@@ -57,6 +59,9 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
             sentences = list(
                 itertools.chain.from_iterable(self.dataset[split]["sentences"])
             )
+
+            check_label_distribution(self.dataset[split])
+
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
         self.dataset = self.stratified_subsampling(
@@ -92,7 +97,19 @@ class StackExchangeClustering(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@article{geigle:2021:arxiv,
+        author    = {Gregor Geigle and 
+                        Nils Reimers and 
+                        Andreas R{\"u}ckl{\'e} and
+                        Iryna Gurevych},
+        title     = {TWEAC: Transformer with Extendable QA Agent Classifiers},
+        journal   = {arXiv preprint},
+        volume    = {abs/2104.07081},
+        year      = {2021},
+        url       = {http://arxiv.org/abs/2104.07081},
+        archivePrefix = {arXiv},
+        eprint    = {2104.07081}
+        }""",
         n_samples={"test": 373850},
         avg_character_length={"test": 57.0},
     )

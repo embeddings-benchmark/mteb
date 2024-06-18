@@ -38,6 +38,7 @@ class AbsTaskSTS(AbsTask):
             data_split["sentence1"],
             data_split["sentence2"],
             normalized_scores,
+            task_name=self.metadata.name,
             **kwargs,
         )
         scores = evaluator(model)
@@ -46,7 +47,4 @@ class AbsTaskSTS(AbsTask):
         return scores
 
     def _add_main_score(self, scores: ScoresDict) -> None:
-        m_score = self.metadata.main_score
-        dist, metric = m_score.split("_")
-        dist_mapping = {"cosine": "cos_sim"}
-        scores["main_score"] = scores[dist_mapping.get(dist, dist)][metric]
+        scores["main_score"] = scores[self.metadata.main_score]

@@ -209,13 +209,19 @@ class MTEBResults(BaseModel):
         main_score = task.metadata.main_score
         for split, split_score in scores.items():
             for hf_subset, hf_subset_scores in split_score.items():
+                if task.metadata.type == "STS":
+                    for name, prev_name in [
+                        ("cosine", "cos_sim"),
+                        ("manhattan", "manhattan"),
+                        ("euclidean", "euclidean"),
+                    ]:
+                        prev_name_scores = hf_subset_scores.pop(prev_name)
+                        for k, v in prev_name_scores.items():
+                            hf_subset_scores[f"{name}_{k}"] = v
+
                 if "main_score" not in hf_subset_scores:
                     if main_score in hf_subset_scores:
                         hf_subset_scores["main_score"] = hf_subset_scores[main_score]
-                    elif main_score == "cosine_spearman":
-                        hf_subset_scores["main_score"] = hf_subset_scores["cos_sim"][
-                            "spearman"
-                        ]
                     else:
                         logger.warning(f"Main score {main_score} not found in scores")
                         hf_subset_scores["main_score"] = None

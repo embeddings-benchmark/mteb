@@ -39,7 +39,14 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@misc{creutz2018open,
+      title={Open Subtitles Paraphrase Corpus for Six Languages}, 
+      author={Mathias Creutz},
+      year={2018},
+      eprint={1809.06142},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
         n_samples=None,
         avg_character_length=None,
     )
@@ -76,6 +83,6 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
                 del sent1[i]
                 del sent2[i]
             new_dict["labels"] = [labels]
-            new_dict["sent1"] = [sent1]
-            new_dict["sent2"] = [sent2]
+            new_dict["sentence1"] = [sent1]
+            new_dict["sentence2"] = [sent2]
             self.dataset[lang][split] = datasets.Dataset.from_dict(new_dict)

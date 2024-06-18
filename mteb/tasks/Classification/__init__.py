@@ -86,6 +86,8 @@ from .multilingual.MultiHateClassification import *
 from .multilingual.MultilingualSentimentClassification import *
 from .multilingual.NaijaSenti import *
 from .multilingual.NordicLangClassification import *
+from .multilingual.NusaParagraphEmotionClassification import *
+from .multilingual.NusaParagraphTopicClassification import *
 from .multilingual.NusaXSenti import *
 from .multilingual.ScalaClassification import *
 from .multilingual.SIB200Classification import *
@@ -105,6 +107,13 @@ from .por.HateSpeechPortugueseClassification import *
 from .ron.Moroco import *
 from .ron.RomanianReviewsSentiment import *
 from .ron.RomanianSentimentClassification import *
+from .rus.GeoreviewClassification import *
+from .rus.HeadlineClassification import *
+from .rus.InappropriatenessClassification import *
+from .rus.KinopoiskClassification import *
+from .rus.RuReviewsClassification import *
+from .rus.RuSciBenchGRNTIClassification import *
+from .rus.RuSciBenchOECDClassification import *
 from .san.SanskritShlokasClassification import *
 from .sin.SinhalaNewsClassification import *
 from .sin.SinhalaNewsSourceClassification import *

@@ -28,7 +28,7 @@ _LANGUAGES = {
 
 
 class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
-    superseeded_by = "WikiClusteringFastP2P"
+    superseeded_by = "WikiClusteringP2P.v2"
     metadata = TaskMetadata(
         name="WikiClusteringP2P",
         description="Clustering of wikipedia articles inspired by BlubrbsClusteringP2P. Labels are taken from top-level categories of the respective languages (e.g., https://lv.wikipedia.org/wiki/Kategorija:Pamatkategorijas).",
@@ -59,7 +59,7 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
 
 class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
     metadata = TaskMetadata(
-        name="WikiClusteringFastP2P",
+        name="WikiClusteringP2P.v2",
         description="Clustering of wikipedia articles inspired by BlubrbsClusteringP2P. Labels are taken from top-level categories of the respective languages (e.g., https://lv.wikipedia.org/wiki/Kategorija:Pamatkategorijas).",
         reference="https://github.com/Rysias/wiki-clustering",
         dataset={

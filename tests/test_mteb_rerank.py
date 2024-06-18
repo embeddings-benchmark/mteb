@@ -337,6 +337,7 @@ def test_mteb_rerank():
                 }
             )
         )
+
     eval.run(
         model,
         output_folder="tests/results",
@@ -359,7 +360,9 @@ def test_mteb_rerank():
 
 
 def test_reranker_same_ndcg1():
-    de = SentenceTransformer("average_word_embeddings_komninos")
+    de_name = "average_word_embeddings_komninos"
+    revision = "21eec43590414cb8e3a6f654857abed0483ae36e"
+    de = SentenceTransformer(de_name, revision=revision)
     ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
     eval = MTEB(tasks=["SciFact"])
     eval.run(
@@ -380,10 +383,14 @@ def test_reranker_same_ndcg1():
     )
 
     # read in stage 1 and stage two and check ndcg@1 is the same
-    with open("tests/results/stage1/SciFact.json") as f:
+    with open(
+        f"tests/results/stage1/sentence-transformers__{de_name}/{revision}/SciFact.json"
+    ) as f:
         stage1 = json.load(f)
 
-    with open("tests/results/stage2/SciFact.json") as f:
+    with open(
+        "tests/results/stage2/no_model_name_available/no_revision_available/SciFact.json"
+    ) as f:
         stage2 = json.load(f)
 
     assert (

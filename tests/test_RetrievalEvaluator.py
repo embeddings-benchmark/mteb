@@ -48,11 +48,7 @@ class TestRetrievalEvaluator:
                 },
                 True,
                 {
-                    "ndcg": {
-                        "NDCG@1": 0.5,
-                        "NDCG@2": 0.30657,
-                        "NDCG@3": 0.30657
-                    },
+                    "ndcg": {"NDCG@1": 0.5, "NDCG@2": 0.30657, "NDCG@3": 0.30657},
                     "map": {"MAP@1": 0.25, "MAP@2": 0.25, "MAP@3": 0.25},
                     "recall": {"Recall@1": 0.25, "Recall@2": 0.25, "Recall@3": 0.25},
                     "precision": {"P@1": 0.5, "P@2": 0.25, "P@3": 0.16667},
@@ -74,3 +70,35 @@ class TestRetrievalEvaluator:
         assert _map == expected_metrics["map"]
         assert recall == expected_metrics["recall"]
         assert precision == expected_metrics["precision"]
+
+    def test_nAUC(self):
+        relevant_docs = {
+            "0": {"0": 1, "1": 1},
+            "1": {"0": 1},
+            "2": {"0": 1, "1": 1, "2": 1},
+            "3": {"0": 1},
+            "4": {"0": 1, "1": 1},
+        }
+        results = {
+            "0": {"0": 0.8, "1": 0.3, "2": 0.4},
+            "1": {"0": 0.5, "1": 0.8, "2": 0.4},
+            "2": {"0": 0.9, "1": 0.3, "2": 0.3},
+            "3": {"0": 0.1, "1": 0.2, "2": 0.2},
+            "4": {"0": 0.5, "1": 0.4, "2": 0.5},
+        }
+
+        _, _, _, _, naucs = self.evaluator.evaluate(
+            relevant_docs,
+            results,
+            [1, 2, 3],
+        )
+
+        print(
+            naucs["nAUC_NDCG@3_max"],
+            naucs["nAUC_NDCG@3_std"],
+            naucs["nAUC_NDCG@3_diff1"],
+        )
+
+        assert naucs["nAUC_NDCG@3_max"] == pytest.approx(0.50843, TOL)
+        assert naucs["nAUC_NDCG@3_std"] == pytest.approx(0.18322, TOL)
+        assert naucs["nAUC_NDCG@3_diff1"] == pytest.approx(0.21416, TOL)

@@ -65,5 +65,13 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
         del labels
         self.dataset = self.dataset.remove_columns(cols_)
         self.dataset = self.dataset.train_test_split(
-            train_size=2048, test_size=2048, seed=self.seed
+            train_size=len(self.dataset) // 2,
+            test_size=len(self.dataset) // 2,
+            seed=self.seed,
+        )
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["train"], n_samples=8192
+        )
+        self.dataset = self.stratified_subsampling(
+            self.dataset, seed=self.seed, splits=["test"], n_samples=2048
         )

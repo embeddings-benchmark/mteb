@@ -1,38 +1,96 @@
 from __future__ import annotations
 
+import logging
+from typing import Any
+
+from datasets import Dataset
+
 from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.evaluation.evaluators import RerankingEvaluator
+from mteb.MTEBResults import ScoresDict
 
 from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
+
+logger = logging.getLogger(__name__)
+
+_EVAL_SPLIT = "dev"
+_LANGUAGES = {
+    "ar": ["ara-Arab"],
+    "bn": ["ben-Beng"],
+    "de": ["deu-Latn"],
+    "en": ["eng-Latn"],
+    "es": ["spa-Latn"],
+    "fa": ["fas-Arab"],
+    "fi": ["fin-Latn"],
+    "fr": ["fra-Latn"],
+    "hi": ["hin-Deva"],
+    "id": ["ind-Latn"],
+    "ja": ["jpn-Jpan"],
+    "ko": ["kor-Kore"],
+    "ru": ["rus-Cyrl"],
+    "sw": ["swa-Latn"],
+    "te": ["tel-Telu"],
+    "th": ["tha-Thai"],
+    "yo": ["yor-Latn"],
+    "zh": ["zho-Hans"],
+}
+
+_CITATION = """@article{10.1162/tacl_a_00595,
+    author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
+    title = "{MIRACL: A Multilingual Retrieval Dataset Covering 18 Diverse Languages}",
+    journal = {Transactions of the Association for Computational Linguistics},
+    volume = {11},
+    pages = {1114-1131},
+    year = {2023},
+    month = {09},
+    issn = {2307-387X},
+    doi = {10.1162/tacl_a_00595},
+}"""
 
 
 class MIRACLReranking(MultilingualTask, AbsTaskReranking):
     metadata = TaskMetadata(
         name="MIRACLReranking",
-        description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages. This task focuses on the German and Spanish subset.",
+        description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.",
         reference="https://project-miracl.github.io/",
         dataset={
-            "path": "jinaai/miracl",
-            "revision": "d28a029f35c4ff7f616df47b0edf54e6882395e6",
+            "path": "miracl/mmteb-miracl-reranking",
+            "revision": "6d1962c527217f8927fca80f890f14f36b2802af",
         },
         type="Reranking",
         category="s2s",
-        eval_splits=["test"],
-        eval_langs={
-            "de": ["deu-Latn"],
-            "es": ["spa-Latn"],
-        },
-        main_score="map",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
-        bibtex_citation=None,
-        n_samples=None,
-        avg_character_length=None,
+        eval_splits=[_EVAL_SPLIT],
+        eval_langs=_LANGUAGES,
+        main_score="NDCG@10(MIRACL)",
+        date=("2022-06-01", "2023-01-30"),
+        form=["written"],
+        domains=["Encyclopaedic"],
+        task_subtypes=[],
+        license="CC BY-SA 4.0",
+        socioeconomic_status="mixed",
+        annotations_creators="expert-annotated",
+        dialect=[],
+        text_creation="created",
+        bibtex_citation=_CITATION,
+        n_samples={"dev": 44608},
+        avg_character_length={"dev": 506.30},
     )
+
+    def _evaluate_subset(
+        self,
+        model: Encoder | EncoderWithQueryCorpusEncode,
+        data_split: Dataset,
+        **kwargs: Any,
+    ) -> ScoresDict:
+        evaluator = RerankingEvaluator(
+            samples=data_split,
+            evaluator_type="miracl",
+            task_name=self.metadata.name,
+            **kwargs,
+        )
+        scores = evaluator(model)
+
+        self._add_main_score(scores)
+        return scores

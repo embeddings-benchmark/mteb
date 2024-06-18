@@ -12,6 +12,7 @@ import sklearn.cluster
 from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 
+from ..evaluation.evaluators.model_encode import model_encode
 from ..MTEBResults import HFSubset
 from .AbsTask import AbsTask
 
@@ -103,7 +104,7 @@ class AbsTaskClusteringFast(AbsTask):
         if self.metadata_dict["main_score"] in scores:
             scores["main_score"] = scores[self.metadata_dict["main_score"]]
         else:
-            logger.warn(
+            logger.warning(
                 f"main score {self.metadata_dict['main_score']} not found in scores {scores.keys()}"
             )
 
@@ -116,13 +117,16 @@ class AbsTaskClusteringFast(AbsTask):
             example_indices = rng_state.sample(
                 range(len(dataset)), k=self.max_documents_to_embed
             )
-            downsampled_dataset = dataset.select(example_indices)
+            downsampled_dataset = dataset.select(example_indices)  # type: ignore
         else:
             downsampled_dataset = dataset
 
-        logger.info(f"Encoding {len(downsampled_dataset)} sentences...")
+        embeddings = model_encode(
+            downsampled_dataset["sentences"],  # type: ignore
+            model=model,
+            task_name=self.metadata.name,
+        )
 
-        embeddings = model.encode(downsampled_dataset["sentences"])
         labels = []
         for label in downsampled_dataset["labels"]:
             if not isinstance(label, list):
@@ -182,7 +186,6 @@ def convert_to_fast(
     """Converts a clustering dataset to a fast version. This concats the cluster into two columns, sentences and labels.
     It additionally downsamples the dataset to max_size.
     """
-    categories = None
     rng_state = random.Random(seed)
 
     ds = {}
@@ -191,22 +194,22 @@ def convert_to_fast(
         labels = []
         sentences = []
         n_clusters = len(dataset[split])
+        all_labels_set = set(itertools.chain.from_iterable(dataset[split]["labels"]))
         for i in range(n_clusters):
             lab = dataset[split]["labels"][i]
             sents = dataset[split]["sentences"][i]
+
+            # check that it is the same distribution
+            row_label_set = set(lab)
+            assert row_label_set.issubset(
+                all_labels_set
+            ), "The clusters are not sampled from the same distribution as they have different labels."
+
             for l, s in zip(lab, sents):
                 if s not in sent_set:
                     labels.append(l)
                     sentences.append(s)
                     sent_set.add(s)  # ensuring no duplicates
-
-        # check that it is the same distribution
-        if categories is None:
-            categories = set(labels)
-        else:
-            assert (
-                categories == set(labels)
-            ), "The clusters are not sampled from the same distribution as they have different labels."
 
         ds[split] = Dataset.from_dict({"sentences": sentences, "labels": labels})
 
@@ -215,3 +218,22 @@ def convert_to_fast(
             ds[split] = ds[split].select(idxs)
 
     return DatasetDict(ds)
+
+
+def check_label_distribution(ds: DatasetDict) -> None:
+    """For older clustering dataset versions.
+    ds is a DatasetDict at the split level
+    """
+    n_clusters = len(ds)
+    if n_clusters > 50:
+        return
+    all_labels_set = set(itertools.chain.from_iterable(ds["labels"]))
+
+    for i in range(n_clusters):
+        lab = ds["labels"][i]
+
+        # check that it is the same distribution
+        row_label_set = set(lab)
+        assert row_label_set.issubset(
+            all_labels_set
+        ), "The clusters are not sampled from the same distribution as they have different labels."

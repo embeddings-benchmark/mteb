@@ -20,6 +20,8 @@ _EVAL_LANGS = {
     "pt": ["por-Latn"],
     "ro": ["ron-Latn"],
     "sr": ["srp-Cyrl"],
+    "no": ["nor-Latn"],
+    "sv": ["swe-Latn"],
 }
 
 
@@ -31,7 +33,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
         hf_hub_name="ellamind/wikipedia-2023-11-reranking-multilingual",
         dataset={
             "path": "ellamind/wikipedia-2023-11-reranking-multilingual",
-            "revision": "b20adcd11a02dc0226edbe8b5951e99ee0bb091c",
+            "revision": "6268b37d6f975f2a134791ba2f250a91d0bdfb4f",
         },
         type="Reranking",
         category="s2p",
@@ -47,7 +49,11 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
         annotations_creators="LM-generated",
         dialect=[],
         text_creation="LM-generated and verified",
-        bibtex_citation="",
+        bibtex_citation="""@ONLINE{wikidump,
+    author = "Wikimedia Foundation",
+    title  = "Wikimedia Downloads",
+    url    = "https://dumps.wikimedia.org"
+}""",
         n_samples={
             "en": 1500,
             "de": 1500,
@@ -63,6 +69,8 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
             "fa": 1500,
             "hi": 1500,
             "bn": 1500,
+            "no": 1500,
+            "sv": 1500,
         },
         avg_character_length={"test": 452},
     )

@@ -28,7 +28,16 @@ class DBPedia(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@inproceedings{Hasibi:2017:DVT,
+ author =    {Hasibi, Faegheh and Nikolaev, Fedor and Xiong, Chenyan and Balog, Krisztian and Bratsberg, Svein Erik and Kotov, Alexander and Callan, Jamie},
+ title =     {DBpedia-Entity V2: A Test Collection for Entity Search},
+ booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+ series =    {SIGIR '17},
+ year =      {2017},
+ pages =     {1265--1268},
+ doi =       {10.1145/3077136.3080751},
+ publisher = {ACM}
+}""",
         n_samples=None,
         avg_character_length=None,
     )
