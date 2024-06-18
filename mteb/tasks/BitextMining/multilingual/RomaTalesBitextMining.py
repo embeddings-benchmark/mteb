@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks import AbsTaskBitextMining, CrosslingualTask
+from mteb.abstasks import AbsTaskBitextMining, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class RomaTalesBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class RomaTalesBitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="RomaTalesBitextMining",
         dataset={

@@ -6,7 +6,7 @@ import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskBitextMining, CrosslingualTask
+from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = [
     "asm_Beng",
@@ -53,7 +53,7 @@ def extend_lang_pairs() -> dict[str, list[str]]:
 _LANGUAGES_MAPPING = extend_lang_pairs()
 
 
-class IN22GenBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class IN22GenBitextMining(AbsTaskBitextMining, MultilingualTask):
     parallel_subsets = True
     metadata = TaskMetadata(
         name="IN22GenBitextMining",

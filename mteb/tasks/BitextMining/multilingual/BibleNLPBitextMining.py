@@ -6,7 +6,7 @@ import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskBitextMining, CrosslingualTask
+from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = [
     "aai_Latn",  # Apinayé
@@ -859,7 +859,7 @@ def extend_lang_pairs_english_centric() -> dict[str, list[str]]:
 _LANGUAGES_MAPPING = extend_lang_pairs_english_centric()
 
 
-class BibleNLPBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class BibleNLPBitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="BibleNLPBitextMining",
         dataset={

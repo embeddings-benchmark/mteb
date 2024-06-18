@@ -6,7 +6,7 @@ import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskBitextMining, CrosslingualTask
+from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = [
     "ben-Beng",
@@ -97,7 +97,7 @@ def get_lang_pairs() -> dict[str, list[str]]:
 _LANGUAGES_MAPPING = get_lang_pairs()
 
 
-class IndicGenBenchFloresBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class IndicGenBenchFloresBitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="IndicGenBenchFloresBitextMining",
         dataset={

@@ -4,7 +4,7 @@ import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskBitextMining, CrosslingualTask
+from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = {
     "ar-en": ["ara-Arab", "eng-Latn"],
@@ -36,7 +36,7 @@ _LANGUAGES = {
 _SPLITS = ["validation"]
 
 
-class IWSLT2017BitextMining(AbsTaskBitextMining, CrosslingualTask):
+class IWSLT2017BitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="IWSLT2017BitextMining",
         dataset={
