@@ -186,7 +186,7 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
         "PhincBitextMining",
         "TatoebaBitextMining",
     ],
-    description="MINERS benchmark for BitextMining from MTEB",
+    description="BitextMining benchmark from MINERS",
     reference="https://arxiv.org/pdf/2406.07424",
     citation="""
     @article{winata2024miners,
