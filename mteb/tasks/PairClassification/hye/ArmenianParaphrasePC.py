@@ -29,14 +29,18 @@ class ArmenianParaphrasePC(AbsTaskPairClassification):
         text_creation="found",
         bibtex_citation="""
         @misc{malajyan2020arpa,
-      title={ARPA: Armenian Paraphrase Detection Corpus and Models}, 
-      author={Arthur Malajyan and Karen Avetisyan and Tsolak Ghukasyan},
-      year={2020},
-      eprint={2009.12615},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}
+            title={ARPA: Armenian Paraphrase Detection Corpus and Models}, 
+            author={Arthur Malajyan and Karen Avetisyan and Tsolak Ghukasyan},
+            year={2020},
+            eprint={2009.12615},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }
         """,
         n_samples={"train": 4023, "test": 1470},
         avg_character_length={"train": 243.81, "test": 241.37},
     )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("sent1", "sentence1")
+        self.dataset = self.dataset.rename_column("sent2", "sentence2")

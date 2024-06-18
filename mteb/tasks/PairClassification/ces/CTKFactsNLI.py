@@ -55,8 +55,8 @@ class CTKFactsNLI(AbsTaskPairClassification):
         for split in self.metadata.eval_splits:
             _dataset[split] = [
                 {
-                    "sent1": hf_dataset[split]["evidence"],
-                    "sent2": hf_dataset[split]["claim"],
+                    "sentence1": hf_dataset[split]["evidence"],
+                    "sentence2": hf_dataset[split]["claim"],
                     "labels": hf_dataset[split]["label"],
                 }
             ]

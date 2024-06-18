@@ -39,7 +39,10 @@ class AbsTaskBitextMining(AbsTask):
         scores = {}
         if self.parallel_subsets:
             scores["default"] = self._evaluate_subset(
-                model, self.dataset[split], parallel=True, **kwargs
+                model,
+                self.dataset[split],  # type: ignore
+                parallel=True,
+                **kwargs,
             )
         else:
             for hf_subet in hf_subsets:
@@ -52,7 +55,10 @@ class AbsTaskBitextMining(AbsTask):
                 else:
                     data_split = self.dataset[hf_subet][split]
                 scores[hf_subet] = self._evaluate_subset(
-                    model, data_split, subsets=["sentence1", "sentence2"], **kwargs
+                    model,
+                    data_split,  # type: ignore
+                    subsets=["sentence1", "sentence2"],
+                    **kwargs,
                 )
 
         return scores
@@ -60,7 +66,9 @@ class AbsTaskBitextMining(AbsTask):
     def _evaluate_subset(
         self, model, data_split: Dataset, parallel=False, **kwargs
     ) -> ScoresDict:
-        evaluator = BitextMiningEvaluator(data_split, **kwargs)
+        evaluator = BitextMiningEvaluator(
+            data_split, task_name=self.metadata.name, **kwargs
+        )
         metrics = evaluator(model)
         if parallel:
             for v in metrics.values():

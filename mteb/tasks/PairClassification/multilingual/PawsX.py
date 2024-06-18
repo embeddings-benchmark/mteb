@@ -58,8 +58,8 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
 
                 _dataset[lang][split] = [
                     {
-                        "sent1": hf_dataset["sentence1"],
-                        "sent2": hf_dataset["sentence2"],
+                        "sentence1": hf_dataset["sentence1"],
+                        "sentence2": hf_dataset["sentence2"],
                         "labels": hf_dataset["label"],
                     }
                 ]

@@ -68,7 +68,7 @@ class RTE3(MultilingualTask, AbsTaskPairClassification):
 
     def dataset_transform(self):
         _dataset = {}
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             _dataset[lang] = {}
             for split in self.metadata.eval_splits:
                 # keep target language
@@ -80,8 +80,8 @@ class RTE3(MultilingualTask, AbsTaskPairClassification):
                 )
                 _dataset[lang][split] = [
                     {
-                        "sent1": hf_dataset["premise"],
-                        "sent2": hf_dataset["hypothesis"],
+                        "sentence1": hf_dataset["premise"],
+                        "sentence2": hf_dataset["hypothesis"],
                         "labels": hf_dataset["label"],
                     }
                 ]
