@@ -39,8 +39,8 @@ def extract_bibtex_to_file(tasks: list[mteb.AbsTask]) -> None:
 def create_citations_table(tasks: list[mteb.AbsTask]) -> str:
     """Create tex
 
-        :param tasks:
-            List of tasks.
+    :param tasks:
+        List of tasks.
     """
     table = """
 \\onecolumn
@@ -60,29 +60,47 @@ def create_citations_table(tasks: list[mteb.AbsTask]) -> str:
 def task_to_tex_row(task: mteb.AbsTask) -> str:
     """Generate a single tex row
 
-        :param task:
-            A single mteb tasks.
-        """
+    :param task:
+        A single mteb tasks.
+    """
     name = task.metadata.name
     domains = (
         "[" + ", ".join(task.metadata.domains) + "]" if task.metadata.domains else ""
     )
-    n_samples = "{:.2f}".format(
-        (sum(task.metadata.n_samples.values()) / len(
-            task.metadata.n_samples.keys()))) if task.metadata.n_samples else ""
+    n_samples = (
+        "{:.2f}".format(
+            (
+                sum(task.metadata.n_samples.values())
+                / len(task.metadata.n_samples.keys())
+            )
+        )
+        if task.metadata.n_samples
+        else ""
+    )
 
-    avg_character_length = "{:.2f}".format((sum(task.metadata.avg_character_length.values()) / len(
-        task.metadata.avg_character_length.keys()))) if task.metadata.avg_character_length else ""
+    avg_character_length = (
+        "{:.2f}".format(
+            (
+                sum(task.metadata.avg_character_length.values())
+                / len(task.metadata.avg_character_length.keys())
+            )
+        )
+        if task.metadata.avg_character_length
+        else ""
+    )
     library = bibtexparser.parse_string(task.metadata.bibtex_citation)
     try:
         cite_key = library.entries[0].key
         cite_key = "\\cite{" + cite_key + "}"
     except IndexError:
         cite_key = ""
-    lang = str(len(task.metadata.languages)) + ' '
-    lang += (str(task.metadata.languages[:11])[1:-1] + '...' if len(task.metadata.languages) > 11 else str(
-        task.metadata.languages)[1:-1])
-    lang=lang.replace("'","")
+    lang = str(len(task.metadata.languages)) + " "
+    lang += (
+        str(task.metadata.languages[:11])[1:-1] + "..."
+        if len(task.metadata.languages) > 11
+        else str(task.metadata.languages)[1:-1]
+    )
+    lang = lang.replace("'", "")
 
     return f"{name}{cite_key} & {lang} & {task.metadata.type} & {task.metadata.category} & {domains[1:-1]} & {n_samples} & {avg_character_length} \\\\"
 
