@@ -97,7 +97,7 @@ def _load_miracl_data(
     return corpus, queries, relevant_docs
 
 
-class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):    
+class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MIRACLRetrieval",
         description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.",
