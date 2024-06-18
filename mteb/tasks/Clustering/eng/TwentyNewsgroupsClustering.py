@@ -92,7 +92,7 @@ class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
         author = {Ken Lang},
         }
         """,
-        n_samples={"test": 2048},
+        n_samples={"test": 2381},
         avg_character_length={"test": 32.0},
     )
 
@@ -108,9 +108,3 @@ class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
 
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            label="labels",
-            n_samples=2048,
-        )

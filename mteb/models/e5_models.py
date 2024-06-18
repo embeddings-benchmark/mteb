@@ -177,3 +177,39 @@ e5_mult_large = ModelMeta(
     revision="4dc6d853a804b9c8886ede6dda8a073b7dc08a81",
     release_date=E5_PAPER_RELEASE_DATE,
 )
+
+e5_eng_small_v2 = ModelMeta(
+    loader=partial(E5Wrapper, model_name="intfloat/e5-small-v2"),  # type: ignore
+    name="intfloat/e5-small-v2",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="dca8b1a9dae0d4575df2bf423a5edb485a431236",
+    release_date=E5_PAPER_RELEASE_DATE,
+)
+
+e5_eng_small = ModelMeta(
+    loader=partial(E5Wrapper, model_name="intfloat/e5-small"),  # type: ignore
+    name="intfloat/e5-small",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="e272f3049e853b47cb5ca3952268c6662abda68f",
+    release_date=E5_PAPER_RELEASE_DATE,
+)
+
+e5_eng_base_v2 = ModelMeta(
+    loader=partial(E5Wrapper, model_name="intfloat/e5-base-v2"),  # type: ignore
+    name="intfloat/e5-base-v2",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="1c644c92ad3ba1efdad3f1451a637716616a20e8",
+    release_date=E5_PAPER_RELEASE_DATE,
+)
+
+e5_eng_large_v2 = ModelMeta(
+    loader=partial(E5Wrapper, model_name="intfloat/e5-large-v2"),  # type: ignore
+    name="intfloat/e5-large-v2",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="b322e09026e4ea05f42beadf4d661fb4e101d311",
+    release_date=E5_PAPER_RELEASE_DATE,
+)

@@ -82,7 +82,13 @@ class AbsTaskClusteringFast(AbsTask):
     The similarity then is calculated using the V-measure metric, which is invariant to the permutation of the labels.
     This approach is then repeated K times.
 
-    If the clustering is hieararchical, and more than one label is specified in order for each observation,
+    There are two ways to specify how a dataset is downsampled:
+        - max_document_to_embe (int): default to None
+        - max_fraction_of_documents_to_embed (float): default to 4%.
+    If both parameters are set to None, no downsampling is done in self._evaluate_subset().
+    Only one of these two parameters can be not None at the same time.
+
+    If the clustering is hierarchical, and more than one label is specified in order for each observation,
     V-measures are calculated in the outlined way on each of the levels separately.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset.
@@ -91,8 +97,9 @@ class AbsTaskClusteringFast(AbsTask):
         labels: list[str] | list[list[str]]
     """
 
-    max_documents_to_embed = 16_384
-    max_documents_per_cluster = 2048
+    max_fraction_of_documents_to_embed = 0.04
+    max_document_to_embed = None
+    max_documents_per_cluster = 16_384
     n_clusters = 10
     k_mean_batch_size = 512
     max_depth = None
@@ -113,13 +120,29 @@ class AbsTaskClusteringFast(AbsTask):
     ) -> dict[str, float | dict[str, list[float]]]:
         rng_state = random.Random(self.seed)
 
-        if len(dataset) > self.max_documents_to_embed:
-            example_indices = rng_state.sample(
-                range(len(dataset)), k=self.max_documents_to_embed
+        if (
+            self.max_document_to_embed is not None
+            and self.max_fraction_of_documents_to_embed is not None
+        ):
+            raise Exception(
+                "Both max_document_to_embed and max_fraction_of_documents_to_embed are set. Please only set one."
             )
-            downsampled_dataset = dataset.select(example_indices)  # type: ignore
-        else:
+
+        if (
+            self.max_document_to_embed is None
+            and self.max_fraction_of_documents_to_embed is None
+        ):
             downsampled_dataset = dataset
+        else:
+            max_documents_to_embed = self.max_document_to_embed
+            if self.max_fraction_of_documents_to_embed is not None:
+                max_documents_to_embed = int(
+                    self.max_fraction_of_documents_to_embed * len(dataset)
+                )
+            example_indices = rng_state.sample(
+                range(len(dataset)), k=max_documents_to_embed
+            )
+            downsampled_dataset = dataset.select(example_indices)
 
         embeddings = model_encode(
             downsampled_dataset["sentences"],  # type: ignore
@@ -133,7 +156,7 @@ class AbsTaskClusteringFast(AbsTask):
                 label = [label]
             labels.append(label)
 
-        v_measures = evaluate_clustering_bootstrapped(
+        all_v_scores = evaluate_clustering_bootstrapped(
             embeddings,
             labels,
             n_clusters=self.n_clusters,
@@ -142,9 +165,15 @@ class AbsTaskClusteringFast(AbsTask):
             max_depth=self.max_depth,
             rng_state=rng_state,
         )
-        all_v_scores = itertools.chain.from_iterable(v_measures.values())
-        mean_v_measure = np.mean(list(all_v_scores))
-        scores = {"v_measures": v_measures, "v_measure": float(mean_v_measure)}
+        v_measures = list(itertools.chain.from_iterable(all_v_scores.values()))
+
+        mean_v_measure = np.mean(v_measures)
+        v_std = np.std(v_measures)
+        scores = {
+            "v_measures": all_v_scores,
+            "v_measure": float(mean_v_measure),
+            "v_measure_std": v_std,
+        }
         self._add_main_score(scores)
         return scores
 
