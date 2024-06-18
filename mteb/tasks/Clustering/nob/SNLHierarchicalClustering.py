@@ -12,6 +12,8 @@ def split_labels(record: dict) -> dict:
 
 
 class SNLHierarchicalClusteringP2P(AbsTaskClusteringFast):
+    max_document_to_embed = 1300
+
     metadata = TaskMetadata(
         name="SNLHierarchicalClusteringP2P",
         dataset={
@@ -53,6 +55,7 @@ class SNLHierarchicalClusteringP2P(AbsTaskClusteringFast):
 
 
 class SNLHierarchicalClusteringS2S(AbsTaskClusteringFast):
+    max_document_to_embed = 1300
     metadata = TaskMetadata(
         name="SNLHierarchicalClusteringS2S",
         dataset={
