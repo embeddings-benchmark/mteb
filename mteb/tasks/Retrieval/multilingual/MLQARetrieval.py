@@ -2,7 +2,7 @@ from typing import Dict, List
 
 import datasets
 
-from mteb.abstasks import AbsTaskRetrieval, CrosslingualTask, TaskMetadata
+from mteb.abstasks import AbsTaskRetrieval, MultilingualTask, TaskMetadata
 
 _LANGUAGES = {
     "mlqa.ar.ar": ["ara-Arab", "ara-Arab"],
@@ -75,7 +75,7 @@ def extend_lang_pairs() -> Dict[str, List[str]]:
 _EVAL_LANGS = extend_lang_pairs()
 
 
-class MLQARetrieval(AbsTaskRetrieval, CrosslingualTask):
+class MLQARetrieval(AbsTaskRetrieval, MultilingualTask):
     metadata = TaskMetadata(
         name="MLQARetrieval",
         description="""MLQA (MultiLingual Question Answering) is a benchmark dataset for evaluating cross-lingual question answering performance.

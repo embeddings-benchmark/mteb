@@ -2,7 +2,7 @@ from typing import Dict, List
 
 import datasets
 
-from mteb.abstasks import AbsTaskRetrieval, CrosslingualTask, TaskMetadata
+from mteb.abstasks import AbsTaskRetrieval, MultilingualTask, TaskMetadata
 
 _LANGUAGES = {
     "wmt21.de.fr": ["deu-Latn", "fra-Latn"],
@@ -28,7 +28,7 @@ def extend_lang_pairs() -> Dict[str, List[str]]:
 _EVAL_LANGS = extend_lang_pairs()
 
 
-class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval, CrosslingualTask):
+class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval, MultilingualTask):
     metadata = TaskMetadata(
         name="CrossLingualSemanticDiscriminationWMT21",
         dataset={
