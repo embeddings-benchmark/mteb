@@ -1,0 +1,23 @@
+{
+  "dataset_revision": "3321d2863453fc96d50e6d861761c323e889f310",
+  "evaluation_time": 16.290266275405884,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.38",
+  "scores": {
+    "train": [
+      {
+        "accuracy": 0.39954869704469353,
+        "f1": 0.3397952374549348,
+        "hf_subset": "eng-eng_hin",
+        "languages": [
+          "eng-Latn",
+          "hin-Latn"
+        ],
+        "main_score": 0.3397952374549348,
+        "precision": 0.32051318886676056,
+        "recall": 0.39954869704469353
+      }
+    ]
+  },
+  "task_name": "PhincBitextMining"
+}
