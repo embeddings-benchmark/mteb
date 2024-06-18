@@ -204,7 +204,7 @@ _LANGS = {
 }
 
 
-class NusaXBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class SIB200BitextMining(AbsTaskBitextMining, CrosslingualTask):
     metadata = TaskMetadata(
         name="SIB200BitextMining",
         dataset={
