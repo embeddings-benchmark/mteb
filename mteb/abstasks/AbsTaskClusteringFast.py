@@ -82,6 +82,12 @@ class AbsTaskClusteringFast(AbsTask):
     The similarity then is calculated using the V-measure metric, which is invariant to the permutation of the labels.
     This approach is then repeated K times.
 
+    There are two ways to specify how a dataset is downsampled:
+        - max_document_to_embe (int): default to None
+        - max_fraction_of_documents_to_embed (float): default to 4%.
+    If both parameters are set to None, no downsampling is done in self._evaluate_subset().
+    Only one of these two parameters can be not None at the same time.
+
     If the clustering is hierarchical, and more than one label is specified in order for each observation,
     V-measures are calculated in the outlined way on each of the levels separately.
 
@@ -92,11 +98,11 @@ class AbsTaskClusteringFast(AbsTask):
     """
 
     max_fraction_of_documents_to_embed = 0.04
+    max_document_to_embed = None
     max_documents_per_cluster = 16_384
     n_clusters = 10
     k_mean_batch_size = 512
     max_depth = None
-    use_dataset_as_is = False
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -114,12 +120,17 @@ class AbsTaskClusteringFast(AbsTask):
     ) -> dict[str, float | dict[str, list[float]]]:
         rng_state = random.Random(self.seed)
 
-        if self.use_dataset_as_is:
+        if self.max_document_to_embed is not None and self.max_fraction_of_documents_to_embed is not None:
+            raise Exception("Both max_document_to_embed and max_fraction_of_documents_to_embed are set. Please only set one.")
+
+        if self.max_document_to_embed is None and self.max_fraction_of_documents_to_embed is None:
             downsampled_dataset = dataset
         else:
-            max_documents_to_embed = int(
-                self.max_fraction_of_documents_to_embed * len(dataset)
-            )
+            max_documents_to_embed = self.max_document_to_embed
+            if self.max_fraction_of_documents_to_embed is not None:
+                max_documents_to_embed = int(
+                    self.max_fraction_of_documents_to_embed * len(dataset)
+                )
             example_indices = rng_state.sample(
                 range(len(dataset)), k=max_documents_to_embed
             )

@@ -71,7 +71,7 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
             label="labels",
             n_samples=32768,
         )
-        self.use_dataset_as_is = True
+        self.max_fraction_of_documents_to_embed = None
 
 
 class StackExchangeClustering(AbsTaskClustering):
