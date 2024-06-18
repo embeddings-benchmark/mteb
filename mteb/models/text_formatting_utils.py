@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 
-def corpus_to_texts(corpus: list[dict[str, str]] | dict[str, list[str]] | list[str]) -> list[str]:
+def corpus_to_texts(
+    corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
+) -> list[str]:
     if isinstance(corpus, dict):
         return [
             (corpus["title"][i] + "\n" + corpus["text"][i]).strip()  # type: ignore
