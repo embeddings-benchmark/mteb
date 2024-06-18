@@ -64,7 +64,7 @@ class TurkicClassification(MultilingualTask, AbsTaskClassification):
         full_dataset = full_dataset.rename_columns(
             {"processed_text": "text", "category": "label"}
         )
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             dataset[lang] = DatasetDict()
             filtered_dataset = self.transform_data(full_dataset, lang)
 

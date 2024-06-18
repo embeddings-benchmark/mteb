@@ -93,7 +93,7 @@ class WikipediaRetrievalMultilingual(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WikipediaRetrievalMultilingual",
         description="The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.",
-        reference="https://huggingface.co/datasets/ellamind/wikipedia-2023-11-retrieval-pt",
+        reference="https://huggingface.co/datasets/ellamind/wikipedia-2023-11-retrieval-multilingual-queries",
         dataset={
             "path": "ellamind/wikipedia-2023-11-retrieval-multilingual-queries",
             "revision": "3b6ea595c94bac3448a2ad167ca2e06abd340d6e",  # avoid validation error
