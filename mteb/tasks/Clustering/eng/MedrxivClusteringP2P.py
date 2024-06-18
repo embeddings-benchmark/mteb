@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import itertools
+
+from datasets import Dataset, DatasetDict
+
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
@@ -15,7 +19,7 @@ class MedrxivClusteringP2PFast(AbsTaskClusteringFast):
         reference="https://api.medrxiv.org/",
         dataset={
             "path": "mteb/medrxiv-clustering-p2p",
-            "revision": "9894e30672c61db02f10a8593519d84e2b7a1a1c",
+            "revision": "e7a26af6f3ae46b30dde8737f02c07b1505bcc73",
         },
         type="Clustering",
         category="p2p",
@@ -32,20 +36,20 @@ class MedrxivClusteringP2PFast(AbsTaskClusteringFast):
         dialect=[],
         text_creation="created",
         bibtex_citation="",
-        n_samples={"test": 2048},
+        n_samples={"test": 1500},
         avg_character_length={"test": 1984.7},
     )
 
     def dataset_transform(self):
+        ds = dict()
         for split in self.metadata.eval_splits:
+            labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
+            sentences = list(
+                itertools.chain.from_iterable(self.dataset[split]["sentences"])
+            )
             check_label_distribution(self.dataset[split])
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=2048,
-        )
+            ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
+        self.dataset = DatasetDict(ds)
 
 
 class MedrxivClusteringP2P(AbsTaskClustering):
@@ -73,6 +77,6 @@ class MedrxivClusteringP2P(AbsTaskClustering):
         dialect=[],
         text_creation="created",
         bibtex_citation="",
-        n_samples={"test": 375000},
+        n_samples={"test": 37500},
         avg_character_length={"test": 1981.2},
     )

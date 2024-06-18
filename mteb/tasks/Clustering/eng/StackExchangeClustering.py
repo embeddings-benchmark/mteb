@@ -48,7 +48,7 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 16000},
+        n_samples={"test": 32768},
         avg_character_length={"test": 57.0},
     )
 
@@ -69,8 +69,9 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=16000,
+            n_samples=32768,
         )
+        self.max_fraction_of_documents_to_embed = None
 
 
 class StackExchangeClustering(AbsTaskClustering):
