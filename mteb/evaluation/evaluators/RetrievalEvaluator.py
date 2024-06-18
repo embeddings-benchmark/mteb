@@ -518,10 +518,10 @@ class RetrievalEvaluator(Evaluator):
         k_values: List[int],
         ignore_identical_ids: bool = False,
     ) -> Tuple[Dict[str, float], dict[str, float], dict[str, float], dict[str, float]]:
+        logger.info(
+            "For evaluation, we do not ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=True`` to ignore this."
+        )
         if ignore_identical_ids:
-            logger.info(
-                "For evaluation, we ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=False`` to ignore this."
-            )
             results_wo_identical_ids = copy.deepcopy(results)
             for qid, rels in results.items():
                 for pid in list(rels):
@@ -531,7 +531,7 @@ class RetrievalEvaluator(Evaluator):
         all_ndcgs_no_self, all_ndcgs, all_aps, all_recalls, all_precisions = {}, {}, {}, {}, {}
 
         for k in k_values:
-            all_ndcgs_no_self[f"NDCG(no self)@{k}"] = 0.0
+            all_ndcgs_no_self[f"NDCG(no self)@{k}"] = []
             all_ndcgs[f"NDCG@{k}"] = []
             all_aps[f"MAP@{k}"] = []
             all_recalls[f"Recall@{k}"] = []
@@ -550,7 +550,7 @@ class RetrievalEvaluator(Evaluator):
         # if ignore_identical_ids is True, we evaluate the results without the self-identical ids
         if ignore_identical_ids:
             evaluator_no_self = pytrec_eval.RelevanceEvaluator(
-                qrels, {ndcg_string_no_self}
+                qrels, {ndcg_string_no_self, map_string, recall_string, precision_string}
             )
             scores_wo_identical_ids = evaluator_no_self.evaluate(
                 results_wo_identical_ids
@@ -559,15 +559,20 @@ class RetrievalEvaluator(Evaluator):
         for query_id in scores.keys():
             for k in k_values:
                 all_ndcgs[f"NDCG@{k}"].append(scores[query_id]["ndcg_cut_" + str(k)])
-                all_aps[f"MAP@{k}"].append(scores[query_id]["map_cut_" + str(k)])
-                all_recalls[f"Recall@{k}"].append(scores[query_id]["recall_" + str(k)])
-                all_precisions[f"P@{k}"].append(scores[query_id]["P_" + str(k)])
                 if ignore_identical_ids:
-                    all_ndcgs_no_self[f"NDCG(no self)@{k}"] += scores_wo_identical_ids[
+                    all_ndcgs_no_self[f"NDCG(no self)@{k}"].append(scores_wo_identical_ids[
                         query_id
-                    ]["ndcg_cut_" + str(k)]
+                    ]["ndcg_cut_" + str(k)])
+                    all_aps[f"MAP@{k}"].append(scores_wo_identical_ids[query_id]["map_cut_" + str(k)])
+                    all_recalls[f"Recall@{k}"].append(scores_wo_identical_ids[query_id]["recall_" + str(k)])
+                    all_precisions[f"P@{k}"].append(scores_wo_identical_ids[query_id]["P_" + str(k)])
+                else:
+                    all_aps[f"MAP@{k}"].append(scores[query_id]["map_cut_" + str(k)])
+                    all_recalls[f"Recall@{k}"].append(scores[query_id]["recall_" + str(k)])
+                    all_precisions[f"P@{k}"].append(scores[query_id]["P_" + str(k)])
 
-        ndcg, _map, recall, precision = (
+        ndcg_no_self, ndcg, _map, recall, precision = (
+            all_ndcgs_no_self.copy(),
             all_ndcgs.copy(),
             all_aps.copy(),
             all_recalls.copy(),
@@ -575,26 +580,25 @@ class RetrievalEvaluator(Evaluator):
         )
 
         for k in k_values:
-            ndcg[f"NDCG@{k}"] = round(ndcg[f"NDCG@{k}"] / len(scores), 5)
-            _map[f"MAP@{k}"] = round(_map[f"MAP@{k}"] / len(scores), 5)
-            recall[f"Recall@{k}"] = round(recall[f"Recall@{k}"] / len(scores), 5)
-            precision[f"P@{k}"] = round(precision[f"P@{k}"] / len(scores), 5)
+            ndcg[f"NDCG@{k}"] = round(sum(ndcg[f"NDCG@{k}"]) / len(scores), 5)
+            _map[f"MAP@{k}"] = round(sum(_map[f"MAP@{k}"]) / len(scores), 5)
+            recall[f"Recall@{k}"] = round(sum(recall[f"Recall@{k}"]) / len(scores), 5)
+            precision[f"P@{k}"] = round(sum(precision[f"P@{k}"]) / len(scores), 5)
             if ignore_identical_ids:
-                all_ndcgs_no_self[f"NDCG(no self)@{k}"] = round(
-                    all_ndcgs_no_self[f"NDCG(no self)@{k}"] / len(scores), 5
+                ndcg_no_self[f"NDCG(no self)@{k}"] = round(
+                    sum(ndcg_no_self[f"NDCG(no self)@{k}"]) / len(scores), 5
                 )
         
-        naucs = RetrievalEvaluator.evaluate_abstention(
-            results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
-        )
         # merge ndcg and ndcg_no_self together
         if ignore_identical_ids:
             ndcg = {**ndcg, **ndcg_no_self}
-
-        for eval in [ndcg, _map, recall, precision]:
-            logger.info("\n")
-            for k in eval.keys():
-                logger.info("{}: {:.4f}".format(k, eval[k]))
+            naucs = RetrievalEvaluator.evaluate_abstention(
+                results, {**all_ndcgs_no_self, **all_aps, **all_recalls, **all_precisions}
+            )
+        else:
+            naucs = RetrievalEvaluator.evaluate_abstention(
+                results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
+            )
 
         return ndcg, _map, recall, precision, naucs
 
