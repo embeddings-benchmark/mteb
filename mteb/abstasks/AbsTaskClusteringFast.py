@@ -120,10 +120,18 @@ class AbsTaskClusteringFast(AbsTask):
     ) -> dict[str, float | dict[str, list[float]]]:
         rng_state = random.Random(self.seed)
 
-        if self.max_document_to_embed is not None and self.max_fraction_of_documents_to_embed is not None:
-            raise Exception("Both max_document_to_embed and max_fraction_of_documents_to_embed are set. Please only set one.")
+        if (
+            self.max_document_to_embed is not None
+            and self.max_fraction_of_documents_to_embed is not None
+        ):
+            raise Exception(
+                "Both max_document_to_embed and max_fraction_of_documents_to_embed are set. Please only set one."
+            )
 
-        if self.max_document_to_embed is None and self.max_fraction_of_documents_to_embed is None:
+        if (
+            self.max_document_to_embed is None
+            and self.max_fraction_of_documents_to_embed is None
+        ):
             downsampled_dataset = dataset
         else:
             max_documents_to_embed = self.max_document_to_embed
