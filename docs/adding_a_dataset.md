@@ -79,8 +79,7 @@ evaluation = MTEB(tasks=[MindSmallReranking()])
 evaluation.run(model)
 ```
 
-> **Note:** for multilingual tasks, make sure your class also inherits from the `MultilingualTask` class like in [this](https://github.com/embeddings-benchmark/mteb-draft/blob/main/mteb/tasks/Classification/MTOPIntentClassification.py) example.
-> For cross-lingual tasks, make sure your class also inherits from the `MultilingualTask` class like in [this](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/tasks/BitextMining/TatoebaBitextMining.py).
+> **Note:** for multilingual / crosslingual tasks, make sure your class also inherits from the `MultilingualTask` class like in [this](https://github.com/embeddings-benchmark/mteb-draft/blob/main/mteb/tasks/Classification/MTOPIntentClassification.py) example.
 
 
 
