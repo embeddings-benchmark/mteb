@@ -283,6 +283,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [LegalQuAD](https://github.com/Christoph911/AIKE2021_Appendix) (Hoppe et al., 2021) | ['deu'] | Retrieval | s2p | [Legal] |  |  |
 | [LegalReasoningCausalityLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 55} | {'test': 1563.76} |
 | [LegalSummarization](https://github.com/lauramanor/legal_summarization) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
+| [LinceMTBitextMining](https://ritual.uh.edu/lince/) (Aguilar et al., 2020) | ['eng', 'hin'] | BitextMining | s2s | [Social] | {'train': 8060} | {'train': 58.67} |
 | [LivedoorNewsClustering](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Clustering | s2s | [News] | {'test': 1107} | {'test': 1082.61} |
 | [MAUDLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 2048} | {'test': 1802.93} |
 | [MIRACLReranking](https://project-miracl.github.io/) (Zhang et al., 2023) | ['ara', 'ben', 'deu', 'eng', 'fas', 'fin', 'fra', 'hin', 'ind', 'jpn', 'kor', 'rus', 'spa', 'swa', 'tel', 'tha', 'yor', 'zho'] | Reranking | s2s | [Encyclopaedic] | {'dev': 44608} | {'dev': 506.3} |
@@ -374,6 +375,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [PawsX](https://arxiv.org/abs/1908.11828) (Yinfei Yang, 2019) | ['cmn', 'deu', 'eng', 'fra', 'jpn', 'kor', 'spa'] | PairClassification | s2s |  |  |  |
 | [PersianFoodSentimentClassification](https://hooshvare.github.io/docs/datasets/sa) (Mehrdad Farahani et al., 2020) | ['fas'] | Classification | s2s | [Reviews] | {'validation': 2048, 'test': 2048} | {'validation': 90.37, 'test': 90.58} |
 | [PersonalJurisdictionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 50} | {'test': 381.14} |
+| [PhincBitextMining](https://huggingface.co/datasets/veezbo/phinc) (Srivastava et al., 2020) | ['eng', 'hin'] | BitextMining | s2s | [Social] | {'train': 13738} | {'train': 75.32} |
 | [PlscClusteringP2P.v2](https://huggingface.co/datasets/rafalposwiata/plsc) | ['pol'] | Clustering | s2s | [Academic] | {'test': 2048} | {'test': 1023.21} |
 | [PlscClusteringS2S.v2](https://huggingface.co/datasets/rafalposwiata/plsc) | ['pol'] | Clustering | s2s | [Academic] | {'test': 2048} | {'test': 84.34} |
 | [PoemSentimentClassification](https://arxiv.org/abs/2011.02686) (Emily Sheng, 2020) | ['eng'] | Classification | s2s | [Reviews] | {'validation': 105, 'test': 104} | {'validation': 45.3, 'test': 42.4} |
@@ -845,7 +847,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | 3 | 6 | 1 | 0 | 1 | 2 | 0 | 3 | 0 | 0 |
 | emi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | emp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eng | 14 | 143 | 16 | 3 | 1 | 8 | 7 | 71 | 13 | 1 |
+| eng | 16 | 143 | 16 | 3 | 1 | 8 | 7 | 71 | 13 | 1 |
 | enq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | epo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | eri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -923,7 +925,7 @@ The following tables give you an overview of the tasks in MTEB.
 | hch | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | heb | 4 | 5 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | heg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hin | 7 | 12 | 2 | 0 | 0 | 1 | 2 | 8 | 2 | 0 |
+| hin | 9 | 12 | 2 | 0 | 0 | 1 | 2 | 8 | 2 | 0 |
 | hix | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | hla | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | hlt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1617,7 +1619,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1390 | 793 | 304 | 3 | 28 | 67 | 46 | 356 | 85 | 2 |
+| Total | 1394 | 793 | 304 | 3 | 28 | 67 | 46 | 356 | 85 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
