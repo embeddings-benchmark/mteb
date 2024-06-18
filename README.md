@@ -215,7 +215,7 @@ evaluation.run(model)
 
 ## Documentation
 
-| Documentation                          |                        |
+| Documentation                  |                        |
 | ------------------------------ | ---------------------- |
 | 📋 [Tasks] | Overview of available tasks |
 | 📈 [Leaderboard] | The interactive leaderboard of the benchmark |
@@ -223,7 +223,7 @@ evaluation.run(model)
 | 👩‍🔬 [Reproducible workflows] | Information related to how to reproduce and create reproducible workflows with MTEB |
 | 👩‍💻 [Adding a dataset] | How to add a new task/dataset to MTEB | 
 | 👩‍💻 [Adding a leaderboard tab] | How to add a new leaderboard tab to MTEB | 
-| 🤝  [Contributing] | How to contribute to MTEB and set it up for development |
+| 🤝 [Contributing] | How to contribute to MTEB and set it up for development |
 | 🌐 [MMTEB] | An open-source effort to extend MTEB to cover a broad set of languages |  
 
 [Tasks]: docs/tasks.md
