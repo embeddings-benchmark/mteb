@@ -1,0 +1,1 @@
+{"name": "intfloat/e5-base-v2", "revision": "1c644c92ad3ba1efdad3f1451a637716616a20e8", "release_date": "2024-02-08", "languages": ["eng_Latn"], "n_parameters": null, "memory_usage": null, "max_tokens": null, "embed_dim": null, "license": null, "open_source": true, "framework": [], "loader": "E5Wrapper"}

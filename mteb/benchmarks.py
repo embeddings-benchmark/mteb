@@ -175,6 +175,29 @@ MTEB_RETRIEVAL_LAW = Benchmark(
     citation=None,
 )
 
+MTEB_MINERS_BITEXT_MINING = Benchmark(
+    name="MINERSBitextMining",
+    tasks=[
+        "BUCCBitextMining",
+        "LinceMTBitextMining",
+        "NollySentiBitextMining",
+        "NusaXBitextMining",
+        "NusaTranslationBitextMining",
+        "PhincBitextMining",
+        "TatoebaBitextMining",
+    ],
+    description="BitextMining benchmark from MINERS",
+    reference="https://arxiv.org/pdf/2406.07424",
+    citation="""
+    @article{winata2024miners,
+    title={MINERS: Multilingual Language Models as Semantic Retrievers},
+    author={Winata, Genta Indra and Zhang, Ruochen and Adelani, David Ifeoluwa},
+    journal={arXiv preprint arXiv:2406.07424},
+    year={2024}
+    }
+    """,
+)
+
 SEB = Benchmark(
     name="MTEB(Scandinavian)",
     tasks=[

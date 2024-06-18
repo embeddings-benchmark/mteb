@@ -199,7 +199,7 @@ def add_run_parser(subparsers) -> None:
         "--output_folder",
         type=str,
         default="results",
-        help="Output directory for results. Will default to results/{model_name} if not set.",
+        help="Output directory for results. Will default to `results` if not set.",
     )
     parser.add_argument(
         "-v", "--verbosity", type=int, default=2, help="Verbosity level"
