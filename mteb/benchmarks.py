@@ -176,7 +176,7 @@ MTEB_RETRIEVAL_LAW = Benchmark(
 )
 
 MTEB_MINERS_BITEXT_MINING = Benchmark(
-    name="MINERS BitextMining",
+    name="MINERSBitextMining",
     tasks=[
         "BUCCBitextMining",
         "LinceMTBitextMining",
