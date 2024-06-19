@@ -43,8 +43,9 @@ def test_run_task(
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
 
+    model_name_as_path = model_name.replace("/", "__").replace(" ", "_")
     results_path = Path(
-        f"tests/results/test_model/average_word_embeddings_komninos/{model_revision}"
+        f"tests/results/test_model/{model_name_as_path}/{model_revision}"
     )
     assert results_path.exists(), "Output folder not created"
     assert "model_meta.json" in [
