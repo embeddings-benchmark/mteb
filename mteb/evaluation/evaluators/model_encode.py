@@ -20,7 +20,6 @@ def model_encode(
         )
         kwargs["prompt_name"] = task_name
 
-
     logger.info(f"Encoding {len(sentences)} sentences.")
 
     embeddings = model.encode(sentences, **kwargs)

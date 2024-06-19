@@ -20,13 +20,24 @@ def test_available_tasks():
 
 
 run_task_fixures = [
-    ("average_word_embeddings_komninos", "BornholmBitextMining", "21eec43590414cb8e3a6f654857abed0483ae36e"),
-    ("intfloat/multilingual-e5-small", "BornholmBitextMining", "e4ce9877abf3edfe10b0d82785e83bdcb973e22e"),
+    (
+        "average_word_embeddings_komninos",
+        "BornholmBitextMining",
+        "21eec43590414cb8e3a6f654857abed0483ae36e",
+    ),
+    (
+        "intfloat/multilingual-e5-small",
+        "BornholmBitextMining",
+        "e4ce9877abf3edfe10b0d82785e83bdcb973e22e",
+    ),
 ]
+
 
 @pytest.mark.parametrize("model_name,task_name,model_revision", run_task_fixures)
 def test_run_task(
-    model_name: str, task_name: str, model_revision: str,
+    model_name: str,
+    task_name: str,
+    model_revision: str,
 ):
     command = f"mteb run -m {model_name} -t {task_name} --verbosity 3 --output_folder tests/results/test_model --model_revision {model_revision}"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
