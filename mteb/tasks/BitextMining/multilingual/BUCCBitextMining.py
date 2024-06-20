@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskBitextMining, CrosslingualTask
+from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = {
     "de-en": ["deu-Latn", "eng-Latn"],
@@ -15,7 +15,7 @@ _LANGUAGES = {
 _SPLITS = ["test"]
 
 
-class BUCCBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class BUCCBitextMining(AbsTaskBitextMining, MultilingualTask):
     superseeded_by = "BUCC.v2"
     metadata = TaskMetadata(
         name="BUCC",

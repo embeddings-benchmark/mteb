@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskBitextMining, CrosslingualTask
+from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = {
     "eng-ace": ["eng-Latn", "ace-Latn"],
@@ -19,7 +19,7 @@ _LANGUAGES = {
 }
 
 
-class NusaXBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class NusaXBitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="NusaXBitextMining",
         dataset={

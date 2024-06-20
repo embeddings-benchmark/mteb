@@ -4,7 +4,7 @@ from typing import Any
 
 import datasets
 
-from mteb.abstasks import AbsTaskBitextMining, CrosslingualTask
+from mteb.abstasks import AbsTaskBitextMining, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -22,7 +22,7 @@ _EVAL_LANGS = {
 }
 
 
-class SRNCorpusBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class SRNCorpusBitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="SRNCorpusBitextMining",
         dataset={
