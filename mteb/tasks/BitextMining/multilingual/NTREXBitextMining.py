@@ -4,7 +4,7 @@ from typing import Any
 
 import datasets
 
-from mteb.abstasks import AbsTaskBitextMining, CrosslingualTask
+from mteb.abstasks import AbsTaskBitextMining, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _BRIDGE_LANGUAGES = (
@@ -243,7 +243,7 @@ def extend_lang_pairs() -> dict[str, list[str]]:
 _EVAL_LANGS = extend_lang_pairs()
 
 
-class NTREXBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class NTREXBitextMining(AbsTaskBitextMining, MultilingualTask):
     parallel_subsets = True
     metadata = TaskMetadata(
         name="NTREXBitextMining",
