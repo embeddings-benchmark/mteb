@@ -77,9 +77,6 @@ def test_mteb_with_instructions(task_name: str):
     """
 
     class EncoderWithInstructions(Encoder):
-        def __init__(self, task_name: str):
-            self.prompts = {task_name: "Dummy prompt"}
-
         def encode(self, sentences, prompt_name: str | None = None, **kwargs):
             assert prompt_name == task_name
             return np.zeros((len(sentences), 10))
@@ -94,7 +91,7 @@ def test_mteb_with_instructions(task_name: str):
     eval = mteb.MTEB(tasks=tasks)
 
     # Test that the task_name is passed down to the encoder
-    model = EncoderWithInstructions(task_name)
+    model = EncoderWithInstructions()
     eval.run(model, output_folder="tests/results", overwrite_results=True)
     # Test that the task_name is not passed down to the encoder
     model = EncoderWithoutInstructions("average_word_embeddings_levy_dependency")
