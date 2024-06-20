@@ -45,7 +45,7 @@ class AbsTaskSpeedTask(AbsTask):
 
     def _get_time_taken(self, model: Encoder, data_split) -> float:
         start = time.time()
-        model.encode(data_split['text'], device=self.device)
+        model.encode(data_split["text"], device=self.device)
         time_taken = time.time() - start
         return time_taken
 
@@ -97,3 +97,6 @@ class AbsTaskSpeedTask(AbsTask):
         }
         self._add_main_score(scores)
         return scores
+
+    def _add_main_score(self, scores) -> None:
+        scores["main_score"] = scores[self.metadata.main_score]

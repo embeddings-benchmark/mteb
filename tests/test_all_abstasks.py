@@ -12,6 +12,7 @@ from mteb import MTEB
 from mteb.abstasks import AbsTask
 from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
 from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
 from mteb.overview import TASKS_REGISTRY
 
@@ -31,6 +32,7 @@ def test_load_data(
         isinstance(task, AbsTaskRetrieval)
         or isinstance(task, AbsTaskInstructionRetrieval)
         or isinstance(task, MultiSubsetLoader)
+        or isinstance(task, AbsTaskSpeedTask)
     ):
         pytest.skip()
     with patch.object(task, "dataset_transform") as mock_dataset_transform:
@@ -60,6 +62,7 @@ async def check_datasets_are_available_on_hf(tasks):
                 task.metadata.dataset["revision"],
             )
             for task in tasks
+            if not isinstance(task, AbsTaskSpeedTask)
         ]
         datasets_exists = await asyncio.gather(*tasks_checks)
 
