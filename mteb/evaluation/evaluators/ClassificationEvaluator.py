@@ -91,7 +91,7 @@ class kNNClassificationEvaluator(Evaluator):
         y_train,
         sentences_test,
         y_test,
-        task_name: str,
+        task_name: str | None = None,
         k: int = 1,
         batch_size: int = 32,
         limit: int | None = None,
