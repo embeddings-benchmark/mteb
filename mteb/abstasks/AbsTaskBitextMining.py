@@ -72,6 +72,3 @@ class AbsTaskBitextMining(AbsTask):
         else:
             self._add_main_score(metrics)
         return metrics
-
-    def _add_main_score(self, scores) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]

@@ -72,9 +72,6 @@ class AbsTaskMultilabelClassification(AbsTask):
         if hasattr(self, "metadata"):
             self.metadata
 
-    def _add_main_score(self, scores):
-        scores["main_score"] = scores[self.metadata.main_score]
-
     def evaluate(
         self, model, eval_split="test", train_split="train", **kwargs
     ) -> dict[HFSubset, ScoresDict]:
