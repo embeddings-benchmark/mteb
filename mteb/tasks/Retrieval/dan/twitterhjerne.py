@@ -45,7 +45,6 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         self.dataset_transform()
         self.data_loaded = True
 
-
     def dataset_transform(self) -> None:
         """And transform to a retrieval datset, which have the following attributes
 

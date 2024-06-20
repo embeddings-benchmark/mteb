@@ -1,5 +1,7 @@
-from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
 import datasets
+
+from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
+
 
 class DanFever(AbsTaskRetrieval):
     metadata = TaskMetadata(
