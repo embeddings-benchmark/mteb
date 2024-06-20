@@ -40,6 +40,7 @@ dependencies = [
     "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
     "GPUtil>=1.4.0",
+    "psutil>=5.9.8",
 ]
 
 
