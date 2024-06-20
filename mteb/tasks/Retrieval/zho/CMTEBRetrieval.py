@@ -185,7 +185,7 @@ class CovidRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
-        eval_splits=["test"],
+        eval_splits=["dev"],
         eval_langs=["cmn-Hans"],
         main_score="ndcg_at_10",
         date=None,
