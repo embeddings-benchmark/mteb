@@ -363,7 +363,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [OdiaNewsClassification](https://github.com/goru001/nlp-for-odia) (Anoop Kunchukuttan, 2020) | ['ory'] | Classification | s2s | [News] | {'test': 2048} | {'test': 49.24} |
 | [OnlineShopping](https://aclanthology.org/2023.nodalida-1.20/) | ['cmn'] | Classification | s2s |  |  |  |
 | [OnlineStoreReviewSentimentClassification](https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN) | ['ara'] | Classification | s2s | [Reviews] | {'train': 2048} | {'train': 137.2} |
-| [OpusparcusPC](https://gem-benchmark.com/data_cards/opusparcus) (Mathias Creutz, 2018) | ['deu', 'eng', 'fin', 'fra', 'rus', 'swe'] | PairClassification | s2s |  |  |  |
+| [OpusparcusPC](https://gem-benchmark.com/data_cards/opusparcus) (Mathias Creutz, 2018) | ['deu', 'eng', 'fin', 'fra', 'rus', 'swe'] | PairClassification | s2s | [Spoken] | {'validation': 10168, 'test': 10210} | {'validation': 24.4, 'test': 23.8} |
 | [OralArgumentQuestionPurposeLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 312} | {'test': 269.71} |
 | [OverrulingLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 2048} | {'test': 167.2} |
 | [PAC](https://arxiv.org/pdf/2211.13112.pdf) | ['pol'] | Classification | p2p |  | {'test': 3453} | {'test': 185.3} |
@@ -372,7 +372,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [PROALegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 95} | {'test': 251.73} |
 | [PSC](http://www.lrec-conf.org/proceedings/lrec2014/pdf/1211_Paper.pdf) | ['pol'] | PairClassification | s2s |  |  |  |
 | [PatentClassification](https://aclanthology.org/P19-1212.pdf) | ['eng'] | Classification | s2s | [Legal] | {'test': 5000} | {'test': 18620.44} |
-| [PawsX](https://arxiv.org/abs/1908.11828) (Yinfei Yang, 2019) | ['cmn', 'deu', 'eng', 'fra', 'jpn', 'kor', 'spa'] | PairClassification | s2s |  |  |  |
+| [PawsX](https://arxiv.org/abs/1908.11828) (Yinfei Yang, 2019) | ['cmn', 'deu', 'eng', 'fra', 'jpn', 'kor', 'spa'] | PairClassification | s2s | [Web, Encyclopaedic] | {'validation': 14000, 'test': 14000} | {'validation': 91.2, 'test': 91.1} |
 | [PersianFoodSentimentClassification](https://hooshvare.github.io/docs/datasets/sa) (Mehrdad Farahani et al., 2020) | ['fas'] | Classification | s2s | [Reviews] | {'validation': 2048, 'test': 2048} | {'validation': 90.37, 'test': 90.58} |
 | [PersonalJurisdictionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 50} | {'test': 381.14} |
 | [PhincBitextMining](https://huggingface.co/datasets/veezbo/phinc) (Srivastava et al., 2020) | ['eng', 'hin'] | BitextMining | s2s | [Social] | {'train': 13738} | {'train': 75.32} |
@@ -471,8 +471,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [StackExchangeClusteringP2P.v2](https://arxiv.org/abs/2104.07081) (Gregor Geigle, 2021) | ['eng'] | Clustering | p2p | [Web] | {'test': 2996} | {'test': 1090.7} |
 | [StackOverflowDupQuestions](https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf) (Xueqing Liu, 2018) | ['eng'] | Reranking | s2s |  | {'test': 3467} | {'test': 49.8} |
 | [StatcanDialogueDatasetRetrieval](https://mcgill-nlp.github.io/statcan-dialogue-dataset/) | ['eng', 'fra'] | Retrieval | s2p | [Government, Web] | {'dev': 1000, 'test': 1011, 'corpus': 5907} | {'dev': 776.58, 'test': 857.13, 'corpus': 6806.97} |
-| [SummEval](https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html) (Soğancıoğlu et al., 2017) | ['eng'] | Summarization | p2p |  | {'test': 2800} | {'test': 359.8} |
-| [SummEvalFr](https://github.com/Yale-LILY/SummEval) (Fabbri et al., 2020) | ['fra'] | Summarization | p2p |  |  |  |
+| [SummEval](https://github.com/Yale-LILY/SummEval) (Fabbri et al., 2020) | ['eng'] | Summarization | p2p | [News] | {'test': 2800} | {'test': 359.8} |
+| [SummEvalFr](https://github.com/Yale-LILY/SummEval) (Fabbri et al., 2020) | ['fra'] | Summarization | p2p | [News] | {'test': 2800} | {'test': 407.1} |
 | [SweFaqRetrieval](https://spraakbanken.gu.se/en/resources/superlim) | ['swe'] | Retrieval | s2s | [Government, Non-fiction] | {'test': 1024} | {'test': 195.44} |
 | [SweRecClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['swe'] | Classification | s2s |  | {'test': 1024} | {'test': 318.8} |
 | [SwedishSentimentClassification](https://huggingface.co/datasets/swedish_reviews) | ['swe'] | Classification | s2s | [Reviews] | {'validation': 1024, 'test': 1024} | {'validation': 499.3, 'test': 498.1} |
