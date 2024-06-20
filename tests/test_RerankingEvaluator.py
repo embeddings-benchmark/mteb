@@ -13,7 +13,7 @@ class TestRerankingEvaluator:
 
         setup_method is invoked for every test method of a class.
         """
-        self.evaluator = RerankingEvaluator([], task_name="test")
+        self.evaluator = RerankingEvaluator([])
 
     def test_mrr_at_k(self):
         is_relevant = [1, 1, 1, 0, 0, 0, 0, 0, 0]

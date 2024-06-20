@@ -116,7 +116,13 @@ XLMR_LANGUAGES = [
 class E5Wrapper:
     """following the implementation within the Scandinavian Embedding Benchmark and the intfloat/multilingual-e5-small documentation."""
 
-    def __init__(self, model_name: str, sep: str = " ", **kwargs: Any):
+    def __init__(
+        self,
+        model_name: str,
+        sep: str = " ",
+        prompt_name: str | None = None,
+        **kwargs: Any,
+    ):
         self.model_name = model_name
         self.mdl = SentenceTransformer(model_name)
         self.sep = sep
@@ -133,7 +139,13 @@ class E5Wrapper:
     ):
         return self.encode_queries(sentences, batch_size=batch_size, **kwargs)
 
-    def encode_queries(self, queries: list[str], batch_size: int = 32, **kwargs: Any):
+    def encode_queries(
+        self,
+        queries: list[str],
+        batch_size: int = 32,
+        prompt_name: str | None = None,
+        **kwargs: Any,
+    ):
         sentences = ["query: " + sentence for sentence in queries]
         emb = self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
         return emb
@@ -141,6 +153,7 @@ class E5Wrapper:
     def encode_corpus(
         self,
         corpus: list[dict[str, str]] | dict[str, list[str]],
+        prompt_name: str | None = None,
         batch_size: int = 32,
         **kwargs: Any,
     ):

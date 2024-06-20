@@ -20,9 +20,7 @@ class TestClusteringEvaluator:
 
         model = Model()
         sentences = ["dog walked home", "cat walked home", "robot walked to the park"]
-        clusterer = ClusteringEvaluator(
-            sentences=sentences, labels=[1, 2, 3], task_name="test"
-        )
+        clusterer = ClusteringEvaluator(sentences=sentences, labels=[1, 2, 3])
         result = clusterer(model)
 
         assert result == {"v_measure": 1.0}
