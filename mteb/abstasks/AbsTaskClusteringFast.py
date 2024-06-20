@@ -107,6 +107,14 @@ class AbsTaskClusteringFast(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+    def _add_main_score(self, scores):
+        if self.metadata_dict["main_score"] in scores:
+            scores["main_score"] = scores[self.metadata_dict["main_score"]]
+        else:
+            logger.warning(
+                f"main score {self.metadata_dict['main_score']} not found in scores {scores.keys()}"
+            )
+
     def _evaluate_subset(
         self, model, dataset: DatasetDict, **kwargs: Any
     ) -> dict[str, float | dict[str, list[float]]]:

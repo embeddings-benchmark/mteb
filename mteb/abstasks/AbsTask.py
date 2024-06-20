@@ -79,9 +79,6 @@ class AbsTask(ABC):
         """
         pass
 
-    def _add_main_score(self, scores: ScoresDict) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
-
     def evaluate(
         self,
         model: Encoder | EncoderWithQueryCorpusEncode,

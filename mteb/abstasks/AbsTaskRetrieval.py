@@ -11,6 +11,7 @@ from typing import Dict, Tuple
 from datasets import Features, Value, load_dataset
 
 from ..evaluation.evaluators import RetrievalEvaluator
+from ..MTEBResults import ScoresDict
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -368,6 +369,9 @@ class AbsTaskRetrieval(AbsTask):
                 json.dump(errors, f)
 
         return scores
+
+    def _add_main_score(self, scores: ScoresDict) -> None:
+        scores["main_score"] = scores[self.metadata.main_score]
 
     def calculate_metadata_metrics(self) -> None:
         self.load_data()

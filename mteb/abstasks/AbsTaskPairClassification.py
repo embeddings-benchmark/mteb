@@ -27,6 +27,9 @@ class AbsTaskPairClassification(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+    def _add_main_score(self, scores) -> None:
+        scores["main_score"] = scores["max"][self.metadata.main_score]
+
     def _evaluate_subset(
         self,
         model: Encoder | EncoderWithQueryCorpusEncode,

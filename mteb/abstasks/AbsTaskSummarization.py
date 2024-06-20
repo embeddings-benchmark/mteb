@@ -52,3 +52,6 @@ class AbsTaskSummarization(AbsTask):
         scores = evaluator(model)
         self._add_main_score(scores)
         return scores
+
+    def _add_main_score(self, scores: ScoresDict) -> None:
+        scores["main_score"] = scores[self.metadata.main_score]
