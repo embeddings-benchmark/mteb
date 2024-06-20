@@ -58,9 +58,9 @@ results = evaluation.run(model, output_folder=f"results/{model_name}")
 * Using CLI
 
 ```bash
-mteb --available_tasks
+mteb available_tasks
 
-mteb -m sentence-transformers/all-MiniLM-L6-v2 \
+mteb run -m sentence-transformers/all-MiniLM-L6-v2 \
     -t Banking77Classification  \
     --verbosity 3
 
