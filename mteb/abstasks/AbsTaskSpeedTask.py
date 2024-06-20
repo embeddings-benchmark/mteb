@@ -57,7 +57,7 @@ class AbsTaskSpeedTask(AbsTask):
         info["platform_version"] = platform.version()
         info["architecture"] = platform.machine()
         info["processor"] = platform.processor()
-        info["ram"] = str(round(psutil.virtual_memory().total / (1024.0**3))) + " GB"
+        info["ram"] = str(round(psutil.virtual_memory().total / (1024.0**3))) + " GB"  ## Convert from Bytes
         info["physical_cores"] = psutil.cpu_count(logical=False)
         info["total_cores"] = psutil.cpu_count(logical=True)
 
