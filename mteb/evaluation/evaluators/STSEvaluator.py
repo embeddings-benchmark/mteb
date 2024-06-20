@@ -44,13 +44,13 @@ class STSEvaluator(Evaluator):
         embeddings1 = model_encode(
             self.sentences1,
             model=model,
-            task_name=self.task_name,
+            prompt_name=self.task_name,
             batch_size=self.batch_size,
         )
         embeddings2 = model_encode(
             self.sentences2,
             model=model,
-            task_name=self.task_name,
+            prompt_name=self.task_name,
             batch_size=self.batch_size,
         )
 

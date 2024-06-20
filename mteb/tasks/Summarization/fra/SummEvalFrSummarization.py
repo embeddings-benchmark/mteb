@@ -18,14 +18,14 @@ class SummEvalFrSummarization(AbsTaskSummarization):
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="cosine_spearman",
-        date=None,
+        date=("2016-01-01", "2016-12-31"),
         form=["written"],
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
+        domains=["News"],
+        task_subtypes=[],
+        license="mit",
+        socioeconomic_status="mixed",
+        annotations_creators="human-annotated",
+        dialect=[],
         text_creation="machine-translated",
         bibtex_citation="""@article{fabbri2020summeval,
   title={SummEval: Re-evaluating Summarization Evaluation},
@@ -33,8 +33,8 @@ class SummEvalFrSummarization(AbsTaskSummarization):
   journal={arXiv preprint arXiv:2007.12626},
   year={2020}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"test": 2800},
+        avg_character_length={"test": 407.1},
     )
 
     @property

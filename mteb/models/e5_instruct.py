@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from itertools import islice
-from typing import Any, Iterable, Literal, Optional, Sequence, TypeVar
+from typing import Any, Callable, Iterable, Literal, Optional, Sequence, Type, TypeVar
 
 import numpy as np
 import torch
@@ -41,13 +41,15 @@ class E5InstructWrapper(Encoder):
         revision: str,
         max_length: int,
         max_batch_size: Optional[int] = None,
+        device: str = "cpu",
         **kwargs: Any,
     ):
         logger.info("Started loading e5 instruct model")
         self.tokenizer = AutoTokenizer.from_pretrained(
             model_name, revision=revision, **kwargs
         )
-        self.model = AutoModel.from_pretrained(model_name, **kwargs)
+
+        self.model = AutoModel.from_pretrained(model_name, **kwargs).to(device)
         self.max_length = max_length
         self.max_batch_size = max_batch_size
 
@@ -143,17 +145,22 @@ class E5InstructWrapper(Encoder):
 class E5MistralWrapper(E5InstructWrapper):
     def __init__(
         self,
+        name: str,
         revision: str,
         max_batch_size: int = 4,
         torch_dtype=torch.float16,
         **kwargs,
     ):
+        assert (
+            name == "intfloat/e5-mistral-7b-instruct"
+        ), f"Unexpected model name: {name}"
         super().__init__(
-            "intfloat/e5-mistral-7b-instruct",
+            name=name,
             revision=revision,
             max_length=4096,
             max_batch_size=max_batch_size,
             torch_dtype=torch_dtype,
+            **kwargs,
         )
 
     @staticmethod
@@ -203,10 +210,22 @@ class E5MistralWrapper(E5InstructWrapper):
         return batch_dict.to(self.model.device)
 
 
+def _loader(
+    wrapper: Type[E5InstructWrapper], name: str, revision: str, **kwargs
+) -> Callable[..., Encoder]:
+    _kwargs = kwargs
+
+    def loader_inner(**kwargs: Any) -> Encoder:
+        return wrapper(name, revision=revision, **_kwargs, **kwargs)
+
+    return loader_inner
+
+
 e5_instruct = ModelMeta(
-    loader=lambda: E5InstructWrapper(
+    loader=_loader(
+        E5InstructWrapper,
         "intfloat/multilingual-e5-large-instruct",
-        revision="baa7be480a7de1539afce709c8f13f833a510e0a",
+        "baa7be480a7de1539afce709c8f13f833a510e0a",
         max_length=512,
     ),
     name="intfloat/multilingual-e5-large-instruct",
@@ -217,8 +236,10 @@ e5_instruct = ModelMeta(
 )
 
 e5_mistral = ModelMeta(
-    loader=lambda: E5MistralWrapper(
-        revision="07163b72af1488142a360786df853f237b1a3ca1",
+    loader=_loader(
+        E5MistralWrapper,
+        "intfloat/e5-mistral-7b-instruct",
+        "07163b72af1488142a360786df853f237b1a3ca1",
         max_batch_size=4,
         torch_dtype=torch.float16,
     ),

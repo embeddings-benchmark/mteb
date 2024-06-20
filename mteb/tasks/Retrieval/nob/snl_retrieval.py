@@ -36,6 +36,14 @@ class SNLRetrieval(AbsTaskRetrieval):
         task_subtypes=["Article retrieval"],
     )
 
+    def load_data(self, **kwargs):
+        """Load dataset from HuggingFace hub"""
+        if self.data_loaded:
+            return
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+        self.dataset_transform()
+        self.data_loaded = True
+
     def dataset_transform(self) -> None:
         """And transform to a retrieval datset, which have the following attributes
 

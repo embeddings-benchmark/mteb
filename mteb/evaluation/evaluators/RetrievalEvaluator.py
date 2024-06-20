@@ -74,7 +74,7 @@ class DenseRetrievalExactSearch:
         queries: dict[str, Union[str, List[str]]],
         top_k: int,
         score_function: str,
-        task_name: str,
+        prompt_name: str,
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
@@ -93,7 +93,7 @@ class DenseRetrievalExactSearch:
         if isinstance(queries[0], list):
             query_embeddings = self.model.encode_conversations(
                 queries,
-                task_name=task_name,
+                prompt_name=prompt_name,
                 batch_size=self.batch_size,
                 show_progress_bar=self.show_progress_bar,
                 convert_to_tensor=self.convert_to_tensor,
@@ -102,7 +102,7 @@ class DenseRetrievalExactSearch:
         else:
             query_embeddings = self.model.encode_queries(
                 queries,
-                task_name=task_name,
+                prompt_name=prompt_name,
                 batch_size=self.batch_size,
                 show_progress_bar=self.show_progress_bar,
                 convert_to_tensor=self.convert_to_tensor,
@@ -146,7 +146,7 @@ class DenseRetrievalExactSearch:
                 # Encode chunk of corpus
                 sub_corpus_embeddings = self.model.encode_corpus(
                     corpus[corpus_start_idx:corpus_end_idx],  # type: ignore
-                    task_name=task_name,
+                    prompt_name=prompt_name,
                     batch_size=self.batch_size,
                     show_progress_bar=self.show_progress_bar,
                     convert_to_tensor=self.convert_to_tensor,
@@ -309,16 +309,16 @@ class DenseRetrievalExactSearch:
         )
 
     def encode_conversations(
-        self, conversations: List[List[str]], task_name: str, **kwargs
+        self, conversations: List[List[str]], prompt_name: str, **kwargs
     ):
         if callable(getattr(self.model, "encode_conversations", None)):
             return self.model.encode_conversations(
-                conversations, task_name=task_name, **kwargs
+                conversations, prompt_name=prompt_name, **kwargs
             )
         # otherwise fallback to default implementation
         # TODO: add a warning here
         queries = self.convert_conv_history_to_query(conversations)
-        return self.encode_queries(queries, task_name=task_name, **kwargs)
+        return self.encode_queries(queries, prompt_name=prompt_name, **kwargs)
 
     def convert_conv_history_to_query(self, conversations: List[List[str]]) -> str:
         if callable(getattr(self.model, "convert_conv_history_to_query", None)):
@@ -338,7 +338,7 @@ class DRESModel:
         self.corpus_embeddings = {}
 
     def encode_queries(
-        self, queries: List[str], *, task_name: str, batch_size: int, **kwargs
+        self, queries: List[str], *, prompt_name: str, batch_size: int, **kwargs
     ):
         if self.use_sbert_model:
             if isinstance(self.model._first_module(), Transformer):
@@ -366,13 +366,13 @@ class DRESModel:
         return model_encode(
             queries,
             model=self.model,
-            task_name=task_name,
+            prompt_name=prompt_name,
             batch_size=batch_size,
             **new_kwargs,
         )
 
     def encode_corpus(
-        self, corpus: List[Dict[str, str]], task_name: str, batch_size: int, **kwargs
+        self, corpus: List[Dict[str, str]], prompt_name: str, batch_size: int, **kwargs
     ):
         if (
             "qid" in kwargs
@@ -407,7 +407,7 @@ class DRESModel:
         corpus_embeddings = model_encode(
             sentences,
             model=self.model,
-            task_name=task_name,
+            prompt_name=prompt_name,
             batch_size=batch_size,
             **new_kwargs,
         )
@@ -416,26 +416,26 @@ class DRESModel:
             self.corpus_embeddings[kwargs["qid"]] = corpus_embeddings
         return corpus_embeddings
 
-    def encode(self, sentences: List[str], task_name: str, **kwargs):
-        return self.encode_queries(sentences, task_name=task_name, **kwargs)
+    def encode(self, sentences: List[str], prompt_name: str, **kwargs):
+        return self.encode_queries(sentences, prompt_name=prompt_name, **kwargs)
 
     def encode_conversations(
         self,
         conversations: List[List[str]],
         *,
         batch_size: int,
-        task_name: str,
+        prompt_name: str,
         **kwargs,
     ):
         if callable(getattr(self.model, "encode_conversations", None)):
             return self.model.encode_conversations(
-                conversations, task_name=task_name, **kwargs
+                conversations, prompt_name=prompt_name, **kwargs
             )
         # otherwise fallback to default implementation
         # TODO: add a warning here
         queries = self.convert_conv_history_to_query(conversations)
         return self.encode_queries(
-            queries, batch_size=batch_size, task_name=task_name, **kwargs
+            queries, batch_size=batch_size, prompt_name=prompt_name, **kwargs
         )
 
     def convert_conv_history_to_query(self, conversations: List[List[str]]) -> str:
@@ -510,7 +510,7 @@ class RetrievalEvaluator(Evaluator):
                 queries,
                 self.top_k,
                 self.score_function,
-                task_name=self.task_name,
+                prompt_name=self.task_name,
             )
 
     @staticmethod

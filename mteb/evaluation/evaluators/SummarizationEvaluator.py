@@ -67,7 +67,7 @@ class SummarizationEvaluator(Evaluator):
                 for summary in human_summaries
             ],
             model=model,
-            task_name=self.task_name,
+            prompt_name=self.task_name,
             batch_size=self.batch_size,
         )
 
@@ -79,7 +79,7 @@ class SummarizationEvaluator(Evaluator):
                 for summary in machine_summaries
             ],
             model=model,
-            task_name=self.task_name,
+            prompt_name=self.task_name,
             batch_size=self.batch_size,
         )
 

@@ -1,0 +1,1 @@
+{"name": "ai-forever/sbert_large_mt_nlu_ru", "revision": "05300876c2b83f46d3ddd422a7f17e45cf633bb0", "release_date": "2021-05-18", "languages": ["rus_Cyrl"], "n_parameters": null, "memory_usage": null, "max_tokens": null, "embed_dim": null, "license": null, "open_source": true, "similarity_fn_name": null, "framework": [], "loader": null}
