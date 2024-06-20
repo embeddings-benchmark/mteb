@@ -14,7 +14,7 @@ def gritlm_loader(**kwargs):
         raise ImportError(
             "GritLM is not installed. Please install it with `pip install gritlm`."
         )
-    kwargs.pop("device") # GritLM does automatic device placement
+    kwargs.pop("device", None) # GritLM does automatic device placement
     return GritLM(**kwargs)
 
 
