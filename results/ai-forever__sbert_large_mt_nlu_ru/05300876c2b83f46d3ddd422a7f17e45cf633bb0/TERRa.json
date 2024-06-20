@@ -1,0 +1,59 @@
+{
+  "dataset_revision": "7b58f24536063837d644aab9a023c62199b2a612",
+  "evaluation_time": 2.5103838443756104,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.25",
+  "scores": {
+    "dev": [
+      {
+        "cos_sim": {
+          "accuracy": 0.5374592833876222,
+          "accuracy_threshold": 0.5588943362236023,
+          "ap": 0.5197295613724908,
+          "f1": 0.6666666666666666,
+          "f1_threshold": 0.243525892496109,
+          "precision": 0.5,
+          "recall": 1.0
+        },
+        "dot": {
+          "accuracy": 0.5374592833876222,
+          "accuracy_threshold": 0.5588943362236023,
+          "ap": 0.5197295613724908,
+          "f1": 0.6666666666666666,
+          "f1_threshold": 0.24352604150772095,
+          "precision": 0.5,
+          "recall": 1.0
+        },
+        "euclidean": {
+          "accuracy": 0.5374592833876222,
+          "accuracy_threshold": 0.9392479658126831,
+          "ap": 0.5197295613724908,
+          "f1": 0.6666666666666666,
+          "f1_threshold": 1.230010986328125,
+          "precision": 0.5,
+          "recall": 1.0
+        },
+        "hf_subset": "default",
+        "languages": [
+          "rus-Cyrl"
+        ],
+        "main_score": 0.5197295613724908,
+        "manhattan": {
+          "accuracy": 0.5407166123778502,
+          "accuracy_threshold": 21.60797119140625,
+          "ap": 0.517835399788033,
+          "f1": 0.6666666666666666,
+          "f1_threshold": 29.333335876464844,
+          "precision": 0.5,
+          "recall": 1.0
+        },
+        "max": {
+          "accuracy": 0.5407166123778502,
+          "ap": 0.5197295613724908,
+          "f1": 0.6666666666666666
+        }
+      }
+    ]
+  },
+  "task_name": "TERRa"
+}

@@ -14,6 +14,7 @@ from mteb.models import (
     gritlm,
     mxbai_models,
     openai_models,
+    ru_sentence_models,
     sentence_transformers_models,
     voyage_models,
 )
@@ -121,6 +122,7 @@ model_modules = [
     voyage_models,
     bge_models,
     mxbai_models,
+    ru_sentence_models,
 ]
 models = {}
 
