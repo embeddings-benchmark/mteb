@@ -14,7 +14,7 @@ def llm2vec_loader(**kwargs):
         from llm2vec import LLM2Vec
     except ImportError:
         raise ImportError(
-            "LLM2Vec is not installed. Please install it with `pip install llm2vec`."
+            "To use the LLM2Vec models `llm2vec` is required. Please install it with `pip install llm2vec`."
         )
     return LLM2Vec.from_pretrained(**kwargs)
 
