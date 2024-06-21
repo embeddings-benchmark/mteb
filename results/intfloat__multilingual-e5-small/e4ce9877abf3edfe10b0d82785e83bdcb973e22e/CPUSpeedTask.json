@@ -1,0 +1,38 @@
+{
+  "dataset_revision": "1.0",
+  "evaluation_time": 14.118372678756714,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.22",
+  "scores": {
+    "test": [
+      {
+        "architecture": "x86_64",
+        "avg_words_per_sec": 1828.056773862902,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 1828.056773862902,
+        "physical_cores": 30,
+        "platform": "Linux",
+        "platform_release": "5.15.0-67-generic",
+        "platform_version": "#74~20.04.1-Ubuntu SMP Wed Feb 22 14:52:34 UTC 2023",
+        "processor": "x86_64",
+        "ram": "197 GB",
+        "time_mean": 1.987356219972883,
+        "time_std": 0.02513596930444969,
+        "timings": [
+          2.0379481315612793,
+          1.9697740077972412,
+          2.0116665363311768,
+          1.9751863479614258,
+          1.971390724182129,
+          1.980954647064209,
+          1.9645731449127197
+        ],
+        "total_cores": 30
+      }
+    ]
+  },
+  "task_name": "CPUSpeedTask"
+}
