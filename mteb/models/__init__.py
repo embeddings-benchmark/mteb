@@ -12,11 +12,8 @@ from mteb.models import (
     e5_instruct,
     e5_models,
     gritlm,
-<<<<<<< HEAD
     mxbai_models,
-=======
     llm2vec_models,
->>>>>>> adding llm2vec model loader
     openai_models,
     ru_sentence_models,
     sentence_transformers_models,
