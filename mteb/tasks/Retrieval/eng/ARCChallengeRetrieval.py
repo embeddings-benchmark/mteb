@@ -46,27 +46,31 @@ class ARCChallenge(AbsTaskRetrieval):
     )
 
     default_instruction = "Retrieve the answer to the question."
-    
+
     def __init__(
-        self, 
-        include_task_instruction: bool = True, 
+        self,
+        include_task_instruction: bool = True,
         instruction: str = None,
-        format_func = None,
-        **kwargs
+        format_func=None,
+        **kwargs,
     ):
         super().__init__(**kwargs)
         self.include_instruction = include_task_instruction
-        self.instruction = instruction if instruction is not None else self.default_instruction
-        self.format_func = format_func if format_func is not None else self.default_format_func
-    
+        self.instruction = (
+            instruction if instruction is not None else self.default_instruction
+        )
+        self.format_func = (
+            format_func if format_func is not None else self.default_format_func
+        )
+
     def default_format_func(self, instruction: str, query: str) -> str:
         return f"{instruction} {query}".strip()
-    
+
     def concatenate_instruction(self, query: str) -> str:
         if self.include_instruction:
             return self.format_func(self.instruction, query)
         return query
-    
+
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
@@ -84,7 +88,9 @@ class ARCChallenge(AbsTaskRetrieval):
             ).load(split=split)
             # Conversion from DataSet
             queries = {
-                query["id"]: self.concatenate_instruction(query["text"]) if self.include_instruction else query["text"]
+                query["id"]: self.concatenate_instruction(query["text"])
+                if self.include_instruction
+                else query["text"]
                 for query in queries
             }
             corpus = {
