@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import copy
 import heapq
 import json
 import logging
@@ -517,7 +516,13 @@ class RetrievalEvaluator(Evaluator):
         results: dict[str, dict[str, float]],
         k_values: List[int],
         ignore_identical_ids: bool = False,
-    ) -> Tuple[dict[str, float], dict[str, float], dict[str, float], dict[str, float], dict[str, float]]:
+    ) -> Tuple[
+        dict[str, float],
+        dict[str, float],
+        dict[str, float],
+        dict[str, float],
+        dict[str, float],
+    ]:
         if ignore_identical_ids:
             logger.info(
                 "For evaluation, ``ignore_identical_ids=True`` is set to True, the evaluator will ignore identical query and document ids."

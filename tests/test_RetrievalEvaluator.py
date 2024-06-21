@@ -72,7 +72,6 @@ class TestRetrievalEvaluator:
         assert recall == expected_metrics["recall"]
         assert precision == expected_metrics["precision"]
 
-
     @pytest.mark.parametrize(
         "ignore_identical_ids, expected_naucs",
         [
@@ -92,7 +91,7 @@ class TestRetrievalEvaluator:
                     "nAUC_NDCG@3_diff1": 0.9507,
                 },
             ),
-        ]
+        ],
     )
     def test_nAUC(self, ignore_identical_ids, expected_naucs):
         relevant_docs = {
