@@ -72,7 +72,6 @@ class IndicQARetrieval(MultilingualTask, AbsTaskRetrieval):
                 name=f"indicqa.{lang}", **self.metadata_dict["dataset"]
             )[split]
             data = data.filter(lambda x: x["answers"]["text"] != "")
-            data = data.select(range(self.metadata.n_samples[split]))
 
             question_ids = {
                 question: sha256(question.encode("utf-8")).hexdigest()

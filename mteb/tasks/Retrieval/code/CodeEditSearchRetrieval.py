@@ -73,12 +73,7 @@ class CodeEditSearchRetrieval(MultilingualTask, AbsTaskRetrieval):
         self.relevant_docs = {}
 
         for lang, sub in lang_subs.items():
-            sub = sub[
-                : min(
-                    len(sub),
-                    self.metadata_dict["n_samples"][self._EVAL_SPLIT] / len(_LANGS),
-                )
-            ]
+            sub = sub[:1000]
 
             self.queries[lang] = {
                 self._EVAL_SPLIT: {

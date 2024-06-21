@@ -405,13 +405,15 @@ def calculate_length_and_count(relevant_docs, queries, corpus):
     total_length = 0
     num_pairs = 0
     for query_id, docs in relevant_docs.items():
-        query = queries[query_id]
+        query = queries.get(query_id, "") or ""
         for doc_id in docs:
             # not relevant
             if docs[doc_id] == 0:
                 continue
-            doc = corpus[doc_id]
-            doc_text = doc["title"] + doc["text"]
+            doc = corpus.get(doc_id)
+            if doc is None:
+                continue
+            doc_text = doc.get("title", "") + doc["text"]
             total_length += len(query) + len(doc_text)
             num_pairs += 1
     return total_length, num_pairs
