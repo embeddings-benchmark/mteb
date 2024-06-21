@@ -8,13 +8,14 @@ from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 
 from .instructions import task_to_instruction
+
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 EncodeTypes = Literal["query", "passage"]
 
 
-class LLM2VecWrapper():
+class LLM2VecWrapper:
     def __init__(self, *args, **kwargs):
         try:
             from llm2vec import LLM2Vec
@@ -35,7 +36,7 @@ class LLM2VecWrapper():
             instruction = task_to_instruction(prompt_name)
         else:
             instruction = ""
-        
+
         sentences = [[instruction, sentence] for sentence in sentences]
         return self.model.encode(sentences, **kwargs)
 
@@ -66,13 +67,13 @@ class LLM2VecWrapper():
         sentences = [["", sentence] for sentence in sentences]
         return self.model.encode(sentences, **kwargs)
 
-    def encode_queries(self, queries: list[str], prompt_name: str | None = None, **kwargs: Any) -> np.ndarray:
+    def encode_queries(
+        self, queries: list[str], prompt_name: str | None = None, **kwargs: Any
+    ) -> np.ndarray:
         return self.encode(queries, **kwargs)
 
 
-def _loader(
-    wrapper: Type[LLM2VecWrapper], **kwargs
-) -> Callable[..., Encoder]:
+def _loader(wrapper: Type[LLM2VecWrapper], **kwargs) -> Callable[..., Encoder]:
     _kwargs = kwargs
 
     def loader_inner(**kwargs: Any) -> Encoder:
