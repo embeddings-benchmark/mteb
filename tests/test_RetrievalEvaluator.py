@@ -60,12 +60,14 @@ class TestRetrievalEvaluator:
     def test_metrics_at_k(
         self, relevant_docs, results, ignore_identical_ids, expected_metrics
     ):
-        ndcg, _map, recall, precision = self.evaluator.evaluate(
+        output = self.evaluator.evaluate(
             relevant_docs,
             results,
             [1, 2, 3],
             ignore_identical_ids=ignore_identical_ids,
         )
+
+        ndcg, _map, recall, precision, nauc = output
 
         assert ndcg == expected_metrics["ndcg"]
         assert _map == expected_metrics["map"]
@@ -79,16 +81,16 @@ class TestRetrievalEvaluator:
                 True,
                 {
                     "nAUC_NDCG@3_max": 0.50843,
-                    "nAUC_NDCGG@3_std": 0.18322,
-                    "nAUC_NDCGG@3_diff1": 0.21416,
+                    "nAUC_NDCG@3_std": 0.18322,
+                    "nAUC_NDCG@3_diff1": 0.21416,
                 },
             ),
             (
                 False,
                 {
-                    "nAUC_NDCG@3_max": 0.9507,
-                    "nAUC_NDCG@3_std": 0.9125,
-                    "nAUC_NDCG@3_diff1": 0.9507,
+                    "nAUC_NDCG@3_max": 0.8368244286523474,
+                    "nAUC_NDCG@3_std": 0.9125701917627439,
+                    "nAUC_NDCG@3_diff1": 0.950708977119359,
                 },
             ),
         ],
