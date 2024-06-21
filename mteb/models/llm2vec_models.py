@@ -42,6 +42,7 @@ class LLM2VecWrapper():
     def encode_corpus(
         self,
         corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
+        prompt_name: str | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
         sep = " "
@@ -65,7 +66,7 @@ class LLM2VecWrapper():
         sentences = [["", sentence] for sentence in sentences]
         return self.model.encode(sentences, **kwargs)
 
-    def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
+    def encode_queries(self, queries: list[str], prompt_name: str | None = None, **kwargs: Any) -> np.ndarray:
         return self.encode(queries, **kwargs)
 
 
