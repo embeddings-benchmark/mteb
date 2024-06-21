@@ -160,7 +160,7 @@ class MTEB:
                     name = f"{task.metadata.name}"
                     category = f", [italic grey39]{task.metadata.category}[/]"
                     multilingual = (
-                        f", [italic red]multilingual {len(task.hf_subsets)} / {len(task.metadata.eval_langs)} langs[/]"
+                        f", [italic red]multilingual {len(task.hf_subsets)} / {len(task.metadata.eval_langs)} Subsets[/]"
                         if task.is_multilingual
                         else ""
                     )

@@ -5,7 +5,6 @@ import platform
 import time
 from pathlib import Path
 
-import GPUtil
 import numpy as np
 import psutil
 
@@ -61,6 +60,8 @@ class AbsTaskSpeedTask(AbsTask):
 
         ## NOTE: Currently works on nvidia GPUs only.
         if self.device != "cpu":
+            import GPUtil
+
             gpus = GPUtil.getGPUs() or []
             info["num_gpus"] = len(gpus)
             list_gpus = []
