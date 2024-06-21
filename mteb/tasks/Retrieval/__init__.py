@@ -15,6 +15,7 @@ from .ell.GreekCivicsQA import *
 from .eng.AILACasedocsRetrieval import *
 from .eng.AILAStatutesRetrieval import *
 from .eng.ArguAnaRetrieval import *
+from .eng.BrightRetrieval import *
 from .eng.ClimateFEVERRetrieval import *
 from .eng.CQADupstackAndroidRetrieval import *
 from .eng.CQADupstackEnglishRetrieval import *
