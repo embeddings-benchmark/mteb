@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval, HFDataLoader
 
 
 class ARCChallenge(AbsTaskRetrieval):
@@ -44,3 +44,57 @@ class ARCChallenge(AbsTaskRetrieval):
         n_samples={"test": 1172},
         avg_character_length={"test": 161.7},
     )
+
+    default_instruction = "Retrieve the answer to the question."
+    
+    def __init__(
+        self, 
+        include_task_instruction: bool = True, 
+        instruction: str = None,
+        format_func = None,
+        **kwargs
+    ):
+        super().__init__(**kwargs)
+        self.include_instruction = include_task_instruction
+        self.instruction = instruction if instruction is not None else self.default_instruction
+        self.format_func = format_func if format_func is not None else self.default_format_func
+    
+    def default_format_func(self, instruction: str, query: str) -> str:
+        return f"{instruction} {query}".strip()
+    
+    def concatenate_instruction(self, query: str) -> str:
+        if self.include_instruction:
+            return self.format_func(self.instruction, query)
+        return query
+    
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
+        dataset_path = self.metadata_dict["dataset"]["path"]
+        hf_repo_qrels = (
+            dataset_path + "-qrels" if "clarin-knext" in dataset_path else None
+        )
+        for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
+            corpus, queries, qrels = HFDataLoader(
+                hf_repo=dataset_path,
+                hf_repo_qrels=hf_repo_qrels,
+                streaming=False,
+                keep_in_memory=False,
+            ).load(split=split)
+            # Conversion from DataSet
+            queries = {
+                query["id"]: self.concatenate_instruction(query["text"]) if self.include_instruction else query["text"]
+                for query in queries
+            }
+            corpus = {
+                doc["id"]: {"title": doc["title"], "text": doc["text"]}
+                for doc in corpus
+            }
+            self.corpus[split], self.queries[split], self.relevant_docs[split] = (
+                corpus,
+                queries,
+                qrels,
+            )
+
+        self.data_loaded = True
