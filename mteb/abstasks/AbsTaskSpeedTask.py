@@ -17,15 +17,11 @@ from .AbsTask import AbsTask
 logger = logging.getLogger(__name__)
 
 
-TOKENS_IN_UGLY_DUCKLING = 3591
+WORDS_IN_UGLY_DUCKLING = 3633
 
 
 class AbsTaskSpeedTask(AbsTask):
-    """Abstract class for speed tasks (e.g. CPU, GPU).
-
-    Args:
-        AbsTask (_type_): _description_
-    """
+    """Abstract class for speed tasks (e.g. CPU, GPU)."""
 
     num_loops = 7
     device = "cpu"
@@ -94,7 +90,7 @@ class AbsTaskSpeedTask(AbsTask):
             "time_mean": time_mean,
             "time_std": time_std,
             "timings": timings,
-            "avg_words_per_sec": TOKENS_IN_UGLY_DUCKLING / time_mean,
+            "avg_words_per_sec": WORDS_IN_UGLY_DUCKLING / time_mean,
             **self.get_system_info(),
         }
         self._add_main_score(scores)
