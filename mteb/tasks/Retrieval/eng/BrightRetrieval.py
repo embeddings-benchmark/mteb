@@ -21,7 +21,7 @@ DOMAINS = [
     # "theoremqa_questions"
 ]
 
-DOMAINS_langs = {domain: [domain] for domain in DOMAINS}
+DOMAINS_langs = {domain: [LANG_CODES_FOR_THE_SPLIT] for split in DOMAINS}
 
 
 EVAL_SPLITS = ["standard", "long"]
