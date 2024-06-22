@@ -48,6 +48,7 @@ class BlurbsClusteringP2PFast(AbsTaskClusteringFast):
     # a faster version of BlurbsClusteringP2P, since it does not sample from the same distribution we can't use the AbsTaskClusteringFast, instead we
     # simply downsample each cluster.
     max_document_to_embed = NUM_SAMPLES
+    max_fraction_of_documents_to_embed = None
 
     metadata = TaskMetadata(
         name="BlurbsClusteringP2P.v2",

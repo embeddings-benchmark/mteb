@@ -69,6 +69,8 @@ class AlloProfClusteringP2P(AbsTaskClustering):
 
 class AlloProfClusteringP2PFast(AbsTaskClusteringFast):
     max_document_to_embed = 2556
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="AlloProfClusteringP2P.v2",
         description="Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic.",
