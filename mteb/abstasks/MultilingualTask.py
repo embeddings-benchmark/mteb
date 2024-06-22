@@ -5,7 +5,7 @@ from .MultiSubsetLoader import MultiSubsetLoader
 
 
 class MultilingualTask(MultiSubsetLoader, AbsTask):
-    def __init__(self, hf_subsets=None, **kwargs):
+    def __init__(self, hf_subsets: list[str] | None = None, **kwargs):
         super().__init__(**kwargs)
         if isinstance(hf_subsets, list):
             hf_subsets = [

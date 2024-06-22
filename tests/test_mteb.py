@@ -12,6 +12,9 @@ from mteb import MTEB
 from mteb.abstasks import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.tasks.BitextMining.dan.BornholmskBitextMining import BornholmBitextMining
+from mteb.tasks.Classification.multilingual.IndicSentimentClassification import (
+    IndicSentimentClassification,
+)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -32,6 +35,7 @@ def test_two_mteb_tasks():
     "task",
     [
         BornholmBitextMining(),
+        IndicSentimentClassification(hf_subsets=["as"]),
         "TwentyNewsgroupsClustering",
         "TwentyNewsgroupsClustering.v2",
         "Banking77Classification",
