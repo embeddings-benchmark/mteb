@@ -235,22 +235,6 @@ class TaskMetadata(BaseModel):
 
     @staticmethod
     def _check_language_code(code):
-        # pass for BRIGHT
-        if code in [
-            "biology",
-            "earth_science",
-            "economics",
-            "psychology",
-            "robotics",
-            "stackoverflow",
-            "sustainable_living",
-            "pony",
-            "leetcode",
-            "aops",
-            "theoremqa_theorems",
-            "theoremqa_questions",
-        ]:
-            return
 
         """This method checks that the language code (e.g. "eng-Latn") is valid."""
         lang, script = code.split("-")
