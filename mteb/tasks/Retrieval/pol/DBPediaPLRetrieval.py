@@ -13,6 +13,7 @@ class DBPediaPL(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/dbpedia-pl",
             "revision": "76afe41d9af165cc40999fcaa92312b8b012064a",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

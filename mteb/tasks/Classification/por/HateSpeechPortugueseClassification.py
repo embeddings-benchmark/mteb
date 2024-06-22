@@ -13,6 +13,7 @@ class HateSpeechPortugueseClassification(AbsTaskClassification):
         dataset={
             "path": "hate-speech-portuguese/hate_speech_portuguese",
             "revision": "b0f431acbf8d3865cb7c7b3effb2a9771a618ebc",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

@@ -11,6 +11,7 @@ class WRIMEClassification(AbsTaskClassification):
             "path": "shunk031/wrime",
             "revision": "3fb7212c389d7818b8e6179e2cdac762f2e081d9",
             "name": "ver2",
+            "trust_remote_code": True,
         },
         description="A dataset of Japanese social network rated for sentiment",
         reference="https://aclanthology.org/2021.naacl-main.169/",

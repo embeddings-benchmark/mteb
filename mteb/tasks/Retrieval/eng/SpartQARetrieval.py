@@ -13,6 +13,7 @@ class SpartQA(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/spartqa",
             "revision": "9ab3ca3ccdd0d43f9cd6d346a363935d127f4f45",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",

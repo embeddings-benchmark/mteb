@@ -14,6 +14,7 @@ class SwedishSentimentClassification(AbsTaskClassification):
         dataset={
             "path": "timpal0l/swedish_reviews",
             "revision": "105ba6b3cb99b9fd64880215be469d60ebf44a1b",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

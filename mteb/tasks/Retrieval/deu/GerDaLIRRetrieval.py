@@ -16,6 +16,7 @@ class GerDaLIR(AbsTaskRetrieval):
         dataset={
             "path": "jinaai/ger_da_lir",
             "revision": "0bb47f1d73827e96964edb84dfe552f62f4fd5eb",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

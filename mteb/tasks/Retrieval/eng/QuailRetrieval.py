@@ -13,6 +13,7 @@ class Quail(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/quail",
             "revision": "1851bc536f8bdab29e03e29191c4586b1d8d7c5a",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",

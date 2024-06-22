@@ -69,6 +69,7 @@ class LegalBenchPC(AbsTaskPairClassification):
         dataset={
             "path": "nguha/legalbench",
             "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+            "trust_remote_code": True,
         },
         type="PairClassification",
         category="s2s",

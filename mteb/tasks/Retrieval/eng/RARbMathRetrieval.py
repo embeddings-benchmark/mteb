@@ -13,6 +13,7 @@ class RARbMath(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/math-pooled",
             "revision": "2393603c0221ff52f448d12dd75f0856103c6cca",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

@@ -14,6 +14,7 @@ class MewsC16JaClustering(AbsTaskClusteringFast):
             "path": "sbintuitions/JMTEB",
             "name": "mewsc16_ja",
             "revision": "e4af6c73182bebb41d94cb336846e5a452454ea7",
+            "trust_remote_code": True,
         },
         type="Clustering",
         category="s2s",

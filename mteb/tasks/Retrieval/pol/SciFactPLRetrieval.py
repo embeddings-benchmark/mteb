@@ -13,6 +13,7 @@ class SciFactPL(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/scifact-pl",
             "revision": "47932a35f045ef8ed01ba82bf9ff67f6e109207e",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

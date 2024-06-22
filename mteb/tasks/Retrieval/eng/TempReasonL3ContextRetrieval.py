@@ -13,6 +13,7 @@ class TempReasonL3Context(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/TempReason-l3-context",
             "revision": "3c42539652de3d787cecfb897d3b20905e5c7250",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",

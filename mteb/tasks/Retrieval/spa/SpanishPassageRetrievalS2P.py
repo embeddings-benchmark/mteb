@@ -15,6 +15,7 @@ class SpanishPassageRetrievalS2P(AbsTaskRetrieval):
         dataset={
             "path": "jinaai/spanish_passage_retrieval",
             "revision": "9cddf2ce5209ade52c2115ccfa00eb22c6d3a837",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

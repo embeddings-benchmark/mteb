@@ -10,6 +10,7 @@ class SweFaqRetrieval(AbsTaskRetrieval):
             "path": "AI-Sweden/SuperLim",
             "revision": "7ebf0b4caa7b2ae39698a889de782c09e6f5ee56",
             "name": "swefaq",
+            "trust_remote_code": True,
         },
         description="A Swedish QA dataset derived from FAQ",
         reference="https://spraakbanken.gu.se/en/resources/superlim",

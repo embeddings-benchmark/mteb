@@ -13,6 +13,7 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
         dataset={
             "path": "community-datasets/yahoo_answers_topics",
             "revision": "78fccffa043240c80e17a6b1da724f5a1057e8e5",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

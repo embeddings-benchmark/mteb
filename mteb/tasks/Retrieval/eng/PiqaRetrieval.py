@@ -13,6 +13,7 @@ class PIQA(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/piqa",
             "revision": "bb30be7e9184e6b6b1d99bbfe1bb90a3a81842e6",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",

@@ -13,6 +13,7 @@ class HotpotQAPL(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/hotpotqa-pl",
             "revision": "a0bd479ac97b4ccb5bd6ce320c415d0bb4beb907",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

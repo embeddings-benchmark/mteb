@@ -11,6 +11,7 @@ class FaithDialRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "McGill-NLP/FaithDial",
             "revision": "7a414e80725eac766f2602676dc8b39f80b061e4",
+            "trust_remote_code": True,
         },
         reference="https://mcgill-nlp.github.io/FaithDial",
         description=(

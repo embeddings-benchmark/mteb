@@ -14,6 +14,7 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
             "path": "takala/financial_phrasebank",
             "revision": "1484d06fe7af23030c7c977b12556108d1f67039",
             "name": "sentences_allagree",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

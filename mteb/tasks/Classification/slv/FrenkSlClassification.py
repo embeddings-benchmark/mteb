@@ -11,6 +11,7 @@ class FrenkSlClassification(AbsTaskClassification):
         dataset={
             "path": "classla/FRENK-hate-sl",
             "revision": "37c8b42c63d4eb75f549679158a85eb5bd984caa",
+            "trust_remote_code": True,
         },
         reference="https://arxiv.org/pdf/1906.02045",
         type="Classification",

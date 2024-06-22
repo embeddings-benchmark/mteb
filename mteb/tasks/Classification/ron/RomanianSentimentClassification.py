@@ -14,6 +14,7 @@ class RomanianSentimentClassification(AbsTaskClassification):
         dataset={
             "path": "dumitrescustefan/ro_sent",
             "revision": "155048684cea7a6d6af1ddbfeb9a04820311ce93",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

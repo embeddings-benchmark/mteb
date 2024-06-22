@@ -12,6 +12,7 @@ class TweetEmotionClassification(AbsTaskClassification):
         dataset={
             "path": "emotone-ar-cicling2017/emotone_ar",
             "revision": "0ded8ff72cc68cbb7bb5c01b0a9157982b73ddaf",
+            "trust_remote_code": True,
         },
         description="A dataset of 10,000 tweets that was created with the aim of covering the most frequently used emotion categories in Arabic tweets.",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-77116-8_8",

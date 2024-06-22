@@ -13,6 +13,7 @@ class AlphaNLI(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/alphanli",
             "revision": "303f40ef3d50918d3dc43577d33f2f7344ad72c1",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",

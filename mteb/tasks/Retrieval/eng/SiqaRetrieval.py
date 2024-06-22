@@ -13,6 +13,7 @@ class SIQA(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/siqa",
             "revision": "4ed8415e9dc24060deefc84be59e2db0aacbadcc",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",

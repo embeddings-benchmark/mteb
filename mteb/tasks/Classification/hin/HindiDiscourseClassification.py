@@ -10,6 +10,7 @@ class HindiDiscourseClassification(AbsTaskClassification):
         dataset={
             "path": "midas/hindi_discourse",
             "revision": "218ce687943a0da435d6d62751a4ab216be6cd40",
+            "trust_remote_code": True,
         },
         description="A Hindi Discourse dataset in Hindi with values for coherence.",
         reference="https://aclanthology.org/2020.lrec-1.149/",
