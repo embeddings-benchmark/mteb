@@ -15,10 +15,10 @@ DOMAINS = [
     "stackoverflow",
     "sustainable_living",
     "pony",
-    # "leetcode",
-    # "aops",
-    # "theoremqa_theorems",
-    # "theoremqa_questions"
+    "leetcode",
+    "aops",
+    "theoremqa_theorems",
+    "theoremqa_questions"
 ]
 
 DOMAINS_langs = {domain: [LANG_CODES_FOR_THE_SPLIT] for split in DOMAINS}
