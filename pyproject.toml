@@ -51,7 +51,7 @@ homepage = "https://github.com/embeddings-benchmark/mteb"
 mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
-dev = ["ruff>=0.0.254", "pytest", "pytest-xdist"]
+dev = ["ruff>=0.0.254", "pytest", "pytest-xdist", "pytest-coverage"]
 codecarbon = ["codecarbon"]
 speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]
 

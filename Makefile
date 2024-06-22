@@ -22,6 +22,10 @@ test:
 	@echo "--- 🧪 Running tests ---"
 	pytest -n auto --durations=5
 
+test-with-coverage:
+	@echo "--- 🧪 Running tests with coverage ---"
+	pytest -n auto --durations=5 --cov=mteb --cov-report=term-missing
+
 pr:
 	@echo "--- 🚀 Running requirements for a PR ---"
 	make lint
