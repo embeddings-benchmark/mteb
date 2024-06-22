@@ -2,6 +2,7 @@
 
 from mteb.model_meta import ModelMeta
 from .e5_models import E5Wrapper
+from functools import partial
 
 rubert_tiny2 = ModelMeta(
     name="cointegrated/rubert-tiny2",
@@ -82,4 +83,12 @@ labse_en_ru = ModelMeta(
     open_source=True,
     revision="83dcef3932b0e93345a5f6506123d5e5a618a9e9",
     release_date="2021-06-10",
+)
+
+labse_en_ru = ModelMeta(
+    name="sergeyzh/rubert-tiny-turbo",
+    languages=["rus_Cyrl"],
+    open_source=True,
+    revision="8ce0cf757446ce9bb2d5f5a4ac8103c7a1049054",
+    release_date="2024-06-21",
 )
