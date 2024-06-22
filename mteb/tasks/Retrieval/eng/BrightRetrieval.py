@@ -33,7 +33,6 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "xlangai/BRIGHT",
             "revision": "a75a0eb",
-            # "name": "narrativeqa",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description=("Bright retrieval dataset."),
