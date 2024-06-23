@@ -7,16 +7,16 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class VoyageMMarcoReranking(AbsTaskReranking):
     metadata = TaskMetadata(
         name="VoyageMMarcoReranking",
-        description="mMARCO is a multilingual version of the MS MARCO passage ranking dataset",
-        reference="https://github.com/unicamp-dl/mMARCO",
+        description="a hard-negative augmented version of the Japanese MMARCO dataset as used in Voyage AI Evaluation Suite",
+        reference="https://arxiv.org/abs/2312.16144",
         dataset={
-            "path": "C-MTEB/Mmarco-reranking",
-            "revision": "8e0c766dbe9e16e1d221116a3f36795fbade07f6",
+            "path": "bclavie/mmarco-japanese-hard-negatives",
+            "revision": "e25c91bc31859606507a968559ab1de0f472d007",
         },
         type="Reranking",
         category="s2s",
-        eval_splits=["dev"],
-        eval_langs=["cmn-Hans"],
+        eval_splits=["test"],
+        eval_langs=["jpn"],
         main_score="map",
         date=None,
         form=None,
@@ -27,23 +27,22 @@ class VoyageMMarcoReranking(AbsTaskReranking):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation="""@misc{bonifacio2021mmarco,
-      title={mMARCO: A Multilingual Version of MS MARCO Passage Ranking Dataset}, 
-      author={Luiz Henrique Bonifacio and Vitor Jeronymo and Hugo Queiroz Abonizio and Israel Campiotti and Marzieh Fadaee and  and Roberto Lotufo and Rodrigo Nogueira},
-      year={2021},
-      eprint={2108.13897},
+        bibtex_citation="""@misc{clavié2023jacolbert,
+      title={JaColBERT and Hard Negatives, Towards Better Japanese-First Embeddings for Retrieval: Early Technical Report}, 
+      author={Benjamin Clavié},
+      year={2023},
+      eprint={2312.16144},
       archivePrefix={arXiv},
-      primaryClass={cs.CL}
+      primaryClass={id='cs.CL' full_name='Computation and Language' is_active=True alt_name='cmp-lg' in_archive='cs' is_general=False description='Covers natural language processing. Roughly includes material in ACM Subject Class I.2.7. Note that work on artificial languages (programming languages, logics, formal systems) that does not explicitly address natural-language issues broadly construed (natural-language processing, computational linguistics, speech, text retrieval, etc.) is not appropriate for this area.'}
 }""",
         n_samples=None,
         avg_character_length=None,
     )
 
     def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )
         self.dataset = self.dataset.rename_column(
-            "positives", "positive"
-        ).rename_column("negatives", "negative")
-        self.dataset["test"] = self.dataset.pop("train")
+            {"positives": "positive", "negatives": "negative"}
+        )
+        self.dataset["test"] = self.dataset.pop("train").train_test_split(
+            test_size=2048, seed=self.seed
+        )["test"]
