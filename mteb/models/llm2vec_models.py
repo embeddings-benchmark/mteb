@@ -23,7 +23,16 @@ class LLM2VecWrapper:
             raise ImportError(
                 "To use the LLM2Vec models `llm2vec` is required. Please install it with `pip install llm2vec`."
             )
-        self.model = LLM2Vec.from_pretrained(*args, **kwargs)
+        extra_kwargs = {}
+        try:
+            import flash_attn
+
+            extra_kwargs["attn_implementation"] = "flash_attention_2"
+        except ImportError:
+            logger.warning(
+                "LLM2Vec models were trained with flash attention enabled. For optimal performance, please install the `flash_attn` package with `pip install flash-attn --no-build-isolation`."
+            )
+        self.model = LLM2Vec.from_pretrained(*args, **extra_kwargs, **kwargs)
 
     def encode(
         self,
