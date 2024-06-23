@@ -8,8 +8,13 @@ from sentence_transformers import SentenceTransformer
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.model_meta import ModelMeta
 from mteb.models import (
+    bge_models,
+    e5_instruct,
     e5_models,
+    gritlm,
+    mxbai_models,
     openai_models,
+    ru_sentence_models,
     sentence_transformers_models,
     voyage_models,
 )
@@ -53,8 +58,10 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
         A model metadata object
     """
     if model_name in models:
-        if not models[model_name].revision == revision:
-            raise ValueError(f"Model {revision} not found for model {model_name}")
+        if revision and (not models[model_name].revision == revision):
+            raise ValueError(
+                f"Model revision {revision} not found for model {model_name}"
+            )
         return models[model_name]
     else:  # assume it is a sentence-transformers model
         logger.info(
@@ -63,7 +70,9 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
         logger.info(
             f"Attempting to extract metadata by loading the model ({model_name}) using sentence-transformers."
         )
-        model = SentenceTransformer(model_name, revision=revision)
+        model = SentenceTransformer(
+            model_name, revision=revision, trust_remote_code=True
+        )
         meta = model_meta_from_sentence_transformers(model)
 
         meta.revision = revision
@@ -89,6 +98,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             release_date=None,
             languages=languages,
             framework=["Sentence Transformers"],
+            similarity_fn_name=model.similarity_fn_name,
         )
     except AttributeError as e:
         logger.warning(
@@ -103,9 +113,18 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
     return meta
 
 
-model_modules = [e5_models, sentence_transformers_models, openai_models, voyage_models]
+model_modules = [
+    e5_models,
+    gritlm,
+    e5_instruct,
+    sentence_transformers_models,
+    openai_models,
+    voyage_models,
+    bge_models,
+    mxbai_models,
+    ru_sentence_models,
+]
 models = {}
-
 
 for module in model_modules:
     for mdl in vars(module).values():

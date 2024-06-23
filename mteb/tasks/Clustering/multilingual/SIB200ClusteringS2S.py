@@ -208,8 +208,9 @@ _LANGS = {
 
 
 class SIB200ClusteringFast(MultilingualTask, AbsTaskClusteringFast):
+    max_document_to_embed = 1004
     metadata = TaskMetadata(
-        name="SIB200ClusteringFastS2S",
+        name="SIB200ClusteringS2S",
         description="""SIB-200 is the largest publicly available topic classification
         dataset based on Flores-200 covering 205 languages and dialects annotated. The dataset is
         annotated in English for the topics,  science/technology, travel, politics, sports,
@@ -221,7 +222,7 @@ class SIB200ClusteringFast(MultilingualTask, AbsTaskClusteringFast):
             "path": "mteb/sib200",
             "revision": "a74d7350ea12af010cfb1c21e34f1f81fd2e615b",
         },
-        type="Classification",
+        type="Clustering",
         category="s2s",
         eval_splits=["test"],
         eval_langs=_LANGS,

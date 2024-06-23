@@ -58,7 +58,6 @@ class AbsTask(ABC):
         self.dataset = None
         self.data_loaded = False
         self.is_multilingual = False
-        self.is_crosslingual = False
         self.save_suffix = kwargs.get("save_suffix", "")
 
         self.seed = seed
@@ -102,9 +101,7 @@ class AbsTask(ABC):
 
         scores = {}
         hf_subsets = (
-            [l for l in self.dataset.keys()]
-            if self.is_crosslingual or self.is_multilingual
-            else ["default"]
+            [l for l in self.dataset.keys()] if self.is_multilingual else ["default"]
         )
 
         for hf_subset in hf_subsets:
@@ -180,8 +177,7 @@ class AbsTask(ABC):
     def languages(self) -> list[str]:
         """Returns the languages of the task"""
         # check if self.hf_subsets is set
-        has_lang_splits = self.is_crosslingual or self.is_multilingual
-        if has_lang_splits and hasattr(self, "hf_subsets"):
+        if self.is_multilingual and hasattr(self, "hf_subsets"):
             assert isinstance(
                 self.metadata.eval_langs, dict
             ), "eval_langs must be dict for multilingual tasks"

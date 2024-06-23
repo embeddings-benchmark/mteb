@@ -22,14 +22,14 @@ class TenKGnadClusteringP2P(AbsTaskClustering):
         eval_langs=["deu-Latn"],
         main_score="v_measure",
         date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
+        form=["written"],
+        domains=["Web"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        socioeconomic_status="mixed",
         annotations_creators=None,
-        dialect=None,
-        text_creation=None,
+        dialect=[],
+        text_creation="found",
         bibtex_citation=None,
         n_samples={"test": 45914},
         avg_character_length={"test": 2641.03},
@@ -37,6 +37,7 @@ class TenKGnadClusteringP2P(AbsTaskClustering):
 
 
 class TenKGnadClusteringP2PFast(AbsTaskClusteringFast):
+    max_document_to_embed = 10275
     metadata = TaskMetadata(
         name="TenKGnadClusteringP2P.v2",
         description="Clustering of news article titles+subheadings+texts. Clustering of 10 splits on the news article category.",

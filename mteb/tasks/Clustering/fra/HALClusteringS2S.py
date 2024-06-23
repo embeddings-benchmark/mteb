@@ -38,7 +38,14 @@ class HALClusteringS2S(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@misc{ciancone2024extending,
+      title={Extending the Massive Text Embedding Benchmark to French}, 
+      author={Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
+      year={2024},
+      eprint={2405.20468},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
         n_samples=None,
         avg_character_length=None,
     )
@@ -56,6 +63,7 @@ class HALClusteringS2S(AbsTaskClustering):
 
 
 class HALClusteringS2SFast(AbsTaskClusteringFast):
+    max_document_to_embed = NUM_SAMPLES
     metadata = TaskMetadata(
         name="HALClusteringS2S.v2",
         description="Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s)",
@@ -78,7 +86,14 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
         annotations_creators="human-annotated",
         dialect=[],
         text_creation="found",
-        bibtex_citation="",
+        bibtex_citation="""@misc{ciancone2024extending,
+      title={Extending the Massive Text Embedding Benchmark to French}, 
+      author={Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
+      year={2024},
+      eprint={2405.20468},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
         n_samples={"test": NUM_SAMPLES},
         avg_character_length={"test": 86.6},
     )

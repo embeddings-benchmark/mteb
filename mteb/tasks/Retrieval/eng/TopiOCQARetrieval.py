@@ -39,20 +39,14 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
         dialect=[],
         text_creation="found",
         bibtex_citation="""
-            @inproceedings{adlakha2022topiocqa,
-            title={Topi{OCQA}: Open-domain Conversational Question Answering with Topic Switching},
-            author={Adlakha, Vaibhav and Dhuliawala, Shehzaad and Suleman, Kaheer and de Vries, Harm and Reddy, Siva},
-            journal={Transactions of the Association for Computational Linguistics},
-            volume = {10},
-            pages = {468-483},
-            year = {2022},
-            month = {04},
-            year={2022},
-            issn = {2307-387X},
-            doi = {10.1162/tacl_a_00471},
-            url = {https://doi.org/10.1162/tacl\_a\_00471},
-            eprint = {https://direct.mit.edu/tacl/article-pdf/doi/10.1162/tacl\_a\_00471/2008126/tacl\_a\_00471.pdf},
-            }
+        @misc{adlakha2022topiocqa,
+      title={TopiOCQA: Open-domain Conversational Question Answering with Topic Switching}, 
+      author={Vaibhav Adlakha and Shehzaad Dhuliawala and Kaheer Suleman and Harm de Vries and Siva Reddy},
+      year={2022},
+      eprint={2110.00768},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+        }
         """,
         n_samples={"dev": 2514},
         avg_character_length={"validation": 708},

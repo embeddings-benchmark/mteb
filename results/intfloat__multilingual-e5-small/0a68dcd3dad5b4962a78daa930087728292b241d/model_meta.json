@@ -1,0 +1,1 @@
+{"name": "intfloat/multilingual-e5-small", "revision": "0a68dcd3dad5b4962a78daa930087728292b241d", "release_date": null, "languages": [], "n_parameters": null, "memory_usage": null, "max_tokens": null, "embed_dim": null, "license": null, "open_source": null, "similarity_fn_name": null, "framework": ["Sentence Transformers"], "loader": null}

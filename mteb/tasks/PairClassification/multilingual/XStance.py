@@ -63,8 +63,8 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
 
         def convert_example(example):
             return {
-                "sent1": example["question"],
-                "sent2": example["comment"],
+                "sentence1": example["question"],
+                "sentence2": example["comment"],
                 "labels": 1 if example["label"] == "FAVOR" else 0,
             }
 

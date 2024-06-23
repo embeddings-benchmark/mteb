@@ -24,7 +24,7 @@ evaluation.run(model, output_folder="results")
 Or using the command line interface:
 
 ```bash
-mteb -m {model_name} -t {task_names}
+mteb run -m {model_name} -t {task_names}
 ```
 
 These will save the results in a folder called `results/{model_name}/{model_revision}`.

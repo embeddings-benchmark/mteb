@@ -49,7 +49,11 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
         annotations_creators="LM-generated",
         dialect=[],
         text_creation="LM-generated and verified",
-        bibtex_citation="",
+        bibtex_citation="""@ONLINE{wikidump,
+    author = "Wikimedia Foundation",
+    title  = "Wikimedia Downloads",
+    url    = "https://dumps.wikimedia.org"
+}""",
         n_samples={
             "en": 1500,
             "de": 1500,

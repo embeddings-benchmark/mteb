@@ -51,7 +51,21 @@ class LanguageClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation="",
+        bibtex_citation="""@InProceedings{conneau2018xnli,
+  author = {Conneau, Alexis
+                 and Rinott, Ruty
+                 and Lample, Guillaume
+                 and Williams, Adina
+                 and Bowman, Samuel R.
+                 and Schwenk, Holger
+                 and Stoyanov, Veselin},
+  title = {XNLI: Evaluating Cross-lingual Sentence Representations},
+  booktitle = {Proceedings of the 2018 Conference on Empirical Methods
+               in Natural Language Processing},
+  year = {2018},
+  publisher = {Association for Computational Linguistics},
+  location = {Brussels, Belgium},
+}""",
         n_samples={"test": 2048},
         avg_character_length={"test": 107.8},
     )

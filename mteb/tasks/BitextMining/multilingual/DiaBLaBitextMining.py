@@ -4,10 +4,10 @@ import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskBitextMining, CrosslingualTask
+from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 
-class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class DiaBLaBitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="DiaBlaBitextMining",
         dataset={

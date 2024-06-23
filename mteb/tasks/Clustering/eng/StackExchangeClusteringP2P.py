@@ -50,7 +50,7 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 16000},
+        n_samples={"test": 2996},
         avg_character_length={"test": 1090.7},
     )
 
@@ -75,13 +75,6 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
 
         self.dataset = DatasetDict(ds)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=16000,
-        )
 
 
 class StackExchangeClusteringP2P(AbsTaskClustering):
@@ -108,7 +101,19 @@ class StackExchangeClusteringP2P(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@article{geigle:2021:arxiv,
+        author    = {Gregor Geigle and 
+                        Nils Reimers and 
+                        Andreas R{\"u}ckl{\'e} and
+                        Iryna Gurevych},
+        title     = {TWEAC: Transformer with Extendable QA Agent Classifiers},
+        journal   = {arXiv preprint},
+        volume    = {abs/2104.07081},
+        year      = {2021},
+        url       = {http://arxiv.org/abs/2104.07081},
+        archivePrefix = {arXiv},
+        eprint    = {2104.07081}
+        }""",
         n_samples={"test": 75000},
         avg_character_length={"test": 1090.7},
     )

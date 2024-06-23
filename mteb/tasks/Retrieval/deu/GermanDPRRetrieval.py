@@ -32,7 +32,14 @@ class GermanDPR(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@misc{möller2021germanquad,
+      title={GermanQuAD and GermanDPR: Improving Non-English Question Answering and Passage Retrieval}, 
+      author={Timo Möller and Julian Risch and Malte Pietsch},
+      year={2021},
+      eprint={2104.12741},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
         n_samples=None,
         avg_character_length=None,
     )

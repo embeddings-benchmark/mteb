@@ -1,0 +1,30 @@
+{
+  "dataset_revision": "43265056790b8f7c59e0139acb4be0a8dad2c8f4",
+  "evaluation_time": 8.51686692237854,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.25",
+  "scores": {
+    "test": [
+      {
+        "cos_sim": {
+          "pearson": 0.5483161718892462,
+          "spearman": 0.6205735129241098
+        },
+        "euclidean": {
+          "pearson": 0.5915000354431326,
+          "spearman": 0.6205735129241098
+        },
+        "hf_subset": "default",
+        "languages": [
+          "rus-Cyrl"
+        ],
+        "main_score": 0.6205735129241098,
+        "manhattan": {
+          "pearson": 0.5902121973530567,
+          "spearman": 0.6197615552351592
+        }
+      }
+    ]
+  },
+  "task_name": "RUParaPhraserSTS"
+}

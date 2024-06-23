@@ -15,6 +15,7 @@ NUM_SAMPLES = 2048
 
 
 class CLSClusteringFastS2S(AbsTaskClusteringFast):
+    max_document_to_embed = NUM_SAMPLES
     metadata = TaskMetadata(
         name="CLSClusteringS2S.v2",
         description="Clustering of titles from CLS dataset. Clustering of 13 sets on the main category.",
@@ -71,6 +72,7 @@ class CLSClusteringFastS2S(AbsTaskClusteringFast):
 
 
 class CLSClusteringFastP2P(AbsTaskClusteringFast):
+    max_document_to_embed = NUM_SAMPLES
     metadata = TaskMetadata(
         name="CLSClusteringP2P.v2",
         description="Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the main category.",
@@ -187,13 +189,19 @@ class CLSClusteringP2P(AbsTaskClustering):
         annotations_creators=None,
         dialect=None,
         text_creation=None,
-        bibtex_citation=None,
+        bibtex_citation="""@article{li2022csl,
+  title={CSL: A large-scale Chinese scientific literature dataset},
+  author={Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
+  journal={arXiv preprint arXiv:2209.05034},
+  year={2022}
+}""",
         n_samples={"test": 100000},
         avg_character_length=None,
     )
 
 
 class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
+    max_document_to_embed = NUM_SAMPLES
     metadata = TaskMetadata(
         name="ThuNewsClusteringS2S.v2",
         dataset={
@@ -216,7 +224,14 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation="",
+        bibtex_citation="""@software{THUCTC,
+  author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
+  title = {THUCTC: An Efficient Chinese Text Classifier},
+  year = {2016},
+  note = {THU Chinese Text Classification Toolkit},
+  publisher = {THU Natural Language Processing Lab},
+  url = {https://github.com/thunlp/THUCTC}
+}""",
         n_samples={"test": NUM_SAMPLES},
         avg_character_length={},
     )
@@ -243,6 +258,7 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
 
 
 class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
+    max_document_to_embed = NUM_SAMPLES
     metadata = TaskMetadata(
         name="ThuNewsClusteringP2P.v2",
         dataset={
@@ -265,7 +281,14 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
         annotations_creators="derived",
         dialect=[],
         text_creation="found",
-        bibtex_citation="",
+        bibtex_citation="""@software{THUCTC,
+  author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
+  title = {THUCTC: An Efficient Chinese Text Classifier},
+  year = {2016},
+  note = {THU Chinese Text Classification Toolkit},
+  publisher = {THU Natural Language Processing Lab},
+  url = {https://github.com/thunlp/THUCTC}
+}""",
         n_samples={"test": NUM_SAMPLES},
         avg_character_length={},
     )

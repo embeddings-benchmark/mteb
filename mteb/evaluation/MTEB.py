@@ -164,14 +164,7 @@ class MTEB:
                         if task.is_multilingual
                         else ""
                     )
-                    crosslingual = (
-                        f", [italic cyan]crosslingual {len(task.hf_subsets)} / {len(task.metadata.eval_langs)} pairs[/]"
-                        if task.is_crosslingual
-                        else ""
-                    )
-                    console.print(
-                        f"{prefix}{name}{category}{multilingual}{crosslingual}"
-                    )
+                    console.print(f"{prefix}{name}{category}{multilingual}")
                 console.print("\n")
 
     @classmethod

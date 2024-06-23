@@ -50,8 +50,8 @@ class KlueNLI(AbsTaskPairClassification):
             )
             _dataset[split] = [
                 {
-                    "sent1": hf_dataset["premise"],
-                    "sent2": hf_dataset["hypothesis"],
+                    "sentence1": hf_dataset["premise"],
+                    "sentence2": hf_dataset["hypothesis"],
                     "labels": hf_dataset["label"],
                 }
             ]
