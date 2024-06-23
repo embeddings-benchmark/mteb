@@ -77,7 +77,7 @@ class LLM2VecWrapper:
         return self.model.encode(sentences, **kwargs)
 
     def encode_queries(
-        self, queries: list[str], prompt_name: str | None = None, **kwargs: Any
+        self, queries: list[str], **kwargs: Any
     ) -> np.ndarray:
         return self.encode(queries, **kwargs)
 
