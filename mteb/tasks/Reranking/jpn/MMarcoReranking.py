@@ -16,7 +16,7 @@ class VoyageMMarcoReranking(AbsTaskReranking):
         type="Reranking",
         category="s2s",
         eval_splits=["test"],
-        eval_langs=["jpn"],
+        eval_langs=["jpn-Jpan"],
         main_score="map",
         date=None,
         form=None,
@@ -41,8 +41,9 @@ class VoyageMMarcoReranking(AbsTaskReranking):
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column(
-            {"positives": "positive", "negatives": "negative"}
-        )
+            "positives", "positive"
+        ).rename_column("negatives", "negative")
+        # 391,061 dataset size
         self.dataset["test"] = self.dataset.pop("train").train_test_split(
             test_size=2048, seed=self.seed
         )["test"]
