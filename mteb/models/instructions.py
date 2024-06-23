@@ -86,6 +86,7 @@ TASKNAME2INSTRUCTIONS = {
     "TwitterURLCorpus": "Retrieve tweets that are semantically similar to the given tweet",
     "T2Reranking": "Given a Chinese search query, retrieve web passages that answer the question",
     "MMarcoReranking": "Given a Chinese search query, retrieve web passages that answer the question",
+    "VoyageMMarcoReranking": "Given a Japanese search query, retrieve web passages that answer the question",
     "CMedQAv1": "Given a Chinese community medical question, retrieve replies that best answer the question",
     "CMedQAv2": "Given a Chinese community medical question, retrieve replies that best answer the question",
     "Ocnli": "Retrieve semantically similar text.",
