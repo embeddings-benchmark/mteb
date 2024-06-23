@@ -46,3 +46,4 @@ class VoyageMMarcoReranking(AbsTaskReranking):
         self.dataset = self.dataset.rename_column(
             "positives", "positive"
         ).rename_column("negatives", "negative")
+        self.dataset["test"] = self.dataset.pop("train")
