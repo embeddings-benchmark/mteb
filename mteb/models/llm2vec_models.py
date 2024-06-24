@@ -32,6 +32,10 @@ class LLM2VecWrapper:
             logger.warning(
                 "LLM2Vec models were trained with flash attention enabled. For optimal performance, please install the `flash_attn` package with `pip install flash-attn --no-build-isolation`."
             )
+        self.task_to_instructions = None
+        if "task_to_instructions" in kwargs:
+            self.task_to_instructions = kwargs.pop("task_to_instructions")
+
         self.model = LLM2Vec.from_pretrained(*args, **extra_kwargs, **kwargs)
 
     def encode(
@@ -42,7 +46,12 @@ class LLM2VecWrapper:
         **kwargs: Any,  # noqa
     ) -> np.ndarray:
         if prompt_name is not None:
-            instruction = task_to_instruction(prompt_name)
+            instruction = (
+                self.task_to_instructions[prompt_name]
+                if self.task_to_instructions
+                and prompt_name in self.task_to_instructions
+                else task_to_instruction(prompt_name)
+            )
         else:
             instruction = ""
 
@@ -76,9 +85,7 @@ class LLM2VecWrapper:
         sentences = [["", sentence] for sentence in sentences]
         return self.model.encode(sentences, **kwargs)
 
-    def encode_queries(
-        self, queries: list[str], **kwargs: Any
-    ) -> np.ndarray:
+    def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
         return self.encode(queries, **kwargs)
 
 
