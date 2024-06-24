@@ -114,8 +114,6 @@ def run(args: argparse.Namespace) -> None:
         tasks=args.tasks,
     )
 
-    print("Tasks:", tasks)
-
     eval = mteb.MTEB(tasks=tasks)
 
     eval.run(
