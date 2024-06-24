@@ -42,7 +42,7 @@ class LLM2VecWrapper:
         self,
         sentences: List[str],
         *,
-        prompt_name: str | None = None,
+        prompt_name: str = None,
         **kwargs: Any,  # noqa
     ) -> np.ndarray:
         if prompt_name is not None:
@@ -61,7 +61,7 @@ class LLM2VecWrapper:
     def encode_corpus(
         self,
         corpus: List[dict[str, str]] | dict[str, List[str]] | List[str],
-        prompt_name: str | None = None,
+        prompt_name: str = None,
         **kwargs: Any,
     ) -> np.ndarray:
         sep = " "
