@@ -25,7 +25,7 @@ class VoyageMMarcoReranking(AbsTaskReranking):
         license="CC BY 4.0",
         socioeconomic_status="mixed",
         annotations_creators="derived",
-        dialect=[],
+        dialect=["jpn-Jpan"],
         text_creation="found",
         bibtex_citation="""@misc{clavié2023jacolbert,
       title={JaColBERT and Hard Negatives, Towards Better Japanese-First Embeddings for Retrieval: Early Technical Report}, 
@@ -35,8 +35,8 @@ class VoyageMMarcoReranking(AbsTaskReranking):
       archivePrefix={arXiv},
       primaryClass={id='cs.CL' full_name='Computation and Language' is_active=True alt_name='cmp-lg' in_archive='cs' is_general=False description='Covers natural language processing. Roughly includes material in ACM Subject Class I.2.7. Note that work on artificial languages (programming languages, logics, formal systems) that does not explicitly address natural-language issues broadly construed (natural-language processing, computational linguistics, speech, text retrieval, etc.) is not appropriate for this area.'}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"test": 391061},
+        avg_character_length={"test": 164},
     )
 
     def dataset_transform(self):
