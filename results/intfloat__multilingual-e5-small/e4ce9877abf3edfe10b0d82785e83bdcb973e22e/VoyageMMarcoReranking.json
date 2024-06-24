@@ -1,0 +1,26 @@
+{
+  "dataset_revision": "e25c91bc31859606507a968559ab1de0f472d007",
+  "evaluation_time": 1872.393664598465,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.25",
+  "scores": {
+    "test": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "jpn-Jpan"
+        ],
+        "main_score": 0.6348999819232641,
+        "map": 0.6348999819232641,
+        "mrr": 0.6406767345610118,
+        "nAUC_map_diff1": 0.6625849323644347,
+        "nAUC_map_max": 0.11384060530446966,
+        "nAUC_map_std": 0.3338435426668049,
+        "nAUC_mrr_diff1": 0.6432990594082483,
+        "nAUC_mrr_max": 0.11894465436812161,
+        "nAUC_mrr_std": 0.3386720132206433
+      }
+    ]
+  },
+  "task_name": "VoyageMMarcoReranking"
+}
