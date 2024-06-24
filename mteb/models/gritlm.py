@@ -28,7 +28,6 @@ def gritlm_loader(**kwargs):
                 else:
                     instruction = gritlm_instruction("")
                 kwargs["instruction"] = instruction
-                print("GritLMWrapper.encode instruction:", instruction)
                 return super().encode(*args, **kwargs)
             def encode_corpus(self, *args, **kwargs):
                 kwargs["is_query"] = False
