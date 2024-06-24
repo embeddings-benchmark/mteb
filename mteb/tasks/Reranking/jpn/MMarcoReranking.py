@@ -32,11 +32,9 @@ class VoyageMMarcoReranking(AbsTaskReranking):
       author={Benjamin Clavié},
       year={2023},
       eprint={2312.16144},
-      archivePrefix={arXiv},
-      primaryClass={id='cs.CL' full_name='Computation and Language' is_active=True alt_name='cmp-lg' in_archive='cs' is_general=False description='Covers natural language processing. Roughly includes material in ACM Subject Class I.2.7. Note that work on artificial languages (programming languages, logics, formal systems) that does not explicitly address natural-language issues broadly construed (natural-language processing, computational linguistics, speech, text retrieval, etc.) is not appropriate for this area.'}
-}""",
-        n_samples={"test": 391061},
-        avg_character_length={"test": 164},
+      archivePrefix={arXiv},}""",
+        n_samples={"test": 2048},
+        avg_character_length={"test": 162},
     )
 
     def dataset_transform(self):
