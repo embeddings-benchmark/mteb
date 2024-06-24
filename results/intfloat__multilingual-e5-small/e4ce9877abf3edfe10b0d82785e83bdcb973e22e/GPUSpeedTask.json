@@ -1,0 +1,45 @@
+{
+  "dataset_revision": "1.0",
+  "evaluation_time": 2.275144577026367,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.22",
+  "scores": {
+    "test": [
+      {
+        "architecture": "x86_64",
+        "avg_words_per_sec": 19574.690240268843,
+        "gpu_info": [
+          {
+            "gpu_name": "NVIDIA A10",
+            "gpu_total_memory": "22.48828125 GB"
+          }
+        ],
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 19574.690240268843,
+        "num_gpus": 1,
+        "physical_cores": 30,
+        "platform": "Linux",
+        "platform_release": "5.15.0-67-generic",
+        "platform_version": "#74~20.04.1-Ubuntu SMP Wed Feb 22 14:52:34 UTC 2023",
+        "processor": "x86_64",
+        "ram": "197 GB",
+        "time_mean": 0.18559680666242326,
+        "time_std": 0.0017364631538924163,
+        "timings": [
+          0.18281221389770508,
+          0.18471002578735352,
+          0.18478941917419434,
+          0.18564128875732422,
+          0.18893837928771973,
+          0.1864168643951416,
+          0.18586945533752441
+        ],
+        "total_cores": 30
+      }
+    ]
+  },
+  "task_name": "GPUSpeedTask"
+}

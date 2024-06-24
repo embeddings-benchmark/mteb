@@ -1,6 +1,4 @@
-"""Creates slurm jobs for running models on all tasks
-Create slurm jobs for running models on all tasks
-"""
+"""Creates slurm jobs for running models on all tasks"""
 
 from __future__ import annotations
 
