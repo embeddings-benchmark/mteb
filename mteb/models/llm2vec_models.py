@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Callable, List, Literal, Type
+from typing import Any, Callable, List, Literal, Type, Dict, Union
 
 import numpy as np
 import torch
@@ -60,12 +60,12 @@ class LLM2VecWrapper:
 
     def encode_corpus(
         self,
-        corpus: List[dict[str, str]] | dict[str, List[str]] | List[str],
+        corpus: Union[List[Dict[str, str]], Dict[str, List[str]], List[str]],
         prompt_name: str = None,
         **kwargs: Any,
     ) -> np.ndarray:
         sep = " "
-        if isinstance(corpus, dict):
+        if isinstance(corpus, Dict):
             sentences = [
                 (corpus["title"][i] + sep + corpus["text"][i]).strip()
                 if "title" in corpus
