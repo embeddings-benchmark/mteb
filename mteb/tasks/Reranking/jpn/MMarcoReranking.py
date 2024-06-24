@@ -21,7 +21,7 @@ class VoyageMMarcoReranking(AbsTaskReranking):
         date=("2016-12-01", "2023-12-23"),
         form=["written"],
         domains=["Academic", "Non-fiction"],
-        task_subtypes=["Scientific Retrieval"],
+        task_subtypes=["Scientific Reranking"],
         license="CC BY 4.0",
         socioeconomic_status="mixed",
         annotations_creators="derived",
