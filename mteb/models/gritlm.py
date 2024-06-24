@@ -23,12 +23,15 @@ def gritlm_loader(**kwargs):
             def encode(self, *args, **kwargs):
                 if "prompt_name" in kwargs:
                     instruction = gritlm_instruction(
-                        task_to_instruction(kwargs.pop("prompt_name"), kwargs.get("is_query", True))
+                        task_to_instruction(
+                            kwargs.pop("prompt_name"), kwargs.get("is_query", True)
+                        )
                     )
                 else:
                     instruction = gritlm_instruction("")
                 kwargs["instruction"] = instruction
                 return super().encode(*args, **kwargs)
+
             def encode_corpus(self, *args, **kwargs):
                 kwargs["is_query"] = False
                 return super().encode_corpus(*args, **kwargs)
