@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Callable, Literal, Type
+from typing import Any, Callable, List, Literal, Type
 
 import numpy as np
 import torch
@@ -40,7 +40,7 @@ class LLM2VecWrapper:
 
     def encode(
         self,
-        sentences: list[str],
+        sentences: List[str],
         *,
         prompt_name: str | None = None,
         **kwargs: Any,  # noqa
@@ -60,7 +60,7 @@ class LLM2VecWrapper:
 
     def encode_corpus(
         self,
-        corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
+        corpus: List[dict[str, str]] | dict[str, List[str]] | List[str],
         prompt_name: str | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
@@ -85,7 +85,7 @@ class LLM2VecWrapper:
         sentences = [["", sentence] for sentence in sentences]
         return self.model.encode(sentences, **kwargs)
 
-    def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
+    def encode_queries(self, queries: List[str], **kwargs: Any) -> np.ndarray:
         return self.encode(queries, **kwargs)
 
 
