@@ -45,8 +45,13 @@ class AbsTaskSpeedTask(AbsTask):
 
     def get_system_info(self) -> dict[str, str]:
         """Returns a dictionary with system information."""
-        import GPUtil
-        import psutil
+        try:
+            import GPUtil
+            import psutil
+        except ImportError as e:
+            raise ImportError(
+                "GPUtil and psutil is not installed. Please install them `pip install GPUtil psutil` or `pip install mteb[speedtask]`"
+            ) from e
 
         info = {}
         info["platform"] = platform.system()
