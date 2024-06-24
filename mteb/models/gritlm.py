@@ -20,15 +20,19 @@ def gritlm_loader(**kwargs):
         from gritlm import GritLM
 
         class GritLMWrapper(GritLM):
-            def encode(*args, **kwargs):
+            def encode(self, *args, **kwargs):
                 if "prompt_name" in kwargs:
                     instruction = gritlm_instruction(
-                        task_to_instruction(kwargs.pop("prompt_name"))
+                        task_to_instruction(kwargs.pop("prompt_name"), kwargs.get("is_query", True))
                     )
                 else:
                     instruction = gritlm_instruction("")
                 kwargs["instruction"] = instruction
-                super().encode(*args, **kwargs)
+                print("GritLMWrapper.encode instruction:", instruction)
+                return super().encode(*args, **kwargs)
+            def encode_corpus(self, *args, **kwargs):
+                kwargs["is_query"] = False
+                return super().encode_corpus(*args, **kwargs)
     except ImportError:
         raise ImportError(
             "GritLM is not installed. Please install it with `pip install gritlm`."
