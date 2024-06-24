@@ -5,9 +5,7 @@ import platform
 import time
 from pathlib import Path
 
-import GPUtil
 import numpy as np
-import psutil
 
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.MTEBResults import ScoresDict
@@ -47,6 +45,14 @@ class AbsTaskSpeedTask(AbsTask):
 
     def get_system_info(self) -> dict[str, str]:
         """Returns a dictionary with system information."""
+        try:
+            import GPUtil
+            import psutil
+        except ImportError as e:
+            raise ImportError(
+                "GPUtil and psutil is not installed. Please install them `pip install GPUtil psutil` or `pip install mteb[speedtask]`"
+            ) from e
+
         info = {}
         info["platform"] = platform.system()
         info["platform_release"] = platform.release()
