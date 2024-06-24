@@ -41,6 +41,7 @@ def test_two_mteb_tasks():
         "MalteseNewsClassification",
         "STS12",
         "SummEval",
+        "BlurbsClusteringP2P",
     ],
 )
 @pytest.mark.parametrize(

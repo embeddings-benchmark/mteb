@@ -59,6 +59,7 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
 
 class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
     max_document_to_embed = 2048
+    max_fraction_of_documents_to_embed = None
 
     metadata = TaskMetadata(
         name="WikiClusteringP2P.v2",

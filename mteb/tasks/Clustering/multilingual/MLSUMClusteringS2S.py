@@ -88,6 +88,8 @@ class MLSUMClusteringS2S(AbsTaskClustering, MultilingualTask):
 
 class MLSUMClusteringS2SFast(AbsTaskClusteringFast, MultilingualTask):
     max_document_to_embed = N_SAMPLES
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="MLSUMClusteringS2S.v2",
         description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",
