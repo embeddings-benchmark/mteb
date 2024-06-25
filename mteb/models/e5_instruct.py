@@ -99,7 +99,7 @@ class E5InstructWrapper(Encoder):
             batch_size = self.max_batch_size
         batched_embeddings = []
         if prompt_name is not None:
-            instruction = task_to_instruction(prompt_name)
+            instruction = task_to_instruction(prompt_name, is_query=encode_type == "query")
         else:
             instruction = ""
         for batch in tqdm(batched(sentences, batch_size)):
@@ -116,6 +116,7 @@ class E5InstructWrapper(Encoder):
     def encode_corpus(
         self,
         corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
+        prompt_name: str | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
         sep = " "
@@ -136,10 +137,16 @@ class E5InstructWrapper(Encoder):
                     else doc["text"].strip()
                     for doc in corpus
                 ]
-        return self.encode(sentences, encode_type="passage", **kwargs)
+        return self.encode(
+            sentences, encode_type="passage", prompt_name=prompt_name, **kwargs
+        )
 
-    def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
-        return self.encode(queries, encode_type="query", **kwargs)
+    def encode_queries(
+        self, queries: list[str], prompt_name: str | None = None, **kwargs: Any
+    ) -> np.ndarray:
+        return self.encode(
+            queries, encode_type="query", prompt_name=prompt_name, **kwargs
+        )
 
 
 class E5MistralWrapper(E5InstructWrapper):
