@@ -13,6 +13,7 @@ class RARbCode(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/humanevalpack-mbpp-pooled",
             "revision": "25f7d11a7ac12dcbb8d3836eb2de682b98c825e4",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

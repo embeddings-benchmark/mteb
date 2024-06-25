@@ -12,6 +12,7 @@ class ArxivClassification(AbsTaskClassification):
         dataset={
             "path": "ccdv/arxiv-classification",
             "revision": "f9bd92144ed76200d6eb3ce73a8bd4eba9ffdc85",
+            "trust_remote_code": True,
         },
         reference="https://ieeexplore.ieee.org/document/8675939",
         type="Classification",

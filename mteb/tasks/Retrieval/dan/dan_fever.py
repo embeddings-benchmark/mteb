@@ -9,6 +9,7 @@ class DanFever(AbsTaskRetrieval):
         dataset={
             "path": "strombergnlp/danfever",
             "revision": "5d01e3f6a661d48e127ab5d7e3aaa0dc8331438a",
+            "trust_remote_code": True,
         },
         description="A Danish dataset intended for misinformation research. It follows the same format as the English FEVER dataset.",
         reference="https://aclanthology.org/2021.nodalida-main.47/",

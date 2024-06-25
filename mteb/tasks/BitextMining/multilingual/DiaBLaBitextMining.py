@@ -13,6 +13,7 @@ class DiaBLaBitextMining(AbsTaskBitextMining, MultilingualTask):
         dataset={
             "path": "rbawden/DiaBLa",
             "revision": "5345895c56a601afe1a98519ce3199be60a27dba",
+            "trust_remote_code": True,
         },
         description="English-French Parallel Corpus. DiaBLa is an English-French dataset for the evaluation of Machine Translation (MT) for informal, written bilingual dialogue.",
         reference="https://inria.hal.science/hal-03021633",

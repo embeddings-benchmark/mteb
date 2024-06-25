@@ -16,6 +16,7 @@ class NLPJournalAbsIntroRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "sbintuitions/JMTEB",
             "revision": "e4af6c73182bebb41d94cb336846e5a452454ea7",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",

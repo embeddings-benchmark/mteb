@@ -13,6 +13,7 @@ class NFCorpusPL(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/nfcorpus-pl",
             "revision": "9a6f9567fda928260afed2de480d79c98bf0bec0",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

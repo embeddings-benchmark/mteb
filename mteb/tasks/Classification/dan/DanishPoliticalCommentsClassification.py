@@ -10,6 +10,7 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
         dataset={
             "path": "community-datasets/danish_political_comments",
             "revision": "edbb03726c04a0efab14fc8c3b8b79e4d420e5a1",
+            "trust_remote_code": True,
         },
         description="A dataset of Danish political comments rated for sentiment",
         reference="https://huggingface.co/datasets/danish_political_comments",

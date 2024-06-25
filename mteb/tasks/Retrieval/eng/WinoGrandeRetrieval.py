@@ -13,6 +13,7 @@ class WinoGrande(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/winogrande",
             "revision": "f74c094f321077cf909ddfb8bccc1b5912a4ac28",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",

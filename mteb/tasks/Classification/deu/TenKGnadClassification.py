@@ -13,6 +13,7 @@ class TenKGnadClassification(AbsTaskClassification):
         dataset={
             "path": "community-datasets/gnad10",
             "revision": "0798affe9b3f88cfda4267b6fbc50fac67046ee5",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="p2p",

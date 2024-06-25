@@ -14,6 +14,7 @@ class FinParaSTS(AbsTaskSTS):
             "path": "TurkuNLP/turku_paraphrase_corpus",
             "revision": "e4428e399de70a21b8857464e76f0fe859cabe05",
             "name": "plain",
+            "trust_remote_code": True,
         },
         description="Finnish paraphrase-based semantic similarity corpus",
         reference="https://huggingface.co/datasets/TurkuNLP/turku_paraphrase_corpus",

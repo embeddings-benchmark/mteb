@@ -14,6 +14,7 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
         dataset={
             "path": "hate-speech-filipino/hate_speech_filipino",
             "revision": "1994e9bb7f3ec07518e3f0d9e870cb293e234686",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

@@ -20,6 +20,7 @@ class MTOPIntentClassification(MultilingualTask, AbsTaskClassification):
         dataset={
             "path": "mteb/mtop_intent",
             "revision": "ae001d0e6b1228650b7bd1c2c65fb50ad11a8aba",
+            "trust_remote_code": True,
         },
         description="MTOP: Multilingual Task-Oriented Semantic Parsing",
         reference="https://arxiv.org/pdf/2008.09335.pdf",

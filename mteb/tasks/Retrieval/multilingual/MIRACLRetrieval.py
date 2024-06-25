@@ -68,6 +68,7 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "jinaai/miracl",
             "revision": "d28a029f35c4ff7f616df47b0edf54e6882395e6",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

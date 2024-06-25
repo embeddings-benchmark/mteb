@@ -12,6 +12,7 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
         dataset={
             "path": "rcds/swiss_judgment_prediction",
             "revision": "29806f87bba4f23d0707d3b6d9ea5432afefbe2f",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

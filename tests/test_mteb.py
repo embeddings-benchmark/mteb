@@ -12,6 +12,12 @@ from mteb import MTEB
 from mteb.abstasks import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.tasks.BitextMining.dan.BornholmskBitextMining import BornholmBitextMining
+from mteb.tasks.Classification.multilingual.IndicSentimentClassification import (
+    IndicSentimentClassification,
+)
+from mteb.tasks.Clustering.eng.TwentyNewsgroupsClustering import (
+    TwentyNewsgroupsClusteringFast,
+)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -28,22 +34,36 @@ def test_two_mteb_tasks():
     eval.run(model, output_folder="tests/results", overwrite_results=True)
 
 
-@pytest.mark.parametrize(
-    "task",
-    [
-        BornholmBitextMining(),
-        "TwentyNewsgroupsClustering",
-        "TwentyNewsgroupsClustering.v2",
-        "Banking77Classification",
-        "SciDocsRR",
-        "SprintDuplicateQuestions",
-        "NFCorpus",
-        "MalteseNewsClassification",
-        "STS12",
-        "SummEval",
-        "BlurbsClusteringP2P",
-    ],
-)
+twenty_news = TwentyNewsgroupsClusteringFast()
+
+# downsample to speed up tests
+twenty_news.max_document_to_embed = 1000
+twenty_news.n_clusters = 2
+twenty_news.max_fraction_of_documents_to_embed = None
+
+task_test_cases = [
+    BornholmBitextMining(),  # bitext mining + just supplying a task class instead of a string
+    IndicSentimentClassification(  # multi subset loader
+        hf_subsets=["as"],  # we only load one subset here to speed up tests
+        n_experiments=2,  # to speed up the test
+    ),
+    "TwentyNewsgroupsClustering",  # clustering and string instead of class
+    twenty_news,  # fast clustering
+    "Banking77Classification",  # classification
+    "SciDocsRR",  # reranking
+    "FarsTail",  # pair classification
+    "TwitterHjerneRetrieval",  # retrieval
+    "BrazilianToxicTweetsClassification",  # multilabel classification
+    "FaroeseSTS",  # STS
+    "SummEval",  # summarization
+]
+
+task_test_cases_only_string = [
+    t.metadata.name if isinstance(t, AbsTask) else t for t in task_test_cases
+]
+
+
+@pytest.mark.parametrize("task", task_test_cases)
 @pytest.mark.parametrize(
     "model_name",
     [
@@ -59,27 +79,19 @@ def test_mteb_task(task: Union[str, AbsTask], model_name: str):
 
 @pytest.mark.parametrize(
     "task_name",
-    [
-        "BornholmBitextMining",
-        "TwentyNewsgroupsClustering",
-        "TwentyNewsgroupsClustering.v2",
-        "Banking77Classification",
-        "SciDocsRR",
-        "SprintDuplicateQuestions",
-        "NFCorpus",
-        "MalteseNewsClassification",
-        "STS12",
-        "SummEval",
-    ],
+    task_test_cases,
 )
-def test_mteb_with_instructions(task_name: str):
+def test_mteb_with_instructions(task_name: str | AbsTask):
     """Test that all tasks correctly pass down the task_name to the encoder which supports it, and that the encoder which does not support it does not
     receive it.
     """
+    _task_name = (
+        task_name.metadata.name if isinstance(task_name, AbsTask) else task_name
+    )
 
     class EncoderWithInstructions(Encoder):
         def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-            assert prompt_name == task_name
+            assert prompt_name == _task_name
             return np.zeros((len(sentences), 10))
 
     class EncoderWithoutInstructions(SentenceTransformer):
@@ -87,7 +99,10 @@ def test_mteb_with_instructions(task_name: str):
             assert "prompt_name" not in kwargs
             return super().encode(sentences, **kwargs)
 
-    tasks = mteb.get_tasks(tasks=[task_name])
+    if isinstance(task_name, AbsTask):
+        tasks = [task_name]
+    else:
+        tasks = mteb.get_tasks(tasks=[task_name])
 
     eval = mteb.MTEB(tasks=tasks)
 

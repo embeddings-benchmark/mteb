@@ -14,6 +14,7 @@ class NaijaSenti(AbsTaskClassification, MultilingualTask):
         dataset={
             "path": "HausaNLP/NaijaSenti-Twitter",
             "revision": "a3d0415a828178edf3466246f49cfcd83b946ab3",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

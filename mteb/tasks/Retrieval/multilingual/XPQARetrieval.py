@@ -68,6 +68,7 @@ class XPQARetrieval(AbsTaskRetrieval, MultilingualTask):
         dataset={
             "path": "jinaai/xpqa",
             "revision": "c99d599f0a6ab9b85b065da6f9d94f9cf731679f",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

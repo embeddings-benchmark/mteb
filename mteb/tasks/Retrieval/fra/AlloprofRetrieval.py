@@ -15,6 +15,7 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "lyon-nlp/alloprof",
             "revision": "fcf295ea64c750f41fadbaa37b9b861558e1bfbd",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

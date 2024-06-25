@@ -11,6 +11,7 @@ class PatentClassification(AbsTaskClassification):
         dataset={
             "path": "ccdv/patent-classification",
             "revision": "2f38a1dfdecfacee0184d74eaeafd3c0fb49d2a6",
+            "trust_remote_code": True,
         },
         reference="https://aclanthology.org/P19-1212.pdf",
         type="Classification",

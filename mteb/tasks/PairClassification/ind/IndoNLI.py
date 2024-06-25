@@ -10,6 +10,7 @@ class IndoNLI(AbsTaskPairClassification):
         dataset={
             "path": "afaji/indonli",
             "revision": "3c976110fc13596004dc36279fc4c453ff2c18aa",
+            "trust_remote_code": True,
         },
         description="IndoNLI is the first human-elicited Natural Language Inference (NLI) dataset for Indonesian. IndoNLI is annotated by both crowd workers and experts.",
         reference="https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39",

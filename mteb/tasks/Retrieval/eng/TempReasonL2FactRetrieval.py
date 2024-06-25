@@ -13,6 +13,7 @@ class TempReasonL2Fact(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/TempReason-l2-fact",
             "revision": "13758bcf978613b249d0de4d0840f57815122bdf",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",

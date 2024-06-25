@@ -31,6 +31,7 @@ class IndicReviewsClusteringP2P(AbsTaskClustering, MultilingualTask):
         dataset={
             "path": "ai4bharat/IndicSentiment",
             "revision": "ccb472517ce32d103bba9d4f5df121ed5a6592a4",
+            "trust_remote_code": True,
         },
         description="Clustering of reviews from IndicSentiment dataset. Clustering of 14 sets on the generic categories label.",
         reference="https://arxiv.org/abs/2212.05409",
