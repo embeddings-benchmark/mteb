@@ -1,6 +1,6 @@
 from mteb.model_meta import ModelMeta
 
-paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
+jina_embeddings_v2_base_en = ModelMeta(
     name="jinaai/jina-embeddings-v2-base-en",
     languages=["eng_Latn"],
     open_source=True,
