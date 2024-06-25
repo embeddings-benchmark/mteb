@@ -2,6 +2,8 @@ from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
 
 
 class DanFever(AbsTaskRetrieval):
+    ignore_identical_ids = True
+    
     metadata = TaskMetadata(
         name="DanFEVER",
         dataset={

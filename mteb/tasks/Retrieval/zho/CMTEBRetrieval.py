@@ -27,6 +27,8 @@ def load_retrieval_data(dataset_path, dataset_revision, qrel_revision, eval_spli
 
 
 class T2Retrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="T2Retrieval",
         description="T2Ranking: A large-scale Chinese Benchmark for Passage Ranking",
@@ -76,6 +78,8 @@ class T2Retrieval(AbsTaskRetrieval):
 
 
 class MMarcoRetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="MMarcoRetrieval",
         description="MMarcoRetrieval",
@@ -258,6 +262,8 @@ class CmedqaRetrieval(AbsTaskRetrieval):
 
 
 class EcomRetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="EcomRetrieval",
         description="EcomRetrieval",
@@ -300,6 +306,8 @@ class EcomRetrieval(AbsTaskRetrieval):
 
 
 class MedicalRetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="MedicalRetrieval",
         description="MedicalRetrieval",
@@ -342,6 +350,8 @@ class MedicalRetrieval(AbsTaskRetrieval):
 
 
 class VideoRetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+    
     metadata = TaskMetadata(
         name="VideoRetrieval",
         description="VideoRetrieval",

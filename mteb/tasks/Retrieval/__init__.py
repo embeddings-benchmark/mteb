@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from .code.CodeEditSearchRetrieval import *
 from .code.CodeSearchNetRetrieval import *
-from .dan.dan_fever import *
-from .dan.t2nord_retrieval import *
-from .dan.twitterhjerne import *
+from .dan.DanFever import *
+from .dan.TV2Nordretrieval import *
+from .dan.TwitterHjerneRetrieval import *
 from .deu.GerDaLIRRetrieval import *
 from .deu.GerDaLIRSmallRetrieval import *
 from .deu.GermanDPRRetrieval import *
@@ -121,8 +121,8 @@ from .rus.RuBQRetrieval import *
 from .slk.SlovakSumRetrieval import *
 from .spa.SpanishPassageRetrievalS2P import *
 from .spa.SpanishPassageRetrievalS2S import *
-from .swe.swedn_retrieval import *
-from .swe.swefaq_retrieval import *
+from .swe.SwednRetrieval import *
+from .swe.SweFaqRetrieval import *
 from .tur.TurHistQuad import *
 from .vie.VieQuADRetrieval import *
 from .zho.CMTEBRetrieval import *

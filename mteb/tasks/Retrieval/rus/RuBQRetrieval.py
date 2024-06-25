@@ -6,6 +6,8 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class RuBQRetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+    
     metadata = TaskMetadata(
         name="RuBQRetrieval",
         dataset={
