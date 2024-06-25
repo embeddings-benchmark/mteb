@@ -99,7 +99,9 @@ class E5InstructWrapper(Encoder):
             batch_size = self.max_batch_size
         batched_embeddings = []
         if prompt_name is not None:
-            instruction = task_to_instruction(prompt_name, is_query=encode_type == "query")
+            instruction = task_to_instruction(
+                prompt_name, is_query=encode_type == "query"
+            )
         else:
             instruction = ""
         for batch in tqdm(batched(sentences, batch_size)):
