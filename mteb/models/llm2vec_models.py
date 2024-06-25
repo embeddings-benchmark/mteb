@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Callable, List, Literal, Type, Dict, Union
+from typing import Any, Callable, Dict, List, Literal, Type, Union
 
 import numpy as np
 import torch
@@ -13,6 +13,7 @@ logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 EncodeTypes = Literal["query", "passage"]
+
 
 def llm2vec_instruction(instruction):
     if len(instruction) > 0 and instruction[-1] != ":":
