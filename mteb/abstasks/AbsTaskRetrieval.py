@@ -402,8 +402,7 @@ class AbsTaskRetrieval(AbsTask):
 
 
 def process_language(relevant_docs, queries, corpus, lang=None):
-    """
-    We want to get three pieces of information:
+    """We want to get three pieces of information:
     - the number of documents (and their char length) in the corpus
     - the number of queries (and their char length)
     - the average number of relevant documents per query
@@ -414,7 +413,8 @@ def process_language(relevant_docs, queries, corpus, lang=None):
 
     # number of qrels that are not 0
     num_qrels_non_zero = sum(
-        sum(1 for doc_id in docs if docs[doc_id] != 0) for docs in relevant_docs.values()
+        sum(1 for doc_id in docs if docs[doc_id] != 0)
+        for docs in relevant_docs.values()
     )
     qrels_per_doc = num_qrels_non_zero / num_queries if num_queries else 0
 
@@ -423,7 +423,9 @@ def process_language(relevant_docs, queries, corpus, lang=None):
     print(f"Average query character length{language_description} is {query_len}")
     print(f"Number of documents{language_description} is {num_documents}")
     print(f"Number of queries{language_description} is {num_queries}")
-    print(f"Average number of relevant documents per query{language_description} is {qrels_per_doc}")
+    print(
+        f"Average number of relevant documents per query{language_description} is {qrels_per_doc}"
+    )
     return {
         "average_document_length": doc_len,
         "average_query_length": query_len,
