@@ -84,9 +84,9 @@ logger = logging.getLogger(__name__)
 def _save_model_metadata(model: mteb.Encoder, output_folder: Path) -> None:
     meta = model.mteb_model_meta  # type: ignore
 
-    save_path = (
-        output_folder / meta.model_name_as_path() / meta.revision / "model_meta.json"
-    )
+    revision = meta.revision if meta.revision is not None else "no_revision_available"
+
+    save_path = output_folder / meta.model_name_as_path() / revision / "model_meta.json"
 
     with save_path.open("w") as f:
         json.dump(meta.to_dict(), f)

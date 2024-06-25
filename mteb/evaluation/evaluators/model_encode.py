@@ -15,12 +15,16 @@ def model_encode(
     sentences: Sequence[str], *, model: Encoder, prompt_name: str | None, **kwargs
 ) -> np.ndarray:
     kwargs["prompt_name"] = prompt_name
-    if hasattr(model, "prompts") and prompt_name not in model.prompts:  # type: ignore
-        logger.info(
-            f"Prompt {prompt_name} not found in model prompts. Removing prompt_name argument."
-        )
-        kwargs.pop("prompt_name")
-
+    if hasattr(model, "prompts"):
+        # check if prompts is an empty dict
+        if not model.prompts:  # type: ignore
+            logger.info("Model does support prompts. Removing prompt_name argument.")
+            kwargs.pop("prompt_name")
+        elif prompt_name not in model.prompts:  # type: ignore
+            logger.info(
+                f"Prompt {prompt_name} not found in model prompts. Removing prompt_name argument."
+            )
+            kwargs.pop("prompt_name")
     logger.info(f"Encoding {len(sentences)} sentences.")
 
     embeddings = model.encode(sentences, **kwargs)
