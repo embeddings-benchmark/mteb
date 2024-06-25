@@ -441,10 +441,7 @@ def calculate_length(queries, corpus):
 
     for doc in corpus.values():
         if isinstance(doc, dict):
-            if "title" in doc:
-                doc_lens.append(len(doc["title"]) + len(doc["text"]))
-            else:
-                doc_lens.append(len(doc["text"]))
+            doc_lens.append(len(doc.get("title", "")) + len(doc["text"]))
         else:
             doc_lens.append(len(doc))
 
