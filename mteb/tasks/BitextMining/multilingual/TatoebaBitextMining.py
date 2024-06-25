@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskBitextMining, CrosslingualTask
+from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = {
     "sqi-eng": ["sqi-Latn", "eng-Latn"],
@@ -120,7 +120,7 @@ _LANGUAGES = {
 }
 
 
-class TatoebaBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class TatoebaBitextMining(AbsTaskBitextMining, MultilingualTask):
     fast_loading = True
     metadata = TaskMetadata(
         name="Tatoeba",

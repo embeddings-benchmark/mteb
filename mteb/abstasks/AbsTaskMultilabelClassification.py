@@ -125,7 +125,7 @@ class AbsTaskMultilabelClassification(AbsTask):
         unique_train_sentences = train_split.select(unique_train_indices)["text"]
 
         _unique_train_embeddings = model_encode(
-            unique_train_sentences, model=model, task_name=self.metadata.name
+            unique_train_sentences, model=model, prompt_name=self.metadata.name
         )
         unique_train_embeddings = dict(
             zip(unique_train_indices, _unique_train_embeddings)
@@ -142,7 +142,7 @@ class AbsTaskMultilabelClassification(AbsTask):
         except ValueError:
             logger.warning("Couldn't subsample, continuing with the entire test set.")
 
-        X_test = model_encode(test_text, model=model, task_name=self.metadata.name)
+        X_test = model_encode(test_text, model=model, prompt_name=self.metadata.name)
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
                 "=" * 10

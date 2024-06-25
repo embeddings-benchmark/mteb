@@ -91,7 +91,7 @@ class RedditFastClusteringP2P(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 16000},
+        n_samples={"test": 18375},
         avg_character_length={"test": 727.7},
     )
 
@@ -116,10 +116,3 @@ class RedditFastClusteringP2P(AbsTaskClusteringFast):
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
 
         self.dataset = DatasetDict(ds)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=16000,
-        )

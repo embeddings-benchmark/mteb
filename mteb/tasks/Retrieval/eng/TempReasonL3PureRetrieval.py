@@ -13,6 +13,7 @@ class TempReasonL3Pure(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/TempReason-l3-pure",
             "revision": "68fba138e7e63daccecfbdad0a9d2714e56e34ff",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",

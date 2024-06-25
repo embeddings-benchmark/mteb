@@ -12,6 +12,7 @@ class JavaneseIMDBClassification(AbsTaskClassification):
         dataset={
             "path": "w11wo/imdb-javanese",
             "revision": "11bef3dfce0ce107eb5e276373dcd28759ce85ee",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

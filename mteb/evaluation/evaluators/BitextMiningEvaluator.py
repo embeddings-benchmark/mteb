@@ -39,13 +39,14 @@ class BitextMiningEvaluator(Evaluator):
 
     def compute_metrics(self, model: Encoder):
         # Compute embeddings
-        logger.info(f"Encoding {self.n_subsets}x{self.n} sentences")
+        n_subsets = len(self.subsets)
+        logger.info(f"Encoding {n_subsets}x{self.n} sentences")
         embeddings = {}
         for sub in tqdm.tqdm(
-            self.subsets, desc=f"Encoding {self.n_subsets}x{self.n} sentences"
+            self.subsets, desc=f"Encoding {n_subsets}x{self.n} sentences"
         ):
             embeddings[sub] = model_encode(
-                self.sentences[sub], model=model, task_name=self.task_name
+                self.sentences[sub], model=model, prompt_name=self.task_name
             )
 
         if set(self.subsets) == {"sentence1", "sentence2"}:  # Case of a single pair

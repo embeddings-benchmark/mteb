@@ -76,6 +76,9 @@ class EightTagsClustering(AbsTaskClustering):
 
 
 class EightTagsClusteringFast(AbsTaskClusteringFast):
+    max_document_to_embed = N_SAMPLES
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="EightTagsClustering.v2",
         description="Clustering of headlines from social media posts in Polish belonging to 8 categories: film, history, "

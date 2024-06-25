@@ -30,6 +30,7 @@ class IndicQARetrieval(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "ai4bharat/IndicQA",
             "revision": "570d90ae4f7b64fe4fdd5f42fc9f9279b8c9fd9d",
+            "trust_remote_code": True,
         },
         description="IndicQA is a manually curated cloze-style reading comprehension dataset that can be used for evaluating question-answering models in 11 Indic languages. It is repurposed retrieving relevant context for each question.",
         reference="https://arxiv.org/abs/2212.05409",
@@ -72,7 +73,6 @@ class IndicQARetrieval(MultilingualTask, AbsTaskRetrieval):
                 name=f"indicqa.{lang}", **self.metadata_dict["dataset"]
             )[split]
             data = data.filter(lambda x: x["answers"]["text"] != "")
-            data = data.select(range(self.metadata.n_samples[split]))
 
             question_ids = {
                 question: sha256(question.encode("utf-8")).hexdigest()

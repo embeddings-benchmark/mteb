@@ -13,6 +13,7 @@ class QuoraPLRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/quora-pl",
             "revision": "0be27e93455051e531182b85e85e425aba12e9d4",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",

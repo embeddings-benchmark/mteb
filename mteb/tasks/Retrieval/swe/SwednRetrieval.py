@@ -10,6 +10,7 @@ class SwednRetrieval(AbsTaskRetrieval):
             "path": "sbx/superlim-2",
             "revision": "ef1661775d746e0844b299164773db733bdc0bf6",
             "name": "swedn",
+            "trust_remote_code": True,
         },
         description="The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper Dagens Nyheter (DN) during the years 2000--2020. The articles are filtered to resemble the CNN/DailyMail dataset both regarding textual structure",
         reference="https://spraakbanken.gu.se/en/resources/swedn",
@@ -36,6 +37,14 @@ class SwednRetrieval(AbsTaskRetrieval):
         n_samples={"test": 2048},
         avg_character_length={"test": 1946.35},
     )
+
+    def load_data(self, **kwargs):
+        """Load dataset from HuggingFace hub"""
+        if self.data_loaded:
+            return
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+        self.dataset_transform()
+        self.data_loaded = True
 
     def dataset_transform(self) -> None:
         """And transform to a retrieval datset, which have the following attributes

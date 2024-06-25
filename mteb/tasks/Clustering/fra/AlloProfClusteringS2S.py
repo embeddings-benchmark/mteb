@@ -20,6 +20,7 @@ class AlloProfClusteringS2S(AbsTaskClustering):
             "path": "lyon-nlp/alloprof",
             "revision": "392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
             "name": "documents",
+            "trust_remote_code": True,
         },
         type="Clustering",
         category="s2s",
@@ -65,6 +66,8 @@ class AlloProfClusteringS2S(AbsTaskClustering):
 
 class AlloProfClusteringS2SFast(AbsTaskClusteringFast):
     max_depth = 1
+    max_document_to_embed = 2556
+    max_fraction_of_documents_to_embed = None
 
     metadata = TaskMetadata(
         name="AlloProfClusteringS2S.v2",
@@ -74,6 +77,7 @@ class AlloProfClusteringS2SFast(AbsTaskClusteringFast):
             "path": "lyon-nlp/alloprof",
             "revision": "392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
             "name": "documents",
+            "trust_remote_code": True,
         },
         type="Clustering",
         category="s2s",

@@ -1,3 +1,5 @@
+import datasets
+
 from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
 
 
@@ -9,6 +11,7 @@ class DanFever(AbsTaskRetrieval):
         dataset={
             "path": "strombergnlp/danfever",
             "revision": "5d01e3f6a661d48e127ab5d7e3aaa0dc8331438a",
+            "trust_remote_code": True,
         },
         description="A Danish dataset intended for misinformation research. It follows the same format as the English FEVER dataset.",
         reference="https://aclanthology.org/2021.nodalida-main.47/",
@@ -46,6 +49,14 @@ class DanFever(AbsTaskRetrieval):
         avg_character_length={"train": 124.84},
         task_subtypes=["Claim verification"],
     )
+
+    def load_data(self, **kwargs):
+        """Load dataset from HuggingFace hub"""
+        if self.data_loaded:
+            return
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+        self.dataset_transform()
+        self.data_loaded = True
 
     def dataset_transform(self) -> None:
         """And transform to a retrieval datset, which have the following attributes

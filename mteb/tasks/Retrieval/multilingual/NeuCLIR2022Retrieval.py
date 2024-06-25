@@ -64,6 +64,7 @@ class NeuCLIR2022Retrieval(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "mteb/neuclir-2022",
             "revision": "920fc15b81e2324e52163904be663f340235cdea",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

@@ -50,7 +50,7 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 16000},
+        n_samples={"test": 2996},
         avg_character_length={"test": 1090.7},
     )
 
@@ -75,13 +75,6 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
 
         self.dataset = DatasetDict(ds)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=16000,
-        )
 
 
 class StackExchangeClusteringP2P(AbsTaskClustering):

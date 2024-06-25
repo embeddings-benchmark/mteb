@@ -91,7 +91,7 @@ class kNNClassificationEvaluator(Evaluator):
         y_train,
         sentences_test,
         y_test,
-        task_name: str,
+        task_name: str | None = None,
         k: int = 1,
         batch_size: int = 32,
         limit: int | None = None,
@@ -120,14 +120,14 @@ class kNNClassificationEvaluator(Evaluator):
         X_train = model_encode(
             self.sentences_train,
             model=model,
-            task_name=self.task_name,
+            prompt_name=self.task_name,
             batch_size=self.batch_size,
         )
         if test_cache is None:
             X_test = model_encode(
                 self.sentences_test,
                 model=model,
-                task_name=self.task_name,
+                prompt_name=self.task_name,
                 batch_size=self.batch_size,
             )
             test_cache = X_test
@@ -192,7 +192,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         X_train = model_encode(
             self.sentences_train,
             model=model,
-            task_name=self.task_name,
+            prompt_name=self.task_name,
             batch_size=self.batch_size,
         )
 
@@ -200,7 +200,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
             X_test = model_encode(
                 self.sentences_test,
                 model=model,
-                task_name=self.task_name,
+                prompt_name=self.task_name,
                 batch_size=self.batch_size,
             )
             test_cache = X_test
@@ -342,14 +342,14 @@ class logRegClassificationEvaluator(Evaluator):
         X_train = model_encode(
             self.sentences_train,
             model=model,
-            task_name=self.task_name,
+            prompt_name=self.task_name,
             batch_size=self.batch_size,
         )
         if test_cache is None:
             X_test = model_encode(
                 self.sentences_test,
                 model=model,
-                task_name=self.task_name,
+                prompt_name=self.task_name,
                 batch_size=self.batch_size,
             )
             test_cache = X_test

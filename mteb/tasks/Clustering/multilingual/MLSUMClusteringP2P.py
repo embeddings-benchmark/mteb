@@ -91,6 +91,9 @@ class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
 
 
 class MLSUMClusteringP2PFast(AbsTaskClustering, MultilingualTask):
+    max_document_to_embed = N_SAMPLES
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="MLSUMClusteringP2P.v2",
         description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",
@@ -102,7 +105,7 @@ class MLSUMClusteringP2PFast(AbsTaskClustering, MultilingualTask):
         },
         type="Clustering",
         category="p2p",
-        eval_splits=["validation", "test"],
+        eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="v_measure",
         date=("2010-01-01", "2018-09-30"),

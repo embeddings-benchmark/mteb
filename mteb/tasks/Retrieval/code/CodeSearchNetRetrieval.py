@@ -18,6 +18,7 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "code-search-net/code_search_net",
             "revision": "fdc6a9e39575768c27eb8a2a5f702bf846eb4759",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="p2p",

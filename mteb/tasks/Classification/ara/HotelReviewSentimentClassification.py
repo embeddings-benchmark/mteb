@@ -12,6 +12,7 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
         dataset={
             "path": "Elnagara/hard",
             "revision": "b108d2c32ee4e1f4176ea233e1a5ac17bceb9ef9",
+            "trust_remote_code": True,
         },
         description="HARD is a dataset of Arabic hotel reviews collected from the Booking.com website.",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-67056-0_3",

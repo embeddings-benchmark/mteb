@@ -4,15 +4,16 @@ import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskBitextMining, CrosslingualTask
+from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 
-class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class DiaBLaBitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="DiaBlaBitextMining",
         dataset={
             "path": "rbawden/DiaBLa",
             "revision": "5345895c56a601afe1a98519ce3199be60a27dba",
+            "trust_remote_code": True,
         },
         description="English-French Parallel Corpus. DiaBLa is an English-French dataset for the evaluation of Machine Translation (MT) for informal, written bilingual dialogue.",
         reference="https://inria.hal.science/hal-03021633",

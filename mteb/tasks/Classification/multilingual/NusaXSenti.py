@@ -14,6 +14,7 @@ class NusaXSentiClassification(AbsTaskClassification, MultilingualTask):
         dataset={
             "path": "indonlp/NusaX-senti",
             "revision": "a450ba4b1b6d2216c3674d3e576b2e85ce729add",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

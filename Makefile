@@ -5,7 +5,7 @@ install:
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	pip install ".[dev]"
+	pip install ".[dev,speedtask]"
 
 lint:
 	@echo "--- 🧹 Running linters ---"
@@ -21,6 +21,10 @@ lint-check:
 test:
 	@echo "--- 🧪 Running tests ---"
 	pytest -n auto --durations=5
+
+test-with-coverage:
+	@echo "--- 🧪 Running tests with coverage ---"
+	pytest -n auto --durations=5 --cov-report=term-missing --cov-config=pyproject.toml --cov=mteb
 
 pr:
 	@echo "--- 🚀 Running requirements for a PR ---"

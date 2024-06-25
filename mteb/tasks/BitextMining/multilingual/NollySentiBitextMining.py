@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskBitextMining, CrosslingualTask
+from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = {
     "en-ha": ["eng-Latn", "hau-Latn"],
@@ -12,7 +12,7 @@ _LANGUAGES = {
 }
 
 
-class NollySentiBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class NollySentiBitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="NollySentiBitextMining",
         dataset={

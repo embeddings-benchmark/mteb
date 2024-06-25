@@ -37,6 +37,9 @@ class TenKGnadClusteringS2S(AbsTaskClustering):
 
 
 class TenKGnadClusteringS2SFast(AbsTaskClusteringFast):
+    max_document_to_embed = 10275
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="TenKGnadClusteringS2S.v2",
         description="Clustering of news article titles. Clustering of 10 splits on the news article category.",

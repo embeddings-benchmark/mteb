@@ -10,6 +10,7 @@ class SweFaqRetrieval(AbsTaskRetrieval):
             "path": "AI-Sweden/SuperLim",
             "revision": "7ebf0b4caa7b2ae39698a889de782c09e6f5ee56",
             "name": "swefaq",
+            "trust_remote_code": True,
         },
         description="A Swedish QA dataset derived from FAQ",
         reference="https://spraakbanken.gu.se/en/resources/superlim",
@@ -31,6 +32,14 @@ class SweFaqRetrieval(AbsTaskRetrieval):
         n_samples={"test": 1024},
         avg_character_length={"test": 195.44},
     )
+
+    def load_data(self, **kwargs):
+        """Load dataset from HuggingFace hub"""
+        if self.data_loaded:
+            return
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+        self.dataset_transform()
+        self.data_loaded = True
 
     def dataset_transform(self) -> None:
         """And transform to a retrieval datset, which have the following attributes

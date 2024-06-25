@@ -17,6 +17,7 @@ class GermanDPR(AbsTaskRetrieval):
         dataset={
             "path": "deepset/germandpr",
             "revision": "5129d02422a66be600ac89cd3e8531b4f97d347d",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskSTS, CrosslingualTask
+from ....abstasks import AbsTaskSTS, MultilingualTask
 
 _LANGUAGES = {
     "en": ["eng-Latn"],
@@ -26,7 +26,7 @@ _LANGUAGES = {
 }
 
 
-class STS22CrosslingualSTS(AbsTaskSTS, CrosslingualTask):
+class STS22CrosslingualSTS(AbsTaskSTS, MultilingualTask):
     fast_loading = True
     metadata = TaskMetadata(
         name="STS22",

@@ -12,6 +12,7 @@ class DalajClassification(AbsTaskClassification):
             "path": "AI-Sweden/SuperLim",
             "revision": "7ebf0b4caa7b2ae39698a889de782c09e6f5ee56",
             "name": "dalaj",
+            "trust_remote_code": True,
         },
         description="A Swedish dataset for linguistic acceptability. Available as a part of Superlim.",
         reference="https://spraakbanken.gu.se/en/resources/superlim",

@@ -13,7 +13,7 @@ class TestRerankingEvaluator:
 
         setup_method is invoked for every test method of a class.
         """
-        self.evaluator = RerankingEvaluator([], task_name="test")
+        self.evaluator = RerankingEvaluator([])
 
     def test_mrr_at_k(self):
         is_relevant = [1, 1, 1, 0, 0, 0, 0, 0, 0]
@@ -53,6 +53,6 @@ class TestRerankingEvaluator:
         conf_scores = [self.evaluator.conf_scores(x) for x in pred_scores]
         nauc_scores_map = self.evaluator.nAUC_scores(conf_scores, ap_scores, "map")
 
-        assert nauc_scores_map["nAUC_map_max"] == pytest.approx(0.86943, TOL)
+        assert nauc_scores_map["nAUC_map_max"] == pytest.approx(0.8694, TOL)
         assert nauc_scores_map["nAUC_map_std"] == pytest.approx(0.94065, TOL)
         assert nauc_scores_map["nAUC_map_diff1"] == pytest.approx(0.85460, TOL)

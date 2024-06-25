@@ -69,6 +69,7 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "jinaai/xmarket_ml",
             "revision": "dfe57acff5b62c23732a7b7d3e3fb84ff501708b",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

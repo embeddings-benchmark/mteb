@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.12.39"
+version = "1.12.51"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -26,7 +26,7 @@ classifiers = [
 requires-python = ">=3.8"
 dependencies = [
     "datasets>=2.19.0",
-    "numpy>=1.0.0,<2.0.0",  # until https://github.com/huggingface/datasets/pull/6976 is merged
+    "numpy>=1.0.0,<2.0.0", # note: https://github.com/huggingface/datasets/issues/6980
     "requests>=2.26.0",
     "scikit_learn>=1.0.2",
     "scipy>=0.0.0",
@@ -51,9 +51,31 @@ homepage = "https://github.com/embeddings-benchmark/mteb"
 mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
-dev = ["ruff>=0.0.254", "pytest", "pytest-xdist"]
+dev = ["ruff>=0.0.254", "pytest", "pytest-xdist", "pytest-coverage"]
 codecarbon = ["codecarbon"]
+speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]
 
+[tool.coverage.report]
+
+omit = ["tests/*", "mteb/tasks/**/*", "scripts"]
+
+# Regexes for lines to exclude from consideration
+exclude_also = [
+    # Don't complain about missing debug-only code:
+    "def __repr__",
+    "if self\\.debug",
+
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+
+    # Don't complain if non-runnable code isn't run:
+    "if 0:",
+    "if __name__ == .__main__.:",
+
+    # Don't complain about abstract methods, they aren't run:
+    "@(abc\\.)?abstractmethod",
+    ]
 
 [tool.setuptools.packages.find]
 exclude = ["tests", "results"]

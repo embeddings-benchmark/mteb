@@ -4,7 +4,7 @@ import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskBitextMining, CrosslingualTask
+from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = {
     "ar-en": ["ara-Arab", "eng-Latn"],
@@ -36,12 +36,13 @@ _LANGUAGES = {
 _SPLITS = ["validation"]
 
 
-class IWSLT2017BitextMining(AbsTaskBitextMining, CrosslingualTask):
+class IWSLT2017BitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="IWSLT2017BitextMining",
         dataset={
             "path": "IWSLT/iwslt2017",
             "revision": "c18a4f81a47ae6fa079fe9d32db288ddde38451d",
+            "trust_remote_code": True,
         },
         description="The IWSLT 2017 Multilingual Task addresses text translation, including zero-shot translation, with a single MT system across all directions including English, German, Dutch, Italian and Romanian.",
         reference="https://aclanthology.org/2017.iwslt-1.1/",

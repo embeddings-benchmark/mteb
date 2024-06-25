@@ -30,15 +30,11 @@ class AbsTaskBitextMining(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
-        hf_subsets = (
-            [l for l in self.dataset]
-            if self.is_multilingual or self.is_crosslingual
-            else ["default"]
-        )
+        hf_subsets = [l for l in self.dataset] if self.is_multilingual else ["default"]
 
         scores = {}
         if self.parallel_subsets:
-            scores["default"] = self._evaluate_subset(
+            scores = self._evaluate_subset(
                 model,
                 self.dataset[split],  # type: ignore
                 parallel=True,

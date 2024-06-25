@@ -13,6 +13,7 @@ class HellaSwag(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/hellaswag",
             "revision": "a5c990205e017d10761197ccab3000936689c3ae",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",

@@ -14,7 +14,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class RedditFastClusteringS2S(AbsTaskClusteringFast):
     metadata = TaskMetadata(
-        name="RedditClusteringS2S.v2",
+        name="RedditClustering.v2",
         description="Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
         reference="https://arxiv.org/abs/2104.07081",
         dataset={
@@ -48,7 +48,7 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 16000},
+        n_samples={"test": 32768},
         avg_character_length={"test": 64.7},
     )
 
@@ -67,12 +67,13 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=16000,
+            n_samples=32768,
         )
+        self.max_fraction_of_documents_to_embed = None
 
 
 class RedditClustering(AbsTaskClustering):
-    superseeded_by = "RedditClusteringS2S.v2"
+    superseeded_by = "RedditClustering.v2"
     metadata = TaskMetadata(
         name="RedditClustering",
         description="Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",

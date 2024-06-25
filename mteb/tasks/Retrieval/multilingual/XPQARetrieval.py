@@ -2,7 +2,7 @@ from typing import List
 
 import datasets
 
-from mteb.abstasks import AbsTaskRetrieval, CrosslingualTask, TaskMetadata
+from mteb.abstasks import AbsTaskRetrieval, MultilingualTask, TaskMetadata
 
 _EVAL_LANGS = {
     "ara-ara": ["ara-Arab", "ara-Arab"],
@@ -60,7 +60,7 @@ _LANG_CONVERSION = {
 }
 
 
-class XPQARetrieval(AbsTaskRetrieval, CrosslingualTask):
+class XPQARetrieval(AbsTaskRetrieval, MultilingualTask):
     metadata = TaskMetadata(
         name="XPQARetrieval",
         description="XPQARetrieval",
@@ -68,6 +68,7 @@ class XPQARetrieval(AbsTaskRetrieval, CrosslingualTask):
         dataset={
             "path": "jinaai/xpqa",
             "revision": "c99d599f0a6ab9b85b065da6f9d94f9cf731679f",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

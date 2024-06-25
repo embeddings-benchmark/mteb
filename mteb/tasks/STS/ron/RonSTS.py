@@ -11,6 +11,7 @@ class RonSTS(AbsTaskSTS):
         dataset={
             "path": "dumitrescustefan/ro_sts",
             "revision": "41a33183b739070f3d46d9d446492c1d2f98ce1a",
+            "trust_remote_code": True,
         },
         description="High-quality Romanian translation of STSBenchmark.",
         reference="https://openreview.net/forum?id=JH61CD7afTv",
