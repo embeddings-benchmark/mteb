@@ -14,6 +14,11 @@ logger = logging.getLogger(__name__)
 
 EncodeTypes = Literal["query", "passage"]
 
+def llm2vec_instruction(instruction):
+    if len(instruction) > 0 and instruction[-1] != ":":
+        instruction = instruction.strip(".") + ":"
+    return instruction
+
 
 class LLM2VecWrapper:
     def __init__(self, *args, **kwargs):
@@ -50,7 +55,7 @@ class LLM2VecWrapper:
                 self.task_to_instructions[prompt_name]
                 if self.task_to_instructions
                 and prompt_name in self.task_to_instructions
-                else task_to_instruction(prompt_name)
+                else llm2vec_instruction(task_to_instruction(prompt_name))
             )
         else:
             instruction = ""
