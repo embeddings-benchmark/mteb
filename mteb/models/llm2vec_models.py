@@ -31,7 +31,7 @@ class LLM2VecWrapper:
             )
         extra_kwargs = {}
         try:
-            import flash_attn
+            import flash_attn  # noqa
 
             extra_kwargs["attn_implementation"] = "flash_attention_2"
         except ImportError:

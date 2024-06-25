@@ -62,10 +62,10 @@ class CohereTextEmbeddingModel(Encoder):
 
 
 nomic_embed = ModelMeta(
-    loader = CohereTextEmbeddingModel,
+    loader=CohereTextEmbeddingModel,
     name="embed-multilingual-v3.0",
-    languages=[], # Unknown, but support >100 languages
+    languages=[],  # Unknown, but support >100 languages
     open_source=False,
     revision=None,
-    release_date="2023-11-02", 
+    release_date="2023-11-02",
 )

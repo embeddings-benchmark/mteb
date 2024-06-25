@@ -1,12 +1,5 @@
 from sentence_transformers import SentenceTransformer
 
-model = SentenceTransformer("nomic-ai/nomic-embed-text-v1.5", trust_remote_code=True)
-
-emb = model.encode(["Hello, world!"])
-
-# !pip install einops
-
-
 from mteb.model_meta import ModelMeta
 
 
