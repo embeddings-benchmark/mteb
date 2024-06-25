@@ -65,6 +65,8 @@ class AlloProfClusteringS2S(AbsTaskClustering):
 
 class AlloProfClusteringS2SFast(AbsTaskClusteringFast):
     max_depth = 1
+    max_document_to_embed = 2556
+    max_fraction_of_documents_to_embed = None
 
     metadata = TaskMetadata(
         name="AlloProfClusteringS2S.v2",

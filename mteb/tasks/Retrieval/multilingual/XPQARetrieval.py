@@ -2,7 +2,7 @@ from typing import List
 
 import datasets
 
-from mteb.abstasks import AbsTaskRetrieval, CrosslingualTask, TaskMetadata
+from mteb.abstasks import AbsTaskRetrieval, MultilingualTask, TaskMetadata
 
 _EVAL_LANGS = {
     "ara-ara": ["ara-Arab", "ara-Arab"],
@@ -60,7 +60,7 @@ _LANG_CONVERSION = {
 }
 
 
-class XPQARetrieval(AbsTaskRetrieval, CrosslingualTask):
+class XPQARetrieval(AbsTaskRetrieval, MultilingualTask):
     metadata = TaskMetadata(
         name="XPQARetrieval",
         description="XPQARetrieval",

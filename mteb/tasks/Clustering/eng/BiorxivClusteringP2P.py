@@ -32,20 +32,13 @@ class BiorxivClusteringP2PFast(AbsTaskClusteringFast):
         dialect=[],
         text_creation="created",
         bibtex_citation="",
-        n_samples={"test": 2048},
+        n_samples={"test": 2151},
         avg_character_length={"test": 1664.0},
     )
 
     def dataset_transform(self):
         for split in self.metadata.eval_splits:
             check_label_distribution(self.dataset[split])
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=2048,
-        )
 
 
 class BiorxivClusteringP2P(AbsTaskClustering):

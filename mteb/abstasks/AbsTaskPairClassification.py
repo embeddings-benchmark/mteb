@@ -19,8 +19,8 @@ class AbsTaskPairClassification(AbsTask):
     is computed to measure how well the methods can be used for pairwise pair classification.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
-        sent1: list[str]
-        sent2: list[str]
+        sentence1: list[str]
+        sentence2: list[str]
         labels: list[int]
     """
 
@@ -41,8 +41,8 @@ class AbsTaskPairClassification(AbsTask):
             "sentence_transformers.evaluation.PairClassificationEvaluator"
         ).setLevel(logging.WARN)
         evaluator = PairClassificationEvaluator(
-            data_split["sent1"],
-            data_split["sent2"],
+            data_split["sentence1"],
+            data_split["sentence2"],
             data_split["labels"],
             task_name=self.metadata.name,
             **kwargs,

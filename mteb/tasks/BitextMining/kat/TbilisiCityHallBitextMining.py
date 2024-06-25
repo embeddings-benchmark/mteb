@@ -4,7 +4,7 @@ from datasets import DatasetDict, load_dataset
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskBitextMining, CrosslingualTask
+from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = {
     "kat_Geor": "ka",
@@ -18,7 +18,7 @@ _EVAL_LANGS = {
 _EVAL_SPLIT = "test"
 
 
-class TbilisiCityHallBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class TbilisiCityHallBitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="TbilisiCityHallBitextMining",
         dataset={

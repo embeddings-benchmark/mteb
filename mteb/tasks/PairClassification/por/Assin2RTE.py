@@ -50,8 +50,8 @@ class Assin2RTE(AbsTaskPairClassification):
         for split in self.metadata.eval_splits:
             _dataset[split] = [
                 {
-                    "sent1": self.dataset[split]["premise"],
-                    "sent2": self.dataset[split]["hypothesis"],
+                    "sentence1": self.dataset[split]["premise"],
+                    "sentence2": self.dataset[split]["hypothesis"],
                     "labels": self.dataset[split]["entailment_judgment"],
                 }
             ]

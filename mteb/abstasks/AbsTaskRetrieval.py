@@ -252,9 +252,7 @@ class AbsTaskRetrieval(AbsTask):
 
         scores = {}
         hf_subsets = (
-            [l for l in self.hf_subsets]
-            if (self.is_multilingual or self.is_crosslingual)
-            else ["default"]
+            [l for l in self.hf_subsets] if self.is_multilingual else ["default"]
         )
 
         for hf_subset in hf_subsets:

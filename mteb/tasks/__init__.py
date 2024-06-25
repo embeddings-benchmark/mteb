@@ -8,5 +8,6 @@ from .MultiLabelClassification import *
 from .PairClassification import *
 from .Reranking import *
 from .Retrieval import *
+from .SpeedTask import *
 from .STS import *
 from .Summarization import *

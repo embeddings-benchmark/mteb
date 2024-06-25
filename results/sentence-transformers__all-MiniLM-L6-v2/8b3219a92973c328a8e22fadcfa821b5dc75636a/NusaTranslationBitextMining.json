@@ -1,0 +1,143 @@
+{
+  "dataset_revision": "ba52e9d114a4a145d79b4293afab31304a999a4c",
+  "evaluation_time": 143.05158877372742,
+  "kg_co2_emissions": 9.734533066596691e-05,
+  "mteb_version": "1.12.34",
+  "scores": {
+    "train": [
+      {
+        "accuracy": 0.658,
+        "f1": 0.6025532467532466,
+        "hf_subset": "ind-abs",
+        "languages": [
+          "ind-Latn",
+          "abs-Latn"
+        ],
+        "main_score": 0.6025532467532466,
+        "precision": 0.5827762097981137,
+        "recall": 0.658
+      },
+      {
+        "accuracy": 0.5215151515151515,
+        "f1": 0.4593849166399476,
+        "hf_subset": "ind-btk",
+        "languages": [
+          "ind-Latn",
+          "bbc-Latn"
+        ],
+        "main_score": 0.4593849166399476,
+        "precision": 0.43945419021315824,
+        "recall": 0.5215151515151515
+      },
+      {
+        "accuracy": 0.6616666666666666,
+        "f1": 0.6043957854532851,
+        "hf_subset": "ind-bew",
+        "languages": [
+          "ind-Latn",
+          "bew-Latn"
+        ],
+        "main_score": 0.6043957854532851,
+        "precision": 0.5844274215750682,
+        "recall": 0.6616666666666666
+      },
+      {
+        "accuracy": 0.658,
+        "f1": 0.6033303117904814,
+        "hf_subset": "ind-bhp",
+        "languages": [
+          "ind-Latn",
+          "bhp-Latn"
+        ],
+        "main_score": 0.6033303117904814,
+        "precision": 0.5823008116883117,
+        "recall": 0.658
+      },
+      {
+        "accuracy": 0.541060606060606,
+        "f1": 0.482899347632381,
+        "hf_subset": "ind-jav",
+        "languages": [
+          "ind-Latn",
+          "jav-Latn"
+        ],
+        "main_score": 0.482899347632381,
+        "precision": 0.46309033852504056,
+        "recall": 0.541060606060606
+      },
+      {
+        "accuracy": 0.4665151515151515,
+        "f1": 0.4056949809830249,
+        "hf_subset": "ind-mad",
+        "languages": [
+          "ind-Latn",
+          "mad-Latn"
+        ],
+        "main_score": 0.4056949809830249,
+        "precision": 0.3865317847276401,
+        "recall": 0.4665151515151515
+      },
+      {
+        "accuracy": 0.35924242424242425,
+        "f1": 0.3058075092156115,
+        "hf_subset": "ind-mak",
+        "languages": [
+          "ind-Latn",
+          "mak-Latn"
+        ],
+        "main_score": 0.3058075092156115,
+        "precision": 0.2892226705235152,
+        "recall": 0.35924242424242425
+      },
+      {
+        "accuracy": 0.7642424242424243,
+        "f1": 0.7158531122917487,
+        "hf_subset": "ind-min",
+        "languages": [
+          "ind-Latn",
+          "min-Latn"
+        ],
+        "main_score": 0.7158531122917487,
+        "precision": 0.6972734542393634,
+        "recall": 0.7642424242424243
+      },
+      {
+        "accuracy": 0.897,
+        "f1": 0.8666999999999999,
+        "hf_subset": "ind-mui",
+        "languages": [
+          "ind-Latn",
+          "mui-Latn"
+        ],
+        "main_score": 0.8666999999999999,
+        "precision": 0.85325,
+        "recall": 0.897
+      },
+      {
+        "accuracy": 0.588,
+        "f1": 0.5251214507714508,
+        "hf_subset": "ind-rej",
+        "languages": [
+          "ind-Latn",
+          "rej-Latn"
+        ],
+        "main_score": 0.5251214507714508,
+        "precision": 0.5039654512154512,
+        "recall": 0.588
+      },
+      {
+        "accuracy": 0.5774242424242424,
+        "f1": 0.5166431999525023,
+        "hf_subset": "ind-sun",
+        "languages": [
+          "ind-Latn",
+          "sun-Latn"
+        ],
+        "main_score": 0.5166431999525023,
+        "precision": 0.49557306194978484,
+        "recall": 0.5774242424242424
+      }
+    ]
+  },
+  "task_name": "NusaTranslationBitextMining"
+}

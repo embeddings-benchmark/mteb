@@ -30,15 +30,15 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
         eval_splits=["test.full", "validation.full"],
         eval_langs=_LANGUAGES,
         main_score="ap",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
+        date=("2013-01-01", "2015-12-31"),
+        form=["spoken"],
+        domains=["Spoken"],
+        task_subtypes=[],
+        license="cc-by-nc-4.0",
+        socioeconomic_status="mixed",
+        annotations_creators="human-annotated",
+        dialect=[],
+        text_creation="created",
         bibtex_citation="""@misc{creutz2018open,
       title={Open Subtitles Paraphrase Corpus for Six Languages}, 
       author={Mathias Creutz},
@@ -47,8 +47,8 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        n_samples={"validation": 10168, "test": 10210},
+        avg_character_length={"validation": 24.4, "test": 23.8},
     )
 
     def load_data(self, **kwargs):
@@ -83,6 +83,6 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
                 del sent1[i]
                 del sent2[i]
             new_dict["labels"] = [labels]
-            new_dict["sent1"] = [sent1]
-            new_dict["sent2"] = [sent2]
+            new_dict["sentence1"] = [sent1]
+            new_dict["sentence2"] = [sent2]
             self.dataset[lang][split] = datasets.Dataset.from_dict(new_dict)

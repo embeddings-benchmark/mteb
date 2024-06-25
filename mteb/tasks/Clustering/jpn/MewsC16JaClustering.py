@@ -3,6 +3,9 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class MewsC16JaClustering(AbsTaskClusteringFast):
+    max_document_to_embed = 992
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="MewsC16JaClustering",
         description="""MewsC-16 (Multilingual Short Text Clustering Dataset for News in 16 languages) is constructed from Wikinews.

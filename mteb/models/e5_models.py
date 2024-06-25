@@ -116,7 +116,13 @@ XLMR_LANGUAGES = [
 class E5Wrapper:
     """following the implementation within the Scandinavian Embedding Benchmark and the intfloat/multilingual-e5-small documentation."""
 
-    def __init__(self, model_name: str, sep: str = " ", **kwargs: Any):
+    def __init__(
+        self,
+        model_name: str,
+        sep: str = " ",
+        prompt_name: str | None = None,
+        **kwargs: Any,
+    ):
         self.model_name = model_name
         self.mdl = SentenceTransformer(model_name)
         self.sep = sep
@@ -133,7 +139,13 @@ class E5Wrapper:
     ):
         return self.encode_queries(sentences, batch_size=batch_size, **kwargs)
 
-    def encode_queries(self, queries: list[str], batch_size: int = 32, **kwargs: Any):
+    def encode_queries(
+        self,
+        queries: list[str],
+        batch_size: int = 32,
+        prompt_name: str | None = None,
+        **kwargs: Any,
+    ):
         sentences = ["query: " + sentence for sentence in queries]
         emb = self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
         return emb
@@ -141,6 +153,7 @@ class E5Wrapper:
     def encode_corpus(
         self,
         corpus: list[dict[str, str]] | dict[str, list[str]],
+        prompt_name: str | None = None,
         batch_size: int = 32,
         **kwargs: Any,
     ):
@@ -175,5 +188,41 @@ e5_mult_large = ModelMeta(
     languages=XLMR_LANGUAGES,
     open_source=True,
     revision="4dc6d853a804b9c8886ede6dda8a073b7dc08a81",
+    release_date=E5_PAPER_RELEASE_DATE,
+)
+
+e5_eng_small_v2 = ModelMeta(
+    loader=partial(E5Wrapper, model_name="intfloat/e5-small-v2"),  # type: ignore
+    name="intfloat/e5-small-v2",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="dca8b1a9dae0d4575df2bf423a5edb485a431236",
+    release_date=E5_PAPER_RELEASE_DATE,
+)
+
+e5_eng_small = ModelMeta(
+    loader=partial(E5Wrapper, model_name="intfloat/e5-small"),  # type: ignore
+    name="intfloat/e5-small",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="e272f3049e853b47cb5ca3952268c6662abda68f",
+    release_date=E5_PAPER_RELEASE_DATE,
+)
+
+e5_eng_base_v2 = ModelMeta(
+    loader=partial(E5Wrapper, model_name="intfloat/e5-base-v2"),  # type: ignore
+    name="intfloat/e5-base-v2",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="1c644c92ad3ba1efdad3f1451a637716616a20e8",
+    release_date=E5_PAPER_RELEASE_DATE,
+)
+
+e5_eng_large_v2 = ModelMeta(
+    loader=partial(E5Wrapper, model_name="intfloat/e5-large-v2"),  # type: ignore
+    name="intfloat/e5-large-v2",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="b322e09026e4ea05f42beadf4d661fb4e101d311",
     release_date=E5_PAPER_RELEASE_DATE,
 )
