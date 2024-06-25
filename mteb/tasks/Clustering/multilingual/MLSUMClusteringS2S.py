@@ -24,7 +24,7 @@ class MLSUMClusteringS2S(AbsTaskClustering, MultilingualTask):
     metadata = TaskMetadata(
         name="MLSUMClusteringS2S",
         description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",
-        reference="https://huggingface.co/datasets/mlsum",
+        reference="https://huggingface.co/datasets/reciTAL/mlsum",
         dataset={
             "path": "reciTAL/mlsum",
             "revision": "b5d54f8f3b61ae17845046286940f03c6bc79bc7",

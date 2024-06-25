@@ -6,6 +6,8 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class ArguAna(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="ArguAna",
         description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
