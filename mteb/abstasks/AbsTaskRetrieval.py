@@ -8,6 +8,7 @@ from pathlib import Path
 from time import time
 from typing import Dict, Tuple
 
+import tqdm
 from datasets import Features, Value, load_dataset
 
 from ..evaluation.evaluators import RetrievalEvaluator
@@ -377,11 +378,20 @@ class AbsTaskRetrieval(AbsTask):
         self.load_data()
 
         all_details = {}
-        for split in self.metadata_dict["eval_splits"]:
+        pbar_split = tqdm.tqdm(
+            self.metadata_dict["eval_splits"], desc="Processing Splits..."
+        )
+        for split in pbar_split:
+            pbar_split.set_postfix_str(f"Split: {split}")
+            print(f"Processing metadata for split {split}")
             all_details[split] = {}
             if self.is_multilingual:
-                for lang in self.relevant_docs.keys():
-                    print(f"Evaluating details for language {lang} and split {split}")
+                pbar_lang = tqdm.tqdm(
+                    self.relevant_docs.keys(), desc="Processing Languages..."
+                )
+                for lang in pbar_lang:
+                    pbar_lang.set_postfix_str(f"Language: {lang}")
+                    print(f"Processing metadata for language {lang}")
                     split_details = process_language(
                         self.relevant_docs[lang][split],
                         self.queries[lang][split],
@@ -390,7 +400,6 @@ class AbsTaskRetrieval(AbsTask):
                     )
                     all_details[split][lang] = split_details
             else:
-                print(f"Evaluating details for split {split}")
                 split_details = process_language(
                     self.relevant_docs[split], self.queries[split], self.corpus[split]
                 )
