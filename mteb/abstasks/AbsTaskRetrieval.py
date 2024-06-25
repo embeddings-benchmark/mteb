@@ -381,7 +381,7 @@ class AbsTaskRetrieval(AbsTask):
             all_details[split] = {}
             if self.is_multilingual:
                 for lang in self.relevant_docs.keys():
-                    print(split, lang)
+                    print(f"Evaluating details for language {lang} and split {split}")
                     split_details = process_language(
                         self.relevant_docs[lang][split],
                         self.queries[lang][split],
@@ -390,7 +390,7 @@ class AbsTaskRetrieval(AbsTask):
                     )
                     all_details[split][lang] = split_details
             else:
-                print(split)
+                print(f"Evaluating details for split {split}")
                 split_details = process_language(
                     self.relevant_docs[split], self.queries[split], self.corpus[split]
                 )
