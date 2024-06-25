@@ -538,6 +538,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [VieMedEVBitextMining](https://aclanthology.org/2015.iwslt-evaluation.11/) (Nhu Vo, 2024) | ['eng', 'vie'] | BitextMining | s2s | [Medical] | {'test': 2048} | {'test': 139.23} |
 | [VieQuADRetrieval](https://aclanthology.org/2020.coling-main.233.pdf) | ['vie'] | Retrieval | s2p | [Encyclopaedic, Non-fiction] | {'validation': 2048} | {'validation': 790.24} |
 | [VieStudentFeedbackClassification](https://ieeexplore.ieee.org/document/8573337) (Nguyen et al., 2018) | ['vie'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 14.22} |
+| [VoyageMMarcoReranking](https://arxiv.org/abs/2312.16144) (Benjamin Clavié, 2023) | ['jpn'] | Reranking | s2s | [Academic, Non-fiction] | {'test': 2048} | {'test': 162.0} |
 | [WRIMEClassification](https://aclanthology.org/2021.naacl-main.169/) | ['jpn'] | Classification | s2s | [Social] | {'test': 2048} | {'test': 47.78} |
 | [Waimai](https://aclanthology.org/2023.nodalida-1.20/) | ['cmn'] | Classification | s2s |  |  |  |
 | [WebLINXCandidatesReranking](https://mcgill-nlp.github.io/weblinx) (Xing Han Lù, 2024) | ['eng'] | Reranking | p2p | [Academic, Web] | {'validation': 1301, 'test_iid': 1438, 'test_cat': 3560, 'test_web': 3144, 'test_vis': 5298, 'test_geo': 4916} | {'validation': 1647.52, 'test_iid': 1722.63, 'test_cat': 2149.66, 'test_web': 1831.46, 'test_vis': 1737.26, 'test_geo': 1742.66} |
@@ -976,7 +977,7 @@ The following tables give you an overview of the tasks in MTEB.
 | jid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | jiv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | jni | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| jpn | 5 | 8 | 3 | 0 | 0 | 1 | 1 | 9 | 2 | 0 | 0 |
+| jpn | 5 | 8 | 3 | 0 | 0 | 1 | 2 | 9 | 2 | 0 | 0 |
 | jvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kab | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kac | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
@@ -1621,7 +1622,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1394 | 793 | 304 | 3 | 28 | 67 | 46 | 356 | 85 | 2 | 2 |
+| Total | 1394 | 793 | 304 | 3 | 28 | 67 | 47 | 356 | 85 | 2 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
