@@ -522,7 +522,7 @@ class RetrievalEvaluator(Evaluator):
     ) -> Tuple[Dict[str, float], dict[str, float], dict[str, float], dict[str, float]]:
         if ignore_identical_ids:
             logger.info(
-                "For evaluation, we ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=False`` to ignore this."
+                "Evaluation ignores identical query and document ids (default), please explicitly set ``ignore_identical_ids=False`` to stop this."
             )
             popped = []
             for qid, rels in results.items():
