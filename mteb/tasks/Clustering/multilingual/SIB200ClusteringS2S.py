@@ -209,6 +209,8 @@ _LANGS = {
 
 class SIB200ClusteringFast(MultilingualTask, AbsTaskClusteringFast):
     max_document_to_embed = 1004
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="SIB200ClusteringS2S",
         description="""SIB-200 is the largest publicly available topic classification

@@ -4,6 +4,8 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class LivedoorNewsClustering(AbsTaskClusteringFast):
     max_document_to_embed = 1107
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="LivedoorNewsClustering",
         description="Clustering of the news reports of a Japanese news site, Livedoor News by RONDHUIT Co, Ltd. in 2012. It contains over 7,000 news report texts across 9 categories (topics).",
