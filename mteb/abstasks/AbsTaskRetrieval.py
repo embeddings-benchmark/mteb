@@ -378,42 +378,76 @@ class AbsTaskRetrieval(AbsTask):
     def calculate_metadata_metrics(self) -> None:
         self.load_data()
 
+        all_details = {}
         for split in self.metadata_dict["eval_splits"]:
+            all_details[split] = {}
             if self.is_multilingual:
                 for lang in self.relevant_docs.keys():
-                    process_language(
+                    print(split, lang)
+                    split_details = process_language(
                         self.relevant_docs[lang][split],
                         self.queries[lang][split],
                         self.corpus[lang][split],
                         lang,
                     )
+                    all_details[split][lang] = split_details
             else:
-                process_language(
+                print(split)
+                split_details = process_language(
                     self.relevant_docs[split], self.queries[split], self.corpus[split]
                 )
+                all_details[split] = split_details
+
+        return all_details
 
 
 def process_language(relevant_docs, queries, corpus, lang=None):
-    total_length, num_pairs = calculate_length_and_count(relevant_docs, queries, corpus)
-    average_length = total_length / num_pairs if num_pairs else 0
-    num_documents = len(queries) + len(corpus)
+    """
+    We want to get three pieces of information:
+    - the number of documents (and their char length) in the corpus
+    - the number of queries (and their char length)
+    - the average number of relevant documents per query
+    """
+    query_len, doc_len = calculate_length(queries, corpus)
+    num_documents = len(corpus)
+    num_queries = len(queries)
+
+    # number of qrels that are not 0
+    num_qrels_non_zero = sum(
+        sum(1 for doc_id in docs if docs[doc_id] != 0) for docs in relevant_docs.values()
+    )
+    qrels_per_doc = num_qrels_non_zero / num_queries if num_queries else 0
 
     language_description = f" for language {lang}" if lang else ""
-    print(f"Average character length{language_description} is {average_length}")
-    print(f"Number of queries and documents{language_description} is {num_documents}")
+    print(f"Average document character length{language_description} is {doc_len}")
+    print(f"Average query character length{language_description} is {query_len}")
+    print(f"Number of documents{language_description} is {num_documents}")
+    print(f"Number of queries{language_description} is {num_queries}")
+    print(f"Average number of relevant documents per query{language_description} is {qrels_per_doc}")
+    return {
+        "average_document_length": doc_len,
+        "average_query_length": query_len,
+        "num_documents": num_documents,
+        "num_queries": num_queries,
+        "average_relevant_docs_per_query": qrels_per_doc,
+    }
 
 
-def calculate_length_and_count(relevant_docs, queries, corpus):
-    total_length = 0
-    num_pairs = 0
-    for query_id, docs in relevant_docs.items():
-        query = queries[query_id]
-        for doc_id in docs:
-            # not relevant
-            if docs[doc_id] == 0:
-                continue
-            doc = corpus[doc_id]
-            doc_text = doc["title"] + doc["text"]
-            total_length += len(query) + len(doc_text)
-            num_pairs += 1
-    return total_length, num_pairs
+def calculate_length(queries, corpus):
+    queries_lens = []
+    doc_lens = []
+    for query in queries.values():
+        queries_lens.append(len(query))
+
+    for doc in corpus.values():
+        if isinstance(doc, dict):
+            if "title" in doc:
+                doc_lens.append(len(doc["title"]) + len(doc["text"]))
+            else:
+                doc_lens.append(len(doc["text"]))
+        else:
+            doc_lens.append(len(doc))
+
+    doc_len = sum(doc_lens) / len(doc_lens) if doc_lens else 0
+    query_len = sum(queries_lens) / len(queries_lens) if queries_lens else 0
+    return query_len, doc_len
