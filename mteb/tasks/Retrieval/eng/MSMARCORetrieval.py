@@ -7,7 +7,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class MSMARCO(AbsTaskRetrieval):
     ignore_identical_ids = True
-    
+
     metadata = TaskMetadata(
         name="MSMARCO",
         dataset={

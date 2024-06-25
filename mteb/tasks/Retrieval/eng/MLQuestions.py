@@ -9,7 +9,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class MLQuestionsRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
-    
+
     metadata = TaskMetadata(
         name="MLQuestions",
         dataset={

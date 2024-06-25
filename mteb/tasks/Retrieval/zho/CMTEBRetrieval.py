@@ -351,7 +351,7 @@ class MedicalRetrieval(AbsTaskRetrieval):
 
 class VideoRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
-    
+
     metadata = TaskMetadata(
         name="VideoRetrieval",
         description="VideoRetrieval",

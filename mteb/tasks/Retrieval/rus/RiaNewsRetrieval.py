@@ -7,7 +7,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class RiaNewsRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
-    
+
     metadata = TaskMetadata(
         name="RiaNewsRetrieval",
         dataset={

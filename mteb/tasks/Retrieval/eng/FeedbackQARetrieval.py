@@ -7,7 +7,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class FeedbackQARetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
-    
+
     metadata = TaskMetadata(
         name="FeedbackQARetrieval",
         description="Using Interactive Feedback to Improve the Accuracy and Explainability of Question Answering Systems Post-Deployment",
