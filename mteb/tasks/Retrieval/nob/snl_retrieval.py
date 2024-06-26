@@ -40,7 +40,6 @@ class SNLRetrieval(AbsTaskRetrieval):
                 "num_queries": 1300,
                 "average_relevant_docs_per_query": 1.0,
             },
-            "task_name": "SNLRetrieval",
         },
         task_subtypes=["Article retrieval"],
     )

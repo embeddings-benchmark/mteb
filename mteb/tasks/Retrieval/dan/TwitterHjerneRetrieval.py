@@ -41,7 +41,6 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
                 "num_queries": 78,
                 "average_relevant_docs_per_query": 3.358974358974359,
             },
-            "task_name": "TwitterHjerneRetrieval",
         },
         task_subtypes=["Question answering"],
     )

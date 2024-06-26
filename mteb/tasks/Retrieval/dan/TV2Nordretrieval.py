@@ -62,7 +62,6 @@ class TV2Nordretrieval(AbsTaskRetrieval):
                 "num_queries": 2048,
                 "average_relevant_docs_per_query": 1.0,
             },
-            "task_name": "TV2Nordretrieval",
         },
         task_subtypes=["Article retrieval"],
     )
