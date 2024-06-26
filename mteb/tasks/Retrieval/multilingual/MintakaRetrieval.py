@@ -96,7 +96,7 @@ class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
     pages = "1604--1619"
 }""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={"test": {"ar": {"average_document_length": 12.736418511066399, "average_query_length": 55.275533363595095, "num_documents": 1491, "num_queries": 2203, "average_relevant_docs_per_query": 1.0}, "de": {"average_document_length": 14.40060422960725, "average_query_length": 65.41322662173546, "num_documents": 1655, "num_queries": 2374, "average_relevant_docs_per_query": 1.0}, "es": {"average_document_length": 14.291789722386296, "average_query_length": 64.88325082508251, "num_documents": 1693, "num_queries": 2424, "average_relevant_docs_per_query": 1.0}, "fr": {"average_document_length": 14.407234539089849, "average_query_length": 68.88452088452088, "num_documents": 1714, "num_queries": 2442, "average_relevant_docs_per_query": 1.0}, "hi": {"average_document_length": 12.71038961038961, "average_query_length": 58.404637247569184, "num_documents": 770, "num_queries": 1337, "average_relevant_docs_per_query": 1.0}, "it": {"average_document_length": 14.365985576923077, "average_query_length": 64.39707724425887, "num_documents": 1664, "num_queries": 2395, "average_relevant_docs_per_query": 1.0004175365344468}, "ja": {"average_document_length": 9.167713567839195, "average_query_length": 29.961937716262977, "num_documents": 1592, "num_queries": 2312, "average_relevant_docs_per_query": 1.0}, "pt": {"average_document_length": 14.244471744471744, "average_query_length": 60.42225998300765, "num_documents": 1628, "num_queries": 2354, "average_relevant_docs_per_query": 1.0004248088360237}}},
     )
 
     def load_data(self, **kwargs):

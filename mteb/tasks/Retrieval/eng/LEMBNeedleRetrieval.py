@@ -58,16 +58,7 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
             "test_16384": 150,
             "test_32768": 150,
         },
-        avg_character_length={
-            "test_256": 1074.4,
-            "test_512": 2067.0,
-            "test_1024": 4129.5,
-            "test_2048": 8513.4,
-            "test_4096": 17452.7,
-            "test_8192": 35261.6,
-            "test_16384": 72113.7,
-            "test_32768": 141829.0,
-        },
+        avg_character_length={"test_256": {"average_document_length": 1013.22, "average_query_length": 60.48, "num_documents": 100, "num_queries": 50, "average_relevant_docs_per_query": 1.0}, "test_512": {"average_document_length": 2009.96, "average_query_length": 57.3, "num_documents": 100, "num_queries": 50, "average_relevant_docs_per_query": 1.0}, "test_1024": {"average_document_length": 4069.9, "average_query_length": 58.28, "num_documents": 100, "num_queries": 50, "average_relevant_docs_per_query": 1.0}, "test_2048": {"average_document_length": 8453.82, "average_query_length": 59.92, "num_documents": 100, "num_queries": 50, "average_relevant_docs_per_query": 1.0}, "test_4096": {"average_document_length": 17395.8, "average_query_length": 55.86, "num_documents": 100, "num_queries": 50, "average_relevant_docs_per_query": 1.0}, "test_8192": {"average_document_length": 35203.82, "average_query_length": 59.6, "num_documents": 100, "num_queries": 50, "average_relevant_docs_per_query": 1.0}, "test_16384": {"average_document_length": 72054.8, "average_query_length": 59.12, "num_documents": 100, "num_queries": 50, "average_relevant_docs_per_query": 1.0}, "test_32768": {"average_document_length": 141769.8, "average_query_length": 58.34, "num_documents": 100, "num_queries": 50, "average_relevant_docs_per_query": 1.0}},
     )
 
     def load_data(self, **kwargs):

@@ -52,5 +52,5 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
 }
 """,
         n_samples={"test": 1992},
-        avg_character_length={"test": 1175},
+        avg_character_length={"test": {"average_document_length": 1174.7986463620982, "average_query_length": 72.33182730923694, "num_documents": 2364, "num_queries": 1992, "average_relevant_docs_per_query": 1.0}},
     )

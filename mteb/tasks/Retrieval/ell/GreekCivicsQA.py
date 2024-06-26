@@ -34,7 +34,8 @@ class GreekCivicsQA(AbsTaskRetrieval):
         text_creation="found",
         bibtex_citation="",
         n_samples={"default": 407},
-        avg_character_length={"default": 2226.85},
+        avg_character_length={"default": {"average_document_length": 1074.894348894349, "average_query_length": 77.06142506142506, "num_documents": 407, "num_queries": 407, "average_relevant_docs_per_query": 1.0}}
+,
     )
 
     def load_data(self, **kwargs):

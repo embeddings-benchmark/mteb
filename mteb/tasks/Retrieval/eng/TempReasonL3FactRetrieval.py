@@ -43,5 +43,5 @@ class TempReasonL3Fact(AbsTaskRetrieval):
 }
 """,
         n_samples={"test": 4426},
-        avg_character_length={"test": 919.9},
+        avg_character_length={"test": {"average_document_length": 19.80534984678243, "average_query_length": 896.0754631721645, "num_documents": 15664, "num_queries": 4426, "average_relevant_docs_per_query": 1.0}},
     )

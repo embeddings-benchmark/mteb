@@ -88,11 +88,7 @@ class NeuCLIR2023Retrieval(MultilingualTask, AbsTaskRetrieval):
       primaryClass={cs.IR}
 }""",
         n_samples={"fas": 2232092, "zho": 3179285, "rus": 4627619},
-        avg_character_length={
-            "fas": 3579.508213937439,
-            "zho": 2704.44834488453,
-            "rus": 3466.8192213553616,
-        },
+        avg_character_length={"test": {"fas": {"average_document_length": 2032.093148525817, "average_query_length": 65.48684210526316, "num_documents": 2232016, "num_queries": 76, "average_relevant_docs_per_query": 66.28947368421052}, "rus": {"average_document_length": 1757.9129983233004, "average_query_length": 74.4342105263158, "num_documents": 4627543, "num_queries": 76, "average_relevant_docs_per_query": 62.223684210526315}, "zho": {"average_document_length": 743.1426659901881, "average_query_length": 22.210526315789473, "num_documents": 3179209, "num_queries": 76, "average_relevant_docs_per_query": 53.68421052631579}}},
     )
 
     def load_data(self, **kwargs):

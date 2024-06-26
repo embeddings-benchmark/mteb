@@ -55,5 +55,5 @@ class RARbMath(AbsTaskRetrieval):
 }
 """,
         n_samples={"test": 6319},
-        avg_character_length={"test": 682.9},
+        avg_character_length={"test": {"average_document_length": 504.0197829347469, "average_query_length": 210.30732710871973, "num_documents": 389376, "num_queries": 6319, "average_relevant_docs_per_query": 1.0}},
     )

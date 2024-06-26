@@ -44,5 +44,5 @@ class AlphaNLI(AbsTaskRetrieval):
 }
 """,
         n_samples={"test": 1532},
-        avg_character_length={"test": 147.8},
+        avg_character_length={"test": {"average_document_length": 43.42647308646886, "average_query_length": 103.05483028720627, "num_documents": 241347, "num_queries": 1532, "average_relevant_docs_per_query": 1.0}},
     )

@@ -37,5 +37,5 @@ class TRECCOVID(AbsTaskRetrieval):
       primaryClass={cs.IR}
 }""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={"test": {"average_document_length": 1116.7434221277986, "average_query_length": 69.24, "num_documents": 171332, "num_queries": 50, "average_relevant_docs_per_query": 493.5}},
     )

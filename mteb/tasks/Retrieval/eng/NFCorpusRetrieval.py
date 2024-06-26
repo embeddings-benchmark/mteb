@@ -39,5 +39,5 @@ class NFCorpus(AbsTaskRetrieval):
   url = {http://www.cl.uni-heidelberg.de/~riezler/publications/papers/ECIR2016.pdf}
 }""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={"test": {"average_document_length": 1589.783925130746, "average_query_length": 21.764705882352942, "num_documents": 3633, "num_queries": 323, "average_relevant_docs_per_query": 38.18575851393189}},
     )

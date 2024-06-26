@@ -33,7 +33,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
 }
 """,
         n_samples={"train": 340},
-        avg_character_length={"train": 138.23},
+        avg_character_length={"train": {"average_document_length": 128.85114503816794, "average_query_length": 166.3846153846154, "num_documents": 262, "num_queries": 78, "average_relevant_docs_per_query": 3.358974358974359}, "task_name": "TwitterHjerneRetrieval"},
         task_subtypes=["Question answering"],
     )
 

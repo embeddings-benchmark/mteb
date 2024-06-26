@@ -170,7 +170,7 @@ class TaskMetadata(BaseModel):
         n_samples: The number of samples in the dataset. This should only be for the splits evaluated on. For retrieval tasks, this should be the
             number of query-document pairs.
         avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on. For
-            retrieval tasks, this should be the average character length of the query-document pairs. (TODO: To update from https://github.com/embeddings-benchmark/mteb/pull/988)
+            retrieval tasks, this will be a dict containing the character length of the queries and documents separately, as well as the total number of queries, documents, and relevance judgements per query.
     """
 
     dataset: dict

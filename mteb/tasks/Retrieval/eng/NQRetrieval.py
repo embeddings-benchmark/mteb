@@ -35,5 +35,5 @@ class NQ(AbsTaskRetrieval):
         and Slav Petrov},year	= {2019},journal	= {Transactions of the Association of Computational 
         Linguistics}}""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={"test": {"average_document_length": 492.2287851281462, "average_query_length": 48.17902665121669, "num_documents": 2681468, "num_queries": 3452, "average_relevant_docs_per_query": 1.2169756662804172}},
     )

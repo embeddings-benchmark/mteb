@@ -66,7 +66,7 @@ class LEMBQMSumRetrieval(AbsTaskRetrieval):
             }
         """,
         n_samples={_EVAL_SPLIT: 1724},
-        avg_character_length={_EVAL_SPLIT: 56136.4},
+        avg_character_length={"test": {"average_document_length": 53335.817258883246, "average_query_length": 433.50294695481335, "num_documents": 197, "num_queries": 1527, "average_relevant_docs_per_query": 1.0}},
     )
 
     def load_data(self, **kwargs):

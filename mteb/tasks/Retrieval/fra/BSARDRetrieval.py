@@ -46,7 +46,7 @@ class BSARDRetrieval(AbsTaskRetrieval):
   pages = {6789–6803},
 }""",
         n_samples={"test": 222},
-        avg_character_length={"test": 71.94},
+        avg_character_length={"test": {"average_document_length": 880.2900631820793, "average_query_length": 144.77027027027026, "num_documents": 22633, "num_queries": 222, "average_relevant_docs_per_query": 1.0}},
     )
 
     def load_data(self, **kwargs):

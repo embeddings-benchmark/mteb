@@ -40,5 +40,5 @@ class DBPediaPL(AbsTaskRetrieval):
  publisher = {ACM}
 }""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={"test": {"average_document_length": 311.7007956561823, "average_query_length": 35.45, "num_documents": 4635922, "num_queries": 400, "average_relevant_docs_per_query": 38.215}},
     )

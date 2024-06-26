@@ -47,7 +47,8 @@ class GermanGovServiceRetrieval(AbsTaskRetrieval):
 }""",
         text_creation="found",
         n_samples={"test": 357},
-        avg_character_length={"test": 1211.69},
+        avg_character_length={"test": {"average_document_length": 1246.4571428571428, "average_query_length": 68.17977528089888, "num_documents": 105, "num_queries": 356, "average_relevant_docs_per_query": 1.0}}
+,
     )
 
     @staticmethod

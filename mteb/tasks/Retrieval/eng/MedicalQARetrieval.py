@@ -38,5 +38,5 @@ class MedicalQARetrieval(AbsTaskRetrieval):
             url       = {https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-019-3119-4}
             } """,
         n_samples={"test": 2048},
-        avg_character_length={"test": 1205.9619140625},
+        avg_character_length={"test": {"average_document_length": 1153.482421875, "average_query_length": 52.4794921875, "num_documents": 2048, "num_queries": 2048, "average_relevant_docs_per_query": 1.0}},
     )

@@ -41,5 +41,5 @@ class QuoraRetrieval(AbsTaskRetrieval):
     url = {https://kaggle.com/competitions/quora-question-pairs}
 }""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={"dev": {"average_document_length": 62.158154708747425, "average_query_length": 51.5342, "num_documents": 522931, "num_queries": 5000, "average_relevant_docs_per_query": 1.5252}, "test": {"average_document_length": 62.158154708747425, "average_query_length": 51.5396, "num_documents": 522931, "num_queries": 10000, "average_relevant_docs_per_query": 1.5675}},
     )
