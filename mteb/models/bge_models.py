@@ -30,6 +30,8 @@ class BGEWrapper:
         return self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
 
     def encode_queries(self, queries: list[str], batch_size: int = 32, **kwargs: Any):
+        if "prompt_name" in kwargs:
+            kwargs.pop("prompt_name")
         sentences = [
             "Represent this sentence for searching relevant passages: " + sentence
             for sentence in queries
@@ -43,6 +45,8 @@ class BGEWrapper:
         batch_size: int = 32,
         **kwargs: Any,
     ):
+        if "prompt_name" in kwargs:
+            kwargs.pop("prompt_name")
         sentences = corpus_to_texts(corpus)
         emb = self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
         return emb
