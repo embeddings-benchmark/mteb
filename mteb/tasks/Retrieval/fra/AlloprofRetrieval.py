@@ -42,7 +42,15 @@ class AlloprofRetrieval(AbsTaskRetrieval):
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }""",
         n_samples={"train": 2048},
-        avg_character_length={"test": {"average_document_length": 3505.705399061033, "average_query_length": 170.71286701208982, "num_documents": 2556, "num_queries": 2316, "average_relevant_docs_per_query": 1.0}},
+        avg_character_length={
+            "test": {
+                "average_document_length": 3505.705399061033,
+                "average_query_length": 170.71286701208982,
+                "num_documents": 2556,
+                "num_queries": 2316,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )
 
     def load_data(self, **kwargs):

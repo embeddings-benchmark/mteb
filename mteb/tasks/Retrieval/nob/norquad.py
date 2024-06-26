@@ -45,7 +45,15 @@ class NorQuadRetrieval(AbsTaskRetrieval):
     abstract = "In this paper we present NorQuAD: the first Norwegian question answering dataset for machine reading comprehension. The dataset consists of 4,752 manually created question-answer pairs. We here detail the data collection procedure and present statistics of the dataset. We also benchmark several multilingual and Norwegian monolingual language models on the dataset and compare them against human performance. The dataset will be made freely available.",
 }""",
         n_samples={"test": 2602},
-        avg_character_length={"test": {"average_document_length": 214.5114503816794, "average_query_length": 47.896484375, "num_documents": 1048, "num_queries": 1024, "average_relevant_docs_per_query": 2.0}},
+        avg_character_length={
+            "test": {
+                "average_document_length": 214.5114503816794,
+                "average_query_length": 47.896484375,
+                "num_documents": 1048,
+                "num_queries": 1024,
+                "average_relevant_docs_per_query": 2.0,
+            }
+        },
     )
 
     def load_data(self, **kwargs):

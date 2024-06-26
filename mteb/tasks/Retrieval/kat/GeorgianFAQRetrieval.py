@@ -36,7 +36,15 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         bibtex_citation="",
-        avg_character_length={"test": {"average_document_length": 511.24668745128605, "average_query_length": 61.69551656920078, "num_documents": 2566, "num_queries": 2565, "average_relevant_docs_per_query": 1.0003898635477584}},
+        avg_character_length={
+            "test": {
+                "average_document_length": 511.24668745128605,
+                "average_query_length": 61.69551656920078,
+                "num_documents": 2566,
+                "num_queries": 2565,
+                "average_relevant_docs_per_query": 1.0003898635477584,
+            }
+        },
     )
 
     def load_data(self, **kwargs):

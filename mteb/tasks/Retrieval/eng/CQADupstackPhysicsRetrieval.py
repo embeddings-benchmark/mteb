@@ -46,5 +46,13 @@ publisher = {ACM},
 address = {New York, NY, USA},
 }""",
         n_samples=None,
-        avg_character_length={"test": {"average_document_length": 818.6476145735463, "average_query_length": 53.36477382098171, "num_documents": 38316, "num_queries": 1039, "average_relevant_docs_per_query": 1.8604427333974976}},
+        avg_character_length={
+            "test": {
+                "average_document_length": 818.6476145735463,
+                "average_query_length": 53.36477382098171,
+                "num_documents": 38316,
+                "num_queries": 1039,
+                "average_relevant_docs_per_query": 1.8604427333974976,
+            }
+        },
     )

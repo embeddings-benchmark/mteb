@@ -37,5 +37,13 @@ class RiaNewsRetrieval(AbsTaskRetrieval):
         year={2019}
         }""",
         n_samples={"test": 10000},
-        avg_character_length={"test": {"average_document_length": 1165.6429557148213, "average_query_length": 62.4029, "num_documents": 704344, "num_queries": 10000, "average_relevant_docs_per_query": 1.0}},
+        avg_character_length={
+            "test": {
+                "average_document_length": 1165.6429557148213,
+                "average_query_length": 62.4029,
+                "num_documents": 704344,
+                "num_queries": 10000,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )

@@ -30,7 +30,15 @@ class SweFaqRetrieval(AbsTaskRetrieval):
         text_creation="found",
         bibtex_citation=None,
         n_samples={"test": 1024},
-        avg_character_length={"test": {"average_document_length": 319.8473581213307, "average_query_length": 70.51461988304094, "num_documents": 511, "num_queries": 513, "average_relevant_docs_per_query": 1.0}},
+        avg_character_length={
+            "test": {
+                "average_document_length": 319.8473581213307,
+                "average_query_length": 70.51461988304094,
+                "num_documents": 511,
+                "num_queries": 513,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )
 
     def load_data(self, **kwargs):

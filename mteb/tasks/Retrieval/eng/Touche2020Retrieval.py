@@ -46,5 +46,13 @@ class Touche2020(AbsTaskRetrieval):
   url          = {https://doi.org/10.5281/zenodo.6862281}
 }""",
         n_samples=None,
-        avg_character_length={"test": {"average_document_length": 1719.3347658445412, "average_query_length": 43.42857142857143, "num_documents": 382545, "num_queries": 49, "average_relevant_docs_per_query": 19.020408163265305}},
+        avg_character_length={
+            "test": {
+                "average_document_length": 1719.3347658445412,
+                "average_query_length": 43.42857142857143,
+                "num_documents": 382545,
+                "num_queries": 49,
+                "average_relevant_docs_per_query": 19.020408163265305,
+            }
+        },
     )

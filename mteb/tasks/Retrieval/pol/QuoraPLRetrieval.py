@@ -38,5 +38,20 @@ class QuoraPLRetrieval(AbsTaskRetrieval):
       primaryClass={cs.IR}
 }""",
         n_samples=None,
-        avg_character_length={"validation": {"average_document_length": 65.82473022253414, "average_query_length": 54.6006, "num_documents": 522931, "num_queries": 5000, "average_relevant_docs_per_query": 1.5252}, "test": {"average_document_length": 65.82473022253414, "average_query_length": 54.5354, "num_documents": 522931, "num_queries": 10000, "average_relevant_docs_per_query": 1.5675}},
+        avg_character_length={
+            "validation": {
+                "average_document_length": 65.82473022253414,
+                "average_query_length": 54.6006,
+                "num_documents": 522931,
+                "num_queries": 5000,
+                "average_relevant_docs_per_query": 1.5252,
+            },
+            "test": {
+                "average_document_length": 65.82473022253414,
+                "average_query_length": 54.5354,
+                "num_documents": 522931,
+                "num_queries": 10000,
+                "average_relevant_docs_per_query": 1.5675,
+            },
+        },
     )

@@ -50,7 +50,15 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
         }
         """,
         n_samples={"dev": 2514},
-        avg_character_length={"validation": {"average_document_length": 478.8968086416064, "average_query_length": 12.579952267303103, "num_documents": 25700592, "num_queries": 2514, "average_relevant_docs_per_query": 1.0}},
+        avg_character_length={
+            "validation": {
+                "average_document_length": 478.8968086416064,
+                "average_query_length": 12.579952267303103,
+                "num_documents": 25700592,
+                "num_queries": 2514,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )
 
     # TODO: Will be removed if curated and added to mteb HF

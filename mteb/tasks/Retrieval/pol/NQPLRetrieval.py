@@ -38,5 +38,13 @@ class NQPL(AbsTaskRetrieval):
       primaryClass={cs.IR}
 }""",
         n_samples=None,
-        avg_character_length={"test": {"average_document_length": 502.14302128535564, "average_query_length": 48.31662804171495, "num_documents": 2681468, "num_queries": 3452, "average_relevant_docs_per_query": 1.2169756662804172}},
+        avg_character_length={
+            "test": {
+                "average_document_length": 502.14302128535564,
+                "average_query_length": 48.31662804171495,
+                "num_documents": 2681468,
+                "num_queries": 3452,
+                "average_relevant_docs_per_query": 1.2169756662804172,
+            }
+        },
     )

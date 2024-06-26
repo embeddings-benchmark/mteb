@@ -47,5 +47,13 @@ class WinoGrande(AbsTaskRetrieval):
 }
 """,
         n_samples={"test": 0},
-        avg_character_length={"test": {"average_document_length": 7.68243375858685, "average_query_length": 111.78216258879242, "num_documents": 5095, "num_queries": 1267, "average_relevant_docs_per_query": 1.0}},
+        avg_character_length={
+            "test": {
+                "average_document_length": 7.68243375858685,
+                "average_query_length": 111.78216258879242,
+                "num_documents": 5095,
+                "num_queries": 1267,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )

@@ -41,5 +41,13 @@ class LegalSummarization(AbsTaskRetrieval):
     pages = "1--11",
 }""",
         n_samples=None,
-        avg_character_length={"test": {"average_document_length": 606.1643835616438, "average_query_length": 103.19014084507042, "num_documents": 438, "num_queries": 284, "average_relevant_docs_per_query": 1.545774647887324}},
+        avg_character_length={
+            "test": {
+                "average_document_length": 606.1643835616438,
+                "average_query_length": 103.19014084507042,
+                "num_documents": 438,
+                "num_queries": 284,
+                "average_relevant_docs_per_query": 1.545774647887324,
+            }
+        },
     )

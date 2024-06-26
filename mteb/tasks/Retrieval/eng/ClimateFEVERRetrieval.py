@@ -37,5 +37,13 @@ class ClimateFEVER(AbsTaskRetrieval):
       primaryClass={cs.CL}
 }""",
         n_samples=None,
-        avg_character_length={"test": {"average_document_length": 538.241873443325, "average_query_length": 123.39934853420195, "num_documents": 5416593, "num_queries": 1535, "average_relevant_docs_per_query": 3.0495114006514656}},
+        avg_character_length={
+            "test": {
+                "average_document_length": 538.241873443325,
+                "average_query_length": 123.39934853420195,
+                "num_documents": 5416593,
+                "num_queries": 1535,
+                "average_relevant_docs_per_query": 3.0495114006514656,
+            }
+        },
     )

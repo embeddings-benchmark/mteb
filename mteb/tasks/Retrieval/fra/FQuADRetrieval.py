@@ -52,7 +52,22 @@ class FQuADRetrieval(AbsTaskRetrieval):
     pages = "1193--1208",
 }""",
         n_samples={"test": 400, "validation": 100},
-        avg_character_length={"test": {"average_document_length": 896.3308550185874, "average_query_length": 58.52, "num_documents": 269, "num_queries": 400, "average_relevant_docs_per_query": 1.0}, "validation": {"average_document_length": 895.1340206185567, "average_query_length": 54.13, "num_documents": 97, "num_queries": 100, "average_relevant_docs_per_query": 1.0}},
+        avg_character_length={
+            "test": {
+                "average_document_length": 896.3308550185874,
+                "average_query_length": 58.52,
+                "num_documents": 269,
+                "num_queries": 400,
+                "average_relevant_docs_per_query": 1.0,
+            },
+            "validation": {
+                "average_document_length": 895.1340206185567,
+                "average_query_length": 54.13,
+                "num_documents": 97,
+                "num_queries": 100,
+                "average_relevant_docs_per_query": 1.0,
+            },
+        },
     )
 
     def load_data(self, **kwargs):
