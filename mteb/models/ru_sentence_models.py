@@ -49,7 +49,7 @@ deberta_v1_ru = ModelMeta(
     name="deepvk/deberta-v1-base",
     languages=["rus_Cyrl"],
     open_source=True,
-    revision="73e64c44a679fc0285f897a78c8504293e03b4d8",
+    revision="bdd30b0e19757e6940c92c7aff19e8fc0a60dff4",
     release_date="2023-02-07",
 )
 
@@ -81,11 +81,11 @@ labse_en_ru = ModelMeta(
     name="cointegrated/LaBSE-en-ru",
     languages=["rus_Cyrl"],
     open_source=True,
-    revision="83dcef3932b0e93345a5f6506123d5e5a618a9e9",
+    revision="cf0714e606d4af551e14ad69a7929cd6b0da7f7e",
     release_date="2021-06-10",
 )
 
-labse_en_ru = ModelMeta(
+rubert_tiny_turbo = ModelMeta(
     name="sergeyzh/rubert-tiny-turbo",
     languages=["rus_Cyrl"],
     open_source=True,
