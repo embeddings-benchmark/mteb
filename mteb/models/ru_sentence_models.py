@@ -57,7 +57,7 @@ rubert_base_cased = ModelMeta(
     name="DeepPavlov/rubert-base-cased",
     languages=["rus_Cyrl"],
     open_source=True,
-    revision="0748d5db80b58ccc794ac130771708cf5fe4d850",
+    revision="4036cab694767a299f2b9e6492909664d9414229",
     release_date="2020-03-04",
 )
 
@@ -65,7 +65,7 @@ distilrubert_small_cased_conversational = ModelMeta(
     name="DeepPavlov/distilrubert-small-cased-conversational",
     languages=["rus_Cyrl"],
     open_source=True,
-    revision="9774ce19f4a58b07026c819173f6a97a912b43c7",
+    revision="e348066b4a7279b97138038299bddc6580a9169a",
     release_date="2022-06-28",
 )
 
@@ -73,7 +73,7 @@ rubert_base_cased_sentence = ModelMeta(
     name="DeepPavlov/rubert-base-cased-sentence",
     languages=["rus_Cyrl"],
     open_source=True,
-    revision="bfdc63cbfa2b40215aeded515c43d3742b4e92b6",
+    revision="78b5122d6365337dd4114281b0d08cd1edbb3bc8",
     release_date="2020-03-04",
 )
 
