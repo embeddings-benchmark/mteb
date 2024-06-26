@@ -83,7 +83,6 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
                     "average_relevant_docs_per_query": 1.0,
                 },
             },
-            "task_name": "CodeSearchNetRetrieval",
         },
     )
 

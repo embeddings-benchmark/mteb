@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from datetime import date
-from typing import List, Mapping, Union
+from typing import List, Mapping, Union, Any
 
 from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
 from typing_extensions import Annotated, Literal
@@ -170,7 +170,7 @@ class TaskMetadata(BaseModel):
         n_samples: The number of samples in the dataset. This should only be for the splits evaluated on. For retrieval tasks, this should be the
             number of query-document pairs.
         avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on. For
-            retrieval tasks, this should be the average character length of the query-document pairs.
+            retrieval tasks, this should be the average character length of the query-document pairs. (TODO: To update from https://github.com/embeddings-benchmark/mteb/pull/988)
     """
 
     dataset: dict
@@ -199,7 +199,7 @@ class TaskMetadata(BaseModel):
     bibtex_citation: str | None
 
     n_samples: dict[SPLIT_NAME, int] | None
-    avg_character_length: dict[SPLIT_NAME, float] | None
+    avg_character_length: Union[dict[SPLIT_NAME, float], dict[SPLIT_NAME, dict[str, Any]]] | None
 
     @field_validator("dataset")
     def _check_dataset_path_is_specified(cls, dataset):
