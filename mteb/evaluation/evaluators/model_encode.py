@@ -18,7 +18,7 @@ def model_encode(
     if hasattr(model, "prompts"):
         # check if prompts is an empty dict
         if not model.prompts:  # type: ignore
-            logger.info("Model does support prompts. Removing prompt_name argument.")
+            logger.info("Model does not support prompts. Removing prompt_name argument.")
             kwargs.pop("prompt_name")
         elif prompt_name not in model.prompts:  # type: ignore
             logger.info(
