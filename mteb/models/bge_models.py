@@ -36,7 +36,9 @@ class BGEWrapper:
             "Represent this sentence for searching relevant passages: " + sentence
             for sentence in queries
         ]
-        emb = self.mdl.encode(sentences, batch_size=batch_size, normalize_embeddings=True, **kwargs)
+        emb = self.mdl.encode(
+            sentences, batch_size=batch_size, normalize_embeddings=True, **kwargs
+        )
         return emb
 
     def encode_corpus(
@@ -48,7 +50,9 @@ class BGEWrapper:
         if "prompt_name" in kwargs:
             kwargs.pop("prompt_name")
         sentences = corpus_to_texts(corpus)
-        emb = self.mdl.encode(sentences, batch_size=batch_size, normalize_embeddings=True, **kwargs)
+        emb = self.mdl.encode(
+            sentences, batch_size=batch_size, normalize_embeddings=True, **kwargs
+        )
         return emb
 
 
