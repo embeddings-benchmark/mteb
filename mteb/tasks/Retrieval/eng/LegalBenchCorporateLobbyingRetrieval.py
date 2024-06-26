@@ -99,5 +99,13 @@ class LegalBenchCorporateLobbying(AbsTaskRetrieval):
 }
 """,
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={
+            "test": {
+                "average_document_length": 1157.2225705329154,
+                "average_query_length": 177.87941176470588,
+                "num_documents": 319,
+                "num_queries": 340,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )

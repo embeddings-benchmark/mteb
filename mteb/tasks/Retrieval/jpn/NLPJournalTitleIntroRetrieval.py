@@ -34,7 +34,15 @@ class NLPJournalTitleIntroRetrieval(AbsTaskRetrieval):
         text_creation="found",
         bibtex_citation="",
         n_samples={_EVAL_SPLIT: 404},
-        avg_character_length={_EVAL_SPLIT: 1040.19},
+        avg_character_length={
+            "test": {
+                "average_document_length": 2052.8611111111113,
+                "average_query_length": 27.60891089108911,
+                "num_documents": 504,
+                "num_queries": 404,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )
 
     def load_data(self, **kwargs):

@@ -46,5 +46,13 @@ class PIQA(AbsTaskRetrieval):
 }
 """,
         n_samples={"test": 1838},
-        avg_character_length={"test": 134.3},
+        avg_character_length={
+            "test": {
+                "average_document_length": 99.89012998705756,
+                "average_query_length": 36.08052230685528,
+                "num_documents": 35542,
+                "num_queries": 1838,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )

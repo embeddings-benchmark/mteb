@@ -53,7 +53,15 @@ class LEMBSummScreenFDRetrieval(AbsTaskRetrieval):
             }
         """,
         n_samples={_EVAL_SPLIT: 672},
-        avg_character_length={_EVAL_SPLIT: 31445.8},
+        avg_character_length={
+            "validation": {
+                "average_document_length": 30854.32738095238,
+                "average_query_length": 591.4910714285714,
+                "num_documents": 336,
+                "num_queries": 336,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )
 
     def load_data(self, **kwargs):

@@ -56,7 +56,22 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
             }
         """,
         n_samples={"dev": 1500, "test": 1500},
-        avg_character_length={"dev": 305, "test": 307},
+        avg_character_length={
+            "dev": {
+                "average_document_length": 258.8772727272727,
+                "average_query_length": 45.05533333333333,
+                "num_documents": 11000,
+                "num_queries": 1500,
+                "average_relevant_docs_per_query": 1.0,
+            },
+            "test": {
+                "average_document_length": 258.8772727272727,
+                "average_query_length": 45.75333333333333,
+                "num_documents": 11000,
+                "num_queries": 1500,
+                "average_relevant_docs_per_query": 1.0,
+            },
+        },
     )
 
     def load_data(self, **kwargs):
