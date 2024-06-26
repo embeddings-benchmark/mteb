@@ -22,6 +22,7 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
         dataset={
             "path": "GEM/opusparcus",
             "revision": "9e9b1f8ef51616073f47f306f7f47dd91663f86a",
+            "trust_remote_code": True,
         },
         description="Opusparcus is a paraphrase corpus for six European language: German, English, Finnish, French, Russian, and Swedish. The paraphrases consist of subtitles from movies and TV shows.",
         reference="https://gem-benchmark.com/data_cards/opusparcus",

@@ -63,6 +63,7 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "Shitao/MLDR",
             "revision": "d67138e705d963e346253a80e59676ddb418810a",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

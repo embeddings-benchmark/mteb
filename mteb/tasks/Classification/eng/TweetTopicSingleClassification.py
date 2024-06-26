@@ -16,6 +16,7 @@ class TweetTopicSingleClassification(AbsTaskClassification):
         dataset={
             "path": "cardiffnlp/tweet_topic_single",
             "revision": "87b7a0d1c402dbb481db649569c556d9aa27ac05",
+            "trust_remote_code": True,
         },
         reference="https://arxiv.org/abs/2209.09824",
         type="Classification",

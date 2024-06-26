@@ -16,6 +16,7 @@ class HagridRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "miracl/hagrid",
             "revision": "b2a085913606be3c4f2f1a8bff1810e38bade8fa",
+            "trust_remote_code": True,
         },
         reference="https://github.com/project-miracl/hagrid",
         description=(

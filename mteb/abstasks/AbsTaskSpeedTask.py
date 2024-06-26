@@ -67,6 +67,8 @@ class AbsTaskSpeedTask(AbsTask):
 
         ## NOTE: Currently works on nvidia GPUs only.
         if self.device != "cpu":
+            import GPUtil
+
             gpus = GPUtil.getGPUs() or []
             info["num_gpus"] = len(gpus)
             list_gpus = []

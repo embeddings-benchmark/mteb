@@ -12,6 +12,7 @@ class PoemSentimentClassification(AbsTaskClassification):
         dataset={
             "path": "google-research-datasets/poem_sentiment",
             "revision": "329d529d875a00c47ec71954a1a96ae167584770",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

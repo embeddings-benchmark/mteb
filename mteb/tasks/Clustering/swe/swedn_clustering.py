@@ -30,6 +30,7 @@ class SwednClustering(AbsTaskClustering):
             "path": "sbx/superlim-2",
             "revision": "ef1661775d746e0844b299164773db733bdc0bf6",
             "name": "swedn",
+            "trust_remote_code": True,
         },
         description="The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper Dagens Nyheter (DN) during the years 2000--2020. The articles are filtered to resemble the CNN/DailyMail dataset both regarding textual structure. This dataset uses the category labels as clusters.",
         reference="https://spraakbanken.gu.se/en/resources/swedn",

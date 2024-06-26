@@ -86,6 +86,7 @@ class MLQARetrieval(AbsTaskRetrieval, MultilingualTask):
         dataset={
             "path": "facebook/mlqa",
             "revision": "397ed406c1a7902140303e7faf60fff35b58d285",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

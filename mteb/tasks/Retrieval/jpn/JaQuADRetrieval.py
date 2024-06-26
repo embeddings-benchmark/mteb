@@ -11,6 +11,7 @@ class JaQuADRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "SkelterLabsInc/JaQuAD",
             "revision": "05600ff310a0970823e70f82f428893b85c71ffe",
+            "trust_remote_code": True,
         },
         description="Human-annotated question-answer pairs for Japanese wikipedia pages.",
         reference="https://arxiv.org/abs/2202.01764",

@@ -97,11 +97,11 @@ class AbsTaskClusteringFast(AbsTask):
         labels: list[str] | list[list[str]]
     """
 
-    max_fraction_of_documents_to_embed = 0.04
-    max_document_to_embed = None
-    max_documents_per_cluster = 16_384
-    n_clusters = 10
-    k_mean_batch_size = 512
+    max_fraction_of_documents_to_embed: float | None = 0.04
+    max_document_to_embed: int | None = None
+    max_documents_per_cluster: int = 16_384
+    n_clusters: int = 10
+    k_mean_batch_size: int = 512
     max_depth = None
 
     def __init__(self, **kwargs):

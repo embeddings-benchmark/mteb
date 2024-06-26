@@ -13,6 +13,7 @@ class ARCChallenge(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/ARC-Challenge",
             "revision": "c481e0da3dcbbad8bce7721dea9085b74320a0a3",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",

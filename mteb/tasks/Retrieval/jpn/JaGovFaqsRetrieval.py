@@ -10,6 +10,8 @@ _MAX_EVAL_SIZE = 2048
 
 
 class JaGovFaqsRetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="JaGovFaqsRetrieval",
         description="JaGovFaqs is a dataset consisting of FAQs manully extracted from the website of Japanese bureaus. The dataset consists of 22k FAQs, where the queries (questions) and corpus (answers) have been shuffled, and the goal is to match the answer with the question.",
@@ -17,6 +19,7 @@ class JaGovFaqsRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "sbintuitions/JMTEB",
             "revision": "e4af6c73182bebb41d94cb336846e5a452454ea7",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",

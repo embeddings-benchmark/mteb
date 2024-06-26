@@ -13,6 +13,7 @@ class SCIDOCSPL(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/scidocs-pl",
             "revision": "45452b03f05560207ef19149545f168e596c9337",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

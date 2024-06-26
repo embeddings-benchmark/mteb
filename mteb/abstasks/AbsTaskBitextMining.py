@@ -34,7 +34,7 @@ class AbsTaskBitextMining(AbsTask):
 
         scores = {}
         if self.parallel_subsets:
-            scores["default"] = self._evaluate_subset(
+            scores = self._evaluate_subset(
                 model,
                 self.dataset[split],  # type: ignore
                 parallel=True,

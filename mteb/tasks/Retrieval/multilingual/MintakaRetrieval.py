@@ -66,6 +66,7 @@ class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "jinaai/mintakaqa",
             "revision": "efa78cc2f74bbcd21eff2261f9e13aebe40b814e",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

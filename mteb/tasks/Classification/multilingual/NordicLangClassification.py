@@ -13,6 +13,7 @@ class NordicLangClassification(AbsTaskClassification):
             "path": "strombergnlp/nordic_langid",
             "revision": "e254179d18ab0165fdb6dbef91178266222bee2a",
             "name": "10k",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

@@ -6,6 +6,8 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class MSMARCOPL(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="MSMARCO-PL",
         description="MS MARCO is a collection of datasets focused on deep learning in search",
@@ -13,6 +15,7 @@ class MSMARCOPL(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/msmarco-pl",
             "revision": "8634c07806d5cce3a6138e260e59b81760a0a640",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

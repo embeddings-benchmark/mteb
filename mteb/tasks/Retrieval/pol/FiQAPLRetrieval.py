@@ -6,6 +6,8 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class FiQAPLRetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="FiQA-PL",
         description="Financial Opinion Mining and Question Answering",
@@ -13,6 +15,7 @@ class FiQAPLRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/fiqa-pl",
             "revision": "2e535829717f8bf9dc829b7f911cc5bbd4e6608e",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

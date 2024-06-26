@@ -12,6 +12,7 @@ class DutchBookReviewSentimentClassification(AbsTaskClassification):
         dataset={
             "path": "benjaminvdb/dbrd",
             "revision": "3f756ab4572e071eb53e887ab629f19fa747d39e",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

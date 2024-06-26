@@ -12,6 +12,7 @@ class UrduRomanSentimentClassification(AbsTaskClassification):
         dataset={
             "path": "community-datasets/roman_urdu",
             "revision": "566be6449bb30b9b9f2b59173391647fe0ca3224",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

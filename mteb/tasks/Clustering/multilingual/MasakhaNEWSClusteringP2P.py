@@ -35,6 +35,7 @@ class MasakhaNEWSClusteringP2P(AbsTaskClustering, MultilingualTask):
         dataset={
             "path": "masakhane/masakhanews",
             "revision": "8ccc72e69e65f40c70e117d8b3c08306bb788b60",
+            "trust_remote_code": True,
         },
         type="Clustering",
         category="p2p",

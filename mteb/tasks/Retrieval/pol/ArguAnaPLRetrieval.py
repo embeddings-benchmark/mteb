@@ -6,6 +6,8 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class ArguAnaPL(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="ArguAna-PL",
         description="ArguAna-PL",
@@ -13,6 +15,7 @@ class ArguAnaPL(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/arguana-pl",
             "revision": "63fc86750af76253e8c760fc9e534bbf24d260a2",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

@@ -2,11 +2,11 @@
 
 import mteb
 
-# prompt are derived from:
-# scandinavian embedding benchmark: https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/c8376f967d1294419be1d3eb41217d04cd3a65d3/src/seb/registered_models/e5_instruct_models.py
-# e5 documentation: https://github.com/microsoft/unilm/blob/9c0f1ff7ca53431fe47d2637dfe253643d94185b/e5/utils.py#L106
+# Prompts from
+# SEB: https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/c8376f967d1294419be1d3eb41217d04cd3a65d3/src/seb/registered_models/e5_instruct_models.py
+# E5: https://github.com/microsoft/unilm/blob/9c0f1ff7ca53431fe47d2637dfe253643d94185b/e5/utils.py#L106
 DEFAULT_PROMPTS = {
-    "STS": "Retrieve semantically similar text",
+    "STS": "Retrieve semantically similar text.",
     "Summarization": "Given a news summary, retrieve other semantically similar summaries",
     "BitextMining": "Retrieve parallel sentences.",
     "Classification": "Classify user passages",
@@ -86,51 +86,128 @@ TASKNAME2INSTRUCTIONS = {
     "TwitterURLCorpus": "Retrieve tweets that are semantically similar to the given tweet",
     "T2Reranking": "Given a Chinese search query, retrieve web passages that answer the question",
     "MMarcoReranking": "Given a Chinese search query, retrieve web passages that answer the question",
+    "VoyageMMarcoReranking": "Given a Japanese search query, retrieve web passages that answer the question",
     "CMedQAv1": "Given a Chinese community medical question, retrieve replies that best answer the question",
     "CMedQAv2": "Given a Chinese community medical question, retrieve replies that best answer the question",
     "Ocnli": "Retrieve semantically similar text.",
     "Cmnli": "Retrieve semantically similar text.",
-    # Retrieval
-    "TwitterHjerneRetrieval": "Retrieve answers to questions asked in Danish tweets",
-    "SwednRetrieval": "Given a Swedish news headline retrieve summaries or news articles",
-    "TV2Nordretrieval": "Given a summary of a Danish news article retrieve the corresponding news article",
-    "DanFEVER": "Given a claim in Danish, retrieve documents that support the claim",
-    "SNLRetrieval": "Given a lexicon headline in Norwegian, retrieve its article",
-    "NorQuadRetrieval": "Given a question in Norwegian, retrieve the answer from Wikipedia articles",
-    "SweFaqRetrieval": "Retrieve answers given questions in Swedish",
-    "ArguAna": "Given a claim, find documents that refute the claim",
-    "ClimateFEVER": "Given a claim about climate change, retrieve documents that support or refute the claim",
-    "DBPedia": "Given a query, retrieve relevant entity descriptions from DBPedia",
-    "FEVER": "Given a claim, retrieve documents that support or refute the claim",
-    "FiQA2018": "Given a financial question, retrieve user replies that best answer the question",
-    "HotpotQA": "Given a multi-hop question, retrieve documents that can help answer the question",
-    "MSMARCO": "Given a web search query, retrieve relevant passages that answer the query",
-    "NFCorpus": "Given a question, retrieve relevant documents that best answer the question",
-    "NQ": "Given a question, retrieve Wikipedia passages that answer the question",
-    "QuoraRetrieval": "Given a question, retrieve questions that are semantically equivalent to the given question",
-    "SCIDOCS": "Given a scientific paper title, retrieve paper abstracts that are cited by the given paper",
-    "SciFact": "Given a scientific claim, retrieve documents that support or refute the claim",
-    "Touche2020": "Given a question, retrieve detailed and persuasive arguments that answer the question",
-    "TRECCOVID": "Given a query on COVID-19, retrieve documents that answer the query",
-    "T2Retrieval": "Given a Chinese search query, retrieve web passages that answer the question",
-    "MMarcoRetrieval": "Given a web search query, retrieve relevant passages that answer the query",
-    "DuRetrieval": "Given a Chinese search query, retrieve web passages that answer the question",
-    "CovidRetrieval": "Given a question on COVID-19, retrieve news articles that answer the question",
-    "CmedqaRetrieval": "Given a Chinese community medical question, retrieve replies that best answer the question",
-    "EcomRetrieval": "Given a user query from an e-commerce website, retrieve description sentences of relevant products",
-    "MedicalRetrieval": "Given a medical question, retrieve user replies that best answer the question",
-    "VideoRetrieval": "Given a video search query, retrieve the titles of relevant videos",
+    # Retrieval - 1st item is query instruction; 2nd is corpus instruction
+    "TwitterHjerneRetrieval": (
+        "Retrieve answers to questions asked in Danish tweets",
+        "",
+    ),
+    "SwednRetrieval": (
+        "Given a Swedish news headline retrieve summaries or news articles",
+        "",
+    ),
+    "TV2Nordretrieval": (
+        "Given a summary of a Danish news article retrieve the corresponding news article",
+        "",
+    ),
+    "DanFEVER": (
+        "Given a claim in Danish, retrieve documents that support the claim",
+        "",
+    ),
+    "SNLRetrieval": ("Given a lexicon headline in Norwegian, retrieve its article", ""),
+    "NorQuadRetrieval": (
+        "Given a question in Norwegian, retrieve the answer from Wikipedia articles",
+        "",
+    ),
+    "SweFaqRetrieval": ("Retrieve answers given questions in Swedish", ""),
+    "ArguAna": ("Given a claim, find documents that refute the claim", ""),
+    "ClimateFEVER": (
+        "Given a claim about climate change, retrieve documents that support or refute the claim",
+        "",
+    ),
+    "DBPedia": (
+        "Given a query, retrieve relevant entity descriptions from DBPedia",
+        "",
+    ),
+    "FEVER": ("Given a claim, retrieve documents that support or refute the claim", ""),
+    "FiQA2018": (
+        "Given a financial question, retrieve user replies that best answer the question",
+        "",
+    ),
+    "HotpotQA": (
+        "Given a multi-hop question, retrieve documents that can help answer the question",
+        "",
+    ),
+    "MSMARCO": (
+        "Given a web search query, retrieve relevant passages that answer the query",
+        "",
+    ),
+    "NFCorpus": (
+        "Given a question, retrieve relevant documents that best answer the question",
+        "",
+    ),
+    "NQ": (
+        "Given a question, retrieve Wikipedia passages that answer the question",
+        "",
+    ),
+    "QuoraRetrieval": (
+        "Given a question, retrieve questions that are semantically equivalent to the given question",
+        "",
+    ),
+    "SCIDOCS": (
+        "Given a scientific paper title, retrieve paper abstracts that are cited by the given paper",
+        "",
+    ),
+    "SciFact": (
+        "Given a scientific claim, retrieve documents that support or refute the claim",
+        "",
+    ),
+    "Touche2020": (
+        "Given a question, retrieve detailed and persuasive arguments that answer the question",
+        "",
+    ),
+    "TRECCOVID": (
+        "Given a query on COVID-19, retrieve documents that answer the query",
+        "",
+    ),
+    "T2Retrieval": (
+        "Given a Chinese search query, retrieve web passages that answer the question",
+        "",
+    ),
+    "MMarcoRetrieval": (
+        "Given a web search query, retrieve relevant passages that answer the query",
+        "",
+    ),
+    "DuRetrieval": (
+        "Given a Chinese search query, retrieve web passages that answer the question",
+        "",
+    ),
+    "CovidRetrieval": (
+        "Given a question on COVID-19, retrieve news articles that answer the question",
+        "",
+    ),
+    "CmedqaRetrieval": (
+        "Given a Chinese community medical question, retrieve replies that best answer the question",
+        "",
+    ),
+    "EcomRetrieval": (
+        "Given a user query from an e-commerce website, retrieve description sentences of relevant products",
+        "",
+    ),
+    "MedicalRetrieval": (
+        "Given a medical question, retrieve user replies that best answer the question",
+        "",
+    ),
+    "VideoRetrieval": (
+        "Given a video search query, retrieve the titles of relevant videos",
+        "",
+    ),
 }
 
 
-def task_to_instruction(task_name: str) -> str:
+def task_to_instruction(task_name: str, is_query: bool = True) -> str:
     if task_name in TASKNAME2INSTRUCTIONS:
+        if isinstance(TASKNAME2INSTRUCTIONS[task_name], tuple):
+            return (
+                TASKNAME2INSTRUCTIONS[task_name][0]
+                if is_query
+                else TASKNAME2INSTRUCTIONS[task_name][1]
+            )
         return TASKNAME2INSTRUCTIONS[task_name]
 
-    task = mteb.get_task(task_name)
-    meta = task.metadata
-
-    if meta.type in DEFAULT_PROMPTS:
-        return DEFAULT_PROMPTS[meta.type]
-
-    return ""
+    meta = mteb.get_task(task_name).metadata
+    return DEFAULT_PROMPTS.get(meta.type, "")

@@ -14,6 +14,7 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
         dataset={
             "path": "ZurichNLP/x_stance",
             "revision": "810604b9ad3aafdc6144597fdaa40f21a6f5f3de",
+            "trust_remote_code": True,
         },
         description="A Multilingual Multi-Target Dataset for Stance Detection in French, German, and Italian.",
         reference="https://github.com/ZurichNLP/xstance",

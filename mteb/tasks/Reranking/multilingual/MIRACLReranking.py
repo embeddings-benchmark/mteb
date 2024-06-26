@@ -58,6 +58,7 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         dataset={
             "path": "miracl/mmteb-miracl-reranking",
             "revision": "6d1962c527217f8927fca80f890f14f36b2802af",
+            "trust_remote_code": True,
         },
         type="Reranking",
         category="s2s",

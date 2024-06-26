@@ -180,15 +180,12 @@ class DenseRetrievalExactSearch:
                     cos_scores_top_k_idx[query_itr], cos_scores_top_k_values[query_itr]
                 ):
                     corpus_id = corpus_ids[corpus_start_idx + sub_corpus_id]
-                    if corpus_id != query_id:
-                        if len(result_heaps[query_id]) < top_k:
-                            # Push item on the heap
-                            heapq.heappush(result_heaps[query_id], (score, corpus_id))
-                        else:
-                            # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
-                            heapq.heappushpop(
-                                result_heaps[query_id], (score, corpus_id)
-                            )
+                    if len(result_heaps[query_id]) < top_k:
+                        # Push item on the heap
+                        heapq.heappush(result_heaps[query_id], (score, corpus_id))
+                    else:
+                        # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
+                        heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
 
         for qid in result_heaps:
             for score, corpus_id in result_heaps[qid]:
@@ -518,18 +515,27 @@ class RetrievalEvaluator(Evaluator):
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
         k_values: List[int],
-        ignore_identical_ids: bool = True,
-    ) -> Tuple[Dict[str, float], dict[str, float], dict[str, float], dict[str, float]]:
+        ignore_identical_ids: bool = False,
+    ) -> Tuple[
+        dict[str, float],
+        dict[str, float],
+        dict[str, float],
+        dict[str, float],
+        dict[str, float],
+    ]:
         if ignore_identical_ids:
             logger.info(
-                "For evaluation, we ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=False`` to ignore this."
+                "For evaluation, ``ignore_identical_ids=True`` is set to True, the evaluator will ignore identical query and document ids."
             )
-            popped = []
+            # Remove identical ids from results dict
             for qid, rels in results.items():
                 for pid in list(rels):
                     if qid == pid:
                         results[qid].pop(pid)
-                        popped.append(pid)
+        else:
+            logger.info(
+                "For evaluation, we DO NOT ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=True`` to ignore this."
+            )
 
         all_ndcgs, all_aps, all_recalls, all_precisions = {}, {}, {}, {}
 

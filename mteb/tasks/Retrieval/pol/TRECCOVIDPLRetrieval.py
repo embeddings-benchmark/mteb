@@ -13,6 +13,7 @@ class TRECCOVIDPL(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/trec-covid-pl",
             "revision": "81bcb408f33366c2a20ac54adafad1ae7e877fdd",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

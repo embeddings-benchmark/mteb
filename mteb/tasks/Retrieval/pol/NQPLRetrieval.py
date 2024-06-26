@@ -13,6 +13,7 @@ class NQPL(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/nq-pl",
             "revision": "f171245712cf85dd4700b06bef18001578d0ca8d",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
