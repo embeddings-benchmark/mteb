@@ -9,7 +9,7 @@ from packaging.version import Version
 
 import mteb
 from mteb import AbsTask
-from mteb.MTEBResults import MTEBResults
+from mteb.load_results.mteb_results import MTEBResults
 
 tests_folder = Path(__file__).parent
 

@@ -13,7 +13,7 @@ from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 
 from ..evaluation.evaluators.model_encode import model_encode
-from ..MTEBResults import HFSubset
+from ..load_results.mteb_results import HFSubset
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)

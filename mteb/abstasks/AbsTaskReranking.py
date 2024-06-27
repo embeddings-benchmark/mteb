@@ -5,7 +5,7 @@ from typing import Any
 from datasets import Dataset
 
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
-from mteb.MTEBResults import ScoresDict
+from mteb.load_results.mteb_results import ScoresDict
 
 from ..evaluation.evaluators import RerankingEvaluator
 from .AbsTask import AbsTask

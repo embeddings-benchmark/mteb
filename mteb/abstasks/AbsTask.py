@@ -16,7 +16,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.languages import LanguageScripts
 
-from ..MTEBResults import HFSubset, ScoresDict
+from ..load_results.mteb_results import HFSubset, ScoresDict
 
 logger = logging.getLogger(__name__)
 
