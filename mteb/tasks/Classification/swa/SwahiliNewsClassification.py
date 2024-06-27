@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-
 # from ....abstasks import AbsTaskClassification
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 
 class SwahiliNewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
