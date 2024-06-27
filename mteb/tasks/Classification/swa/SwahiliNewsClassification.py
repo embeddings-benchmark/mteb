@@ -9,7 +9,7 @@ class SwahiliNewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SwahiliNewsClassification",
         description="Dataset for Swahili News Classification, categorized with 5 domains. Building and Optimizing Swahili Language Models: Techniques, Embeddings, and Datasets",
-        reference="https://zenodo.org/records/4300294",
+        reference="https://huggingface.co/datasets/Mollel/SwahiliNewsClassification",
         dataset={
             "path": "Mollel/SwahiliNewsClassification",
             "revision": "5bc5ef41a6232c5e3c84e1e9615099b70922d7be",
