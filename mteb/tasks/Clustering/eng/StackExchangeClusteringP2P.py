@@ -78,7 +78,7 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
 
 
 class StackExchangeClusteringP2P(AbsTaskClustering):
-    superseeded_by = "StackExchangeClusteringP2P.v2"
+    superseded_by = "StackExchangeClusteringP2P.v2"
     metadata = TaskMetadata(
         name="StackExchangeClusteringP2P",
         description="Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragraphs and 5 sets of 5k paragraphs.",

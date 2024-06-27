@@ -13,6 +13,7 @@ class SpartQA(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/spartqa",
             "revision": "9ab3ca3ccdd0d43f9cd6d346a363935d127f4f45",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",
@@ -42,5 +43,13 @@ class SpartQA(AbsTaskRetrieval):
 }
 """,
         n_samples={"test": 0},
-        avg_character_length={"test": 0.0},
+        avg_character_length={
+            "test": {
+                "average_document_length": 50.40829145728643,
+                "average_query_length": 656.2328881469115,
+                "num_documents": 1592,
+                "num_queries": 3594,
+                "average_relevant_docs_per_query": 1.8786867000556482,
+            }
+        },
     )

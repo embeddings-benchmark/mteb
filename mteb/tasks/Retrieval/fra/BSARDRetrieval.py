@@ -8,6 +8,8 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class BSARDRetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="BSARDRetrieval",
         description="The Belgian Statutory Article Retrieval Dataset (BSARD) is a French native dataset for studying legal information retrieval. BSARD consists of more than 22,600 statutory articles from Belgian law and about 1,100 legal questions posed by Belgian citizens and labeled by experienced jurists with relevant articles from the corpus.",
@@ -15,6 +17,7 @@ class BSARDRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "maastrichtlawtech/bsard",
             "revision": "5effa1b9b5fa3b0f9e12523e6e43e5f86a6e6d59",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
@@ -43,7 +46,15 @@ class BSARDRetrieval(AbsTaskRetrieval):
   pages = {6789–6803},
 }""",
         n_samples={"test": 222},
-        avg_character_length={"test": 71.94},
+        avg_character_length={
+            "test": {
+                "average_document_length": 880.2900631820793,
+                "average_query_length": 144.77027027027026,
+                "num_documents": 22633,
+                "num_queries": 222,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )
 
     def load_data(self, **kwargs):

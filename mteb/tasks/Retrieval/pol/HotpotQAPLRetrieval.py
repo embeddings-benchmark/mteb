@@ -13,6 +13,7 @@ class HotpotQAPL(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/hotpotqa-pl",
             "revision": "a0bd479ac97b4ccb5bd6ce320c415d0bb4beb907",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
@@ -37,5 +38,13 @@ class HotpotQAPL(AbsTaskRetrieval):
       primaryClass={cs.IR}
 }""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={
+            "test": {
+                "average_document_length": 292.26835882093405,
+                "average_query_length": 94.64064821066847,
+                "num_documents": 5233329,
+                "num_queries": 7405,
+                "average_relevant_docs_per_query": 2.0,
+            }
+        },
     )

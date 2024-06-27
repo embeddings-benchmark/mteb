@@ -8,6 +8,8 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class MLQuestionsRetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="MLQuestions",
         dataset={
@@ -54,7 +56,22 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
             }
         """,
         n_samples={"dev": 1500, "test": 1500},
-        avg_character_length={"dev": 305, "test": 307},
+        avg_character_length={
+            "dev": {
+                "average_document_length": 258.8772727272727,
+                "average_query_length": 45.05533333333333,
+                "num_documents": 11000,
+                "num_queries": 1500,
+                "average_relevant_docs_per_query": 1.0,
+            },
+            "test": {
+                "average_document_length": 258.8772727272727,
+                "average_query_length": 45.75333333333333,
+                "num_documents": 11000,
+                "num_queries": 1500,
+                "average_relevant_docs_per_query": 1.0,
+            },
+        },
     )
 
     def load_data(self, **kwargs):
@@ -83,18 +100,18 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
         with open(dataset_path, "r") as csvfile:
             reader = csv.DictReader(csvfile)
             for i, row in enumerate(reader):
-                query_id = str(i)
+                query_id = f"Q{str(i)}"
                 doc_id = row["indexes"]
                 query = row["target_text"]
                 queries[query_id] = query
-                qrels[query_id] = {doc_id: 1}
+                qrels[query_id] = {f"C{doc_id}": 1}
 
         # Same corpus for all splits
         corpus_path = f"{download_dir}/test_passages.csv"
         with open(corpus_path, "r") as csvfile:
             reader = csv.DictReader(csvfile)
             for i, row in enumerate(reader):
-                doc_id = str(i)
+                doc_id = f"C{str(i)}"
                 corpus[doc_id] = {
                     "title": "",
                     "text": row["input_text"],

@@ -154,6 +154,7 @@ class PacClassification(AbsTaskClassification):
         dataset={
             "path": "laugustyniak/abusive-clauses-pl",
             "revision": "fc69d1c153a8ccdcf1eef52f4e2a27f88782f543",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="p2p",

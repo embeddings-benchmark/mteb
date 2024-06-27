@@ -14,6 +14,7 @@ class VieStudentFeedbackClassification(AbsTaskClassification):
         dataset={
             "path": "uitnlp/vietnamese_students_feedback",
             "revision": "7b56c6cb1c9c8523249f407044c838660df3811a",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

@@ -11,6 +11,7 @@ class JSICK(AbsTaskSTS):
             "path": "sbintuitions/JMTEB",
             "name": "jsick",
             "revision": "e4af6c73182bebb41d94cb336846e5a452454ea7",
+            "trust_remote_code": True,
         },
         description="JSICK is the Japanese NLI and STS dataset by manually translating the English dataset SICK (Marelli et al., 2014) into Japanese.",
         reference="https://github.com/sbintuitions/JMTEB",

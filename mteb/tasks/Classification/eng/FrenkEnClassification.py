@@ -11,6 +11,7 @@ class FrenkEnClassification(AbsTaskClassification):
         dataset={
             "path": "classla/FRENK-hate-en",
             "revision": "52483dba0ff23291271ee9249839865e3c3e7e50",
+            "trust_remote_code": True,
         },
         reference="https://arxiv.org/abs/1906.02045",
         type="Classification",

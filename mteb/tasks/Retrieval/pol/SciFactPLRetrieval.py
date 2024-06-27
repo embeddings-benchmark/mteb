@@ -13,6 +13,7 @@ class SciFactPL(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/scifact-pl",
             "revision": "47932a35f045ef8ed01ba82bf9ff67f6e109207e",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
@@ -37,5 +38,13 @@ class SciFactPL(AbsTaskRetrieval):
       primaryClass={cs.IR}
 }""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={
+            "test": {
+                "average_document_length": 1553.5178468068686,
+                "average_query_length": 95.44,
+                "num_documents": 5183,
+                "num_queries": 300,
+                "average_relevant_docs_per_query": 1.13,
+            }
+        },
     )

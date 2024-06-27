@@ -6,6 +6,8 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class FeedbackQARetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="FeedbackQARetrieval",
         description="Using Interactive Feedback to Improve the Accuracy and Explainability of Question Answering Systems Post-Deployment",
@@ -50,5 +52,13 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
 }
 """,
         n_samples={"test": 1992},
-        avg_character_length={"test": 1175},
+        avg_character_length={
+            "test": {
+                "average_document_length": 1174.7986463620982,
+                "average_query_length": 72.33182730923694,
+                "num_documents": 2364,
+                "num_queries": 1992,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )

@@ -12,6 +12,7 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
         dataset={
             "path": "google-research-datasets/paws-x",
             "revision": "8a04d940a42cd40658986fdd8e3da561533a3646",
+            "trust_remote_code": True,
         },
         description="",
         reference="https://arxiv.org/abs/1908.11828",

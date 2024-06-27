@@ -42,6 +42,7 @@ class IWSLT2017BitextMining(AbsTaskBitextMining, MultilingualTask):
         dataset={
             "path": "IWSLT/iwslt2017",
             "revision": "c18a4f81a47ae6fa079fe9d32db288ddde38451d",
+            "trust_remote_code": True,
         },
         description="The IWSLT 2017 Multilingual Task addresses text translation, including zero-shot translation, with a single MT system across all directions including English, German, Dutch, Italian and Romanian.",
         reference="https://aclanthology.org/2017.iwslt-1.1/",

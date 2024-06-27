@@ -13,6 +13,7 @@ class DBPediaPL(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/dbpedia-pl",
             "revision": "76afe41d9af165cc40999fcaa92312b8b012064a",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
@@ -39,5 +40,13 @@ class DBPediaPL(AbsTaskRetrieval):
  publisher = {ACM}
 }""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={
+            "test": {
+                "average_document_length": 311.7007956561823,
+                "average_query_length": 35.45,
+                "num_documents": 4635922,
+                "num_queries": 400,
+                "average_relevant_docs_per_query": 38.215,
+            }
+        },
     )

@@ -12,6 +12,7 @@ class NorwegianParliamentClassification(AbsTaskClassification):
         dataset={
             "path": "NbAiLab/norwegian_parliament",
             "revision": "f7393532774c66312378d30b197610b43d751972",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

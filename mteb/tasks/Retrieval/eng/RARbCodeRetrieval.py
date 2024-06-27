@@ -13,6 +13,7 @@ class RARbCode(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/humanevalpack-mbpp-pooled",
             "revision": "25f7d11a7ac12dcbb8d3836eb2de682b98c825e4",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
@@ -53,5 +54,13 @@ class RARbCode(AbsTaskRetrieval):
 }
 """,
         n_samples={"test": 1484},
-        avg_character_length={"test": 621.2},
+        avg_character_length={
+            "test": {
+                "average_document_length": 793.6813076734267,
+                "average_query_length": 375.7506738544474,
+                "num_documents": 301482,
+                "num_queries": 1484,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )

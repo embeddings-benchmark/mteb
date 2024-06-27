@@ -18,6 +18,7 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
             "path": "JAugusto97/told-br",
             "revision": "fb4f11a5bc68b99891852d20f1ec074be6289768",
             "name": "multilabel",
+            "trust_remote_code": True,
         },
         type="MultilabelClassification",
         category="s2s",

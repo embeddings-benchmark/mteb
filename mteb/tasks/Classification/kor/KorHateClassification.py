@@ -18,6 +18,7 @@ class KorHateClassification(AbsTaskClassification):
         dataset={
             "path": "inmoonlight/kor_hate",
             "revision": "bd1a7370caf712125fac1fda375834ca8ddefaca",
+            "trust_remote_code": True,
         },
         reference="https://paperswithcode.com/dataset/korean-hatespeech-dataset",
         type="Classification",

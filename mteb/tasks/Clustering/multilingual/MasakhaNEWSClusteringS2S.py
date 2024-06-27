@@ -33,6 +33,7 @@ class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
         dataset={
             "path": "masakhane/masakhanews",
             "revision": "8ccc72e69e65f40c70e117d8b3c08306bb788b60",
+            "trust_remote_code": True,
         },
         description=(
             "Clustering of news article headlines from MasakhaNEWS dataset. Clustering of 10 sets on the news article label."

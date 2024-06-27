@@ -6,7 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class TenKGnadClusteringS2S(AbsTaskClustering):
-    superseeded_by = "TenKGnadClusteringS2S.v2"
+    superseded_by = "TenKGnadClusteringS2S.v2"
 
     metadata = TaskMetadata(
         name="TenKGnadClusteringS2S",
@@ -38,6 +38,7 @@ class TenKGnadClusteringS2S(AbsTaskClustering):
 
 class TenKGnadClusteringS2SFast(AbsTaskClusteringFast):
     max_document_to_embed = 10275
+    max_fraction_of_documents_to_embed = None
 
     metadata = TaskMetadata(
         name="TenKGnadClusteringS2S.v2",

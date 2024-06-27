@@ -84,9 +84,9 @@ logger = logging.getLogger(__name__)
 def _save_model_metadata(model: mteb.Encoder, output_folder: Path) -> None:
     meta = model.mteb_model_meta  # type: ignore
 
-    save_path = (
-        output_folder / meta.model_name_as_path() / meta.revision / "model_meta.json"
-    )
+    revision = meta.revision if meta.revision is not None else "no_revision_available"
+
+    save_path = output_folder / meta.model_name_as_path() / revision / "model_meta.json"
 
     with save_path.open("w") as f:
         json.dump(meta.to_dict(), f)
@@ -121,6 +121,7 @@ def run(args: argparse.Namespace) -> None:
         output_folder=args.output_folder,
         eval_splits=args.eval_splits,
         co2_tracker=args.co2_tracker,
+        overwrite_results=args.overwrite,
     )
 
     _save_model_metadata(model, Path(args.output_folder))
@@ -223,6 +224,12 @@ def add_run_parser(subparsers) -> None:
         default=None,
         help="Revision of the model to be loaded. Revisions are automatically read if the model is loaded from huggingface.",
     )
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        default=False,
+        help="Overwrite the output file if it already exists",
+    )
 
     parser.set_defaults(func=run)
 
@@ -256,7 +263,8 @@ def create_meta(args: argparse.Namespace) -> None:
                 metrics = [
                     {
                         "type": k,
-                        "value": v,
+                        "value": v
+                        * 100,  # convert to percentage (for consistency with the leaderboard and to make it more readable)
                     }
                     for k, v in hf_subset_score.items()
                     if isinstance(v, (int, float))

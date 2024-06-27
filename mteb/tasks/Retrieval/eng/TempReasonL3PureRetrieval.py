@@ -13,6 +13,7 @@ class TempReasonL3Pure(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/TempReason-l3-pure",
             "revision": "68fba138e7e63daccecfbdad0a9d2714e56e34ff",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",
@@ -42,5 +43,13 @@ class TempReasonL3Pure(AbsTaskRetrieval):
 }
 """,
         n_samples={"test": 4426},
-        avg_character_length={"test": 98.2},
+        avg_character_length={
+            "test": {
+                "average_document_length": 19.80534984678243,
+                "average_query_length": 74.44012652507908,
+                "num_documents": 15664,
+                "num_queries": 4426,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )

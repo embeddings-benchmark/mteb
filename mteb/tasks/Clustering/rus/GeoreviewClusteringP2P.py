@@ -7,6 +7,8 @@ from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 class GeoreviewClusteringP2P(AbsTaskClusteringFast):
     max_document_to_embed = 2000
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="GeoreviewClusteringP2P",
         dataset={

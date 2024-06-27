@@ -69,6 +69,7 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "jinaai/xmarket_ml",
             "revision": "dfe57acff5b62c23732a7b7d3e3fb84ff501708b",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
@@ -94,7 +95,31 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
    year={2021},
    month=oct, collection={CIKM ’21} }""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={
+            "test": {
+                "de": {
+                    "average_document_length": 187.4061197288943,
+                    "average_query_length": 15.717612088184294,
+                    "num_documents": 70526,
+                    "num_queries": 4037,
+                    "average_relevant_docs_per_query": 54.3522417636859,
+                },
+                "en": {
+                    "average_document_length": 452.792089662076,
+                    "average_query_length": 15.881635344543357,
+                    "num_documents": 218777,
+                    "num_queries": 9099,
+                    "average_relevant_docs_per_query": 85.43719090009891,
+                },
+                "es": {
+                    "average_document_length": 279.67909262759923,
+                    "average_query_length": 19.97062937062937,
+                    "num_documents": 39675,
+                    "num_queries": 3575,
+                    "average_relevant_docs_per_query": 36.01006993006993,
+                },
+            }
+        },
     )
 
     def load_data(self, **kwargs):

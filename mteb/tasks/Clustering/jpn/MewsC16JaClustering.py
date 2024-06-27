@@ -4,6 +4,8 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class MewsC16JaClustering(AbsTaskClusteringFast):
     max_document_to_embed = 992
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="MewsC16JaClustering",
         description="""MewsC-16 (Multilingual Short Text Clustering Dataset for News in 16 languages) is constructed from Wikinews.
@@ -14,6 +16,7 @@ class MewsC16JaClustering(AbsTaskClusteringFast):
             "path": "sbintuitions/JMTEB",
             "name": "mewsc16_ja",
             "revision": "e4af6c73182bebb41d94cb336846e5a452454ea7",
+            "trust_remote_code": True,
         },
         type="Clustering",
         category="s2s",

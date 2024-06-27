@@ -6,6 +6,8 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class FiQA2018(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="FiQA2018",
         description="Financial Opinion Mining and Question Answering",
@@ -37,5 +39,27 @@ year={2021},
 url={https://openreview.net/forum?id=wCu6T5xFjeJ}
 }""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={
+            "train": {
+                "average_document_length": 767.2108157812554,
+                "average_query_length": 61.49763636363636,
+                "num_documents": 57638,
+                "num_queries": 5500,
+                "average_relevant_docs_per_query": 2.5756363636363635,
+            },
+            "dev": {
+                "average_document_length": 767.2108157812554,
+                "average_query_length": 62.756,
+                "num_documents": 57638,
+                "num_queries": 500,
+                "average_relevant_docs_per_query": 2.476,
+            },
+            "test": {
+                "average_document_length": 767.2108157812554,
+                "average_query_length": 62.7037037037037,
+                "num_documents": 57638,
+                "num_queries": 648,
+                "average_relevant_docs_per_query": 2.632716049382716,
+            },
+        },
     )

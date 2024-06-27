@@ -13,6 +13,7 @@ class Quail(AbsTaskRetrieval):
         dataset={
             "path": "RAR-b/quail",
             "revision": "1851bc536f8bdab29e03e29191c4586b1d8d7c5a",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",
@@ -45,5 +46,13 @@ class Quail(AbsTaskRetrieval):
 }
 """,
         n_samples={"test": 2720},
-        avg_character_length={"test": 1983.3},
+        avg_character_length={
+            "test": {
+                "average_document_length": 27.50788422240522,
+                "average_query_length": 1957.3632352941177,
+                "num_documents": 32787,
+                "num_queries": 2720,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )

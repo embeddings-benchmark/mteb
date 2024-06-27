@@ -13,6 +13,7 @@ class NFCorpusPL(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/nfcorpus-pl",
             "revision": "9a6f9567fda928260afed2de480d79c98bf0bec0",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
@@ -37,5 +38,13 @@ class NFCorpusPL(AbsTaskRetrieval):
       primaryClass={cs.IR}
 }""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={
+            "test": {
+                "average_document_length": 1652.1926782273604,
+                "average_query_length": 24.390092879256965,
+                "num_documents": 3633,
+                "num_queries": 323,
+                "average_relevant_docs_per_query": 38.18575851393189,
+            }
+        },
     )

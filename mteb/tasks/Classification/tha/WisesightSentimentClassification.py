@@ -12,6 +12,7 @@ class WisesightSentimentClassification(AbsTaskClassification):
         dataset={
             "path": "pythainlp/wisesight_sentiment",
             "revision": "14aa5773afa135ba835cc5179bbc4a63657a42ae",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

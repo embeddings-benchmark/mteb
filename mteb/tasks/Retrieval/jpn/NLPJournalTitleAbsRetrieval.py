@@ -16,6 +16,7 @@ class NLPJournalTitleAbsRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "sbintuitions/JMTEB",
             "revision": "e4af6c73182bebb41d94cb336846e5a452454ea7",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2s",
@@ -33,7 +34,15 @@ class NLPJournalTitleAbsRetrieval(AbsTaskRetrieval):
         text_creation="found",
         bibtex_citation="",
         n_samples={_EVAL_SPLIT: 404},
-        avg_character_length={_EVAL_SPLIT: 234.59},
+        avg_character_length={
+            "test": {
+                "average_document_length": 441.6746031746032,
+                "average_query_length": 27.60891089108911,
+                "num_documents": 504,
+                "num_queries": 404,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )
 
     def load_data(self, **kwargs):

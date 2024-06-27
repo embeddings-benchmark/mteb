@@ -17,6 +17,7 @@ class GermanDPR(AbsTaskRetrieval):
         dataset={
             "path": "deepset/germandpr",
             "revision": "5129d02422a66be600ac89cd3e8531b4f97d347d",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
@@ -41,7 +42,15 @@ class GermanDPR(AbsTaskRetrieval):
       primaryClass={cs.CL}
 }""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={
+            "test": {
+                "average_document_length": 1288.3410987482614,
+                "average_query_length": 64.38439024390244,
+                "num_documents": 2876,
+                "num_queries": 1025,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )
 
     @staticmethod

@@ -20,6 +20,7 @@ class MTOPDomainClassification(MultilingualTask, AbsTaskClassification):
         dataset={
             "path": "mteb/mtop_domain",
             "revision": "d80d48c1eb48d3562165c59d59d0034df9fff0bf",
+            "trust_remote_code": True,
         },
         description="MTOP: Multilingual Task-Oriented Semantic Parsing",
         reference="https://arxiv.org/pdf/2008.09335.pdf",

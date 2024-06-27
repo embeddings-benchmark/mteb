@@ -12,6 +12,7 @@ class JSTS(AbsTaskSTS):
             "path": "shunk031/JGLUE",
             "revision": "50e79c314a7603ebc92236b66a0973d51a00ed8c",
             "name": "JSTS",
+            "trust_remote_code": True,
         },
         description="Japanese Semantic Textual Similarity Benchmark dataset construct from YJ Image Captions Dataset"
         "(Miyazaki and Shimizu, 2016) and annotated by crowdsource annotators.",

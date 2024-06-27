@@ -53,7 +53,24 @@ class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval, MultilingualTask
         text_creation="LM-generated and verified",
         bibtex_citation="preprint_coming",
         n_samples={"test": 2946},
-        avg_character_length={"test": 161},
+        avg_character_length={
+            "test": {
+                "deu-fra": {
+                    "average_document_length": 147.49857433808555,
+                    "average_query_length": 152.95587236931433,
+                    "num_documents": 7365,
+                    "num_queries": 1473,
+                    "average_relevant_docs_per_query": 1.0,
+                },
+                "fra-deu": {
+                    "average_document_length": 154.21968771215208,
+                    "average_query_length": 145.877800407332,
+                    "num_documents": 7365,
+                    "num_queries": 1473,
+                    "average_relevant_docs_per_query": 1.0,
+                },
+            },
+        },
     )
 
     def __init__(self, **kwargs):

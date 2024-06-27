@@ -42,5 +42,13 @@ class LegalBenchConsumerContractsQA(AbsTaskRetrieval):
   year={2021}
 }""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={
+            "test": {
+                "average_document_length": 2745.8246753246754,
+                "average_query_length": 92.4090909090909,
+                "num_documents": 154,
+                "num_queries": 396,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )

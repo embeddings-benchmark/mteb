@@ -14,6 +14,7 @@ class RomanianReviewsSentiment(AbsTaskClassification):
         dataset={
             "path": "universityofbucharest/laroseda",
             "revision": "358bcc95aeddd5d07a4524ee416f03d993099b23",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",

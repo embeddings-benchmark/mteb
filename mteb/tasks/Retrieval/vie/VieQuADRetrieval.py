@@ -52,7 +52,15 @@ url = "https://aclanthology.org/2020.coling-main.233",
 doi = "10.18653/v1/2020.coling-main.233",
 pages = "2595--2605"}""",
         n_samples={"validation": TEST_SAMPLES},
-        avg_character_length={"validation": 790.24},
+        avg_character_length={
+            "validation": {
+                "average_document_length": 222.61244979919678,
+                "average_query_length": 65.51513671875,
+                "num_documents": 2490,
+                "num_queries": 2048,
+                "average_relevant_docs_per_query": 2.0,
+            }
+        },
     )
 
     def load_data(self, **kwargs):

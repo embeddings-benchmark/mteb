@@ -18,6 +18,7 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "code-search-net/code_search_net",
             "revision": "fdc6a9e39575768c27eb8a2a5f702bf846eb4759",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="p2p",
@@ -37,7 +38,52 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         n_samples={
             _EVAL_SPLIT: 1000,
         },
-        avg_character_length={"test": 1196.4609},
+        avg_character_length={
+            "test": {
+                "python": {
+                    "average_document_length": 862.842,
+                    "average_query_length": 466.546,
+                    "num_documents": 1000,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.0,
+                },
+                "javascript": {
+                    "average_document_length": 1415.632,
+                    "average_query_length": 186.018,
+                    "num_documents": 1000,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.0,
+                },
+                "go": {
+                    "average_document_length": 563.729,
+                    "average_query_length": 125.213,
+                    "num_documents": 1000,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.0,
+                },
+                "ruby": {
+                    "average_document_length": 577.634,
+                    "average_query_length": 313.818,
+                    "num_documents": 1000,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.0,
+                },
+                "java": {
+                    "average_document_length": 420.287,
+                    "average_query_length": 690.36,
+                    "num_documents": 1000,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.0,
+                },
+                "php": {
+                    "average_document_length": 712.129,
+                    "average_query_length": 162.119,
+                    "num_documents": 1000,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.0,
+                },
+            },
+        },
     )
 
     def load_data(self, **kwargs):

@@ -9,10 +9,13 @@ from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.model_meta import ModelMeta
 from mteb.models import (
     bge_models,
+    cohere_models,
     e5_instruct,
     e5_models,
     gritlm,
+    llm2vec_models,
     mxbai_models,
+    nomic_models,
     openai_models,
     ru_sentence_models,
     sentence_transformers_models,
@@ -117,12 +120,15 @@ model_modules = [
     e5_models,
     gritlm,
     e5_instruct,
+    llm2vec_models,
     sentence_transformers_models,
     openai_models,
     voyage_models,
     bge_models,
     mxbai_models,
     ru_sentence_models,
+    nomic_models,
+    cohere_models,
 ]
 models = {}
 

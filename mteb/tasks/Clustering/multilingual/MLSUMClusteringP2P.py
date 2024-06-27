@@ -19,11 +19,11 @@ N_SAMPLES = 2048
 
 
 class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
-    superseeded_by = "MLSUMClusteringP2P.v2"
+    superseded_by = "MLSUMClusteringP2P.v2"
     metadata = TaskMetadata(
         name="MLSUMClusteringP2P",
         description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",
-        reference="https://huggingface.co/datasets/mlsum",
+        reference="https://huggingface.co/datasets/reciTAL/mlsum",
         dataset={
             "path": "reciTAL/mlsum",
             "revision": "b5d54f8f3b61ae17845046286940f03c6bc79bc7",
@@ -92,6 +92,8 @@ class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
 
 class MLSUMClusteringP2PFast(AbsTaskClustering, MultilingualTask):
     max_document_to_embed = N_SAMPLES
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="MLSUMClusteringP2P.v2",
         description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",

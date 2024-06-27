@@ -13,7 +13,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class TwentyNewsgroupsClustering(AbsTaskClustering):
-    superseeded_by = "TwentyNewsgroupsClustering.v2"
+    superseded_by = "TwentyNewsgroupsClustering.v2"
     metadata = TaskMetadata(
         name="TwentyNewsgroupsClustering",
         description="Clustering of the 20 Newsgroups dataset (subject only).",

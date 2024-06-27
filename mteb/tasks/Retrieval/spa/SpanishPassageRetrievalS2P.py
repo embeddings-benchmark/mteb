@@ -15,6 +15,7 @@ class SpanishPassageRetrievalS2P(AbsTaskRetrieval):
         dataset={
             "path": "jinaai/spanish_passage_retrieval",
             "revision": "9cddf2ce5209ade52c2115ccfa00eb22c6d3a837",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
@@ -54,7 +55,15 @@ isbn="978-3-030-15719-7"
 }
 """,
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={
+            "test": {
+                "average_document_length": 2635.217893792966,
+                "average_query_length": 67.55688622754491,
+                "num_documents": 10037,
+                "num_queries": 167,
+                "average_relevant_docs_per_query": 6.053892215568863,
+            }
+        },
     )
 
     def load_data(self, **kwargs):

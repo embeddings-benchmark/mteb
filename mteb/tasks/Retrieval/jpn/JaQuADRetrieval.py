@@ -11,6 +11,7 @@ class JaQuADRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "SkelterLabsInc/JaQuAD",
             "revision": "05600ff310a0970823e70f82f428893b85c71ffe",
+            "trust_remote_code": True,
         },
         description="Human-annotated question-answer pairs for Japanese wikipedia pages.",
         reference="https://arxiv.org/abs/2202.01764",
@@ -37,7 +38,15 @@ class JaQuADRetrieval(AbsTaskRetrieval):
     primaryClass={cs.CL}
 }""",
         n_samples={"validation": 2048},
-        avg_character_length={"validation": 400.75},
+        avg_character_length={
+            "validation": {
+                "average_document_length": 155.80922362309224,
+                "average_query_length": 30.826171875,
+                "num_documents": 3014,
+                "num_queries": 2048,
+                "average_relevant_docs_per_query": 2.0,
+            }
+        },
     )
 
     def load_data(self, **kwargs):

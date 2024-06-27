@@ -8,10 +8,10 @@ The following tables give you an overview of the tasks in MTEB.
 | Name | Languages | Type | Category | Domains | # Samples | Avg. Length (Char.) |
 |------|-----------|------|----------|---------|-----------|---------------------|
 | [AFQMC](https://aclanthology.org/2021.emnlp-main.357) | ['cmn'] | STS | s2s |  |  |  |
-| [AILACasedocs](https://zenodo.org/records/4063986) | ['eng'] | Retrieval | p2p | [Legal] |  |  |
-| [AILAStatutes](https://zenodo.org/records/4063986) | ['eng'] | Retrieval | p2p | [Legal] |  |  |
+| [AILACasedocs](https://zenodo.org/records/4063986) | ['eng'] | Retrieval | p2p | [Legal] |  | {'test': {'average_document_length': 26948.344086021505, 'average_query_length': 3038.42, 'num_documents': 186, 'num_queries': 50, 'average_relevant_docs_per_query': 3.9}} |
+| [AILAStatutes](https://zenodo.org/records/4063986) | ['eng'] | Retrieval | p2p | [Legal] |  | {'test': {'average_document_length': 1973.6341463414635, 'average_query_length': 3038.42, 'num_documents': 82, 'num_queries': 50, 'average_relevant_docs_per_query': 4.34}} |
 | [AJGT](https://link.springer.com/chapter/10.1007/978-3-319-60042-0_66/) (Alomari et al., 2017) | ['ara'] | Classification | s2s | [Social] | {'train': 1800} | {'train': 46.81} |
-| [ARCChallenge](https://allenai.org/data/arc) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 1172} | {'test': 161.7} |
+| [ARCChallenge](https://allenai.org/data/arc) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 1172} | {'test': {'average_document_length': 30.94235294117647, 'average_query_length': 131.56569965870307, 'num_documents': 9350, 'num_queries': 1172, 'average_relevant_docs_per_query': 1.0}} |
 | [ATEC](https://aclanthology.org/2021.emnlp-main.357) | ['cmn'] | STS | s2s |  |  |  |
 | [AfriSentiClassification](https://arxiv.org/abs/2302.08956) | ['amh', 'arq', 'ary', 'hau', 'ibo', 'kin', 'pcm', 'por', 'swa', 'tso', 'twi', 'yor'] | Classification | s2s | [Social] | {'test': 2048} | {'test': 74.77} |
 | [AfriSentiLangClassification](https://huggingface.co/datasets/HausaNLP/afrisenti-lid-data/) | ['amh', 'arq', 'ary', 'hau', 'ibo', 'kin', 'pcm', 'por', 'swa', 'tso', 'twi', 'yor'] | Classification | s2s | [Social] | {'test': 5754} | {'test': 77.84} |
@@ -19,8 +19,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [AlloProfClusteringP2P.v2](https://huggingface.co/datasets/lyon-nlp/alloprof) (Lefebvre-Brossard et al., 2023) | ['fra'] | Clustering | p2p | [Encyclopaedic] | {'test': 2556} | {'test': 3539.5} |
 | [AlloProfClusteringS2S.v2](https://huggingface.co/datasets/lyon-nlp/alloprof) (Lefebvre-Brossard et al., 2023) | ['fra'] | Clustering | s2s | [Encyclopaedic] | {'test': 2556} | {'test': 32.8} |
 | [AlloprofReranking](https://huggingface.co/datasets/antoinelb7/alloprof) (Lefebvre-Brossard et al., 2023) | ['fra'] | Reranking | s2p | [Web, Academic] | {'test': 2316, 'train': 9264} |  |
-| [AlloprofRetrieval](https://huggingface.co/datasets/antoinelb7/alloprof) (Lefebvre-Brossard et al., 2023) | ['fra'] | Retrieval | s2p | [Encyclopaedic] | {'train': 2048} |  |
-| [AlphaNLI](https://leaderboard.allenai.org/anli/submissions/get-started) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 1532} | {'test': 147.8} |
+| [AlloprofRetrieval](https://huggingface.co/datasets/antoinelb7/alloprof) (Lefebvre-Brossard et al., 2023) | ['fra'] | Retrieval | s2p | [Encyclopaedic] | {'train': 2048} | {'test': {'average_document_length': 3505.705399061033, 'average_query_length': 170.71286701208982, 'num_documents': 2556, 'num_queries': 2316, 'average_relevant_docs_per_query': 1.0}} |
+| [AlphaNLI](https://leaderboard.allenai.org/anli/submissions/get-started) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 1532} | {'test': {'average_document_length': 43.42647308646886, 'average_query_length': 103.05483028720627, 'num_documents': 241347, 'num_queries': 1532, 'average_relevant_docs_per_query': 1.0}} |
 | [AmazonCounterfactualClassification](https://arxiv.org/abs/2104.06893) | ['deu', 'eng', 'jpn'] | Classification | s2s | [Reviews] | {'validation': 335, 'test': 670} | {'validation': 109.2, 'test': 106.1} |
 | [AmazonPolarityClassification](https://huggingface.co/datasets/amazon_polarity) (Julian McAuley, 2013) | ['eng'] | Classification | s2s | [Reviews] | {'test': 400000} | {'test': 431.4} |
 | [AmazonReviewsClassification](https://arxiv.org/abs/2010.02573) (Phillip Keung, 2020) | ['cmn', 'deu', 'eng', 'fra', 'jpn', 'spa'] | Classification | s2s | [Reviews] | {'validation': 30000, 'test': 30000} | {'validation': 159.2, 'test': 160.4} |
@@ -28,8 +28,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [ArEntail](https://link.springer.com/article/10.1007/s10579-024-09731-1) (Obeidat et al., 2024) | ['ara'] | PairClassification | s2s | [News] | {'test': 1000} | {'test': 65.77} |
 | [ArXivHierarchicalClusteringP2P](https://www.kaggle.com/Cornell-University/arxiv) | ['eng'] | Clustering | p2p | [Academic] | {'test': 2048} | {'test': 1009.98} |
 | [ArXivHierarchicalClusteringS2S](https://www.kaggle.com/Cornell-University/arxiv) | ['eng'] | Clustering | p2p | [Academic] | {'test': 2048} | {'test': 1009.98} |
-| [ArguAna](http://argumentation.bplaced.net/arguana/data) (Boteva et al., 2016) | ['eng'] | Retrieval | s2p |  |  |  |
-| [ArguAna-PL](https://huggingface.co/datasets/clarin-knext/arguana-pl) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  |  |
+| [ArguAna](http://argumentation.bplaced.net/arguana/data) (Boteva et al., 2016) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1029.2327645838136, 'average_query_length': 1192.7204836415362, 'num_documents': 8674, 'num_queries': 1406, 'average_relevant_docs_per_query': 1.0}} |
+| [ArguAna-PL](https://huggingface.co/datasets/clarin-knext/arguana-pl) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1060.702674659903, 'average_query_length': 1224.8022759601706, 'num_documents': 8674, 'num_queries': 1406, 'average_relevant_docs_per_query': 1.0}} |
 | [ArmenianParaphrasePC](https://github.com/ivannikov-lab/arpa-paraphrase-corpus) (Arthur Malajyan, 2020) | ['hye'] | PairClassification | s2s | [News] | {'train': 4023, 'test': 1470} | {'train': 243.81, 'test': 241.37} |
 | [ArxivClassification](https://ieeexplore.ieee.org/document/8675939) (He et al., 2019) | ['eng'] | Classification | s2s | [Academic] | {'test': 2048} |  |
 | [AskUbuntuDupQuestions](https://github.com/taolei87/askubuntu) | ['eng'] | Reranking | s2s |  | {'test': 2255} | {'test': 52.5} |
@@ -37,10 +37,10 @@ The following tables give you an overview of the tasks in MTEB.
 | [Assin2STS](https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39) (Real et al., 2020) | ['por'] | STS | s2s |  | {'test': 2448} | {'test': 53.55} |
 | [BIOSSES](https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html) (Soğancıoğlu et al., 2017) | ['eng'] | STS | s2s |  |  |  |
 | [BQ](https://aclanthology.org/2021.emnlp-main.357) | ['cmn'] | STS | s2s |  |  |  |
-| [BSARDRetrieval](https://huggingface.co/datasets/maastrichtlawtech/bsard) (Louis et al., 2022) | ['fra'] | Retrieval | s2p | [Legal] | {'test': 222} | {'test': 71.94} |
+| [BSARDRetrieval](https://huggingface.co/datasets/maastrichtlawtech/bsard) (Louis et al., 2022) | ['fra'] | Retrieval | s2p | [Legal] | {'test': 222} | {'test': {'average_document_length': 880.2900631820793, 'average_query_length': 144.77027027027026, 'num_documents': 22633, 'num_queries': 222, 'average_relevant_docs_per_query': 1.0}} |
 | [BUCC.v2](https://comparable.limsi.fr/bucc2018/bucc2018-task.html) | ['cmn', 'deu', 'eng', 'fra', 'rus'] | BitextMining | s2s |  | {'test': 641684} | {'test': 101.3} |
 | [Banking77Classification](https://arxiv.org/abs/2003.04807) | ['eng'] | Classification | s2s |  | {'test': 3080} | {'test': 54.2} |
-| [BelebeleRetrieval](https://arxiv.org/abs/2308.16884) (Lucas Bandarkar, 2023) | ['acm', 'afr', 'als', 'amh', 'apc', 'arb', 'ars', 'ary', 'arz', 'asm', 'azj', 'bam', 'ben', 'bod', 'bul', 'cat', 'ceb', 'ces', 'ckb', 'dan', 'deu', 'ell', 'eng', 'est', 'eus', 'fin', 'fra', 'fuv', 'gaz', 'grn', 'guj', 'hat', 'hau', 'heb', 'hin', 'hrv', 'hun', 'hye', 'ibo', 'ilo', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kac', 'kan', 'kat', 'kaz', 'kea', 'khk', 'khm', 'kin', 'kir', 'kor', 'lao', 'lin', 'lit', 'lug', 'luo', 'lvs', 'mal', 'mar', 'mkd', 'mlt', 'mri', 'mya', 'nld', 'nob', 'npi', 'nso', 'nya', 'ory', 'pan', 'pbt', 'pes', 'plt', 'pol', 'por', 'ron', 'rus', 'shn', 'sin', 'slk', 'slv', 'sna', 'snd', 'som', 'sot', 'spa', 'srp', 'ssw', 'sun', 'swe', 'swh', 'tam', 'tel', 'tgk', 'tgl', 'tha', 'tir', 'tsn', 'tso', 'tur', 'ukr', 'urd', 'uzn', 'vie', 'war', 'wol', 'xho', 'yor', 'zho', 'zsm', 'zul'] | Retrieval | s2p | [Web, News] | {'test': 103500} | {'test': 568.0} |
+| [BelebeleRetrieval](https://arxiv.org/abs/2308.16884) (Lucas Bandarkar, 2023) | ['acm', 'afr', 'als', 'amh', 'apc', 'arb', 'ars', 'ary', 'arz', 'asm', 'azj', 'bam', 'ben', 'bod', 'bul', 'cat', 'ceb', 'ces', 'ckb', 'dan', 'deu', 'ell', 'eng', 'est', 'eus', 'fin', 'fra', 'fuv', 'gaz', 'grn', 'guj', 'hat', 'hau', 'heb', 'hin', 'hrv', 'hun', 'hye', 'ibo', 'ilo', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kac', 'kan', 'kat', 'kaz', 'kea', 'khk', 'khm', 'kin', 'kir', 'kor', 'lao', 'lin', 'lit', 'lug', 'luo', 'lvs', 'mal', 'mar', 'mkd', 'mlt', 'mri', 'mya', 'nld', 'nob', 'npi', 'nso', 'nya', 'ory', 'pan', 'pbt', 'pes', 'plt', 'pol', 'por', 'ron', 'rus', 'shn', 'sin', 'slk', 'slv', 'sna', 'snd', 'som', 'sot', 'spa', 'srp', 'ssw', 'sun', 'swe', 'swh', 'tam', 'tel', 'tgk', 'tgl', 'tha', 'tir', 'tsn', 'tso', 'tur', 'ukr', 'urd', 'uzn', 'vie', 'war', 'wol', 'xho', 'yor', 'zho', 'zsm', 'zul'] | Retrieval | s2p | [Web, News] | {'test': 103500} | {'test': {'acm_Arab-acm_Arab': {'average_document_length': 416.4733606557377, 'average_query_length': 55.84, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'acm_Arab-eng_Latn': {'average_document_length': 416.4733606557377, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-acm_Arab': {'average_document_length': 475.51024590163934, 'average_query_length': 55.84, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'afr_Latn-afr_Latn': {'average_document_length': 503.6659836065574, 'average_query_length': 78.04555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'afr_Latn-eng_Latn': {'average_document_length': 503.6659836065574, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-afr_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 78.04555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'als_Latn-als_Latn': {'average_document_length': 534.016393442623, 'average_query_length': 76.13555555555556, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'als_Latn-eng_Latn': {'average_document_length': 534.016393442623, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-als_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 76.13555555555556, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'amh_Ethi-amh_Ethi': {'average_document_length': 319.8688524590164, 'average_query_length': 49.16111111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'amh_Ethi-eng_Latn': {'average_document_length': 319.8688524590164, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-amh_Ethi': {'average_document_length': 475.51024590163934, 'average_query_length': 49.16111111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'apc_Arab-apc_Arab': {'average_document_length': 393.0553278688525, 'average_query_length': 55.85777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'apc_Arab-eng_Latn': {'average_document_length': 393.0553278688525, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-apc_Arab': {'average_document_length': 475.51024590163934, 'average_query_length': 55.85777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'arb_Arab-arb_Arab': {'average_document_length': 421.96311475409834, 'average_query_length': 58.55, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'arb_Arab-eng_Latn': {'average_document_length': 421.96311475409834, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-arb_Arab': {'average_document_length': 475.51024590163934, 'average_query_length': 58.55, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'arb_Latn-arb_Latn': {'average_document_length': 555.6188524590164, 'average_query_length': 67.02444444444444, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'arb_Latn-eng_Latn': {'average_document_length': 555.6188524590164, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-arb_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 67.02444444444444, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ars_Arab-ars_Arab': {'average_document_length': 422.5553278688525, 'average_query_length': 56.43222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ars_Arab-eng_Latn': {'average_document_length': 422.5553278688525, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ars_Arab': {'average_document_length': 475.51024590163934, 'average_query_length': 56.43222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ary_Arab-ary_Arab': {'average_document_length': 411.1475409836066, 'average_query_length': 66.01893095768374, 'num_documents': 488, 'num_queries': 898, 'average_relevant_docs_per_query': 1.0}, 'ary_Arab-eng_Latn': {'average_document_length': 411.1475409836066, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ary_Arab': {'average_document_length': 475.51024590163934, 'average_query_length': 66.01893095768374, 'num_documents': 488, 'num_queries': 898, 'average_relevant_docs_per_query': 1.0}, 'arz_Arab-arz_Arab': {'average_document_length': 412.05122950819674, 'average_query_length': 57.14111111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'arz_Arab-eng_Latn': {'average_document_length': 412.05122950819674, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-arz_Arab': {'average_document_length': 475.51024590163934, 'average_query_length': 57.14111111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'asm_Beng-asm_Beng': {'average_document_length': 458.5983606557377, 'average_query_length': 68.26, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'asm_Beng-eng_Latn': {'average_document_length': 458.5983606557377, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-asm_Beng': {'average_document_length': 475.51024590163934, 'average_query_length': 68.26, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'azj_Latn-azj_Latn': {'average_document_length': 519.6127049180328, 'average_query_length': 73.51222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'azj_Latn-eng_Latn': {'average_document_length': 519.6127049180328, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-azj_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 73.51222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'bam_Latn-bam_Latn': {'average_document_length': 457.3114754098361, 'average_query_length': 72.34222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'bam_Latn-eng_Latn': {'average_document_length': 457.3114754098361, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-bam_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 72.34222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ben_Beng-ben_Beng': {'average_document_length': 467.7745901639344, 'average_query_length': 69.48444444444445, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ben_Beng-eng_Latn': {'average_document_length': 467.7745901639344, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ben_Beng': {'average_document_length': 475.51024590163934, 'average_query_length': 69.48444444444445, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ben_Latn-ben_Latn': {'average_document_length': 522.8934426229508, 'average_query_length': 74.78777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ben_Latn-eng_Latn': {'average_document_length': 522.8934426229508, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ben_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 74.78777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'bod_Tibt-bod_Tibt': {'average_document_length': 533.3872950819672, 'average_query_length': 86.90222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'bod_Tibt-eng_Latn': {'average_document_length': 533.3872950819672, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-bod_Tibt': {'average_document_length': 475.51024590163934, 'average_query_length': 86.90222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'bul_Cyrl-bul_Cyrl': {'average_document_length': 496.97131147540983, 'average_query_length': 72.89, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'bul_Cyrl-eng_Latn': {'average_document_length': 496.97131147540983, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-bul_Cyrl': {'average_document_length': 475.51024590163934, 'average_query_length': 72.89, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'cat_Latn-cat_Latn': {'average_document_length': 525.4467213114754, 'average_query_length': 75.40666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'cat_Latn-eng_Latn': {'average_document_length': 525.4467213114754, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-cat_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 75.40666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ceb_Latn-ceb_Latn': {'average_document_length': 570.8483606557377, 'average_query_length': 81.19666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ceb_Latn-eng_Latn': {'average_document_length': 570.8483606557377, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ceb_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 81.19666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ces_Latn-ces_Latn': {'average_document_length': 461.0061475409836, 'average_query_length': 67.73333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ces_Latn-eng_Latn': {'average_document_length': 461.0061475409836, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ces_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 67.73333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ckb_Arab-ckb_Arab': {'average_document_length': 462.98770491803276, 'average_query_length': 71.04555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ckb_Arab-eng_Latn': {'average_document_length': 462.98770491803276, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ckb_Arab': {'average_document_length': 475.51024590163934, 'average_query_length': 71.04555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'dan_Latn-dan_Latn': {'average_document_length': 489.4856557377049, 'average_query_length': 72.96888888888888, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'dan_Latn-eng_Latn': {'average_document_length': 489.4856557377049, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-dan_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 72.96888888888888, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'deu_Latn-deu_Latn': {'average_document_length': 555.1659836065573, 'average_query_length': 75.32444444444444, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'deu_Latn-eng_Latn': {'average_document_length': 555.1659836065573, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-deu_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 75.32444444444444, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ell_Grek-ell_Grek': {'average_document_length': 568.3872950819672, 'average_query_length': 86.92666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ell_Grek-eng_Latn': {'average_document_length': 568.3872950819672, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ell_Grek': {'average_document_length': 475.51024590163934, 'average_query_length': 86.92666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-eng_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'est_Latn-est_Latn': {'average_document_length': 467.1475409836066, 'average_query_length': 67.55888888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'est_Latn-eng_Latn': {'average_document_length': 467.1475409836066, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-est_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 67.55888888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eus_Latn-eus_Latn': {'average_document_length': 506.19262295081967, 'average_query_length': 74.44777777777777, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eus_Latn-eng_Latn': {'average_document_length': 506.19262295081967, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-eus_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 74.44777777777777, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'fin_Latn-fin_Latn': {'average_document_length': 507.5, 'average_query_length': 72.50888888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'fin_Latn-eng_Latn': {'average_document_length': 507.5, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-fin_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 72.50888888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'fra_Latn-fra_Latn': {'average_document_length': 564.8401639344262, 'average_query_length': 90.54222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'fra_Latn-eng_Latn': {'average_document_length': 564.8401639344262, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-fra_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 90.54222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'fuv_Latn-fuv_Latn': {'average_document_length': 443.4733606557377, 'average_query_length': 58.42111111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'fuv_Latn-eng_Latn': {'average_document_length': 443.4733606557377, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-fuv_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 58.42111111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'gaz_Latn-gaz_Latn': {'average_document_length': 563.5389344262295, 'average_query_length': 85.93222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'gaz_Latn-eng_Latn': {'average_document_length': 563.5389344262295, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-gaz_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 85.93222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'grn_Latn-grn_Latn': {'average_document_length': 480.3299180327869, 'average_query_length': 75.10666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'grn_Latn-eng_Latn': {'average_document_length': 480.3299180327869, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-grn_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 75.10666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'guj_Gujr-guj_Gujr': {'average_document_length': 458.1885245901639, 'average_query_length': 62.25666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'guj_Gujr-eng_Latn': {'average_document_length': 458.1885245901639, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-guj_Gujr': {'average_document_length': 475.51024590163934, 'average_query_length': 62.25666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hat_Latn-hat_Latn': {'average_document_length': 438.6700819672131, 'average_query_length': 70.64666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hat_Latn-eng_Latn': {'average_document_length': 438.6700819672131, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-hat_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 70.64666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hau_Latn-hau_Latn': {'average_document_length': 507.24590163934425, 'average_query_length': 85.8488888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hau_Latn-eng_Latn': {'average_document_length': 507.24590163934425, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-hau_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 85.8488888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'heb_Hebr-heb_Hebr': {'average_document_length': 371.36270491803276, 'average_query_length': 55.135555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'heb_Hebr-eng_Latn': {'average_document_length': 371.36270491803276, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-heb_Hebr': {'average_document_length': 475.51024590163934, 'average_query_length': 55.135555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hin_Deva-hin_Deva': {'average_document_length': 473.55737704918033, 'average_query_length': 72.61777777777777, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hin_Deva-eng_Latn': {'average_document_length': 473.55737704918033, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-hin_Deva': {'average_document_length': 475.51024590163934, 'average_query_length': 72.61777777777777, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hin_Latn-hin_Latn': {'average_document_length': 541.7315573770492, 'average_query_length': 74.81222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hin_Latn-eng_Latn': {'average_document_length': 541.7315573770492, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-hin_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 74.81222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hrv_Latn-hrv_Latn': {'average_document_length': 469.202868852459, 'average_query_length': 68.83555555555556, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hrv_Latn-eng_Latn': {'average_document_length': 469.202868852459, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-hrv_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 68.83555555555556, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hun_Latn-hun_Latn': {'average_document_length': 501.1946721311475, 'average_query_length': 74.40555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hun_Latn-eng_Latn': {'average_document_length': 501.1946721311475, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-hun_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 74.40555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hye_Armn-hye_Armn': {'average_document_length': 527.5102459016393, 'average_query_length': 75.42555555555556, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hye_Armn-eng_Latn': {'average_document_length': 527.5102459016393, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-hye_Armn': {'average_document_length': 475.51024590163934, 'average_query_length': 75.42555555555556, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ibo_Latn-ibo_Latn': {'average_document_length': 482.3483606557377, 'average_query_length': 72.51501668520578, 'num_documents': 488, 'num_queries': 899, 'average_relevant_docs_per_query': 1.0011123470522802}, 'ibo_Latn-eng_Latn': {'average_document_length': 482.3483606557377, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ibo_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 72.51501668520578, 'num_documents': 488, 'num_queries': 899, 'average_relevant_docs_per_query': 1.0011123470522802}, 'ilo_Latn-ilo_Latn': {'average_document_length': 574.6987704918033, 'average_query_length': 85.7611111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ilo_Latn-eng_Latn': {'average_document_length': 574.6987704918033, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ilo_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 85.7611111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ind_Latn-ind_Latn': {'average_document_length': 516.0573770491803, 'average_query_length': 82.10555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ind_Latn-eng_Latn': {'average_document_length': 516.0573770491803, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ind_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 82.10555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'isl_Latn-isl_Latn': {'average_document_length': 470.73975409836066, 'average_query_length': 77.27333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'isl_Latn-eng_Latn': {'average_document_length': 470.73975409836066, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-isl_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 77.27333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ita_Latn-ita_Latn': {'average_document_length': 560.9344262295082, 'average_query_length': 83.49777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ita_Latn-eng_Latn': {'average_document_length': 560.9344262295082, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ita_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 83.49777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'jav_Latn-jav_Latn': {'average_document_length': 494.1803278688525, 'average_query_length': 78.60666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'jav_Latn-eng_Latn': {'average_document_length': 494.1803278688525, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-jav_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 78.60666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'jpn_Jpan-jpn_Jpan': {'average_document_length': 207.74795081967213, 'average_query_length': 35.79, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'jpn_Jpan-eng_Latn': {'average_document_length': 207.74795081967213, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-jpn_Jpan': {'average_document_length': 475.51024590163934, 'average_query_length': 35.79, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'kac_Latn-kac_Latn': {'average_document_length': 605.2889344262295, 'average_query_length': 98.64182424916574, 'num_documents': 488, 'num_queries': 899, 'average_relevant_docs_per_query': 1.0}, 'kac_Latn-eng_Latn': {'average_document_length': 605.2889344262295, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-kac_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 98.64182424916574, 'num_documents': 488, 'num_queries': 899, 'average_relevant_docs_per_query': 1.0}, 'kan_Knda-kan_Knda': {'average_document_length': 498.9077868852459, 'average_query_length': 72.13666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'kan_Knda-eng_Latn': {'average_document_length': 498.9077868852459, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-kan_Knda': {'average_document_length': 475.51024590163934, 'average_query_length': 72.13666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'kat_Geor-kat_Geor': {'average_document_length': 521.7766393442623, 'average_query_length': 74.81444444444445, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'kat_Geor-eng_Latn': {'average_document_length': 521.7766393442623, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-kat_Geor': {'average_document_length': 475.51024590163934, 'average_query_length': 74.81444444444445, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'kaz_Cyrl-kaz_Cyrl': {'average_document_length': 488.2110655737705, 'average_query_length': 70.75666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'kaz_Cyrl-eng_Latn': {'average_document_length': 488.2110655737705, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-kaz_Cyrl': {'average_document_length': 475.51024590163934, 'average_query_length': 70.75666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'kea_Latn-kea_Latn': {'average_document_length': 471.5594262295082, 'average_query_length': 75.94111111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'kea_Latn-eng_Latn': {'average_document_length': 471.5594262295082, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-kea_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 75.94111111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'khk_Cyrl-khk_Cyrl': {'average_document_length': 496.655737704918, 'average_query_length': 73.33444444444444, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'khk_Cyrl-eng_Latn': {'average_document_length': 496.655737704918, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-khk_Cyrl': {'average_document_length': 475.51024590163934, 'average_query_length': 73.33444444444444, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'khm_Khmr-khm_Khmr': {'average_document_length': 562.4139344262295, 'average_query_length': 75.74888888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'khm_Khmr-eng_Latn': {'average_document_length': 562.4139344262295, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-khm_Khmr': {'average_document_length': 475.51024590163934, 'average_query_length': 75.74888888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'kin_Latn-kin_Latn': {'average_document_length': 529.2520491803278, 'average_query_length': 79.89655172413794, 'num_documents': 488, 'num_queries': 899, 'average_relevant_docs_per_query': 1.0011123470522802}, 'kin_Latn-eng_Latn': {'average_document_length': 529.2520491803278, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-kin_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 79.89655172413794, 'num_documents': 488, 'num_queries': 899, 'average_relevant_docs_per_query': 1.0011123470522802}, 'kir_Cyrl-kir_Cyrl': {'average_document_length': 487.80737704918033, 'average_query_length': 74.42333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'kir_Cyrl-eng_Latn': {'average_document_length': 487.80737704918033, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-kir_Cyrl': {'average_document_length': 475.51024590163934, 'average_query_length': 74.42333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'kor_Hang-kor_Hang': {'average_document_length': 241.32991803278688, 'average_query_length': 35.257777777777775, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'kor_Hang-eng_Latn': {'average_document_length': 241.32991803278688, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-kor_Hang': {'average_document_length': 475.51024590163934, 'average_query_length': 35.257777777777775, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'lao_Laoo-lao_Laoo': {'average_document_length': 471.6495901639344, 'average_query_length': 63.31333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'lao_Laoo-eng_Latn': {'average_document_length': 471.6495901639344, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-lao_Laoo': {'average_document_length': 475.51024590163934, 'average_query_length': 63.31333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'lin_Latn-lin_Latn': {'average_document_length': 512.9016393442623, 'average_query_length': 81.56681514476615, 'num_documents': 488, 'num_queries': 898, 'average_relevant_docs_per_query': 1.0022271714922049}, 'lin_Latn-eng_Latn': {'average_document_length': 512.9016393442623, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-lin_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 81.56681514476615, 'num_documents': 488, 'num_queries': 898, 'average_relevant_docs_per_query': 1.0022271714922049}, 'lit_Latn-lit_Latn': {'average_document_length': 474.0553278688525, 'average_query_length': 68.69888888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'lit_Latn-eng_Latn': {'average_document_length': 474.0553278688525, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-lit_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 68.69888888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'lug_Latn-lug_Latn': {'average_document_length': 485.73975409836066, 'average_query_length': 78.52057842046719, 'num_documents': 488, 'num_queries': 899, 'average_relevant_docs_per_query': 1.0011123470522802}, 'lug_Latn-eng_Latn': {'average_document_length': 485.73975409836066, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-lug_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 78.52057842046719, 'num_documents': 488, 'num_queries': 899, 'average_relevant_docs_per_query': 1.0011123470522802}, 'luo_Latn-luo_Latn': {'average_document_length': 497.53688524590166, 'average_query_length': 73.14333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'luo_Latn-eng_Latn': {'average_document_length': 497.53688524590166, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-luo_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 73.14333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'lvs_Latn-lvs_Latn': {'average_document_length': 487.21311475409834, 'average_query_length': 69.97888888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'lvs_Latn-eng_Latn': {'average_document_length': 487.21311475409834, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-lvs_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 69.97888888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'mal_Mlym-mal_Mlym': {'average_document_length': 539.2827868852459, 'average_query_length': 80.69222222222223, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'mal_Mlym-eng_Latn': {'average_document_length': 539.2827868852459, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-mal_Mlym': {'average_document_length': 475.51024590163934, 'average_query_length': 80.69222222222223, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'mar_Deva-mar_Deva': {'average_document_length': 478.67418032786884, 'average_query_length': 68.62625139043382, 'num_documents': 488, 'num_queries': 899, 'average_relevant_docs_per_query': 1.0011123470522802}, 'mar_Deva-eng_Latn': {'average_document_length': 478.67418032786884, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-mar_Deva': {'average_document_length': 475.51024590163934, 'average_query_length': 68.62625139043382, 'num_documents': 488, 'num_queries': 899, 'average_relevant_docs_per_query': 1.0011123470522802}, 'mkd_Cyrl-mkd_Cyrl': {'average_document_length': 495.77868852459017, 'average_query_length': 74.01333333333334, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'mkd_Cyrl-eng_Latn': {'average_document_length': 495.77868852459017, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-mkd_Cyrl': {'average_document_length': 475.51024590163934, 'average_query_length': 74.01333333333334, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'mlt_Latn-mlt_Latn': {'average_document_length': 525.8995901639345, 'average_query_length': 75.00444444444445, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'mlt_Latn-eng_Latn': {'average_document_length': 525.8995901639345, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-mlt_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 75.00444444444445, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'mri_Latn-mri_Latn': {'average_document_length': 526.0860655737705, 'average_query_length': 81.71444444444444, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'mri_Latn-eng_Latn': {'average_document_length': 526.0860655737705, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-mri_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 81.71444444444444, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'mya_Mymr-mya_Mymr': {'average_document_length': 590.389344262295, 'average_query_length': 89.28333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'mya_Mymr-eng_Latn': {'average_document_length': 590.389344262295, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-mya_Mymr': {'average_document_length': 475.51024590163934, 'average_query_length': 89.28333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'nld_Latn-nld_Latn': {'average_document_length': 529.1434426229508, 'average_query_length': 75.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'nld_Latn-eng_Latn': {'average_document_length': 529.1434426229508, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-nld_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 75.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'nob_Latn-nob_Latn': {'average_document_length': 479.13729508196724, 'average_query_length': 71.04555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'nob_Latn-eng_Latn': {'average_document_length': 479.13729508196724, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-nob_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 71.04555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'npi_Deva-npi_Deva': {'average_document_length': 456.9590163934426, 'average_query_length': 66.89666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'npi_Deva-eng_Latn': {'average_document_length': 456.9590163934426, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-npi_Deva': {'average_document_length': 475.51024590163934, 'average_query_length': 66.89666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'npi_Latn-npi_Latn': {'average_document_length': 515.9815573770492, 'average_query_length': 71.89666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'npi_Latn-eng_Latn': {'average_document_length': 515.9815573770492, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-npi_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 71.89666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'nso_Latn-nso_Latn': {'average_document_length': 548.0225409836065, 'average_query_length': 86.77444444444444, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'nso_Latn-eng_Latn': {'average_document_length': 548.0225409836065, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-nso_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 86.77444444444444, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'nya_Latn-nya_Latn': {'average_document_length': 532.3934426229508, 'average_query_length': 90.78777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'nya_Latn-eng_Latn': {'average_document_length': 532.3934426229508, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-nya_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 90.78777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ory_Orya-ory_Orya': {'average_document_length': 487.78483606557376, 'average_query_length': 72.95777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ory_Orya-eng_Latn': {'average_document_length': 487.78483606557376, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ory_Orya': {'average_document_length': 475.51024590163934, 'average_query_length': 72.95777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'pan_Guru-pan_Guru': {'average_document_length': 480.2438524590164, 'average_query_length': 73.29777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'pan_Guru-eng_Latn': {'average_document_length': 480.2438524590164, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-pan_Guru': {'average_document_length': 475.51024590163934, 'average_query_length': 73.29777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'pbt_Arab-pbt_Arab': {'average_document_length': 453.3299180327869, 'average_query_length': 67.67111111111112, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'pbt_Arab-eng_Latn': {'average_document_length': 453.3299180327869, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-pbt_Arab': {'average_document_length': 475.51024590163934, 'average_query_length': 67.67111111111112, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'pes_Arab-pes_Arab': {'average_document_length': 448.84631147540983, 'average_query_length': 64.75111111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'pes_Arab-eng_Latn': {'average_document_length': 448.84631147540983, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-pes_Arab': {'average_document_length': 475.51024590163934, 'average_query_length': 64.75111111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'plt_Latn-plt_Latn': {'average_document_length': 581.2745901639345, 'average_query_length': 94.99555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'plt_Latn-eng_Latn': {'average_document_length': 581.2745901639345, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-plt_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 94.99555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'pol_Latn-pol_Latn': {'average_document_length': 504.0409836065574, 'average_query_length': 74.09777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'pol_Latn-eng_Latn': {'average_document_length': 504.0409836065574, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-pol_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 74.09777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'por_Latn-por_Latn': {'average_document_length': 517.2827868852459, 'average_query_length': 78.11666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'por_Latn-eng_Latn': {'average_document_length': 517.2827868852459, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-por_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 78.11666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ron_Latn-ron_Latn': {'average_document_length': 534.8668032786885, 'average_query_length': 78.74222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ron_Latn-eng_Latn': {'average_document_length': 534.8668032786885, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ron_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 78.74222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'rus_Cyrl-rus_Cyrl': {'average_document_length': 520.1700819672132, 'average_query_length': 83.16333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'rus_Cyrl-eng_Latn': {'average_document_length': 520.1700819672132, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-rus_Cyrl': {'average_document_length': 475.51024590163934, 'average_query_length': 83.16333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'shn_Mymr-shn_Mymr': {'average_document_length': 676.172131147541, 'average_query_length': 75.90222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'shn_Mymr-eng_Latn': {'average_document_length': 676.172131147541, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-shn_Mymr': {'average_document_length': 475.51024590163934, 'average_query_length': 75.90222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'sin_Latn-sin_Latn': {'average_document_length': 590.7889344262295, 'average_query_length': 94.46666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'sin_Latn-eng_Latn': {'average_document_length': 590.7889344262295, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-sin_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 94.46666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'sin_Sinh-sin_Sinh': {'average_document_length': 478.66803278688525, 'average_query_length': 69.91777777777777, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'sin_Sinh-eng_Latn': {'average_document_length': 478.66803278688525, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-sin_Sinh': {'average_document_length': 475.51024590163934, 'average_query_length': 69.91777777777777, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'slk_Latn-slk_Latn': {'average_document_length': 476.7766393442623, 'average_query_length': 68.5411111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'slk_Latn-eng_Latn': {'average_document_length': 476.7766393442623, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-slk_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 68.5411111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'slv_Latn-slv_Latn': {'average_document_length': 474.84631147540983, 'average_query_length': 68.79888888888888, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'slv_Latn-eng_Latn': {'average_document_length': 474.84631147540983, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-slv_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 68.79888888888888, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'sna_Latn-sna_Latn': {'average_document_length': 532.5860655737705, 'average_query_length': 81.30700778642937, 'num_documents': 488, 'num_queries': 899, 'average_relevant_docs_per_query': 1.0}, 'sna_Latn-eng_Latn': {'average_document_length': 532.5860655737705, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-sna_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 81.30700778642937, 'num_documents': 488, 'num_queries': 899, 'average_relevant_docs_per_query': 1.0}, 'snd_Arab-snd_Arab': {'average_document_length': 431.48770491803276, 'average_query_length': 63.42333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'snd_Arab-eng_Latn': {'average_document_length': 431.48770491803276, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-snd_Arab': {'average_document_length': 475.51024590163934, 'average_query_length': 63.42333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'som_Latn-som_Latn': {'average_document_length': 542.0737704918033, 'average_query_length': 90.95777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'som_Latn-eng_Latn': {'average_document_length': 542.0737704918033, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-som_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 90.95777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'sot_Latn-sot_Latn': {'average_document_length': 573.3258196721312, 'average_query_length': 83.13111111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'sot_Latn-eng_Latn': {'average_document_length': 573.3258196721312, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-sot_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 83.13111111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'spa_Latn-spa_Latn': {'average_document_length': 564.3319672131148, 'average_query_length': 82.16, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'spa_Latn-eng_Latn': {'average_document_length': 564.3319672131148, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-spa_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 82.16, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'srp_Cyrl-srp_Cyrl': {'average_document_length': 471.84631147540983, 'average_query_length': 67.49833147942158, 'num_documents': 488, 'num_queries': 899, 'average_relevant_docs_per_query': 1.0011123470522802}, 'srp_Cyrl-eng_Latn': {'average_document_length': 471.84631147540983, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-srp_Cyrl': {'average_document_length': 475.51024590163934, 'average_query_length': 67.49833147942158, 'num_documents': 488, 'num_queries': 899, 'average_relevant_docs_per_query': 1.0011123470522802}, 'ssw_Latn-ssw_Latn': {'average_document_length': 535.0901639344262, 'average_query_length': 81.09777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ssw_Latn-eng_Latn': {'average_document_length': 535.0901639344262, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ssw_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 81.09777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'sun_Latn-sun_Latn': {'average_document_length': 495.3032786885246, 'average_query_length': 78.16, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'sun_Latn-eng_Latn': {'average_document_length': 495.3032786885246, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-sun_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 78.16, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'swe_Latn-swe_Latn': {'average_document_length': 480.6803278688525, 'average_query_length': 68.67666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'swe_Latn-eng_Latn': {'average_document_length': 480.6803278688525, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-swe_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 68.67666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'swh_Latn-swh_Latn': {'average_document_length': 499.0983606557377, 'average_query_length': 80.56, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'swh_Latn-eng_Latn': {'average_document_length': 499.0983606557377, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-swh_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 80.56, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tam_Taml-tam_Taml': {'average_document_length': 555.5286885245902, 'average_query_length': 81.12777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tam_Taml-eng_Latn': {'average_document_length': 555.5286885245902, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-tam_Taml': {'average_document_length': 475.51024590163934, 'average_query_length': 81.12777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tel_Telu-tel_Telu': {'average_document_length': 481.5245901639344, 'average_query_length': 72.18777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tel_Telu-eng_Latn': {'average_document_length': 481.5245901639344, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-tel_Telu': {'average_document_length': 475.51024590163934, 'average_query_length': 72.18777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tgk_Cyrl-tgk_Cyrl': {'average_document_length': 528.516393442623, 'average_query_length': 74.28111111111112, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tgk_Cyrl-eng_Latn': {'average_document_length': 528.516393442623, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-tgk_Cyrl': {'average_document_length': 475.51024590163934, 'average_query_length': 74.28111111111112, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tgl_Latn-tgl_Latn': {'average_document_length': 597.6270491803278, 'average_query_length': 82.34555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tgl_Latn-eng_Latn': {'average_document_length': 597.6270491803278, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-tgl_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 82.34555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tha_Thai-tha_Thai': {'average_document_length': 456.1659836065574, 'average_query_length': 59.46666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tha_Thai-eng_Latn': {'average_document_length': 456.1659836065574, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-tha_Thai': {'average_document_length': 475.51024590163934, 'average_query_length': 59.46666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tir_Ethi-tir_Ethi': {'average_document_length': 327.6967213114754, 'average_query_length': 51.99888888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tir_Ethi-eng_Latn': {'average_document_length': 327.6967213114754, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-tir_Ethi': {'average_document_length': 475.51024590163934, 'average_query_length': 51.99888888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tsn_Latn-tsn_Latn': {'average_document_length': 591.7131147540983, 'average_query_length': 87.12777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tsn_Latn-eng_Latn': {'average_document_length': 591.7131147540983, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-tsn_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 87.12777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tso_Latn-tso_Latn': {'average_document_length': 569.6475409836065, 'average_query_length': 91.69444444444444, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tso_Latn-eng_Latn': {'average_document_length': 569.6475409836065, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-tso_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 91.69444444444444, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tur_Latn-tur_Latn': {'average_document_length': 489.0409836065574, 'average_query_length': 71.56222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'tur_Latn-eng_Latn': {'average_document_length': 489.0409836065574, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-tur_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 71.56222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ukr_Cyrl-ukr_Cyrl': {'average_document_length': 488.11475409836066, 'average_query_length': 72.08222222222223, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ukr_Cyrl-eng_Latn': {'average_document_length': 488.11475409836066, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-ukr_Cyrl': {'average_document_length': 475.51024590163934, 'average_query_length': 72.08222222222223, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'urd_Arab-urd_Arab': {'average_document_length': 470.452868852459, 'average_query_length': 70.52666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'urd_Arab-eng_Latn': {'average_document_length': 470.452868852459, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-urd_Arab': {'average_document_length': 475.51024590163934, 'average_query_length': 70.52666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'urd_Latn-urd_Latn': {'average_document_length': 590.5348360655738, 'average_query_length': 90.07, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'urd_Latn-eng_Latn': {'average_document_length': 590.5348360655738, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-urd_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 90.07, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'uzn_Latn-uzn_Latn': {'average_document_length': 539.2418032786885, 'average_query_length': 77.61333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'uzn_Latn-eng_Latn': {'average_document_length': 539.2418032786885, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-uzn_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 77.61333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'vie_Latn-vie_Latn': {'average_document_length': 499.8360655737705, 'average_query_length': 73.05333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'vie_Latn-eng_Latn': {'average_document_length': 499.8360655737705, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-vie_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 73.05333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'war_Latn-war_Latn': {'average_document_length': 592.8688524590164, 'average_query_length': 86.07555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'war_Latn-eng_Latn': {'average_document_length': 592.8688524590164, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-war_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 86.07555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'wol_Latn-wol_Latn': {'average_document_length': 456.9795081967213, 'average_query_length': 70.60555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'wol_Latn-eng_Latn': {'average_document_length': 456.9795081967213, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-wol_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 70.60555555555555, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'xho_Latn-xho_Latn': {'average_document_length': 505.0655737704918, 'average_query_length': 78.50333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'xho_Latn-eng_Latn': {'average_document_length': 505.0655737704918, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-xho_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 78.50333333333333, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'yor_Latn-yor_Latn': {'average_document_length': 459.5204918032787, 'average_query_length': 68.64, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'yor_Latn-eng_Latn': {'average_document_length': 459.5204918032787, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-yor_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 68.64, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'zho_Hans-zho_Hans': {'average_document_length': 159.76024590163934, 'average_query_length': 21.747777777777777, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'zho_Hans-eng_Latn': {'average_document_length': 159.76024590163934, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-zho_Hans': {'average_document_length': 475.51024590163934, 'average_query_length': 21.747777777777777, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'zho_Hant-zho_Hant': {'average_document_length': 149.77254098360655, 'average_query_length': 21.07888888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'zho_Hant-eng_Latn': {'average_document_length': 149.77254098360655, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-zho_Hant': {'average_document_length': 475.51024590163934, 'average_query_length': 21.07888888888889, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'zsm_Latn-zsm_Latn': {'average_document_length': 528.9139344262295, 'average_query_length': 78.92444444444445, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'zsm_Latn-eng_Latn': {'average_document_length': 528.9139344262295, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-zsm_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 78.92444444444445, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'zul_Latn-zul_Latn': {'average_document_length': 532.9713114754098, 'average_query_length': 76.0411111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'zul_Latn-eng_Latn': {'average_document_length': 532.9713114754098, 'average_query_length': 77.34777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'eng_Latn-zul_Latn': {'average_document_length': 475.51024590163934, 'average_query_length': 76.0411111111111, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'arb_Arab-arb_Latn': {'average_document_length': 421.96311475409834, 'average_query_length': 67.02444444444444, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'arb_Latn-arb_Arab': {'average_document_length': 555.6188524590164, 'average_query_length': 58.55, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ben_Beng-ben_Latn': {'average_document_length': 467.7745901639344, 'average_query_length': 74.78777777777778, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'ben_Latn-ben_Beng': {'average_document_length': 522.8934426229508, 'average_query_length': 69.48444444444445, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hin_Deva-hin_Latn': {'average_document_length': 473.55737704918033, 'average_query_length': 74.81222222222222, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'hin_Latn-hin_Deva': {'average_document_length': 541.7315573770492, 'average_query_length': 72.61777777777777, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'npi_Deva-npi_Latn': {'average_document_length': 456.9590163934426, 'average_query_length': 71.89666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'npi_Latn-npi_Deva': {'average_document_length': 515.9815573770492, 'average_query_length': 66.89666666666666, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'sin_Sinh-sin_Latn': {'average_document_length': 478.66803278688525, 'average_query_length': 94.46666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'sin_Latn-sin_Sinh': {'average_document_length': 590.7889344262295, 'average_query_length': 69.91777777777777, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'urd_Arab-urd_Latn': {'average_document_length': 470.452868852459, 'average_query_length': 90.07, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}, 'urd_Latn-urd_Arab': {'average_document_length': 590.5348360655738, 'average_query_length': 70.52666666666667, 'num_documents': 488, 'num_queries': 900, 'average_relevant_docs_per_query': 1.0}}} |
 | [BengaliDocumentClassification](https://aclanthology.org/2023.eacl-main.4) | ['ben'] | Classification | s2s | [News] | {'test': 2048} | {'test': 1658.1} |
 | [BengaliHateSpeechClassification](https://huggingface.co/datasets/bn_hate_speech) (Karim et al., 2020) | ['ben'] | Classification | s2s | [News] | {'train': 3418} | {'train': 103.42} |
 | [BengaliSentimentAnalysis](https://data.mendeley.com/datasets/p6zc7krs37/4) (Sazzed et al., 2020) | ['ben'] | Classification | s2s | [Reviews] | {'train': 11807} | {'train': 69.66} |
@@ -61,18 +61,19 @@ The following tables give you an overview of the tasks in MTEB.
 | [CLSClusteringS2S.v2](https://arxiv.org/abs/2209.05034) (Yudong Li, 2022) | ['cmn'] | Clustering | s2s | [Academic] | {'test': 2048} |  |
 | [CMedQAv1-reranking](https://github.com/zhangsheng93/cMedQA) (Zhang et al., 2017) | ['cmn'] | Reranking | s2s | [Medical] | {'test': 2000} | {'test': 165.0} |
 | [CMedQAv2-reranking](https://github.com/zhangsheng93/cMedQA2) (S. Zhang, 2018) | ['cmn'] | Reranking | s2s |  |  |  |
-| [CQADupstackAndroidRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  |  |
-| [CQADupstackEnglishRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  |  |
-| [CQADupstackGamingRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  |  |
-| [CQADupstackGisRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  |  |
-| [CQADupstackMathematicaRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  |  |
-| [CQADupstackPhysicsRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  |  |
-| [CQADupstackProgrammersRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  |  |
-| [CQADupstackStatsRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  |  |
-| [CQADupstackTexRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  |  |
-| [CQADupstackUnixRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  |  |
-| [CQADupstackWebmastersRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  |  |
-| [CQADupstackWordpressRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  |  |
+| [CPUSpeedTask](https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/c8376f967d1294419be1d3eb41217d04cd3a65d3/src/seb/registered_tasks/speed.py#L83-L96) | ['eng'] | Speed | s2s | [Fiction] | {'test': 1} | {'test': 3591.0} |
+| [CQADupstackAndroidRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 593.701974084703, 'average_query_length': 51.76680972818312, 'num_documents': 22998, 'num_queries': 699, 'average_relevant_docs_per_query': 2.4263233190271816}} |
+| [CQADupstackEnglishRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 482.4710971880361, 'average_query_length': 48.32993630573248, 'num_documents': 40221, 'num_queries': 1570, 'average_relevant_docs_per_query': 2.3980891719745223}} |
+| [CQADupstackGamingRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 488.74152888457206, 'average_query_length': 48.772413793103446, 'num_documents': 45301, 'num_queries': 1595, 'average_relevant_docs_per_query': 1.418808777429467}} |
+| [CQADupstackGisRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1012.167813587693, 'average_query_length': 52.2, 'num_documents': 37637, 'num_queries': 885, 'average_relevant_docs_per_query': 1.2587570621468926}} |
+| [CQADupstackMathematicaRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1153.4967375037413, 'average_query_length': 48.90547263681592, 'num_documents': 16705, 'num_queries': 804, 'average_relevant_docs_per_query': 1.6890547263681592}} |
+| [CQADupstackPhysicsRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 818.6476145735463, 'average_query_length': 53.36477382098171, 'num_documents': 38316, 'num_queries': 1039, 'average_relevant_docs_per_query': 1.8604427333974976}} |
+| [CQADupstackProgrammersRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1055.7033814022875, 'average_query_length': 55.1837899543379, 'num_documents': 32176, 'num_queries': 876, 'average_relevant_docs_per_query': 1.9121004566210045}} |
+| [CQADupstackStatsRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1055.1668598736662, 'average_query_length': 56.31748466257669, 'num_documents': 42269, 'num_queries': 652, 'average_relevant_docs_per_query': 1.4003067484662577}} |
+| [CQADupstackTexRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1297.09043177285, 'average_query_length': 46.935306262904334, 'num_documents': 68184, 'num_queries': 2906, 'average_relevant_docs_per_query': 1.7735719201651754}} |
+| [CQADupstackUnixRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1004.8120383267908, 'average_query_length': 50.32369402985075, 'num_documents': 47382, 'num_queries': 1072, 'average_relevant_docs_per_query': 1.5792910447761195}} |
+| [CQADupstackWebmastersRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 707.3635736857225, 'average_query_length': 51.93478260869565, 'num_documents': 17405, 'num_queries': 506, 'average_relevant_docs_per_query': 2.7569169960474307}} |
+| [CQADupstackWordpressRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1122.7690155333814, 'average_query_length': 48.7264325323475, 'num_documents': 48605, 'num_queries': 541, 'average_relevant_docs_per_query': 1.3752310536044363}} |
 | [CSFDCZMovieReviewSentimentClassification](https://arxiv.org/abs/2304.01922) (Michal Štefánik, 2023) | ['ces'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 386.5} |
 | [CSFDSKMovieReviewSentimentClassification](https://arxiv.org/abs/2304.01922) (Michal Štefánik, 2023) | ['slk'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 366.2} |
 | [CTKFactsNLI](https://arxiv.org/abs/2201.11115) (Ullrich et al., 2023) | ['ces'] | PairClassification | s2s | [News] | {'test': 375, 'validation': 305} | {'test': 225.62, 'validation': 219.32} |
@@ -116,11 +117,11 @@ The following tables give you an overview of the tasks in MTEB.
 | [CUADWarrantyDurationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 320} | {'test': 352.27} |
 | [CanadaTaxCourtOutcomesLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 244} | {'test': 622.6} |
 | [CataloniaTweetClassification](https://aclanthology.org/2020.lrec-1.171/) | ['cat', 'spa'] | Classification | s2s | [Social, Government] | {'validation': 2000, 'test': 2000} | {'validation': 202.61, 'test': 200.49} |
-| [ClimateFEVER](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) (Thomas Diggelmann, 2021) | ['eng'] | Retrieval | s2p |  |  |  |
-| [CmedqaRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) | ['cmn'] | Retrieval | s2p |  |  |  |
+| [ClimateFEVER](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) (Thomas Diggelmann, 2021) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 538.241873443325, 'average_query_length': 123.39934853420195, 'num_documents': 5416593, 'num_queries': 1535, 'average_relevant_docs_per_query': 3.0495114006514656}} |
+| [CmedqaRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) | ['cmn'] | Retrieval | s2p |  |  | {'dev': {'average_document_length': 307.7710222897771, 'average_query_length': 48.470367591897976, 'num_documents': 100001, 'num_queries': 3999, 'average_relevant_docs_per_query': 1.86271567891973}} |
 | [Cmnli](https://huggingface.co/datasets/clue/viewer/cmnli) | ['cmn'] | PairClassification | s2s |  |  |  |
-| [CodeEditSearchRetrieval](https://huggingface.co/datasets/cassanof/CodeEditSearch/viewer) (Niklas Muennighoff, 2023) | ['c', 'c++', 'go', 'java', 'javascript', 'php', 'python', 'ruby', 'rust', 'scala', 'shell', 'swift', 'typescript'] | Retrieval | p2p | [Programming] | {'train': 13000} | {'train': 553.5} |
-| [CodeSearchNetRetrieval](https://huggingface.co/datasets/code_search_net/) (Husain et al., 2019) | ['go', 'java', 'javascript', 'php', 'python', 'ruby'] | Retrieval | p2p | [Programming] | {'test': 1000} | {'test': 1196.4609} |
+| [CodeEditSearchRetrieval](https://huggingface.co/datasets/cassanof/CodeEditSearch/viewer) (Niklas Muennighoff, 2023) | ['c', 'c++', 'go', 'java', 'javascript', 'php', 'python', 'ruby', 'rust', 'scala', 'shell', 'swift', 'typescript'] | Retrieval | p2p | [Programming] | {'train': 13000} | {'train': {'python': {'average_document_length': 597.592, 'average_query_length': 69.519, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'javascript': {'average_document_length': 582.554, 'average_query_length': 56.88, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'typescript': {'average_document_length': 580.877, 'average_query_length': 60.092, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'go': {'average_document_length': 548.498, 'average_query_length': 70.797, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'ruby': {'average_document_length': 518.895, 'average_query_length': 66.9, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'java': {'average_document_length': 620.332, 'average_query_length': 62.984, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'php': {'average_document_length': 545.452, 'average_query_length': 61.927, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'c': {'average_document_length': 475.868, 'average_query_length': 97.588, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'c++': {'average_document_length': 544.446, 'average_query_length': 114.48, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'rust': {'average_document_length': 609.548, 'average_query_length': 67.503, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'swift': {'average_document_length': 574.62, 'average_query_length': 57.279, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'scala': {'average_document_length': 495.485, 'average_query_length': 64.833, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'shell': {'average_document_length': 486.519, 'average_query_length': 72.059, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}}} |
+| [CodeSearchNetRetrieval](https://huggingface.co/datasets/code_search_net/) (Husain et al., 2019) | ['go', 'java', 'javascript', 'php', 'python', 'ruby'] | Retrieval | p2p | [Programming] | {'test': 1000} | {'test': {'python': {'average_document_length': 862.842, 'average_query_length': 466.546, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'javascript': {'average_document_length': 1415.632, 'average_query_length': 186.018, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'go': {'average_document_length': 563.729, 'average_query_length': 125.213, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'ruby': {'average_document_length': 577.634, 'average_query_length': 313.818, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'java': {'average_document_length': 420.287, 'average_query_length': 690.36, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}, 'php': {'average_document_length': 712.129, 'average_query_length': 162.119, 'num_documents': 1000, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}}} |
 | [ContractNLIConfidentialityOfAgreementLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 82} | {'test': 473.17} |
 | [ContractNLIExplicitIdentificationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 109} | {'test': 506.12} |
 | [ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 139} | {'test': 525.75} |
@@ -137,19 +138,19 @@ The following tables give you an overview of the tasks in MTEB.
 | [ContractNLISurvivalOfObligationsLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 157} | {'test': 417.64} |
 | [Core17InstructionRetrieval](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | InstructionRetrieval | s2p | [News] | {'eng': 39838} | {'eng': 2768.749235474006} |
 | [CorporateLobbyingLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 490} | {'test': 6039.85} |
-| [CovidRetrieval](https://arxiv.org/abs/2203.03367) | ['cmn'] | Retrieval | s2p |  |  |  |
-| [CrossLingualSemanticDiscriminationWMT19](https://huggingface.co/datasets/Andrianos/clsd_wmt19_21) | ['deu', 'fra'] | Retrieval | s2s | [News] | {'test': 2946} | {'test': 161.0} |
-| [CrossLingualSemanticDiscriminationWMT21](https://huggingface.co/datasets/Andrianos/clsd_wmt19_21) | ['deu', 'fra'] | Retrieval | s2s | [News] | {'test': 1786} | {'test': 159.0} |
+| [CovidRetrieval](https://arxiv.org/abs/2203.03367) | ['cmn'] | Retrieval | s2p |  |  | {'dev': {'average_document_length': 332.4152658473415, 'average_query_length': 25.9304531085353, 'num_documents': 100001, 'num_queries': 949, 'average_relevant_docs_per_query': 1.0105374077976819}} |
+| [CrossLingualSemanticDiscriminationWMT19](https://huggingface.co/datasets/Andrianos/clsd_wmt19_21) | ['deu', 'fra'] | Retrieval | s2s | [News] | {'test': 2946} | {'test': {'deu-fra': {'average_document_length': 147.49857433808555, 'average_query_length': 152.95587236931433, 'num_documents': 7365, 'num_queries': 1473, 'average_relevant_docs_per_query': 1.0}, 'fra-deu': {'average_document_length': 154.21968771215208, 'average_query_length': 145.877800407332, 'num_documents': 7365, 'num_queries': 1473, 'average_relevant_docs_per_query': 1.0}}} |
+| [CrossLingualSemanticDiscriminationWMT21](https://huggingface.co/datasets/Andrianos/clsd_wmt19_21) | ['deu', 'fra'] | Retrieval | s2s | [News] | {'test': 1786} | {'test': {'deu-fra': {'average_document_length': 177.26270996640537, 'average_query_length': 171.73012318029114, 'num_documents': 4465, 'num_queries': 893, 'average_relevant_docs_per_query': 1.0}, 'fra-deu': {'average_document_length': 174.45061590145576, 'average_query_length': 176.99216125419932, 'num_documents': 4465, 'num_queries': 893, 'average_relevant_docs_per_query': 1.0}}} |
 | [CyrillicTurkicLangClassification](https://huggingface.co/datasets/tatiana-merz/cyrillic_turkic_langs) (Goldhahn et al., 2012) | ['bak', 'chv', 'kaz', 'kir', 'krc', 'rus', 'sah', 'tat', 'tyv'] | Classification | s2s | [Web] | {'test': 2048} | {'test': 92.22} |
 | [CzechProductReviewSentimentClassification](https://aclanthology.org/W13-1609/) | ['ces'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 153.26} |
 | [CzechSoMeSentimentClassification](https://aclanthology.org/W13-1609/) | ['ces'] | Classification | s2s | [Reviews] | {'test': 1000} | {'test': 59.89} |
 | [CzechSubjectivityClassification](https://arxiv.org/abs/2009.08712) | ['ces'] | Classification | s2s | [Reviews] | {'validation': 500, 'test': 2000} | {'validation': 108.2, 'test': 108.3} |
-| [DBPedia](https://github.com/iai-group/DBpedia-Entity/) (Hasibi et al., 2017) | ['eng'] | Retrieval | s2p |  |  |  |
-| [DBPedia-PL](https://github.com/iai-group/DBpedia-Entity/) (Hasibi et al., 2017) | ['pol'] | Retrieval | s2p |  |  |  |
+| [DBPedia](https://github.com/iai-group/DBpedia-Entity/) (Hasibi et al., 2017) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1122.7690155333814, 'average_query_length': 48.7264325323475, 'num_documents': 48605, 'num_queries': 541, 'average_relevant_docs_per_query': 1.3752310536044363}} |
+| [DBPedia-PL](https://github.com/iai-group/DBpedia-Entity/) (Hasibi et al., 2017) | ['pol'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 311.7007956561823, 'average_query_length': 35.45, 'num_documents': 4635922, 'num_queries': 400, 'average_relevant_docs_per_query': 38.215}} |
 | [DBpediaClassification](https://arxiv.org/abs/1509.01626) (Zhang et al., 2015) | ['eng'] | Classification | s2s | [Encyclopaedic] | {'test': 70000} | {'test': 281.4} |
 | [DKHateClassification](https://aclanthology.org/2020.lrec-1.430/) | ['dan'] | Classification | s2s | [Social] | {'test': 329} | {'test': 104.0} |
 | [DalajClassification](https://spraakbanken.gu.se/en/resources/superlim) | ['swe'] | Classification | s2s | [Non-fiction] | {'test': 444} | {'test': 243.8} |
-| [DanFEVER](https://aclanthology.org/2021.nodalida-main.47/) | ['dan'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'train': 8897} | {'train': 124.84} |
+| [DanFeverRetrieval](https://aclanthology.org/2021.nodalida-main.47/) | ['dan'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'train': 8897} | {'train': {'average_document_length': 312.1117274167987, 'average_query_length': 50.26957476855484, 'num_documents': 2524, 'num_queries': 6373, 'average_relevant_docs_per_query': 0.48721167425074535}} |
 | [DanishPoliticalCommentsClassification](https://huggingface.co/datasets/danish_political_comments) (Mads Guldborg Kjeldgaard Kongsbak, 2019) | ['dan'] | Classification | s2s | [Social] | {'train': 9010} | {'train': 69.9} |
 | [DefinitionClassificationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 1337} | {'test': 253.72} |
 | [DiaBlaBitextMining](https://inria.hal.science/hal-03021633) (González et al., 2019) | ['eng', 'fra'] | BitextMining | s2s | [Social] |  |  |
@@ -159,22 +160,22 @@ The following tables give you an overview of the tasks in MTEB.
 | [Diversity4LegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 300} | {'test': 144.52} |
 | [Diversity5LegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 300} | {'test': 174.77} |
 | [Diversity6LegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 300} | {'test': 301.01} |
-| [DuRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) (Yifu Qiu, 2022) | ['cmn'] | Retrieval | s2p |  |  |  |
+| [DuRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) (Yifu Qiu, 2022) | ['cmn'] | Retrieval | s2p |  |  | {'dev': {'average_document_length': 331.3219967800322, 'average_query_length': 9.289, 'num_documents': 100001, 'num_queries': 2000, 'average_relevant_docs_per_query': 4.9195}} |
 | [DutchBookReviewSentimentClassification](https://github.com/benjaminvdb/DBRD) (Benjamin et al., 2019) | ['nld'] | Classification | s2s | [Reviews] | {'test': 2224} | {'test': 1443.0} |
-| [EcomRetrieval](https://arxiv.org/abs/2203.03367) | ['cmn'] | Retrieval | s2p |  |  |  |
+| [EcomRetrieval](https://arxiv.org/abs/2203.03367) | ['cmn'] | Retrieval | s2p |  |  | {'dev': {'average_document_length': 32.98041664189015, 'average_query_length': 6.798, 'num_documents': 100902, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}} |
 | [EightTagsClustering.v2](https://aclanthology.org/2020.lrec-1.207.pdf) | ['pol'] | Clustering | s2s | [Social] | {'test': 2048} | {'test': 78.73} |
 | [EmotionClassification](https://www.aclweb.org/anthology/D18-1404) | ['eng'] | Classification | s2s | [Social] | {'validation': 2000, 'test': 2000} | {'validation': 95.3, 'test': 95.6} |
-| [EstQA](https://www.semanticscholar.org/paper/Extractive-Question-Answering-for-Estonian-Language-182912IAPM-Alum%C3%A4e/ea4f60ab36cadca059c880678bc4c51e293a85d6?utm_source=direct_link) | ['est'] | Retrieval | s2p | [Encyclopaedic] | {'test': 603} | {'test': 772.5331950207469} |
+| [EstQA](https://www.semanticscholar.org/paper/Extractive-Question-Answering-for-Estonian-Language-182912IAPM-Alum%C3%A4e/ea4f60ab36cadca059c880678bc4c51e293a85d6?utm_source=direct_link) | ['est'] | Retrieval | s2p | [Encyclopaedic] | {'test': 603} | {'test': {'average_document_length': 785.595041322314, 'average_query_length': 55.32006633499171, 'num_documents': 121, 'num_queries': 603, 'average_relevant_docs_per_query': 1.0}} |
 | [EstonianValenceClassification](https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054) | ['est'] | Classification | s2s | [News] | {'train': 3270, 'test': 818} | {'train': 226.70642201834863, 'test': 231.5085574572127} |
-| [FEVER](https://fever.ai/) | ['eng'] | Retrieval | s2p |  |  |  |
-| [FQuADRetrieval](https://huggingface.co/datasets/manu/fquad2_test) | ['fra'] | Retrieval | s2p | [Encyclopaedic] | {'test': 400, 'validation': 100} | {'test': 937.0, 'validation': 930.0} |
-| [FaithDial](https://mcgill-nlp.github.io/FaithDial) (Dziri et al., 2022) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'test': 2042} | {'test': 74.0} |
+| [FEVER](https://fever.ai/) | ['eng'] | Retrieval | s2p |  |  | {'train': {'average_document_length': 538.2340070317589, 'average_query_length': 47.56034058828886, 'num_documents': 5416568, 'num_queries': 109810, 'average_relevant_docs_per_query': 1.2757034878426372}, 'dev': {'average_document_length': 538.2340070317589, 'average_query_length': 47.326282628262824, 'num_documents': 5416568, 'num_queries': 6666, 'average_relevant_docs_per_query': 1.211971197119712}, 'test': {'average_document_length': 538.2340070317589, 'average_query_length': 49.60546054605461, 'num_documents': 5416568, 'num_queries': 6666, 'average_relevant_docs_per_query': 1.1906690669066906}} |
+| [FQuADRetrieval](https://huggingface.co/datasets/manu/fquad2_test) | ['fra'] | Retrieval | s2p | [Encyclopaedic] | {'test': 400, 'validation': 100} | {'test': {'average_document_length': 896.3308550185874, 'average_query_length': 58.52, 'num_documents': 269, 'num_queries': 400, 'average_relevant_docs_per_query': 1.0}, 'validation': {'average_document_length': 895.1340206185567, 'average_query_length': 54.13, 'num_documents': 97, 'num_queries': 100, 'average_relevant_docs_per_query': 1.0}} |
+| [FaithDial](https://mcgill-nlp.github.io/FaithDial) (Dziri et al., 2022) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'test': 2042} | {'test': {'average_document_length': 140.61062447018932, 'average_query_length': 4.926542605288932, 'num_documents': 3539, 'num_queries': 2042, 'average_relevant_docs_per_query': 1.0}} |
 | [FalseFriendsGermanEnglish](https://drive.google.com/file/d/1jgq0nBnV-UiYNxbKNrrr2gxDEHm-DMKH/view?usp=share_link) | ['deu'] | PairClassification | s2s |  | {'test': 1524} | {'test': 40.3} |
 | [FaroeseSTS](https://aclanthology.org/2023.nodalida-1.74.pdf) | ['fao'] | STS | s2s | [News, Web] | {'train': 729} | {'train': 43.6} |
 | [FarsTail](https://link.springer.com/article/10.1007/s00500-023-08959-3) (Amirkhani et al., 2023) | ['fas'] | PairClassification | s2s | [Academic] | {'test': 1029} | {'test': 125.84} |
-| [FeedbackQARetrieval](https://arxiv.org/abs/2204.03025) | ['eng'] | Retrieval | s2p | [Web, Government, Medical] | {'test': 1992} | {'test': 1175.0} |
-| [FiQA-PL](https://sites.google.com/view/fiqa/) (Nandan Thakur, 2021) | ['pol'] | Retrieval | s2p |  |  |  |
-| [FiQA2018](https://sites.google.com/view/fiqa/) (Nandan Thakur, 2021) | ['eng'] | Retrieval | s2p |  |  |  |
+| [FeedbackQARetrieval](https://arxiv.org/abs/2204.03025) | ['eng'] | Retrieval | s2p | [Web, Government, Medical] | {'test': 1992} | {'test': {'average_document_length': 1174.7986463620982, 'average_query_length': 72.33182730923694, 'num_documents': 2364, 'num_queries': 1992, 'average_relevant_docs_per_query': 1.0}} |
+| [FiQA-PL](https://sites.google.com/view/fiqa/) (Nandan Thakur, 2021) | ['pol'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 795.2371699226205, 'average_query_length': 70.00771604938272, 'num_documents': 57638, 'num_queries': 648, 'average_relevant_docs_per_query': 2.632716049382716}} |
+| [FiQA2018](https://sites.google.com/view/fiqa/) (Nandan Thakur, 2021) | ['eng'] | Retrieval | s2p |  |  | {'train': {'average_document_length': 767.2108157812554, 'average_query_length': 61.49763636363636, 'num_documents': 57638, 'num_queries': 5500, 'average_relevant_docs_per_query': 2.5756363636363635}, 'dev': {'average_document_length': 767.2108157812554, 'average_query_length': 62.756, 'num_documents': 57638, 'num_queries': 500, 'average_relevant_docs_per_query': 2.476}, 'test': {'average_document_length': 767.2108157812554, 'average_query_length': 62.7037037037037, 'num_documents': 57638, 'num_queries': 648, 'average_relevant_docs_per_query': 2.632716049382716}} |
 | [FilipinoHateSpeechClassification](https://pcj.csp.org.ph/index.php/pcj/issue/download/29/PCJ%20V14%20N1%20pp1-14%202019) (Neil Vicente Cabasag et al., 2019) | ['fil'] | Classification | s2s | [Social] | {'validation': 2048, 'test': 2048} | {'validation': 88.1, 'test': 87.4} |
 | [FilipinoShopeeReviewsClassification](https://uijrt.com/articles/v4/i8/UIJRTV4I80009.pdf) | ['fil'] | Classification | s2s | [Social] | {'validation': 2250, 'test': 2250} | {'validation': 143.8, 'test': 145.1} |
 | [FinParaSTS](https://huggingface.co/datasets/TurkuNLP/turku_paraphrase_corpus) | ['fin'] | STS | s2s | [News, Subtitles] | {'test': 1000, 'validation': 1000} | {'test': 59.0, 'validation': 58.8} |
@@ -186,31 +187,32 @@ The following tables give you an overview of the tasks in MTEB.
 | [FrenkHrClassification](https://arxiv.org/abs/1906.02045) (Nikola Ljubešić, 2019) | ['hrv'] | Classification | s2s | [Social] | {'test': 2120} | {'test': 89.86} |
 | [FrenkSlClassification](https://arxiv.org/pdf/1906.02045) (Nikola Ljubešić, 2019) | ['slv'] | Classification | s2s | [Social] | {'test': 2177} | {'test': 136.61} |
 | [FunctionOfDecisionSectionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 367} | {'test': 551.07} |
+| [GPUSpeedTask](https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/c8376f967d1294419be1d3eb41217d04cd3a65d3/src/seb/registered_tasks/speed.py#L83-L96) | ['eng'] | Speed | s2s | [Fiction] | {'test': 1} | {'test': 3591.0} |
 | [GeoreviewClassification](https://github.com/yandex/geo-reviews-dataset-2023) | ['rus'] | Classification | p2p | [Reviews] | {'test': 2048} | {'test': 409.0} |
 | [GeoreviewClusteringP2P](https://github.com/yandex/geo-reviews-dataset-2023) | ['rus'] | Clustering | p2p | [Reviews] | {'test': 2000} | {'test': 384.5} |
-| [GeorgianFAQRetrieval](https://huggingface.co/datasets/jupyterjazz/georgian-faq) | ['kat'] | Retrieval | s2p | [Web] | {'test': 2566} | {'test': 572.0} |
-| [GerDaLIR](https://github.com/lavis-nlp/GerDaLIR) | ['deu'] | Retrieval | s2p |  |  |  |
-| [GerDaLIRSmall](https://github.com/lavis-nlp/GerDaLIR) | ['deu'] | Retrieval | p2p | [Legal] |  |  |
-| [GermanDPR](https://huggingface.co/datasets/deepset/germandpr) (Timo Möller, 2021) | ['deu'] | Retrieval | s2p |  |  |  |
-| [GermanGovServiceRetrieval](https://huggingface.co/datasets/it-at-m/LHM-Dienstleistungen-QA) | ['deu'] | Retrieval | s2p | [Government] | {'test': 357} | {'test': 1211.69} |
+| [GeorgianFAQRetrieval](https://huggingface.co/datasets/jupyterjazz/georgian-faq) | ['kat'] | Retrieval | s2p | [Web] | {'test': 2566} | {'test': {'average_document_length': 511.24668745128605, 'average_query_length': 61.69551656920078, 'num_documents': 2566, 'num_queries': 2565, 'average_relevant_docs_per_query': 1.0003898635477584}} |
+| [GerDaLIR](https://github.com/lavis-nlp/GerDaLIR) | ['deu'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 15483.237726805888, 'average_query_length': 1027.3495690356156, 'num_documents': 131445, 'num_queries': 12298, 'average_relevant_docs_per_query': 1.1704342169458448}} |
+| [GerDaLIRSmall](https://github.com/lavis-nlp/GerDaLIR) | ['deu'] | Retrieval | p2p | [Legal] |  | {'test': {'average_document_length': 19706.823653325308, 'average_query_length': 1031.0680889324833, 'num_documents': 9969, 'num_queries': 12234, 'average_relevant_docs_per_query': 1.1705084191597188}} |
+| [GermanDPR](https://huggingface.co/datasets/deepset/germandpr) (Timo Möller, 2021) | ['deu'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1288.3410987482614, 'average_query_length': 64.38439024390244, 'num_documents': 2876, 'num_queries': 1025, 'average_relevant_docs_per_query': 1.0}} |
+| [GermanGovServiceRetrieval](https://huggingface.co/datasets/it-at-m/LHM-Dienstleistungen-QA) | ['deu'] | Retrieval | s2p | [Government] | {'test': 357} | {'test': {'average_document_length': 1246.4571428571428, 'average_query_length': 68.17977528089888, 'num_documents': 105, 'num_queries': 356, 'average_relevant_docs_per_query': 1.0}} |
 | [GermanPoliticiansTwitterSentimentClassification](https://aclanthology.org/2022.konvens-1.9) | ['deu'] | Classification | s2s | [Social, Government] | {'test': 357} | {'test': 302.48} |
-| [GermanQuAD-Retrieval](https://www.kaggle.com/datasets/GermanQuAD) (Timo Möller, 2021) | ['deu'] | Retrieval | s2p |  |  |  |
+| [GermanQuAD-Retrieval](https://www.kaggle.com/datasets/GermanQuAD) (Timo Möller, 2021) | ['deu'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1941.090717299578, 'average_query_length': 56.74773139745916, 'num_documents': 474, 'num_queries': 2204, 'average_relevant_docs_per_query': 1.0}} |
 | [GermanSTSBenchmark](https://github.com/t-systems-on-site-services-gmbh/german-STSbenchmark) (Philip May, 2021) | ['deu'] | STS | s2s |  |  |  |
-| [GreekCivicsQA](https://huggingface.co/datasets/antoinelb7/alloprof) | ['ell'] | Retrieval | s2p | [Academic] | {'default': 407} | {'default': 2226.85} |
+| [GreekCivicsQA](https://huggingface.co/datasets/antoinelb7/alloprof) | ['ell'] | Retrieval | s2p | [Academic] | {'default': 407} | {'default': {'average_document_length': 1074.894348894349, 'average_query_length': 77.06142506142506, 'num_documents': 407, 'num_queries': 407, 'average_relevant_docs_per_query': 1.0}} |
 | [GreekLegalCodeClassification](https://arxiv.org/abs/2109.15298) | ['ell'] | Classification | s2s | [Legal] | {'validation': 2048, 'test': 2048} | {'validation': 4046.8, 'test': 4200.8} |
 | [GujaratiNewsClassification](https://github.com/goru001/nlp-for-gujarati) | ['guj'] | Classification | s2s | [News] | {'train': 5269, 'test': 1318} | {'train': 61.95, 'test': 61.91} |
 | [HALClusteringS2S.v2](https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s) (Mathieu Ciancone, 2024) | ['fra'] | Clustering | s2s | [Academic] | {'test': 2048} | {'test': 86.6} |
-| [HagridRetrieval](https://github.com/project-miracl/hagrid) (Ehsan Kamalloo, 2023) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'train': 1922} | {'train': 14.53} |
+| [HagridRetrieval](https://github.com/project-miracl/hagrid) (Ehsan Kamalloo, 2023) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'train': 1922} | {'dev': {'average_document_length': 228.36693548387098, 'average_query_length': 40.064516129032256, 'num_documents': 496, 'num_queries': 496, 'average_relevant_docs_per_query': 1.0}} |
 | [HateSpeechPortugueseClassification](https://aclanthology.org/W19-3510) | ['por'] | Classification | s2s | [Social] | {'train': 2048} | {'train': 101.02} |
 | [HeadlineClassification](https://aclanthology.org/2020.ngt-1.6/) | ['rus'] | Classification | s2s | [News] | {'test': 2048} | {'test': 61.6} |
 | [HebrewSentimentAnalysis](https://huggingface.co/datasets/hebrew_sentiment) | ['heb'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 113.57} |
-| [HellaSwag](https://rowanzellers.com/hellaswag/) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 10042} | {'test': 366.1} |
+| [HellaSwag](https://rowanzellers.com/hellaswag/) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 10042} | {'test': {'average_document_length': 137.36519014671472, 'average_query_length': 224.53654650468033, 'num_documents': 199162, 'num_queries': 10042, 'average_relevant_docs_per_query': 1.0}} |
 | [HinDialectClassification](https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-4839) (Bafna et al., 2022) | ['anp', 'awa', 'ben', 'bgc', 'bhb', 'bhd', 'bho', 'bjj', 'bns', 'bra', 'gbm', 'guj', 'hne', 'kfg', 'kfy', 'mag', 'mar', 'mup', 'noe', 'pan', 'raj'] | Classification | s2s | [Social, Spoken] | {'test': 1152} | {'test': 583.82} |
 | [HindiDiscourseClassification](https://aclanthology.org/2020.lrec-1.149/) | ['hin'] | Classification | s2s | [Fiction, Social] | {'train': 2048} | {'train': 79.23828125} |
 | [HotelReviewSentimentClassification](https://link.springer.com/chapter/10.1007/978-3-319-67056-0_3) (Elnagar et al., 2018) | ['ara'] | Classification | s2s | [Reviews] | {'train': 2048} | {'train': 137.2} |
-| [HotpotQA](https://hotpotqa.github.io/) | ['eng'] | Retrieval | s2p |  |  |  |
-| [HotpotQA-PL](https://hotpotqa.github.io/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  |  |
-| [HunSum2AbstractiveRetrieval](https://arxiv.org/abs/2404.03555) (Botond Barta, 2024) | ['hun'] | Retrieval | s2p | [News] | {'test': 1998} | {'test': 2462.2177177177177} |
+| [HotpotQA](https://hotpotqa.github.io/) | ['eng'] | Retrieval | s2p |  |  | {'train': {'average_document_length': 287.9079517072212, 'average_query_length': 105.54965882352941, 'num_documents': 5233329, 'num_queries': 85000, 'average_relevant_docs_per_query': 2.0}, 'dev': {'average_document_length': 287.9079517072212, 'average_query_length': 105.35634294106848, 'num_documents': 5233329, 'num_queries': 5447, 'average_relevant_docs_per_query': 2.0}, 'test': {'average_document_length': 287.9079517072212, 'average_query_length': 92.17096556380824, 'num_documents': 5233329, 'num_queries': 7405, 'average_relevant_docs_per_query': 2.0}} |
+| [HotpotQA-PL](https://hotpotqa.github.io/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 292.26835882093405, 'average_query_length': 94.64064821066847, 'num_documents': 5233329, 'num_queries': 7405, 'average_relevant_docs_per_query': 2.0}} |
+| [HunSum2AbstractiveRetrieval](https://arxiv.org/abs/2404.03555) (Botond Barta, 2024) | ['hun'] | Retrieval | s2p | [News] | {'test': 1998} | {'test': {'average_document_length': 2511.0315315315315, 'average_query_length': 201.2112112112112, 'num_documents': 1998, 'num_queries': 1998, 'average_relevant_docs_per_query': 1.0}} |
 | [IFlyTek](https://www.cluebenchmarks.com/introduce.html) | ['cmn'] | Classification | s2s |  |  |  |
 | [IN22ConvBitextMining](https://huggingface.co/datasets/ai4bharat/IN22-Conv) (Jay Gala, 2023) | ['asm', 'ben', 'brx', 'doi', 'eng', 'gom', 'guj', 'hin', 'kan', 'kas', 'mai', 'mal', 'mar', 'mni', 'npi', 'ory', 'pan', 'san', 'sat', 'snd', 'tam', 'tel', 'urd'] | BitextMining | s2s | [Social, Spoken, Fiction] | {'test': 1503} | {'test': 54.3} |
 | [IN22GenBitextMining](https://huggingface.co/datasets/ai4bharat/IN22-Gen) (Jay Gala, 2023) | ['asm', 'ben', 'brx', 'doi', 'eng', 'gom', 'guj', 'hin', 'kan', 'kas', 'mai', 'mal', 'mar', 'mni', 'npi', 'ory', 'pan', 'san', 'sat', 'snd', 'tam', 'tel', 'urd'] | BitextMining | s2s | [Web, Legal, Government, News, Religious, Non-fiction] | {'test': 1024} | {'test': 156.7} |
@@ -221,7 +223,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [IndicGenBenchFloresBitextMining](https://github.com/google-research-datasets/indic-gen-bench/) (Harman Singh, 2024) | ['asm', 'awa', 'ben', 'bgc', 'bho', 'bod', 'boy', 'eng', 'gbm', 'gom', 'guj', 'hin', 'hne', 'kan', 'mai', 'mal', 'mar', 'mni', 'mup', 'mwr', 'nep', 'ory', 'pan', 'pus', 'raj', 'san', 'sat', 'tam', 'tel', 'urd'] | BitextMining | s2s | [Web, News] | {'validation': 997, 'test': 1012} | {'validation': 126.25, 'test': 130.84} |
 | [IndicLangClassification](https://arxiv.org/abs/2305.15814) | ['asm', 'ben', 'brx', 'doi', 'gom', 'guj', 'hin', 'kan', 'kas', 'mai', 'mal', 'mar', 'mni', 'npi', 'ory', 'pan', 'san', 'sat', 'snd', 'tam', 'tel', 'urd'] | Classification | s2s | [Web, Non-fiction] | {'test': 30418} | {'test': 106.5} |
 | [IndicNLPNewsClassification](https://github.com/AI4Bharat/indicnlp_corpus#indicnlp-news-article-classification-dataset) (Anoop Kunchukuttan, 2020) | ['guj', 'kan', 'mal', 'mar', 'ori', 'pan', 'tam', 'tel'] | Classification | s2s | [News] | {'test': 2048} | {'test': 1169.053974484789} |
-| [IndicQARetrieval](https://arxiv.org/abs/2212.05409) (Sumanth Doddapaneni, 2022) | ['asm', 'ben', 'guj', 'hin', 'kan', 'mal', 'mar', 'ory', 'pan', 'tam', 'tel'] | Retrieval | s2p | [Web] | {'test': 18586} | {'test': 930.6} |
+| [IndicQARetrieval](https://arxiv.org/abs/2212.05409) (Sumanth Doddapaneni, 2022) | ['asm', 'ben', 'guj', 'hin', 'kan', 'mal', 'mar', 'ory', 'pan', 'tam', 'tel'] | Retrieval | s2p | [Web] | {'test': 18586} | {'test': {'as': {'average_document_length': 1401.28, 'average_query_length': 56.60504201680672, 'num_documents': 250, 'num_queries': 1785, 'average_relevant_docs_per_query': 1.0016806722689076}, 'bn': {'average_document_length': 2196.012, 'average_query_length': 57.069239500567534, 'num_documents': 250, 'num_queries': 1762, 'average_relevant_docs_per_query': 1.0005675368898979}, 'gu': {'average_document_length': 960.4959677419355, 'average_query_length': 60.3712158808933, 'num_documents': 248, 'num_queries': 2015, 'average_relevant_docs_per_query': 1.0009925558312656}, 'hi': {'average_document_length': 2550.770114942529, 'average_query_length': 52.84909326424871, 'num_documents': 261, 'num_queries': 1544, 'average_relevant_docs_per_query': 1.0019430051813472}, 'kn': {'average_document_length': 882.7354085603113, 'average_query_length': 50.58734344100198, 'num_documents': 257, 'num_queries': 1517, 'average_relevant_docs_per_query': 1.0}, 'ml': {'average_document_length': 2522.6437246963565, 'average_query_length': 75.93635790800252, 'num_documents': 247, 'num_queries': 1587, 'average_relevant_docs_per_query': 1.0}, 'mr': {'average_document_length': 1711.74, 'average_query_length': 58.785, 'num_documents': 250, 'num_queries': 1600, 'average_relevant_docs_per_query': 1.0}, 'or': {'average_document_length': 801.9206349206349, 'average_query_length': 55.072792362768496, 'num_documents': 252, 'num_queries': 1676, 'average_relevant_docs_per_query': 1.0011933174224343}, 'pa': {'average_document_length': 1423.5062240663901, 'average_query_length': 58.394925178919976, 'num_documents': 241, 'num_queries': 1537, 'average_relevant_docs_per_query': 1.0013012361743656}, 'ta': {'average_document_length': 2288.2608695652175, 'average_query_length': 54.06211869107044, 'num_documents': 253, 'num_queries': 1803, 'average_relevant_docs_per_query': 1.0005546311702718}, 'te': {'average_document_length': 2936.176, 'average_query_length': 67.00634371395617, 'num_documents': 250, 'num_queries': 1734, 'average_relevant_docs_per_query': 1.0}}} |
 | [IndicReviewsClusteringP2P](https://arxiv.org/abs/2212.05409) (Sumanth Doddapaneni, 2022) | ['asm', 'ben', 'brx', 'guj', 'hin', 'kan', 'mal', 'mar', 'ory', 'pan', 'tam', 'tel', 'urd'] | Clustering | p2p | [Reviews] | {'test': 1000} | {'test': 137.6} |
 | [IndicSentimentClassification](https://arxiv.org/abs/2212.05409) (Sumanth Doddapaneni, 2022) | ['asm', 'ben', 'brx', 'guj', 'hin', 'kan', 'mal', 'mar', 'ory', 'pan', 'tam', 'tel', 'urd'] | Classification | s2s | [Reviews] | {'test': 1000} | {'test': 137.6} |
 | [IndonesianIdClickbaitClassification](http://www.sciencedirect.com/science/article/pii/S2352340920311252) | ['ind'] | Classification | s2s | [News] | {'train': 2048} | {'train': 64.28} |
@@ -235,16 +237,15 @@ The following tables give you an overview of the tasks in MTEB.
 | [JDReview](https://aclanthology.org/2023.nodalida-1.20/) | ['cmn'] | Classification | s2s |  |  |  |
 | [JSICK](https://github.com/sbintuitions/JMTEB) (Yanaka et al., 2022) | ['jpn'] | STS | s2s | [Web] | {'test': 1986} | {'test': 21.47} |
 | [JSTS](https://aclanthology.org/2022.lrec-1.317.pdf#page=2.00) | ['jpn'] | STS | s2s | [Web] | {'valudtion': 1457} | {'valudtion': 46.34} |
-| [JaGovFaqsRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Web] | {'test': 2048} | {'test': 210.02} |
-| [JaQuADRetrieval](https://arxiv.org/abs/2202.01764) (ByungHoon So, 2022) | ['jpn'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'validation': 2048} | {'validation': 400.75} |
+| [JaGovFaqsRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Web] | {'test': 2048} | {'test': {'average_document_length': 210.02601561814512, 'average_query_length': 59.48193359375, 'num_documents': 22794, 'num_queries': 2048, 'average_relevant_docs_per_query': 1.0}} |
+| [JaQuADRetrieval](https://arxiv.org/abs/2202.01764) (ByungHoon So, 2022) | ['jpn'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'validation': 2048} | {'validation': {'average_document_length': 155.80922362309224, 'average_query_length': 30.826171875, 'num_documents': 3014, 'num_queries': 2048, 'average_relevant_docs_per_query': 2.0}} |
 | [JavaneseIMDBClassification](https://github.com/w11wo/nlp-datasets#javanese-imdb) (Wongso et al., 2021) | ['jav'] | Classification | s2s | [Reviews] | {'test': 25000} | {'test': 481.83} |
 | [KLUE-NLI](https://arxiv.org/abs/2105.09680) (Sungjoon Park, 2021) | ['kor'] | PairClassification | s2s | [News, Encyclopaedic] | {'validation': 2000} | {'validation': 35.01} |
 | [KLUE-STS](https://arxiv.org/abs/2105.09680) (Sungjoon Park, 2021) | ['kor'] | STS | s2s | [Reviews, News, Spoken] | {'validation': 519} | {'validation': 33.178227360308284} |
 | [KLUE-TC](https://arxiv.org/abs/2105.09680) (Sungjoon Park, 2021) | ['kor'] | Classification | s2s | [News] | {'validation': 2048} | {'validation': 27.079609091907326} |
 | [KannadaNewsClassification](https://github.com/goru001/nlp-for-kannada) (Anoop Kunchukuttan, 2020) | ['kan'] | Classification | s2s | [News] | {'train': 6460} | {'train': 65.88} |
 | [KinopoiskClassification](https://www.dialog-21.ru/media/1226/blinovpd.pdf) (Blinov et al., 2013) | ['rus'] | Classification | p2p | [Reviews] | {'test': 1500} | {'test': 1897.3} |
-| Ko-StrategyQA (Geva et al., 2021) | ['kor'] | Retrieval | s2p |  |  |  |
-| Ko-miracl (Zhang et al., 2023) | ['kor'] | Retrieval | s2p |  |  |  |
+| Ko-StrategyQA (Geva et al., 2021) | ['kor'] | Retrieval | s2p |  |  | {'dev': {'average_document_length': 319.25953950924225, 'average_query_length': 22.75337837837838, 'num_documents': 9251, 'num_queries': 592, 'average_relevant_docs_per_query': 1.9341216216216217}} |
 | [KorFin](https://huggingface.co/datasets/amphora/korfin-asc) (Son et al., 2023) | ['kor'] | Classification | s2s | [News] | {'test': 2048} | {'test': 75.28} |
 | [KorHateClassification](https://paperswithcode.com/dataset/korean-hatespeech-dataset) (Jihyung Moon, 2020) | ['kor'] | Classification | s2s | [Social] | {'train': 2048, 'test': 471} | {'train': 38.57, 'test': 38.86} |
 | [KorHateSpeechMLClassification](https://paperswithcode.com/dataset/korean-multi-label-hate-speech-dataset) | ['kor'] | MultilabelClassification | s2s | [Social] | {'train': 8192, 'test': 2048} | {'train': 33.67, 'test': 34.67} |
@@ -252,15 +253,15 @@ The following tables give you an overview of the tasks in MTEB.
 | [KorSarcasmClassification](https://github.com/SpellOnYou/korean-sarcasm) (Kim et al., 2019) | ['kor'] | Classification | s2s | [Social] | {'train': 2048, 'test': 301} | {'train': 48.45, 'test': 46.77} |
 | [KurdishSentimentClassification](https://link.springer.com/article/10.1007/s10579-023-09716-6) (Badawi et al., 2024) | ['kur'] | Classification | s2s | [Web] | {'train': 6000, 'test': 1987} | {'train': 59.38, 'test': 56.11} |
 | [LCQMC](https://aclanthology.org/2021.emnlp-main.357) | ['cmn'] | STS | s2s |  |  |  |
-| [LEMBNarrativeQARetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) | ['eng'] | Retrieval | s2p | [Fiction, Non-fiction] | {'test': 10804} | {'test': 326399.3} |
-| [LEMBNeedleRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) (Zhu et al., 2024) | ['eng'] | Retrieval | s2p | [Academic, Blog] | {'test_256': 150, 'test_512': 150, 'test_1024': 150, 'test_2048': 150, 'test_4096': 150, 'test_8192': 150, 'test_16384': 150, 'test_32768': 150} | {'test_256': 1074.4, 'test_512': 2067.0, 'test_1024': 4129.5, 'test_2048': 8513.4, 'test_4096': 17452.7, 'test_8192': 35261.6, 'test_16384': 72113.7, 'test_32768': 141829.0} |
-| [LEMBPasskeyRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) (Zhu et al., 2024) | ['eng'] | Retrieval | s2p | [Fiction] | {'test_256': 150, 'test_512': 150, 'test_1024': 150, 'test_2048': 150, 'test_4096': 150, 'test_8192': 150, 'test_16384': 150, 'test_32768': 150} | {'test_256': 914.9, 'test_512': 1823.0, 'test_1024': 3644.7, 'test_2048': 7280.0, 'test_4096': 14555.5, 'test_8192': 29108.1, 'test_16384': 58213.9, 'test_32768': 116417.9} |
-| [LEMBQMSumRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) | ['eng'] | Retrieval | s2p | [Spoken] | {'test': 1724} | {'test': 56136.4} |
-| [LEMBSummScreenFDRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) | ['eng'] | Retrieval | s2p | [Spoken] | {'validation': 672} | {'validation': 31445.8} |
-| [LEMBWikimQARetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) (Ho et al., 2020) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'test': 500} | {'test': 37513.0} |
+| [LEMBNarrativeQARetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) | ['eng'] | Retrieval | s2p | [Fiction, Non-fiction] | {'test': 10804} | {'test': {'average_document_length': 326753.5323943662, 'average_query_length': 47.89453536223562, 'num_documents': 355, 'num_queries': 10449, 'average_relevant_docs_per_query': 1.0}} |
+| [LEMBNeedleRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) (Zhu et al., 2024) | ['eng'] | Retrieval | s2p | [Academic, Blog] | {'test_256': 150, 'test_512': 150, 'test_1024': 150, 'test_2048': 150, 'test_4096': 150, 'test_8192': 150, 'test_16384': 150, 'test_32768': 150} | {'test_256': {'average_document_length': 1013.22, 'average_query_length': 60.48, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}, 'test_512': {'average_document_length': 2009.96, 'average_query_length': 57.3, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}, 'test_1024': {'average_document_length': 4069.9, 'average_query_length': 58.28, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}, 'test_2048': {'average_document_length': 8453.82, 'average_query_length': 59.92, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}, 'test_4096': {'average_document_length': 17395.8, 'average_query_length': 55.86, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}, 'test_8192': {'average_document_length': 35203.82, 'average_query_length': 59.6, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}, 'test_16384': {'average_document_length': 72054.8, 'average_query_length': 59.12, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}, 'test_32768': {'average_document_length': 141769.8, 'average_query_length': 58.34, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}} |
+| [LEMBPasskeyRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) (Zhu et al., 2024) | ['eng'] | Retrieval | s2p | [Fiction] | {'test_256': 150, 'test_512': 150, 'test_1024': 150, 'test_2048': 150, 'test_4096': 150, 'test_8192': 150, 'test_16384': 150, 'test_32768': 150} | {'test_256': {'average_document_length': 876.24, 'average_query_length': 38.1, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}, 'test_512': {'average_document_length': 1785.2, 'average_query_length': 37.76, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}, 'test_1024': {'average_document_length': 3607.18, 'average_query_length': 37.68, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}, 'test_2048': {'average_document_length': 7242.2, 'average_query_length': 37.8, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}, 'test_4096': {'average_document_length': 14518.16, 'average_query_length': 37.64, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}, 'test_8192': {'average_document_length': 29071.16, 'average_query_length': 37.54, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}, 'test_16384': {'average_document_length': 58175.16, 'average_query_length': 38.12, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}, 'test_32768': {'average_document_length': 116380.16, 'average_query_length': 37.74, 'num_documents': 100, 'num_queries': 50, 'average_relevant_docs_per_query': 1.0}} |
+| [LEMBQMSumRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) | ['eng'] | Retrieval | s2p | [Spoken] | {'test': 1724} | {'test': {'average_document_length': 53335.817258883246, 'average_query_length': 433.50294695481335, 'num_documents': 197, 'num_queries': 1527, 'average_relevant_docs_per_query': 1.0}} |
+| [LEMBSummScreenFDRetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) | ['eng'] | Retrieval | s2p | [Spoken] | {'validation': 672} | {'validation': {'average_document_length': 30854.32738095238, 'average_query_length': 591.4910714285714, 'num_documents': 336, 'num_queries': 336, 'average_relevant_docs_per_query': 1.0}} |
+| [LEMBWikimQARetrieval](https://huggingface.co/datasets/dwzhu/LongEmbed) (Ho et al., 2020) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'test': 500} | {'test': {'average_document_length': 37445.60333333333, 'average_query_length': 67.57, 'num_documents': 300, 'num_queries': 300, 'average_relevant_docs_per_query': 1.0}} |
 | [LanguageClassification](https://huggingface.co/datasets/papluca/language-identification) (Conneau et al., 2018) | ['ara', 'bul', 'cmn', 'deu', 'ell', 'eng', 'fra', 'hin', 'ita', 'jpn', 'nld', 'pol', 'por', 'rus', 'spa', 'swa', 'tha', 'tur', 'urd', 'vie'] | Classification | s2s | [Reviews, Web, Non-fiction, Fiction, Government] | {'test': 2048} | {'test': 107.8} |
 | [LccSentimentClassification](https://github.com/fnielsen/lcc-sentiment) | ['dan'] | Classification | s2s | [News, Web] | {'test': 150} | {'test': 118.7} |
-| [LeCaRDv2](https://github.com/THUIR/LeCaRDv2) (Haitao Li, 2023) | ['zho'] | Retrieval | p2p | [Legal] |  |  |
+| [LeCaRDv2](https://github.com/THUIR/LeCaRDv2) (Haitao Li, 2023) | ['zho'] | Retrieval | p2p | [Legal] |  | {'test': {'average_document_length': 7232.823978919631, 'average_query_length': 4259.440251572327, 'num_documents': 3795, 'num_queries': 159, 'average_relevant_docs_per_query': 24.50314465408805}} |
 | [LearnedHandsBenefitsLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 66} | {'test': 1308.44} |
 | [LearnedHandsBusinessLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 174} | {'test': 1144.51} |
 | [LearnedHandsConsumerLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 614} | {'test': 1277.45} |
@@ -277,25 +278,25 @@ The following tables give you an overview of the tasks in MTEB.
 | [LearnedHandsImmigrationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 134} | {'test': 1216.31} |
 | [LearnedHandsTortsLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 432} | {'test': 1406.97} |
 | [LearnedHandsTrafficLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 556} | {'test': 1182.91} |
-| [LegalBenchConsumerContractsQA](https://huggingface.co/datasets/nguha/legalbench/viewer/consumer_contracts_qa) (Koreeda et al., 2021) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
-| [LegalBenchCorporateLobbying](https://huggingface.co/datasets/nguha/legalbench/viewer/corporate_lobbying) (Neel Guha, 2023) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
+| [LegalBenchConsumerContractsQA](https://huggingface.co/datasets/nguha/legalbench/viewer/consumer_contracts_qa) (Koreeda et al., 2021) | ['eng'] | Retrieval | s2p | [Legal] |  | {'test': {'average_document_length': 2745.8246753246754, 'average_query_length': 92.4090909090909, 'num_documents': 154, 'num_queries': 396, 'average_relevant_docs_per_query': 1.0}} |
+| [LegalBenchCorporateLobbying](https://huggingface.co/datasets/nguha/legalbench/viewer/corporate_lobbying) (Neel Guha, 2023) | ['eng'] | Retrieval | s2p | [Legal] |  | {'test': {'average_document_length': 1157.2225705329154, 'average_query_length': 177.87941176470588, 'num_documents': 319, 'num_queries': 340, 'average_relevant_docs_per_query': 1.0}} |
 | [LegalBenchPC](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | PairClassification | s2s | [Legal] | {'test': 2048} | {'test': 287.18} |
-| [LegalQuAD](https://github.com/Christoph911/AIKE2021_Appendix) (Hoppe et al., 2021) | ['deu'] | Retrieval | s2p | [Legal] |  |  |
+| [LegalQuAD](https://github.com/Christoph911/AIKE2021_Appendix) (Hoppe et al., 2021) | ['deu'] | Retrieval | s2p | [Legal] |  | {'test': {'average_document_length': 19481.955, 'average_query_length': 71.965, 'num_documents': 200, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}} |
 | [LegalReasoningCausalityLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 55} | {'test': 1563.76} |
-| [LegalSummarization](https://github.com/lauramanor/legal_summarization) | ['eng'] | Retrieval | s2p | [Legal] |  |  |
+| [LegalSummarization](https://github.com/lauramanor/legal_summarization) | ['eng'] | Retrieval | s2p | [Legal] |  | {'test': {'average_document_length': 606.1643835616438, 'average_query_length': 103.19014084507042, 'num_documents': 438, 'num_queries': 284, 'average_relevant_docs_per_query': 1.545774647887324}} |
 | [LinceMTBitextMining](https://ritual.uh.edu/lince/) (Aguilar et al., 2020) | ['eng', 'hin'] | BitextMining | s2s | [Social] | {'train': 8060} | {'train': 58.67} |
 | [LivedoorNewsClustering](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Clustering | s2s | [News] | {'test': 1107} | {'test': 1082.61} |
 | [MAUDLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 2048} | {'test': 1802.93} |
 | [MIRACLReranking](https://project-miracl.github.io/) (Zhang et al., 2023) | ['ara', 'ben', 'deu', 'eng', 'fas', 'fin', 'fra', 'hin', 'ind', 'jpn', 'kor', 'rus', 'spa', 'swa', 'tel', 'tha', 'yor', 'zho'] | Reranking | s2s | [Encyclopaedic] | {'dev': 44608} | {'dev': 506.3} |
-| MIRACLRetrieval (Zhang et al., 2023) | ['deu', 'spa'] | Retrieval | s2p |  |  |  |
-| [MLQARetrieval](https://huggingface.co/datasets/mlqa) | ['ara', 'deu', 'eng', 'hin', 'spa', 'vie', 'zho'] | Retrieval | s2p | [Encyclopaedic] | {'test': 158083, 'validation': 15747} | {'test': 37352.28, 'validation': 36952.7} |
-| [MLQuestions](https://github.com/McGill-NLP/MLQuestions) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Academic] | {'dev': 1500, 'test': 1500} | {'dev': 305.0, 'test': 307.0} |
+| [MIRACLRetrieval](http://miracl.ai/) (Zhang et al., 2023) | ['ara', 'ben', 'deu', 'eng', 'fas', 'fin', 'fra', 'hin', 'ind', 'jpn', 'kor', 'rus', 'spa', 'swa', 'tel', 'tha', 'yor', 'zho'] | Retrieval | s2p | [Encyclopaedic] |  | {'dev': {'ar': {'average_document_length': 318.6539598547405, 'average_query_length': 29.480662983425415, 'num_documents': 2061414, 'num_queries': 2896, 'average_relevant_docs_per_query': 1.953729281767956}, 'bn': {'average_document_length': 383.2428136511194, 'average_query_length': 46.98053527980535, 'num_documents': 297265, 'num_queries': 411, 'average_relevant_docs_per_query': 2.099756690997567}, 'de': {'average_document_length': 414.28004442393404, 'average_query_length': 46.0, 'num_documents': 15866222, 'num_queries': 305, 'average_relevant_docs_per_query': 2.6590163934426227}, 'en': {'average_document_length': 401.0042914921588, 'average_query_length': 40.247809762202756, 'num_documents': 32893221, 'num_queries': 799, 'average_relevant_docs_per_query': 2.911138923654568}, 'es': {'average_document_length': 403.71153493754986, 'average_query_length': 47.373456790123456, 'num_documents': 10373953, 'num_queries': 648, 'average_relevant_docs_per_query': 4.609567901234568}, 'fa': {'average_document_length': 262.6478385010321, 'average_query_length': 41.1503164556962, 'num_documents': 2207172, 'num_queries': 632, 'average_relevant_docs_per_query': 2.079113924050633}, 'fi': {'average_document_length': 359.87767671935734, 'average_query_length': 38.63493312352478, 'num_documents': 1883509, 'num_queries': 1271, 'average_relevant_docs_per_query': 1.925255704169945}, 'fr': {'average_document_length': 343.6283550271699, 'average_query_length': 43.883381924198254, 'num_documents': 14636953, 'num_queries': 343, 'average_relevant_docs_per_query': 2.131195335276968}, 'hi': {'average_document_length': 370.96196845914386, 'average_query_length': 53.34, 'num_documents': 506264, 'num_queries': 350, 'average_relevant_docs_per_query': 2.1485714285714286}, 'id': {'average_document_length': 350.2785651811673, 'average_query_length': 37.958333333333336, 'num_documents': 1446315, 'num_queries': 960, 'average_relevant_docs_per_query': 3.216666666666667}, 'ja': {'average_document_length': 145.8538220556965, 'average_query_length': 17.71395348837209, 'num_documents': 6953614, 'num_queries': 860, 'average_relevant_docs_per_query': 2.0813953488372094}, 'ko': {'average_document_length': 173.97649170809927, 'average_query_length': 21.624413145539908, 'num_documents': 1486752, 'num_queries': 213, 'average_relevant_docs_per_query': 2.568075117370892}, 'ru': {'average_document_length': 332.2475377512674, 'average_query_length': 44.13258785942492, 'num_documents': 9543918, 'num_queries': 1252, 'average_relevant_docs_per_query': 2.8434504792332267}, 'sw': {'average_document_length': 228.71348655286377, 'average_query_length': 38.97095435684647, 'num_documents': 131924, 'num_queries': 482, 'average_relevant_docs_per_query': 1.887966804979253}, 'te': {'average_document_length': 396.2108674545774, 'average_query_length': 38.11231884057971, 'num_documents': 518079, 'num_queries': 828, 'average_relevant_docs_per_query': 1.0314009661835748}, 'th': {'average_document_length': 356.8283496198581, 'average_query_length': 42.87585266030014, 'num_documents': 542166, 'num_queries': 733, 'average_relevant_docs_per_query': 1.8321964529331514}, 'yo': {'average_document_length': 159.35250698366738, 'average_query_length': 37.6890756302521, 'num_documents': 49043, 'num_queries': 119, 'average_relevant_docs_per_query': 1.2100840336134453}, 'zh': {'average_document_length': 119.9458931721347, 'average_query_length': 10.867684478371501, 'num_documents': 4934368, 'num_queries': 393, 'average_relevant_docs_per_query': 2.5292620865139948}}} |
+| [MLQARetrieval](https://huggingface.co/datasets/mlqa) | ['ara', 'deu', 'eng', 'hin', 'spa', 'vie', 'zho'] | Retrieval | s2p | [Encyclopaedic] | {'test': 158083, 'validation': 15747} | {'validation': {'ara-ara': {'average_document_length': 693.8883826879271, 'average_query_length': 42.321083172147, 'num_documents': 439, 'num_queries': 517, 'average_relevant_docs_per_query': 1.0}, 'ara-deu': {'average_document_length': 759.3882352941176, 'average_query_length': 55.14492753623188, 'num_documents': 170, 'num_queries': 207, 'average_relevant_docs_per_query': 1.0}, 'ara-eng': {'average_document_length': 693.8883826879271, 'average_query_length': 50.029013539651835, 'num_documents': 439, 'num_queries': 517, 'average_relevant_docs_per_query': 1.0}, 'ara-spa': {'average_document_length': 654.3071428571428, 'average_query_length': 53.68944099378882, 'num_documents': 140, 'num_queries': 161, 'average_relevant_docs_per_query': 1.0}, 'ara-hin': {'average_document_length': 626.5935483870968, 'average_query_length': 51.956989247311824, 'num_documents': 155, 'num_queries': 186, 'average_relevant_docs_per_query': 1.0}, 'ara-vie': {'average_document_length': 804.6216216216217, 'average_query_length': 49.57055214723926, 'num_documents': 148, 'num_queries': 163, 'average_relevant_docs_per_query': 1.0}, 'ara-zho': {'average_document_length': 787.3161290322581, 'average_query_length': 15.617021276595745, 'num_documents': 155, 'num_queries': 188, 'average_relevant_docs_per_query': 1.0}, 'deu-ara': {'average_document_length': 702.1675977653631, 'average_query_length': 43.06280193236715, 'num_documents': 179, 'num_queries': 207, 'average_relevant_docs_per_query': 1.0}, 'deu-deu': {'average_document_length': 721.405701754386, 'average_query_length': 52.572265625, 'num_documents': 456, 'num_queries': 512, 'average_relevant_docs_per_query': 1.0}, 'deu-eng': {'average_document_length': 721.405701754386, 'average_query_length': 48.33984375, 'num_documents': 456, 'num_queries': 512, 'average_relevant_docs_per_query': 1.0}, 'deu-spa': {'average_document_length': 677.2762430939226, 'average_query_length': 50.60204081632653, 'num_documents': 181, 'num_queries': 196, 'average_relevant_docs_per_query': 1.0}, 'deu-hin': {'average_document_length': 685.917808219178, 'average_query_length': 47.01840490797546, 'num_documents': 146, 'num_queries': 163, 'average_relevant_docs_per_query': 1.0}, 'deu-vie': {'average_document_length': 921.6196319018405, 'average_query_length': 46.81868131868132, 'num_documents': 163, 'num_queries': 182, 'average_relevant_docs_per_query': 1.0}, 'deu-zho': {'average_document_length': 736.6347305389221, 'average_query_length': 14.936842105263159, 'num_documents': 167, 'num_queries': 190, 'average_relevant_docs_per_query': 1.0}, 'eng-ara': {'average_document_length': 979.3447488584475, 'average_query_length': 42.321083172147, 'num_documents': 438, 'num_queries': 517, 'average_relevant_docs_per_query': 1.0}, 'eng-deu': {'average_document_length': 947.3109619686801, 'average_query_length': 52.572265625, 'num_documents': 447, 'num_queries': 512, 'average_relevant_docs_per_query': 1.0}, 'eng-eng': {'average_document_length': 940.2842535787321, 'average_query_length': 49.01480836236934, 'num_documents': 978, 'num_queries': 1148, 'average_relevant_docs_per_query': 1.0}, 'eng-spa': {'average_document_length': 904.3166287015945, 'average_query_length': 52.146, 'num_documents': 439, 'num_queries': 500, 'average_relevant_docs_per_query': 1.0}, 'eng-hin': {'average_document_length': 926.9621749408983, 'average_query_length': 49.3905325443787, 'num_documents': 423, 'num_queries': 507, 'average_relevant_docs_per_query': 1.0}, 'eng-vie': {'average_document_length': 1011.8296460176991, 'average_query_length': 48.082191780821915, 'num_documents': 452, 'num_queries': 511, 'average_relevant_docs_per_query': 1.0}, 'eng-zho': {'average_document_length': 1001.5046511627907, 'average_query_length': 15.39484126984127, 'num_documents': 430, 'num_queries': 504, 'average_relevant_docs_per_query': 1.0}, 'spa-ara': {'average_document_length': 674.3586206896551, 'average_query_length': 41.36024844720497, 'num_documents': 145, 'num_queries': 161, 'average_relevant_docs_per_query': 1.0}, 'spa-deu': {'average_document_length': 544.0489130434783, 'average_query_length': 51.86734693877551, 'num_documents': 184, 'num_queries': 196, 'average_relevant_docs_per_query': 1.0}, 'spa-eng': {'average_document_length': 641.8215859030837, 'average_query_length': 49.156, 'num_documents': 454, 'num_queries': 500, 'average_relevant_docs_per_query': 1.0}, 'spa-spa': {'average_document_length': 641.8215859030837, 'average_query_length': 52.146, 'num_documents': 454, 'num_queries': 500, 'average_relevant_docs_per_query': 1.0}, 'spa-hin': {'average_document_length': 703.3212121212122, 'average_query_length': 48.080213903743314, 'num_documents': 165, 'num_queries': 187, 'average_relevant_docs_per_query': 1.0}, 'spa-vie': {'average_document_length': 737.8579545454545, 'average_query_length': 48.82539682539682, 'num_documents': 176, 'num_queries': 189, 'average_relevant_docs_per_query': 1.0}, 'spa-zho': {'average_document_length': 605.52, 'average_query_length': 15.590062111801242, 'num_documents': 150, 'num_queries': 161, 'average_relevant_docs_per_query': 1.0}, 'hin-ara': {'average_document_length': 670.0394736842105, 'average_query_length': 43.623655913978496, 'num_documents': 152, 'num_queries': 186, 'average_relevant_docs_per_query': 1.0}, 'hin-deu': {'average_document_length': 596.9718309859155, 'average_query_length': 51.41717791411043, 'num_documents': 142, 'num_queries': 163, 'average_relevant_docs_per_query': 1.0}, 'hin-eng': {'average_document_length': 691.5482352941176, 'average_query_length': 49.75936883629191, 'num_documents': 425, 'num_queries': 507, 'average_relevant_docs_per_query': 1.0}, 'hin-spa': {'average_document_length': 718.4904458598726, 'average_query_length': 52.75935828877005, 'num_documents': 157, 'num_queries': 187, 'average_relevant_docs_per_query': 1.0}, 'hin-hin': {'average_document_length': 691.5482352941176, 'average_query_length': 49.3905325443787, 'num_documents': 425, 'num_queries': 507, 'average_relevant_docs_per_query': 1.0}, 'hin-vie': {'average_document_length': 778.484076433121, 'average_query_length': 48.35028248587571, 'num_documents': 157, 'num_queries': 177, 'average_relevant_docs_per_query': 1.0}, 'hin-zho': {'average_document_length': 685.0679012345679, 'average_query_length': 15.97883597883598, 'num_documents': 162, 'num_queries': 189, 'average_relevant_docs_per_query': 1.0}, 'vie-ara': {'average_document_length': 886.6052631578947, 'average_query_length': 41.214723926380366, 'num_documents': 152, 'num_queries': 163, 'average_relevant_docs_per_query': 1.0}, 'vie-deu': {'average_document_length': 981.4534161490683, 'average_query_length': 51.27472527472528, 'num_documents': 161, 'num_queries': 182, 'average_relevant_docs_per_query': 1.0}, 'vie-eng': {'average_document_length': 892.7250554323725, 'average_query_length': 48.09001956947162, 'num_documents': 451, 'num_queries': 511, 'average_relevant_docs_per_query': 1.0}, 'vie-spa': {'average_document_length': 936.6746987951807, 'average_query_length': 51.851851851851855, 'num_documents': 166, 'num_queries': 189, 'average_relevant_docs_per_query': 1.0}, 'vie-hin': {'average_document_length': 869.0509554140127, 'average_query_length': 46.44632768361582, 'num_documents': 157, 'num_queries': 177, 'average_relevant_docs_per_query': 1.0}, 'vie-vie': {'average_document_length': 892.7250554323725, 'average_query_length': 48.082191780821915, 'num_documents': 451, 'num_queries': 511, 'average_relevant_docs_per_query': 1.0}, 'vie-zho': {'average_document_length': 960.7349397590361, 'average_query_length': 15.048913043478262, 'num_documents': 166, 'num_queries': 184, 'average_relevant_docs_per_query': 1.0}, 'zho-ara': {'average_document_length': 238.75155279503105, 'average_query_length': 44.34574468085106, 'num_documents': 161, 'num_queries': 188, 'average_relevant_docs_per_query': 1.0}, 'zho-deu': {'average_document_length': 257.109756097561, 'average_query_length': 53.84736842105263, 'num_documents': 164, 'num_queries': 190, 'average_relevant_docs_per_query': 1.0}, 'zho-eng': {'average_document_length': 246.65237020316027, 'average_query_length': 50.15079365079365, 'num_documents': 443, 'num_queries': 504, 'average_relevant_docs_per_query': 1.0}, 'zho-spa': {'average_document_length': 249.6081081081081, 'average_query_length': 52.857142857142854, 'num_documents': 148, 'num_queries': 161, 'average_relevant_docs_per_query': 1.0}, 'zho-hin': {'average_document_length': 238.5521472392638, 'average_query_length': 52.05291005291005, 'num_documents': 163, 'num_queries': 189, 'average_relevant_docs_per_query': 1.0}, 'zho-vie': {'average_document_length': 268.32142857142856, 'average_query_length': 49.33695652173913, 'num_documents': 168, 'num_queries': 184, 'average_relevant_docs_per_query': 1.0}, 'zho-zho': {'average_document_length': 246.65237020316027, 'average_query_length': 15.39484126984127, 'num_documents': 443, 'num_queries': 504, 'average_relevant_docs_per_query': 1.0}}, 'test': {'ara-ara': {'average_document_length': 698.5714593198451, 'average_query_length': 41.26176636039752, 'num_documents': 4646, 'num_queries': 5333, 'average_relevant_docs_per_query': 1.000375023438965}, 'ara-deu': {'average_document_length': 592.5728542914171, 'average_query_length': 51.27730582524272, 'num_documents': 1503, 'num_queries': 1648, 'average_relevant_docs_per_query': 1.0006067961165048}, 'ara-eng': {'average_document_length': 698.5714593198451, 'average_query_length': 48.556451612903224, 'num_documents': 4646, 'num_queries': 5332, 'average_relevant_docs_per_query': 1.000562640660165}, 'ara-spa': {'average_document_length': 713.4833239118146, 'average_query_length': 51.406471183013146, 'num_documents': 1769, 'num_queries': 1978, 'average_relevant_docs_per_query': 1.0}, 'ara-hin': {'average_document_length': 702.1388888888889, 'average_query_length': 48.71818678317859, 'num_documents': 1512, 'num_queries': 1831, 'average_relevant_docs_per_query': 1.0}, 'ara-vie': {'average_document_length': 745.4528096017458, 'average_query_length': 48.815828041035665, 'num_documents': 1833, 'num_queries': 2047, 'average_relevant_docs_per_query': 1.0}, 'ara-zho': {'average_document_length': 774.4593639575971, 'average_query_length': 14.985355648535565, 'num_documents': 1698, 'num_queries': 1912, 'average_relevant_docs_per_query': 1.0}, 'deu-ara': {'average_document_length': 719.6800267201069, 'average_query_length': 39.54578532443905, 'num_documents': 1497, 'num_queries': 1649, 'average_relevant_docs_per_query': 1.0}, 'deu-deu': {'average_document_length': 725.5304712558599, 'average_query_length': 51.610680257035234, 'num_documents': 4053, 'num_queries': 4513, 'average_relevant_docs_per_query': 1.0008863283846665}, 'deu-eng': {'average_document_length': 725.5304712558599, 'average_query_length': 47.07777531575449, 'num_documents': 4053, 'num_queries': 4513, 'average_relevant_docs_per_query': 1.0008863283846665}, 'deu-spa': {'average_document_length': 740.5414052697616, 'average_query_length': 50.098591549295776, 'num_documents': 1594, 'num_queries': 1775, 'average_relevant_docs_per_query': 1.0005633802816902}, 'deu-hin': {'average_document_length': 674.3714063714064, 'average_query_length': 45.146153846153844, 'num_documents': 1287, 'num_queries': 1430, 'average_relevant_docs_per_query': 1.0}, 'deu-vie': {'average_document_length': 760.1198945981555, 'average_query_length': 46.64358208955224, 'num_documents': 1518, 'num_queries': 1675, 'average_relevant_docs_per_query': 1.0}, 'deu-zho': {'average_document_length': 771.3367697594501, 'average_query_length': 14.942592592592593, 'num_documents': 1455, 'num_queries': 1620, 'average_relevant_docs_per_query': 1.0006172839506173}, 'eng-ara': {'average_document_length': 1008.3584455058619, 'average_query_length': 41.26176636039752, 'num_documents': 4606, 'num_queries': 5333, 'average_relevant_docs_per_query': 1.000375023438965}, 'eng-deu': {'average_document_length': 910.3226686507936, 'average_query_length': 51.610680257035234, 'num_documents': 4032, 'num_queries': 4513, 'average_relevant_docs_per_query': 1.0008863283846665}, 'eng-eng': {'average_document_length': 983.0993344090359, 'average_query_length': 47.960714902434816, 'num_documents': 9916, 'num_queries': 11582, 'average_relevant_docs_per_query': 1.000690726990157}, 'eng-spa': {'average_document_length': 967.4622376109068, 'average_query_length': 50.923252713768804, 'num_documents': 4621, 'num_queries': 5251, 'average_relevant_docs_per_query': 1.000380879832413}, 'eng-hin': {'average_document_length': 986.0465631929046, 'average_query_length': 47.328315703824245, 'num_documents': 4059, 'num_queries': 4916, 'average_relevant_docs_per_query': 1.000406834825061}, 'eng-vie': {'average_document_length': 1048.6062197940744, 'average_query_length': 48.094085532302095, 'num_documents': 4759, 'num_queries': 5495, 'average_relevant_docs_per_query': 1.0}, 'eng-zho': {'average_document_length': 1063.8536257833482, 'average_query_length': 15.019080996884735, 'num_documents': 4468, 'num_queries': 5136, 'average_relevant_docs_per_query': 1.0001947040498442}, 'spa-ara': {'average_document_length': 645.5182320441988, 'average_query_length': 40.78412537917088, 'num_documents': 1810, 'num_queries': 1978, 'average_relevant_docs_per_query': 1.0}, 'spa-deu': {'average_document_length': 586.6057810578105, 'average_query_length': 51.870913190529876, 'num_documents': 1626, 'num_queries': 1774, 'average_relevant_docs_per_query': 1.0011273957158964}, 'spa-eng': {'average_document_length': 630.6735979836169, 'average_query_length': 47.827907862173994, 'num_documents': 4761, 'num_queries': 5253, 'average_relevant_docs_per_query': 1.0}, 'spa-spa': {'average_document_length': 630.6735979836169, 'average_query_length': 50.923252713768804, 'num_documents': 4761, 'num_queries': 5251, 'average_relevant_docs_per_query': 1.000380879832413}, 'spa-hin': {'average_document_length': 613.3478260869565, 'average_query_length': 46.36680208937899, 'num_documents': 1518, 'num_queries': 1723, 'average_relevant_docs_per_query': 1.0}, 'spa-vie': {'average_document_length': 659.6179295624333, 'average_query_length': 48.1595639246779, 'num_documents': 1874, 'num_queries': 2018, 'average_relevant_docs_per_query': 1.0}, 'spa-zho': {'average_document_length': 668.6646171045277, 'average_query_length': 15.115562403697997, 'num_documents': 1789, 'num_queries': 1947, 'average_relevant_docs_per_query': 1.0}, 'hin-ara': {'average_document_length': 765.0352862849534, 'average_query_length': 42.04642271982523, 'num_documents': 1502, 'num_queries': 1831, 'average_relevant_docs_per_query': 1.0}, 'hin-deu': {'average_document_length': 719.676862745098, 'average_query_length': 51.002799160251925, 'num_documents': 1275, 'num_queries': 1429, 'average_relevant_docs_per_query': 1.000699790062981}, 'hin-eng': {'average_document_length': 760.9956086850451, 'average_query_length': 47.91232709519935, 'num_documents': 4099, 'num_queries': 4916, 'average_relevant_docs_per_query': 1.000406834825061}, 'hin-spa': {'average_document_length': 753.5010281014394, 'average_query_length': 50.46689895470383, 'num_documents': 1459, 'num_queries': 1722, 'average_relevant_docs_per_query': 1.0005807200929153}, 'hin-hin': {'average_document_length': 760.9956086850451, 'average_query_length': 47.328315703824245, 'num_documents': 4099, 'num_queries': 4916, 'average_relevant_docs_per_query': 1.000406834825061}, 'hin-vie': {'average_document_length': 789.9253822629969, 'average_query_length': 48.21160760143811, 'num_documents': 1635, 'num_queries': 1947, 'average_relevant_docs_per_query': 1.0}, 'hin-zho': {'average_document_length': 834.2057448229793, 'average_query_length': 15.101301641199774, 'num_documents': 1497, 'num_queries': 1767, 'average_relevant_docs_per_query': 1.0}, 'vie-ara': {'average_document_length': 992.2129527991218, 'average_query_length': 41.82462139716659, 'num_documents': 1822, 'num_queries': 2047, 'average_relevant_docs_per_query': 1.0}, 'vie-deu': {'average_document_length': 861.0610079575597, 'average_query_length': 51.58721624850657, 'num_documents': 1508, 'num_queries': 1674, 'average_relevant_docs_per_query': 1.0005973715651135}, 'vie-eng': {'average_document_length': 913.8633993743483, 'average_query_length': 48.11086837793555, 'num_documents': 4795, 'num_queries': 5493, 'average_relevant_docs_per_query': 1.0003640997633352}, 'vie-spa': {'average_document_length': 940.0322580645161, 'average_query_length': 51.13386217154189, 'num_documents': 1829, 'num_queries': 2017, 'average_relevant_docs_per_query': 1.0004957858205255}, 'vie-hin': {'average_document_length': 838.1713414634146, 'average_query_length': 47.484334874165384, 'num_documents': 1640, 'num_queries': 1947, 'average_relevant_docs_per_query': 1.0}, 'vie-vie': {'average_document_length': 913.8633993743483, 'average_query_length': 48.094085532302095, 'num_documents': 4795, 'num_queries': 5495, 'average_relevant_docs_per_query': 1.0}, 'vie-zho': {'average_document_length': 999.064534883721, 'average_query_length': 15.045805455481215, 'num_documents': 1720, 'num_queries': 1943, 'average_relevant_docs_per_query': 1.0}, 'zho-ara': {'average_document_length': 253.71303841676368, 'average_query_length': 42.04866562009419, 'num_documents': 1718, 'num_queries': 1911, 'average_relevant_docs_per_query': 1.000523286237572}, 'zho-deu': {'average_document_length': 241.84631147540983, 'average_query_length': 52.25107958050586, 'num_documents': 1464, 'num_queries': 1621, 'average_relevant_docs_per_query': 1.0}, 'zho-eng': {'average_document_length': 247.55609326880776, 'average_query_length': 48.64167478091529, 'num_documents': 4546, 'num_queries': 5135, 'average_relevant_docs_per_query': 1.0003894839337877}, 'zho-spa': {'average_document_length': 254.44552196235026, 'average_query_length': 51.90446841294299, 'num_documents': 1753, 'num_queries': 1947, 'average_relevant_docs_per_query': 1.0}, 'zho-hin': {'average_document_length': 229.60590163934427, 'average_query_length': 49.06625141562854, 'num_documents': 1525, 'num_queries': 1766, 'average_relevant_docs_per_query': 1.0005662514156286}, 'zho-vie': {'average_document_length': 266.1140401146132, 'average_query_length': 49.27328872876994, 'num_documents': 1745, 'num_queries': 1943, 'average_relevant_docs_per_query': 1.0}, 'zho-zho': {'average_document_length': 247.55609326880776, 'average_query_length': 15.019080996884735, 'num_documents': 4546, 'num_queries': 5136, 'average_relevant_docs_per_query': 1.0001947040498442}}} |
+| [MLQuestions](https://github.com/McGill-NLP/MLQuestions) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Academic] | {'dev': 1500, 'test': 1500} | {'dev': {'average_document_length': 258.8772727272727, 'average_query_length': 45.05533333333333, 'num_documents': 11000, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'test': {'average_document_length': 258.8772727272727, 'average_query_length': 45.75333333333333, 'num_documents': 11000, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}} |
 | [MLSUMClusteringP2P.v2](https://huggingface.co/datasets/mlsum) (Scialom et al., 2020) | ['deu', 'fra', 'rus', 'spa'] | Clustering | p2p | [News] | {'validation': 2048, 'test': 2048} | {'validation': 4613.0, 'test': 4810.0} |
 | [MLSUMClusteringS2S.v2](https://huggingface.co/datasets/mlsum) (Scialom et al., 2020) | ['deu', 'fra', 'rus', 'spa'] | Clustering | s2s | [News] | {'validation': 2048, 'test': 2048} | {'validation': 4613.0, 'test': 4810.0} |
 | [MMarcoReranking](https://github.com/unicamp-dl/mMARCO) (Luiz Henrique Bonifacio, 2021) | ['cmn'] | Reranking | s2s |  |  |  |
-| [MMarcoRetrieval](https://arxiv.org/abs/2309.07597) (Shitao Xiao, 2024) | ['cmn'] | Retrieval | s2p |  |  |  |
-| [MSMARCO](https://microsoft.github.io/msmarco/) (Tri Nguyen and                Mir Rosenberg and                Xia Song and                Jianfeng Gao and                Saurabh Tiwary and                Rangan Majumder and                Li Deng, 2016) | ['eng'] | Retrieval | s2p |  |  |  |
-| [MSMARCO-PL](https://microsoft.github.io/msmarco/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  |  |
+| [MMarcoRetrieval](https://arxiv.org/abs/2309.07597) (Shitao Xiao, 2024) | ['cmn'] | Retrieval | s2p |  |  | {'dev': {'average_document_length': 114.41787048392986, 'average_query_length': 10.51131805157593, 'num_documents': 106813, 'num_queries': 6980, 'average_relevant_docs_per_query': 1.0654727793696275}} |
+| [MSMARCO](https://microsoft.github.io/msmarco/) (Tri Nguyen and                Mir Rosenberg and                Xia Song and                Jianfeng Gao and                Saurabh Tiwary and                Rangan Majumder and                Li Deng, 2016) | ['eng'] | Retrieval | s2p |  |  | {'train': {'average_document_length': 335.79716603691344, 'average_query_length': 33.21898281898998, 'num_documents': 8841823, 'num_queries': 502939, 'average_relevant_docs_per_query': 1.0592755781516248}, 'dev': {'average_document_length': 335.79716603691344, 'average_query_length': 33.2621776504298, 'num_documents': 8841823, 'num_queries': 6980, 'average_relevant_docs_per_query': 1.0654727793696275}, 'test': {'average_document_length': 335.79716603691344, 'average_query_length': 32.74418604651163, 'num_documents': 8841823, 'num_queries': 43, 'average_relevant_docs_per_query': 95.3953488372093}} |
+| [MSMARCO-PL](https://microsoft.github.io/msmarco/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 349.3574939240471, 'average_query_length': 33.02325581395349, 'num_documents': 8841823, 'num_queries': 43, 'average_relevant_docs_per_query': 95.3953488372093}} |
 | [MSMARCOv2](https://microsoft.github.io/msmarco/TREC-Deep-Learning.html) (Tri Nguyen and                        Mir Rosenberg and                        Xia Song and                        Jianfeng Gao and                        Saurabh Tiwary and                        Rangan Majumder and                        Li Deng, 2016) | ['eng'] | Retrieval | s2p |  |  |  |
 | [MTOPDomainClassification](https://arxiv.org/pdf/2008.09335.pdf) | ['deu', 'eng', 'fra', 'hin', 'spa', 'tha'] | Classification | s2s | [Spoken] | {'validation': 2235, 'test': 4386} | {'validation': 36.5, 'test': 36.8} |
 | [MTOPIntentClassification](https://arxiv.org/pdf/2008.09335.pdf) | ['deu', 'eng', 'fra', 'hin', 'spa', 'tha'] | Classification | s2s | [Spoken] | {'validation': 2235, 'test': 4386} | {'validation': 36.5, 'test': 36.8} |
@@ -308,40 +309,40 @@ The following tables give you an overview of the tasks in MTEB.
 | [MasakhaNEWSClusteringS2S](https://huggingface.co/datasets/masakhane/masakhanews) (David Ifeoluwa Adelani, 2023) | ['amh', 'eng', 'fra', 'hau', 'ibo', 'lin', 'lug', 'orm', 'pcm', 'run', 'sna', 'som', 'swa', 'tir', 'xho', 'yor'] | Clustering | s2s |  |  |  |
 | [MassiveIntentClassification](https://arxiv.org/abs/2204.08582) (Jack FitzGerald, 2022) | ['afr', 'amh', 'ara', 'aze', 'ben', 'cmo', 'cym', 'dan', 'deu', 'ell', 'eng', 'fas', 'fin', 'fra', 'heb', 'hin', 'hun', 'hye', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kan', 'kat', 'khm', 'kor', 'lav', 'mal', 'mon', 'msa', 'mya', 'nld', 'nob', 'pol', 'por', 'ron', 'rus', 'slv', 'spa', 'sqi', 'swa', 'swe', 'tam', 'tel', 'tgl', 'tha', 'tur', 'urd', 'vie'] | Classification | s2s | [Spoken] | {'validation': 2033, 'test': 2974} | {'validation': 34.8, 'test': 34.6} |
 | [MassiveScenarioClassification](https://arxiv.org/abs/2204.08582) (Jack FitzGerald, 2022) | ['afr', 'amh', 'ara', 'aze', 'ben', 'cmo', 'cym', 'dan', 'deu', 'ell', 'eng', 'fas', 'fin', 'fra', 'heb', 'hin', 'hun', 'hye', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kan', 'kat', 'khm', 'kor', 'lav', 'mal', 'mon', 'msa', 'mya', 'nld', 'nob', 'pol', 'por', 'ron', 'rus', 'slv', 'spa', 'sqi', 'swa', 'swe', 'tam', 'tel', 'tgl', 'tha', 'tur', 'urd', 'vie'] | Classification | s2s | [Spoken] | {'validation': 2033, 'test': 2974} | {'validation': 34.8, 'test': 34.6} |
-| [MedicalQARetrieval](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-019-3119-4) (Asma et al., 2019) | ['eng'] | Retrieval | s2s | [Medical] | {'test': 2048} | {'test': 1205.9619140625} |
-| [MedicalRetrieval](https://arxiv.org/abs/2203.03367) | ['cmn'] | Retrieval | s2p |  |  |  |
+| [MedicalQARetrieval](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-019-3119-4) (Asma et al., 2019) | ['eng'] | Retrieval | s2s | [Medical] | {'test': 2048} | {'test': {'average_document_length': 1153.482421875, 'average_query_length': 52.4794921875, 'num_documents': 2048, 'num_queries': 2048, 'average_relevant_docs_per_query': 1.0}} |
+| [MedicalRetrieval](https://arxiv.org/abs/2203.03367) | ['cmn'] | Retrieval | s2p |  |  | {'dev': {'average_document_length': 122.04231725066585, 'average_query_length': 17.938, 'num_documents': 100999, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}} |
 | [MedrxivClusteringP2P.v2](https://api.medrxiv.org/) | ['eng'] | Clustering | p2p | [Academic, Medical] | {'test': 1500} | {'test': 1984.7} |
 | [MedrxivClusteringS2S.v2](https://api.medrxiv.org/) | ['eng'] | Clustering | s2s | [Academic, Medical] | {'test': 1500} | {'test': 114.9} |
 | [MewsC16JaClustering](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Clustering | s2s | [News] | {'test': 992} | {'test': 95.0} |
 | [MindSmallReranking](https://msnews.github.io/assets/doc/ACL2020_MIND.pdf) | ['eng'] | Reranking | s2s | [News] | {'test': 107968} | {'test': 70.9} |
-| MintakaRetrieval | ['ara', 'deu', 'fra', 'hin', 'ita', 'jpn', 'por', 'spa'] | Retrieval | s2p |  |  |  |
+| MintakaRetrieval | ['ara', 'deu', 'fra', 'hin', 'ita', 'jpn', 'por', 'spa'] | Retrieval | s2p |  |  | {'test': {'ar': {'average_document_length': 12.736418511066399, 'average_query_length': 55.275533363595095, 'num_documents': 1491, 'num_queries': 2203, 'average_relevant_docs_per_query': 1.0}, 'de': {'average_document_length': 14.40060422960725, 'average_query_length': 65.41322662173546, 'num_documents': 1655, 'num_queries': 2374, 'average_relevant_docs_per_query': 1.0}, 'es': {'average_document_length': 14.291789722386296, 'average_query_length': 64.88325082508251, 'num_documents': 1693, 'num_queries': 2424, 'average_relevant_docs_per_query': 1.0}, 'fr': {'average_document_length': 14.407234539089849, 'average_query_length': 68.88452088452088, 'num_documents': 1714, 'num_queries': 2442, 'average_relevant_docs_per_query': 1.0}, 'hi': {'average_document_length': 12.71038961038961, 'average_query_length': 58.404637247569184, 'num_documents': 770, 'num_queries': 1337, 'average_relevant_docs_per_query': 1.0}, 'it': {'average_document_length': 14.365985576923077, 'average_query_length': 64.39707724425887, 'num_documents': 1664, 'num_queries': 2395, 'average_relevant_docs_per_query': 1.0004175365344468}, 'ja': {'average_document_length': 9.167713567839195, 'average_query_length': 29.961937716262977, 'num_documents': 1592, 'num_queries': 2312, 'average_relevant_docs_per_query': 1.0}, 'pt': {'average_document_length': 14.244471744471744, 'average_query_length': 60.42225998300765, 'num_documents': 1628, 'num_queries': 2354, 'average_relevant_docs_per_query': 1.0004248088360237}}} |
 | [Moroco](https://huggingface.co/datasets/moroco) (Andrei M. Butnaru, 2019) | ['ron'] | Classification | s2s | [News] | {'test': 2048} | {'test': 1710.94} |
 | [MovieReviewSentimentClassification](https://github.com/TheophileBlard/french-sentiment-analysis-with-bert) (Théophile Blard, 2020) | ['fra'] | Classification | s2s | [Reviews] | {'validation': 1024, 'test': 1024} | {'validation': 550.3, 'test': 558.1} |
 | [MultiEURLEXMultilabelClassification](https://huggingface.co/datasets/coastalcph/multi_eurlex) (Chalkidis et al., 2021) | ['bul', 'ces', 'dan', 'deu', 'ell', 'eng', 'est', 'fin', 'fra', 'hrv', 'hun', 'ita', 'lav', 'lit', 'mlt', 'nld', 'pol', 'por', 'ron', 'slk', 'slv', 'spa', 'swe'] | MultilabelClassification | p2p | [Legal, Government] | {'test': 5000} | {'test': 12014.41} |
 | [MultiHateClassification](https://aclanthology.org/2022.woah-1.15/) | ['ara', 'cmn', 'deu', 'eng', 'fra', 'hin', 'ita', 'nld', 'pol', 'por', 'spa'] | Classification | s2s | [Constructed] | {'test': 10000} | {'test': 45.9} |
-| [MultiLongDocRetrieval](https://arxiv.org/abs/2402.03216) (Jianlv Chen, 2024) | ['ara', 'cmn', 'deu', 'eng', 'fra', 'hin', 'ita', 'jpn', 'kor', 'por', 'rus', 'spa', 'tha'] | Retrieval | s2p |  |  |  |
+| [MultiLongDocRetrieval](https://arxiv.org/abs/2402.03216) (Jianlv Chen, 2024) | ['ara', 'cmn', 'deu', 'eng', 'fra', 'hin', 'ita', 'jpn', 'kor', 'por', 'rus', 'spa', 'tha'] | Retrieval | s2p |  |  | {'dev': {'ar': {'average_document_length': 29234.48153016958, 'average_query_length': 69.27, 'num_documents': 7607, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'de': {'average_document_length': 33771.2111, 'average_query_length': 153.63, 'num_documents': 10000, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'en': {'average_document_length': 13332.76764, 'average_query_length': 81.22, 'num_documents': 200000, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'es': {'average_document_length': 36567.1736990891, 'average_query_length': 123.11, 'num_documents': 9551, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'fr': {'average_document_length': 36009.4934, 'average_query_length': 142.165, 'num_documents': 10000, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'hi': {'average_document_length': 18688.50788229112, 'average_query_length': 77.995, 'num_documents': 3806, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'it': {'average_document_length': 36633.9969, 'average_query_length': 99.615, 'num_documents': 10000, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'ja': {'average_document_length': 14480.7508, 'average_query_length': 61.625, 'num_documents': 10000, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'ko': {'average_document_length': 13813.441224093263, 'average_query_length': 58.845, 'num_documents': 6176, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'pt': {'average_document_length': 32127.576952351956, 'average_query_length': 122.275, 'num_documents': 6569, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'ru': {'average_document_length': 35934.8756, 'average_query_length': 87.875, 'num_documents': 10000, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'th': {'average_document_length': 25993.2696, 'average_query_length': 107.81, 'num_documents': 10000, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'zh': {'average_document_length': 6039.059725, 'average_query_length': 26.79, 'num_documents': 200000, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}}, 'test': {'ar': {'average_document_length': 29234.48153016958, 'average_query_length': 75.77, 'num_documents': 7607, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'de': {'average_document_length': 33771.2111, 'average_query_length': 123.65, 'num_documents': 10000, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'en': {'average_document_length': 13332.76764, 'average_query_length': 81.33, 'num_documents': 200000, 'num_queries': 800, 'average_relevant_docs_per_query': 1.0}, 'es': {'average_document_length': 36567.1736990891, 'average_query_length': 131.985, 'num_documents': 9551, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'fr': {'average_document_length': 36009.4934, 'average_query_length': 149.795, 'num_documents': 10000, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'hi': {'average_document_length': 18688.50788229112, 'average_query_length': 103.76, 'num_documents': 3806, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'it': {'average_document_length': 36633.9969, 'average_query_length': 114.595, 'num_documents': 10000, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'ja': {'average_document_length': 14480.7508, 'average_query_length': 55.73, 'num_documents': 10000, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'ko': {'average_document_length': 13813.441224093263, 'average_query_length': 58.72, 'num_documents': 6176, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'pt': {'average_document_length': 32127.576952351956, 'average_query_length': 113.455, 'num_documents': 6569, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'ru': {'average_document_length': 35934.8756, 'average_query_length': 94.87, 'num_documents': 10000, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'th': {'average_document_length': 25993.2696, 'average_query_length': 97.99, 'num_documents': 10000, 'num_queries': 200, 'average_relevant_docs_per_query': 1.0}, 'zh': {'average_document_length': 6039.059725, 'average_query_length': 24.70875, 'num_documents': 200000, 'num_queries': 800, 'average_relevant_docs_per_query': 1.0}}} |
 | [MultilingualSentiment](https://github.com/tyqiangz/multilingual-sentiment-datasets) | ['cmn'] | Classification | s2s |  |  |  |
 | [MultilingualSentimentClassification](https://huggingface.co/datasets/mteb/multilingual-sentiment-classification) | ['ara', 'bam', 'bul', 'cmn', 'cym', 'deu', 'dza', 'ell', 'eng', 'eus', 'fas', 'fin', 'heb', 'hrv', 'ind', 'jpn', 'kor', 'mlt', 'nor', 'pol', 'rus', 'slk', 'spa', 'tha', 'tur', 'uig', 'urd', 'vie', 'zho'] | Classification | s2s | [Reviews] | {'test': 7000} | {'test': 56.0} |
 | [MyanmarNews](https://huggingface.co/datasets/myanmar_news) (A. H. Khine, 2017) | ['mya'] | Classification | p2p | [News] | {'train': 2048} | {'train': 174.2} |
-| [NFCorpus](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/) (Boteva et al., 2016) | ['eng'] | Retrieval | s2p |  |  |  |
-| [NFCorpus-PL](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  |  |
-| [NLPJournalAbsIntroRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Academic] | {'test': 404} | {'test': 1246.49} |
-| [NLPJournalTitleAbsRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Academic] | {'test': 404} | {'test': 234.59} |
-| [NLPJournalTitleIntroRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Academic] | {'test': 404} | {'test': 1040.19} |
-| [NQ](https://ai.google.com/research/NaturalQuestions/) (Tom Kwiatkowski, 2019) | ['eng'] | Retrieval | s2p |  |  |  |
-| [NQ-PL](https://ai.google.com/research/NaturalQuestions/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  |  |
+| [NFCorpus](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/) (Boteva et al., 2016) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1589.783925130746, 'average_query_length': 21.764705882352942, 'num_documents': 3633, 'num_queries': 323, 'average_relevant_docs_per_query': 38.18575851393189}} |
+| [NFCorpus-PL](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1652.1926782273604, 'average_query_length': 24.390092879256965, 'num_documents': 3633, 'num_queries': 323, 'average_relevant_docs_per_query': 38.18575851393189}} |
+| [NLPJournalAbsIntroRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Academic] | {'test': 404} | {'test': {'average_document_length': 2052.8611111111113, 'average_query_length': 439.2772277227723, 'num_documents': 504, 'num_queries': 404, 'average_relevant_docs_per_query': 1.0}} |
+| [NLPJournalTitleAbsRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Academic] | {'test': 404} | {'test': {'average_document_length': 441.6746031746032, 'average_query_length': 27.60891089108911, 'num_documents': 504, 'num_queries': 404, 'average_relevant_docs_per_query': 1.0}} |
+| [NLPJournalTitleIntroRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Academic] | {'test': 404} | {'test': {'average_document_length': 2052.8611111111113, 'average_query_length': 27.60891089108911, 'num_documents': 504, 'num_queries': 404, 'average_relevant_docs_per_query': 1.0}} |
+| [NQ](https://ai.google.com/research/NaturalQuestions/) (Tom Kwiatkowski, 2019) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 492.2287851281462, 'average_query_length': 48.17902665121669, 'num_documents': 2681468, 'num_queries': 3452, 'average_relevant_docs_per_query': 1.2169756662804172}} |
+| [NQ-PL](https://ai.google.com/research/NaturalQuestions/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 502.14302128535564, 'average_query_length': 48.31662804171495, 'num_documents': 2681468, 'num_queries': 3452, 'average_relevant_docs_per_query': 1.2169756662804172}} |
 | [NTREXBitextMining](https://huggingface.co/datasets/davidstap/NTREX) | ['afr', 'amh', 'arb', 'aze', 'bak', 'bel', 'bem', 'ben', 'bod', 'bos', 'bul', 'cat', 'ces', 'ckb', 'cym', 'dan', 'deu', 'div', 'dzo', 'ell', 'eng', 'eus', 'ewe', 'fao', 'fas', 'fij', 'fil', 'fin', 'fra', 'fuc', 'gle', 'glg', 'guj', 'hau', 'heb', 'hin', 'hmn', 'hrv', 'hun', 'hye', 'ibo', 'ind', 'isl', 'ita', 'jpn', 'kan', 'kat', 'kaz', 'khm', 'kin', 'kir', 'kmr', 'kor', 'lao', 'lav', 'lit', 'ltz', 'mal', 'mar', 'mey', 'mkd', 'mlg', 'mlt', 'mon', 'mri', 'msa', 'mya', 'nde', 'nep', 'nld', 'nno', 'nob', 'nso', 'nya', 'orm', 'pan', 'pol', 'por', 'prs', 'pus', 'ron', 'rus', 'shi', 'sin', 'slk', 'slv', 'smo', 'sna', 'snd', 'som', 'spa', 'sqi', 'srp', 'ssw', 'swa', 'swe', 'tah', 'tam', 'tat', 'tel', 'tgk', 'tha', 'tir', 'ton', 'tsn', 'tuk', 'tur', 'uig', 'ukr', 'urd', 'uzb', 'ven', 'vie', 'wol', 'xho', 'yor', 'yue', 'zho', 'zul'] | BitextMining | s2s | [News] | {'test': 3826252} | {'test': 120.0} |
 | [NYSJudicialEthicsLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 292} | {'test': 159.45} |
 | [NaijaSenti](https://github.com/hausanlp/NaijaSenti) | ['hau', 'ibo', 'pcm', 'yor'] | Classification | s2s | [Social] | {'test': 4800} | {'test': 72.81} |
-| [NarrativeQARetrieval](https://metatext.io/datasets/narrativeqa) (Tomáš Kočiský, 2017) | ['eng'] | Retrieval | s2p |  |  |  |
+| [NarrativeQARetrieval](https://metatext.io/datasets/narrativeqa) (Tomáš Kočiský, 2017) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 326753.5323943662, 'average_query_length': 47.730889457232166, 'num_documents': 355, 'num_queries': 10557, 'average_relevant_docs_per_query': 1.0}} |
 | [NepaliNewsClassification](https://github.com/goru001/nlp-for-nepali) | ['nep'] | Classification | s2s | [News] | {'train': 5975, 'test': 1495} | {'train': 196.61, 'test': 196.017} |
-| [NeuCLIR2022Retrieval](https://neuclir.github.io/) (Lawrie et al., 2023) | ['fas', 'rus', 'zho'] | Retrieval | s2p | [News] | {'fas': 2232130, 'zho': 3179323, 'rus': 4627657} | {'fas': 3500.5143969099317, 'zho': 2543.1140667919617, 'rus': 3214.755239654659} |
-| [NeuCLIR2023Retrieval](https://neuclir.github.io/) (Dawn Lawrie, 2024) | ['fas', 'rus', 'zho'] | Retrieval | s2p | [News] | {'fas': 2232092, 'zho': 3179285, 'rus': 4627619} | {'fas': 3579.508213937439, 'zho': 2704.44834488453, 'rus': 3466.8192213553616} |
+| [NeuCLIR2022Retrieval](https://neuclir.github.io/) (Lawrie et al., 2023) | ['fas', 'rus', 'zho'] | Retrieval | s2p | [News] | {'fas': 2232130, 'zho': 3179323, 'rus': 4627657} | {'test': {'fas': {'average_document_length': 2032.093148525817, 'average_query_length': 85.4298245614035, 'num_documents': 2232016, 'num_queries': 114, 'average_relevant_docs_per_query': 12.912280701754385}, 'rus': {'average_document_length': 1757.9129983233004, 'average_query_length': 85.58771929824562, 'num_documents': 4627543, 'num_queries': 114, 'average_relevant_docs_per_query': 16.57017543859649}, 'zho': {'average_document_length': 743.1426659901881, 'average_query_length': 24.17543859649123, 'num_documents': 3179209, 'num_queries': 114, 'average_relevant_docs_per_query': 18.710526315789473}}} |
+| [NeuCLIR2023Retrieval](https://neuclir.github.io/) (Dawn Lawrie, 2024) | ['fas', 'rus', 'zho'] | Retrieval | s2p | [News] | {'fas': 2232092, 'zho': 3179285, 'rus': 4627619} | {'test': {'fas': {'average_document_length': 2032.093148525817, 'average_query_length': 65.48684210526316, 'num_documents': 2232016, 'num_queries': 76, 'average_relevant_docs_per_query': 66.28947368421052}, 'rus': {'average_document_length': 1757.9129983233004, 'average_query_length': 74.4342105263158, 'num_documents': 4627543, 'num_queries': 76, 'average_relevant_docs_per_query': 62.223684210526315}, 'zho': {'average_document_length': 743.1426659901881, 'average_query_length': 22.210526315789473, 'num_documents': 3179209, 'num_queries': 76, 'average_relevant_docs_per_query': 53.68421052631579}}} |
 | [News21InstructionRetrieval](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | InstructionRetrieval | s2p | [News] | {'eng': 61906} | {'eng': 2983.724665391969} |
 | [NewsClassification](https://arxiv.org/abs/1509.01626) (Zhang et al., 2015) | ['eng'] | Classification | s2s | [News] | {'test': 7600} | {'test': 235.29} |
 | [NoRecClassification](https://aclanthology.org/L18-1661/) | ['nob'] | Classification | s2s |  | {'test': 2050} | {'test': 82.0} |
 | [NollySentiBitextMining](https://github.com/IyanuSh/NollySenti) (Shode et al., 2023) | ['eng', 'hau', 'ibo', 'pcm', 'yor'] | BitextMining | s2s | [Social, Reviews] | {'train': 1640} | {'train': 135.91} |
-| [NorQuadRetrieval](https://aclanthology.org/2023.nodalida-1.17/) | ['nob'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'test': 2602} | {'test': 502.19} |
+| [NorQuadRetrieval](https://aclanthology.org/2023.nodalida-1.17/) | ['nob'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'test': 2602} | {'test': {'average_document_length': 214.5114503816794, 'average_query_length': 47.896484375, 'num_documents': 1048, 'num_queries': 1024, 'average_relevant_docs_per_query': 2.0}} |
 | [NordicLangClassification](https://aclanthology.org/2021.vardial-1.8/) | ['dan', 'fao', 'isl', 'nno', 'nob', 'swe'] | Classification | s2s |  | {'test': 3000} | {'test': 78.2} |
 | [NorwegianCourtsBitextMining](https://opus.nlpl.eu/index.php) (Tiedemann et al., 2020) | ['nno', 'nob'] | BitextMining | s2s | [Legal] | {'test': 2050} | {'test': 1884.0} |
 | [NorwegianParliamentClassification](https://huggingface.co/datasets/NbAiLab/norwegian_parliament) | ['nob'] | Classification | s2s |  | {'test': 1200, 'validation': 1200} | {'test': 1884.0, 'validation': 1911.0} |
@@ -368,7 +369,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [OverrulingLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 2048} | {'test': 167.2} |
 | [PAC](https://arxiv.org/pdf/2211.13112.pdf) | ['pol'] | Classification | p2p |  | {'test': 3453} | {'test': 185.3} |
 | [PAWSX](https://aclanthology.org/2021.emnlp-main.357) | ['cmn'] | STS | s2s |  |  |  |
-| [PIQA](https://arxiv.org/abs/1911.11641) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 1838} | {'test': 134.3} |
+| [PIQA](https://arxiv.org/abs/1911.11641) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 1838} | {'test': {'average_document_length': 99.89012998705756, 'average_query_length': 36.08052230685528, 'num_documents': 35542, 'num_queries': 1838, 'average_relevant_docs_per_query': 1.0}} |
 | [PROALegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 95} | {'test': 251.73} |
 | [PSC](http://www.lrec-conf.org/proceedings/lrec2014/pdf/1211_Paper.pdf) | ['pol'] | PairClassification | s2s |  |  |  |
 | [PatentClassification](https://aclanthology.org/P19-1212.pdf) | ['eng'] | Classification | s2s | [Legal] | {'test': 5000} | {'test': 18620.44} |
@@ -382,20 +383,20 @@ The following tables give you an overview of the tasks in MTEB.
 | [PolEmo2.0-IN](https://aclanthology.org/K19-1092.pdf) | ['pol'] | Classification | s2s |  |  |  |
 | [PolEmo2.0-OUT](https://aclanthology.org/K19-1092.pdf) | ['pol'] | Classification | s2s |  | {'test': 722} | {'test': 756.2} |
 | [PpcPC](https://arxiv.org/pdf/2207.12759.pdf) (Sławomir Dadas, 2022) | ['pol'] | PairClassification | s2s |  |  |  |
-| [PublicHealthQA](https://huggingface.co/datasets/xhluca/publichealth-qa) | ['ara', 'eng', 'fra', 'kor', 'rus', 'spa', 'vie', 'zho'] | Retrieval | s2p | [Medical, Government, Web] | {'test': 888} | {'test': 778.1655} |
+| [PublicHealthQA](https://huggingface.co/datasets/xhluca/publichealth-qa) | ['ara', 'eng', 'fra', 'kor', 'rus', 'spa', 'vie', 'zho'] | Retrieval | s2p | [Medical, Government, Web] | {'test': 888} | {'test': {'arabic': {'average_document_length': 836.8850574712644, 'average_query_length': 79.84883720930233, 'num_documents': 87, 'num_queries': 87, 'average_relevant_docs_per_query': 1.0}, 'chinese': {'average_document_length': 239.58282208588957, 'average_query_length': 24.828220858895705, 'num_documents': 163, 'num_queries': 163, 'average_relevant_docs_per_query': 1.0}, 'english': {'average_document_length': 799.3430232558139, 'average_query_length': 71.78488372093024, 'num_documents': 172, 'num_queries': 172, 'average_relevant_docs_per_query': 1.0}, 'french': {'average_document_length': 1021.6823529411764, 'average_query_length': 101.88235294117646, 'num_documents': 85, 'num_queries': 85, 'average_relevant_docs_per_query': 1.0}, 'korean': {'average_document_length': 339.0, 'average_query_length': 36.90909090909091, 'num_documents': 77, 'num_queries': 77, 'average_relevant_docs_per_query': 1.0}, 'russian': {'average_document_length': 985.1076923076923, 'average_query_length': 85.2, 'num_documents': 65, 'num_queries': 65, 'average_relevant_docs_per_query': 1.0}, 'spanish': {'average_document_length': 941.1666666666666, 'average_query_length': 84.67901234567901, 'num_documents': 162, 'num_queries': 162, 'average_relevant_docs_per_query': 1.0}, 'vietnamese': {'average_document_length': 704.5454545454545, 'average_query_length': 71.83116883116882, 'num_documents': 77, 'num_queries': 77, 'average_relevant_docs_per_query': 1.0}}} |
 | [PunjabiNewsClassification](https://github.com/goru001/nlp-for-punjabi/) (Anoop Kunchukuttan, 2020) | ['pan'] | Classification | s2s | [News] | {'train': 627, 'test': 157} | {'train': 4222.22, 'test': 4115.14} |
 | [QBQTC](https://github.com/CLUEbenchmark/QBQTC/tree/main/dataset) | ['cmn'] | STS | s2s |  |  |  |
-| [Quail](https://text-machine.cs.uml.edu/lab2/projects/quail/) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 2720} | {'test': 1983.3} |
-| [Quora-PL](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2s |  |  |  |
-| [QuoraRetrieval](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) (DataCanary et al., 2017) | ['eng'] | Retrieval | s2s |  |  |  |
-| [RARbCode](https://arxiv.org/abs/2404.06347) (Xiao et al., 2024) | ['eng'] | Retrieval | s2p | [Programming] | {'test': 1484} | {'test': 621.2} |
-| [RARbMath](https://arxiv.org/abs/2404.06347) (Xiao et al., 2024) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'test': 6319} | {'test': 682.9} |
+| [Quail](https://text-machine.cs.uml.edu/lab2/projects/quail/) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 2720} | {'test': {'average_document_length': 27.50788422240522, 'average_query_length': 1957.3632352941177, 'num_documents': 32787, 'num_queries': 2720, 'average_relevant_docs_per_query': 1.0}} |
+| [Quora-PL](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2s |  |  | {'validation': {'average_document_length': 65.82473022253414, 'average_query_length': 54.6006, 'num_documents': 522931, 'num_queries': 5000, 'average_relevant_docs_per_query': 1.5252}, 'test': {'average_document_length': 65.82473022253414, 'average_query_length': 54.5354, 'num_documents': 522931, 'num_queries': 10000, 'average_relevant_docs_per_query': 1.5675}} |
+| [QuoraRetrieval](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) (DataCanary et al., 2017) | ['eng'] | Retrieval | s2s |  |  | {'dev': {'average_document_length': 62.158154708747425, 'average_query_length': 51.5342, 'num_documents': 522931, 'num_queries': 5000, 'average_relevant_docs_per_query': 1.5252}, 'test': {'average_document_length': 62.158154708747425, 'average_query_length': 51.5396, 'num_documents': 522931, 'num_queries': 10000, 'average_relevant_docs_per_query': 1.5675}} |
+| [RARbCode](https://arxiv.org/abs/2404.06347) (Xiao et al., 2024) | ['eng'] | Retrieval | s2p | [Programming] | {'test': 1484} | {'test': {'average_document_length': 793.6813076734267, 'average_query_length': 375.7506738544474, 'num_documents': 301482, 'num_queries': 1484, 'average_relevant_docs_per_query': 1.0}} |
+| [RARbMath](https://arxiv.org/abs/2404.06347) (Xiao et al., 2024) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'test': 6319} | {'test': {'average_document_length': 504.0197829347469, 'average_query_length': 210.30732710871973, 'num_documents': 389376, 'num_queries': 6319, 'average_relevant_docs_per_query': 1.0}} |
 | [RTE3](https://aclanthology.org/W07-1401/) | ['deu', 'eng', 'fra', 'ita'] | PairClassification | s2s | [News, Web, Encyclopaedic] | {'test': 1923} | {'test': 124.79} |
 | [RUParaPhraserSTS](https://aclanthology.org/2020.ngt-1.6) (Pivovarova et al., 2017) | ['rus'] | STS | s2s | [News] | {'test': 1924} | {'test': 61.25} |
 | [RedditClustering.v2](https://arxiv.org/abs/2104.07081) (Gregor Geigle, 2021) | ['eng'] | Clustering | s2s | [Web, Social] | {'test': 32768} | {'test': 64.7} |
 | [RedditClusteringP2P.v2](https://arxiv.org/abs/2104.07081) (Gregor Geigle, 2021) | ['eng'] | Clustering | p2p | [Web, Social] | {'test': 18375} | {'test': 727.7} |
 | [RestaurantReviewSentimentClassification](https://link.springer.com/chapter/10.1007/978-3-319-18117-2_2) (ElSahar et al., 2015) | ['ara'] | Classification | s2s | [Reviews] | {'train': 2048} | {'train': 231.4} |
-| [RiaNewsRetrieval](https://arxiv.org/abs/1901.07786) (Gavrilov et al., 2019) | ['rus'] | Retrieval | s2p | [News] | {'test': 10000} | {'test': 1230.8} |
+| [RiaNewsRetrieval](https://arxiv.org/abs/1901.07786) (Gavrilov et al., 2019) | ['rus'] | Retrieval | s2p | [News] | {'test': 10000} | {'test': {'average_document_length': 1165.6429557148213, 'average_query_length': 62.4029, 'num_documents': 704344, 'num_queries': 10000, 'average_relevant_docs_per_query': 1.0}} |
 | [Robust04InstructionRetrieval](https://arxiv.org/abs/2403.15246) (Orion Weller, 2024) | ['eng'] | InstructionRetrieval | s2p | [News] | {'eng': 95088} | {'eng': 2471.0398058252426} |
 | [RomaTalesBitextMining](https://idoc.pub/documents/idocpub-zpnxm9g35ylv) | ['hun', 'rom'] | BitextMining | s2s | [Fiction] | {'test': 215} | {'test': 316.8046511627907} |
 | [RomaniBibleClustering](https://romani.global.bible/info) | ['rom'] | Clustering | p2p | [Religious] | {'test': 2048} | {'test': 132.2} |
@@ -403,7 +404,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [RomanianSentimentClassification](https://arxiv.org/abs/2009.08712) (Dumitrescu et al., 2020) | ['ron'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 67.6} |
 | [RonSTS](https://openreview.net/forum?id=JH61CD7afTv) (Dumitrescu et al., 2021) | ['ron'] | STS | s2s | [News, Social, Web] | {'test': 1379} | {'test': 60.5} |
 | [RuBQReranking](https://openreview.net/pdf?id=P5UQFFoQ4PJ) (Ivan Rybin, 2021) | ['rus'] | Reranking | s2p | [Encyclopaedic] | {'test': 1551} | {'test': 499.9} |
-| [RuBQRetrieval](https://openreview.net/pdf?id=P5UQFFoQ4PJ) (Ivan Rybin, 2021) | ['rus'] | Retrieval | s2p | [Encyclopaedic] | {'test': 2845} | {'test': 509.5} |
+| [RuBQRetrieval](https://openreview.net/pdf?id=P5UQFFoQ4PJ) (Ivan Rybin, 2021) | ['rus'] | Retrieval | s2p | [Encyclopaedic] | {'test': 2845} | {'test': {'average_document_length': 448.94659134903037, 'average_query_length': 45.29609929078014, 'num_documents': 56826, 'num_queries': 1692, 'average_relevant_docs_per_query': 1.6814420803782506}} |
 | [RuReviewsClassification](https://github.com/sismetanin/rureviews) (Sergey Smetanin, 2019) | ['rus'] | Classification | p2p | [Reviews] | {'test': 2048} | {'test': 133.2} |
 | [RuSTSBenchmarkSTS](https://github.com/PhilipMay/stsb-multi-mt/) (Philip May, 2021) | ['rus'] | STS | s2s | [News, Social, Web] | {'test': 1264} | {'test': 54.2} |
 | [RuSciBenchGRNTIClassification](https://github.com/mlsa-iai-msu-lab/ru_sci_bench/) | ['rus'] | Classification | p2p | [Academic] | {'test': 2048} | {'test': 890.1} |
@@ -420,8 +421,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [SCDDCertificationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 378} | {'test': 3518.0} |
 | [SCDDTrainingLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 379} | {'test': 3499.0} |
 | [SCDDVerificationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 379} | {'test': 3503.0} |
-| [SCIDOCS](https://allenai.org/data/scidocs) (Arman Cohan, 2020) | ['eng'] | Retrieval | s2p |  |  |  |
-| [SCIDOCS-PL](https://allenai.org/data/scidocs) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  |  |
+| [SCIDOCS](https://allenai.org/data/scidocs) (Arman Cohan, 2020) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1203.3659819932182, 'average_query_length': 71.632, 'num_documents': 25657, 'num_queries': 1000, 'average_relevant_docs_per_query': 4.928}} |
+| [SCIDOCS-PL](https://allenai.org/data/scidocs) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1270.0791986592353, 'average_query_length': 80.671, 'num_documents': 25657, 'num_queries': 1000, 'average_relevant_docs_per_query': 4.928}} |
 | [SIB200Classification](https://arxiv.org/abs/2309.07445) (Adelani et al., 2023) | ['ace', 'acm', 'acq', 'aeb', 'afr', 'ajp', 'aka', 'als', 'amh', 'apc', 'arb', 'ars', 'ary', 'arz', 'asm', 'ast', 'awa', 'ayr', 'azb', 'azj', 'bak', 'bam', 'ban', 'bel', 'bem', 'ben', 'bho', 'bjn', 'bod', 'bos', 'bug', 'bul', 'cat', 'ceb', 'ces', 'cjk', 'ckb', 'crh', 'cym', 'dan', 'deu', 'dik', 'dyu', 'dzo', 'ell', 'eng', 'epo', 'est', 'eus', 'ewe', 'fao', 'fij', 'fin', 'fon', 'fra', 'fur', 'fuv', 'gaz', 'gla', 'gle', 'glg', 'grn', 'guj', 'hat', 'hau', 'heb', 'hin', 'hne', 'hrv', 'hun', 'hye', 'ibo', 'ilo', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kab', 'kac', 'kam', 'kan', 'kas', 'kat', 'kaz', 'kbp', 'kea', 'khk', 'khm', 'kik', 'kin', 'kir', 'kmb', 'kmr', 'knc', 'kon', 'kor', 'lao', 'lij', 'lim', 'lin', 'lit', 'lmo', 'ltg', 'ltz', 'lua', 'lug', 'luo', 'lus', 'lvs', 'mag', 'mai', 'mal', 'mar', 'min', 'mkd', 'mlt', 'mni', 'mos', 'mri', 'mya', 'nld', 'nno', 'nob', 'npi', 'nqo', 'nso', 'nus', 'nya', 'oci', 'ory', 'pag', 'pan', 'pap', 'pbt', 'pes', 'plt', 'pol', 'por', 'prs', 'quy', 'ron', 'run', 'rus', 'sag', 'san', 'sat', 'scn', 'shn', 'sin', 'slk', 'slv', 'smo', 'sna', 'snd', 'som', 'sot', 'spa', 'srd', 'srp', 'ssw', 'sun', 'swe', 'swh', 'szl', 'tam', 'taq', 'tat', 'tel', 'tgk', 'tgl', 'tha', 'tir', 'tpi', 'tsn', 'tso', 'tuk', 'tum', 'tur', 'twi', 'tzm', 'uig', 'ukr', 'umb', 'urd', 'uzn', 'vec', 'vie', 'war', 'wol', 'xho', 'ydd', 'yor', 'yue', 'zho', 'zsm', 'zul'] | Classification | s2s | [News] | {'train': 701, 'validation': 99, 'test': 204} | {'train': 111.24, 'validation': 97.11, 'test': 135.53} |
 | [SIB200ClusteringS2S](https://arxiv.org/abs/2309.07445) (Adelani et al., 2023) | ['ace', 'acm', 'acq', 'aeb', 'afr', 'ajp', 'aka', 'als', 'amh', 'apc', 'arb', 'ars', 'ary', 'arz', 'asm', 'ast', 'awa', 'ayr', 'azb', 'azj', 'bak', 'bam', 'ban', 'bel', 'bem', 'ben', 'bho', 'bjn', 'bod', 'bos', 'bug', 'bul', 'cat', 'ceb', 'ces', 'cjk', 'ckb', 'crh', 'cym', 'dan', 'deu', 'dik', 'dyu', 'dzo', 'ell', 'eng', 'epo', 'est', 'eus', 'ewe', 'fao', 'fij', 'fin', 'fon', 'fra', 'fur', 'fuv', 'gaz', 'gla', 'gle', 'glg', 'grn', 'guj', 'hat', 'hau', 'heb', 'hin', 'hne', 'hrv', 'hun', 'hye', 'ibo', 'ilo', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kab', 'kac', 'kam', 'kan', 'kas', 'kat', 'kaz', 'kbp', 'kea', 'khk', 'khm', 'kik', 'kin', 'kir', 'kmb', 'kmr', 'knc', 'kon', 'kor', 'lao', 'lij', 'lim', 'lin', 'lit', 'lmo', 'ltg', 'ltz', 'lua', 'lug', 'luo', 'lus', 'lvs', 'mag', 'mai', 'mal', 'mar', 'min', 'mkd', 'mlt', 'mni', 'mos', 'mri', 'mya', 'nld', 'nno', 'nob', 'npi', 'nqo', 'nso', 'nus', 'nya', 'oci', 'ory', 'pag', 'pan', 'pap', 'pbt', 'pes', 'plt', 'pol', 'por', 'prs', 'quy', 'ron', 'run', 'rus', 'sag', 'san', 'sat', 'scn', 'shn', 'sin', 'slk', 'slv', 'smo', 'sna', 'snd', 'som', 'sot', 'spa', 'srd', 'srp', 'ssw', 'sun', 'swe', 'swh', 'szl', 'tam', 'taq', 'tat', 'tel', 'tgk', 'tgl', 'tha', 'tir', 'tpi', 'tsn', 'tso', 'tuk', 'tum', 'tur', 'twi', 'tzm', 'uig', 'ukr', 'umb', 'urd', 'uzn', 'vec', 'vie', 'war', 'wol', 'xho', 'ydd', 'yor', 'yue', 'zho', 'zsm', 'zul'] | Clustering | s2s | [News] | {'test': 1004} | {'test': 114.78} |
 | [SICK-BR-PC](https://linux.ime.usp.br/~thalen/SICK_PT.pdf) | ['por'] | PairClassification | s2s | [Web] | {'test': 1000} | {'test': 54.89} |
@@ -430,10 +431,10 @@ The following tables give you an overview of the tasks in MTEB.
 | [SICK-R](https://aclanthology.org/2020.lrec-1.207) | ['eng'] | STS | s2s |  |  |  |
 | [SICK-R-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | STS | s2s | [Web] | {'test': 9812} | {'test': 42.8} |
 | [SICKFr](https://huggingface.co/datasets/Lajavaness/SICK-fr) | ['fra'] | STS | s2s |  |  |  |
-| [SIQA](https://leaderboard.allenai.org/socialiqa/submissions/get-started) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 0} | {'test': 0.0} |
+| [SIQA](https://leaderboard.allenai.org/socialiqa/submissions/get-started) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 0} | {'test': {'average_document_length': 22.967085695044617, 'average_query_length': 127.75383828045035, 'num_documents': 71276, 'num_queries': 1954, 'average_relevant_docs_per_query': 1.0}} |
 | [SNLHierarchicalClusteringP2P](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [Encyclopaedic, Non-fiction] | {'test': 1300} | {'test': 1986.9453846153847} |
 | [SNLHierarchicalClusteringS2S](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | s2s | [Encyclopaedic, Non-fiction] | {'test': 1300} | {'test': 242.22384615384615} |
-| [SNLRetrieval](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'test': 2048} | {'test': 1101.3} |
+| [SNLRetrieval](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Retrieval | p2p | [Encyclopaedic, Non-fiction] | {'test': 2048} | {'test': {'average_document_length': 1986.9453846153847, 'average_query_length': 14.906153846153845, 'num_documents': 1300, 'num_queries': 1300, 'average_relevant_docs_per_query': 1.0}} |
 | [SRNCorpusBitextMining](https://arxiv.org/abs/2212.06383) (Zwennicker et al., 2022) | ['nld', 'srn'] | BitextMining | s2s | [Social, Web] | {'test': 256} | {'test': 55.0} |
 | [STS12](https://www.aclweb.org/anthology/S12-1051.pdf) (Agirre et al., 2012) | ['eng'] | STS | s2s | [Encyclopaedic, News] | {'test': 6216} | {'test': 64.7} |
 | [STS13](https://www.aclweb.org/anthology/S13-1004/) (Eneko Agirre, 2013) | ['eng'] | STS | s2s | [Web, News, Non-fiction] | {'test': 3000} | {'test': 54.0} |
@@ -449,8 +450,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [SanskritShlokasClassification](https://github.com/goru001/nlp-for-sanskrit) | ['san'] | Classification | s2s | [Religious] | {'train': 383, 'validation': 96} | {'train': 98.415, 'validation': 96.635} |
 | [ScalaClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['dan', 'nno', 'nob', 'swe'] | Classification | s2s | [Fiction, News, Non-fiction, Blog, Spoken, Web] | {'test': 4096} | {'test': 102.72} |
 | [SciDocsRR](https://allenai.org/data/scidocs) | ['eng'] | Reranking | s2s | [Academic, Non-fiction] | {'test': 19599} | {'test': 69.0} |
-| [SciFact](https://github.com/allenai/scifact) (Arman Cohan, 2020) | ['eng'] | Retrieval | s2p |  |  |  |
-| [SciFact-PL](https://github.com/allenai/scifact) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  |  |
+| [SciFact](https://github.com/allenai/scifact) (Arman Cohan, 2020) | ['eng'] | Retrieval | s2p |  |  | {'train': {'average_document_length': 1498.4152035500674, 'average_query_length': 88.58838071693448, 'num_documents': 5183, 'num_queries': 809, 'average_relevant_docs_per_query': 1.1359703337453646}, 'test': {'average_document_length': 1498.4152035500674, 'average_query_length': 90.34666666666666, 'num_documents': 5183, 'num_queries': 300, 'average_relevant_docs_per_query': 1.13}} |
+| [SciFact-PL](https://github.com/allenai/scifact) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1553.5178468068686, 'average_query_length': 95.44, 'num_documents': 5183, 'num_queries': 300, 'average_relevant_docs_per_query': 1.13}} |
 | [SemRel24STS](https://huggingface.co/datasets/SemRel/SemRel2024) (Nedjma Ousidhoum, 2024) | ['afr', 'amh', 'arb', 'arq', 'ary', 'eng', 'hau', 'hin', 'ind', 'kin', 'mar', 'tel'] | STS | s2s |  | {'dev': 2089, 'test': 7498} | {'dev': 163.1, 'test': 145.9} |
 | [SensitiveTopicsClassification](https://aclanthology.org/2021.bsnlp-1.4) | ['rus'] | MultilabelClassification | s2s | [Web, Social] | {'test': 2048} | {'test': 95.3} |
 | [SentimentAnalysisHindi](https://huggingface.co/datasets/OdiaGenAI/sentiment_analysis_hindi) (Shantipriya Parida, 2023) | ['hin'] | Classification | s2s | [Reviews] | {'train': 2497} | {'train': 81.29} |
@@ -458,49 +459,49 @@ The following tables give you an overview of the tasks in MTEB.
 | [SinhalaNewsSourceClassification](https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Source-classification) (Dhananjaya et al., 2022) | ['sin'] | Classification | s2s | [News] | {'train': 24094} | {'train': 56.08} |
 | [SiswatiNewsClassification](https://huggingface.co/datasets/dsfsi/za-isizulu-siswati-news) (Madodonga et al., 2023) | ['ssw'] | Classification | s2s | [News] | {'train': 80} | {'train': 354.2} |
 | [SlovakMovieReviewSentimentClassification](https://arxiv.org/pdf/2304.01922) ({{S, 2023) | ['svk'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 366.17} |
-| [SlovakSumRetrieval](https://huggingface.co/datasets/NaiveNeuron/slovaksum) | ['slk'] | Retrieval | s2s | [News, Social, Web] | {'test': 600} | {'test': 238.44} |
+| [SlovakSumRetrieval](https://huggingface.co/datasets/NaiveNeuron/slovaksum) | ['slk'] | Retrieval | s2s | [News, Social, Web] | {'test': 600} | {'test': {'average_document_length': 2156.445, 'average_query_length': 143.59833333333333, 'num_documents': 600, 'num_queries': 600, 'average_relevant_docs_per_query': 1.0}} |
 | [SouthAfricanLangClassification](https://www.kaggle.com/competitions/south-african-language-identification/) (ExploreAI Academy et al., 2022) | ['afr', 'eng', 'nbl', 'nso', 'sot', 'ssw', 'tsn', 'tso', 'ven', 'xho', 'zul'] | Classification | s2s | [Web, Non-fiction] | {'test': 2048} | {'test': 247.49} |
 | [SpanishNewsClassification](https://huggingface.co/datasets/MarcOrfilaCarreras/spanish-news) | ['spa'] | Classification | s2s | [News] | {'train': 2048} | {'train': 4218.2} |
 | [SpanishNewsClusteringP2P](https://www.kaggle.com/datasets/kevinmorgado/spanish-news-classification) | ['spa'] | Clustering | p2p |  |  |  |
-| [SpanishPassageRetrievalS2P](https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/) | ['spa'] | Retrieval | s2p |  |  |  |
-| [SpanishPassageRetrievalS2S](https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/) | ['spa'] | Retrieval | s2s |  |  |  |
+| [SpanishPassageRetrievalS2P](https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/) | ['spa'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 2635.217893792966, 'average_query_length': 67.55688622754491, 'num_documents': 10037, 'num_queries': 167, 'average_relevant_docs_per_query': 6.053892215568863}} |
+| [SpanishPassageRetrievalS2S](https://mklab.iti.gr/results/spanish-passage-retrieval-dataset/) | ['spa'] | Retrieval | s2s |  |  | {'test': {'average_document_length': 434.5924528301887, 'average_query_length': 67.55688622754491, 'num_documents': 265, 'num_queries': 167, 'average_relevant_docs_per_query': 7.718562874251497}} |
 | [SpanishSentimentClassification](https://huggingface.co/datasets/sepidmnorozy/Spanish_sentiment) | ['spa'] | Classification | s2s | [Reviews] | {'validation': 147, 'test': 296} | {'validation': 85.02, 'test': 87.91} |
-| [SpartQA](https://github.com/HLR/SpartQA_generation) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 0} | {'test': 0.0} |
+| [SpartQA](https://github.com/HLR/SpartQA_generation) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 0} | {'test': {'average_document_length': 50.40829145728643, 'average_query_length': 656.2328881469115, 'num_documents': 1592, 'num_queries': 3594, 'average_relevant_docs_per_query': 1.8786867000556482}} |
 | [SprintDuplicateQuestions](https://www.aclweb.org/anthology/D18-1131/) | ['eng'] | PairClassification | s2s |  | {'validation': 101000, 'test': 101000} | {'validation': 65.2, 'test': 67.9} |
 | [StackExchangeClustering.v2](https://arxiv.org/abs/2104.07081) (Gregor Geigle, 2021) | ['eng'] | Clustering | s2s | [Web] | {'test': 32768} | {'test': 57.0} |
 | [StackExchangeClusteringP2P.v2](https://arxiv.org/abs/2104.07081) (Gregor Geigle, 2021) | ['eng'] | Clustering | p2p | [Web] | {'test': 2996} | {'test': 1090.7} |
 | [StackOverflowDupQuestions](https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf) (Xueqing Liu, 2018) | ['eng'] | Reranking | s2s |  | {'test': 3467} | {'test': 49.8} |
-| [StatcanDialogueDatasetRetrieval](https://mcgill-nlp.github.io/statcan-dialogue-dataset/) | ['eng', 'fra'] | Retrieval | s2p | [Government, Web] | {'dev': 1000, 'test': 1011, 'corpus': 5907} | {'dev': 776.58, 'test': 857.13, 'corpus': 6806.97} |
+| [StatcanDialogueDatasetRetrieval](https://mcgill-nlp.github.io/statcan-dialogue-dataset/) | ['eng', 'fra'] | Retrieval | s2p | [Government, Web] | {'dev': 1000, 'test': 1011, 'corpus': 5907} | {'dev': {'english': {'average_document_length': 6535.865413915693, 'average_query_length': 6.869244935543278, 'num_documents': 5907, 'num_queries': 543, 'average_relevant_docs_per_query': 1.4714548802946592}, 'french': {'average_document_length': 7078.072794988996, 'average_query_length': 6.860655737704918, 'num_documents': 5907, 'num_queries': 122, 'average_relevant_docs_per_query': 1.6475409836065573}}, 'test': {'english': {'average_document_length': 6535.865413915693, 'average_query_length': 7.650994575045208, 'num_documents': 5907, 'num_queries': 553, 'average_relevant_docs_per_query': 1.573236889692586}, 'french': {'average_document_length': 7078.072794988996, 'average_query_length': 5.907407407407407, 'num_documents': 5907, 'num_queries': 108, 'average_relevant_docs_per_query': 1.3055555555555556}}} |
 | [SummEval](https://github.com/Yale-LILY/SummEval) (Fabbri et al., 2020) | ['eng'] | Summarization | p2p | [News] | {'test': 2800} | {'test': 359.8} |
 | [SummEvalFr](https://github.com/Yale-LILY/SummEval) (Fabbri et al., 2020) | ['fra'] | Summarization | p2p | [News] | {'test': 2800} | {'test': 407.1} |
-| [SweFaqRetrieval](https://spraakbanken.gu.se/en/resources/superlim) | ['swe'] | Retrieval | s2s | [Government, Non-fiction] | {'test': 1024} | {'test': 195.44} |
+| [SweFaqRetrieval](https://spraakbanken.gu.se/en/resources/superlim) | ['swe'] | Retrieval | s2s | [Government, Non-fiction] | {'test': 1024} | {'test': {'average_document_length': 319.8473581213307, 'average_query_length': 70.51461988304094, 'num_documents': 511, 'num_queries': 513, 'average_relevant_docs_per_query': 1.0}} |
 | [SweRecClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['swe'] | Classification | s2s |  | {'test': 1024} | {'test': 318.8} |
 | [SwedishSentimentClassification](https://huggingface.co/datasets/swedish_reviews) | ['swe'] | Classification | s2s | [Reviews] | {'validation': 1024, 'test': 1024} | {'validation': 499.3, 'test': 498.1} |
 | [SwednClusteringP2P](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Clustering | p2p | [News, Non-fiction] | {'all': 2048} | {'all': 1619.71} |
 | [SwednClusteringS2S](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Clustering | s2s | [News, Non-fiction] | {'all': 2048} | {'all': 1619.71} |
-| [SwednRetrieval](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Retrieval | p2p | [News, Non-fiction] | {'test': 2048} | {'test': 1946.35} |
+| [SwednRetrieval](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Retrieval | p2p | [News, Non-fiction] | {'test': 2048} | {'test': {'average_document_length': 2896.519550342131, 'average_query_length': 45.876953125, 'num_documents': 2046, 'num_queries': 1024, 'average_relevant_docs_per_query': 2.0}} |
 | [SwissJudgementClassification](https://aclanthology.org/2021.nllp-1.3/) (Joel Niklaus, 2022) | ['deu', 'fra', 'ita'] | Classification | s2s | [Legal] | {'test': 2048} | {'test': 3411.72} |
 | [SyntecReranking](https://huggingface.co/datasets/lyon-nlp/mteb-fr-reranking-syntec-s2p) (Mathieu Ciancone, 2024) | ['fra'] | Reranking | s2p | [Legal] |  |  |
-| [SyntecRetrieval](https://huggingface.co/datasets/lyon-nlp/mteb-fr-retrieval-syntec-s2p) (Mathieu Ciancone, 2024) | ['fra'] | Retrieval | s2p | [Legal] | {'test': 90} | {'test': 62.0} |
+| [SyntecRetrieval](https://huggingface.co/datasets/lyon-nlp/mteb-fr-retrieval-syntec-s2p) (Mathieu Ciancone, 2024) | ['fra'] | Retrieval | s2p | [Legal] | {'test': 90} | {'test': {'average_document_length': 1224.2666666666667, 'average_query_length': 72.82, 'num_documents': 90, 'num_queries': 100, 'average_relevant_docs_per_query': 1.0}} |
 | [T2Reranking](https://arxiv.org/abs/2304.03679) (Xiaohui Xie, 2023) | ['cmn'] | Reranking | s2s |  |  |  |
-| [T2Retrieval](https://arxiv.org/abs/2304.03679) (Xiaohui Xie, 2023) | ['cmn'] | Retrieval | s2p |  |  |  |
+| [T2Retrieval](https://arxiv.org/abs/2304.03679) (Xiaohui Xie, 2023) | ['cmn'] | Retrieval | s2p |  |  | {'dev': {'average_document_length': 874.1184182791619, 'average_query_length': 10.938847974750132, 'num_documents': 118605, 'num_queries': 22812, 'average_relevant_docs_per_query': 5.213571804313519}} |
 | [TERRa](https://arxiv.org/pdf/2010.15925) (Shavrina et al., 2020) | ['rus'] | PairClassification | s2s | [News, Web] | {'dev': 307} | {'dev': 138.2} |
 | [TNews](https://www.cluebenchmarks.com/introduce.html) | ['cmn'] | Classification | s2s |  |  |  |
-| [TRECCOVID](https://ir.nist.gov/covidSubmit/index.html) (Kirk Roberts, 2021) | ['eng'] | Retrieval | s2p |  |  |  |
-| [TRECCOVID-PL](https://ir.nist.gov/covidSubmit/index.html) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  |  |
-| [TV2Nordretrieval](https://huggingface.co/datasets/alexandrainst/nordjylland-news-summarization) | ['dan'] | Retrieval | p2p | [News, Non-fiction] | {'test': 4096} | {'test': 784.11} |
+| [TRECCOVID](https://ir.nist.gov/covidSubmit/index.html) (Kirk Roberts, 2021) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1116.7434221277986, 'average_query_length': 69.24, 'num_documents': 171332, 'num_queries': 50, 'average_relevant_docs_per_query': 493.5}} |
+| [TRECCOVID-PL](https://ir.nist.gov/covidSubmit/index.html) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1159.8020276422385, 'average_query_length': 69.42, 'num_documents': 171332, 'num_queries': 50, 'average_relevant_docs_per_query': 493.5}} |
+| [TV2Nordretrieval](https://huggingface.co/datasets/alexandrainst/nordjylland-news-summarization) | ['dan'] | Retrieval | p2p | [News, Non-fiction] | {'test': 4096} | {'test': {'average_document_length': 1440.66552734375, 'average_query_length': 126.552734375, 'num_documents': 2048, 'num_queries': 2048, 'average_relevant_docs_per_query': 1.0}} |
 | [TamilNewsClassification](https://github.com/vanangamudi/tamil-news-classification) (Anoop Kunchukuttan, 2020) | ['tam'] | Classification | s2s | [News] | {'train': 14521, 'test': 3631} | {'train': 56.5, 'test': 56.52} |
 | [Tatoeba](https://github.com/facebookresearch/LASER/tree/main/data/tatoeba/v1) (Tatoeba community, 2021) | ['afr', 'amh', 'ang', 'ara', 'arq', 'arz', 'ast', 'awa', 'aze', 'bel', 'ben', 'ber', 'bos', 'bre', 'bul', 'cat', 'cbk', 'ceb', 'ces', 'cha', 'cmn', 'cor', 'csb', 'cym', 'dan', 'deu', 'dsb', 'dtp', 'ell', 'eng', 'epo', 'est', 'eus', 'fao', 'fin', 'fra', 'fry', 'gla', 'gle', 'glg', 'gsw', 'heb', 'hin', 'hrv', 'hsb', 'hun', 'hye', 'ido', 'ile', 'ina', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kab', 'kat', 'kaz', 'khm', 'kor', 'kur', 'kzj', 'lat', 'lfn', 'lit', 'lvs', 'mal', 'mar', 'max', 'mhr', 'mkd', 'mon', 'nds', 'nld', 'nno', 'nob', 'nov', 'oci', 'orv', 'pam', 'pes', 'pms', 'pol', 'por', 'ron', 'rus', 'slk', 'slv', 'spa', 'sqi', 'srp', 'swe', 'swg', 'swh', 'tam', 'tat', 'tel', 'tgl', 'tha', 'tuk', 'tur', 'tzl', 'uig', 'ukr', 'urd', 'uzb', 'vie', 'war', 'wuu', 'xho', 'yid', 'yue', 'zsm'] | BitextMining | s2s |  | {'test': 2000} | {'test': 39.4} |
 | [TbilisiCityHallBitextMining](https://huggingface.co/datasets/jupyterjazz/tbilisi-city-hall-titles) | ['eng', 'kat'] | BitextMining | s2s | [News] | {'test': 1820} | {'test': 78.0} |
 | [TelemarketingSalesRuleLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 47} | {'test': 348.29} |
 | [TeluguAndhraJyotiNewsClassification](https://github.com/AnushaMotamarri/Telugu-Newspaper-Article-Dataset) | ['tel'] | Classification | s2s | [News] | {'test': 4329} | {'test': 1428.28} |
-| [TempReasonL1](https://github.com/DAMO-NLP-SG/TempReason) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 4000} | {'test': 59.2} |
-| [TempReasonL2Context](https://github.com/DAMO-NLP-SG/TempReason) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 0} | {'test': 0.0} |
-| [TempReasonL2Fact](https://github.com/DAMO-NLP-SG/TempReason) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 5397} | {'test': 854.8} |
-| [TempReasonL2Pure](https://github.com/DAMO-NLP-SG/TempReason) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 5397} | {'test': 80.0} |
-| [TempReasonL3Context](https://github.com/DAMO-NLP-SG/TempReason) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 4426} | {'test': 13448.4} |
-| [TempReasonL3Fact](https://github.com/DAMO-NLP-SG/TempReason) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 4426} | {'test': 919.9} |
-| [TempReasonL3Pure](https://github.com/DAMO-NLP-SG/TempReason) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 4426} | {'test': 98.2} |
+| [TempReasonL1](https://github.com/DAMO-NLP-SG/TempReason) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 4000} | {'test': {'average_document_length': 8.989843250159948, 'average_query_length': 50.22375, 'num_documents': 12504, 'num_queries': 4000, 'average_relevant_docs_per_query': 1.0}} |
+| [TempReasonL2Context](https://github.com/DAMO-NLP-SG/TempReason) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 0} | {'test': {'average_document_length': 19.823525685690758, 'average_query_length': 11919.25792106726, 'num_documents': 15787, 'num_queries': 5397, 'average_relevant_docs_per_query': 1.0}} |
+| [TempReasonL2Fact](https://github.com/DAMO-NLP-SG/TempReason) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 5397} | {'test': {'average_document_length': 19.823525685690758, 'average_query_length': 830.7268853066519, 'num_documents': 15787, 'num_queries': 5397, 'average_relevant_docs_per_query': 1.0}} |
+| [TempReasonL2Pure](https://github.com/DAMO-NLP-SG/TempReason) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 5397} | {'test': {'average_document_length': 19.823525685690758, 'average_query_length': 55.94089308875301, 'num_documents': 15787, 'num_queries': 5397, 'average_relevant_docs_per_query': 1.0}} |
+| [TempReasonL3Context](https://github.com/DAMO-NLP-SG/TempReason) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 4426} | {'test': {'average_document_length': 19.80534984678243, 'average_query_length': 13424.633077270673, 'num_documents': 15664, 'num_queries': 4426, 'average_relevant_docs_per_query': 1.0}} |
+| [TempReasonL3Fact](https://github.com/DAMO-NLP-SG/TempReason) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 4426} | {'test': {'average_document_length': 19.80534984678243, 'average_query_length': 896.0754631721645, 'num_documents': 15664, 'num_queries': 4426, 'average_relevant_docs_per_query': 1.0}} |
+| [TempReasonL3Pure](https://github.com/DAMO-NLP-SG/TempReason) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 4426} | {'test': {'average_document_length': 19.80534984678243, 'average_query_length': 74.44012652507908, 'num_documents': 15664, 'num_queries': 4426, 'average_relevant_docs_per_query': 1.0}} |
 | [TenKGnadClassification](https://tblock.github.io/10kGNAD/) | ['deu'] | Classification | p2p | [News] | {'test': 1028} | {'test': 2627.31} |
 | [TenKGnadClusteringP2P.v2](https://tblock.github.io/10kGNAD/) | ['deu'] | Clustering | p2p | [News, Non-fiction] | {'test': 10275} | {'test': 2641.03} |
 | [TenKGnadClusteringS2S.v2](https://tblock.github.io/10kGNAD/) | ['deu'] | Clustering | s2s | [News, Non-fiction] | {'test': 10275} | {'test': 50.96} |
@@ -508,12 +509,12 @@ The following tables give you an overview of the tasks in MTEB.
 | [TextualismToolPlainLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 165} | {'test': 997.97} |
 | [ThuNewsClusteringP2P.v2](http://thuctc.thunlp.org/) (Sun et al., 2016) | ['cmn'] | Clustering | p2p | [News] | {'test': 2048} |  |
 | [ThuNewsClusteringS2S.v2](http://thuctc.thunlp.org/) (Sun et al., 2016) | ['cmn'] | Clustering | s2s | [News] | {'test': 2048} |  |
-| [TopiOCQA](https://mcgill-nlp.github.io/topiocqa) (Vaibhav Adlakha, 2022) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'dev': 2514} | {'validation': 708.0} |
-| [Touche2020](https://webis.de/events/touche-20/shared-task-1.html) | ['eng'] | Retrieval | s2p |  |  |  |
+| [TopiOCQA](https://mcgill-nlp.github.io/topiocqa) (Vaibhav Adlakha, 2022) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | {'dev': 2514} | {'validation': {'average_document_length': 478.8968086416064, 'average_query_length': 12.579952267303103, 'num_documents': 25700592, 'num_queries': 2514, 'average_relevant_docs_per_query': 1.0}} |
+| [Touche2020](https://webis.de/events/touche-20/shared-task-1.html) | ['eng'] | Retrieval | s2p |  |  | {'test': {'average_document_length': 1719.3347658445412, 'average_query_length': 43.42857142857143, 'num_documents': 382545, 'num_queries': 49, 'average_relevant_docs_per_query': 19.020408163265305}} |
 | [ToxicChatClassification](https://aclanthology.org/2023.findings-emnlp.311/) (Zi Lin, 2023) | ['eng'] | Classification | s2s | [Constructed] | {'test': 1427} | {'test': 189.4} |
 | [ToxicConversationsClassification](https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/overview) (cjadams et al., 2019) | ['eng'] | Classification | s2s | [Social] | {'test': 50000} | {'test': 296.6} |
 | [TswanaNewsClassification](https://link.springer.com/chapter/10.1007/978-3-031-49002-6_17) (Vukosi Marivate, 2023) | ['tsn'] | Classification | s2s | [News] | {'validation': 487, 'test': 487} | {'validation': 2417.72, 'test': 2369.52} |
-| [TurHistQuadRetrieval](https://github.com/okanvk/Turkish-Reading-Comprehension-Question-Answering-Dataset) (Soygazi et al., 2021) | ['tur'] | Retrieval | p2p | [Encyclopaedic, Non-fiction, Academic] | {'test': 1330} | {'test': 1513.83} |
+| [TurHistQuadRetrieval](https://github.com/okanvk/Turkish-Reading-Comprehension-Question-Answering-Dataset) (Soygazi et al., 2021) | ['tur'] | Retrieval | p2p | [Encyclopaedic, Non-fiction, Academic] | {'test': 1330} | {'test': {'average_document_length': 172.12118713932398, 'average_query_length': 62.5302734375, 'num_documents': 1213, 'num_queries': 1024, 'average_relevant_docs_per_query': 2.0}} |
 | [TurkicClassification](https://huggingface.co/datasets/Electrotubbie/classification_Turkic_languages/) | ['bak', 'kaz', 'kir'] | Classification | s2s | [News] | {'train': 193056} | {'train': 1103.13} |
 | [TurkishMovieSentimentClassification](https://www.win.tue.nl/~mpechen/publications/pubs/MT_WISDOM2013.pdf) (Erkin Demirtas, 2013) | ['tur'] | Classification | s2s | [Reviews] | {'test': 2644} | {'test': 141.5} |
 | [TurkishProductSentimentClassification](https://www.win.tue.nl/~mpechen/publications/pubs/MT_WISDOM2013.pdf) (Erkin Demirtas, 2013) | ['tur'] | Classification | s2s | [Reviews] | {'test': 800} | {'test': 246.85} |
@@ -523,7 +524,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [TweetSentimentExtractionClassification](https://www.kaggle.com/competitions/tweet-sentiment-extraction/overview) (Maggie et al., 2020) | ['eng'] | Classification | s2s | [Social] | {'test': 3534} | {'test': 67.8} |
 | [TweetTopicSingleClassification](https://arxiv.org/abs/2209.09824) | ['eng'] | Classification | s2s | [Social, News] | {'test_2021': 1693} | {'test_2021': 167.66} |
 | [TwentyNewsgroupsClustering.v2](https://scikit-learn.org/0.19/datasets/twenty_newsgroups.html) (Ken Lang, 1995) | ['eng'] | Clustering | s2s | [News] | {'test': 2381} | {'test': 32.0} |
-| [TwitterHjerneRetrieval](https://huggingface.co/datasets/sorenmulli/da-hashtag-twitterhjerne) (Holm et al., 2024) | ['dan'] | Retrieval | p2p | [Social] | {'train': 340} | {'train': 138.23} |
+| [TwitterHjerneRetrieval](https://huggingface.co/datasets/sorenmulli/da-hashtag-twitterhjerne) (Holm et al., 2024) | ['dan'] | Retrieval | p2p | [Social] | {'train': 340} | {'train': {'average_document_length': 128.85114503816794, 'average_query_length': 166.3846153846154, 'num_documents': 262, 'num_queries': 78, 'average_relevant_docs_per_query': 3.358974358974359}} |
 | [TwitterSemEval2015](https://alt.qcri.org/semeval2015/task1/) | ['eng'] | PairClassification | s2s |  | {'test': 16777} | {'test': 38.3} |
 | [TwitterURLCorpus](https://languagenet.github.io/) | ['eng'] | PairClassification | s2s |  | {'test': 51534} | {'test': 79.5} |
 | [UCCVCommonLawLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal] | {'test': 94} | {'test': 114.127} |
@@ -532,24 +533,25 @@ The following tables give you an overview of the tasks in MTEB.
 | [UrduRomanSentimentClassification](https://archive.ics.uci.edu/dataset/458/roman+urdu+data+set) (Sharf,Zareen, 2018) | ['urd'] | Classification | s2s | [Social] | {'train': 2048} | {'train': 68.248} |
 | [VGHierarchicalClusteringP2P](https://huggingface.co/datasets/navjordj/VG_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [News, Non-fiction] | {'test': 2048} | {'test': 2670.3243084794544} |
 | [VGHierarchicalClusteringS2S](https://huggingface.co/datasets/navjordj/VG_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [News, Non-fiction] | {'test': 2048} | {'test': 139.31247668283325} |
-| [VideoRetrieval](https://arxiv.org/abs/2203.03367) | ['cmn'] | Retrieval | s2p |  |  |  |
+| [VideoRetrieval](https://arxiv.org/abs/2203.03367) | ['cmn'] | Retrieval | s2p |  |  | {'dev': {'average_document_length': 31.048855642524522, 'average_query_length': 7.365, 'num_documents': 100930, 'num_queries': 1000, 'average_relevant_docs_per_query': 1.0}} |
 | [VieMedEVBitextMining](https://aclanthology.org/2015.iwslt-evaluation.11/) (Nhu Vo, 2024) | ['eng', 'vie'] | BitextMining | s2s | [Medical] | {'test': 2048} | {'test': 139.23} |
-| [VieQuADRetrieval](https://aclanthology.org/2020.coling-main.233.pdf) | ['vie'] | Retrieval | s2p | [Encyclopaedic, Non-fiction] | {'validation': 2048} | {'validation': 790.24} |
+| [VieQuADRetrieval](https://aclanthology.org/2020.coling-main.233.pdf) | ['vie'] | Retrieval | s2p | [Encyclopaedic, Non-fiction] | {'validation': 2048} | {'validation': {'average_document_length': 222.61244979919678, 'average_query_length': 65.51513671875, 'num_documents': 2490, 'num_queries': 2048, 'average_relevant_docs_per_query': 2.0}} |
 | [VieStudentFeedbackClassification](https://ieeexplore.ieee.org/document/8573337) (Nguyen et al., 2018) | ['vie'] | Classification | s2s | [Reviews] | {'test': 2048} | {'test': 14.22} |
+| [VoyageMMarcoReranking](https://arxiv.org/abs/2312.16144) (Benjamin Clavié, 2023) | ['jpn'] | Reranking | s2s | [Academic, Non-fiction] | {'test': 2048} | {'test': 162.0} |
 | [WRIMEClassification](https://aclanthology.org/2021.naacl-main.169/) | ['jpn'] | Classification | s2s | [Social] | {'test': 2048} | {'test': 47.78} |
 | [Waimai](https://aclanthology.org/2023.nodalida-1.20/) | ['cmn'] | Classification | s2s |  |  |  |
 | [WebLINXCandidatesReranking](https://mcgill-nlp.github.io/weblinx) (Xing Han Lù, 2024) | ['eng'] | Reranking | p2p | [Academic, Web] | {'validation': 1301, 'test_iid': 1438, 'test_cat': 3560, 'test_web': 3144, 'test_vis': 5298, 'test_geo': 4916} | {'validation': 1647.52, 'test_iid': 1722.63, 'test_cat': 2149.66, 'test_web': 1831.46, 'test_vis': 1737.26, 'test_geo': 1742.66} |
 | [WikiCitiesClustering](https://huggingface.co/datasets/wikipedia) | ['eng'] | Clustering | p2p |  |  |  |
 | [WikiClusteringP2P.v2](https://github.com/Rysias/wiki-clustering) | ['bos', 'cat', 'ces', 'dan', 'eus', 'glv', 'ilo', 'kur', 'lav', 'min', 'mlt', 'sco', 'sqi', 'wln'] | Clustering | p2p | [Encyclopaedic] | {'test': 2048} | {'test': 625.3} |
 | [WikipediaRerankingMultilingual](https://huggingface.co/datasets/ellamind/wikipedia-2023-11-reranking-multilingual) | ['ben', 'bul', 'ces', 'dan', 'deu', 'eng', 'fas', 'fin', 'hin', 'ita', 'nld', 'nor', 'por', 'ron', 'srp', 'swe'] | Reranking | s2p | [Encyclopaedic] | {'en': 1500, 'de': 1500, 'it': 1500, 'pt': 1500, 'nl': 1500, 'cs': 1500, 'ro': 1500, 'bg': 1500, 'sr': 1500, 'fi': 1500, 'da': 1500, 'fa': 1500, 'hi': 1500, 'bn': 1500, 'no': 1500, 'sv': 1500} | {'test': 452.0} |
-| [WikipediaRetrievalMultilingual](https://huggingface.co/datasets/ellamind/wikipedia-2023-11-retrieval-multilingual-queries) | ['ben', 'bul', 'ces', 'dan', 'deu', 'eng', 'fas', 'fin', 'hin', 'ita', 'nld', 'nor', 'por', 'ron', 'srp', 'swe'] | Retrieval | s2p | [Encyclopaedic] | {'en': 1500, 'de': 1500, 'it': 1500, 'pt': 1500, 'nl': 1500, 'cs': 1500, 'ro': 1500, 'bg': 1500, 'sr': 1500, 'fi': 1500, 'da': 1500, 'fa': 1500, 'hi': 1500, 'bn': 1500, 'no': 1500, 'sv': 1500} | {'test': 452.0} |
-| [WinoGrande](https://winogrande.allenai.org/) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 0} | {'test': 0.0} |
+| [WikipediaRetrievalMultilingual](https://huggingface.co/datasets/ellamind/wikipedia-2023-11-retrieval-multilingual-queries) | ['ben', 'bul', 'ces', 'dan', 'deu', 'eng', 'fas', 'fin', 'hin', 'ita', 'nld', 'nor', 'por', 'ron', 'srp', 'swe'] | Retrieval | s2p | [Encyclopaedic] | {'en': 1500, 'de': 1500, 'it': 1500, 'pt': 1500, 'nl': 1500, 'cs': 1500, 'ro': 1500, 'bg': 1500, 'sr': 1500, 'fi': 1500, 'da': 1500, 'fa': 1500, 'hi': 1500, 'bn': 1500, 'no': 1500, 'sv': 1500} | {'test': {'bg': {'average_document_length': 374.376, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'bn': {'average_document_length': 394.05044444444445, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'cs': {'average_document_length': 369.9831111111111, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'da': {'average_document_length': 345.2597037037037, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'de': {'average_document_length': 398.4137777777778, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'en': {'average_document_length': 452.9871111111111, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'fa': {'average_document_length': 345.1568888888889, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'fi': {'average_document_length': 379.71237037037037, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'hi': {'average_document_length': 410.72540740740743, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'it': {'average_document_length': 393.73437037037036, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'nl': {'average_document_length': 375.6695555555556, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'pt': {'average_document_length': 398.27237037037037, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'ro': {'average_document_length': 348.3817037037037, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'sr': {'average_document_length': 384.3131851851852, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'no': {'average_document_length': 366.93733333333336, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}, 'sv': {'average_document_length': 369.340962962963, 'average_query_length': 1.0, 'num_documents': 13500, 'num_queries': 1500, 'average_relevant_docs_per_query': 1.0}}} |
+| [WinoGrande](https://winogrande.allenai.org/) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic] | {'test': 0} | {'test': {'average_document_length': 7.68243375858685, 'average_query_length': 111.78216258879242, 'num_documents': 5095, 'num_queries': 1267, 'average_relevant_docs_per_query': 1.0}} |
 | [WisesightSentimentClassification](https://github.com/PyThaiNLP/wisesight-sentiment) | ['tha'] | Classification | s2s | [Social, News] | {'train': 2048} | {'train': 103.42} |
-| XMarket (Bonab et al., 2021) | ['deu', 'eng', 'spa'] | Retrieval | s2p |  |  |  |
+| XMarket (Bonab et al., 2021) | ['deu', 'eng', 'spa'] | Retrieval | s2p |  |  | {'test': {'de': {'average_document_length': 187.4061197288943, 'average_query_length': 15.717612088184294, 'num_documents': 70526, 'num_queries': 4037, 'average_relevant_docs_per_query': 54.3522417636859}, 'en': {'average_document_length': 452.792089662076, 'average_query_length': 15.881635344543357, 'num_documents': 218777, 'num_queries': 9099, 'average_relevant_docs_per_query': 85.43719090009891}, 'es': {'average_document_length': 279.67909262759923, 'average_query_length': 19.97062937062937, 'num_documents': 39675, 'num_queries': 3575, 'average_relevant_docs_per_query': 36.01006993006993}}} |
 | [XNLI](https://aclanthology.org/D18-1269/) (Conneau et al., 2018) | ['ara', 'bul', 'deu', 'ell', 'eng', 'fra', 'hin', 'rus', 'spa', 'swa', 'tha', 'tur', 'vie', 'zho'] | PairClassification | s2s | [Non-fiction, Fiction, Government] | {'validation': 2163, 'test': 2460} | {'validation': 106.5, 'test': 106.5} |
 | [XNLIV2](https://arxiv.org/pdf/2301.06527) (Upadhyay et al., 2023) | ['asm', 'ben', 'bho', 'ell', 'guj', 'kan', 'mar', 'ory', 'pan', 'rus', 'san', 'tam', 'tur'] | PairClassification | s2s | [Non-fiction, Fiction, Government] | {'test': 5010} | {'test': 80.06} |
-| [XPQARetrieval](https://arxiv.org/abs/2305.09249) (Shen et al., 2023) | ['ara', 'cmn', 'deu', 'eng', 'fra', 'hin', 'ita', 'jpn', 'kor', 'pol', 'por', 'spa', 'tam'] | Retrieval | s2p | [Reviews] | {'test': 19801} | {'test': 104.68} |
-| [XQuADRetrieval](https://huggingface.co/datasets/xquad) (Mikel Artetxe, 2019) | ['arb', 'deu', 'ell', 'eng', 'hin', 'ron', 'rus', 'spa', 'tha', 'tur', 'vie', 'zho'] | Retrieval | s2p | [Web] | {'test': 1190} | {'test': 788.7} |
+| [XPQARetrieval](https://arxiv.org/abs/2305.09249) (Shen et al., 2023) | ['ara', 'cmn', 'deu', 'eng', 'fra', 'hin', 'ita', 'jpn', 'kor', 'pol', 'por', 'spa', 'tam'] | Retrieval | s2p | [Reviews] | {'test': 19801} | {'test': {'ara-ara': {'average_document_length': 61.88361204013378, 'average_query_length': 29.688, 'num_documents': 1495, 'num_queries': 750, 'average_relevant_docs_per_query': 2.004}, 'eng-ara': {'average_document_length': 125.26940639269407, 'average_query_length': 29.688, 'num_documents': 1533, 'num_queries': 750, 'average_relevant_docs_per_query': 2.058666666666667}, 'ara-eng': {'average_document_length': 61.88361204013378, 'average_query_length': 39.5188679245283, 'num_documents': 1495, 'num_queries': 742, 'average_relevant_docs_per_query': 2.024258760107817}, 'deu-deu': {'average_document_length': 69.54807692307692, 'average_query_length': 55.51827676240209, 'num_documents': 1248, 'num_queries': 766, 'average_relevant_docs_per_query': 1.6318537859007833}, 'eng-deu': {'average_document_length': 115.77118078719145, 'average_query_length': 55.51827676240209, 'num_documents': 1499, 'num_queries': 766, 'average_relevant_docs_per_query': 1.9634464751958225}, 'deu-eng': {'average_document_length': 69.54807692307692, 'average_query_length': 51.88903394255875, 'num_documents': 1248, 'num_queries': 766, 'average_relevant_docs_per_query': 1.6318537859007833}, 'spa-spa': {'average_document_length': 68.27511591962906, 'average_query_length': 46.711223203026485, 'num_documents': 1941, 'num_queries': 793, 'average_relevant_docs_per_query': 2.4489281210592684}, 'eng-spa': {'average_document_length': 123.43698347107438, 'average_query_length': 46.711223203026485, 'num_documents': 1936, 'num_queries': 793, 'average_relevant_docs_per_query': 2.472887767969735}, 'spa-eng': {'average_document_length': 68.27511591962906, 'average_query_length': 47.21059268600252, 'num_documents': 1941, 'num_queries': 793, 'average_relevant_docs_per_query': 2.4489281210592684}, 'fra-fra': {'average_document_length': 76.99354005167959, 'average_query_length': 56.0520694259012, 'num_documents': 1548, 'num_queries': 749, 'average_relevant_docs_per_query': 2.069425901201602}, 'eng-fra': {'average_document_length': 137.31242532855435, 'average_query_length': 56.0520694259012, 'num_documents': 1674, 'num_queries': 749, 'average_relevant_docs_per_query': 2.248331108144192}, 'fra-eng': {'average_document_length': 76.99354005167959, 'average_query_length': 49.58744993324433, 'num_documents': 1548, 'num_queries': 749, 'average_relevant_docs_per_query': 2.069425901201602}, 'hin-hin': {'average_document_length': 47.20783373301359, 'average_query_length': 33.47783783783784, 'num_documents': 1251, 'num_queries': 925, 'average_relevant_docs_per_query': 1.3902702702702703}, 'eng-hin': {'average_document_length': 106.67662682602922, 'average_query_length': 33.47783783783784, 'num_documents': 1506, 'num_queries': 925, 'average_relevant_docs_per_query': 1.8054054054054054}, 'hin-eng': {'average_document_length': 47.20783373301359, 'average_query_length': 34.98574561403509, 'num_documents': 1251, 'num_queries': 912, 'average_relevant_docs_per_query': 1.4100877192982457}, 'ita-ita': {'average_document_length': 59.778301886792455, 'average_query_length': 49.14932126696833, 'num_documents': 1272, 'num_queries': 663, 'average_relevant_docs_per_query': 1.9245852187028658}, 'eng-ita': {'average_document_length': 123.07302075326672, 'average_query_length': 49.14932126696833, 'num_documents': 1301, 'num_queries': 663, 'average_relevant_docs_per_query': 1.9849170437405732}, 'ita-eng': {'average_document_length': 59.778301886792455, 'average_query_length': 49.040723981900456, 'num_documents': 1272, 'num_queries': 663, 'average_relevant_docs_per_query': 1.9245852187028658}, 'jpn-jpn': {'average_document_length': 41.030605871330415, 'average_query_length': 23.296969696969697, 'num_documents': 1601, 'num_queries': 825, 'average_relevant_docs_per_query': 1.9406060606060607}, 'eng-jpn': {'average_document_length': 126.2647564469914, 'average_query_length': 23.296969696969697, 'num_documents': 1745, 'num_queries': 825, 'average_relevant_docs_per_query': 2.1187878787878787}, 'jpn-eng': {'average_document_length': 41.030605871330415, 'average_query_length': 51.416058394160586, 'num_documents': 1601, 'num_queries': 822, 'average_relevant_docs_per_query': 1.9476885644768855}, 'kor-kor': {'average_document_length': 31.22722159730034, 'average_query_length': 21.81804281345566, 'num_documents': 889, 'num_queries': 654, 'average_relevant_docs_per_query': 1.5642201834862386}, 'eng-kor': {'average_document_length': 112.41231822070145, 'average_query_length': 21.81804281345566, 'num_documents': 1169, 'num_queries': 654, 'average_relevant_docs_per_query': 1.952599388379205}, 'kor-eng': {'average_document_length': 31.22722159730034, 'average_query_length': 43.9527687296417, 'num_documents': 889, 'num_queries': 614, 'average_relevant_docs_per_query': 1.6661237785016287}, 'pol-pol': {'average_document_length': 50.66814439518683, 'average_query_length': 53.72101910828025, 'num_documents': 1579, 'num_queries': 785, 'average_relevant_docs_per_query': 2.080254777070064}, 'eng-pol': {'average_document_length': 112.96919566457501, 'average_query_length': 53.72101910828025, 'num_documents': 1753, 'num_queries': 785, 'average_relevant_docs_per_query': 2.385987261146497}, 'pol-eng': {'average_document_length': 50.66814439518683, 'average_query_length': 54.1994851994852, 'num_documents': 1579, 'num_queries': 777, 'average_relevant_docs_per_query': 2.101673101673102}, 'por-por': {'average_document_length': 75.9845869297164, 'average_query_length': 42.58875, 'num_documents': 1622, 'num_queries': 800, 'average_relevant_docs_per_query': 2.14}, 'eng-por': {'average_document_length': 111.42525930445393, 'average_query_length': 42.58875, 'num_documents': 1639, 'num_queries': 800, 'average_relevant_docs_per_query': 2.21875}, 'por-eng': {'average_document_length': 75.9845869297164, 'average_query_length': 46.57967377666248, 'num_documents': 1622, 'num_queries': 797, 'average_relevant_docs_per_query': 2.148055207026349}, 'tam-tam': {'average_document_length': 64.89019607843137, 'average_query_length': 33.267263427109974, 'num_documents': 1275, 'num_queries': 782, 'average_relevant_docs_per_query': 1.6994884910485935}, 'eng-tam': {'average_document_length': 96.96361185983828, 'average_query_length': 33.267263427109974, 'num_documents': 1484, 'num_queries': 782, 'average_relevant_docs_per_query': 2.0255754475703327}, 'tam-eng': {'average_document_length': 64.89019607843137, 'average_query_length': 34.777633289986994, 'num_documents': 1275, 'num_queries': 769, 'average_relevant_docs_per_query': 1.728218465539662}, 'cmn-cmn': {'average_document_length': 20.958944281524925, 'average_query_length': 12.21116504854369, 'num_documents': 1705, 'num_queries': 824, 'average_relevant_docs_per_query': 2.0716019417475726}, 'eng-cmn': {'average_document_length': 108.31593874078276, 'average_query_length': 12.21116504854369, 'num_documents': 1763, 'num_queries': 824, 'average_relevant_docs_per_query': 2.2633495145631066}, 'cmn-eng': {'average_document_length': 20.958944281524925, 'average_query_length': 41.24390243902439, 'num_documents': 1705, 'num_queries': 820, 'average_relevant_docs_per_query': 2.0817073170731706}}} |
+| [XQuADRetrieval](https://huggingface.co/datasets/xquad) (Mikel Artetxe, 2019) | ['arb', 'deu', 'ell', 'eng', 'hin', 'ron', 'rus', 'spa', 'tha', 'tur', 'vie', 'zho'] | Retrieval | s2p | [Web] | {'test': 1190} | {'validation': {'ar': {'average_document_length': 683.4666666666667, 'average_query_length': 53.327993254637434, 'num_documents': 240, 'num_queries': 1186, 'average_relevant_docs_per_query': 1.0}, 'de': {'average_document_length': 894.0666666666667, 'average_query_length': 69.04318374259103, 'num_documents': 240, 'num_queries': 1181, 'average_relevant_docs_per_query': 1.0}, 'el': {'average_document_length': 894.3791666666667, 'average_query_length': 68.61317567567568, 'num_documents': 240, 'num_queries': 1184, 'average_relevant_docs_per_query': 1.0}, 'en': {'average_document_length': 784.8333333333334, 'average_query_length': 61.25063291139241, 'num_documents': 240, 'num_queries': 1185, 'average_relevant_docs_per_query': 1.0}, 'es': {'average_document_length': 883.8041666666667, 'average_query_length': 68.23817567567568, 'num_documents': 240, 'num_queries': 1184, 'average_relevant_docs_per_query': 1.0}, 'hi': {'average_document_length': 764.9416666666667, 'average_query_length': 59.684699915469146, 'num_documents': 240, 'num_queries': 1183, 'average_relevant_docs_per_query': 1.0}, 'ro': {'average_document_length': 878.4458333333333, 'average_query_length': 67.17229729729729, 'num_documents': 240, 'num_queries': 1184, 'average_relevant_docs_per_query': 1.0}, 'ru': {'average_document_length': 850.1875, 'average_query_length': 64.94261603375527, 'num_documents': 240, 'num_queries': 1185, 'average_relevant_docs_per_query': 1.0}, 'th': {'average_document_length': 736.7583333333333, 'average_query_length': 55.103389830508476, 'num_documents': 240, 'num_queries': 1180, 'average_relevant_docs_per_query': 1.0}, 'tr': {'average_document_length': 788.3, 'average_query_length': 60.876689189189186, 'num_documents': 240, 'num_queries': 1184, 'average_relevant_docs_per_query': 1.0}, 'vi': {'average_document_length': 803.9083333333333, 'average_query_length': 61.62859560067682, 'num_documents': 240, 'num_queries': 1182, 'average_relevant_docs_per_query': 1.0}, 'zh': {'average_document_length': 252.4, 'average_query_length': 18.460626587637595, 'num_documents': 240, 'num_queries': 1181, 'average_relevant_docs_per_query': 1.0}}} |
 | [XStance](https://github.com/ZurichNLP/xstance) | ['deu', 'fra', 'ita'] | PairClassification | s2s | [Social] | {'test': 2048} | {'test': 152.41} |
 | [YahooAnswersTopicsClassification](https://huggingface.co/datasets/yahoo_answers_topics) (Zhang et al., 2015) | ['eng'] | Classification | s2s | [Web] | {'test': 60000} | {'test': 346.35} |
 | [YelpReviewFullClassification](https://arxiv.org/abs/1509.01626) (Zhang et al., 2015) | ['eng'] | Classification | s2s | [Reviews] | {'test': 50000} |  |
@@ -566,1060 +568,1060 @@ The following tables give you an overview of the tasks in MTEB.
 <details>
 
 <!-- TASK LANG TABLE START -->
-| Language | BitextMining | Classification | Clustering | InstructionRetrieval | MultilabelClassification | PairClassification | Reranking | Retrieval | STS | Summarization |
-|---|------|------|------|------|------|------|------|------|------|---|
-| aai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aak | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aau | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aaz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| abs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| abt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| abx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aby | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ace | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| acf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| acm | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| acq | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| acr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| acu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| adz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aeb | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aer | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aey | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| afr | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 |
-| agd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| agg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| agm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| agn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| agr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| agt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| agu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aia | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aii | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ajp | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aka | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ake | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| alp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| alq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| als | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| aly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ame | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| amf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| amh | 3 | 6 | 3 | 0 | 0 | 0 | 0 | 1 | 1 | 0 |
-| amk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| amm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| amn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| amo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| amp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| amr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| amu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| amx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ang | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| anh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| anp | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| anv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aoi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aoj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aom | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| apb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| apc | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| ape | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| apn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| apr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| apu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| apw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| apz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ara | 2 | 12 | 0 | 0 | 0 | 2 | 1 | 5 | 2 | 0 |
-| arb | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 |
-| are | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| arl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| arn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| arp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| arq | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
-| ars | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| ary | 1 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 |
-| arz | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| asm | 5 | 3 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
-| aso | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ast | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ata | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| atb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| atd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| atg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| att | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| auc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| auy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| avt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| awa | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| awb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| awk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| awx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ayr | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| azb | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| aze | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| azg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| azj | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| azz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bak | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bam | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| ban | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bba | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bbb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bbc | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bbr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bch | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bco | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bdd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bef | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bel | 4 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bem | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ben | 7 | 9 | 2 | 0 | 0 | 1 | 2 | 3 | 1 | 0 |
-| beo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ber | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| beu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bew | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bgc | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bgs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bgt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bhb | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bhd | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bhg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bhl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bho | 2 | 2 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
-| bhp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| big | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bjj | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bjk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bjn | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bjp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bjr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bjv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bjz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bkd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bki | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bkq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bkx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| blw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| blz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bmh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bmk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bmr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bmu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bnp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bns | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| boa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bod | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| boj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bos | 3 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| box | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| boy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bpr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bps | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bqc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bqp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bra | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bre | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| brx | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bsj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bsn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bsp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bss | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bug | 2 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| buk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bul | 3 | 4 | 1 | 0 | 1 | 1 | 1 | 2 | 0 | 0 |
-| bus | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bvd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bvr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bxh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| byr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| byx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bzd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bzh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| bzj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| caa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| caf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cak | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cap | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| car | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cat | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| cav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cax | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cbc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cbi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cbk | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cbr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cbs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cbt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cbu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cbv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cco | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ceb | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| cek | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ces | 4 | 5 | 2 | 0 | 1 | 1 | 1 | 2 | 0 | 0 |
-| cgc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cha | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| chd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| chf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| chk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| chq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| chv | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| chz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cjk | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cjo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cjv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ckb | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| cle | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| clu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cme | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cmn | 4 | 10 | 4 | 0 | 0 | 3 | 4 | 10 | 9 | 0 |
-| cmo | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cni | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cnl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cnt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| code | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 19 | 0 | 0 |
-| cof | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| con | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cor | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cot | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cpa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cpb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cpc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cpu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cpy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| crh | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| crn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| crx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| csb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cso | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| csy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cta | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cth | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ctp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ctu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cub | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cuc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cuk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cut | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cux | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cwe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cya | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| cym | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| daa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dad | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dan | 5 | 9 | 2 | 0 | 1 | 0 | 1 | 5 | 0 | 0 |
-| ded | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| deu | 6 | 14 | 7 | 0 | 1 | 6 | 2 | 17 | 4 | 0 |
-| dgc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dgr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dgz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dhg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dif | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dik | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| div | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dji | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| djk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| djr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dob | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| doi | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dov | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dsb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dtp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dwr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dww | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dwy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dyu | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dza | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| dzo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ebk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eko | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ell | 3 | 6 | 1 | 0 | 1 | 2 | 0 | 3 | 0 | 0 |
-| emi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| emp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eng | 16 | 143 | 16 | 3 | 1 | 8 | 7 | 71 | 13 | 1 |
-| enq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| epo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ese | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| esk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| est | 2 | 2 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 |
-| etr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eus | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| ewe | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| faa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fao | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 |
-| far | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fas | 1 | 4 | 0 | 0 | 0 | 1 | 2 | 3 | 0 | 0 |
-| ffm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fij | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fil | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fin | 3 | 5 | 1 | 0 | 1 | 1 | 2 | 2 | 1 | 0 |
-| fon | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| for | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fra | 7 | 13 | 8 | 0 | 1 | 5 | 3 | 12 | 4 | 1 |
-| fry | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fuc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fue | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fuf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fuh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fur | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fuv | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| gah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gam | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gaw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gaz | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| gbm | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gdn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gdr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| geb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gfk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ghs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gla | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gle | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| glg | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| glk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| glv | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gmv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gng | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gnn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gnw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gof | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gom | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| grc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| grn | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| gsw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gub | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| guh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| guj | 6 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
-| gul | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gum | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gun | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| guo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gup | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gux | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gvc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gvf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gvs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gwi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gym | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| gyr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hat | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| hau | 4 | 5 | 3 | 0 | 0 | 0 | 0 | 1 | 1 | 0 |
-| haw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hbo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hch | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| heb | 4 | 5 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| heg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hin | 9 | 12 | 2 | 0 | 0 | 1 | 2 | 8 | 2 | 0 |
-| hix | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hla | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hlt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hmn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hmo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hne | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hns | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hot | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hrv | 4 | 3 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 |
-| hsb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hto | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hub | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hun | 5 | 3 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 |
-| hus | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| huu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| huv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| hye | 3 | 3 | 1 | 0 | 0 | 1 | 0 | 1 | 0 | 0 |
-| ian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ibo | 3 | 5 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| ido | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ign | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ikk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ikw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ile | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ilo | 2 | 1 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| imo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ina | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| inb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ind | 6 | 7 | 1 | 0 | 0 | 1 | 1 | 1 | 1 | 0 |
-| ino | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| iou | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ipi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| isl | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| isn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ita | 5 | 9 | 1 | 0 | 1 | 2 | 1 | 5 | 3 | 0 |
-| iws | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ixl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| jac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| jae | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| jao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| jav | 4 | 7 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| jic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| jid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| jiv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| jni | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| jpn | 5 | 8 | 3 | 0 | 0 | 1 | 1 | 9 | 2 | 0 |
-| jvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kab | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kac | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| kam | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kan | 6 | 7 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
-| kaq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kas | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kat | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 2 | 0 | 0 |
-| kaz | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| kbc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kbh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kbm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kbp | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kbq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kdc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kde | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kdl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kea | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| kek | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ken | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kew | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kfg | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kfy | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kgf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kgk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kgp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| khk | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| khm | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| khs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| khz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kik | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kin | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 |
-| kir | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| kiw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kiz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kje | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kjs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kkc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kkl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| klt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| klv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kmb | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kmg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kmh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kmk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kmo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kmr | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kms | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kmu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| knc | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kne | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| knf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| knj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| knv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kon | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kor | 4 | 8 | 1 | 0 | 1 | 2 | 1 | 6 | 3 | 0 |
-| kos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kpf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kpg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kpj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kpr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kpw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kpx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kqa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kqc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kqf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kql | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kqw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| krc | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ksd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ksj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ksr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ktm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kto | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kud | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kue | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kup | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kur | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kvg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kwd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kwf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kwi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kwj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kyc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kyf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kyg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kyq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kyz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kze | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kzj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lao | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| lat | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lav | 1 | 2 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
-| lbb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lbk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lcm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| leu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lex | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lfn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lgl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lif | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lij | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lim | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lin | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| lit | 4 | 1 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 |
-| llg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lmo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ltg | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ltz | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lua | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lug | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| luo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| lus | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| lvs | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| lww | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| maa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mad | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mag | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mai | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| maj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mak | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mal | 7 | 7 | 2 | 0 | 0 | 0 | 0 | 2 | 1 | 0 |
-| mam | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| maq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mar | 7 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 2 | 0 |
-| mau | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| max | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| maz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mbb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mbc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mbh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mbj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mbl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mbs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mbt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mca | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mcb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mcd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mcf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mco | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mcp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mcq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mcr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mdy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| med | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mee | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mek | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| meq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| met | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| meu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mey | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mgc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mgh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mgw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mhl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mhr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mib | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mie | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mig | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mih | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mil | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| min | 3 | 4 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mio | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mir | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| miz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mjc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mkd | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| mkj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mkl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mkn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mks | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mle | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mlg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mlh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mlp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mlt | 2 | 2 | 2 | 0 | 2 | 0 | 0 | 1 | 0 | 0 |
-| mmo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mmx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mna | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mni | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mon | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mos | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mox | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mph | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mpj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mpm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mpp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mps | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mpt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mpx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mqb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mqj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mri | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| msa | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| msb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| msc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| msk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| msm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| msy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mti | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mto | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mui | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mup | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mux | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| muy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mva | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mwc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mwe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mwf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mwp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mwr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mxb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mxp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mxq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mxt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mya | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| myk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| myu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| myw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| myy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| mzz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| naf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nak | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nas | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nbl | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nbq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nca | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nch | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ncj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ncl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ncu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nde | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ndg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ndj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nds | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nep | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nfa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ngp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ngu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nhe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nhg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nhi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nho | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nhr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nhu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nhw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nhy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nif | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nii | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nij | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nin | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nko | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nld | 6 | 6 | 1 | 0 | 1 | 0 | 1 | 2 | 2 | 0 |
-| nlg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nna | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nno | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nnq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| noa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nob | 4 | 7 | 5 | 0 | 0 | 0 | 0 | 3 | 0 | 0 |
-| noe | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nor | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
-| not | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nou | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nov | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| npi | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| npl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nqo | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nsn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nso | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| nss | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ntj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ntp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ntu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nus | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nuy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nvm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nwi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nya | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| nys | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| nyu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| obo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| oci | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| okv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| omw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ong | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ons | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ood | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| opm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ori | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| orm | 1 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| orv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ory | 5 | 4 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
-| ote | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| otm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| otn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| otq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ots | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pad | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pag | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pam | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pan | 6 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 |
-| pao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pap | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pbt | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| pcm | 1 | 4 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pes | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| pib | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pio | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pir | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| piu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pjt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pls | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| plt | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| plu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pma | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pms | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| poe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| poh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| poi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pol | 4 | 11 | 4 | 0 | 1 | 4 | 0 | 13 | 4 | 0 |
-| pon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| por | 4 | 9 | 1 | 0 | 2 | 2 | 1 | 5 | 3 | 0 |
-| poy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ppo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| prf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| prs | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ptp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ptu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pus | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| pwg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| qub | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| quc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| quf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| quh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| qul | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| qup | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| quy | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| qvc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| qve | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| qvh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| qvm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| qvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| qvs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| qvw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| qvz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| qwh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| qxh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| qxn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| qxo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| rai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| raj | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| reg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| rej | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| rgu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| rkb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| rmc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| rmy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| rom | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ron | 5 | 6 | 1 | 0 | 1 | 0 | 1 | 3 | 1 | 0 |
-| roo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| rop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| row | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| rro | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ruf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| rug | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| run | 1 | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| rus | 5 | 13 | 6 | 0 | 2 | 4 | 2 | 8 | 4 | 0 |
-| rwo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sag | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sah | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| san | 5 | 3 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
-| sat | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sbe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sbk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sbs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| scn | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sco | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| seh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sey | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sgb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sgz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| shi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| shj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| shn | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| shp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sim | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sin | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| sja | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| slk | 3 | 3 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 |
-| sll | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| slv | 3 | 4 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 |
-| smk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| smo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sna | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| snc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| snd | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| snn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| snp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| snx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sny | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| som | 3 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| soq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sot | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| soy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| spa | 4 | 13 | 4 | 0 | 1 | 2 | 1 | 11 | 4 | 0 |
-| spl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| spm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| spp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sps | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| spy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sqi | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| srd | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| srm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| srn | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| srp | 4 | 1 | 1 | 0 | 0 | 0 | 1 | 2 | 0 | 0 |
-| srq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ssd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ssg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ssw | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| ssx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| stp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sua | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sue | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sun | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| sus | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| suz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| svk | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| swa | 1 | 6 | 2 | 0 | 0 | 1 | 1 | 0 | 0 | 0 |
-| swe | 4 | 8 | 3 | 0 | 1 | 1 | 1 | 4 | 0 | 0 |
-| swg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| swh | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| swp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| sxb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| szl | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| taj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tam | 7 | 7 | 2 | 0 | 0 | 1 | 0 | 3 | 1 | 0 |
-| taq | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tat | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| taw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tbc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tbf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tbg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tbo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tbz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tca | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tcs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tcz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tdt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tee | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tel | 7 | 7 | 2 | 0 | 0 | 0 | 1 | 2 | 2 | 0 |
-| ter | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tet | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tew | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tfr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tgk | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| tgl | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| tgo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tgp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tha | 4 | 8 | 1 | 0 | 0 | 1 | 1 | 3 | 0 | 0 |
-| tif | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tim | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tir | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| tiw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tiy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tke | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tku | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tlf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tmd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tna | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tnc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tnk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tnn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tnp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| toc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tod | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tof | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| toj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ton | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| too | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| top | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tpa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tpi | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tpt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tpz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| trc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tsn | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| tso | 1 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| tsw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ttc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tte | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tuc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tue | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tuf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tuk | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tum | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tuo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tur | 4 | 7 | 1 | 0 | 0 | 2 | 0 | 3 | 2 | 0 |
-| tvk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| twi | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| txq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| txu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tyv | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tzj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tzl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tzm | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| tzo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ubr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ubu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| udu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| uig | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ukr | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| uli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ulk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| umb | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| upv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ura | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| urb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| urd | 7 | 8 | 2 | 0 | 0 | 0 | 0 | 1 | 1 | 0 |
-| uri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| urt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| urw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| usa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| usp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| uvh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| uvl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| uzb | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| uzn | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| vec | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ven | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| vid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| vie | 5 | 6 | 1 | 0 | 0 | 1 | 0 | 5 | 0 | 0 |
-| viv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| vmy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| waj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wal | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wap | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| war | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| wat | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wbi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wbp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wed | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wer | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wim | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wiu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wiv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wln | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wmt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wmw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wnc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wnu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wol | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| wos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wrk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wro | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wrs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wsk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wuu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| wuv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| xav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| xbi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| xed | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| xho | 3 | 3 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| xla | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| xnn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| xon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| xsi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| xtd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| xtm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yaa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yad | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yal | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yap | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yaq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yby | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ycn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ydd | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yka | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yle | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yml | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yor | 4 | 5 | 3 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
-| yrb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yre | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yss | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yue | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yuj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yut | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yuw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| yva | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zaa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zad | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zaj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zam | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zap | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zar | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zas | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zat | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zaw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zca | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zga | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zho | 2 | 2 | 1 | 0 | 0 | 1 | 1 | 7 | 0 | 0 |
-| zia | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ziw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zlm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zpc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zpl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zpm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zpo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zpq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zpu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zpv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zpz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zsm | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| zsr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ztq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zul | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
-| zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1394 | 793 | 304 | 3 | 28 | 67 | 46 | 356 | 85 | 2 |
+| Language | BitextMining | Classification | Clustering | InstructionRetrieval | MultilabelClassification | PairClassification | Reranking | Retrieval | STS | Speed | Summarization |
+|---|------|------|------|------|------|------|------|------|------|------|---|
+| aai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aak | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aau | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aaz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| abs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| abt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| abx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aby | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ace | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| acf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| acm | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| acq | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| acr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| acu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| adz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aeb | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aer | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aey | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| afr | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+| agd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| agg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| agm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| agn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| agr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| agt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| agu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aia | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aii | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ajp | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aka | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ake | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| alp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| alq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| als | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| aly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ame | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amh | 3 | 6 | 3 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+| amk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ang | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| anh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| anp | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| anv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aoi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aoj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aom | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| apb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| apc | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| ape | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| apn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| apr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| apu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| apw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| apz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ara | 2 | 12 | 0 | 0 | 0 | 2 | 1 | 6 | 2 | 0 | 0 |
+| arb | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 |
+| are | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| arl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| arn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| arp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| arq | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| ars | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| ary | 1 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+| arz | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| asm | 5 | 3 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 |
+| aso | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ast | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ata | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| atb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| atd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| atg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| att | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| auc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| auy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| avt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| awa | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| awb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| awk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| awx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ayr | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| azb | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aze | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| azg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| azj | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| azz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bak | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bam | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| ban | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bba | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bbb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bbc | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bbr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bch | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bco | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bdd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bef | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bel | 4 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bem | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ben | 7 | 9 | 2 | 0 | 0 | 1 | 2 | 4 | 1 | 0 | 0 |
+| beo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ber | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| beu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bew | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bgc | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bgs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bgt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bhb | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bhd | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bhg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bhl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bho | 2 | 2 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| bhp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| big | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bjj | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bjk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bjn | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bjp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bjr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bjv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bjz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bkd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bki | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bkq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bkx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| blw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| blz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bmh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bmk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bmr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bmu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bnp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bns | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| boa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bod | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| boj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bos | 3 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| box | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| boy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bpr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bps | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bqc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bqp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bra | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bre | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| brx | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bsj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bsn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bsp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bss | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bug | 2 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| buk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bul | 3 | 4 | 1 | 0 | 1 | 1 | 1 | 2 | 0 | 0 | 0 |
+| bus | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bvd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bvr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bxh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| byr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| byx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bzd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bzh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bzj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| caa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| caf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cak | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cap | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| car | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cat | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| cav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cax | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbk | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cco | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ceb | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| cek | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ces | 4 | 5 | 2 | 0 | 1 | 1 | 1 | 2 | 0 | 0 | 0 |
+| cgc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cha | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| chd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| chf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| chk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| chq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| chv | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| chz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cjk | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cjo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cjv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ckb | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| cle | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| clu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cme | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cmn | 4 | 10 | 4 | 0 | 0 | 3 | 4 | 10 | 9 | 0 | 0 |
+| cmo | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cni | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cnl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cnt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| code | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 19 | 0 | 0 | 0 |
+| cof | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| con | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cor | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cot | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cpa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cpb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cpc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cpu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cpy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| crh | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| crn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| crx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| csb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cso | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| csy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cta | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cth | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ctp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ctu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cub | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cuc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cuk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cut | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cux | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cwe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cya | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cym | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| daa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dad | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dan | 5 | 9 | 2 | 0 | 1 | 0 | 1 | 5 | 0 | 0 | 0 |
+| ded | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| deu | 6 | 14 | 7 | 0 | 1 | 6 | 2 | 17 | 4 | 0 | 0 |
+| dgc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dgr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dgz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dhg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dif | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dik | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| div | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dji | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| djk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| djr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dob | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| doi | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dov | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dsb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dtp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dwr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dww | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dwy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dyu | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dza | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dzo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ebk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| eko | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ell | 3 | 6 | 1 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 |
+| emi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| emp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| eng | 16 | 143 | 16 | 3 | 1 | 8 | 7 | 72 | 13 | 2 | 1 |
+| enq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| epo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| eri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ese | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| esk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| est | 2 | 2 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 |
+| etr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| eus | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| ewe | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| faa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fao | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| far | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fas | 1 | 4 | 0 | 0 | 0 | 1 | 2 | 4 | 0 | 0 | 0 |
+| ffm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fij | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fil | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fin | 3 | 5 | 1 | 0 | 1 | 1 | 2 | 3 | 1 | 0 | 0 |
+| fon | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| for | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fra | 7 | 13 | 8 | 0 | 1 | 5 | 3 | 13 | 4 | 0 | 1 |
+| fry | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fuc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fue | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fuf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fuh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fur | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fuv | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| gah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gam | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gaw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gaz | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| gbm | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gdn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gdr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| geb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gfk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ghs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gla | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gle | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| glg | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| glk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| glv | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gmv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gng | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gnn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gnw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gof | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gom | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| grc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| grn | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| gsw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gub | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| guh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| guj | 6 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 |
+| gul | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gum | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gun | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| guo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gup | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gux | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gvc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gvf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gvs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gwi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gym | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gyr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hat | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| hau | 4 | 5 | 3 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+| haw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hbo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hch | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| heb | 4 | 5 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| heg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hin | 9 | 12 | 2 | 0 | 0 | 1 | 2 | 9 | 2 | 0 | 0 |
+| hix | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hla | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hlt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hmn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hmo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hne | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hns | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hot | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hrv | 4 | 3 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 |
+| hsb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hto | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hub | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hun | 5 | 3 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 |
+| hus | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| huu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| huv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hye | 3 | 3 | 1 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 0 |
+| ian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ibo | 3 | 5 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| ido | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ign | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ikk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ikw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ile | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ilo | 2 | 1 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| imo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ina | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| inb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ind | 6 | 7 | 1 | 0 | 0 | 1 | 1 | 2 | 1 | 0 | 0 |
+| ino | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| iou | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ipi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| isl | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| isn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ita | 5 | 9 | 1 | 0 | 1 | 2 | 1 | 5 | 3 | 0 | 0 |
+| iws | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ixl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jae | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jav | 4 | 7 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| jic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jiv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jni | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jpn | 5 | 8 | 3 | 0 | 0 | 1 | 2 | 10 | 2 | 0 | 0 |
+| jvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kab | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kac | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| kam | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kan | 6 | 7 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 |
+| kaq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kas | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kat | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 |
+| kaz | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| kbc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kbh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kbm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kbp | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kbq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kdc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kde | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kdl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kea | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| kek | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ken | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kew | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kfg | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kfy | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kgf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kgk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kgp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| khk | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| khm | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| khs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| khz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kik | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kin | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+| kir | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| kiw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kiz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kje | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kjs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kkc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kkl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| klt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| klv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kmb | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kmg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kmh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kmk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kmo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kmr | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kms | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kmu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| knc | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kne | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| knf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| knj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| knv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kon | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kor | 4 | 8 | 1 | 0 | 1 | 2 | 1 | 6 | 3 | 0 | 0 |
+| kos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kpf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kpg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kpj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kpr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kpw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kpx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kqa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kqc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kqf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kql | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kqw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| krc | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ksd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ksj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ksr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ktm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kto | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kud | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kue | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kup | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kur | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kvg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kwd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kwf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kwi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kwj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kyc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kyf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kyg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kyq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kyz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kze | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kzj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lao | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| lat | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lav | 1 | 2 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lbb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lbk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lcm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| leu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lex | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lfn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lgl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lif | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lij | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lim | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lin | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| lit | 4 | 1 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 |
+| llg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lmo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ltg | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ltz | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lua | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lug | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| luo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| lus | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lvs | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| lww | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| maa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mad | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mag | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mai | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| maj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mak | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mal | 7 | 7 | 2 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 |
+| mam | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| maq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mar | 7 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 2 | 0 | 0 |
+| mau | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| max | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| maz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mbb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mbc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mbh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mbj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mbl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mbs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mbt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mca | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mcb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mcd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mcf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mco | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mcp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mcq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mcr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mdy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| med | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mee | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mek | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| meq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| met | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| meu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mey | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mgc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mgh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mgw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mhl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mhr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mib | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mie | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mig | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mih | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mil | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| min | 3 | 4 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mio | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mir | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| miz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mjc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mkd | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| mkj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mkl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mkn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mks | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mle | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mlg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mlh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mlp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mlt | 2 | 2 | 2 | 0 | 2 | 0 | 0 | 1 | 0 | 0 | 0 |
+| mmo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mmx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mna | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mni | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mon | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mos | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mox | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mph | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mpj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mpm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mpp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mps | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mpt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mpx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mqb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mqj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mri | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| msa | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| msb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| msc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| msk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| msm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| msy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mti | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mto | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mui | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mup | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mux | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| muy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mva | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mwc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mwe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mwf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mwp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mwr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mxb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mxp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mxq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mxt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mya | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| myk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| myu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| myw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| myy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mzz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| naf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nak | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nas | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nbl | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nbq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nca | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nch | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ncj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ncl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ncu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nde | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ndg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ndj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nds | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nep | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nfa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ngp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ngu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nhe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nhg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nhi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nho | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nhr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nhu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nhw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nhy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nif | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nii | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nij | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nin | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nko | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nld | 6 | 6 | 1 | 0 | 1 | 0 | 1 | 2 | 2 | 0 | 0 |
+| nlg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nna | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nno | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nnq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| noa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nob | 4 | 7 | 5 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 |
+| noe | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nor | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 |
+| not | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nou | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nov | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| npi | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| npl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nqo | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nsn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nso | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| nss | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ntj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ntp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ntu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nus | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nuy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nvm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nwi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nya | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| nys | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nyu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| obo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| oci | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| okv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| omw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ong | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ons | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ood | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| opm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ori | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| orm | 1 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| orv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ory | 5 | 4 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 |
+| ote | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| otm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| otn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| otq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ots | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pad | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pag | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pam | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pan | 6 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 |
+| pao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pap | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pbt | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| pcm | 1 | 4 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pes | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| pib | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pio | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pir | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| piu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pjt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pls | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| plt | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| plu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pma | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pms | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| poe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| poh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| poi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pol | 4 | 11 | 4 | 0 | 1 | 4 | 0 | 13 | 4 | 0 | 0 |
+| pon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| por | 4 | 9 | 1 | 0 | 2 | 2 | 1 | 5 | 3 | 0 | 0 |
+| poy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ppo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| prf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| prs | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ptp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ptu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pus | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pwg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qub | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| quc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| quf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| quh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qul | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qup | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| quy | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qvc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qve | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qvh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qvm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qvs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qvw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qvz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qwh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qxh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qxn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qxo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| raj | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| reg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rej | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rgu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rkb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rmc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rmy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rom | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ron | 5 | 6 | 1 | 0 | 1 | 0 | 1 | 3 | 1 | 0 | 0 |
+| roo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| row | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rro | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ruf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rug | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| run | 1 | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rus | 5 | 13 | 6 | 0 | 2 | 4 | 2 | 9 | 4 | 0 | 0 |
+| rwo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sag | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sah | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| san | 5 | 3 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| sat | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sbe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sbk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sbs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| scn | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sco | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| seh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sey | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sgb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sgz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| shi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| shj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| shn | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| shp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sim | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sin | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| sja | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| slk | 3 | 3 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 |
+| sll | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| slv | 3 | 4 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 |
+| smk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| smo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sna | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| snc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| snd | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| snn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| snp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| snx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sny | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| som | 3 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| soq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sot | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| soy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| spa | 4 | 13 | 4 | 0 | 1 | 2 | 1 | 11 | 4 | 0 | 0 |
+| spl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| spm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| spp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sps | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| spy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sqi | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| srd | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| srm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| srn | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| srp | 4 | 1 | 1 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 0 |
+| srq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ssd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ssg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ssw | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| ssx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| stp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sua | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sue | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sun | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| sus | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| suz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| svk | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| swa | 1 | 6 | 2 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 |
+| swe | 4 | 8 | 3 | 0 | 1 | 1 | 1 | 4 | 0 | 0 | 0 |
+| swg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| swh | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| swp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sxb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| szl | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| taj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tam | 7 | 7 | 2 | 0 | 0 | 1 | 0 | 3 | 1 | 0 | 0 |
+| taq | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tat | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| taw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tbc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tbf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tbg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tbo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tbz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tca | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tcs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tcz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tdt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tee | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tel | 7 | 7 | 2 | 0 | 0 | 0 | 1 | 3 | 2 | 0 | 0 |
+| ter | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tet | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tew | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tfr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tgk | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| tgl | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| tgo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tgp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tha | 4 | 8 | 1 | 0 | 0 | 1 | 1 | 4 | 0 | 0 | 0 |
+| tif | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tim | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tir | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| tiw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tiy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tke | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tku | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tlf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tmd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tna | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tnc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tnk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tnn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tnp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| toc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tod | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tof | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| toj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ton | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| too | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| top | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tpa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tpi | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tpt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tpz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| trc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tsn | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| tso | 1 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| tsw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ttc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tte | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tuc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tue | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tuf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tuk | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tum | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tuo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tur | 4 | 7 | 1 | 0 | 0 | 2 | 0 | 3 | 2 | 0 | 0 |
+| tvk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| twi | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| txq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| txu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tyv | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tzj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tzl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tzm | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tzo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ubr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ubu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| udu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| uig | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ukr | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| uli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ulk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| umb | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| upv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ura | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| urb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| urd | 7 | 8 | 2 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+| uri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| urt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| urw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| usa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| usp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| uvh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| uvl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| uzb | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| uzn | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| vec | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ven | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| vid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| vie | 5 | 6 | 1 | 0 | 0 | 1 | 0 | 5 | 0 | 0 | 0 |
+| viv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| vmy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| waj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wal | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wap | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| war | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| wat | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wbi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wbp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wed | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wer | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wim | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wiu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wiv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wln | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wmt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wmw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wnc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wnu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wol | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| wos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wrk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wro | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wrs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wsk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wuu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wuv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xbi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xed | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xho | 3 | 3 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| xla | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xnn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xsi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xtd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xtm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yaa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yad | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yal | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yap | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yaq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yby | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ycn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ydd | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yka | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yle | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yml | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yor | 4 | 5 | 3 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 0 |
+| yrb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yre | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yss | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yue | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yuj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yut | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yuw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yva | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zaa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zad | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zaj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zam | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zap | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zar | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zas | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zat | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zaw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zca | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zga | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zho | 2 | 2 | 1 | 0 | 0 | 1 | 1 | 8 | 0 | 0 | 0 |
+| zia | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ziw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zlm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zsm | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| zsr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ztq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zul | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Total | 1394 | 793 | 304 | 3 | 28 | 67 | 47 | 371 | 85 | 2 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>

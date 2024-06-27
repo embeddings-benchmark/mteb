@@ -6,6 +6,8 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 class ArguAna(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="ArguAna",
         description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
@@ -39,5 +41,13 @@ class ArguAna(AbsTaskRetrieval):
   url = {http://www.cl.uni-heidelberg.de/~riezler/publications/papers/ECIR2016.pdf}
 }""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={
+            "test": {
+                "average_document_length": 1029.2327645838136,
+                "average_query_length": 1192.7204836415362,
+                "num_documents": 8674,
+                "num_queries": 1406,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )
