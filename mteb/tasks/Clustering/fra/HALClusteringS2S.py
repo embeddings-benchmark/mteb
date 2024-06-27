@@ -14,7 +14,7 @@ NUM_SAMPLES = 2048
 
 
 class HALClusteringS2S(AbsTaskClustering):
-    superseeded_by = "HALClusteringS2S.v2"
+    superseded_by = "HALClusteringS2S.v2"
 
     metadata = TaskMetadata(
         name="HALClusteringS2S",

@@ -15,7 +15,7 @@ tests_folder = Path(__file__).parent
 
 
 class DummyTask(AbsTask):
-    superseeded_by = "newer_task"
+    superseded_by = "newer_task"
     metadata = mteb.TaskMetadata(
         name="dummy_task",
         description="dummy task for testing",

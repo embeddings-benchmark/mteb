@@ -73,7 +73,7 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
 
 
 class RedditClustering(AbsTaskClustering):
-    superseeded_by = "RedditClustering.v2"
+    superseded_by = "RedditClustering.v2"
     metadata = TaskMetadata(
         name="RedditClustering",
         description="Clustering of titles from 199 subreddits. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",

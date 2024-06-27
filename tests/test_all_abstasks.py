@@ -88,7 +88,7 @@ def test_dataset_availability():
 def test_superseeded_dataset_exists():
     tasks = mteb.get_tasks(exclude_superseeded=False)
     for task in tasks:
-        if task.superseeded_by:
+        if task.superseded_by:
             assert (
-                task.superseeded_by in TASKS_REGISTRY
-            ), f"{task} is superseeded by {task.superseeded_by} but {task.superseeded_by} is not in the TASKS_REGISTRY"
+                task.superseded_by in TASKS_REGISTRY
+            ), f"{task} is superseeded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"
