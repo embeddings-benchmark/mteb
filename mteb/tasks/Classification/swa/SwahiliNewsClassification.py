@@ -9,10 +9,10 @@ class SwahiliNewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SwahiliNewsClassification",
         description="Dataset for Swahili News Classification, categorized with 5 domains. Building and Optimizing Swahili Language Models: Techniques, Embeddings, and Datasets",
-        reference="https://www.sartify.com/",
+        reference="https://zenodo.org/records/4300294",
         dataset={
             "path": "Mollel/SwahiliNewsClassification",
-            "revision": "fadfd9f2989740dc6c9aa020cac97b318ec41cc3",
+            "revision": "5bc5ef41a6232c5e3c84e1e9615099b70922d7be",
         },
         type="Classification",
         category="s2s",
@@ -31,7 +31,7 @@ class SwahiliNewsClassification(AbsTaskClassification):
         bibtex_citation="""
         """,
         n_samples={"train": 2048},
-        avg_character_length={"train": 2107.1962725684334},
+        avg_character_length={"train": 2438.2308135942326},
     )
 
     def dataset_transform(self) -> None:
