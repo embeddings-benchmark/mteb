@@ -256,7 +256,8 @@ def create_meta(args: argparse.Namespace) -> None:
                 metrics = [
                     {
                         "type": k,
-                        "value": v,
+                        "value": v
+                        * 100,  # convert to percentage (for consistency with the leaderboard and to make it more readable)
                     }
                     for k, v in hf_subset_score.items()
                     if isinstance(v, (int, float))
