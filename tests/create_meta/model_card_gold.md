@@ -16,7 +16,7 @@ model-index:
     - type: map_at_100
       value: 0.0
     - type: map_at_1000
-      value: 6.0e-05
+      value: 0.006
     - type: map_at_3
       value: 0.0
     - type: map_at_5
@@ -28,7 +28,7 @@ model-index:
     - type: mrr_at_100
       value: 0.0
     - type: mrr_at_1000
-      value: 6.0e-05
+      value: 0.006
     - type: mrr_at_3
       value: 0.0
     - type: mrr_at_5
@@ -40,7 +40,7 @@ model-index:
     - type: ndcg_at_100
       value: 0.0
     - type: ndcg_at_1000
-      value: 0.0021
+      value: 0.21
     - type: ndcg_at_3
       value: 0.0
     - type: ndcg_at_5
@@ -52,7 +52,7 @@ model-index:
     - type: precision_at_100
       value: 0.0
     - type: precision_at_1000
-      value: 2.0e-05
+      value: 0.002
     - type: precision_at_3
       value: 0.0
     - type: precision_at_5
@@ -64,7 +64,7 @@ model-index:
     - type: recall_at_100
       value: 0.0
     - type: recall_at_1000
-      value: 0.01802
+      value: 1.802
     - type: recall_at_3
       value: 0.0
     - type: recall_at_5
@@ -81,15 +81,15 @@ model-index:
       type: strombergnlp/bornholmsk_parallel
     metrics:
     - type: accuracy
-      value: 0.36
+      value: 36.0
     - type: f1
-      value: 0.2968132161955691
+      value: 29.68132161955691
     - type: main_score
-      value: 0.2968132161955691
+      value: 29.68132161955691
     - type: precision
-      value: 0.27690919913419915
+      value: 27.690919913419915
     - type: recall
-      value: 0.36
+      value: 36.0
     task:
       type: BitextMining
   - dataset:
@@ -100,19 +100,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.05006610360999117
+      value: 5.006610360999117
     - type: cosine_spearman
-      value: 0.2263866797712348
+      value: 22.63866797712348
     - type: manhattan_pearson
-      value: 0.13260328120447723
+      value: 13.260328120447722
     - type: manhattan_spearman
-      value: 0.22340169287120717
+      value: 22.340169287120716
     - type: euclidean_pearson
-      value: 0.13082283087945362
+      value: 13.082283087945362
     - type: euclidean_spearman
-      value: 0.2263866797712348
+      value: 22.63866797712348
     - type: main_score
-      value: 0.2263866797712348
+      value: 22.63866797712348
     task:
       type: STS
   - dataset:
@@ -123,19 +123,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.26596033966146115
+      value: 26.596033966146116
     - type: cosine_spearman
-      value: 0.31044353994772356
+      value: 31.044353994772354
     - type: manhattan_pearson
-      value: 0.21718468273577896
+      value: 21.718468273577894
     - type: manhattan_spearman
-      value: 0.311979155955977
+      value: 31.197915595597696
     - type: euclidean_pearson
-      value: 0.2151728902500591
+      value: 21.51728902500591
     - type: euclidean_spearman
-      value: 0.31044353994772356
+      value: 31.044353994772354
     - type: main_score
-      value: 0.31044353994772356
+      value: 31.044353994772354
     task:
       type: STS
   - dataset:
@@ -146,19 +146,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.47545312366545117
+      value: 47.54531236654512
     - type: cosine_spearman
-      value: 0.44038685024247604
+      value: 44.038685024247606
     - type: manhattan_pearson
-      value: 0.4810217367438755
+      value: 48.10217367438755
     - type: manhattan_spearman
-      value: 0.44442850465339095
+      value: 44.4428504653391
     - type: euclidean_pearson
-      value: 0.4846975590869453
+      value: 48.46975590869453
     - type: euclidean_spearman
-      value: 0.44038685024247604
+      value: 44.038685024247606
     - type: main_score
-      value: 0.44038685024247604
+      value: 44.038685024247606
     task:
       type: STS
   - dataset:
@@ -169,19 +169,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.26472844763068937
+      value: 26.472844763068938
     - type: cosine_spearman
-      value: 0.3006758748207823
+      value: 30.067587482078228
     - type: manhattan_pearson
-      value: 0.25808959063835424
+      value: 25.808959063835424
     - type: manhattan_spearman
-      value: 0.27996294873002153
+      value: 27.996294873002153
     - type: euclidean_pearson
-      value: 0.26872307920750726
+      value: 26.87230792075073
     - type: euclidean_spearman
-      value: 0.3006758748207823
+      value: 30.067587482078228
     - type: main_score
-      value: 0.3006758748207823
+      value: 30.067587482078228
     task:
       type: STS
   - dataset:
@@ -192,19 +192,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.0702656697163116
+      value: 7.026566971631159
     - type: cosine_spearman
-      value: 0.04927056559940413
+      value: 4.9270565599404135
     - type: manhattan_pearson
-      value: 0.0901762174854638
+      value: 9.01762174854638
     - type: manhattan_spearman
-      value: 0.07359790736410993
+      value: 7.359790736410993
     - type: euclidean_pearson
-      value: 0.06729027056926624
+      value: 6.729027056926625
     - type: euclidean_spearman
-      value: 0.04927056559940413
+      value: 4.9270565599404135
     - type: main_score
-      value: 0.04927056559940413
+      value: 4.9270565599404135
     task:
       type: STS
   - dataset:
@@ -215,19 +215,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.6709882753030891
+      value: 67.09882753030891
     - type: cosine_spearman
-      value: 0.6721465212910986
+      value: 67.21465212910987
     - type: manhattan_pearson
-      value: 0.6841388868877885
+      value: 68.41388868877884
     - type: manhattan_spearman
-      value: 0.6783615682571867
+      value: 67.83615682571867
     - type: euclidean_pearson
-      value: 0.6821374069918402
+      value: 68.21374069918403
     - type: euclidean_spearman
-      value: 0.6721465212910986
+      value: 67.21465212910987
     - type: main_score
-      value: 0.6721465212910986
+      value: 67.21465212910987
     task:
       type: STS
   - dataset:
@@ -238,19 +238,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.4433815143022264
+      value: 44.33815143022264
     - type: cosine_spearman
-      value: 0.5477772552456677
+      value: 54.77772552456677
     - type: manhattan_pearson
-      value: 0.4929424073081744
+      value: 49.29424073081744
     - type: manhattan_spearman
-      value: 0.5525969655269095
+      value: 55.259696552690954
     - type: euclidean_pearson
-      value: 0.48483578263920635
+      value: 48.483578263920634
     - type: euclidean_spearman
-      value: 0.5477772552456677
+      value: 54.77772552456677
     - type: main_score
-      value: 0.5477772552456677
+      value: 54.77772552456677
     task:
       type: STS
   - dataset:
@@ -261,19 +261,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.4993601240112664
+      value: 49.93601240112664
     - type: cosine_spearman
-      value: 0.5341895837272506
+      value: 53.41895837272506
     - type: manhattan_pearson
-      value: 0.4986265183075983
+      value: 49.86265183075983
     - type: manhattan_spearman
-      value: 0.5310065931046005
+      value: 53.10065931046005
     - type: euclidean_pearson
-      value: 0.5016469746986203
+      value: 50.16469746986203
     - type: euclidean_spearman
-      value: 0.5341895837272506
+      value: 53.41895837272506
     - type: main_score
-      value: 0.5341895837272506
+      value: 53.41895837272506
     task:
       type: STS
   - dataset:
@@ -284,19 +284,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.42568537775842247
+      value: 42.568537775842245
     - type: cosine_spearman
-      value: 0.44269936659450304
+      value: 44.2699366594503
     - type: manhattan_pearson
-      value: 0.43954212787242286
+      value: 43.954212787242284
     - type: manhattan_spearman
-      value: 0.4432159550471527
+      value: 44.32159550471527
     - type: euclidean_pearson
-      value: 0.4356982813703426
+      value: 43.569828137034264
     - type: euclidean_spearman
-      value: 0.44269936659450304
+      value: 44.2699366594503
     - type: main_score
-      value: 0.44269936659450304
+      value: 44.2699366594503
     task:
       type: STS
   - dataset:
@@ -307,19 +307,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.7064344773137496
+      value: 70.64344773137496
     - type: cosine_spearman
-      value: 0.7700398643056744
+      value: 77.00398643056744
     - type: manhattan_pearson
-      value: 0.7164373853764818
+      value: 71.64373853764818
     - type: manhattan_spearman
-      value: 0.7671158725879226
+      value: 76.71158725879226
     - type: euclidean_pearson
-      value: 0.71583201999231
+      value: 71.58320199923101
     - type: euclidean_spearman
-      value: 0.7700398643056744
+      value: 77.00398643056744
     - type: main_score
-      value: 0.7700398643056744
+      value: 77.00398643056744
     task:
       type: STS
   - dataset:
@@ -330,19 +330,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.5430555900396821
+      value: 54.305559003968206
     - type: cosine_spearman
-      value: 0.50709255283711
+      value: 50.709255283710995
     - type: manhattan_pearson
-      value: 0.5233784187543788
+      value: 52.33784187543789
     - type: manhattan_spearman
-      value: 0.50709255283711
+      value: 50.709255283710995
     - type: euclidean_pearson
-      value: 0.5300660084455784
+      value: 53.00660084455784
     - type: euclidean_spearman
-      value: 0.50709255283711
+      value: 50.709255283710995
     - type: main_score
-      value: 0.50709255283711
+      value: 50.709255283710995
     task:
       type: STS
   - dataset:
@@ -353,19 +353,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.574312835830767
+      value: 57.4312835830767
     - type: cosine_spearman
-      value: 0.6039610834515271
+      value: 60.39610834515271
     - type: manhattan_pearson
-      value: 0.5783823485037898
+      value: 57.83823485037898
     - type: manhattan_spearman
-      value: 0.6037493826031753
+      value: 60.374938260317535
     - type: euclidean_pearson
-      value: 0.5781507077373551
+      value: 57.81507077373551
     - type: euclidean_spearman
-      value: 0.6039610834515271
+      value: 60.39610834515271
     - type: main_score
-      value: 0.6039610834515271
+      value: 60.39610834515271
     task:
       type: STS
   - dataset:
@@ -376,19 +376,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.08000336595206134
+      value: 8.000336595206134
     - type: cosine_spearman
-      value: 0.26768906191975933
+      value: 26.768906191975933
     - type: manhattan_pearson
-      value: 0.01588769366202155
+      value: 1.588769366202155
     - type: manhattan_spearman
-      value: 0.2676300987426348
+      value: 26.76300987426348
     - type: euclidean_pearson
-      value: 0.014181188576056134
+      value: 1.4181188576056134
     - type: euclidean_spearman
-      value: 0.26768906191975933
+      value: 26.768906191975933
     - type: main_score
-      value: 0.26768906191975933
+      value: 26.768906191975933
     task:
       type: STS
   - dataset:
@@ -399,19 +399,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.3508730015173829
+      value: 35.08730015173829
     - type: cosine_spearman
-      value: 0.32797912957778136
+      value: 32.79791295777814
     - type: manhattan_pearson
-      value: 0.36273935331272256
+      value: 36.273935331272256
     - type: manhattan_spearman
-      value: 0.3588704294252439
+      value: 35.88704294252439
     - type: euclidean_pearson
-      value: 0.3454132550386404
+      value: 34.54132550386404
     - type: euclidean_spearman
-      value: 0.32797912957778136
+      value: 32.79791295777814
     - type: main_score
-      value: 0.32797912957778136
+      value: 32.79791295777814
     task:
       type: STS
   - dataset:
@@ -422,19 +422,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.0003100716792233671
+      value: 0.03100716792233671
     - type: cosine_spearman
-      value: 0.14721380413194854
+      value: 14.721380413194854
     - type: manhattan_pearson
-      value: 0.057576102223040736
+      value: 5.7576102223040735
     - type: manhattan_spearman
-      value: 0.1508182690716095
+      value: 15.08182690716095
     - type: euclidean_pearson
-      value: 0.04871526064730011
+      value: 4.871526064730011
     - type: euclidean_spearman
-      value: 0.14721380413194854
+      value: 14.721380413194854
     - type: main_score
-      value: 0.14721380413194854
+      value: 14.721380413194854
     task:
       type: STS
   - dataset:
@@ -445,19 +445,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.20597902459466386
+      value: 20.597902459466386
     - type: cosine_spearman
-      value: 0.3369451080773859
+      value: 33.694510807738595
     - type: manhattan_pearson
-      value: 0.2753029492621081
+      value: 27.530294926210807
     - type: manhattan_spearman
-      value: 0.3374254435313719
+      value: 33.74254435313719
     - type: euclidean_pearson
-      value: 0.2696486278754096
+      value: 26.964862787540962
     - type: euclidean_spearman
-      value: 0.3369451080773859
+      value: 33.694510807738595
     - type: main_score
-      value: 0.3369451080773859
+      value: 33.694510807738595
     task:
       type: STS
   - dataset:
@@ -468,19 +468,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.2312788511141443
+      value: 23.127885111414432
     - type: cosine_spearman
-      value: 0.4492964024177277
+      value: 44.92964024177277
     - type: manhattan_pearson
-      value: 0.3177656358573927
+      value: 31.77656358573927
     - type: manhattan_spearman
-      value: 0.44964763982886374
+      value: 44.964763982886375
     - type: euclidean_pearson
-      value: 0.31061639313469924
+      value: 31.061639313469925
     - type: euclidean_spearman
-      value: 0.4492964024177277
+      value: 44.92964024177277
     - type: main_score
-      value: 0.4492964024177277
+      value: 44.92964024177277
     task:
       type: STS
   - dataset:
@@ -491,19 +491,19 @@ model-index:
       type: mteb/sts22-crosslingual-sts
     metrics:
     - type: cosine_pearson
-      value: 0.37411117415851225
+      value: 37.41111741585122
     - type: cosine_spearman
-      value: 0.41643997417444484
+      value: 41.64399741744448
     - type: manhattan_pearson
-      value: 0.3571015224548175
+      value: 35.71015224548175
     - type: manhattan_spearman
-      value: 0.4146055167345605
+      value: 41.460551673456045
     - type: euclidean_pearson
-      value: 0.36831609277110533
+      value: 36.83160927711053
     - type: euclidean_spearman
-      value: 0.41643997417444484
+      value: 41.64399741744448
     - type: main_score
-      value: 0.41643997417444484
+      value: 41.64399741744448
     task:
       type: STS
 tags:
