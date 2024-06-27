@@ -16,7 +16,7 @@ _SPLITS = ["test"]
 
 
 class BUCCBitextMining(AbsTaskBitextMining, MultilingualTask):
-    superseeded_by = "BUCC.v2"
+    superseded_by = "BUCC.v2"
     metadata = TaskMetadata(
         name="BUCC",
         dataset={

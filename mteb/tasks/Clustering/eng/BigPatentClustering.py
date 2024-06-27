@@ -11,7 +11,7 @@ NUM_SAMPLES = 2048
 
 
 class BigPatentClustering(AbsTaskClustering):
-    superseeded_by = "BigPatentClustering.v2"
+    superseded_by = "BigPatentClustering.v2"
 
     metadata = TaskMetadata(
         name="BigPatentClustering",

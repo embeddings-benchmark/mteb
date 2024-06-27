@@ -8,7 +8,7 @@ NUM_SAMPLES = 2048
 
 
 class BlurbsClusteringP2P(AbsTaskClustering):
-    superseeded_by = "BlurbsClusteringP2P.v2"
+    superseded_by = "BlurbsClusteringP2P.v2"
 
     metadata = TaskMetadata(
         name="BlurbsClusteringP2P",

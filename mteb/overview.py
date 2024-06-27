@@ -57,7 +57,7 @@ def check_is_valid_language(lang: str) -> None:
 
 
 def filter_superseeded_datasets(tasks: list[AbsTask]) -> list[AbsTask]:
-    return [t for t in tasks if t.superseeded_by is None]
+    return [t for t in tasks if t.superseded_by is None]
 
 
 def filter_tasks_by_languages(

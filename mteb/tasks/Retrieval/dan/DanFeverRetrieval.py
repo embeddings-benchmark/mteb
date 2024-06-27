@@ -112,7 +112,7 @@ class DanFeverRetrieval(AbsTaskRetrieval):
 
 class DanFever(AbsTaskRetrieval):
     ignore_identical_ids = True
-    superseeded_by = "DanFeverRetrieval"
+    superseded_by = "DanFeverRetrieval"
 
     metadata = TaskMetadata(
         name="DanFEVER",
