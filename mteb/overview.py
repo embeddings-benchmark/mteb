@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import difflib
 import logging
 from collections import Counter
 from typing import Dict, Set, Type
@@ -226,4 +227,15 @@ def get_task(
     Examples:
         >>> get_task("BornholmBitextMining")
     """
+    if task_name not in TASKS_REGISTRY:
+        close_matches = difflib.get_close_matches(task_name, TASKS_REGISTRY.keys())
+        if close_matches:
+            suggestion = (
+                f"KeyError: '{task_name}' not found. Did you mean: {close_matches[0]}?"
+            )
+        else:
+            suggestion = (
+                f"KeyError: '{task_name}' not found and no similar keys were found."
+            )
+        raise KeyError(suggestion)
     return TASKS_REGISTRY[task_name]().filter_languages(languages, script)
