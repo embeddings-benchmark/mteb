@@ -19,7 +19,7 @@ jobs:
           cache: "pip"
 
       - name: Install dependencies
-        run: make install
+        run: pip install ruff
 
       - name: Lint
         id: lint
