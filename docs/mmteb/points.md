@@ -27,13 +27,13 @@ The possible keys to include is:
 }
 ```
 
-**Note**: The points have been moved to points folder to avoid merge conflicts.
+**Note**: The points have been moved to the points folder to avoid merge conflicts.
 
-Note that coordination and ideation is not included in the points yet, but is used to determine first and last authors.
+Note that coordination and ideation are not included in the points yet, but are used to determine first and last authors.
 
 # Contributor Informations
 
-Please also add your first name and last name are as you want them to appear in a publication. If you do not with to have your name in a publication, please add a note to that effect.
+Please also add your first name and last name are as you want them to appear in a publication. If you do not wish to have your name in a publication, please add a note to that effect.
 
 | GitHub            | First name | Last name  | Email                        | User on openreview   | Affiliations                                          |
 | ----------------- | ---------- | ---------- | ---------------------------- | -------------------- | ----------------------------------------------------- |
@@ -77,7 +77,7 @@ Please also add your first name and last name are as you want them to appear in 
 | SaitejaUtpala     | Saiteja | Utpala  | saitejautpala@gmail.com         | ~Saiteja_Utpala1 | Microsoft Research|
 | mmhamdy     | Mohammed | Hamdy  | mhamdy.res@gmail.com         | ~Mohammed_Hamdy1 | Cohere For AI Community|
 | jupyterjazz       | Saba         | Sturua     | saba.sturua@jina.ai              |     ~Saba_Sturua1      | Jina AI                                                     |
-| Ruqyai       | Ruqiya         | Bin Safi     | ruqiya.binsafi@libfstudy.ac.uk           |    ~Ruqiya_Bin_Safi1       | LIBF : The London Institute of Banking & Finance                                                    |
+| Ruqyai       | Ruqiya         | Bin Safi     | ruqiya.binsafi@libfstudy.ac.uk           |    ~Ruqiya_Bin_Safi1       | LIBF : The London Institute of Banking & Finance                                     
 | kranthigv     | Kranthi Kiran | GV  | kranthi.gv@nyu.edu         | ~Kranthi_Kiran_GV1 | New York University|
 | shreeya-dhakal            | Shreeya     | Dhakal     | ssdhakal57@gmail.com      |                      | Individual Contributor                                                   |
 | dipam7 | Dipam | Vasani | dipam44@gmail.com | ~Dipam_Vasani1 | Individual Contributor                                                  |
@@ -90,10 +90,11 @@ Please also add your first name and last name are as you want them to appear in 
 | jphme             | Jan Philipp| Harries    | jan@ellamind.com             |~Jan_Philipp_Harries1 | ellamind, Germany                                   |
 | malteos           | Malte       | Ostendorff      | malte@occiglot.eu           | ~Malte_Ostendorff1| Occiglot                             |
 | ManuelFay         | Manuel        | Faysse     | manuel.faysse@centralesupelec.fr |              ~Manuel_Faysse1        | CentraleSupélec & Illuin Technology                  |
-| hgissbkh          | Hippolyte     | Gisserot-Boukhlef    | hippolyte.gisserot-boukhlef@centralesupelec.fr        |   ~Hippolyte_Gisserot-Boukhlef1                   | CentraleSupélec & Artefact Research Center   |
+| hgissbkh          | Hippolyte     | Gisserot-Boukhlef    | hippolyte.gisserot-boukhlef@centralesupelec.fr        |   ~Hippolyte_Gisserot-Boukhlef1    | CentraleSupélec & Artefact Research Center   |
 | sted97          | Simone     | Tedeschi    | tedeschi@diag.uniroma1.it        |   ~Simone_Tedeschi1                   | Sapienza University of Rome   |
 | gentaiscool          | Genta Indra     | Winata    | genta.winata@capitalone.com        |   ~Genta_Indra_Winata1                   | Capital One   | 
 | henilp105 | Henil | Panchal | henilp105@gmail.com | ~Henil_Shalin_Panchal1 | Nirma University |
 | ABorghini          | Alessia     | Borghini    | borghini.alessia99@gmail.com        |   ~Alessia_Borghini1            | Sapienza University of Rome   |
 | jordiclive          | Jordan     | Clive    | jordan.clive19@imperial.ac.uk        |   ~Jordan_Clive1            | Imperial College London   |
 | gowitheflow-1998          | Chenghao     | Xiao    | chenghao.xiao@durham.ac.uk        |   ~Chenghao_Xiao1            | Durham University   |
+| mariyahendriksen          | Mariya     | Hendriksen    | mariya.hendriksen@gmail.com   |   ~Mariya_Hendriksen1            | University of Amsterdam   |
