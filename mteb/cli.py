@@ -75,7 +75,7 @@ from pathlib import Path
 import yaml
 
 import mteb
-from mteb.MTEBResults import MTEBResults
+from mteb.load_results.mteb_results import MTEBResults
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)

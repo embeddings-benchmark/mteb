@@ -18,7 +18,7 @@ from mteb.models import model_meta_from_sentence_transformers
 
 from ..abstasks import *
 from ..abstasks import AbsTask
-from ..MTEBResults import MTEBResults
+from ..load_results.mteb_results import MTEBResults
 from ..tasks import *
 from . import LangMapping
 
