@@ -7,7 +7,7 @@ The approach is:
 2. Optionally define tasks that must be included in the benchmark (high quality, representative etc.)
 3. Optionally define other limitations such as domains, task type coverage etc. (other conditions such that a task could not be removed)
 4. Iteratively remove tasks from the list of tasks based on how predictive they are from the remaining tasks
-5. Construct the benchmark using the remaining tasks 
+5. Construct the benchmark using the remaining tasks
 
 
 This describes the benchmarks that are to be constructed
@@ -230,9 +230,9 @@ task_lists = {
             "Reranking",
             "Retrieval",
         ],
-
+    },
     "MTEB(Multilingual)": {
-        "tasks_to_search": mteb.get_tasks(), # just use everything
+        "tasks_to_search": mteb.get_tasks(),  # just use everything
         "minimally_include": [
             "BibleNLPBitextMining",  # extreme coverage
             "SIB200ClusteringS2S",
@@ -243,8 +243,8 @@ task_lists = {
             "MIRACLReranking",
             "WikiClusteringP2P.v2",
             "XQuADRetrieval",
-            "SemRel24STS"
-            ],
+            "SemRel24STS",
+        ],
         "task_types_to_include": [
             "Classification",
             "Clustering",
