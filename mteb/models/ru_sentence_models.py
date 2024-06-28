@@ -1,8 +1,10 @@
 """Sentence models for evaluation on the Russian part of MTEB"""
 
-from mteb.model_meta import ModelMeta
-from .e5_models import E5Wrapper
 from functools import partial
+
+from mteb.model_meta import ModelMeta
+
+from .e5_models import E5Wrapper
 
 rubert_tiny2 = ModelMeta(
     name="cointegrated/rubert-tiny2",
