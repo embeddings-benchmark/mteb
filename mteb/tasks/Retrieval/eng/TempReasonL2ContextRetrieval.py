@@ -43,5 +43,13 @@ class TempReasonL2Context(AbsTaskRetrieval):
 }
 """,
         n_samples={"test": 0},
-        avg_character_length={"test": 0.0},
+        avg_character_length={
+            "test": {
+                "average_document_length": 19.823525685690758,
+                "average_query_length": 11919.25792106726,
+                "num_documents": 15787,
+                "num_queries": 5397,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )

@@ -21,7 +21,7 @@ STR_DATE = Annotated[
 
 
 def sentence_transformers_loader(
-    model_name: str, revision: str, **kwargs
+    model_name: str, revision: str | None, **kwargs
 ) -> SentenceTransformer:
     return SentenceTransformer(
         model_name_or_path=model_name, revision=revision, **kwargs

@@ -55,7 +55,15 @@ isbn="978-3-030-15719-7"
 }
 """,
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={
+            "test": {
+                "average_document_length": 434.5924528301887,
+                "average_query_length": 67.55688622754491,
+                "num_documents": 265,
+                "num_queries": 167,
+                "average_relevant_docs_per_query": 7.718562874251497,
+            }
+        },
     )
 
     def load_data(self, **kwargs):

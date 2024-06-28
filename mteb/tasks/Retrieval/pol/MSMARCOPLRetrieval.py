@@ -40,5 +40,13 @@ class MSMARCOPL(AbsTaskRetrieval):
       primaryClass={cs.IR}
 }""",
         n_samples=None,
-        avg_character_length=None,
+        avg_character_length={
+            "test": {
+                "average_document_length": 349.3574939240471,
+                "average_query_length": 33.02325581395349,
+                "num_documents": 8841823,
+                "num_queries": 43,
+                "average_relevant_docs_per_query": 95.3953488372093,
+            }
+        },
     )

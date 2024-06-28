@@ -75,7 +75,7 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
 
 
 class StackExchangeClustering(AbsTaskClustering):
-    superseeded_by = "StackExchangeClustering.v2"
+    superseded_by = "StackExchangeClustering.v2"
     metadata = TaskMetadata(
         name="StackExchangeClustering",
         description="Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",

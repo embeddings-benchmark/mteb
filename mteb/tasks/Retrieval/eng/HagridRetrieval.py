@@ -45,7 +45,15 @@ class HagridRetrieval(AbsTaskRetrieval):
       journal={arXiv:2307.16883},
 }""",
         n_samples={"train": 1922},
-        avg_character_length={"train": 14.53},
+        avg_character_length={
+            "dev": {
+                "average_document_length": 228.36693548387098,
+                "average_query_length": 40.064516129032256,
+                "num_documents": 496,
+                "num_queries": 496,
+                "average_relevant_docs_per_query": 1.0,
+            }
+        },
     )
 
     def load_data(self, **kwargs):

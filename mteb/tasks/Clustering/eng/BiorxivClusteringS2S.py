@@ -42,7 +42,7 @@ class BiorxivClusteringS2SFast(AbsTaskClusteringFast):
 
 
 class BiorxivClusteringS2S(AbsTaskClustering):
-    superseeded_by = "BiorxivClusteringS2S.v2"
+    superseded_by = "BiorxivClusteringS2S.v2"
     metadata = TaskMetadata(
         name="BiorxivClusteringS2S",
         description="Clustering of titles from biorxiv. Clustering of 10 sets, based on the main category.",

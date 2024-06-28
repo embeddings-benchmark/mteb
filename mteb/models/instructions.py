@@ -196,6 +196,74 @@ TASKNAME2INSTRUCTIONS = {
         "Given a video search query, retrieve the titles of relevant videos",
         "",
     ),
+    "ARCChallenge": (
+        "Retrieve the answer to the question.",
+        "",
+    ),
+    "AlphaNLI": (
+        "Given the following start and end of a story, retrieve a possible reason that leads to the end.",
+        "",
+    ),
+    "HellaSwag": (
+        "Given the following unfinished context, retrieve the most plausible ending to finish it.",
+        "",
+    ),
+    "PIQA": (
+        "Given the following goal, retrieve a possible solution.",
+        "",
+    ),
+    "Quail": (
+        "Given the following context and question, retrieve the correct answer.",
+        "",
+    ),
+    "SIQA": (
+        "Given the following context and question, retrieve the correct answer.",
+        "",
+    ),
+    "RARbCode": (
+        "Retrieve the answer for the following coding problem.",
+        "",
+    ),
+    "RARbMath": (
+        "Retrieve the answer for the following math problem.",
+        "",
+    ),
+    "SpartQA": (
+        "Given the following spatial reasoning question, retrieve the right answer.",
+        "",
+    ),
+    "TempReasonL1": (
+        "Given the following question about time, retrieve the correct answer.",
+        "",
+    ),
+    "TempReasonL2Pure": (
+        "Given the following question, retrieve the correct answer.",
+        "",
+    ),
+    "TempReasonL2Fact": (
+        "Given the following question and facts, retrieve the correct answer.",
+        "",
+    ),
+    "TempReasonL2Context": (
+        "Given the following question, facts and contexts, retrieve the correct answer.",
+        "",
+    ),
+    "TempReasonL3Pure": (
+        "Given the following question, retrieve the correct answer.",
+        "",
+    ),
+    "TempReasonL3Fact": (
+        "Given the following question and facts, retrieve the correct answer.",
+        "",
+    ),
+    "TempReasonL3Context": (
+        "Given the following question, facts and contexts, retrieve the correct answer.",
+        "",
+    ),
+    "WinoGrande": (
+        "Given the following sentence, retrieve an appropriate answer to fill in the missing underscored part.",
+        "",
+    ),
 }
 
 

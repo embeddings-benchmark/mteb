@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import difflib
 import logging
 from collections import Counter
 from typing import Dict, Set, Type
@@ -56,7 +57,7 @@ def check_is_valid_language(lang: str) -> None:
 
 
 def filter_superseeded_datasets(tasks: list[AbsTask]) -> list[AbsTask]:
-    return [t for t in tasks if t.superseeded_by is None]
+    return [t for t in tasks if t.superseded_by is None]
 
 
 def filter_tasks_by_languages(
@@ -226,4 +227,15 @@ def get_task(
     Examples:
         >>> get_task("BornholmBitextMining")
     """
+    if task_name not in TASKS_REGISTRY:
+        close_matches = difflib.get_close_matches(task_name, TASKS_REGISTRY.keys())
+        if close_matches:
+            suggestion = (
+                f"KeyError: '{task_name}' not found. Did you mean: {close_matches[0]}?"
+            )
+        else:
+            suggestion = (
+                f"KeyError: '{task_name}' not found and no similar keys were found."
+            )
+        raise KeyError(suggestion)
     return TASKS_REGISTRY[task_name]().filter_languages(languages, script)

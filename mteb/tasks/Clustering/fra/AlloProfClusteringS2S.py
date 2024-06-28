@@ -10,7 +10,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class AlloProfClusteringS2S(AbsTaskClustering):
-    superseeded_by = "AlloProfClusteringS2S.v2"
+    superseded_by = "AlloProfClusteringS2S.v2"
 
     metadata = TaskMetadata(
         name="AlloProfClusteringS2S",

@@ -310,8 +310,8 @@ class MTEB:
             if output_path:
                 save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
                 if save_path.exists() and not overwrite_results:
-                    logger.warning(
-                        f"WARNING: {task.metadata.name} results already exists. Skipping."
+                    logger.info(
+                        f"{task.metadata.name} results already exists. Skipping. Set overwrite_results=True to overwrite."
                     )
                     del self.tasks[0]
                     continue

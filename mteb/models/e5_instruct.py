@@ -164,7 +164,7 @@ class E5MistralWrapper(E5InstructWrapper):
             name == "intfloat/e5-mistral-7b-instruct"
         ), f"Unexpected model name: {name}"
         super().__init__(
-            name=name,
+            model_name=name,
             revision=revision,
             max_length=4096,
             max_batch_size=max_batch_size,
