@@ -92,3 +92,11 @@ rubert_tiny_turbo = ModelMeta(
     revision="8ce0cf757446ce9bb2d5f5a4ac8103c7a1049054",
     release_date="2024-06-21",
 )
+
+labse_ru_turbo = ModelMeta(
+    name="sergeyzh/LaBSE-ru-turbo",
+    languages=["rus_Cyrl"],
+    open_source=True,
+    revision="1940b046c6b5e125df11722b899130329d0a46da",
+    release_date="2024-06-27",
+)
