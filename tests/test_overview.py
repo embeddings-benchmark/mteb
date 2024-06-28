@@ -52,7 +52,7 @@ def test_get_task(
         if task_types:
             assert task.metadata.type in task_types
         if exclude_superseeded_datasets:
-            assert task.superseeded_by is None
+            assert task.superseded_by is None
 
 
 def test_get_tasks_filtering():

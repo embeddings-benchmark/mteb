@@ -52,7 +52,7 @@ def _multilabel_subsampling(
 
 class AbsTask(ABC):
     metadata: TaskMetadata
-    superseeded_by: None | str = None
+    superseded_by: None | str = None
 
     def __init__(self, seed: int = 42, **kwargs: Any):
         self.dataset = None
@@ -68,9 +68,9 @@ class AbsTask(ABC):
 
     def check_if_dataset_is_superseeded(self):
         """Check if the dataset is superseeded by a newer version"""
-        if self.superseeded_by:
+        if self.superseded_by:
             logger.warning(
-                f"Dataset '{self.metadata.name}' is superseeded by '{self.superseeded_by}', you might consider using the newer version of the dataset."
+                f"Dataset '{self.metadata.name}' is superseeded by '{self.superseded_by}', you might consider using the newer version of the dataset."
             )
 
     def dataset_transform(self):

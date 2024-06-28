@@ -121,6 +121,7 @@ def run(args: argparse.Namespace) -> None:
         output_folder=args.output_folder,
         eval_splits=args.eval_splits,
         co2_tracker=args.co2_tracker,
+        overwrite_results=args.overwrite,
     )
 
     _save_model_metadata(model, Path(args.output_folder))
@@ -222,6 +223,12 @@ def add_run_parser(subparsers) -> None:
         type=str,
         default=None,
         help="Revision of the model to be loaded. Revisions are automatically read if the model is loaded from huggingface.",
+    )
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        default=False,
+        help="Overwrite the output file if it already exists",
     )
 
     parser.set_defaults(func=run)

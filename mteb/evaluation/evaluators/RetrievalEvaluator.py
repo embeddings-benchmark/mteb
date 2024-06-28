@@ -524,7 +524,7 @@ class RetrievalEvaluator(Evaluator):
         dict[str, float],
     ]:
         if ignore_identical_ids:
-            logger.info(
+            logger.debug(
                 "For evaluation, ``ignore_identical_ids=True`` is set to True, the evaluator will ignore identical query and document ids."
             )
             # Remove identical ids from results dict
@@ -533,7 +533,7 @@ class RetrievalEvaluator(Evaluator):
                     if qid == pid:
                         results[qid].pop(pid)
         else:
-            logger.info(
+            logger.debug(
                 "For evaluation, we DO NOT ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=True`` to ignore this."
             )
 

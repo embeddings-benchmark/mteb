@@ -6,7 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class TenKGnadClusteringS2S(AbsTaskClustering):
-    superseeded_by = "TenKGnadClusteringS2S.v2"
+    superseded_by = "TenKGnadClusteringS2S.v2"
 
     metadata = TaskMetadata(
         name="TenKGnadClusteringS2S",

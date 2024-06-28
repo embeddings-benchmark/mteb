@@ -16,7 +16,7 @@ N_SAMPLES = 2048
 
 
 class EightTagsClustering(AbsTaskClustering):
-    superseeded_by = "EightTagsClustering.v2"
+    superseded_by = "EightTagsClustering.v2"
     metadata = TaskMetadata(
         name="EightTagsClustering",
         description="Clustering of headlines from social media posts in Polish belonging to 8 categories: film, history, "
@@ -155,7 +155,7 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
 
 
 class PlscClusteringS2S(AbsTaskClusteringFast):
-    superseeded_by = "PlscClusteringS2S.v2"
+    superseded_by = "PlscClusteringS2S.v2"
     metadata = TaskMetadata(
         name="PlscClusteringS2S",
         description="Clustering of Polish article titles from Library of Science (https://bibliotekanauki.pl/), either "
@@ -242,7 +242,7 @@ class PlscClusteringS2SFast(AbsTaskClusteringFast):
 
 
 class PlscClusteringP2P(AbsTaskClusteringFast):
-    superseeded_by = "PlscClusteringP2P.v2"
+    superseded_by = "PlscClusteringP2P.v2"
     metadata = TaskMetadata(
         name="PlscClusteringP2P",
         description="Clustering of Polish article titles+abstracts from Library of Science "
