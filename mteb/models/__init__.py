@@ -18,6 +18,7 @@ from mteb.models import (
     nomic_models,
     openai_models,
     ru_sentence_models,
+    salesforce_models,
     sentence_transformers_models,
     voyage_models,
 )
@@ -126,6 +127,7 @@ model_modules = [
     voyage_models,
     bge_models,
     mxbai_models,
+    salesforce_models,
     ru_sentence_models,
     nomic_models,
     cohere_models,
