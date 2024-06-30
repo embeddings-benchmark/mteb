@@ -97,3 +97,4 @@ Please also add your first name and last name are as you want them to appear in 
 | ABorghini          | Alessia     | Borghini    | borghini.alessia99@gmail.com        |   ~Alessia_Borghini1            | Sapienza University of Rome   |
 | jordiclive          | Jordan     | Clive    | jordan.clive19@imperial.ac.uk        |   ~Jordan_Clive1            | Imperial College London   |
 | gowitheflow-1998          | Chenghao     | Xiao    | chenghao.xiao@durham.ac.uk        |   ~Chenghao_Xiao1            | Durham University   |
+| Samoed | Roman | Solomatin | risolomatin@gmail.com | | ITMO                                                      |
