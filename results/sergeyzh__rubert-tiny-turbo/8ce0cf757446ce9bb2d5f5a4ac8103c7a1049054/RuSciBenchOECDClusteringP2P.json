@@ -1,0 +1,34 @@
+{
+  "dataset_revision": "26c88e99dcaba32bb45d0e1bfc21902337f6d471",
+  "evaluation_time": 6.100334405899048,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.49",
+  "scores": {
+    "test": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "rus-Cyrl"
+        ],
+        "main_score": 0.41440393356807953,
+        "v_measure": 0.41440393356807953,
+        "v_measure_std": 0.012447867997057735,
+        "v_measures": {
+          "Level 0": [
+            0.4277119271570462,
+            0.41700888465701275,
+            0.39089087539589434,
+            0.40802787605475926,
+            0.4068679181537213,
+            0.4014026732700305,
+            0.41785191568763097,
+            0.43300862394884554,
+            0.4280708813600974,
+            0.4131977599957571
+          ]
+        }
+      }
+    ]
+  },
+  "task_name": "RuSciBenchOECDClusteringP2P"
+}

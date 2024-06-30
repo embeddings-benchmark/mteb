@@ -98,3 +98,5 @@ Please also add your first name and last name are as you want them to appear in 
 | jordiclive          | Jordan     | Clive    | jordan.clive19@imperial.ac.uk        |   ~Jordan_Clive1            | Imperial College London   |
 | gowitheflow-1998          | Chenghao     | Xiao    | chenghao.xiao@durham.ac.uk        |   ~Chenghao_Xiao1            | Durham University   |
 | mariyahendriksen          | Mariya     | Hendriksen    | mariya.hendriksen@gmail.com   |   ~Mariya_Hendriksen1            | University of Amsterdam   |
+| dokato          | Dominik     | Krzemiński    | dkk33@cantab.ac.uk   |   ~Dominik_Krzemiński1            | Cohere For AI Community   |
+| Samoed | Roman | Solomatin | risolomatin@gmail.com | | ITMO                                                      |

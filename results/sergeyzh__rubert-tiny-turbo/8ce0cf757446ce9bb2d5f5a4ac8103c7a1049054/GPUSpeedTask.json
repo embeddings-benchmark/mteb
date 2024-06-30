@@ -1,0 +1,53 @@
+{
+  "dataset_revision": "1.0",
+  "evaluation_time": 1.1198527812957764,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.49",
+  "scores": {
+    "test": [
+      {
+        "architecture": "x86_64",
+        "avg_words_per_sec": 71864.56843601672,
+        "gpu_info": [
+          {
+            "gpu_name": "Quadro RTX 8000",
+            "gpu_total_memory": "48.0 GB"
+          },
+          {
+            "gpu_name": "Quadro RTX 8000",
+            "gpu_total_memory": "48.0 GB"
+          },
+          {
+            "gpu_name": "Quadro RTX 8000",
+            "gpu_total_memory": "48.0 GB"
+          }
+        ],
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 71864.56843601672,
+        "num_gpus": 3,
+        "physical_cores": 36,
+        "platform": "Linux",
+        "platform_release": "4.15.0-213-generic",
+        "platform_version": "#224-Ubuntu SMP Mon Jun 19 13:30:12 UTC 2023",
+        "processor": "x86_64",
+        "ram": "504 GB",
+        "time_mean": 0.05055342401776995,
+        "time_std": 0.010630782067852144,
+        "timings": [
+          0.07657909393310547,
+          0.046666860580444336,
+          0.04624748229980469,
+          0.0459136962890625,
+          0.0465543270111084,
+          0.04635930061340332,
+          0.04555320739746094
+        ],
+        "total_cores": 72
+      }
+    ]
+  },
+  "task_name": "GPUSpeedTask"
+}
