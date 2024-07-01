@@ -1,0 +1,1 @@
+{"name": "deepvk/deberta-v1-base", "revision": "bdd30b0e19757e6940c92c7aff19e8fc0a60dff4", "release_date": "2023-02-07", "languages": ["rus_Cyrl"], "n_parameters": null, "memory_usage": null, "max_tokens": null, "embed_dim": null, "license": null, "open_source": true, "similarity_fn_name": null, "framework": [], "loader": null}

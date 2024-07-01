@@ -1,0 +1,68 @@
+{
+  "dataset_revision": "7b58f24536063837d644aab9a023c62199b2a612",
+  "evaluation_time": 0.7326867580413818,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.49",
+  "scores": {
+    "dev": [
+      {
+        "cosine": {
+          "accuracy": 0.6123778501628665,
+          "accuracy_threshold": 0.6209568977355957,
+          "ap": 0.6001782200359489,
+          "f1": 0.6681222707423581,
+          "f1_threshold": 0.26439931988716125,
+          "precision": 0.5016393442622951,
+          "recall": 1.0
+        },
+        "dot": {
+          "accuracy": 0.6123778501628665,
+          "accuracy_threshold": 0.6209568977355957,
+          "ap": 0.6001782200359489,
+          "f1": 0.6681222707423581,
+          "f1_threshold": 0.26439931988716125,
+          "precision": 0.5016393442622951,
+          "recall": 1.0
+        },
+        "euclidean": {
+          "accuracy": 0.6123778501628665,
+          "accuracy_threshold": 0.8706814050674438,
+          "ap": 0.6001782200359489,
+          "f1": 0.6681222707423581,
+          "f1_threshold": 1.2129271030426025,
+          "precision": 0.5016393442622951,
+          "recall": 1.0
+        },
+        "hf_subset": "default",
+        "languages": [
+          "rus-Cyrl"
+        ],
+        "main_score": 0.6010737523228904,
+        "manhattan": {
+          "accuracy": 0.6123778501628665,
+          "accuracy_threshold": 20.636640548706055,
+          "ap": 0.6010737523228904,
+          "f1": 0.6695842450765863,
+          "f1_threshold": 26.682357788085938,
+          "precision": 0.5032894736842105,
+          "recall": 1.0
+        },
+        "max": {
+          "accuracy": 0.6123778501628665,
+          "ap": 0.6010737523228904,
+          "f1": 0.6695842450765863
+        },
+        "similarity": {
+          "accuracy": 0.6123778501628665,
+          "accuracy_threshold": 0.6209568977355957,
+          "ap": 0.6001782200359489,
+          "f1": 0.6681222707423581,
+          "f1_threshold": 0.26439931988716125,
+          "precision": 0.5016393442622951,
+          "recall": 1.0
+        }
+      }
+    ]
+  },
+  "task_name": "TERRa"
+}

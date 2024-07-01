@@ -1,0 +1,1 @@
+{"name": "DeepPavlov/distilrubert-small-cased-conversational", "revision": "e348066b4a7279b97138038299bddc6580a9169a", "release_date": "2022-06-28", "languages": ["rus_Cyrl"], "n_parameters": null, "memory_usage": null, "max_tokens": null, "embed_dim": null, "license": null, "open_source": true, "similarity_fn_name": null, "framework": [], "loader": null}
