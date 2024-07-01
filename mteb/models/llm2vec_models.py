@@ -41,7 +41,7 @@ class LLM2VecWrapper:
         self.task_to_instructions = None
         if "task_to_instructions" in kwargs:
             self.task_to_instructions = kwargs.pop("task_to_instructions")
-        
+
         if "device" in kwargs:
             kwargs["device_map"] = kwargs.pop("device")
         elif torch.cuda.device_count() > 1:
