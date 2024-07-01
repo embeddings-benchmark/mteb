@@ -47,18 +47,28 @@ def results_to_dataframe(
     for model_name, revisions in mteb_results.items():
         for rev, tasks_results in revisions.items():
             for task_result in tasks_results:
-                for split, scores in task_result.scores.items():
-                    for score in scores:
-                        data.append(
-                            {
-                                "model": model_name,
-                                "revision": rev,
-                                "task": task_result.task_name,
-                                "split": split,
-                                "hf_subset": score["hf_subset"],
-                                "main_score": score["main_score"],
-                            }
-                        )
+                data.append(
+                    {
+                        "model": model_name,
+                        "revision": rev,
+                        "task": task_result.task_name,
+                        "main_score": task_result.get_score(),
+                    }
+                )
+
+                # # this is for split, language specific scores (it makes the analysis simpler if we just average across each task (though future work could look at language specific scores))
+                # for split, scores in task_result.scores.items():
+                #     for score in scores:
+                #         data.append(
+                #             {
+                #                 "model": model_name,
+                #                 "revision": rev,
+                #                 "task": task_result.task_name,
+                #                 "split": split,
+                #                 "hf_subset": score["hf_subset"],
+                #                 "main_score": score["main_score"],
+                #             }
+                #         )
     return pd.DataFrame(data)
 
 
@@ -187,8 +197,6 @@ results_df = results_to_dataframe(mteb_results)
 
 wide_table = results_df.pivot_table(
     index=["model", "revision"],
-    columns=["task", "split", "hf_subset"],
+    columns=["task"],
     values="main_score",
 )
-
-wide_table
