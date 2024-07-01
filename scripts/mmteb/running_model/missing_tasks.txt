@@ -1,46 +1,14 @@
 ('GritLM/GritLM-7B', '13f00a0e36500c80ce12870ea513846a066004af'):
-	AILACasedocs
-	AILAStatutes
 	AlloprofReranking
-	AlloprofRetrieval
-	ArguAna
+	BelebeleRetrieval
 	CMedQAv1-reranking
 	CMedQAv2-reranking
-	CQADupstackAndroidRetrieval
-	CQADupstackEnglishRetrieval
-	CQADupstackGamingRetrieval
-	CQADupstackGisRetrieval
-	CQADupstackMathematicaRetrieval
-	CQADupstackPhysicsRetrieval
-	CQADupstackProgrammersRetrieval
-	CQADupstackStatsRetrieval
-	CQADupstackTexRetrieval
-	CQADupstackUnixRetrieval
-	CQADupstackWebmastersRetrieval
-	CQADupstackWordpressRetrieval
-	EstQA
 	FaithDial
-	FarsTail
-	FeedbackQARetrieval
 	FiQA2018
-	GerDaLIRSmall
-	Ko-StrategyQA
-	LEMBSummScreenFDRetrieval
-	LeCaRDv2
-	LegalBenchConsumerContractsQA
-	LegalBenchCorporateLobbying
-	LegalQuAD
-	LegalSummarization
 	LivedoorNewsClustering
 	MLSUMClusteringS2S.v2
 	MMarcoReranking
-	MedicalQARetrieval
-	NFCorpus
-	PAWSX
-	Quail
-	RARbCode
 	RuBQReranking
-	RuBQRetrieval
 	SCIDOCS
 	SIB200Classification
 	STS17
@@ -48,15 +16,11 @@
 	SciFact
 	SemRel24STS
 	StatcanDialogueDatasetRetrieval
-	SyntecRetrieval
 	T2Reranking
-	TRECCOVID
 	TenKGnadClusteringS2S.v2
-	Touche2020
 	WebLINXCandidatesReranking
-	WikiClusteringP2P.v2
 	WikipediaRerankingMultilingual
-	XPQARetrieval
+	WikipediaRetrievalMultilingual
 ('intfloat/multilingual-e5-base', 'd13f1b27baf31030b7fd040960d60d909913633f'):
 	AILACasedocs
 	AILAStatutes
@@ -78,7 +42,6 @@
 	FiQA2018
 	GerDaLIRSmall
 	IndicGenBenchFloresBitextMining
-	LEMBSummScreenFDRetrieval
 	LeCaRDv2
 	LegalBenchConsumerContractsQA
 	LegalBenchCorporateLobbying
@@ -89,52 +52,36 @@
 	MassiveScenarioClassification
 	MedicalQARetrieval
 	NFCorpus
-	PAWSX
-	Quail
-	RARbCode
 	RuBQRetrieval
 	SCIDOCS
+	SIB200ClusteringS2S
 	STS17
 	STS22
 	SciFact
 	SemRel24STS
 	StatcanDialogueDatasetRetrieval
-	SyntecRetrieval
 	TRECCOVID
 	Touche2020
+	WikipediaRetrievalMultilingual
 	XPQARetrieval
 ('intfloat/multilingual-e5-large', '4dc6d853a804b9c8886ede6dda8a073b7dc08a81'):
-	AILACasedocs
-	AILAStatutes
-	AlloprofRetrieval
-	CQADupstackAndroidRetrieval
-	CQADupstackPhysicsRetrieval
-	CQADupstackWebmastersRetrieval
 	FaithDial
-	FarsTail
-	FeedbackQARetrieval
-	GerDaLIRSmall
 	IndicGenBenchFloresBitextMining
-	LEMBNeedleRetrieval
 	LeCaRDv2
 	MLSUMClusteringS2S.v2
-	MMarcoRetrieval
-	MassiveIntentClassification
 	MassiveScenarioClassification
-	PAWSX
-	RuBQRetrieval
 	SIB200Classification
-	STS17
 	STS22
 	SemRel24STS
 	StatcanDialogueDatasetRetrieval
 	TenKGnadClusteringS2S.v2
-	WikiClusteringP2P.v2
+	WikipediaRetrievalMultilingual
 ('intfloat/multilingual-e5-large-instruct', 'baa7be480a7de1539afce709c8f13f833a510e0a'):
 	AILACasedocs
 	AILAStatutes
 	AlloprofRetrieval
 	ArguAna
+	BelebeleRetrieval
 	CQADupstackAndroidRetrieval
 	CQADupstackEnglishRetrieval
 	CQADupstackGamingRetrieval
@@ -154,6 +101,7 @@
 	FiQA2018
 	GeorgianFAQRetrieval
 	GerDaLIRSmall
+	HunSum2AbstractiveRetrieval
 	IndicGenBenchFloresBitextMining
 	JaGovFaqsRetrieval
 	Ko-StrategyQA
@@ -168,13 +116,13 @@
 	MintakaRetrieval
 	MultiLongDocRetrieval
 	NusaParagraphEmotionClassification
-	PAWSX
 	Quail
 	RARbCode
 	RARbMath
 	RuBQRetrieval
 	SCIDOCS
 	SIB200Classification
+	SIB200ClusteringS2S
 	SIQA
 	STS22
 	SciFact
@@ -187,467 +135,91 @@
 	WebLINXCandidatesReranking
 	WikiClusteringP2P.v2
 	WikipediaRerankingMultilingual
+	WikipediaRetrievalMultilingual
 	XPQARetrieval
 	XQuADRetrieval
 ('intfloat/multilingual-e5-small', 'e4ce9877abf3edfe10b0d82785e83bdcb973e22e'):
-	AILACasedocs
-	AILAStatutes
-	AlloprofRetrieval
-	ArguAna
-	CQADupstackAndroidRetrieval
-	CQADupstackEnglishRetrieval
-	CQADupstackGamingRetrieval
-	CQADupstackGisRetrieval
 	CQADupstackMathematicaRetrieval
 	CQADupstackPhysicsRetrieval
-	CQADupstackProgrammersRetrieval
 	CQADupstackStatsRetrieval
-	CQADupstackTexRetrieval
 	CQADupstackUnixRetrieval
 	CQADupstackWebmastersRetrieval
-	CQADupstackWordpressRetrieval
-	EstQA
 	FaithDial
-	FeedbackQARetrieval
 	FiQA2018
-	GerDaLIRSmall
-	Ko-StrategyQA
-	LEMBSummScreenFDRetrieval
-	LeCaRDv2
-	LegalBenchConsumerContractsQA
-	LegalBenchCorporateLobbying
-	LegalQuAD
-	LegalSummarization
 	MLSUMClusteringS2S.v2
-	MedicalQARetrieval
 	NFCorpus
-	PAWSX
 	RuBQRetrieval
-	SCIDOCS
 	SemRel24STS
 	StatcanDialogueDatasetRetrieval
-	SyntecRetrieval
 	TRECCOVID
 	TenKGnadClusteringS2S.v2
-	Touche2020
-	WikiClusteringP2P.v2
-	XPQARetrieval
+	WikipediaRetrievalMultilingual
 ('sentence-transformers/LaBSE', 'e34fab64a3011d2176c99545a93d5cbddc9a91b7'):
 	AILACasedocs
-	AILAStatutes
-	AlloprofRetrieval
-	ArguAna
 	CQADupstackAndroidRetrieval
-	CQADupstackEnglishRetrieval
-	CQADupstackGamingRetrieval
-	CQADupstackGisRetrieval
-	CQADupstackMathematicaRetrieval
-	CQADupstackPhysicsRetrieval
-	CQADupstackProgrammersRetrieval
-	CQADupstackStatsRetrieval
-	CQADupstackTexRetrieval
-	CQADupstackUnixRetrieval
 	CQADupstackWebmastersRetrieval
 	CQADupstackWordpressRetrieval
-	CovidRetrieval
-	EstQA
-	FQuADRetrieval
-	FeedbackQARetrieval
 	FiQA2018
-	GeorgianFAQRetrieval
-	GerDaLIRSmall
 	IndicGenBenchFloresBitextMining
-	JaGovFaqsRetrieval
-	JaQuADRetrieval
-	Ko-StrategyQA
-	LEMBSummScreenFDRetrieval
-	LeCaRDv2
-	LegalBenchConsumerContractsQA
-	LegalBenchCorporateLobbying
 	LegalQuAD
 	LegalSummarization
 	MLSUMClusteringS2S.v2
-	MedicalQARetrieval
-	MintakaRetrieval
-	NFCorpus
-	PAWSX
-	Quail
-	RARbCode
-	RARbMath
-	RuBQRetrieval
-	SCIDOCS
 	SIB200Classification
-	SIQA
+	SIB200ClusteringS2S
 	SciFact
 	SemRel24STS
-	SpartQA
-	SyntecRetrieval
-	TRECCOVID
-	TempReasonL2Fact
-	TempReasonL3Pure
 	TenKGnadClusteringS2S.v2
-	Touche2020
-	WikiClusteringP2P.v2
-	XPQARetrieval
-	XQuADRetrieval
 ('sentence-transformers/all-MiniLM-L12-v2', 'a05860a77cef7b37e0048a7864658139bc18a854'):
-	BSARDRetrieval
-	CMedQAv1-reranking
-	CMedQAv2-reranking
-	CQADupstackMathematicaRetrieval
-	CQADupstackTexRetrieval
-	FQuADRetrieval
-	GeorgianFAQRetrieval
-	GerDaLIRSmall
-	IndicGenBenchFloresBitextMining
-	JaGovFaqsRetrieval
-	JaQuADRetrieval
-	Ko-StrategyQA
-	LEMBSummScreenFDRetrieval
-	LEMBWikimQARetrieval
+	BelebeleRetrieval
+	HunSum2AbstractiveRetrieval
 	MLSUMClusteringS2S.v2
-	MMarcoReranking
-	MedicalQARetrieval
-	NLPJournalTitleAbsRetrieval
-	PAWSX
-	Quail
-	RARbCode
-	RARbMath
-	RuBQReranking
-	SCIDOCS
 	SIB200Classification
-	SIQA
-	SciFact
 	SemRel24STS
-	SpartQA
-	SyntecRetrieval
-	T2Reranking
-	TRECCOVID
-	TempReasonL2Fact
 	TenKGnadClusteringS2S.v2
-	WebLINXCandidatesReranking
-	WikipediaRerankingMultilingual
-	XNLI
 ('sentence-transformers/all-MiniLM-L6-v2', '8b3219a92973c328a8e22fadcfa821b5dc75636a'):
-	AILACasedocs
-	AILAStatutes
-	ARCChallenge
-	AllegroReviews
-	AlloprofRetrieval
-	AlphaNLI
-	ArEntail
-	ArguAna
-	ArguAna-PL
-	ArmenianParaphrasePC
-	BSARDRetrieval
-	BrazilianToxicTweetsClassification
-	CBD
-	CEDRClassification
-	CQADupstackAndroidRetrieval
-	CQADupstackEnglishRetrieval
-	CQADupstackGamingRetrieval
-	CQADupstackGisRetrieval
-	CQADupstackMathematicaRetrieval
-	CQADupstackPhysicsRetrieval
-	CQADupstackProgrammersRetrieval
-	CQADupstackStatsRetrieval
-	CQADupstackTexRetrieval
-	CQADupstackUnixRetrieval
-	CQADupstackWebmastersRetrieval
-	CQADupstackWordpressRetrieval
-	CSFDSKMovieReviewSentimentClassification
-	CTKFactsNLI
-	CmedqaRetrieval
-	CovidRetrieval
-	CrossLingualSemanticDiscriminationWMT19
-	CrossLingualSemanticDiscriminationWMT21
-	DalajClassification
-	DanFeverRetrieval
-	DuRetrieval
-	DutchBookReviewSentimentClassification
-	EcomRetrieval
-	EstQA
-	FQuADRetrieval
-	FaithDial
-	FalseFriendsGermanEnglish
-	FarsTail
-	FeedbackQARetrieval
-	FiQA-PL
-	FiQA2018
-	FloresBitextMining
-	FrenkSlClassification
-	GeoreviewClassification
-	GeorgianFAQRetrieval
-	GerDaLIR
-	GerDaLIRSmall
-	GermanDPR
-	GermanGovServiceRetrieval
-	GermanQuAD-Retrieval
-	GreekCivicsQA
-	HagridRetrieval
-	HateSpeechPortugueseClassification
-	HeadlineClassification
-	HellaSwag
-	IFlyTek
-	IN22ConvBitextMining
-	IN22GenBitextMining
-	InappropriatenessClassification
-	IndicNLPNewsClassification
-	IndicQARetrieval
-	IsiZuluNewsClassification
-	JDReview
-	JaGovFaqsRetrieval
-	JaQuADRetrieval
-	KLUE-NLI
-	KinopoiskClassification
-	Ko-StrategyQA
-	KorHateSpeechMLClassification
-	LEMBNarrativeQARetrieval
-	LEMBNeedleRetrieval
-	LEMBPasskeyRetrieval
-	LEMBQMSumRetrieval
-	LEMBSummScreenFDRetrieval
-	LEMBWikimQARetrieval
-	LeCaRDv2
-	LegalBenchConsumerContractsQA
-	LegalBenchCorporateLobbying
-	LegalBenchPC
-	LegalQuAD
-	LegalSummarization
-	MAUDLegalBenchClassification
-	MLQARetrieval
-	MLQuestions
 	MLSUMClusteringS2S.v2
-	MMarcoRetrieval
-	MalteseNewsClassification
-	MasakhaNEWSClassification
-	MedicalQARetrieval
-	MedicalRetrieval
-	MintakaRetrieval
-	Moroco
-	MultiEURLEXMultilabelClassification
-	MultiLongDocRetrieval
-	MultilingualSentiment
-	MyanmarNews
-	NFCorpus
-	NFCorpus-PL
-	NLPJournalAbsIntroRetrieval
-	NLPJournalTitleAbsRetrieval
-	NLPJournalTitleIntroRetrieval
-	NarrativeQARetrieval
-	NepaliNewsClassification
-	NoRecClassification
-	NorQuadRetrieval
-	NorwegianParliamentClassification
-	NusaParagraphEmotionClassification
-	NusaParagraphTopicClassification
-	OdiaNewsClassification
-	OnlineShopping
-	OpusparcusPC
-	PAC
-	PIQA
-	PawsX
-	PolEmo2.0-IN
-	PolEmo2.0-OUT
-	PunjabiNewsClassification
-	Quail
-	RARbCode
-	RARbMath
-	RTE3
-	RomanianReviewsSentiment
-	RomanianSentimentClassification
-	RuBQRetrieval
-	RuReviewsClassification
-	RuSciBenchGRNTIClassification
-	RuSciBenchOECDClassification
-	SCIDOCS
-	SCIDOCS-PL
-	SIB200Classification
-	SIQA
-	SNLRetrieval
-	SanskritShlokasClassification
-	ScalaClassification
-	SciFact
-	SciFact-PL
 	SemRel24STS
-	SensitiveTopicsClassification
-	SinhalaNewsClassification
-	SinhalaNewsSourceClassification
-	SiswatiNewsClassification
-	SlovakMovieReviewSentimentClassification
-	SlovakSumRetrieval
-	SpanishNewsClassification
-	SpanishPassageRetrievalS2S
-	SpanishSentimentClassification
-	SpartQA
-	StatcanDialogueDatasetRetrieval
-	SweFaqRetrieval
-	SweRecClassification
-	SwedishSentimentClassification
-	SwednRetrieval
-	SyntecRetrieval
-	T2Retrieval
-	TNews
-	TRECCOVID
-	TRECCOVID-PL
-	TV2Nordretrieval
-	TamilNewsClassification
-	TeluguAndhraJyotiNewsClassification
-	TempReasonL1
-	TempReasonL2Context
-	TempReasonL2Fact
-	TempReasonL2Pure
-	TempReasonL3Context
-	TempReasonL3Fact
-	TempReasonL3Pure
 	TenKGnadClusteringS2S.v2
-	Touche2020
-	TswanaNewsClassification
-	TurHistQuadRetrieval
-	TurkicClassification
-	TurkishMovieSentimentClassification
-	TurkishProductSentimentClassification
-	TweetSentimentClassification
-	TwitterHjerneRetrieval
-	UkrFormalityClassification
-	UrduRomanSentimentClassification
-	VideoRetrieval
-	VieQuADRetrieval
-	VieStudentFeedbackClassification
-	Waimai
-	WikiClusteringP2P.v2
-	WinoGrande
-	WisesightSentimentClassification
-	XMarket
-	XNLI
-	XPQARetrieval
-	XQuADRetrieval
-	YueOpenriceReviewClassification
-	indonli
 ('sentence-transformers/all-mpnet-base-v2', '84f2bcc00d77236f9e89c8a360a00fb1139bf47d'):
 	AFQMC
-	AILACasedocs
-	AILAStatutes
-	ARCChallenge
 	ATEC
 	AlloprofReranking
-	AlloprofRetrieval
-	AlphaNLI
-	ArguAna
-	ArguAna-PL
 	AskUbuntuDupQuestions
 	Assin2RTE
 	Assin2STS
 	BIOSSES
 	BQ
-	BSARDRetrieval
+	BelebeleRetrieval
 	CDSC-R
 	CMedQAv1-reranking
 	CMedQAv2-reranking
-	CQADupstackAndroidRetrieval
-	CQADupstackEnglishRetrieval
-	CQADupstackGamingRetrieval
-	CQADupstackGisRetrieval
-	CQADupstackMathematicaRetrieval
-	CQADupstackPhysicsRetrieval
-	CQADupstackProgrammersRetrieval
-	CQADupstackStatsRetrieval
-	CQADupstackTexRetrieval
-	CQADupstackUnixRetrieval
-	CQADupstackWebmastersRetrieval
-	CQADupstackWordpressRetrieval
-	CmedqaRetrieval
 	CovidRetrieval
-	CrossLingualSemanticDiscriminationWMT19
-	CrossLingualSemanticDiscriminationWMT21
-	DanFeverRetrieval
 	DuRetrieval
 	EcomRetrieval
-	EstQA
-	FQuADRetrieval
-	FaithDial
 	FaroeseSTS
-	FeedbackQARetrieval
-	FiQA-PL
-	FiQA2018
 	FinParaSTS
-	FloresBitextMining
-	GeorgianFAQRetrieval
-	GerDaLIR
-	GerDaLIRSmall
-	GermanDPR
-	GermanGovServiceRetrieval
-	GermanQuAD-Retrieval
 	GermanSTSBenchmark
-	GreekCivicsQA
-	HagridRetrieval
-	HateSpeechPortugueseClassification
-	HellaSwag
-	IN22ConvBitextMining
-	IN22GenBitextMining
 	IndicCrosslingualSTS
-	IndicQARetrieval
 	JSICK
 	JSTS
-	JaGovFaqsRetrieval
-	JaQuADRetrieval
 	KLUE-NLI
 	KLUE-STS
-	Ko-StrategyQA
 	KorSTS
 	LCQMC
-	LEMBNarrativeQARetrieval
-	LEMBNeedleRetrieval
-	LEMBPasskeyRetrieval
-	LEMBQMSumRetrieval
-	LEMBSummScreenFDRetrieval
-	LEMBWikimQARetrieval
 	LeCaRDv2
-	LegalBenchConsumerContractsQA
-	LegalBenchCorporateLobbying
-	LegalQuAD
-	LegalSummarization
-	MLQARetrieval
-	MLQuestions
 	MLSUMClusteringS2S.v2
 	MMarcoReranking
-	MMarcoRetrieval
-	MasakhaNEWSClassification
-	MedicalQARetrieval
 	MedicalRetrieval
-	MintakaRetrieval
-	MultiLongDocRetrieval
-	MultilingualSentiment
-	NFCorpus
-	NFCorpus-PL
-	NLPJournalAbsIntroRetrieval
-	NLPJournalTitleAbsRetrieval
-	NLPJournalTitleIntroRetrieval
-	NarrativeQARetrieval
-	NorQuadRetrieval
-	NusaParagraphTopicClassification
 	OpusparcusPC
-	PAC
-	PAWSX
-	PIQA
-	Quail
-	RARbCode
-	RARbMath
 	RUParaPhraserSTS
-	RomanianReviewsSentiment
 	RonSTS
 	RuBQReranking
-	RuBQRetrieval
 	RuSTSBenchmarkSTS
-	SCIDOCS
-	SCIDOCS-PL
-	SIB200Classification
+	SIB200ClusteringS2S
 	SICK-BR-PC
 	SICK-R
 	SICK-R-PL
 	SICKFr
-	SIQA
-	SNLRetrieval
 	STS12
 	STS13
 	STS15
@@ -658,143 +230,26 @@
 	STSBenchmark
 	STSBenchmarkMultilingualSTS
 	STSES
-	SciFact
-	SciFact-PL
 	SemRel24STS
-	SlovakMovieReviewSentimentClassification
-	SlovakSumRetrieval
-	SpanishPassageRetrievalS2S
-	SpartQA
 	StackOverflowDupQuestions
-	StatcanDialogueDatasetRetrieval
 	SummEval
 	SummEvalFr
-	SweFaqRetrieval
-	SwedishSentimentClassification
-	SwednRetrieval
 	SyntecReranking
-	SyntecRetrieval
 	T2Reranking
 	T2Retrieval
 	TERRa
-	TNews
-	TRECCOVID
-	TRECCOVID-PL
-	TV2Nordretrieval
-	TempReasonL1
-	TempReasonL2Context
-	TempReasonL2Fact
-	TempReasonL2Pure
-	TempReasonL3Context
-	TempReasonL3Fact
-	TempReasonL3Pure
 	TenKGnadClusteringS2S.v2
-	Touche2020
-	TurHistQuadRetrieval
-	TwitterHjerneRetrieval
-	VideoRetrieval
-	VieQuADRetrieval
 	WebLINXCandidatesReranking
 	WikiClusteringP2P.v2
 	WikipediaRerankingMultilingual
-	WinoGrande
-	XMarket
-	XPQARetrieval
-	XQuADRetrieval
 ('sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2', 'bf3bf13ab40c3157080a7ab344c831b9ad18b5eb'):
-	AILACasedocs
-	AlloprofRetrieval
-	ArguAna
-	CQADupstackAndroidRetrieval
-	CQADupstackEnglishRetrieval
-	CQADupstackGamingRetrieval
-	CQADupstackMathematicaRetrieval
-	CQADupstackTexRetrieval
-	CovidRetrieval
-	EstQA
-	FQuADRetrieval
-	FarsTail
-	FiQA2018
-	GeorgianFAQRetrieval
-	IndicGenBenchFloresBitextMining
-	JaGovFaqsRetrieval
-	Ko-StrategyQA
-	LEMBQMSumRetrieval
-	LEMBSummScreenFDRetrieval
-	LeCaRDv2
-	LegalBenchCorporateLobbying
-	LegalSummarization
-	MassiveIntentClassification
-	MassiveScenarioClassification
-	MintakaRetrieval
+	BelebeleRetrieval
 	NFCorpus
-	PAWSX
-	RuBQRetrieval
-	SCIDOCS
 	SIB200Classification
-	STS17
-	STS22
-	SciFact
-	SyntecRetrieval
-	TRECCOVID
 	TenKGnadClusteringS2S.v2
-	XPQARetrieval
-	XQuADRetrieval
 ('sentence-transformers/paraphrase-multilingual-mpnet-base-v2', '79f2382ceacceacdf38563d7c5d16b9ff8d725d6'):
-	AILACasedocs
-	AILAStatutes
-	AlloprofRetrieval
-	ArguAna
-	BSARDRetrieval
-	CQADupstackAndroidRetrieval
-	CQADupstackEnglishRetrieval
-	CQADupstackGamingRetrieval
-	CQADupstackGisRetrieval
-	CQADupstackMathematicaRetrieval
-	CQADupstackPhysicsRetrieval
-	CQADupstackProgrammersRetrieval
-	CQADupstackStatsRetrieval
-	CQADupstackTexRetrieval
-	CQADupstackUnixRetrieval
-	CQADupstackWebmastersRetrieval
-	CQADupstackWordpressRetrieval
-	CovidRetrieval
-	EstQA
-	FQuADRetrieval
-	FeedbackQARetrieval
-	FiQA2018
-	GerDaLIRSmall
-	IndicGenBenchFloresBitextMining
-	JaGovFaqsRetrieval
-	JaQuADRetrieval
-	Ko-StrategyQA
-	LEMBSummScreenFDRetrieval
-	LeCaRDv2
-	LegalBenchConsumerContractsQA
-	LegalBenchCorporateLobbying
-	LegalQuAD
-	LegalSummarization
+	BelebeleRetrieval
 	MLSUMClusteringS2S.v2
-	MedicalQARetrieval
-	MintakaRetrieval
-	NFCorpus
-	PAWSX
-	Quail
-	RARbCode
-	RARbMath
-	RuBQRetrieval
-	SCIDOCS
-	SIB200Classification
-	SIQA
-	STS17
-	STS22
-	SciFact
+	SIB200ClusteringS2S
 	SemRel24STS
-	SpartQA
-	SyntecRetrieval
-	TRECCOVID
-	TempReasonL3Pure
 	TenKGnadClusteringS2S.v2
-	WikiClusteringP2P.v2
-	XPQARetrieval
-	XQuADRetrieval
