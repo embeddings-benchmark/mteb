@@ -6,10 +6,10 @@ from typing import Any
 import torch
 from sentence_transformers import SentenceTransformer
 
-from .instructions import task_to_instruction
-
 from mteb.model_meta import ModelMeta
 from mteb.models.text_formatting_utils import corpus_to_texts
+
+from .instructions import task_to_instruction
 
 
 class SFRWrapper:
