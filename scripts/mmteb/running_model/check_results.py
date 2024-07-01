@@ -1,4 +1,4 @@
-"""This script checks that all result have been runs and writes a file: missing_tasks.txt with the missing tasks for each model"""
+"""This script checks that all result have been run and writes a file: missing_tasks.txt with the missing tasks for each model"""
 
 from __future__ import annotations
 
