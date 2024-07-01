@@ -12,31 +12,6 @@ MODEL = str
 REVISION = str
 
 
-def is_valid_to_remove(task: mteb.AbsTask, tasks: list[mteb.AbsTask]) -> bool:
-    """Check if a task is valid to remove.
-
-    Ensure that all languages are covered for at least one of the task types.
-
-    Args:
-        task: A candidate tasks to remove.
-        tasks: The current list of tasks.
-
-    Returns:
-        True if the task is valid to remove, False otherwise.
-    """
-    _tasks = [
-        t
-        for t in tasks
-        if t.metadata.name != task.metadata.name
-        and t.metadata.type == task.metadata.type
-    ]
-
-    for lang in task.metadata.languages:
-        if not any(lang in t.metadata.languages for t in _tasks):
-            return False
-    return True
-
-
 def results_to_dataframe(
     mteb_results: dict[MODEL, dict[REVISION, list[mteb.MTEBResults]]],
 ):
