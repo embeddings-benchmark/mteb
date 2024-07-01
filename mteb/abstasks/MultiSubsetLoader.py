@@ -29,7 +29,7 @@ class MultiSubsetLoader:
         )  # load "default" subset
         for split in merged_dataset.keys():
             df_split = merged_dataset[split].to_polars()
-            df_grouped = dict(df_split.group_by("lang"))
+            df_grouped = dict(df_split.group_by(["lang"]))
             for lang in set(df_split["lang"].unique()) & set(self.hf_subsets):
                 self.dataset.setdefault(lang, {})
                 self.dataset[lang][split] = datasets.Dataset.from_polars(
