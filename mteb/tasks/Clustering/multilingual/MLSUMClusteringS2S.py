@@ -20,7 +20,7 @@ N_SAMPLES = 2048
 
 
 class MLSUMClusteringS2S(AbsTaskClustering, MultilingualTask):
-    superseeded_by = "MLSUMClusteringS2S.v2"
+    superseded_by = "MLSUMClusteringS2S.v2"
     metadata = TaskMetadata(
         name="MLSUMClusteringS2S",
         description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",

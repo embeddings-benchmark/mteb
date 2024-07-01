@@ -133,7 +133,7 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
 
 
 class CLSClusteringS2S(AbsTaskClustering):
-    superseeded_by = "CLSClusteringS2S.v2"
+    superseded_by = "CLSClusteringS2S.v2"
     metadata = TaskMetadata(
         name="CLSClusteringS2S",
         description="Clustering of titles from CLS dataset. Clustering of 13 sets on the main category.",
@@ -170,7 +170,7 @@ class CLSClusteringS2S(AbsTaskClustering):
 
 
 class CLSClusteringP2P(AbsTaskClustering):
-    superseeded_by = "CLSClusteringP2P.v2"
+    superseded_by = "CLSClusteringP2P.v2"
     metadata = TaskMetadata(
         name="CLSClusteringP2P",
         description="Clustering of titles + abstract from CLS dataset. Clustering of 13 sets on the main category.",
@@ -323,7 +323,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
 
 
 class ThuNewsClusteringS2S(AbsTaskClustering):
-    superseeded_by = "ThuNewsClusteringS2S.v2"
+    superseded_by = "ThuNewsClusteringS2S.v2"
     metadata = TaskMetadata(
         name="ThuNewsClusteringS2S",
         dataset={
@@ -367,7 +367,7 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
 
 
 class ThuNewsClusteringP2P(AbsTaskClustering):
-    superseeded_by = "ThuNewsClusteringP2P.v2"
+    superseded_by = "ThuNewsClusteringP2P.v2"
     metadata = TaskMetadata(
         name="ThuNewsClusteringP2P",
         dataset={

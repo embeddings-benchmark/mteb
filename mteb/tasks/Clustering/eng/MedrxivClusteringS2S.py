@@ -53,7 +53,7 @@ class MedrxivClusteringS2SFast(AbsTaskClusteringFast):
 
 
 class MedrxivClusteringS2S(AbsTaskClustering):
-    superseeded_by = "MedrxivClusteringS2S.v2"
+    superseded_by = "MedrxivClusteringS2S.v2"
     metadata = TaskMetadata(
         name="MedrxivClusteringS2S",
         description="Clustering of titles from medrxiv. Clustering of 10 sets, based on the main category.",

@@ -1,0 +1,81 @@
+{
+  "dataset_revision": "e42d330f33d65b7b72dfd408883daf1661f06f18",
+  "evaluation_time": 16.814642190933228,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.49",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 0.588037109375,
+        "f1": 0.5931922848278683,
+        "f1_weighted": 0.5932530112985139,
+        "hf_subset": "default",
+        "languages": [
+          "bak-Cyrl",
+          "chv-Cyrl",
+          "tat-Cyrl",
+          "kir-Cyrl",
+          "rus-Cyrl",
+          "kaz-Cyrl",
+          "tyv-Cyrl",
+          "krc-Cyrl",
+          "sah-Cyrl"
+        ],
+        "main_score": 0.588037109375,
+        "scores_per_experiment": [
+          {
+            "accuracy": 0.55859375,
+            "f1": 0.5682718749313963,
+            "f1_weighted": 0.5683572160402321
+          },
+          {
+            "accuracy": 0.58154296875,
+            "f1": 0.5808801063355742,
+            "f1_weighted": 0.5808788125583546
+          },
+          {
+            "accuracy": 0.5830078125,
+            "f1": 0.5941473286182194,
+            "f1_weighted": 0.5942155805892053
+          },
+          {
+            "accuracy": 0.6298828125,
+            "f1": 0.6331050308090749,
+            "f1_weighted": 0.6331756354602831
+          },
+          {
+            "accuracy": 0.5654296875,
+            "f1": 0.5657058067538497,
+            "f1_weighted": 0.56574464939623
+          },
+          {
+            "accuracy": 0.5771484375,
+            "f1": 0.5787789059305692,
+            "f1_weighted": 0.5788292076628938
+          },
+          {
+            "accuracy": 0.59130859375,
+            "f1": 0.6009655402862437,
+            "f1_weighted": 0.6010329395532583
+          },
+          {
+            "accuracy": 0.58544921875,
+            "f1": 0.5955416906328428,
+            "f1_weighted": 0.5956007802465653
+          },
+          {
+            "accuracy": 0.580078125,
+            "f1": 0.5847931032604824,
+            "f1_weighted": 0.5848449060000324
+          },
+          {
+            "accuracy": 0.6279296875,
+            "f1": 0.6297334607204311,
+            "f1_weighted": 0.6298503854780841
+          }
+        ]
+      }
+    ]
+  },
+  "task_name": "CyrillicTurkicLangClassification"
+}
