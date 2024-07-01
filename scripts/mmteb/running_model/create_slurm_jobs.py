@@ -100,8 +100,36 @@ if __name__ == "__main__":
             "Reranking",
             "STS",
             "Summarization",
+            "Clustering",
+            "InstructionRetrieval",
+            "Retrieval",
         ]
     )
+
+    retrieval_to_be_downsampled = [
+        "TopiOCQA",
+        "MSMARCO-PL",
+        "ClimateFEVER",
+        "FEVER",
+        "HotpotQA",
+        "HotpotQA-PL",
+        "DBPedia",
+        "DBPedia-PL",
+        "NeuCLIR2022Retrieval",
+        "NeuCLIR2023Retrieval",
+        "NeuCLIR2022Retrieval",
+        "NeuCLIR2023Retrieval",
+        "NQ",
+        "NQ-PL",
+        "NeuCLIR2022Retrieval",
+        "NeuCLIR2023Retrieval",
+        "MIRACLRetrieval",
+        "RiaNewsRetrieval",
+        "Quora-PL",
+        "QuoraRetrieval",
+    ]
+
+    tasks = [t for t in tasks if t.metadata.name not in retrieval_to_be_downsampled]
 
     slurm_jobs_folder.mkdir(exist_ok=True)
     files = create_slurm_job_files(
