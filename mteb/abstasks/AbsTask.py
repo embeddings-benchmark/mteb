@@ -152,10 +152,11 @@ class AbsTask(ABC):
                     raise e
 
         for split in splits:
+            test_size = min(len(dataset_dict[split]), n_samples)
             dataset_dict.update(
                 {
                     split: dataset_dict[split].train_test_split(
-                        test_size=n_samples, seed=seed, stratify_by_column=label
+                        test_size=test_size, seed=seed, stratify_by_column=label
                     )["test"]
                 }
             )  ## only take the specified test split.
