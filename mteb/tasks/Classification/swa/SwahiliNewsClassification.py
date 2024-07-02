@@ -8,11 +8,11 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class SwahiliNewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SwahiliNewsClassification",
-        description="Dataset for Swahili News Classification, categorized with 5 domains. Building and Optimizing Swahili Language Models: Techniques, Embeddings, and Datasets",
+        description="Dataset for Swahili News Classification, categorized with 6 domains (Local News (Kitaifa), International News (Kimataifa), Finance News (Uchumi), Health News (Afya), Sports News (Michezo), and Entertainment News (Burudani)). Building and Optimizing Swahili Language Models: Techniques, Embeddings, and Datasets",
         reference="https://huggingface.co/datasets/Mollel/SwahiliNewsClassification",
         dataset={
             "path": "Mollel/SwahiliNewsClassification",
-            "revision": "5bc5ef41a6232c5e3c84e1e9615099b70922d7be",
+            "revision": "cd89b0993ca6a71240f7fb16223c64f6fe4a27b7",
         },
         type="Classification",
         category="s2s",
@@ -29,6 +29,14 @@ class SwahiliNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         text_creation="found",
         bibtex_citation="""
+        @inproceedings{davis2020swahili,
+        title = "Swahili: News Classification Dataset (0.2)",
+        author = "Davis, David",
+        year = "2020",
+        publisher = "Zenodo",
+        doi = "10.5281/zenodo.5514203",
+        url = "https://doi.org/10.5281/zenodo.5514203"
+        }
         """,
         n_samples={"train": 2048},
         avg_character_length={"train": 2438.2308135942326},
