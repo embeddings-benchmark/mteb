@@ -13,6 +13,8 @@ from mteb.load_results import load_results
 from mteb.models import get_model, get_model_meta
 from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
 
+from .benchmarks import Benchmark
+
 __version__ = version("mteb")  # fetch version from install metadata
 
 
@@ -27,4 +29,5 @@ __all__ = [
     "get_model",
     "get_model_meta",
     "load_results",
+    "Benchmark",
 ]
