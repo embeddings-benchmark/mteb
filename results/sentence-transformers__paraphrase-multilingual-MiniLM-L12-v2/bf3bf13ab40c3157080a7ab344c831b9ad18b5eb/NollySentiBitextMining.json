@@ -1,8 +1,8 @@
 {
   "dataset_revision": "d48254fbdb51af1ae7f20831aab0bccf0b70a19c",
-  "evaluation_time": 2.15173602104187,
+  "evaluation_time": 9.97982382774353,
   "kg_co2_emissions": null,
-  "mteb_version": "1.12.30",
+  "mteb_version": "1.12.59",
   "scores": {
     "train": [
       {

@@ -237,6 +237,7 @@ def extend_lang_pairs() -> dict[str, list[str]]:
                         x.replace("_", "-"),
                         y.replace("_", "-"),
                     ]
+
     return hf_lang_subset2isolang
 
 
@@ -290,5 +291,5 @@ class NTREXBitextMining(AbsTaskBitextMining, MultilingualTask):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.data_loaded = True
