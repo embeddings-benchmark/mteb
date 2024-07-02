@@ -62,10 +62,9 @@ class AbsTaskBitextMining(AbsTask):
     def _evaluate_subset(
         self, model, data_split: Dataset, parallel=False, **kwargs
     ) -> ScoresDict:
+        pairs = [("sentence1", "sentence2")]
         if parallel:
             pairs = [langpair.split("-") for langpair in self.hf_subsets]
-        else:
-            pairs = [("sentence1", "sentence2")]
 
         evaluator = BitextMiningEvaluator(
             data_split,
