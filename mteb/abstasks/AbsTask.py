@@ -152,6 +152,11 @@ class AbsTask(ABC):
                     raise e
 
         for split in splits:
+            if n_samples >= len(dataset_dict[split]):
+                logger.debug(
+                    f"Subsampling not needed for split {split}, as n_samples is equal or greater than the number of samples."
+                )
+                continue
             dataset_dict.update(
                 {
                     split: dataset_dict[split].train_test_split(

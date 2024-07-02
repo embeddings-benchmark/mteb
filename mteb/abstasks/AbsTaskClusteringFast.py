@@ -53,11 +53,13 @@ def evaluate_clustering_bootstrapped(
             else:
                 level_labels.append(-1)
         level_labels = np.array(level_labels)
-        valid_idx = level_labels != -1
+        valid_idx = np.array(
+            [level_label != -1 for level_label in level_labels]
+        )  # Could be level_labels != -1 but fails with FutureWarning: elementwise comparison failed
         level_labels = level_labels[valid_idx]
         level_embeddings = embeddings[valid_idx]
         clustering_model = sklearn.cluster.MiniBatchKMeans(
-            n_clusters=len(set(level_labels)),
+            n_clusters=np.unique(level_labels).size,
             batch_size=kmean_batch_size,
             n_init="auto",
         )
