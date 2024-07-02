@@ -78,7 +78,7 @@ def create_task_lang_table(tasks: list[mteb.AbsTask]) -> str:
         pl_table_dict.append(d)
 
     df = pl.DataFrame(pl_table_dict).sort(by="lang")
-    total = df.sum(axis=0)
+    total = df.sum_horizontal()
 
     task_names_md = " | ".join(sorted(get_args(TASK_TYPE)))
     horizontal_line_md = "---|---" * len(sorted(get_args(TASK_TYPE)))

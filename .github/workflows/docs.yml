@@ -22,6 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           make install
+          pip install "pandas>=2.0.0"
 
       - name: Create table
         run: python docs/create_tasks_table.py
