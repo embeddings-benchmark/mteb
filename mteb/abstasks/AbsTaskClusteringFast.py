@@ -53,11 +53,13 @@ def evaluate_clustering_bootstrapped(
             else:
                 level_labels.append(-1)
         level_labels = np.array(level_labels)
-        valid_idx = level_labels != -1
+        valid_idx = np.array(
+            [level_label != -1 for level_label in level_labels]
+        )  # Could be level_labels != -1 but fails with FutureWarning: elementwise comparison failed
         level_labels = level_labels[valid_idx]
         level_embeddings = embeddings[valid_idx]
         clustering_model = sklearn.cluster.MiniBatchKMeans(
-            n_clusters=len(set(level_labels)),
+            n_clusters=np.unique(level_labels).size,
             batch_size=kmean_batch_size,
             n_init="auto",
         )
@@ -134,7 +136,7 @@ class AbsTaskClusteringFast(AbsTask):
         ):
             downsampled_dataset = dataset
         else:
-            max_documents_to_embed = self.max_document_to_embed
+            max_documents_to_embed = min(len(dataset), self.max_document_to_embed)
             if self.max_fraction_of_documents_to_embed is not None:
                 max_documents_to_embed = int(
                     self.max_fraction_of_documents_to_embed * len(dataset)

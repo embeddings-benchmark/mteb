@@ -119,7 +119,7 @@ class MLSUMClusteringS2SFast(AbsTaskClusteringFast, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        n_samples={"validation": N_SAMPLES, "test": N_SAMPLES},
+        n_samples={"validation": 750, "test": 756},
         avg_character_length={"validation": 4613, "test": 4810},
     )
 
