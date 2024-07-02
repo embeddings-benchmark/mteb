@@ -12,6 +12,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
+from mteb.encoder_interface import Encoder
+
 from ..evaluation.evaluators.model_encode import model_encode
 from ..load_results.mteb_results import HFSubset, ScoresDict
 from .AbsTask import AbsTask
@@ -76,7 +78,13 @@ class AbsTaskMultilabelClassification(AbsTask):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def evaluate(
-        self, model, eval_split="test", train_split="train", **kwargs
+        self,
+        model: Encoder,
+        eval_split: str = "test",
+        train_split: str = "train",
+        *,
+        encode_kwargs: dict[str, Any] = {},
+        **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
             self.load_data()
@@ -94,14 +102,26 @@ class AbsTaskMultilabelClassification(AbsTask):
             else:
                 ds = self.dataset[hf_subset]
             scores[hf_subset] = self._evaluate_subset(
-                model, ds, eval_split, train_split, **kwargs
+                model,
+                ds,
+                eval_split,
+                train_split,
+                encode_kwargs=encode_kwargs,
+                **kwargs,
             )
             self._add_main_score(scores[hf_subset])
 
         return scores
 
     def _evaluate_subset(
-        self, model, dataset, eval_split="test", train_split="train", **kwargs
+        self,
+        model: Encoder,
+        dataset,
+        eval_split: str = "test",
+        train_split: str = "train",
+        *,
+        encode_kwargs: dict[str, Any] = {},
+        **kwargs: Any,
     ) -> ScoresDict:
         train_split = dataset[train_split]
         eval_split = dataset[eval_split]
@@ -125,7 +145,10 @@ class AbsTaskMultilabelClassification(AbsTask):
         unique_train_sentences = train_split.select(unique_train_indices)["text"]
 
         _unique_train_embeddings = model_encode(
-            unique_train_sentences, model=model, prompt_name=self.metadata.name
+            unique_train_sentences,
+            model=model,
+            prompt_name=self.metadata.name,
+            **encode_kwargs,
         )
         unique_train_embeddings = dict(
             zip(unique_train_indices, _unique_train_embeddings)
@@ -142,7 +165,9 @@ class AbsTaskMultilabelClassification(AbsTask):
         except ValueError:
             logger.warning("Couldn't subsample, continuing with the entire test set.")
 
-        X_test = model_encode(test_text, model=model, prompt_name=self.metadata.name)
+        X_test = model_encode(
+            test_text, model=model, prompt_name=self.metadata.name, **encode_kwargs
+        )
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
                 "=" * 10

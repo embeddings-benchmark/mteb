@@ -6,6 +6,8 @@ from typing import Any
 
 import numpy as np
 
+from mteb.encoder_interface import Encoder
+
 from ..evaluation.evaluators import (
     kNNClassificationEvaluator,
     kNNClassificationEvaluatorPytorch,
@@ -33,11 +35,9 @@ class AbsTaskClassification(AbsTask):
         n_experiments: int | None = None,
         samples_per_label: int | None = None,
         k: int = 3,
-        batch_size: int = 32,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.batch_size = batch_size
         self.method = method
 
         # Bootstrap parameters
@@ -66,7 +66,13 @@ class AbsTaskClassification(AbsTask):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def evaluate(
-        self, model, eval_split="test", train_split="train", **kwargs
+        self,
+        model,
+        eval_split: str = "test",
+        train_split: str = "train",
+        *,
+        encode_kwargs: dict[str, Any] = {},
+        **kwargs,
     ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
             self.load_data()
@@ -84,18 +90,29 @@ class AbsTaskClassification(AbsTask):
             else:
                 ds = self.dataset[hf_subset]
             scores[hf_subset] = self._evaluate_subset(
-                model, ds, eval_split, train_split, **kwargs
+                model,
+                ds,
+                eval_split,
+                train_split,
+                encode_kwargs=encode_kwargs,
+                **kwargs,
             )
             self._add_main_score(scores[hf_subset])
 
         return scores
 
     def _evaluate_subset(
-        self, model, dataset, eval_split="test", train_split="train", **kwargs
+        self,
+        model: Encoder,
+        dataset,
+        eval_split: str = "test",
+        train_split: str = "train",
+        encode_kwargs: dict[str, Any] = {},
+        **kwargs,
     ) -> ScoresDict:
         train_split = dataset[train_split]
         eval_split = dataset[eval_split]
-        params = {"k": self.k, "batch_size": self.batch_size}
+        params = {"k": self.k}
         params.update(kwargs)
 
         scores = []
@@ -109,34 +126,40 @@ class AbsTaskClassification(AbsTask):
             )
             # Bootstrap `self.samples_per_label` samples per label for each split
             X_sampled, y_sampled, idxs = self._undersample_data(
-                train_split["text"], train_split["label"], self.samples_per_label, idxs
+                train_split["text"],  # type: ignore
+                train_split["label"],  # type: ignore
+                self.samples_per_label,
+                idxs,
             )
 
             if self.method == "kNN":
                 evaluator = kNNClassificationEvaluator(
                     X_sampled,
                     y_sampled,
-                    eval_split["text"],
-                    eval_split["label"],
+                    eval_split["text"],  # type: ignore
+                    eval_split["label"],  # type: ignore
                     task_name=self.metadata.name,
+                    encode_kwargs=encode_kwargs,
                     **params,
                 )
             elif self.method == "kNN-pytorch":
                 evaluator = kNNClassificationEvaluatorPytorch(
                     X_sampled,
                     y_sampled,
-                    eval_split["text"],
-                    eval_split["label"],
+                    eval_split["text"],  # type: ignore
+                    eval_split["label"],  # type: ignore
                     task_name=self.metadata.name,
+                    encode_kwargs=encode_kwargs,
                     **params,
                 )
             elif self.method == "logReg":
                 evaluator = logRegClassificationEvaluator(
                     X_sampled,
                     y_sampled,
-                    eval_split["text"],
-                    eval_split["label"],
+                    eval_split["text"],  # type: ignore
+                    eval_split["label"],  # type: ignore
                     task_name=self.metadata.name,
+                    encode_kwargs=encode_kwargs,
                     **params,
                 )
             else:

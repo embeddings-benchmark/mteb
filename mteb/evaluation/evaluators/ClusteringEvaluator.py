@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 import sklearn
 import sklearn.cluster
@@ -21,7 +22,6 @@ class ClusteringEvaluator(Evaluator):
         labels,
         task_name: str | None = None,
         clustering_batch_size: int = 500,
-        batch_size: int = 32,
         limit: int | None = None,
         **kwargs,
     ):
@@ -32,15 +32,17 @@ class ClusteringEvaluator(Evaluator):
         self.sentences = sentences
         self.labels = labels
         self.clustering_batch_size = clustering_batch_size
-        self.batch_size = batch_size
         self.task_name = task_name
 
-    def __call__(self, model: Encoder):
+    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
+        if "batch_size" not in encode_kwargs:
+            encode_kwargs["batch_size"] = 32
+
         corpus_embeddings = model_encode(
             self.sentences,
             model=model,
             prompt_name=self.task_name,
-            batch_size=self.batch_size,
+            **encode_kwargs,
         )
 
         logger.info("Fitting Mini-Batch K-Means model...")

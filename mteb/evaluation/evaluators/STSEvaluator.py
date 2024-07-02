@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 import numpy as np
 from scipy.stats import pearsonr, spearmanr
@@ -25,7 +26,6 @@ class STSEvaluator(Evaluator):
         sentences2,
         gold_scores,
         task_name: str | None = None,
-        batch_size: int = 64,
         limit: int | None = None,
         **kwargs,
     ):
@@ -37,21 +37,19 @@ class STSEvaluator(Evaluator):
         self.sentences1 = sentences1
         self.sentences2 = sentences2
         self.gold_scores = gold_scores
-        self.batch_size = batch_size
         self.task_name = task_name
 
-    def __call__(self, model: Encoder | EncoderWithSimilarity):
+    def __call__(
+        self,
+        model: Encoder | EncoderWithSimilarity,
+        *,
+        encode_kwargs: dict[str, Any] = {},
+    ):
         embeddings1 = model_encode(
-            self.sentences1,
-            model=model,
-            prompt_name=self.task_name,
-            batch_size=self.batch_size,
+            self.sentences1, model=model, prompt_name=self.task_name, **encode_kwargs
         )
         embeddings2 = model_encode(
-            self.sentences2,
-            model=model,
-            prompt_name=self.task_name,
-            batch_size=self.batch_size,
+            self.sentences2, model=model, prompt_name=self.task_name, **encode_kwargs
         )
 
         logger.info("Evaluating...")

@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 import numpy as np
 
+from mteb.encoder_interface import Encoder
 from mteb.load_results.mteb_results import ScoresDict
 
 from ..evaluation.evaluators import SummarizationEvaluator
@@ -33,7 +35,9 @@ class AbsTaskSummarization(AbsTask):
     def max_score(self):
         return self.metadata_dict["max_score"]
 
-    def _evaluate_subset(self, model, data_split, **kwargs) -> ScoresDict:
+    def _evaluate_subset(
+        self, model: Encoder, data_split, *, encode_kwargs: dict[str, Any], **kwargs
+    ) -> ScoresDict:
         normalized_scores = list(
             map(
                 lambda x: (np.array(x) - self.min_score)
@@ -49,7 +53,7 @@ class AbsTaskSummarization(AbsTask):
             task_name=self.metadata.name,
             **kwargs,
         )
-        scores = evaluator(model)
+        scores = evaluator(model, encode_kwargs=encode_kwargs)
         self._add_main_score(scores)
         return scores
 

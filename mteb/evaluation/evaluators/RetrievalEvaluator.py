@@ -5,7 +5,7 @@ import json
 import logging
 import os
 from collections import defaultdict
-from typing import Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 
 import numpy as np
 import pytrec_eval
@@ -39,14 +39,22 @@ class DenseRetrievalExactSearch:
     def __init__(
         self,
         model: EncoderWithQueryCorpusEncode,
-        batch_size: int = 128,
+        encode_kwargs: dict[str, Any] = {},
         corpus_chunk_size: int = 50000,
         previous_results: str | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         # Model is class that provides encode_corpus() and encode_queries()
         self.model = model
-        self.batch_size = batch_size
+        self.encode_kwargs = encode_kwargs
+
+        if "batch_size" not in encode_kwargs:
+            encode_kwargs["batch_size"] = 128
+        if "show_progress_bar" not in encode_kwargs:
+            encode_kwargs["show_progress_bar"] = True
+        if "convert_to_tensor" not in encode_kwargs:
+            encode_kwargs["convert_to_tensor"] = True
+
         self.score_functions = {"cos_sim": cos_sim, "dot": dot_score}
         self.score_function_desc = {
             "cos_sim": "Cosine Similarity",
@@ -54,8 +62,8 @@ class DenseRetrievalExactSearch:
         }
         self.corpus_chunk_size = corpus_chunk_size
         self.previous_results = previous_results
-        self.show_progress_bar = kwargs.get("show_progress_bar", True)
-        self.convert_to_tensor = kwargs.get("convert_to_tensor", True)
+        self.batch_size = encode_kwargs.get("batch_size")
+        self.show_progress_bar = encode_kwargs.get("show_progress_bar")
         self.save_corpus_embeddings = kwargs.get("save_corpus_embeddings", False)
         self.corpus_embeddings = defaultdict(list)
         self.results = {}
@@ -94,19 +102,13 @@ class DenseRetrievalExactSearch:
             query_embeddings = self.model.encode_conversations(
                 queries,
                 prompt_name=prompt_name,
-                batch_size=self.batch_size,
-                show_progress_bar=self.show_progress_bar,
-                convert_to_tensor=self.convert_to_tensor,
-                **kwargs,
+                **self.encode_kwargs,
             )
         else:
             query_embeddings = self.model.encode_queries(
                 queries,
                 prompt_name=prompt_name,
-                batch_size=self.batch_size,
-                show_progress_bar=self.show_progress_bar,
-                convert_to_tensor=self.convert_to_tensor,
-                **kwargs,
+                **self.encode_kwargs,
             )
 
         logger.info("Sorting Corpus by document length (Longest first)...")
@@ -147,9 +149,7 @@ class DenseRetrievalExactSearch:
                 sub_corpus_embeddings = self.model.encode_corpus(
                     corpus[corpus_start_idx:corpus_end_idx],  # type: ignore
                     prompt_name=prompt_name,
-                    batch_size=self.batch_size,
-                    show_progress_bar=self.show_progress_bar,
-                    convert_to_tensor=self.convert_to_tensor,
+                    **self.encode_kwargs,
                 )
                 if self.save_corpus_embeddings and "qid" in kwargs:
                     self.corpus_embeddings[kwargs["qid"]].append(sub_corpus_embeddings)
@@ -464,6 +464,7 @@ class RetrievalEvaluator(Evaluator):
         task_name: str | None = None,
         k_values: List[int] = [1, 3, 5, 10, 20, 100, 1000],
         score_function: str = "cos_sim",
+        encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -472,18 +473,24 @@ class RetrievalEvaluator(Evaluator):
             logger.info(
                 "The custom predict function of the model will be used if not a SentenceTransformer CrossEncoder"
             )
-            self.retriever = DenseRetrievalExactSearch(retriever, **kwargs)
+            self.retriever = DenseRetrievalExactSearch(
+                retriever, encode_kwargs=encode_kwargs, **kwargs
+            )
             self.is_cross_encoder = True
         elif is_dres_compatible(retriever):
             logger.info(
                 "The custom encode_queries and encode_corpus functions of the model will be used"
             )
-            self.retriever = DenseRetrievalExactSearch(retriever, **kwargs)
+            self.retriever = DenseRetrievalExactSearch(
+                retriever, encode_kwargs=encode_kwargs, **kwargs
+            )
         else:
             logger.info(
                 "The model does not have the optional encode_queries and encode_corpus functions. Wrapping it in DRESModel."
             )
-            self.retriever = DenseRetrievalExactSearch(DRESModel(retriever), **kwargs)
+            self.retriever = DenseRetrievalExactSearch(
+                DRESModel(retriever), encode_kwargs=encode_kwargs, **kwargs
+            )
         self.k_values = k_values
         self.top_k = (
             max(k_values) if "top_k" not in kwargs else kwargs["top_k"]
@@ -507,7 +514,7 @@ class RetrievalEvaluator(Evaluator):
                 queries,
                 self.top_k,
                 self.score_function,
-                prompt_name=self.task_name,
+                prompt_name=self.task_name,  # type: ignore
             )
 
     @staticmethod
