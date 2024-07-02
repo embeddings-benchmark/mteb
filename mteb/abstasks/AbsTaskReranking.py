@@ -27,10 +27,15 @@ class AbsTaskReranking(AbsTask):
         self,
         model: Encoder | EncoderWithQueryCorpusEncode,
         data_split: Dataset,
+        *,
+        encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> ScoresDict:
         evaluator = RerankingEvaluator(
-            data_split, task_name=self.metadata.name, **kwargs
+            data_split,
+            task_name=self.metadata.name,
+            encode_kwargs=encode_kwargs,
+            **kwargs,
         )
         scores = evaluator(model)
 

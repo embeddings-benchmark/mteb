@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 import numpy as np
 from sklearn.metrics import average_precision_score
@@ -41,7 +42,6 @@ class PairClassificationEvaluator(Evaluator):
         sentences2,
         labels,
         task_name: str | None = None,
-        batch_size: int = 32,
         limit: int | None = None,
         **kwargs,
     ):
@@ -53,7 +53,6 @@ class PairClassificationEvaluator(Evaluator):
         self.sentences1 = sentences1
         self.sentences2 = sentences2
         self.labels = labels
-        self.batch_size = batch_size
         self.task_name = task_name
 
         assert len(self.sentences1) == len(self.sentences2)
@@ -61,15 +60,27 @@ class PairClassificationEvaluator(Evaluator):
         for label in labels:
             assert label == 0 or label == 1
 
-    def __call__(self, model: Encoder | EncoderWithSimilarity):
-        scores = self.compute_metrics(model)
+    def __call__(
+        self,
+        model: Encoder | EncoderWithSimilarity,
+        encode_kwargs: dict[str, Any] = {},
+    ):
+        scores = self.compute_metrics(model, encode_kwargs=encode_kwargs)
 
         # Main score is the max of Average Precision (AP)
         main_score = max(scores[short_name]["ap"] for short_name in scores)
         scores["main_score"] = main_score
         return scores
 
-    def compute_metrics(self, model: Encoder | EncoderWithSimilarity):
+    def compute_metrics(
+        self,
+        model: Encoder | EncoderWithSimilarity,
+        *,
+        encode_kwargs: dict[str, Any] = {},
+    ):
+        if "batch_size" not in encode_kwargs:
+            encode_kwargs["batch_size"] = 32
+
         sentences = list(set(self.sentences1 + self.sentences2))
 
         total_sents = len(self.sentences1) + len(self.sentences2)
@@ -82,7 +93,7 @@ class PairClassificationEvaluator(Evaluator):
             sentences,
             model=model,
             prompt_name=self.task_name,
-            batch_size=self.batch_size,
+            **encode_kwargs,
         )
         emb_dict = {sent: emb for sent, emb in zip(sentences, embeddings)}
         embeddings1 = [emb_dict[sent] for sent in self.sentences1]

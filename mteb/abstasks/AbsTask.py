@@ -83,6 +83,8 @@ class AbsTask(ABC):
         self,
         model: Encoder | EncoderWithQueryCorpusEncode,
         split: str = "test",
+        *,
+        encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluates a Sentence Embedding Model on the task.
@@ -92,6 +94,7 @@ class AbsTask(ABC):
             model: Sentence embedding method. Implements a encode(sentences) method, that encodes sentences and returns a numpy matrix with the
                 sentence embeddings
             split: Which datasplit to be used.
+            encode_kwargs: Additional keyword arguments that are passed to the models encode method.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
         """
         if not self.data_loaded:
@@ -112,11 +115,19 @@ class AbsTask(ABC):
                 data_split = self.dataset[split]
             else:
                 data_split = self.dataset[hf_subset][split]
-            scores[hf_subset] = self._evaluate_subset(model, data_split, **kwargs)
+            scores[hf_subset] = self._evaluate_subset(
+                model, data_split, encode_kwargs=encode_kwargs, **kwargs
+            )
         return scores
 
     @abstractmethod
-    def _evaluate_subset(self, model, data_split, **kwargs) -> ScoresDict:
+    def _evaluate_subset(
+        self,
+        model: Encoder,
+        data_split: DatasetDict | Dataset,
+        encode_kwargs: dict[str, Any],
+        **kwargs: Any,
+    ) -> ScoresDict:
         raise NotImplementedError(
             "If you are using the default evaluate method, you must implement _evaluate_subset method."
         )
