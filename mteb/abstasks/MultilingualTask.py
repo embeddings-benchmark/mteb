@@ -9,12 +9,12 @@ class MultilingualTask(MultiSubsetLoader, AbsTask):
         super().__init__(**kwargs)
         if isinstance(hf_subsets, list):
             hf_subsets = [
-                lang for lang in hf_subsets if lang in self.metadata_dict["eval_langs"]
+                lang for lang in hf_subsets if lang in self.metadata.eval_langs
             ]
         if hf_subsets is not None and len(hf_subsets) > 0:
             self.hf_subsets = (
                 hf_subsets  # TODO: case where user provides langs not in the dataset
             )
         else:
-            self.hf_subsets = self.metadata_dict["eval_langs"]
+            self.hf_subsets = self.metadata.eval_langs
         self.is_multilingual = True

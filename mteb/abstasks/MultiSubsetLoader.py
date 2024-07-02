@@ -25,7 +25,7 @@ class MultiSubsetLoader:
         """
         self.dataset = {}
         merged_dataset = datasets.load_dataset(
-            **self.metadata_dict["dataset"]
+            **self.metadata.dataset
         )  # load "default" subset
         for split in merged_dataset.keys():
             df_split = merged_dataset[split].to_polars()
@@ -44,5 +44,5 @@ class MultiSubsetLoader:
         for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
                 name=lang,
-                **self.metadata_dict.get("dataset", None),
+                **self.metadata.dataset,
             )
