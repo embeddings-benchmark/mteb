@@ -127,6 +127,13 @@ from mteb import MTEB_MAIN_EN
 evaluation = mteb.MTEB(tasks=MTEB_MAIN_EN, task_langs=["en"])
 ```
 
+### Passing in `encode` arguments
+
+To pass in arguments to the model's `encode` function, you can use the encode keyword arguments (`encode_kwargs`):
+
+```python
+evaluation.run(model, encode_kwargs={"batch_size": 32}
+```
 
 ### Evaluation split
 You can evaluate only on `test` splits of all tasks by doing the following:

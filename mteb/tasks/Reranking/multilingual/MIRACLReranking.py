@@ -83,12 +83,15 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         self,
         model: Encoder | EncoderWithQueryCorpusEncode,
         data_split: Dataset,
+        *,
+        encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> ScoresDict:
         evaluator = RerankingEvaluator(
             samples=data_split,
             evaluator_type="miracl",
             task_name=self.metadata.name,
+            encode_kwargs=encode_kwargs,
             **kwargs,
         )
         scores = evaluator(model)
