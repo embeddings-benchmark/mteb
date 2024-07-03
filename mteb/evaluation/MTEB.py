@@ -247,7 +247,13 @@ class MTEB:
 
     @staticmethod
     def _run_eval(
-        task: AbsTask, model: Encoder, split, output_folder, *, encode_kwargs, **kwargs
+        task: AbsTask,
+        model: Encoder,
+        split,
+        output_folder,
+        *,
+        encode_kwargs: dict[str, Any],
+        **kwargs: Any,
     ):
         tick = time()
         results = task.evaluate(
