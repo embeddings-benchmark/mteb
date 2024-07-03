@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import os
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any, List, Sequence, Type
 
 import numpy as np
 import torch
@@ -9,7 +11,7 @@ import torch
 from mteb import AbsTask, Encoder
 
 
-def all_subclasses(cls: type[AbsTask]) -> list[type[AbsTask]]:
+def all_subclasses(cls: Type[AbsTask]) -> List[Type[AbsTask]]:
     return sorted(
         list(
             set(cls.__subclasses__()).union(
