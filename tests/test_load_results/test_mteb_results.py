@@ -194,9 +194,7 @@ def test_revision_layer(json_path, results_path):
     ],
 )
 def test_main_score_in_task_result(task, dataset):
-    """
-    Make sure that main_score of task is in results
-    """
+    """Make sure that main_score of task is in results"""
     all_subclasses_classes = mteb.get_tasks(task_types=[task])
     example_task = all_subclasses_classes[0]
     example_task.is_multilingual = False
@@ -213,9 +211,7 @@ def test_main_score_in_task_result(task, dataset):
 
 
 def test_main_score_in_task_result_multilabel():
-    """
-    Make sure that main_score of task is in results
-    """
+    """Make sure that main_score of task is in results"""
     all_subclasses_classes = mteb.get_tasks(task_types=["MultilabelClassification"])
     example_task = all_subclasses_classes[0]
     example_task.is_multilingual = False
@@ -238,9 +234,7 @@ def test_main_score_in_task_result_multilabel():
 
 @pytest.mark.skip(reason="InstructionRetrival not correctly Initializing")
 def test_main_score_in_task_result_instruction_retrival():
-    """
-    Make sure that main_score of task is in results
-    """
+    """Make sure that main_score of task is in results"""
     all_subclasses_classes = mteb.get_tasks(task_types=["InstructionRetrieval"])
     example_task = all_subclasses_classes[0]
     example_task.is_multilingual = False
@@ -262,9 +256,7 @@ def test_main_score_in_task_result_instruction_retrival():
 
 
 def test_main_score_in_task_result_retrival():
-    """
-    Make sure that main_score of task is in results
-    """
+    """Make sure that main_score of task is in results"""
     all_subclasses_classes = mteb.get_tasks(task_types=["Retrieval"])
     example_task = all_subclasses_classes[0]
     example_task.is_multilingual = False
@@ -301,9 +293,7 @@ def test_main_score_in_task_result_retrival():
 
 
 def test_main_score_in_task_result_gpu_speed():
-    """
-    Make sure that main_score of task is in results
-    """
+    """Make sure that main_score of task is in results"""
     pytest.importorskip("GPUtil")
     pytest.importorskip("psutil")
 

@@ -7,7 +7,8 @@ from datasets import Dataset, DatasetDict
 
 import mteb
 from mteb import (
-    MTEB, MTEBResults,
+    MTEB,
+    MTEBResults,
 )
 from tests.test_load_results.conftest import (
     MockEncoder,
@@ -39,9 +40,7 @@ def test_mteb_load_results():
 @pytest.mark.xfail
 @pytest.mark.parametrize("task", MTEB().tasks_cls)
 def test_load_results_main_score_in_real_results(task):
-    """
-    Test that main score is in real results scores with equal values
-    """
+    """Test that main score is in real results scores with equal values"""
     task_files = get_all_tasks_results()
     task_name = task.metadata.name
     result_files = task_files[task_name]
@@ -57,7 +56,9 @@ def test_load_results_main_score_in_real_results(task):
                 assert (
                     task.metadata.main_score in subset_score
                 ), f"{result_file} not have {task.metadata.main_score} for task {task_name}"
-                assert subset_score[task.metadata.main_score] == subset_score["main_score"], result_file
+                assert (
+                    subset_score[task.metadata.main_score] == subset_score["main_score"]
+                ), result_file
 
 
 @pytest.mark.xfail(reason="Some classification datasets have additional keys")
@@ -105,9 +106,7 @@ def test_load_results_main_score_in_real_results(task):
     ],
 )
 def test_load_results_scores(task, dataset):
-    """
-    Test that all keys from actual task results presented in real task result
-    """
+    """Test that all keys from actual task results presented in real task result"""
     task_files = get_all_tasks_results()
     all_subclasses_classes = mteb.get_tasks(task_types=[task])
     example_task = all_subclasses_classes[0]
@@ -137,9 +136,7 @@ def test_load_results_scores(task, dataset):
 
 
 def test_load_results_scores_multilabel():
-    """
-    Test that all keys from actual task results presented in real task result
-    """
+    """Test that all keys from actual task results presented in real task result"""
     task_files = get_all_tasks_results()
     all_subclasses_classes = mteb.get_tasks(task_types=["MultilabelClassification"])
     example_task = all_subclasses_classes[0]
@@ -176,9 +173,7 @@ def test_load_results_scores_multilabel():
 
 
 def test_load_results_scores_retrival():
-    """
-    Test that all keys from actual task results presented in real task result
-    """
+    """Test that all keys from actual task results presented in real task result"""
     task_files = get_all_tasks_results()
     all_subclasses_classes = mteb.get_tasks(task_types=["Retrieval"])
     example_task = all_subclasses_classes[0]
@@ -230,9 +225,7 @@ def test_load_results_scores_retrival():
 
 
 def test_load_results_scores_gpu_speed():
-    """
-    Test that all keys from actual task results presented in real task result
-    """
+    """Test that all keys from actual task results presented in real task result"""
     task_files = get_all_tasks_results()
     pytest.importorskip("GPUtil")
     pytest.importorskip("psutil")
