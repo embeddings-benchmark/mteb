@@ -94,7 +94,7 @@ class AbsTask(ABC):
             model: Sentence embedding method. Implements a encode(sentences) method, that encodes sentences and returns a numpy matrix with the
                 sentence embeddings
             split: Which datasplit to be used.
-            encode_kwargs: Additional keyword arguments that are passed to the models encode method.
+            encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
         """
         if not self.data_loaded:
