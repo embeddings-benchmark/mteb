@@ -291,5 +291,6 @@ def test_main_score_in_task_result_retrival():
             task_class.metadata.main_score in res
         ), f"{task_class.metadata.name} have main_score {task_class.metadata.main_score} that not in {res.keys()}"
 
+
 if __name__ == "__main__":
     pytest.main([__file__])
