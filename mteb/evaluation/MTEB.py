@@ -292,6 +292,13 @@ class MTEB:
         Returns:
             A list of MTEBResults objects, one for each task evaluated.
         """
+        if "batch_size" in kwargs:
+            logger.warning(
+                "The `batch_size` argument is deprecated and will be removed in the next release. "
+                + "Please use `encode_kwargs = {'batch_size': ...}` to set the batch size instead."
+            )
+            encode_kwargs["batch_size"] = kwargs["batch_size"]
+
         # Set logging
         if verbosity < 2:
             datasets.logging.set_verbosity(40)
