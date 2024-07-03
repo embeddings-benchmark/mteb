@@ -3,23 +3,12 @@ from __future__ import annotations
 import os
 from collections import defaultdict
 from pathlib import Path
-from typing import Any, List, Sequence, Type
+from typing import Any, Sequence
 
 import numpy as np
 import torch
 
-from mteb import AbsTask, Encoder
-
-
-def all_subclasses(cls: Type[AbsTask]) -> List[Type[AbsTask]]:
-    return sorted(
-        list(
-            set(cls.__subclasses__()).union(
-                [s for c in cls.__subclasses__() for s in all_subclasses(c)]
-            )
-        ),
-        key=lambda x: x.__name__,
-    )
+from mteb import Encoder
 
 
 class MockEncoder(Encoder):
@@ -29,15 +18,8 @@ class MockEncoder(Encoder):
         return np.random.randn(len(sentences), 2)
 
 
-def find_root_dir(starting_path: Path) -> Path:
-    current_path = starting_path.resolve()
-    while not (current_path / "pyproject.toml").exists():
-        current_path = current_path.parent
-    return current_path.absolute()
-
-
 def get_all_tasks_results():
-    root_dir = find_root_dir(Path(__file__))
+    root_dir = Path(__file__).parent.parent.absolute()
     results_dir = root_dir / "results"
     task_files = defaultdict(list)
     for path, _, files in os.walk(results_dir):

@@ -11,20 +11,9 @@ from packaging.version import Version
 import mteb
 from mteb import (
     AbsTask,
-    AbsTaskBitextMining,
-    AbsTaskClassification,
-    AbsTaskClustering,
-    AbsTaskClusteringFast,
-    AbsTaskInstructionRetrieval,
-    AbsTaskMultilabelClassification,
-    AbsTaskPairClassification,
-    AbsTaskReranking,
-    AbsTaskRetrieval,
-    AbsTaskSTS,
-    AbsTaskSummarization,
 )
 from mteb.load_results.mteb_results import MTEBResults
-from tests.test_load_results.conftest import MockEncoder, all_subclasses
+from tests.test_load_results.conftest import MockEncoder
 
 tests_folder = Path(__file__).parent
 
@@ -160,22 +149,21 @@ def test_revision_layer(json_path, results_path):
         ], f"Unexpected path structure for version {json_version}: '{relative_path}'"
 
 
-@pytest.mark.xfail
+@pytest.mark.xfail(reason="PairClassification and Reranking fail that test")
 @pytest.mark.parametrize(
     "task, dataset",
     [
         (
-            AbsTaskBitextMining,
+            "BitextMining",
             {"sentence1": ["test"] * 2, "sentence2": ["test"] * 2, "id": ["test"] * 2},
         ),
         (
-            AbsTaskClassification,
+            "Classification",
             {"text": ["test"] * 2, "label": [1, 0]},
         ),  # classification needs at least 2 classes
-        (AbsTaskClustering, {"sentences": [["test"]] * 2, "labels": [[1]] * 2}),
-        (AbsTaskClusteringFast, {"sentences": [["test"]] * 2, "labels": [1] * 2}),
+        ("Clustering", {"sentences": [["test"]] * 2, "labels": [[0], [1]]}),
         (
-            AbsTaskPairClassification,
+            "PairClassification",
             {
                 "sentence1": [["test"]] * 2,
                 "sentence2": [["test"]] * 2,
@@ -183,7 +171,7 @@ def test_revision_layer(json_path, results_path):
             },
         ),
         (
-            AbsTaskReranking,
+            "Reranking",
             {
                 "query": ["test"] * 2,
                 "positive": [["test"]] * 2,
@@ -191,11 +179,11 @@ def test_revision_layer(json_path, results_path):
             },
         ),
         (
-            AbsTaskSTS,
+            "STS",
             {"sentence1": ["test"] * 2, "sentence2": ["test"] * 2, "score": [1] * 2},
         ),
         (
-            AbsTaskSummarization,
+            "Summarization",
             {
                 "text": ["text"],
                 "human_summaries": [["text"]],
@@ -206,8 +194,11 @@ def test_revision_layer(json_path, results_path):
     ],
 )
 def test_main_score_in_task_result(task, dataset):
-    all_subclasses_classes = all_subclasses(task)
-    example_task = all_subclasses_classes[0]()
+    """
+    Make sure that main_score of task is in results
+    """
+    all_subclasses_classes = mteb.get_tasks(task_types=[task])
+    example_task = all_subclasses_classes[0]
     example_task.is_multilingual = False
     example_task.data_loaded = True
     hf_dataset = Dataset.from_dict(dataset)
@@ -222,8 +213,11 @@ def test_main_score_in_task_result(task, dataset):
 
 
 def test_main_score_in_task_result_multilabel():
-    all_subclasses_classes = all_subclasses(AbsTaskMultilabelClassification)
-    example_task = all_subclasses_classes[0]()
+    """
+    Make sure that main_score of task is in results
+    """
+    all_subclasses_classes = mteb.get_tasks(task_types=["MultilabelClassification"])
+    example_task = all_subclasses_classes[0]
     example_task.is_multilingual = False
     example_task.data_loaded = True
     test_dataset = Dataset.from_dict(
@@ -242,10 +236,13 @@ def test_main_score_in_task_result_multilabel():
         ), f"{task_class.metadata.name} have main_score {task_class.metadata.main_score} that not in {res.keys()}"
 
 
-@pytest.mark.skip
+@pytest.mark.skip(reason="InstructionRetrival not correctly Initializing")
 def test_main_score_in_task_result_instruction_retrival():
-    all_subclasses_classes = all_subclasses(AbsTaskInstructionRetrieval)
-    example_task = all_subclasses_classes[0]()
+    """
+    Make sure that main_score of task is in results
+    """
+    all_subclasses_classes = mteb.get_tasks(task_types=["InstructionRetrieval"])
+    example_task = all_subclasses_classes[0]
     example_task.is_multilingual = False
     example_task.data_loaded = True
     test_dataset = Dataset.from_dict(
@@ -265,8 +262,11 @@ def test_main_score_in_task_result_instruction_retrival():
 
 
 def test_main_score_in_task_result_retrival():
-    all_subclasses_classes = all_subclasses(AbsTaskRetrieval)
-    example_task = all_subclasses_classes[0]()
+    """
+    Make sure that main_score of task is in results
+    """
+    all_subclasses_classes = mteb.get_tasks(task_types=["Retrieval"])
+    example_task = all_subclasses_classes[0]
     example_task.is_multilingual = False
     example_task.data_loaded = True
     test_dataset = Dataset.from_dict(
@@ -301,12 +301,14 @@ def test_main_score_in_task_result_retrival():
 
 
 def test_main_score_in_task_result_gpu_speed():
+    """
+    Make sure that main_score of task is in results
+    """
     pytest.importorskip("GPUtil")
     pytest.importorskip("psutil")
-    from mteb import AbsTaskSpeedTask
 
-    all_subclasses_classes = all_subclasses(AbsTaskSpeedTask)
-    example_task = all_subclasses_classes[0]()
+    all_subclasses_classes = mteb.get_tasks(task_types=["Speed"])
+    example_task = all_subclasses_classes[0]
     encoder = MockEncoder()
     res = example_task.evaluate(encoder, split="test")["default"]
     for task_class in all_subclasses_classes:
