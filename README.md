@@ -129,7 +129,7 @@ evaluation = mteb.MTEB(tasks=MTEB_MAIN_EN, task_langs=["en"])
 
 ### Passing in `encode` arguments
 
-To pass in arguments to the model's `encode` function you can use the encode keyword arguments (`encode_kwargs`):
+To pass in arguments to the model's `encode` function, you can use the encode keyword arguments (`encode_kwargs`):
 
 ```python
 evaluation.run(model, encode_kwargs={"batch_size": 32}
