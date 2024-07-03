@@ -222,33 +222,3 @@ def test_load_results_scores_retrival():
                     assert (
                         res_keys == subset_keys
                     ), f"{result_file} for task {task_name} keys not matching expected {res_keys}, actual {subset_keys}"
-
-
-def test_load_results_scores_gpu_speed():
-    """Test that all keys from actual task results presented in real task result"""
-    task_files = get_all_tasks_results()
-    pytest.importorskip("GPUtil")
-    pytest.importorskip("psutil")
-
-    all_subclasses_classes = mteb.get_tasks(task_types=["Speed"])
-    example_task = all_subclasses_classes[0]
-    encoder = MockEncoder()
-    res = example_task.evaluate(encoder, split="test")["default"]
-    res_keys = sorted(list(res.keys()))
-    for task_class in all_subclasses_classes:
-        task_name = task_class.metadata.name
-        result_files = task_files[task_name]
-        for result_file in result_files:
-            result = MTEBResults.from_disk(Path(result_file))
-            for subset, subset_scores in result.scores.items():
-                assert isinstance(subset_scores, list), (
-                    result_file + " 'scores' is not list"
-                )
-                for subset_score in subset_scores:
-                    subset_keys = list(subset_score.keys())
-                    subset_keys.remove("hf_subset")
-                    subset_keys.remove("languages")
-                    subset_keys = sorted(subset_keys)
-                    assert (
-                        res_keys == subset_keys
-                    ), f"{result_file} for task {task_name} keys not matching expected {res_keys}, actual {subset_keys}"

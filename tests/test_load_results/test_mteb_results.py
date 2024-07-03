@@ -298,13 +298,12 @@ def test_main_score_in_task_result_gpu_speed():
     pytest.importorskip("psutil")
 
     all_subclasses_classes = mteb.get_tasks(task_types=["Speed"])
-    example_task = all_subclasses_classes[0]
     encoder = MockEncoder()
-    res = example_task.evaluate(encoder, split="test")["default"]
-    for task_class in all_subclasses_classes:
+    for task in all_subclasses_classes:
+        res = task.evaluate(encoder, split="test")["default"]
         assert (
-            task_class.metadata.main_score in res
-        ), f"{task_class.metadata.name} have main_score {task_class.metadata.main_score} that not in {res.keys()}"
+            task.metadata.main_score in res
+        ), f"{task.metadata.name} have main_score {task.metadata.main_score} that not in {res.keys()}"
 
 
 if __name__ == "__main__":
