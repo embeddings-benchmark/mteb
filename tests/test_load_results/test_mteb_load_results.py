@@ -3,15 +3,12 @@ import os
 from pathlib import Path
 
 import pytest
-from datasets import Dataset, DatasetDict
 
 import mteb
 from mteb import (
     MTEB,
-    MTEBResults,
 )
 from tests.test_load_results.conftest import (
-    MockEncoder,
     get_all_tasks_results,
 )
 
@@ -70,6 +67,10 @@ def test_load_results_scores():
         for rev, mtebscore in revscores.items():
             for mteb_result in mtebscore:
                 task = mteb.get_task(mteb_result.task_name)
-                score = mteb_result.get_score(getter=lambda scores: scores[task.metadata.main_score])
-                main_score = mteb_result.get_score(getter=lambda scores: scores["main_score"])
+                score = mteb_result.get_score(
+                    getter=lambda scores: scores[task.metadata.main_score]
+                )
+                main_score = mteb_result.get_score(
+                    getter=lambda scores: scores["main_score"]
+                )
                 assert score == main_score, f"{model} {mteb_result.task_name}"
