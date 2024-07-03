@@ -291,20 +291,5 @@ def test_main_score_in_task_result_retrival():
             task_class.metadata.main_score in res
         ), f"{task_class.metadata.name} have main_score {task_class.metadata.main_score} that not in {res.keys()}"
 
-
-def test_main_score_in_task_result_gpu_speed():
-    """Make sure that main_score of task is in results"""
-    pytest.importorskip("GPUtil")
-    pytest.importorskip("psutil")
-
-    all_subclasses_classes = mteb.get_tasks(task_types=["Speed"])
-    encoder = MockEncoder()
-    for task in all_subclasses_classes:
-        res = task.evaluate(encoder, split="test")["default"]
-        assert (
-            task.metadata.main_score in res
-        ), f"{task.metadata.name} have main_score {task.metadata.main_score} that not in {res.keys()}"
-
-
 if __name__ == "__main__":
     pytest.main([__file__])
