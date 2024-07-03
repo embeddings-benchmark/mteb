@@ -64,7 +64,7 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         category="s2s",
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGUAGES,
-        main_score="NDCG@10(MIRACL)",
+        main_score="map",
         date=("2022-06-01", "2023-01-30"),
         form=["written"],
         domains=["Encyclopaedic"],

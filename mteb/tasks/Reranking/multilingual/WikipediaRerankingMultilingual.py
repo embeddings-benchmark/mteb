@@ -30,7 +30,6 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
         name="WikipediaRerankingMultilingual",
         description="The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.",
         reference="https://huggingface.co/datasets/ellamind/wikipedia-2023-11-reranking-multilingual",
-        hf_hub_name="ellamind/wikipedia-2023-11-reranking-multilingual",
         dataset={
             "path": "ellamind/wikipedia-2023-11-reranking-multilingual",
             "revision": "6268b37d6f975f2a134791ba2f250a91d0bdfb4f",

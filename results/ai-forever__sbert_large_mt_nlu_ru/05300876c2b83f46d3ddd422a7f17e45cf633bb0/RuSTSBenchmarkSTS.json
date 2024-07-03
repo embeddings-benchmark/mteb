@@ -6,23 +6,17 @@
   "scores": {
     "test": [
       {
-        "cos_sim": {
-          "pearson": 0.7325497596408407,
-          "spearman": 0.7122457553400247
-        },
-        "euclidean": {
-          "pearson": 0.7319945098848417,
-          "spearman": 0.7122444896135419
-        },
+        "cosine_pearson": 0.7325497596408407,
+        "cosine_spearman": 0.7122457553400247,
+        "euclidean_pearson": 0.7319945098848417,
+        "euclidean_spearman": 0.7122444896135419,
+        "manhattan_pearson": 0.7375216750360236,
+        "manhattan_spearman": 0.7167666976721552,
         "hf_subset": "default",
         "languages": [
           "rus-Cyrl"
         ],
-        "main_score": 0.7122457553400247,
-        "manhattan": {
-          "pearson": 0.7375216750360236,
-          "spearman": 0.7167666976721552
-        }
+        "main_score": 0.7122457553400247
       }
     ]
   },

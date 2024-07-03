@@ -5,11 +5,26 @@ from importlib.metadata import version
 from pathlib import Path
 
 import pytest
+from datasets import Dataset, DatasetDict
 from packaging.version import Version
 
 import mteb
-from mteb import AbsTask
+from mteb import (
+    AbsTask,
+    AbsTaskBitextMining,
+    AbsTaskClassification,
+    AbsTaskClustering,
+    AbsTaskClusteringFast,
+    AbsTaskInstructionRetrieval,
+    AbsTaskMultilabelClassification,
+    AbsTaskPairClassification,
+    AbsTaskReranking,
+    AbsTaskRetrieval,
+    AbsTaskSTS,
+    AbsTaskSummarization,
+)
 from mteb.load_results.mteb_results import MTEBResults
+from tests.test_load_results.conftest import MockEncoder, all_subclasses
 
 tests_folder = Path(__file__).parent
 
@@ -143,6 +158,161 @@ def test_revision_layer(json_path, results_path):
             2,
             3,
         ], f"Unexpected path structure for version {json_version}: '{relative_path}'"
+
+
+@pytest.mark.xfail
+@pytest.mark.parametrize(
+    "task, dataset",
+    [
+        (
+            AbsTaskBitextMining,
+            {"sentence1": ["test"] * 2, "sentence2": ["test"] * 2, "id": ["test"] * 2},
+        ),
+        (
+            AbsTaskClassification,
+            {"text": ["test"] * 2, "label": [1, 0]},
+        ),  # classification needs at least 2 classes
+        (AbsTaskClustering, {"sentences": [["test"]] * 2, "labels": [[1]] * 2}),
+        (AbsTaskClusteringFast, {"sentences": [["test"]] * 2, "labels": [1] * 2}),
+        (
+            AbsTaskPairClassification,
+            {
+                "sentence1": [["test"]] * 2,
+                "sentence2": [["test"]] * 2,
+                "labels": [[1]] * 2,
+            },
+        ),
+        (
+            AbsTaskReranking,
+            {
+                "query": ["test"] * 2,
+                "positive": [["test"]] * 2,
+                "negative": [["test"]] * 2,
+            },
+        ),
+        (
+            AbsTaskSTS,
+            {"sentence1": ["test"] * 2, "sentence2": ["test"] * 2, "score": [1] * 2},
+        ),
+        (
+            AbsTaskSummarization,
+            {
+                "text": ["text"],
+                "human_summaries": [["text"]],
+                "machine_summaries": [["text"]],
+                "relevance": [[0.1]],
+            },
+        ),
+    ],
+)
+def test_main_score_in_task_result(task, dataset):
+    all_subclasses_classes = all_subclasses(task)
+    example_task = all_subclasses_classes[0]()
+    example_task.is_multilingual = False
+    example_task.data_loaded = True
+    hf_dataset = Dataset.from_dict(dataset)
+    example_task.dataset = DatasetDict(test=hf_dataset, train=hf_dataset)
+
+    encoder = MockEncoder()
+    res = example_task.evaluate(encoder, split="test")["default"]
+    for task_class in all_subclasses_classes:
+        assert (
+            task_class.metadata.main_score in res
+        ), f"{task_class.metadata.name} have main_score {task_class.metadata.main_score} that not in {res.keys()}"
+
+
+def test_main_score_in_task_result_multilabel():
+    all_subclasses_classes = all_subclasses(AbsTaskMultilabelClassification)
+    example_task = all_subclasses_classes[0]()
+    example_task.is_multilingual = False
+    example_task.data_loaded = True
+    test_dataset = Dataset.from_dict(
+        {"text": ["test", "test", "test"], "label": [[0, 1], [1, 0], [1, 0]]}
+    )
+    train_dataset = Dataset.from_dict(
+        {"text": ["test"] * 100, "label": [[0, 1], [1, 0]] * 50}
+    )
+    example_task.dataset = DatasetDict(test=test_dataset, train=train_dataset)
+
+    encoder = MockEncoder()
+    res = example_task.evaluate(encoder, split="test")["default"]
+    for task_class in all_subclasses_classes:
+        assert (
+            task_class.metadata.main_score in res
+        ), f"{task_class.metadata.name} have main_score {task_class.metadata.main_score} that not in {res.keys()}"
+
+
+@pytest.mark.skip
+def test_main_score_in_task_result_instruction_retrival():
+    all_subclasses_classes = all_subclasses(AbsTaskInstructionRetrieval)
+    example_task = all_subclasses_classes[0]()
+    example_task.is_multilingual = False
+    example_task.data_loaded = True
+    test_dataset = Dataset.from_dict(
+        {"query": ["test", "test"], "instruction": ["test", "test"]}
+    )
+    train_dataset = Dataset.from_dict(
+        {"query": ["test", "test"], "instruction": ["test", "test"]}
+    )
+    example_task.dataset = DatasetDict(test=test_dataset, train=train_dataset)
+
+    encoder = MockEncoder()
+    res = example_task.evaluate(encoder, split="test")["default"]
+    for task_class in all_subclasses_classes:
+        assert (
+            task_class.metadata.main_score in res
+        ), f"{task_class.metadata.name} have main_score {task_class.metadata.main_score} that not in {res.keys()}"
+
+
+def test_main_score_in_task_result_retrival():
+    all_subclasses_classes = all_subclasses(AbsTaskRetrieval)
+    example_task = all_subclasses_classes[0]()
+    example_task.is_multilingual = False
+    example_task.data_loaded = True
+    test_dataset = Dataset.from_dict(
+        {
+            "id": [1, 2],
+            "context": ["test", "test"],
+            "question": ["test", "test"],
+            "answers": ["test", "test"],
+        }
+    )
+    train_dataset = Dataset.from_dict(
+        {
+            "id": [1, 2],
+            "context": ["test", "test"],
+            "question": ["test", "test"],
+            "answers": ["test", "test"],
+        }
+    )
+    example_task.dataset = DatasetDict(test=test_dataset, train=train_dataset)
+    example_task.corpus = {
+        "test": {"document_one": {"_id": "d1", "title": "title", "text": "text"}}
+    }
+    example_task.queries = {"test": {"q1": ["turn1", "turn2", "turn3"]}}
+    example_task.relevant_docs = {"test": {"q1": {"document_one": 1}}}
+
+    encoder = MockEncoder()
+    res = example_task.evaluate(encoder, split="test")["default"]
+    for task_class in all_subclasses_classes:
+        assert (
+            task_class.metadata.main_score in res
+        ), f"{task_class.metadata.name} have main_score {task_class.metadata.main_score} that not in {res.keys()}"
+
+
+def test_main_score_in_task_result_gpu_speed():
+    pytest.importorskip("GPUtil")
+    pytest.importorskip("psutil")
+    from mteb import AbsTaskSpeedTask
+
+    all_subclasses_classes = all_subclasses(AbsTaskSpeedTask)
+    example_task = all_subclasses_classes[0]()
+    encoder = MockEncoder()
+    res = example_task.evaluate(encoder, split="test")["default"]
+    for task_class in all_subclasses_classes:
+        assert (
+            task_class.metadata.main_score in res
+        ), f"{task_class.metadata.name} have main_score {task_class.metadata.main_score} that not in {res.keys()}"
 
 
 if __name__ == "__main__":
