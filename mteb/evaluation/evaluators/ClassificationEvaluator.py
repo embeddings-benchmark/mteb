@@ -35,7 +35,7 @@ class kNNClassificationEvaluator(Evaluator):
         y_test,
         task_name: str | None = None,
         k: int = 1,
-        encode_kwargs: dict[str, Any] = {"batch_size": 32},
+        encode_kwargs: dict[str, Any] = {},
         limit: int | None = None,
         **kwargs,
     ):
@@ -52,6 +52,10 @@ class kNNClassificationEvaluator(Evaluator):
 
         self.task_name = task_name
         self.encode_kwargs = encode_kwargs
+
+        if "batch_size" not in self.encode_kwargs:
+            self.encode_kwargs["batch_size"] = 32
+
         self.k = k
 
     def __call__(self, model, test_cache=None):
@@ -106,7 +110,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         y_test,
         task_name: str,
         k: int = 1,
-        encode_kwargs: dict[str, Any] = {"batch_size": 32},
+        encode_kwargs: dict[str, Any] = {},
         limit: int | None = None,
         **kwargs: Any,
     ):
@@ -124,6 +128,10 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 
         self.task_name = task_name
         self.encode_kwargs = encode_kwargs
+
+        if "batch_size" not in self.encode_kwargs:
+            self.encode_kwargs["batch_size"] = 32
+
         self.k = k
 
     def __call__(self, model: Encoder, test_cache=None):
