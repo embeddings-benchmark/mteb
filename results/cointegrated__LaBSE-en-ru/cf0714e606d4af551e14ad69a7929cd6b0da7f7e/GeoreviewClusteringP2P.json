@@ -1,0 +1,34 @@
+{
+  "dataset_revision": "97a313c8fc85b47f13f33e7e9a95c1ad888c7fec",
+  "evaluation_time": 11.9805908203125,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.49",
+  "scores": {
+    "test": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "rus-Cyrl"
+        ],
+        "main_score": 0.5189085926575909,
+        "v_measure": 0.5189085926575909,
+        "v_measure_std": 0.00934946501839827,
+        "v_measures": {
+          "Level 0": [
+            0.5148533304682752,
+            0.5286911914167258,
+            0.5065089391389558,
+            0.5345668817367675,
+            0.5212652809754154,
+            0.5109324365997421,
+            0.5139547558618763,
+            0.5303607452083189,
+            0.5072857242094889,
+            0.520666640960344
+          ]
+        }
+      }
+    ]
+  },
+  "task_name": "GeoreviewClusteringP2P"
+}

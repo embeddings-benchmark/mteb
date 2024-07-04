@@ -7,7 +7,7 @@ from datasets import Dataset
 
 from ..encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from ..evaluation.evaluators import PairClassificationEvaluator
-from ..MTEBResults import ScoresDict
+from ..load_results.mteb_results import ScoresDict
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -34,6 +34,8 @@ class AbsTaskPairClassification(AbsTask):
         self,
         model: Encoder | EncoderWithQueryCorpusEncode,
         dataset: Dataset,
+        *,
+        encode_kwargs: dict[str, str] = {},
         **kwargs,
     ) -> ScoresDict:
         data_split = dataset[0]
@@ -47,7 +49,7 @@ class AbsTaskPairClassification(AbsTask):
             task_name=self.metadata.name,
             **kwargs,
         )
-        scores = evaluator.compute_metrics(model)
+        scores = evaluator.compute_metrics(model, encode_kwargs=encode_kwargs)
 
         # Compute max
         max_scores = defaultdict(list)

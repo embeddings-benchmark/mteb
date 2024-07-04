@@ -6,13 +6,13 @@ import os
 from collections import defaultdict
 from pathlib import Path
 from time import time
-from typing import Dict, Tuple
+from typing import Any, Dict, Tuple
 
 import tqdm
 from datasets import Features, Value, load_dataset
 
 from ..evaluation.evaluators import RetrievalEvaluator
-from ..MTEBResults import ScoresDict
+from ..load_results.mteb_results import ScoresDict
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -248,9 +248,19 @@ class AbsTaskRetrieval(AbsTask):
 
         self.data_loaded = True
 
-    def evaluate(self, model, split: str = "test", **kwargs):
+    def evaluate(
+        self,
+        model,
+        split: str = "test",
+        *,
+        encode_kwargs: dict[str, Any] = {},
+        **kwargs,
+    ):
         retriever = RetrievalEvaluator(
-            retriever=model, task_name=self.metadata.name, **kwargs
+            retriever=model,
+            task_name=self.metadata.name,
+            encode_kwargs=encode_kwargs,
+            **kwargs,
         )
 
         scores = {}

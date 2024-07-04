@@ -8,7 +8,7 @@ from pathlib import Path
 import numpy as np
 
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
-from mteb.MTEBResults import ScoresDict
+from mteb.load_results.mteb_results import ScoresDict
 
 from .AbsTask import AbsTask
 
