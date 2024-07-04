@@ -69,7 +69,7 @@ def _load_data(
         # don't pass on titles to make task harder
         corpus_lang_dict = {doc["_id"]: {"text": doc["text"]} for doc in corpus_lang}
         queries_lang_dict = {
-            query["_id"]: {"text": query["text"]} for query in queries_lang
+            query["_id"]: query["text"] for query in queries_lang
         }
         # qrels_lang_dict = {qrel["query-id"]: {qrel["corpus-id"]: qrel["score"]} for qrel in qrels_lang}
 
