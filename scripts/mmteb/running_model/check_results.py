@@ -131,11 +131,12 @@ retrieval_to_be_downsampled = [
     "Quora-PL",
     "QuoraRetrieval",
 ]
+not_include = ["MSMARCOv2"]
 
 tasks_which_should_be_there = [
     t
     for t in tasks_which_should_be_there
-    if t.metadata.name not in retrieval_to_be_downsampled
+    if t.metadata.name not in (retrieval_to_be_downsampled + not_include)
 ]
 
 mteb_results = mteb.load_results()
