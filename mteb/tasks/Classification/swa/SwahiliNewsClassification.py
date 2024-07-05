@@ -11,7 +11,7 @@ class SwahiliNewsClassification(AbsTaskClassification):
         reference="https://huggingface.co/datasets/Mollel/SwahiliNewsClassification",
         dataset={
             "path": "Mollel/SwahiliNewsClassification",
-            "revision": "cd89b0993ca6a71240f7fb16223c64f6fe4a27b7",
+            "revision": "24fcf066e6b96f9e0d743e8b79184e0c599f73c3",
         },
         type="Classification",
         category="s2s",
