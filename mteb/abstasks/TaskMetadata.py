@@ -37,6 +37,7 @@ TASK_SUBTYPE = Literal[
     "Counterfactual Detection",
     "Emotion classification",
     "Reasoning as Retrieval",
+    "Rendered Texts Understanding",
 ]
 
 TASK_DOMAIN = Literal[
@@ -58,6 +59,7 @@ TASK_DOMAIN = Literal[
     "Subtitles",
     "Web",
     "Programming",
+    "Movie",
 ]
 
 TEXT_CREATION_METHOD = Literal[
@@ -90,12 +92,14 @@ TASK_TYPE = Literal[
     "Summarization",
     "InstructionRetrieval",
     "Speed",
+    "ZeroShotClassification",
 ]
 
 TASK_CATEGORY = Literal[
     "s2s",  # Sentence-to-sentence
     "s2p",  # Sentence-to-paragraph
     "p2p",  # Paragraph-to-paragraph
+    "i2t",
 ]
 
 ANNOTATOR_TYPE = Literal[

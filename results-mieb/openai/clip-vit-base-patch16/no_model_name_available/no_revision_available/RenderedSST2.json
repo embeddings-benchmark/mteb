@@ -1,0 +1,19 @@
+{
+  "dataset_revision": "66b9a461eda025201dd147e5f390f5984c33643a",
+  "evaluation_time": 11.55782675743103,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.67",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 0.6051619989017024,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.6051619989017024
+      }
+    ]
+  },
+  "task_name": "RenderedSST2"
+}

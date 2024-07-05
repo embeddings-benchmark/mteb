@@ -1,0 +1,36 @@
+from __future__ import annotations
+
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from ....abstasks import AbsTaskZeroshotClassification
+
+
+class RenderedSST2(AbsTaskZeroshotClassification):
+    metadata = TaskMetadata(
+        name="RenderedSST2",
+        description="RenderedSST2.",
+        reference="https://huggingface.co/datasets/clip-benchmark/wds_renderedsst2/commits/main",
+        dataset={
+            "path": "clip-benchmark/wds_renderedsst2",
+            "revision": "66b9a461eda025201dd147e5f390f5984c33643a",
+        },
+        type="ZeroShotClassification",
+        category="i2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2016-01-01", "2016-12-31"),
+        form=["written"],
+        domains=["Movie"],
+        task_subtypes=[],
+        license="mit",
+        socioeconomic_status="mixed",
+        annotations_creators="human-annotated",
+        dialect=[],
+        text_creation="created",
+        bibtex_citation="""d""",
+        n_samples={"test": 1820},
+        avg_character_length={"test": 10.0},
+    )
+    def get_text_candidates(self) -> list[str]:
+        return ["a negative review of a movie", "a positive review of a movie"]

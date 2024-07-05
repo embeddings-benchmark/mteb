@@ -8,6 +8,7 @@ from sentence_transformers import SentenceTransformer
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.model_meta import ModelMeta
 from mteb.models import (
+    clip_models,
     bge_models,
     cohere_models,
     e5_instruct,
