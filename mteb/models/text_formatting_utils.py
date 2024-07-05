@@ -2,7 +2,8 @@ from __future__ import annotations
 
 
 def corpus_to_texts(
-    corpus: list[dict[str, str]] | dict[str, list[str]] | list[str], sep: str = "\n",
+    corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
+    sep: str = "\n",
 ) -> list[str]:
     if isinstance(corpus, dict):
         return [
