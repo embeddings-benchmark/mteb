@@ -8,7 +8,7 @@ class LivedoorNewsClusteringv2(AbsTaskClusteringFast):
 
     metadata = TaskMetadata(
         name="LivedoorNewsClustering.v2",
-        description="Clustering of the news reports of a Japanese news site, Livedoor News by RONDHUIT Co, Ltd. in 2012. It contains over 7,000 news report texts across 9 categories (topics).",
+        description="Clustering of the news reports of a Japanese news site, Livedoor News by RONDHUIT Co, Ltd. in 2012. It contains over 7,000 news report texts across 9 categories (topics). Version 2 updated on LivedoorNewsClustering by removing pairs where one of entries contain an empty sentences.",
         reference="https://github.com/sbintuitions/JMTEB",
         dataset={
             "path": "sbintuitions/JMTEB",
