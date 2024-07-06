@@ -29,10 +29,9 @@ class SFRWrapper:
         batch_size: int = 32,
         **kwargs: Any,
     ):
+        is_query = kwargs.pop("is_query", True)
         if "prompt_name" in kwargs:
-            instruction = task_to_instruction(
-                kwargs.pop("prompt_name"), kwargs.get("is_query", True)
-            )
+            instruction = task_to_instruction(kwargs.pop("prompt_name"), is_query)
             sentences = [self.get_detailed_instruct(instruction, q) for q in sentences]
         return self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
 
