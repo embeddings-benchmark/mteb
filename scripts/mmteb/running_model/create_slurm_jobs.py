@@ -118,26 +118,44 @@ if __name__ == "__main__":
         ],
     )
 
-    retrieval_to_be_downsampled = ['TopiOCQA',
-    'MSMARCO-PL',
-    'ClimateFEVER',
-    'FEVER',
-    'HotpotQA',
-    'HotpotQA-PL',
-    'DBPedia',
-    'DBPedia-PL',
-    'NeuCLIR2022Retrieval',
-    'NeuCLIR2023Retrieval',
-    'NeuCLIR2022Retrieval',
-    'NeuCLIR2023Retrieval',
-    'NQ',
-    'NQ-PL',
-    'NeuCLIR2022Retrieval',
-    'NeuCLIR2023Retrieval',
-    'MIRACLRetrieval',
-    'RiaNewsRetrieval',
-    'Quora-PL',
-    'QuoraRetrieval']
+    tasks = mteb.get_tasks(
+        task_types=[
+            "BitextMining",
+            "Classification",
+            "MultilabelClassification",
+            "PairClassification",
+            "Reranking",
+            "STS",
+            "Summarization",
+            "Clustering",
+            "InstructionRetrieval",
+            "Retrieval",
+        ]
+    )
+
+    # WE ALSO NEED TO RUN THESE
+    retrieval_to_be_downsampled = [
+        "TopiOCQA",
+        "MSMARCO-PL",
+        "ClimateFEVER",
+        "FEVER",
+        "HotpotQA",
+        "HotpotQA-PL",
+        "DBPedia",
+        "DBPedia-PL",
+        "NeuCLIR2022Retrieval",
+        "NeuCLIR2023Retrieval",
+        "NeuCLIR2022Retrieval",
+        "NeuCLIR2023Retrieval",
+        "NQ",
+        "NQ-PL",
+        "NeuCLIR2022Retrieval",
+        "NeuCLIR2023Retrieval",
+        "MIRACLRetrieval",
+        "RiaNewsRetrieval",
+        "Quora-PL",
+        "QuoraRetrieval",
+    ]
 
     tasks = [t for t in tasks if t.metadata.name not in retrieval_to_be_downsampled]
 

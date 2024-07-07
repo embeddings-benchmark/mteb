@@ -474,6 +474,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [StatcanDialogueDatasetRetrieval](https://mcgill-nlp.github.io/statcan-dialogue-dataset/) | ['eng', 'fra'] | Retrieval | s2p | [Government, Web] | {'dev': 1000, 'test': 1011, 'corpus': 5907} | {'dev': {'english': {'average_document_length': 6535.865413915693, 'average_query_length': 6.869244935543278, 'num_documents': 5907, 'num_queries': 543, 'average_relevant_docs_per_query': 1.4714548802946592}, 'french': {'average_document_length': 7078.072794988996, 'average_query_length': 6.860655737704918, 'num_documents': 5907, 'num_queries': 122, 'average_relevant_docs_per_query': 1.6475409836065573}}, 'test': {'english': {'average_document_length': 6535.865413915693, 'average_query_length': 7.650994575045208, 'num_documents': 5907, 'num_queries': 553, 'average_relevant_docs_per_query': 1.573236889692586}, 'french': {'average_document_length': 7078.072794988996, 'average_query_length': 5.907407407407407, 'num_documents': 5907, 'num_queries': 108, 'average_relevant_docs_per_query': 1.3055555555555556}}} |
 | [SummEval](https://github.com/Yale-LILY/SummEval) (Fabbri et al., 2020) | ['eng'] | Summarization | p2p | [News] | {'test': 2800} | {'test': 359.8} |
 | [SummEvalFr](https://github.com/Yale-LILY/SummEval) (Fabbri et al., 2020) | ['fra'] | Summarization | p2p | [News] | {'test': 2800} | {'test': 407.1} |
+| [SwahiliNewsClassification](https://huggingface.co/datasets/Mollel/SwahiliNewsClassification) | ['swa'] | Classification | s2s | [News] | {'train': 2048} | {'train': 2438.2308135942326} |
 | [SweFaqRetrieval](https://spraakbanken.gu.se/en/resources/superlim) | ['swe'] | Retrieval | s2s | [Government, Non-fiction] | {'test': 1024} | {'test': {'average_document_length': 319.8473581213307, 'average_query_length': 70.51461988304094, 'num_documents': 511, 'num_queries': 513, 'average_relevant_docs_per_query': 1.0}} |
 | [SweRecClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['swe'] | Classification | s2s |  | {'test': 1024} | {'test': 318.8} |
 | [SwedishSentimentClassification](https://huggingface.co/datasets/swedish_reviews) | ['swe'] | Classification | s2s | [Reviews] | {'validation': 1024, 'test': 1024} | {'validation': 499.3, 'test': 498.1} |
@@ -1419,7 +1420,7 @@ The following tables give you an overview of the tasks in MTEB.
 | sus | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | suz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | svk | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| swa | 1 | 6 | 2 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 |
+| swa | 1 | 7 | 2 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 |
 | swe | 4 | 8 | 3 | 0 | 1 | 1 | 1 | 4 | 0 | 0 | 0 |
 | swg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | swh | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
@@ -1621,7 +1622,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1394 | 793 | 304 | 3 | 28 | 67 | 47 | 371 | 85 | 2 | 2 |
+| Total | 1394 | 794 | 304 | 3 | 28 | 67 | 47 | 371 | 85 | 2 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
