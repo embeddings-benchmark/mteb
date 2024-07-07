@@ -65,4 +65,3 @@ if __name__ == "__main__":
 
     mdl = mteb.get_model(gte_Qwen2_7B_instruct.name, gte_Qwen2_7B_instruct.revision)
     emb = mdl.encode(["Hello, world!"])
-    print(emb)

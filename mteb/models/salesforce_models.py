@@ -58,4 +58,3 @@ if __name__ == "__main__":
 
     mdl = mteb.get_model(SFR_Embedding_2_R.name, SFR_Embedding_2_R.revision)
     emb = mdl.encode(["Hello, world!"])
-    print(emb)
