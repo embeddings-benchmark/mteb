@@ -6,9 +6,9 @@ from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
-class PawsX(MultilingualTask, AbsTaskPairClassification):
+class PawsXPairClassification(MultilingualTask, AbsTaskPairClassification):
     metadata = TaskMetadata(
-        name="PawsXPairClassification", 
+        name="PawsXPairClassification",
         dataset={
             "path": "google-research-datasets/paws-x",
             "revision": "8a04d940a42cd40658986fdd8e3da561533a3646",
