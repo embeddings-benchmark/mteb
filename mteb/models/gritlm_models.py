@@ -30,12 +30,6 @@ def gritlm_loader(**kwargs):
                 else:
                     instruction = gritlm_instruction("")
                 kwargs["instruction"] = instruction
-                #print("Instruction", instruction)
-                #print("Args", args)
-                #print("Kwargs", kwargs)
-                #if "batch_size" in kwargs:
-                #kwargs["batch_size"] = 1["batch_size"] /
-                #kwargs["max_length"] = 512
                 return super().encode(*args, **kwargs)
 
             def encode_corpus(self, *args, **kwargs):
