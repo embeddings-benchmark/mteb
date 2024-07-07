@@ -65,6 +65,7 @@ if __name__ == "__main__":
 #SBATCH --gres=gpu:1                 # number of gpus
 #SBATCH --time 24:00:00             # maximum execution time (HH:MM:SS)
 #SBATCH --output=/data/niklas/jobs/%x-%j.out           # output file name
+#SBATCH --exclusive
 """
 
     project_root = Path(__file__).parent / ".." / ".." / ".."
@@ -73,19 +74,19 @@ if __name__ == "__main__":
     slurm_jobs_folder = Path(__file__).parent / "slurm_jobs"
 
     model_names = [
-        "sentence-transformers/all-MiniLM-L6-v2",
-        "sentence-transformers/all-MiniLM-L12-v2",
-        "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
-        "sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
-        "sentence-transformers/all-mpnet-base-v2",
-        "sentence-transformers/LaBSE",
-        "intfloat/multilingual-e5-large-instruct",
-        "intfloat/e5-mistral-7b-instruct",
+        #"sentence-transformers/all-MiniLM-L6-v2",
+        #"sentence-transformers/all-MiniLM-L12-v2",
+        #"sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        #"sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+        #"sentence-transformers/all-mpnet-base-v2",
+        #"sentence-transformers/LaBSE",
+        #"intfloat/multilingual-e5-large-instruct",
+        #"intfloat/e5-mistral-7b-instruct",
         "GritLM/GritLM-7B",
         #"GritLM/GritLM-8x7B",
-        "intfloat/multilingual-e5-small",
-        "intfloat/multilingual-e5-base",
-        "intfloat/multilingual-e5-large",
+        #"intfloat/multilingual-e5-small",
+        #"intfloat/multilingual-e5-base",
+        #"intfloat/multilingual-e5-large",
     ]
 
     # expanding to a full list of tasks
@@ -102,10 +103,19 @@ if __name__ == "__main__":
             "STS",
             "Summarization",
         ],
-        #tasks=[
-        #    "MLSUMClusteringS2S.v2",
-        #    "TenKGnadClusteringS2S.v2"
-        #],
+        tasks=[
+            "LivedoorNewsClustering",
+            #"FaithDial",
+            #"STS22",
+            #"StatcanDialogueDatasetRetrieval",
+            #"WikipediaRetrievalMultilingual"
+            #"RARbMath"
+            #"Touche2020",
+            #"WebLINXCandidatesReranking",
+            #"MultiLongDocRetrieval",
+            #"CodeEditSearchRetrieval",
+
+        ],
     )
 
     retrieval_to_be_downsampled = ['TopiOCQA',
