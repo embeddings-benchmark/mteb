@@ -8,13 +8,13 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 class PawsX(MultilingualTask, AbsTaskPairClassification):
     metadata = TaskMetadata(
-        name="PawsX",
+        name="PawsXPairClassification", 
         dataset={
             "path": "google-research-datasets/paws-x",
             "revision": "8a04d940a42cd40658986fdd8e3da561533a3646",
             "trust_remote_code": True,
         },
-        description="",
+        description="{PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification",
         reference="https://arxiv.org/abs/1908.11828",
         category="s2s",
         type="PairClassification",
