@@ -2,16 +2,17 @@ from __future__ import annotations
 
 import json
 import logging
+from argparse import Namespace
 from collections import defaultdict
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any, Callable, Dict, Type
+from typing import Any, Callable, Type
 
 import numpy as np
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
 
-from mteb.abstasks import AbsTask
+from mteb.abstasks.AbsTask import AbsTask, ScoresDict
 from mteb.abstasks.TaskMetadata import (
     ISO_LANGUAGE_SCRIPT,
     HFSubset,
@@ -19,11 +20,23 @@ from mteb.abstasks.TaskMetadata import (
 from mteb.languages import ISO_LANGUAGE, LanguageScripts
 
 Split = str
-ScoresDict = Dict[str, Any]
-# ^ e.g {'main_score': 0.5, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']}
 Score = Any
 
 logger = logging.getLogger(__name__)
+
+
+class CQADupstackRetrievalDummy:
+    """A dummy task for loading historic results from before v1.11.0"""
+
+    metadata = Namespace(  # type: ignore
+        name="CQADupstackRetrieval",
+        main_score="ndcg_at_10",
+        type="Retrieval",
+        hf_subsets_to_langscripts={
+            "default": ["eng-Latn"],
+        },
+        dataset={"revision": "revision not applicable"},
+    )
 
 
 class MTEBResults(BaseModel):
@@ -141,7 +154,7 @@ class MTEBResults(BaseModel):
             f.write(self.model_dump_json())
 
     @classmethod
-    def from_disk(cls, path: Path, load_historic_data: bool = True) -> MTEBResults:
+    def from_disk(cls, path: Path, load_historic_data: bool = True) -> MTEBResults:  # type: ignore
         """Load MTEBResults from disk.
 
         Args:
@@ -159,26 +172,25 @@ class MTEBResults(BaseModel):
                     f"Error loading MTEBResults from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
                 )
 
-        err: str = ""
+        pre_1_11_load = "mteb_version" in data and Version(
+            data["mteb_version"]
+        ) < Version("1.11.0")
         try:
             return cls.model_validate(data)
         except Exception as e:
-            err = f"Error loading MTEBResults from disk: {e}"
-        try:
-            if "mteb_version" in data and Version(data["mteb_version"]) < Version(
-                "1.11.0"
-            ):
-                logger.info(
-                    f"Could not load MTEBResults from disk, got error: {err}. Attempting to load from disk using format from before v1.11.0"
-                )
-                return cls._convert_from_before_v1_11_0(data)
-        except Exception as historic_err:
-            err += f"\nAttempted to load as historic data but got the error: {historic_err}"
-        raise ValueError(err)
+            if not pre_1_11_load:
+                raise e
+            logger.debug(
+                f"Could not load MTEBResults from disk, got error: {e}. Attempting to load from disk using format from before v1.11.0"
+            )
+        return cls._convert_from_before_v1_11_0(data)
 
     @classmethod
     def _convert_from_before_v1_11_0(cls, data: dict) -> MTEBResults:
         from mteb.overview import TASKS_REGISTRY
+
+        # in case the task name is not found in the registry, try to find a lower case version
+        lower_case_registry = {k.lower(): v for k, v in TASKS_REGISTRY.items()}
 
         scores = {**data}
 
@@ -205,7 +217,17 @@ class MTEBResults(BaseModel):
                 scores[split] = {"default": split_score.copy()}
 
         # make sure that main score exists
-        task = TASKS_REGISTRY[task_name]
+
+        if task_name == "CQADupstackRetrieval":  # exception for CQADupstackRetrieval
+            logger.debug(
+                "Loading CQADupstackRetrieval as a dummy task, in reality it consist of multiple tasks. To avoid this set `load_historic_data=False`"
+            )
+            task = CQADupstackRetrievalDummy()  # type: ignore
+        else:
+            task = TASKS_REGISTRY.get(
+                task_name, lower_case_registry.get(task_name.lower())
+            )
+
         main_score = task.metadata.main_score
         for split, split_score in scores.items():
             for hf_subset, hf_subset_scores in split_score.items():
@@ -215,7 +237,9 @@ class MTEBResults(BaseModel):
                         ("manhattan", "manhattan"),
                         ("euclidean", "euclidean"),
                     ]:
-                        prev_name_scores = hf_subset_scores.pop(prev_name)
+                        prev_name_scores = hf_subset_scores.pop(
+                            prev_name, {"spearman": "NaN"}
+                        )
                         for k, v in prev_name_scores.items():
                             hf_subset_scores[f"{name}_{k}"] = v
 
@@ -226,8 +250,19 @@ class MTEBResults(BaseModel):
                         logger.warning(f"Main score {main_score} not found in scores")
                         hf_subset_scores["main_score"] = None
 
+        # specific fixes:
+        if (
+            task_name == "MLSUMClusteringP2P" and mteb_version == "1.1.2.dev0"
+        ):  # back then it was only the french subsection which was implemented
+            scores["test"]["fr"] = scores["test"].pop("default")
+        if task_name == "MLSUMClusteringS2S" and mteb_version == "1.1.2.dev0":
+            scores["test"]["fr"] = scores["test"].pop("default")
+        if task_name == "XPQARetrieval":  # subset were renamed from "fr" to "fra-fra"
+            if "test" in scores and "fr" in scores["test"]:
+                scores["test"]["fra-fra"] = scores["test"].pop("fr")
+
         result = MTEBResults.from_task_results(
-            task,
+            task,  # type: ignore
             scores,
             evaluation_time,
             kg_co2_emissions=None,
