@@ -121,7 +121,7 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     name="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-supervised",
     languages=["eng_Latn"],
     open_source=True,
-    revision="None",  # TODO: Not sure what to put here as a model is made of two peft repos, each with a different revision
+    revision=None,  # TODO: Not sure what to put here as a model is made of two peft repos, each with a different revision
     release_date="2024-04-09",
 )
 
