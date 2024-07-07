@@ -61,17 +61,15 @@ if __name__ == "__main__":
     slurm_prefix = """#!/bin/bash
 #SBATCH --job-name=mteb
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1          # crucial - only 1 task per dist per node!
-#SBATCH --hint=nomultithread         # we get physical cores not logical
-#SBATCH --partition=a3
-#SBATCH --gres=gpu:8                 # number of gpus
-#SBATCH --time 99:00:00             # maximum execution time (HH:MM:SS)
+#SBATCH --partition=a3mixed
+#SBATCH --gres=gpu:1                 # number of gpus
+#SBATCH --time 24:00:00             # maximum execution time (HH:MM:SS)
 #SBATCH --output=/data/niklas/jobs/%x-%j.out           # output file name
-#SBATCH --exclusive
 """
 
     project_root = Path(__file__).parent / ".." / ".." / ".."
     results_folder = project_root / "results"
+    results_folder = Path("/data/niklas/results")
     slurm_jobs_folder = Path(__file__).parent / "slurm_jobs"
 
     model_names = [
@@ -84,7 +82,7 @@ if __name__ == "__main__":
         "intfloat/multilingual-e5-large-instruct",
         "intfloat/e5-mistral-7b-instruct",
         "GritLM/GritLM-7B",
-        "GritLM/GritLM-8x7B",
+        #"GritLM/GritLM-8x7B",
         "intfloat/multilingual-e5-small",
         "intfloat/multilingual-e5-base",
         "intfloat/multilingual-e5-large",
@@ -95,13 +93,43 @@ if __name__ == "__main__":
         task_types=[
             "BitextMining",
             "Classification",
+            "Clustering",
             "MultilabelClassification",
             "PairClassification",
             "Reranking",
+            "Retrieval",
+            "InstructionRetrieval",
             "STS",
             "Summarization",
-        ]
+        ],
+        #tasks=[
+        #    "MLSUMClusteringS2S.v2",
+        #    "TenKGnadClusteringS2S.v2"
+        #],
     )
+
+    retrieval_to_be_downsampled = ['TopiOCQA',
+    'MSMARCO-PL',
+    'ClimateFEVER',
+    'FEVER',
+    'HotpotQA',
+    'HotpotQA-PL',
+    'DBPedia',
+    'DBPedia-PL',
+    'NeuCLIR2022Retrieval',
+    'NeuCLIR2023Retrieval',
+    'NeuCLIR2022Retrieval',
+    'NeuCLIR2023Retrieval',
+    'NQ',
+    'NQ-PL',
+    'NeuCLIR2022Retrieval',
+    'NeuCLIR2023Retrieval',
+    'MIRACLRetrieval',
+    'RiaNewsRetrieval',
+    'Quora-PL',
+    'QuoraRetrieval']
+
+    tasks = [t for t in tasks if t.metadata.name not in retrieval_to_be_downsampled]
 
     slurm_jobs_folder.mkdir(exist_ok=True)
     files = create_slurm_job_files(

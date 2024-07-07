@@ -12,7 +12,8 @@ from mteb.models import (
     cohere_models,
     e5_instruct,
     e5_models,
-    gritlm,
+    gritlm_models,
+    gte_models,
     llm2vec_models,
     mxbai_models,
     nomic_models,
@@ -62,10 +63,10 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
         A model metadata object
     """
     if model_name in models:
-        if revision and (not models[model_name].revision == revision):
-            raise ValueError(
-                f"Model revision {revision} not found for model {model_name}"
-            )
+        #if revision and (not models[model_name].revision == revision):
+        #    raise ValueError(
+        #        f"Model revision {revision} not found for model {model_name}"
+        #    )
         return models[model_name]
     else:  # assume it is a sentence-transformers model
         logger.info(
@@ -118,19 +119,20 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
 
 
 model_modules = [
-    e5_models,
-    gritlm,
-    e5_instruct,
-    llm2vec_models,
-    sentence_transformers_models,
-    openai_models,
-    voyage_models,
     bge_models,
-    mxbai_models,
-    salesforce_models,
-    ru_sentence_models,
-    nomic_models,
     cohere_models,
+    e5_instruct,
+    e5_models,
+    gritlm_models,
+    gte_models,
+    llm2vec_models,
+    mxbai_models,
+    nomic_models,
+    openai_models,
+    ru_sentence_models,
+    salesforce_models,
+    sentence_transformers_models,
+    voyage_models,
 ]
 models = {}
 
