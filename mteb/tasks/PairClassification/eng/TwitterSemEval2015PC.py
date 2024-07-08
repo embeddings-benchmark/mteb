@@ -18,7 +18,7 @@ class TwitterSemEval2015PC(AbsTaskPairClassification):
         type="PairClassification",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ap",
+        main_score="cosine_ap",
         date=None,
         form=None,
         domains=None,

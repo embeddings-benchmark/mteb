@@ -132,7 +132,9 @@ class PairClassificationEvaluator(Evaluator):
             ["euclidean", "Euclidean-Distance", euclidean_distances, False],
             ["dot", "Dot-Product", dot_scores, True],
         ]:
-            output_scores[short_name] = self._compute_metrics(scores, labels, reverse)
+            metrics = self._compute_metrics(scores, labels, reverse)
+            for metric_name, metric_value in metrics.items():
+                output_scores[f"{short_name}_{metric_name}"] = metric_value
 
         return output_scores
 
@@ -164,11 +166,7 @@ class PairClassificationEvaluator(Evaluator):
 
         return {
             "accuracy": float(acc),
-            "accuracy_threshold": float(acc_threshold),
             "f1": float(f1),
-            "f1_threshold": float(f1_threshold),
-            "precision": float(precision),
-            "recall": float(recall),
             "ap": float(ap),
         }
 

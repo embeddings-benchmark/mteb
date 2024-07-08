@@ -17,7 +17,7 @@ class ArmenianParaphrasePC(AbsTaskPairClassification):
         category="s2s",
         eval_splits=["test"],
         eval_langs=["hye-Armn"],
-        main_score="ap",
+        main_score="cosine_ap",
         date=("2021-01-01", "2022-04-06"),
         form=["written"],
         domains=["News"],

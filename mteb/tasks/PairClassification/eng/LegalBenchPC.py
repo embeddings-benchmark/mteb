@@ -75,7 +75,7 @@ class LegalBenchPC(AbsTaskPairClassification):
         category="s2s",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
+        main_score="cosine_accuracy",
         date=("2000-01-01", "2023-08-23"),  # best guess
         form=["written"],
         domains=["Legal"],

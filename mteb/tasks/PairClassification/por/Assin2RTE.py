@@ -17,7 +17,7 @@ class Assin2RTE(AbsTaskPairClassification):
         category="s2s",
         eval_splits=["test"],
         eval_langs=["por-Latn"],
-        main_score="ap",
+        main_score="cosine_ap",
         date=("2019-01-01", "2019-09-16"),  # best guess
         form=["written"],
         domains=[],

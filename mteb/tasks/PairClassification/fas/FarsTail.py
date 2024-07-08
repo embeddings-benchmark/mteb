@@ -19,7 +19,7 @@ class FarsTail(AbsTaskPairClassification):
         category="s2s",
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
-        main_score="ap",
+        main_score="cosine_ap",
         date=("2021-01-01", "2021-07-12"),  # best guess
         form=["written"],
         domains=["Academic"],
