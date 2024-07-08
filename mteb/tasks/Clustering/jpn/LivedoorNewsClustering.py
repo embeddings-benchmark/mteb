@@ -41,7 +41,7 @@ class LivedoorNewsClusteringv2(AbsTaskClusteringFast):
         )
 
         for split in self.metadata.eval_splits:
-            # remove empty sentences (there is only one pr. split)
+            # remove empty sentences (there is only one per split)
             self.dataset[split] = self.dataset[split].filter(
                 lambda x: len(x["sentences"]) > 0
             )
