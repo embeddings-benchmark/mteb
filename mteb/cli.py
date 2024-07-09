@@ -72,6 +72,7 @@ import json
 import logging
 from pathlib import Path
 
+import torch
 import yaml
 
 import mteb
@@ -105,7 +106,12 @@ def run(args: argparse.Namespace) -> None:
 
     logger.info("Running with parameters: %s", args)
 
-    model = mteb.get_model(args.model, args.model_revision, device=args.device)
+    if args.device is None:
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+    else:
+        device = args.device
+
+    model = mteb.get_model(args.model, args.model_revision, device=device)
 
     tasks = mteb.get_tasks(
         categories=args.categories,

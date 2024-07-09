@@ -30,7 +30,7 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
         type="PairClassification",
         eval_splits=["test.full", "validation.full"],
         eval_langs=_LANGUAGES,
-        main_score="ap",
+        main_score="max_ap",
         date=("2013-01-01", "2015-12-31"),
         form=["spoken"],
         domains=["Spoken"],
