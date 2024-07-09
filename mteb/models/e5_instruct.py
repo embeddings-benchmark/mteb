@@ -48,9 +48,6 @@ class E5InstructWrapper(Encoder):
         self.tokenizer = AutoTokenizer.from_pretrained(
             model_name, revision=revision, **kwargs
         )
-        device = (
-            torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-        )
         self.model = AutoModel.from_pretrained(model_name, **kwargs).to(device)
         self.model.eval()
         self.device = device
