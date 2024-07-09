@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from collections import defaultdict
 from typing import Any
 
 import numpy as np
@@ -125,6 +126,7 @@ class PairClassificationEvaluator(Evaluator):
         logger.info("Computing metrics...")
         labels = np.asarray(self.labels)
         output_scores = {}
+        max_scores = defaultdict(list)
         for short_name, name, scores, reverse in [
             ["similarity", "Model-Specified Similarity", similarity_scores, True],
             ["cosine", "Cosine-Similarity", cosine_scores, True],
@@ -132,7 +134,14 @@ class PairClassificationEvaluator(Evaluator):
             ["euclidean", "Euclidean-Distance", euclidean_distances, False],
             ["dot", "Dot-Product", dot_scores, True],
         ]:
-            output_scores[short_name] = self._compute_metrics(scores, labels, reverse)
+            metrics = self._compute_metrics(scores, labels, reverse)
+            for metric_name, metric_value in metrics.items():
+                output_scores[f"{short_name}_{metric_name}"] = metric_value
+                max_scores[metric_name].append(metric_value)
+
+        for metric in max_scores:
+            if metric in ["f1", "ap", "f1", "precision", "recall"]:
+                output_scores[f"max_{metric}"] = max(max_scores[metric])
 
         return output_scores
 

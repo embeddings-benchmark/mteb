@@ -18,7 +18,7 @@ class KlueNLI(AbsTaskPairClassification):
         category="s2s",
         eval_splits=["validation"],
         eval_langs=["kor-Hang"],
-        main_score="ap",
+        main_score="max_ap",
         date=("2016-01-01", "2020-12-31"),
         form=["written"],
         domains=["News", "Encyclopaedic"],

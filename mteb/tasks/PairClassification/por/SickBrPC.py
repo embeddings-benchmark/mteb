@@ -19,7 +19,7 @@ class SickBrPC(AbsTaskPairClassification):
         category="s2s",
         eval_splits=["test"],
         eval_langs=["por-Latn"],
-        main_score="ap",
+        main_score="max_ap",
         date=("2018-01-01", "2018-09-01"),  # rough estimate
         form=["written"],
         domains=["Web"],
