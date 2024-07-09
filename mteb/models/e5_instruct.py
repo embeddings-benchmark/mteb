@@ -244,7 +244,6 @@ e5_instruct = ModelMeta(
         "intfloat/multilingual-e5-large-instruct",
         "baa7be480a7de1539afce709c8f13f833a510e0a",
         max_length=512,
-        #max_batch_size=2,
     ),
     name="intfloat/multilingual-e5-large-instruct",
     languages=XLMR_LANGUAGES,
