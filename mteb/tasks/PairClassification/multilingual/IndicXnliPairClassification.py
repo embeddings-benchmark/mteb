@@ -40,7 +40,7 @@ class IndicXnliPairClassification(AbsTaskPairClassification, MultilingualTask):
         type="PairClassification",
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
-        main_score="cosine_ap",
+        main_score="max_ap",
         date=("2022-04-22", "2022-10-06"),
         form=["written"],
         domains=["Non-fiction", "Fiction", "Government"],

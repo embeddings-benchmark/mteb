@@ -18,7 +18,7 @@ class CTKFactsNLI(AbsTaskPairClassification):
         category="s2s",
         eval_splits=["validation", "test"],
         eval_langs=["ces-Latn"],
-        main_score="cosine_ap",
+        main_score="max_ap",
         date=("2020-09-01", "2021-08-31"),  # academic year 2020/2021
         form=["written"],
         domains=["News"],

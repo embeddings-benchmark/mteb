@@ -27,7 +27,7 @@ class RTE3(MultilingualTask, AbsTaskPairClassification):
         type="PairClassification",
         eval_splits=["test"],
         eval_langs=_LANGS,
-        main_score="cosine_ap",
+        main_score="max_ap",
         date=("2023-03-25", "2024-04-15"),
         form=["written"],
         domains=["News", "Web", "Encyclopaedic"],

@@ -19,7 +19,7 @@ class TERRa(AbsTaskPairClassification):
         category="s2s",
         eval_splits=["dev"],
         eval_langs=["rus-Cyrl"],
-        main_score="cosine_ap",
+        main_score="max_ap",
         date=("2000-01-01", "2018-01-01"),
         form=["written"],
         domains=["News", "Web"],

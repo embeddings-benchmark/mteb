@@ -28,7 +28,7 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
             "ko": ["kor-Hang"],
             "zh": ["cmn-Hans"],
         },
-        main_score="cosine_ap",
+        main_score="max_ap",
         date=("2016-01-01", "2018-12-31"),
         form=["written"],
         domains=["Web", "Encyclopaedic"],

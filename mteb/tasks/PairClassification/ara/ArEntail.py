@@ -17,7 +17,7 @@ class ArEntail(AbsTaskPairClassification):
         category="s2s",
         eval_splits=["test"],
         eval_langs=["ara-Arab"],
-        main_score="cosine_ap",
+        main_score="max_ap",
         date=(
             "2020-01-01",
             "2024-03-04",

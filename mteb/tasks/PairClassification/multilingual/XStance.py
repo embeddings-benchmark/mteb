@@ -26,7 +26,7 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
             "fr": ["fra-Latn"],
             "it": ["ita-Latn"],
         },
-        main_score="cosine_ap",
+        main_score="max_ap",
         date=("2011-01-01", "2020-12-31"),
         form=["written"],
         domains=["Social"],

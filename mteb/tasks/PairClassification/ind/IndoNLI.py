@@ -18,7 +18,7 @@ class IndoNLI(AbsTaskPairClassification):
         category="s2s",
         eval_splits=["test_expert"],
         eval_langs=["ind-Latn"],
-        main_score="cosine_ap",
+        main_score="max_ap",
         date=("2021-01-01", "2021-11-01"),  # best guess
         form=["written"],
         domains=["Encyclopaedic", "Web", "News"],
