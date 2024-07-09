@@ -1,17 +1,10 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Any
-
-import torch
 
 from mteb.model_meta import ModelMeta
-from mteb.models.text_formatting_utils import corpus_to_texts
 
-try:
-    from .instructions import task_to_instruction
-except:
-    from instructions import task_to_instruction
+from .instructions import task_to_instruction
 
 
 def gte_loader(**kwargs):
@@ -20,7 +13,8 @@ def gte_loader(**kwargs):
     except ImportError:
         raise ImportError(
             "Please install `pip install gritlm` to use gte-Qwen2-7B-instruct."
-        )        
+        )
+
     class GTEWrapper(GritLM):
         def get_detailed_instruct(self, instruction: str, query: str) -> str:
             return f"Instruct: {instruction}\nQuery: "
@@ -37,8 +31,10 @@ def gte_loader(**kwargs):
         def encode_corpus(self, *args, **kwargs):
             kwargs["is_query"] = False
             return super().encode_corpus(*args, **kwargs)
+
     kwargs.pop("device", None)  # GritLM does automatic device placement
     return GTEWrapper(**kwargs)
+
 
 gte_Qwen2_7B_instruct = ModelMeta(
     loader=partial(

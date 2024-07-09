@@ -22,6 +22,7 @@ def gritlm_loader(**kwargs):
         raise ImportError(
             "GritLM is not installed. Please install it with `pip install gritlm`."
         )
+
     class GritLMWrapper(GritLM):
         def encode(self, *args, **kwargs):
             if "prompt_name" in kwargs:
@@ -38,6 +39,7 @@ def gritlm_loader(**kwargs):
         def encode_corpus(self, *args, **kwargs):
             kwargs["is_query"] = False
             return super().encode_corpus(*args, **kwargs)
+
     kwargs.pop("device", None)  # GritLM does automatic device placement
     return GritLMWrapper(**kwargs)
 
