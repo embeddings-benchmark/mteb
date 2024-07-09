@@ -65,7 +65,7 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
     if model_name in models:
         if revision and (not models[model_name].revision == revision):
             raise ValueError(
-                f"Model revision {revision} not found for model {model_name}"
+                f"Model revision {revision} not found for model {model_name}. Expected {models[model_name].revision}."
             )
         return models[model_name]
     else:  # assume it is a sentence-transformers model

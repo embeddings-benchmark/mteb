@@ -57,7 +57,7 @@ class E5InstructWrapper(Encoder):
         self.gpu_count = torch.cuda.device_count()
 
         if self.gpu_count > 1:
-            print(f"----------Using {self.gpu_count} data-parallel GPUs----------")
+            logger.info(f"----------Using {self.gpu_count} data-parallel GPUs----------")
             self.model = torch.nn.DataParallel(self.model)
 
     def preprocess(
