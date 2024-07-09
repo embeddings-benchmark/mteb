@@ -122,3 +122,40 @@ class EncoderWithQueryCorpusEncode(Encoder, Protocol):
             The encoded corpus.
         """
         ...
+
+
+@runtime_checkable
+class EncoderWithConversationEncode(Encoder, Protocol):
+    """The optional interface for an encoder that supports encoding conversations."""
+
+    def encode_conversations(
+        self,
+        conversations: Sequence[Sequence[str]],
+        *,
+        prompt_name: str | None = None,
+        **kwargs: Any,
+    ) -> torch.Tensor | np.ndarray:
+        """Encodes the given conversations using the encoder.
+
+        Args:
+            conversations: The conversations to encode.
+            prompt_name: The name of the prompt. This will just be the name of the task. Sentence-transformers uses this to
+                determine which prompt to use from a specified dictionary.
+            **kwargs: Additional arguments to pass to the encoder.
+
+        Returns:
+            The encoded conversations.
+        """
+        ...
+
+    @staticmethod
+    def convert_conv_history_to_query(conversations: Sequence[Sequence[str]]) -> str:
+        """Converts a conversation history to a single query.
+
+        Args:
+            conversations: The conversations to convert.
+
+        Returns:
+            The query.
+        """
+        ...

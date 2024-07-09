@@ -9,8 +9,7 @@ class MultiSubsetLoader:
         if self.data_loaded:
             return
 
-        fast_loading = self.fast_loading if hasattr(self, "fast_loading") else False
-        if fast_loading:
+        if hasattr(self, "fast_loading") and self.fast_loading:
             self.fast_load()
         else:
             self.slow_load()
