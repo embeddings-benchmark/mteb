@@ -140,7 +140,8 @@ class PairClassificationEvaluator(Evaluator):
                 max_scores[metric_name].append(metric_value)
 
         for metric in max_scores:
-            output_scores[f"max_{metric}"] = max(max_scores[metric])
+            if metric in ["f1", "ap", "f1", "precision", "recall"]:
+                output_scores[f"max_{metric}"] = max(max_scores[metric])
 
         return output_scores
 
@@ -172,7 +173,11 @@ class PairClassificationEvaluator(Evaluator):
 
         return {
             "accuracy": float(acc),
+            "accuracy_threshold": float(acc_threshold),
             "f1": float(f1),
+            "f1_threshold": float(f1_threshold),
+            "precision": float(precision),
+            "recall": float(recall),
             "ap": float(ap),
         }
 
