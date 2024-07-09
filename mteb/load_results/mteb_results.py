@@ -25,6 +25,7 @@ Score = Any
 logger = logging.getLogger(__name__)
 
 
+# Tasks that were completely removed from the MTEB (we generally don't do this anymore instead we supersede tasks)
 class CQADupstackRetrievalDummy:
     """A dummy task for loading historic results from before v1.11.0"""
 
@@ -37,6 +38,79 @@ class CQADupstackRetrievalDummy:
         },
         dataset={"revision": "revision not applicable"},
     )
+
+
+class ScalaNbClassificationDummy:
+    """A dummy task for loading historic results from before v1.11.0"""
+
+    metadata = Namespace(  # type: ignore
+        name="ScalaNbClassification",
+        main_score="accuracy",
+        type="Classification",
+        hf_subsets_to_langscripts={
+            "default": ["nob-Latn"],
+        },
+        dataset={"revision": "revision not applicable"},
+    )
+
+
+class ScalaNnClassificationDummy:
+    """A dummy task for loading historic results from before v1.11.0"""
+
+    metadata = Namespace(  # type: ignore
+        name="ScalaNnClassification",
+        main_score="accuracy",
+        type="Classification",
+        hf_subsets_to_langscripts={
+            "default": ["nno-Latn"],
+        },
+        dataset={"revision": "revision not applicable"},
+    )
+
+
+class ScalaDaClassificationDummy:
+    """A dummy task for loading historic results from before v1.11.0"""
+
+    metadata = Namespace(  # type: ignore
+        name="ScalaDaClassification",
+        main_score="accuracy",
+        type="Classification",
+        hf_subsets_to_langscripts={
+            "default": ["dan-Latn"],
+        },
+        dataset={"revision": "revision not applicable"},
+    )
+
+
+class ScalaSvClassificationDummy:
+    """A dummy task for loading historic results from before v1.11.0"""
+
+    metadata = Namespace(  # type: ignore
+        name="ScalaSvClassification",
+        main_score="accuracy",
+        type="Classification",
+        hf_subsets_to_langscripts={
+            "default": ["swe-Latn"],
+        },
+        dataset={"revision": "revision not applicable"},
+    )
+
+
+outdated_tasks = {
+    "CQADupstackRetrieval": CQADupstackRetrievalDummy,
+    "ScalaNbClassification": ScalaNbClassificationDummy,
+    "ScalaNnClassification": ScalaNnClassificationDummy,
+    "ScalaDaClassification": ScalaDaClassificationDummy,
+    "ScalaSvClassification": ScalaSvClassificationDummy,
+}
+
+renamed_tasks = {
+    "NorwegianParliament": "NorwegianParliamentClassification",
+    "CMedQAv2": "CMedQAv2-reranking",
+    "CMedQAv1": "CMedQAv1-reranking",
+    "8TagsClustering": "EightTagsClustering",
+    "PPC": "PpcPC",
+}
 
 
 class MTEBResults(BaseModel):
@@ -172,9 +246,13 @@ class MTEBResults(BaseModel):
                     f"Error loading MTEBResults from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
                 )
 
-        pre_1_11_load = "mteb_version" in data and Version(
-            data["mteb_version"]
-        ) < Version("1.11.0")
+        pre_1_11_load = (
+            (
+                "mteb_version" in data
+                and Version(data["mteb_version"]) < Version("1.11.0")
+            )
+            or "mteb_version" not in data
+        )  # assume it is before 1.11.0 if the version is not present
         try:
             return cls.model_validate(data)
         except Exception as e:
@@ -194,9 +272,11 @@ class MTEBResults(BaseModel):
 
         scores = {**data}
 
-        dataset_revision = scores.pop("dataset_revision")
+        dataset_revision = scores.pop(
+            "dataset_revision", "dataset revision not available"
+        )
         task_name = scores.pop("mteb_dataset_name")
-        mteb_version = scores.pop("mteb_version")
+        mteb_version = scores.pop("mteb_version", "mteb version not available")
 
         # calculate evaluation time across all splits (move to top level)
         evaluation_time = 0
@@ -216,18 +296,17 @@ class MTEBResults(BaseModel):
             for split, split_score in scores.items():
                 scores[split] = {"default": split_score.copy()}
 
-        # make sure that main score exists
-
-        if task_name == "CQADupstackRetrieval":  # exception for CQADupstackRetrieval
+        if task_name in outdated_tasks:
             logger.debug(
-                "Loading CQADupstackRetrieval as a dummy task, in reality it consist of multiple tasks. To avoid this set `load_historic_data=False`"
+                f"Loading {task_name} as a dummy task as it no longer exists within MTEB. To avoid this set `load_historic_data=False`"
             )
-            task = CQADupstackRetrievalDummy()  # type: ignore
+            task = outdated_tasks[task_name]
         else:
-            task = TASKS_REGISTRY.get(
-                task_name, lower_case_registry.get(task_name.lower())
-            )
+            if task_name in renamed_tasks:
+                task_name = renamed_tasks[task_name]
+            task = TASKS_REGISTRY.get(task_name, lower_case_registry[task_name.lower()])
 
+        # make sure that main score exists
         main_score = task.metadata.main_score
         for split, split_score in scores.items():
             for hf_subset, hf_subset_scores in split_score.items():
@@ -251,17 +330,21 @@ class MTEBResults(BaseModel):
                         hf_subset_scores["main_score"] = None
 
         # specific fixes:
-        if (
-            task_name == "MLSUMClusteringP2P" and mteb_version == "1.1.2.dev0"
-        ):  # back then it was only the french subsection which was implemented
+        if task_name == "MLSUMClusteringP2P" and mteb_version in [
+            "1.1.2.dev0",
+            "1.1.3.dev0",
+        ]:  # back then it was only the french subsection which was implemented
             scores["test"]["fr"] = scores["test"].pop("default")
-        if task_name == "MLSUMClusteringS2S" and mteb_version == "1.1.2.dev0":
+        if task_name == "MLSUMClusteringS2S" and mteb_version in [
+            "1.1.2.dev0",
+            "1.1.3.dev0",
+        ]:
             scores["test"]["fr"] = scores["test"].pop("default")
         if task_name == "XPQARetrieval":  # subset were renamed from "fr" to "fra-fra"
             if "test" in scores and "fr" in scores["test"]:
                 scores["test"]["fra-fra"] = scores["test"].pop("fr")
 
-        result = MTEBResults.from_task_results(
+        result: MTEBResults = MTEBResults.from_task_results(
             task,  # type: ignore
             scores,
             evaluation_time,
@@ -312,3 +395,39 @@ class MTEBResults(BaseModel):
 
     def __repr__(self) -> str:
         return f"MTEBResults(task_name={self.task_name}, scores=...)"
+
+    def validate_and_filter_scores(self):
+        """This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
+        Additionally it also ensure that all of the splits required as well as the languages are present in the scores.
+        """
+        from mteb.overview import get_task
+
+        task = get_task(self.task_name)
+        splits = task.metadata.eval_splits
+        hf_subsets = set([s for s in task.metadata.hf_subsets_to_langscripts])
+
+        new_scores = {}
+        seen_splits = set()
+        for split in self.scores:
+            if split not in splits:
+                continue
+            new_scores[split] = []
+
+            seen_subsets = set()
+            for _scores in self.scores[split]:
+                if _scores["hf_subset"] not in hf_subsets:
+                    continue
+                new_scores[split].append(_scores)
+                seen_subsets.add(_scores["hf_subset"])
+
+            if seen_subsets != hf_subsets:
+                raise ValueError(
+                    f"Missing subsets {hf_subsets - seen_subsets} for split {split}"
+                )
+
+            seen_splits.add(split)
+
+        if seen_splits != set(splits):
+            raise ValueError(f"Missing splits {set(splits) - seen_splits}")
+
+        self.scores = new_scores
