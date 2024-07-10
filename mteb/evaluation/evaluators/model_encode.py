@@ -39,6 +39,6 @@ def model_encode(
 
     embeddings = model.encode(sentences, **kwargs)
     if isinstance(embeddings, torch.Tensor):
-        embeddings = embeddings.cpu().detach()
+        embeddings = embeddings.cpu().detach().float()
 
     return np.asarray(embeddings)
