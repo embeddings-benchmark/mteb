@@ -341,7 +341,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         keywords: Union[Dict, None] = None,
         short_instructions: Union[Dict, None] = None,
         **kwargs,
-    ) -> Dict[str, Any]:
+    ) -> Dict[str, Union[Dict[str, float], float]]:
         corpus, queries = corpus[split], queries[split]
         og_relevant_docs, changed_relevant_docs = (
             og_relevant_docs[split],
@@ -382,10 +382,10 @@ class AbsTaskInstructionRetrieval(AbsTask):
             results_og, results_changed, newly_irrelevant_qrels
         )
 
-        for k, v in scores_og.items():
-            overall_changed_scores[f"individual_original_{k}"] = v
-        for k, v in scores_changed.items():
-            overall_changed_scores[f"individual_changed_{k}"] = v
+        overall_changed_scores["individual"] = {
+            "original": scores_og,
+            "changed": scores_changed,
+        }
 
         if self.do_length_ablation:
             keywords, short_instructions = (
@@ -424,14 +424,11 @@ class AbsTaskInstructionRetrieval(AbsTask):
                     **kwargs,
                 )
             )
-            for k, v in scores_base.items():
-                overall_changed_scores[f"length_ablation_base_{k}"] = v
-
-            for k, v in scores_w_keywords_scores.items():
-                overall_changed_scores[f"length_ablation_keywords_{k}"] = v
-
-            for k, v in scores_w_short_instr_scores.items():
-                overall_changed_scores[f"length_ablation_short_instructions_{k}"] = v
+            overall_changed_scores["length_ablation"] = {
+                "keywords": scores_w_keywords_scores,
+                "short_instructions": scores_w_short_instr_scores,
+                "base": scores_base,
+            }
 
         return overall_changed_scores
 
