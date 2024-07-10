@@ -5,15 +5,15 @@ from importlib.metadata import version
 from pathlib import Path
 
 import pytest
-from datasets import Dataset, DatasetDict
 from packaging.version import Version
+from sentence_transformers import SentenceTransformer
 
 import mteb
 from mteb import (
+    MTEB,
     AbsTask,
 )
 from mteb.load_results.mteb_results import MTEBResults
-from tests.test_load_results.conftest import MockEncoder
 
 tests_folder = Path(__file__).parent
 
@@ -149,147 +149,42 @@ def test_revision_layer(json_path, results_path):
         ], f"Unexpected path structure for version {json_version}: '{relative_path}'"
 
 
-@pytest.mark.xfail(reason="PairClassification and Reranking fail that test")
+@pytest.mark.xfail(
+    reason="MIRACLReranking have NDCG@10(MIRACL) and can't run InstructionRetrieval"
+)
 @pytest.mark.parametrize(
-    "task, dataset",
+    "task",
     [
-        (
-            "BitextMining",
-            {"sentence1": ["test"] * 2, "sentence2": ["test"] * 2, "id": ["test"] * 2},
-        ),
-        (
-            "Classification",
-            {"text": ["test"] * 2, "label": [1, 0]},
-        ),  # classification needs at least 2 classes
-        ("Clustering", {"sentences": [["test"]] * 2, "labels": [[0], [1]]}),
-        (
-            "PairClassification",
-            {
-                "sentence1": [["test"]] * 2,
-                "sentence2": [["test"]] * 2,
-                "labels": [[1]] * 2,
-            },
-        ),
-        (
-            "Reranking",
-            {
-                "query": ["test"] * 2,
-                "positive": [["test"]] * 2,
-                "negative": [["test"]] * 2,
-            },
-        ),
-        (
-            "STS",
-            {"sentence1": ["test"] * 2, "sentence2": ["test"] * 2, "score": [1] * 2},
-        ),
-        (
-            "Summarization",
-            {
-                "text": ["text"],
-                "human_summaries": [["text"]],
-                "machine_summaries": [["text"]],
-                "relevance": [[0.1]],
-            },
-        ),
+        "BitextMining",
+        "Classification",
+        "MultilabelClassification",
+        "Clustering",
+        "PairClassification",
+        "Reranking",
+        "Retrieval",
+        "STS",
+        "Summarization",
+        "InstructionRetrieval",
+        "Speed",
     ],
 )
-def test_main_score_in_task_result(task, dataset):
-    """Make sure that main_score of task is in results"""
-    all_subclasses_classes = mteb.get_tasks(task_types=[task])
-    example_task = all_subclasses_classes[0]
-    example_task.is_multilingual = False
-    example_task.data_loaded = True
-    hf_dataset = Dataset.from_dict(dataset)
-    example_task.dataset = DatasetDict(test=hf_dataset, train=hf_dataset)
-
-    encoder = MockEncoder()
-    res = example_task.evaluate(encoder, split="test")["default"]
-    for task_class in all_subclasses_classes:
+def test_mteb_task(task: str):
+    """Test that a task can be fetched, run and main_score in scores"""
+    model = SentenceTransformer("average_word_embeddings_komninos")
+    tasks = mteb.get_tasks(task_types=[task])
+    assert len(tasks) > 0
+    task_eval = [tasks[0]]
+    eval = MTEB(tasks=task_eval)
+    results = eval.run(model, output_folder="results", overwrite_results=True)
+    assert len(results) == 1
+    assert isinstance(results[0], MTEBResults)
+    result = results[0].scores
+    result_split = list(result.keys())[0]
+    result_split_results = result[result_split][0]
+    for t in tasks:
         assert (
-            task_class.metadata.main_score in res
-        ), f"{task_class.metadata.name} have main_score {task_class.metadata.main_score} that not in {res.keys()}"
-
-
-def test_main_score_in_task_result_multilabel():
-    """Make sure that main_score of task is in results"""
-    all_subclasses_classes = mteb.get_tasks(task_types=["MultilabelClassification"])
-    example_task = all_subclasses_classes[0]
-    example_task.is_multilingual = False
-    example_task.data_loaded = True
-    test_dataset = Dataset.from_dict(
-        {"text": ["test", "test", "test"], "label": [[0, 1], [1, 0], [1, 0]]}
-    )
-    train_dataset = Dataset.from_dict(
-        {"text": ["test"] * 100, "label": [[0, 1], [1, 0]] * 50}
-    )
-    example_task.dataset = DatasetDict(test=test_dataset, train=train_dataset)
-
-    encoder = MockEncoder()
-    res = example_task.evaluate(encoder, split="test")["default"]
-    for task_class in all_subclasses_classes:
-        assert (
-            task_class.metadata.main_score in res
-        ), f"{task_class.metadata.name} have main_score {task_class.metadata.main_score} that not in {res.keys()}"
-
-
-@pytest.mark.skip(reason="InstructionRetrival not correctly Initializing")
-def test_main_score_in_task_result_instruction_retrival():
-    """Make sure that main_score of task is in results"""
-    all_subclasses_classes = mteb.get_tasks(task_types=["InstructionRetrieval"])
-    example_task = all_subclasses_classes[0]
-    example_task.is_multilingual = False
-    example_task.data_loaded = True
-    test_dataset = Dataset.from_dict(
-        {"query": ["test", "test"], "instruction": ["test", "test"]}
-    )
-    train_dataset = Dataset.from_dict(
-        {"query": ["test", "test"], "instruction": ["test", "test"]}
-    )
-    example_task.dataset = DatasetDict(test=test_dataset, train=train_dataset)
-
-    encoder = MockEncoder()
-    res = example_task.evaluate(encoder, split="test")["default"]
-    for task_class in all_subclasses_classes:
-        assert (
-            task_class.metadata.main_score in res
-        ), f"{task_class.metadata.name} have main_score {task_class.metadata.main_score} that not in {res.keys()}"
-
-
-def test_main_score_in_task_result_retrival():
-    """Make sure that main_score of task is in results"""
-    all_subclasses_classes = mteb.get_tasks(task_types=["Retrieval"])
-    example_task = all_subclasses_classes[0]
-    example_task.is_multilingual = False
-    example_task.data_loaded = True
-    test_dataset = Dataset.from_dict(
-        {
-            "id": [1, 2],
-            "context": ["test", "test"],
-            "question": ["test", "test"],
-            "answers": ["test", "test"],
-        }
-    )
-    train_dataset = Dataset.from_dict(
-        {
-            "id": [1, 2],
-            "context": ["test", "test"],
-            "question": ["test", "test"],
-            "answers": ["test", "test"],
-        }
-    )
-    example_task.dataset = DatasetDict(test=test_dataset, train=train_dataset)
-    example_task.corpus = {
-        "test": {"document_one": {"_id": "d1", "title": "title", "text": "text"}}
-    }
-    example_task.queries = {"test": {"q1": ["turn1", "turn2", "turn3"]}}
-    example_task.relevant_docs = {"test": {"q1": {"document_one": 1}}}
-
-    encoder = MockEncoder()
-    res = example_task.evaluate(encoder, split="test")["default"]
-    for task_class in all_subclasses_classes:
-        assert (
-            task_class.metadata.main_score in res
-        ), f"{task_class.metadata.name} have main_score {task_class.metadata.main_score} that not in {res.keys()}"
+            t.metadata.main_score in result_split_results
+        ), f"{t.metadata.name} have {t.metadata.main_score} main score, but result has {list(result_split_results.keys())}"
 
 
 if __name__ == "__main__":

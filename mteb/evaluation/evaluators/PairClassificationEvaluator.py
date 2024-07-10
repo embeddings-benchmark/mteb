@@ -140,7 +140,7 @@ class PairClassificationEvaluator(Evaluator):
                 max_scores[metric_name].append(metric_value)
 
         for metric in max_scores:
-            if metric in ["f1", "ap", "f1", "precision", "recall"]:
+            if metric in ["f1", "ap", "f1", "precision", "recall", "accuracy"]:
                 output_scores[f"max_{metric}"] = max(max_scores[metric])
 
         return output_scores

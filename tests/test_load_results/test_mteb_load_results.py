@@ -1,16 +1,9 @@
-import json
 import os
 from pathlib import Path
 
 import pytest
 
 import mteb
-from mteb import (
-    MTEB,
-)
-from tests.test_load_results.conftest import (
-    get_all_tasks_results,
-)
 
 
 def test_mteb_load_results():
@@ -32,30 +25,6 @@ def test_mteb_load_results():
     known_revision = "6d9c09a789ad5dd126b476323fccfeeafcd90509"
     assert known_model in results
     assert known_revision in results[known_model]
-
-
-@pytest.mark.xfail
-@pytest.mark.parametrize("task", MTEB().tasks_cls)
-def test_load_results_main_score_in_real_results(task):
-    """Test that main score is in real results scores with equal values"""
-    task_files = get_all_tasks_results()
-    task_name = task.metadata.name
-    result_files = task_files[task_name]
-    for result_file in result_files:
-        with open(result_file, "r") as f:
-            result = json.load(f)
-        assert "scores" in result.keys(), result_file + " not have 'scores'"
-        for subset, subset_scores in result["scores"].items():
-            assert isinstance(subset_scores, list), (
-                result_file + " 'scores' is not list"
-            )
-            for subset_score in subset_scores:
-                assert (
-                    task.metadata.main_score in subset_score
-                ), f"{result_file} not have {task.metadata.main_score} for task {task_name}"
-                assert (
-                    subset_score[task.metadata.main_score] == subset_score["main_score"]
-                ), result_file
 
 
 @pytest.mark.xfail(reason="Some models results have wrong main score")
