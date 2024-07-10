@@ -8,7 +8,7 @@ import pytest
 from sentence_transformers import SentenceTransformer
 
 import mteb
-from mteb import MTEB
+from mteb import MTEB, AbsTaskInstructionRetrieval
 from mteb.abstasks import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.tasks.BitextMining.dan.BornholmskBitextMining import BornholmBitextMining
@@ -105,6 +105,10 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | AbsTask):
     else:
         tasks = mteb.get_tasks(tasks=[task_name])
 
+    # skip instruction task, because they override prompts
+    for task in tasks:
+        if isinstance(task, AbsTaskInstructionRetrieval):
+            return
     eval = mteb.MTEB(tasks=tasks)
 
     # Test that the task_name is passed down to the encoder
