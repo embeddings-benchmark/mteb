@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 import torch
 import tqdm
@@ -37,11 +38,11 @@ class BitextMiningEvaluator(Evaluator):
         )
         self.task_name = task_name
 
-    def __call__(self, model: Encoder):
-        scores = self.compute_metrics(model)
+    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
+        scores = self.compute_metrics(model, encode_kwargs=encode_kwargs)
         return scores
 
-    def compute_metrics(self, model: Encoder):
+    def compute_metrics(self, model: Encoder, encode_kwargs: dict[str, Any] = {}):
         pair_elements = set(p for pair in self.pairs for p in pair)
         subsets = [
             col for col in self.sentences.features.keys() if col in pair_elements
@@ -51,7 +52,10 @@ class BitextMiningEvaluator(Evaluator):
         embeddings = {}
         for sub in tqdm.tqdm(subsets, desc=f"Encoding {n_subsets}x{self.n} sentences"):
             embeddings[sub] = model_encode(
-                self.sentences[sub], model=model, prompt_name=self.task_name
+                self.sentences[sub],
+                model=model,
+                prompt_name=self.task_name,
+                **encode_kwargs,
             )
 
         scores = {}

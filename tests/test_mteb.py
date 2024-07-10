@@ -81,7 +81,7 @@ def test_mteb_task(task: Union[str, AbsTask], model_name: str):
     "task_name",
     task_test_cases,
 )
-def test_mteb_with_instructions(task_name: str | AbsTask):
+def test_prompt_name_passed_to_all_encodes(task_name: str | AbsTask):
     """Test that all tasks correctly pass down the task_name to the encoder which supports it, and that the encoder which does not support it does not
     receive it.
     """
@@ -113,6 +113,36 @@ def test_mteb_with_instructions(task_name: str | AbsTask):
     model = EncoderWithoutInstructions("average_word_embeddings_levy_dependency")
     assert model.prompts == {}, "The encoder should not have any prompts"
     eval.run(model, output_folder="tests/results", overwrite_results=True)
+
+
+@pytest.mark.parametrize(
+    "task_name",
+    task_test_cases,
+)
+def test_encode_kwargs_passed_to_all_encodes(task_name: str | AbsTask):
+    """Test that all tasks correctly pass down the encode_kwargs to the encoder."""
+    my_encode_kwargs = {"no_one_uses_this_args": "but_its_here"}
+
+    class TestEncoder(Encoder):
+        def encode(self, sentences, prompt_name: str | None = None, **kwargs):
+            assert kwargs == my_encode_kwargs
+            return np.zeros((len(sentences), 10))
+
+    if isinstance(task_name, AbsTask):
+        tasks = [task_name]
+    else:
+        tasks = mteb.get_tasks(tasks=[task_name])
+
+    eval = mteb.MTEB(tasks=tasks)
+
+    # Test that the task_name is passed down to the encoder
+    model = TestEncoder()
+    eval.run(
+        model,
+        output_folder="tests/results",
+        overwrite_results=True,
+        encode_kwargs=my_encode_kwargs,
+    )
 
 
 def test_all_tasks_fetch():

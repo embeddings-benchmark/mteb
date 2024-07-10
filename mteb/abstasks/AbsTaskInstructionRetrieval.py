@@ -5,10 +5,12 @@ import logging
 import os
 from collections import defaultdict
 from time import time
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 import tqdm
 from datasets import Features, Value, load_dataset
+
+from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators import utils
 from ..evaluation.evaluators.InstructionRetrievalEvaluator import (
@@ -324,9 +326,19 @@ class AbsTaskInstructionRetrieval(AbsTask):
 
         self.data_loaded = True
 
-    def evaluate(self, model, split="test", **kwargs):
+    def evaluate(
+        self,
+        model: Encoder,
+        split: str = "test",
+        *,
+        encode_kwargs: dict[str, Any] = {},
+        **kwargs,
+    ):
         retriever = InstructionRetrievalEvaluator(
-            model=model, task_name=self.metadata.name, **kwargs
+            model=model,
+            task_name=self.metadata.name,
+            encode_kwargs=encode_kwargs,
+            **kwargs,
         )
 
         scores_og = {}

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 import numpy as np
 import torch
@@ -25,7 +26,6 @@ class SummarizationEvaluator(Evaluator):
         texts=None,
         gold_scores=None,
         limit: int | None = None,
-        batch_size: int = 32,
         **kwargs,
     ):
         # human_summaries shape: (None, num_human_summaries)
@@ -42,10 +42,18 @@ class SummarizationEvaluator(Evaluator):
         self.machine_summaries = machine_summaries
         self.texts = texts
         self.gold_scores = gold_scores
-        self.batch_size = batch_size
         self.task_name = task_name
 
-    def __call__(self, model: Encoder | EncoderWithSimilarity):
+    def __call__(
+        self,
+        model: Encoder | EncoderWithSimilarity,
+        *,
+        encode_kwargs: dict[str, Any] = {},
+    ):
+        # set default for encode_kwargs
+        if "batch_size" not in encode_kwargs:
+            encode_kwargs["batch_size"] = 32
+
         cosine_spearman_scores = []
         cosine_pearson_scores = []
         dot_spearman_scores = []
@@ -68,7 +76,7 @@ class SummarizationEvaluator(Evaluator):
             ],
             model=model,
             prompt_name=self.task_name,
-            batch_size=self.batch_size,
+            **encode_kwargs,
         )
 
         logger.info("Encoding machine summaries...")
@@ -80,7 +88,7 @@ class SummarizationEvaluator(Evaluator):
             ],
             model=model,
             prompt_name=self.task_name,
-            batch_size=self.batch_size,
+            **encode_kwargs,
         )
 
         # Split the embeddings into the original human & machine summaries

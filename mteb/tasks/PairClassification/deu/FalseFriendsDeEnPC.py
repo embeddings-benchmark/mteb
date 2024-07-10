@@ -18,7 +18,7 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
         category="s2s",
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
-        main_score="ap",
+        main_score="max_ap",
         date=("2023-08-01", "2023-09-01"),
         form=["written"],
         domains=[],

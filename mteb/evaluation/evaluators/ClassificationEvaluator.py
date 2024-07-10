@@ -10,7 +10,6 @@ from sklearn.metrics import (
     accuracy_score,
     average_precision_score,
     f1_score,
-    label_ranking_average_precision_score,
 )
 from sklearn.neighbors import KNeighborsClassifier
 from torch import Tensor
@@ -27,63 +26,6 @@ def dot_distance(a: np.ndarray, b: np.ndarray) -> float:
     return -np.dot(a, b)
 
 
-class kNNMultiLabelClassificationEvaluator(Evaluator):
-    def __init__(
-        self,
-        embeddings_train,
-        y_train,
-        embeddings_test,
-        y_test,
-        task_name: str | None,
-        k: int = 1,
-        batch_size: int = 32,
-        limit: int | None = None,
-        **kwargs,
-    ):
-        super().__init__(**kwargs)
-        if limit is not None:
-            embeddings_train = embeddings_train[:limit]
-            y_train = y_train[:limit]
-            embeddings_test = embeddings_test[:limit]
-            y_test = y_test[:limit]
-        self.embeddings_train = embeddings_train
-        self.y_train = y_train
-        self.embeddings_test = embeddings_test
-        self.y_test = y_test
-
-        self.batch_size = batch_size
-        self.k = k
-        self.task_name = task_name
-
-    def __call__(self, model: Encoder, test_cache=None):
-        scores = {}
-        max_accuracy = 0
-        max_f1 = 0
-        max_ap = 0
-        for metric_name in ["cosine", "euclidean", "dot"]:
-            if metric_name == "dot":
-                metric = dot_distance
-            else:
-                metric = metric_name
-            classifier = KNeighborsClassifier(n_neighbors=self.k, metric=metric)
-            classifier.fit(self.embeddings_train, self.y_train)
-            y_pred = classifier.predict(self.embeddings_test)
-            accuracy = classifier.score(self.embeddings_test, self.y_test)
-            f1 = f1_score(self.y_test, y_pred, average="macro")
-            scores["accuracy_" + metric_name] = accuracy
-            scores["f1_" + metric_name] = f1
-            max_accuracy = max(max_accuracy, accuracy)
-            max_f1 = max(max_f1, f1)
-            lrap = label_ranking_average_precision_score(self.y_test, y_pred)
-            scores["lrap_" + metric_name] = lrap
-            max_ap = max(max_ap, lrap)
-        scores["accuracy"] = max_accuracy
-        scores["f1"] = max_f1
-        if len(np.unique(self.y_train)) == 2:
-            scores["lrap"] = max_ap
-        return scores, test_cache
-
-
 class kNNClassificationEvaluator(Evaluator):
     def __init__(
         self,
@@ -93,7 +35,7 @@ class kNNClassificationEvaluator(Evaluator):
         y_test,
         task_name: str | None = None,
         k: int = 1,
-        batch_size: int = 32,
+        encode_kwargs: dict[str, Any] = {},
         limit: int | None = None,
         **kwargs,
     ):
@@ -109,7 +51,11 @@ class kNNClassificationEvaluator(Evaluator):
         self.y_test = y_test
 
         self.task_name = task_name
-        self.batch_size = batch_size
+        self.encode_kwargs = encode_kwargs
+
+        if "batch_size" not in self.encode_kwargs:
+            self.encode_kwargs["batch_size"] = 32
+
         self.k = k
 
     def __call__(self, model, test_cache=None):
@@ -121,14 +67,14 @@ class kNNClassificationEvaluator(Evaluator):
             self.sentences_train,
             model=model,
             prompt_name=self.task_name,
-            batch_size=self.batch_size,
+            **self.encode_kwargs,
         )
         if test_cache is None:
             X_test = model_encode(
                 self.sentences_test,
                 model=model,
                 prompt_name=self.task_name,
-                batch_size=self.batch_size,
+                **self.encode_kwargs,
             )
             test_cache = X_test
         else:
@@ -142,7 +88,7 @@ class kNNClassificationEvaluator(Evaluator):
             scores["accuracy_" + metric] = accuracy
             scores["f1_" + metric] = f1
             max_accuracy = max(max_accuracy, accuracy)
-            max_f1 = max(max_f1, f1)
+            max_f1 = max(max_f1, f1)  # type: ignore
             # if binary classification
             if len(np.unique(self.y_train)) == 2:
                 ap = average_precision_score(self.y_test, y_pred)
@@ -164,7 +110,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         y_test,
         task_name: str,
         k: int = 1,
-        batch_size: int = 32,
+        encode_kwargs: dict[str, Any] = {},
         limit: int | None = None,
         **kwargs: Any,
     ):
@@ -181,7 +127,11 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         self.y_test = y_test
 
         self.task_name = task_name
-        self.batch_size = batch_size
+        self.encode_kwargs = encode_kwargs
+
+        if "batch_size" not in self.encode_kwargs:
+            self.encode_kwargs["batch_size"] = 32
+
         self.k = k
 
     def __call__(self, model: Encoder, test_cache=None):
@@ -193,7 +143,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
             self.sentences_train,
             model=model,
             prompt_name=self.task_name,
-            batch_size=self.batch_size,
+            **self.encode_kwargs,
         )
 
         if test_cache is None:
@@ -201,7 +151,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
                 self.sentences_test,
                 model=model,
                 prompt_name=self.task_name,
-                batch_size=self.batch_size,
+                **self.encode_kwargs,
             )
             test_cache = X_test
         else:
@@ -225,7 +175,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
             scores["accuracy_" + metric] = accuracy
             scores["f1_" + metric] = f1
             max_accuracy = max(max_accuracy, accuracy)
-            max_f1 = max(max_f1, f1)
+            max_f1 = max(max_f1, f1)  # type: ignore
             # if binary classification
             if len(np.unique(self.y_train)) == 2:
                 ap = average_precision_score(self.y_test, y_pred)
@@ -312,11 +262,16 @@ class logRegClassificationEvaluator(Evaluator):
         y_test,
         task_name: str,
         max_iter: int = 100,
-        batch_size: int = 32,
+        encode_kwargs: dict[str, Any] = {},
         limit: int | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
+        self.encode_kwargs = encode_kwargs
+
+        if "batch_size" not in self.encode_kwargs:
+            self.encode_kwargs["batch_size"] = 32
+
         if limit is not None:
             sentences_train = sentences_train[:limit]
             y_train = y_train[:limit]
@@ -328,7 +283,6 @@ class logRegClassificationEvaluator(Evaluator):
         self.y_test = y_test
 
         self.max_iter = max_iter
-        self.batch_size = batch_size
         self.task_name = task_name
 
     def __call__(self, model, test_cache=None):
@@ -343,14 +297,14 @@ class logRegClassificationEvaluator(Evaluator):
             self.sentences_train,
             model=model,
             prompt_name=self.task_name,
-            batch_size=self.batch_size,
+            **self.encode_kwargs,
         )
         if test_cache is None:
             X_test = model_encode(
                 self.sentences_test,
                 model=model,
                 prompt_name=self.task_name,
-                batch_size=self.batch_size,
+                **self.encode_kwargs,
             )
             test_cache = X_test
         else:
