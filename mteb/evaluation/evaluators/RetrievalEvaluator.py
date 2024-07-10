@@ -243,7 +243,7 @@ class DenseRetrievalExactSearch:
             top_n = [k for k, v in list(q_results_sorted.items())[:top_k]]
             query = queries[qid]
             query = (
-                self.convert_conv_history_to_query([query])[0]
+                self.convert_conv_history_to_query(self.model, [query])[0]
                 if isinstance(query, list)
                 else query
             )
@@ -574,7 +574,7 @@ class RetrievalEvaluator(Evaluator):
         k_values: List[int],
         metric: str,
         output_type: str = "all",
-    ) -> Tuple[Dict[str, float]]:
+    ) -> Tuple[Dict[str, float], Dict[str, float]]:
         if metric.lower() in ["mrr", "mrr@k", "mrr_cut"]:
             metric_scores = mrr(qrels, results, k_values, output_type)
 

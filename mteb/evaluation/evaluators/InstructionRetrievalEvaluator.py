@@ -30,6 +30,6 @@ class InstructionRetrievalEvaluator(RetrievalEvaluator):
                 queries,
                 self.top_k,
                 self.score_function,
-                instructions=instructions,
+                prompt_name=instructions,
                 **kwargs,
             )

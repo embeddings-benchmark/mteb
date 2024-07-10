@@ -56,6 +56,7 @@ task_test_cases = [
     "BrazilianToxicTweetsClassification",  # multilabel classification
     "FaroeseSTS",  # STS
     "SummEval",  # summarization
+    "Core17InstructionRetrieval",  # instruction retrival
 ]
 
 task_test_cases_only_string = [

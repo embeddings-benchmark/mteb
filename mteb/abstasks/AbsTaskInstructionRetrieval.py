@@ -5,7 +5,7 @@ import logging
 import os
 from collections import defaultdict
 from time import time
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple, Union
 
 import tqdm
 from datasets import Features, Value, load_dataset
@@ -326,205 +326,176 @@ class AbsTaskInstructionRetrieval(AbsTask):
 
         self.data_loaded = True
 
-    def evaluate(
+    def _evaluate_subset_lang(
         self,
-        model: Encoder,
-        split: str = "test",
-        *,
-        encode_kwargs: dict[str, Any] = {},
+        retriever: InstructionRetrievalEvaluator,
+        corpus: Dict,
+        queries: Dict,
+        og_relevant_docs: Dict,
+        changed_relevant_docs: Dict,
+        og_instructions: Dict,
+        changed_instructions: Dict,
+        top_ranked: Dict,
+        lang: str,
+        split: str,
+        keywords: Union[Dict, None] = None,
+        short_instructions: Union[Dict, None] = None,
         **kwargs,
-    ):
-        retriever = InstructionRetrievalEvaluator(
-            model=model,
-            task_name=self.metadata.name,
-            encode_kwargs=encode_kwargs,
+    ) -> Dict[str, Any]:
+        corpus, queries = corpus[split], queries[split]
+        og_relevant_docs, changed_relevant_docs = (
+            og_relevant_docs[split],
+            changed_relevant_docs[split],
+        )
+        og_instructions, changed_instructions = (
+            og_instructions[split],
+            changed_instructions[split],
+        )
+
+        top_ranked = top_ranked[split]
+        scores_og, results_og = self._evaluate_subset(
+            retriever,
+            corpus,
+            queries,
+            og_relevant_docs,
+            og_instructions,
+            top_ranked,
+            lang,
+            **kwargs,
+        )
+        scores_changed, results_changed = self._evaluate_subset(
+            retriever,
+            corpus,
+            queries,
+            changed_relevant_docs,
+            changed_instructions,
+            top_ranked,
+            lang,
             **kwargs,
         )
 
-        scores_og = {}
-        scores_changed = {}
-        results_og = {}
-        results_changed = {}
-        scores_base = {}
-        results_base = {}
-        overall_changed_scores = {}
-        if self.is_multilingual:
-            for lang in self.hf_subsets:
-                logger.info(f"Language: {lang}")
-                corpus, queries = self.corpus[lang][split], self.queries[lang][split]
-                og_relevant_docs, changed_relevant_docs = (
-                    self.og_relevant_docs[lang][split],
-                    self.changed_relevant_docs[lang][split],
-                )
-                og_instructions, changed_instructions = (
-                    self.og_instructions[lang][split],
-                    self.changed_instructions[lang][split],
-                )
+        newly_irrelevant_qrels = self.create_qrel_diff(
+            og_relevant_docs,
+            changed_relevant_docs,
+        )
+        overall_changed_scores = utils.evaluate_change(
+            results_og, results_changed, newly_irrelevant_qrels
+        )
 
-                top_ranked = self.top_ranked[lang][split]
-                scores_og[lang], results_og[lang] = self._evaluate_subset(
-                    retriever,
-                    corpus,
-                    queries,
-                    og_relevant_docs,
-                    og_instructions,
-                    top_ranked,
-                    lang,
-                    **kwargs,
-                )
-                scores_changed[lang], results_changed[lang] = self._evaluate_subset(
-                    retriever,
-                    corpus,
-                    queries,
-                    changed_relevant_docs,
-                    changed_instructions,
-                    top_ranked,
-                    lang,
-                    **kwargs,
-                )
+        for k, v in scores_og.items():
+            overall_changed_scores[f"individual_original_{k}"] = v
+        for k, v in scores_changed.items():
+            overall_changed_scores[f"individual_changed_{k}"] = v
 
-                newly_irrelevant_qrels = self.create_qrel_diff(
-                    self.og_relevant_docs[lang][split],
-                    self.changed_relevant_docs[lang][split],
-                )
-                overall_changed_scores[lang] = utils.evaluate_change(
-                    results_og[lang], results_changed[lang], newly_irrelevant_qrels
-                )
-
-                overall_changed_scores[lang]["individual"] = {
-                    "original": scores_og[lang],
-                    "changed": scores_changed[lang],
-                }
-
-                if self.do_length_ablation:
-                    keywords, short_instructions = (
-                        self.keywords[lang][split],
-                        self.short_instructions[lang][split],
-                    )
-                    scores_base[lang], results_base[lang] = self._evaluate_subset(
-                        retriever,
-                        corpus,
-                        queries,
-                        og_relevant_docs,
-                        defaultdict(str),
-                        top_ranked,
-                        lang,
-                        **kwargs,
-                    )
-                    scores_w_keywords = self._evaluate_subset(
-                        retriever,
-                        corpus,
-                        queries,
-                        og_relevant_docs,
-                        keywords,
-                        top_ranked,
-                        lang,
-                        **kwargs,
-                    )
-                    scores_w_short_instr = self._evaluate_subset(
-                        retriever,
-                        corpus,
-                        queries,
-                        og_relevant_docs,
-                        short_instructions,
-                        top_ranked,
-                        lang,
-                        **kwargs,
-                    )
-                    overall_changed_scores[lang]["length_ablation"] = {
-                        "keywords": scores_w_keywords,
-                        "short_instructions": scores_w_short_instr,
-                        "base": scores_base[lang],
-                    }
-        else:  # seems like these two can be combined into one (with the new lang="default")
-            lang = "default"
-            corpus, queries = self.corpus[split], self.queries[split]
-            og_relevant_docs, changed_relevant_docs = (
-                self.og_relevant_docs[split],
-                self.changed_relevant_docs[split],
+        if self.do_length_ablation:
+            keywords, short_instructions = (
+                keywords[split],
+                short_instructions[split],
             )
-            og_instructions, changed_instructions = (
-                self.og_instructions[split],
-                self.changed_instructions[split],
-            )
-            top_ranked = self.top_ranked[split]
-
-            scores_og, results_og = self._evaluate_subset(
+            scores_base, results_base = self._evaluate_subset(
                 retriever,
                 corpus,
                 queries,
                 og_relevant_docs,
-                og_instructions,
+                defaultdict(str),
                 top_ranked,
-                None,
+                lang,
                 **kwargs,
             )
-
-            scores_changed, results_changed = self._evaluate_subset(
+            scores_w_keywords_scores, scores_w_keywords_results = self._evaluate_subset(
                 retriever,
                 corpus,
                 queries,
-                changed_relevant_docs,
-                changed_instructions,
+                og_relevant_docs,
+                keywords,
                 top_ranked,
-                None,
+                lang,
                 **kwargs,
             )
-
-            newly_irrelevant_qrels = self.create_qrel_diff(
-                self.og_relevant_docs[split], self.changed_relevant_docs[split]
-            )
-            overall_changed_scores[lang] = utils.evaluate_change(
-                results_og, results_changed, newly_irrelevant_qrels
-            )
-
-            overall_changed_scores[lang]["individual"] = {
-                "original": scores_og,
-                "changed": scores_changed,
-            }
-
-            if self.do_length_ablation:
-                keywords, short_instructions = (
-                    self.keywords[split],
-                    self.short_instructions[split],
-                )
-                scores_w_keywords = self._evaluate_subset(
-                    retriever,
-                    corpus,
-                    queries,
-                    og_relevant_docs,
-                    keywords,
-                    top_ranked,
-                    None,
-                    **kwargs,
-                )
-                scores_w_short_instr = self._evaluate_subset(
+            scores_w_short_instr_scores, scores_w_short_instr_result = (
+                self._evaluate_subset(
                     retriever,
                     corpus,
                     queries,
                     og_relevant_docs,
                     short_instructions,
                     top_ranked,
-                    None,
+                    lang,
                     **kwargs,
                 )
-                scores_base, results_base = self._evaluate_subset(
-                    retriever,
-                    corpus,
-                    queries,
-                    og_relevant_docs,
-                    defaultdict(str),
-                    top_ranked,
-                    None,
-                    **kwargs,
-                )
-                overall_changed_scores[lang]["length_ablation"] = {
-                    "keywords": scores_w_keywords,
-                    "short_instructions": scores_w_short_instr,
-                    "base": scores_base,
-                }
+            )
+            for k, v in scores_base.items():
+                overall_changed_scores[f"length_ablation_base_{k}"] = v
+
+            for k, v in scores_w_keywords_scores.items():
+                overall_changed_scores[f"length_ablation_keywords_{k}"] = v
+
+            for k, v in scores_w_short_instr_scores.items():
+                overall_changed_scores[f"length_ablation_short_instructions_{k}"] = v
 
         return overall_changed_scores
+
+    def evaluate(
+        self,
+        model: Encoder,
+        split: str = "test",
+        *,
+        encode_kwargs: Dict[str, Any] = {},
+        **kwargs,
+    ) -> Dict[str, Dict[str, Any]]:
+        retriever = InstructionRetrievalEvaluator(
+            retriever=model,
+            task_name=self.metadata.name,
+            encode_kwargs=encode_kwargs,
+            **kwargs,
+        )
+        scores = {}
+        if self.is_multilingual:
+            for lang in self.hf_subsets:
+                logger.info(f"Language: {lang}")
+                scores[lang] = self._evaluate_subset_lang(
+                    retriever,
+                    corpus=self.corpus[lang],
+                    queries=self.queries[lang],
+                    og_relevant_docs=self.og_relevant_docs[lang],
+                    changed_relevant_docs=self.changed_relevant_docs[lang],
+                    og_instructions=self.og_instructions[lang],
+                    changed_instructions=self.changed_instructions[lang],
+                    top_ranked=self.top_ranked[lang],
+                    lang=lang,
+                    split=split,
+                    keywords=self.keywords[lang] if self.do_length_ablation else None,
+                    short_instructions=self.short_instructions[lang]
+                    if self.do_length_ablation
+                    else None,
+                    **kwargs,
+                )
+                self._add_main_score(scores[lang])
+        else:
+            lang = "default"
+            scores[lang] = self._evaluate_subset_lang(
+                retriever,
+                corpus=self.corpus,
+                queries=self.queries,
+                og_relevant_docs=self.og_relevant_docs,
+                changed_relevant_docs=self.changed_relevant_docs,
+                og_instructions=self.og_instructions,
+                changed_instructions=self.changed_instructions,
+                top_ranked=self.top_ranked,
+                lang=lang,
+                split=split,
+                keywords=self.keywords if self.do_length_ablation else None,
+                short_instructions=self.short_instructions
+                if self.do_length_ablation
+                else None,
+                **kwargs,
+            )
+            self._add_main_score(scores[lang])
+
+        return scores
+
+    def _add_main_score(self, scores: dict[str, dict[str, float]]) -> None:
+        scores["main_score"] = scores[self.metadata.main_score]
 
     def _evaluate_subset(
         self,
@@ -536,7 +507,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         top_ranked: Dict[str, List[str]],
         lang=None,
         **kwargs,
-    ):
+    ) -> Tuple[Dict[str, float], Dict[str, Dict[str, float]]]:
         start_time = time()
 
         # do the results by query and relevant docs only
@@ -589,13 +560,13 @@ class AbsTaskInstructionRetrieval(AbsTask):
             with open(qrels_save_path, "w") as f:
                 json.dump(results, f)
 
-        ndcg, _map, recall, precision = retriever.evaluate(
+        ndcg, _map, recall, precision, naucs = retriever.evaluate(
             relevant_docs,
             results,
             retriever.k_values,
             ignore_identical_ids=kwargs.get("ignore_identical_ids", True),
         )
-        mrr = retriever.evaluate_custom(
+        mrr, naucs = retriever.evaluate_custom(
             relevant_docs, results, retriever.k_values, "mrr"
         )
         scores = {
@@ -603,6 +574,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
             **{f"map_at_{k.split('@')[1]}": v for (k, v) in _map.items()},
             **{f"recall_at_{k.split('@')[1]}": v for (k, v) in recall.items()},
             **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
+            **{f"naucs_at_{k.split('@')[1]}": v for (k, v) in naucs.items()},
             **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
         }
         return scores, results
