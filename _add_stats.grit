@@ -10,4 +10,7 @@ language python
             $avg_kwarg <: `avg_character_length = $avg_val` => `stats=GeneralDescriptiveStats(n_samples=$ns_val, avg_character_length=$avg_val)`
         },
     },
+
+    $import = "GeneralDescriptiveStats",
+    $import <: ensure_import_from("mteb.abstasks.TaskMetadata")
 }
