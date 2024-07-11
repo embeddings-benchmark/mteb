@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from datetime import date
-from typing import List, Mapping, Union
+from typing import Any, Dict, List, Mapping, Optional, Union
 
 from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
 from typing_extensions import Annotated, Literal
@@ -128,6 +128,9 @@ PROGRAMMING_LANGS = [
     "shell",
 ]
 
+METRIC_NAME = str
+METRIC_VALUE = Union[int, float, Dict[str, Any]]
+
 logger = logging.getLogger(__name__)
 
 
@@ -197,7 +200,7 @@ class TaskMetadata(BaseModel):
     sample_creation: SAMPLE_CREATION_METHOD | None
     bibtex_citation: str | None
 
-    stats: dict[str, dict[SPLIT_NAME, Union[int, float]]]
+    stats: dict[METRIC_NAME, Optional[dict[SPLIT_NAME, METRIC_VALUE]]]
 
     @field_validator("dataset")
     def _check_dataset_path_is_specified(cls, dataset):

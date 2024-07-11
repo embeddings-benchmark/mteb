@@ -7,7 +7,7 @@ language python
             $ns_kwarg <: `n_samples = $ns_val` => .
         },
         contains keyword_argument(name="avg_character_length") as $avg_kwarg where {
-            $avg_kwarg <: `avg_character_length = $avg_val` => `stats={"n_samples": $ns_val, "avg_character_length": $avg_val})`
+            $avg_kwarg <: `avg_character_length = $avg_val` => `stats={"n_samples": $ns_val, "avg_character_length": $avg_val}`
         },
         contains keyword_argument(name="form") as $form_kwarg where {
             $form_kwarg <: or {`form = [$form_val]`, `form = $form_val`} => .
@@ -21,7 +21,7 @@ language python
         contains keyword_argument(name="socioeconomic_status") as $socio where {
             $socio <: `socioeconomic_status = $val` => .
         },
-        contains keyword_argument(name="category") as $category where {
+        and { contains keyword_argument(name="category"), !contains keyword_argument(name="modalities") } as $category where {
             $category <: `category = $c_val` => `category=$c_val,\nmodalities=["text"]`
         },
     },
