@@ -14,4 +14,5 @@ from .AbsTaskSpeedTask import *
 from .AbsTaskSTS import *
 from .AbsTaskSummarization import *
 from .MultilingualTask import *
-from .AbsTaskZeroshotClassification import *
+from .Image.AbsTaskZeroshotClassification import *
+from .Image.AbsTaskImageClassification import *

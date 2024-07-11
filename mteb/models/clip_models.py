@@ -3,7 +3,9 @@ from transformers import AutoProcessor, AutoModel
 from typing import Any
 import torch
 from tqdm import tqdm
-    
+from mteb.model_meta import ModelMeta
+from functools import partial
+
 class CLIPModelWrapper:
     
     def __init__(
@@ -58,3 +60,45 @@ class CLIPModelWrapper:
         logits = torch.matmul(image_embeddings, text_embeddings.T)
         probs = (logits*100).softmax(dim=-1)
         return probs
+    
+clip_vit_large_patch14 = ModelMeta(
+    loader=partial(
+        CLIPModelWrapper,
+        model_name="openai/clip-vit-large-patch14",
+    ),
+    name="openai/clip-vit-large-patch14",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="32bd64288804d66eefd0ccbe215aa642df71cc41",
+    release_date="2021-02-26",
+)
+
+clip_vit_base_patch32 = ModelMeta(
+    loader=partial(
+        CLIPModelWrapper,
+        model_name="openai/clip-vit-base-patch32",
+    ),
+    name="openai/clip-vit-base-patch32",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+    release_date="2021-02-26",
+)
+
+clip_vit_base_patch16 = ModelMeta(
+    loader=partial(
+        CLIPModelWrapper,
+        model_name="openai/clip-vit-base-patch16",
+    ),
+    name="openai/clip-vit-base-patch16",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="57c216476eefef5ab752ec549e440a49ae4ae5f3",
+    release_date="2021-02-26",
+)
+
+if __name__ == "__main__":
+    import mteb
+
+    mdl = mteb.get_model(clip_vit_base_patch16.name, clip_vit_base_patch16.revision)
+    emb = mdl.get_text_embeddings(["Hello, world!"])

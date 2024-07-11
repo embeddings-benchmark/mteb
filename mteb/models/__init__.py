@@ -22,6 +22,7 @@ from mteb.models import (
     salesforce_models,
     sentence_transformers_models,
     voyage_models,
+    clip_models,
 )
 
 logger = logging.getLogger(__name__)
@@ -132,6 +133,7 @@ model_modules = [
     ru_sentence_models,
     nomic_models,
     cohere_models,
+    clip_models
 ]
 models = {}
 

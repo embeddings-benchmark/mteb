@@ -11,4 +11,5 @@ from .Retrieval import *
 from .SpeedTask import *
 from .STS import *
 from .Summarization import *
-from .ZeroshotClassification import *
+from .Image.ZeroshotClassification import *
+from .Image.ImageClassification import *
