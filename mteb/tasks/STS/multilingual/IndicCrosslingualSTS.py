@@ -53,7 +53,7 @@ class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
             "Spoken",
             "Government",
             "Written",
-            "spoken",
+            "Spoken",
         ],
         task_subtypes=[],
         license="CC0",

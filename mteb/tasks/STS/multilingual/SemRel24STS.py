@@ -41,7 +41,7 @@ class SemRel24STS(AbsTaskSTS, MultilingualTask):
         eval_langs=_LANGUAGES,
         main_score="cosine_spearman",
         date=("2023-01-01", "2023-12-31"),
-        domains=[, "spoken", "Written"],
+        domains=["Spoken", "Written"],
         task_subtypes=[],
         license="Not specified",
         annotations_creators="human-annotated",
@@ -61,7 +61,10 @@ class SemRel24STS(AbsTaskSTS, MultilingualTask):
               primaryClass={cs.CL}
         }
         """,
-        stats={"n_samples": {"dev": 2089, "test": 7498}, "avg_character_length": {"dev": 163.1, "test": 145.9}},
+        stats={
+            "n_samples": {"dev": 2089, "test": 7498},
+            "avg_character_length": {"dev": 163.1, "test": 145.9},
+        },
     )
 
     @property

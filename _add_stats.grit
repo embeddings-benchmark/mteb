@@ -26,29 +26,3 @@ language python
         },
     },
 }
-
-`mteb.TaskMetadata($args)` where {
-    $args <: any {
-        contains keyword_argument(name="n_samples") as $ns_kwarg where {
-            $ns_kwarg <: `n_samples = $ns_val` => .
-        },
-        contains keyword_argument(name="avg_character_length") as $avg_kwarg where {
-            $avg_kwarg <: `avg_character_length = $avg_val` => `stats={"n_samples": $ns_val, "avg_character_length": $avg_val}`
-        },
-        contains keyword_argument(name="form") as $form_kwarg where {
-            $form_kwarg <: or {`form = [$form_val]`, `form = $form_val`} => .
-        },
-        contains keyword_argument(name="domains") as $domains_kwarg where {
-            $domains_kwarg <: `domains = [$domains_val]` => `domains=[$domains_val, $form_val]`
-        },
-        contains keyword_argument(name="text_creation") as $text_creation_kwarg where {
-            $text_creation_kwarg <: `text_creation = $text_creation_val` => `sample_creation=$text_creation_val`
-        },
-        contains keyword_argument(name="socioeconomic_status") as $socio where {
-            $socio <: `socioeconomic_status = $val` => .
-        },
-        and {contains keyword_argument(name="category") as $category, !contains keyword_argument(name="modalities")} where {
-            $category <: `category = $c_val` => `category=$c_val,\nmodalities=["text"]`
-        },
-    },
-}

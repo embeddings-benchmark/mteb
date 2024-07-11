@@ -40,7 +40,7 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
         eval_langs=_LANGUAGES,
         main_score="cosine_spearman",
         date=("2012-01-01", "2017-12-31"),
-        domains=["News", "Social", "Web", "spoken", "Written"],
+        domains=["News", "Social", "Web", "Spoken", "Written"],
         task_subtypes=[],
         license="Not specified",
         annotations_creators="human-annotated",

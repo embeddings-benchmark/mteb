@@ -21,7 +21,6 @@ class KoStrategyQA(AbsTaskRetrieval):
         eval_langs=["kor-Hang"],
         main_score="ndcg_at_10",
         date=None,
-        
         domains=None,
         task_subtypes=None,
         license=None,
