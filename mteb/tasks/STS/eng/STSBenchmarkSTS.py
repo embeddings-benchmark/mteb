@@ -16,6 +16,7 @@ class STSBenchmarkSTS(AbsTaskSTS):
         reference="https://github.com/PhilipMay/stsb-multi-mt/",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cosine_spearman",
@@ -24,18 +25,16 @@ class STSBenchmarkSTS(AbsTaskSTS):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@InProceedings{huggingface:dataset:stsb_multi_mt,
 title = {Machine translated multilingual STS benchmark dataset.},
 author={Philip May},
 year={2021},
 url={https://github.com/PhilipMay/stsb-multi-mt}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     @property

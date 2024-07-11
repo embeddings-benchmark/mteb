@@ -16,6 +16,7 @@ class MSMARCOv2(AbsTaskRetrieval):
         reference="https://microsoft.github.io/msmarco/TREC-Deep-Learning.html",
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["train", "dev", "dev2"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
@@ -24,10 +25,9 @@ class MSMARCOv2(AbsTaskRetrieval):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@article{DBLP:journals/corr/NguyenRSGTMD16,
           author    = {Tri Nguyen and
                        Mir Rosenberg and
@@ -48,6 +48,5 @@ class MSMARCOv2(AbsTaskRetrieval):
           bibsource = {dblp computer science bibliography, https://dblp.org}
         }
         }""",
-        n_samples=None,
-        avg_character_length=None,
+        stats={"n_samples": None, "avg_character_length": None}),
     )

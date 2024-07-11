@@ -15,6 +15,7 @@ class Ocnli(AbsTaskPairClassification):
         },
         type="PairClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["cmn-Hans"],
         main_score="max_accuracy",
@@ -23,10 +24,9 @@ class Ocnli(AbsTaskPairClassification):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{hu2020ocnli,
             title={OCNLI: Original Chinese Natural Language Inference}, 
             author={Hai Hu and Kyle Richardson and Liang Xu and Lu Li and Sandra Kuebler and Lawrence S. Moss},
@@ -35,8 +35,7 @@ class Ocnli(AbsTaskPairClassification):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
-        n_samples=None,
-        avg_character_length=None,
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     def dataset_transform(self):
@@ -55,6 +54,7 @@ class Cmnli(AbsTaskPairClassification):
         },
         type="PairClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["cmn-Hans"],
         main_score="max_accuracy",
@@ -63,10 +63,10 @@ class Cmnli(AbsTaskPairClassification):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
+        
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{xu-etal-2020-clue,
             title = "{CLUE}: A {C}hinese Language Understanding Evaluation Benchmark",
             author = "Xu, Liang  and
@@ -110,8 +110,7 @@ class Cmnli(AbsTaskPairClassification):
             doi = "10.18653/v1/2020.coling-main.419",
             pages = "4762--4772",
         }""",
-        n_samples=None,
-        avg_character_length=None,
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     def dataset_transform(self):

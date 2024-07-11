@@ -16,6 +16,7 @@ class SickFrSTS(AbsTaskSTS):
         reference="https://huggingface.co/datasets/Lajavaness/SICK-fr",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["fra-Latn"],
         main_score="cosine_spearman",
@@ -24,13 +25,11 @@ class SickFrSTS(AbsTaskSTS):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation=None,
-        n_samples=None,
-        avg_character_length=None,
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     @property

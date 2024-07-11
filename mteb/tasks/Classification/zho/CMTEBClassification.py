@@ -16,6 +16,7 @@ class TNews(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["cmn-Hans"],
         main_score="accuracy",
@@ -24,10 +25,9 @@ class TNews(AbsTaskClassification):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings {xu-etal-2020-clue,
  title = "{CLUE}: A {C}hinese Language Understanding Evaluation Benchmark",
  author = "Xu, Liang  and
@@ -72,8 +72,7 @@ class TNews(AbsTaskClassification):
  pages = "4762--4772",
  abstract = "The advent of natural language understanding (NLU) benchmarks for English, such as GLUE and SuperGLUE allows new NLU models to be evaluated across a diverse set of tasks. These comprehensive benchmarks have facilitated a broad range of research and applications in natural language processing (NLP). The problem, however, is that most such benchmarks are limited to English, which has made it difficult to replicate many of the successes in English NLU for other languages. To help remedy this issue, we introduce the first large-scale Chinese Language Understanding Evaluation (CLUE) benchmark. CLUE is an open-ended, community-driven project that brings together 9 tasks spanning several well-established single-sentence/sentence-pair classification tasks, as well as machine reading comprehension, all on original Chinese text. To establish results on these tasks, we report scores using an exhaustive set of current state-of-the-art pre-trained Chinese models (9 in total). We also introduce a number of supplementary datasets and additional tools to help facilitate further progress on Chinese NLU. Our benchmark is released at https://www.cluebenchmarks.com",
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     @property
@@ -94,6 +93,7 @@ class IFlyTek(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["cmn-Hans"],
         main_score="accuracy",
@@ -102,10 +102,10 @@ class IFlyTek(AbsTaskClassification):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
+        
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings {xu-etal-2020-clue,
  title = "{CLUE}: A {C}hinese Language Understanding Evaluation Benchmark",
  author = "Xu, Liang  and
@@ -150,8 +150,8 @@ class IFlyTek(AbsTaskClassification):
  pages = "4762--4772",
  abstract = "The advent of natural language understanding (NLU) benchmarks for English, such as GLUE and SuperGLUE allows new NLU models to be evaluated across a diverse set of tasks. These comprehensive benchmarks have facilitated a broad range of research and applications in natural language processing (NLP). The problem, however, is that most such benchmarks are limited to English, which has made it difficult to replicate many of the successes in English NLU for other languages. To help remedy this issue, we introduce the first large-scale Chinese Language Understanding Evaluation (CLUE) benchmark. CLUE is an open-ended, community-driven project that brings together 9 tasks spanning several well-established single-sentence/sentence-pair classification tasks, as well as machine reading comprehension, all on original Chinese text. To establish results on these tasks, we report scores using an exhaustive set of current state-of-the-art pre-trained Chinese models (9 in total). We also introduce a number of supplementary datasets and additional tools to help facilitate further progress on Chinese NLU. Our benchmark is released at https://www.cluebenchmarks.com",
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     @property
@@ -173,6 +173,7 @@ class MultilingualSentiment(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["cmn-Hans"],
         main_score="accuracy",
@@ -181,13 +182,11 @@ class MultilingualSentiment(AbsTaskClassification):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation=None,
-        n_samples=None,
-        avg_character_length=None,
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     @property
@@ -208,6 +207,7 @@ class JDReview(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="accuracy",
@@ -216,10 +216,10 @@ class JDReview(AbsTaskClassification):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
+        
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{nielsen-2023-scandeval,
     title = "{S}cand{E}val: A Benchmark for {S}candinavian Natural Language Processing",
     author = "Nielsen, Dan",
@@ -235,8 +235,7 @@ class JDReview(AbsTaskClassification):
     abstract = "This paper introduces a Scandinavian benchmarking platform, ScandEval, which can benchmark any pretrained model on four different tasks in the Scandinavian languages. The datasets used in two of the tasks, linguistic acceptability and question answering, are new. We develop and release a Python package and command-line interface, scandeval, which can benchmark any model that has been uploaded to the Hugging Face Hub, with reproducible results. Using this package, we benchmark more than 80 Scandinavian or multilingual models and present the results of these in an interactive online leaderboard, as well as provide an analysis of the results. The analysis shows that there is substantial cross-lingual transfer among the the Mainland Scandinavian languages (Danish, Swedish and Norwegian), with limited cross-lingual transfer between the group of Mainland Scandinavian languages and the group of Insular Scandinavian languages (Icelandic and Faroese). The benchmarking results also show that the investment in language technology in Norway and Sweden has led to language models that outperform massively multilingual models such as XLM-RoBERTa and mDeBERTaV3. We release the source code for both the package and leaderboard.",
 }
 """,
-        n_samples=None,
-        avg_character_length=None,
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     @property
@@ -257,6 +256,7 @@ class OnlineShopping(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="accuracy",
@@ -265,10 +265,9 @@ class OnlineShopping(AbsTaskClassification):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{nielsen-2023-scandeval,
     title = "{S}cand{E}val: A Benchmark for {S}candinavian Natural Language Processing",
     author = "Nielsen, Dan",
@@ -284,8 +283,7 @@ class OnlineShopping(AbsTaskClassification):
     abstract = "This paper introduces a Scandinavian benchmarking platform, ScandEval, which can benchmark any pretrained model on four different tasks in the Scandinavian languages. The datasets used in two of the tasks, linguistic acceptability and question answering, are new. We develop and release a Python package and command-line interface, scandeval, which can benchmark any model that has been uploaded to the Hugging Face Hub, with reproducible results. Using this package, we benchmark more than 80 Scandinavian or multilingual models and present the results of these in an interactive online leaderboard, as well as provide an analysis of the results. The analysis shows that there is substantial cross-lingual transfer among the the Mainland Scandinavian languages (Danish, Swedish and Norwegian), with limited cross-lingual transfer between the group of Mainland Scandinavian languages and the group of Insular Scandinavian languages (Icelandic and Faroese). The benchmarking results also show that the investment in language technology in Norway and Sweden has led to language models that outperform massively multilingual models such as XLM-RoBERTa and mDeBERTaV3. We release the source code for both the package and leaderboard.",
 }
 """,
-        n_samples=None,
-        avg_character_length=None,
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     @property
@@ -306,6 +304,7 @@ class Waimai(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="accuracy",
@@ -314,10 +313,10 @@ class Waimai(AbsTaskClassification):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
+        
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{nielsen-2023-scandeval,
     title = "{S}cand{E}val: A Benchmark for {S}candinavian Natural Language Processing",
     author = "Nielsen, Dan",
@@ -333,8 +332,7 @@ class Waimai(AbsTaskClassification):
     abstract = "This paper introduces a Scandinavian benchmarking platform, ScandEval, which can benchmark any pretrained model on four different tasks in the Scandinavian languages. The datasets used in two of the tasks, linguistic acceptability and question answering, are new. We develop and release a Python package and command-line interface, scandeval, which can benchmark any model that has been uploaded to the Hugging Face Hub, with reproducible results. Using this package, we benchmark more than 80 Scandinavian or multilingual models and present the results of these in an interactive online leaderboard, as well as provide an analysis of the results. The analysis shows that there is substantial cross-lingual transfer among the the Mainland Scandinavian languages (Danish, Swedish and Norwegian), with limited cross-lingual transfer between the group of Mainland Scandinavian languages and the group of Insular Scandinavian languages (Icelandic and Faroese). The benchmarking results also show that the investment in language technology in Norway and Sweden has led to language models that outperform massively multilingual models such as XLM-RoBERTa and mDeBERTaV3. We release the source code for both the package and leaderboard.",
 }
 """,
-        n_samples=None,
-        avg_character_length=None,
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     @property

@@ -57,10 +57,11 @@ TASK_DOMAIN = Literal[
     "Spoken",
     "Subtitles",
     "Web",
+    "Written",
     "Programming",
 ]
 
-TEXT_CREATION_METHOD = Literal[
+SAMPLE_CREATION_METHOD = Literal[
     "found",
     "created",
     "machine-translated",
@@ -69,13 +70,6 @@ TEXT_CREATION_METHOD = Literal[
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",
-]
-
-SOCIOECONOMIC_STATUS = Literal[
-    "high",
-    "medium",
-    "low",
-    "mixed",
 ]
 
 TASK_TYPE = Literal[
@@ -162,16 +156,15 @@ class TaskMetadata(BaseModel):
             huggingface dataset contain different languages).
         main_score: The main score used for evaluation.
         date: The date when the data was collected. Specified as a tuple of two dates.
-        form: The form of the data. Either "spoken", "written".
         domains: The domains of the data. These includes "Non-fiction", "Social", "Fiction", "News", "Academic", "Blog", "Encyclopaedic",
-            "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken". A dataset can belong to multiple domains.
+            "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
         license: The license of the data.
         socioeconomic_status: The socioeconomic status of the data. Includes "high", "medium", "low", "mixed".
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
         dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
-        text_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
+        sample_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
         n_samples: The number of samples in the dataset. This should only be for the splits evaluated on. For retrieval tasks, this should be the
@@ -185,6 +178,7 @@ class TaskMetadata(BaseModel):
     name: str
     description: str
     type: TASK_TYPE
+    modalities: list[Literal["text"]]
     category: TASK_CATEGORY
     reference: STR_URL | None  # URL to documentation, e.g. published paper
 
@@ -193,19 +187,17 @@ class TaskMetadata(BaseModel):
     main_score: str  # Might want a literal here
 
     date: tuple[STR_DATE, STR_DATE] | None  # When the data was collected
-    form: list[Literal["spoken", "written"]] | None
     domains: list[TASK_DOMAIN] | None
     task_subtypes: list[TASK_SUBTYPE] | None
     license: str | None
 
-    socioeconomic_status: SOCIOECONOMIC_STATUS | None
     annotations_creators: ANNOTATOR_TYPE | None
     dialect: list[str] | None
 
-    text_creation: TEXT_CREATION_METHOD | None
+    sample_creation: SAMPLE_CREATION_METHOD | None
     bibtex_citation: str | None
 
-    stats: GeneralDescriptiveStats
+    stats: dict[str, dict[SPLIT_NAME, Union[int, float]]]
 
     @field_validator("dataset")
     def _check_dataset_path_is_specified(cls, dataset):

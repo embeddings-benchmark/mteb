@@ -21,18 +21,17 @@ class CanadaTaxCourtOutcomesLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2023-08-23", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=["en-CA"],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -42,8 +41,7 @@ class CanadaTaxCourtOutcomesLegalBenchClassification(AbsTaskClassification):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
             }""",
-        n_samples={"test": 244},
-        avg_character_length={"test": 622.60},
+        stats={"n_samples": {"test": 244}, "avg_character_length": {"test": 622.60}},
     )
 
     def dataset_transform(self):
@@ -64,18 +62,17 @@ class ContractNLIConfidentialityOfAgreementLegalBenchClassification(
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1996-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -91,8 +88,7 @@ class ContractNLIConfidentialityOfAgreementLegalBenchClassification(
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 82},
-        avg_character_length={"test": 473.17},
+        stats={"n_samples": {"test": 82}, "avg_character_length": {"test": 473.17}},
     )
 
     def dataset_transform(self):
@@ -117,18 +113,17 @@ class ContractNLIExplicitIdentificationLegalBenchClassification(AbsTaskClassific
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1996-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -144,8 +139,7 @@ class ContractNLIExplicitIdentificationLegalBenchClassification(AbsTaskClassific
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 109},
-        avg_character_length={"test": 506.12},
+        stats={"n_samples": {"test": 109}, "avg_character_length": {"test": 506.12}},
     )
 
     def dataset_transform(self):
@@ -172,18 +166,17 @@ class ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification(
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1996-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -199,8 +192,7 @@ class ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification(
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 139},
-        avg_character_length={"test": 525.75},
+        stats={"n_samples": {"test": 139}, "avg_character_length": {"test": 525.75}},
     )
 
     def dataset_transform(self):
@@ -225,18 +217,17 @@ class ContractNLILimitedUseLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1996-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -252,8 +243,7 @@ class ContractNLILimitedUseLegalBenchClassification(AbsTaskClassification):
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 208},
-        avg_character_length={"test": 407.51},
+        stats={"n_samples": {"test": 208}, "avg_character_length": {"test": 407.51}},
     )
 
     def dataset_transform(self):
@@ -278,18 +268,17 @@ class ContractNLINoLicensingLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1996-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -305,8 +294,7 @@ class ContractNLINoLicensingLegalBenchClassification(AbsTaskClassification):
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 162},
-        avg_character_length={"test": 419.42},
+        stats={"n_samples": {"test": 162}, "avg_character_length": {"test": 419.42}},
     )
 
     def dataset_transform(self):
@@ -333,18 +321,17 @@ class ContractNLINoticeOnCompelledDisclosureLegalBenchClassification(
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1996-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -360,8 +347,7 @@ class ContractNLINoticeOnCompelledDisclosureLegalBenchClassification(
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 142},
-        avg_character_length={"test": 503.45},
+        stats={"n_samples": {"test": 142}, "avg_character_length": {"test": 503.45}},
     )
 
     def dataset_transform(self):
@@ -388,18 +374,17 @@ class ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassificat
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1996-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -415,8 +400,7 @@ class ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassificat
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 178},
-        avg_character_length={"test": 427.40},
+        stats={"n_samples": {"test": 178}, "avg_character_length": {"test": 427.40}},
     )
 
     def dataset_transform(self):
@@ -441,18 +425,17 @@ class ContractNLIPermissibleCopyLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1996-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -468,8 +451,7 @@ class ContractNLIPermissibleCopyLegalBenchClassification(AbsTaskClassification):
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 87},
-        avg_character_length={"test": 386.84},
+        stats={"n_samples": {"test": 87}, "avg_character_length": {"test": 386.84}},
     )
 
     def dataset_transform(self):
@@ -496,18 +478,17 @@ class ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassificat
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1996-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -523,8 +504,7 @@ class ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassificat
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 136},
-        avg_character_length={"test": 396.40},
+        stats={"n_samples": {"test": 136}, "avg_character_length": {"test": 396.40}},
     )
 
     def dataset_transform(self):
@@ -551,18 +531,17 @@ class ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification(
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1996-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -578,8 +557,7 @@ class ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification(
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 111},
-        avg_character_length={"test": 529.09},
+        stats={"n_samples": {"test": 111}, "avg_character_length": {"test": 529.09}},
     )
 
     def dataset_transform(self):
@@ -606,18 +584,17 @@ class ContractNLIReturnOfConfidentialInformationLegalBenchClassification(
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1996-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -633,8 +610,7 @@ class ContractNLIReturnOfConfidentialInformationLegalBenchClassification(
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 66},
-        avg_character_length={"test": 478.29},
+        stats={"n_samples": {"test": 66}, "avg_character_length": {"test": 478.29}},
     )
 
     def dataset_transform(self):
@@ -659,18 +635,17 @@ class ContractNLISharingWithEmployeesLegalBenchClassification(AbsTaskClassificat
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1996-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -686,8 +661,7 @@ class ContractNLISharingWithEmployeesLegalBenchClassification(AbsTaskClassificat
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 170},
-        avg_character_length={"test": 548.63},
+        stats={"n_samples": {"test": 170}, "avg_character_length": {"test": 548.63}},
     )
 
     def dataset_transform(self):
@@ -712,18 +686,17 @@ class ContractNLISharingWithThirdPartiesLegalBenchClassification(AbsTaskClassifi
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1996-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -739,8 +712,7 @@ class ContractNLISharingWithThirdPartiesLegalBenchClassification(AbsTaskClassifi
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 180},
-        avg_character_length={"test": 517.29},
+        stats={"n_samples": {"test": 180}, "avg_character_length": {"test": 517.29}},
     )
 
     def dataset_transform(self):
@@ -765,18 +737,17 @@ class ContractNLISurvivalOfObligationsLegalBenchClassification(AbsTaskClassifica
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1996-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -792,8 +763,7 @@ class ContractNLISurvivalOfObligationsLegalBenchClassification(AbsTaskClassifica
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 157},
-        avg_character_length={"test": 417.64},
+        stats={"n_samples": {"test": 157}, "avg_character_length": {"test": 417.64}},
     )
 
     def dataset_transform(self):
@@ -818,18 +788,17 @@ class CorporateLobbyingLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2023-08-23", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -840,8 +809,7 @@ class CorporateLobbyingLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"test": 490},
-        avg_character_length={"test": 6039.85},
+        stats={"n_samples": {"test": 490}, "avg_character_length": {"test": 6039.85}},
     )
 
     def dataset_transform(self):
@@ -881,18 +849,17 @@ class CUADAffiliateLicenseLicenseeLegalBenchClassification(AbsTaskClassification
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -909,8 +876,7 @@ class CUADAffiliateLicenseLicenseeLegalBenchClassification(AbsTaskClassification
             year={2021}
         }
         """,
-        n_samples={"test": 198},
-        avg_character_length={"test": 484.11},
+        stats={"n_samples": {"test": 198}, "avg_character_length": {"test": 484.11}},
     )
 
     def dataset_transform(self):
@@ -935,18 +901,17 @@ class CUADAffiliateLicenseLicensorLegalBenchClassification(AbsTaskClassification
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -963,8 +928,7 @@ class CUADAffiliateLicenseLicensorLegalBenchClassification(AbsTaskClassification
             year={2021}
         }
         """,
-        n_samples={"test": 88},
-        avg_character_length={"test": 633.40},
+        stats={"n_samples": {"test": 88}, "avg_character_length": {"test": 633.40}},
     )
 
     def dataset_transform(self):
@@ -989,18 +953,17 @@ class CUADAntiAssignmentLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1017,8 +980,7 @@ class CUADAntiAssignmentLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 1172},
-        avg_character_length={"test": 340.81},
+        stats={"n_samples": {"test": 1172}, "avg_character_length": {"test": 340.81}},
     )
 
     def dataset_transform(self):
@@ -1043,18 +1005,17 @@ class CUADAuditRightsLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1071,8 +1032,7 @@ class CUADAuditRightsLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 1216},
-        avg_character_length={"test": 337.14},
+        stats={"n_samples": {"test": 1216}, "avg_character_length": {"test": 337.14}},
     )
 
     def dataset_transform(self):
@@ -1097,18 +1057,17 @@ class CUADCapOnLiabilityLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1125,8 +1084,7 @@ class CUADCapOnLiabilityLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 1246},
-        avg_character_length={"test": 375.74},
+        stats={"n_samples": {"test": 1246}, "avg_character_length": {"test": 375.74}},
     )
 
     def dataset_transform(self):
@@ -1151,18 +1109,17 @@ class CUADChangeOfControlLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1179,8 +1136,7 @@ class CUADChangeOfControlLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 416},
-        avg_character_length={"test": 391.96},
+        stats={"n_samples": {"test": 416}, "avg_character_length": {"test": 391.96}},
     )
 
     def dataset_transform(self):
@@ -1207,18 +1163,17 @@ class CUADCompetitiveRestrictionExceptionLegalBenchClassification(
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1235,8 +1190,7 @@ class CUADCompetitiveRestrictionExceptionLegalBenchClassification(
             year={2021}
         }
         """,
-        n_samples={"test": 220},
-        avg_character_length={"test": 433.04},
+        stats={"n_samples": {"test": 220}, "avg_character_length": {"test": 433.04}},
     )
 
     def dataset_transform(self):
@@ -1261,18 +1215,17 @@ class CUADCovenantNotToSueLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1289,8 +1242,7 @@ class CUADCovenantNotToSueLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 308},
-        avg_character_length={"test": 402.97},
+        stats={"n_samples": {"test": 308}, "avg_character_length": {"test": 402.97}},
     )
 
     def dataset_transform(self):
@@ -1315,18 +1267,17 @@ class CUADEffectiveDateLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1343,8 +1294,7 @@ class CUADEffectiveDateLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 236},
-        avg_character_length={"test": 277.62},
+        stats={"n_samples": {"test": 236}, "avg_character_length": {"test": 277.62}},
     )
 
     def dataset_transform(self):
@@ -1369,18 +1319,17 @@ class CUADExclusivityLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1397,8 +1346,7 @@ class CUADExclusivityLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 762},
-        avg_character_length={"test": 369.17},
+        stats={"n_samples": {"test": 762}, "avg_character_length": {"test": 369.17}},
     )
 
     def dataset_transform(self):
@@ -1423,18 +1371,17 @@ class CUADExpirationDateLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1451,8 +1398,7 @@ class CUADExpirationDateLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 876},
-        avg_character_length={"test": 309.27},
+        stats={"n_samples": {"test": 876}, "avg_character_length": {"test": 309.27}},
     )
 
     def dataset_transform(self):
@@ -1477,18 +1423,17 @@ class CUADGoverningLawLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1505,8 +1450,7 @@ class CUADGoverningLawLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 876},
-        avg_character_length={"test": 289.87},
+        stats={"n_samples": {"test": 876}, "avg_character_length": {"test": 289.87}},
     )
 
     def dataset_transform(self):
@@ -1531,18 +1475,17 @@ class CUADInsuranceLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1559,8 +1502,7 @@ class CUADInsuranceLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 1030},
-        avg_character_length={"test": 365.54},
+        stats={"n_samples": {"test": 1030}, "avg_character_length": {"test": 365.54}},
     )
 
     def dataset_transform(self):
@@ -1585,18 +1527,17 @@ class CUADIPOwnershipAssignmentLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1613,8 +1554,7 @@ class CUADIPOwnershipAssignmentLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 576},
-        avg_character_length={"test": 414.00},
+        stats={"n_samples": {"test": 576}, "avg_character_length": {"test": 414.00}},
     )
 
     def dataset_transform(self):
@@ -1639,18 +1579,17 @@ class CUADIrrevocableOrPerpetualLicenseLegalBenchClassification(AbsTaskClassific
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1667,8 +1606,7 @@ class CUADIrrevocableOrPerpetualLicenseLegalBenchClassification(AbsTaskClassific
             year={2021}
         }
         """,
-        n_samples={"test": 280},
-        avg_character_length={"test": 473.40},
+        stats={"n_samples": {"test": 280}, "avg_character_length": {"test": 473.40}},
     )
 
     def dataset_transform(self):
@@ -1693,18 +1631,17 @@ class CUADJointIPOwnershipLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1721,8 +1658,7 @@ class CUADJointIPOwnershipLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 192},
-        avg_character_length={"test": 374.17},
+        stats={"n_samples": {"test": 192}, "avg_character_length": {"test": 374.17}},
     )
 
     def dataset_transform(self):
@@ -1747,18 +1683,17 @@ class CUADLicenseGrantLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1775,8 +1710,7 @@ class CUADLicenseGrantLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 1396},
-        avg_character_length={"test": 409.89},
+        stats={"n_samples": {"test": 1396}, "avg_character_length": {"test": 409.89}},
     )
 
     def dataset_transform(self):
@@ -1801,18 +1735,17 @@ class CUADLiquidatedDamagesLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1829,8 +1762,7 @@ class CUADLiquidatedDamagesLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 220},
-        avg_character_length={"test": 351.76},
+        stats={"n_samples": {"test": 220}, "avg_character_length": {"test": 351.76}},
     )
 
     def dataset_transform(self):
@@ -1855,18 +1787,17 @@ class CUADMinimumCommitmentLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1883,8 +1814,7 @@ class CUADMinimumCommitmentLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 772},
-        avg_character_length={"test": 364.16},
+        stats={"n_samples": {"test": 772}, "avg_character_length": {"test": 364.16}},
     )
 
     def dataset_transform(self):
@@ -1909,18 +1839,17 @@ class CUADMostFavoredNationLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1937,8 +1866,7 @@ class CUADMostFavoredNationLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 64},
-        avg_character_length={"test": 418.75},
+        stats={"n_samples": {"test": 64}, "avg_character_length": {"test": 418.75}},
     )
 
     def dataset_transform(self):
@@ -1963,18 +1891,17 @@ class CUADNoSolicitOfCustomersLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -1991,8 +1918,7 @@ class CUADNoSolicitOfCustomersLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 84},
-        avg_character_length={"test": 392.89},
+        stats={"n_samples": {"test": 84}, "avg_character_length": {"test": 392.89}},
     )
 
     def dataset_transform(self):
@@ -2017,18 +1943,17 @@ class CUADNoSolicitOfEmployeesLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2045,8 +1970,7 @@ class CUADNoSolicitOfEmployeesLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 142},
-        avg_character_length={"test": 417.94},
+        stats={"n_samples": {"test": 142}, "avg_character_length": {"test": 417.94}},
     )
 
     def dataset_transform(self):
@@ -2071,18 +1995,17 @@ class CUADNonCompeteLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2099,8 +2022,7 @@ class CUADNonCompeteLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 442},
-        avg_character_length={"test": 383.20},
+        stats={"n_samples": {"test": 442}, "avg_character_length": {"test": 383.20}},
     )
 
     def dataset_transform(self):
@@ -2125,18 +2047,17 @@ class CUADNonDisparagementLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2153,8 +2074,7 @@ class CUADNonDisparagementLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 100},
-        avg_character_length={"test": 403.08},
+        stats={"n_samples": {"test": 100}, "avg_character_length": {"test": 403.08}},
     )
 
     def dataset_transform(self):
@@ -2179,18 +2099,17 @@ class CUADNonTransferableLicenseLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2207,8 +2126,7 @@ class CUADNonTransferableLicenseLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 542},
-        avg_character_length={"test": 399.16},
+        stats={"n_samples": {"test": 542}, "avg_character_length": {"test": 399.16}},
     )
 
     def dataset_transform(self):
@@ -2233,18 +2151,17 @@ class CUADNoticePeriodToTerminateRenewalLegalBenchClassification(AbsTaskClassifi
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2261,8 +2178,7 @@ class CUADNoticePeriodToTerminateRenewalLegalBenchClassification(AbsTaskClassifi
             year={2021}
         }
         """,
-        n_samples={"test": 222},
-        avg_character_length={"test": 354.85},
+        stats={"n_samples": {"test": 222}, "avg_character_length": {"test": 354.85}},
     )
 
     def dataset_transform(self):
@@ -2287,18 +2203,17 @@ class CUADPostTerminationServicesLegalBenchClassification(AbsTaskClassification)
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2315,8 +2230,7 @@ class CUADPostTerminationServicesLegalBenchClassification(AbsTaskClassification)
             year={2021}
         }
         """,
-        n_samples={"test": 808},
-        avg_character_length={"test": 422.53},
+        stats={"n_samples": {"test": 808}, "avg_character_length": {"test": 422.53}},
     )
 
     def dataset_transform(self):
@@ -2341,18 +2255,17 @@ class CUADPriceRestrictionsLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2369,8 +2282,7 @@ class CUADPriceRestrictionsLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 46},
-        avg_character_length={"test": 324.71},
+        stats={"n_samples": {"test": 46}, "avg_character_length": {"test": 324.71}},
     )
 
     def dataset_transform(self):
@@ -2395,18 +2307,17 @@ class CUADRenewalTermLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2423,8 +2334,7 @@ class CUADRenewalTermLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 386},
-        avg_character_length={"test": 340.87},
+        stats={"n_samples": {"test": 386}, "avg_character_length": {"test": 340.87}},
     )
 
     def dataset_transform(self):
@@ -2449,18 +2359,17 @@ class CUADRevenueProfitSharingLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2477,8 +2386,7 @@ class CUADRevenueProfitSharingLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 774},
-        avg_character_length={"test": 371.55},
+        stats={"n_samples": {"test": 774}, "avg_character_length": {"test": 371.55}},
     )
 
     def dataset_transform(self):
@@ -2503,18 +2411,17 @@ class CUADRofrRofoRofnLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2531,8 +2438,7 @@ class CUADRofrRofoRofnLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 690},
-        avg_character_length={"test": 395.46},
+        stats={"n_samples": {"test": 690}, "avg_character_length": {"test": 395.46}},
     )
 
     def dataset_transform(self):
@@ -2557,18 +2463,17 @@ class CUADSourceCodeEscrowLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2585,8 +2490,7 @@ class CUADSourceCodeEscrowLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 118},
-        avg_character_length={"test": 399.18},
+        stats={"n_samples": {"test": 118}, "avg_character_length": {"test": 399.18}},
     )
 
     def dataset_transform(self):
@@ -2611,18 +2515,17 @@ class CUADTerminationForConvenienceLegalBenchClassification(AbsTaskClassificatio
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2639,8 +2542,7 @@ class CUADTerminationForConvenienceLegalBenchClassification(AbsTaskClassificatio
             year={2021}
         }
         """,
-        n_samples={"test": 430},
-        avg_character_length={"test": 326.30},
+        stats={"n_samples": {"test": 430}, "avg_character_length": {"test": 326.30}},
     )
 
     def dataset_transform(self):
@@ -2665,18 +2567,17 @@ class CUADThirdPartyBeneficiaryLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2693,8 +2594,7 @@ class CUADThirdPartyBeneficiaryLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 68},
-        avg_character_length={"test": 261.04},
+        stats={"n_samples": {"test": 68}, "avg_character_length": {"test": 261.04}},
     )
 
     def dataset_transform(self):
@@ -2719,18 +2619,17 @@ class CUADUncappedLiabilityLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2747,8 +2646,7 @@ class CUADUncappedLiabilityLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 294},
-        avg_character_length={"test": 441.04},
+        stats={"n_samples": {"test": 294}, "avg_character_length": {"test": 441.04}},
     )
 
     def dataset_transform(self):
@@ -2773,18 +2671,17 @@ class CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification(AbsTaskClassifica
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2801,8 +2698,7 @@ class CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification(AbsTaskClassifica
             year={2021}
         }
         """,
-        n_samples={"test": 48},
-        avg_character_length={"test": 368.08},
+        stats={"n_samples": {"test": 48}, "avg_character_length": {"test": 368.08}},
     )
 
     def dataset_transform(self):
@@ -2827,18 +2723,17 @@ class CUADVolumeRestrictionLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2855,8 +2750,7 @@ class CUADVolumeRestrictionLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 322},
-        avg_character_length={"test": 306.27},
+        stats={"n_samples": {"test": 322}, "avg_character_length": {"test": 306.27}},
     )
 
     def dataset_transform(self):
@@ -2881,18 +2775,17 @@ class CUADWarrantyDurationLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2909,8 +2802,7 @@ class CUADWarrantyDurationLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 320},
-        avg_character_length={"test": 352.27},
+        stats={"n_samples": {"test": 320}, "avg_character_length": {"test": 352.27}},
     )
 
     def dataset_transform(self):
@@ -2935,18 +2827,17 @@ class DefinitionClassificationLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -2957,8 +2848,7 @@ class DefinitionClassificationLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 1337},
-        avg_character_length={"test": 253.72},
+        stats={"n_samples": {"test": 1337}, "avg_character_length": {"test": 253.72}},
     )
 
     def dataset_transform(self):
@@ -2983,18 +2873,17 @@ class Diversity1LegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3005,8 +2894,7 @@ class Diversity1LegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 300},
-        avg_character_length={"test": 103.21},
+        stats={"n_samples": {"test": 300}, "avg_character_length": {"test": 103.21}},
     )
 
     def dataset_transform(self):
@@ -3055,18 +2943,17 @@ class Diversity2LegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3077,8 +2964,7 @@ class Diversity2LegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 300},
-        avg_character_length={"test": 0},
+        stats={"n_samples": {"test": 300}, "avg_character_length": {"test": 0}},
     )
 
     def dataset_transform(self):
@@ -3127,18 +3013,17 @@ class Diversity3LegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3149,8 +3034,7 @@ class Diversity3LegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 300},
-        avg_character_length={"test": 135.46},
+        stats={"n_samples": {"test": 300}, "avg_character_length": {"test": 135.46}},
     )
 
     def dataset_transform(self):
@@ -3199,18 +3083,17 @@ class Diversity4LegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3221,8 +3104,7 @@ class Diversity4LegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 300},
-        avg_character_length={"test": 144.52},
+        stats={"n_samples": {"test": 300}, "avg_character_length": {"test": 144.52}},
     )
 
     def dataset_transform(self):
@@ -3271,18 +3153,17 @@ class Diversity5LegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3293,8 +3174,7 @@ class Diversity5LegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 300},
-        avg_character_length={"test": 174.77},
+        stats={"n_samples": {"test": 300}, "avg_character_length": {"test": 174.77}},
     )
 
     def dataset_transform(self):
@@ -3343,18 +3223,17 @@ class Diversity6LegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3365,8 +3244,7 @@ class Diversity6LegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 300},
-        avg_character_length={"test": 301.01},
+        stats={"n_samples": {"test": 300}, "avg_character_length": {"test": 301.01}},
     )
 
     def dataset_transform(self):
@@ -3423,18 +3301,17 @@ class FunctionOfDecisionSectionLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3445,8 +3322,7 @@ class FunctionOfDecisionSectionLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 367},
-        avg_character_length={"test": 551.07},
+        stats={"n_samples": {"test": 367}, "avg_character_length": {"test": 551.07}},
     )
 
     def dataset_transform(self):
@@ -3474,18 +3350,17 @@ class InsurancePolicyInterpretationLegalBenchClassification(AbsTaskClassificatio
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3496,8 +3371,7 @@ class InsurancePolicyInterpretationLegalBenchClassification(AbsTaskClassificatio
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 133},
-        avg_character_length={"test": 521.88},
+        stats={"n_samples": {"test": 133}, "avg_character_length": {"test": 521.88}},
     )
 
     def dataset_transform(self):
@@ -3522,18 +3396,17 @@ class InternationalCitizenshipQuestionsLegalBenchClassification(AbsTaskClassific
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1960-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3551,8 +3424,7 @@ class InternationalCitizenshipQuestionsLegalBenchClassification(AbsTaskClassific
             publisher = {Global Citizenship Observatory}
         }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 206.18},
+        stats={"n_samples": {"test": 2048}, "avg_character_length": {"test": 206.18}},
     )
 
     def dataset_transform(self):
@@ -3582,18 +3454,17 @@ class JCrewBlockerLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2016-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3604,8 +3475,7 @@ class JCrewBlockerLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 54},
-        avg_character_length={"test": 1092.22},
+        stats={"n_samples": {"test": 54}, "avg_character_length": {"test": 1092.22}},
     )
 
     def dataset_transform(self):
@@ -3630,18 +3500,17 @@ class LearnedHandsBenefitsLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3660,8 +3529,7 @@ class LearnedHandsBenefitsLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 66},
-        avg_character_length={"test": 1308.44},
+        stats={"n_samples": {"test": 66}, "avg_character_length": {"test": 1308.44}},
     )
 
     def dataset_transform(self):
@@ -3686,18 +3554,17 @@ class LearnedHandsBusinessLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3716,8 +3583,7 @@ class LearnedHandsBusinessLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 174},
-        avg_character_length={"test": 1144.51},
+        stats={"n_samples": {"test": 174}, "avg_character_length": {"test": 1144.51}},
     )
 
     def dataset_transform(self):
@@ -3742,18 +3608,17 @@ class LearnedHandsConsumerLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3772,8 +3637,7 @@ class LearnedHandsConsumerLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 614},
-        avg_character_length={"test": 1277.45},
+        stats={"n_samples": {"test": 614}, "avg_character_length": {"test": 1277.45}},
     )
 
     def dataset_transform(self):
@@ -3798,18 +3662,17 @@ class LearnedHandsCourtsLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3828,8 +3691,7 @@ class LearnedHandsCourtsLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 192},
-        avg_character_length={"test": 1171.02},
+        stats={"n_samples": {"test": 192}, "avg_character_length": {"test": 1171.02}},
     )
 
     def dataset_transform(self):
@@ -3854,18 +3716,17 @@ class LearnedHandsCrimeLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3884,8 +3745,7 @@ class LearnedHandsCrimeLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 688},
-        avg_character_length={"test": 1212.90},
+        stats={"n_samples": {"test": 688}, "avg_character_length": {"test": 1212.90}},
     )
 
     def dataset_transform(self):
@@ -3910,18 +3770,17 @@ class LearnedHandsDivorceLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3940,8 +3799,7 @@ class LearnedHandsDivorceLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 150},
-        avg_character_length={"test": 1242.43},
+        stats={"n_samples": {"test": 150}, "avg_character_length": {"test": 1242.43}},
     )
 
     def dataset_transform(self):
@@ -3966,18 +3824,17 @@ class LearnedHandsDomesticViolenceLegalBenchClassification(AbsTaskClassification
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -3996,8 +3853,7 @@ class LearnedHandsDomesticViolenceLegalBenchClassification(AbsTaskClassification
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 174},
-        avg_character_length={"test": 1360.83},
+        stats={"n_samples": {"test": 174}, "avg_character_length": {"test": 1360.83}},
     )
 
     def dataset_transform(self):
@@ -4022,18 +3878,17 @@ class LearnedHandsEducationLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -4052,8 +3907,7 @@ class LearnedHandsEducationLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 56},
-        avg_character_length={"test": 1397.44},
+        stats={"n_samples": {"test": 56}, "avg_character_length": {"test": 1397.44}},
     )
 
     def dataset_transform(self):
@@ -4078,18 +3932,17 @@ class LearnedHandsEmploymentLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -4108,8 +3961,7 @@ class LearnedHandsEmploymentLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 710},
-        avg_character_length={"test": 1262.74},
+        stats={"n_samples": {"test": 710}, "avg_character_length": {"test": 1262.74}},
     )
 
     def dataset_transform(self):
@@ -4134,18 +3986,17 @@ class LearnedHandsEstatesLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -4164,8 +4015,7 @@ class LearnedHandsEstatesLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 178},
-        avg_character_length={"test": 1200.70},
+        stats={"n_samples": {"test": 178}, "avg_character_length": {"test": 1200.70}},
     )
 
     def dataset_transform(self):
@@ -4190,18 +4040,17 @@ class LearnedHandsFamilyLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -4220,8 +4069,7 @@ class LearnedHandsFamilyLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 1338.27},
+        stats={"n_samples": {"test": 2048}, "avg_character_length": {"test": 1338.27}},
     )
 
     def dataset_transform(self):
@@ -4249,18 +4097,17 @@ class LearnedHandsHealthLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -4279,8 +4126,7 @@ class LearnedHandsHealthLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 226},
-        avg_character_length={"test": 1472.59},
+        stats={"n_samples": {"test": 226}, "avg_character_length": {"test": 1472.59}},
     )
 
     def dataset_transform(self):
@@ -4305,18 +4151,17 @@ class LearnedHandsHousingLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -4335,8 +4180,7 @@ class LearnedHandsHousingLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 1322.54},
+        stats={"n_samples": {"test": 2048}, "avg_character_length": {"test": 1322.54}},
     )
 
     def dataset_transform(self):
@@ -4364,18 +4208,17 @@ class LearnedHandsImmigrationLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -4394,8 +4237,7 @@ class LearnedHandsImmigrationLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 134},
-        avg_character_length={"test": 1216.31},
+        stats={"n_samples": {"test": 134}, "avg_character_length": {"test": 1216.31}},
     )
 
     def dataset_transform(self):
@@ -4420,18 +4262,17 @@ class LearnedHandsTortsLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -4450,8 +4291,7 @@ class LearnedHandsTortsLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 432},
-        avg_character_length={"test": 1406.97},
+        stats={"n_samples": {"test": 432}, "avg_character_length": {"test": 1406.97}},
     )
 
     def dataset_transform(self):
@@ -4476,18 +4316,17 @@ class LearnedHandsTrafficLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-05-21", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -4506,8 +4345,7 @@ class LearnedHandsTrafficLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 556},
-        avg_character_length={"test": 1182.91},
+        stats={"n_samples": {"test": 556}, "avg_character_length": {"test": 1182.91}},
     )
 
     def dataset_transform(self):
@@ -4532,18 +4370,17 @@ class LegalReasoningCausalityLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2020-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -4554,8 +4391,7 @@ class LegalReasoningCausalityLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"test": 55},
-        avg_character_length={"test": 1563.76},
+        stats={"n_samples": {"test": 55}, "avg_character_length": {"test": 1563.76}},
     )
 
     def dataset_transform(self):
@@ -4714,7 +4550,7 @@ class MAUDLegalBenchClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MAUDLegalBenchClassification",
         description="""This task was constructed from the MAUD dataset, which consists of over 47,000 labels across 152 merger agreements annotated to identify 92 questions in each agreement used by the 2021 American Bar Association (ABA) Public Target Deal Points Study. Each dataset is formatted as a series of multiple-choice questions, where given a segment of the merger agreement and a Deal Point question, the model is to choose the answer that best characterizes the agreement as response.
-        
+
         This is a combination of all 34 of the MAUD Legal Bench datasets:
         1. MAUD Ability To Consummate Concept Is Subject To MAE Carveouts: Given an excerpt from a merger agreement and the task is to answer: is the “ability to consummate” concept subject to Material Adverse Effect (MAE) carveouts? amongst the multiple choice options.
         2. MAUD Accuracy Of Fundamental Target RWS Bringdown Standard: Given an excerpt from a merger agreement and the task is to answer: how accurate must the fundamental representations and warranties be according to the bring down provision, amongst the multiple choice options.
@@ -4758,18 +4594,17 @@ class MAUDLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2021-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -4786,8 +4621,7 @@ class MAUDLegalBenchClassification(AbsTaskClassification):
             year={2023}
         }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 1802.93},
+        stats={"n_samples": {"test": 2048}, "avg_character_length": {"test": 1802.93}},
     )
 
     def load_data(self, **kwargs: Any) -> None:
@@ -4868,18 +4702,17 @@ class NYSJudicialEthicsLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2010-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="mit",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -4890,8 +4723,7 @@ class NYSJudicialEthicsLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"test": 292},
-        avg_character_length={"test": 159.45},
+        stats={"n_samples": {"test": 292}, "avg_character_length": {"test": 159.45}},
     )
 
     def dataset_transform(self):
@@ -4918,18 +4750,17 @@ class OPP115DataRetentionLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2015-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -4947,8 +4778,7 @@ class OPP115DataRetentionLegalBenchClassification(AbsTaskClassification):
             year={2016}
         }
         """,
-        n_samples={"test": 88},
-        avg_character_length={"test": 195.20},
+        stats={"n_samples": {"test": 88}, "avg_character_length": {"test": 195.20}},
     )
 
     def dataset_transform(self):
@@ -4973,18 +4803,17 @@ class OPP115DataSecurityLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2015-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5002,8 +4831,7 @@ class OPP115DataSecurityLegalBenchClassification(AbsTaskClassification):
             year={2016}
         }
         """,
-        n_samples={"test": 1334},
-        avg_character_length={"test": 246.69},
+        stats={"n_samples": {"test": 1334}, "avg_character_length": {"test": 246.69}},
     )
 
     def dataset_transform(self):
@@ -5028,18 +4856,17 @@ class OPP115DoNotTrackLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2015-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5057,8 +4884,7 @@ class OPP115DoNotTrackLegalBenchClassification(AbsTaskClassification):
             year={2016}
         }
         """,
-        n_samples={"test": 110},
-        avg_character_length={"test": 223.16},
+        stats={"n_samples": {"test": 110}, "avg_character_length": {"test": 223.16}},
     )
 
     def dataset_transform(self):
@@ -5083,18 +4909,17 @@ class OPP115FirstPartyCollectionUseLegalBenchClassification(AbsTaskClassificatio
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2015-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5112,8 +4937,7 @@ class OPP115FirstPartyCollectionUseLegalBenchClassification(AbsTaskClassificatio
             year={2016}
         }
         """,
-        n_samples={"test": 2086},
-        avg_character_length={"test": 204.25},
+        stats={"n_samples": {"test": 2086}, "avg_character_length": {"test": 204.25}},
     )
 
     def dataset_transform(self):
@@ -5140,18 +4964,17 @@ class OPP115InternationalAndSpecificAudiencesLegalBenchClassification(
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2015-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5169,8 +4992,7 @@ class OPP115InternationalAndSpecificAudiencesLegalBenchClassification(
             year={2016}
         }
         """,
-        n_samples={"test": 980},
-        avg_character_length={"test": 327.71},
+        stats={"n_samples": {"test": 980}, "avg_character_length": {"test": 327.71}},
     )
 
     def dataset_transform(self):
@@ -5195,18 +5017,17 @@ class OPP115PolicyChangeLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2015-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5224,8 +5045,7 @@ class OPP115PolicyChangeLegalBenchClassification(AbsTaskClassification):
             year={2016}
         }
         """,
-        n_samples={"test": 431},
-        avg_character_length={"test": 200.99},
+        stats={"n_samples": {"test": 431}, "avg_character_length": {"test": 200.99}},
     )
 
     def dataset_transform(self):
@@ -5250,18 +5070,17 @@ class OPP115ThirdPartySharingCollectionLegalBenchClassification(AbsTaskClassific
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2015-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5279,8 +5098,7 @@ class OPP115ThirdPartySharingCollectionLegalBenchClassification(AbsTaskClassific
             year={2016}
         }
         """,
-        n_samples={"test": 1590},
-        avg_character_length={"test": 223.64},
+        stats={"n_samples": {"test": 1590}, "avg_character_length": {"test": 223.64}},
     )
 
     def dataset_transform(self):
@@ -5305,18 +5123,17 @@ class OPP115UserAccessEditAndDeletionLegalBenchClassification(AbsTaskClassificat
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2015-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5334,8 +5151,7 @@ class OPP115UserAccessEditAndDeletionLegalBenchClassification(AbsTaskClassificat
             year={2016}
         }
         """,
-        n_samples={"test": 462},
-        avg_character_length={"test": 218.59},
+        stats={"n_samples": {"test": 462}, "avg_character_length": {"test": 218.59}},
     )
 
     def dataset_transform(self):
@@ -5360,18 +5176,17 @@ class OPP115UserChoiceControlLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2015-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-nc-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5389,8 +5204,7 @@ class OPP115UserChoiceControlLegalBenchClassification(AbsTaskClassification):
             year={2016}
         }
         """,
-        n_samples={"test": 1546},
-        avg_character_length={"test": 210.62},
+        stats={"n_samples": {"test": 1546}, "avg_character_length": {"test": 210.62}},
     )
 
     def dataset_transform(self):
@@ -5423,18 +5237,17 @@ class OralArgumentQuestionPurposeLegalBenchClassification(AbsTaskClassification)
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2021-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5445,8 +5258,7 @@ class OralArgumentQuestionPurposeLegalBenchClassification(AbsTaskClassification)
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 312},
-        avg_character_length={"test": 269.71},
+        stats={"n_samples": {"test": 312}, "avg_character_length": {"test": 269.71}},
     )
 
     def dataset_transform(self):
@@ -5467,18 +5279,17 @@ class OverrulingLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1965-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5496,8 +5307,7 @@ class OverrulingLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 167.20},
+        stats={"n_samples": {"test": 2048}, "avg_character_length": {"test": 167.20}},
     )
 
     def dataset_transform(self):
@@ -5525,18 +5335,17 @@ class PersonalJurisdictionLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5547,8 +5356,7 @@ class PersonalJurisdictionLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 50},
-        avg_character_length={"test": 381.14},
+        stats={"n_samples": {"test": 50}, "avg_character_length": {"test": 381.14}},
     )
 
     def dataset_transform(self):
@@ -5573,18 +5381,17 @@ class PROALegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2000-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5595,8 +5402,7 @@ class PROALegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 95},
-        avg_character_length={"test": 251.73},
+        stats={"n_samples": {"test": 95}, "avg_character_length": {"test": 251.73}},
     )
 
     def dataset_transform(self):
@@ -5621,18 +5427,17 @@ class SCDBPAccountabilityLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2010-01-01", "2015-06-30"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5652,8 +5457,7 @@ class SCDBPAccountabilityLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 379},
-        avg_character_length={"test": 3520},
+        stats={"n_samples": {"test": 379}, "avg_character_length": {"test": 3520}},
     )
 
     def dataset_transform(self):
@@ -5678,18 +5482,17 @@ class SCDBPAuditsLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2010-01-01", "2015-06-30"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5709,8 +5512,7 @@ class SCDBPAuditsLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 379},
-        avg_character_length={"test": 3507},
+        stats={"n_samples": {"test": 379}, "avg_character_length": {"test": 3507}},
     )
 
     def dataset_transform(self):
@@ -5735,18 +5537,17 @@ class SCDBPCertificationLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2010-01-01", "2015-06-30"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5766,8 +5567,7 @@ class SCDBPCertificationLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 378},
-        avg_character_length={"test": 3507},
+        stats={"n_samples": {"test": 378}, "avg_character_length": {"test": 3507}},
     )
 
     def dataset_transform(self):
@@ -5792,18 +5592,17 @@ class SCDBPTrainingLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2010-01-01", "2015-06-30"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5823,8 +5622,7 @@ class SCDBPTrainingLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 379},
-        avg_character_length={"test": 3506},
+        stats={"n_samples": {"test": 379}, "avg_character_length": {"test": 3506}},
     )
 
     def dataset_transform(self):
@@ -5849,18 +5647,17 @@ class SCDBPVerificationLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2010-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5880,8 +5677,7 @@ class SCDBPVerificationLegalBenchClassification(AbsTaskClassification):
             publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 379},
-        avg_character_length={"test": 3498},
+        stats={"n_samples": {"test": 379}, "avg_character_length": {"test": 3498}},
     )
 
     def dataset_transform(self):
@@ -5906,18 +5702,17 @@ class SCDDAccountabilityLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2010-01-01", "2015-06-30"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5937,8 +5732,7 @@ class SCDDAccountabilityLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 378},
-        avg_character_length={"test": 3522},
+        stats={"n_samples": {"test": 378}, "avg_character_length": {"test": 3522}},
     )
 
     def dataset_transform(self):
@@ -5963,18 +5757,17 @@ class SCDDAuditsLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2010-01-01", "2015-06-30"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -5994,8 +5787,7 @@ class SCDDAuditsLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 379},
-        avg_character_length={"test": 3506},
+        stats={"n_samples": {"test": 379}, "avg_character_length": {"test": 3506}},
     )
 
     def dataset_transform(self):
@@ -6020,18 +5812,17 @@ class SCDDCertificationLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2010-01-01", "2015-06-30"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -6051,8 +5842,7 @@ class SCDDCertificationLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 378},
-        avg_character_length={"test": 3518},
+        stats={"n_samples": {"test": 378}, "avg_character_length": {"test": 3518}},
     )
 
     def dataset_transform(self):
@@ -6077,18 +5867,17 @@ class SCDDTrainingLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2010-01-01", "2015-06-30"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -6108,8 +5897,7 @@ class SCDDTrainingLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 379},
-        avg_character_length={"test": 3499},
+        stats={"n_samples": {"test": 379}, "avg_character_length": {"test": 3499}},
     )
 
     def dataset_transform(self):
@@ -6134,18 +5922,17 @@ class SCDDVerificationLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2010-01-01", "2015-06-30"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -6165,8 +5952,7 @@ class SCDDVerificationLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 379},
-        avg_character_length={"test": 3503},
+        stats={"n_samples": {"test": 379}, "avg_character_length": {"test": 3503}},
     )
 
     def dataset_transform(self):
@@ -6191,18 +5977,17 @@ class TelemarketingSalesRuleLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2020-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -6213,8 +5998,7 @@ class TelemarketingSalesRuleLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"test": 47},
-        avg_character_length={"test": 348.29},
+        stats={"n_samples": {"test": 47}, "avg_character_length": {"test": 348.29}},
     )
 
     def dataset_transform(self):
@@ -6239,18 +6023,17 @@ class TextualismToolDictionariesLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2020-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -6261,8 +6044,7 @@ class TextualismToolDictionariesLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"test": 107},
-        avg_character_length={"test": 943.23},
+        stats={"n_samples": {"test": 107}, "avg_character_length": {"test": 943.23}},
     )
 
     def dataset_transform(self):
@@ -6287,18 +6069,17 @@ class TextualismToolPlainLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2020-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -6309,8 +6090,7 @@ class TextualismToolPlainLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"test": 165},
-        avg_character_length={"test": 997.97},
+        stats={"n_samples": {"test": 165}, "avg_character_length": {"test": 997.97}},
     )
 
     def dataset_transform(self):
@@ -6335,18 +6115,17 @@ class UCCVCommonLawLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2020-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -6357,8 +6136,7 @@ class UCCVCommonLawLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"test": 94},
-        avg_character_length={"test": 114.127},
+        stats={"n_samples": {"test": 94}, "avg_character_length": {"test": 114.127}},
     )
 
     def dataset_transform(self):
@@ -6385,18 +6163,17 @@ class UnfairTOSLegalBenchClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2006-01-01", "2023-08-23"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -6416,8 +6193,7 @@ class UnfairTOSLegalBenchClassification(AbsTaskClassification):
             publisher={Springer}
         }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 184.69},
+        stats={"n_samples": {"test": 2048}, "avg_character_length": {"test": 184.69}},
     )
 
     def dataset_transform(self):

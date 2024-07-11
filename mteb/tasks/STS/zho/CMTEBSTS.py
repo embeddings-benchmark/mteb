@@ -16,6 +16,7 @@ class ATEC(AbsTaskSTS):
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["cmn-Hans"],
         main_score="cosine_spearman",
@@ -24,10 +25,9 @@ class ATEC(AbsTaskSTS):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{raghu-etal-2021-end,
     title = "End-to-End Learning of Flowchart Grounded Task-Oriented Dialogs",
     author = "Raghu, Dinesh  and
@@ -48,8 +48,8 @@ class ATEC(AbsTaskSTS):
     pages = "4348--4366",
     abstract = "We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.",
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     @property
@@ -71,6 +71,7 @@ class BQ(AbsTaskSTS):
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["cmn-Hans"],
         main_score="cosine_spearman",
@@ -79,10 +80,9 @@ class BQ(AbsTaskSTS):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{raghu-etal-2021-end,
     title = "End-to-End Learning of Flowchart Grounded Task-Oriented Dialogs",
     author = "Raghu, Dinesh  and
@@ -103,8 +103,8 @@ class BQ(AbsTaskSTS):
     pages = "4348--4366",
     abstract = "We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.",
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     @property
@@ -126,6 +126,7 @@ class LCQMC(AbsTaskSTS):
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="cosine_spearman",
@@ -134,10 +135,9 @@ class LCQMC(AbsTaskSTS):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{raghu-etal-2021-end,
     title = "End-to-End Learning of Flowchart Grounded Task-Oriented Dialogs",
     author = "Raghu, Dinesh  and
@@ -158,8 +158,8 @@ class LCQMC(AbsTaskSTS):
     pages = "4348--4366",
     abstract = "We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.",
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     @property
@@ -181,6 +181,7 @@ class PAWSX(AbsTaskSTS):
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="cosine_spearman",
@@ -189,10 +190,9 @@ class PAWSX(AbsTaskSTS):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{raghu-etal-2021-end,
     title = "End-to-End Learning of Flowchart Grounded Task-Oriented Dialogs",
     author = "Raghu, Dinesh  and
@@ -213,8 +213,8 @@ class PAWSX(AbsTaskSTS):
     pages = "4348--4366",
     abstract = "We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.",
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     @property
@@ -236,6 +236,7 @@ class STSB(AbsTaskSTS):
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["cmn-Hans"],
         main_score="cosine_spearman",
@@ -244,10 +245,9 @@ class STSB(AbsTaskSTS):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{raghu-etal-2021-end,
     title = "End-to-End Learning of Flowchart Grounded Task-Oriented Dialogs",
     author = "Raghu, Dinesh  and
@@ -268,8 +268,8 @@ class STSB(AbsTaskSTS):
     pages = "4348--4366",
     abstract = "We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.",
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     @property
@@ -291,6 +291,7 @@ class AFQMC(AbsTaskSTS):
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["cmn-Hans"],
         main_score="cosine_spearman",
@@ -299,10 +300,9 @@ class AFQMC(AbsTaskSTS):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{raghu-etal-2021-end,
     title = "End-to-End Learning of Flowchart Grounded Task-Oriented Dialogs",
     author = "Raghu, Dinesh  and
@@ -323,8 +323,8 @@ class AFQMC(AbsTaskSTS):
     pages = "4348--4366",
     abstract = "We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.",
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        
+        stats={"n_samples": None, "avg_character_length": None}),
     )
 
     @property
@@ -346,6 +346,7 @@ class QBQTC(AbsTaskSTS):
         reference="https://github.com/CLUEbenchmark/QBQTC/tree/main/dataset",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="cosine_spearman",
@@ -354,11 +355,9 @@ class QBQTC(AbsTaskSTS):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation=None,
-        n_samples=None,
-        avg_character_length=None,
+        stats={"n_samples": None, "avg_character_length": None}),
     )

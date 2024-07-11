@@ -10,7 +10,7 @@ language python
             $avg_kwarg <: `avg_character_length = $avg_val` => `stats={"n_samples": $ns_val, "avg_character_length": $avg_val})`
         },
         contains keyword_argument(name="form") as $form_kwarg where {
-            $form_kwarg <: `form = [$form_val]` => .
+            $form_kwarg <: or {`form = [$form_val]`, `form = $form_val`} => .
         },
         contains keyword_argument(name="domains") as $domains_kwarg where {
             $domains_kwarg <: `domains = [$domains_val]` => `domains=[$domains_val, $form_val]`

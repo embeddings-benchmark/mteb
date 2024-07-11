@@ -17,6 +17,7 @@ class ArxivClusteringS2S(AbsTaskClustering):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
@@ -25,10 +26,9 @@ class ArxivClusteringS2S(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{arxiv_org_submitters_2024,
     title={arXiv Dataset},
     url={https://www.kaggle.com/dsv/7548853},
@@ -37,6 +37,5 @@ class ArxivClusteringS2S(AbsTaskClustering):
     author={arXiv.org submitters},
     year={2024}
 }""",
-        n_samples={"test": 732723},
-        avg_character_length={"test": 74},
+        stats={"n_samples": {"test": 732723}, "avg_character_length": {"test": 74}},
     )

@@ -16,6 +16,7 @@ class CbdClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="accuracy",
@@ -24,10 +25,9 @@ class CbdClassification(AbsTaskClassification):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@proceedings{ogr:kob:19:poleval,
   editor    = {Maciej Ogrodniczuk and Łukasz Kobyliński},
   title     = {{Proceedings of the PolEval 2019 Workshop}},
@@ -37,8 +37,7 @@ class CbdClassification(AbsTaskClassification):
   url       = {http://2019.poleval.pl/files/poleval2019.pdf},
   isbn      = "978-83-63159-28-3"}
 }""",
-        n_samples={"test": 1000},
-        avg_character_length={"test": 93.2},
+        stats={"n_samples": {"test": 1000}, "avg_character_length": {"test": 93.2}},
     )
 
 
@@ -54,6 +53,7 @@ class PolEmo2InClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="accuracy",
@@ -62,10 +62,9 @@ class PolEmo2InClassification(AbsTaskClassification):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{kocon-etal-2019-multi,
     title = "Multi-Level Sentiment Analysis of {P}ol{E}mo 2.0: Extended Corpus of Multi-Domain Consumer Reviews",
     author = "Koco{\'n}, Jan  and
@@ -81,8 +80,7 @@ class PolEmo2InClassification(AbsTaskClassification):
     pages = "980--991",
     abstract = "In this article we present an extended version of PolEmo {--} a corpus of consumer reviews from 4 domains: medicine, hotels, products and school. Current version (PolEmo 2.0) contains 8,216 reviews having 57,466 sentences. Each text and sentence was manually annotated with sentiment in 2+1 scheme, which gives a total of 197,046 annotations. We obtained a high value of Positive Specific Agreement, which is 0.91 for texts and 0.88 for sentences. PolEmo 2.0 is publicly available under a Creative Commons copyright license. We explored recent deep learning approaches for the recognition of sentiment, such as Bi-directional Long Short-Term Memory (BiLSTM) and Bidirectional Encoder Representations from Transformers (BERT).",
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        stats={"n_samples": None, "avg_character_length": None},
     )
 
 
@@ -99,6 +97,7 @@ class PolEmo2OutClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="accuracy",
@@ -107,13 +106,11 @@ class PolEmo2OutClassification(AbsTaskClassification):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation=None,
-        n_samples={"test": 722},
-        avg_character_length={"test": 756.2},
+        stats={"n_samples": {"test": 722}, "avg_character_length": {"test": 756.2}},
     )
 
 
@@ -128,6 +125,7 @@ class AllegroReviewsClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="accuracy",
@@ -136,13 +134,11 @@ class AllegroReviewsClassification(AbsTaskClassification):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation=None,
-        n_samples={"test": 1006},
-        avg_character_length={"test": 477.2},
+        stats={"n_samples": {"test": 1006}, "avg_character_length": {"test": 477.2}},
     )
 
 
@@ -158,6 +154,7 @@ class PacClassification(AbsTaskClassification):
         },
         type="Classification",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="accuracy",
@@ -166,11 +163,9 @@ class PacClassification(AbsTaskClassification):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation=None,
-        n_samples={"test": 3453},
-        avg_character_length={"test": 185.3},
+        stats={"n_samples": {"test": 3453}, "avg_character_length": {"test": 185.3}},
     )

@@ -38,7 +38,7 @@ class SciDocsReranking(AbsTaskReranking):
             "revision": "d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
         }
         date=("2000-01-01", "2020-12-31"), # best guess
-        form="written",
+        form="Written",
         domains=["Academic", "Non-fiction"],
         task_subtypes=["Scientific Reranking"],
         license="cc-by-4.0",
@@ -102,7 +102,7 @@ class VGClustering(AbsTaskClustering):
             "revision": "d4c5a8ba10ae71224752c727094ac4c46947fa29",
         },
         date=("2012-01-01", "2020-01-01"),
-        form="written",
+        form="Written",
         domains=["Academic", "Non-fiction"],
         task_subtypes=["Scientific Reranking"],
         license="cc-by-nc",

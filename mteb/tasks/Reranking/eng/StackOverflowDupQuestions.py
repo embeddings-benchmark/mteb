@@ -16,6 +16,7 @@ class StackOverflowDupQuestions(AbsTaskReranking):
         },
         type="Reranking",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="map",
@@ -24,10 +25,9 @@ class StackOverflowDupQuestions(AbsTaskReranking):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@article{Liu2018LinkSOAD,
   title={LinkSO: a dataset for learning to retrieve similar question answer pairs on software development forums},
   author={Xueqing Liu and Chi Wang and Yue Leng and ChengXiang Zhai},
@@ -35,6 +35,5 @@ class StackOverflowDupQuestions(AbsTaskReranking):
   year={2018},
   url={https://api.semanticscholar.org/CorpusID:53111679}
 }""",
-        n_samples={"test": 3467},
-        avg_character_length={"test": 49.8},
+        stats={"n_samples": {"test": 3467}, "avg_character_length": {"test": 49.8}},
     )

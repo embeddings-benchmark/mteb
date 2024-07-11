@@ -376,7 +376,7 @@ def test_filled_metadata_is_filled():
             eval_langs=["eng-Latn"],
             main_score="map",
             date=("2021-01-01", "2021-12-31"),
-            form=["written"],
+            form=["Written"],
             domains=["Non-fiction"],
             license="mit",
             task_subtypes=["Thematic clustering"],
