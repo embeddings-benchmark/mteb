@@ -1,0 +1,1 @@
+{"name": "openai/clip-vit-base-patch16", "revision": "57c216476eefef5ab752ec549e440a49ae4ae5f3", "release_date": "2021-02-26", "languages": ["eng_Latn"], "n_parameters": null, "memory_usage": null, "max_tokens": null, "embed_dim": null, "license": null, "open_source": true, "similarity_fn_name": null, "framework": [], "loader": "CLIPModelWrapper"}
