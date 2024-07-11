@@ -1,0 +1,13 @@
+engine marzano(0.1)
+language python
+
+`TaskMetadata($args)` where {
+    $args <: any {
+        contains keyword_argument(name="n_samples") as $ns_kwarg where {
+            $ns_kwarg <: `n_samples = $ns_val` => .
+        },
+        contains keyword_argument(name="avg_character_length") as $avg_kwarg where {
+            $avg_kwarg <: `avg_character_length = $avg_val` => `stats=GeneralDescriptiveStats(n_samples=$ns_val, avg_character_length=$avg_val)`
+        },
+    },
+}

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from datetime import date
-from typing import Any, List, Mapping, Union
+from typing import List, Mapping, Union
 
 from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
 from typing_extensions import Annotated, Literal
@@ -137,6 +137,13 @@ PROGRAMMING_LANGS = [
 logger = logging.getLogger(__name__)
 
 
+class GeneralDescriptiveStats(BaseModel):
+    """General descriptive statistics for a dataset."""
+
+    n_samples: dict[SPLIT_NAME, int]
+    avg_character_length: dict[SPLIT_NAME, float]
+
+
 class TaskMetadata(BaseModel):
     """Metadata for a task.
 
@@ -198,10 +205,7 @@ class TaskMetadata(BaseModel):
     text_creation: TEXT_CREATION_METHOD | None
     bibtex_citation: str | None
 
-    n_samples: dict[SPLIT_NAME, int] | None
-    avg_character_length: (
-        Union[dict[SPLIT_NAME, float], dict[SPLIT_NAME, dict[str, Any]]] | None
-    )
+    stats: GeneralDescriptiveStats
 
     @field_validator("dataset")
     def _check_dataset_path_is_specified(cls, dataset):
