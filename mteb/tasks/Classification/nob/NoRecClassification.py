@@ -21,7 +21,6 @@ class NoRecClassification(AbsTaskClassification):
         eval_langs=["nob-Latn"],
         main_score="accuracy",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,

@@ -90,11 +90,9 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
         date=("2022-01-01", "2022-09-12"),
-        
         domains=["Academic", "Written"],
         task_subtypes=["Thematic clustering", "Topic classification"],
         license="Apache-2.0",
-        
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
@@ -106,7 +104,6 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
-        
         stats={"n_samples": {"test": NUM_SAMPLES}, "avg_character_length": {}},
     )
 
@@ -163,7 +160,7 @@ class CLSClusteringS2S(AbsTaskClustering):
   year={2022}
 }
 """,
-        stats={"n_samples": {"test": 100000}, "avg_character_length": None}),
+        stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )
 
 
@@ -188,7 +185,6 @@ class CLSClusteringP2P(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
@@ -198,8 +194,7 @@ class CLSClusteringP2P(AbsTaskClustering):
   journal={arXiv preprint arXiv:2209.05034},
   year={2022}
 }""",
-        
-        stats={"n_samples": {"test": 100000}, "avg_character_length": None}),
+        stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )
 
 
@@ -279,11 +274,9 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
         date=("2006-01-01", "2007-01-01"),
-        
         domains=["News", "Written"],
         task_subtypes=["Thematic clustering", "Topic classification"],
         license="Not specified",
-        
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
@@ -295,7 +288,6 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
   publisher = {THU Natural Language Processing Lab},
   url = {https://github.com/thunlp/THUCTC}
 }""",
-        
         stats={"n_samples": {"test": NUM_SAMPLES}, "avg_character_length": {}},
     )
 
@@ -359,7 +351,7 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
   year={2006}
 }
 """,
-        stats={"n_samples": {"test": 100000}, "avg_character_length": None}),
+        stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )
 
 
@@ -384,7 +376,6 @@ class ThuNewsClusteringP2P(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
@@ -403,6 +394,5 @@ class ThuNewsClusteringP2P(AbsTaskClustering):
   year={2006}
 }
 """,
-        
-        stats={"n_samples": {"test": 100000}, "avg_character_length": None}),
+        stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )

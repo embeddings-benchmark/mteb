@@ -22,7 +22,6 @@ class NorwegianParliamentClassification(AbsTaskClassification):
         # assumed to be bokmål
         main_score="accuracy",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,

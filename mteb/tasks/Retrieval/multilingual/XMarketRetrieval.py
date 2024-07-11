@@ -78,7 +78,7 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
         eval_langs=_EVAL_LANGS,
         main_score="ndcg_at_10",
         date=None,
-        form=None,
+        
         domains=None,
         task_subtypes=None,
         license=None,

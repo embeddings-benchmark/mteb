@@ -25,7 +25,6 @@ class GerDaLIR(AbsTaskRetrieval):
         eval_langs=["deu-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,

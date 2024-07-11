@@ -21,11 +21,9 @@ class WikiCitiesClustering(AbsTaskClustering):
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
@@ -34,5 +32,5 @@ class WikiCitiesClustering(AbsTaskClustering):
     title  = "Wikimedia Downloads",
     url    = "https://dumps.wikimedia.org"
 }""",
-        stats={"n_samples": None, "avg_character_length": None}),
+        stats={"n_samples": None, "avg_character_length": None},
     )

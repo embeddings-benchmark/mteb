@@ -21,7 +21,6 @@ class MSMARCOv2(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
@@ -48,5 +47,5 @@ class MSMARCOv2(AbsTaskRetrieval):
           bibsource = {dblp computer science bibliography, https://dblp.org}
         }
         }""",
-        stats={"n_samples": None, "avg_character_length": None}),
+        stats={"n_samples": None, "avg_character_length": None},
     )

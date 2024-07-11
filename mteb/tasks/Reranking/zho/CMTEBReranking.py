@@ -35,7 +35,7 @@ class T2Reranking(AbsTaskReranking):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        stats={"n_samples": None, "avg_character_length": None}),
+        stats={"n_samples": None, "avg_character_length": None},
     )
 
 
@@ -59,7 +59,6 @@ class MMarcoReranking(AbsTaskReranking):
         domains=None,
         task_subtypes=None,
         license=None,
-        
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
@@ -71,8 +70,7 @@ class MMarcoReranking(AbsTaskReranking):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        
-        stats={"n_samples": None, "avg_character_length": None}),
+        stats={"n_samples": None, "avg_character_length": None},
     )
 
 
@@ -132,7 +130,6 @@ class CMedQAv2(AbsTaskReranking):
         domains=None,
         task_subtypes=None,
         license=None,
-        
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
@@ -148,6 +145,5 @@ keywords={Biomedical imaging;Data mining;Semantics;Medical services;Feature extr
 doi={10.1109/ACCESS.2018.2883637}, 
 ISSN={2169-3536}, 
 month={},}""",
-        
-        stats={"n_samples": None, "avg_character_length": None}),
+        stats={"n_samples": None, "avg_character_length": None},
     )

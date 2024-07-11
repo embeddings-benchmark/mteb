@@ -21,7 +21,6 @@ class STSBenchmarkSTS(AbsTaskSTS):
         eval_langs=["eng-Latn"],
         main_score="cosine_spearman",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
@@ -34,7 +33,7 @@ author={Philip May},
 year={2021},
 url={https://github.com/PhilipMay/stsb-multi-mt}
 }""",
-        stats={"n_samples": None, "avg_character_length": None}),
+        stats={"n_samples": None, "avg_character_length": None},
     )
 
     @property

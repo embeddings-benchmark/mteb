@@ -21,7 +21,6 @@ class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
         eval_langs=["eng-Latn"],
         main_score="max_ap",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,

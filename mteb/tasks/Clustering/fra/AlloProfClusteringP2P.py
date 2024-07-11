@@ -46,7 +46,7 @@ class AlloProfClusteringP2P(AbsTaskClustering):
   year = {2023},
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }""",
-        stats={"n_samples": None, "avg_character_length": None}),
+        stats={"n_samples": None, "avg_character_length": None},
     )
 
     def create_description(self, example):
@@ -89,11 +89,9 @@ class AlloProfClusteringP2PFast(AbsTaskClusteringFast):
         main_score="v_measure",
         # (date of founding of the dataset source site, date of dataset paper publication)
         date=("1996-01-01", "2023-04-14"),
-        
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="mit",
-        
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
@@ -108,7 +106,6 @@ class AlloProfClusteringP2PFast(AbsTaskClusteringFast):
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }
 """,
-        
         stats={"n_samples": {"test": 2556}, "avg_character_length": {"test": 3539.5}},
     )
 

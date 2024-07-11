@@ -20,7 +20,6 @@ class Ocnli(AbsTaskPairClassification):
         eval_langs=["cmn-Hans"],
         main_score="max_accuracy",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
@@ -35,7 +34,7 @@ class Ocnli(AbsTaskPairClassification):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
-        stats={"n_samples": None, "avg_character_length": None}),
+        stats={"n_samples": None, "avg_character_length": None},
     )
 
     def dataset_transform(self):
@@ -59,11 +58,9 @@ class Cmnli(AbsTaskPairClassification):
         eval_langs=["cmn-Hans"],
         main_score="max_accuracy",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
@@ -110,7 +107,7 @@ class Cmnli(AbsTaskPairClassification):
             doi = "10.18653/v1/2020.coling-main.419",
             pages = "4762--4772",
         }""",
-        stats={"n_samples": None, "avg_character_length": None}),
+        stats={"n_samples": None, "avg_character_length": None},
     )
 
     def dataset_transform(self):

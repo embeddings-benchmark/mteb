@@ -20,7 +20,6 @@ class SweRecClassification(AbsTaskClassification):
         eval_langs=["swe-Latn"],
         main_score="accuracy",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,

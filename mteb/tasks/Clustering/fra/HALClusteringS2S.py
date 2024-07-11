@@ -35,7 +35,6 @@ class HALClusteringS2S(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
@@ -47,8 +46,7 @@ class HALClusteringS2S(AbsTaskClustering):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        
-        stats={"n_samples": None, "avg_character_length": None}),
+        stats={"n_samples": None, "avg_character_length": None},
     )
 
     def dataset_transform(self):
@@ -82,11 +80,9 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
         eval_langs=["fra-Latn"],
         main_score="v_measure",
         date=("2000-03-29", "2024-05-24"),
-        
         domains=["Academic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="Apache-2.0",
-        
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
@@ -98,8 +94,10 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        
-        stats={"n_samples": {"test": NUM_SAMPLES}, "avg_character_length": {"test": 86.6}},
+        stats={
+            "n_samples": {"test": NUM_SAMPLES},
+            "avg_character_length": {"test": 86.6},
+        },
     )
 
     def dataset_transform(self):

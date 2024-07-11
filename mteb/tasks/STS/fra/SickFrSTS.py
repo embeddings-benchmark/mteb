@@ -21,7 +21,6 @@ class SickFrSTS(AbsTaskSTS):
         eval_langs=["fra-Latn"],
         main_score="cosine_spearman",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
@@ -29,7 +28,7 @@ class SickFrSTS(AbsTaskSTS):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        stats={"n_samples": None, "avg_character_length": None}),
+        stats={"n_samples": None, "avg_character_length": None},
     )
 
     @property

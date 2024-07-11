@@ -52,7 +52,7 @@ class BigPatentClustering(AbsTaskClustering):
   biburl    = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }""",
-        stats={"n_samples": None, "avg_character_length": None}),
+        stats={"n_samples": None, "avg_character_length": None},
     )
 
 
@@ -77,11 +77,9 @@ class BigPatentClusteringFast(AbsTaskClusteringFast):
             "1971-01-01",
             "2019-06-10",
         ),  # start date from paper, end date - paper publication
-        
         domains=["Legal", "Written"],
         task_subtypes=["Thematic clustering"],
         license="cc-by-4.0",
-        
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
@@ -101,8 +99,10 @@ class BigPatentClusteringFast(AbsTaskClusteringFast):
   biburl    = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }""",
-        
-        stats={"n_samples": {"test": NUM_SAMPLES}, "avg_character_length": {"test": 30995.5}},
+        stats={
+            "n_samples": {"test": NUM_SAMPLES},
+            "avg_character_length": {"test": 30995.5},
+        },
     )
 
     def dataset_transform(self):

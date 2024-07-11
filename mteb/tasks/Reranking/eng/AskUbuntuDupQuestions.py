@@ -21,7 +21,6 @@ class AskUbuntuDupQuestions(AbsTaskReranking):
         eval_langs=["eng-Latn"],
         main_score="map",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,

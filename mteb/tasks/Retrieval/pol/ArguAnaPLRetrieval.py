@@ -24,7 +24,6 @@ class ArguAnaPL(AbsTaskRetrieval):
         eval_langs=["pol-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,

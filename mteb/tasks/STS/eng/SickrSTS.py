@@ -21,7 +21,6 @@ class SickrSTS(AbsTaskSTS):
         eval_langs=["eng-Latn"],
         main_score="cosine_spearman",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
@@ -58,7 +57,7 @@ class SickrSTS(AbsTaskSTS):
     language = "English",
     ISBN = "979-10-95546-34-4",
 }""",
-        stats={"n_samples": None, "avg_character_length": None}),
+        stats={"n_samples": None, "avg_character_length": None},
     )
 
     @property

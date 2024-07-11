@@ -24,7 +24,6 @@ class SpanishPassageRetrievalS2P(AbsTaskRetrieval):
         eval_langs=["spa-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
