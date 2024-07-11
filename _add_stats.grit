@@ -21,7 +21,7 @@ language python
         contains keyword_argument(name="socioeconomic_status") as $socio where {
             $socio <: `socioeconomic_status = $val` => .
         },
-        and { contains keyword_argument(name="category"), !contains keyword_argument(name="modalities") } as $category where {
+        and {contains keyword_argument(name="category") as $category, !contains keyword_argument(name="modalities")} where {
             $category <: `category = $c_val` => `category=$c_val,\nmodalities=["text"]`
         },
     },
