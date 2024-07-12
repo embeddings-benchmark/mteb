@@ -8,7 +8,7 @@ from time import time
 from typing import Any, Dict, List, Tuple, Union
 
 import tqdm
-from datasets import Features, Value, load_dataset
+from datasets import Dataset, Features, Value, load_dataset
 
 from mteb.encoder_interface import Encoder
 
@@ -72,10 +72,11 @@ class HFDataLoaderInstructions(HFDataLoader):
     def load(
         self, split="test"
     ) -> Tuple[
-        Dict[str, Dict[str, str]],
-        Dict[str, str],
+        Dataset,
+        Dataset,
         Dict[str, Dict[str, int]],
         Dict[str, Dict[str, int]],
+        Dataset,
     ]:
         if not self.hf_repo:
             self.og_qrels_file = os.path.join(self.qrels_folder + "_og", split + ".tsv")
@@ -223,28 +224,18 @@ class AbsTaskInstructionRetrieval(AbsTask):
         instruction: A relevant document will provide the projected or actual date of completion of the project, its estimated or actual total cost, or the estimated or ongoing electrical output of the finished project. Discussions of the social, political, or ecological impact of the project are not relevant.
 
     Child-classes must implement the following properties:
-    self.corpus = Dict[id, Dict[str, str]] #id => dict with document datas like title and text
-    self.queries = Dict[id, str] #id => query
-    self.relevant_docs = List[id, id, score]
+    self.corpus = Dict[corpus_id, Dict[str, str]] #id => dict with document datas like title and text
+    self.queries = Dict[query_id, str] #id => query
+    self.relevant_docs = Dict[query_id, Dict[corpus_id, int]]
     self.og_instructions = Dict[str, str] query => original instruction
     self.changed_instructions = Dict[str, str] query => changed instruction
-    self.top_ranked = Dict[id, List[id]] #id => list of top ranked document ids
+    self.top_ranked = Dict[query_id, List[corpus_id]] #id => list of top ranked document ids
 
     See https://arxiv.org/abs/2403.15246 for more details
     """
 
     def __init__(
         self,
-        hf_repo: str = None,
-        hf_repo_qrels: str = None,
-        data_folder: str = None,
-        prefix: str = None,
-        corpus_file: str = "corpus.jsonl",
-        query_file: str = "queries.jsonl",
-        qrels_folder: str = "qrels",
-        qrels_file: str = "",
-        streaming: bool = False,
-        keep_in_memory: bool = False,
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -271,14 +262,18 @@ class AbsTaskInstructionRetrieval(AbsTask):
             dataset_path + "-qrels" if "clarin-knext" in dataset_path else None
         )
         for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
-            corpus, queries, og_qrels, changed_qrels, top_ranked_init = (
-                HFDataLoaderInstructions(
-                    hf_repo=dataset_path,
-                    hf_repo_qrels=hf_repo_qrels,
-                    streaming=False,
-                    keep_in_memory=False,
-                ).load(split=split)
-            )
+            (
+                corpus,
+                queries,
+                og_relevant_docs,
+                changed_relevant_docs,
+                top_ranked_init,
+            ) = HFDataLoaderInstructions(
+                hf_repo=dataset_path,
+                hf_repo_qrels=hf_repo_qrels,
+                streaming=False,
+                keep_in_memory=False,
+            ).load(split=split)
 
             # Conversion from DataSet
             top_ranked = defaultdict(list)
@@ -311,7 +306,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 self.queries[split],
                 self.og_relevant_docs[split],
                 self.changed_relevant_docs[split],
-            ) = corpus, queries, og_qrels, changed_qrels
+            ) = corpus, queries, og_relevant_docs, changed_relevant_docs
             self.changed_instructions[split], self.og_instructions[split] = (
                 changed_instructions,
                 og_instructions,
