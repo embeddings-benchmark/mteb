@@ -16,6 +16,7 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
         description="A collection of Amazon reviews specifically designed to aid research in multilingual text classification.",
         reference="https://arxiv.org/abs/2010.02573",
         category="s2s",
+        modalities=["text"],
         type="Classification",
         eval_splits=["validation", "test"],
         eval_langs={
@@ -28,14 +29,12 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
         },
         main_score="accuracy",
         date=("2015-11-01", "2019-11-01"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=[],
         license="https://docs.opendata.aws/amazon-reviews-ml/license.txt",
-        socioeconomic_status="medium",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{keung2020multilingual,
       title={The Multilingual Amazon Reviews Corpus}, 
       author={Phillip Keung and Yichao Lu and György Szarvas and Noah A. Smith},
@@ -44,6 +43,8 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples={"validation": 30000, "test": 30000},
-        avg_character_length={"validation": 159.2, "test": 160.4},
+        descriptive_stats={
+            "n_samples": {"validation": 30000, "test": 30000},
+            "avg_character_length": {"validation": 159.2, "test": 160.4},
+        },
     )

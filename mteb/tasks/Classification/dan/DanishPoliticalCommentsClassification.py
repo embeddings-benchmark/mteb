@@ -16,6 +16,7 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
         reference="https://huggingface.co/datasets/danish_political_comments",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["dan-Latn"],
         main_score="accuracy",
@@ -23,22 +24,22 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
             "2000-01-01",
             "2022-12-31",
         ),  # Estimated range for the collection of comments
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@techreport{SAMsentiment,
   author={Mads Guldborg Kjeldgaard Kongsbak and Steffan Eybye Christensen and Lucas Høyberg Puvis~de~Chavannes and Peter Due Jensen},
   title={Sentiment Analysis Multitool, SAM},
   year={2019},
   institution={IT University of Copenhagen},
 }""",
-        n_samples={"train": 9010},
-        avg_character_length={"train": 69.9},
+        descriptive_stats={
+            "n_samples": {"train": 9010},
+            "avg_character_length": {"train": 69.9},
+        },
     )
 
     @property

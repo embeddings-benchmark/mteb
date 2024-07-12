@@ -20,18 +20,17 @@ class LinceMTBitextMining(AbsTaskBitextMining, MultilingualTask):
         reference="https://ritual.uh.edu/lince/",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=_LANGUAGES,
         main_score="f1",
         date=("2019-01-01", "2020-01-01"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=[],
         license="Unknown",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{aguilar2020lince,
         title={LinCE: A Centralized Benchmark for Linguistic Code-switching Evaluation},
@@ -41,6 +40,8 @@ class LinceMTBitextMining(AbsTaskBitextMining, MultilingualTask):
         year={2020}
         }
         """,
-        n_samples={"train": 8060},
-        avg_character_length={"train": 58.67},
+        descriptive_stats={
+            "n_samples": {"train": 8060},
+            "avg_character_length": {"train": 58.67},
+        },
     )

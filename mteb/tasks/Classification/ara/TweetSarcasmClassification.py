@@ -15,18 +15,17 @@ class TweetSarcasmClassification(AbsTaskClassification):
         reference="https://aclanthology.org/2020.osact-1.5/",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ara-Arab"],
         main_score="accuracy",
         date=("2020-01-01", "2021-01-01"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="MIT",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=["ara-arab-EG", "ara-arab-LB", "ara-arab-MA", "ara-arab-SA"],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @inproceedings{abu-farha-magdy-2020-arabic,
     title = "From {A}rabic Sentiment Analysis to Sarcasm Detection: The {A}r{S}arcasm Dataset",
@@ -49,8 +48,10 @@ class TweetSarcasmClassification(AbsTaskClassification):
     ISBN = "979-10-95546-51-1",
 }
 """,
-        n_samples={"test": 2110},
-        avg_character_length={"test": 102.1},
+        descriptive_stats={
+            "n_samples": {"test": 2110},
+            "avg_character_length": {"test": 102.1},
+        },
     )
 
     def dataset_transform(self):

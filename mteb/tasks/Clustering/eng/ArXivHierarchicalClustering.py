@@ -26,21 +26,22 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=("1991-01-01", "2021-01-01"),  # 1991-01-01 is the first arxiv paper
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=[],
         license="CC0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=["Thematic clustering"],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="@misc{arXiv.org e-Print archive, url={https://arxiv.org/} }",
-        n_samples={"test": N_SAMPLES},
-        avg_character_length={"test": 1009.98},
+        descriptive_stats={
+            "n_samples": {"test": N_SAMPLES},
+            "avg_character_length": {"test": 1009.98},
+        },
     )
 
     def dataset_transform(self):
@@ -69,21 +70,22 @@ class ArXivHierarchicalClusteringS2S(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=("1991-01-01", "2021-01-01"),  # 1991-01-01 is the first arxiv paper
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="CC0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="@misc{arXiv.org e-Print archive, url={https://arxiv.org/} }",
-        n_samples={"test": N_SAMPLES},
-        avg_character_length={"test": 1009.98},
+        descriptive_stats={
+            "n_samples": {"test": N_SAMPLES},
+            "avg_character_length": {"test": 1009.98},
+        },
     )
 
     def dataset_transform(self):

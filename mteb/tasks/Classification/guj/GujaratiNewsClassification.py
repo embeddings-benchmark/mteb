@@ -15,21 +15,22 @@ class GujaratiNewsClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],
         eval_langs=["guj-Gujr"],
         main_score="accuracy",
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="MIT",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",  # none found
-        n_samples={"train": 5269, "test": 1318},
-        avg_character_length={"train": 61.95, "test": 61.91},
+        descriptive_stats={
+            "n_samples": {"train": 5269, "test": 1318},
+            "avg_character_length": {"train": 61.95, "test": 61.91},
+        },
     )
 
     def dataset_transform(self):

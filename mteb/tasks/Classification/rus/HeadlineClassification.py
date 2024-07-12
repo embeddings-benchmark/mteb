@@ -16,18 +16,17 @@ class HeadlineClassification(AbsTaskClassification):
         reference="https://aclanthology.org/2020.ngt-1.6/",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
         main_score="accuracy",
         date=("2009-01-01", "2020-01-01"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="mit",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{gudkov-etal-2020-automatically,
         title = "Automatically Ranked {R}ussian Paraphrase Corpus for Text Generation",
         author = "Gudkov, Vadim  and
@@ -52,8 +51,10 @@ class HeadlineClassification(AbsTaskClassification):
         pages = "54--59",
         abstract = "The article is focused on automatic development and ranking of a large corpus for Russian paraphrase generation which proves to be the first corpus of such type in Russian computational linguistics. Existing manually annotated paraphrase datasets for Russian are limited to small-sized ParaPhraser corpus and ParaPlag which are suitable for a set of NLP tasks, such as paraphrase and plagiarism detection, sentence similarity and relatedness estimation, etc. Due to size restrictions, these datasets can hardly be applied in end-to-end text generation solutions. Meanwhile, paraphrase generation requires a large amount of training data. In our study we propose a solution to the problem: we collect, rank and evaluate a new publicly available headline paraphrase corpus (ParaPhraser Plus), and then perform text generation experiments with manual evaluation on automatically ranked corpora using the Universal Transformer architecture.",
         }""",
-        n_samples={"test": 2048},
-        avg_character_length={"test": 61.6},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 61.6},
+        },
     )
 
     def dataset_transform(self):

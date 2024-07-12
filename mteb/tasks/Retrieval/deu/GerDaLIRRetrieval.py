@@ -20,18 +20,17 @@ class GerDaLIR(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["deu-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{wrzalik-krechel-2021-gerdalir,
     title = "{G}er{D}a{LIR}: A {G}erman Dataset for Legal Information Retrieval",
     author = "Wrzalik, Marco  and
@@ -45,15 +44,17 @@ class GerDaLIR(AbsTaskRetrieval):
     pages = "123--128",
     abstract = "We present GerDaLIR, a German Dataset for Legal Information Retrieval based on case documents from the open legal information platform Open Legal Data. The dataset consists of 123K queries, each labelled with at least one relevant document in a collection of 131K case documents. We conduct several baseline experiments including BM25 and a state-of-the-art neural re-ranker. With our dataset, we aim to provide a standardized benchmark for German LIR and promote open research in this area. Beyond that, our dataset comprises sufficient training data to be used as a downstream task for German or multilingual language models.",
 }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "average_document_length": 15483.237726805888,
-                "average_query_length": 1027.3495690356156,
-                "num_documents": 131445,
-                "num_queries": 12298,
-                "average_relevant_docs_per_query": 1.1704342169458448,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 15483.237726805888,
+                    "average_query_length": 1027.3495690356156,
+                    "num_documents": 131445,
+                    "num_queries": 12298,
+                    "average_relevant_docs_per_query": 1.1704342169458448,
+                }
+            },
         },
     )
 

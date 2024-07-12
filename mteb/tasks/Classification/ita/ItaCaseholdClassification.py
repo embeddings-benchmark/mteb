@@ -15,18 +15,17 @@ class ItaCaseholdClassification(AbsTaskClassification):
         reference="https://doi.org/10.1145/3594536.3595177",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ita-Latn"],
         main_score="accuracy",
         date=("2019-01-01", "2022-12-31"),
-        form=["written"],
-        domains=["Legal", "Government"],
+        domains=["Legal", "Government", "Written"],
         dialect=[],
         task_subtypes=[],
         license="Apache 2.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @inproceedings{10.1145/3594536.3595177,
             author = {Licari, Daniele and Bushipaka, Praveen and Marino, Gabriele and Comand\'{e}, Giovanni and Cucinotta, Tommaso},
@@ -46,8 +45,10 @@ class ItaCaseholdClassification(AbsTaskClassification):
             series = {ICAIL '23}
             }
         """,
-        n_samples={"test": 221},
-        avg_character_length={"test": 4207.9},
+        descriptive_stats={
+            "n_samples": {"test": 221},
+            "avg_character_length": {"test": 4207.9},
+        },
     )
 
     def dataset_transform(self):

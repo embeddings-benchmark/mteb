@@ -15,18 +15,17 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tur-Latn"],
         main_score="accuracy",
         date=("2013-01-01", "2013-08-11"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{Demirtas2013CrosslingualPD,
             title={Cross-lingual polarity detection with machine translation},
@@ -36,8 +35,10 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
             url={https://api.semanticscholar.org/CorpusID:3912960}
         }
         """,
-        n_samples={"test": 2644},
-        avg_character_length={"test": 141.50},
+        descriptive_stats={
+            "n_samples": {"test": 2644},
+            "avg_character_length": {"test": 141.50},
+        },
     )
 
     def dataset_transform(self):

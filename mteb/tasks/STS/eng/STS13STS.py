@@ -16,18 +16,17 @@ class STS13STS(AbsTaskSTS):
         reference="https://www.aclweb.org/anthology/S13-1004/",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cosine_spearman",
         date=("2012-01-01", "2012-12-31"),
-        form=["written"],
-        domains=["Web", "News", "Non-fiction"],
+        domains=["Web", "News", "Non-fiction", "Written"],
         task_subtypes=[],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""@inproceedings{Agirre2013SEM2S,
   title={*SEM 2013 shared task: Semantic Textual Similarity},
   author={Eneko Agirre and Daniel Matthew Cer and Mona T. Diab and Aitor Gonzalez-Agirre and Weiwei Guo},
@@ -35,8 +34,10 @@ class STS13STS(AbsTaskSTS):
   year={2013},
   url={https://api.semanticscholar.org/CorpusID:10241043}
 }""",
-        n_samples={"test": 3000},
-        avg_character_length={"test": 54.0},
+        descriptive_stats={
+            "n_samples": {"test": 3000},
+            "avg_character_length": {"test": 54.0},
+        },
     )
 
     @property

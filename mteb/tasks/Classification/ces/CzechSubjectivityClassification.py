@@ -15,18 +15,17 @@ class CzechSubjectivityClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         date=("2022-04-01", "2022-04-01"),
         eval_splits=["validation", "test"],
         eval_langs=["ces-Latn"],
         main_score="accuracy",
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{priban-steinberger-2022-czech,
     title = "\{C\}zech Dataset for Cross-lingual Subjectivity Classification",
     author = "P{\v{r}}ib{\'a}{\v{n}}, Pavel  and
@@ -40,6 +39,8 @@ class CzechSubjectivityClassification(AbsTaskClassification):
     pages = "1381--1391",
 }
 """,
-        n_samples={"validation": 500, "test": 2000},
-        avg_character_length={"validation": 108.2, "test": 108.3},
+        descriptive_stats={
+            "n_samples": {"validation": 500, "test": 2000},
+            "avg_character_length": {"validation": 108.2, "test": 108.3},
+        },
     )

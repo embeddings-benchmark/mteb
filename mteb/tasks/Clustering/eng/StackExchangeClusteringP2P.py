@@ -25,18 +25,17 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=("2021-01-01", "2021-04-14"),
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=["Thematic clustering"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{geigle:2021:arxiv,
         author    = {Gregor Geigle and 
                         Nils Reimers and 
@@ -50,8 +49,10 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 2996},
-        avg_character_length={"test": 1090.7},
+        descriptive_stats={
+            "n_samples": {"test": 2996},
+            "avg_character_length": {"test": 1090.7},
+        },
     )
 
     def dataset_transform(self):
@@ -89,6 +90,7 @@ class StackExchangeClusteringP2P(AbsTaskClustering):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
@@ -97,10 +99,9 @@ class StackExchangeClusteringP2P(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@article{geigle:2021:arxiv,
         author    = {Gregor Geigle and 
                         Nils Reimers and 
@@ -114,6 +115,8 @@ class StackExchangeClusteringP2P(AbsTaskClustering):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 75000},
-        avg_character_length={"test": 1090.7},
+        descriptive_stats={
+            "n_samples": {"test": 75000},
+            "avg_character_length": {"test": 1090.7},
+        },
     )

@@ -39,21 +39,22 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="v_measure",
         date=("2001-01-15", "2024-04-15"),
-        form=["written"],
-        domains=["Encyclopaedic"],
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="cc-by-sa-3.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation=None,  # None exists
-        n_samples={"test": 71680},
-        avg_character_length={"test": 625.3},
+        descriptive_stats={
+            "n_samples": {"test": 71680},
+            "avg_character_length": {"test": 625.3},
+        },
     )
 
 
@@ -71,21 +72,22 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="v_measure",
         date=("2001-01-15", "2024-04-15"),
-        form=["written"],
-        domains=["Encyclopaedic"],
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="cc-by-sa-3.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="",  # None exists
-        n_samples={"test": 2048},
-        avg_character_length={"test": 625.3},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 625.3},
+        },
     )
 
     def dataset_transform(self):

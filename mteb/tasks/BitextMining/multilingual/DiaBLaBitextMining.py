@@ -19,6 +19,7 @@ class DiaBLaBitextMining(AbsTaskBitextMining, MultilingualTask):
         reference="https://inria.hal.science/hal-03021633",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs={
             "fr-en": ["fra-Latn", "eng-Latn"],
@@ -26,14 +27,12 @@ class DiaBLaBitextMining(AbsTaskBitextMining, MultilingualTask):
         },
         main_score="f1",
         date=("2016-01-01", "2017-12-31"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=[],
         license="CC BY-NC-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""
         @inproceedings{gonzalez2019diabla,
         title={DiaBLa: A Corpus of Bilingual Spontaneous Written Dialogues for Machine Translation},
@@ -43,8 +42,7 @@ class DiaBLaBitextMining(AbsTaskBitextMining, MultilingualTask):
         year={2019}
         }
         """,
-        n_samples={},
-        avg_character_length={},
+        descriptive_stats={"n_samples": {}, "avg_character_length": {}},
     )
 
     def load_data(self, **kwargs):

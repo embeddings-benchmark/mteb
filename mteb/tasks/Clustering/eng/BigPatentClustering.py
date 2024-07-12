@@ -24,6 +24,7 @@ class BigPatentClustering(AbsTaskClustering):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
@@ -32,10 +33,9 @@ class BigPatentClustering(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@article{DBLP:journals/corr/abs-1906-03741,
   author    = {Eva Sharma and
                Chen Li and
@@ -52,8 +52,7 @@ class BigPatentClustering(AbsTaskClustering):
   biburl    = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
 
@@ -70,6 +69,7 @@ class BigPatentClusteringFast(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
@@ -77,14 +77,12 @@ class BigPatentClusteringFast(AbsTaskClusteringFast):
             "1971-01-01",
             "2019-06-10",
         ),  # start date from paper, end date - paper publication
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=["Thematic clustering"],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{DBLP:journals/corr/abs-1906-03741,
   author    = {Eva Sharma and
                Chen Li and
@@ -101,8 +99,10 @@ class BigPatentClusteringFast(AbsTaskClusteringFast):
   biburl    = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }""",
-        n_samples={"test": NUM_SAMPLES},
-        avg_character_length={"test": 30995.5},
+        descriptive_stats={
+            "n_samples": {"test": NUM_SAMPLES},
+            "avg_character_length": {"test": 30995.5},
+        },
     )
 
     def dataset_transform(self):
