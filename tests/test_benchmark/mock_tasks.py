@@ -29,17 +29,15 @@ general_args = dict(
     eval_splits=["test"],
     eval_langs=["eng-Latn"],
     date=("2022-12-22", "2022-12-22"),
-    form=["written"],
-    dialect=[],
+    dialect=["Written"],
     domains=[],
     task_subtypes=[],
     license="NA",
-    socioeconomic_status="mixed",
     annotations_creators="derived",
-    text_creation="found",
+    modalities=["text"],
+    sample_creation="found",
     bibtex_citation="",
-    n_samples={},
-    avg_character_length={},
+    descriptive_stats={},
 )
 
 
