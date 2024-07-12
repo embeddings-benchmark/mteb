@@ -214,7 +214,7 @@ _LANGUAGES = [
     "som_Latn",
     "tum_Latn",
 ]
-_SPLIT = ["dev", "devtest"]
+_SPLIT = ["devtest"]
 
 
 def extend_lang_pairs() -> dict[str, list[str]]:

@@ -339,7 +339,7 @@ def test_mteb_rerank():
         )
 
     eval.run(
-        model,
+        model,  # type: ignore
         output_folder="tests/results",
         overwrite_results=True,
         eval_splits=["test"],
@@ -373,7 +373,7 @@ def test_reranker_same_ndcg1():
         eval_splits=["test"],
     )
     eval.run(
-        ce,
+        ce,  # type: ignore
         output_folder="tests/results/stage2",
         overwrite_results=True,
         previous_results="tests/results/stage1/SciFact_default_predictions.json",

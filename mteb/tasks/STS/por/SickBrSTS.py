@@ -39,7 +39,7 @@ class SickBrSTS(AbsTaskSTS):
     and Guide, Bruno
     and Silva, Cindy
     and de Oliveira Lima, Guilherme
-    and C{\^a}mara, Igor C. S.
+    and Camara, Igor C. S.
     and Stanojevi{\'{c}}, Milo{\v{s}}
     and Souza, Rodrigo
     and de Paiva, Valeria"

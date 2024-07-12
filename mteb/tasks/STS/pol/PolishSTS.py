@@ -30,8 +30,8 @@ class SickrPLSTS(AbsTaskSTS):
 @inproceedings{dadas-etal-2020-evaluation,
     title = "Evaluation of Sentence Representations in {P}olish",
     author = "Dadas, Slawomir  and
-      Pere{\l}kiewicz, Micha{\l}  and
-      Po{\'s}wiata, Rafa{\l}",
+      Perelkiewicz, Michal  and
+      Poswiata, Rafal",
     editor = "Calzolari, Nicoletta  and
       B{\'e}chet, Fr{\'e}d{\'e}ric  and
       Blache, Philippe  and
@@ -42,7 +42,7 @@ class SickrPLSTS(AbsTaskSTS):
       Isahara, Hitoshi  and
       Maegaard, Bente  and
       Mariani, Joseph  and
-      Mazo, H{\'e}l{\`e}ne  and
+      Mazo, Helene  and
       Moreno, Asuncion  and
       Odijk, Jan  and
       Piperidis, Stelios",

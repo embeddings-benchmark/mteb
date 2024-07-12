@@ -11,8 +11,9 @@ from time import time
 from typing import Any, Iterable
 
 import datasets
+from sentence_transformers import SentenceTransformer
 
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
 
@@ -268,7 +269,7 @@ class MTEB:
 
     def run(
         self,
-        model: Encoder | EncoderWithQueryCorpusEncode,
+        model: SentenceTransformer | Encoder,
         verbosity: int = 1,
         output_folder: str | None = "results",
         eval_splits=None,

@@ -11,7 +11,7 @@ import mteb
 from mteb import AbsTask
 from mteb.load_results.mteb_results import MTEBResults
 
-tests_folder = Path(__file__).parent
+tests_folder = Path(__file__).parent.parent
 
 
 class DummyTask(AbsTask):
