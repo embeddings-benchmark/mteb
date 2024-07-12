@@ -12,7 +12,7 @@ from .hye.ArmenianParaphrasePC import *
 from .ind.IndoNLI import *
 from .kor.KlueNLI import *
 from .multilingual.OpusparcusPC import *
-from .multilingual.PawsX import *
+from .multilingual.PawsXPairClassification import *
 from .multilingual.RTE3 import *
 from .multilingual.XNLI import *
 from .multilingual.XStance import *

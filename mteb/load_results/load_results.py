@@ -112,10 +112,8 @@ def load_results(
             ]},
         ...
     """
-    results_directory = download_of_results(
-        results_repo, download_latest=download_latest
-    )
-    models = [p for p in results_directory.glob("*") if p.is_dir() and p.stem != ".git"]
+    repo_directory = download_of_results(results_repo, download_latest=download_latest)
+    models = [p for p in (repo_directory / "results").glob("*") if p.is_dir()]
 
     results = defaultdict(dict)
 
