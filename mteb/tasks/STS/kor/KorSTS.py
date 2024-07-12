@@ -21,7 +21,7 @@ class KorSTS(AbsTaskSTS):
         eval_langs=["kor-Hang"],
         main_score="cosine_spearman",
         date=("2012-01-01", "2017-01-01"),  # rough approximates
-        domains=["News", "Web", None],
+        domains=["News", "Web"],
         task_subtypes=None,
         license="CC-BY-SA-4.0",
         annotations_creators=None,
