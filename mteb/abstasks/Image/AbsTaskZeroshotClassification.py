@@ -42,12 +42,12 @@ class AbsTaskZeroshotClassification(AbsTask):
         **kwargs,
     ) -> ScoresDict:
 
-        text_candidates = self.get_text_candidates()
+        candidate_labels = self.get_candidate_labels()
         
         evaluator = ZeroshotClassificationEvaluator(
             dataset[self.image_column_name],  
             dataset[self.label_column_name],  
-            text_candidates,
+            candidate_labels,
             task_name=self.metadata.name,
             **kwargs,
         )
@@ -58,6 +58,6 @@ class AbsTaskZeroshotClassification(AbsTask):
         self._add_main_score(scores)
         return scores
     
-    def get_text_candidates(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""
         raise NotImplementedError("This method should be overridden by subclasses")

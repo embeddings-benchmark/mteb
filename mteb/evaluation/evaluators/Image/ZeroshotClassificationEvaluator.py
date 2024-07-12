@@ -17,21 +17,21 @@ class ZeroshotClassificationEvaluator(Evaluator):
         self,
         images:list[Image.Image],
         labels:list[int],
-        text_candidates:list[str],
+        candidate_labels:list[str],
         task_name: str | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
         self.images = images
         self.labels = labels
-        self.text_candidates = text_candidates
+        self.candidate_labels = candidate_labels
         self.task_name = task_name
 
     def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 32
 
-        text_embeddings = model.get_text_embeddings(self.text_candidates, batch_size=encode_kwargs["batch_size"])
+        text_embeddings = model.get_text_embeddings(self.candidate_labels, batch_size=encode_kwargs["batch_size"])
         image_embeddings = model.get_image_embeddings(self.images, batch_size=encode_kwargs["batch_size"])
         probs = model.calculate_probs(text_embeddings, image_embeddings)
         predictions = probs.argmax(dim=1)

@@ -37,5 +37,5 @@ class RenderedSST2(AbsTaskZeroshotClassification):
     image_column_name: str = "png"
     label_column_name: str = "cls"
     
-    def get_text_candidates(self) -> list[str]:
+    def get_candidate_labels(self) -> list[str]:
         return ["a negative review of a movie", "a positive review of a movie"]
