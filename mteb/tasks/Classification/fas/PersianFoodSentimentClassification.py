@@ -17,18 +17,17 @@ class PersianFoodSentimentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["fas-Arab"],
         main_score="accuracy",
         date=("2020-01-01", "2020-05-31"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @article{ParsBERT,
             title={ParsBERT: Transformer-based Model for Persian Language Understanding},
@@ -38,8 +37,10 @@ class PersianFoodSentimentClassification(AbsTaskClassification):
             volume={abs/2005.12515}
         }
         """,
-        n_samples={"validation": TEST_SAMPLES, "test": TEST_SAMPLES},
-        avg_character_length={"validation": 90.37, "test": 90.58},
+        descriptive_stats={
+            "n_samples": {"validation": TEST_SAMPLES, "test": TEST_SAMPLES},
+            "avg_character_length": {"validation": 90.37, "test": 90.58},
+        },
     )
 
     def dataset_transform(self):

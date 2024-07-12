@@ -16,17 +16,16 @@ class TswanaNewsClassification(AbsTaskClassification):
         type="Classification",
         task_subtypes=["Topic classification"],
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tsn-Latn"],
         main_score="accuracy",
         date=("2015-01-01", "2023-01-01"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         license="CC-BY-SA-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{marivate2023puoberta,
             title   = {PuoBERTa: Training and evaluation of a curated language model for Setswana},
@@ -39,6 +38,8 @@ class TswanaNewsClassification(AbsTaskClassification):
             software_url = {https://huggingface.co/dsfsi/PuoBERTa}
         }
         """,
-        n_samples={"validation": 487, "test": 487},
-        avg_character_length={"validation": 2417.72, "test": 2369.52},
+        descriptive_stats={
+            "n_samples": {"validation": 487, "test": 487},
+            "avg_character_length": {"validation": 2417.72, "test": 2369.52},
+        },
     )

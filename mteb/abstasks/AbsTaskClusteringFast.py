@@ -143,11 +143,14 @@ class AbsTaskClusteringFast(AbsTask):
         ):
             downsampled_dataset = dataset
         else:
-            max_documents_to_embed = min(len(dataset), self.max_document_to_embed)  # type: ignore
             if self.max_fraction_of_documents_to_embed is not None:
                 max_documents_to_embed = int(
                     self.max_fraction_of_documents_to_embed * len(dataset)
                 )
+            else:
+                max_documents_to_embed = self.max_document_to_embed
+
+            max_documents_to_embed = min(len(dataset), max_documents_to_embed)  # type: ignore
             example_indices = rng_state.sample(
                 range(len(dataset)), k=max_documents_to_embed
             )

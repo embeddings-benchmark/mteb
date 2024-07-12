@@ -14,18 +14,17 @@ class MyanmarNews(AbsTaskClassification):
         reference="https://huggingface.co/datasets/myanmar_news",
         type="Classification",
         category="p2p",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["mya-Mymr"],
         main_score="accuracy",
         date=("2017-10-01", "2017-10-31"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="GPL 3.0",
-        socioeconomic_status="low",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation=""""
         @inproceedings{Khine2017,
         author    = {A. H. Khine and K. T. Nwet and K. M. Soe},
@@ -35,8 +34,10 @@ class MyanmarNews(AbsTaskClassification):
         month     = {February},
         pages     = {401--408}
         }""",
-        n_samples={"train": 2048},
-        avg_character_length={"train": 174.2},
+        descriptive_stats={
+            "n_samples": {"train": 2048},
+            "avg_character_length": {"train": 174.2},
+        },
     )
 
     def dataset_transform(self):

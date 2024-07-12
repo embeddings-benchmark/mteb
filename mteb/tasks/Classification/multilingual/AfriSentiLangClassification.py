@@ -15,6 +15,7 @@ class AfriSentiLangClassification(AbsTaskClassification):
         reference="https://huggingface.co/datasets/HausaNLP/afrisenti-lid-data/",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=[
             "amh-Ethi",  # Amharic (Ethiopic script)
@@ -32,18 +33,18 @@ class AfriSentiLangClassification(AbsTaskClassification):
         ],
         main_score="accuracy",
         date=("2023-07-04", "2023-08-04"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Language identification"],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="low",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         """,
-        n_samples={"test": 5754},
-        avg_character_length={"test": 77.84},
+        descriptive_stats={
+            "n_samples": {"test": 5754},
+            "avg_character_length": {"test": 77.84},
+        },
     )
 
     @property

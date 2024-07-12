@@ -18,18 +18,17 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2013-11-01", "2013-11-01"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-nc-sa-3.0",
-        socioeconomic_status="medium",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @article{Malo2014GoodDO,
             title={Good debt or bad debt: Detecting semantic orientations in economic texts},
@@ -39,8 +38,10 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
             volume={65}
             }
         """,
-        n_samples={"train": 4840},
-        avg_character_length={"train": 121.96},
+        descriptive_stats={
+            "n_samples": {"train": 4840},
+            "avg_character_length": {"train": 121.96},
+        },
     )
 
     def dataset_transform(self):

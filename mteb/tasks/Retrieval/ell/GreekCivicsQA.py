@@ -20,28 +20,29 @@ class GreekCivicsQA(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["default"],
         eval_langs=["ell-Grek"],
         main_score="ndcg_at_10",
         date=("2023-01-01", "2024-04-01"),
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=["Question answering"],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",
-        n_samples={"default": 407},
-        avg_character_length={
-            "default": {
-                "average_document_length": 1074.894348894349,
-                "average_query_length": 77.06142506142506,
-                "num_documents": 407,
-                "num_queries": 407,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": {"default": 407},
+            "avg_character_length": {
+                "default": {
+                    "average_document_length": 1074.894348894349,
+                    "average_query_length": 77.06142506142506,
+                    "num_documents": 407,
+                    "num_queries": 407,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

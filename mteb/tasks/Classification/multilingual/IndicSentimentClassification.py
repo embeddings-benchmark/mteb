@@ -32,19 +32,18 @@ class IndicSentimentClassification(MultilingualTask, AbsTaskClassification):
         description="A new, multilingual, and n-way parallel dataset for sentiment analysis in 13 Indic languages.",
         reference="https://arxiv.org/abs/2212.05409",
         category="s2s",
+        modalities=["text"],
         type="Classification",
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
         date=("2022-08-01", "2022-12-20"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="machine-translated and verified",
+        sample_creation="machine-translated and verified",
         bibtex_citation="""@article{doddapaneni2022towards,
   title     = {Towards Leaving No Indic Language Behind: Building Monolingual Corpora, Benchmark and Models for Indic Languages},
   author    = {Sumanth Doddapaneni and Rahul Aralikatte and Gowtham Ramesh and Shreyansh Goyal and Mitesh M. Khapra and Anoop Kunchukuttan and Pratyush Kumar},
@@ -52,8 +51,10 @@ class IndicSentimentClassification(MultilingualTask, AbsTaskClassification):
   year      = {2022},
   doi       = {10.18653/v1/2023.acl-long.693}
 }""",
-        n_samples={"test": 1000},
-        avg_character_length={"test": 137.6},
+        descriptive_stats={
+            "n_samples": {"test": 1000},
+            "avg_character_length": {"test": 137.6},
+        },
     )
 
     def dataset_transform(self) -> None:

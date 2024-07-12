@@ -30,18 +30,17 @@ class NusaXBitextMining(AbsTaskBitextMining, MultilingualTask):
         reference="https://huggingface.co/datasets/indonlp/NusaX-senti/",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=_LANGUAGES,
         main_score="f1",
         date=("2021-08-01", "2022-07-01"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=[],
         license="CC BY-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""
         @inproceedings{winata2023nusax,
         title={NusaX: Multilingual Parallel Sentiment Dataset for 10 Indonesian Local Languages},
@@ -59,6 +58,8 @@ class NusaXBitextMining(AbsTaskBitextMining, MultilingualTask):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"train": 5500},
-        avg_character_length={"train": 157.15},
+        descriptive_stats={
+            "n_samples": {"train": 5500},
+            "avg_character_length": {"train": 157.15},
+        },
     )

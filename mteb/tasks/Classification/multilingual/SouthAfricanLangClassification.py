@@ -29,19 +29,18 @@ class SouthAfricanLangClassification(AbsTaskClassification):
         description="A language identification test set for 11 South African Languages.",
         reference="https://www.kaggle.com/competitions/south-african-language-identification/",
         category="s2s",
+        modalities=["text"],
         type="Classification",
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
         date=("2010-01-01", "2023-01-01"),
-        form=["written"],
-        domains=["Web", "Non-fiction"],
+        domains=["Web", "Non-fiction", "Written"],
         task_subtypes=["Language identification"],
         license="MIT",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{south-african-language-identification,
     author = {ExploreAI Academy, Joanne M},
     title = {South African Language Identification},
@@ -49,8 +48,10 @@ class SouthAfricanLangClassification(AbsTaskClassification):
     year = {2022},
     url = {https://kaggle.com/competitions/south-african-language-identification}
 }""",
-        n_samples={"test": 2048},
-        avg_character_length={"test": 247.49},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 247.49},
+        },
     )
 
     def dataset_transform(self) -> None:

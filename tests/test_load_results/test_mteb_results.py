@@ -11,7 +11,7 @@ import mteb
 from mteb import AbsTask
 from mteb.load_results.mteb_results import MTEBResults
 
-tests_folder = Path(__file__).parent
+tests_folder = Path(__file__).parent.parent
 
 
 class DummyTask(AbsTask):
@@ -29,18 +29,16 @@ class DummyTask(AbsTask):
         main_score="main_score",
         eval_splits=["train"],
         domains=[],
-        text_creation="created",
         reference="https://www.noreference.com",
         date=("2024-05-02", "2024-05-03"),
-        form=[],
         task_subtypes=[],
         license="mit",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         bibtex_citation="",
-        avg_character_length={},
-        n_samples={},
+        descriptive_stats={},
+        modalities=["text"],
+        sample_creation="created",
     )
 
     def evaluate(self, model, split: str = "test"):

@@ -16,33 +16,34 @@ class SwednRetrieval(AbsTaskRetrieval):
         reference="https://spraakbanken.gu.se/en/resources/swedn",
         type="Retrieval",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["swe-Latn"],
         main_score="ndcg_at_10",
         date=("2000-01-01", "2020-12-31"),
-        form=["written"],
-        domains=["News", "Non-fiction"],
+        domains=["News", "Non-fiction", "Written"],
         license="CC BY-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         task_subtypes=["Article retrieval"],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{monsen2021method,
     title={A method for building non-english corpora for abstractive text summarization},
     author={Monsen, Julius and J{\"o}nsson, Arne},
     booktitle={Proceedings of CLARIN Annual Conference},
     year={2021}
 }""",
-        n_samples={"test": 2048},
-        avg_character_length={
-            "test": {
-                "average_document_length": 2896.519550342131,
-                "average_query_length": 45.876953125,
-                "num_documents": 2046,
-                "num_queries": 1024,
-                "average_relevant_docs_per_query": 2.0,
-            }
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 2896.519550342131,
+                    "average_query_length": 45.876953125,
+                    "num_documents": 2046,
+                    "num_queries": 1024,
+                    "average_relevant_docs_per_query": 2.0,
+                }
+            },
         },
     )
 

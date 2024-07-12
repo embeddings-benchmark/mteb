@@ -17,21 +17,22 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         reference="https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ara-Arab"],
         main_score="accuracy",
         date=("2024-05-01", "2024-05-15"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=["ara-Arab-SA"],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",
-        n_samples={"train": N_SAMPLES},
-        avg_character_length={"train": 137.2},
+        descriptive_stats={
+            "n_samples": {"train": N_SAMPLES},
+            "avg_character_length": {"train": 137.2},
+        },
     )
 
     def dataset_transform(self):

@@ -18,18 +18,17 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         date=("2019-08-01", "2019-08-01"),
         eval_splits=["validation", "test"],
         eval_langs=["fil-Latn"],
         main_score="accuracy",
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @article{Cabasag-2019-hate-speech,
             title={Hate speech in Philippine election-related tweets: Automatic detection and classification using natural language processing.},
@@ -41,8 +40,10 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
             year={2019}
         }
         """,
-        n_samples={"validation": TEST_SAMPLES, "test": TEST_SAMPLES},
-        avg_character_length={"validation": 88.1, "test": 87.4},
+        descriptive_stats={
+            "n_samples": {"validation": TEST_SAMPLES, "test": TEST_SAMPLES},
+            "avg_character_length": {"validation": 88.1, "test": 87.4},
+        },
     )
 
     def dataset_transform(self):

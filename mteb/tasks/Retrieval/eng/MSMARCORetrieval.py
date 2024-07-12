@@ -18,18 +18,17 @@ class MSMARCO(AbsTaskRetrieval):
         reference="https://microsoft.github.io/msmarco/",
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["train", "dev", "test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@article{DBLP:journals/corr/NguyenRSGTMD16,
   author    = {Tri Nguyen and
                Mir Rosenberg and
@@ -50,28 +49,30 @@ class MSMARCO(AbsTaskRetrieval):
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 }""",
-        n_samples=None,
-        avg_character_length={
-            "train": {
-                "average_document_length": 335.79716603691344,
-                "average_query_length": 33.21898281898998,
-                "num_documents": 8841823,
-                "num_queries": 502939,
-                "average_relevant_docs_per_query": 1.0592755781516248,
-            },
-            "dev": {
-                "average_document_length": 335.79716603691344,
-                "average_query_length": 33.2621776504298,
-                "num_documents": 8841823,
-                "num_queries": 6980,
-                "average_relevant_docs_per_query": 1.0654727793696275,
-            },
-            "test": {
-                "average_document_length": 335.79716603691344,
-                "average_query_length": 32.74418604651163,
-                "num_documents": 8841823,
-                "num_queries": 43,
-                "average_relevant_docs_per_query": 95.3953488372093,
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "train": {
+                    "average_document_length": 335.79716603691344,
+                    "average_query_length": 33.21898281898998,
+                    "num_documents": 8841823,
+                    "num_queries": 502939,
+                    "average_relevant_docs_per_query": 1.0592755781516248,
+                },
+                "dev": {
+                    "average_document_length": 335.79716603691344,
+                    "average_query_length": 33.2621776504298,
+                    "num_documents": 8841823,
+                    "num_queries": 6980,
+                    "average_relevant_docs_per_query": 1.0654727793696275,
+                },
+                "test": {
+                    "average_document_length": 335.79716603691344,
+                    "average_query_length": 32.74418604651163,
+                    "num_documents": 8841823,
+                    "num_queries": 43,
+                    "average_relevant_docs_per_query": 95.3953488372093,
+                },
             },
         },
     )

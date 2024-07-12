@@ -15,18 +15,17 @@ class HebrewSentimentAnalysis(AbsTaskClassification):
         reference="https://huggingface.co/datasets/hebrew_sentiment",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["heb-Hebr"],
         main_score="accuracy",
         date=("2015-10-01", "2015-10-31"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="MIT License",
-        socioeconomic_status="low",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation=""""
         @inproceedings{amram-etal-2018-representations,
             title = "Representations and Architectures in Neural Sentiment Analysis for Morphologically Rich Languages: A Case Study from {M}odern {H}ebrew",
@@ -40,8 +39,10 @@ class HebrewSentimentAnalysis(AbsTaskClassification):
             pages = "2242--2252"
         }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 113.57},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 113.57},
+        },
     )
 
     def dataset_transform(self):

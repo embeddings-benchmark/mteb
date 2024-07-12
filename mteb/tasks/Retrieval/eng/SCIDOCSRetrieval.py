@@ -19,32 +19,33 @@ class SCIDOCS(AbsTaskRetrieval):
         reference="https://allenai.org/data/scidocs",
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{specter2020cohan,
   title={SPECTER: Document-level Representation Learning using Citation-informed Transformers},
   author={Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
   booktitle={ACL},
   year={2020}
 }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "average_document_length": 1203.3659819932182,
-                "average_query_length": 71.632,
-                "num_documents": 25657,
-                "num_queries": 1000,
-                "average_relevant_docs_per_query": 4.928,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 1203.3659819932182,
+                    "average_query_length": 71.632,
+                    "num_documents": 25657,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 4.928,
+                }
+            },
         },
     )

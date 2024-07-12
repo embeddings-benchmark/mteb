@@ -15,18 +15,17 @@ class BulgarianStoreReviewSentimentClassfication(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         date=("2018-05-14", "2018-05-14"),
         eval_splits=["test"],
         eval_langs=["bul-Cyrl"],
         main_score="accuracy",
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@data{DVN/TXIK9P_2018,
 author = {Georgieva-Trifonova, Tsvetanka and Stefanova, Milena and Kalchev, Stefan},
 publisher = {Harvard Dataverse},
@@ -37,8 +36,10 @@ doi = {10.7910/DVN/TXIK9P},
 url = {https://doi.org/10.7910/DVN/TXIK9P}
 }
 """,
-        n_samples={"test": 182},
-        avg_character_length={"test": 316.7},
+        descriptive_stats={
+            "n_samples": {"test": 182},
+            "avg_character_length": {"test": 316.7},
+        },
     )
 
     def dataset_transform(self):

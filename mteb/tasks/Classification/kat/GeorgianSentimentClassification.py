@@ -15,18 +15,17 @@ class GeorgianSentimentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kat-Geor"],
         main_score="accuracy",
         date=("2022-01-01", "2022-06-25"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC BY 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{stefanovitch-etal-2022-resources,
     title = "Resources and Experiments on Sentiment Classification for {G}eorgian",
@@ -56,6 +55,8 @@ class GeorgianSentimentClassification(AbsTaskClassification):
     abstract = "This paper presents, to the best of our knowledge, the first ever publicly available annotated dataset for sentiment classification and semantic polarity dictionary for Georgian. The characteristics of these resources and the process of their creation are described in detail. The results of various experiments on the performance of both lexicon- and machine learning-based models for Georgian sentiment classification are also reported. Both 3-label (positive, neutral, negative) and 4-label settings (same labels + mixed) are considered. The machine learning models explored include, i.a., logistic regression, SVMs, and transformed-based models. We also explore transfer learning- and translation-based (to a well-supported language) approaches. The obtained results for Georgian are on par with the state-of-the-art results in sentiment classification for well studied languages when using training data of comparable size.",
 }
         """,
-        n_samples={"train": 330, "test": 1200},
-        avg_character_length={"train": 114.26, "test": 118.06},
+        descriptive_stats={
+            "n_samples": {"train": 330, "test": 1200},
+            "avg_character_length": {"train": 114.26, "test": 118.06},
+        },
     )
