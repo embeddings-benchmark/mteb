@@ -226,26 +226,27 @@ class SIB200ClusteringFast(MultilingualTask, AbsTaskClusteringFast):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGS,
         main_score="v_measure",
         date=("2023-09-14", "2024-01-27"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Thematic clustering"],
         license="cc-by-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",  # expert annotated for English --> human translations
         dialect=[],
-        text_creation="human-translated and localized",
+        sample_creation="human-translated and localized",
         bibtex_citation="""@article{adelani2023sib,
             title={SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
             author={Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
             journal={arXiv preprint arXiv:2309.07445},
             year={2023}
-        }""",
-        n_samples={"test": 1004},  # combined train, validation, and test into test.
-        avg_character_length={"test": 114.78},
+        }""",  # combined train, validation, and test into test.
+        descriptive_stats={
+            "n_samples": {"test": 1004},
+            "avg_character_length": {"test": 114.78},
+        },
     )
 
     def dataset_transform(self):

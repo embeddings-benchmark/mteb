@@ -24,6 +24,7 @@ class AlloProfClusteringS2S(AbsTaskClustering):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="v_measure",
@@ -32,10 +33,9 @@ class AlloProfClusteringS2S(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{lef23,
   doi = {10.48550/ARXIV.2302.07738},
   url = {https://arxiv.org/abs/2302.07738},
@@ -46,8 +46,7 @@ class AlloProfClusteringS2S(AbsTaskClustering):
   year = {2023},
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     def dataset_transform(self):
@@ -81,19 +80,18 @@ class AlloProfClusteringS2SFast(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="v_measure",
         # (date of founding of the dataset source site, date of dataset paper publication)
         date=("1996-01-01", "2023-04-14"),
-        form=["written"],
-        domains=["Encyclopaedic"],
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="mit",
-        socioeconomic_status="medium",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{lef23,
   doi = {10.48550/ARXIV.2302.07738},
   url = {https://arxiv.org/abs/2302.07738},
@@ -105,8 +103,10 @@ class AlloProfClusteringS2SFast(AbsTaskClusteringFast):
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }
 """,
-        n_samples={"test": 2556},
-        avg_character_length={"test": 32.8},
+        descriptive_stats={
+            "n_samples": {"test": 2556},
+            "avg_character_length": {"test": 32.8},
+        },
     )
 
     def dataset_transform(self):

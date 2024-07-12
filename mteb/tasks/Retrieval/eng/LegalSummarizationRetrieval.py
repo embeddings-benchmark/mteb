@@ -16,18 +16,17 @@ class LegalSummarization(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=["Article retrieval"],
         license="Apache License 2.0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=None,
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{manor-li-2019-plain,
     title = "Plain {E}nglish Summarization of Contracts",
     author = "Manor, Laura  and
@@ -40,14 +39,16 @@ class LegalSummarization(AbsTaskRetrieval):
     url = "https://www.aclweb.org/anthology/W19-2201",
     pages = "1--11",
 }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "average_document_length": 606.1643835616438,
-                "average_query_length": 103.19014084507042,
-                "num_documents": 438,
-                "num_queries": 284,
-                "average_relevant_docs_per_query": 1.545774647887324,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 606.1643835616438,
+                    "average_query_length": 103.19014084507042,
+                    "num_documents": 438,
+                    "num_queries": 284,
+                    "average_relevant_docs_per_query": 1.545774647887324,
+                }
+            },
         },
     )

@@ -23,28 +23,29 @@ class JaGovFaqsRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2s",
+        modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["jpn-Jpan"],
         main_score="ndcg_at_10",
         date=("2000-01-01", "2023-12-31"),
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",
-        n_samples={_EVAL_SPLIT: _MAX_EVAL_SIZE},
-        avg_character_length={
-            "test": {
-                "average_document_length": 210.02601561814512,
-                "average_query_length": 59.48193359375,
-                "num_documents": 22794,
-                "num_queries": 2048,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": {_EVAL_SPLIT: _MAX_EVAL_SIZE},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 210.02601561814512,
+                    "average_query_length": 59.48193359375,
+                    "num_documents": 22794,
+                    "num_queries": 2048,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

@@ -73,18 +73,17 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_EVAL_LANGS,
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{Bonab_2021, series={CIKM ’21},
    title={Cross-Market Product Recommendation},
    url={http://dx.doi.org/10.1145/3459637.3482493},
@@ -94,31 +93,33 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
    author={Bonab, Hamed and Aliannejadi, Mohammad and Vardasbi, Ali and Kanoulas, Evangelos and Allan, James},
    year={2021},
    month=oct, collection={CIKM ’21} }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "de": {
-                    "average_document_length": 187.4061197288943,
-                    "average_query_length": 15.717612088184294,
-                    "num_documents": 70526,
-                    "num_queries": 4037,
-                    "average_relevant_docs_per_query": 54.3522417636859,
-                },
-                "en": {
-                    "average_document_length": 452.792089662076,
-                    "average_query_length": 15.881635344543357,
-                    "num_documents": 218777,
-                    "num_queries": 9099,
-                    "average_relevant_docs_per_query": 85.43719090009891,
-                },
-                "es": {
-                    "average_document_length": 279.67909262759923,
-                    "average_query_length": 19.97062937062937,
-                    "num_documents": 39675,
-                    "num_queries": 3575,
-                    "average_relevant_docs_per_query": 36.01006993006993,
-                },
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "de": {
+                        "average_document_length": 187.4061197288943,
+                        "average_query_length": 15.717612088184294,
+                        "num_documents": 70526,
+                        "num_queries": 4037,
+                        "average_relevant_docs_per_query": 54.3522417636859,
+                    },
+                    "en": {
+                        "average_document_length": 452.792089662076,
+                        "average_query_length": 15.881635344543357,
+                        "num_documents": 218777,
+                        "num_queries": 9099,
+                        "average_relevant_docs_per_query": 85.43719090009891,
+                    },
+                    "es": {
+                        "average_document_length": 279.67909262759923,
+                        "average_query_length": 19.97062937062937,
+                        "num_documents": 39675,
+                        "num_queries": 3575,
+                        "average_relevant_docs_per_query": 36.01006993006993,
+                    },
+                }
+            },
         },
     )
 

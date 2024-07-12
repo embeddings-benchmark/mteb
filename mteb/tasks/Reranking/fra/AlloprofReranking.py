@@ -18,18 +18,17 @@ class AlloprofReranking(AbsTaskReranking):
         },
         type="Reranking",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="map",
         date=("2020-01-01", "2023-04-14"),  # supposition
-        form=["written"],
-        domains=["Web", "Academic"],
+        domains=["Web", "Academic", "Written"],
         task_subtypes=None,
         license="CC BY-NC-SA 4.0",
-        socioeconomic_status=None,
         annotations_creators="expert-annotated",
         dialect=None,
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{lef23,
             doi = {10.48550/ARXIV.2302.07738},
             url = {https://arxiv.org/abs/2302.07738},
@@ -40,8 +39,10 @@ class AlloprofReranking(AbsTaskReranking):
             year = {2023},
             copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
             }""",
-        n_samples={"test": 2316, "train": 9264},
-        avg_character_length=None,
+        descriptive_stats={
+            "n_samples": {"test": 2316, "train": 9264},
+            "avg_character_length": None,
+        },
     )
 
     def load_data(self, **kwargs):

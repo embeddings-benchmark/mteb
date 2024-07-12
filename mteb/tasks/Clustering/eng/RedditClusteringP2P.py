@@ -25,6 +25,7 @@ class RedditClusteringP2P(AbsTaskClustering):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
@@ -33,10 +34,9 @@ class RedditClusteringP2P(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@article{geigle:2021:arxiv,
         author    = {Gregor Geigle and 
                         Nils Reimers and 
@@ -50,8 +50,10 @@ class RedditClusteringP2P(AbsTaskClustering):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 459399},
-        avg_character_length={"test": 727.7},
+        descriptive_stats={
+            "n_samples": {"test": 459399},
+            "avg_character_length": {"test": 727.7},
+        },
     )
 
 
@@ -66,18 +68,17 @@ class RedditFastClusteringP2P(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=("2021-01-01", "2021-04-14"),
-        form=["written"],
-        domains=["Web", "Social"],
+        domains=["Web", "Social", "Written"],
         task_subtypes=["Thematic clustering"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{geigle:2021:arxiv,
         author    = {Gregor Geigle and 
                         Nils Reimers and 
@@ -91,8 +92,10 @@ class RedditFastClusteringP2P(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 18375},
-        avg_character_length={"test": 727.7},
+        descriptive_stats={
+            "n_samples": {"test": 18375},
+            "avg_character_length": {"test": 727.7},
+        },
     )
 
     def dataset_transform(self):

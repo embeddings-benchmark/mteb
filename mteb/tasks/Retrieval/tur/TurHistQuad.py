@@ -14,18 +14,17 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
         reference="https://github.com/okanvk/Turkish-Reading-Comprehension-Question-Answering-Dataset",
         type="Retrieval",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tur-Latn"],
         main_score="ndcg_at_10",
         date=("2021-01-01", "2021-10-13"),
-        form=["written"],
         task_subtypes=["Question answering"],
-        domains=["Encyclopaedic", "Non-fiction", "Academic"],
+        domains=["Encyclopaedic", "Non-fiction", "Academic", "Written"],
         license="MIT",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @INPROCEEDINGS{9559013,
                 author={Soygazi, Fatih and Çiftçi, Okan and Kök, Uğurcan and Cengiz, Soner},
@@ -39,15 +38,17 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
                 doi={10.1109/UBMK52708.2021.9559013}}
 
         """,
-        n_samples={"test": 1330},
-        avg_character_length={
-            "test": {
-                "average_document_length": 172.12118713932398,
-                "average_query_length": 62.5302734375,
-                "num_documents": 1213,
-                "num_queries": 1024,
-                "average_relevant_docs_per_query": 2.0,
-            }
+        descriptive_stats={
+            "n_samples": {"test": 1330},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 172.12118713932398,
+                    "average_query_length": 62.5302734375,
+                    "num_documents": 1213,
+                    "num_queries": 1024,
+                    "average_relevant_docs_per_query": 2.0,
+                }
+            },
         },
     )
 

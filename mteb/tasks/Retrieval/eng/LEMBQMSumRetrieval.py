@@ -19,18 +19,17 @@ class LEMBQMSumRetrieval(AbsTaskRetrieval):
         description=("qmsum subset of dwzhu/LongEmbed dataset."),
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("1950-01-01", "2021-12-31"),
-        form=["written"],
-        domains=["Spoken"],
+        domains=["Spoken", "Written"],
         task_subtypes=["Article retrieval"],
         license="Not specified",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @inproceedings{zhong-etal-2021-qmsum,
             title = "{QMS}um: A New Benchmark for Query-based Multi-domain Meeting Summarization",
@@ -65,15 +64,17 @@ class LEMBQMSumRetrieval(AbsTaskRetrieval):
             abstract = "",
             }
         """,
-        n_samples={_EVAL_SPLIT: 1724},
-        avg_character_length={
-            "test": {
-                "average_document_length": 53335.817258883246,
-                "average_query_length": 433.50294695481335,
-                "num_documents": 197,
-                "num_queries": 1527,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": {_EVAL_SPLIT: 1724},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 53335.817258883246,
+                    "average_query_length": 433.50294695481335,
+                    "num_documents": 197,
+                    "num_queries": 1527,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

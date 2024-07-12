@@ -15,26 +15,27 @@ class SummEvalFrSummarization(AbsTaskSummarization):
         },
         type="Summarization",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="cosine_spearman",
         date=("2016-01-01", "2016-12-31"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=[],
         license="mit",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="machine-translated",
+        sample_creation="machine-translated",
         bibtex_citation="""@article{fabbri2020summeval,
   title={SummEval: Re-evaluating Summarization Evaluation},
   author={Fabbri, Alexander R and Kry{\'s}ci{\'n}ski, Wojciech and McCann, Bryan and Xiong, Caiming and Socher, Richard and Radev, Dragomir},
   journal={arXiv preprint arXiv:2007.12626},
   year={2020}
 }""",
-        n_samples={"test": 2800},
-        avg_character_length={"test": 407.1},
+        descriptive_stats={
+            "n_samples": {"test": 2800},
+            "avg_character_length": {"test": 407.1},
+        },
     )
 
     @property

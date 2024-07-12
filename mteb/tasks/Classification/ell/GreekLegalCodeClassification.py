@@ -18,18 +18,17 @@ class GreekLegalCodeClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         date=("2021-01-01", "2021-01-01"),
         eval_splits=["validation", "test"],
         eval_langs=["ell-Grek"],
         main_score="accuracy",
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=["Topic classification"],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{papaloukas-etal-2021-glc,
     title = "Multi-granular Legal Topic Classification on Greek Legislation",
     author = "Papaloukas, Christos and Chalkidis, Ilias and Athinaios, Konstantinos and Pantazi, Despina-Athanasia and Koubarakis, Manolis",
@@ -42,8 +41,10 @@ class GreekLegalCodeClassification(AbsTaskClassification):
     pages = "63--75"
 }
 """,
-        n_samples={"validation": TEST_SAMPLES, "test": TEST_SAMPLES},
-        avg_character_length={"validation": 4046.8, "test": 4200.8},
+        descriptive_stats={
+            "n_samples": {"validation": TEST_SAMPLES, "test": TEST_SAMPLES},
+            "avg_character_length": {"validation": 4046.8, "test": 4200.8},
+        },
     )
 
     def dataset_transform(self):

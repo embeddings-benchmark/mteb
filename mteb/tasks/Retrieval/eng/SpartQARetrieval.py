@@ -17,18 +17,17 @@ class SpartQA(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2021-01-01", "2021-12-31"),
-        form=["written"],
-        domains=["Encyclopaedic"],
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=["Reasoning as Retrieval"],
         license="MIT",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{xiao2024rar,
   title={RAR-b: Reasoning as Retrieval Benchmark},
   author={Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
@@ -42,14 +41,16 @@ class SpartQA(AbsTaskRetrieval):
   year={2021}
 }
 """,
-        n_samples={"test": 0},
-        avg_character_length={
-            "test": {
-                "average_document_length": 50.40829145728643,
-                "average_query_length": 656.2328881469115,
-                "num_documents": 1592,
-                "num_queries": 3594,
-                "average_relevant_docs_per_query": 1.8786867000556482,
-            }
+        descriptive_stats={
+            "n_samples": {"test": 0},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 50.40829145728643,
+                    "average_query_length": 656.2328881469115,
+                    "num_documents": 1592,
+                    "num_queries": 3594,
+                    "average_relevant_docs_per_query": 1.8786867000556482,
+                }
+            },
         },
     )

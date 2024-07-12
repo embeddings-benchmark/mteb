@@ -16,18 +16,17 @@ class CQADupstackEnglishRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{hoogeveen2015,
 author = {Hoogeveen, Doris and Verspoor, Karin M. and Baldwin, Timothy},
 title = {CQADupStack: A Benchmark Data Set for Community Question-Answering Research},
@@ -45,14 +44,16 @@ acmid = {2838934},
 publisher = {ACM},
 address = {New York, NY, USA},
 }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "average_document_length": 482.4710971880361,
-                "average_query_length": 48.32993630573248,
-                "num_documents": 40221,
-                "num_queries": 1570,
-                "average_relevant_docs_per_query": 2.3980891719745223,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 482.4710971880361,
+                    "average_query_length": 48.32993630573248,
+                    "num_documents": 40221,
+                    "num_queries": 1570,
+                    "average_relevant_docs_per_query": 2.3980891719745223,
+                }
+            },
         },
     )
