@@ -83,7 +83,7 @@ def normalize_results(results):
             for task_result in tasks_results:
                 try:
                     task_result.validate_and_filter_scores()
-                except Exception as e:
+                except Exception:
                     print(
                         f"Error validating and filtering scores for {model_name} {rev} {task_result.task_name}. Some splits are missing"
                     )
@@ -215,8 +215,6 @@ for model in nans.index:
 
 with open("missing_tasks.txt", "w") as f:
     f.write(sav_str)
-
-
 
 
 # import mteb
