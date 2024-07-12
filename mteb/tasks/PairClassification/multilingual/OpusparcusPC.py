@@ -47,7 +47,7 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": 10168, "test": 10210},
             "avg_character_length": {"validation": 24.4, "test": 23.8},
         },

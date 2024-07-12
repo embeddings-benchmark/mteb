@@ -34,7 +34,10 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
     year={2020}
 }
 """,
-        stats={"n_samples": {"train": 3418}, "avg_character_length": {"train": 103.42}},
+        descriptive_stats={
+            "n_samples": {"train": 3418},
+            "avg_character_length": {"train": 103.42},
+        },
     )
 
     def dataset_transform(self):

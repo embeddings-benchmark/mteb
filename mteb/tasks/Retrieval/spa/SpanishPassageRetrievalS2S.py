@@ -53,7 +53,7 @@ abstract="This paper describes a new test collection for passage retrieval from 
 isbn="978-3-030-15719-7"
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "test": {

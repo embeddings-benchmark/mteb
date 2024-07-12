@@ -49,7 +49,10 @@ class STS16STS(AbsTaskSTS):
     doi = "10.18653/v1/S16-1001",
     pages = "1--18",
 }""",
-        stats={"n_samples": {"test": 2372}, "avg_character_length": {"test": 65.3}},
+        descriptive_stats={
+            "n_samples": {"test": 2372},
+            "avg_character_length": {"test": 65.3},
+        },
     )
 
     @property

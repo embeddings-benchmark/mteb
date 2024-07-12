@@ -32,7 +32,7 @@ class MalayalamNewsClassification(AbsTaskClassification):
     year={2020},
     journal={arXiv preprint arXiv:2005.00085},
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"train": 5036, "test": 1260},
             "avg_character_length": {"train": 79.48, "test": 80.44},
         },

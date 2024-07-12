@@ -51,7 +51,7 @@ class NusaTranslationBitextMining(AbsTaskBitextMining, MultilingualTask):
         }
 
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {"train": 50200},
             "avg_character_length": {"train": 147.01},
         },

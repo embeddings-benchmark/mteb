@@ -38,7 +38,7 @@ class RomanianReviewsSentiment(AbsTaskClassification):
     year = {2021}
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": N_SAMPLES},
             "avg_character_length": {"test": 588.6},
         },

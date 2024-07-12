@@ -45,7 +45,7 @@ class IndicNLPNewsClassification(MultilingualTask, AbsTaskClassification):
     year={2020},
     journal={arXiv preprint arXiv:2005.00085}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 2048},
             "avg_character_length": {"test": 1169.053974484789},
         },

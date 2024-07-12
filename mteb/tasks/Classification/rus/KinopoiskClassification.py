@@ -36,5 +36,8 @@ class KinopoiskClassification(AbsTaskClassification):
         pages={48--58},
         year={2013}
         }""",
-        stats={"n_samples": {"test": 1500}, "avg_character_length": {"test": 1897.3}},
+        descriptive_stats={
+            "n_samples": {"test": 1500},
+            "avg_character_length": {"test": 1897.3},
+        },
     )

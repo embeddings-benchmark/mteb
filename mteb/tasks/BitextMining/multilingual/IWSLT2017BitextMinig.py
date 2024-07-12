@@ -81,7 +81,7 @@ class IWSLT2017BitextMining(AbsTaskBitextMining, MultilingualTask):
     pages = "2--14",
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": 21928},
             "avg_character_length": {"validation": 95.4},
         },

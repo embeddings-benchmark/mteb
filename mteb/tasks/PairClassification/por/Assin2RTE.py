@@ -34,7 +34,10 @@ class Assin2RTE(AbsTaskPairClassification):
             year={2020},
             organization={Springer}
         }""",
-        stats={"n_samples": {"test": 2448}, "avg_character_length": {"test": 53.55}},
+        descriptive_stats={
+            "n_samples": {"test": 2448},
+            "avg_character_length": {"test": 53.55},
+        },
     )
 
     def dataset_transform(self):

@@ -57,7 +57,10 @@ class NaijaSenti(AbsTaskClassification, MultilingualTask):
         url = "https://aclanthology.org/2022.lrec-1.63",
         pages = "590--602",
     }""",
-        stats={"n_samples": {"test": 4800}, "avg_character_length": {"test": 72.81}},
+        descriptive_stats={
+            "n_samples": {"test": 4800},
+            "avg_character_length": {"test": 72.81},
+        },
     )
 
     def load_data(self, **kwargs: Any) -> None:

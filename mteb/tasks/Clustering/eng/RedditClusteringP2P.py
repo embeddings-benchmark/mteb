@@ -50,7 +50,10 @@ class RedditClusteringP2P(AbsTaskClustering):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        stats={"n_samples": {"test": 459399}, "avg_character_length": {"test": 727.7}},
+        descriptive_stats={
+            "n_samples": {"test": 459399},
+            "avg_character_length": {"test": 727.7},
+        },
     )
 
 
@@ -89,7 +92,10 @@ class RedditFastClusteringP2P(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        stats={"n_samples": {"test": 18375}, "avg_character_length": {"test": 727.7}},
+        descriptive_stats={
+            "n_samples": {"test": 18375},
+            "avg_character_length": {"test": 727.7},
+        },
     )
 
     def dataset_transform(self):

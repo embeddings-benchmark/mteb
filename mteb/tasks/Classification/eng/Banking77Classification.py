@@ -54,5 +54,8 @@ class Banking77Classification(AbsTaskClassification):
     doi = "10.18653/v1/2020.nlp4convai-1.5",
     pages = "38--45",
 }""",
-        stats={"n_samples": {"test": 3080}, "avg_character_length": {"test": 54.2}},
+        descriptive_stats={
+            "n_samples": {"test": 3080},
+            "avg_character_length": {"test": 54.2},
+        },
     )

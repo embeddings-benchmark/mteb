@@ -32,7 +32,10 @@ class RuSciBenchGRNTIClusteringP2P(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        stats={"n_samples": {"test": 2048}, "avg_character_length": {"test": 890.1}},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 890.1},
+        },
     )
 
     def dataset_transform(self):

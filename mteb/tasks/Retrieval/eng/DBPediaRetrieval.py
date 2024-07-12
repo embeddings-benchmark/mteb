@@ -37,7 +37,7 @@ class DBPedia(AbsTaskRetrieval):
  doi =       {10.1145/3077136.3080751},
  publisher = {ACM}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "test": {

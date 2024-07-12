@@ -47,7 +47,7 @@ class FaithDialRetrieval(AbsTaskRetrieval):
             doi={10.1162/tacl_a_00529}
             }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 2042},
             "avg_character_length": {
                 "test": {

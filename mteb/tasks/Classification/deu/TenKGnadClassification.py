@@ -40,5 +40,8 @@ class TenKGnadClassification(AbsTaskClassification):
                 Month     = aug
                 }
         """,
-        stats={"n_samples": {"test": 1028}, "avg_character_length": {"test": 2627.31}},
+        descriptive_stats={
+            "n_samples": {"test": 1028},
+            "avg_character_length": {"test": 2627.31},
+        },
     )

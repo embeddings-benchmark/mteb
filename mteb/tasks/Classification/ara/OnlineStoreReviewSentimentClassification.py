@@ -29,7 +29,7 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         dialect=["ara-Arab-SA"],
         sample_creation="found",
         bibtex_citation="",
-        stats={
+        descriptive_stats={
             "n_samples": {"train": N_SAMPLES},
             "avg_character_length": {"train": 137.2},
         },

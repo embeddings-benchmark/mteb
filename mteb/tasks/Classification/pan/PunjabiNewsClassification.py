@@ -32,7 +32,7 @@ class PunjabiNewsClassification(AbsTaskClassification):
     year={2020},
     journal={arXiv preprint arXiv:2005.00085},
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"train": 627, "test": 157},
             "avg_character_length": {"train": 4222.22, "test": 4115.14},
         },

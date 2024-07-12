@@ -36,7 +36,7 @@ class TRECCOVIDPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "test": {

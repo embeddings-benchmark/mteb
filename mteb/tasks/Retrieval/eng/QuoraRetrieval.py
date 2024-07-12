@@ -39,7 +39,7 @@ class QuoraRetrieval(AbsTaskRetrieval):
     year = {2017},
     url = {https://kaggle.com/competitions/quora-question-pairs}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "dev": {

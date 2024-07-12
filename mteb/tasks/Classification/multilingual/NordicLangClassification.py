@@ -55,7 +55,10 @@ class NordicLangClassification(AbsTaskClassification):
     abstract = "Automatic language identification is a challenging problem. Discriminating between closely related languages is especially difficult. This paper presents a machine learning approach for automatic language identification for the Nordic languages, which often suffer miscategorisation by existing state-of-the-art tools. Concretely we will focus on discrimination between six Nordic languages: Danish, Swedish, Norwegian (Nynorsk), Norwegian (Bokm{\aa}l), Faroese and Icelandic.",
 }
 """,
-        stats={"n_samples": {"test": 3000}, "avg_character_length": {"test": 78.2}},
+        descriptive_stats={
+            "n_samples": {"test": 3000},
+            "avg_character_length": {"test": 78.2},
+        },
     )
 
     @property

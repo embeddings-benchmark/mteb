@@ -269,7 +269,7 @@ class NTREXBitextMining(AbsTaskBitextMining, MultilingualTask):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="human-translated and localized",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": _N * len(_EVAL_LANGS)},
             "avg_character_length": {"test": 120},
         },

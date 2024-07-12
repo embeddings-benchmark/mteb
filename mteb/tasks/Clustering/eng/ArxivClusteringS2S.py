@@ -36,5 +36,8 @@ class ArxivClusteringS2S(AbsTaskClustering):
     author={arXiv.org submitters},
     year={2024}
 }""",
-        stats={"n_samples": {"test": 732723}, "avg_character_length": {"test": 74}},
+        descriptive_stats={
+            "n_samples": {"test": 732723},
+            "avg_character_length": {"test": 74},
+        },
     )

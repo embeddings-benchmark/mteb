@@ -68,5 +68,8 @@ class MultiEURLEXMultilabelClassification(
   url = {https://arxiv.org/abs/2109.00904}
 }
         """,
-        stats={"n_samples": {"test": 5000}, "avg_character_length": {"test": 12014.41}},
+        descriptive_stats={
+            "n_samples": {"test": 5000},
+            "avg_character_length": {"test": 12014.41},
+        },
     )

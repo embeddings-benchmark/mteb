@@ -41,7 +41,7 @@ class HellaSwag(AbsTaskRetrieval):
   year={2019}
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 10042},
             "avg_character_length": {
                 "test": {

@@ -46,7 +46,7 @@ class AlloProfClusteringS2S(AbsTaskClustering):
   year = {2023},
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }""",
-        stats={"n_samples": None, "avg_character_length": None},
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     def dataset_transform(self):
@@ -103,7 +103,10 @@ class AlloProfClusteringS2SFast(AbsTaskClusteringFast):
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }
 """,
-        stats={"n_samples": {"test": 2556}, "avg_character_length": {"test": 32.8}},
+        descriptive_stats={
+            "n_samples": {"test": 2556},
+            "avg_character_length": {"test": 32.8},
+        },
     )
 
     def dataset_transform(self):

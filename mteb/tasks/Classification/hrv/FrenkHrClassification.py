@@ -36,5 +36,8 @@ class FrenkHrClassification(AbsTaskClassification):
         primaryClass={cs.CL},
         url={https://arxiv.org/abs/1906.02045}
         }""",
-        stats={"n_samples": {"test": 2120}, "avg_character_length": {"test": 89.86}},
+        descriptive_stats={
+            "n_samples": {"test": 2120},
+            "avg_character_length": {"test": 89.86},
+        },
     )

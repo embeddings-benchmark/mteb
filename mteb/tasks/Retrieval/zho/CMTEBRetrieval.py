@@ -59,7 +59,7 @@ class T2Retrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "dev": {
@@ -119,7 +119,7 @@ class MMarcoRetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "dev": {
@@ -177,7 +177,7 @@ class DuRetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "dev": {
@@ -228,7 +228,7 @@ class CovidRetrieval(AbsTaskRetrieval):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "dev": {
@@ -279,7 +279,7 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "dev": {
@@ -332,7 +332,7 @@ class EcomRetrieval(AbsTaskRetrieval):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "dev": {
@@ -385,7 +385,7 @@ class MedicalRetrieval(AbsTaskRetrieval):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "dev": {
@@ -438,7 +438,7 @@ class VideoRetrieval(AbsTaskRetrieval):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "dev": {

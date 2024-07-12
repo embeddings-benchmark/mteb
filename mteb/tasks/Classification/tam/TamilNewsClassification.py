@@ -32,7 +32,7 @@ class TamilNewsClassification(AbsTaskClassification):
     year={2020},
     journal={arXiv preprint arXiv:2005.00085},
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"train": 14521, "test": 3631},
             "avg_character_length": {"train": 56.50, "test": 56.52},
         },

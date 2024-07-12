@@ -39,7 +39,10 @@ class RuReviewsClassification(AbsTaskClassification):
         ISSN={2378-1963},
         month={July}
         }""",
-        stats={"n_samples": {"test": 2048}, "avg_character_length": {"test": 133.2}},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 133.2},
+        },
     )
 
     def dataset_transform(self):

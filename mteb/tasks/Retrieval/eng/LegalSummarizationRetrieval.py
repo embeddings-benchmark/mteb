@@ -39,7 +39,7 @@ class LegalSummarization(AbsTaskRetrieval):
     url = "https://www.aclweb.org/anthology/W19-2201",
     pages = "1--11",
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "test": {

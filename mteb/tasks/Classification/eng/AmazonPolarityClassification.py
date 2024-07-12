@@ -37,5 +37,8 @@ class AmazonPolarityClassification(AbsTaskClassification):
   year={2013},
   url={https://api.semanticscholar.org/CorpusID:6440341}
 }""",
-        stats={"n_samples": {"test": 400000}, "avg_character_length": {"test": 431.4}},
+        descriptive_stats={
+            "n_samples": {"test": 400000},
+            "avg_character_length": {"test": 431.4},
+        },
     )

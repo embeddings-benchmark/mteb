@@ -43,7 +43,7 @@ class HagridRetrieval(AbsTaskRetrieval):
       year={2023},
       journal={arXiv:2307.16883},
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"train": 1922},
             "avg_character_length": {
                 "dev": {

@@ -47,7 +47,10 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        stats={"n_samples": {"test": 32768}, "avg_character_length": {"test": 57.0}},
+        descriptive_stats={
+            "n_samples": {"test": 32768},
+            "avg_character_length": {"test": 57.0},
+        },
     )
 
     def dataset_transform(self):
@@ -109,5 +112,8 @@ class StackExchangeClustering(AbsTaskClustering):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        stats={"n_samples": {"test": 373850}, "avg_character_length": {"test": 57.0}},
+        descriptive_stats={
+            "n_samples": {"test": 373850},
+            "avg_character_length": {"test": 57.0},
+        },
     )

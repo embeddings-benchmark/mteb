@@ -52,7 +52,7 @@ class RARbCode(AbsTaskRetrieval):
   year={2019}
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 1484},
             "avg_character_length": {
                 "test": {

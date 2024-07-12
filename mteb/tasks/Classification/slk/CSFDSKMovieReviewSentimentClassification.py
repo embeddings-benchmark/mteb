@@ -38,7 +38,7 @@ class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
       primaryClass={cs.CL}
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": N_SAMPLES},
             "avg_character_length": {"test": 366.2},
         },

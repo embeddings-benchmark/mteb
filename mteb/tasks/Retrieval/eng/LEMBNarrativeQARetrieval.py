@@ -55,7 +55,7 @@ class LEMBNarrativeQARetrieval(AbsTaskRetrieval):
             abstract = "",
         }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {_EVAL_SPLIT: 10804},
             "avg_character_length": {
                 "test": {

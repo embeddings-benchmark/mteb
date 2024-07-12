@@ -97,7 +97,7 @@ class LegalBenchCorporateLobbying(AbsTaskRetrieval):
   publisher={Springer}
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "test": {

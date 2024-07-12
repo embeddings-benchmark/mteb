@@ -37,7 +37,7 @@ class NFCorpus(AbsTaskRetrieval):
   country = {Italy},
   url = {http://www.cl.uni-heidelberg.de/~riezler/publications/papers/ECIR2016.pdf}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "test": {

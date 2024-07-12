@@ -28,7 +28,10 @@ class SpanishNewsClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="""
         """,
-        stats={"n_samples": {"train": 2048}, "avg_character_length": {"train": 4218.2}},
+        descriptive_stats={
+            "n_samples": {"train": 2048},
+            "avg_character_length": {"train": 4218.2},
+        },
     )
 
     def dataset_transform(self):

@@ -60,7 +60,7 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
         location = {Brussels, Belgium},
         }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": 2163, "test": 2460},
             "avg_character_length": {"validation": 106.5, "test": 106.5},
         },
@@ -144,7 +144,7 @@ class XNLIV2(MultilingualTask, AbsTaskPairClassification):
             organization={IEEE}
             }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 5010},
             "avg_character_length": {"test": 80.06},
         },  # average of premise and hypothesis

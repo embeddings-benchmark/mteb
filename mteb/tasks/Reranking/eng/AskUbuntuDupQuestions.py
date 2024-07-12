@@ -35,5 +35,8 @@ class AskUbuntuDupQuestions(AbsTaskReranking):
     year = "2021",
     url = "https://arxiv.org/abs/2104.06979",
 }""",
-        stats={"n_samples": {"test": 2255}, "avg_character_length": {"test": 52.5}},
+        descriptive_stats={
+            "n_samples": {"test": 2255},
+            "avg_character_length": {"test": 52.5},
+        },
     )

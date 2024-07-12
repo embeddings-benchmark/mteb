@@ -34,7 +34,10 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
   year={2020}
 }
 """,
-        stats={"n_samples": {"test": 2050}, "avg_character_length": {"test": 1884.0}},
+        descriptive_stats={
+            "n_samples": {"test": 2050},
+            "avg_character_length": {"test": 1884.0},
+        },
     )
 
     def dataset_transform(self):

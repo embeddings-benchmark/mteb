@@ -42,7 +42,7 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
                 date = {2024},
             }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 600},
             "avg_character_length": {
                 "test": {

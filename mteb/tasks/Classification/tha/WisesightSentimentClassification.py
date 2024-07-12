@@ -42,7 +42,10 @@ class WisesightSentimentClassification(AbsTaskClassification):
 }
 
 """,
-        stats={"n_samples": {"train": 2048}, "avg_character_length": {"train": 103.42}},
+        descriptive_stats={
+            "n_samples": {"train": 2048},
+            "avg_character_length": {"train": 103.42},
+        },
     )
 
     def dataset_transform(self):

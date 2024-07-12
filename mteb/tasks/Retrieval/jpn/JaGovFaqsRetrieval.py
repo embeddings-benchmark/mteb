@@ -35,7 +35,7 @@ class JaGovFaqsRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        stats={
+        descriptive_stats={
             "n_samples": {_EVAL_SPLIT: _MAX_EVAL_SIZE},
             "avg_character_length": {
                 "test": {

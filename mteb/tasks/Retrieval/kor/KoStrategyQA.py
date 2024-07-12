@@ -33,7 +33,7 @@ class KoStrategyQA(AbsTaskRetrieval):
   journal = {Transactions of the Association for Computational Linguistics (TACL)},
   year = {2021},
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "dev": {

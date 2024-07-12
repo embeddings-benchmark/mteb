@@ -43,7 +43,10 @@ class STS15STS(AbsTaskSTS):
     doi = "10.18653/v1/S15-2010",
     pages = "56--63",
 }""",
-        stats={"n_samples": {"test": 6000}, "avg_character_length": {"test": 57.7}},
+        descriptive_stats={
+            "n_samples": {"test": 6000},
+            "avg_character_length": {"test": 57.7},
+        },
     )
 
     @property

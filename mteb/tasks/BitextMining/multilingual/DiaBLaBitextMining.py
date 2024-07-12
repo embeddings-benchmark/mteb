@@ -42,7 +42,7 @@ class DiaBLaBitextMining(AbsTaskBitextMining, MultilingualTask):
         year={2019}
         }
         """,
-        stats={"n_samples": {}, "avg_character_length": {}},
+        descriptive_stats={"n_samples": {}, "avg_character_length": {}},
     )
 
     def load_data(self, **kwargs):

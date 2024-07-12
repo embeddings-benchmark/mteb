@@ -94,7 +94,7 @@ class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
     url = "https://aclanthology.org/2022.coling-1.138",
     pages = "1604--1619"
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "test": {

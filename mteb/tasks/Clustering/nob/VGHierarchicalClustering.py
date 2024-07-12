@@ -42,7 +42,7 @@ class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
     year={2023},
     school={Norwegian University of Life Sciences, {\AA}s}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": N_SAMPLES},
             "avg_character_length": {"test": 2670.3243084794544},
         },
@@ -90,7 +90,7 @@ class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
     year={2023},
     school={Norwegian University of Life Sciences, {\AA}s}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": N_SAMPLES},
             "avg_character_length": {"test": 139.31247668283325},
         },

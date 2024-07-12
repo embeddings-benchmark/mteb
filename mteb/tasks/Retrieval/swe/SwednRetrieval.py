@@ -33,7 +33,7 @@ class SwednRetrieval(AbsTaskRetrieval):
     booktitle={Proceedings of CLARIN Annual Conference},
     year={2021}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 2048},
             "avg_character_length": {
                 "test": {

@@ -135,13 +135,6 @@ METRIC_VALUE = Union[int, float, Dict[str, Any]]
 logger = logging.getLogger(__name__)
 
 
-class GeneralDescriptiveStats(BaseModel):
-    """General descriptive statistics for a dataset."""
-
-    n_samples: dict[SPLIT_NAME, int]
-    avg_character_length: dict[SPLIT_NAME, float]
-
-
 class TaskMetadata(BaseModel):
     """Metadata for a task.
 
@@ -201,7 +194,7 @@ class TaskMetadata(BaseModel):
     sample_creation: SAMPLE_CREATION_METHOD | None
     bibtex_citation: str | None
 
-    stats: dict[METRIC_NAME, Optional[dict[SPLIT_NAME, METRIC_VALUE]]]
+    descriptive_stats: dict[METRIC_NAME, Optional[dict[SPLIT_NAME, METRIC_VALUE]]]
 
     @field_validator("dataset")
     def _check_dataset_path_is_specified(cls, dataset):

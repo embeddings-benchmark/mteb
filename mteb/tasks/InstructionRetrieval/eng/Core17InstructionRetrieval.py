@@ -35,7 +35,7 @@ class Core17InstructionRetrieval(AbsTaskInstructionRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"eng": 19919 * 2},
             "avg_character_length": {"eng": 2768.749235474006},
         },

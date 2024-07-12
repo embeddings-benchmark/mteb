@@ -237,7 +237,7 @@ class SIB200Classification(MultilingualTask, AbsTaskClassification):
             journal={arXiv preprint arXiv:2309.07445},
             year={2023}
         }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"train": 701, "validation": 99, "test": 204},
             "avg_character_length": {
                 "train": 111.24,

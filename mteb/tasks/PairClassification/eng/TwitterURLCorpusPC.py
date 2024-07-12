@@ -46,7 +46,10 @@ class TwitterURLCorpusPC(AbsTaskPairClassification):
             pages = "1224--1234",
             abstract = "A major challenge in paraphrase research is the lack of parallel corpora. In this paper, we present a new method to collect large-scale sentential paraphrases from Twitter by linking tweets through shared URLs. The main advantage of our method is its simplicity, as it gets rid of the classifier or human in the loop needed to select data before annotation and subsequent application of paraphrase identification algorithms in the previous work. We present the largest human-labeled paraphrase corpus to date of 51,524 sentence pairs and the first cross-domain benchmarking for automatic paraphrase identification. In addition, we show that more than 30,000 new sentential paraphrases can be easily and continuously captured every month at {\textasciitilde}70{\%} precision, and demonstrate their utility for downstream NLP tasks through phrasal paraphrase extraction. We make our code and data freely available.",
         }""",
-        stats={"n_samples": {"test": 51534}, "avg_character_length": {"test": 79.5}},
+        descriptive_stats={
+            "n_samples": {"test": 51534},
+            "avg_character_length": {"test": 79.5},
+        },
     )
 
     def dataset_transform(self):

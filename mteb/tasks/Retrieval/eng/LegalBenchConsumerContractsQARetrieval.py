@@ -40,7 +40,7 @@ class LegalBenchConsumerContractsQA(AbsTaskRetrieval):
   journal={arXiv preprint arXiv:2103.06268},
   year={2021}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "test": {

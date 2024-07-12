@@ -108,7 +108,7 @@ class MLQARetrieval(AbsTaskRetrieval, MultilingualTask):
         year = 2019,
         eid = {arXiv: 1910.07475}
         }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 158083, "validation": 15747},
             "avg_character_length": {
                 "validation": {

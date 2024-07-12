@@ -43,7 +43,7 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": 30000, "test": 30000},
             "avg_character_length": {"validation": 159.2, "test": 160.4},
         },

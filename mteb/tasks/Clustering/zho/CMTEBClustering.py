@@ -47,7 +47,10 @@ class CLSClusteringFastS2S(AbsTaskClusteringFast):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
-        stats={"n_samples": {"test": NUM_SAMPLES}, "avg_character_length": {}},
+        descriptive_stats={
+            "n_samples": {"test": NUM_SAMPLES},
+            "avg_character_length": {},
+        },
     )
 
     def dataset_transform(self):
@@ -104,7 +107,10 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
-        stats={"n_samples": {"test": NUM_SAMPLES}, "avg_character_length": {}},
+        descriptive_stats={
+            "n_samples": {"test": NUM_SAMPLES},
+            "avg_character_length": {},
+        },
     )
 
     def dataset_transform(self):
@@ -160,7 +166,7 @@ class CLSClusteringS2S(AbsTaskClustering):
   year={2022}
 }
 """,
-        stats={"n_samples": {"test": 100000}, "avg_character_length": None},
+        descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )
 
 
@@ -194,7 +200,7 @@ class CLSClusteringP2P(AbsTaskClustering):
   journal={arXiv preprint arXiv:2209.05034},
   year={2022}
 }""",
-        stats={"n_samples": {"test": 100000}, "avg_character_length": None},
+        descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )
 
 
@@ -231,7 +237,10 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
   publisher = {THU Natural Language Processing Lab},
   url = {https://github.com/thunlp/THUCTC}
 }""",
-        stats={"n_samples": {"test": NUM_SAMPLES}, "avg_character_length": {}},
+        descriptive_stats={
+            "n_samples": {"test": NUM_SAMPLES},
+            "avg_character_length": {},
+        },
     )
 
     def dataset_transform(self):
@@ -288,7 +297,10 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
   publisher = {THU Natural Language Processing Lab},
   url = {https://github.com/thunlp/THUCTC}
 }""",
-        stats={"n_samples": {"test": NUM_SAMPLES}, "avg_character_length": {}},
+        descriptive_stats={
+            "n_samples": {"test": NUM_SAMPLES},
+            "avg_character_length": {},
+        },
     )
 
     def dataset_transform(self):
@@ -351,7 +363,7 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
   year={2006}
 }
 """,
-        stats={"n_samples": {"test": 100000}, "avg_character_length": None},
+        descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )
 
 
@@ -394,5 +406,5 @@ class ThuNewsClusteringP2P(AbsTaskClustering):
   year={2006}
 }
 """,
-        stats={"n_samples": {"test": 100000}, "avg_character_length": None},
+        descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )

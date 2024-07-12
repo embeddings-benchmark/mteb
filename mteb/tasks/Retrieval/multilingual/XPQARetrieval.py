@@ -90,7 +90,7 @@ class XPQARetrieval(AbsTaskRetrieval, MultilingualTask):
         pages={103--115},
         year={2023}
         }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 19801},
             "avg_character_length": {
                 "test": {

@@ -36,7 +36,7 @@ class JaQuADRetrieval(AbsTaskRetrieval):
     archivePrefix={arXiv},
     primaryClass={cs.CL}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": 2048},
             "avg_character_length": {
                 "validation": {

@@ -40,7 +40,7 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
             year={2019}
         }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": TEST_SAMPLES, "test": TEST_SAMPLES},
             "avg_character_length": {"validation": 88.1, "test": 87.4},
         },

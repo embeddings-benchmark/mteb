@@ -47,7 +47,7 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
             year={2024}
             }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {
                 "test_256": 150,
                 "test_512": 150,

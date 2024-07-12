@@ -38,7 +38,7 @@ class SadeemQuestionRetrieval(AbsTaskRetrieval):
             author = "abubakr.soliman@sadeem.app"
             }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {_EVAL_SPLIT: 22979},
             "avg_character_length": {_EVAL_SPLIT: 500.0},
         },

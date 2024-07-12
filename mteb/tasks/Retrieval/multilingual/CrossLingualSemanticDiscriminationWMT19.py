@@ -51,7 +51,7 @@ class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval, MultilingualTask
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation="preprint_coming",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 2946},
             "avg_character_length": {
                 "test": {

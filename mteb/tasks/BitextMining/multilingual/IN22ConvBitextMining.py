@@ -100,7 +100,10 @@ year={2023},
 url={https://openreview.net/forum?id=vfT4YuzAYA},
 note={}
 }""",
-        stats={"n_samples": {"test": 1503}, "avg_character_length": {"test": 54.3}},
+        descriptive_stats={
+            "n_samples": {"test": 1503},
+            "avg_character_length": {"test": 54.3},
+        },
     )
 
     def load_data(self, **kwargs: Any) -> None:

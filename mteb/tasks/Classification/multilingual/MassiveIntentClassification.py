@@ -90,7 +90,7 @@ class MassiveIntentClassification(MultilingualTask, AbsTaskClassification):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": 2033, "test": 2974},
             "avg_character_length": {"validation": 34.8, "test": 34.6},
         },

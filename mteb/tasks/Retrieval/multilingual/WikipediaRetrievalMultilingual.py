@@ -112,7 +112,7 @@ class WikipediaRetrievalMultilingual(MultilingualTask, AbsTaskRetrieval):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation="",
-        stats={
+        descriptive_stats={
             "n_samples": {
                 "en": 1500,
                 "de": 1500,

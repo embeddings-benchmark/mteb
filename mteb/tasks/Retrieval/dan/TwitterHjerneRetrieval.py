@@ -31,7 +31,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
   year={2024}
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"train": 340},
             "avg_character_length": {
                 "train": {

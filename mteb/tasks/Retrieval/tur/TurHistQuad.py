@@ -38,7 +38,7 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
                 doi={10.1109/UBMK52708.2021.9559013}}
 
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 1330},
             "avg_character_length": {
                 "test": {

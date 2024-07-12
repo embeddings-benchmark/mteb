@@ -41,7 +41,7 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining, MultilingualTask):
         annotations_creators="derived",
         dialect=[],
         bibtex_citation="",
-        stats={
+        descriptive_stats={
             "n_samples": {_EVAL_SPLIT: 1820},
             "avg_character_length": {_EVAL_SPLIT: 78},
         },

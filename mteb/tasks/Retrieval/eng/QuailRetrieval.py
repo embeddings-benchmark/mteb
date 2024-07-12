@@ -44,7 +44,7 @@ class Quail(AbsTaskRetrieval):
   year={2020}
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 2720},
             "avg_character_length": {
                 "test": {

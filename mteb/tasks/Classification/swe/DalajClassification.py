@@ -35,7 +35,10 @@ Title = {DaLAJ - a dataset for linguistic acceptability judgments for Swedish: F
 Year = {2021},
 Eprint = {arXiv:2105.06681},
 }""",
-        stats={"n_samples": {"test": 444}, "avg_character_length": {"test": 243.8}},
+        descriptive_stats={
+            "n_samples": {"test": 444},
+            "avg_character_length": {"test": 243.8},
+        },
     )
 
     @property

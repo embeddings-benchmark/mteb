@@ -44,7 +44,10 @@ class CzechSoMeSentimentClassification(AbsTaskClassification):
             pages = "65--74",
         }
         """,
-        stats={"n_samples": {"test": 1000}, "avg_character_length": {"test": 59.89}},
+        descriptive_stats={
+            "n_samples": {"test": 1000},
+            "avg_character_length": {"test": 59.89},
+        },
     )
 
     @property

@@ -54,7 +54,7 @@ class IndicQARetrieval(MultilingualTask, AbsTaskRetrieval):
   year      = {2022},
   doi       = {10.18653/v1/2023.acl-long.693}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 18586},
             "avg_character_length": {
                 "test": {

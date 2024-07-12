@@ -128,7 +128,7 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining, MultilingualTask):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": 997, "test": 1012},
             "avg_character_length": {"validation": 126.25, "test": 130.84},
         },

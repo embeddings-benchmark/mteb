@@ -44,7 +44,7 @@ acmid = {2838934},
 publisher = {ACM},
 address = {New York, NY, USA},
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "test": {

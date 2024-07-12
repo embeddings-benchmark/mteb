@@ -77,7 +77,10 @@ class STS22CrosslingualSTSv2(AbsTaskSTS, MultilingualTask):
     doi = "10.18653/v1/2022.semeval-1.155",
     pages = "1094--1106",
 }""",
-        stats={"n_samples": {"test": 3958}, "avg_character_length": {"test": 1993.6}},
+        descriptive_stats={
+            "n_samples": {"test": 3958},
+            "avg_character_length": {"test": 1993.6},
+        },
     )
 
     @property
@@ -140,7 +143,10 @@ class STS22CrosslingualSTS(AbsTaskSTS, MultilingualTask):
     doi = "10.18653/v1/2022.semeval-1.155",
     pages = "1094--1106",
 }""",
-        stats={"n_samples": {"test": 8056}, "avg_character_length": {"test": 1993.6}},
+        descriptive_stats={
+            "n_samples": {"test": 8056},
+            "avg_character_length": {"test": 1993.6},
+        },
     )
 
     @property

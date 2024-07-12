@@ -34,7 +34,10 @@ class KannadaNewsClassification(AbsTaskClassification):
     year={2020},
     journal={arXiv preprint arXiv:2005.00085},
 }""",
-        stats={"n_samples": {"train": 6460}, "avg_character_length": {"train": 65.88}},
+        descriptive_stats={
+            "n_samples": {"train": 6460},
+            "avg_character_length": {"train": 65.88},
+        },
     )
 
     def dataset_transform(self):

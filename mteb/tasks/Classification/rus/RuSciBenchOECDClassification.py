@@ -28,7 +28,10 @@ class RuSciBenchOECDClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        stats={"n_samples": {"test": 2048}, "avg_character_length": {"test": 838.9}},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 838.9},
+        },
     )
 
     def dataset_transform(self):

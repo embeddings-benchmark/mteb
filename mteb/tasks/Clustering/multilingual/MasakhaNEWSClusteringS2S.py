@@ -59,7 +59,7 @@ class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
   year={2023},
   volume={}
 }""",
-        stats={"n_samples": None, "avg_character_length": None},
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     def load_data(self, **kwargs):

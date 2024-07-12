@@ -54,7 +54,7 @@ class NusaParagraphEmotionClassification(MultilingualTask, AbsTaskClassification
             pages = "921--945",
         }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {"train": 15516, "validation": 2948, "test": 6250},
             "avg_character_length": {
                 "train": 740.24,

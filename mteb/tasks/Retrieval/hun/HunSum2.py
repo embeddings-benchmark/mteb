@@ -44,7 +44,7 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
       primaryClass={cs.CL}
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {
                 "test": 1998,
             },

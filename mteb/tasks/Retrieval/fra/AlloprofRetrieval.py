@@ -40,7 +40,7 @@ class AlloprofRetrieval(AbsTaskRetrieval):
   year = {2023},
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"train": 2048},
             "avg_character_length": {
                 "test": {

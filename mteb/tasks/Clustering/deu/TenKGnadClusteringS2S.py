@@ -31,7 +31,10 @@ class TenKGnadClusteringS2S(AbsTaskClustering):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        stats={"n_samples": {"test": 45914}, "avg_character_length": {"test": 50.96}},
+        descriptive_stats={
+            "n_samples": {"test": 45914},
+            "avg_character_length": {"test": 50.96},
+        },
     )
 
 
@@ -65,7 +68,10 @@ class TenKGnadClusteringS2SFast(AbsTaskClusteringFast):
         sample_creation="found",
         bibtex_citation=None,  # none found
         # due to duplicates
-        stats={"n_samples": {"test": 10267}, "avg_character_length": {"test": 50.96}},
+        descriptive_stats={
+            "n_samples": {"test": 10267},
+            "avg_character_length": {"test": 50.96},
+        },
     )
 
     def dataset_transform(self) -> None:

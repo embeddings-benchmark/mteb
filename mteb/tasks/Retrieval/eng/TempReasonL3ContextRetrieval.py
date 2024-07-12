@@ -41,7 +41,7 @@ class TempReasonL3Context(AbsTaskRetrieval):
   year={2023}
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 4426},
             "avg_character_length": {
                 "test": {

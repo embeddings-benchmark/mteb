@@ -51,7 +51,7 @@ class LEMBSummScreenFDRetrieval(AbsTaskRetrieval):
                 abstract = "",
             }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {_EVAL_SPLIT: 672},
             "avg_character_length": {
                 "validation": {

@@ -36,7 +36,7 @@ class RonSTS(AbsTaskSTS):
             year={2021}
             }
             """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 1379},
             "avg_character_length": {"test": 60.5},
         },  # avg across sent1 and sent2

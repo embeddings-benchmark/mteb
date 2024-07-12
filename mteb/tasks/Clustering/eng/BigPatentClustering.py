@@ -52,7 +52,7 @@ class BigPatentClustering(AbsTaskClustering):
   biburl    = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }""",
-        stats={"n_samples": None, "avg_character_length": None},
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
 
@@ -99,7 +99,7 @@ class BigPatentClusteringFast(AbsTaskClusteringFast):
   biburl    = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": NUM_SAMPLES},
             "avg_character_length": {"test": 30995.5},
         },

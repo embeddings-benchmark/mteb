@@ -44,7 +44,7 @@ class Touche2020(AbsTaskRetrieval):
   doi          = {10.5281/zenodo.6862281},
   url          = {https://doi.org/10.5281/zenodo.6862281}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "test": {

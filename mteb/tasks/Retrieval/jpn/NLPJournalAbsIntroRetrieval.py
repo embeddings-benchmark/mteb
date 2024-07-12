@@ -32,7 +32,7 @@ class NLPJournalAbsIntroRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        stats={
+        descriptive_stats={
             "n_samples": {_EVAL_SPLIT: 404},
             "avg_character_length": {
                 "test": {

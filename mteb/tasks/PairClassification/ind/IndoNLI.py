@@ -39,7 +39,7 @@ class IndoNLI(AbsTaskPairClassification):
             pages = "10511--10527",
         }""",
         # after removing neutral
-        stats={
+        descriptive_stats={
             "n_samples": {"test_expert": 2040},
             "avg_character_length": {"test_expert": 145.88},
         },

@@ -32,7 +32,7 @@ class GreekCivicsQA(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        stats={
+        descriptive_stats={
             "n_samples": {"default": 407},
             "avg_character_length": {
                 "default": {

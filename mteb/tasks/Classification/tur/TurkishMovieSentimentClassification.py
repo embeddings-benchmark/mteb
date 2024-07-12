@@ -35,7 +35,10 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
             url={https://api.semanticscholar.org/CorpusID:3912960}
         }
         """,
-        stats={"n_samples": {"test": 2644}, "avg_character_length": {"test": 141.50}},
+        descriptive_stats={
+            "n_samples": {"test": 2644},
+            "avg_character_length": {"test": 141.50},
+        },
     )
 
     def dataset_transform(self):

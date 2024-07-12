@@ -32,5 +32,5 @@ class WikiCitiesClustering(AbsTaskClustering):
     title  = "Wikimedia Downloads",
     url    = "https://dumps.wikimedia.org"
 }""",
-        stats={"n_samples": None, "avg_character_length": None},
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )

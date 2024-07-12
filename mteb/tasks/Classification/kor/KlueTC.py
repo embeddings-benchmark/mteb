@@ -35,7 +35,7 @@ class KlueTC(AbsTaskClassification):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": 2048},
             "avg_character_length": {"validation": 27.079609091907326},
         },

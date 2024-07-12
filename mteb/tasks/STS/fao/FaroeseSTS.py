@@ -41,7 +41,10 @@ class FaroeseSTS(AbsTaskSTS):
             publisher = {Link{\"o}ping University Electronic Press, Sweden},
         }
         """,
-        stats={"n_samples": {"train": 729}, "avg_character_length": {"train": 43.6}},
+        descriptive_stats={
+            "n_samples": {"train": 729},
+            "avg_character_length": {"train": 43.6},
+        },
     )
 
     @property

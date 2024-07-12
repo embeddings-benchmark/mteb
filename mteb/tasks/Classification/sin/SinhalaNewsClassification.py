@@ -38,7 +38,10 @@ class SinhalaNewsClassification(AbsTaskClassification):
             journal   = {Year of Publication},
             year      = {2022},
             }""",
-        stats={"n_samples": {"train": 3327}, "avg_character_length": {"train": 148.04}},
+        descriptive_stats={
+            "n_samples": {"train": 3327},
+            "avg_character_length": {"train": 148.04},
+        },
     )
 
     def dataset_transform(self):

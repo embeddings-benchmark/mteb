@@ -41,7 +41,10 @@ class BornholmBitextMining(AbsTaskBitextMining):
 	file = {Available Version (via Google Scholar):/Users/au554730/Zotero/storage/FBQ73ZYN/Derczynski and Kjeldsen - 2019 - Bornholmsk natural language processing Resources .pdf:application/pdf},
 }
 """,
-        stats={"n_samples": {"test": 500}, "avg_character_length": {"test": 89.7}},
+        descriptive_stats={
+            "n_samples": {"test": 500},
+            "avg_character_length": {"test": 89.7},
+        },
     )
 
     def dataset_transform(self):

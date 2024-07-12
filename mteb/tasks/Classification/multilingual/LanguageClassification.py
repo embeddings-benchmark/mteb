@@ -65,7 +65,10 @@ class LanguageClassification(AbsTaskClassification):
   publisher = {Association for Computational Linguistics},
   location = {Brussels, Belgium},
 }""",
-        stats={"n_samples": {"test": 2048}, "avg_character_length": {"test": 107.8}},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 107.8},
+        },
     )
 
     def dataset_transform(self) -> None:

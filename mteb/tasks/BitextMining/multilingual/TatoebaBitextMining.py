@@ -152,5 +152,8 @@ class TatoebaBitextMining(AbsTaskBitextMining, MultilingualTask):
         year = {2021},
         }
         """,
-        stats={"n_samples": {"test": 2000}, "avg_character_length": {"test": 39.4}},
+        descriptive_stats={
+            "n_samples": {"test": 2000},
+            "avg_character_length": {"test": 39.4},
+        },
     )

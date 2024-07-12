@@ -32,7 +32,10 @@ class OdiaNewsClassification(AbsTaskClassification):
     year={2020},
     journal={arXiv preprint arXiv:2005.00085},
 }""",
-        stats={"n_samples": {"test": 2048}, "avg_character_length": {"test": 49.24}},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 49.24},
+        },
     )
 
     def dataset_transform(self):

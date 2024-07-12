@@ -38,7 +38,7 @@ class LegalQuAD(AbsTaskRetrieval):
   keywords={Knowledge engineering;Law;Semantic search;Conferences;Bit error rate;NLP;knowledge extraction;question-answering;semantic search;document retrieval;German language},
   doi={10.1109/AIKE52691.2021.00011}
   }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "test": {

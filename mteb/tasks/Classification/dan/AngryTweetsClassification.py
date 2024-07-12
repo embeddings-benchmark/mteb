@@ -33,7 +33,10 @@ class AngryTweetsClassification(AbsTaskClassification):
   pages={460--466},
   year={2021}
 }""",
-        stats={"n_samples": {"test": 1050}, "avg_character_length": {"test": 156.1}},
+        descriptive_stats={
+            "n_samples": {"test": 1050},
+            "avg_character_length": {"test": 156.1},
+        },
     )
 
     @property

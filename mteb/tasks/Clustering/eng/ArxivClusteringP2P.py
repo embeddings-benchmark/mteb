@@ -38,7 +38,7 @@ class ArxivClusteringP2P(AbsTaskClustering):
     author={arXiv.org submitters},
     year={2024}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 732723},
             "avg_character_length": {"test": 1009.98},
         },
@@ -79,7 +79,7 @@ class ArxivClusteringP2PFast(AbsTaskClustering):
     author={arXiv.org submitters},
     year={2024}
 }""",  # None found
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 250_000},
             "avg_character_length": {"test": 1009.98},
         },

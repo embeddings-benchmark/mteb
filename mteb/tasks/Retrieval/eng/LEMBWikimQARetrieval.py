@@ -39,7 +39,7 @@ class LEMBWikimQARetrieval(AbsTaskRetrieval):
                 year={2020}
             }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {_EVAL_SPLIT: 500},
             "avg_character_length": {
                 "test": {

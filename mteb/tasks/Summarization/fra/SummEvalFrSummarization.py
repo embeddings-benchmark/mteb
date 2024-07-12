@@ -32,7 +32,10 @@ class SummEvalFrSummarization(AbsTaskSummarization):
   journal={arXiv preprint arXiv:2007.12626},
   year={2020}
 }""",
-        stats={"n_samples": {"test": 2800}, "avg_character_length": {"test": 407.1}},
+        descriptive_stats={
+            "n_samples": {"test": 2800},
+            "avg_character_length": {"test": 407.1},
+        },
     )
 
     @property

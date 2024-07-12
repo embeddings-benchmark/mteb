@@ -48,7 +48,7 @@ class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": 38561, "test": 41206},
             "avg_character_length": {"validation": 4613, "test": 4810},
         },
@@ -123,7 +123,7 @@ class MLSUMClusteringP2PFast(AbsTaskClustering, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": N_SAMPLES, "test": N_SAMPLES},
             "avg_character_length": {"validation": 4613, "test": 4810},
         },

@@ -58,5 +58,8 @@ class NusaXBitextMining(AbsTaskBitextMining, MultilingualTask):
             primaryClass={cs.CL}
         }
         """,
-        stats={"n_samples": {"train": 5500}, "avg_character_length": {"train": 157.15}},
+        descriptive_stats={
+            "n_samples": {"train": 5500},
+            "avg_character_length": {"train": 157.15},
+        },
     )

@@ -40,7 +40,10 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
         volume = {28},
         year = {2015}
         }""",
-        stats={"n_samples": {"test": 60000}, "avg_character_length": {"test": 346.35}},
+        descriptive_stats={
+            "n_samples": {"test": 60000},
+            "avg_character_length": {"test": 346.35},
+        },
     )
 
     @property

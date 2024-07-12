@@ -93,7 +93,7 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
    author={Bonab, Hamed and Aliannejadi, Mohammad and Vardasbi, Ali and Kanoulas, Evangelos and Allan, James},
    year={2021},
    month=oct, collection={CIKM ’21} }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "test": {

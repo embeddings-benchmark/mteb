@@ -42,7 +42,7 @@ class AILAStatutes(AbsTaskRetrieval):
   doi          = {10.5281/zenodo.4063986},
   url          = {https://doi.org/10.5281/zenodo.4063986}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "test": {

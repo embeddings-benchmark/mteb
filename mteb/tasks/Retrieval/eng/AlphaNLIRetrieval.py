@@ -42,7 +42,7 @@ class AlphaNLI(AbsTaskRetrieval):
   year={2019}
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 1532},
             "avg_character_length": {
                 "test": {

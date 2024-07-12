@@ -45,7 +45,7 @@ class GermanGovServiceRetrieval(AbsTaskRetrieval):
   url          = {https://huggingface.co/datasets/it-at-m/LHM-Dienstleistungen-QA}
 }""",
         sample_creation="found",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 357},
             "avg_character_length": {
                 "test": {

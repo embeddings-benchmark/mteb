@@ -35,7 +35,7 @@ class KlueNLI(AbsTaskPairClassification):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",  # 3000 - neutral samples
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": 2000},
             "avg_character_length": {"validation": 35.01},
         },

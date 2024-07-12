@@ -38,5 +38,5 @@ class ArxivClassification(AbsTaskClassification):
         pages={40707-40718},
         doi={10.1109/ACCESS.2019.2907992}
         }""",
-        stats={"n_samples": {"test": 2048}, "avg_character_length": {}},
+        descriptive_stats={"n_samples": {"test": 2048}, "avg_character_length": {}},
     )

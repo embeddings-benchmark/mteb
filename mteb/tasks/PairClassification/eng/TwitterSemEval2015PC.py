@@ -45,7 +45,10 @@ class TwitterSemEval2015PC(AbsTaskPairClassification):
         doi = "10.18653/v1/S15-2001",
         pages = "1--11",
     }""",
-        stats={"n_samples": {"test": 16777}, "avg_character_length": {"test": 38.3}},
+        descriptive_stats={
+            "n_samples": {"test": 16777},
+            "avg_character_length": {"test": 38.3},
+        },
     )
 
     def dataset_transform(self):

@@ -36,7 +36,7 @@ class MovieReviewSentimentClassification(AbsTaskClassification):
   year = {2020},
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": N_SAMPLES, "test": N_SAMPLES},
             "avg_character_length": {"validation": 550.3, "test": 558.1},
         },

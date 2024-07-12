@@ -34,7 +34,10 @@ class MyanmarNews(AbsTaskClassification):
         month     = {February},
         pages     = {401--408}
         }""",
-        stats={"n_samples": {"train": 2048}, "avg_character_length": {"train": 174.2}},
+        descriptive_stats={
+            "n_samples": {"train": 2048},
+            "avg_character_length": {"train": 174.2},
+        },
     )
 
     def dataset_transform(self):

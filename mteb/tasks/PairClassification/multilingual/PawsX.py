@@ -45,7 +45,7 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": 14000, "test": 14000},
             "avg_character_length": {"validation": 91.2, "test": 91.1},
         },

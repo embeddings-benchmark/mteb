@@ -36,7 +36,7 @@ class DummyTask(AbsTask):
         annotations_creators="derived",
         dialect=[],
         bibtex_citation="",
-        stats={},
+        descriptive_stats={},
         modalities=["text"],
         sample_creation="created",
     )

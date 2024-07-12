@@ -35,7 +35,10 @@ class MedrxivClusteringS2SFast(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="created",
         bibtex_citation="",
-        stats={"n_samples": {"test": 1500}, "avg_character_length": {"test": 114.9}},
+        descriptive_stats={
+            "n_samples": {"test": 1500},
+            "avg_character_length": {"test": 114.9},
+        },
     )
 
     def dataset_transform(self):
@@ -74,5 +77,8 @@ class MedrxivClusteringS2S(AbsTaskClustering):
         dialect=[],
         sample_creation="created",
         bibtex_citation="",
-        stats={"n_samples": {"test": 37500}, "avg_character_length": {"test": 114.7}},
+        descriptive_stats={
+            "n_samples": {"test": 37500},
+            "avg_character_length": {"test": 114.7},
+        },
     )

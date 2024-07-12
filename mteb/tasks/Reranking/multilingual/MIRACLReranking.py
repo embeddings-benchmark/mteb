@@ -74,7 +74,10 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         dialect=[],
         sample_creation="created",
         bibtex_citation=_CITATION,
-        stats={"n_samples": {"dev": 44608}, "avg_character_length": {"dev": 506.30}},
+        descriptive_stats={
+            "n_samples": {"dev": 44608},
+            "avg_character_length": {"dev": 506.30},
+        },
     )
 
     def _evaluate_subset(

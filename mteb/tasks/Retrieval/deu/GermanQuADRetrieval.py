@@ -57,7 +57,7 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "test": {

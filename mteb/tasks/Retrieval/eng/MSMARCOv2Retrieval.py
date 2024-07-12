@@ -47,5 +47,5 @@ class MSMARCOv2(AbsTaskRetrieval):
           bibsource = {dblp computer science bibliography, https://dblp.org}
         }
         }""",
-        stats={"n_samples": None, "avg_character_length": None},
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )

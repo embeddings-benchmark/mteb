@@ -36,7 +36,7 @@ class SCIDOCS(AbsTaskRetrieval):
   booktitle={ACL},
   year={2020}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
                 "test": {

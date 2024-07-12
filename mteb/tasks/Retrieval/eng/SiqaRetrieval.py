@@ -41,7 +41,7 @@ class SIQA(AbsTaskRetrieval):
   year={2019}
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 0},
             "avg_character_length": {
                 "test": {

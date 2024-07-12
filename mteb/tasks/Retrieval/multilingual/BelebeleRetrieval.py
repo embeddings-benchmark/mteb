@@ -200,7 +200,7 @@ class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
         task_subtypes=["Question answering"],
         annotations_creators="expert-annotated",
         dialect=[],
-        stats={
+        descriptive_stats={
             "n_samples": {_EVAL_SPLIT: 103500},
             "avg_character_length": {
                 "test": {

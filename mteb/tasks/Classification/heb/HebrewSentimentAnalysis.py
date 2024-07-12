@@ -39,7 +39,10 @@ class HebrewSentimentAnalysis(AbsTaskClassification):
             pages = "2242--2252"
         }
         """,
-        stats={"n_samples": {"test": 2048}, "avg_character_length": {"test": 113.57}},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 113.57},
+        },
     )
 
     def dataset_transform(self):

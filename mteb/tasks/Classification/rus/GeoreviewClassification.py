@@ -29,7 +29,10 @@ class GeoreviewClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        stats={"n_samples": {"test": 2048}, "avg_character_length": {"test": 409.0}},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 409.0},
+        },
     )
 
     def dataset_transform(self):

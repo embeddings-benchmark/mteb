@@ -43,7 +43,10 @@ class TERRa(AbsTaskPairClassification):
         journal={arXiv preprint arXiv:2010.15925},
         year={2020}
         }""",
-        stats={"n_samples": {"dev": 307}, "avg_character_length": {"dev": 138.2}},
+        descriptive_stats={
+            "n_samples": {"dev": 307},
+            "avg_character_length": {"dev": 138.2},
+        },
     )
 
     def dataset_transform(self):

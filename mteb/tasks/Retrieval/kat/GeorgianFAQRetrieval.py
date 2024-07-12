@@ -34,7 +34,7 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         bibtex_citation="",
-        stats={
+        descriptive_stats={
             "n_samples": {_EVAL_SPLIT: 2566},
             "avg_character_length": {
                 "test": {

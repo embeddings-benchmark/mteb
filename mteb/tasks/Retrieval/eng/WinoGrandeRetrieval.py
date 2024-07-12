@@ -45,7 +45,7 @@ class WinoGrande(AbsTaskRetrieval):
   publisher={ACM New York, NY, USA}
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 0},
             "avg_character_length": {
                 "test": {

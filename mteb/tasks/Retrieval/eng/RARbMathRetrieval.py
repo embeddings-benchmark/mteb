@@ -53,7 +53,7 @@ class RARbMath(AbsTaskRetrieval):
   year={2023}
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 6319},
             "avg_character_length": {
                 "test": {

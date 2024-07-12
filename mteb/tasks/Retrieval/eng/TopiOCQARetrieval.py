@@ -48,7 +48,7 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
       primaryClass={cs.CL}
         }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {"dev": 2514},
             "avg_character_length": {
                 "validation": {

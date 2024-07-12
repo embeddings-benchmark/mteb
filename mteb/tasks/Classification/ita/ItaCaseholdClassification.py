@@ -45,7 +45,10 @@ class ItaCaseholdClassification(AbsTaskClassification):
             series = {ICAIL '23}
             }
         """,
-        stats={"n_samples": {"test": 221}, "avg_character_length": {"test": 4207.9}},
+        descriptive_stats={
+            "n_samples": {"test": 221},
+            "avg_character_length": {"test": 4207.9},
+        },
     )
 
     def dataset_transform(self):

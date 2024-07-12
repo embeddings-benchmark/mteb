@@ -47,7 +47,7 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
       primaryClass={cs.CL}
 }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {
                 "validation": 1301,
                 "test_iid": 1438,

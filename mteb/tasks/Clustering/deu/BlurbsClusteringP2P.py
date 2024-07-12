@@ -39,7 +39,10 @@ class BlurbsClusteringP2P(AbsTaskClustering):
   year={2019},
   url={https://api.semanticscholar.org/CorpusID:208334484}
 }""",
-        stats={"n_samples": {"test": 174637}, "avg_character_length": {"test": 664.09}},
+        descriptive_stats={
+            "n_samples": {"test": 174637},
+            "avg_character_length": {"test": 664.09},
+        },
     )
 
 
@@ -80,7 +83,7 @@ class BlurbsClusteringP2PFast(AbsTaskClusteringFast):
   year={2019},
   url={https://api.semanticscholar.org/CorpusID:208334484}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": NUM_SAMPLES},
             "avg_character_length": {"test": 664.09},
         },

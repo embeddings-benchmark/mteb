@@ -37,5 +37,8 @@ class CEDRClassification(AbsTaskMultilabelClassification):
         publisher={Elsevier}
         }
         """,
-        stats={"n_samples": {"test": 1882}, "avg_character_length": {"test": 91.2}},
+        descriptive_stats={
+            "n_samples": {"test": 1882},
+            "avg_character_length": {"test": 91.2},
+        },
     )

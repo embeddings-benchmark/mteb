@@ -38,7 +38,7 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClusteringFast):
         dialect=["Thematic clustering"],
         sample_creation="found",
         bibtex_citation="@misc{arXiv.org e-Print archive, url={https://arxiv.org/} }",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": N_SAMPLES},
             "avg_character_length": {"test": 1009.98},
         },
@@ -82,7 +82,7 @@ class ArXivHierarchicalClusteringS2S(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="@misc{arXiv.org e-Print archive, url={https://arxiv.org/} }",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": N_SAMPLES},
             "avg_character_length": {"test": 1009.98},
         },

@@ -42,7 +42,10 @@ class BengaliDocumentClassification(AbsTaskClassification):
             pages = "52--67"
         }
         """,
-        stats={"n_samples": {"test": 2048}, "avg_character_length": {"test": 1658.1}},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 1658.1},
+        },
     )
 
     def dataset_transform(self) -> None:

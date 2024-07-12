@@ -51,7 +51,7 @@ class SpanishSentimentClassification(AbsTaskClassification):
             pages = "89--95",
         }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": 147, "test": 296},
             "avg_character_length": {"validation": 85.02, "test": 87.91},
         },

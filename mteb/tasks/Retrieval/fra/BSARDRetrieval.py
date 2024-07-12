@@ -44,7 +44,7 @@ class BSARDRetrieval(AbsTaskRetrieval):
   doi = {10.18653/v1/2022.acl-long.468},
   pages = {6789–6803},
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 222},
             "avg_character_length": {
                 "test": {

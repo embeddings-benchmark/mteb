@@ -50,7 +50,7 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
     pages = "926--937"
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 1992},
             "avg_character_length": {
                 "test": {

@@ -36,7 +36,7 @@ class KlueSTS(AbsTaskSTS):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"validation": 519},
             "avg_character_length": {"validation": 33.178227360308284},
         },

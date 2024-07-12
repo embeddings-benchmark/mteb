@@ -31,7 +31,10 @@ class BiorxivClusteringS2SFast(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="created",
         bibtex_citation="",
-        stats={"n_samples": {"test": 2151}, "avg_character_length": {"test": 101.7}},
+        descriptive_stats={
+            "n_samples": {"test": 2151},
+            "avg_character_length": {"test": 101.7},
+        },
     )
 
     def dataset_transform(self):
@@ -63,5 +66,8 @@ class BiorxivClusteringS2S(AbsTaskClustering):
         dialect=[],
         sample_creation="created",
         bibtex_citation="",
-        stats={"n_samples": {"test": 75000}, "avg_character_length": {"test": 101.6}},
+        descriptive_stats={
+            "n_samples": {"test": 75000},
+            "avg_character_length": {"test": 101.6},
+        },
     )

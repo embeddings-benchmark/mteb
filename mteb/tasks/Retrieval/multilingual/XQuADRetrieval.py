@@ -64,7 +64,7 @@ class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
       year={2021},
       url={https://openreview.net/forum?id=JH61CD7afTv}
 }""",
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 1190},
             "avg_character_length": {
                 "validation": {

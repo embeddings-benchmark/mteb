@@ -36,7 +36,7 @@ class SwahiliNewsClassification(AbsTaskClassification):
         url = "https://doi.org/10.5281/zenodo.5514203"
         }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {"train": 2048},
             "avg_character_length": {"train": 2438.2308135942326},
         },

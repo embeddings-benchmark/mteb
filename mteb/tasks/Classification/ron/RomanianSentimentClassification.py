@@ -36,7 +36,7 @@ class RomanianSentimentClassification(AbsTaskClassification):
   year={2020}
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": TEST_SAMPLES},
             "avg_character_length": {"test": 67.6},
         },

@@ -102,7 +102,10 @@ class IndicLangClassification(AbsTaskClassification):
     doi = "10.18653/v1/2023.acl-short.71",
     pages = "816--826"
 }""",
-        stats={"n_samples": {"test": 30418}, "avg_character_length": {"test": 106.5}},
+        descriptive_stats={
+            "n_samples": {"test": 30418},
+            "avg_character_length": {"test": 106.5},
+        },
     )
 
     def load_data(self, **kwargs: Any) -> None:

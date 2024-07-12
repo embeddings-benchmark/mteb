@@ -34,5 +34,8 @@ class StackOverflowDupQuestions(AbsTaskReranking):
   year={2018},
   url={https://api.semanticscholar.org/CorpusID:53111679}
 }""",
-        stats={"n_samples": {"test": 3467}, "avg_character_length": {"test": 49.8}},
+        descriptive_stats={
+            "n_samples": {"test": 3467},
+            "avg_character_length": {"test": 49.8},
+        },
     )

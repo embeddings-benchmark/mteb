@@ -39,7 +39,7 @@ class TweetEmotionClassification(AbsTaskClassification):
   organization={Springer}
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"train": N_SAMPLES},
             "avg_character_length": {"train": 78.8},
         },

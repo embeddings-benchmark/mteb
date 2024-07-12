@@ -46,7 +46,7 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
                 url       = "http://ceur-ws.org/Vol-2624/paper9.pdf"
             }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 2048},
             "avg_character_length": {"test": 152.41},
         },  # length of`sent1` + `sent2`

@@ -48,7 +48,7 @@ class TweetTopicSingleClassification(AbsTaskClassification):
             publisher = "International Committee on Computational Linguistics"
         }
         """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test_2021": 1693},
             "avg_character_length": {"test_2021": 167.66},
         },

@@ -40,7 +40,7 @@ class EstQA(AbsTaskRetrieval):
   year         = 2021
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 603},
             "avg_character_length": {
                 "test": {

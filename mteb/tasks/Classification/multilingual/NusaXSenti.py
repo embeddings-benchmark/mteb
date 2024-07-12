@@ -56,5 +56,8 @@ class NusaXSentiClassification(AbsTaskClassification, MultilingualTask):
       primaryClass={cs.CL}
 }
 """,
-        stats={"n_samples": {"test": 4800}, "avg_character_length": {"test": 52.4}},
+        descriptive_stats={
+            "n_samples": {"test": 4800},
+            "avg_character_length": {"test": 52.4},
+        },
     )

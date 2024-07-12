@@ -49,5 +49,8 @@ class ImdbClassification(AbsTaskClassification):
     url = "https://aclanthology.org/P11-1015",
     pages = "142--150",
 }""",
-        stats={"n_samples": {"test": 25000}, "avg_character_length": {"test": 1293.8}},
+        descriptive_stats={
+            "n_samples": {"test": 25000},
+            "avg_character_length": {"test": 1293.8},
+        },
     )

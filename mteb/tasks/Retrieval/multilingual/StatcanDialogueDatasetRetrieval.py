@@ -100,7 +100,7 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
     pages = "2799--2829",
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"dev": 1000, "test": 1011, "corpus": 5907},
             "avg_character_length": {
                 "dev": {

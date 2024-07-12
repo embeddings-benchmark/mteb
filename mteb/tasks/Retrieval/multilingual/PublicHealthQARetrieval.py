@@ -92,7 +92,7 @@ class PublicHealthQARetrieval(MultilingualTask, AbsTaskRetrieval):
 	publisher    = { Hugging Face }
 }
 """,
-        stats={
+        descriptive_stats={
             "n_samples": {"test": 888},
             "avg_character_length": {
                 "test": {
