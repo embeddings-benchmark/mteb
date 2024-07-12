@@ -16,6 +16,7 @@ class AmazonPolarityClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -23,14 +24,12 @@ class AmazonPolarityClassification(AbsTaskClassification):
             "2012-01-01",
             "2015-12-31",
         ),  # Estimated range for the collection of reviews
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{McAuley2013HiddenFA,
   title={Hidden factors and hidden topics: understanding rating dimensions with review text},
   author={Julian McAuley and Jure Leskovec},
@@ -38,6 +37,8 @@ class AmazonPolarityClassification(AbsTaskClassification):
   year={2013},
   url={https://api.semanticscholar.org/CorpusID:6440341}
 }""",
-        n_samples={"test": 400000},
-        avg_character_length={"test": 431.4},
+        descriptive_stats={
+            "n_samples": {"test": 400000},
+            "avg_character_length": {"test": 431.4},
+        },
     )

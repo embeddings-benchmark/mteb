@@ -223,9 +223,27 @@ class MTEBResults(BaseModel):
     def from_dict(cls, data: dict) -> MTEBResults:
         return cls.model_validate(data)
 
+    def _round_scores(self, scores: dict[Split, list[ScoresDict]], n: int) -> None:
+        """Recursively round scores to n decimal places"""
+        for key, value in scores.items():
+            if isinstance(value, dict):
+                self._round_scores(value, n)
+            elif isinstance(value, list):
+                for i, v in enumerate(value):
+                    if isinstance(v, dict):
+                        self._round_scores(v, n)
+                    elif isinstance(v, float):
+                        value[i] = round(v, n)
+
+            elif isinstance(value, float):
+                scores[key] = round(value, n)
+
     def to_disk(self, path: Path) -> None:
+        json_obj = self.model_dump()
+        self._round_scores(json_obj["scores"], 6)
+
         with path.open("w") as f:
-            f.write(self.model_dump_json())
+            json.dump(json_obj, f, indent=2)
 
     @classmethod
     def from_disk(cls, path: Path, load_historic_data: bool = True) -> MTEBResults:  # type: ignore

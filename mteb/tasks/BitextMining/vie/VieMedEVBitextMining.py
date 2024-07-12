@@ -22,26 +22,27 @@ class VieMedEVBitextMining(AbsTaskBitextMining):
         reference="https://aclanthology.org/2015.iwslt-evaluation.11/",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn", "vie-Latn"],
         main_score="f1",
         date=("2024-08-28", "2022-03-28"),
-        form=["written"],
-        domains=["Medical"],
+        domains=["Medical", "Written"],
         task_subtypes=[],
         license="cc-by-nc",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="human-translated and localized",
+        sample_creation="human-translated and localized",
         bibtex_citation="""@inproceedings{medev,
     title     = {{Improving Vietnamese-English Medical Machine Translation}},
     author    = {Nhu Vo and Dat Quoc Nguyen and Dung D. Le and Massimo Piccardi and Wray Buntine},
     booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING)},
     year      = {2024}
 }""",
-        n_samples={"test": TEST_SAMPLES},
-        avg_character_length={"test": 139.23},
+        descriptive_stats={
+            "n_samples": {"test": TEST_SAMPLES},
+            "avg_character_length": {"test": 139.23},
+        },
     )
 
     def dataset_transform(self):

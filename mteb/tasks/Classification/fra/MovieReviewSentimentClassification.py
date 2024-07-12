@@ -17,18 +17,17 @@ class MovieReviewSentimentClassification(AbsTaskClassification):
         reference="https://github.com/TheophileBlard/french-sentiment-analysis-with-bert",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["fra-Latn"],
         main_score="accuracy",
         date=("2006-01-01", "2020-01-01"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="MIT",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @software{blard2020,
   title = {French sentiment analysis with BERT},
@@ -37,8 +36,10 @@ class MovieReviewSentimentClassification(AbsTaskClassification):
   year = {2020},
 }
 """,
-        n_samples={"validation": N_SAMPLES, "test": N_SAMPLES},
-        avg_character_length={"validation": 550.3, "test": 558.1},
+        descriptive_stats={
+            "n_samples": {"validation": N_SAMPLES, "test": N_SAMPLES},
+            "avg_character_length": {"validation": 550.3, "test": 558.1},
+        },
     )
 
     def dataset_transform(self):

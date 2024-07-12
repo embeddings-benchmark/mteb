@@ -15,18 +15,17 @@ class KurdishSentimentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kur-Arab"],
         main_score="accuracy",
         date=("2023-01-01", "2024-01-02"),
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC BY 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=["Sorani"],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @article{article,
             author = {Badawi, Soran and Kazemi, Arefeh and Rezaie, Vali},
@@ -38,6 +37,8 @@ class KurdishSentimentClassification(AbsTaskClassification):
             doi = {10.1007/s10579-023-09716-6}
             }
         """,
-        n_samples={"train": 6000, "test": 1987},
-        avg_character_length={"train": 59.38, "test": 56.11},
+        descriptive_stats={
+            "n_samples": {"train": 6000, "test": 1987},
+            "avg_character_length": {"train": 59.38, "test": 56.11},
+        },
     )

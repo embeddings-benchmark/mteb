@@ -17,6 +17,7 @@ class RomaTalesBitextMining(AbsTaskBitextMining, MultilingualTask):
         reference="https://idoc.pub/documents/idocpub-zpnxm9g35ylv",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs={"rom-hun": ["rom-Latn", "hun-Latn"]},
         main_score="f1",
@@ -24,17 +25,17 @@ class RomaTalesBitextMining(AbsTaskBitextMining, MultilingualTask):
             "1800-01-01",
             "1950-12-31",
         ),  # Broad historical range for the creation of folk tales
-        form=["written"],
-        domains=["Fiction"],
+        domains=["Fiction", "Written"],
         task_subtypes=[],
         license="Not specified",
-        socioeconomic_status="low",
         annotations_creators="expert-annotated",
         dialect=["Lovari"],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="",
-        n_samples={"test": 215},
-        avg_character_length={"test": 316.8046511627907},
+        descriptive_stats={
+            "n_samples": {"test": 215},
+            "avg_character_length": {"test": 316.8046511627907},
+        },
     )
 
     def load_data(self, **kwargs):

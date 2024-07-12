@@ -17,18 +17,17 @@ class RonSTS(AbsTaskSTS):
         reference="https://openreview.net/forum?id=JH61CD7afTv",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ron-Latn"],
         main_score="cosine_spearman",
         date=("2020-01-01", "2021-01-31"),
-        form=["written"],
-        domains=["News", "Social", "Web"],  # web for image captions
+        domains=["News", "Social", "Web", "Written"],  # web for image captions
         task_subtypes=None,
-        license="cc-by-4.0",
-        socioeconomic_status=None,  # not specified
+        license="cc-by-4.0",  # not specified
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="machine-translated and verified",
+        sample_creation="machine-translated and verified",
         bibtex_citation="""
         @inproceedings{dumitrescu2021liro,
             title={LiRo: Benchmark and leaderboard for Romanian language tasks},
@@ -37,8 +36,10 @@ class RonSTS(AbsTaskSTS):
             year={2021}
             }
             """,
-        n_samples={"test": 1379},
-        avg_character_length={"test": 60.5},  # avg across sent1 and sent2
+        descriptive_stats={
+            "n_samples": {"test": 1379},
+            "avg_character_length": {"test": 60.5},
+        },  # avg across sent1 and sent2
     )
 
     @property

@@ -19,18 +19,17 @@ class JSTS(AbsTaskSTS):
         reference="https://aclanthology.org/2022.lrec-1.317.pdf#page=2.00",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["jpn-Jpan"],
         main_score="cosine_spearman",
         date=("2016-01-01", "2022-12-31"),
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=[],
         license="CC BY-SA 4.0",
-        socioeconomic_status="high",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{kurihara-etal-2022-jglue,
     title = "{JGLUE}: {J}apanese General Language Understanding Evaluation",
     author = "Kurihara, Kentaro  and
@@ -58,8 +57,10 @@ class JSTS(AbsTaskSTS):
     pages = "2957--2966",
     abstract = "To develop high-performance natural language understanding (NLU) models, it is necessary to have a benchmark to evaluate and analyze NLU ability from various perspectives. While the English NLU benchmark, GLUE, has been the forerunner, benchmarks are now being released for languages other than English, such as CLUE for Chinese and FLUE for French; but there is no such benchmark for Japanese. We build a Japanese NLU benchmark, JGLUE, from scratch without translation to measure the general NLU ability in Japanese. We hope that JGLUE will facilitate NLU research in Japanese.",
 }""",
-        n_samples={"valudtion": 1457},
-        avg_character_length={"valudtion": 46.34},
+        descriptive_stats={
+            "n_samples": {"valudtion": 1457},
+            "avg_character_length": {"valudtion": 46.34},
+        },
     )
 
     @property

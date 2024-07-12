@@ -23,6 +23,7 @@ class ScalaClassification(AbsTaskClassification, MultilingualTask):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGS,
         main_score="accuracy",
@@ -30,14 +31,12 @@ class ScalaClassification(AbsTaskClassification, MultilingualTask):
             "1990-01-01",
             "2023-01-01",
         ),  # derived from dependency treebank, this a the best guess
-        form=["written"],
-        domains=["Fiction", "News", "Non-fiction", "Blog", "Spoken", "Web"],
+        domains=["Fiction", "News", "Non-fiction", "Blog", "Spoken", "Web", "Written"],
         task_subtypes=["Linguistic acceptability"],
         license="CC BY-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""@inproceedings{nielsen-2023-scandeval,
             title = "{S}cand{E}val: A Benchmark for {S}candinavian Natural Language Processing",
             author = "Nielsen, Dan",
@@ -51,8 +50,10 @@ class ScalaClassification(AbsTaskClassification, MultilingualTask):
             url = "https://aclanthology.org/2023.nodalida-1.20",
             pages = "185--201",
         }""",
-        n_samples={"test": len(_LANGS) * 1024},
-        avg_character_length={"test": 102.72},
+        descriptive_stats={
+            "n_samples": {"test": len(_LANGS) * 1024},
+            "avg_character_length": {"test": 102.72},
+        },
     )
 
     @property

@@ -14,17 +14,16 @@ class TV2Nordretrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/alexandrainst/nordjylland-news-summarization",
         type="Retrieval",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["dan-Latn"],
         main_score="ndcg_at_10",
         date=("2020-01-01", "2024-12-31"),  # best guess
-        form=["written"],
-        domains=["News", "Non-fiction"],
+        domains=["News", "Non-fiction", "Written"],
         license="CC0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{flansmose-mikkelsen-etal-2022-ddisco,
     title = "{DD}is{C}o: A Discourse Coherence Dataset for {D}anish",
     author = "Flansmose Mikkelsen, Linea  and
@@ -53,14 +52,16 @@ class TV2Nordretrieval(AbsTaskRetrieval):
     pages = "2440--2445",
     abstract = "To date, there has been no resource for studying discourse coherence on real-world Danish texts. Discourse coherence has mostly been approached with the assumption that incoherent texts can be represented by coherent texts in which sentences have been shuffled. However, incoherent real-world texts rarely resemble that. We thus present DDisCo, a dataset including text from the Danish Wikipedia and Reddit annotated for discourse coherence. We choose to annotate real-world texts instead of relying on artificially incoherent text for training and testing models. Then, we evaluate the performance of several methods, including neural networks, on the dataset.",
 }""",
-        n_samples={"test": 4096},
-        avg_character_length={
-            "test": {
-                "average_document_length": 1440.66552734375,
-                "average_query_length": 126.552734375,
-                "num_documents": 2048,
-                "num_queries": 2048,
-                "average_relevant_docs_per_query": 1.0,
+        descriptive_stats={
+            "n_samples": {"test": 4096},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 1440.66552734375,
+                    "average_query_length": 126.552734375,
+                    "num_documents": 2048,
+                    "num_queries": 2048,
+                    "average_relevant_docs_per_query": 1.0,
+                },
             },
         },
         task_subtypes=["Article retrieval"],

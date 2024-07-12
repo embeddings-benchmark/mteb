@@ -22,18 +22,17 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
         },
         type="MultilabelClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["por-Latn"],
         main_score="accuracy",
         date=("2019-08-01", "2019-08-16"),
-        form=["written"],
-        domains=["Constructed"],
+        domains=["Constructed", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC BY-SA 4.0",
-        socioeconomic_status="medium",
         annotations_creators="expert-annotated",
         dialect=["brazilian"],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{DBLP:journals/corr/abs-2010-04543,
             author    = {Joao Augusto Leite and
                         Diego F. Silva and
@@ -49,8 +48,10 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
             eprint    = {2010.04543},
             timestamp = {Tue, 15 Dec 2020 16:10:16 +0100},
             }""",
-        n_samples={"test": 2048},
-        avg_character_length={"test": 85.05},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 85.05},
+        },
     )
 
     def dataset_transform(self):

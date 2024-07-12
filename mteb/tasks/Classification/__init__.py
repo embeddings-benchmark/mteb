@@ -123,6 +123,7 @@ from .spa.SpanishNewsClassification import *
 from .spa.SpanishSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
 from .svk.SlovakMovieReviewSentimentClassification import *
+from .swa.SwahiliNewsClassification import *
 from .swe.DalajClassification import *
 from .swe.SwedishSentimentClassification import *
 from .swe.SweRecClassification import *

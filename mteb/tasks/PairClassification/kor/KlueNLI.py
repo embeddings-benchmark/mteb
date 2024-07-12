@@ -16,18 +16,17 @@ class KlueNLI(AbsTaskPairClassification):
         reference="https://arxiv.org/abs/2105.09680",
         type="PairClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["kor-Hang"],
-        main_score="ap",
+        main_score="max_ap",
         date=("2016-01-01", "2020-12-31"),
-        form=["written"],
-        domains=["News", "Encyclopaedic"],
+        domains=["News", "Encyclopaedic", "Written"],
         task_subtypes=["Textual Entailment"],
         license="CC-BY-SA-4.0",
-        socioeconomic_status="high",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{park2021klue,
       title={KLUE: Korean Language Understanding Evaluation}, 
       author={Sungjoon Park and Jihyung Moon and Sungdong Kim and Won Ik Cho and Jiyoon Han and Jangwon Park and Chisung Song and Junseong Kim and Yongsook Song and Taehwan Oh and Joohong Lee and Juhyun Oh and Sungwon Lyu and Younghoon Jeong and Inkwon Lee and Sangwoo Seo and Dongjun Lee and Hyunwoo Kim and Myeonghwa Lee and Seongbo Jang and Seungwon Do and Sunkyoung Kim and Kyungtae Lim and Jongwon Lee and Kyumin Park and Jamin Shin and Seonghyun Kim and Lucy Park and Alice Oh and Jungwoo Ha and Kyunghyun Cho},
@@ -35,9 +34,11 @@ class KlueNLI(AbsTaskPairClassification):
       eprint={2105.09680},
       archivePrefix={arXiv},
       primaryClass={cs.CL}
-}""",
-        n_samples={"validation": 2000},  # 3000 - neutral samples
-        avg_character_length={"validation": 35.01},
+}""",  # 3000 - neutral samples
+        descriptive_stats={
+            "n_samples": {"validation": 2000},
+            "avg_character_length": {"validation": 35.01},
+        },
     )
 
     def dataset_transform(self):

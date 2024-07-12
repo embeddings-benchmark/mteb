@@ -38,18 +38,17 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="mrr_at_5",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""misc{möller2021germanquad,
       title={GermanQuAD and GermanDPR: Improving Non-English Question Answering and Passage Retrieval}, 
       author={Timo Möller and Julian Risch and Malte Pietsch},
@@ -58,15 +57,17 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "average_document_length": 1941.090717299578,
-                "average_query_length": 56.74773139745916,
-                "num_documents": 474,
-                "num_queries": 2204,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 1941.090717299578,
+                    "average_query_length": 56.74773139745916,
+                    "num_documents": 474,
+                    "num_queries": 2204,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

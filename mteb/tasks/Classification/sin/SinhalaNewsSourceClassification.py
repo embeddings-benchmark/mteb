@@ -15,18 +15,17 @@ class SinhalaNewsSourceClassification(AbsTaskClassification):
         reference="https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Source-classification",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["sin-Sinh"],
         main_score="accuracy",
         date=("2021-02-17", "2022-08-20"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="mit",
-        socioeconomic_status="low",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @article{dhananjaya2022,
             author    = {Dhananjaya et al.},
@@ -34,8 +33,10 @@ class SinhalaNewsSourceClassification(AbsTaskClassification):
             journal   = {Year of Publication},
             year      = {2022},
             }""",
-        n_samples={"train": 24094},
-        avg_character_length={"train": 56.08},
+        descriptive_stats={
+            "n_samples": {"train": 24094},
+            "avg_character_length": {"train": 56.08},
+        },
     )
 
     def dataset_transform(self):

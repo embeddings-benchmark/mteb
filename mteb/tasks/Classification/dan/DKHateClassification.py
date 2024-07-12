@@ -15,18 +15,17 @@ class DKHateClassification(AbsTaskClassification):
         reference="https://aclanthology.org/2020.lrec-1.430/",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["dan-Latn"],
         main_score="accuracy",
         date=("2018-01-01", "2018-12-31"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC-BY-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{sigurbergsson-derczynski-2020-offensive,
     title = "Offensive Language and Hate Speech Detection for {D}anish",
     author = "Sigurbergsson, Gudbjartur Ingi  and
@@ -56,8 +55,10 @@ class DKHateClassification(AbsTaskClassification):
     language = "English",
     ISBN = "979-10-95546-34-4",
 }""",
-        n_samples={"test": 329},
-        avg_character_length={"test": 104.0},
+        descriptive_stats={
+            "n_samples": {"test": 329},
+            "avg_character_length": {"test": 104.0},
+        },
     )
 
     @property

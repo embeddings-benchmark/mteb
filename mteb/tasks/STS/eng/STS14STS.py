@@ -16,18 +16,17 @@ class STS14STS(AbsTaskSTS):
         reference="https://www.aclweb.org/anthology/S14-1002",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cosine_spearman",
         date=("2012-01-01", "2012-08-31"),
-        form=["spoken"],
-        domains=["Blog", "Web"],
+        domains=["Blog", "Web", "Spoken"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""@inproceedings{bandhakavi-etal-2014-generating,
     title = "Generating a Word-Emotion Lexicon from {\#}Emotional Tweets",
     author = "Bandhakavi, Anil  and
@@ -46,8 +45,10 @@ class STS14STS(AbsTaskSTS):
     doi = "10.3115/v1/S14-1002",
     pages = "12--21",
 }""",
-        n_samples={"test": 7500},
-        avg_character_length={"test": 54.3},
+        descriptive_stats={
+            "n_samples": {"test": 7500},
+            "avg_character_length": {"test": 54.3},
+        },
     )
 
     @property

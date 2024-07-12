@@ -27,18 +27,17 @@ class IndicNLPNewsClassification(MultilingualTask, AbsTaskClassification):
         reference="https://github.com/AI4Bharat/indicnlp_corpus#indicnlp-news-article-classification-dataset",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
         date=("2020-09-01", "2022-04-09"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         dialect=[],
         task_subtypes=["Topic classification"],
         license="cc-by-nc-4.0",
-        socioeconomic_status="medium",
         annotations_creators="expert-annotated",
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
       @article{kunchukuttan2020indicnlpcorpus,
     title={AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
@@ -46,8 +45,10 @@ class IndicNLPNewsClassification(MultilingualTask, AbsTaskClassification):
     year={2020},
     journal={arXiv preprint arXiv:2005.00085}
 }""",
-        n_samples={"test": 2048},
-        avg_character_length={"test": 1169.053974484789},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 1169.053974484789},
+        },
     )
 
     def dataset_transform(self):

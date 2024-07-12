@@ -15,21 +15,20 @@ class ArEntail(AbsTaskPairClassification):
         reference="https://link.springer.com/article/10.1007/s10579-024-09731-1",
         type="PairClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ara-Arab"],
-        main_score="ap",
+        main_score="max_ap",
         date=(
             "2020-01-01",
             "2024-03-04",
         ),  # best guess based on google searching random samples
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Textual Entailment"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{obeidat2024arentail,
         title={ArEntail: manually-curated Arabic natural language inference dataset from news headlines},
         author={Obeidat, Rasha and Al-Harahsheh, Yara and Al-Ayyoub, Mahmoud and Gharaibeh, Maram},
@@ -38,8 +37,10 @@ class ArEntail(AbsTaskPairClassification):
         year={2024},
         publisher={Springer}
         }""",
-        n_samples={"test": 1000},
-        avg_character_length={"test": 65.77},
+        descriptive_stats={
+            "n_samples": {"test": 1000},
+            "avg_character_length": {"test": 65.77},
+        },
     )
 
     def dataset_transform(self):

@@ -15,18 +15,17 @@ class SpanishSentimentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         date=("2022-08-16", "2022-08-16"),
         eval_splits=["validation", "test"],
         eval_langs=["spa-Latn"],
         main_score="accuracy",
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{mollanorozy-etal-2023-cross,
             title = "Cross-lingual Transfer Learning with \{P\}ersian",
@@ -52,6 +51,8 @@ class SpanishSentimentClassification(AbsTaskClassification):
             pages = "89--95",
         }
         """,
-        n_samples={"validation": 147, "test": 296},
-        avg_character_length={"validation": 85.02, "test": 87.91},
+        descriptive_stats={
+            "n_samples": {"validation": 147, "test": 296},
+            "avg_character_length": {"validation": 85.02, "test": 87.91},
+        },
     )

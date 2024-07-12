@@ -16,18 +16,17 @@ class HindiDiscourseClassification(AbsTaskClassification):
         reference="https://aclanthology.org/2020.lrec-1.149/",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["hin-Deva"],
         main_score="accuracy",
         date=("2019-12-01", "2020-04-09"),
-        form=["written"],
-        domains=["Fiction", "Social"],
+        domains=["Fiction", "Social", "Written"],
         dialect=[],
         task_subtypes=["Discourse coherence"],
         license="MIT",
-        socioeconomic_status="medium",
         annotations_creators="expert-annotated",
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{dhanwal-etal-2020-annotated,
     title = "An Annotated Dataset of Discourse Modes in {H}indi Stories",
@@ -51,8 +50,10 @@ class HindiDiscourseClassification(AbsTaskClassification):
     language = "English",
     ISBN = "979-10-95546-34-4",
 }""",
-        n_samples={"train": 2048},
-        avg_character_length={"train": 79.23828125},
+        descriptive_stats={
+            "n_samples": {"train": 2048},
+            "avg_character_length": {"train": 79.23828125},
+        },
     )
 
     def dataset_transform(self):

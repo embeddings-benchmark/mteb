@@ -17,18 +17,17 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
         reference="https://link.springer.com/chapter/10.1007/978-3-319-18117-2_2",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ara-Arab"],
         main_score="accuracy",
         date=("2014-01-01", "2015-01-01"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="None specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=["ara-arab-EG", "ara-arab-JO", "ara-arab-SA"],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @inproceedings{elsahar2015building,
   title={Building large arabic multi-domain resources for sentiment analysis},
@@ -39,8 +38,10 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
   organization={Springer}
 }
 """,
-        n_samples={"train": N_SAMPLES},
-        avg_character_length={"train": 231.4},
+        descriptive_stats={
+            "n_samples": {"train": N_SAMPLES},
+            "avg_character_length": {"train": 231.4},
+        },
     )
 
     def dataset_transform(self):

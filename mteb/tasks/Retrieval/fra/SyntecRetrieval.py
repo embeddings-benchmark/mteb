@@ -20,18 +20,17 @@ class SyntecRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=_EVAL_SPLITS,
         eval_langs=["fra-Latn"],
         main_score="ndcg_at_10",
         date=None,  # not specified
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="not specified.",
-        socioeconomic_status="high",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""@misc{ciancone2024extending,
       title={Extending the Massive Text Embedding Benchmark to French}, 
       author={Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
@@ -40,15 +39,17 @@ class SyntecRetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples={"test": 90},
-        avg_character_length={
-            "test": {
-                "average_document_length": 1224.2666666666667,
-                "average_query_length": 72.82,
-                "num_documents": 90,
-                "num_queries": 100,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": {"test": 90},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 1224.2666666666667,
+                    "average_query_length": 72.82,
+                    "num_documents": 90,
+                    "num_queries": 100,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

@@ -17,18 +17,17 @@ class CSFDCZMovieReviewSentimentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         date=("2002-06-28", "2020-03-13"),
         eval_splits=["test"],
         eval_langs=["ces-Latn"],
         main_score="accuracy",
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC-BY-SA-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @misc{štefánik2023resources,
       title={Resources and Few-shot Learners for In-context Learning in Slavic Languages}, 
@@ -39,8 +38,10 @@ class CSFDCZMovieReviewSentimentClassification(AbsTaskClassification):
       primaryClass={cs.CL}
 }
 """,
-        n_samples={"test": N_SAMPLES},
-        avg_character_length={"test": 386.5},
+        descriptive_stats={
+            "n_samples": {"test": N_SAMPLES},
+            "avg_character_length": {"test": 386.5},
+        },
     )
 
     @property

@@ -23,18 +23,17 @@ class KorHateClassification(AbsTaskClassification):
         reference="https://paperswithcode.com/dataset/korean-hatespeech-dataset",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["kor-Hang"],
         main_score="accuracy",
         date=("2018-01-01", "2020-01-01"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{moon2020beep,
             title={BEEP! Korean Corpus of Online News Comments for Toxic Speech Detection}, 
@@ -44,8 +43,10 @@ class KorHateClassification(AbsTaskClassification):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
-        n_samples={"train": 2048, "test": 471},
-        avg_character_length={"train": 38.57, "test": 38.86},
+        descriptive_stats={
+            "n_samples": {"train": 2048, "test": 471},
+            "avg_character_length": {"train": 38.57, "test": 38.86},
+        },
     )
 
     def dataset_transform(self):
