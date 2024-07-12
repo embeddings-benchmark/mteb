@@ -41,7 +41,7 @@ class E5InstructWrapper(Encoder):
         revision: str,
         max_length: int,
         max_batch_size: Optional[int] = None,
-        device: str = "cpu",
+        device: str = torch.device("cuda" if torch.cuda.is_available() else "cpu"),
         **kwargs: Any,
     ):
         logger.info("Started loading e5 instruct model")

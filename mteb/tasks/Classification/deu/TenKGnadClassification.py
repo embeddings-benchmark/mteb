@@ -17,18 +17,17 @@ class TenKGnadClassification(AbsTaskClassification):
         },
         type="Classification",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="accuracy",
         date=("2015-06-01", "2016-05-31"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="medium",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @InProceedings{Schabus2017,
                 Author    = {Dietmar Schabus and Marcin Skowron and Martin Trapp},
@@ -41,6 +40,8 @@ class TenKGnadClassification(AbsTaskClassification):
                 Month     = aug
                 }
         """,
-        n_samples={"test": 1028},
-        avg_character_length={"test": 2627.31},
+        descriptive_stats={
+            "n_samples": {"test": 1028},
+            "avg_character_length": {"test": 2627.31},
+        },
     )

@@ -16,6 +16,7 @@ class EmotionClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -23,14 +24,12 @@ class EmotionClassification(AbsTaskClassification):
             "2017-01-01",
             "2018-12-31",
         ),  # Estimated range for the collection of Twitter messages
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{saravia-etal-2018-carer,
     title = "{CARER}: Contextualized Affect Representations for Emotion Recognition",
     author = "Saravia, Elvis  and
@@ -52,8 +51,10 @@ class EmotionClassification(AbsTaskClassification):
     pages = "3687--3697",
     abstract = "Emotions are expressed in nuanced ways, which varies by collective or individual experiences, knowledge, and beliefs. Therefore, to understand emotion, as conveyed through text, a robust mechanism capable of capturing and modeling different linguistic nuances and phenomena is needed. We propose a semi-supervised, graph-based algorithm to produce rich structural descriptors which serve as the building blocks for constructing contextualized affect representations from text. The pattern-based representations are further enriched with word embeddings and evaluated through several emotion recognition tasks. Our experimental results demonstrate that the proposed method outperforms state-of-the-art techniques on emotion recognition tasks.",
 }""",
-        n_samples={"validation": 2000, "test": 2000},
-        avg_character_length={"validation": 95.3, "test": 95.6},
+        descriptive_stats={
+            "n_samples": {"validation": 2000, "test": 2000},
+            "avg_character_length": {"validation": 95.3, "test": 95.6},
+        },
     )
 
     @property

@@ -16,18 +16,17 @@ class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
         reference="https://aclanthology.org/2021.findings-emnlp.250/",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ita-Latn"],
         main_score="accuracy",
         date=("2021-01-01", "2021-12-31"),
-        form=["written"],
-        domains=["Non-fiction", "Spoken"],
+        domains=["Non-fiction", "Spoken", "Written"],
         dialect=[],
         task_subtypes=["Linguistic acceptability"],
         license="unknown",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{trotta-etal-2021-monolingual-cross,
     title = "Monolingual and Cross-Lingual Acceptability Judgments with the {I}talian {C}o{LA} corpus",
@@ -45,8 +44,10 @@ class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
     pages = "2929--2940"
 }
         """,
-        n_samples={"train": 7801, "test": 975},
-        avg_character_length={"train": 35.95, "test": 36.67},
+        descriptive_stats={
+            "n_samples": {"train": 7801, "test": 975},
+            "avg_character_length": {"train": 35.95, "test": 36.67},
+        },
     )
 
     def dataset_transform(self):

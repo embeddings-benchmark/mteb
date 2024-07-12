@@ -9,8 +9,7 @@ class MultiSubsetLoader:
         if self.data_loaded:
             return
 
-        fast_loading = self.fast_loading if hasattr(self, "fast_loading") else False
-        if fast_loading:
+        if hasattr(self, "fast_loading") and self.fast_loading:
             self.fast_load()
         else:
             self.slow_load()
@@ -25,15 +24,15 @@ class MultiSubsetLoader:
         """
         self.dataset = {}
         merged_dataset = datasets.load_dataset(
-            **self.metadata_dict["dataset"]
+            **self.metadata.dataset
         )  # load "default" subset
         for split in merged_dataset.keys():
             df_split = merged_dataset[split].to_polars()
-            df_grouped = dict(df_split.group_by("lang"))
+            df_grouped = dict(df_split.group_by(["lang"]))
             for lang in set(df_split["lang"].unique()) & set(self.hf_subsets):
                 self.dataset.setdefault(lang, {})
                 self.dataset[lang][split] = datasets.Dataset.from_polars(
-                    df_grouped[lang].drop("lang")
+                    df_grouped[(lang,)].drop("lang")
                 )  # Remove lang column and convert back to HF datasets, not strictly necessary but better for compatibility
         for lang, subset in self.dataset.items():
             self.dataset[lang] = datasets.DatasetDict(subset)
@@ -44,5 +43,5 @@ class MultiSubsetLoader:
         for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
                 name=lang,
-                **self.metadata_dict.get("dataset", None),
+                **self.metadata.dataset,
             )

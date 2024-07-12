@@ -72,6 +72,7 @@ import json
 import logging
 from pathlib import Path
 
+import torch
 import yaml
 
 import mteb
@@ -105,7 +106,12 @@ def run(args: argparse.Namespace) -> None:
 
     logger.info("Running with parameters: %s", args)
 
-    model = mteb.get_model(args.model, args.model_revision, device=args.device)
+    if args.device is None:
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+    else:
+        device = args.device
+
+    model = mteb.get_model(args.model, args.model_revision, device=device)
 
     tasks = mteb.get_tasks(
         categories=args.categories,
@@ -115,6 +121,10 @@ def run(args: argparse.Namespace) -> None:
     )
     eval = mteb.MTEB(tasks=tasks)
 
+    encode_kwargs = {}
+    if args.batch_size is not None:
+        encode_kwargs["batch_size"] = args.batch_size
+
     eval.run(
         model,
         verbosity=args.verbosity,
@@ -122,6 +132,7 @@ def run(args: argparse.Namespace) -> None:
         eval_splits=args.eval_splits,
         co2_tracker=args.co2_tracker,
         overwrite_results=args.overwrite,
+        encode_kwargs=encode_kwargs,
     )
 
     _save_model_metadata(model, Path(args.output_folder))
@@ -223,6 +234,12 @@ def add_run_parser(subparsers) -> None:
         type=str,
         default=None,
         help="Revision of the model to be loaded. Revisions are automatically read if the model is loaded from huggingface.",
+    )
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=None,
+        help="Batch size of the encode. Will be passed to the MTEB as MTEB.evaluate(model, encode_kwargs = {'batch_size': value}).",
     )
     parser.add_argument(
         "--overwrite",

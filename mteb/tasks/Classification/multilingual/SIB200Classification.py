@@ -220,26 +220,31 @@ class SIB200Classification(MultilingualTask, AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train", "validation", "test"],
         eval_langs=_LANGS,
         main_score="accuracy",
         date=("2023-09-14", "2024-01-27"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="cc-by-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",  # expert annotated for English --> human translations
         dialect=[],
-        text_creation="human-translated and localized",
+        sample_creation="human-translated and localized",
         bibtex_citation="""@article{adelani2023sib,
             title={SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
             author={Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
             journal={arXiv preprint arXiv:2309.07445},
             year={2023}
         }""",
-        n_samples={"train": 701, "validation": 99, "test": 204},
-        avg_character_length={"train": 111.24, "validation": 97.11, "test": 135.53},
+        descriptive_stats={
+            "n_samples": {"train": 701, "validation": 99, "test": 204},
+            "avg_character_length": {
+                "train": 111.24,
+                "validation": 97.11,
+                "test": 135.53,
+            },
+        },
     )
 
     def dataset_transform(self):

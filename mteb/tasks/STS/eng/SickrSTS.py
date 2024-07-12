@@ -16,18 +16,17 @@ class SickrSTS(AbsTaskSTS):
         reference="https://aclanthology.org/2020.lrec-1.207",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cosine_spearman",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{dadas-etal-2020-evaluation,
     title = "Evaluation of Sentence Representations in {P}olish",
     author = "Dadas, Slawomir  and
@@ -58,8 +57,7 @@ class SickrSTS(AbsTaskSTS):
     language = "English",
     ISBN = "979-10-95546-34-4",
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     @property

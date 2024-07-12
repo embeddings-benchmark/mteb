@@ -15,19 +15,18 @@ class TwitterSemEval2015PC(AbsTaskPairClassification):
         description="Paraphrase-Pairs of Tweets from the SemEval 2015 workshop.",
         reference="https://alt.qcri.org/semeval2015/task1/",
         category="s2s",
+        modalities=["text"],
         type="PairClassification",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ap",
+        main_score="max_ap",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{xu-etal-2015-semeval,
         title = "{S}em{E}val-2015 Task 1: Paraphrase and Semantic Similarity in {T}witter ({PIT})",
         author = "Xu, Wei  and
@@ -46,8 +45,10 @@ class TwitterSemEval2015PC(AbsTaskPairClassification):
         doi = "10.18653/v1/S15-2001",
         pages = "1--11",
     }""",
-        n_samples={"test": 16777},
-        avg_character_length={"test": 38.3},
+        descriptive_stats={
+            "n_samples": {"test": 16777},
+            "avg_character_length": {"test": 38.3},
+        },
     )
 
     def dataset_transform(self):

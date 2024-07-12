@@ -18,21 +18,22 @@ class TenKGnadClusteringP2P(AbsTaskClustering):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="v_measure",
         date=None,
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="mixed",
         annotations_creators=None,
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation=None,
-        n_samples={"test": 45914},
-        avg_character_length={"test": 2641.03},
+        descriptive_stats={
+            "n_samples": {"test": 45914},
+            "avg_character_length": {"test": 2641.03},
+        },
     )
 
 
@@ -50,6 +51,7 @@ class TenKGnadClusteringP2PFast(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="v_measure",
@@ -57,17 +59,18 @@ class TenKGnadClusteringP2PFast(AbsTaskClusteringFast):
             "2000-01-01",
             "2020-12-31",
         ),  # since it is news it is guessed that it is from 2000 to 2020
-        form=["written"],
-        domains=["News", "Non-fiction"],
+        domains=["News", "Non-fiction", "Written"],
         task_subtypes=None,
         license="cc-by-sa-4.0",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation=None,  # none found
-        n_samples={"test": 10275},  # due to duplicates
-        avg_character_length={"test": 2641.03},
+        # due to duplicates
+        descriptive_stats={
+            "n_samples": {"test": 10275},
+            "avg_character_length": {"test": 2641.03},
+        },
     )
 
     def dataset_transform(self) -> None:

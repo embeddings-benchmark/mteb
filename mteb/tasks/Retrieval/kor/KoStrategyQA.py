@@ -16,32 +16,33 @@ class KoStrategyQA(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["kor-Hang"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@article{geva2021strategyqa,
   title = {{Did Aristotle Use a Laptop? A Question Answering Benchmark with Implicit Reasoning Strategies}},
   author = {Geva, Mor and Khashabi, Daniel and Segal, Elad and Khot, Tushar and Roth, Dan and Berant, Jonathan},
   journal = {Transactions of the Association for Computational Linguistics (TACL)},
   year = {2021},
 }""",
-        n_samples=None,
-        avg_character_length={
-            "dev": {
-                "average_document_length": 319.25953950924225,
-                "average_query_length": 22.75337837837838,
-                "num_documents": 9251,
-                "num_queries": 592,
-                "average_relevant_docs_per_query": 1.9341216216216217,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "dev": {
+                    "average_document_length": 319.25953950924225,
+                    "average_query_length": 22.75337837837838,
+                    "num_documents": 9251,
+                    "num_queries": 592,
+                    "average_relevant_docs_per_query": 1.9341216216216217,
+                }
+            },
         },
     )

@@ -8,11 +8,12 @@ from copy import copy
 from datetime import datetime
 from pathlib import Path
 from time import time
-from typing import Iterable
+from typing import Any, Iterable
 
 import datasets
+from sentence_transformers import SentenceTransformer
 
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
 
@@ -246,21 +247,36 @@ class MTEB:
             task.load_data()
 
     @staticmethod
-    def _run_eval(task, model, split, output_folder, **kwargs):
+    def _run_eval(
+        task: AbsTask,
+        model: Encoder,
+        split,
+        output_folder,
+        *,
+        encode_kwargs: dict[str, Any],
+        **kwargs: Any,
+    ):
         tick = time()
-        results = task.evaluate(model, split, output_folder=output_folder, **kwargs)
+        results = task.evaluate(
+            model,
+            split,
+            output_folder=output_folder,
+            encode_kwargs=encode_kwargs,
+            **kwargs,
+        )
         tock = time()
         return results, tick, tock
 
     def run(
         self,
-        model: Encoder | EncoderWithQueryCorpusEncode,
+        model: SentenceTransformer | Encoder,
         verbosity: int = 1,
         output_folder: str | None = "results",
         eval_splits=None,
         overwrite_results: bool = False,
         raise_error: bool = True,
         co2_tracker: bool = False,
+        encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ):
         """Run the evaluation pipeline on the selected tasks.
@@ -277,11 +293,19 @@ class MTEB:
             overwrite_results: Whether to overwrite existing results.
             raise_error: Whether to raise an error if an exception occurs during evaluation.
             co2_tracker: Whether to enable or disable CO2 emissions tracker using codecarbon.
+            encode_kwargs: Additional keyword arguments to be passed to the model.encode method.
             kwargs: Additional arguments to be passed to `_run_eval` method and task.load_data.
 
         Returns:
             A list of MTEBResults objects, one for each task evaluated.
         """
+        if "batch_size" in kwargs:
+            logger.warning(
+                "The `batch_size` argument is deprecated and will be removed in the next release. "
+                + "Please use `encode_kwargs = {'batch_size': ...}` to set the batch size instead."
+            )
+            encode_kwargs["batch_size"] = kwargs["batch_size"]
+
         # Set logging
         if verbosity < 2:
             datasets.logging.set_verbosity(40)
@@ -344,7 +368,12 @@ class MTEB:
                             save_to_file=False, save_to_api=False, logging_logger=logger
                         ) as tracker:
                             results, tick, tock = self._run_eval(
-                                task, model, split, output_folder, **kwargs
+                                task,
+                                model,
+                                split,
+                                output_folder,
+                                encode_kwargs=encode_kwargs,
+                                **kwargs,
                             )
 
                         kg_co2_emissions += (
@@ -352,7 +381,12 @@ class MTEB:
                         )  # expressed as kilograms of CO₂-equivalents
                     else:
                         results, tick, tock = self._run_eval(
-                            task, model, split, output_folder, **kwargs
+                            task,
+                            model,
+                            split,
+                            output_folder,
+                            encode_kwargs=encode_kwargs,
+                            **kwargs,
                         )
 
                     logger.info(

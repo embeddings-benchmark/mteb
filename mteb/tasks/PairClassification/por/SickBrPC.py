@@ -17,18 +17,17 @@ class SickBrPC(AbsTaskPairClassification):
         reference="https://linux.ime.usp.br/~thalen/SICK_PT.pdf",
         type="PairClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["por-Latn"],
-        main_score="ap",
+        main_score="max_ap",
         date=("2018-01-01", "2018-09-01"),  # rough estimate
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=["Textual Entailment"],
         license="unknown",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="human-translated and localized",
+        sample_creation="human-translated and localized",
         bibtex_citation="""
         @inproceedings{real18,
         author="Real, Livy
@@ -50,8 +49,10 @@ class SickBrPC(AbsTaskPairClassification):
         isbn="978-3-319-99722-3"
         }
         """,
-        n_samples={"test": N_SAMPLES},
-        avg_character_length={"test": 54.89},
+        descriptive_stats={
+            "n_samples": {"test": N_SAMPLES},
+            "avg_character_length": {"test": 54.89},
+        },
     )
 
     def dataset_transform(self):

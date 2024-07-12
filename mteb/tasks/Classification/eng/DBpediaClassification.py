@@ -16,18 +16,17 @@ class DBpediaClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-01-25", "2022-01-25"),
-        form=["written"],
-        domains=["Encyclopaedic"],
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=["Topic classification"],
         license="cc-by-sa-3.0",
-        socioeconomic_status="low",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @inproceedings{NIPS2015_250cf8b5,
             author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
@@ -41,8 +40,10 @@ class DBpediaClassification(AbsTaskClassification):
             year = {2015}
             }
         """,
-        n_samples={"test": 70000},
-        avg_character_length={"test": 281.40},
+        descriptive_stats={
+            "n_samples": {"test": 70000},
+            "avg_character_length": {"test": 281.40},
+        },
     )
 
     def dataset_transform(self):

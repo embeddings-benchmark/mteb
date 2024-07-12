@@ -15,18 +15,17 @@ class BengaliDocumentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ben-Beng"],
         main_score="accuracy",
         date=("2022-05-01", "2023-05-01"),
-        form=["written"],
         dialect=[],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=[],
         license="CC BY-NC-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{akash-etal-2023-shironaam,
             title = "Shironaam: {B}engali News Headline Generation using Auxiliary Information",
@@ -43,8 +42,10 @@ class BengaliDocumentClassification(AbsTaskClassification):
             pages = "52--67"
         }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 1658.1},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 1658.1},
+        },
     )
 
     def dataset_transform(self) -> None:

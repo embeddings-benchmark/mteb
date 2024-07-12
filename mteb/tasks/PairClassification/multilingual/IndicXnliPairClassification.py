@@ -37,19 +37,18 @@ class IndicXnliPairClassification(AbsTaskPairClassification, MultilingualTask):
         """,
         reference="https://gem-benchmark.com/data_cards/opusparcus",
         category="s2s",
+        modalities=["text"],
         type="PairClassification",
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
-        main_score="ap",
+        main_score="max_ap",
         date=("2022-04-22", "2022-10-06"),
-        form=["written"],
-        domains=["Non-fiction", "Fiction", "Government"],
+        domains=["Non-fiction", "Fiction", "Government", "Written"],
         task_subtypes=None,
         license="cc-by-4.0",
-        socioeconomic_status="low",
         annotations_creators="derived",
         dialect=[],
-        text_creation="machine-translated",
+        sample_creation="machine-translated",
         bibtex_citation="""
         @misc{aggarwal_gupta_kunch_22,
             doi = {10.48550/ARXIV.2204.08776},
@@ -61,8 +60,10 @@ class IndicXnliPairClassification(AbsTaskPairClassification, MultilingualTask):
             copyright = {Creative Commons Attribution 4.0 International}
         }
         """,
-        n_samples={"test": 5010},
-        avg_character_length={"test": 77.24},  # average of premise and hypothesis
+        descriptive_stats={
+            "n_samples": {"test": 5010},
+            "avg_character_length": {"test": 77.24},
+        },  # average of premise and hypothesis
     )
 
     def dataset_transform(self) -> None:

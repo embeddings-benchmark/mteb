@@ -6,6 +6,7 @@ import torch
 
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
+from mteb.models.text_formatting_utils import corpus_to_texts
 
 from .instructions import task_to_instruction
 
@@ -42,6 +43,12 @@ class LLM2VecWrapper:
         if "task_to_instructions" in kwargs:
             self.task_to_instructions = kwargs.pop("task_to_instructions")
 
+        if "device" in kwargs:
+            kwargs["device_map"] = kwargs.pop("device")
+        elif torch.cuda.device_count() > 1:
+            # bug fix for multi-gpu
+            kwargs["device_map"] = None
+
         self.model = LLM2Vec.from_pretrained(*args, **extra_kwargs, **kwargs)
 
     def encode(
@@ -70,24 +77,7 @@ class LLM2VecWrapper:
         prompt_name: str = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        sep = " "
-        if isinstance(corpus, Dict):
-            sentences = [
-                (corpus["title"][i] + sep + corpus["text"][i]).strip()
-                if "title" in corpus
-                else corpus["text"][i].strip()  # type: ignore
-                for i in range(len(corpus["text"]))  # type: ignore
-            ]
-        else:
-            if isinstance(corpus[0], str):
-                sentences = corpus
-            else:
-                sentences = [
-                    (doc["title"] + sep + doc["text"]).strip()
-                    if "title" in doc
-                    else doc["text"].strip()
-                    for doc in corpus
-                ]
+        sentences = corpus_to_texts(corpus, sep=" ")
         sentences = [["", sentence] for sentence in sentences]
         return self.model.encode(sentences, **kwargs)
 

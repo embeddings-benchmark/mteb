@@ -17,6 +17,7 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
         description="",
         reference="https://arxiv.org/abs/1908.11828",
         category="s2s",
+        modalities=["text"],
         type="PairClassification",
         eval_splits=["test", "validation"],
         eval_langs={
@@ -28,16 +29,14 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
             "ko": ["kor-Hang"],
             "zh": ["cmn-Hans"],
         },
-        main_score="ap",
+        main_score="max_ap",
         date=("2016-01-01", "2018-12-31"),
-        form=["written"],
-        domains=["Web", "Encyclopaedic"],
+        domains=["Web", "Encyclopaedic", "Written"],
         task_subtypes=["Textual Entailment"],
         license="Custom (commercial)",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="human-translated",
+        sample_creation="human-translated",
         bibtex_citation="""@misc{yang2019pawsx,
       title={PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification}, 
       author={Yinfei Yang and Yuan Zhang and Chris Tar and Jason Baldridge},
@@ -46,8 +45,10 @@ class PawsX(MultilingualTask, AbsTaskPairClassification):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples={"validation": 14000, "test": 14000},
-        avg_character_length={"validation": 91.2, "test": 91.1},
+        descriptive_stats={
+            "n_samples": {"validation": 14000, "test": 14000},
+            "avg_character_length": {"validation": 91.2, "test": 91.1},
+        },
     )
 
     def dataset_transform(self):

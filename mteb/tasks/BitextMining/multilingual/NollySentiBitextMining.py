@@ -23,18 +23,17 @@ class NollySentiBitextMining(AbsTaskBitextMining, MultilingualTask):
         reference="https://github.com/IyanuSh/NollySenti",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=_LANGUAGES,
         main_score="f1",
         date=("2022-01-01", "2023-01-01"),
-        form=["written"],
-        domains=["Social", "Reviews"],
+        domains=["Social", "Reviews", "Written"],
         task_subtypes=[],
         license="CC BY-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{shode2023nollysenti,
             title={NollySenti: Leveraging Transfer Learning and Machine Translation for Nigerian Movie Sentiment Classification},
@@ -44,6 +43,8 @@ class NollySentiBitextMining(AbsTaskBitextMining, MultilingualTask):
             year={2023}
         }
         """,
-        n_samples={"train": 1640},
-        avg_character_length={"train": 135.91},
+        descriptive_stats={
+            "n_samples": {"train": 1640},
+            "avg_character_length": {"train": 135.91},
+        },
     )

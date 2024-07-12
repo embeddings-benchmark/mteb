@@ -18,18 +18,17 @@ class SyntecReranking(AbsTaskReranking):
         },
         type="Reranking",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="map",
         date=("2022-12-01", "2022-12-02"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=None,
         license="CC BY-NC-SA 4.0",
-        socioeconomic_status=None,
         annotations_creators="human-annotated",
         dialect=None,
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{ciancone2024extending,
       title={Extending the Massive Text Embedding Benchmark to French}, 
       author={Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
@@ -38,8 +37,7 @@ class SyntecReranking(AbsTaskReranking):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     def load_data(self, **kwargs):

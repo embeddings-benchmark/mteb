@@ -19,18 +19,17 @@ class LEMBNarrativeQARetrieval(AbsTaskRetrieval):
         description=("narrativeqa subset of dwzhu/LongEmbed dataset."),
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("1000-01-01", "2017-12-31"),
-        form=["written"],
-        domains=["Fiction", "Non-fiction"],
+        domains=["Fiction", "Non-fiction", "Written"],
         task_subtypes=["Article retrieval"],
         license="Not specified",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @article{kocisky-etal-2018-narrativeqa,
             title = "The {N}arrative{QA} Reading Comprehension Challenge",
@@ -56,15 +55,17 @@ class LEMBNarrativeQARetrieval(AbsTaskRetrieval):
             abstract = "",
         }
         """,
-        n_samples={_EVAL_SPLIT: 10804},
-        avg_character_length={
-            "test": {
-                "average_document_length": 326753.5323943662,
-                "average_query_length": 47.89453536223562,
-                "num_documents": 355,
-                "num_queries": 10449,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": {_EVAL_SPLIT: 10804},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 326753.5323943662,
+                    "average_query_length": 47.89453536223562,
+                    "num_documents": 355,
+                    "num_queries": 10449,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

@@ -20,28 +20,29 @@ class NLPJournalAbsIntroRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2s",
+        modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["jpn-Jpan"],
         main_score="ndcg_at_10",
         date=("2000-01-01", "2023-12-31"),
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",
-        n_samples={_EVAL_SPLIT: 404},
-        avg_character_length={
-            "test": {
-                "average_document_length": 2052.8611111111113,
-                "average_query_length": 439.2772277227723,
-                "num_documents": 504,
-                "num_queries": 404,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": {_EVAL_SPLIT: 404},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 2052.8611111111113,
+                    "average_query_length": 439.2772277227723,
+                    "num_documents": 504,
+                    "num_queries": 404,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

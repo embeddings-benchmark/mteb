@@ -16,18 +16,17 @@ class RUParaPhraserSTS(AbsTaskSTS):
         reference="https://aclanthology.org/2020.ngt-1.6",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
         main_score="cosine_spearman",
         date=("2009-01-01", "2019-01-01"),  # rough estimate,
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=[],
         license="MIT",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{gudkov-etal-2020-automatically,
           title = "Automatically Ranked {R}ussian Paraphrase Corpus for Text Generation",
@@ -52,8 +51,10 @@ class RUParaPhraserSTS(AbsTaskSTS):
           organization={Springer}
         }
         """,
-        n_samples={"test": 1924},
-        avg_character_length={"test": 61.25},
+        descriptive_stats={
+            "n_samples": {"test": 1924},
+            "avg_character_length": {"test": 61.25},
+        },
     )
 
     @property

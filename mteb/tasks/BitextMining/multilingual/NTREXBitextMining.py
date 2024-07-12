@@ -237,6 +237,7 @@ def extend_lang_pairs() -> dict[str, list[str]]:
                         x.replace("_", "-"),
                         y.replace("_", "-"),
                     ]
+
     return hf_lang_subset2isolang
 
 
@@ -256,21 +257,22 @@ class NTREXBitextMining(AbsTaskBitextMining, MultilingualTask):
         reference="https://huggingface.co/datasets/davidstap/NTREX",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=_SPLIT,
         eval_langs=_EVAL_LANGS,
         main_score="f1",
         # publication date newstest19 until publication date NTREX paper
         date=("2019-08-01", "2022-11-01"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=[],
         license="CC-BY-SA-4.0",
-        socioeconomic_status="medium",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="human-translated and localized",
-        n_samples={"test": _N * len(_EVAL_LANGS)},
-        avg_character_length={"test": 120},
+        sample_creation="human-translated and localized",
+        descriptive_stats={
+            "n_samples": {"test": _N * len(_EVAL_LANGS)},
+            "avg_character_length": {"test": 120},
+        },
         bibtex_citation="""
 @inproceedings{federmann-etal-2022-ntrex,
     title = "{NTREX}-128 {--} News Test References for {MT} Evaluation of 128 Languages",
@@ -290,5 +292,5 @@ class NTREXBitextMining(AbsTaskBitextMining, MultilingualTask):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.data_loaded = True

@@ -18,6 +18,7 @@ class TenKGnadClusteringS2S(AbsTaskClustering):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="v_measure",
@@ -26,18 +27,19 @@ class TenKGnadClusteringS2S(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation=None,
-        n_samples={"test": 45914},
-        avg_character_length={"test": 50.96},
+        descriptive_stats={
+            "n_samples": {"test": 45914},
+            "avg_character_length": {"test": 50.96},
+        },
     )
 
 
 class TenKGnadClusteringS2SFast(AbsTaskClusteringFast):
-    max_document_to_embed = 10275
+    max_document_to_embed = 10267
     max_fraction_of_documents_to_embed = None
 
     metadata = TaskMetadata(
@@ -50,6 +52,7 @@ class TenKGnadClusteringS2SFast(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="v_measure",
@@ -57,17 +60,18 @@ class TenKGnadClusteringS2SFast(AbsTaskClusteringFast):
             "2000-01-01",
             "2020-12-31",
         ),  # since it is news it is guessed that it is from 2000 to 2020
-        form=["written"],
-        domains=["News", "Non-fiction"],
+        domains=["News", "Non-fiction", "Written"],
         task_subtypes=None,
         license="cc-by-sa-4.0",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation=None,  # none found
-        n_samples={"test": 10275},  # due to duplicates
-        avg_character_length={"test": 50.96},
+        # due to duplicates
+        descriptive_stats={
+            "n_samples": {"test": 10267},
+            "avg_character_length": {"test": 50.96},
+        },
     )
 
     def dataset_transform(self) -> None:

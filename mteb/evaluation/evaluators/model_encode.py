@@ -14,6 +14,14 @@ logger = logging.getLogger(__name__)
 def model_encode(
     sentences: Sequence[str], *, model: Encoder, prompt_name: str | None, **kwargs
 ) -> np.ndarray:
+    """A wrapper function around the model.encode method that handles the prompt_name argument and standardizes the output to a numpy array.
+
+    Args:
+        sentences: The sentences to encode
+        model: The model to use for encoding
+        prompt_name: The prompt name to use for encoding
+        **kwargs: Additional arguments to pass to the model.encode method
+    """
     kwargs["prompt_name"] = prompt_name
     if hasattr(model, "prompts"):
         # check if prompts is an empty dict
@@ -31,6 +39,6 @@ def model_encode(
 
     embeddings = model.encode(sentences, **kwargs)
     if isinstance(embeddings, torch.Tensor):
-        embeddings = embeddings.cpu().detach()
+        embeddings = embeddings.cpu().detach().float()
 
     return np.asarray(embeddings)
