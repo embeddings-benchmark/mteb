@@ -35,26 +35,27 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
         reference="https://github.com/PhilipMay/stsb-multi-mt/",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=_SPLITS,
         eval_langs=_LANGUAGES,
         main_score="cosine_spearman",
         date=("2012-01-01", "2017-12-31"),
-        form=["spoken", "written"],
-        domains=["News", "Social", "Web"],
+        domains=["News", "Social", "Web", "Spoken", "Written"],
         task_subtypes=[],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="machine-translated",
+        sample_creation="machine-translated",
         bibtex_citation="""@InProceedings{huggingface:dataset:stsb_multi_mt,
         title = {Machine translated multilingual STS benchmark dataset.},
         author={Philip May},
         year={2021},
         url={https://github.com/PhilipMay/stsb-multi-mt}
         }""",
-        n_samples={"dev": 30000, "test": 27580},
-        avg_character_length={"dev": 66.5, "test": 56.1},
+        descriptive_stats={
+            "n_samples": {"dev": 30000, "test": 27580},
+            "avg_character_length": {"dev": 66.5, "test": 56.1},
+        },
     )
 
     @property

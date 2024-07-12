@@ -38,19 +38,18 @@ class LanguageClassification(AbsTaskClassification):
         description="A language identification dataset for 20 languages.",
         reference="https://huggingface.co/datasets/papluca/language-identification",
         category="s2s",
+        modalities=["text"],
         type="Classification",
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
         date=("2021-11-01", "2021-11-30"),
-        form=["written"],
-        domains=["Reviews", "Web", "Non-fiction", "Fiction", "Government"],
+        domains=["Reviews", "Web", "Non-fiction", "Fiction", "Government", "Written"],
         task_subtypes=["Language identification"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@InProceedings{conneau2018xnli,
   author = {Conneau, Alexis
                  and Rinott, Ruty
@@ -66,8 +65,10 @@ class LanguageClassification(AbsTaskClassification):
   publisher = {Association for Computational Linguistics},
   location = {Brussels, Belgium},
 }""",
-        n_samples={"test": 2048},
-        avg_character_length={"test": 107.8},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 107.8},
+        },
     )
 
     def dataset_transform(self) -> None:

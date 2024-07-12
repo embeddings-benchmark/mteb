@@ -16,18 +16,17 @@ class RuReviewsClassification(AbsTaskClassification):
         reference="https://github.com/sismetanin/rureviews",
         type="Classification",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
         main_score="accuracy",
         date=("2000-01-01", "2020-01-01"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="apache-2.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@INPROCEEDINGS{Smetanin-SA-2019,
         author={Sergey Smetanin and Michail Komarov},
         booktitle={2019 IEEE 21st Conference on Business Informatics (CBI)},
@@ -40,8 +39,10 @@ class RuReviewsClassification(AbsTaskClassification):
         ISSN={2378-1963},
         month={July}
         }""",
-        n_samples={"test": 2048},
-        avg_character_length={"test": 133.2},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 133.2},
+        },
     )
 
     def dataset_transform(self):

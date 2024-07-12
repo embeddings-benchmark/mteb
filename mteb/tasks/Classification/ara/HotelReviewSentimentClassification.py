@@ -18,18 +18,17 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
         reference="https://link.springer.com/chapter/10.1007/978-3-319-67056-0_3",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ara-Arab"],
         main_score="accuracy",
         date=("2016-06-01", "2016-07-31"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=["ara-arab-EG", "ara-arab-JO", "ara-arab-LB", "ara-arab-SA"],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @article{elnagar2018hotel,
   title={Hotel Arabic-reviews dataset construction for sentiment analysis applications},
@@ -40,8 +39,10 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
   publisher={Springer}
 }
 """,
-        n_samples={"train": N_SAMPLES},
-        avg_character_length={"train": 137.2},
+        descriptive_stats={
+            "n_samples": {"train": N_SAMPLES},
+            "avg_character_length": {"train": 137.2},
+        },
     )
 
     def dataset_transform(self):

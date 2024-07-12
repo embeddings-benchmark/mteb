@@ -16,18 +16,17 @@ class JavaneseIMDBClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         date=("2021-06-24", "2021-06-24"),
         eval_splits=["test"],
         eval_langs=["jav-Latn"],
         main_score="accuracy",
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="MIT",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{wongso2021causal,
             title={Causal and Masked Language Modeling of Javanese Language using Transformer-based Architectures},
@@ -38,8 +37,10 @@ class JavaneseIMDBClassification(AbsTaskClassification):
             organization={IEEE}
         }
         """,
-        n_samples={"test": 25_000},
-        avg_character_length={"test": 481.83},
+        descriptive_stats={
+            "n_samples": {"test": 25_000},
+            "avg_character_length": {"test": 481.83},
+        },
     )
 
     def dataset_transform(self):

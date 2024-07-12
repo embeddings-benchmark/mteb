@@ -15,18 +15,17 @@ class BengaliSentimentAnalysis(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ben-Beng"],
         main_score="f1",
         date=("2020-06-24", "2020-11-26"),
-        form=["written"],
         dialect=[],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC BY 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{sazzed2020cross,
         title={Cross-lingual sentiment classification in low-resource Bengali language},
         author={Sazzed, Salim},
@@ -34,8 +33,10 @@ class BengaliSentimentAnalysis(AbsTaskClassification):
         pages={50--60},
         year={2020}
         }""",
-        n_samples={"train": 11807},
-        avg_character_length={"train": 69.66},
+        descriptive_stats={
+            "n_samples": {"train": 11807},
+            "avg_character_length": {"train": 69.66},
+        },
     )
 
     def dataset_transform(self):

@@ -132,18 +132,19 @@ class TatoebaBitextMining(AbsTaskBitextMining, MultilingualTask):
         reference="https://github.com/facebookresearch/LASER/tree/main/data/tatoeba/v1",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="f1",
         date=("2006-01-01", "2021-12-31"),  # Estimated range
-        form=["written"],
-        domains=[],  # Tatoeba corpus includes a wide range of topics and domains
+        domains=[
+            "Written"
+        ],  # Tatoeba corpus includes a wide range of topics and domains
         task_subtypes=[],
         license="CC BY 2.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],  # No specific dialect mentioned
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{tatoeba,
         author = {Tatoeba community},
@@ -151,6 +152,8 @@ class TatoebaBitextMining(AbsTaskBitextMining, MultilingualTask):
         year = {2021},
         }
         """,
-        n_samples={"test": 2000},
-        avg_character_length={"test": 39.4},
+        descriptive_stats={
+            "n_samples": {"test": 2000},
+            "avg_character_length": {"test": 39.4},
+        },
     )

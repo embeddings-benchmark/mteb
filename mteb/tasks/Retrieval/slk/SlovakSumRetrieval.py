@@ -23,18 +23,17 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["slk-Latn"],
         main_score="ndcg_at_10",
         date=("2015-04-26", "2022-01-11"),
-        form=["written"],
-        domains=["News", "Social", "Web"],
+        domains=["News", "Social", "Web", "Written"],
         task_subtypes=["Article retrieval"],
         license="openrail",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @inproceedings{OndrejowaSlovakSum24,
                 title = {SlovakSum: A Large Scale Slovak Summarization Dataset},
@@ -43,15 +42,17 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
                 date = {2024},
             }
         """,
-        n_samples={"test": 600},
-        avg_character_length={
-            "test": {
-                "average_document_length": 2156.445,
-                "average_query_length": 143.59833333333333,
-                "num_documents": 600,
-                "num_queries": 600,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": {"test": 600},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 2156.445,
+                    "average_query_length": 143.59833333333333,
+                    "num_documents": 600,
+                    "num_queries": 600,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

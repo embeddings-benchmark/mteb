@@ -24,18 +24,17 @@ class KorHateSpeechMLClassification(AbsTaskMultilabelClassification):
         reference="https://paperswithcode.com/dataset/korean-multi-label-hate-speech-dataset",
         type="MultilabelClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kor-Hang"],
         main_score="accuracy",
         date=("2018-01-01", "2020-06-30"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{lee-etal-2022-k,
             title = "K-{MH}a{S}: A Multi-label Hate Speech Detection Dataset in {K}orean Online News Comment",
@@ -54,8 +53,10 @@ class KorHateSpeechMLClassification(AbsTaskMultilabelClassification):
             url = "https://aclanthology.org/2022.coling-1.311",
             pages = "3530--3538",
         }""",
-        n_samples={"train": 8192, "test": 2048},
-        avg_character_length={"train": 33.67, "test": 34.67},
+        descriptive_stats={
+            "n_samples": {"train": 8192, "test": 2048},
+            "avg_character_length": {"train": 33.67, "test": 34.67},
+        },
     )
 
     def dataset_transform(self):

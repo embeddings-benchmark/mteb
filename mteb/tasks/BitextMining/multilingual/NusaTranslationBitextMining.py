@@ -30,18 +30,17 @@ class NusaTranslationBitextMining(AbsTaskBitextMining, MultilingualTask):
         reference="https://huggingface.co/datasets/indonlp/nusatranslation_mt",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=_LANGUAGES,
         main_score="f1",
         date=("2021-08-01", "2022-07-01"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=[],
         license="CC BY-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""
         @inproceedings{cahyawijaya2023nusawrites,
             title={NusaWrites: Constructing High-Quality Corpora for Underrepresented and Extremely Low-Resource Languages},
@@ -52,6 +51,8 @@ class NusaTranslationBitextMining(AbsTaskBitextMining, MultilingualTask):
         }
 
         """,
-        n_samples={"train": 50200},
-        avg_character_length={"train": 147.01},
+        descriptive_stats={
+            "n_samples": {"train": 50200},
+            "avg_character_length": {"train": 147.01},
+        },
     )

@@ -17,18 +17,17 @@ class JaQuADRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2202.01764",
         type="Retrieval",
         category="p2p",
+        modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["jpn-Jpan"],
         main_score="ndcg_at_10",
         date=("2022-01-01", "2022-12-31"),  # approximate guess
-        form=["written"],
-        domains=["Encyclopaedic", "Non-fiction"],
+        domains=["Encyclopaedic", "Non-fiction", "Written"],
         task_subtypes=["Question answering"],
         license="CC-BY-SA-3.0",
-        socioeconomic_status="high",
         annotations_creators="human-annotated",
         dialect=None,
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{so2022jaquad,
     title={{JaQuAD: Japanese Question Answering Dataset for Machine Reading Comprehension}},
     author={ByungHoon So and Kyuhong Byun and Kyungwon Kang and Seongjin Cho},
@@ -37,15 +36,17 @@ class JaQuADRetrieval(AbsTaskRetrieval):
     archivePrefix={arXiv},
     primaryClass={cs.CL}
 }""",
-        n_samples={"validation": 2048},
-        avg_character_length={
-            "validation": {
-                "average_document_length": 155.80922362309224,
-                "average_query_length": 30.826171875,
-                "num_documents": 3014,
-                "num_queries": 2048,
-                "average_relevant_docs_per_query": 2.0,
-            }
+        descriptive_stats={
+            "n_samples": {"validation": 2048},
+            "avg_character_length": {
+                "validation": {
+                    "average_document_length": 155.80922362309224,
+                    "average_query_length": 30.826171875,
+                    "num_documents": 3014,
+                    "num_queries": 2048,
+                    "average_relevant_docs_per_query": 2.0,
+                }
+            },
         },
     )
 

@@ -18,21 +18,22 @@ class SwedishSentimentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["swe-Latn"],
         main_score="accuracy",
         date=("2021-01-01", "2022-01-01"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",
-        n_samples={"validation": N_SAMPLES, "test": N_SAMPLES},
-        avg_character_length={"validation": 499.3, "test": 498.1},
+        descriptive_stats={
+            "n_samples": {"validation": N_SAMPLES, "test": N_SAMPLES},
+            "avg_character_length": {"validation": 499.3, "test": 498.1},
+        },
     )
 
     def dataset_transform(self):

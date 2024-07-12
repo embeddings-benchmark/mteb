@@ -18,18 +18,17 @@ class RuBQRetrieval(AbsTaskRetrieval):
         reference="https://openreview.net/pdf?id=P5UQFFoQ4PJ",
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
         main_score="ndcg_at_10",
         date=("2001-01-01", "2021-01-01"),
-        form=["written"],
-        domains=["Encyclopaedic"],
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=["Question answering"],
         license="cc-by-sa-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""@inproceedings{RuBQ2021,
         title={RuBQ 2.0: An Innovated Russian Question Answering Dataset},
         author={Ivan Rybin and Vladislav Korablinov and Pavel Efimov and Pavel Braslavski},
@@ -37,14 +36,16 @@ class RuBQRetrieval(AbsTaskRetrieval):
         year={2021},
         pages={532--547}
         }""",
-        n_samples={"test": 2845},
-        avg_character_length={
-            "test": {
-                "average_document_length": 448.94659134903037,
-                "average_query_length": 45.29609929078014,
-                "num_documents": 56826,
-                "num_queries": 1692,
-                "average_relevant_docs_per_query": 1.6814420803782506,
-            }
+        descriptive_stats={
+            "n_samples": {"test": 2845},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 448.94659134903037,
+                    "average_query_length": 45.29609929078014,
+                    "num_documents": 56826,
+                    "num_queries": 1692,
+                    "average_relevant_docs_per_query": 1.6814420803782506,
+                }
+            },
         },
     )

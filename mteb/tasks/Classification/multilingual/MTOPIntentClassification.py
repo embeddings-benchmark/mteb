@@ -25,19 +25,18 @@ class MTOPIntentClassification(MultilingualTask, AbsTaskClassification):
         description="MTOP: Multilingual Task-Oriented Semantic Parsing",
         reference="https://arxiv.org/pdf/2008.09335.pdf",
         category="s2s",
+        modalities=["text"],
         type="Classification",
         eval_splits=["validation", "test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
         date=("2020-01-01", "2020-12-31"),
-        form=["spoken"],
-        domains=["Spoken"],
+        domains=["Spoken", "Spoken"],
         task_subtypes=[],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""@inproceedings{li-etal-2021-mtop,
     title = "{MTOP}: A Comprehensive Multilingual Task-Oriented Semantic Parsing Benchmark",
     author = "Li, Haoran  and
@@ -60,6 +59,8 @@ class MTOPIntentClassification(MultilingualTask, AbsTaskClassification):
     abstract = "Scaling semantic parsing models for task-oriented dialog systems to new languages is often expensive and time-consuming due to the lack of available datasets. Available datasets suffer from several shortcomings: a) they contain few languages b) they contain small amounts of labeled examples per language c) they are based on the simple intent and slot detection paradigm for non-compositional queries. In this paper, we present a new multilingual dataset, called MTOP, comprising of 100k annotated utterances in 6 languages across 11 domains. We use this dataset and other publicly available datasets to conduct a comprehensive benchmarking study on using various state-of-the-art multilingual pre-trained models for task-oriented semantic parsing. We achieve an average improvement of +6.3 points on Slot F1 for the two existing multilingual datasets, over best results reported in their experiments. Furthermore, we demonstrate strong zero-shot performance using pre-trained models combined with automatic translation and alignment, and a proposed distant supervision method to reduce the noise in slot label projection.",
 }
 """,
-        n_samples={"validation": 2235, "test": 4386},
-        avg_character_length={"validation": 36.5, "test": 36.8},
+        descriptive_stats={
+            "n_samples": {"validation": 2235, "test": 4386},
+            "avg_character_length": {"validation": 36.5, "test": 36.8},
+        },
     )

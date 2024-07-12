@@ -16,18 +16,17 @@ class UrduRomanSentimentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         date=("2018-01-01", "2018-08-28"),
         eval_splits=["train"],
         eval_langs=["urd-Latn"],
         main_score="f1",
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="MIT",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{misc_roman_urdu_data_set_458,
   author       = {Sharf,Zareen},
@@ -37,8 +36,10 @@ class UrduRomanSentimentClassification(AbsTaskClassification):
   note         = {{DOI}: https://doi.org/10.24432/C58325}
 }
     """,
-        n_samples={"train": 2048},
-        avg_character_length={"train": 68.248},
+        descriptive_stats={
+            "n_samples": {"train": 2048},
+            "avg_character_length": {"train": 68.248},
+        },
     )
 
     def dataset_transform(self):

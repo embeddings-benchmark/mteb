@@ -20,21 +20,22 @@ class RuSciBenchOECDClusteringP2P(AbsTaskClusteringFast):
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench/",
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
         main_score="v_measure",
         date=("1999-01-01", "2024-01-01"),
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",
-        n_samples={"test": 2048},
-        avg_character_length={"test": 838.9},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 838.9},
+        },
     )
 
     def dataset_transform(self):
