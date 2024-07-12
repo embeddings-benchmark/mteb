@@ -10,6 +10,7 @@ import pytest
 from sentence_transformers import SentenceTransformer
 
 import mteb
+from mteb import AbsTaskInstructionRetrieval
 from mteb.benchmarks import Benchmark
 
 from .mock_models import MockNumpyEncoder, MockTorchbf16Encoder, MockTorchEncoder
@@ -51,6 +52,8 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
     _task_name = (
         task_name.metadata.name if isinstance(task_name, mteb.AbsTask) else task_name
     )
+    if isinstance(task_name, AbsTaskInstructionRetrieval):
+        pytest.skip(reason="Instruction retrival override prompt")
 
     class MockEncoderWithInstructions(mteb.Encoder):
         def encode(self, sentences, prompt_name: str | None = None, **kwargs):
