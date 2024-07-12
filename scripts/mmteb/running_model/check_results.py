@@ -77,6 +77,20 @@ def filter_results(
     return _results
 
 
+def normalize_results(results):
+    for model_name, revisions in results.items():
+        for rev, tasks_results in revisions.items():
+            for task_result in tasks_results:
+                try:
+                    task_result.validate_and_filter_scores()
+                except Exception:
+                    print(
+                        f"Error validating and filtering scores for {model_name} {rev} {task_result.task_name}. Some splits are missing"
+                    )
+                    # print(e)
+    return results
+
+
 model_names = [
     "sentence-transformers/all-MiniLM-L6-v2",
     "sentence-transformers/all-MiniLM-L12-v2",
@@ -131,11 +145,12 @@ retrieval_to_be_downsampled = [
     "Quora-PL",
     "QuoraRetrieval",
 ]
+not_include = ["MSMARCOv2"]
 
 tasks_which_should_be_there = [
     t
     for t in tasks_which_should_be_there
-    if t.metadata.name not in retrieval_to_be_downsampled
+    if t.metadata.name not in (retrieval_to_be_downsampled + not_include)
 ]
 
 mteb_results = mteb.load_results()
@@ -153,11 +168,19 @@ mteb_results = filter_results(
     mteb_results, tasks=tasks_which_should_be_there, models=models
 )
 
+_mteb_results = normalize_results(mteb_results)
+mteb_results = _mteb_results
+
+# [t.task_name for t in mteb_results['GritLM/GritLM-7B']["13f00a0e36500c80ce12870ea513846a066004af"] if t.task_name == "SemRel24STS"]
+# it is there
+
 assert [
     len(revisions.keys()) == 1 for model, revisions in mteb_results.items()
 ], "Some models have more than one revision"
 
 results_df = results_to_dataframe(mteb_results)
+
+# results_df[results_df["task"] == "SemRel24STS"]  # still there
 
 wide_table = results_df.pivot_table(
     index=["model", "revision"],
@@ -180,7 +203,6 @@ for model in nans.index:
     for task, split, lang in nans.columns:
         if task not in t_names:
             continue
-
         if task == nan_tasks:
             continue
         value = nans.loc[model, (task, split, lang)]
@@ -193,3 +215,31 @@ for model in nans.index:
 
 with open("missing_tasks.txt", "w") as f:
     f.write(sav_str)
+
+
+# import mteb
+
+# # running a model to ensure that the code works as expected
+# task = mteb.get_task("FloresBitextMining")
+# mdl = models[0].load_model()
+
+# eval = mteb.MTEB(tasks = [task])
+# results = eval.run(mdl)
+# result = results[0]
+# result.validate_and_filter_scores() # sucess
+
+
+# len(set([s for s in task.metadata.hf_subsets_to_langscripts])) # 506
+
+# # fetch from existing results
+# grit_lm = [t for t in mteb_results["GritLM/GritLM-7B"]["13f00a0e36500c80ce12870ea513846a066004af"] if t.task_name == "FloresBitextMining"][0]
+
+# grit_lm.validate_and_filter_scores() # fails
+# # ValueError: Missing subsets {'ben_Beng-urd_Arab', 'sat_Olck-mal_Mlym', 'mar_Deva-snd_Deva', 'mar_Deva-san_Deva', 'mai_Deva-pan_Guru', 'sat_Olck-mni_Mtei', ...
+# # KCE: have checked the results the keys are not present in the scores
+
+# grit_lm.scores.keys() # ["test"]
+# result.scores.keys() # ["test"]
+
+# len(grit_lm.scores["devtest"]) # 20706
+# len(result.scores["devtest"]) # 41412
