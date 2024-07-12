@@ -28,12 +28,12 @@ nomic_embed = ModelMeta(
         sentence_transformers_loader,
         trust_remote_code=True,
         model_name="nomic-ai/nomic-embed-text-v1.5",
-        revision=None,
+        revision="b0753ae76394dd36bcfb912a46018088bca48be0",
     ),
     name="nomic-ai/nomic-embed-text-v1.5",
     languages=["eng-Latn"],
     open_source=True,
-    revision=None,
+    revision="b0753ae76394dd36bcfb912a46018088bca48be0",
     release_date="2024-02-10",  # first commit
 )
 

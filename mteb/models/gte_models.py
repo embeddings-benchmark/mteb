@@ -2,22 +2,20 @@ from __future__ import annotations
 
 from functools import partial
 
-import torch
-
 from mteb.model_meta import ModelMeta
 
 from .instructions import task_to_instruction
 
 
-def sfr_loader(**kwargs):
+def gte_loader(**kwargs):
     try:
         from gritlm import GritLM
     except ImportError:
         raise ImportError(
-            "Please install `pip install gritlm` to use SFR_Embedding_2_R."
+            "Please install `pip install gritlm` to use gte-Qwen2-7B-instruct."
         )
 
-    class SFRWrapper(GritLM):
+    class GTEWrapper(GritLM):
         def get_detailed_instruct(self, instruction: str, query: str) -> str:
             return f"Instruct: {instruction}\nQuery: "
 
@@ -35,30 +33,31 @@ def sfr_loader(**kwargs):
             return super().encode_corpus(*args, **kwargs)
 
     kwargs.pop("device", None)  # GritLM does automatic device placement
-    return SFRWrapper(**kwargs)
+    return GTEWrapper(**kwargs)
 
 
-SFR_Embedding_2_R = ModelMeta(
+gte_Qwen2_7B_instruct = ModelMeta(
     loader=partial(
-        sfr_loader,
-        model_name_or_path="Salesforce/SFR-Embedding-2_R",
+        gte_loader,
+        model_name_or_path="Alibaba-NLP/gte-Qwen2-7B-instruct",
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
-        torch_dtype=torch.bfloat16,
+        torch_dtype="auto",
         # The ST script does not normalize while the HF one does so unclear what to do
-        # https://huggingface.co/Salesforce/SFR-Embedding-2_R
+        # https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct#sentence-transformers
         normalized=True,
     ),
-    name="Salesforce/SFR-Embedding-2_R",
-    languages=["eng_Latn"],
+    name="Alibaba-NLP/gte-Qwen2-7B-instruct",
+    languages=None,
     open_source=True,
-    revision="91762139d94ed4371a9fa31db5551272e0b83818",
-    release_date="2024-06-14",  # initial commit of hf model.
+    revision="e26182b2122f4435e8b3ebecbf363990f409b45b",
+    release_date="2024-06-15",  # initial commit of hf model.
 )
+
 
 if __name__ == "__main__":
     import mteb
 
-    mdl = mteb.get_model(SFR_Embedding_2_R.name, SFR_Embedding_2_R.revision)
+    mdl = mteb.get_model(gte_Qwen2_7B_instruct.name, gte_Qwen2_7B_instruct.revision)
     emb = mdl.encode(["Hello, world!"])
