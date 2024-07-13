@@ -6,6 +6,8 @@ from mteb.model_meta import ModelMeta
 
 from .instructions import task_to_instruction
 
+def gte_instruction(instruction: str) -> str:
+    return f"Instruct: {instruction}\nQuery: "
 
 def gte_loader(**kwargs):
     try:
@@ -16,23 +18,20 @@ def gte_loader(**kwargs):
         )
 
     class GTEWrapper(GritLM):
-        def get_detailed_instruct(self, instruction: str, query: str) -> str:
-            return f"Instruct: {instruction}\nQuery: "
-
         def encode(self, *args, **kwargs):
-            instruction = ""
-            if ("prompt_name" in kwargs) and (kwargs.get("is_query", True)):
-                instruction = self.get_detailed_instruct(
-                    task_to_instruction(kwargs.pop("prompt_name"))
-                )
-            kwargs["instruction"] = instruction
+            if ("prompt_name" in kwargs):
+                if ("instruction" in kwargs): 
+                    raise ValueError("Cannot specify both `prompt_name` and `instruction`.")
+                instruction = task_to_instruction(kwargs.pop("prompt_name"), kwargs.pop("is_query", True))
+            else:
+                instruction = kwargs.pop("instruction", "")
+            if instruction:
+                kwargs["instruction"] = gte_instruction(instruction)
             return super().encode(*args, **kwargs)
 
         def encode_corpus(self, *args, **kwargs):
             kwargs["is_query"] = False
             return super().encode_corpus(*args, **kwargs)
-
-    kwargs.pop("device", None)  # GritLM does automatic device placement
     return GTEWrapper(**kwargs)
 
 
