@@ -54,6 +54,7 @@ mteb = "mteb.cli:main"
 dev = ["ruff>=0.0.254", "pytest", "pytest-xdist", "pytest-coverage"]
 codecarbon = ["codecarbon"]
 speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]
+bm25 = ["bm25s>=0.1.7", "PyStemmer>=2.2.0.1"]
 
 [tool.coverage.report]
 
