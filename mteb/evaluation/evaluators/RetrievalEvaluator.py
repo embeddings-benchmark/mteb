@@ -488,6 +488,14 @@ class RetrievalEvaluator(Evaluator):
 
         if self.is_cross_encoder:
             return self.retriever.search_cross_encoder(corpus, queries, self.top_k)
+        elif self.retriever.model.mteb_model_meta.name == "bm25s":
+            return self.retriever.model.search(
+                corpus,
+                queries,
+                self.top_k,
+                self.score_function,
+                prompt_name=self.task_name,  # type: ignore
+            )
         else:
             return self.retriever.search(
                 corpus,

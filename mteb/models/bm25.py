@@ -1,18 +1,19 @@
 import logging
 from functools import partial
-from typing import List, Optional, Union
+from typing import Any, List, Optional, Union
 
 import bm25s
 import Stemmer
 
-from mteb.evaluation.evaluators.RetrievalEvaluator import DenseRetrievalExactSearch
+from mteb.evaluation.evaluators.RetrievalEvaluator import DRESModel
 from mteb.model_meta import ModelMeta
+from mteb.models.text_formatting_utils import corpus_to_texts
 
 logger = logging.getLogger(__name__)
 
 
-class BM25Search(DenseRetrievalExactSearch):
-    """Override dense retrieval with BM25 search"""
+class BM25Search(DRESModel):
+    """BM25 search"""
 
     def __init__(
         self,
@@ -34,6 +35,10 @@ class BM25Search(DenseRetrievalExactSearch):
         # optional: create a stemmer
         self.stemmer = Stemmer.Stemmer(stemmer_language) if stemmer_language else None
 
+    @classmethod
+    def name(self):
+        return "bm25s"
+
     def search(
         self,
         corpus: dict[str, dict[str, str]],
@@ -48,7 +53,7 @@ class BM25Search(DenseRetrievalExactSearch):
         corpus_with_ids = [{"doc_id": cid, **corpus[cid]} for cid in corpus_ids]
 
         corpus_texts = [
-            "\n".join([doc["title"], doc["text"]]) for doc in corpus_with_ids
+            "\n".join([doc.get("title", ""), doc["text"]]) for doc in corpus_with_ids
         ]  # concatenate all document values (title, text, ...)
         encoded_corpus = self.encode(corpus_texts)
 
@@ -94,9 +99,24 @@ class BM25Search(DenseRetrievalExactSearch):
 
     def encode(self, texts: List[str], **kwargs):
         """Encode input text as term vectors"""
-        return bm25s.tokenize(
-            texts, stopwords=self.stopwords, stemmer=self.stemmer, **kwargs
-        )
+        return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
+
+    def encode_queries(
+        self,
+        queries: list[str],
+        batch_size: int = 32,
+        **kwargs: Any,
+    ):
+        return self.encode(queries, kwargs=kwargs)
+
+    def encode_corpus(
+        self,
+        corpus: list[dict[str, str]] | dict[str, list[str]],
+        batch_size: int = 32,
+        **kwargs: Any,
+    ):
+        sentences = corpus_to_texts(corpus)
+        return self.encode(sentences, kwargs=kwargs)
 
 
 bm25_s = ModelMeta(
