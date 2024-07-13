@@ -43,3 +43,4 @@ jobs:
             git add docs/tasks.md
             git commit -m "Update tasks table"
             git push
+          fi
