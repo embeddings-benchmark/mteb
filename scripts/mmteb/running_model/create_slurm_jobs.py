@@ -61,8 +61,8 @@ if __name__ == "__main__":
     slurm_prefix = """#!/bin/bash
 #SBATCH --job-name=mteb
 #SBATCH --nodes=1
-#SBATCH --partition=a3mixed
-#SBATCH --gres=gpu:1                 # number of gpus
+#SBATCH --partition=a3
+#SBATCH --gres=gpu:8                 # number of gpus
 #SBATCH --time 24:00:00             # maximum execution time (HH:MM:SS)
 #SBATCH --output=/data/niklas/jobs/%x-%j.out           # output file name
 #SBATCH --exclusive
@@ -83,7 +83,7 @@ if __name__ == "__main__":
         #"intfloat/multilingual-e5-large-instruct",
         #"intfloat/e5-mistral-7b-instruct",
         "GritLM/GritLM-7B",
-        #"GritLM/GritLM-8x7B",
+        # "GritLM/GritLM-8x7B",
         #"intfloat/multilingual-e5-small",
         #"intfloat/multilingual-e5-base",
         #"intfloat/multilingual-e5-large",
@@ -104,33 +104,20 @@ if __name__ == "__main__":
             "Summarization",
         ],
         tasks=[
-            "LivedoorNewsClustering",
+            #"LivedoorNewsClustering",
             #"FaithDial",
-            #"STS22",
             #"StatcanDialogueDatasetRetrieval",
-            #"WikipediaRetrievalMultilingual"
-            #"RARbMath"
-            #"Touche2020",
-            #"WebLINXCandidatesReranking",
-            #"MultiLongDocRetrieval",
-            #"CodeEditSearchRetrieval",
-
+            #"STS22",
+            #"IN22GenBitextMining",
+            #"IN22ConvBitextMining",
+            #"FloresBitextMining",
+            # "WikipediaRetrievalMultilingual"
+            # "RARbMath"
+            # "Touche2020",
+            # "WebLINXCandidatesReranking",
+            # "MultiLongDocRetrieval",
+            # "CodeEditSearchRetrieval",
         ],
-    )
-
-    tasks = mteb.get_tasks(
-        task_types=[
-            "BitextMining",
-            "Classification",
-            "MultilabelClassification",
-            "PairClassification",
-            "Reranking",
-            "STS",
-            "Summarization",
-            "Clustering",
-            "InstructionRetrieval",
-            "Retrieval",
-        ]
     )
 
     # WE ALSO NEED TO RUN THESE
