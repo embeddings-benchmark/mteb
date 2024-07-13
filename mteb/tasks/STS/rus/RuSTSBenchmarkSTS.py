@@ -17,26 +17,27 @@ class RuSTSBenchmarkSTS(AbsTaskSTS):
         reference="https://github.com/PhilipMay/stsb-multi-mt/",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
         main_score="cosine_spearman",
         date=("2012-01-01", "2018-01-01"),
-        form=["written"],
-        domains=["News", "Social", "Web"],
+        domains=["News", "Social", "Web", "Written"],
         task_subtypes=[],
         license="cc-by-sa-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="machine-translated and verified",
+        sample_creation="machine-translated and verified",
         bibtex_citation="""@InProceedings{huggingface:dataset:stsb_multi_mt,
 title = {Machine translated multilingual STS benchmark dataset.},
 author={Philip May},
 year={2021},
 url={https://github.com/PhilipMay/stsb-multi-mt}
 }""",
-        n_samples={"test": 1264},
-        avg_character_length={"test": 54.2},
+        descriptive_stats={
+            "n_samples": {"test": 1264},
+            "avg_character_length": {"test": 54.2},
+        },
     )
 
     @property

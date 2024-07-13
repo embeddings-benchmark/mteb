@@ -17,18 +17,17 @@ class JSICK(AbsTaskSTS):
         reference="https://github.com/sbintuitions/JMTEB",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],
         main_score="cosine_spearman",
         date=("2000-01-01", "2012-12-31"),  # best guess
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @article{yanaka2022compositional,
             title={Compositional Evaluation on Japanese Textual Entailment and Similarity},
@@ -40,8 +39,10 @@ class JSICK(AbsTaskSTS):
             publisher={MIT Press One Broadway, 12th Floor, Cambridge, Massachusetts 02142, USA~…}
         }
         """,
-        n_samples={"test": 1986},
-        avg_character_length={"test": 21.47},
+        descriptive_stats={
+            "n_samples": {"test": 1986},
+            "avg_character_length": {"test": 21.47},
+        },
     )
 
     @property

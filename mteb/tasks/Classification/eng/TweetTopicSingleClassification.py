@@ -21,18 +21,17 @@ class TweetTopicSingleClassification(AbsTaskClassification):
         reference="https://arxiv.org/abs/2209.09824",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test_2021"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2019-09-01", "2021-08-31"),
-        form=["written"],
-        domains=["Social", "News"],
+        domains=["Social", "News", "Written"],
         task_subtypes=["Topic classification"],
         license="Other",
-        socioeconomic_status="medium",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{dimosthenis-etal-2022-twitter,
             title = "{T}witter {T}opic {C}lassification",
@@ -49,8 +48,10 @@ class TweetTopicSingleClassification(AbsTaskClassification):
             publisher = "International Committee on Computational Linguistics"
         }
         """,
-        n_samples={"test_2021": 1693},
-        avg_character_length={"test_2021": 167.66},
+        descriptive_stats={
+            "n_samples": {"test_2021": 1693},
+            "avg_character_length": {"test_2021": 167.66},
+        },
     )
 
     def dataset_transform(self):

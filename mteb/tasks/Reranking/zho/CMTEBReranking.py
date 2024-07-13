@@ -15,6 +15,7 @@ class T2Reranking(AbsTaskReranking):
         },
         type="Reranking",
         category="s2s",
+        modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["cmn-Hans"],
         main_score="map",
@@ -23,10 +24,9 @@ class T2Reranking(AbsTaskReranking):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{xie2023t2ranking,
       title={T2Ranking: A large-scale Chinese Benchmark for Passage Ranking}, 
       author={Xiaohui Xie and Qian Dong and Bingning Wang and Feiyang Lv and Ting Yao and Weinan Gan and Zhijing Wu and Xiangsheng Li and Haitao Li and Yiqun Liu and Jin Ma},
@@ -35,8 +35,7 @@ class T2Reranking(AbsTaskReranking):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
 
@@ -51,6 +50,7 @@ class MMarcoReranking(AbsTaskReranking):
         },
         type="Reranking",
         category="s2s",
+        modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["cmn-Hans"],
         main_score="map",
@@ -59,10 +59,9 @@ class MMarcoReranking(AbsTaskReranking):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{bonifacio2021mmarco,
       title={mMARCO: A Multilingual Version of MS MARCO Passage Ranking Dataset}, 
       author={Luiz Henrique Bonifacio and Vitor Jeronymo and Hugo Queiroz Abonizio and Israel Campiotti and Marzieh Fadaee and  and Roberto Lotufo and Rodrigo Nogueira},
@@ -71,8 +70,7 @@ class MMarcoReranking(AbsTaskReranking):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
 
@@ -87,18 +85,17 @@ class CMedQAv1(AbsTaskReranking):
         },
         type="Reranking",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="map",
         date=("2017-01-01", "2017-07-26"),
-        form=["written"],
-        domains=["Medical"],
+        domains=["Medical", "Written"],
         task_subtypes=[],
         license="not specified.",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{zhang2017chinese,
   title={Chinese Medical Question Answer Matching Using End-to-End Character-Level Multi-Scale CNNs},
   author={Zhang, Sheng and Zhang, Xin and Wang, Hui and Cheng, Jiajun and Li, Pei and Ding, Zhaoyun},
@@ -109,8 +106,10 @@ class CMedQAv1(AbsTaskReranking):
   year={2017},
   publisher={Multidisciplinary Digital Publishing Institute}
 }""",
-        n_samples={"test": 2000},
-        avg_character_length={"test": 165},
+        descriptive_stats={
+            "n_samples": {"test": 2000},
+            "avg_character_length": {"test": 165},
+        },
     )
 
 
@@ -125,6 +124,7 @@ class CMedQAv2(AbsTaskReranking):
         },
         type="Reranking",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="map",
@@ -133,10 +133,9 @@ class CMedQAv2(AbsTaskReranking):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@ARTICLE{8548603, 
 author={S. Zhang and X. Zhang and H. Wang and L. Guo and S. Liu}, 
 journal={IEEE Access}, 
@@ -149,6 +148,5 @@ keywords={Biomedical imaging;Data mining;Semantics;Medical services;Feature extr
 doi={10.1109/ACCESS.2018.2883637}, 
 ISSN={2169-3536}, 
 month={},}""",
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )

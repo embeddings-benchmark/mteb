@@ -109,18 +109,17 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining, MultilingualTask):
         reference="https://github.com/google-research-datasets/indic-gen-bench/",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=_SPLIT,
         eval_langs=_LANGUAGES_MAPPING,
         main_score="f1",
         date=("2023-10-01", "2024-05-01"),
-        form=["written"],
-        domains=["Web", "News"],
+        domains=["Web", "News", "Written"],
         task_subtypes=[],
         license="CC-BY-SA-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="human-translated and localized",
+        sample_creation="human-translated and localized",
         bibtex_citation="""@misc{singh2024indicgenbench,
       title={IndicGenBench: A Multilingual Benchmark to Evaluate Generation Capabilities of LLMs on Indic Languages}, 
       author={Harman Singh and Nitish Gupta and Shikhar Bharadwaj and Dinesh Tewari and Partha Talukdar},
@@ -129,8 +128,10 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining, MultilingualTask):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples={"validation": 997, "test": 1012},
-        avg_character_length={"validation": 126.25, "test": 130.84},
+        descriptive_stats={
+            "n_samples": {"validation": 997, "test": 1012},
+            "avg_character_length": {"validation": 126.25, "test": 130.84},
+        },
     )
 
     def load_data(self, **kwargs: Any) -> None:

@@ -16,18 +16,17 @@ class Touche2020(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@dataset{potthast_2022_6862281,
   author       = {Potthast, Martin and
                   Gienapp, Lukas and
@@ -45,14 +44,16 @@ class Touche2020(AbsTaskRetrieval):
   doi          = {10.5281/zenodo.6862281},
   url          = {https://doi.org/10.5281/zenodo.6862281}
 }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "average_document_length": 1719.3347658445412,
-                "average_query_length": 43.42857142857143,
-                "num_documents": 382545,
-                "num_queries": 49,
-                "average_relevant_docs_per_query": 19.020408163265305,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 1719.3347658445412,
+                    "average_query_length": 43.42857142857143,
+                    "num_documents": 382545,
+                    "num_queries": 49,
+                    "average_relevant_docs_per_query": 19.020408163265305,
+                }
+            },
         },
     )

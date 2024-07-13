@@ -18,33 +18,28 @@ def gritlm_instruction(instruction):
 def gritlm_loader(**kwargs):
     try:
         from gritlm import GritLM
-
-        class GritLMWrapper(GritLM):
-            def encode(self, *args, **kwargs):
-                if "prompt_name" in kwargs:
-                    instruction = gritlm_instruction(
-                        task_to_instruction(
-                            kwargs.pop("prompt_name"), kwargs.get("is_query", True)
-                        )
-                    )
-                else:
-                    instruction = gritlm_instruction("")
-                kwargs["instruction"] = instruction
-                #print("Instruction", instruction)
-                #print("Args", args)
-                #print("Kwargs", kwargs)
-                #if "batch_size" in kwargs:
-                #kwargs["batch_size"] = 1["batch_size"] /
-                #kwargs["max_length"] = 512
-                return super().encode(*args, **kwargs)
-
-            def encode_corpus(self, *args, **kwargs):
-                kwargs["is_query"] = False
-                return super().encode_corpus(*args, **kwargs)
     except ImportError:
         raise ImportError(
             "GritLM is not installed. Please install it with `pip install gritlm`."
         )
+
+    class GritLMWrapper(GritLM):
+        def encode(self, *args, **kwargs):
+            if "prompt_name" in kwargs:
+                instruction = gritlm_instruction(
+                    task_to_instruction(
+                        kwargs.pop("prompt_name"), kwargs.get("is_query", True)
+                    )
+                )
+            else:
+                instruction = gritlm_instruction("")
+            kwargs["instruction"] = instruction
+            return super().encode(*args, **kwargs)
+
+        def encode_corpus(self, *args, **kwargs):
+            kwargs["is_query"] = False
+            return super().encode_corpus(*args, **kwargs)
+
     kwargs.pop("device", None)  # GritLM does automatic device placement
     return GritLMWrapper(**kwargs)
 

@@ -18,18 +18,17 @@ class VieStudentFeedbackClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
         main_score="accuracy",
         date=("2021-12-26", "2021-12-26"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="MIT",
-        socioeconomic_status="medium",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""@InProceedings{8573337,
   author={Nguyen, Kiet Van and Nguyen, Vu Duc and Nguyen, Phu X. V. and Truong, Tham T. H. and Nguyen, Ngan Luu-Thuy},
   booktitle={2018 10th International Conference on Knowledge and Systems Engineering (KSE)},
@@ -40,8 +39,10 @@ class VieStudentFeedbackClassification(AbsTaskClassification):
   pages={19-24},
   doi={10.1109/KSE.2018.8573337}
 }""",
-        n_samples={"test": TEST_SAMPLES},
-        avg_character_length={"test": 14.22},
+        descriptive_stats={
+            "n_samples": {"test": TEST_SAMPLES},
+            "avg_character_length": {"test": 14.22},
+        },
     )
 
     def dataset_transform(self):

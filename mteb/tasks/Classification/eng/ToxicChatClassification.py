@@ -26,18 +26,17 @@ class ToxicChatClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=_EVAL_SPLITS,
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2023-10-26", "2024-01-31"),
-        form=["written"],
-        domains=["Constructed"],
+        domains=["Constructed", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{lin2023toxicchat,
             title={ToxicChat: Unveiling Hidden Challenges of Toxicity Detection in Real-World User-AI Conversation},
             author={Zi Lin and Zihan Wang and Yongqi Tong and Yangkun Wang and Yuxin Guo and Yujia Wang and Jingbo Shang},
@@ -46,8 +45,10 @@ class ToxicChatClassification(AbsTaskClassification):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
-        n_samples={"test": 1427},
-        avg_character_length={"test": 189.4},
+        descriptive_stats={
+            "n_samples": {"test": 1427},
+            "avg_character_length": {"test": 189.4},
+        },
     )
 
     def dataset_transform(self):

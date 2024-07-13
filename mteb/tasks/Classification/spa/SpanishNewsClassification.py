@@ -15,22 +15,23 @@ class SpanishNewsClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         date=("2023-05-01", "2024-05-01"),
         eval_splits=["train"],
         eval_langs=["spa-Latn"],
         main_score="accuracy",
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=[],
         license="MIT",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         """,
-        n_samples={"train": 2048},
-        avg_character_length={"train": 4218.2},
+        descriptive_stats={
+            "n_samples": {"train": 2048},
+            "avg_character_length": {"train": 4218.2},
+        },
     )
 
     def dataset_transform(self):

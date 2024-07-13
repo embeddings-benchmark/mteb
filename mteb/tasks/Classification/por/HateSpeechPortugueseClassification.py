@@ -17,18 +17,17 @@ class HateSpeechPortugueseClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["por-Latn"],
         main_score="accuracy",
         date=("2017-03-08", "2017-03-09"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @inproceedings{fortuna-etal-2019-hierarchically,
                 title = "A Hierarchically-Labeled {P}ortuguese Hate Speech Dataset",
@@ -51,8 +50,10 @@ class HateSpeechPortugueseClassification(AbsTaskClassification):
                 pages = "94--104",
             }
         """,
-        n_samples={"train": 2048},
-        avg_character_length={"train": 101.02},
+        descriptive_stats={
+            "n_samples": {"train": 2048},
+            "avg_character_length": {"train": 101.02},
+        },
     )
 
     def dataset_transform(self):

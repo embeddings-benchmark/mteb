@@ -17,18 +17,17 @@ class MindSmallReranking(AbsTaskReranking):
         },
         type="Reranking",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="map",
         date=("2019-10-12", "2019-11-22"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=[],
         license="https://github.com/msnews/MIND/blob/master/MSR%20License_Data.pdf",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{wu-etal-2020-mind, title = "{MIND}: A Large-scale Dataset for News 
         Recommendation", author = "Wu, Fangzhao  and Qiao, Ying  and Chen, Jiun-Hung  and Wu, Chuhan  and Qi, 
         Tao  and Lian, Jianxun  and Liu, Danyang  and Xie, Xing  and Gao, Jianfeng  and Wu, Winnie  and Zhou, Ming", 
@@ -48,6 +47,8 @@ class MindSmallReranking(AbsTaskReranking):
         Many natural language processing techniques such as effective text representation methods and pre-trained 
         language models can effectively improve the performance of news recommendation. The MIND dataset will be 
         available at https://msnews.github.io}.", }""",
-        n_samples={"test": 107968},
-        avg_character_length={"test": 70.9},
+        descriptive_stats={
+            "n_samples": {"test": 107968},
+            "avg_character_length": {"test": 70.9},
+        },
     )

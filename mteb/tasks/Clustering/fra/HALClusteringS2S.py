@@ -26,6 +26,7 @@ class HALClusteringS2S(AbsTaskClustering):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="v_measure",
@@ -34,10 +35,9 @@ class HALClusteringS2S(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{ciancone2024extending,
       title={Extending the Massive Text Embedding Benchmark to French}, 
       author={Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
@@ -46,8 +46,7 @@ class HALClusteringS2S(AbsTaskClustering):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     def dataset_transform(self):
@@ -76,18 +75,17 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="v_measure",
         date=("2000-03-29", "2024-05-24"),
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="Apache-2.0",
-        socioeconomic_status="medium",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{ciancone2024extending,
       title={Extending the Massive Text Embedding Benchmark to French}, 
       author={Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
@@ -96,8 +94,10 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples={"test": NUM_SAMPLES},
-        avg_character_length={"test": 86.6},
+        descriptive_stats={
+            "n_samples": {"test": NUM_SAMPLES},
+            "avg_character_length": {"test": 86.6},
+        },
     )
 
     def dataset_transform(self):

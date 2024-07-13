@@ -23,18 +23,17 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
         ),
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{kočiský2017narrativeqa,
       title={The NarrativeQA Reading Comprehension Challenge}, 
       author={Tomáš Kočiský and Jonathan Schwarz and Phil Blunsom and Chris Dyer and Karl Moritz Hermann and Gábor Melis and Edward Grefenstette},
@@ -43,15 +42,17 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "average_document_length": 326753.5323943662,
-                "average_query_length": 47.730889457232166,
-                "num_documents": 355,
-                "num_queries": 10557,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 326753.5323943662,
+                    "average_query_length": 47.730889457232166,
+                    "num_documents": 355,
+                    "num_queries": 10557,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

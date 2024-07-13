@@ -16,6 +16,7 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs={
             "de": ["deu-Latn"],
@@ -24,16 +25,14 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
         },
         main_score="accuracy",
         date=("2020-12-15", "2022-04-08"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[
             "Political classification",
         ],
         license="CC-BY-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{niklaus2022empirical,
     title={An Empirical Study on Cross-X Transfer for Legal Judgment Prediction},
     author={Joel Niklaus and Matthias Stürmer and Ilias Chalkidis},
@@ -43,8 +42,10 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
     primaryClass={cs.CL}
 }
 """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 3411.72},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 3411.72},
+        },
     )
 
     def dataset_transform(self):

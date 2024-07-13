@@ -13,18 +13,17 @@ class WongnaiReviewsClassification(AbsTaskClassification):
         },
         type="Classification",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tha-Thai"],
         main_score="accuracy",
         date=("2018-01-01", "2018-12-31"),
-        form=["written"],
         dialect=[],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=[],
         license="LGPL-3.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @software{cstorm125_2020_3852912,
             author  = {cstorm125 and lukkiddd},
@@ -36,8 +35,10 @@ class WongnaiReviewsClassification(AbsTaskClassification):
             doi     = {10.5281/zenodo.3852912},
             url     = {https://doi.org/10.5281/zenodo.3852912}
         }""",
-        n_samples={"test": 2048},
-        avg_character_length={"test": 540.3717},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 540.3717},
+        },
     )
 
     def dataset_transform(self):

@@ -16,18 +16,17 @@ class WisesightSentimentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tha-Thai"],
         main_score="f1",
         date=("2019-05-24", "2021-09-16"),
-        form=["written"],
         dialect=[],
-        domains=["Social", "News"],
+        domains=["Social", "News", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc0-1.0",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@software{bact_2019_3457447,
   author       = {Suriyawongkul, Arthit and
                   Chuangsuwanich, Ekapol and
@@ -43,8 +42,10 @@ class WisesightSentimentClassification(AbsTaskClassification):
 }
 
 """,
-        n_samples={"train": 2048},
-        avg_character_length={"train": 103.42},
+        descriptive_stats={
+            "n_samples": {"train": 2048},
+            "avg_character_length": {"train": 103.42},
+        },
     )
 
     def dataset_transform(self):

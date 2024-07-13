@@ -16,18 +16,17 @@ class SciDocsReranking(AbsTaskReranking):
         },
         type="Reranking",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="map",
         date=("2000-01-01", "2020-12-31"),  # best guess
-        form=["written"],
-        domains=["Academic", "Non-fiction"],
+        domains=["Academic", "Non-fiction", "Written"],
         task_subtypes=["Scientific Reranking"],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators=None,
         dialect=None,
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @inproceedings{cohan-etal-2020-specter,
     title = "{SPECTER}: Document-level Representation Learning using Citation-informed Transformers",
@@ -51,6 +50,8 @@ class SciDocsReranking(AbsTaskReranking):
     abstract = "Representation learning is a critical ingredient for natural language processing systems. Recent Transformer language models like BERT learn powerful textual representations, but these models are targeted towards token- and sentence-level training objectives and do not leverage information on inter-document relatedness, which limits their document-level representation power. For applications on scientific documents, such as classification and recommendation, accurate embeddings of documents are a necessity. We propose SPECTER, a new method to generate document-level embedding of scientific papers based on pretraining a Transformer language model on a powerful signal of document-level relatedness: the citation graph. Unlike existing pretrained language models, Specter can be easily applied to downstream applications without task-specific fine-tuning. Additionally, to encourage further research on document-level models, we introduce SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation. We show that Specter outperforms a variety of competitive baselines on the benchmark.",
 }
 """,
-        n_samples={"test": 19599},
-        avg_character_length={"test": 69.0},
+        descriptive_stats={
+            "n_samples": {"test": 19599},
+            "avg_character_length": {"test": 69.0},
+        },
     )

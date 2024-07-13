@@ -27,19 +27,18 @@ class TweetSentimentClassification(MultilingualTask, AbsTaskClassification):
         description="A multilingual Sentiment Analysis dataset consisting of tweets in 8 different languages.",
         reference="https://aclanthology.org/2022.lrec-1.27",
         category="s2s",
+        modalities=["text"],
         type="Classification",
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
         date=("2018-05-01", "2020-03-31"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-3.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @inproceedings{barbieri-etal-2022-xlm,
                 title = "{XLM}-{T}: Multilingual Language Models in {T}witter for Sentiment Analysis and Beyond",
@@ -56,8 +55,10 @@ class TweetSentimentClassification(MultilingualTask, AbsTaskClassification):
                 abstract = "Language models are ubiquitous in current NLP, and their multilingual capacity has recently attracted considerable attention. However, current analyses have almost exclusively focused on (multilingual variants of) standard benchmarks, and have relied on clean pre-training and task-specific corpora as multilingual signals. In this paper, we introduce XLM-T, a model to train and evaluate multilingual language models in Twitter. In this paper we provide: (1) a new strong multilingual baseline consisting of an XLM-R (Conneau et al. 2020) model pre-trained on millions of tweets in over thirty languages, alongside starter code to subsequently fine-tune on a target task; and (2) a set of unified sentiment analysis Twitter datasets in eight different languages and a XLM-T model trained on this dataset.",
             }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 83.51},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 83.51},
+        },
     )
 
     def dataset_transform(self):
