@@ -19,18 +19,17 @@ class STSES(AbsTaskSTS):
         reference="https://huggingface.co/datasets/PlanTL-GOB-ES/sts-es",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["spa-Latn"],
         main_score="cosine_spearman",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{agirre2015semeval,
   title={Semeval-2015 task 2: Semantic textual similarity, english, spanish and pilot on interpretability},
   author={Agirre, Eneko and Banea, Carmen and Cardie, Claire and Cer, Daniel and Diab, Mona and Gonzalez-Agirre, Aitor and Guo, Weiwei and Lopez-Gazpio, Inigo and Maritxalar, Montse and Mihalcea, Rada and others},
@@ -48,8 +47,7 @@ class STSES(AbsTaskSTS):
   year={2014}
 }
 """,
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     @property

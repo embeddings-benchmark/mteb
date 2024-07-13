@@ -214,7 +214,7 @@ _LANGUAGES = [
     "som_Latn",
     "tum_Latn",
 ]
-_SPLIT = ["dev", "devtest"]
+_SPLIT = ["devtest"]
 
 
 def extend_lang_pairs() -> dict[str, list[str]]:
@@ -248,18 +248,17 @@ class FloresBitextMining(AbsTaskBitextMining, MultilingualTask):
         reference="https://huggingface.co/datasets/facebook/flores",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=_SPLIT,
         eval_langs=_LANGUAGES_MAPPING,
         main_score="f1",
         date=("2022-01-01", "2022-12-31"),
-        form=["written"],
-        domains=["Non-fiction", "Encyclopaedic"],
+        domains=["Non-fiction", "Encyclopaedic", "Written"],
         task_subtypes=[],
         license="CC BY-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""
         @inproceedings{goyal2022flores,
         title={The FLORES-101 Evaluation Benchmark for Low-Resource and Multilingual Machine Translation},
@@ -269,8 +268,10 @@ class FloresBitextMining(AbsTaskBitextMining, MultilingualTask):
         year={2022}
         }
         """,
-        n_samples={"dev": 997, "devtest": 1012},
-        avg_character_length={},
+        descriptive_stats={
+            "n_samples": {"dev": 997, "devtest": 1012},
+            "avg_character_length": {},
+        },
     )
 
     def load_data(self, **kwargs: Any) -> None:

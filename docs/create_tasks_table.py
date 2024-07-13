@@ -40,9 +40,15 @@ def task_to_markdown_row(task: mteb.AbsTask) -> str:
     domains = (
         "[" + ", ".join(task.metadata.domains) + "]" if task.metadata.domains else ""
     )
-    n_samples = task.metadata.n_samples if task.metadata.n_samples else ""
+    n_samples = (
+        task.metadata.descriptive_stats["n_samples"]
+        if "n_samples" in task.metadata.descriptive_stats
+        else ""
+    )
     avg_character_length = (
-        task.metadata.avg_character_length if task.metadata.avg_character_length else ""
+        task.metadata.descriptive_stats["avg_character_length"]
+        if "avg_character_length" in task.metadata.descriptive_stats
+        else ""
     )
 
     name_w_reference += author_from_bibtex(task.metadata.bibtex_citation)

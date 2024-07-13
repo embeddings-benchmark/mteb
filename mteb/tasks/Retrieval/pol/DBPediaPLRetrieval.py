@@ -17,18 +17,17 @@ class DBPediaPL(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{Hasibi:2017:DVT,
  author =    {Hasibi, Faegheh and Nikolaev, Fedor and Xiong, Chenyan and Balog, Krisztian and Bratsberg, Svein Erik and Kotov, Alexander and Callan, Jamie},
  title =     {DBpedia-Entity V2: A Test Collection for Entity Search},
@@ -39,14 +38,16 @@ class DBPediaPL(AbsTaskRetrieval):
  doi =       {10.1145/3077136.3080751},
  publisher = {ACM}
 }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "average_document_length": 311.7007956561823,
-                "average_query_length": 35.45,
-                "num_documents": 4635922,
-                "num_queries": 400,
-                "average_relevant_docs_per_query": 38.215,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 311.7007956561823,
+                    "average_query_length": 35.45,
+                    "num_documents": 4635922,
+                    "num_queries": 400,
+                    "average_relevant_docs_per_query": 38.215,
+                }
+            },
         },
     )

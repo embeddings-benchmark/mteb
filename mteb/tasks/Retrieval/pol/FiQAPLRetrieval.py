@@ -19,18 +19,17 @@ class FiQAPLRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{
 thakur2021beir,
 title={{BEIR}: A Heterogeneous Benchmark for Zero-shot Evaluation of Information Retrieval Models},
@@ -39,14 +38,16 @@ booktitle={Thirty-fifth Conference on Neural Information Processing Systems Data
 year={2021},
 url={https://openreview.net/forum?id=wCu6T5xFjeJ}
 }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "average_document_length": 795.2371699226205,
-                "average_query_length": 70.00771604938272,
-                "num_documents": 57638,
-                "num_queries": 648,
-                "average_relevant_docs_per_query": 2.632716049382716,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 795.2371699226205,
+                    "average_query_length": 70.00771604938272,
+                    "num_documents": 57638,
+                    "num_queries": 648,
+                    "average_relevant_docs_per_query": 2.632716049382716,
+                }
+            },
         },
     )

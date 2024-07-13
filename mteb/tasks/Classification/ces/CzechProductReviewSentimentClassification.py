@@ -15,18 +15,17 @@ class CzechProductReviewSentimentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ces-Latn"],
         main_score="accuracy",
         date=("2013-01-01", "2013-06-01"),
-        form=["written"],
         dialect=[],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC BY-NC-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{habernal-etal-2013-sentiment,
             title = "Sentiment Analysis in {C}zech Social Media Using Supervised Machine Learning",
@@ -45,8 +44,10 @@ class CzechProductReviewSentimentClassification(AbsTaskClassification):
             pages = "65--74",
         }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 153.26},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 153.26},
+        },
     )
 
     @property

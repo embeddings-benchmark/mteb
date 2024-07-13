@@ -15,18 +15,17 @@ class AngryTweetsClassification(AbsTaskClassification):
         reference="https://aclanthology.org/2021.nodalida-main.53/",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["dan-Latn"],
         main_score="accuracy",
         date=("2021-01-01", "2021-12-31"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC-BY-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{pauli2021danlp,
   title={DaNLP: An open-source toolkit for Danish Natural Language Processing},
   author={Pauli, Amalie Brogaard and Barrett, Maria and Lacroix, Oph{\'e}lie and Hvingelby, Rasmus},
@@ -34,8 +33,10 @@ class AngryTweetsClassification(AbsTaskClassification):
   pages={460--466},
   year={2021}
 }""",
-        n_samples={"test": 1050},
-        avg_character_length={"test": 156.1},
+        descriptive_stats={
+            "n_samples": {"test": 1050},
+            "avg_character_length": {"test": 156.1},
+        },
     )
 
     @property

@@ -60,3 +60,10 @@ if __name__ == "__main__":
 
     mdl = mteb.get_model(gte_Qwen2_7B_instruct.name, gte_Qwen2_7B_instruct.revision)
     emb = mdl.encode(["Hello, world!"])
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    print(emb)
+=======
+>>>>>>> db45092f31a1be05f264a0752fa68964a35b5927
+>>>>>>> main

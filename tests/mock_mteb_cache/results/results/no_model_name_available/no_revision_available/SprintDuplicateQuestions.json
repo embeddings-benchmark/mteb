@@ -1,0 +1,127 @@
+{
+  "dataset_revision": "d66bd1f72af766a5cc4b0ca5e00c162f89e8cc46",
+  "evaluation_time": 2.8606724739074707,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.34",
+  "scores": {
+    "test": [
+      {
+        "cosine": {
+          "accuracy": 1.0,
+          "accuracy_threshold": 1.0,
+          "ap": 0.009900990099009901,
+          "f1": 1.0,
+          "f1_threshold": 1.0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "dot": {
+          "accuracy": 1.0,
+          "accuracy_threshold": 0.0,
+          "ap": 0.009900990099009901,
+          "f1": 1.0,
+          "f1_threshold": 0.0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "euclidean": {
+          "accuracy": 1.0,
+          "accuracy_threshold": 0.0,
+          "ap": 0.009900990099009901,
+          "f1": 1.0,
+          "f1_threshold": 0.0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.009900990099009901,
+        "manhattan": {
+          "accuracy": 1.0,
+          "accuracy_threshold": 0.0,
+          "ap": 0.009900990099009901,
+          "f1": 1.0,
+          "f1_threshold": 0.0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "max": {
+          "accuracy": 1.0,
+          "ap": 0.009900990099009901,
+          "f1": 1.0
+        },
+        "similarity": {
+          "accuracy": 1.0,
+          "accuracy_threshold": 1.0,
+          "ap": 0.009900990099009901,
+          "f1": 1.0,
+          "f1_threshold": 1.0,
+          "precision": 1.0,
+          "recall": 1.0
+        }
+      }
+    ],
+    "validation": [
+      {
+        "cosine": {
+          "accuracy": 1.0,
+          "accuracy_threshold": 1.0,
+          "ap": 0.009900990099009901,
+          "f1": 1.0,
+          "f1_threshold": 1.0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "dot": {
+          "accuracy": 1.0,
+          "accuracy_threshold": 0.0,
+          "ap": 0.009900990099009901,
+          "f1": 1.0,
+          "f1_threshold": 0.0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "euclidean": {
+          "accuracy": 1.0,
+          "accuracy_threshold": 0.0,
+          "ap": 0.009900990099009901,
+          "f1": 1.0,
+          "f1_threshold": 0.0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.009900990099009901,
+        "manhattan": {
+          "accuracy": 1.0,
+          "accuracy_threshold": 0.0,
+          "ap": 0.009900990099009901,
+          "f1": 1.0,
+          "f1_threshold": 0.0,
+          "precision": 1.0,
+          "recall": 1.0
+        },
+        "max": {
+          "accuracy": 1.0,
+          "ap": 0.009900990099009901,
+          "f1": 1.0
+        },
+        "similarity": {
+          "accuracy": 1.0,
+          "accuracy_threshold": 1.0,
+          "ap": 0.009900990099009901,
+          "f1": 1.0,
+          "f1_threshold": 1.0,
+          "precision": 1.0,
+          "recall": 1.0
+        }
+      }
+    ]
+  },
+  "task_name": "SprintDuplicateQuestions"
+}

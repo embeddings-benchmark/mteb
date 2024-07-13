@@ -18,6 +18,7 @@ class NaijaSenti(AbsTaskClassification, MultilingualTask):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs={
             "hau": ["hau-Latn"],
@@ -27,14 +28,12 @@ class NaijaSenti(AbsTaskClassification, MultilingualTask):
         },
         main_score="accuracy",
         date=("2022-05-01", "2023-05-08"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC-BY-4.0 license",
-        socioeconomic_status="low",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{muhammad-etal-2022-naijasenti,
     title = "{N}aija{S}enti: A {N}igerian {T}witter Sentiment Corpus for Multilingual Sentiment Analysis",
@@ -58,8 +57,10 @@ class NaijaSenti(AbsTaskClassification, MultilingualTask):
         url = "https://aclanthology.org/2022.lrec-1.63",
         pages = "590--602",
     }""",
-        n_samples={"test": 4800},
-        avg_character_length={"test": 72.81},
+        descriptive_stats={
+            "n_samples": {"test": 4800},
+            "avg_character_length": {"test": 72.81},
+        },
     )
 
     def load_data(self, **kwargs: Any) -> None:

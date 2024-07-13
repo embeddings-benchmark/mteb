@@ -13,6 +13,7 @@ class KorFin(AbsTaskClassification):
         reference="https://huggingface.co/datasets/amphora/korfin-asc",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kor-Hang"],
         main_score="accuracy",
@@ -20,14 +21,12 @@ class KorFin(AbsTaskClassification):
             "2022-01-01",
             "2022-12-31",
         ),  # Assumed date based on the citations in the paper
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC BY-SA 4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation=""""
         @article{son2023removing,
         title={Removing Non-Stationary Knowledge From Pre-Trained Language Models for Entity-Level Sentiment Classification in Finance},
@@ -36,8 +35,10 @@ class KorFin(AbsTaskClassification):
         year={2023}
         }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 75.28},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 75.28},
+        },
     )
 
     def dataset_transform(self):

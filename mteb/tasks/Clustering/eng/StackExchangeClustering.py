@@ -23,18 +23,17 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=("2021-01-01", "2021-04-14"),
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=["Thematic clustering"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{geigle:2021:arxiv,
         author    = {Gregor Geigle and 
                         Nils Reimers and 
@@ -48,8 +47,10 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 32768},
-        avg_character_length={"test": 57.0},
+        descriptive_stats={
+            "n_samples": {"test": 32768},
+            "avg_character_length": {"test": 57.0},
+        },
     )
 
     def dataset_transform(self):
@@ -86,6 +87,7 @@ class StackExchangeClustering(AbsTaskClustering):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
@@ -94,10 +96,9 @@ class StackExchangeClustering(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@article{geigle:2021:arxiv,
         author    = {Gregor Geigle and 
                         Nils Reimers and 
@@ -111,6 +112,8 @@ class StackExchangeClustering(AbsTaskClustering):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 373850},
-        avg_character_length={"test": 57.0},
+        descriptive_stats={
+            "n_samples": {"test": 373850},
+            "avg_character_length": {"test": 57.0},
+        },
     )

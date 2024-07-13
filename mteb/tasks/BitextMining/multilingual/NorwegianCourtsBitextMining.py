@@ -15,18 +15,17 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
         reference="https://opus.nlpl.eu/index.php",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn", "nno-Latn"],
         main_score="f1",
         date=("2020-01-01", "2020-12-31"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="CC BY 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @inproceedings{opus4,
   title={OPUS-MT — Building open translation services for the World},
@@ -35,8 +34,10 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
   year={2020}
 }
 """,
-        n_samples={"test": 2050},
-        avg_character_length={"test": 1884.0},
+        descriptive_stats={
+            "n_samples": {"test": 2050},
+            "avg_character_length": {"test": 1884.0},
+        },
     )
 
     def dataset_transform(self):

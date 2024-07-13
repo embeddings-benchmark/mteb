@@ -32,26 +32,27 @@ class VGClustering(AbsTaskClustering):
         reference="https://huggingface.co/datasets/navjordj/VG_summarization",
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],
         main_score="v_measure",
         date=("2020-01-01", "2024-12-31"),  # best guess
-        form=["written"],
-        domains=["News", "Non-fiction"],
+        domains=["News", "Non-fiction", "Written"],
         license=None,
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         task_subtypes=["Thematic clustering"],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@mastersthesis{navjord2023beyond,
     title={Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
     author={Navjord, J{\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
     year={2023},
     school={Norwegian University of Life Sciences, {\AA}s}
 }""",
-        n_samples={"test": 2048},
-        avg_character_length={"test": 1009.65},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 1009.65},
+        },
     )
 
     def dataset_transform(self):

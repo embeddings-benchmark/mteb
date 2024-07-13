@@ -14,21 +14,20 @@ class Moroco(AbsTaskClassification):
         reference="https://huggingface.co/datasets/moroco",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ron-Latn"],
         main_score="accuracy",
         date=("2017-10-01", "2017-10-31"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="CC BY-4.0",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[
             "ron-Latn-ron",
             "ron-Latn-mol",
         ],  # Moldavian, or the Romanian dialect used in Moldova, does not have an ISO 639-1 code assigned to it. However, it has been given the three-letter code "mol" under ISO 639-3
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation=""""
         @inproceedings{ Butnaru-ACL-2019,
         author = {Andrei M. Butnaru and Radu Tudor Ionescu},
@@ -38,8 +37,10 @@ class Moroco(AbsTaskClassification):
         pages={688--698},
         }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 1710.94},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 1710.94},
+        },
     )
 
     def dataset_transform(self):

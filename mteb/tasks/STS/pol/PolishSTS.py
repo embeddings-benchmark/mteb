@@ -15,24 +15,23 @@ class SickrPLSTS(AbsTaskSTS):
         reference="https://aclanthology.org/2020.lrec-1.207",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="cosine_spearman",
         date=("2018-01-01", "2019-09-01"),  # rough estimate
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=["Textual Entailment"],
         license="CC-BY-NC-SA-3.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="human-translated and localized",
+        sample_creation="human-translated and localized",
         bibtex_citation="""
 @inproceedings{dadas-etal-2020-evaluation,
     title = "Evaluation of Sentence Representations in {P}olish",
     author = "Dadas, Slawomir  and
-      Pere{\l}kiewicz, Micha{\l}  and
-      Po{\'s}wiata, Rafa{\l}",
+      Perelkiewicz, Michal  and
+      Poswiata, Rafal",
     editor = "Calzolari, Nicoletta  and
       B{\'e}chet, Fr{\'e}d{\'e}ric  and
       Blache, Philippe  and
@@ -43,7 +42,7 @@ class SickrPLSTS(AbsTaskSTS):
       Isahara, Hitoshi  and
       Maegaard, Bente  and
       Mariani, Joseph  and
-      Mazo, H{\'e}l{\`e}ne  and
+      Mazo, Helene  and
       Moreno, Asuncion  and
       Odijk, Jan  and
       Piperidis, Stelios",
@@ -58,8 +57,10 @@ class SickrPLSTS(AbsTaskSTS):
     ISBN = "979-10-95546-34-4",
 }
         """,
-        n_samples={"test": 9812},
-        avg_character_length={"test": 42.8},
+        descriptive_stats={
+            "n_samples": {"test": 9812},
+            "avg_character_length": {"test": 42.8},
+        },
     )
 
     @property
@@ -81,18 +82,17 @@ class CdscrSTS(AbsTaskSTS):
         reference="https://aclanthology.org/P17-1073.pdf",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="cosine_spearman",
         date=("2016-01-01", "2017-04-01"),  # rough estimate
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=["Textual Entailment"],
         license="CC-BY-NC-SA-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="human-translated and localized",
+        sample_creation="human-translated and localized",
         bibtex_citation="""
 @inproceedings{wroblewska-krasnowska-kieras-2017-polish,
     title = "{P}olish evaluation dataset for compositional distributional semantics models",
@@ -111,8 +111,10 @@ class CdscrSTS(AbsTaskSTS):
 }
 
         """,
-        n_samples={"test": 1000},
-        avg_character_length={"test": 75.24},
+        descriptive_stats={
+            "n_samples": {"test": 1000},
+            "avg_character_length": {"test": 75.24},
+        },
     )
 
     @property

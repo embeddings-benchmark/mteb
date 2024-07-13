@@ -19,18 +19,17 @@ class LEMBSummScreenFDRetrieval(AbsTaskRetrieval):
         description=("summ_screen_fd subset of dwzhu/LongEmbed dataset."),
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2000-01-01", "2021-12-31"),
-        form=["written"],
-        domains=["Spoken"],
+        domains=["Spoken", "Written"],
         task_subtypes=["Article retrieval"],
         license="Not specified",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @inproceedings{chen-etal-2022-summscreen,
                 title = "{S}umm{S}creen: A Dataset for Abstractive Screenplay Summarization",
@@ -52,15 +51,17 @@ class LEMBSummScreenFDRetrieval(AbsTaskRetrieval):
                 abstract = "",
             }
         """,
-        n_samples={_EVAL_SPLIT: 672},
-        avg_character_length={
-            "validation": {
-                "average_document_length": 30854.32738095238,
-                "average_query_length": 591.4910714285714,
-                "num_documents": 336,
-                "num_queries": 336,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": {_EVAL_SPLIT: 672},
+            "avg_character_length": {
+                "validation": {
+                    "average_document_length": 30854.32738095238,
+                    "average_query_length": 591.4910714285714,
+                    "num_documents": 336,
+                    "num_queries": 336,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

@@ -21,18 +21,17 @@ class UkrFormalityClassification(AbsTaskClassification):
         reference="https://huggingface.co/datasets/ukr-detect/ukr-formality-dataset-translated-gyafc",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train", "test"],
         eval_langs=["ukr-Cyrl"],
         main_score="accuracy",
         date=("2018-04-11", "2018-06-20"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="openrail++",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="machine-translated",
+        sample_creation="machine-translated",
         bibtex_citation="""@inproceedings{rao-tetreault-2018-dear,
         title = "Dear Sir or Madam, May {I} Introduce the {GYAFC} Dataset: Corpus, Benchmarks and Metrics for Formality Style Transfer",
         author = "Rao, Sudha  and
@@ -43,8 +42,10 @@ class UkrFormalityClassification(AbsTaskClassification):
         publisher = "Association for Computational Linguistics",
         url = "https://aclanthology.org/N18-1012",
         }""",
-        n_samples={"train": 2048, "test": 2048},
-        avg_character_length={"train": 52.10, "test": 53.07},
+        descriptive_stats={
+            "n_samples": {"train": 2048, "test": 2048},
+            "avg_character_length": {"train": 52.10, "test": 53.07},
+        },
     )
 
     def dataset_transform(self):
