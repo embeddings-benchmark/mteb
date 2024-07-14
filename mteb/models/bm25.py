@@ -4,9 +4,6 @@ import logging
 from functools import partial
 from typing import Any, List, Optional, Union
 
-import bm25s
-import Stemmer
-
 from mteb.evaluation.evaluators.RetrievalEvaluator import DRESModel
 from mteb.model_meta import ModelMeta
 from mteb.models.text_formatting_utils import corpus_to_texts
@@ -35,6 +32,8 @@ class BM25Search(DRESModel):
         self.stopwords = stopwords
 
         # optional: create a stemmer
+        import Stemmer
+
         self.stemmer = Stemmer.Stemmer(stemmer_language) if stemmer_language else None
 
     @classmethod
@@ -64,6 +63,8 @@ class BM25Search(DRESModel):
         )
 
         # Create the BM25 model and index the corpus
+        import bm25s
+
         retriever = bm25s.BM25()
         retriever.index(encoded_corpus)
 
@@ -101,6 +102,8 @@ class BM25Search(DRESModel):
 
     def encode(self, texts: List[str], **kwargs):
         """Encode input text as term vectors"""
+        import bm25s
+
         return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
 
     def encode_queries(
