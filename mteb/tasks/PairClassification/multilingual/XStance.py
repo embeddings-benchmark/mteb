@@ -14,10 +14,12 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
         dataset={
             "path": "ZurichNLP/x_stance",
             "revision": "810604b9ad3aafdc6144597fdaa40f21a6f5f3de",
+            "trust_remote_code": True,
         },
         description="A Multilingual Multi-Target Dataset for Stance Detection in French, German, and Italian.",
         reference="https://github.com/ZurichNLP/xstance",
         category="s2s",
+        modalities=["text"],
         type="PairClassification",
         eval_splits=["test"],
         eval_langs={
@@ -25,16 +27,14 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
             "fr": ["fra-Latn"],
             "it": ["ita-Latn"],
         },
-        main_score="ap",
+        main_score="max_ap",
         date=("2011-01-01", "2020-12-31"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Political classification"],
         license="cc by-nc 4.0",
-        socioeconomic_status="medium",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""
             @inproceedings{vamvas2020xstance,
                 author    = "Vamvas, Jannis and Sennrich, Rico",
@@ -46,8 +46,10 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
                 url       = "http://ceur-ws.org/Vol-2624/paper9.pdf"
             }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 152.41},  # length of`sent1` + `sent2`
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 152.41},
+        },  # length of`sent1` + `sent2`
     )
 
     def load_data(self, **kwargs):
@@ -63,8 +65,8 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
 
         def convert_example(example):
             return {
-                "sent1": example["question"],
-                "sent2": example["comment"],
+                "sentence1": example["question"],
+                "sentence2": example["comment"],
                 "labels": 1 if example["label"] == "FAVOR" else 0,
             }
 

@@ -4,7 +4,7 @@ import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskBitextMining, CrosslingualTask
+from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = {
     "ar-en": ["ara-Arab", "eng-Latn"],
@@ -36,29 +36,29 @@ _LANGUAGES = {
 _SPLITS = ["validation"]
 
 
-class IWSLT2017BitextMining(AbsTaskBitextMining, CrosslingualTask):
+class IWSLT2017BitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="IWSLT2017BitextMining",
         dataset={
             "path": "IWSLT/iwslt2017",
             "revision": "c18a4f81a47ae6fa079fe9d32db288ddde38451d",
+            "trust_remote_code": True,
         },
         description="The IWSLT 2017 Multilingual Task addresses text translation, including zero-shot translation, with a single MT system across all directions including English, German, Dutch, Italian and Romanian.",
         reference="https://aclanthology.org/2017.iwslt-1.1/",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=_SPLITS,
         eval_langs=_LANGUAGES,
         main_score="f1",
         date=("2007-01-01", "2017-12-14"),  # rough estimate
-        form=["written"],
-        domains=["Non-fiction", "Fiction"],
+        domains=["Non-fiction", "Fiction", "Written"],
         task_subtypes=[],
         license="CC-BY-NC-ND-4.0",
-        socioeconomic_status="medium",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @inproceedings{cettolo-etal-2017-overview,
     title = "Overview of the {IWSLT} 2017 Evaluation Campaign",
@@ -81,8 +81,10 @@ class IWSLT2017BitextMining(AbsTaskBitextMining, CrosslingualTask):
     pages = "2--14",
 }
 """,
-        n_samples={"validation": 21928},
-        avg_character_length={"validation": 95.4},
+        descriptive_stats={
+            "n_samples": {"validation": 21928},
+            "avg_character_length": {"validation": 95.4},
+        },
     )
 
     def load_data(self, **kwargs):

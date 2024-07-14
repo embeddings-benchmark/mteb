@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 import numpy as np
 import tqdm
 from datasets import Dataset
 
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
-from mteb.MTEBResults import ScoresDict
+from mteb.load_results.mteb_results import ScoresDict
 
 from ..evaluation.evaluators import ClusteringEvaluator
 from .AbsTask import AbsTask
@@ -31,7 +32,12 @@ class AbsTaskClustering(AbsTask):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _evaluate_subset(
-        self, model: EncoderWithQueryCorpusEncode | Encoder, dataset: Dataset, **kwargs
+        self,
+        model: EncoderWithQueryCorpusEncode | Encoder,
+        dataset: Dataset,
+        *,
+        encode_kwargs: dict[str, Any] = {},
+        **kwargs,
     ) -> ScoresDict:
         v_measures = []
         for cluster_set in tqdm.tqdm(dataset, desc="Clustering"):
@@ -41,7 +47,7 @@ class AbsTaskClustering(AbsTask):
                 task_name=self.metadata.name,
                 **kwargs,
             )
-            metrics = evaluator(model)
+            metrics = evaluator(model, encode_kwargs=encode_kwargs)
             v_measures.append(metrics["v_measure"])
 
         v_mean = np.mean(v_measures)

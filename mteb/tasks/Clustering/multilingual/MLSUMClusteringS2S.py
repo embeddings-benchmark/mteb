@@ -20,11 +20,11 @@ N_SAMPLES = 2048
 
 
 class MLSUMClusteringS2S(AbsTaskClustering, MultilingualTask):
-    superseeded_by = "MLSUMClusteringS2S.v2"
+    superseded_by = "MLSUMClusteringS2S.v2"
     metadata = TaskMetadata(
         name="MLSUMClusteringS2S",
         description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",
-        reference="https://huggingface.co/datasets/mlsum",
+        reference="https://huggingface.co/datasets/reciTAL/mlsum",
         dataset={
             "path": "reciTAL/mlsum",
             "revision": "b5d54f8f3b61ae17845046286940f03c6bc79bc7",
@@ -32,26 +32,27 @@ class MLSUMClusteringS2S(AbsTaskClustering, MultilingualTask):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=_LANGUAGES,
         main_score="v_measure",
         date=("2010-01-01", "2018-09-30"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{scialom2020mlsum,
         title={MLSUM: The Multilingual Summarization Corpus},
         author={Scialom, Thomas and Dray, Paul-Alexis and Lamprier, Sylvain and Piwowarski, Benjamin and Staiano, Jacopo},
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        n_samples={"validation": 38561, "test": 41206},
-        avg_character_length={"validation": 4613, "test": 4810},
+        descriptive_stats={
+            "n_samples": {"validation": 38561, "test": 41206},
+            "avg_character_length": {"validation": 4613, "test": 4810},
+        },
     )
 
     def load_data(self, **kwargs):
@@ -87,6 +88,9 @@ class MLSUMClusteringS2S(AbsTaskClustering, MultilingualTask):
 
 
 class MLSUMClusteringS2SFast(AbsTaskClusteringFast, MultilingualTask):
+    max_document_to_embed = N_SAMPLES
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="MLSUMClusteringS2S.v2",
         description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",
@@ -98,26 +102,27 @@ class MLSUMClusteringS2SFast(AbsTaskClusteringFast, MultilingualTask):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=_LANGUAGES,
         main_score="v_measure",
         date=("2010-01-01", "2018-09-30"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{scialom2020mlsum,
         title={MLSUM: The Multilingual Summarization Corpus},
         author={Scialom, Thomas and Dray, Paul-Alexis and Lamprier, Sylvain and Piwowarski, Benjamin and Staiano, Jacopo},
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        n_samples={"validation": N_SAMPLES, "test": N_SAMPLES},
-        avg_character_length={"validation": 4613, "test": 4810},
+        descriptive_stats={
+            "n_samples": {"validation": 750, "test": 756},
+            "avg_character_length": {"validation": 4613, "test": 4810},
+        },
     )
 
     def load_data(self, **kwargs):

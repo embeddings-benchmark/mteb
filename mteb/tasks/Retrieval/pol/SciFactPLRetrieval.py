@@ -13,21 +13,21 @@ class SciFactPL(AbsTaskRetrieval):
         dataset={
             "path": "clarin-knext/scifact-pl",
             "revision": "47932a35f045ef8ed01ba82bf9ff67f6e109207e",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{wojtasik2024beirpl,
       title={BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language}, 
       author={Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -36,6 +36,16 @@ class SciFactPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 1553.5178468068686,
+                    "average_query_length": 95.44,
+                    "num_documents": 5183,
+                    "num_queries": 300,
+                    "average_relevant_docs_per_query": 1.13,
+                }
+            },
+        },
     )

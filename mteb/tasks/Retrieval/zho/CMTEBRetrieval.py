@@ -27,6 +27,8 @@ def load_retrieval_data(dataset_path, dataset_revision, qrel_revision, eval_spli
 
 
 class T2Retrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="T2Retrieval",
         description="T2Ranking: A large-scale Chinese Benchmark for Passage Ranking",
@@ -38,18 +40,17 @@ class T2Retrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["cmn-Hans"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{xie2023t2ranking,
       title={T2Ranking: A large-scale Chinese Benchmark for Passage Ranking}, 
       author={Xiaohui Xie and Qian Dong and Bingning Wang and Feiyang Lv and Ting Yao and Weinan Gan and Zhijing Wu and Xiangsheng Li and Haitao Li and Yiqun Liu and Jin Ma},
@@ -58,8 +59,18 @@ class T2Retrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "dev": {
+                    "average_document_length": 874.1184182791619,
+                    "average_query_length": 10.938847974750132,
+                    "num_documents": 118605,
+                    "num_queries": 22812,
+                    "average_relevant_docs_per_query": 5.213571804313519,
+                }
+            },
+        },
     )
 
     def load_data(self, **kwargs):
@@ -76,6 +87,8 @@ class T2Retrieval(AbsTaskRetrieval):
 
 
 class MMarcoRetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="MMarcoRetrieval",
         description="MMarcoRetrieval",
@@ -87,18 +100,17 @@ class MMarcoRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["cmn-Hans"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{xiao2024cpack,
       title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
       author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
@@ -107,8 +119,18 @@ class MMarcoRetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "dev": {
+                    "average_document_length": 114.41787048392986,
+                    "average_query_length": 10.51131805157593,
+                    "num_documents": 106813,
+                    "num_queries": 6980,
+                    "average_relevant_docs_per_query": 1.0654727793696275,
+                }
+            },
+        },
     )
 
     def load_data(self, **kwargs):
@@ -136,18 +158,17 @@ class DuRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["cmn-Hans"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{qiu2022dureaderretrieval,
       title={DuReader_retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine}, 
       author={Yifu Qiu and Hongyu Li and Yingqi Qu and Ying Chen and Qiaoqiao She and Jing Liu and Hua Wu and Haifeng Wang},
@@ -156,8 +177,18 @@ class DuRetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "dev": {
+                    "average_document_length": 331.3219967800322,
+                    "average_query_length": 9.289,
+                    "num_documents": 100001,
+                    "num_queries": 2000,
+                    "average_relevant_docs_per_query": 4.9195,
+                }
+            },
+        },
     )
 
     def load_data(self, **kwargs):
@@ -185,21 +216,30 @@ class CovidRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
-        eval_splits=["test"],
+        modalities=["text"],
+        eval_splits=["dev"],
         eval_langs=["cmn-Hans"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation=None,
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "dev": {
+                    "average_document_length": 332.4152658473415,
+                    "average_query_length": 25.9304531085353,
+                    "num_documents": 100001,
+                    "num_queries": 949,
+                    "average_relevant_docs_per_query": 1.0105374077976819,
+                }
+            },
+        },
     )
 
     def load_data(self, **kwargs):
@@ -227,21 +267,30 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["cmn-Hans"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation=None,
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "dev": {
+                    "average_document_length": 307.7710222897771,
+                    "average_query_length": 48.470367591897976,
+                    "num_documents": 100001,
+                    "num_queries": 3999,
+                    "average_relevant_docs_per_query": 1.86271567891973,
+                }
+            },
+        },
     )
 
     def load_data(self, **kwargs):
@@ -258,6 +307,8 @@ class CmedqaRetrieval(AbsTaskRetrieval):
 
 
 class EcomRetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="EcomRetrieval",
         description="EcomRetrieval",
@@ -269,21 +320,30 @@ class EcomRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["cmn-Hans"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation=None,
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "dev": {
+                    "average_document_length": 32.98041664189015,
+                    "average_query_length": 6.798,
+                    "num_documents": 100902,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
+        },
     )
 
     def load_data(self, **kwargs):
@@ -300,6 +360,8 @@ class EcomRetrieval(AbsTaskRetrieval):
 
 
 class MedicalRetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="MedicalRetrieval",
         description="MedicalRetrieval",
@@ -311,21 +373,30 @@ class MedicalRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["cmn-Hans"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation=None,
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "dev": {
+                    "average_document_length": 122.04231725066585,
+                    "average_query_length": 17.938,
+                    "num_documents": 100999,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
+        },
     )
 
     def load_data(self, **kwargs):
@@ -342,6 +413,8 @@ class MedicalRetrieval(AbsTaskRetrieval):
 
 
 class VideoRetrieval(AbsTaskRetrieval):
+    ignore_identical_ids = True
+
     metadata = TaskMetadata(
         name="VideoRetrieval",
         description="VideoRetrieval",
@@ -353,21 +426,30 @@ class VideoRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["cmn-Hans"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation=None,
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "dev": {
+                    "average_document_length": 31.048855642524522,
+                    "average_query_length": 7.365,
+                    "num_documents": 100930,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
+        },
     )
 
     def load_data(self, **kwargs):

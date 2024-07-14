@@ -15,29 +15,31 @@ class Ocnli(AbsTaskPairClassification):
         },
         type="PairClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["cmn-Hans"],
-        main_score="accuracy",
+        main_score="max_accuracy",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{hu2020ocnli,
-      title={OCNLI: Original Chinese Natural Language Inference}, 
-      author={Hai Hu and Kyle Richardson and Liang Xu and Lu Li and Sandra Kuebler and Lawrence S. Moss},
-      year={2020},
-      eprint={2010.05444},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}""",
-        n_samples=None,
-        avg_character_length=None,
+            title={OCNLI: Original Chinese Natural Language Inference}, 
+            author={Hai Hu and Kyle Richardson and Liang Xu and Lu Li and Sandra Kuebler and Lawrence S. Moss},
+            year={2020},
+            eprint={2010.05444},
+            archivePrefix={arXiv},
+            primaryClass={cs.CL}
+        }""",
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("sent1", "sentence1")
+        self.dataset = self.dataset.rename_column("sent2", "sentence2")
 
 
 class Cmnli(AbsTaskPairClassification):
@@ -51,61 +53,63 @@ class Cmnli(AbsTaskPairClassification):
         },
         type="PairClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["cmn-Hans"],
-        main_score="accuracy",
+        main_score="max_accuracy",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{xu-etal-2020-clue,
-    title = "{CLUE}: A {C}hinese Language Understanding Evaluation Benchmark",
-    author = "Xu, Liang  and
-      Hu, Hai  and
-      Zhang, Xuanwei  and
-      Li, Lu  and
-      Cao, Chenjie  and
-      Li, Yudong  and
-      Xu, Yechen  and
-      Sun, Kai  and
-      Yu, Dian  and
-      Yu, Cong  and
-      Tian, Yin  and
-      Dong, Qianqian  and
-      Liu, Weitang  and
-      Shi, Bo  and
-      Cui, Yiming  and
-      Li, Junyi  and
-      Zeng, Jun  and
-      Wang, Rongzhao  and
-      Xie, Weijian  and
-      Li, Yanting  and
-      Patterson, Yina  and
-      Tian, Zuoyu  and
-      Zhang, Yiwen  and
-      Zhou, He  and
-      Liu, Shaoweihua  and
-      Zhao, Zhe  and
-      Zhao, Qipeng  and
-      Yue, Cong  and
-      Zhang, Xinrui  and
-      Yang, Zhengliang  and
-      Richardson, Kyle  and
-      Lan, Zhenzhong",
-    booktitle = "Proceedings of the 28th International Conference on Computational Linguistics",
-    month = dec,
-    year = "2020",
-    address = "Barcelona, Spain (Online)",
-    publisher = "International Committee on Computational Linguistics",
-    url = "https://aclanthology.org/2020.coling-main.419",
-    doi = "10.18653/v1/2020.coling-main.419",
-    pages = "4762--4772",
-}""",
-        n_samples=None,
-        avg_character_length=None,
+            title = "{CLUE}: A {C}hinese Language Understanding Evaluation Benchmark",
+            author = "Xu, Liang  and
+            Hu, Hai  and
+            Zhang, Xuanwei  and
+            Li, Lu  and
+            Cao, Chenjie  and
+            Li, Yudong  and
+            Xu, Yechen  and
+            Sun, Kai  and
+            Yu, Dian  and
+            Yu, Cong  and
+            Tian, Yin  and
+            Dong, Qianqian  and
+            Liu, Weitang  and
+            Shi, Bo  and
+            Cui, Yiming  and
+            Li, Junyi  and
+            Zeng, Jun  and
+            Wang, Rongzhao  and
+            Xie, Weijian  and
+            Li, Yanting  and
+            Patterson, Yina  and
+            Tian, Zuoyu  and
+            Zhang, Yiwen  and
+            Zhou, He  and
+            Liu, Shaoweihua  and
+            Zhao, Zhe  and
+            Zhao, Qipeng  and
+            Yue, Cong  and
+            Zhang, Xinrui  and
+            Yang, Zhengliang  and
+            Richardson, Kyle  and
+            Lan, Zhenzhong",
+            booktitle = "Proceedings of the 28th International Conference on Computational Linguistics",
+            month = dec,
+            year = "2020",
+            address = "Barcelona, Spain (Online)",
+            publisher = "International Committee on Computational Linguistics",
+            url = "https://aclanthology.org/2020.coling-main.419",
+            doi = "10.18653/v1/2020.coling-main.419",
+            pages = "4762--4772",
+        }""",
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("sent1", "sentence1")
+        self.dataset = self.dataset.rename_column("sent2", "sentence2")

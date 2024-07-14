@@ -6,6 +6,9 @@ from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 
 class GeoreviewClusteringP2P(AbsTaskClusteringFast):
+    max_document_to_embed = 2000
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="GeoreviewClusteringP2P",
         dataset={
@@ -16,19 +19,20 @@ class GeoreviewClusteringP2P(AbsTaskClusteringFast):
         reference="https://github.com/yandex/geo-reviews-dataset-2023",
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
         main_score="v_measure",
         date=("2023-01-01", "2023-07-01"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=[],
         license="mit",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",
-        n_samples={"test": 2000},
-        avg_character_length={"test": 384.5},
+        descriptive_stats={
+            "n_samples": {"test": 2000},
+            "avg_character_length": {"test": 384.5},
+        },
     )

@@ -13,7 +13,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class TwentyNewsgroupsClustering(AbsTaskClustering):
-    superseeded_by = "TwentyNewsgroupsClustering.v2"
+    superseded_by = "TwentyNewsgroupsClustering.v2"
     metadata = TaskMetadata(
         name="TwentyNewsgroupsClustering",
         description="Clustering of the 20 Newsgroups dataset (subject only).",
@@ -24,18 +24,17 @@ class TwentyNewsgroupsClustering(AbsTaskClustering):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=("1995-01-01", "1995-01-01"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Thematic clustering"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@incollection{LANG1995331,
         title = {NewsWeeder: Learning to Filter Netnews},
         editor = {Armand Prieditis and Stuart Russell},
@@ -50,8 +49,10 @@ class TwentyNewsgroupsClustering(AbsTaskClustering):
         author = {Ken Lang},
         }
         """,
-        n_samples={"test": 59545},
-        avg_character_length={"test": 32.0},
+        descriptive_stats={
+            "n_samples": {"test": 59545},
+            "avg_character_length": {"test": 32.0},
+        },
     )
 
 
@@ -66,18 +67,17 @@ class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=("1995-01-01", "1995-01-01"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Thematic clustering"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@incollection{LANG1995331,
         title = {NewsWeeder: Learning to Filter Netnews},
         editor = {Armand Prieditis and Stuart Russell},
@@ -92,8 +92,10 @@ class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
         author = {Ken Lang},
         }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 32.0},
+        descriptive_stats={
+            "n_samples": {"test": 2381},
+            "avg_character_length": {"test": 32.0},
+        },
     )
 
     def dataset_transform(self):
@@ -108,9 +110,3 @@ class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
 
             ds[split] = Dataset.from_dict({"labels": labels, "sentences": sentences})
         self.dataset = DatasetDict(ds)
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            label="labels",
-            n_samples=2048,
-        )

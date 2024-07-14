@@ -19,37 +19,31 @@ class BiorxivClusteringP2PFast(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=("2021-01-01", "2022-05-10"),
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="https://www.biorxiv.org/content/about-biorxiv",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="",
-        n_samples={"test": 2048},
-        avg_character_length={"test": 1664.0},
+        descriptive_stats={
+            "n_samples": {"test": 2151},
+            "avg_character_length": {"test": 1664.0},
+        },
     )
 
     def dataset_transform(self):
         for split in self.metadata.eval_splits:
             check_label_distribution(self.dataset[split])
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            self.seed,
-            self.metadata.eval_splits,
-            label="labels",
-            n_samples=2048,
-        )
 
 
 class BiorxivClusteringP2P(AbsTaskClustering):
-    superseeded_by = "BiorxivClusteringP2P.v2"
+    superseded_by = "BiorxivClusteringP2P.v2"
     metadata = TaskMetadata(
         name="BiorxivClusteringP2P",
         description="Clustering of titles+abstract from biorxiv. Clustering of 10 sets, based on the main category.",
@@ -60,19 +54,20 @@ class BiorxivClusteringP2P(AbsTaskClustering):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=("2021-01-01", "2022-05-10"),
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="https://www.biorxiv.org/content/about-biorxiv",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="",
-        n_samples={"test": 75000},
-        avg_character_length={"test": 1666.2},
+        descriptive_stats={
+            "n_samples": {"test": 75000},
+            "avg_character_length": {"test": 1666.2},
+        },
     )

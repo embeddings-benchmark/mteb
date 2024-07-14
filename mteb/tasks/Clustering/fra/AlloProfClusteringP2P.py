@@ -10,7 +10,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class AlloProfClusteringP2P(AbsTaskClustering):
-    superseeded_by = "AlloProfClusteringP2P.v2"
+    superseded_by = "AlloProfClusteringP2P.v2"
 
     metadata = TaskMetadata(
         name="AlloProfClusteringP2P",
@@ -20,9 +20,11 @@ class AlloProfClusteringP2P(AbsTaskClustering):
             "path": "lyon-nlp/alloprof",
             "revision": "392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
             "name": "documents",
+            "trust_remote_code": True,
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="v_measure",
@@ -31,10 +33,9 @@ class AlloProfClusteringP2P(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{lef23,
   doi = {10.48550/ARXIV.2302.07738},
   url = {https://arxiv.org/abs/2302.07738},
@@ -45,8 +46,7 @@ class AlloProfClusteringP2P(AbsTaskClustering):
   year = {2023},
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     def create_description(self, example):
@@ -68,6 +68,9 @@ class AlloProfClusteringP2P(AbsTaskClustering):
 
 
 class AlloProfClusteringP2PFast(AbsTaskClusteringFast):
+    max_document_to_embed = 2556
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="AlloProfClusteringP2P.v2",
         description="Clustering of document titles and descriptions from Allo Prof dataset. Clustering of 10 sets on the document topic.",
@@ -76,22 +79,22 @@ class AlloProfClusteringP2PFast(AbsTaskClusteringFast):
             "path": "lyon-nlp/alloprof",
             "revision": "392ba3f5bcc8c51f578786c1fc3dae648662cb9b",
             "name": "documents",
+            "trust_remote_code": True,
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="v_measure",
         # (date of founding of the dataset source site, date of dataset paper publication)
         date=("1996-01-01", "2023-04-14"),
-        form=["written"],
-        domains=["Encyclopaedic"],
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="mit",
-        socioeconomic_status="medium",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{lef23,
   doi = {10.48550/ARXIV.2302.07738},
   url = {https://arxiv.org/abs/2302.07738},
@@ -103,8 +106,10 @@ class AlloProfClusteringP2PFast(AbsTaskClusteringFast):
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }
 """,
-        n_samples={"test": 2556},
-        avg_character_length={"test": 3539.5},
+        descriptive_stats={
+            "n_samples": {"test": 2556},
+            "avg_character_length": {"test": 3539.5},
+        },
     )
 
     def create_description(self, example):

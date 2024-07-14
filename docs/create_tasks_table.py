@@ -40,9 +40,15 @@ def task_to_markdown_row(task: mteb.AbsTask) -> str:
     domains = (
         "[" + ", ".join(task.metadata.domains) + "]" if task.metadata.domains else ""
     )
-    n_samples = task.metadata.n_samples if task.metadata.n_samples else ""
+    n_samples = (
+        task.metadata.descriptive_stats["n_samples"]
+        if "n_samples" in task.metadata.descriptive_stats
+        else ""
+    )
     avg_character_length = (
-        task.metadata.avg_character_length if task.metadata.avg_character_length else ""
+        task.metadata.descriptive_stats["avg_character_length"]
+        if "avg_character_length" in task.metadata.descriptive_stats
+        else ""
     )
 
     name_w_reference += author_from_bibtex(task.metadata.bibtex_citation)
@@ -78,7 +84,7 @@ def create_task_lang_table(tasks: list[mteb.AbsTask]) -> str:
         pl_table_dict.append(d)
 
     df = pl.DataFrame(pl_table_dict).sort(by="lang")
-    total = df.sum(axis=0)
+    total = df.sum()
 
     task_names_md = " | ".join(sorted(get_args(TASK_TYPE)))
     horizontal_line_md = "---|---" * len(sorted(get_args(TASK_TYPE)))

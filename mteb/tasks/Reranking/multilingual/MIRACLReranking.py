@@ -1,21 +1,14 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any
 
-import numpy as np
-import torch
-import tqdm
 from datasets import Dataset
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.evaluation.evaluators import RerankingEvaluator
-from mteb.evaluation.evaluators.model_encode import model_encode
-from mteb.evaluation.evaluators.RetrievalEvaluator import RetrievalEvaluator
-from mteb.evaluation.evaluators.utils import cos_sim
-from mteb.MTEBResults import ScoresDict
+from mteb.load_results.mteb_results import ScoresDict
 
 from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
@@ -65,238 +58,44 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         dataset={
             "path": "miracl/mmteb-miracl-reranking",
             "revision": "6d1962c527217f8927fca80f890f14f36b2802af",
+            "trust_remote_code": True,
         },
         type="Reranking",
         category="s2s",
+        modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGUAGES,
         main_score="NDCG@10(MIRACL)",
         date=("2022-06-01", "2023-01-30"),
-        form=["written"],
-        domains=["Encyclopaedic"],
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=[],
         license="CC BY-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation=_CITATION,
-        n_samples={"dev": 44608},
-        avg_character_length={"dev": 506.30},
+        descriptive_stats={
+            "n_samples": {"dev": 44608},
+            "avg_character_length": {"dev": 506.30},
+        },
     )
 
     def _evaluate_subset(
         self,
         model: Encoder | EncoderWithQueryCorpusEncode,
         data_split: Dataset,
+        *,
+        encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> ScoresDict:
-        evaluator = MIRACLRerankingEvaluator(
-            samples=data_split, task_name=self.metadata.name, **kwargs
+        evaluator = RerankingEvaluator(
+            samples=data_split,
+            evaluator_type="miracl",
+            task_name=self.metadata.name,
+            encode_kwargs=encode_kwargs,
+            **kwargs,
         )
         scores = evaluator(model)
 
         self._add_main_score(scores)
         return scores
-
-
-class MIRACLRerankingEvaluator(RerankingEvaluator):
-    """This class evaluates a SentenceTransformer model for the task of re-ranking.
-    MIRACLRerankingEvaluator differs from RerankingEvaluator in two ways:
-    1. it uses the pytrec_eval via RetrievalEvaluator instead of the metrics provided by sklearn;
-    2. it reranks the top-k `candidates` from previous-stage retrieval which may not include all ground-truth `positive` documents
-    """
-
-    def __init__(
-        self,
-        samples: list[dict],
-        task_name: str,
-        mrr_at_k: int = 10,
-        name: str = "",
-        similarity_fct=cos_sim,
-        batch_size: int = 512,
-        use_batched_encoding: bool = True,
-        limit: int | None = None,
-        k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
-        **kwargs,
-    ):
-        super().__init__(
-            samples,
-            task_name=task_name,
-            mrr_at_k=mrr_at_k,
-            name=name,
-            similarity_fct=similarity_fct,
-            batch_size=batch_size,
-            use_batched_encoding=use_batched_encoding,
-            limit=limit,
-            **kwargs,
-        )
-        self.k_values = k_values
-
-    def rerank(
-        self, query_emb: torch.Tensor, docs_emb: torch.Tensor
-    ) -> dict[str, float]:
-        """Rerank documents (docs_emb) given the query (query_emb)
-
-        Args:
-            query_emb: Query embedding of shape `(num_queries, hidden_size)`)
-                if `num_queries` > 0: we take the closest document to any of the queries
-            docs_emb: Candidates documents embeddings of shape `(num_pos+num_neg, hidden_size)`)
-
-        Returns:
-            similarity_scores:
-        """
-        if not query_emb.shape[0]:
-            raise ValueError("Empty query embedding")
-
-        if not docs_emb.shape[0]:
-            return {"empty-docid": 0}
-
-        pred_scores = self.similarity_fct(query_emb, docs_emb)
-        if len(pred_scores.shape) > 1:
-            pred_scores = torch.amax(pred_scores, dim=0)
-
-        return {
-            str(i): score.detach().numpy().item() for i, score in enumerate(pred_scores)
-        }
-
-    def compute_metrics_batched(self, model: Encoder | EncoderWithQueryCorpusEncode):
-        """Computes the metrices in a batched way, by batching all queries and
-        all documents together
-        """
-        # using encode_queries and encode_corpus functions if they exists,
-        # which can be defined by users to add different instructions for query and passage conveniently
-        encode_queries_func = (
-            model.encode_queries
-            if isinstance(model, EncoderWithQueryCorpusEncode)
-            else partial(model_encode, model=model)
-        )
-        encode_corpus_func = (
-            model.encode_corpus
-            if isinstance(model, EncoderWithQueryCorpusEncode)
-            else partial(model_encode, model=model)
-        )
-
-        logger.info("Encoding queries...")
-        if isinstance(self.samples[0]["query"], str):
-            all_query_embs = np.asarray(
-                encode_queries_func(
-                    [sample["query"] for sample in self.samples],
-                    batch_size=self.batch_size,
-                    task_name=self.task_name,
-                )
-            )
-        elif isinstance(self.samples[0]["query"], list):
-            # In case the query is a list of strings, we get the most similar embedding to any of the queries
-            all_query_flattened = [
-                q for sample in self.samples for q in sample["query"]
-            ]
-            all_query_embs = np.asarray(
-                encode_queries_func(
-                    all_query_flattened,
-                    batch_size=self.batch_size,
-                    task_name=self.task_name,
-                )
-            )
-        else:
-            raise ValueError(
-                f"Query must be a string or a list of strings but is {type(self.samples[0]['query'])}"
-            )
-
-        logger.info("Encoding candidates...")
-        all_docs = []
-        for sample in self.samples:
-            all_docs.extend(sample["candidates"])
-
-        all_docs_embs = np.asarray(
-            encode_corpus_func(
-                all_docs, batch_size=self.batch_size, task_name=self.task_name
-            )
-        )
-
-        # Compute scores
-        logger.info("Evaluating...")
-        query_idx, docs_idx = 0, 0
-        results, qrels = {}, {}
-        for instance in self.samples:
-            num_subqueries = (
-                len(instance["query"]) if isinstance(instance["query"], list) else 1
-            )
-            query_emb = all_query_embs[query_idx : query_idx + num_subqueries]
-            query_idx += num_subqueries
-
-            positive = instance["positive"]
-            docs = instance["candidates"]
-            num_doc = len(docs)
-            docs_emb = all_docs_embs[docs_idx : docs_idx + num_doc]
-            docs_idx += num_doc
-
-            fake_qid = str(query_idx)
-            results[fake_qid] = self.rerank(query_emb, docs_emb)
-            qrels[fake_qid] = {
-                str(i): 1 if doc in positive else 0 for i, doc in enumerate(docs)
-            }
-
-        ndcg, _map, recall, precision, naucs = RetrievalEvaluator.evaluate(
-            qrels=qrels,
-            results=results,
-            k_values=self.k_values,
-            ignore_identical_ids=False,
-        )
-        scores = {**ndcg, **_map, **recall, **precision, **naucs}
-        scores_miracl = {f"{k}(MIRACL)": v for k, v in scores.items()}
-        return scores_miracl
-
-    def compute_metrics_individual(self, model):
-        """Embeds every (query, positive, negative) tuple individually.
-        Is slower than the batched version, but saves memory as only the
-        embeddings for one tuple are needed. Useful when you have
-        a really large test set
-        """
-        # using encode_queries and encode_corpus functions if they exists,
-        # which can be defined by users to add different instructions for query and passage conveniently
-        encode_queries_func = (
-            model.encode_queries
-            if hasattr(model, "encode_queries")
-            else partial(model_encode, model=model)
-        )
-        encode_corpus_func = (
-            model.encode_corpus
-            if hasattr(model, "encode_corpus")
-            else partial(model_encode, model=model)
-        )
-
-        results, qrels = {}, {}
-        for i, instance in enumerate(tqdm.tqdm(self.samples, desc="Samples")):
-            query = instance["query"]
-            positive = set(instance["positive"])
-            docs = list(instance["candidates"])
-
-            if isinstance(query, str):
-                # .encoding interface requires List[str] as input
-                query_emb = np.asarray(
-                    encode_queries_func(
-                        [query], batch_size=self.batch_size, task_name=self.task_name
-                    )
-                )
-                docs_emb = np.asarray(
-                    encode_corpus_func(
-                        docs, batch_size=self.batch_size, task_name=self.task_name
-                    )
-                )
-
-            fake_qid = str(i)
-            results[fake_qid] = self.rerank(query_emb, docs_emb)
-            qrels[fake_qid] = {
-                str(i): 1 if doc in positive else 0 for i, doc in enumerate(docs)
-            }
-
-        ndcg, _map, recall, precision, naucs = RetrievalEvaluator.evaluate(
-            qrels=qrels,
-            results=results,
-            k_values=self.k_values,
-            ignore_identical_ids=False,
-        )
-        scores = {**ndcg, **_map, **recall, **precision, **naucs}
-        scores_miracl = {f"{k}(MIRACL)": v for k, v in scores.items()}
-        return scores_miracl

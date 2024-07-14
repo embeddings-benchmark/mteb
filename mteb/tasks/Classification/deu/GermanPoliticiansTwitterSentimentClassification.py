@@ -16,18 +16,17 @@ class GermanPoliticiansTwitterSentimentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="accuracy",
         date=("2021-01-01", "2021-12-31"),
-        form=["written"],
-        domains=["Social", "Government"],
+        domains=["Social", "Government", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="high",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @inproceedings{schmidt-etal-2022-sentiment,
                 title = "Sentiment Analysis on {T}witter for the Major {G}erman Parties during the 2021 {G}erman Federal Election",
@@ -50,8 +49,10 @@ class GermanPoliticiansTwitterSentimentClassification(AbsTaskClassification):
                 pages = "74--87",
             }
         """,
-        n_samples={"test": 357},
-        avg_character_length={"test": 302.48},
+        descriptive_stats={
+            "n_samples": {"test": 357},
+            "avg_character_length": {"test": 302.48},
+        },
     )
 
     def dataset_transform(self):

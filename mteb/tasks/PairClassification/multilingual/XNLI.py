@@ -32,19 +32,18 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
         description="",
         reference="https://aclanthology.org/D18-1269/",
         category="s2s",
+        modalities=["text"],
         type="PairClassification",
         eval_splits=["test", "validation"],
         eval_langs=_LANGS,
-        main_score="ap",
+        main_score="max_ap",
         date=("2018-01-01", "2018-11-04"),
-        form=["written"],
-        domains=["Non-fiction", "Fiction", "Government"],
+        domains=["Non-fiction", "Fiction", "Government", "Written"],
         task_subtypes=[],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""@InProceedings{conneau2018xnli,
         author = {Conneau, Alexis
                         and Rinott, Ruty
@@ -61,8 +60,10 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
         location = {Brussels, Belgium},
         }
         """,
-        n_samples={"validation": 2163, "test": 2460},
-        avg_character_length={"validation": 106.5, "test": 106.5},
+        descriptive_stats={
+            "n_samples": {"validation": 2163, "test": 2460},
+            "avg_character_length": {"validation": 106.5, "test": 106.5},
+        },
     )
 
     def dataset_transform(self):
@@ -84,8 +85,8 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
 
                 _dataset[lang][split] = [
                     {
-                        "sent1": hf_dataset["premise"],
-                        "sent2": hf_dataset["hypothesis"],
+                        "sentence1": hf_dataset["premise"],
+                        "sentence2": hf_dataset["hypothesis"],
                         "labels": hf_dataset["label"],
                     }
                 ]
@@ -122,19 +123,18 @@ class XNLIV2(MultilingualTask, AbsTaskPairClassification):
         """,
         reference="https://arxiv.org/pdf/2301.06527",
         category="s2s",
+        modalities=["text"],
         type="PairClassification",
         eval_splits=["test"],
         eval_langs=_LANGS_2,
-        main_score="ap",
+        main_score="max_ap",
         date=("2018-01-01", "2018-11-04"),
-        form=["written"],
-        domains=["Non-fiction", "Fiction", "Government"],
+        domains=["Non-fiction", "Fiction", "Government", "Written"],
         task_subtypes=[],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="machine-translated and verified",
+        sample_creation="machine-translated and verified",
         bibtex_citation="""@inproceedings{upadhyay2023xnli,
             title={XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding (XLU)},
             author={Upadhyay, Ankit Kumar and Upadhya, Harsit Kumar},
@@ -144,13 +144,15 @@ class XNLIV2(MultilingualTask, AbsTaskPairClassification):
             organization={IEEE}
             }
         """,
-        n_samples={"test": 5010},
-        avg_character_length={"test": 80.06},  # average of premise and hypothesis
+        descriptive_stats={
+            "n_samples": {"test": 5010},
+            "avg_character_length": {"test": 80.06},
+        },  # average of premise and hypothesis
     )
 
     def dataset_transform(self):
         _dataset = {}
-        for lang in self.langs:
+        for lang in self.hf_subsets:
             _dataset[lang] = {}
             self.dataset[lang] = self.stratified_subsampling(
                 self.dataset[lang], seed=self.seed, splits=self.metadata.eval_splits
@@ -166,8 +168,8 @@ class XNLIV2(MultilingualTask, AbsTaskPairClassification):
                 )
                 _dataset[lang][split] = [
                     {
-                        "sent1": hf_dataset["premise"],
-                        "sent2": hf_dataset["hypothesis"],
+                        "sentence1": hf_dataset["premise"],
+                        "sentence2": hf_dataset["hypothesis"],
                         "labels": hf_dataset["label"],
                     }
                 ]

@@ -1,0 +1,15 @@
+('GritLM/GritLM-7B', '13f00a0e36500c80ce12870ea513846a066004af'):
+	FaithDial
+	StatcanDialogueDatasetRetrieval
+('intfloat/multilingual-e5-base', 'd13f1b27baf31030b7fd040960d60d909913633f'):
+	FaithDial
+	StatcanDialogueDatasetRetrieval
+('intfloat/multilingual-e5-large', '4dc6d853a804b9c8886ede6dda8a073b7dc08a81'):
+	FaithDial
+	StatcanDialogueDatasetRetrieval
+('intfloat/multilingual-e5-large-instruct', 'baa7be480a7de1539afce709c8f13f833a510e0a'):
+	FaithDial
+	StatcanDialogueDatasetRetrieval
+('intfloat/multilingual-e5-small', 'e4ce9877abf3edfe10b0d82785e83bdcb973e22e'):
+	FaithDial
+	StatcanDialogueDatasetRetrieval

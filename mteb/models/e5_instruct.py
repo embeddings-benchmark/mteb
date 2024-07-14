@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from itertools import islice
-from typing import Any, Iterable, Literal, Optional, Sequence, TypeVar
+from typing import Any, Callable, Iterable, Literal, Optional, Sequence, Type, TypeVar
 
 import numpy as np
 import torch
@@ -41,15 +41,25 @@ class E5InstructWrapper(Encoder):
         revision: str,
         max_length: int,
         max_batch_size: Optional[int] = None,
+        device: str = torch.device("cuda" if torch.cuda.is_available() else "cpu"),
         **kwargs: Any,
     ):
         logger.info("Started loading e5 instruct model")
         self.tokenizer = AutoTokenizer.from_pretrained(
             model_name, revision=revision, **kwargs
         )
-        self.model = AutoModel.from_pretrained(model_name, **kwargs)
+        self.model = AutoModel.from_pretrained(model_name, **kwargs).to(device)
+        self.model.eval()
+        self.device = device
         self.max_length = max_length
         self.max_batch_size = max_batch_size
+        self.gpu_count = torch.cuda.device_count()
+
+        if self.gpu_count > 1:
+            logger.info(
+                f"----------Using {self.gpu_count} data-parallel GPUs----------"
+            )
+            self.model = torch.nn.DataParallel(self.model)
 
     def preprocess(
         self, sentences: Sequence[str], instruction: str, encode_type: EncodeTypes
@@ -68,7 +78,7 @@ class E5InstructWrapper(Encoder):
             return_tensors="pt",
         )
 
-        return batch_dict.to(self.model.device)
+        return batch_dict.to(self.device)
 
     def get_embedding_from_output(
         self, output: ModelOutput, batch_dict: BatchEncoding
@@ -95,9 +105,12 @@ class E5InstructWrapper(Encoder):
     ) -> np.ndarray:
         if self.max_batch_size and batch_size > self.max_batch_size:
             batch_size = self.max_batch_size
+        batch_size = batch_size * self.gpu_count
         batched_embeddings = []
         if prompt_name is not None:
-            instruction = task_to_instruction(prompt_name)
+            instruction = task_to_instruction(
+                prompt_name, is_query=encode_type == "query"
+            )
         else:
             instruction = ""
         for batch in tqdm(batched(sentences, batch_size)):
@@ -114,6 +127,7 @@ class E5InstructWrapper(Encoder):
     def encode_corpus(
         self,
         corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
+        prompt_name: str | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
         sep = " "
@@ -134,26 +148,37 @@ class E5InstructWrapper(Encoder):
                     else doc["text"].strip()
                     for doc in corpus
                 ]
-        return self.encode(sentences, encode_type="passage", **kwargs)
+        return self.encode(
+            sentences, encode_type="passage", prompt_name=prompt_name, **kwargs
+        )
 
-    def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
-        return self.encode(queries, encode_type="query", **kwargs)
+    def encode_queries(
+        self, queries: list[str], prompt_name: str | None = None, **kwargs: Any
+    ) -> np.ndarray:
+        return self.encode(
+            queries, encode_type="query", prompt_name=prompt_name, **kwargs
+        )
 
 
 class E5MistralWrapper(E5InstructWrapper):
     def __init__(
         self,
+        name: str,
         revision: str,
         max_batch_size: int = 4,
         torch_dtype=torch.float16,
         **kwargs,
     ):
+        assert (
+            name == "intfloat/e5-mistral-7b-instruct"
+        ), f"Unexpected model name: {name}"
         super().__init__(
-            "intfloat/e5-mistral-7b-instruct",
+            model_name=name,
             revision=revision,
             max_length=4096,
             max_batch_size=max_batch_size,
             torch_dtype=torch_dtype,
+            **kwargs,
         )
 
     @staticmethod
@@ -200,13 +225,25 @@ class E5MistralWrapper(E5InstructWrapper):
             batch_dict, padding=True, return_attention_mask=True, return_tensors="pt"
         )
 
-        return batch_dict.to(self.model.device)
+        return batch_dict.to(self.device)
+
+
+def _loader(
+    wrapper: Type[E5InstructWrapper], name: str, revision: str, **kwargs
+) -> Callable[..., Encoder]:
+    _kwargs = kwargs
+
+    def loader_inner(**kwargs: Any) -> Encoder:
+        return wrapper(name, revision=revision, **_kwargs, **kwargs)
+
+    return loader_inner
 
 
 e5_instruct = ModelMeta(
-    loader=lambda: E5InstructWrapper(
+    loader=_loader(
+        E5InstructWrapper,
         "intfloat/multilingual-e5-large-instruct",
-        revision="baa7be480a7de1539afce709c8f13f833a510e0a",
+        "baa7be480a7de1539afce709c8f13f833a510e0a",
         max_length=512,
     ),
     name="intfloat/multilingual-e5-large-instruct",
@@ -217,9 +254,11 @@ e5_instruct = ModelMeta(
 )
 
 e5_mistral = ModelMeta(
-    loader=lambda: E5MistralWrapper(
-        revision="07163b72af1488142a360786df853f237b1a3ca1",
-        max_batch_size=4,
+    loader=_loader(
+        E5MistralWrapper,
+        "intfloat/e5-mistral-7b-instruct",
+        "07163b72af1488142a360786df853f237b1a3ca1",
+        max_batch_size=512,
         torch_dtype=torch.float16,
     ),
     name="intfloat/e5-mistral-7b-instruct",

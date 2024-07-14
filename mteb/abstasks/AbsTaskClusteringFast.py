@@ -12,8 +12,10 @@ import sklearn.cluster
 from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 
+from mteb.encoder_interface import Encoder
+
 from ..evaluation.evaluators.model_encode import model_encode
-from ..MTEBResults import HFSubset
+from ..load_results.mteb_results import HFSubset
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -53,11 +55,13 @@ def evaluate_clustering_bootstrapped(
             else:
                 level_labels.append(-1)
         level_labels = np.array(level_labels)
-        valid_idx = level_labels != -1
+        valid_idx = np.array(
+            [level_label != -1 for level_label in level_labels]
+        )  # Could be level_labels != -1 but fails with FutureWarning: elementwise comparison failed
         level_labels = level_labels[valid_idx]
         level_embeddings = embeddings[valid_idx]
         clustering_model = sklearn.cluster.MiniBatchKMeans(
-            n_clusters=len(set(level_labels)),
+            n_clusters=np.unique(level_labels).size,
             batch_size=kmean_batch_size,
             n_init="auto",
         )
@@ -82,7 +86,13 @@ class AbsTaskClusteringFast(AbsTask):
     The similarity then is calculated using the V-measure metric, which is invariant to the permutation of the labels.
     This approach is then repeated K times.
 
-    If the clustering is hieararchical, and more than one label is specified in order for each observation,
+    There are two ways to specify how a dataset is downsampled:
+        - max_document_to_embe (int): default to None
+        - max_fraction_of_documents_to_embed (float): default to 4%.
+    If both parameters are set to None, no downsampling is done in self._evaluate_subset().
+    Only one of these two parameters can be not None at the same time.
+
+    If the clustering is hierarchical, and more than one label is specified in order for each observation,
     V-measures are calculated in the outlined way on each of the levels separately.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset.
@@ -91,10 +101,11 @@ class AbsTaskClusteringFast(AbsTask):
         labels: list[str] | list[list[str]]
     """
 
-    max_documents_to_embed = 16_384
-    max_documents_per_cluster = 2048
-    n_clusters = 10
-    k_mean_batch_size = 512
+    max_fraction_of_documents_to_embed: float | None = 0.04
+    max_document_to_embed: int | None = None
+    max_documents_per_cluster: int = 16_384
+    n_clusters: int = 10
+    k_mean_batch_size: int = 512
     max_depth = None
 
     def __init__(self, **kwargs):
@@ -102,29 +113,54 @@ class AbsTaskClusteringFast(AbsTask):
 
     def _add_main_score(self, scores):
         if self.metadata_dict["main_score"] in scores:
-            scores["main_score"] = scores[self.metadata_dict["main_score"]]
+            scores["main_score"] = scores[self.metadata.main_score]
         else:
             logger.warning(
-                f"main score {self.metadata_dict['main_score']} not found in scores {scores.keys()}"
+                f"main score {self.metadata.main_score} not found in scores {scores.keys()}"
             )
 
     def _evaluate_subset(
-        self, model, dataset: DatasetDict, **kwargs: Any
+        self,
+        model: Encoder,
+        dataset: DatasetDict,
+        *,
+        encode_kwargs: dict[str, Any] = {},
+        **kwargs: Any,
     ) -> dict[str, float | dict[str, list[float]]]:
         rng_state = random.Random(self.seed)
 
-        if len(dataset) > self.max_documents_to_embed:
+        if (
+            self.max_document_to_embed is not None
+            and self.max_fraction_of_documents_to_embed is not None
+        ):
+            raise Exception(
+                "Both max_document_to_embed and max_fraction_of_documents_to_embed are set. Please only set one."
+            )
+
+        if (
+            self.max_document_to_embed is None
+            and self.max_fraction_of_documents_to_embed is None
+        ):
+            downsampled_dataset = dataset
+        else:
+            if self.max_fraction_of_documents_to_embed is not None:
+                max_documents_to_embed = int(
+                    self.max_fraction_of_documents_to_embed * len(dataset)
+                )
+            else:
+                max_documents_to_embed = self.max_document_to_embed
+
+            max_documents_to_embed = min(len(dataset), max_documents_to_embed)  # type: ignore
             example_indices = rng_state.sample(
-                range(len(dataset)), k=self.max_documents_to_embed
+                range(len(dataset)), k=max_documents_to_embed
             )
             downsampled_dataset = dataset.select(example_indices)  # type: ignore
-        else:
-            downsampled_dataset = dataset
 
         embeddings = model_encode(
             downsampled_dataset["sentences"],  # type: ignore
             model=model,
-            task_name=self.metadata.name,
+            prompt_name=self.metadata.name,
+            **encode_kwargs,
         )
 
         labels = []
@@ -133,7 +169,7 @@ class AbsTaskClusteringFast(AbsTask):
                 label = [label]
             labels.append(label)
 
-        v_measures = evaluate_clustering_bootstrapped(
+        all_v_scores = evaluate_clustering_bootstrapped(
             embeddings,
             labels,
             n_clusters=self.n_clusters,
@@ -142,9 +178,15 @@ class AbsTaskClusteringFast(AbsTask):
             max_depth=self.max_depth,
             rng_state=rng_state,
         )
-        all_v_scores = itertools.chain.from_iterable(v_measures.values())
-        mean_v_measure = np.mean(list(all_v_scores))
-        scores = {"v_measures": v_measures, "v_measure": float(mean_v_measure)}
+        v_measures = list(itertools.chain.from_iterable(all_v_scores.values()))
+
+        mean_v_measure = np.mean(v_measures)
+        v_std = np.std(v_measures)
+        scores = {
+            "v_measures": all_v_scores,
+            "v_measure": float(mean_v_measure),
+            "v_measure_std": v_std,
+        }
         self._add_main_score(scores)
         return scores
 

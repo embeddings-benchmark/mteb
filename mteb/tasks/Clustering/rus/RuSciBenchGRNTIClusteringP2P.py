@@ -6,6 +6,9 @@ from ....abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 
 class RuSciBenchGRNTIClusteringP2P(AbsTaskClusteringFast):
+    max_document_to_embed = 2048
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="RuSciBenchGRNTIClusteringP2P",
         dataset={
@@ -17,21 +20,22 @@ class RuSciBenchGRNTIClusteringP2P(AbsTaskClusteringFast):
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench/",
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
         main_score="v_measure",
         date=("1999-01-01", "2024-01-01"),
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",
-        n_samples={"test": 2048},
-        avg_character_length={"test": 890.1},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 890.1},
+        },
     )
 
     def dataset_transform(self):

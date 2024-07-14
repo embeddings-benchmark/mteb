@@ -4,7 +4,7 @@ from typing import Any
 
 import datasets
 
-from mteb.abstasks import AbsTaskBitextMining, CrosslingualTask
+from mteb.abstasks import AbsTaskBitextMining, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -22,7 +22,7 @@ _EVAL_LANGS = {
 }
 
 
-class SRNCorpusBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class SRNCorpusBitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="SRNCorpusBitextMining",
         dataset={
@@ -34,20 +34,21 @@ class SRNCorpusBitextMining(AbsTaskBitextMining, CrosslingualTask):
         reference="https://arxiv.org/abs/2212.06383",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=_SPLIT,
         eval_langs=_EVAL_LANGS,
         main_score="f1",
         date=("2022-04-01", "2022-07-31"),
-        form=["written"],
-        domains=["Social", "Web"],
+        domains=["Social", "Web", "Written"],
         task_subtypes=[],
         license="CC-BY-SA-4.0",
-        socioeconomic_status="medium",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
-        n_samples={"test": _N},
-        avg_character_length={"test": 55},
+        sample_creation="found",
+        descriptive_stats={
+            "n_samples": {"test": _N},
+            "avg_character_length": {"test": 55},
+        },
         bibtex_citation="""
 @article{zwennicker2022towards,
   title={Towards a general purpose machine translation system for Sranantongo},

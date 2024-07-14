@@ -10,7 +10,7 @@ from .AbsTaskMultilabelClassification import *
 from .AbsTaskPairClassification import *
 from .AbsTaskReranking import *
 from .AbsTaskRetrieval import *
+from .AbsTaskSpeedTask import *
 from .AbsTaskSTS import *
 from .AbsTaskSummarization import *
-from .CrosslingualTask import *
 from .MultilingualTask import *

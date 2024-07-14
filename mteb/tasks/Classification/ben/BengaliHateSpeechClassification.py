@@ -15,18 +15,17 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ben-Beng"],
         main_score="f1",
         date=("2019-12-01", "2020-04-09"),
-        form=["written"],
         dialect=[],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="MIT",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{karim2020BengaliNLP,
     title={Classification Benchmarks for Under-resourced Bengali Language based on Multichannel Convolutional-LSTM Network},
     author={Karim, Md. Rezaul and Chakravarti, Bharathi Raja and P. McCrae, John and Cochez, Michael},
@@ -35,8 +34,10 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
     year={2020}
 }
 """,
-        n_samples={"train": 3418},
-        avg_character_length={"train": 103.42},
+        descriptive_stats={
+            "n_samples": {"train": 3418},
+            "avg_character_length": {"train": 103.42},
+        },
     )
 
     def dataset_transform(self):

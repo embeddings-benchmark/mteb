@@ -6,7 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class TenKGnadClusteringP2P(AbsTaskClustering):
-    superseeded_by = "TenKGnadClusteringP2P.v2"
+    superseded_by = "TenKGnadClusteringP2P.v2"
 
     metadata = TaskMetadata(
         name="TenKGnadClusteringP2P",
@@ -18,25 +18,29 @@ class TenKGnadClusteringP2P(AbsTaskClustering):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="v_measure",
         date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
+        domains=["Web", "Written"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
         annotations_creators=None,
-        dialect=None,
-        text_creation=None,
+        dialect=[],
+        sample_creation="found",
         bibtex_citation=None,
-        n_samples={"test": 45914},
-        avg_character_length={"test": 2641.03},
+        descriptive_stats={
+            "n_samples": {"test": 45914},
+            "avg_character_length": {"test": 2641.03},
+        },
     )
 
 
 class TenKGnadClusteringP2PFast(AbsTaskClusteringFast):
+    max_document_to_embed = 10275
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="TenKGnadClusteringP2P.v2",
         description="Clustering of news article titles+subheadings+texts. Clustering of 10 splits on the news article category.",
@@ -47,6 +51,7 @@ class TenKGnadClusteringP2PFast(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="v_measure",
@@ -54,17 +59,18 @@ class TenKGnadClusteringP2PFast(AbsTaskClusteringFast):
             "2000-01-01",
             "2020-12-31",
         ),  # since it is news it is guessed that it is from 2000 to 2020
-        form=["written"],
-        domains=["News", "Non-fiction"],
+        domains=["News", "Non-fiction", "Written"],
         task_subtypes=None,
         license="cc-by-sa-4.0",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation=None,  # none found
-        n_samples={"test": 10275},  # due to duplicates
-        avg_character_length={"test": 2641.03},
+        # due to duplicates
+        descriptive_stats={
+            "n_samples": {"test": 10275},
+            "avg_character_length": {"test": 2641.03},
+        },
     )
 
     def dataset_transform(self) -> None:

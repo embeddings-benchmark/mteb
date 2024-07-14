@@ -8,7 +8,7 @@ NUM_SAMPLES = 2048
 
 
 class BlurbsClusteringP2P(AbsTaskClustering):
-    superseeded_by = "BlurbsClusteringP2P.v2"
+    superseded_by = "BlurbsClusteringP2P.v2"
 
     metadata = TaskMetadata(
         name="BlurbsClusteringP2P",
@@ -20,6 +20,7 @@ class BlurbsClusteringP2P(AbsTaskClustering):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="v_measure",
@@ -28,10 +29,9 @@ class BlurbsClusteringP2P(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@inproceedings{Remus2019GermEval2T,
   title={GermEval 2019 Task 1: Hierarchical Classification of Blurbs},
   author={Steffen Remus and Rami Aly and Chris Biemann},
@@ -39,14 +39,18 @@ class BlurbsClusteringP2P(AbsTaskClustering):
   year={2019},
   url={https://api.semanticscholar.org/CorpusID:208334484}
 }""",
-        n_samples={"test": 174637},
-        avg_character_length={"test": 664.09},
+        descriptive_stats={
+            "n_samples": {"test": 174637},
+            "avg_character_length": {"test": 664.09},
+        },
     )
 
 
 class BlurbsClusteringP2PFast(AbsTaskClusteringFast):
     # a faster version of BlurbsClusteringP2P, since it does not sample from the same distribution we can't use the AbsTaskClusteringFast, instead we
     # simply downsample each cluster.
+    max_document_to_embed = NUM_SAMPLES
+    max_fraction_of_documents_to_embed = None
 
     metadata = TaskMetadata(
         name="BlurbsClusteringP2P.v2",
@@ -58,6 +62,7 @@ class BlurbsClusteringP2PFast(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="v_measure",
@@ -65,14 +70,12 @@ class BlurbsClusteringP2PFast(AbsTaskClusteringFast):
             "1900-01-01",
             "2019-12-31",
         ),  # since it is books it is likely to be from the 20th century -> paper from 2019
-        form=["written"],
-        domains=["Fiction"],
+        domains=["Fiction", "Written"],
         task_subtypes=["Thematic clustering"],
         license="cc-by-nc-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{Remus2019GermEval2T,
   title={GermEval 2019 Task 1: Hierarchical Classification of Blurbs},
   author={Steffen Remus and Rami Aly and Chris Biemann},
@@ -80,8 +83,10 @@ class BlurbsClusteringP2PFast(AbsTaskClusteringFast):
   year={2019},
   url={https://api.semanticscholar.org/CorpusID:208334484}
 }""",
-        n_samples={"test": NUM_SAMPLES},
-        avg_character_length={"test": 664.09},
+        descriptive_stats={
+            "n_samples": {"test": NUM_SAMPLES},
+            "avg_character_length": {"test": 664.09},
+        },
     )
 
     def dataset_transform(self):

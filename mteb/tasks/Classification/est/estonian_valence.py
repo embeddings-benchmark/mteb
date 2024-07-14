@@ -15,6 +15,7 @@ class EstonianValenceClassification(AbsTaskClassification):
         reference="https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["est-Latn"],
         main_score="accuracy",
@@ -22,14 +23,12 @@ class EstonianValenceClassification(AbsTaskClassification):
             "1857-01-01",  # Inception of Postimees
             "2023-11-08",  # dataset publication
         ),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         dialect=[],
         license="CC BY 4.0",
-        socioeconomic_status="high",
         annotations_creators="human-annotated",
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @article{Pajupuu2023,
     author = "Hille Pajupuu and Jaan Pajupuu and Rene Altrov and Kairi Tamuri",
@@ -39,8 +38,13 @@ class EstonianValenceClassification(AbsTaskClassification):
     url = "https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054",
     doi = "10.6084/m9.figshare.24517054.v1"
 }""",
-        n_samples={"train": 3270, "test": 818},
-        avg_character_length={"train": 226.70642201834863, "test": 231.5085574572127},
+        descriptive_stats={
+            "n_samples": {"train": 3270, "test": 818},
+            "avg_character_length": {
+                "train": 226.70642201834863,
+                "test": 231.5085574572127,
+            },
+        },
     )
 
     def dataset_transform(self):

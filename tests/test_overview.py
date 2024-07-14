@@ -52,7 +52,7 @@ def test_get_task(
         if task_types:
             assert task.metadata.type in task_types
         if exclude_superseeded_datasets:
-            assert task.superseeded_by is None
+            assert task.superseded_by is None
 
 
 def test_get_tasks_filtering():
@@ -84,3 +84,8 @@ def test_MTEBTasks(
     # check for header of a table
     n_langs = len(tasks)
     assert len(tasks.to_markdown().split("\n")) - 3 == n_langs
+
+
+def test_all_tasks_fetch():
+    """Test that all tasks can be fetched"""
+    mteb.MTEB.mteb_tasks()

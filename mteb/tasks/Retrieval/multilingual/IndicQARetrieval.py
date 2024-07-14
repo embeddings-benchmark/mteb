@@ -30,23 +30,23 @@ class IndicQARetrieval(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "ai4bharat/IndicQA",
             "revision": "570d90ae4f7b64fe4fdd5f42fc9f9279b8c9fd9d",
+            "trust_remote_code": True,
         },
         description="IndicQA is a manually curated cloze-style reading comprehension dataset that can be used for evaluating question-answering models in 11 Indic languages. It is repurposed retrieving relevant context for each question.",
         reference="https://arxiv.org/abs/2212.05409",
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="ndcg_at_10",
         date=("2022-08-01", "2022-12-20"),
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=[],
         license="CC0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="machine-translated and verified",
+        sample_creation="machine-translated and verified",
         bibtex_citation="""@article{doddapaneni2022towards,
   title     = {Towards Leaving No Indic Language Behind: Building Monolingual Corpora, Benchmark and Models for Indic Languages},
   author    = {Sumanth Doddapaneni and Rahul Aralikatte and Gowtham Ramesh and Shreyansh Goyal and Mitesh M. Khapra and Anoop Kunchukuttan and Pratyush Kumar},
@@ -54,8 +54,90 @@ class IndicQARetrieval(MultilingualTask, AbsTaskRetrieval):
   year      = {2022},
   doi       = {10.18653/v1/2023.acl-long.693}
 }""",
-        n_samples={"test": 18586},
-        avg_character_length={"test": 930.6},
+        descriptive_stats={
+            "n_samples": {"test": 18586},
+            "avg_character_length": {
+                "test": {
+                    "as": {
+                        "average_document_length": 1401.28,
+                        "average_query_length": 56.60504201680672,
+                        "num_documents": 250,
+                        "num_queries": 1785,
+                        "average_relevant_docs_per_query": 1.0016806722689076,
+                    },
+                    "bn": {
+                        "average_document_length": 2196.012,
+                        "average_query_length": 57.069239500567534,
+                        "num_documents": 250,
+                        "num_queries": 1762,
+                        "average_relevant_docs_per_query": 1.0005675368898979,
+                    },
+                    "gu": {
+                        "average_document_length": 960.4959677419355,
+                        "average_query_length": 60.3712158808933,
+                        "num_documents": 248,
+                        "num_queries": 2015,
+                        "average_relevant_docs_per_query": 1.0009925558312656,
+                    },
+                    "hi": {
+                        "average_document_length": 2550.770114942529,
+                        "average_query_length": 52.84909326424871,
+                        "num_documents": 261,
+                        "num_queries": 1544,
+                        "average_relevant_docs_per_query": 1.0019430051813472,
+                    },
+                    "kn": {
+                        "average_document_length": 882.7354085603113,
+                        "average_query_length": 50.58734344100198,
+                        "num_documents": 257,
+                        "num_queries": 1517,
+                        "average_relevant_docs_per_query": 1.0,
+                    },
+                    "ml": {
+                        "average_document_length": 2522.6437246963565,
+                        "average_query_length": 75.93635790800252,
+                        "num_documents": 247,
+                        "num_queries": 1587,
+                        "average_relevant_docs_per_query": 1.0,
+                    },
+                    "mr": {
+                        "average_document_length": 1711.74,
+                        "average_query_length": 58.785,
+                        "num_documents": 250,
+                        "num_queries": 1600,
+                        "average_relevant_docs_per_query": 1.0,
+                    },
+                    "or": {
+                        "average_document_length": 801.9206349206349,
+                        "average_query_length": 55.072792362768496,
+                        "num_documents": 252,
+                        "num_queries": 1676,
+                        "average_relevant_docs_per_query": 1.0011933174224343,
+                    },
+                    "pa": {
+                        "average_document_length": 1423.5062240663901,
+                        "average_query_length": 58.394925178919976,
+                        "num_documents": 241,
+                        "num_queries": 1537,
+                        "average_relevant_docs_per_query": 1.0013012361743656,
+                    },
+                    "ta": {
+                        "average_document_length": 2288.2608695652175,
+                        "average_query_length": 54.06211869107044,
+                        "num_documents": 253,
+                        "num_queries": 1803,
+                        "average_relevant_docs_per_query": 1.0005546311702718,
+                    },
+                    "te": {
+                        "average_document_length": 2936.176,
+                        "average_query_length": 67.00634371395617,
+                        "num_documents": 250,
+                        "num_queries": 1734,
+                        "average_relevant_docs_per_query": 1.0,
+                    },
+                }
+            },
+        },
     )
 
     def load_data(self, **kwargs):
@@ -72,7 +154,6 @@ class IndicQARetrieval(MultilingualTask, AbsTaskRetrieval):
                 name=f"indicqa.{lang}", **self.metadata_dict["dataset"]
             )[split]
             data = data.filter(lambda x: x["answers"]["text"] != "")
-            data = data.select(range(self.metadata.n_samples[split]))
 
             question_ids = {
                 question: sha256(question.encode("utf-8")).hexdigest()

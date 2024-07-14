@@ -86,6 +86,8 @@ from .multilingual.MultiHateClassification import *
 from .multilingual.MultilingualSentimentClassification import *
 from .multilingual.NaijaSenti import *
 from .multilingual.NordicLangClassification import *
+from .multilingual.NusaParagraphEmotionClassification import *
+from .multilingual.NusaParagraphTopicClassification import *
 from .multilingual.NusaXSenti import *
 from .multilingual.ScalaClassification import *
 from .multilingual.SIB200Classification import *
@@ -121,6 +123,7 @@ from .spa.SpanishNewsClassification import *
 from .spa.SpanishSentimentClassification import *
 from .ssw.SiswatiNewsClassification import *
 from .svk.SlovakMovieReviewSentimentClassification import *
+from .swa.SwahiliNewsClassification import *
 from .swe.DalajClassification import *
 from .swe.SwedishSentimentClassification import *
 from .swe.SweRecClassification import *

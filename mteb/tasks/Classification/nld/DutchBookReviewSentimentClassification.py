@@ -12,21 +12,21 @@ class DutchBookReviewSentimentClassification(AbsTaskClassification):
         dataset={
             "path": "benjaminvdb/dbrd",
             "revision": "3f756ab4572e071eb53e887ab629f19fa747d39e",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         date=("2019-10-04", "2019-10-04"),
         eval_splits=["test"],
         eval_langs=["nld-Latn"],
         main_score="accuracy",
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC BY-NC-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{DBLP:journals/corr/abs-1910-00896,
   author    = {Benjamin, van der Burgh and
                Suzan, Verberne},
@@ -43,6 +43,8 @@ class DutchBookReviewSentimentClassification(AbsTaskClassification):
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 """,
-        n_samples={"test": 2224},
-        avg_character_length={"test": 1443.0},
+        descriptive_stats={
+            "n_samples": {"test": 2224},
+            "avg_character_length": {"test": 1443.0},
+        },
     )

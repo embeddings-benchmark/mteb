@@ -28,7 +28,7 @@ _LANGUAGES = {
 
 
 class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
-    superseeded_by = "WikiClusteringP2P.v2"
+    superseded_by = "WikiClusteringP2P.v2"
     metadata = TaskMetadata(
         name="WikiClusteringP2P",
         description="Clustering of wikipedia articles inspired by BlubrbsClusteringP2P. Labels are taken from top-level categories of the respective languages (e.g., https://lv.wikipedia.org/wiki/Kategorija:Pamatkategorijas).",
@@ -39,25 +39,29 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="v_measure",
         date=("2001-01-15", "2024-04-15"),
-        form=["written"],
-        domains=["Encyclopaedic"],
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="cc-by-sa-3.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation=None,  # None exists
-        n_samples={"test": 71680},
-        avg_character_length={"test": 625.3},
+        descriptive_stats={
+            "n_samples": {"test": 71680},
+            "avg_character_length": {"test": 625.3},
+        },
     )
 
 
 class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
+    max_document_to_embed = 2048
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="WikiClusteringP2P.v2",
         description="Clustering of wikipedia articles inspired by BlubrbsClusteringP2P. Labels are taken from top-level categories of the respective languages (e.g., https://lv.wikipedia.org/wiki/Kategorija:Pamatkategorijas).",
@@ -68,21 +72,22 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="v_measure",
         date=("2001-01-15", "2024-04-15"),
-        form=["written"],
-        domains=["Encyclopaedic"],
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=["Thematic clustering"],
         license="cc-by-sa-3.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="",  # None exists
-        n_samples={"test": 2048},
-        avg_character_length={"test": 625.3},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 625.3},
+        },
     )
 
     def dataset_transform(self):

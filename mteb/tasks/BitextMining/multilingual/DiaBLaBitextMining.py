@@ -4,20 +4,22 @@ import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskBitextMining, CrosslingualTask
+from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 
-class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class DiaBLaBitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="DiaBlaBitextMining",
         dataset={
             "path": "rbawden/DiaBLa",
             "revision": "5345895c56a601afe1a98519ce3199be60a27dba",
+            "trust_remote_code": True,
         },
         description="English-French Parallel Corpus. DiaBLa is an English-French dataset for the evaluation of Machine Translation (MT) for informal, written bilingual dialogue.",
         reference="https://inria.hal.science/hal-03021633",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs={
             "fr-en": ["fra-Latn", "eng-Latn"],
@@ -25,14 +27,12 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
         },
         main_score="f1",
         date=("2016-01-01", "2017-12-31"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=[],
         license="CC BY-NC-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""
         @inproceedings{gonzalez2019diabla,
         title={DiaBLa: A Corpus of Bilingual Spontaneous Written Dialogues for Machine Translation},
@@ -42,8 +42,7 @@ class DiaBLaBitextMining(AbsTaskBitextMining, CrosslingualTask):
         year={2019}
         }
         """,
-        n_samples={},
-        avg_character_length={},
+        descriptive_stats={"n_samples": {}, "avg_character_length": {}},
     )
 
     def load_data(self, **kwargs):

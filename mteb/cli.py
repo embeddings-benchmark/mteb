@@ -72,10 +72,11 @@ import json
 import logging
 from pathlib import Path
 
+import torch
 import yaml
 
 import mteb
-from mteb.MTEBResults import MTEBResults
+from mteb.load_results.mteb_results import MTEBResults
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
@@ -84,9 +85,9 @@ logger = logging.getLogger(__name__)
 def _save_model_metadata(model: mteb.Encoder, output_folder: Path) -> None:
     meta = model.mteb_model_meta  # type: ignore
 
-    save_path = (
-        output_folder / meta.model_name_as_path() / meta.revision / "model_meta.json"
-    )
+    revision = meta.revision if meta.revision is not None else "no_revision_available"
+
+    save_path = output_folder / meta.model_name_as_path() / revision / "model_meta.json"
 
     with save_path.open("w") as f:
         json.dump(meta.to_dict(), f)
@@ -105,7 +106,12 @@ def run(args: argparse.Namespace) -> None:
 
     logger.info("Running with parameters: %s", args)
 
-    model = mteb.get_model(args.model, args.model_revision, device=args.device)
+    if args.device is None:
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+    else:
+        device = args.device
+
+    model = mteb.get_model(args.model, args.model_revision, device=device)
 
     tasks = mteb.get_tasks(
         categories=args.categories,
@@ -115,12 +121,18 @@ def run(args: argparse.Namespace) -> None:
     )
     eval = mteb.MTEB(tasks=tasks)
 
+    encode_kwargs = {}
+    if args.batch_size is not None:
+        encode_kwargs["batch_size"] = args.batch_size
+
     eval.run(
         model,
         verbosity=args.verbosity,
         output_folder=args.output_folder,
         eval_splits=args.eval_splits,
         co2_tracker=args.co2_tracker,
+        overwrite_results=args.overwrite,
+        encode_kwargs=encode_kwargs,
     )
 
     _save_model_metadata(model, Path(args.output_folder))
@@ -198,8 +210,8 @@ def add_run_parser(subparsers) -> None:
     parser.add_argument(
         "--output_folder",
         type=str,
-        default=None,
-        help="Output directory for results. Will default to results/{model_name} if not set.",
+        default="results",
+        help="Output directory for results. Will default to `results` if not set.",
     )
     parser.add_argument(
         "-v", "--verbosity", type=int, default=2, help="Verbosity level"
@@ -223,6 +235,18 @@ def add_run_parser(subparsers) -> None:
         default=None,
         help="Revision of the model to be loaded. Revisions are automatically read if the model is loaded from huggingface.",
     )
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=None,
+        help="Batch size of the encode. Will be passed to the MTEB as MTEB.evaluate(model, encode_kwargs = {'batch_size': value}).",
+    )
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        default=False,
+        help="Overwrite the output file if it already exists",
+    )
 
     parser.set_defaults(func=run)
 
@@ -245,6 +269,7 @@ def create_meta(args: argparse.Namespace) -> None:
     ]
 
     task_results = [MTEBResults.from_disk(path) for path in json_files]
+    task_results = sorted(task_results, key=lambda x: x.task_name)
 
     yaml_results = []
     for task_result in task_results:
@@ -252,21 +277,30 @@ def create_meta(args: argparse.Namespace) -> None:
 
         for split, hf_subset_scores in task_result.scores.items():
             for hf_subset_score in hf_subset_scores:
+                metrics = [
+                    {
+                        "type": k,
+                        "value": v
+                        * 100,  # convert to percentage (for consistency with the leaderboard and to make it more readable)
+                    }
+                    for k, v in hf_subset_score.items()
+                    if isinstance(v, (int, float))
+                ]
+                if task.metadata.main_score not in hf_subset_score:
+                    raise ValueError(
+                        f"Main score {task.metadata.main_score} not found in metrics or is not a number."
+                    )
+
                 yaml_result = {
                     "task": {"type": task.metadata.type},
                     "dataset": {
                         "type": task.metadata.dataset["path"],
-                        "name": f"MTEB {task.metadata.name}",
+                        "name": f"MTEB {task.metadata.name} ({hf_subset_score['hf_subset']})",
                         "config": hf_subset_score["hf_subset"],
                         "split": split,
                         "revision": task_result.dataset_revision,
                     },
-                    "metrics": [
-                        {
-                            "type": task.metadata.main_score,
-                            "value": hf_subset_score["main_score"],
-                        }
-                    ],
+                    "metrics": metrics,
                 }
                 yaml_results.append(yaml_result)
 

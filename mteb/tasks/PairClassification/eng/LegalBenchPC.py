@@ -69,21 +69,21 @@ class LegalBenchPC(AbsTaskPairClassification):
         dataset={
             "path": "nguha/legalbench",
             "revision": "12ca3b695563788fead87a982ad1a068284413f4",
+            "trust_remote_code": True,
         },
         type="PairClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
+        main_score="max_accuracy",
         date=("2000-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -117,8 +117,10 @@ class LegalBenchPC(AbsTaskPairClassification):
             year={2019}
         }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 287.18},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 287.18},
+        },
     )
 
     def load_data(self, **kwargs: Any) -> None:
@@ -137,12 +139,12 @@ class LegalBenchPC(AbsTaskPairClassification):
 
             _dataset = _dataset.rename_columns(
                 {
-                    dataset_col_map["sent1"]: "sent1",
-                    dataset_col_map["sent2"]: "sent2",
+                    dataset_col_map["sent1"]: "sentence1",
+                    dataset_col_map["sent2"]: "sentence2",
                     dataset_col_map["labels"]: "labels",
                 }
             )
-            _dataset = _dataset.select_columns(["labels", "sent1", "sent2"])
+            _dataset = _dataset.select_columns(["labels", "sentence1", "sentence2"])
             mapping = dataset_col_map["mapping"]
             _dataset = _dataset.map(
                 lambda example: {
@@ -174,8 +176,8 @@ class LegalBenchPC(AbsTaskPairClassification):
             hf_dataset = self.dataset[split]
             _dataset[split] = [
                 {
-                    "sent1": hf_dataset["sent1"],
-                    "sent2": hf_dataset["sent2"],
+                    "sentence1": hf_dataset["sentence1"],
+                    "sentence2": hf_dataset["sentence2"],
                     "labels": hf_dataset["labels"],
                 }
             ]

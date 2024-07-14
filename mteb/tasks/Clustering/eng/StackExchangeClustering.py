@@ -23,18 +23,17 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=("2021-01-01", "2021-04-14"),
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=["Thematic clustering"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{geigle:2021:arxiv,
         author    = {Gregor Geigle and 
                         Nils Reimers and 
@@ -48,8 +47,10 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 16000},
-        avg_character_length={"test": 57.0},
+        descriptive_stats={
+            "n_samples": {"test": 32768},
+            "avg_character_length": {"test": 57.0},
+        },
     )
 
     def dataset_transform(self):
@@ -69,12 +70,13 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=16000,
+            n_samples=32768,
         )
+        self.max_fraction_of_documents_to_embed = None
 
 
 class StackExchangeClustering(AbsTaskClustering):
-    superseeded_by = "StackExchangeClustering.v2"
+    superseded_by = "StackExchangeClustering.v2"
     metadata = TaskMetadata(
         name="StackExchangeClustering",
         description="Clustering of titles from 121 stackexchanges. Clustering of 25 sets, each with 10-50 classes, and each class with 100 - 1000 sentences.",
@@ -85,6 +87,7 @@ class StackExchangeClustering(AbsTaskClustering):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
@@ -93,10 +96,9 @@ class StackExchangeClustering(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@article{geigle:2021:arxiv,
         author    = {Gregor Geigle and 
                         Nils Reimers and 
@@ -110,6 +112,8 @@ class StackExchangeClustering(AbsTaskClustering):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        n_samples={"test": 373850},
-        avg_character_length={"test": 57.0},
+        descriptive_stats={
+            "n_samples": {"test": 373850},
+            "avg_character_length": {"test": 57.0},
+        },
     )

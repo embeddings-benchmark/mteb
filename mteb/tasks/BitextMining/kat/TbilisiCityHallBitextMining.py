@@ -4,7 +4,7 @@ from datasets import DatasetDict, load_dataset
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskBitextMining, CrosslingualTask
+from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = {
     "kat_Geor": "ka",
@@ -18,7 +18,7 @@ _EVAL_LANGS = {
 _EVAL_SPLIT = "test"
 
 
-class TbilisiCityHallBitextMining(AbsTaskBitextMining, CrosslingualTask):
+class TbilisiCityHallBitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="TbilisiCityHallBitextMining",
         dataset={
@@ -28,22 +28,23 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining, CrosslingualTask):
         description="Parallel news titles from the Tbilisi City Hall website (https://tbilisi.gov.ge/).",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_EVAL_LANGS,
         main_score="f1",
-        domains=["News"],
-        text_creation="created",
-        n_samples={_EVAL_SPLIT: 1820},
+        domains=["News", "Written"],
+        sample_creation="created",
         reference="https://huggingface.co/datasets/jupyterjazz/tbilisi-city-hall-titles",
         date=("2024-05-02", "2024-05-03"),
-        form=["written"],
         task_subtypes=[],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         bibtex_citation="",
-        avg_character_length={_EVAL_SPLIT: 78},
+        descriptive_stats={
+            "n_samples": {_EVAL_SPLIT: 1820},
+            "avg_character_length": {_EVAL_SPLIT: 78},
+        },
     )
 
     def load_data(self, **kwargs) -> None:

@@ -16,18 +16,17 @@ class FaroeseSTS(AbsTaskSTS):
         reference="https://aclanthology.org/2023.nodalida-1.74.pdf",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["fao-Latn"],
         main_score="cosine_spearman",
         date=("2018-05-01", "2020-03-31"),
-        form=["written"],
-        domains=["News", "Web"],
+        domains=["News", "Web", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @inproceedings{snaebjarnarson-etal-2023-transfer,
             title = "{T}ransfer to a Low-Resource Language via Close Relatives: The Case Study on Faroese",
@@ -42,8 +41,10 @@ class FaroeseSTS(AbsTaskSTS):
             publisher = {Link{\"o}ping University Electronic Press, Sweden},
         }
         """,
-        n_samples={"train": 729},
-        avg_character_length={"train": 43.6},
+        descriptive_stats={
+            "n_samples": {"train": 729},
+            "avg_character_length": {"train": 43.6},
+        },
     )
 
     @property

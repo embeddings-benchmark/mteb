@@ -16,7 +16,7 @@ N_SAMPLES = 2048
 
 
 class EightTagsClustering(AbsTaskClustering):
-    superseeded_by = "EightTagsClustering.v2"
+    superseded_by = "EightTagsClustering.v2"
     metadata = TaskMetadata(
         name="EightTagsClustering",
         description="Clustering of headlines from social media posts in Polish belonging to 8 categories: film, history, "
@@ -28,18 +28,17 @@ class EightTagsClustering(AbsTaskClustering):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="v_measure",
         date=("2019-01-01", "2020-05-01"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Topic classification", "Thematic clustering"],
         license="GPL-3.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{dadas-etal-2020-evaluation,
             title = "Evaluation of Sentence Representations in {P}olish",
             author = "Dadas, Slawomir  and
@@ -70,12 +69,17 @@ class EightTagsClustering(AbsTaskClustering):
             language = "English",
             ISBN = "979-10-95546-34-4",
         }""",
-        n_samples={"test": 49373},
-        avg_character_length={"test": 78.23},
+        descriptive_stats={
+            "n_samples": {"test": 49373},
+            "avg_character_length": {"test": 78.23},
+        },
     )
 
 
 class EightTagsClusteringFast(AbsTaskClusteringFast):
+    max_document_to_embed = N_SAMPLES
+    max_fraction_of_documents_to_embed = None
+
     metadata = TaskMetadata(
         name="EightTagsClustering.v2",
         description="Clustering of headlines from social media posts in Polish belonging to 8 categories: film, history, "
@@ -87,18 +91,17 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="v_measure",
         date=("2019-01-01", "2020-05-01"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Topic classification", "Thematic clustering"],
         license="GPL-3.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{dadas-etal-2020-evaluation,
             title = "Evaluation of Sentence Representations in {P}olish",
             author = "Dadas, Slawomir  and
@@ -129,8 +132,10 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
             language = "English",
             ISBN = "979-10-95546-34-4",
         }""",
-        n_samples={"test": N_SAMPLES},
-        avg_character_length={"test": 78.73},
+        descriptive_stats={
+            "n_samples": {"test": N_SAMPLES},
+            "avg_character_length": {"test": 78.73},
+        },
     )
 
     def dataset_transform(self):
@@ -152,7 +157,7 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
 
 
 class PlscClusteringS2S(AbsTaskClusteringFast):
-    superseeded_by = "PlscClusteringS2S.v2"
+    superseded_by = "PlscClusteringS2S.v2"
     metadata = TaskMetadata(
         name="PlscClusteringS2S",
         description="Clustering of Polish article titles from Library of Science (https://bibliotekanauki.pl/), either "
@@ -164,21 +169,22 @@ class PlscClusteringS2S(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="v_measure",
         date=("2022-04-04", "2023-09-12"),
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=["Topic classification", "Thematic clustering"],
         license="cc0-1.0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",
-        n_samples={"test": 17534},
-        avg_character_length={"test": 84.34},
+        descriptive_stats={
+            "n_samples": {"test": 17534},
+            "avg_character_length": {"test": 84.34},
+        },
     )
 
 
@@ -194,21 +200,22 @@ class PlscClusteringS2SFast(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="v_measure",
         date=("2022-04-04", "2023-09-12"),
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=["Topic classification", "Thematic clustering"],
         license="cc0-1.0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",
-        n_samples={"test": N_SAMPLES},
-        avg_character_length={"test": 84.34},
+        descriptive_stats={
+            "n_samples": {"test": N_SAMPLES},
+            "avg_character_length": {"test": 84.34},
+        },
     )
 
     def dataset_transform(self):
@@ -239,7 +246,7 @@ class PlscClusteringS2SFast(AbsTaskClusteringFast):
 
 
 class PlscClusteringP2P(AbsTaskClusteringFast):
-    superseeded_by = "PlscClusteringP2P.v2"
+    superseded_by = "PlscClusteringP2P.v2"
     metadata = TaskMetadata(
         name="PlscClusteringP2P",
         description="Clustering of Polish article titles+abstracts from Library of Science "
@@ -251,21 +258,22 @@ class PlscClusteringP2P(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="v_measure",
         date=("2022-04-04", "2023-09-12"),
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=["Topic classification", "Thematic clustering"],
         license="cc0-1.0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",
-        n_samples={"test": 17537},
-        avg_character_length={"test": 1023.21},
+        descriptive_stats={
+            "n_samples": {"test": 17537},
+            "avg_character_length": {"test": 1023.21},
+        },
     )
 
 
@@ -281,21 +289,22 @@ class PlscClusteringP2PFast(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="v_measure",
         date=("2022-04-04", "2023-09-12"),
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=["Topic classification", "Thematic clustering"],
         license="cc0-1.0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",
-        n_samples={"test": N_SAMPLES},
-        avg_character_length={"test": 1023.21},
+        descriptive_stats={
+            "n_samples": {"test": N_SAMPLES},
+            "avg_character_length": {"test": 1023.21},
+        },
     )
 
     def dataset_transform(self):

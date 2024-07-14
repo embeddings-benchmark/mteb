@@ -6,7 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class ArxivClusteringP2P(AbsTaskClustering):
-    superseeded_by = "ArXivHierarchicalClusteringP2P"
+    superseded_by = "ArXivHierarchicalClusteringP2P"
 
     metadata = TaskMetadata(
         name="ArxivClusteringP2P",
@@ -18,6 +18,7 @@ class ArxivClusteringP2P(AbsTaskClustering):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
@@ -26,10 +27,9 @@ class ArxivClusteringP2P(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{arxiv_org_submitters_2024,
     title={arXiv Dataset},
     url={https://www.kaggle.com/dsv/7548853},
@@ -38,13 +38,15 @@ class ArxivClusteringP2P(AbsTaskClustering):
     author={arXiv.org submitters},
     year={2024}
 }""",
-        n_samples={"test": 732723},
-        avg_character_length={"test": 1009.98},
+        descriptive_stats={
+            "n_samples": {"test": 732723},
+            "avg_character_length": {"test": 1009.98},
+        },
     )
 
 
 class ArxivClusteringP2PFast(AbsTaskClustering):
-    superseeded_by = "ArXivHierarchicalClusteringP2P"
+    superseded_by = "ArXivHierarchicalClusteringP2P"
     # a faster version of the dataset, since it does not sample from the same distribution we can't use the AbsTaskClusteringFast, instead we
     # simply downsample each cluster.
 
@@ -58,18 +60,17 @@ class ArxivClusteringP2PFast(AbsTaskClustering):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=("1991-01-01", "2021-01-01"),  # 1991-01-01 is the first arxiv paper
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=[],
         license="CC0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{arxiv_org_submitters_2024,
     title={arXiv Dataset},
     url={https://www.kaggle.com/dsv/7548853},
@@ -78,8 +79,10 @@ class ArxivClusteringP2PFast(AbsTaskClustering):
     author={arXiv.org submitters},
     year={2024}
 }""",  # None found
-        n_samples={"test": 250_000},
-        avg_character_length={"test": 1009.98},
+        descriptive_stats={
+            "n_samples": {"test": 250_000},
+            "avg_character_length": {"test": 1009.98},
+        },
     )
 
     def dataset_transform(self):

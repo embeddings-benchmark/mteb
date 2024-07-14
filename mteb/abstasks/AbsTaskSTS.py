@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 from ..evaluation.evaluators import STSEvaluator
-from ..MTEBResults import ScoresDict
+from ..load_results.mteb_results import ScoresDict
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
@@ -29,7 +30,9 @@ class AbsTaskSTS(AbsTask):
     def max_score(self) -> int:
         return self.metadata_dict["max_score"]
 
-    def _evaluate_subset(self, model, data_split, **kwargs) -> ScoresDict:
+    def _evaluate_subset(
+        self, model, data_split, *, encode_kwargs: dict[str, Any] = {}, **kwargs
+    ) -> ScoresDict:
         def normalize(x):
             return (x - self.min_score) / (self.max_score - self.min_score)
 
@@ -41,13 +44,10 @@ class AbsTaskSTS(AbsTask):
             task_name=self.metadata.name,
             **kwargs,
         )
-        scores = evaluator(model)
+        scores = evaluator(model, encode_kwargs=encode_kwargs)
 
         self._add_main_score(scores)
         return scores
 
     def _add_main_score(self, scores: ScoresDict) -> None:
-        m_score = self.metadata.main_score
-        dist, metric = m_score.split("_")
-        dist_mapping = {"cosine": "cos_sim"}
-        scores["main_score"] = scores[dist_mapping.get(dist, dist)][metric]
+        scores["main_score"] = scores[self.metadata.main_score]

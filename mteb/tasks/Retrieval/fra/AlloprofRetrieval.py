@@ -15,21 +15,21 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "lyon-nlp/alloprof",
             "revision": "fcf295ea64c750f41fadbaa37b9b861558e1bfbd",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="ndcg_at_10",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
+        date=None,  # no date specified.
+        domains=["Encyclopaedic", "Written"],
+        task_subtypes=[],
+        license="cc-by-nc-sa-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation="""@misc{lef23,
   doi = {10.48550/ARXIV.2302.07738},
   url = {https://arxiv.org/abs/2302.07738},
@@ -40,8 +40,18 @@ class AlloprofRetrieval(AbsTaskRetrieval):
   year = {2023},
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }""",
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={
+            "n_samples": {"train": 2048},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 3505.705399061033,
+                    "average_query_length": 170.71286701208982,
+                    "num_documents": 2556,
+                    "num_queries": 2316,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
+        },
     )
 
     def load_data(self, **kwargs):
