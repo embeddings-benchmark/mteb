@@ -8,8 +8,8 @@ from sentence_transformers import SentenceTransformer
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.model_meta import ModelMeta
 from mteb.models import (
-    clip_models,
     bge_models,
+    clip_models,
     cohere_models,
     e5_instruct,
     e5_models,
@@ -22,7 +22,6 @@ from mteb.models import (
     salesforce_models,
     sentence_transformers_models,
     voyage_models,
-    clip_models,
 )
 
 logger = logging.getLogger(__name__)
@@ -133,7 +132,7 @@ model_modules = [
     ru_sentence_models,
     nomic_models,
     cohere_models,
-    clip_models
+    clip_models,
 ]
 models = {}
 

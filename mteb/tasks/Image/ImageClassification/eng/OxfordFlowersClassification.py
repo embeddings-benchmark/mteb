@@ -4,6 +4,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from .....abstasks import AbsTaskImageClassification
 
+
 class OxfordFlowersClassification(AbsTaskImageClassification):
     metadata = TaskMetadata(
         name="OxfordFlowersClassification",

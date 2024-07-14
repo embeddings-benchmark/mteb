@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import tqdm
 from datasets import Dataset
 
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
@@ -41,23 +40,21 @@ class AbsTaskZeroshotClassification(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
-
         candidate_labels = self.get_candidate_labels()
-        
+
         evaluator = ZeroshotClassificationEvaluator(
-            dataset[self.image_column_name],  
-            dataset[self.label_column_name],  
+            dataset[self.image_column_name],
+            dataset[self.label_column_name],
             candidate_labels,
             task_name=self.metadata.name,
             **kwargs,
         )
         metrics = evaluator(model, encode_kwargs=encode_kwargs)
 
-
         scores = {"accuracy": metrics["accuracy"]}
         self._add_main_score(scores)
         return scores
-    
+
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""
         raise NotImplementedError("This method should be overridden by subclasses")

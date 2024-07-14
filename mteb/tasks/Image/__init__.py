@@ -1,2 +1,2 @@
-from .ZeroshotClassification import *
 from .ImageClassification import *
+from .ZeroshotClassification import *
