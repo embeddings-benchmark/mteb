@@ -42,4 +42,4 @@ TASK_LIST_RETRIEVAL = [
 model = get_model("bm25s", "0_1_10")
 
 evaluation = MTEB(tasks=TASK_LIST_RETRIEVAL, task_langs=["en"])
-evaluation.run(model, output_folder=f"results")
+evaluation.run(model, output_folder="results")

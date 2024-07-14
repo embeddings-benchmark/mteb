@@ -332,7 +332,9 @@ class DRESModel:
     """Dense Retrieval Exact Search (DRES) requires an encode_queries & encode_corpus method.
     This class converts a model with just an .encode method into DRES format.
     """
+
     mteb_model_meta: ModelMeta | None
+
     def __init__(self, model, **kwargs):
         self.model = model
         self.use_sbert_model = isinstance(model, SentenceTransformer)
@@ -489,7 +491,10 @@ class RetrievalEvaluator(Evaluator):
 
         if self.is_cross_encoder:
             return self.retriever.search_cross_encoder(corpus, queries, self.top_k)
-        elif hasattr(self.retriever.model, "mteb_model_meta") and self.retriever.model.mteb_model_meta.name == "bm25s":
+        elif (
+            hasattr(self.retriever.model, "mteb_model_meta")
+            and self.retriever.model.mteb_model_meta.name == "bm25s"
+        ):
             return self.retriever.model.search(
                 corpus,
                 queries,
