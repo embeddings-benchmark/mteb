@@ -10,13 +10,13 @@ To solve this task, we basically need to encode the `images`, encode the `class 
 Since we don't have an established class like `SentenceTransformer` or `DRES` anymore now, we first decide for this task so far, we need the model class to have `get_text_embeddings`, `get_image_embeddings`, and `calculate_probs`. As an example,  [CLIPModelWrapper](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/models/clip_models.py) is first implemented, with MetaData defined.
 
 #### X Evaluator
-With the model, [ZeroshotClassificationEvaluator](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/evaluation/evaluators/ZeroshotClassificationEvaluator.py) is implemented here, basically the pipeline of using the defined models to do zero-shot classification.
+With the model, [ZeroshotClassificationEvaluator](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/evaluation/evaluators/Image/ZeroshotClassificationEvaluator.py) is implemented here, basically the pipeline of using the defined models to do zero-shot classification.
 
 #### AbsTask X
-With the evaluator, [AbsTaskZeroshotClassification](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/abstasks/AbsTaskZeroshotClassification.py) is defined, operating on the dataset, calling the defined Evaluator, and gives out results.
+With the evaluator, [AbsTaskZeroshotClassification](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/abstasks/Image/AbsTaskZeroshotClassification.py) is defined, operating on the dataset, calling the defined Evaluator, and gives out results.
 
 #### Dataset class
-With all these, we can then define the dataset. Here I choose Rendered SST2 as an example, which is to classify SST2 movie reviews, with reviews rendered into images. [RenderedSST2](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/tasks/ZeroshotClassification/eng/RenderedSST2.py) is implemented like this, subclassing `AbsTaskZeroshotClassification`, and overwrite the `get_candidate_labels` function, which gives `["a negative review of a movie", "a positive review of a movie"]` to be used in the evaluator.
+With all these, we can then define the dataset. Here I choose Rendered SST2 as an example, which is to classify SST2 movie reviews, with reviews rendered into images. [RenderedSST2](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/tasks/Image/ZeroshotClassification/eng/RenderedSST2.py) is implemented like this, subclassing `AbsTaskZeroshotClassification`, and overwrite the `get_candidate_labels` function, which gives `["a negative review of a movie", "a positive review of a movie"]` to be used in the evaluator.
 
 With all these, we can then 
 ```python
