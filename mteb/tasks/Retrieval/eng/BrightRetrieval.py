@@ -42,7 +42,7 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
         eval_langs=DOMAINS_langs,
         main_score="ndcg_at_10",
         date=("2024-03-01", "2024-06-01"),
-        form="written",
+        form=["written"],
         domains=["Non-fiction"],
         task_subtypes=["Article retrieval"],
         license="CC-BY-4.0",
