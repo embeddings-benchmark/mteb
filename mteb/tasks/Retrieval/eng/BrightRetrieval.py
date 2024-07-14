@@ -6,7 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskRetrieval, MultilingualTask
 
-DOMAINS = [
+DOMAINS_LONG = [
     "biology",
     "earth_science",
     "economics",
@@ -15,13 +15,16 @@ DOMAINS = [
     "stackoverflow",
     "sustainable_living",
     "pony",
+]
+
+DOMAINS = DOMAINS_LONG + [
     "leetcode",
     "aops",
     "theoremqa_theorems",
     "theoremqa_questions"
 ]
 
-DOMAINS_langs = {domain: [LANG_CODES_FOR_THE_SPLIT] for split in DOMAINS}
+DOMAINS_langs = {split: ["eng-Latn"] for split in DOMAINS}
 
 
 EVAL_SPLITS = ["standard", "long"]
@@ -82,19 +85,21 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
             examples = datasets.load_dataset(
                 path, "examples", split=domain, cache_dir=cache_dir, revision=revision
             )
-            domain_corpus_long = datasets.load_dataset(
-                path,
-                "long_documents",
-                split=domain,
-                cache_dir=cache_dir,
-                revision=revision,
-            )
+            if domain in DOMAINS_LONG:
+                domain_corpus_long = datasets.load_dataset(
+                    path,
+                    "long_documents",
+                    split=domain,
+                    cache_dir=cache_dir,
+                    revision=revision,
+                )
             corpus[domain]["standard"] = {
                 e["id"]: {"text": e["content"]} for e in domain_corpus
             }
-            corpus[domain]["long"] = {
-                e["id"]: {"text": e["content"]} for e in domain_corpus_long
-            }
+            if domain in DOMAINS_LONG:
+                corpus[domain]["long"] = {
+                    e["id"]: {"text": e["content"]} for e in domain_corpus_long
+                }
             queries[domain]["standard"] = queries[domain]["long"] = {
                 e["id"]: e["query"] for e in examples
             }
