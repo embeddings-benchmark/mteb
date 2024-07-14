@@ -6,8 +6,10 @@ from mteb.model_meta import ModelMeta
 
 from .instructions import task_to_instruction
 
+
 def gte_instruction(instruction: str) -> str:
     return f"Instruct: {instruction}\nQuery: "
+
 
 def gte_loader(**kwargs):
     try:
@@ -19,10 +21,14 @@ def gte_loader(**kwargs):
 
     class GTEWrapper(GritLM):
         def encode(self, *args, **kwargs):
-            if ("prompt_name" in kwargs):
-                if ("instruction" in kwargs): 
-                    raise ValueError("Cannot specify both `prompt_name` and `instruction`.")
-                instruction = task_to_instruction(kwargs.pop("prompt_name"), kwargs.pop("is_query", True))
+            if "prompt_name" in kwargs:
+                if "instruction" in kwargs:
+                    raise ValueError(
+                        "Cannot specify both `prompt_name` and `instruction`."
+                    )
+                instruction = task_to_instruction(
+                    kwargs.pop("prompt_name"), kwargs.pop("is_query", True)
+                )
             else:
                 instruction = kwargs.pop("instruction", "")
             if instruction:
@@ -32,6 +38,7 @@ def gte_loader(**kwargs):
         def encode_corpus(self, *args, **kwargs):
             kwargs["is_query"] = False
             return super().encode_corpus(*args, **kwargs)
+
     return GTEWrapper(**kwargs)
 
 
@@ -57,5 +64,6 @@ gte_Qwen2_7B_instruct = ModelMeta(
 
 if __name__ == "__main__":
     import mteb
+
     mdl = mteb.get_model(gte_Qwen2_7B_instruct.name, gte_Qwen2_7B_instruct.revision)
     emb = mdl.encode(["Hello, world!"])

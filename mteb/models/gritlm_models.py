@@ -19,16 +19,18 @@ def gritlm_loader(**kwargs):
     try:
         from gritlm import GritLM
     except ImportError:
-        raise ImportError(
-            "Please install `pip install gritlm` to use GritLM models."
-        )
+        raise ImportError("Please install `pip install gritlm` to use GritLM models.")
 
     class GritLMWrapper(GritLM):
         def encode(self, *args, **kwargs):
-            if ("prompt_name" in kwargs):
-                if ("instruction" in kwargs): 
-                    raise ValueError("Cannot specify both `prompt_name` and `instruction`.")
-                instruction = task_to_instruction(kwargs.pop("prompt_name"), kwargs.pop("is_query", True))
+            if "prompt_name" in kwargs:
+                if "instruction" in kwargs:
+                    raise ValueError(
+                        "Cannot specify both `prompt_name` and `instruction`."
+                    )
+                instruction = task_to_instruction(
+                    kwargs.pop("prompt_name"), kwargs.pop("is_query", True)
+                )
             else:
                 instruction = kwargs.pop("instruction", "")
             kwargs["instruction"] = gritlm_instruction(instruction)
@@ -37,6 +39,7 @@ def gritlm_loader(**kwargs):
         def encode_corpus(self, *args, **kwargs):
             kwargs["is_query"] = False
             return super().encode_corpus(*args, **kwargs)
+
     return GritLMWrapper(**kwargs)
 
 

@@ -9,8 +9,10 @@ from .instructions import task_to_instruction
 
 MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
 
+
 def e5_instruction(instruction: str) -> str:
     return f"Instruct: {instruction}\nQuery: "
+
 
 def e5_loader(**kwargs):
     try:
@@ -22,10 +24,14 @@ def e5_loader(**kwargs):
 
     class E5InstructWrapper(GritLM):
         def encode(self, *args, **kwargs):
-            if ("prompt_name" in kwargs):
-                if ("instruction" in kwargs): 
-                    raise ValueError("Cannot specify both `prompt_name` and `instruction`.")
-                instruction = task_to_instruction(kwargs.pop("prompt_name"), kwargs.pop("is_query", True))
+            if "prompt_name" in kwargs:
+                if "instruction" in kwargs:
+                    raise ValueError(
+                        "Cannot specify both `prompt_name` and `instruction`."
+                    )
+                instruction = task_to_instruction(
+                    kwargs.pop("prompt_name"), kwargs.pop("is_query", True)
+                )
             else:
                 instruction = kwargs.pop("instruction", "")
             if instruction:
@@ -35,7 +41,9 @@ def e5_loader(**kwargs):
         def encode_corpus(self, *args, **kwargs):
             kwargs["is_query"] = False
             return super().encode_corpus(*args, **kwargs)
+
     return E5InstructWrapper(**kwargs)
+
 
 e5_instruct = ModelMeta(
     loader=partial(

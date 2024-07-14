@@ -6,8 +6,10 @@ from mteb.model_meta import ModelMeta
 
 from .instructions import task_to_instruction
 
+
 def sfr_instruction(instruction: str) -> str:
     return f"Instruct: {instruction}\nQuery: "
+
 
 def sfr_loader(**kwargs):
     try:
@@ -19,10 +21,14 @@ def sfr_loader(**kwargs):
 
     class SFRWrapper(GritLM):
         def encode(self, *args, **kwargs):
-            if ("prompt_name" in kwargs):
-                if ("instruction" in kwargs): 
-                    raise ValueError("Cannot specify both `prompt_name` and `instruction`.")
-                instruction = task_to_instruction(kwargs.pop("prompt_name"), kwargs.pop("is_query", True))
+            if "prompt_name" in kwargs:
+                if "instruction" in kwargs:
+                    raise ValueError(
+                        "Cannot specify both `prompt_name` and `instruction`."
+                    )
+                instruction = task_to_instruction(
+                    kwargs.pop("prompt_name"), kwargs.pop("is_query", True)
+                )
             else:
                 instruction = kwargs.pop("instruction", "")
             if instruction:
@@ -32,6 +38,7 @@ def sfr_loader(**kwargs):
         def encode_corpus(self, *args, **kwargs):
             kwargs["is_query"] = False
             return super().encode_corpus(*args, **kwargs)
+
     return SFRWrapper(**kwargs)
 
 
