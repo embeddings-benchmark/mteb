@@ -15,6 +15,7 @@ class InstructionRetrievalEvaluator(RetrievalEvaluator):
         corpus: Dict[str, Dict[str, str]],
         queries: Dict[str, str],
         instructions: Dict[str, str],
+        qid: str | None = None,
         **kwargs,
     ) -> Dict[str, Dict[str, float]]:
         if not self.retriever:
@@ -30,6 +31,8 @@ class InstructionRetrievalEvaluator(RetrievalEvaluator):
                 queries,
                 self.top_k,
                 self.score_function,
-                prompt_name=instructions,
+                instructions=instructions,
+                request_qid=qid,
+                prompt_name=self.task_name,
                 **kwargs,
             )
