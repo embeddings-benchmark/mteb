@@ -1,5 +1,5 @@
 import logging
-from typing import Dict
+from typing import Dict, Union
 
 from .RetrievalEvaluator import (
     RetrievalEvaluator,
@@ -15,7 +15,7 @@ class InstructionRetrievalEvaluator(RetrievalEvaluator):
         corpus: Dict[str, Dict[str, str]],
         queries: Dict[str, str],
         instructions: Dict[str, str],
-        qid: str | None = None,
+        qid: Union[str, None] = None,
         **kwargs,
     ) -> Dict[str, Dict[str, float]]:
         if not self.retriever:

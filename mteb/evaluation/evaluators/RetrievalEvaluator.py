@@ -84,7 +84,7 @@ class DenseRetrievalExactSearch:
         score_function: str,
         prompt_name: str,
         instructions: Dict[str, str] | None = None,
-        request_qid: str | None = None,
+        request_qid: Union[str, None] = None,
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
@@ -228,7 +228,7 @@ class DenseRetrievalExactSearch:
         corpus: Dict[str, Dict[str, str]],
         queries: Dict[str, Union[str, List[str]]],
         top_k: int,
-        instructions: Dict[str, str] | None = None,
+        instructions: Union[Dict[str, str], None] = None,
         **kwargs,
     ) -> Dict[str, Dict[str, float]]:
         """This function provides support for reranker (or cross-encoder) models that encoder query and document at the same time (typically with attention).
@@ -369,7 +369,7 @@ class DRESModel:
         corpus: List[Dict[str, str]],
         prompt_name: str,
         batch_size: int,
-        request_qid: str | None = None,
+        request_qid: Union[str, None] = None,
         **kwargs,
     ):
         if (
