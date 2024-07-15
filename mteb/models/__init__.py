@@ -12,6 +12,7 @@ from mteb.models import (
     cohere_models,
     e5_instruct,
     e5_models,
+    google_models,
     gritlm_models,
     gte_models,
     llm2vec_models,
@@ -133,6 +134,7 @@ model_modules = [
     salesforce_models,
     sentence_transformers_models,
     voyage_models,
+    google_models,
 ]
 models = {}
 
