@@ -36,6 +36,6 @@ class RenderedSST2(AbsTaskZeroshotClassification):
     # Override default column names in the subclass
     image_column_name: str = "png"
     label_column_name: str = "cls"
-    
+
     def get_candidate_labels(self) -> list[str]:
         return ["a negative review of a movie", "a positive review of a movie"]

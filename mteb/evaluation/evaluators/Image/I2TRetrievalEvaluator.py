@@ -10,13 +10,13 @@ from typing import Any, Dict, List, Tuple, Union
 import numpy as np
 import pytrec_eval
 import torch
-import tqdm
+from PIL import Image
+
 from mteb.encoder_interface import EncoderWithQueryCorpusEncode
 
 from ..Evaluator import Evaluator
 from ..utils import (
     confidence_scores,
-    convert_conv_history_to_query,
     cos_sim,
     dot_score,
     download,
@@ -26,7 +26,6 @@ from ..utils import (
     recall_cap,
     top_k_accuracy,
 )
-from PIL import Image
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +34,7 @@ logger = logging.getLogger(__name__)
 class DenseRetrievalExactSearch:
     def __init__(
         self,
-        model: EncoderWithQueryCorpusEncode, 
+        model: EncoderWithQueryCorpusEncode,
         encode_kwargs: dict[str, Any] = {},
         corpus_chunk_size: int = 50000,
         previous_results: str | None = None,
@@ -47,7 +46,7 @@ class DenseRetrievalExactSearch:
 
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 128
-            
+
         self.score_functions = {"cos_sim": cos_sim, "dot": dot_score}
         self.score_function_desc = {
             "cos_sim": "Cosine Similarity",
@@ -73,7 +72,6 @@ class DenseRetrievalExactSearch:
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
-
         if score_function not in self.score_functions:
             raise ValueError(
                 f"score function: {score_function} must be either (cos_sim) for cosine similarity or (dot) for dot product"
@@ -83,16 +81,19 @@ class DenseRetrievalExactSearch:
         query_ids = list(queries.keys())
         self.results = {qid: {} for qid in query_ids}
         queries = [queries[qid] for qid in queries]
-        query_embeddings = self.model.get_image_embeddings(queries,
-                                                           batch_size=self.encode_kwargs["batch_size"])
+        query_embeddings = self.model.get_image_embeddings(
+            queries, batch_size=self.encode_kwargs["batch_size"]
+        )
 
         logger.info("Sorting Corpus by document length (Longest first)...")
         corpus_ids = sorted(
             corpus,
-            key=lambda k: len(corpus[k].get("text", "")),# no "title" as in text retrieval.
+            key=lambda k: len(
+                corpus[k].get("text", "")
+            ),  # no "title" as in text retrieval.
             reverse=True,
         )
-        
+
         corpus = [corpus[cid] for cid in corpus_ids]
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
@@ -126,7 +127,7 @@ class DenseRetrievalExactSearch:
                 sub_corpus_embeddings = self.model.get_text_embeddings(
                     # corpus[corpus_start_idx:corpus_end_idx],
                     texts,
-                    batch_size=self.encode_kwargs["batch_size"]
+                    batch_size=self.encode_kwargs["batch_size"],
                 )
                 if self.save_corpus_embeddings and "qid" in kwargs:
                     self.corpus_embeddings[kwargs["qid"]].append(sub_corpus_embeddings)
@@ -225,7 +226,6 @@ class I2TRetrievalEvaluator(Evaluator):
     ) -> dict[str, dict[str, float]]:
         if not self.retriever:
             raise ValueError("Model/Technique has not been provided!")
-
 
         return self.retriever.search(
             corpus,

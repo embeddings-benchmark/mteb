@@ -6,8 +6,8 @@ import os
 from collections import defaultdict
 from pathlib import Path
 from time import time
-from typing import Any, Dict, Tuple, Union
-from PIL import Image
+from typing import Any, Dict, Tuple
+
 import tqdm
 from datasets import Features, Value, load_dataset
 
@@ -16,6 +16,7 @@ from ...load_results.mteb_results import ScoresDict
 from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
+
 
 class HFDataLoader:
     def __init__(
@@ -178,6 +179,7 @@ class HFDataLoader:
         qrels_ds = qrels_ds.cast(features)
         self.qrels = qrels_ds
 
+
 class AbsTaskI2TRetrieval(AbsTask):
     """Abstract class for retrieval experiments.
 
@@ -218,10 +220,7 @@ class AbsTaskI2TRetrieval(AbsTask):
             ).load(split=split)
             # Conversion from DataSet
             queries = {query["id"]: query["image"] for query in queries}
-            corpus = {
-                doc["id"]: {"text": doc["text"]}
-                for doc in corpus
-            }
+            corpus = {doc["id"]: {"text": doc["text"]} for doc in corpus}
             self.corpus[split], self.queries[split], self.relevant_docs[split] = (
                 corpus,
                 queries,

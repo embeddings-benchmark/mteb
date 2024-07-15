@@ -15,7 +15,6 @@ from sklearn.neighbors import KNeighborsClassifier
 from torch import Tensor
 
 from mteb.encoder_interface import Encoder
-from mteb.evaluation.evaluators.model_encode import model_encode
 
 from ..Evaluator import Evaluator
 
@@ -63,9 +62,13 @@ class ImagekNNClassificationEvaluator(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
-        X_train = model.get_image_embeddings(self.images_train, batch_size=self.encode_kwargs["batch_size"])
+        X_train = model.get_image_embeddings(
+            self.images_train, batch_size=self.encode_kwargs["batch_size"]
+        )
         if test_cache is None:
-            X_test = model.get_image_embeddings(self.images_test, batch_size=self.encode_kwargs["batch_size"])
+            X_test = model.get_image_embeddings(
+                self.images_test, batch_size=self.encode_kwargs["batch_size"]
+            )
             test_cache = X_test
         else:
             X_test = test_cache
@@ -129,10 +132,14 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
-        X_train = model.get_image_embeddings(self.images_train, batch_size=self.encode_kwargs["batch_size"])
+        X_train = model.get_image_embeddings(
+            self.images_train, batch_size=self.encode_kwargs["batch_size"]
+        )
 
         if test_cache is None:
-            X_test = model.get_image_embeddings(self.images_test, batch_size=self.encode_kwargs["batch_size"])
+            X_test = model.get_image_embeddings(
+                self.images_test, batch_size=self.encode_kwargs["batch_size"]
+            )
             test_cache = X_test
         else:
             X_test = test_cache
@@ -273,10 +280,14 @@ class ImagelogRegClassificationEvaluator(Evaluator):
             max_iter=self.max_iter,
             verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
         )
-        X_train = model.get_image_embeddings(self.images_train, batch_size=self.encode_kwargs["batch_size"])
+        X_train = model.get_image_embeddings(
+            self.images_train, batch_size=self.encode_kwargs["batch_size"]
+        )
 
         if test_cache is None:
-            X_test = model.get_image_embeddings(self.images_test, batch_size=self.encode_kwargs["batch_size"])
+            X_test = model.get_image_embeddings(
+                self.images_test, batch_size=self.encode_kwargs["batch_size"]
+            )
             test_cache = X_test
         else:
             X_test = test_cache
@@ -296,4 +307,3 @@ class ImagelogRegClassificationEvaluator(Evaluator):
             )
 
         return scores, test_cache
-    

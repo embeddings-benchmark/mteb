@@ -1,22 +1,21 @@
 from __future__ import annotations
 
+from mteb.abstasks import AbsTaskImageClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from .....abstasks import AbsTaskImageClassification
 
-
-class OxfordFlowersClassification(AbsTaskImageClassification):
+class TinyImageNet(AbsTaskImageClustering):
     metadata = TaskMetadata(
-        name="OxfordFlowersClassification",
-        description="Classifying flowers",
-        reference="https://huggingface.co/datasets/nelorth/oxford-flowers/viewer/default/train",
+        name="TinyImageNetClustering",
+        description="Clustering over 200 classes.",
+        reference="https://huggingface.co/datasets/zh-plus/tiny-imagenet/viewer/default/valid",
         dataset={
-            "path": "nelorth/oxford-flowers",
-            "revision": "a37b1891609c0376fa81eced756e7863e1bd873b",
+            "path": "zh-plus/tiny-imagenet",
+            "revision": "5a77092c28e51558c5586e9c5eb71a7e17a5e43f",
         },
-        type="Classification",
+        type="Clustering",
         category="s2s",
-        eval_splits=["test"],
+        eval_splits=["valid"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=(
@@ -32,6 +31,6 @@ class OxfordFlowersClassification(AbsTaskImageClassification):
         dialect=[],
         text_creation="found",
         bibtex_citation="""d""",
-        n_samples={"test": 400000},
-        avg_character_length={"test": 431.4},
+        n_samples={"valid": 10000},
+        avg_character_length={"valid": 431.4},
     )
