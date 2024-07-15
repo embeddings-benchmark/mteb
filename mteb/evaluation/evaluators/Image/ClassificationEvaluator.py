@@ -260,9 +260,9 @@ class ImagelogRegClassificationEvaluator(Evaluator):
             self.encode_kwargs["batch_size"] = 32
 
         if limit is not None:
-            sentences_train = sentences_train[:limit]
+            images_train = images_train[:limit]
             y_train = y_train[:limit]
-            sentences_test = sentences_test[:limit]
+            images_test = images_test[:limit]
             y_test = y_test[:limit]
         self.images_train = images_train
         self.y_train = y_train
