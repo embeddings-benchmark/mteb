@@ -53,5 +53,6 @@ class ImageClusteringEvaluator(Evaluator):
 
         logger.info("Evaluating...")
         v_measure = metrics.cluster.v_measure_score(self.labels, cluster_assignment)
+        accuracy = metrics.accuracy_score(self.labels, cluster_assignment)
 
-        return {"v_measure": v_measure}
+        return {"v_measure": v_measure, "accuracy": accuracy}

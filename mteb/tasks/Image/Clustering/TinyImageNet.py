@@ -17,7 +17,7 @@ class TinyImageNet(AbsTaskImageClustering):
         category="s2s",
         eval_splits=["valid"],
         eval_langs=["eng-Latn"],
-        main_score="v_measure",
+        main_score="accuracy",
         date=(
             "2012-01-01",
             "2015-12-31",

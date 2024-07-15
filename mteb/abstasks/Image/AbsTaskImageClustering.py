@@ -46,6 +46,5 @@ class AbsTaskImageClustering(AbsTask):
             **kwargs,
         )
         metrics = evaluator(model, encode_kwargs=encode_kwargs)
-        scores = {"v_measure": metrics["v_measure"]}
-        self._add_main_score(scores)
+        self._add_main_score(metrics)
         return scores
