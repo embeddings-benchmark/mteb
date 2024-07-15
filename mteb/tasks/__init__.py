@@ -13,3 +13,4 @@ from .STS import *
 from .Summarization import *
 from .Image.ZeroshotClassification import *
 from .Image.ImageClassification import *
+from .Image.I2TRetrieval import *

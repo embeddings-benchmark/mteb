@@ -10,3 +10,4 @@ from .STSEvaluator import *
 from .SummarizationEvaluator import *
 from .Image.ZeroshotClassificationEvaluator import *
 from .Image.ClassificationEvaluator import *
+from .Image.I2TRetrievalEvaluator import *
