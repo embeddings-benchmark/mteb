@@ -12,8 +12,8 @@ from mteb import MTEB
 from mteb.abstasks import AbsTask
 from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.Image.AbsTaskI2TRetrieval import AbsTaskI2TRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
+from mteb.abstasks.Image.AbsTaskI2TRetrieval import AbsTaskI2TRetrieval
 from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
 from mteb.overview import TASKS_REGISTRY
 
