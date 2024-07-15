@@ -233,7 +233,6 @@ class TaskMetadata(BaseModel):
 
     @staticmethod
     def _check_language_code(code):
-
         """This method checks that the language code (e.g. "eng-Latn") is valid."""
         lang, script = code.split("-")
         if script == "Code":
