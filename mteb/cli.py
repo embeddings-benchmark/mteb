@@ -255,22 +255,20 @@ def add_run_parser(subparsers) -> None:
 
 def potentially_add_cqadupstack_to_results(results: list[mteb.MTEBResults]) -> None:
     """If all CQADupstack tasks are present in the results, combine them into a single CQADupstackRetrieval task and add it to the results."""
-    TASK_LIST_CQA = set(
-        [
-            "CQADupstackAndroidRetrieval",
-            "CQADupstackEnglishRetrieval",
-            "CQADupstackGamingRetrieval",
-            "CQADupstackGisRetrieval",
-            "CQADupstackMathematicaRetrieval",
-            "CQADupstackPhysicsRetrieval",
-            "CQADupstackProgrammersRetrieval",
-            "CQADupstackStatsRetrieval",
-            "CQADupstackTexRetrieval",
-            "CQADupstackUnixRetrieval",
-            "CQADupstackWebmastersRetrieval",
-            "CQADupstackWordpressRetrieval",
-        ]
-    )
+    TASK_LIST_CQA = {
+        "CQADupstackAndroidRetrieval",
+        "CQADupstackEnglishRetrieval",
+        "CQADupstackGamingRetrieval",
+        "CQADupstackGisRetrieval",
+        "CQADupstackMathematicaRetrieval",
+        "CQADupstackPhysicsRetrieval",
+        "CQADupstackProgrammersRetrieval",
+        "CQADupstackStatsRetrieval",
+        "CQADupstackTexRetrieval",
+        "CQADupstackUnixRetrieval",
+        "CQADupstackWebmastersRetrieval",
+        "CQADupstackWordpressRetrieval",
+    }
 
     task_names = {result.task_name for result in results}
 

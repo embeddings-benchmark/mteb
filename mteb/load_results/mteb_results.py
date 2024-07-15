@@ -256,9 +256,6 @@ class MTEBResults(BaseModel):
             path: The path to the file to load.
             load_historic_data: Whether to attempt to load historic data from before v1.11.0.
         """
-        import mteb
-
-        mteb.__version__
         with path.open("r") as f:
             data = json.load(f)
 
