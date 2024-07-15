@@ -52,7 +52,8 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
         socioeconomic_status="low",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
+        modalities=["text"],
         bibtex_citation="""
             @misc{BRIGHT,
             title={BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval},
@@ -60,8 +61,10 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
             year={2024},
             }
         """,
-        n_samples=None,
-        avg_character_length=None,
+        descriptive_stats={
+            "n_samples": {"standard": 1334914, "long": 7048},
+            "avg_character_length": {"standard": 800.3994729248476, "long": 46527.35839954597},
+        },
     )
 
     def load_bright_data(
