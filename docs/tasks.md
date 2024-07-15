@@ -52,6 +52,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [BlurbsClusteringS2S.v2](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html) (Steffen Remus, 2019) | ['deu'] | Clustering | s2s | [Fiction, Written] | {'test': 2048} | {'test': 23.02} |
 | [BornholmBitextMining](https://aclanthology.org/W19-6138/) | ['dan'] | BitextMining | s2s | [Web, Social, Fiction, Written] | {'test': 500} | {'test': 89.7} |
 | [BrazilianToxicTweetsClassification](https://paperswithcode.com/dataset/told-br) (Joao Augusto Leite and                         Diego F. Silva and                         Kalina Bontcheva and                         Carolina Scarton, 2020) | ['por'] | MultilabelClassification | s2s | [Constructed, Written] | {'test': 2048} | {'test': 85.05} |
+| [BrightRetrieval](https://huggingface.co/datasets/xlangai/BRIGHT) (Su et al., 2024) | ['eng'] | Retrieval | s2p | [Non-fiction] | {'standard': 1334914, 'long': 7048} | {'standard': 800.3994729248476, 'long': 46527.35839954597} |
 | [BulgarianStoreReviewSentimentClassfication](https://doi.org/10.7910/DVN/TXIK9P) (Georgieva-Trifonova et al., 2018) | ['bul'] | Classification | s2s | [Reviews, Written] | {'test': 182} | {'test': 316.7} |
 | [CBD](http://2019.poleval.pl/files/poleval2019.pdf) | ['pol'] | Classification | s2s |  | {'test': 1000} | {'test': 93.2} |
 | [CDSC-E](https://aclanthology.org/P17-1073.pdf) | ['pol'] | PairClassification | s2s |  | None | None |
@@ -850,7 +851,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | 3 | 6 | 1 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 |
 | emi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | emp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eng | 16 | 143 | 16 | 3 | 1 | 8 | 7 | 72 | 13 | 2 | 1 |
+| eng | 16 | 143 | 16 | 3 | 1 | 8 | 7 | 73 | 13 | 2 | 1 |
 | enq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | epo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | eri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1622,7 +1623,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1394 | 794 | 304 | 3 | 28 | 67 | 47 | 371 | 85 | 2 | 2 |
+| Total | 1394 | 794 | 304 | 3 | 28 | 67 | 47 | 372 | 85 | 2 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
