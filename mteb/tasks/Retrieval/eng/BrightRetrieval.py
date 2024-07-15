@@ -21,7 +21,7 @@ DOMAINS = DOMAINS_LONG + [
     "leetcode",
     "aops",
     "theoremqa_theorems",
-    "theoremqa_questions"
+    "theoremqa_questions",
 ]
 
 DOMAINS_langs = {split: ["eng-Latn"] for split in DOMAINS}
@@ -63,7 +63,10 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
         """,
         descriptive_stats={
             "n_samples": {"standard": 1334914, "long": 7048},
-            "avg_character_length": {"standard": 800.3994729248476, "long": 46527.35839954597},
+            "avg_character_length": {
+                "standard": 800.3994729248476,
+                "long": 46527.35839954597,
+            },
         },
     )
 
