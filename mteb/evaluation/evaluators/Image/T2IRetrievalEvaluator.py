@@ -5,7 +5,7 @@ import json
 import logging
 import os
 from collections import defaultdict
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple
 
 import numpy as np
 import pytrec_eval
@@ -65,8 +65,8 @@ class DenseRetrievalExactSearch:
 
     def search(
         self,
-        corpus: dict[str, dict[str, str]],
-        queries: dict[str, Image.Image],
+        corpus: dict[str, Image.Image],
+        queries: dict[str, dict[str, str]],
         top_k: int,
         score_function: str,
         return_sorted: bool = False,
@@ -80,21 +80,14 @@ class DenseRetrievalExactSearch:
         logger.info("Encoding Queries.")
         query_ids = list(queries.keys())
         self.results = {qid: {} for qid in query_ids}
-        queries = [queries[qid] for qid in queries]
-        query_embeddings = self.model.get_image_embeddings(
+        queries = [queries[qid]["text"] for qid in queries]
+        query_embeddings = self.model.get_text_embeddings(
             queries, batch_size=self.encode_kwargs["batch_size"]
         )
 
-        logger.info("Sorting Corpus by document length (Longest first)...")
-        corpus_ids = sorted(
-            corpus,
-            key=lambda k: len(
-                corpus[k].get("text", "")
-            ),  # no "title" as in text retrieval.
-            reverse=True,
-        )
-
-        corpus = [corpus[cid] for cid in corpus_ids]
+        logger.info("Preparing Corpus...")
+        corpus_ids = list(corpus.keys())
+        corpus_images = [corpus[cid] for cid in corpus_ids]
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
         logger.info(
@@ -123,10 +116,10 @@ class DenseRetrievalExactSearch:
                 )
             else:
                 # Encode chunk of corpus
-                texts = [doc["text"] for doc in corpus[corpus_start_idx:corpus_end_idx]]
-                sub_corpus_embeddings = self.model.get_text_embeddings(
+                images = corpus_images[corpus_start_idx:corpus_end_idx]
+                sub_corpus_embeddings = self.model.get_image_embeddings(
                     # corpus[corpus_start_idx:corpus_end_idx],
-                    texts,
+                    images,
                     batch_size=self.encode_kwargs["batch_size"],
                 )
                 if self.save_corpus_embeddings and "qid" in kwargs:
@@ -197,7 +190,7 @@ class DenseRetrievalExactSearch:
 
 
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/evaluation.py#L9
-class I2TRetrievalEvaluator(Evaluator):
+class T2IRetrievalEvaluator(Evaluator):
     def __init__(
         self,
         retriever=None,
@@ -221,8 +214,8 @@ class I2TRetrievalEvaluator(Evaluator):
 
     def __call__(
         self,
-        corpus: dict[str, Image.Image],
-        queries: dict[str, Union[str, List[str]]],
+        corpus: dict[str, dict[str, str]],
+        queries: dict[str, Image.Image],
     ) -> dict[str, dict[str, float]]:
         if not self.retriever:
             raise ValueError("Model/Technique has not been provided!")
@@ -299,7 +292,7 @@ class I2TRetrievalEvaluator(Evaluator):
             recall[f"Recall@{k}"] = round(sum(recall[f"Recall@{k}"]) / len(scores), 5)
             precision[f"P@{k}"] = round(sum(precision[f"P@{k}"]) / len(scores), 5)
 
-        naucs = I2TRetrievalEvaluator.evaluate_abstention(
+        naucs = T2IRetrievalEvaluator.evaluate_abstention(
             results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
         )
 
@@ -331,7 +324,7 @@ class I2TRetrievalEvaluator(Evaluator):
         ]:
             metric_scores = top_k_accuracy(qrels, results, k_values, output_type)
 
-        naucs = I2TRetrievalEvaluator.evaluate_abstention(results, metric_scores)
+        naucs = T2IRetrievalEvaluator.evaluate_abstention(results, metric_scores)
         metric_scores_avg = {k: sum(v) / len(v) for k, v in metric_scores.items()}
 
         return metric_scores_avg, naucs

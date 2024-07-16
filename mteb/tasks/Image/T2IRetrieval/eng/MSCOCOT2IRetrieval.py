@@ -2,21 +2,21 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from .....abstasks import AbsTaskI2TRetrieval
+from .....abstasks import AbsTaskT2IRetrieval
 
 
-class MSCOCOI2TRetrieval(AbsTaskI2TRetrieval):
+class MSCOCOT2IRetrieval(AbsTaskT2IRetrieval):
     metadata = TaskMetadata(
-        name="MSCOCOI2TRetrieval",
+        name="MSCOCOT2IRetrieval",
         description="Retrieve captions based on images.",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-10602-1_48",
         dataset={
-            "path": "MRBench/mbeir_mscoco_task3",
-            "revision": "cca3a3e223763e6519a4d68936bc9279034d75d2",
+            "path": "MRBench/mbeir_mscoco_task0",
+            "revision": "cfe15bd2791dde5f8f20aebecf0b4eb3812972d6",
             "trust_remote_code": True,
         },
         type="Retrieval",
-        category="i2t",
+        category="t2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",

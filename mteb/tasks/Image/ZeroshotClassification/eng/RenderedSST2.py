@@ -21,7 +21,7 @@ class RenderedSST2(AbsTaskZeroshotClassification):
         main_score="accuracy",
         date=("2016-01-01", "2016-12-31"),
         form=["written"],
-        domains=["Movie"],
+        domains=["Reviews"],
         task_subtypes=[],
         license="mit",
         socioeconomic_status="mixed",

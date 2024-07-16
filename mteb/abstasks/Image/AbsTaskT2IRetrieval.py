@@ -12,7 +12,7 @@ import tqdm
 from datasets import Features, Value, load_dataset
 from PIL import Image
 
-from ...evaluation.evaluators import I2TRetrievalEvaluator
+from ...evaluation.evaluators import T2IRetrievalEvaluator
 from ...load_results.mteb_results import ScoresDict
 from ..AbsTask import AbsTask
 
@@ -77,7 +77,7 @@ class HFDataLoader:
     def load(
         self, split="test"
     ) -> Tuple[
-        Dict[str, dict[str, str]], dict[str, Image.Image], dict[str, dict[str, int]]
+        Dict[str, Image.Image], dict[str, dict[str, str]], dict[str, dict[str, int]]
     ]:
         if not self.hf_repo:
             self.qrels_file = os.path.join(self.qrels_folder, split + ".tsv")
@@ -183,7 +183,7 @@ class HFDataLoader:
         self.qrels = qrels_ds
 
 
-class AbsTaskI2TRetrieval(AbsTask):
+class AbsTaskT2IRetrieval(AbsTask):
     """Abstract class for retrieval experiments.
 
     Child-classes must implement the following properties:
@@ -220,8 +220,8 @@ class AbsTaskI2TRetrieval(AbsTask):
                 keep_in_memory=False,
             ).load(split=split)
             # Conversion from DataSet
-            queries = {query["id"]: query["image"] for query in queries}
-            corpus = {doc["id"]: {"text": doc["text"]} for doc in corpus}
+            queries = {query["id"]: {"text": query["text"]} for query in queries}
+            corpus = {image["id"]: image["image"] for image in corpus}
             self.corpus[split], self.queries[split], self.relevant_docs[split] = (
                 corpus,
                 queries,
@@ -238,7 +238,7 @@ class AbsTaskI2TRetrieval(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ):
-        retriever = I2TRetrievalEvaluator(
+        retriever = T2IRetrievalEvaluator(
             retriever=model,
             task_name=self.metadata.name,
             encode_kwargs=encode_kwargs,
@@ -440,14 +440,11 @@ def calculate_length(queries, corpus):
     queries_lens = []
     doc_lens = []
     for query in queries.values():
-        # for image append 1. Can perhaps be removed.
-        queries_lens.append(1.0)
+        queries_lens.append(len(query))
 
     for doc in corpus.values():
-        if isinstance(doc, dict):
-            doc_lens.append(len(doc["text"]))
-        else:
-            doc_lens.append(len(doc))
+        if isinstance(doc, Image.Image):
+            doc_lens.append(1.0)  # for image append 1. Can perhaps be removed.
 
     doc_len = sum(doc_lens) / len(doc_lens) if doc_lens else 0
     query_len = sum(queries_lens) / len(queries_lens) if queries_lens else 0
