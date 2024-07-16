@@ -15,6 +15,7 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
 
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.model_meta import ModelMeta
 
 from .Evaluator import Evaluator
 from .model_encode import model_encode
@@ -332,6 +333,8 @@ class DRESModel:
     This class converts a model with just an .encode method into DRES format.
     """
 
+    mteb_model_meta: ModelMeta | None
+
     def __init__(self, model, **kwargs):
         self.model = model
         self.use_sbert_model = isinstance(model, SentenceTransformer)
@@ -488,6 +491,17 @@ class RetrievalEvaluator(Evaluator):
 
         if self.is_cross_encoder:
             return self.retriever.search_cross_encoder(corpus, queries, self.top_k)
+        elif (
+            hasattr(self.retriever.model, "mteb_model_meta")
+            and self.retriever.model.mteb_model_meta.name == "bm25s"
+        ):
+            return self.retriever.model.search(
+                corpus,
+                queries,
+                self.top_k,
+                self.score_function,
+                prompt_name=self.task_name,  # type: ignore
+            )
         else:
             return self.retriever.search(
                 corpus,
