@@ -1,11 +1,11 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
-	pip install -e ".[dev, bm25]"
+	pip install -e ".[dev]"
 
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	pip install ".[dev,speedtask,bm25]"
+	pip install ".[dev,speedtask]"
 
 lint:
 	@echo "--- 🧹 Running linters ---"
