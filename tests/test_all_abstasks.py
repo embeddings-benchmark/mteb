@@ -13,6 +13,7 @@ from mteb.abstasks import AbsTask
 from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
+from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.Image.AbsTaskI2TRetrieval import AbsTaskI2TRetrieval
 from mteb.abstasks.Image.AbsTaskT2IRetrieval import AbsTaskT2IRetrieval
 from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
@@ -34,6 +35,7 @@ def test_load_data(
         isinstance(task, AbsTaskRetrieval)
         or isinstance(task, AbsTaskI2TRetrieval)
         or isinstance(task, AbsTaskT2IRetrieval)
+        or isinstance(task, AbsTaskAny2AnyRetrieval)
         or isinstance(task, AbsTaskInstructionRetrieval)
         or isinstance(task, MultiSubsetLoader)
         or isinstance(task, AbsTaskSpeedTask)

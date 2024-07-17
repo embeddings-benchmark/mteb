@@ -101,6 +101,11 @@ TASK_CATEGORY = Literal[
     "p2p",  # Paragraph-to-paragraph
     "i2t",
     "t2i",
+    "it2t",
+    "it2i",
+    "i2it",
+    "t2it",
+    "it2it",
 ]
 
 ANNOTATOR_TYPE = Literal[

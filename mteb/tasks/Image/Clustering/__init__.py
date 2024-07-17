@@ -1,3 +1,3 @@
 from __future__ import annotations
 
-from .TinyImageNet import *
+from .eng.TinyImageNet import *

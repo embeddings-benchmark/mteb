@@ -13,6 +13,7 @@ from .AbsTaskRetrieval import *
 from .AbsTaskSpeedTask import *
 from .AbsTaskSTS import *
 from .AbsTaskSummarization import *
+from .Image.AbsTaskAny2AnyRetrieval import *
 from .Image.AbsTaskI2TRetrieval import *
 from .Image.AbsTaskImageClassification import *
 from .Image.AbsTaskImageClustering import *
