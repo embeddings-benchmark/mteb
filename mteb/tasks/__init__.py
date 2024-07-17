@@ -5,6 +5,7 @@ from .Classification import *
 from .Clustering import *
 from .Image.I2TRetrieval import *
 from .Image.ImageClassification import *
+from .Image.ImageTextPairClassification import *
 from .Image.T2IRetrieval import *
 from .Image.ZeroshotClassification import *
 from .InstructionRetrieval import *

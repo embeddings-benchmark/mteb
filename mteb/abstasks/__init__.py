@@ -16,6 +16,7 @@ from .AbsTaskSummarization import *
 from .Image.AbsTaskI2TRetrieval import *
 from .Image.AbsTaskImageClassification import *
 from .Image.AbsTaskImageClustering import *
+from .Image.AbsTaskImageTextPairClassification import *
 from .Image.AbsTaskT2IRetrieval import *
 from .Image.AbsTaskZeroshotClassification import *
 from .MultilingualTask import *

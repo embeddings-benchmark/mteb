@@ -6,6 +6,7 @@ from .ClusteringEvaluator import *
 from .Image.ClassificationEvaluator import *
 from .Image.ClusteringEvaluator import *
 from .Image.I2TRetrievalEvaluator import *
+from .Image.ImageTextPairClassificationEvaluator import *
 from .Image.T2IRetrievalEvaluator import *
 from .Image.ZeroshotClassificationEvaluator import *
 from .PairClassificationEvaluator import *
