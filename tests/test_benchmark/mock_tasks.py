@@ -370,6 +370,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
 
 
 class MockInstructionRetrival(AbsTaskInstructionRetrieval):
+    do_length_ablation = True
     metadata = TaskMetadata(
         type="InstructionRetrieval",
         name="MockInstructionRetrival",
@@ -422,7 +423,6 @@ class MockInstructionRetrival(AbsTaskInstructionRetrieval):
                 "q2": ["d2", "d1"],
             }
         }
-        self.do_length_ablation = True
 
         self.keywords = {
             "test": {
