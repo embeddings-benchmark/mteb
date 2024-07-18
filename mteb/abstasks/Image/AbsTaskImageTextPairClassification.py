@@ -17,18 +17,15 @@ class AbsTaskImageTextPairClassification(AbsTask):
     """Abstract class for Image Text Pair Classification tasks,
     e.g. Compositionality evaluation.
     The similarity is computed between pairs and the results are ranked.
+    Note that the number of images and the number of captions can be different.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
-        image0: Image.Image
-        image1: Image.Image
-        text0: str
-        text1: str
+        images: List[List[Image.Image]]
+        captions: List[List[str]]
     """
 
-    image0_column_name: str = "image_0"
-    image1_column_name: str = "image_1"
-    text0_column_name: str = "caption_0"
-    text1_column_name: str = "caption_1"
+    images_column_name: str = "images"
+    texts_column_name: str = "captions"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -44,14 +41,9 @@ class AbsTaskImageTextPairClassification(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
-        logging.getLogger(
-            "sentence_transformers.evaluation.PairClassificationEvaluator"
-        ).setLevel(logging.WARN)
         evaluator = ImageTextPairClassificationEvaluator(
-            dataset[self.image0_column_name],
-            dataset[self.image1_column_name],
-            dataset[self.text0_column_name],
-            dataset[self.text1_column_name],
+            dataset[self.images_column_name],
+            dataset[self.texts_column_name],
             task_name=self.metadata.name,
             **kwargs,
         )
