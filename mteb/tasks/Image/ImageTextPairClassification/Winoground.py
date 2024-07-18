@@ -7,6 +7,10 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class Winoground(AbsTaskImageTextPairClassification):
+
+    images_column_names = ["image_0","image_1"]
+    texts_column_names = ["caption_0","caption_1"]
+    
     metadata = TaskMetadata(
         name="Winoground",
         description="Compositionality Evaluation of images to their captions.",
@@ -46,20 +50,20 @@ class Winoground(AbsTaskImageTextPairClassification):
         avg_character_length={"test": 431.4},
     )
 
-    def dataset_transform(self):
-        def group_data(example):
-            example["images"] = [example["image_0"], example["image_1"]]
-            example["captions"] = [example["caption_0"], example["caption_1"], "It's whatever"]
-            return example
+    # def dataset_transform(self):
+    #     def group_data(example):
+    #         example["images"] = [example["image_0"], example["image_1"]]
+    #         example["captions"] = [example["caption_0"], example["caption_1"], "It's whatever"]
+    #         return example
 
-        orig_col_names = self.dataset["test"].column_names
-        # self.dataset["test"] = self.dataset["test"].select([0, 1, 2, 3])
-        self.dataset["test"] = self.dataset["test"].map(group_data)
+    #     orig_col_names = self.dataset["test"].column_names
+    #     # self.dataset["test"] = self.dataset["test"].select([0, 1, 2, 3])
+    #     self.dataset["test"] = self.dataset["test"].map(group_data)
 
-        self.dataset["test"] = self.dataset["test"].remove_columns(orig_col_names)
-        features = Features(
-            {"images": Sequence(Image()), "captions": Sequence(Value("string"))}
-        )
-        self.dataset["test"] = self.dataset["test"].cast(features)
+    #     self.dataset["test"] = self.dataset["test"].remove_columns(orig_col_names)
+    #     features = Features(
+    #         {"images": Sequence(Image()), "captions": Sequence(Value("string"))}
+    #     )
+    #     self.dataset["test"] = self.dataset["test"].cast(features)
 
-        return
+    #     return

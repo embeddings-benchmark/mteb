@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, List, Union
 
 from datasets import Dataset
-
+from tqdm import tqdm
 from mteb.abstasks import AbsTask
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.evaluation.evaluators import ImageTextPairClassificationEvaluator
@@ -24,12 +24,22 @@ class AbsTaskImageTextPairClassification(AbsTask):
         captions: List[List[str]]
     """
 
-    images_column_name: str = "images"
-    texts_column_name: str = "captions"
+    # it can be ["image_0", "image_1"]; ["text_0", "text_1"] for datasets like WinoGround
+    images_column_names: Union[str, List[str]] = "image"
+    texts_column_names: Union[str, List[str]] = "caption"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+    def _preprocess_column(self, dataset: Dataset, column_name: Union[str, List[str]]) -> List[List[Any]]:
+        if isinstance(column_name, str):
+            return dataset[column_name]
+        else:
+            return [
+                [example[col] for col in column_name] 
+                for example in tqdm(dataset, desc=f"Processing columns {column_name}")
+            ]
+         
     def _add_main_score(self, scores) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
@@ -41,9 +51,13 @@ class AbsTaskImageTextPairClassification(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
+
+        images = self._preprocess_column(dataset, self.images_column_names)
+        texts = self._preprocess_column(dataset, self.texts_column_names)
+
         evaluator = ImageTextPairClassificationEvaluator(
-            dataset[self.images_column_name],
-            dataset[self.texts_column_name],
+            images,
+            texts,
             task_name=self.metadata.name,
             **kwargs,
         )

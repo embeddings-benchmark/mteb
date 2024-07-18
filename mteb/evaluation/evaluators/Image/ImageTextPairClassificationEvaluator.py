@@ -7,6 +7,7 @@ from typing import Any, List
 import torch
 import torch.nn.functional as F
 from PIL import Image
+from tqdm import tqdm 
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 from mteb.evaluation.evaluators.Evaluator import Evaluator
