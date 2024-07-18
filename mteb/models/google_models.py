@@ -22,7 +22,7 @@ class GoogleTextEmbeddingModel(Encoder):
             import google.generativeai as genai
         except ImportError:
             raise ImportError(
-                "`google-generativeai` is required to run the google API, pleae install it using `pip install google-generativeai`"
+                "`google-generativeai` is required to run the google API, please install it using `pip install google-generativeai`"
             )
 
         if titles:
@@ -47,7 +47,7 @@ class GoogleTextEmbeddingModel(Encoder):
         prompt_name: str | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        input_type = "RETRIEVAL_DOCUMENT"  # Default
+        input_type = None  # Default
         if prompt_name:
             task = mteb.get_task(prompt_name)
             task_type = task.metadata.type
@@ -83,11 +83,11 @@ google_emb_004 = ModelMeta(
     name=name,
     languages=["eng-Latn"],
     open_source=False,
-    revision=None,
+    revision="1",  # revision is intended for implementation
     release_date=None,  # couldnt figure this out
     n_parameters=None,
     memory_usage=None,
-    max_tokens=None,
+    max_tokens=2048,
     embed_dim=768,
     license=None,
     similarity_fn_name="cosine",  # assumed
