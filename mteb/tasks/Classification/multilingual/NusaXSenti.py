@@ -18,6 +18,7 @@ class NusaXSentiClassification(AbsTaskClassification, MultilingualTask):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs={
             "ace": ["ace-Latn"],
@@ -35,19 +36,12 @@ class NusaXSentiClassification(AbsTaskClassification, MultilingualTask):
         },
         main_score="accuracy",
         date=("2022-05-01", "2023-05-08"),
-        form=["written"],
-        domains=[
-            "Reviews",
-            "Web",
-            "Social",
-            "Constructed",
-        ],
+        domains=["Reviews", "Web", "Social", "Constructed", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC-BY-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{winata2022nusax,
       title={NusaX: Multilingual Parallel Sentiment Dataset for 10 Indonesian Local Languages},
@@ -62,6 +56,8 @@ class NusaXSentiClassification(AbsTaskClassification, MultilingualTask):
       primaryClass={cs.CL}
 }
 """,
-        n_samples={"test": 4800},
-        avg_character_length={"test": 52.4},
+        descriptive_stats={
+            "n_samples": {"test": 4800},
+            "avg_character_length": {"test": 52.4},
+        },
     )

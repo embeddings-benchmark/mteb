@@ -86,6 +86,7 @@ class ModelMeta(BaseModel):
                 sentence_transformers_loader,
                 model_name=self.name,
                 revision=self.revision,
+                trust_remote_code=True,
                 **kwargs,
             )
         else:

@@ -73,19 +73,18 @@ class IndicLangClassification(AbsTaskClassification):
         description="A language identification test set for native-script as well as Romanized text which spans 22 Indic languages.",
         reference="https://arxiv.org/abs/2305.15814",
         category="s2s",
+        modalities=["text"],
         type="Classification",
         eval_splits=["test"],
         eval_langs=[l for langs in _LANGUAGES.values() for l in langs],
         main_score="accuracy",
         date=("2022-08-01", "2023-01-01"),
-        form=["written"],
-        domains=["Web", "Non-fiction"],
+        domains=["Web", "Non-fiction", "Written"],
         task_subtypes=["Language identification"],
         license="CC0",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""@inproceedings{madhani-etal-2023-bhasa,
     title = "Bhasa-Abhijnaanam: Native-script and romanized Language Identification for 22 {I}ndic languages",
     author = "Madhani, Yash  and
@@ -103,8 +102,10 @@ class IndicLangClassification(AbsTaskClassification):
     doi = "10.18653/v1/2023.acl-short.71",
     pages = "816--826"
 }""",
-        n_samples={"test": 30418},
-        avg_character_length={"test": 106.5},
+        descriptive_stats={
+            "n_samples": {"test": 30418},
+            "avg_character_length": {"test": 106.5},
+        },
     )
 
     def load_data(self, **kwargs: Any) -> None:

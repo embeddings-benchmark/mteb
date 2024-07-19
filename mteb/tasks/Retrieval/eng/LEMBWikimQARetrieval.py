@@ -19,18 +19,17 @@ class LEMBWikimQARetrieval(AbsTaskRetrieval):
         description=("2wikimqa subset of dwzhu/LongEmbed dataset."),
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("1950-01-01", "2019-12-31"),
-        form=["written"],
-        domains=["Encyclopaedic"],
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=["Article retrieval"],
         license="Not specified",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @inproceedings{ho2020constructing,
                 title={Constructing A Multi-hop QA Dataset for Comprehensive Evaluation of Reasoning Steps},
@@ -40,15 +39,17 @@ class LEMBWikimQARetrieval(AbsTaskRetrieval):
                 year={2020}
             }
         """,
-        n_samples={_EVAL_SPLIT: 500},
-        avg_character_length={
-            "test": {
-                "average_document_length": 37445.60333333333,
-                "average_query_length": 67.57,
-                "num_documents": 300,
-                "num_queries": 300,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": {_EVAL_SPLIT: 500},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 37445.60333333333,
+                    "average_query_length": 67.57,
+                    "num_documents": 300,
+                    "num_queries": 300,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

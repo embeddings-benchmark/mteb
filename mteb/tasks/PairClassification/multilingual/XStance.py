@@ -19,6 +19,7 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
         description="A Multilingual Multi-Target Dataset for Stance Detection in French, German, and Italian.",
         reference="https://github.com/ZurichNLP/xstance",
         category="s2s",
+        modalities=["text"],
         type="PairClassification",
         eval_splits=["test"],
         eval_langs={
@@ -26,16 +27,14 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
             "fr": ["fra-Latn"],
             "it": ["ita-Latn"],
         },
-        main_score="ap",
+        main_score="max_ap",
         date=("2011-01-01", "2020-12-31"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Political classification"],
         license="cc by-nc 4.0",
-        socioeconomic_status="medium",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""
             @inproceedings{vamvas2020xstance,
                 author    = "Vamvas, Jannis and Sennrich, Rico",
@@ -47,8 +46,10 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
                 url       = "http://ceur-ws.org/Vol-2624/paper9.pdf"
             }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 152.41},  # length of`sent1` + `sent2`
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 152.41},
+        },  # length of`sent1` + `sent2`
     )
 
     def load_data(self, **kwargs):

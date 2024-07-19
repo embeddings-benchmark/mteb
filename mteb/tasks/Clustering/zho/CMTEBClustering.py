@@ -28,18 +28,17 @@ class CLSClusteringFastS2S(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
         date=("2022-01-01", "2022-09-12"),
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=["Thematic clustering", "Topic classification"],
         license="Apache-2.0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{li2022csl,
             title={CSL: A Large-scale Chinese Scientific Literature Dataset}, 
             author={Yudong Li and Yuqing Zhang and Zhe Zhao and Linlin Shen and Weijie Liu and Weiquan Mao and Hui Zhang},
@@ -48,8 +47,10 @@ class CLSClusteringFastS2S(AbsTaskClusteringFast):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
-        n_samples={"test": NUM_SAMPLES},
-        avg_character_length={},
+        descriptive_stats={
+            "n_samples": {"test": NUM_SAMPLES},
+            "avg_character_length": {},
+        },
     )
 
     def dataset_transform(self):
@@ -87,18 +88,17 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
         date=("2022-01-01", "2022-09-12"),
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=["Thematic clustering", "Topic classification"],
         license="Apache-2.0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{li2022csl,
             title={CSL: A Large-scale Chinese Scientific Literature Dataset}, 
             author={Yudong Li and Yuqing Zhang and Zhe Zhao and Linlin Shen and Weijie Liu and Weiquan Mao and Hui Zhang},
@@ -107,8 +107,10 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
-        n_samples={"test": NUM_SAMPLES},
-        avg_character_length={},
+        descriptive_stats={
+            "n_samples": {"test": NUM_SAMPLES},
+            "avg_character_length": {},
+        },
     )
 
     def dataset_transform(self):
@@ -144,6 +146,7 @@ class CLSClusteringS2S(AbsTaskClustering):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
@@ -152,10 +155,9 @@ class CLSClusteringS2S(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""
 @article{li2022csl,
   title={CSL: A large-scale Chinese scientific literature dataset},
@@ -164,8 +166,7 @@ class CLSClusteringS2S(AbsTaskClustering):
   year={2022}
 }
 """,
-        n_samples={"test": 100000},
-        avg_character_length=None,
+        descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )
 
 
@@ -181,6 +182,7 @@ class CLSClusteringP2P(AbsTaskClustering):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
@@ -189,18 +191,16 @@ class CLSClusteringP2P(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@article{li2022csl,
   title={CSL: A large-scale Chinese scientific literature dataset},
   author={Li, Yudong and Zhang, Yuqing and Zhao, Zhe and Shen, Linlin and Liu, Weijie and Mao, Weiquan and Zhang, Hui},
   journal={arXiv preprint arXiv:2209.05034},
   year={2022}
 }""",
-        n_samples={"test": 100000},
-        avg_character_length=None,
+        descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )
 
 
@@ -218,18 +218,17 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
         reference="http://thuctc.thunlp.org/",
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
         date=("2006-01-01", "2007-01-01"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Thematic clustering", "Topic classification"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@software{THUCTC,
   author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
   title = {THUCTC: An Efficient Chinese Text Classifier},
@@ -238,8 +237,10 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
   publisher = {THU Natural Language Processing Lab},
   url = {https://github.com/thunlp/THUCTC}
 }""",
-        n_samples={"test": NUM_SAMPLES},
-        avg_character_length={},
+        descriptive_stats={
+            "n_samples": {"test": NUM_SAMPLES},
+            "avg_character_length": {},
+        },
     )
 
     def dataset_transform(self):
@@ -277,18 +278,17 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
         reference="http://thuctc.thunlp.org/",
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
         date=("2006-01-01", "2007-01-01"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Thematic clustering", "Topic classification"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@software{THUCTC,
   author = {Sun, M. and Li, J. and Guo, Z. and Yu, Z. and Zheng, Y. and Si, X. and Liu, Z.},
   title = {THUCTC: An Efficient Chinese Text Classifier},
@@ -297,8 +297,10 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
   publisher = {THU Natural Language Processing Lab},
   url = {https://github.com/thunlp/THUCTC}
 }""",
-        n_samples={"test": NUM_SAMPLES},
-        avg_character_length={},
+        descriptive_stats={
+            "n_samples": {"test": NUM_SAMPLES},
+            "avg_character_length": {},
+        },
     )
 
     def dataset_transform(self):
@@ -334,6 +336,7 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
         reference="http://thuctc.thunlp.org/",
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
@@ -342,10 +345,9 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""
 @inproceedings{eisner2007proceedings,
   title={Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
@@ -361,8 +363,7 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
   year={2006}
 }
 """,
-        n_samples={"test": 100000},
-        avg_character_length=None,
+        descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )
 
 
@@ -378,6 +379,7 @@ class ThuNewsClusteringP2P(AbsTaskClustering):
         reference="http://thuctc.thunlp.org/",
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
         main_score="v_measure",
@@ -386,10 +388,9 @@ class ThuNewsClusteringP2P(AbsTaskClustering):
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""
 @inproceedings{eisner2007proceedings,
   title={Proceedings of the 2007 joint conference on empirical methods in natural language processing and computational natural language learning (EMNLP-CoNLL)},
@@ -405,6 +406,5 @@ class ThuNewsClusteringP2P(AbsTaskClustering):
   year={2006}
 }
 """,
-        n_samples={"test": 100000},
-        avg_character_length=None,
+        descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )

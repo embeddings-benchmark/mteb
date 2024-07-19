@@ -16,26 +16,27 @@ class KorSTS(AbsTaskSTS):
         reference="https://arxiv.org/abs/2004.03289",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kor-Hang"],
         main_score="cosine_spearman",
         date=("2012-01-01", "2017-01-01"),  # rough approximates
-        form=None,
         domains=["News", "Web"],
         task_subtypes=None,
         license="CC-BY-SA-4.0",
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=[],
-        text_creation="machine-translated and localized",
+        sample_creation="machine-translated and localized",
         bibtex_citation="""@article{ham2020kornli,
   title={KorNLI and KorSTS: New Benchmark Datasets for Korean Natural Language Understanding},
   author={Ham, Jiyeon and Choe, Yo Joong and Park, Kyubyong and Choi, Ilji and Soh, Hyungjoon},
   journal={arXiv preprint arXiv:2004.03289},
   year={2020}
 }""",
-        n_samples={"test": 1379},
-        avg_character_length={"test": 29.279433139534884},
+        descriptive_stats={
+            "n_samples": {"test": 1379},
+            "avg_character_length": {"test": 29.279433139534884},
+        },
     )
 
     @property

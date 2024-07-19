@@ -11,22 +11,21 @@ class SwahiliNewsClassification(AbsTaskClassification):
         reference="https://huggingface.co/datasets/Mollel/SwahiliNewsClassification",
         dataset={
             "path": "Mollel/SwahiliNewsClassification",
-            "revision": "cd89b0993ca6a71240f7fb16223c64f6fe4a27b7",
+            "revision": "24fcf066e6b96f9e0d743e8b79184e0c599f73c3",
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["swa-Latn"],
         main_score="accuracy",
         date=("2019-01-01", "2023-05-01"),
-        form=["written"],
         dialect=[],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=[],
         license="CC BY-NC-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{davis2020swahili,
         title = "Swahili: News Classification Dataset (0.2)",
@@ -37,8 +36,10 @@ class SwahiliNewsClassification(AbsTaskClassification):
         url = "https://doi.org/10.5281/zenodo.5514203"
         }
         """,
-        n_samples={"train": 2048},
-        avg_character_length={"train": 2438.2308135942326},
+        descriptive_stats={
+            "n_samples": {"train": 2048},
+            "avg_character_length": {"train": 2438.2308135942326},
+        },
     )
 
     def dataset_transform(self) -> None:

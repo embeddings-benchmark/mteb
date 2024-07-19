@@ -17,21 +17,22 @@ class GeoreviewClassification(AbsTaskClassification):
         reference="https://github.com/yandex/geo-reviews-dataset-2023",
         type="Classification",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
         main_score="accuracy",
         date=("2023-01-01", "2023-08-01"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="mit",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",
-        n_samples={"test": 2048},
-        avg_character_length={"test": 409.0},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 409.0},
+        },
     )
 
     def dataset_transform(self):
