@@ -39,6 +39,7 @@ TASK_SUBTYPE = Literal[
     "Reasoning as Retrieval",
     "Rendered Texts Understanding",
     "Image Text Retrieval",
+    "Caption Pairing",
 ]
 
 TASK_DOMAIN = Literal[
@@ -88,6 +89,7 @@ TASK_TYPE = Literal[
     "InstructionRetrieval",
     "Speed",
     "ZeroShotClassification",
+    "ImageTextPairClassification",
 ]
 
 TASK_CATEGORY = Literal[
