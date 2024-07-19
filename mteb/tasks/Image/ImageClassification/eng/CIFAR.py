@@ -52,7 +52,7 @@ class CIFAR100Classification(AbsTaskImageClassification):
         description="Classifying images from 100 classes.",
         reference="https://huggingface.co/datasets/uoft-cs/cifar100",
         dataset={
-            "path": "uoft-cs/cifar10",
+            "path": "uoft-cs/cifar100",
             "revision": "aadb3af77e9048adbea6b47c21a81e47dd092ae5",
         },
         type="Classification",
