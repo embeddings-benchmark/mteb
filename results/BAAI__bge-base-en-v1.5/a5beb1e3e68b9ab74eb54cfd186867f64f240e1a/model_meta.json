@@ -1,1 +1,0 @@
-{"name": "BAAI/bge-base-en-v1.5", "revision": "a5beb1e3e68b9ab74eb54cfd186867f64f240e1a", "release_date": "2023-09-11", "languages": ["eng_Latn"], "n_parameters": null, "memory_usage": null, "max_tokens": null, "embed_dim": null, "license": null, "open_source": true, "framework": [], "loader": "BGEWrapper"}

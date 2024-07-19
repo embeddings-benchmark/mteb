@@ -14,18 +14,17 @@ class NorQuadRetrieval(AbsTaskRetrieval):
         reference="https://aclanthology.org/2023.nodalida-1.17/",
         type="Retrieval",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],
         main_score="ndcg_at_10",
         date=("2022-01-01", "2023-12-31"),
-        form=["written"],
         task_subtypes=["Question answering"],
-        domains=["Encyclopaedic", "Non-fiction"],
+        domains=["Encyclopaedic", "Non-fiction", "Written"],
         license="CC-BY-SA-4.0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{ivanova-etal-2023-norquad,
     title = "{N}or{Q}u{AD}: {N}orwegian Question Answering Dataset",
     author = "Ivanova, Sardana  and
@@ -44,15 +43,17 @@ class NorQuadRetrieval(AbsTaskRetrieval):
     pages = "159--168",
     abstract = "In this paper we present NorQuAD: the first Norwegian question answering dataset for machine reading comprehension. The dataset consists of 4,752 manually created question-answer pairs. We here detail the data collection procedure and present statistics of the dataset. We also benchmark several multilingual and Norwegian monolingual language models on the dataset and compare them against human performance. The dataset will be made freely available.",
 }""",
-        n_samples={"test": 2602},
-        avg_character_length={
-            "test": {
-                "average_document_length": 214.5114503816794,
-                "average_query_length": 47.896484375,
-                "num_documents": 1048,
-                "num_queries": 1024,
-                "average_relevant_docs_per_query": 2.0,
-            }
+        descriptive_stats={
+            "n_samples": {"test": 2602},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 214.5114503816794,
+                    "average_query_length": 47.896484375,
+                    "num_documents": 1048,
+                    "num_queries": 1024,
+                    "average_relevant_docs_per_query": 2.0,
+                }
+            },
         },
     )
 

@@ -15,18 +15,17 @@ class AJGT(AbsTaskClassification):
         reference="https://link.springer.com/chapter/10.1007/978-3-319-60042-0_66/",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ara-Arab"],
         main_score="accuracy",
         date=("2021-01-01", "2022-01-25"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="AFL",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=["ara-arab-MSA", "ara-arab-JO"],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @inproceedings{alomari2017arabic,
   title={Arabic tweets sentimental analysis using machine learning},
@@ -37,6 +36,8 @@ class AJGT(AbsTaskClassification):
   organization={Springer}
 }
 """,
-        n_samples={"train": 1800},
-        avg_character_length={"train": 46.81},
+        descriptive_stats={
+            "n_samples": {"train": 1800},
+            "avg_character_length": {"train": 46.81},
+        },
     )

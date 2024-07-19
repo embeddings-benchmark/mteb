@@ -73,19 +73,18 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=_EVAL_SPLITS,
         eval_langs=_LANGS,
         main_score="recall_at_10",
         reference="https://mcgill-nlp.github.io/statcan-dialogue-dataset/",
         date=("2020-01-01", "2020-04-15"),
-        form=["written"],
-        domains=["Government", "Web"],
+        domains=["Government", "Web", "Written"],
         task_subtypes=["Conversational retrieval"],
         license="https://huggingface.co/datasets/McGill-NLP/statcan-dialogue-dataset-retrieval/blob/main/LICENSE.md",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @inproceedings{lu-etal-2023-statcan,
     title = "The {S}tat{C}an Dialogue Dataset: Retrieving Data Tables through Conversations with Genuine Intents",
@@ -101,38 +100,40 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
     pages = "2799--2829",
 }
 """,
-        n_samples={"dev": 1000, "test": 1011, "corpus": 5907},
-        avg_character_length={
-            "dev": {
-                "english": {
-                    "average_document_length": 6535.865413915693,
-                    "average_query_length": 6.869244935543278,
-                    "num_documents": 5907,
-                    "num_queries": 543,
-                    "average_relevant_docs_per_query": 1.4714548802946592,
+        descriptive_stats={
+            "n_samples": {"dev": 1000, "test": 1011, "corpus": 5907},
+            "avg_character_length": {
+                "dev": {
+                    "english": {
+                        "average_document_length": 6535.865413915693,
+                        "average_query_length": 6.869244935543278,
+                        "num_documents": 5907,
+                        "num_queries": 543,
+                        "average_relevant_docs_per_query": 1.4714548802946592,
+                    },
+                    "french": {
+                        "average_document_length": 7078.072794988996,
+                        "average_query_length": 6.860655737704918,
+                        "num_documents": 5907,
+                        "num_queries": 122,
+                        "average_relevant_docs_per_query": 1.6475409836065573,
+                    },
                 },
-                "french": {
-                    "average_document_length": 7078.072794988996,
-                    "average_query_length": 6.860655737704918,
-                    "num_documents": 5907,
-                    "num_queries": 122,
-                    "average_relevant_docs_per_query": 1.6475409836065573,
-                },
-            },
-            "test": {
-                "english": {
-                    "average_document_length": 6535.865413915693,
-                    "average_query_length": 7.650994575045208,
-                    "num_documents": 5907,
-                    "num_queries": 553,
-                    "average_relevant_docs_per_query": 1.573236889692586,
-                },
-                "french": {
-                    "average_document_length": 7078.072794988996,
-                    "average_query_length": 5.907407407407407,
-                    "num_documents": 5907,
-                    "num_queries": 108,
-                    "average_relevant_docs_per_query": 1.3055555555555556,
+                "test": {
+                    "english": {
+                        "average_document_length": 6535.865413915693,
+                        "average_query_length": 7.650994575045208,
+                        "num_documents": 5907,
+                        "num_queries": 553,
+                        "average_relevant_docs_per_query": 1.573236889692586,
+                    },
+                    "french": {
+                        "average_document_length": 7078.072794988996,
+                        "average_query_length": 5.907407407407407,
+                        "num_documents": 5907,
+                        "num_queries": 108,
+                        "average_relevant_docs_per_query": 1.3055555555555556,
+                    },
                 },
             },
         },

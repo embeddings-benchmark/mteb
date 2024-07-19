@@ -14,7 +14,8 @@ import tqdm
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
 
-from mteb.encoder_interface import EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.model_meta import ModelMeta
 
 from .Evaluator import Evaluator
 from .model_encode import model_encode
@@ -97,16 +98,17 @@ class DenseRetrievalExactSearch:
         logger.info("Encoding Queries.")
         query_ids = list(queries.keys())
         self.results = {qid: {} for qid in query_ids}
-        queries = [queries[qid] for qid in queries]
-        if isinstance(queries[0], list):
-            query_embeddings = self.model.encode_conversations(
-                queries,
+        queries = [queries[qid] for qid in queries]  # type: ignore
+        if isinstance(queries[0], list):  # type: ignore
+            query_embeddings = self.encode_conversations(
+                model=self.model,
+                conversations=queries,  # type: ignore
                 prompt_name=prompt_name,
                 **self.encode_kwargs,
             )
         else:
             query_embeddings = self.model.encode_queries(
-                queries,
+                queries,  # type: ignore
                 prompt_name=prompt_name,
                 **self.encode_kwargs,
             )
@@ -117,7 +119,7 @@ class DenseRetrievalExactSearch:
             key=lambda k: len(corpus[k].get("title", "") + corpus[k].get("text", "")),
             reverse=True,
         )
-        corpus = [corpus[cid] for cid in corpus_ids]
+        corpus = [corpus[cid] for cid in corpus_ids]  # type: ignore
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
         logger.info(
@@ -288,10 +290,10 @@ class DenseRetrievalExactSearch:
                     f"{q} {i}".strip()
                     for i, q in zip(instructions_in_pair, queries_in_pair)
                 ]
-                scores = self.model.predict(list(zip(queries_in_pair, corpus_in_pair)))
+                scores = self.model.predict(list(zip(queries_in_pair, corpus_in_pair)))  # type: ignore
             else:
                 # may use the instructions in a unique way, so give them also
-                scores = self.model.predict(
+                scores = self.model.predict(  # type: ignore
                     list(zip(queries_in_pair, corpus_in_pair, instructions_in_pair))
                 )
 
@@ -306,27 +308,32 @@ class DenseRetrievalExactSearch:
         )
 
     def encode_conversations(
-        self, conversations: List[List[str]], prompt_name: str, **kwargs
+        self, model: Encoder, conversations: list[list[str]], prompt_name: str, **kwargs
     ):
         if callable(getattr(self.model, "encode_conversations", None)):
-            return self.model.encode_conversations(
+            return model.encode_conversations(  # type: ignore
                 conversations, prompt_name=prompt_name, **kwargs
             )
         # otherwise fallback to default implementation
         # TODO: add a warning here
-        queries = self.convert_conv_history_to_query(conversations)
-        return self.encode_queries(queries, prompt_name=prompt_name, **kwargs)
+        queries = self.convert_conv_history_to_query(model, conversations)  # type: ignore
+        return model.encode_queries(queries, prompt_name=prompt_name, **kwargs)  # type: ignore
 
-    def convert_conv_history_to_query(self, conversations: List[List[str]]) -> str:
-        if callable(getattr(self.model, "convert_conv_history_to_query", None)):
-            return self.model.convert_conv_history_to_query(conversations)
-        return convert_conv_history_to_query(conversations)
+    @staticmethod
+    def convert_conv_history_to_query(
+        model: Encoder, conversations: list[list[str]]
+    ) -> str:
+        if callable(getattr(model, "convert_conv_history_to_query", None)):
+            return model.convert_conv_history_to_query(conversations)  # type: ignore
+        return convert_conv_history_to_query(conversations)  # type: ignore
 
 
 class DRESModel:
     """Dense Retrieval Exact Search (DRES) requires an encode_queries & encode_corpus method.
     This class converts a model with just an .encode method into DRES format.
     """
+
+    mteb_model_meta: ModelMeta | None
 
     def __init__(self, model, **kwargs):
         self.model = model
@@ -416,30 +423,6 @@ class DRESModel:
     def encode(self, sentences: List[str], prompt_name: str, **kwargs):
         return self.encode_queries(sentences, prompt_name=prompt_name, **kwargs)
 
-    def encode_conversations(
-        self,
-        conversations: List[List[str]],
-        *,
-        batch_size: int,
-        prompt_name: str,
-        **kwargs,
-    ):
-        if callable(getattr(self.model, "encode_conversations", None)):
-            return self.model.encode_conversations(
-                conversations, prompt_name=prompt_name, **kwargs
-            )
-        # otherwise fallback to default implementation
-        # TODO: add a warning here
-        queries = self.convert_conv_history_to_query(conversations)
-        return self.encode_queries(
-            queries, batch_size=batch_size, prompt_name=prompt_name, **kwargs
-        )
-
-    def convert_conv_history_to_query(self, conversations: List[List[str]]) -> str:
-        if callable(getattr(self.model, "convert_conv_history_to_query", None)):
-            return self.model.convert_conv_history_to_query(conversations)
-        return convert_conv_history_to_query(conversations)
-
 
 def is_dres_compatible(model):
     for method in ["encode_queries", "encode_corpus"]:
@@ -508,6 +491,17 @@ class RetrievalEvaluator(Evaluator):
 
         if self.is_cross_encoder:
             return self.retriever.search_cross_encoder(corpus, queries, self.top_k)
+        elif (
+            hasattr(self.retriever.model, "mteb_model_meta")
+            and self.retriever.model.mteb_model_meta.name == "bm25s"
+        ):
+            return self.retriever.model.search(
+                corpus,
+                queries,
+                self.top_k,
+                self.score_function,
+                prompt_name=self.task_name,  # type: ignore
+            )
         else:
             return self.retriever.search(
                 corpus,

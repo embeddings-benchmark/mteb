@@ -15,6 +15,7 @@ class CyrillicTurkicLangClassification(AbsTaskClassification):
         reference="https://huggingface.co/datasets/tatiana-merz/cyrillic_turkic_langs",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=[
             "bak-Cyrl",  # Bashkir
@@ -29,14 +30,12 @@ class CyrillicTurkicLangClassification(AbsTaskClassification):
         ],
         main_score="accuracy",
         date=("1998-01-01", "2012-05-01"),
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=["Language identification"],
         license="CC BY-NC 4.0 DEED",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{goldhahn2012building,
         title={Building Large Monolingual Dictionaries at the Leipzig Corpora Collection: From 100 to 200 Languages},
@@ -45,8 +44,10 @@ class CyrillicTurkicLangClassification(AbsTaskClassification):
         year={2012}
         }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 92.22},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 92.22},
+        },
     )
 
     def dataset_transform(self):

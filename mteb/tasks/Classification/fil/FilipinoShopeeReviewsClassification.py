@@ -14,15 +14,14 @@ class FilipinoShopeeReviewsClassification(AbsTaskClassification):
         type="Classification",
         task_subtypes=["Sentiment/Hate speech"],
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["fil-Latn"],
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         license="MPL-2.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         date=("2022-05-13", "2023-05-13"),
         main_score="accuracy",
         bibtex_citation="""
@@ -34,8 +33,10 @@ class FilipinoShopeeReviewsClassification(AbsTaskClassification):
             issue={08},
             pages={72--82}
         }""",
-        n_samples={"validation": 2250, "test": 2250},
-        avg_character_length={"validation": 143.8, "test": 145.1},
+        descriptive_stats={
+            "n_samples": {"validation": 2250, "test": 2250},
+            "avg_character_length": {"validation": 143.8, "test": 145.1},
+        },
     )
 
     def dataset_transform(self):

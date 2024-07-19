@@ -16,18 +16,17 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
         },
         type="PairClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
-        main_score="ap",
+        main_score="max_ap",
         date=("2023-08-01", "2023-09-01"),
-        form=["written"],
-        domains=[],
+        domains=["Written"],
         task_subtypes=["False Friends"],
         license="mit",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""
         @misc{Chibb_2022, 
         title="German-English False Friends in Multilingual Transformer Models: An Evaluation on Robustness and Word-to-Word Fine-Tuning",
@@ -37,8 +36,10 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
         abstract="This paper explores the robustness of multilingual language models against false friends. False friends are words that sound or are written the same in two different languages but have different meaning. Generally, it is argued that multilingual models, such as XLM-RoBERTA, can outperform monolingual models in most tasks on conventional datasets. However, false friends are not considered in these tests. In this paper, experiments with a false friends dataset show that multilingual models are not robust against false friends; they have problems creating monolingual representations and differentiating between meanings of similarly written words in different languages. An attempt of word-based finetuning multilingual models on false friends pairs is promising, however the results do not generally solve the presented problem and still, monolingual models are more robust against false friends."
         }
         """,
-        n_samples={"test": 1524},
-        avg_character_length={"test": 40.3},
+        descriptive_stats={
+            "n_samples": {"test": 1524},
+            "avg_character_length": {"test": 40.3},
+        },
     )
 
     def dataset_transform(self):

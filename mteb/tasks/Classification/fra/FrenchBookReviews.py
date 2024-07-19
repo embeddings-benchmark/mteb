@@ -15,22 +15,23 @@ class FrenchBookReviews(AbsTaskClassification):
         reference="https://huggingface.co/datasets/Abirate/french_book_reviews",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["fra-Latn"],
         main_score="accuracy",
         date=("2022-01-01", "2023-01-01"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=[],
         license="CC0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         """,
-        n_samples={"train": 2048},
-        avg_character_length={"train": 311.5},
+        descriptive_stats={
+            "n_samples": {"train": 2048},
+            "avg_character_length": {"train": 311.5},
+        },
     )
 
     def dataset_transform(self):

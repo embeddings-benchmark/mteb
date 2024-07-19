@@ -1,0 +1,73 @@
+{
+  "dataset_revision": "NA",
+  "evaluation_time": 0.07277321815490723,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.75",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 1.0,
+        "f1": 1.0,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "lrap": 1.0,
+        "main_score": 1.0,
+        "scores_per_experiment": [
+          {
+            "accuracy": 1.0,
+            "f1": 1.0,
+            "lrap": 1.0
+          },
+          {
+            "accuracy": 1.0,
+            "f1": 1.0,
+            "lrap": 1.0
+          },
+          {
+            "accuracy": 1.0,
+            "f1": 1.0,
+            "lrap": 1.0
+          },
+          {
+            "accuracy": 1.0,
+            "f1": 1.0,
+            "lrap": 1.0
+          },
+          {
+            "accuracy": 1.0,
+            "f1": 1.0,
+            "lrap": 1.0
+          },
+          {
+            "accuracy": 1.0,
+            "f1": 1.0,
+            "lrap": 1.0
+          },
+          {
+            "accuracy": 1.0,
+            "f1": 1.0,
+            "lrap": 1.0
+          },
+          {
+            "accuracy": 1.0,
+            "f1": 1.0,
+            "lrap": 1.0
+          },
+          {
+            "accuracy": 1.0,
+            "f1": 1.0,
+            "lrap": 1.0
+          },
+          {
+            "accuracy": 1.0,
+            "f1": 1.0,
+            "lrap": 1.0
+          }
+        ]
+      }
+    ]
+  },
+  "task_name": "MockMultilabelClassification"
+}

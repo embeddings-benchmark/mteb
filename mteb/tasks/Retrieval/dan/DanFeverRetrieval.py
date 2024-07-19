@@ -14,17 +14,16 @@ class DanFeverRetrieval(AbsTaskRetrieval):
         reference="https://aclanthology.org/2021.nodalida-main.47/",
         type="Retrieval",
         category="p2p",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["dan-Latn"],
         main_score="ndcg_at_10",
         date=("2020-01-01", "2021-12-31"),  # best guess
-        form=["spoken"],
-        domains=["Encyclopaedic", "Non-fiction"],
+        domains=["Encyclopaedic", "Non-fiction", "Spoken"],
         license="CC BY-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @inproceedings{norregaard-derczynski-2021-danfever,
     title = "{D}an{FEVER}: claim verification dataset for {D}anish",
@@ -42,15 +41,17 @@ class DanFeverRetrieval(AbsTaskRetrieval):
     abstract = "We present a dataset, DanFEVER, intended for multilingual misinformation research. The dataset is in Danish and has the same format as the well-known English FEVER dataset. It can be used for testing methods in multilingual settings, as well as for creating models in production for the Danish language.",
 }
 """,
-        n_samples={"train": 8897},
-        avg_character_length={
-            "train": {
-                "average_document_length": 312.1117274167987,
-                "average_query_length": 50.26957476855484,
-                "num_documents": 2524,
-                "num_queries": 6373,
-                "average_relevant_docs_per_query": 0.48721167425074535,
-            }
+        descriptive_stats={
+            "n_samples": {"train": 8897},
+            "avg_character_length": {
+                "train": {
+                    "average_document_length": 312.1117274167987,
+                    "average_query_length": 50.26957476855484,
+                    "num_documents": 2524,
+                    "num_queries": 6373,
+                    "average_relevant_docs_per_query": 0.48721167425074535,
+                }
+            },
         },
         task_subtypes=["Claim verification"],
     )
@@ -125,17 +126,16 @@ class DanFever(AbsTaskRetrieval):
         reference="https://aclanthology.org/2021.nodalida-main.47/",
         type="Retrieval",
         category="p2p",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["dan-Latn"],
         main_score="ndcg_at_10",
         date=("2020-01-01", "2021-12-31"),  # best guess
-        form=["spoken"],
-        domains=["Encyclopaedic", "Non-fiction"],
+        domains=["Encyclopaedic", "Non-fiction", "Spoken"],
         license="CC BY-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @inproceedings{norregaard-derczynski-2021-danfever,
     title = "{D}an{FEVER}: claim verification dataset for {D}anish",
@@ -153,15 +153,17 @@ class DanFever(AbsTaskRetrieval):
     abstract = "We present a dataset, DanFEVER, intended for multilingual misinformation research. The dataset is in Danish and has the same format as the well-known English FEVER dataset. It can be used for testing methods in multilingual settings, as well as for creating models in production for the Danish language.",
 }
 """,
-        n_samples={"train": 8897},
-        avg_character_length={
-            "train": {
-                "average_document_length": 312.1117274167987,
-                "average_query_length": 50.26957476855484,
-                "num_documents": 2524,
-                "num_queries": 6373,
-                "average_relevant_docs_per_query": 0.48721167425074535,
-            }
+        descriptive_stats={
+            "n_samples": {"train": 8897},
+            "avg_character_length": {
+                "train": {
+                    "average_document_length": 312.1117274167987,
+                    "average_query_length": 50.26957476855484,
+                    "num_documents": 2524,
+                    "num_queries": 6373,
+                    "average_relevant_docs_per_query": 0.48721167425074535,
+                }
+            },
         },
         task_subtypes=["Claim verification"],
     )

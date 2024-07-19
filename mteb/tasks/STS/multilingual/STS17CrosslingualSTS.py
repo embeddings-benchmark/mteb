@@ -31,18 +31,17 @@ class STS17Crosslingual(AbsTaskSTS, MultilingualTask):
         reference="https://alt.qcri.org/semeval2017/task1/",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="cosine_spearman",
         date=("2014-01-01", "2015-12-31"),
-        form=["written"],
-        domains=["News", "Web"],
+        domains=["News", "Web", "Written"],
         task_subtypes=[],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""@inproceedings{cer-etal-2017-semeval,
     title = "{S}em{E}val-2017 Task 1: Semantic Textual Similarity Multilingual and Crosslingual Focused Evaluation",
     author = "Cer, Daniel  and
@@ -66,8 +65,10 @@ class STS17Crosslingual(AbsTaskSTS, MultilingualTask):
     pages = "1--14",
     abstract = "Semantic Textual Similarity (STS) measures the meaning similarity of sentences. Applications include machine translation (MT), summarization, generation, question answering (QA), short answer grading, semantic search, dialog and conversational systems. The STS shared task is a venue for assessing the current state-of-the-art. The 2017 task focuses on multilingual and cross-lingual pairs with one sub-track exploring MT quality estimation (MTQE) data. The task obtained strong participation from 31 teams, with 17 participating in \textit{all language tracks}. We summarize performance and review a selection of well performing methods. Analysis highlights common errors, providing insight into the limitations of existing models. To support ongoing work on semantic representations, the \textit{STS Benchmark} is introduced as a new shared training and evaluation set carefully selected from the corpus of English STS shared task data (2012-2017).",
 }""",
-        n_samples={"test": 500},
-        avg_character_length={"test": 43.3},
+        descriptive_stats={
+            "n_samples": {"test": 500},
+            "avg_character_length": {"test": 43.3},
+        },
     )
 
     @property

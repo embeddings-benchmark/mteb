@@ -16,18 +16,17 @@ class PoemSentimentClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("1700-01-01", "1900-01-01"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC-BY-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=["eng-Latn-US", "en-Latn-GB"],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @misc{sheng2020investigating,
       title={Investigating Societal Biases in a Poetry Composition System},
@@ -38,8 +37,10 @@ class PoemSentimentClassification(AbsTaskClassification):
       primaryClass={cs.CL}
 }
 """,
-        n_samples={"validation": 105, "test": 104},
-        avg_character_length={"validation": 45.3, "test": 42.4},
+        descriptive_stats={
+            "n_samples": {"validation": 105, "test": 104},
+            "avg_character_length": {"validation": 45.3, "test": 42.4},
+        },
     )
 
     def dataset_transform(self):

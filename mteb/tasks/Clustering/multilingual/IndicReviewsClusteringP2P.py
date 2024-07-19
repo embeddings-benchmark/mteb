@@ -37,18 +37,17 @@ class IndicReviewsClusteringP2P(AbsTaskClustering, MultilingualTask):
         reference="https://arxiv.org/abs/2212.05409",
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="v_measure",
         date=("2022-08-01", "2022-12-20"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Thematic clustering"],
         license="CC0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="machine-translated and verified",
+        sample_creation="machine-translated and verified",
         bibtex_citation="""@article{doddapaneni2022towards,
   title     = {Towards Leaving No Indic Language Behind: Building Monolingual Corpora, Benchmark and Models for Indic Languages},
   author    = {Sumanth Doddapaneni and Rahul Aralikatte and Gowtham Ramesh and Shreyansh Goyal and Mitesh M. Khapra and Anoop Kunchukuttan and Pratyush Kumar},
@@ -56,8 +55,10 @@ class IndicReviewsClusteringP2P(AbsTaskClustering, MultilingualTask):
   year      = {2022},
   doi       = {10.18653/v1/2023.acl-long.693}
 }""",
-        n_samples={"test": 1000},
-        avg_character_length={"test": 137.6},
+        descriptive_stats={
+            "n_samples": {"test": 1000},
+            "avg_character_length": {"test": 137.6},
+        },
     )
 
     def load_data(self, **kwargs: Any) -> None:

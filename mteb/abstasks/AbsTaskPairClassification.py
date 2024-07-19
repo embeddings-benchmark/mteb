@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from collections import defaultdict
 
 from datasets import Dataset
 
@@ -27,8 +26,8 @@ class AbsTaskPairClassification(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def _add_main_score(self, scores) -> None:
-        scores["main_score"] = scores["max"][self.metadata.main_score]
+    def _add_main_score(self, scores: ScoresDict) -> None:
+        scores["main_score"] = scores[self.metadata.main_score]
 
     def _evaluate_subset(
         self,
@@ -50,17 +49,6 @@ class AbsTaskPairClassification(AbsTask):
             **kwargs,
         )
         scores = evaluator.compute_metrics(model, encode_kwargs=encode_kwargs)
-
-        # Compute max
-        max_scores = defaultdict(list)
-        for sim_fct in scores:
-            for metric in ["accuracy", "f1", "ap"]:
-                max_scores[metric].append(scores[sim_fct][metric])
-
-        for metric in max_scores:
-            max_scores[metric] = max(max_scores[metric])
-
-        scores["max"] = dict(max_scores)
 
         self._add_main_score(scores)
         return scores

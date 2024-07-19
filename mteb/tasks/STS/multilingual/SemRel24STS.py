@@ -36,18 +36,17 @@ class SemRel24STS(AbsTaskSTS, MultilingualTask):
         reference="https://huggingface.co/datasets/SemRel/SemRel2024",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=_SPLITS,
         eval_langs=_LANGUAGES,
         main_score="cosine_spearman",
         date=("2023-01-01", "2023-12-31"),
-        form=["spoken", "written"],
-        domains=[],
+        domains=["Spoken", "Written"],
         task_subtypes=[],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""@misc{ousidhoum2024semrel2024,
         title={SemRel2024: A Collection of Semantic Textual Relatedness Datasets for 14 Languages}, 
         author={Nedjma Ousidhoum and Shamsuddeen Hassan Muhammad and Mohamed Abdalla and Idris Abdulmumin and Ibrahim Said Ahmad and
@@ -62,8 +61,10 @@ class SemRel24STS(AbsTaskSTS, MultilingualTask):
               primaryClass={cs.CL}
         }
         """,
-        n_samples={"dev": 2089, "test": 7498},
-        avg_character_length={"dev": 163.1, "test": 145.9},
+        descriptive_stats={
+            "n_samples": {"dev": 2089, "test": 7498},
+            "avg_character_length": {"dev": 163.1, "test": 145.9},
+        },
     )
 
     @property

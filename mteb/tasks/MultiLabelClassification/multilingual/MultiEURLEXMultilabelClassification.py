@@ -17,6 +17,7 @@ class MultiEURLEXMultilabelClassification(
         description="EU laws in 23 EU languages containing gold labels.",
         reference="https://huggingface.co/datasets/coastalcph/multi_eurlex",
         category="p2p",
+        modalities=["text"],
         type="MultilabelClassification",
         eval_splits=["test"],
         eval_langs={
@@ -46,14 +47,12 @@ class MultiEURLEXMultilabelClassification(
         },
         main_score="accuracy",
         date=("1958-01-01", "2016-01-01"),
-        form=["written"],
-        domains=["Legal", "Government"],
+        domains=["Legal", "Government", "Written"],
         task_subtypes=["Topic classification"],
         license="CC BY-SA 4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @InProceedings{chalkidis-etal-2021-multieurlex,
   author = {Chalkidis, Ilias  
@@ -69,6 +68,8 @@ class MultiEURLEXMultilabelClassification(
   url = {https://arxiv.org/abs/2109.00904}
 }
         """,
-        n_samples={"test": 5000},
-        avg_character_length={"test": 12014.41},
+        descriptive_stats={
+            "n_samples": {"test": 5000},
+            "avg_character_length": {"test": 12014.41},
+        },
     )

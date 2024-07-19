@@ -100,3 +100,8 @@ Please also add your first name and last name are as you want them to appear in 
 | mariyahendriksen          | Mariya     | Hendriksen    | mariya.hendriksen@gmail.com   |   ~Mariya_Hendriksen1            | University of Amsterdam   |
 | dokato          | Dominik     | Krzemiński    | dkk33@cantab.ac.uk   |   ~Dominik_Krzemiński1            | Cohere For AI Community   |
 | Samoed | Roman | Solomatin | risolomatin@gmail.com | | ITMO                                                      |
+| Alenush           | Alena      | Fenogenova | alenush93@gmail.com          | ~Alena_Fenogenova1   | SaluteDevices, Russia                                 |
+| Ab1992ao          | Aleksandr  | Abramov    | andril772@gmail.com          | ~Aleksandr_Abramov1  | SaluteDevices, Russia                                 |
+| artemsnegirev     | Artem      | Snegirev   | artem.s.snegirev@gmail.com   | ~Artem_Snegirev1     | SaluteDevices, Russia                                 |
+| anpalmak2003      | Anna       | Maksimova  | anpalmak@gmail.com           | ~Anna_Maksimova1     | SaluteDevices, Russia                                 |
+| MariyaTikhonova   | Maria      | Tikhonova  | m_tikhonova94@mail.ru        | ~Maria_Tikhonova1    | SaluteDevices, HSE University, Russia                 |

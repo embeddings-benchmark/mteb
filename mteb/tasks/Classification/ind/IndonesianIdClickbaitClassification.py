@@ -17,18 +17,17 @@ class IndonesianIdClickbaitClassification(AbsTaskClassification):
         reference="http://www.sciencedirect.com/science/article/pii/S2352340920311252",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ind-Latn"],
         main_score="f1",
         date=("2020-10-01", "2020-10-01"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         dialect=[],
         task_subtypes=["Claim verification"],
         license="cc-by-4.0",
-        socioeconomic_status="medium",
         annotations_creators="expert-annotated",
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @article{WILLIAM2020106231,
 title = "CLICK-ID: A novel dataset for Indonesian clickbait headlines",
@@ -44,8 +43,10 @@ keywords = "Indonesian, Natural Language Processing, News articles, Clickbait, T
 abstract = "News analysis is a popular task in Natural Language Processing (NLP). In particular, the problem of clickbait in news analysis has gained attention in recent years [1, 2]. However, the majority of the tasks has been focused on English news, in which there is already a rich representative resource. For other languages, such as Indonesian, there is still a lack of resource for clickbait tasks. Therefore, we introduce the CLICK-ID dataset of Indonesian news headlines extracted from 12 Indonesian online news publishers. It is comprised of 15,000 annotated headlines with clickbait and non-clickbait labels. Using the CLICK-ID dataset, we then developed an Indonesian clickbait classification model achieving favourable performance. We believe that this corpus will be useful for replicable experiments in clickbait detection or other experiments in NLP areas."
 }
 """,
-        n_samples={"train": N_SAMPLES},
-        avg_character_length={"train": 64.28},
+        descriptive_stats={
+            "n_samples": {"train": N_SAMPLES},
+            "avg_character_length": {"train": 64.28},
+        },
     )
 
     def dataset_transform(self):

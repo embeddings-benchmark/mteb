@@ -15,18 +15,17 @@ class ArmenianParaphrasePC(AbsTaskPairClassification):
         },
         type="PairClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["hye-Armn"],
-        main_score="ap",
+        main_score="max_ap",
         date=("2021-01-01", "2022-04-06"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=[],
         license="Apache-2.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{malajyan2020arpa,
             title={ARPA: Armenian Paraphrase Detection Corpus and Models}, 
@@ -37,8 +36,10 @@ class ArmenianParaphrasePC(AbsTaskPairClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"train": 4023, "test": 1470},
-        avg_character_length={"train": 243.81, "test": 241.37},
+        descriptive_stats={
+            "n_samples": {"train": 4023, "test": 1470},
+            "avg_character_length": {"train": 243.81, "test": 241.37},
+        },
     )
 
     def dataset_transform(self):

@@ -73,18 +73,17 @@ class LegalBenchPC(AbsTaskPairClassification):
         },
         type="PairClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
+        main_score="max_accuracy",
         date=("2000-01-01", "2023-08-23"),  # best guess
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{guha2023legalbench,
             title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models}, 
@@ -118,8 +117,10 @@ class LegalBenchPC(AbsTaskPairClassification):
             year={2019}
         }
         """,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 287.18},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 287.18},
+        },
     )
 
     def load_data(self, **kwargs: Any) -> None:

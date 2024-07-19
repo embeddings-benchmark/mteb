@@ -16,18 +16,17 @@ class BornholmBitextMining(AbsTaskBitextMining):
         reference="https://aclanthology.org/W19-6138/",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["dan-Latn"],
         main_score="f1",
         date=("2019-01-01", "2019-12-31"),
-        form=["written"],
-        domains=["Web", "Social", "Fiction"],
+        domains=["Web", "Social", "Fiction", "Written"],
         license="CC-BY-4.0",
         task_subtypes=["Dialect pairing"],
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=["da-dan-bornholm"],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""
 @inproceedings{derczynskiBornholmskNaturalLanguage2019,
 	title = {Bornholmsk natural language processing: Resources and tools},
@@ -42,8 +41,10 @@ class BornholmBitextMining(AbsTaskBitextMining):
 	file = {Available Version (via Google Scholar):/Users/au554730/Zotero/storage/FBQ73ZYN/Derczynski and Kjeldsen - 2019 - Bornholmsk natural language processing Resources .pdf:application/pdf},
 }
 """,
-        avg_character_length={"test": 89.7},
-        n_samples={"test": 500},
+        descriptive_stats={
+            "n_samples": {"test": 500},
+            "avg_character_length": {"test": 89.7},
+        },
     )
 
     def dataset_transform(self):

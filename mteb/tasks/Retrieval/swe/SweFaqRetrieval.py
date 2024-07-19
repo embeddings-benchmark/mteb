@@ -16,28 +16,29 @@ class SweFaqRetrieval(AbsTaskRetrieval):
         reference="https://spraakbanken.gu.se/en/resources/superlim",
         type="Retrieval",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["swe-Latn"],
         main_score="ndcg_at_10",
         date=("2000-01-01", "2024-12-31"),  # best guess
-        form=["written"],
         task_subtypes=["Question answering"],
-        domains=["Government", "Non-fiction"],
+        domains=["Government", "Non-fiction", "Written"],
         license="CC-BY-SA-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation=None,
-        n_samples={"test": 1024},
-        avg_character_length={
-            "test": {
-                "average_document_length": 319.8473581213307,
-                "average_query_length": 70.51461988304094,
-                "num_documents": 511,
-                "num_queries": 513,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": {"test": 1024},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 319.8473581213307,
+                    "average_query_length": 70.51461988304094,
+                    "num_documents": 511,
+                    "num_queries": 513,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

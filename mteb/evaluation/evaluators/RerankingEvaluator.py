@@ -210,7 +210,7 @@ class RerankingEvaluator(Evaluator):
             all_docs,
             encode_corpus_func,
             prompt_name=self.task_name,
-            encode_kwargs=self.encode_kwargs,
+            **self.encode_kwargs,
         )
 
         # Compute scores and confidence scores
@@ -422,7 +422,7 @@ class RerankingEvaluator(Evaluator):
         all_texts: list[str],
         encode_fn: Callable,
         prompt_name: str | None,
-        encode_kwargs: dict[str, Any],
+        **encode_kwargs: Any,
     ):
         index_map, all_unique_texts, all_texts_indexes = {}, [], []
         for text in all_texts:

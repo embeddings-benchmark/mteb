@@ -73,6 +73,41 @@ class CLIPModelWrapper:
         probs = (logits * 100).softmax(dim=-1)
         return probs
 
+    def get_fused_embeddings(
+        self,
+        texts: list[str] = None,
+        images: list[Image.Image] = None,
+        fusion_mode="sum",
+        batch_size: int = 32,
+    ):
+        if texts is None and images is None:
+            raise ValueError("Either texts or images must be provided")
+
+        text_embeddings = None
+        image_embeddings = None
+
+        if texts is not None:
+            text_embeddings = self.get_text_embeddings(texts, batch_size)
+
+        if images is not None:
+            image_embeddings = self.get_image_embeddings(images, batch_size)
+
+        if text_embeddings is not None and image_embeddings is not None:
+            if len(text_embeddings) != len(image_embeddings):
+                raise ValueError(
+                    "The number of texts and images must have the same length"
+                )
+            if fusion_mode == "sum":
+                fused_embeddings = text_embeddings + image_embeddings
+            else:
+                # to do: add other fusion mode
+                raise ValueError(f"fusion mode {fusion_mode} hasn't been implemented")
+            return fused_embeddings
+        elif text_embeddings is not None:
+            return text_embeddings
+        elif image_embeddings is not None:
+            return image_embeddings
+
 
 clip_vit_large_patch14 = ModelMeta(
     loader=partial(

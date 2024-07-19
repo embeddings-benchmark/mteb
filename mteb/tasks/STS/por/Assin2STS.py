@@ -15,18 +15,17 @@ class Assin2STS(AbsTaskSTS):
         reference="https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39",
         type="STS",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["por-Latn"],
         main_score="cosine_spearman",
         date=("2019-01-01", "2019-09-16"),  # best guess
-        form=["written"],
-        domains=[],
+        domains=["Written"],
         task_subtypes=["Claim verification"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{real2020assin,
             title={The assin 2 shared task: a quick overview},
             author={Real, Livy and Fonseca, Erick and Oliveira, Hugo Goncalo},
@@ -35,8 +34,10 @@ class Assin2STS(AbsTaskSTS):
             year={2020},
             organization={Springer}
         }""",
-        n_samples={"test": 2448},
-        avg_character_length={"test": 53.55},
+        descriptive_stats={
+            "n_samples": {"test": 2448},
+            "avg_character_length": {"test": 53.55},
+        },
     )
 
     @property
