@@ -28,23 +28,26 @@ class MSCOCOI2TRetrieval(AbsTaskI2TRetrieval):
         socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        modalities=["text", "image"],
+        sample_creation="found",
         bibtex_citation="""@inproceedings{lin2014microsoft,
-  title={Microsoft coco: Common objects in context},
-  author={Lin, Tsung-Yi and Maire, Michael and Belongie, Serge and Hays, James and Perona, Pietro and Ramanan, Deva and Doll{\'a}r, Piotr and Zitnick, C Lawrence},
-  booktitle={Computer Vision--ECCV 2014: 13th European Conference, Zurich, Switzerland, September 6-12, 2014, Proceedings, Part V 13},
-  pages={740--755},
-  year={2014},
-  organization={Springer}
-}""",
-        n_samples={"test": 1172},
-        avg_character_length={
-            "test": {
-                "average_document_length": 30.94235294117647,
-                "average_query_length": 131.56569965870307,
-                "num_documents": 9350,
-                "num_queries": 1172,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        title={Microsoft coco: Common objects in context},
+        author={Lin, Tsung-Yi and Maire, Michael and Belongie, Serge and Hays, James and Perona, Pietro and Ramanan, Deva and Doll{\'a}r, Piotr and Zitnick, C Lawrence},
+        booktitle={Computer Vision--ECCV 2014: 13th European Conference, Zurich, Switzerland, September 6-12, 2014, Proceedings, Part V 13},
+        pages={740--755},
+        year={2014},
+        organization={Springer}
+        }""",
+        descriptive_stats={
+            "n_samples": {"test": 1172},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 30.94235294117647,
+                    "average_query_length": 131.56569965870307,
+                    "num_documents": 9350,
+                    "num_queries": 1172,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )

@@ -103,6 +103,11 @@ TASK_CATEGORY = Literal[
     "it2it",
 ]
 
+MODALITIES = Literal[
+    "text",
+    "image",
+]
+
 ANNOTATOR_TYPE = Literal[
     "expert-annotated", "human-annotated", "derived", "LM-generated"
 ]
@@ -185,7 +190,7 @@ class TaskMetadata(BaseModel):
     name: str
     description: str
     type: TASK_TYPE
-    modalities: list[Literal["text"]]
+    modalities: list[MODALITIES]
     category: TASK_CATEGORY
     reference: STR_URL | None  # URL to documentation, e.g. published paper
 

@@ -29,8 +29,11 @@ class TinyImageNet(AbsTaskImageClustering):
         socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        modalities=["image"],
+        sample_creation="found",
         bibtex_citation="""d""",
-        n_samples={"valid": 10000},
-        avg_character_length={"valid": 431.4},
+        descriptive_stats={
+            "n_samples": {"valid": 10000},
+            "avg_character_length": {"valid": 431.4},
+        },
     )

@@ -28,22 +28,25 @@ class CIRRIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        modalities=["text", "image"],
+        sample_creation="found",
         bibtex_citation="""@inproceedings{liu2021image,
-  title={Image retrieval on real-life images with pre-trained vision-and-language models},
-  author={Liu, Zheyuan and Rodriguez-Opazo, Cristian and Teney, Damien and Gould, Stephen},
-  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
-  pages={2125--2134},
-  year={2021}
-}""",
-        n_samples={"test": 1172},
-        avg_character_length={
-            "test": {
-                "average_document_length": 30.94235294117647,
-                "average_query_length": 131.56569965870307,
-                "num_documents": 9350,
-                "num_queries": 1172,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        title={Image retrieval on real-life images with pre-trained vision-and-language models},
+        author={Liu, Zheyuan and Rodriguez-Opazo, Cristian and Teney, Damien and Gould, Stephen},
+        booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+        pages={2125--2134},
+        year={2021}
+        }""",
+        descriptive_stats={
+            "n_samples": {"test": 1172},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 30.94235294117647,
+                    "average_query_length": 131.56569965870307,
+                    "num_documents": 9350,
+                    "num_queries": 1172,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
