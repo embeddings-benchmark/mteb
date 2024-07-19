@@ -4,28 +4,28 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskClassification
 
-_LANGUAGES = {
-    "ar": ["ara-Arab"],
-    "bg": ["bul-Cyrl"],
-    "de": ["deu-Latn"],
-    "el": ["ell-Grek"],
-    "en": ["eng-Latn"],
-    "es": ["spa-Latn"],
-    "fr": ["fra-Latn"],
-    "hi": ["hin-Deva"],
-    "it": ["ita-Latn"],
-    "ja": ["jpn-Jpan"],
-    "nl": ["nld-Latn"],
-    "pl": ["pol-Latn"],
-    "pt": ["por-Latn"],
-    "ru": ["rus-Cyrl"],
-    "sw": ["swa-Latn"],
-    "th": ["tha-Thai"],
-    "tr": ["tur-Latn"],
-    "ur": ["urd-Arab"],
-    "vi": ["vie-Latn"],
-    "zh": ["cmn-Hans"],
-}
+_LANGUAGES = [
+    "ara-Arab",
+    "bul-Cyrl",
+    "deu-Latn",
+    "ell-Grek",
+    "eng-Latn",
+    "spa-Latn",
+    "fra-Latn",
+    "hin-Deva",
+    "ita-Latn",
+    "jpn-Jpan",
+    "nld-Latn",
+    "pol-Latn",
+    "por-Latn",
+    "rus-Cyrl",
+    "swa-Latn",
+    "tha-Thai",
+    "tur-Latn",
+    "urd-Arab",
+    "vie-Latn",
+    "cmn-Hans",
+]
 
 
 class LanguageClassification(AbsTaskClassification):
@@ -38,19 +38,18 @@ class LanguageClassification(AbsTaskClassification):
         description="A language identification dataset for 20 languages.",
         reference="https://huggingface.co/datasets/papluca/language-identification",
         category="s2s",
+        modalities=["text"],
         type="Classification",
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
         date=("2021-11-01", "2021-11-30"),
-        form=["written"],
-        domains=["Reviews", "Web", "Non-fiction", "Fiction", "Government"],
+        domains=["Reviews", "Web", "Non-fiction", "Fiction", "Government", "Written"],
         task_subtypes=["Language identification"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@InProceedings{conneau2018xnli,
   author = {Conneau, Alexis
                  and Rinott, Ruty
@@ -66,8 +65,10 @@ class LanguageClassification(AbsTaskClassification):
   publisher = {Association for Computational Linguistics},
   location = {Brussels, Belgium},
 }""",
-        n_samples={"test": 2048},
-        avg_character_length={"test": 107.8},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 107.8},
+        },
     )
 
     def dataset_transform(self) -> None:

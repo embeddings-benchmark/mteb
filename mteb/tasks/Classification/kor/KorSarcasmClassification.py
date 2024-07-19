@@ -24,18 +24,17 @@ class KorSarcasmClassification(AbsTaskClassification):
         reference="https://github.com/SpellOnYou/korean-sarcasm",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["kor-Hang"],
         main_score="accuracy",
         date=("2018-10-31", "2019-09-28"),  # estimated based on git history
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Topic classification"],
         license="MIT",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{kim2019kocasm,
             author = {Kim, Jiwon and Cho, Won Ik},
@@ -46,8 +45,10 @@ class KorSarcasmClassification(AbsTaskClassification):
             howpublished = {https://github.com/SpellOnYou/korean-sarcasm}
         }
         """,
-        n_samples={"train": 2048, "test": 301},
-        avg_character_length={"train": 48.45, "test": 46.77},
+        descriptive_stats={
+            "n_samples": {"train": 2048, "test": 301},
+            "avg_character_length": {"train": 48.45, "test": 46.77},
+        },
     )
 
     def dataset_transform(self):

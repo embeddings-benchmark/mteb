@@ -19,18 +19,17 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
         main_score="ndcg_at_10",
         date=None,  # no date specified.
-        form=["written"],
-        domains=["Encyclopaedic"],
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{lef23,
   doi = {10.48550/ARXIV.2302.07738},
   url = {https://arxiv.org/abs/2302.07738},
@@ -41,15 +40,17 @@ class AlloprofRetrieval(AbsTaskRetrieval):
   year = {2023},
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }""",
-        n_samples={"train": 2048},
-        avg_character_length={
-            "test": {
-                "average_document_length": 3505.705399061033,
-                "average_query_length": 170.71286701208982,
-                "num_documents": 2556,
-                "num_queries": 2316,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": {"train": 2048},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 3505.705399061033,
+                    "average_query_length": 170.71286701208982,
+                    "num_documents": 2556,
+                    "num_queries": 2316,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

@@ -41,17 +41,25 @@ class E5InstructWrapper(Encoder):
         revision: str,
         max_length: int,
         max_batch_size: Optional[int] = None,
-        device: str = "cpu",
+        device: str = torch.device("cuda" if torch.cuda.is_available() else "cpu"),
         **kwargs: Any,
     ):
         logger.info("Started loading e5 instruct model")
         self.tokenizer = AutoTokenizer.from_pretrained(
             model_name, revision=revision, **kwargs
         )
-
         self.model = AutoModel.from_pretrained(model_name, **kwargs).to(device)
+        self.model.eval()
+        self.device = device
         self.max_length = max_length
         self.max_batch_size = max_batch_size
+        self.gpu_count = torch.cuda.device_count()
+
+        if self.gpu_count > 1:
+            logger.info(
+                f"----------Using {self.gpu_count} data-parallel GPUs----------"
+            )
+            self.model = torch.nn.DataParallel(self.model)
 
     def preprocess(
         self, sentences: Sequence[str], instruction: str, encode_type: EncodeTypes
@@ -70,7 +78,7 @@ class E5InstructWrapper(Encoder):
             return_tensors="pt",
         )
 
-        return batch_dict.to(self.model.device)
+        return batch_dict.to(self.device)
 
     def get_embedding_from_output(
         self, output: ModelOutput, batch_dict: BatchEncoding
@@ -97,6 +105,7 @@ class E5InstructWrapper(Encoder):
     ) -> np.ndarray:
         if self.max_batch_size and batch_size > self.max_batch_size:
             batch_size = self.max_batch_size
+        batch_size = batch_size * self.gpu_count
         batched_embeddings = []
         if prompt_name is not None:
             instruction = task_to_instruction(
@@ -216,7 +225,7 @@ class E5MistralWrapper(E5InstructWrapper):
             batch_dict, padding=True, return_attention_mask=True, return_tensors="pt"
         )
 
-        return batch_dict.to(self.model.device)
+        return batch_dict.to(self.device)
 
 
 def _loader(
@@ -249,7 +258,7 @@ e5_mistral = ModelMeta(
         E5MistralWrapper,
         "intfloat/e5-mistral-7b-instruct",
         "07163b72af1488142a360786df853f237b1a3ca1",
-        max_batch_size=4,
+        max_batch_size=512,
         torch_dtype=torch.float16,
     ),
     name="intfloat/e5-mistral-7b-instruct",

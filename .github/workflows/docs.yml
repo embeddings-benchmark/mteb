@@ -5,9 +5,30 @@ name: documentation
 on:
   push:
     branches: [main]
+  pull_request:
 
 jobs:
-  create-table:
+  create-table-on-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          make install
+
+      - name: Create table
+        run: |
+          make build-docs
+
+  create-table-and-push:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,10 +45,10 @@ jobs:
           make install
 
       - name: Create table
-        run: python docs/create_tasks_table.py
-    
+        run: |
+          make build-docs
+      
       - name: Push table
-        if: github.event_name == 'push'
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"

@@ -20,18 +20,17 @@ class IndonesianMongabayConservationClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         date=("2012-01-01", "2023-12-31"),
         eval_splits=["validation", "test"],
         eval_langs=["ind-Latn"],
         main_score="f1",
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{fransiska-etal-2023-utilizing,
             title = "Utilizing Weak Supervision to Generate {I}ndonesian Conservation Datasets",
@@ -55,8 +54,10 @@ class IndonesianMongabayConservationClassification(AbsTaskClassification):
             pages = "30--54",
         }
         """,
-        n_samples={"validation": 984, "test": 970},
-        avg_character_length={"validation": 1675.8, "test": 1675.5},
+        descriptive_stats={
+            "n_samples": {"validation": 984, "test": 970},
+            "avg_character_length": {"validation": 1675.8, "test": 1675.5},
+        },
     )
 
     def dataset_transform(self):

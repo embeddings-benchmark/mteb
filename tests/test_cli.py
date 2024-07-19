@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from mteb.cli import create_meta
+from mteb.cli import create_meta, run
 
 
 def test_available_tasks():
@@ -39,9 +39,23 @@ def test_run_task(
     task_name: str,
     model_revision: str,
 ):
-    command = f"mteb run -m {model_name} -t {task_name} --verbosity 3 --output_folder tests/results/test_model --model_revision {model_revision}"
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    assert result.returncode == 0, "Command failed"
+    args = Namespace(
+        model=model_name,
+        tasks=[task_name],
+        model_revision=model_revision,
+        output_folder="tests/results/test_model",
+        verbosity=3,
+        device=None,
+        categories=None,
+        task_types=None,
+        languages=None,
+        batch_size=None,
+        co2_tracker=None,
+        overwrite=True,
+        eval_splits=None,
+    )
+
+    run(args)
 
     model_name_as_path = model_name.replace("/", "__").replace(" ", "_")
     results_path = Path(

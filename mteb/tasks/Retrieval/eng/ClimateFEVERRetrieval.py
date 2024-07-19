@@ -16,18 +16,17 @@ class ClimateFEVER(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{diggelmann2021climatefever,
       title={CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims}, 
       author={Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
@@ -36,14 +35,16 @@ class ClimateFEVER(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "average_document_length": 538.241873443325,
-                "average_query_length": 123.39934853420195,
-                "num_documents": 5416593,
-                "num_queries": 1535,
-                "average_relevant_docs_per_query": 3.0495114006514656,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 538.241873443325,
+                    "average_query_length": 123.39934853420195,
+                    "num_documents": 5416593,
+                    "num_queries": 1535,
+                    "average_relevant_docs_per_query": 3.0495114006514656,
+                }
+            },
         },
     )

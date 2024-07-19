@@ -23,13 +23,12 @@ class Evaluator(ABC):
         torch.cuda.manual_seed_all(self.seed)
 
     @abstractmethod
-    def __call__(self, model: Encoder):
+    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
         """This is called during training to evaluate the model.
         It returns scores.
 
-        Parameters
-        ----------
-        model:
-            the model to evaluate
+        Args:
+            model: the model to evaluate
+            encode_kwargs: kwargs to pass to the model's encode method
         """
         pass

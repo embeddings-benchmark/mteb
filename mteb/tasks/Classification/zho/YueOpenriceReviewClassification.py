@@ -15,18 +15,17 @@ class YueOpenriceReviewClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["yue-Hant"],
         main_score="accuracy",
         date=("2019-01-01", "2019-05-01"),
-        form=["spoken"],
-        domains=["Reviews"],
+        domains=["Reviews", "Spoken"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{xiang2019sentiment,
   title={Sentiment Augmented Attention Network for Cantonese Restaurant Review Analysis},
   author={Xiang, Rong and Jiao, Ying and Lu, Qin},
@@ -35,8 +34,10 @@ class YueOpenriceReviewClassification(AbsTaskClassification):
   year={2019},
   organization={KDD WISDOM}
 }""",
-        n_samples={"test": 6161},
-        avg_character_length={"test": 173.0},
+        descriptive_stats={
+            "n_samples": {"test": 6161},
+            "avg_character_length": {"test": 173.0},
+        },
     )
 
     @property

@@ -24,19 +24,18 @@ class RTE3(MultilingualTask, AbsTaskPairClassification):
         description="Recognising Textual Entailment Challenge (RTE-3) aim to provide the NLP community with a benchmark to test progress in recognizing textual entailment",
         reference="https://aclanthology.org/W07-1401/",
         category="s2s",
+        modalities=["text"],
         type="PairClassification",
         eval_splits=["test"],
         eval_langs=_LANGS,
-        main_score="ap",
+        main_score="max_ap",
         date=("2023-03-25", "2024-04-15"),
-        form=["written"],
-        domains=["News", "Web", "Encyclopaedic"],
+        domains=["News", "Web", "Encyclopaedic", "Written"],
         task_subtypes=["Textual Entailment"],
         license="cc-by-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{giampiccolo-etal-2007-third,
             title = "The Third {PASCAL} Recognizing Textual Entailment Challenge",
             author = "Giampiccolo, Danilo  and
@@ -52,8 +51,11 @@ class RTE3(MultilingualTask, AbsTaskPairClassification):
             pages = "1--9",
         }
         """,
-        n_samples={"test": 1923},  # sum of 4 languages after neutral filtering
-        avg_character_length={"test": 124.79},
+        # sum of 4 languages after neutral filtering
+        descriptive_stats={
+            "n_samples": {"test": 1923},
+            "avg_character_length": {"test": 124.79},
+        },
     )
 
     def load_data(self, **kwargs):

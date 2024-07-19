@@ -17,18 +17,17 @@ class FarsTail(AbsTaskPairClassification):
         reference="https://link.springer.com/article/10.1007/s00500-023-08959-3",
         type="PairClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
-        main_score="ap",
+        main_score="max_ap",
         date=("2021-01-01", "2021-07-12"),  # best guess
-        form=["written"],
-        domains=["Academic"],
+        domains=["Academic", "Written"],
         task_subtypes=["Textual Entailment"],
         license="Not specified",
-        socioeconomic_status="high",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{amirkhani2023farstail,
         title={FarsTail: a Persian natural language inference dataset},
         author={Amirkhani, Hossein and AzariJafari, Mohammad and Faridan-Jahromi, Soroush and Kouhkan, Zeinab and Pourjafari, Zohreh and Amirak, Azadeh},
@@ -36,9 +35,11 @@ class FarsTail(AbsTaskPairClassification):
         year={2023},
         publisher={Springer},
         doi={10.1007/s00500-023-08959-3}
-        }""",
-        n_samples={"test": 1029},  # after removing neutral
-        avg_character_length={"test": 125.84},
+        }""",  # after removing neutral
+        descriptive_stats={
+            "n_samples": {"test": 1029},
+            "avg_character_length": {"test": 125.84},
+        },
     )
 
     def load_data(self, **kwargs):

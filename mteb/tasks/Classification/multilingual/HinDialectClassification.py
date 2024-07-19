@@ -39,19 +39,18 @@ class HinDialectClassification(AbsTaskClassification):
         description="HinDialect: 26 Hindi-related languages and dialects of the Indic Continuum in North India",
         reference="https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-4839",
         category="s2s",
+        modalities=["text"],
         type="Classification",
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="f1",
         date=("2010-01-01", "2023-01-01"),
-        form=["written"],
-        domains=["Social", "Spoken"],
+        domains=["Social", "Spoken", "Written"],
         task_subtypes=["Language identification"],
         license="CC-BY-SA-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @misc{11234/1-4839,
         title = {{HinDialect} 1.1: 26 Hindi-related languages and dialects of the Indic Continuum in North India},
@@ -61,8 +60,10 @@ class HinDialectClassification(AbsTaskClassification):
         copyright = {Creative Commons - Attribution-{NonCommercial}-{ShareAlike} 4.0 International ({CC} {BY}-{NC}-{SA} 4.0)},
         year = {2022} }
         """,
-        n_samples={"test": 1152},
-        avg_character_length={"test": 583.82},
+        descriptive_stats={
+            "n_samples": {"test": 1152},
+            "avg_character_length": {"test": 583.82},
+        },
     )
 
     def dataset_transform(self) -> None:

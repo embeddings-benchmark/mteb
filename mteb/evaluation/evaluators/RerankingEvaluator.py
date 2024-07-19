@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from functools import partial
-from typing import Callable, Dict, List
+from typing import Any, Callable, Dict, List
 
 import numpy as np
 import torch
@@ -37,7 +37,7 @@ class RerankingEvaluator(Evaluator):
         mrr_at_k: int = 10,
         name: str = "",
         similarity_fct=cos_sim,
-        batch_size: int = 512,
+        encode_kwargs: dict[str, Any] = {},
         use_batched_encoding: bool = True,
         limit: int | None = None,
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
@@ -51,11 +51,14 @@ class RerankingEvaluator(Evaluator):
         self.name = name
         self.mrr_at_k = mrr_at_k
         self.similarity_fct = similarity_fct
-        self.batch_size = batch_size
         self.use_batched_encoding = use_batched_encoding
         self.task_name = task_name
         self.k_values = k_values
         self.evaluator_type = evaluator_type
+        self.encode_kwargs = encode_kwargs
+
+        if "batch_size" not in self.encode_kwargs:
+            self.encode_kwargs["batch_size"] = 512
 
         if isinstance(self.samples, dict):
             self.samples = list(self.samples.values())
@@ -101,7 +104,7 @@ class RerankingEvaluator(Evaluator):
                 encode_queries_func(
                     [sample["query"] for sample in self.samples],
                     prompt_name=self.task_name,
-                    batch_size=self.batch_size,
+                    **self.encode_kwargs,
                 )
             )
         elif isinstance(self.samples[0]["query"], list):
@@ -113,7 +116,7 @@ class RerankingEvaluator(Evaluator):
                 all_query_flattened,
                 encode_queries_func,
                 prompt_name=self.task_name,
-                batch_size=self.batch_size,
+                **self.encode_kwargs,
             )
         else:
             raise ValueError(
@@ -207,7 +210,7 @@ class RerankingEvaluator(Evaluator):
             all_docs,
             encode_corpus_func,
             prompt_name=self.task_name,
-            batch_size=self.batch_size,
+            **self.encode_kwargs,
         )
 
         # Compute scores and confidence scores
@@ -259,10 +262,8 @@ class RerankingEvaluator(Evaluator):
             if isinstance(query, str):
                 # .encoding interface requires List[str] as input
                 query = [query]
-            query_emb = np.asarray(
-                encode_queries_func(query, batch_size=self.batch_size)
-            )
-            docs_emb = np.asarray(encode_corpus_func(docs, batch_size=self.batch_size))
+            query_emb = np.asarray(encode_queries_func(query, **self.encode_kwargs))
+            docs_emb = np.asarray(encode_corpus_func(docs, **self.encode_kwargs))
             self._apply_sim_scores(
                 query_emb,
                 docs_emb,
@@ -306,7 +307,7 @@ class RerankingEvaluator(Evaluator):
 
         all_docs_embs = np.asarray(
             encode_corpus_func(
-                all_docs, prompt_name=self.task_name, batch_size=self.batch_size
+                all_docs, prompt_name=self.task_name, **self.encode_kwargs
             )
         )
 
@@ -348,11 +349,9 @@ class RerankingEvaluator(Evaluator):
             if isinstance(query, str):
                 # .encoding interface requires List[str] as input
                 query_emb = np.asarray(
-                    encode_queries_func([query], batch_size=self.batch_size)
+                    encode_queries_func([query], **self.encode_kwargs)
                 )
-                docs_emb = np.asarray(
-                    encode_corpus_func(docs, batch_size=self.batch_size)
-                )
+                docs_emb = np.asarray(encode_corpus_func(docs, **self.encode_kwargs))
 
             fake_qid = str(i)
             results[fake_qid] = self.rerank(query_emb, docs_emb)
@@ -423,7 +422,7 @@ class RerankingEvaluator(Evaluator):
         all_texts: list[str],
         encode_fn: Callable,
         prompt_name: str | None,
-        batch_size: int,
+        **encode_kwargs: Any,
     ):
         index_map, all_unique_texts, all_texts_indexes = {}, [], []
         for text in all_texts:
@@ -436,7 +435,7 @@ class RerankingEvaluator(Evaluator):
             f"A total on {len(all_texts) - len(all_unique_texts)}/{len(all_texts)} duplicate texts were found during encoding. Only encoding unique text and duplicating embeddings across."
         )
         all_unique_texts_embs = np.asarray(
-            encode_fn(all_unique_texts, prompt_name=prompt_name, batch_size=batch_size)
+            encode_fn(all_unique_texts, prompt_name=prompt_name, **encode_kwargs)
         )
         return all_unique_texts_embs[all_texts_indexes]
 

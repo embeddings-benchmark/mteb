@@ -17,18 +17,17 @@ class TERRa(AbsTaskPairClassification):
         reference="https://arxiv.org/pdf/2010.15925",
         type="PairClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["rus-Cyrl"],
-        main_score="ap",
+        main_score="max_ap",
         date=("2000-01-01", "2018-01-01"),
-        form=["written"],
-        domains=["News", "Web"],
+        domains=["News", "Web", "Written"],
         task_subtypes=[],
         license="mit",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{shavrina2020russiansuperglue,
         title={RussianSuperGLUE: A Russian Language Understanding Evaluation Benchmark},
         author={Shavrina, Tatiana 
@@ -44,8 +43,10 @@ class TERRa(AbsTaskPairClassification):
         journal={arXiv preprint arXiv:2010.15925},
         year={2020}
         }""",
-        n_samples={"dev": 307},
-        avg_character_length={"dev": 138.2},
+        descriptive_stats={
+            "n_samples": {"dev": 307},
+            "avg_character_length": {"dev": 138.2},
+        },
     )
 
     def dataset_transform(self):

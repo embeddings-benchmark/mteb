@@ -20,6 +20,7 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2404.03555",
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["hun-Latn"],
         main_score="ndcg_at_1",
@@ -27,14 +28,12 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
             "1848-12-15",
             "2024-03-19",
         ),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Article retrieval"],
         license="CC-BY 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @misc{barta2024news,
       title={From News to Summaries: Building a Hungarian Corpus for Extractive and Abstractive Summarization}, 
@@ -45,17 +44,19 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
       primaryClass={cs.CL}
 }
 """,
-        n_samples={
-            "test": 1998,
-        },
-        avg_character_length={
-            "test": {
-                "average_document_length": 2511.0315315315315,
-                "average_query_length": 201.2112112112112,
-                "num_documents": 1998,
-                "num_queries": 1998,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": {
+                "test": 1998,
+            },
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 2511.0315315315315,
+                    "average_query_length": 201.2112112112112,
+                    "num_documents": 1998,
+                    "num_queries": 1998,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

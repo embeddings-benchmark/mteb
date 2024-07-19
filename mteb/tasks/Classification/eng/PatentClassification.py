@@ -16,18 +16,17 @@ class PatentClassification(AbsTaskClassification):
         reference="https://aclanthology.org/P19-1212.pdf",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2021-11-05", "2022-10-22"),
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=["Topic classification"],
         license="Not specified",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{sharma-etal-2019-bigpatent,
             title = "{BIGPATENT}: A Large-Scale Dataset for Abstractive and Coherent Summarization",
             author = "Sharma, Eva  and
@@ -46,8 +45,10 @@ class PatentClassification(AbsTaskClassification):
             pages = "2204--2213",
             abstract = "Most existing text summarization datasets are compiled from the news domain, where summaries have a flattened discourse structure. In such datasets, summary-worthy content often appears in the beginning of input articles. Moreover, large segments from input articles are present verbatim in their respective summaries. These issues impede the learning and evaluation of systems that can understand an article{'}s global content structure as well as produce abstractive summaries with high compression ratio. In this work, we present a novel dataset, BIGPATENT, consisting of 1.3 million records of U.S. patent documents along with human written abstractive summaries. Compared to existing summarization datasets, BIGPATENT has the following properties: i) summaries contain a richer discourse structure with more recurring entities, ii) salient content is evenly distributed in the input, and iii) lesser and shorter extractive fragments are present in the summaries. Finally, we train and evaluate baselines and popular learning models on BIGPATENT to shed light on new challenges and motivate future directions for summarization research.",
         }""",
-        n_samples={"test": 5000},
-        avg_character_length={"test": 18620.44},
+        descriptive_stats={
+            "n_samples": {"test": 5000},
+            "avg_character_length": {"test": 18620.44},
+        },
     )
 
     def dataset_transform(self):

@@ -12,6 +12,8 @@ import sklearn.cluster
 from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 
+from mteb.encoder_interface import Encoder
+
 from ..evaluation.evaluators.model_encode import model_encode
 from ..load_results.mteb_results import HFSubset
 from .AbsTask import AbsTask
@@ -53,11 +55,13 @@ def evaluate_clustering_bootstrapped(
             else:
                 level_labels.append(-1)
         level_labels = np.array(level_labels)
-        valid_idx = level_labels != -1
+        valid_idx = np.array(
+            [level_label != -1 for level_label in level_labels]
+        )  # Could be level_labels != -1 but fails with FutureWarning: elementwise comparison failed
         level_labels = level_labels[valid_idx]
         level_embeddings = embeddings[valid_idx]
         clustering_model = sklearn.cluster.MiniBatchKMeans(
-            n_clusters=len(set(level_labels)),
+            n_clusters=np.unique(level_labels).size,
             batch_size=kmean_batch_size,
             n_init="auto",
         )
@@ -109,14 +113,19 @@ class AbsTaskClusteringFast(AbsTask):
 
     def _add_main_score(self, scores):
         if self.metadata_dict["main_score"] in scores:
-            scores["main_score"] = scores[self.metadata_dict["main_score"]]
+            scores["main_score"] = scores[self.metadata.main_score]
         else:
             logger.warning(
-                f"main score {self.metadata_dict['main_score']} not found in scores {scores.keys()}"
+                f"main score {self.metadata.main_score} not found in scores {scores.keys()}"
             )
 
     def _evaluate_subset(
-        self, model, dataset: DatasetDict, **kwargs: Any
+        self,
+        model: Encoder,
+        dataset: DatasetDict,
+        *,
+        encode_kwargs: dict[str, Any] = {},
+        **kwargs: Any,
     ) -> dict[str, float | dict[str, list[float]]]:
         rng_state = random.Random(self.seed)
 
@@ -134,20 +143,24 @@ class AbsTaskClusteringFast(AbsTask):
         ):
             downsampled_dataset = dataset
         else:
-            max_documents_to_embed = self.max_document_to_embed
             if self.max_fraction_of_documents_to_embed is not None:
                 max_documents_to_embed = int(
                     self.max_fraction_of_documents_to_embed * len(dataset)
                 )
+            else:
+                max_documents_to_embed = self.max_document_to_embed
+
+            max_documents_to_embed = min(len(dataset), max_documents_to_embed)  # type: ignore
             example_indices = rng_state.sample(
                 range(len(dataset)), k=max_documents_to_embed
             )
-            downsampled_dataset = dataset.select(example_indices)
+            downsampled_dataset = dataset.select(example_indices)  # type: ignore
 
         embeddings = model_encode(
             downsampled_dataset["sentences"],  # type: ignore
             model=model,
             prompt_name=self.metadata.name,
+            **encode_kwargs,
         )
 
         labels = []

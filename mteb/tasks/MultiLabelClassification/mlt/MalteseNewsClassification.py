@@ -20,18 +20,17 @@ class MalteseNewsClassification(AbsTaskMultilabelClassification):
         },
         type="MultilabelClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["mlt-Latn"],
         main_score="accuracy",
         date=("2023-10-21", "2024-04-24"),
-        form=["written"],
-        domains=["Constructed"],
+        domains=["Constructed", "Written"],
         task_subtypes=["Topic classification"],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="high",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{maltese-news-datasets,
             title = "Topic Classification and Headline Generation for {M}altese using a Public News Corpus",
             author = "Chaudhary, Amit Kumar  and
@@ -42,8 +41,10 @@ class MalteseNewsClassification(AbsTaskMultilabelClassification):
             year = "2024",
             publisher = "Association for Computational Linguistics",
         }""",
-        n_samples={"train": 10784, "test": 2297},
-        avg_character_length={"train": 1595.63, "test": 1752.1},
+        descriptive_stats={
+            "n_samples": {"train": 10784, "test": 2297},
+            "avg_character_length": {"train": 1595.63, "test": 1752.1},
+        },
     )
 
     def dataset_transform(self):

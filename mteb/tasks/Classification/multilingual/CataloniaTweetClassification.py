@@ -25,18 +25,17 @@ class CataloniaTweetClassification(MultilingualTask, AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=_LANGS,
         main_score="accuracy",
         date=("2018-09-01", "2029-03-30"),
-        form=["written"],
-        domains=["Social", "Government"],
+        domains=["Social", "Government", "Written"],
         task_subtypes=["Political classification"],
         license="cc-by-sa-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""@inproceedings{zotova-etal-2020-multilingual,
             title = "Multilingual Stance Detection in Tweets: The {C}atalonia Independence Corpus",
             author = "Zotova, Elena  and
@@ -64,8 +63,10 @@ class CataloniaTweetClassification(MultilingualTask, AbsTaskClassification):
             pages = "1368--1375",
             ISBN = "979-10-95546-34-4",
         }""",
-        n_samples={"validation": 2000, "test": 2000},
-        avg_character_length={"validation": 202.61, "test": 200.49},
+        descriptive_stats={
+            "n_samples": {"validation": 2000, "test": 2000},
+            "avg_character_length": {"validation": 202.61, "test": 200.49},
+        },
     )
 
     def dataset_transform(self):

@@ -15,18 +15,17 @@ class MedicalQARetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2017-01-01", "2019-12-31"),  # best guess,
-        form=["written"],
-        domains=["Medical"],
+        domains=["Medical", "Written"],
         task_subtypes=["Article retrieval"],
         license="CC0 1.0 Universal",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@ARTICLE{BenAbacha-BMC-2019,
             author    = {Asma, Ben Abacha and Dina, Demner{-}Fushman},
             title     = {A Question-Entailment Approach to Question Answering},
@@ -37,14 +36,16 @@ class MedicalQARetrieval(AbsTaskRetrieval):
             year      = {2019},
             url       = {https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-019-3119-4}
             } """,
-        n_samples={"test": 2048},
-        avg_character_length={
-            "test": {
-                "average_document_length": 1153.482421875,
-                "average_query_length": 52.4794921875,
-                "num_documents": 2048,
-                "num_queries": 2048,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 1153.482421875,
+                    "average_query_length": 52.4794921875,
+                    "num_documents": 2048,
+                    "num_queries": 2048,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )

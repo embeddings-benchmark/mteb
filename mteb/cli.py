@@ -67,15 +67,18 @@ model-index:
 ```
 """
 
+from __future__ import annotations
+
 import argparse
 import json
 import logging
 from pathlib import Path
 
+import torch
 import yaml
 
 import mteb
-from mteb.load_results.mteb_results import MTEBResults
+from mteb.load_results.mteb_results import CQADupstackRetrievalDummy, MTEBResults
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
@@ -105,7 +108,12 @@ def run(args: argparse.Namespace) -> None:
 
     logger.info("Running with parameters: %s", args)
 
-    model = mteb.get_model(args.model, args.model_revision, device=args.device)
+    if args.device is None:
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+    else:
+        device = args.device
+
+    model = mteb.get_model(args.model, args.model_revision, device=device)
 
     tasks = mteb.get_tasks(
         categories=args.categories,
@@ -115,6 +123,10 @@ def run(args: argparse.Namespace) -> None:
     )
     eval = mteb.MTEB(tasks=tasks)
 
+    encode_kwargs = {}
+    if args.batch_size is not None:
+        encode_kwargs["batch_size"] = args.batch_size
+
     eval.run(
         model,
         verbosity=args.verbosity,
@@ -122,6 +134,7 @@ def run(args: argparse.Namespace) -> None:
         eval_splits=args.eval_splits,
         co2_tracker=args.co2_tracker,
         overwrite_results=args.overwrite,
+        encode_kwargs=encode_kwargs,
     )
 
     _save_model_metadata(model, Path(args.output_folder))
@@ -225,6 +238,12 @@ def add_run_parser(subparsers) -> None:
         help="Revision of the model to be loaded. Revisions are automatically read if the model is loaded from huggingface.",
     )
     parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=None,
+        help="Batch size of the encode. Will be passed to the MTEB as MTEB.evaluate(model, encode_kwargs = {'batch_size': value}).",
+    )
+    parser.add_argument(
         "--overwrite",
         action="store_true",
         default=False,
@@ -232,6 +251,54 @@ def add_run_parser(subparsers) -> None:
     )
 
     parser.set_defaults(func=run)
+
+
+def potentially_add_cqadupstack_to_results(results: list[mteb.MTEBResults]) -> None:
+    """If all CQADupstack tasks are present in the results, combine them into a single CQADupstackRetrieval task and add it to the results."""
+    TASK_LIST_CQA = {
+        "CQADupstackAndroidRetrieval",
+        "CQADupstackEnglishRetrieval",
+        "CQADupstackGamingRetrieval",
+        "CQADupstackGisRetrieval",
+        "CQADupstackMathematicaRetrieval",
+        "CQADupstackPhysicsRetrieval",
+        "CQADupstackProgrammersRetrieval",
+        "CQADupstackStatsRetrieval",
+        "CQADupstackTexRetrieval",
+        "CQADupstackUnixRetrieval",
+        "CQADupstackWebmastersRetrieval",
+        "CQADupstackWordpressRetrieval",
+    }
+
+    task_names = {result.task_name for result in results}
+
+    if not TASK_LIST_CQA.issubset(task_names):
+        return None
+    cqa_results = [result for result in results if result.task_name in TASK_LIST_CQA]
+
+    evaluation_time = sum([result.evaluation_time for result in cqa_results])
+    main_scores = [r.get_score(splits=["test"]) for r in cqa_results]
+    main_score = float(sum(main_scores) / len(main_scores))
+    scores = {
+        "test": [
+            {
+                "main_score": main_score,
+                "ndcg_at_10": main_score,
+                "hf_subset": "default",
+                "languages": ["eng_Latn"],
+            }
+        ]
+    }
+
+    result = mteb.MTEBResults(
+        task_name="CQADupstackRetrieval",
+        dataset_revision="CQADupstackRetrieval is a combined dataset",
+        mteb_version="NA",
+        scores=scores,
+        evaluation_time=evaluation_time,
+        kg_co2_emissions=None,
+    )
+    results.append(result)
 
 
 def create_meta(args: argparse.Namespace) -> None:
@@ -252,11 +319,19 @@ def create_meta(args: argparse.Namespace) -> None:
     ]
 
     task_results = [MTEBResults.from_disk(path) for path in json_files]
+    potentially_add_cqadupstack_to_results(
+        task_results
+    )  # We should ideally find better way in the future to aggregate scores for tasks like CQADupstack
     task_results = sorted(task_results, key=lambda x: x.task_name)
 
     yaml_results = []
     for task_result in task_results:
-        task = mteb.get_task(task_result.task_name)
+        if (
+            task_result.task_name == "CQADupstackRetrieval"
+        ):  # CQADupstackRetrieval is a combined dataset (special case atm.)
+            task = CQADupstackRetrievalDummy()
+        else:
+            task = mteb.get_task(task_result.task_name)
 
         for split, hf_subset_scores in task_result.scores.items():
             for hf_subset_score in hf_subset_scores:

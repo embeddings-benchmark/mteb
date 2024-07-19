@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import random
 from abc import ABC, abstractmethod
-from typing import Any, Sequence
+from typing import Any, Dict, Sequence
 
 import datasets
 import numpy as np
@@ -12,13 +12,14 @@ from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks.stratification import _iterative_train_test_split
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.TaskMetadata import HFSubset, TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.languages import LanguageScripts
 
-from ..load_results.mteb_results import HFSubset, ScoresDict
-
 logger = logging.getLogger(__name__)
+
+ScoresDict = Dict[str, Any]
+# ^ e.g {'main_score': 0.5, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']}
 
 
 def _multilabel_subsampling(
@@ -83,6 +84,8 @@ class AbsTask(ABC):
         self,
         model: Encoder | EncoderWithQueryCorpusEncode,
         split: str = "test",
+        *,
+        encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluates a Sentence Embedding Model on the task.
@@ -92,6 +95,7 @@ class AbsTask(ABC):
             model: Sentence embedding method. Implements a encode(sentences) method, that encodes sentences and returns a numpy matrix with the
                 sentence embeddings
             split: Which datasplit to be used.
+            encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
         """
         if not self.data_loaded:
@@ -112,11 +116,19 @@ class AbsTask(ABC):
                 data_split = self.dataset[split]
             else:
                 data_split = self.dataset[hf_subset][split]
-            scores[hf_subset] = self._evaluate_subset(model, data_split, **kwargs)
+            scores[hf_subset] = self._evaluate_subset(
+                model, data_split, encode_kwargs=encode_kwargs, **kwargs
+            )
         return scores
 
     @abstractmethod
-    def _evaluate_subset(self, model, data_split, **kwargs) -> ScoresDict:
+    def _evaluate_subset(
+        self,
+        model: Encoder,
+        data_split: DatasetDict | Dataset,
+        encode_kwargs: dict[str, Any],
+        **kwargs: Any,
+    ) -> ScoresDict:
         raise NotImplementedError(
             "If you are using the default evaluate method, you must implement _evaluate_subset method."
         )
@@ -152,6 +164,11 @@ class AbsTask(ABC):
                     raise e
 
         for split in splits:
+            if n_samples >= len(dataset_dict[split]):
+                logger.debug(
+                    f"Subsampling not needed for split {split}, as n_samples is equal or greater than the number of samples."
+                )
+                continue
             dataset_dict.update(
                 {
                     split: dataset_dict[split].train_test_split(

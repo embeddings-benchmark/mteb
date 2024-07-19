@@ -19,18 +19,17 @@ class MSMARCOPL(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation=""""@misc{wojtasik2024beirpl,
       title={BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language}, 
       author={Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -39,14 +38,16 @@ class MSMARCOPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "average_document_length": 349.3574939240471,
-                "average_query_length": 33.02325581395349,
-                "num_documents": 8841823,
-                "num_queries": 43,
-                "average_relevant_docs_per_query": 95.3953488372093,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 349.3574939240471,
+                    "average_query_length": 33.02325581395349,
+                    "num_documents": 8841823,
+                    "num_queries": 43,
+                    "average_relevant_docs_per_query": 95.3953488372093,
+                }
+            },
         },
     )

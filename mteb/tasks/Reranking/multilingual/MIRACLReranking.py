@@ -62,33 +62,37 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         },
         type="Reranking",
         category="s2s",
+        modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGUAGES,
         main_score="NDCG@10(MIRACL)",
         date=("2022-06-01", "2023-01-30"),
-        form=["written"],
-        domains=["Encyclopaedic"],
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=[],
         license="CC BY-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation=_CITATION,
-        n_samples={"dev": 44608},
-        avg_character_length={"dev": 506.30},
+        descriptive_stats={
+            "n_samples": {"dev": 44608},
+            "avg_character_length": {"dev": 506.30},
+        },
     )
 
     def _evaluate_subset(
         self,
         model: Encoder | EncoderWithQueryCorpusEncode,
         data_split: Dataset,
+        *,
+        encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> ScoresDict:
         evaluator = RerankingEvaluator(
             samples=data_split,
             evaluator_type="miracl",
             task_name=self.metadata.name,
+            encode_kwargs=encode_kwargs,
             **kwargs,
         )
         scores = evaluator(model)

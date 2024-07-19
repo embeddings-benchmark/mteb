@@ -9,10 +9,13 @@ from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.model_meta import ModelMeta
 from mteb.models import (
     bge_models,
+    bm25,
     cohere_models,
     e5_instruct,
     e5_models,
-    gritlm,
+    google_models,
+    gritlm_models,
+    gte_models,
     llm2vec_models,
     mxbai_models,
     nomic_models,
@@ -64,7 +67,7 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
     if model_name in models:
         if revision and (not models[model_name].revision == revision):
             raise ValueError(
-                f"Model revision {revision} not found for model {model_name}"
+                f"Model revision {revision} not found for model {model_name}. Expected {models[model_name].revision}."
             )
         return models[model_name]
     else:  # assume it is a sentence-transformers model
@@ -118,19 +121,22 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
 
 
 model_modules = [
-    e5_models,
-    gritlm,
-    e5_instruct,
-    llm2vec_models,
-    sentence_transformers_models,
-    openai_models,
-    voyage_models,
     bge_models,
-    mxbai_models,
-    salesforce_models,
-    ru_sentence_models,
-    nomic_models,
+    bm25,
     cohere_models,
+    e5_instruct,
+    e5_models,
+    gritlm_models,
+    gte_models,
+    llm2vec_models,
+    mxbai_models,
+    nomic_models,
+    openai_models,
+    ru_sentence_models,
+    salesforce_models,
+    sentence_transformers_models,
+    voyage_models,
+    google_models,
 ]
 models = {}
 

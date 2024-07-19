@@ -14,32 +14,33 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/sorenmulli/da-hashtag-twitterhjerne",
         type="Retrieval",
         category="p2p",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["dan-Latn"],
         main_score="ndcg_at_10",
         date=("2006-01-01", "2024-12-31"),  # best guess
-        form=["written"],
-        domains=["Social"],
-        license=None,
-        socioeconomic_status="mixed",
+        domains=["Social", "Written"],
+        license="CC BY 4.0",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
 @article{holm2024gllms,
   title={Are GLLMs Danoliterate? Benchmarking Generative NLP in Danish},
-  author={Holm, S{\o}ren Vejlgaard},
+  author={Holm, Soren Vejlgaard},
   year={2024}
 }
 """,
-        n_samples={"train": 340},
-        avg_character_length={
-            "train": {
-                "average_document_length": 128.85114503816794,
-                "average_query_length": 166.3846153846154,
-                "num_documents": 262,
-                "num_queries": 78,
-                "average_relevant_docs_per_query": 3.358974358974359,
+        descriptive_stats={
+            "n_samples": {"train": 340},
+            "avg_character_length": {
+                "train": {
+                    "average_document_length": 128.85114503816794,
+                    "average_query_length": 166.3846153846154,
+                    "num_documents": 262,
+                    "num_queries": 78,
+                    "average_relevant_docs_per_query": 3.358974358974359,
+                },
             },
         },
         task_subtypes=["Question answering"],

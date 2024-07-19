@@ -30,3 +30,9 @@ pr:
 	@echo "--- 🚀 Running requirements for a PR ---"
 	make lint
 	make test
+
+
+build-docs:
+	@echo "--- 📚 Building documentation ---"
+	# since we do not have a documentation site, this just build tables for the .md files
+	python docs/create_tasks_table.py

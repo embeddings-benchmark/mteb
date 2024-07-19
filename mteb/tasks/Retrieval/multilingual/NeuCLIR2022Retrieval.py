@@ -68,49 +68,50 @@ class NeuCLIR2022Retrieval(MultilingualTask, AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="ndcg_at_20",
         date=("2021-08-01", "2022-06-30"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=[],
         license="odc-by",
-        socioeconomic_status="medium",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{lawrie2023overview,
   title={Overview of the TREC 2022 NeuCLIR track},
   author={Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
   journal={arXiv preprint arXiv:2304.12367},
   year={2023}
 }""",
-        n_samples={"fas": 2232130, "zho": 3179323, "rus": 4627657},
-        avg_character_length={
-            "test": {
-                "fas": {
-                    "average_document_length": 2032.093148525817,
-                    "average_query_length": 85.4298245614035,
-                    "num_documents": 2232016,
-                    "num_queries": 114,
-                    "average_relevant_docs_per_query": 12.912280701754385,
-                },
-                "rus": {
-                    "average_document_length": 1757.9129983233004,
-                    "average_query_length": 85.58771929824562,
-                    "num_documents": 4627543,
-                    "num_queries": 114,
-                    "average_relevant_docs_per_query": 16.57017543859649,
-                },
-                "zho": {
-                    "average_document_length": 743.1426659901881,
-                    "average_query_length": 24.17543859649123,
-                    "num_documents": 3179209,
-                    "num_queries": 114,
-                    "average_relevant_docs_per_query": 18.710526315789473,
-                },
-            }
+        descriptive_stats={
+            "n_samples": {"fas": 2232130, "zho": 3179323, "rus": 4627657},
+            "avg_character_length": {
+                "test": {
+                    "fas": {
+                        "average_document_length": 2032.093148525817,
+                        "average_query_length": 85.4298245614035,
+                        "num_documents": 2232016,
+                        "num_queries": 114,
+                        "average_relevant_docs_per_query": 12.912280701754385,
+                    },
+                    "rus": {
+                        "average_document_length": 1757.9129983233004,
+                        "average_query_length": 85.58771929824562,
+                        "num_documents": 4627543,
+                        "num_queries": 114,
+                        "average_relevant_docs_per_query": 16.57017543859649,
+                    },
+                    "zho": {
+                        "average_document_length": 743.1426659901881,
+                        "average_query_length": 24.17543859649123,
+                        "num_documents": 3179209,
+                        "num_queries": 114,
+                        "average_relevant_docs_per_query": 18.710526315789473,
+                    },
+                }
+            },
         },
     )
 

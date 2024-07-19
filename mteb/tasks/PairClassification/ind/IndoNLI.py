@@ -16,18 +16,17 @@ class IndoNLI(AbsTaskPairClassification):
         reference="https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39",
         type="PairClassification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test_expert"],
         eval_langs=["ind-Latn"],
-        main_score="ap",
+        main_score="max_ap",
         date=("2021-01-01", "2021-11-01"),  # best guess
-        form=["written"],
-        domains=["Encyclopaedic", "Web", "News"],
+        domains=["Encyclopaedic", "Web", "News", "Written"],
         task_subtypes=["Textual Entailment"],
         license="CC-BY-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{mahendra-etal-2021-indonli,
             title = "{I}ndo{NLI}: A Natural Language Inference Dataset for {I}ndonesian",
             author = "Mahendra, Rahmad and Aji, Alham Fikri and Louvan, Samuel and Rahman, Fahrurrozi and Vania, Clara",
@@ -39,8 +38,11 @@ class IndoNLI(AbsTaskPairClassification):
             url = "https://aclanthology.org/2021.emnlp-main.821",
             pages = "10511--10527",
         }""",
-        n_samples={"test_expert": 2040},  # after removing neutral
-        avg_character_length={"test_expert": 145.88},
+        # after removing neutral
+        descriptive_stats={
+            "n_samples": {"test_expert": 2040},
+            "avg_character_length": {"test_expert": 145.88},
+        },
     )
 
     def dataset_transform(self):

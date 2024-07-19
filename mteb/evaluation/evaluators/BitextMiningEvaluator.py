@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 import torch
 import tqdm
@@ -15,16 +16,20 @@ from .utils import cos_sim
 logger = logging.getLogger(__name__)
 
 
+DEFAULT_PAIR = [("sentence1", "sentence2")]
+
+
 class BitextMiningEvaluator(Evaluator):
-    def __init__(self, sentences, task_name: str | None = None, subsets=None, **kwargs):
+    def __init__(
+        self,
+        sentences,
+        task_name: str | None = None,
+        pair_columns: list[tuple[str, str]] = DEFAULT_PAIR,
+        **kwargs,
+    ):
         super().__init__(**kwargs)
-        # By default, all the columns in sentences will serve for evaluation
-        # Specifying a 'subsets' attribute will limit to certain columns
-        self.subsets = (
-            subsets if subsets is not None else list(sentences.features.keys())
-        )
+        self.pairs = pair_columns
         self.n = len(sentences)
-        self.n_subsets = len(self.subsets)
         self.sentences = sentences
         self.gold = (
             list(zip(range(self.n), range(self.n)))
@@ -33,37 +38,39 @@ class BitextMiningEvaluator(Evaluator):
         )
         self.task_name = task_name
 
-    def __call__(self, model: Encoder):
-        scores = self.compute_metrics(model)
+    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
+        scores = self.compute_metrics(model, encode_kwargs=encode_kwargs)
         return scores
 
-    def compute_metrics(self, model: Encoder):
-        # Compute embeddings
-        n_subsets = len(self.subsets)
-        logger.info(f"Encoding {n_subsets}x{self.n} sentences")
+    def compute_metrics(self, model: Encoder, encode_kwargs: dict[str, Any] = {}):
+        pair_elements = set(p for pair in self.pairs for p in pair)
+        subsets = [
+            col for col in self.sentences.features.keys() if col in pair_elements
+        ]
+        n_subsets = len(subsets)
+
         embeddings = {}
-        for sub in tqdm.tqdm(
-            self.subsets, desc=f"Encoding {n_subsets}x{self.n} sentences"
-        ):
+        for sub in tqdm.tqdm(subsets, desc=f"Encoding {n_subsets}x{self.n} sentences"):
             embeddings[sub] = model_encode(
-                self.sentences[sub], model=model, prompt_name=self.task_name
+                self.sentences[sub],
+                model=model,
+                prompt_name=self.task_name,
+                **encode_kwargs,
             )
 
-        if set(self.subsets) == {"sentence1", "sentence2"}:  # Case of a single pair
-            return self._compute_metrics(
-                embeddings["sentence1"], embeddings["sentence2"]
-            )
-
-        # Otherwise evaluate all pairs
         scores = {}
-        for i in tqdm.tqdm(range(self.n_subsets), desc="Matching sentences"):
-            for j in range(i + 1, self.n_subsets):
-                key1, key2 = self.subsets[i], self.subsets[j]
-                embeddings1 = embeddings[key1]
-                embeddings2 = embeddings[key2]
-                scores[f"{key1}-{key2}"] = self._compute_metrics(
-                    embeddings1, embeddings2
-                )
+        for i, (key1, key2) in enumerate(
+            tqdm.tqdm(self.pairs, desc="Matching sentences")
+        ):
+            scores[f"{key1}-{key2}"] = self._compute_metrics(
+                embeddings[key1], embeddings[key2]
+            )
+
+        # in case of default pair unnest the dict
+        def_pair_str = "-".join(DEFAULT_PAIR[0])
+        if def_pair_str in scores:
+            scores = scores[def_pair_str]
+
         return scores
 
     def _compute_metrics(
