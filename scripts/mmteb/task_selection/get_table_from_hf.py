@@ -12,7 +12,7 @@ from yaml import safe_load
 
 warnings.filterwarnings("ignore")
 
-HF_TOKEN = "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"
+HF_TOKEN = "[removed]"
 
 MODEL_INFOS = {}
 
