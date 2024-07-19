@@ -11,14 +11,14 @@ import mteb
 from mteb import MTEB
 from mteb.abstasks import AbsTask
 
-from .mock_models import MockNumpyEncoder
-from .task_grid import TASK_TEST_GRID
+from ..test_benchmark.mock_models import MockCLIPEncoder
+from ..test_benchmark.task_grid import MIEB_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 
 
-@pytest.mark.parametrize("task", TASK_TEST_GRID)
-@pytest.mark.parametrize("model", [MockNumpyEncoder()])
+@pytest.mark.parametrize("task", MIEB_TASK_TEST_GRID)
+@pytest.mark.parametrize("model", [MockCLIPEncoder()])
 def test_benchmark_sentence_transformer(task: Union[str, AbsTask], model: mteb.Encoder):
     """Test that a task can be fetched and run"""
     eval = MTEB(tasks=[task])
