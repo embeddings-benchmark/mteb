@@ -39,6 +39,8 @@ TASK_SUBTYPE = Literal[
     "Reasoning as Retrieval",
     "Rendered Texts Understanding",
     "Image Text Retrieval",
+    "Object recognition",
+    "Scene recognition",
 ]
 
 TASK_DOMAIN = Literal[
@@ -55,6 +57,7 @@ TASK_DOMAIN = Literal[
     "Poetry",
     "Religious",
     "Reviews",
+    "Scene",
     "Social",
     "Spoken",
     "Subtitles",
