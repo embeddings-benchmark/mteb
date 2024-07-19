@@ -5,3 +5,4 @@ from .eng.CIFAR import *
 from .eng.FGVCAircraftClassification import *
 from .eng.Food101Classification import *
 from .eng.OxfordFlowersClassification import *
+from .eng.OxfordPetsClassification import *
