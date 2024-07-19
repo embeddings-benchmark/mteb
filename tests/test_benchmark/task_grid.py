@@ -73,7 +73,7 @@ winoground.dataset_transform = dataset_transform.__get__(winoground)
 
 MIEB_TASK_TEST_GRID = [
     tiny_imagenet,  # image clustering
-    winoground,  # pair classification
+    # winoground,  # pair classification. Gated
     renderedSST2,  # zero shot classification
     # The following takes a long time. Consider creating a mock class.
     # "CIRRIT2TRetrieval",  # it2i retrieval
