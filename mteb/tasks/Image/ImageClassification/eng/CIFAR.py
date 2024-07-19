@@ -85,3 +85,4 @@ class CIFAR100Classification(AbsTaskImageClassification):
         },
     )
     image_column_name: str = "img"
+    label_column_name: str = "fine_label"
