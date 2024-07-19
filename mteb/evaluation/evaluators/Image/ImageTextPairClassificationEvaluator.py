@@ -7,7 +7,6 @@ from typing import Any, List
 import torch
 import torch.nn.functional as F
 from PIL import Image
-from tqdm import tqdm 
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 from mteb.evaluation.evaluators.Evaluator import Evaluator
@@ -80,12 +79,18 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         for i in range(num_samples):
             images_emb = image_embeddings[i]
             texts_emb = text_embeddings[i]
-            scores = images_emb @ texts_emb.t()  # shape = (num_images_per_sample x num_texts_per_sample)
+            scores = (
+                images_emb @ texts_emb.t()
+            )  # shape = (num_images_per_sample x num_texts_per_sample)
 
             image_closest_text = scores.argmax(dim=1)  # shape = (num_images_per_sample)
             text_closest_image = scores.argmax(dim=0)  # shape = (num_texts_per_sample)
-            pred_text_is_correct = (image_closest_text == img_ground_truths).all().item()
-            pred_image_is_correct = (text_closest_image == caption_ground_truths).all().item()
+            pred_text_is_correct = (
+                (image_closest_text == img_ground_truths).all().item()
+            )
+            pred_image_is_correct = (
+                (text_closest_image == caption_ground_truths).all().item()
+            )
             all_correct = pred_text_is_correct and pred_image_is_correct
             image_score.append(pred_image_is_correct)
             text_score.append(pred_text_is_correct)
