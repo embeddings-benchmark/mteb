@@ -33,7 +33,8 @@ class Winoground(AbsTaskImageTextPairClassification):
         socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="created",
+        modalities=["text", "image"],
+        sample_creation="created",
         bibtex_citation="""@misc{thrush2022winogroundprobingvisionlanguage,
             title={Winoground: Probing Vision and Language Models for Visio-Linguistic Compositionality}, 
             author={Tristan Thrush and Ryan Jiang and Max Bartolo and Amanpreet Singh and Adina Williams and Douwe Kiela and Candace Ross},
@@ -43,6 +44,8 @@ class Winoground(AbsTaskImageTextPairClassification):
             primaryClass={cs.CV},
             url={https://arxiv.org/abs/2204.03162}, 
         }""",
-        n_samples={"test": 400},
-        avg_character_length={"test": 431.4},
+        descriptive_stats={
+            "n_samples": {"test": 400},
+            "avg_character_length": {"test": 431.4},
+        },
     )

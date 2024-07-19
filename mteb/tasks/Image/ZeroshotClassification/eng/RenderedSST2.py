@@ -27,10 +27,13 @@ class RenderedSST2(AbsTaskZeroshotClassification):
         socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        modalities=["text", "image"],
+        sample_creation="created",
         bibtex_citation="""d""",
-        n_samples={"test": 1820},
-        avg_character_length={"test": 10.0},
+        descriptive_stats={
+            "n_samples": {"test": 1820},
+            "avg_character_length": {"test": 10.0},
+        },
     )
 
     # Override default column names in the subclass
