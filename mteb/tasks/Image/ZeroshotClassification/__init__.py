@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .eng.Birdsnap import *
 from .eng.Caltech101 import *
 from .eng.CIFAR import *
 from .eng.FER2013 import *
