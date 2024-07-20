@@ -4,14 +4,12 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from .....abstasks import AbsTaskImageClassification
 
-## mteb run -m openai/clip-vit-base-patch32 --model_revision 3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268 --output_folder results-mieb -t MNIST
-
 
 class MNISTClassification(AbsTaskImageClassification):
     metadata = TaskMetadata(
         name="MNIST",
         description="Classifying handwritten digits.",
-        reference="https://openaccess.thecvf.com/content_cvpr_2014/html/Berg_Birdsnap_Large-scale_Fine-grained_2014_CVPR_paper.html",
+        reference="https://en.wikipedia.org/wiki/MNIST_database",
         dataset={
             "path": "ylecun/mnist",
             "revision": "b06aab39e05f7bcd9635d18ed25d06eae523c574",

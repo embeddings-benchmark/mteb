@@ -9,7 +9,7 @@ class MNISTClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="MNISTZeroShot",
         description="Classifying handwritten digits.",
-        reference="https://openaccess.thecvf.com/content_cvpr_2014/html/Berg_Birdsnap_Large-scale_Fine-grained_2014_CVPR_paper.html",
+        reference="https://en.wikipedia.org/wiki/MNIST_database",
         dataset={
             "path": "ylecun/mnist",
             "revision": "b06aab39e05f7bcd9635d18ed25d06eae523c574",
