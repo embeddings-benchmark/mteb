@@ -47,12 +47,12 @@ class AbsTaskImageClassification(AbsTask):
         self.n_experiments: int = (  # type: ignore
             n_experiments
             if n_experiments is not None
-            else self.metadata_dict.get("n_experiments", 10)
+            else self.metadata_dict.get("n_experiments", 5)
         )
         self.samples_per_label: int = (  # type: ignore
             samples_per_label
             if samples_per_label is not None
-            else self.metadata_dict.get("samples_per_label", 8)
+            else self.metadata_dict.get("samples_per_label", 16)
         )
 
         # kNN parameters

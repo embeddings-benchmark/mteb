@@ -47,7 +47,7 @@ class CIFAR10ZeroShotClassification(AbsTaskZeroshotClassification):
 
     def get_candidate_labels(self) -> list[str]:
         return [
-            f"a photo of {name}"
+            f"a photo of a {name}."
             for name in self.dataset["test"].features[self.label_column_name].names
         ]
 
@@ -91,10 +91,10 @@ class CIFAR100ZeroShotClassification(AbsTaskZeroshotClassification):
         },
     )
     image_column_name: str = "img"
-    label_column_name: str = "coarse_label"
+    label_column_name: str = "fine_label"
 
     def get_candidate_labels(self) -> list[str]:
         return [
-            f"a photo of {name}"
+            f"a photo of a {name}."
             for name in self.dataset["test"].features[self.label_column_name].names
         ]

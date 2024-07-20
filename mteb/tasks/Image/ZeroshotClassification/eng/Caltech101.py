@@ -51,6 +51,6 @@ class Caltech101Classification(AbsTaskZeroshotClassification):
 
     def get_candidate_labels(self) -> list[str]:
         return [
-            f"a photo of {name}"
+            f"a photo of a {name}."
             for name in self.dataset["test"].features[self.label_column_name].names
         ]
