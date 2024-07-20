@@ -9,3 +9,4 @@ from .eng.Food101Classification import *
 from .eng.MNISTClassification import *
 from .eng.OxfordFlowersClassification import *
 from .eng.OxfordPetsClassification import *
+from .eng.StanfordCarsClassification import *

@@ -1,0 +1,48 @@
+{
+  "dataset_revision": "09ffe9bc7864d3f1e851529e5c4b7e05601a04fb",
+  "evaluation_time": 660.5333795547485,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.80",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 0.7398830991170253,
+        "f1": 0.7403225810264707,
+        "f1_weighted": 0.7400357184409913,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.7398830991170253,
+        "scores_per_experiment": [
+          {
+            "accuracy": 0.7430667827384654,
+            "f1": 0.7436627162291564,
+            "f1_weighted": 0.7435113191449505
+          },
+          {
+            "accuracy": 0.7363512000994901,
+            "f1": 0.7365198863893867,
+            "f1_weighted": 0.7363691751162225
+          },
+          {
+            "accuracy": 0.734112672553165,
+            "f1": 0.7341057453057904,
+            "f1_weighted": 0.7342243485571237
+          },
+          {
+            "accuracy": 0.7404551672677527,
+            "f1": 0.7408828281148372,
+            "f1_weighted": 0.7406406001011914
+          },
+          {
+            "accuracy": 0.745429672926253,
+            "f1": 0.7464417290931831,
+            "f1_weighted": 0.7454331492854683
+          }
+        ]
+      }
+    ]
+  },
+  "task_name": "StanfordCars"
+}
