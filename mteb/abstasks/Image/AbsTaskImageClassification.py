@@ -29,6 +29,9 @@ class AbsTaskImageClassification(AbsTask):
         label: int
     """
 
+    image_column_name: str = "image"
+    label_column_name: str = "label"
+
     def __init__(
         self,
         method: str = "logReg",
@@ -44,12 +47,12 @@ class AbsTaskImageClassification(AbsTask):
         self.n_experiments: int = (  # type: ignore
             n_experiments
             if n_experiments is not None
-            else self.metadata_dict.get("n_experiments", 10)
+            else self.metadata_dict.get("n_experiments", 5)
         )
         self.samples_per_label: int = (  # type: ignore
             samples_per_label
             if samples_per_label is not None
-            else self.metadata_dict.get("samples_per_label", 8)
+            else self.metadata_dict.get("samples_per_label", 16)
         )
 
         # kNN parameters
@@ -126,8 +129,8 @@ class AbsTaskImageClassification(AbsTask):
             )
             # Bootstrap `self.samples_per_label` samples per label for each split
             X_sampled, y_sampled, idxs = self._undersample_data(
-                train_split["image"],  # type: ignore
-                train_split["label"],  # type: ignore
+                train_split[self.image_column_name],  # type: ignore
+                train_split[self.label_column_name],  # type: ignore
                 self.samples_per_label,
                 idxs,
             )
@@ -136,8 +139,8 @@ class AbsTaskImageClassification(AbsTask):
                 evaluator = ImagekNNClassificationEvaluator(
                     X_sampled,
                     y_sampled,
-                    eval_split["image"],  # type: ignore
-                    eval_split["label"],  # type: ignore
+                    eval_split[self.image_column_name],  # type: ignore
+                    eval_split[self.label_column_name],  # type: ignore
                     task_name=self.metadata.name,
                     encode_kwargs=encode_kwargs,
                     **params,
@@ -146,8 +149,8 @@ class AbsTaskImageClassification(AbsTask):
                 evaluator = ImagekNNClassificationEvaluatorPytorch(
                     X_sampled,
                     y_sampled,
-                    eval_split["image"],  # type: ignore
-                    eval_split["label"],  # type: ignore
+                    eval_split[self.image_column_name],  # type: ignore
+                    eval_split[self.label_column_name],  # type: ignore
                     task_name=self.metadata.name,
                     encode_kwargs=encode_kwargs,
                     **params,
@@ -156,8 +159,8 @@ class AbsTaskImageClassification(AbsTask):
                 evaluator = ImagelogRegClassificationEvaluator(
                     X_sampled,
                     y_sampled,
-                    eval_split["image"],  # type: ignore
-                    eval_split["label"],  # type: ignore
+                    eval_split[self.image_column_name],  # type: ignore
+                    eval_split[self.label_column_name],  # type: ignore
                     task_name=self.metadata.name,
                     encode_kwargs=encode_kwargs,
                     **params,

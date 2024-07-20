@@ -21,7 +21,6 @@ class MSCOCOT2IRetrieval(AbsTaskT2IRetrieval):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2018-01-01", "2018-12-31"),
-        form=["written"],
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
         license="CC BY-SA 4.0",

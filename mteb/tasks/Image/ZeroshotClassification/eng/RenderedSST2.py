@@ -20,7 +20,6 @@ class RenderedSST2(AbsTaskZeroshotClassification):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2016-01-01", "2016-12-31"),
-        form=["written"],
         domains=["Reviews"],
         task_subtypes=[],
         license="mit",

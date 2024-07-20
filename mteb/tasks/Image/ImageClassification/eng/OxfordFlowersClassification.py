@@ -23,7 +23,6 @@ class OxfordFlowersClassification(AbsTaskImageClassification):
             "2012-01-01",
             "2015-12-31",
         ),  # Estimated range for the collection of reviews
-        form=["written"],
         domains=["Reviews"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
