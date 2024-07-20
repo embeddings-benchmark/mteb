@@ -51,7 +51,5 @@ class EuroSATClassification(AbsTaskZeroshotClassification):
     def get_candidate_labels(self) -> list[str]:
         return [
             f"a centered satellite photo of {name}."
-            for name in self.dataset["test"]
-            .features[self.label_column_name]
-            .names
+            for name in self.dataset["test"].features[self.label_column_name].names
         ]
