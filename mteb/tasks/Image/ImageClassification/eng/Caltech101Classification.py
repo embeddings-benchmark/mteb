@@ -16,7 +16,7 @@ class Caltech101Classification(AbsTaskImageClassification):
             "revision": "851374102055782c84f89b1b4e9d128a6568847b",
         },
         type="Classification",
-        category="s2s",
+        category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
