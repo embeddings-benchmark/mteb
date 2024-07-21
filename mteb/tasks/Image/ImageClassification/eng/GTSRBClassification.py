@@ -19,8 +19,8 @@ class GTSRBClassification(AbsTaskImageClassification):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=(
-            "2012-01-01",
-            "2012-12-01",
+            "2011-01-01",
+            "2011-12-01",
         ),  # Estimated range for the collection of reviews
         domains=["Activity recognition"],
         task_subtypes=["Traffic sign recognition"],
