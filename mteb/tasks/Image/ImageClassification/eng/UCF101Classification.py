@@ -27,7 +27,7 @@ version train/test list.""",
             "2012-12-01",
         ),  # Estimated range for the collection of reviews
         domains=["Scene"],
-        task_subtypes=["Action recognition"],
+        task_subtypes=["Activity recognition"],
         license="Not specified",
         socioeconomic_status="mixed",
         annotations_creators="derived",

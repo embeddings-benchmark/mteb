@@ -12,5 +12,6 @@ from .eng.Imagenet1k import *
 from .eng.MNISTClassification import *
 from .eng.OxfordFlowersClassification import *
 from .eng.OxfordPetsClassification import *
+from .eng.PatchCamelyonClassification import *
 from .eng.StanfordCarsClassification import *
 from .eng.UCF101Classification import *
