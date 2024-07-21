@@ -32,10 +32,10 @@ class DTDClassification(AbsTaskZeroshotClassification):
         modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation="""@InProceedings{cimpoi14describing,
-	      Author    = {M. Cimpoi and S. Maji and I. Kokkinos and S. Mohamed and and A. Vedaldi},
-	      Title     = {Describing Textures in the Wild},
-	      Booktitle = {Proceedings of the {IEEE} Conf. on Computer Vision and Pattern Recognition ({CVPR})},
-	      Year      = {2014}}
+            Author    = {M. Cimpoi and S. Maji and I. Kokkinos and S. Mohamed and and A. Vedaldi},
+            Title     = {Describing Textures in the Wild},
+            Booktitle = {Proceedings of the {IEEE} Conf. on Computer Vision and Pattern Recognition ({CVPR})},
+            Year      = {2014}}
         """,
         descriptive_stats={
             "n_samples": {"test": 1880},
