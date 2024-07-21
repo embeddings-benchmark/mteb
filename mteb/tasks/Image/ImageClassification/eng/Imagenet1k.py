@@ -26,7 +26,7 @@ class Imagenet1kClassification(AbsTaskImageClassification):
         task_subtypes=["Object recognition"],
         license="Not specified",
         socioeconomic_status="mixed",
-        annotations_creators="derived",
+        annotations_creators="human-annotated",
         dialect=[],
         modalities=["image"],
         sample_creation="created",
