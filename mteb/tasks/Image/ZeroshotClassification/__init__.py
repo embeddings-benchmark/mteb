@@ -10,5 +10,6 @@ from .eng.Food101 import *
 from .eng.MNIST import *
 from .eng.OxfordPets import *
 from .eng.RenderedSST2 import *
+from .eng.RESISC45 import *
 from .eng.StanfordCars import *
 from .eng.STL10 import *
