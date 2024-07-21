@@ -6,7 +6,7 @@ from mteb.abstasks import AbsTaskZeroshotClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class GTSRBZeroShotClassification(AbsTaskZeroshotClassification):
+class GTSRBClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="GTSRBZeroShot",
         description="""The German Traffic Sign Recognition Benchmark (GTSRB) is a multi-class classification dataset for traffic signs. It consists of dataset of more than 50,000 traffic sign images. The dataset comprises 43 classes with unbalanced class frequencies.""",
