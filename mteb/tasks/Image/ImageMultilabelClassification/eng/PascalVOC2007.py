@@ -50,6 +50,6 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
 
     # Override default column name in the subclass
     label_column_name: str = "classes"
-    
+
     # To be removed when we want full results
     n_experiments: int = 1
