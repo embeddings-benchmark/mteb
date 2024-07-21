@@ -15,7 +15,7 @@ class FGVCAircraftClassification(AbsTaskImageClassification):
             "revision": "91860adfc9a09aabca5cddb5247442109b38e213",
         },
         type="Classification",
-        category="s2s",
+        category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

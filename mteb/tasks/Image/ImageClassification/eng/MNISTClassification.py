@@ -5,14 +5,14 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from .....abstasks import AbsTaskImageClassification
 
 
-class OxfordPetsClassification(AbsTaskImageClassification):
+class MNISTClassification(AbsTaskImageClassification):
     metadata = TaskMetadata(
-        name="OxfordPets",
-        description="Classifying animal images.",
-        reference="https://arxiv.org/abs/1306.5151",
+        name="MNIST",
+        description="Classifying handwritten digits.",
+        reference="https://en.wikipedia.org/wiki/MNIST_database",
         dataset={
-            "path": "isaacchung/OxfordPets",
-            "revision": "557b480fae8d69247be74d9503b378a09425096f",
+            "path": "ylecun/mnist",
+            "revision": "b06aab39e05f7bcd9635d18ed25d06eae523c574",
         },
         type="Classification",
         category="i2t",
@@ -20,8 +20,8 @@ class OxfordPetsClassification(AbsTaskImageClassification):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=(
-            "2009-01-01",
             "2010-01-01",
+            "2010-04-01",
         ),  # Estimated range for the collection of reviews
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
@@ -31,18 +31,16 @@ class OxfordPetsClassification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@misc{maji2013finegrainedvisualclassificationaircraft,
-            title={Fine-Grained Visual Classification of Aircraft}, 
-            author={Subhransu Maji and Esa Rahtu and Juho Kannala and Matthew Blaschko and Andrea Vedaldi},
-            year={2013},
-            eprint={1306.5151},
-            archivePrefix={arXiv},
-            primaryClass={cs.CV},
-            url={https://arxiv.org/abs/1306.5151}, 
+        bibtex_citation="""@article{lecun2010mnist,
+        title={MNIST handwritten digit database},
+        author={LeCun, Yann and Cortes, Corinna and Burges, CJ},
+        journal={ATT Labs [Online]. Available: http://yann.lecun.com/exdb/mnist},
+        volume={2},
+        year={2010}
         }
         """,
         descriptive_stats={
-            "n_samples": {"test": 3669},
+            "n_samples": {"test": 10000},
             "avg_character_length": {"test": 431.4},
         },
     )
