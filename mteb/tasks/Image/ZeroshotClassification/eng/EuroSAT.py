@@ -49,7 +49,16 @@ class EuroSATClassification(AbsTaskZeroshotClassification):
     )
 
     def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a centered satellite photo of {name}."
-            for name in self.dataset["test"].features[self.label_column_name].names
+        labels = [
+            "annual crop land",
+            "forest land",
+            "brushland or shrubland",
+            "highway or road",
+            "industrial land",
+            "pasture land",
+            "permanent crop land",
+            "residential land",
+            "river",
+            "sea or lake",
         ]
+        return [f"a centered satellite photo of {name}." for name in labels]
