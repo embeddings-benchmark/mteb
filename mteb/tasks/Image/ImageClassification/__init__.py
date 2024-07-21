@@ -14,3 +14,4 @@ from .eng.OxfordPetsClassification import *
 from .eng.RESISC45Classification import *
 from .eng.StanfordCarsClassification import *
 from .eng.STL10Classification import *
+from .eng.SUN397Classification import *
