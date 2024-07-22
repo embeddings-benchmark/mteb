@@ -54,6 +54,6 @@ class SUN397Classification(AbsTaskZeroshotClassification):
         """
         labels = []
         for name in self.dataset["test"].features[self.label_column_name].names:
-            name = " ".join(name.split("/")[1:]).replace("_", " ")
+            name = " ".join(name.split("/")[2:]).replace("_", " ")
             labels.append(f"a photo of a {name}.")
         return labels
