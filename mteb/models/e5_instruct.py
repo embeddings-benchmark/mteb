@@ -193,7 +193,7 @@ class E5MistralWrapper(E5InstructWrapper):
             sequence_lengths,
         ]
 
-    def get_embbeding_from_output(
+    def get_embedding_from_output(
         self, output: ModelOutput, batch_dict: BatchEncoding
     ) -> torch.Tensor:
         return self.last_token_pool(
