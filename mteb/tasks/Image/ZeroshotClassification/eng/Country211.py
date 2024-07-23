@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import os
 import itertools
+import os
 
 from mteb.abstasks import AbsTaskZeroshotClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
