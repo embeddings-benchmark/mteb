@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import itertools
+import os
 
 from mteb.abstasks import AbsTaskZeroshotClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -24,8 +25,8 @@ class GTSRBClassification(AbsTaskZeroshotClassification):
             "2011-01-01",
             "2011-12-01",
         ),  # Estimated range for the collection of reviews
-        domains=["Activity recognition"],
-        task_subtypes=["Traffic sign recognition"],
+        task_subtypes=["Activity recognition"],
+        domains=["Scene"],
         license="Not specified",
         socioeconomic_status="mixed",
         annotations_creators="derived",
@@ -53,51 +54,9 @@ class GTSRBClassification(AbsTaskZeroshotClassification):
     label_column_name: str = "cls"
 
     def get_candidate_labels(self) -> list[str]:
-        labels = [
-            "red and white circle 20 kph speed limit",
-            "red and white circle 30 kph speed limit",
-            "red and white circle 50 kph speed limit",
-            "red and white circle 60 kph speed limit",
-            "red and white circle 70 kph speed limit",
-            "red and white circle 80 kph speed limit",
-            "end / de-restriction of 80 kph speed limit",
-            "red and white circle 100 kph speed limit",
-            "red and white circle 120 kph speed limit",
-            "red and white circle red car and black car no passing",
-            "red and white circle red truck and black car no passing",
-            "red and white triangle road intersection warning",
-            "white and yellow diamond priority road",
-            "red and white upside down triangle yield right-of-way",
-            "stop",
-            "empty red and white circle",
-            "red and white circle no truck entry",
-            "red circle with white horizonal stripe no entry",
-            "red and white triangle with exclamation mark warning",
-            "red and white triangle with black left curve approaching warning",
-            "red and white triangle with black right curve approaching warning",
-            "red and white triangle with black double curve approaching warning",
-            "red and white triangle rough / bumpy road warning",
-            "red and white triangle car skidding / slipping warning",
-            "red and white triangle with merging / narrow lanes warning",
-            "red and white triangle with person digging / construction / road work warning",
-            "red and white triangle with traffic light approaching warning",
-            "red and white triangle with person walking warning",
-            "red and white triangle with child and person walking warning",
-            "red and white triangle with bicyle warning",
-            "red and white triangle with snowflake / ice warning",
-            "red and white triangle with deer warning",
-            "white circle with gray strike bar no speed limit",
-            "blue circle with white right turn arrow mandatory",
-            "blue circle with white left turn arrow mandatory",
-            "blue circle with white forward arrow mandatory",
-            "blue circle with white forward or right turn arrow mandatory",
-            "blue circle with white forward or left turn arrow mandatory",
-            "blue circle with white keep right arrow mandatory",
-            "blue circle with white keep left arrow mandatory",
-            "blue circle with white arrows indicating a traffic circle",
-            "white circle with gray strike bar indicating no passing for cars has ended",
-            "white circle with gray strike bar indicating no passing for trucks has ended",
-        ]
+        path = os.path.dirname(__file__)
+        with open(os.path.join(path, "templates/GTSRB_labels.txt")) as f:
+            labels = f.readlines()
 
         prompts = [
             [f"a zoomed in photo of a '{c}' traffic sign." for c in labels],

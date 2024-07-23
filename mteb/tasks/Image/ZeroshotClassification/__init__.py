@@ -9,6 +9,7 @@ from .eng.FER2013 import *
 from .eng.FGVCAircraft import *
 from .eng.Food101 import *
 from .eng.GTSRB import *
+from .eng.Imagenet1k import *
 from .eng.MNIST import *
 from .eng.OxfordPets import *
 from .eng.RenderedSST2 import *
