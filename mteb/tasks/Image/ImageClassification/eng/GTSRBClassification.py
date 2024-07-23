@@ -22,8 +22,8 @@ class GTSRBClassification(AbsTaskImageClassification):
             "2011-01-01",
             "2011-12-01",
         ),  # Estimated range for the collection of reviews
-        domains=["Activity recognition"],
-        task_subtypes=["Traffic sign recognition"],
+        task_subtypes=["Activity recognition"],
+        domains=["Scene"],
         license="Not specified",
         socioeconomic_status="mixed",
         annotations_creators="derived",
