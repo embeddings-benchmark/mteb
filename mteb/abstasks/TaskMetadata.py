@@ -43,6 +43,7 @@ TASK_SUBTYPE = Literal[
     "Scene recognition",
     "Caption Pairing",
     "Emotion recognition",
+    "Textures recognition",
     "Activity recognition",
     "Tumor detection",
 ]
