@@ -12,5 +12,6 @@ from .eng.GTSRB import *
 from .eng.Imagenet1k import *
 from .eng.MNIST import *
 from .eng.OxfordPets import *
+from .eng.PatchCamelyon import *
 from .eng.RenderedSST2 import *
 from .eng.StanfordCars import *

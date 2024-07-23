@@ -1,0 +1,19 @@
+{
+  "dataset_revision": "502695fe1a141108650e3c5b91c8b5e0ff84ed49",
+  "evaluation_time": 188.3293001651764,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.59",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 0.125396728515625,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.125396728515625
+      }
+    ]
+  },
+  "task_name": "PatchCamelyonZeroShot"
+}

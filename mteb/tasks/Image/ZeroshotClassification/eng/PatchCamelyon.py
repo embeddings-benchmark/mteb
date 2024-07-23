@@ -1,12 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskImageClassification
+import itertools
+import os
+
+from mteb.abstasks import AbsTaskZeroshotClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class PatchCamelyonClassification(AbsTaskImageClassification):
+class PatchCamelyonClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
-        name="PatchCamelyon",
+        name="PatchCamelyonZeroShot",
         description="""Histopathology diagnosis classification dataset.""",
         reference="https://link.springer.com/chapter/10.1007/978-3-030-00934-2_24",
         dataset={
@@ -58,3 +61,15 @@ isbn="978-3-030-00934-2"
     )
     image_column_name = "webp"
     label_column_name = "cls"
+
+    def get_candidate_labels(self) -> list[str]:
+        path = os.path.dirname(__file__)
+        with open(os.path.join(path, "templates/PatchCamelyon_labels.txt")) as f:
+            labels = f.readlines()
+        
+        prompts = [
+            [f"a histopathology slide showing {c}" for c in labels],
+            [f"histopathology image of {c}" for c in labels]
+        ]
+
+        return list(itertools.chain(*prompts))
