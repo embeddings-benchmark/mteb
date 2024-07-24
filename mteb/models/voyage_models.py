@@ -107,7 +107,7 @@ class VoyageWrapper:
     ) -> np.ndarray:
         embeddings, index = [], 0
 
-        while index < len(sentences) - 1:
+        while index < len(sentences):
             batch, batch_tokens = [], 0
             while (
                 index < len(sentences)
@@ -174,7 +174,7 @@ voyage_code_2 = ModelMeta(
 )
 
 voyage_large_2 = ModelMeta(
-    name="voyage-large-2",  # The release date is considered to be the date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
+    name="voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
@@ -191,6 +191,17 @@ voyage_2 = ModelMeta(
     languages=None,  # supported languages not specified
     loader=partial(VoyageWrapper, model_name="voyage-2"),
     max_tokens=4000,
+    embed_dim=1024,
+    open_source=False,
+)
+
+voyage_multilingual_2 = ModelMeta(
+    name="voyage-multilingual-2",
+    revision="1",
+    release_date="2024-06-10",
+    languages=None,  # supported languages not specified
+    loader=partial(VoyageWrapper, model_name="voyage-multilingual-2"),
+    max_tokens=32000,
     embed_dim=1024,
     open_source=False,
 )
