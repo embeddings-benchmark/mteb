@@ -42,37 +42,11 @@ class GoogleTextEmbeddingModel(Encoder):
         kwargs = dict(output_dimensionality=dimensionality) if dimensionality else {}
         try:
             embeddings = model.get_embeddings(inputs, **kwargs)
-        # Except google.api_core.exceptions.InternalServerError
+        # Except the very rare google.api_core.exceptions.InternalServerError
         except Exception as e:
             print("Retrying once after error:", e)
             embeddings = model.get_embeddings(inputs, **kwargs)
         return np.asarray([embedding.values for embedding in embeddings])
-
-    def _embed_genai(
-        self, sentences: list[str], *, task_type: str, titles: list[str] | None = None
-    ) -> np.ndarray:
-        try:
-            import google.generativeai as genai
-        except ImportError:
-            raise ImportError(
-                "`google-generativeai` is required to run the google API, pleae install it using `pip install google-generativeai`"
-            )
-
-        if titles:
-            result = genai.embed_content(  # type: ignore
-                model=self.model_name,
-                content=sentences,
-                task_type=task_type,
-                title=titles,
-            )
-        else:
-            result = genai.embed_content(  # type: ignore
-                model=self.model_name,
-                content=sentences,
-                task_type=task_type,
-            )
-
-        return np.asarray(result["embedding"])
 
     def encode(
         self,
@@ -80,7 +54,7 @@ class GoogleTextEmbeddingModel(Encoder):
         prompt_name: str | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        input_type = "RETRIEVAL_DOCUMENT"  # Default
+        input_type = None  # Default
         if prompt_name:
             task = mteb.get_task(prompt_name)
             task_type = task.metadata.type
@@ -116,11 +90,11 @@ google_emb_004 = ModelMeta(
     name=name,
     languages=["eng-Latn"],
     open_source=False,
-    revision="1",
+    revision="1",  # revision is intended for implementation
     release_date=None,  # couldnt figure this out
     n_parameters=None,
     memory_usage=None,
-    max_tokens=3072,
+    max_tokens=2048,
     embed_dim=768,
     license=None,
     similarity_fn_name="cosine",  # assumed
@@ -130,6 +104,5 @@ google_emb_004 = ModelMeta(
 
 if __name__ == "__main__":
     import mteb
-
     mdl = mteb.get_model(google_emb_004.name, google_emb_004.revision)
     emb = mdl.encode(["Hello, world!"])

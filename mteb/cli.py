@@ -67,6 +67,8 @@ model-index:
 ```
 """
 
+from __future__ import annotations
+
 import argparse
 import json
 import logging
@@ -76,7 +78,7 @@ import torch
 import yaml
 
 import mteb
-from mteb.load_results.mteb_results import MTEBResults
+from mteb.load_results.mteb_results import CQADupstackRetrievalDummy, MTEBResults
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
@@ -251,6 +253,54 @@ def add_run_parser(subparsers) -> None:
     parser.set_defaults(func=run)
 
 
+def potentially_add_cqadupstack_to_results(results: list[mteb.MTEBResults]) -> None:
+    """If all CQADupstack tasks are present in the results, combine them into a single CQADupstackRetrieval task and add it to the results."""
+    TASK_LIST_CQA = {
+        "CQADupstackAndroidRetrieval",
+        "CQADupstackEnglishRetrieval",
+        "CQADupstackGamingRetrieval",
+        "CQADupstackGisRetrieval",
+        "CQADupstackMathematicaRetrieval",
+        "CQADupstackPhysicsRetrieval",
+        "CQADupstackProgrammersRetrieval",
+        "CQADupstackStatsRetrieval",
+        "CQADupstackTexRetrieval",
+        "CQADupstackUnixRetrieval",
+        "CQADupstackWebmastersRetrieval",
+        "CQADupstackWordpressRetrieval",
+    }
+
+    task_names = {result.task_name for result in results}
+
+    if not TASK_LIST_CQA.issubset(task_names):
+        return None
+    cqa_results = [result for result in results if result.task_name in TASK_LIST_CQA]
+
+    evaluation_time = sum([result.evaluation_time for result in cqa_results])
+    main_scores = [r.get_score(splits=["test"]) for r in cqa_results]
+    main_score = float(sum(main_scores) / len(main_scores))
+    scores = {
+        "test": [
+            {
+                "main_score": main_score,
+                "ndcg_at_10": main_score,
+                "hf_subset": "default",
+                "languages": ["eng_Latn"],
+            }
+        ]
+    }
+
+    result = mteb.MTEBResults(
+        task_name="CQADupstackRetrieval",
+        dataset_revision="CQADupstackRetrieval is a combined dataset",
+        mteb_version="NA",
+        scores=scores,
+        evaluation_time=evaluation_time,
+        kg_co2_emissions=None,
+    )
+    results.append(result)
+
+
 def create_meta(args: argparse.Namespace) -> None:
     results_folder = Path(args.results_folder)
     output_path = Path(args.output_path)
@@ -269,11 +319,19 @@ def create_meta(args: argparse.Namespace) -> None:
     ]
 
     task_results = [MTEBResults.from_disk(path) for path in json_files]
+    potentially_add_cqadupstack_to_results(
+        task_results
+    )  # We should ideally find better way in the future to aggregate scores for tasks like CQADupstack
     task_results = sorted(task_results, key=lambda x: x.task_name)
 
     yaml_results = []
     for task_result in task_results:
-        task = mteb.get_task(task_result.task_name)
+        if (
+            task_result.task_name == "CQADupstackRetrieval"
+        ):  # CQADupstackRetrieval is a combined dataset (special case atm.)
+            task = CQADupstackRetrievalDummy()
+        else:
+            task = mteb.get_task(task_result.task_name)
 
         for split, hf_subset_scores in task_result.scores.items():
             for hf_subset_score in hf_subset_scores:
