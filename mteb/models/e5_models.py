@@ -183,7 +183,6 @@ e5_mult_base = ModelMeta(
     release_date=E5_PAPER_RELEASE_DATE,
 )
 
-
 e5_mult_large = ModelMeta(
     loader=partial(E5Wrapper, model_name="intfloat/multilingual-e5-large"),  # type: ignore
     name="intfloat/multilingual-e5-large",

@@ -126,6 +126,7 @@ model_modules = [
     cohere_models,
     e5_instruct,
     e5_models,
+    google_models,
     gritlm_models,
     gte_models,
     llm2vec_models,

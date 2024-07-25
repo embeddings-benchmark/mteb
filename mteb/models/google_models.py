@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Any
+from typing import Any, List, Optional
 
 import numpy as np
 
@@ -16,30 +16,37 @@ class GoogleTextEmbeddingModel(Encoder):
         self.model_name = model_name
 
     def _embed(
-        self, sentences: list[str], *, task_type: str, titles: list[str] | None = None
-    ) -> np.ndarray:
+        self,
+        texts: List[str],
+        task_type: str = "RETRIEVAL_DOCUMENT",
+        titles: List[str] | None = None,
+        dimensionality: Optional[int] = 768,
+    ) -> List[List[float]]:
+        """
+        Embeds texts with a pre-trained, foundational model.
+        From https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings#generative-ai-get-text-embedding-python_vertex_ai_sdk
+        """
         try:
-            import google.generativeai as genai
-        except ImportError:
+            from vertexai.language_models import TextEmbeddingInput, TextEmbeddingModel
+        except:
             raise ImportError(
-                "`google-generativeai` is required to run the google API, please install it using `pip install google-generativeai`"
+                "The `vertexai` package is required to run the google API, please install it using `pip install vertexai`"
             )
-
+        model = TextEmbeddingModel.from_pretrained(self.model_name)
         if titles:
-            result = genai.embed_content(  # type: ignore
-                model=self.model_name,
-                content=sentences,
-                task_type=task_type,
-                title=titles,
-            )
+            # Allow title-only embeddings by replacing text with a space
+            # Else Google throws google.api_core.exceptions.InvalidArgument: 400 The text content is empty.
+            inputs = [TextEmbeddingInput(text if text else " ", task_type=task_type, title=title) for text, title in zip(texts, titles)]
         else:
-            result = genai.embed_content(  # type: ignore
-                model=self.model_name,
-                content=sentences,
-                task_type=task_type,
-            )
-
-        return np.asarray(result["embedding"])
+            inputs = [TextEmbeddingInput(text, task_type=task_type) for text in texts]
+        kwargs = dict(output_dimensionality=dimensionality) if dimensionality else {}
+        try:
+            embeddings = model.get_embeddings(inputs, **kwargs)
+        # Except the very rare google.api_core.exceptions.InternalServerError
+        except Exception as e:
+            print("Retrying once after error:", e)
+            embeddings = model.get_embeddings(inputs, **kwargs)
+        return np.asarray([embedding.values for embedding in embeddings])
 
     def encode(
         self,
@@ -74,10 +81,10 @@ class GoogleTextEmbeddingModel(Encoder):
             for doc in corpus:
                 titles.append(doc["title"])
                 sentences.append(doc["text"])
-        return self._embed(sentences, task_type="RETRIEVAL_DOCUMENT")
+        return self._embed(sentences, task_type="RETRIEVAL_DOCUMENT", titles=titles)
 
 
-name = "models/text-embedding-004"
+name = "text-embedding-004"
 google_emb_004 = ModelMeta(
     loader=partial(GoogleTextEmbeddingModel, model_name=name),
     name=name,
@@ -97,6 +104,5 @@ google_emb_004 = ModelMeta(
 
 if __name__ == "__main__":
     import mteb
-
     mdl = mteb.get_model(google_emb_004.name, google_emb_004.revision)
     emb = mdl.encode(["Hello, world!"])
