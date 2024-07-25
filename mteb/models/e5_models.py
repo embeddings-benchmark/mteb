@@ -157,6 +157,8 @@ class E5Wrapper:
         batch_size: int = 32,
         **kwargs: Any,
     ):
+        if "request_qid" in kwargs:
+            kwargs.pop("request_qid")
         sentences = corpus_to_texts(corpus)
         sentences = ["passage: " + sentence for sentence in sentences]
         emb = self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
