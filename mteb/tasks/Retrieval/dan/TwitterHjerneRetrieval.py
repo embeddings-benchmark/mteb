@@ -20,14 +20,14 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=("2006-01-01", "2024-12-31"),  # best guess
         domains=["Social", "Written"],
-        license=None,
+        license="CC BY 4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
         bibtex_citation="""
 @article{holm2024gllms,
   title={Are GLLMs Danoliterate? Benchmarking Generative NLP in Danish},
-  author={Holm, S{\o}ren Vejlgaard},
+  author={Holm, Soren Vejlgaard},
   year={2024}
 }
 """,

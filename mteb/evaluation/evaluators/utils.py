@@ -182,7 +182,7 @@ def top_k_accuracy(
     results: dict[str, dict[str, float]],
     k_values: List[int],
     output_type: str = "mean",
-) -> Tuple[Dict[str, float]]:
+) -> Dict[str, float]:
     top_k_acc = {}
 
     for k in k_values:

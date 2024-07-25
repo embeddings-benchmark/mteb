@@ -1,0 +1,24 @@
+{
+  "dataset_revision": "NA",
+  "evaluation_time": 0.008913993835449219,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.75",
+  "scores": {
+    "test": [
+      {
+        "cosine_pearson": NaN,
+        "cosine_spearman": NaN,
+        "dot_pearson": NaN,
+        "dot_spearman": NaN,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": NaN,
+        "pearson": NaN,
+        "spearman": NaN
+      }
+    ]
+  },
+  "task_name": "MockSummarizationTask"
+}

@@ -1,0 +1,57 @@
+{
+  "dataset_revision": "7335288588f14e5a687d97fc979194c2abe6f4e7",
+  "evaluation_time": 0.012730836868286133,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.75",
+  "scores": {
+    "test": [
+      {
+        "cosine_accuracy": 0.5150631681243926,
+        "cosine_accuracy_threshold": 0.8030677580569284,
+        "cosine_ap": 0.5011348630572023,
+        "cosine_f1": 0.6709760827407886,
+        "cosine_f1_threshold": 0.34885253212690925,
+        "cosine_precision": 0.504863813229572,
+        "cosine_recall": 1.0,
+        "dot_accuracy": 0.5092322643343051,
+        "dot_accuracy_threshold": 2.4331466515112554,
+        "dot_ap": 0.5031357307496832,
+        "dot_f1": 0.6709760827407886,
+        "dot_f1_threshold": 0.7419924712435435,
+        "dot_precision": 0.504863813229572,
+        "dot_recall": 1.0,
+        "euclidean_accuracy": 0.5131195335276968,
+        "euclidean_accuracy_threshold": 1.0681553236243553,
+        "euclidean_ap": 0.5031722752305269,
+        "euclidean_f1": 0.669683257918552,
+        "euclidean_f1_threshold": 1.989631770887137,
+        "euclidean_precision": 0.5038910505836576,
+        "euclidean_recall": 0.9980732177263969,
+        "hf_subset": "default",
+        "languages": [
+          "fas-Arab"
+        ],
+        "main_score": 0.5092653001263145,
+        "manhattan_accuracy": 0.5131195335276968,
+        "manhattan_accuracy_threshold": 2.5001080536657128,
+        "manhattan_ap": 0.5092653001263145,
+        "manhattan_f1": 0.6701231367465975,
+        "manhattan_f1_threshold": 5.3860075655775415,
+        "manhattan_precision": 0.5048828125,
+        "manhattan_recall": 0.9961464354527938,
+        "max_ap": 0.5092653001263145,
+        "max_f1": 0.6709760827407886,
+        "max_precision": 0.5048828125,
+        "max_recall": 1.0,
+        "similarity_accuracy": 0.5150631681243926,
+        "similarity_accuracy_threshold": 0.8030677580569284,
+        "similarity_ap": 0.5011348630572023,
+        "similarity_f1": 0.6709760827407886,
+        "similarity_f1_threshold": 0.34885253212690925,
+        "similarity_precision": 0.504863813229572,
+        "similarity_recall": 1.0
+      }
+    ]
+  },
+  "task_name": "FarsTail"
+}

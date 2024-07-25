@@ -80,25 +80,14 @@ class BQ(AbsTaskSTS):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@inproceedings{raghu-etal-2021-end,
-    title = "End-to-End Learning of Flowchart Grounded Task-Oriented Dialogs",
-    author = "Raghu, Dinesh  and
-      Agarwal, Shantanu  and
-      Joshi, Sachindra  and
-      {Mausam}",
-    editor = "Moens, Marie-Francine  and
-      Huang, Xuanjing  and
-      Specia, Lucia  and
-      Yih, Scott Wen-tau",
-    booktitle = "Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing",
-    month = nov,
-    year = "2021",
-    address = "Online and Punta Cana, Dominican Republic",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2021.emnlp-main.357",
-    doi = "10.18653/v1/2021.emnlp-main.357",
-    pages = "4348--4366",
-    abstract = "We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.",
+        bibtex_citation="""@misc{xiao2024cpackpackagedresourcesadvance,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
+      year={2024},
+      eprint={2309.07597},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2309.07597}, 
 }""",
         descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
@@ -133,25 +122,14 @@ class LCQMC(AbsTaskSTS):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@inproceedings{raghu-etal-2021-end,
-    title = "End-to-End Learning of Flowchart Grounded Task-Oriented Dialogs",
-    author = "Raghu, Dinesh  and
-      Agarwal, Shantanu  and
-      Joshi, Sachindra  and
-      {Mausam}",
-    editor = "Moens, Marie-Francine  and
-      Huang, Xuanjing  and
-      Specia, Lucia  and
-      Yih, Scott Wen-tau",
-    booktitle = "Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing",
-    month = nov,
-    year = "2021",
-    address = "Online and Punta Cana, Dominican Republic",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2021.emnlp-main.357",
-    doi = "10.18653/v1/2021.emnlp-main.357",
-    pages = "4348--4366",
-    abstract = "We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.",
+        bibtex_citation="""@misc{xiao2024cpackpackagedresourcesadvance,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
+      year={2024},
+      eprint={2309.07597},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2309.07597}, 
 }""",
         descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
@@ -186,25 +164,14 @@ class PAWSX(AbsTaskSTS):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@inproceedings{raghu-etal-2021-end,
-    title = "End-to-End Learning of Flowchart Grounded Task-Oriented Dialogs",
-    author = "Raghu, Dinesh  and
-      Agarwal, Shantanu  and
-      Joshi, Sachindra  and
-      {Mausam}",
-    editor = "Moens, Marie-Francine  and
-      Huang, Xuanjing  and
-      Specia, Lucia  and
-      Yih, Scott Wen-tau",
-    booktitle = "Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing",
-    month = nov,
-    year = "2021",
-    address = "Online and Punta Cana, Dominican Republic",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2021.emnlp-main.357",
-    doi = "10.18653/v1/2021.emnlp-main.357",
-    pages = "4348--4366",
-    abstract = "We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.",
+        bibtex_citation="""@misc{xiao2024cpackpackagedresourcesadvance,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
+      year={2024},
+      eprint={2309.07597},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2309.07597}, 
 }""",
         descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
@@ -239,25 +206,14 @@ class STSB(AbsTaskSTS):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@inproceedings{raghu-etal-2021-end,
-    title = "End-to-End Learning of Flowchart Grounded Task-Oriented Dialogs",
-    author = "Raghu, Dinesh  and
-      Agarwal, Shantanu  and
-      Joshi, Sachindra  and
-      {Mausam}",
-    editor = "Moens, Marie-Francine  and
-      Huang, Xuanjing  and
-      Specia, Lucia  and
-      Yih, Scott Wen-tau",
-    booktitle = "Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing",
-    month = nov,
-    year = "2021",
-    address = "Online and Punta Cana, Dominican Republic",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2021.emnlp-main.357",
-    doi = "10.18653/v1/2021.emnlp-main.357",
-    pages = "4348--4366",
-    abstract = "We propose a novel problem within end-to-end learning of task oriented dialogs (TOD), in which the dialog system mimics a troubleshooting agent who helps a user by diagnosing their problem (e.g., car not starting). Such dialogs are grounded in domain-specific flowcharts, which the agent is supposed to follow during the conversation. Our task exposes novel technical challenges for neural TOD, such as grounding an utterance to the flowchart without explicit annotation, referring to additional manual pages when user asks a clarification question, and ability to follow unseen flowcharts at test time. We release a dataset (FLODIAL) consisting of 2,738 dialogs grounded on 12 different troubleshooting flowcharts. We also design a neural model, FLONET, which uses a retrieval-augmented generation architecture to train the dialog agent. Our experiments find that FLONET can do zero-shot transfer to unseen flowcharts, and sets a strong baseline for future research.",
+        bibtex_citation="""@misc{xiao2024cpackpackagedresourcesadvance,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
+      year={2024},
+      eprint={2309.07597},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2309.07597}, 
 }""",
         descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
