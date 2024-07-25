@@ -157,6 +157,8 @@ class E5Wrapper:
         batch_size: int = 32,
         **kwargs: Any,
     ):
+        if "request_qid" in kwargs:
+            kwargs.pop("request_qid")
         sentences = corpus_to_texts(corpus)
         sentences = ["passage: " + sentence for sentence in sentences]
         emb = self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
@@ -180,7 +182,6 @@ e5_mult_base = ModelMeta(
     revision="d13f1b27baf31030b7fd040960d60d909913633f",
     release_date=E5_PAPER_RELEASE_DATE,
 )
-
 
 e5_mult_large = ModelMeta(
     loader=partial(E5Wrapper, model_name="intfloat/multilingual-e5-large"),  # type: ignore
