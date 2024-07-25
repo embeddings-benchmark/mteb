@@ -72,10 +72,12 @@ mteb run -m sentence-transformers/all-MiniLM-L6-v2 \
 
 
 ## Advanced Usage
+Click on each section below to see the details.
+
 <br /> 
 
 <details>
-  <summary>  Dataset selection (click to unfold) </summary>
+  <summary>  Dataset selection </summary>
 
 ### Dataset selection
 
@@ -129,7 +131,7 @@ evaluation = mteb.MTEB(tasks=MTEB_MAIN_EN, task_langs=["en"])
 </details>
 
 <details>
-  <summary>  Passing in `encode` arguments (click to unfold) </summary>
+  <summary>  Passing in `encode` arguments </summary>
 
 
 ### Passing in `encode` arguments
@@ -143,7 +145,7 @@ evaluation.run(model, encode_kwargs={"batch_size": 32}
 
 
 <details>
-  <summary>  Selecting evaluation split (click to unfold) </summary>
+  <summary>  Selecting evaluation split </summary>
 
 ### Selecting evaluation split
 You can evaluate only on `test` splits of all tasks by doing the following:
@@ -157,7 +159,7 @@ Note that the public leaderboard uses the test splits for all datasets except MS
 </details>
 
 <details>
-  <summary>  Using a custom model (click to unfold) </summary>
+  <summary>  Using a custom model </summary>
 
 
 ### Using a custom model
@@ -217,7 +219,7 @@ class MyModel():
 </details>
 
 <details>
-  <summary>  Evaluating on a custom dataset (click to unfold) </summary>
+  <summary>  Evaluating on a custom dataset </summary>
 
 
 ### Evaluating on a custom dataset
