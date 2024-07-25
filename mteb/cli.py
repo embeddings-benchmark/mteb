@@ -292,7 +292,7 @@ def potentially_add_cqadupstack_to_results(results: list[mteb.MTEBResults]) -> N
 
     result = mteb.MTEBResults(
         task_name="CQADupstackRetrieval",
-        dataset_revision="CQADupstackRetrieval_is_a_combined dataset",
+        dataset_revision="CQADupstackRetrieval_is_a_combined_dataset",
         mteb_version="NA",
         scores=scores,
         evaluation_time=evaluation_time,
