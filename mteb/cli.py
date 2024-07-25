@@ -292,7 +292,7 @@ def potentially_add_cqadupstack_to_results(results: list[mteb.MTEBResults]) -> N
 
     result = mteb.MTEBResults(
         task_name="CQADupstackRetrieval",
-        dataset_revision="CQADupstackRetrieval is a combined dataset",
+        dataset_revision="CQADupstackRetrieval_is_a_combined dataset",
         mteb_version="NA",
         scores=scores,
         evaluation_time=evaluation_time,
@@ -319,6 +319,7 @@ def create_meta(args: argparse.Namespace) -> None:
     ]
 
     task_results = [MTEBResults.from_disk(path) for path in json_files]
+    task_results = [results for results in task_results if results.task_name not in ["GPUSpeedTask", "CPUSpeedTask"]
     potentially_add_cqadupstack_to_results(
         task_results
     )  # We should ideally find better way in the future to aggregate scores for tasks like CQADupstack
