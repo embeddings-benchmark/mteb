@@ -10,6 +10,7 @@ from .instructions import task_to_instruction
 def sfr_instruction(instruction: str) -> str:
     return f"Instruct: {instruction}\nQuery: "
 
+
 def sfr_loader(**kwargs):
     try:
         from gritlm import GritLM
@@ -39,6 +40,7 @@ def sfr_loader(**kwargs):
             return super().encode_corpus(*args, **kwargs)
 
     return SFRWrapper(**kwargs)
+
 
 SFR_Embedding_2_R = ModelMeta(
     loader=partial(

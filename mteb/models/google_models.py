@@ -22,8 +22,7 @@ class GoogleTextEmbeddingModel(Encoder):
         titles: List[str] | None = None,
         dimensionality: Optional[int] = 768,
     ) -> List[List[float]]:
-        """
-        Embeds texts with a pre-trained, foundational model.
+        """Embeds texts with a pre-trained, foundational model.
         From https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings#generative-ai-get-text-embedding-python_vertex_ai_sdk
         """
         try:
@@ -36,7 +35,12 @@ class GoogleTextEmbeddingModel(Encoder):
         if titles:
             # Allow title-only embeddings by replacing text with a space
             # Else Google throws google.api_core.exceptions.InvalidArgument: 400 The text content is empty.
-            inputs = [TextEmbeddingInput(text if text else " ", task_type=task_type, title=title) for text, title in zip(texts, titles)]
+            inputs = [
+                TextEmbeddingInput(
+                    text if text else " ", task_type=task_type, title=title
+                )
+                for text, title in zip(texts, titles)
+            ]
         else:
             inputs = [TextEmbeddingInput(text, task_type=task_type) for text in texts]
         kwargs = dict(output_dimensionality=dimensionality) if dimensionality else {}
@@ -104,5 +108,6 @@ google_emb_004 = ModelMeta(
 
 if __name__ == "__main__":
     import mteb
+
     mdl = mteb.get_model(google_emb_004.name, google_emb_004.revision)
     emb = mdl.encode(["Hello, world!"])
