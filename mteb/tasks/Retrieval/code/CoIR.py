@@ -16,8 +16,8 @@ class CoIRTasks:
         queries_corpus_dataset = load_dataset(f"CoIR-Retrieval/{task_name}-queries-corpus")
         qrels_dataset = load_dataset(f"CoIR-Retrieval/{task_name}-qrels")
 
-        corpus_data = queries_corpus_dataset['corpus']
-        query_data = queries_corpus_dataset['queries']
+        corpus_data = [q for q in queries_corpus_dataset['corpus'] if q['partition'] == _EVAL_SPLIT]
+        query_data = [q for q in queries_corpus_dataset['queries'] if q['partition'] == _EVAL_SPLIT]
         
         # corpus handling 
         corpus_file = StringIO('\n'.join(json.dumps(doc) for doc in corpus_data))
@@ -63,7 +63,7 @@ class CodeContestRetrieval(CoIRTasks, AbsTaskRetrieval):
         name="CodeContestRetrieval",
         dataset={
             "path": "CoIR-Retrieval/apps",
-            "revision": None,
+            "revision": "",
             "name": "apps",
         },
         reference="https://huggingface.co/CoIR-Retrieval",
