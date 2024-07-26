@@ -161,8 +161,6 @@ class AbsTaskImageClassification(AbsTask):
                 evaluator = ImagelogRegClassificationEvaluator(
                     X_sampled,
                     y_sampled,
-                    # instead of slicing out the image column (huge memory),
-                    # we pass the whole eval split in and do dataloader stype operations inside.
                     eval_split,
                     self.image_column_name,
                     self.label_column_name,
