@@ -2,11 +2,11 @@ from __future__ import annotations
 import json, csv
 from io import StringIO
 from datasets import load_dataset, Value, Features
-from mteb.abstasks import AbsTaskRetrieval, TaskMetadata, HFDataLoader
+from mteb.abstasks import AbsTaskRetrieval, TaskMetadata, MultilingualTask, HFDataLoader
 
 _EVAL_SPLIT = "test"
 
-class CoIRTasks:
+class CoIRTask:
     def _load_data(self, **kwargs):
         if self.data_loaded:
             return
@@ -57,8 +57,151 @@ class CoIRTasks:
             self.corpus[split] = _corpus
 
         self.data_loaded = True
+        
+_LANGS = ["ruby", "php", "javascript", "python", "java", "go"]
+
+class CoIRMultiLingualTask:
+    def _load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
+        _corpus, _queries = {}, {}
+        task_name = self.metadata_dict["dataset"]["name"]
+        
+        for lang in _LANGS:
+            queries_corpus_dataset = load_dataset(f"CoIR-Retrieval/{task_name}-{lang}-queries-corpus")
+            qrels_dataset = load_dataset(f"CoIR-Retrieval/{task_name}-{lang}-qrels")
+            corpus_data = [q for q in queries_corpus_dataset['corpus']]
+            query_data = [q for q in queries_corpus_dataset['queries'] if q['partition'] == _EVAL_SPLIT]
+        
+            # corpus handling 
+            corpus_file = StringIO('\n'.join(json.dumps(doc) for doc in corpus_data))
+            corpus_file.seek(0)
+            for line in corpus_file:
+                doc = json.loads(line)
+                _corpus[doc["_id"]] = {
+                    "text": doc.get("text"),
+                    "title": doc.get("title")
+                }
+                
+            query_file = StringIO('\n'.join(json.dumps(doc) for doc in query_data))
+            query_file.seek(0)
+            for line in query_file:
+                doc = json.loads(line)
+                _queries[doc["_id"]] = {
+                    "text": doc.get("text"),
+                    "title": doc.get("title")
+                }
+
+            # qrels_data = qrels_dataset['test']
             
-class CodeContestRetrieval(CoIRTasks, AbsTaskRetrieval):
+            for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
+                qrel_split = qrels_dataset[split]
+                qrels_file = StringIO('\n'.join(f"{qrel['query_id']}\t{qrel['corpus_id']}\t{qrel['score']}" for qrel in qrel_split))
+                qrels_file.seek(0)
+                reader = csv.reader(qrels_file, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
+                qrels = {}
+                for row in reader:
+                    query_id, corpus_id, score = row[0], row[1], int(row[2])
+                    if query_id not in qrels:
+                        qrels[query_id] = {corpus_id: score}
+                    else:
+                        qrels[query_id][corpus_id] = score
+                self.relevant_docs[lang][split] = qrels
+                self.queries[lang][split] = _queries
+                self.corpus[lang][split] = _corpus
+
+        self.data_loaded = True
+            
+class CodeSummaryRetrieval(CoIRMultiLingualTask, MultilingualTask): 
+    metadata = TaskMetadata(
+        name="CodeContestRetrieval",
+        dataset={
+            "path": "CoIR-Retrieval/CodeSearchNet",
+            "revision": "",
+            "name": "CodeSearchNet",
+        },
+        reference="https://huggingface.co/CoIR-Retrieval",
+        description=("Retrieving relevant code solutions in response to coding problems described in natural language"),
+        type="Retrieval",
+        modalities=['text'],
+        sample_creation="found",
+        category="p2p",
+        eval_splits=[_EVAL_SPLIT],
+        eval_langs=[f"{lang}-Code" for lang in _LANGS],
+        main_score="ndcg_at_10",
+        date=("2020-01-01", "2021-11-08"),  
+        form=["written"],
+        domains=["Programming"],
+        task_subtypes=["Code retrieval"],
+        license="Not specified",
+        annotations_creators="derived",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+            @misc{li2024coircomprehensivebenchmarkcode,
+            title={CoIR: A Comprehensive Benchmark for Code Information Retrieval Models}, 
+            author={Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
+            year={2024},
+            eprint={2407.02883},
+            archivePrefix={arXiv},
+            primaryClass={cs.IR},
+            url={https://arxiv.org/abs/2407.02883}, 
+        }
+        """,
+        descriptive_stats={
+            "n_samples": {_EVAL_SPLIT: 52590}   
+        }
+    )
+    
+    def load_data(self, **kwargs):
+        self._load_data()
+        
+class CodeContextRetrieval(CoIRMultiLingualTask, MultilingualTask): 
+    metadata = TaskMetadata(
+        name="CodeContextRetrieval",
+        dataset={
+            "path": "CoIR-Retrieval/CodeSearchNet-ccr",
+            "revision": "",
+            "name": "CodeSearchNet-ccr",
+        },
+        reference="https://huggingface.co/CoIR-Retrieval",
+        description=("Retrieving relevant code solutions in response to coding problems described in natural language"),
+        type="Retrieval",
+        modalities=['text'],
+        sample_creation="found",
+        category="s2s",
+        eval_splits=[_EVAL_SPLIT],
+        eval_langs=[f"{lang}-Code" for lang in _LANGS],
+        main_score="ndcg_at_10",
+        date=("2020-01-01", "2021-11-08"),  
+        form=["written"],
+        domains=["Programming"],
+        task_subtypes=["Code retrieval"],
+        license="Not specified",
+        annotations_creators="derived",
+        dialect=[],
+        text_creation="found",
+        bibtex_citation="""
+            @misc{li2024coircomprehensivebenchmarkcode,
+            title={CoIR: A Comprehensive Benchmark for Code Information Retrieval Models}, 
+            author={Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
+            year={2024},
+            eprint={2407.02883},
+            archivePrefix={arXiv},
+            primaryClass={cs.IR},
+            url={https://arxiv.org/abs/2407.02883}, 
+        }
+        """,
+        descriptive_stats={
+            "n_samples": {_EVAL_SPLIT: 52561}   
+        }
+    )
+    
+    def load_data(self, **kwargs):
+        self._load_data()
+
+class CodeContestRetrieval(CoIRTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeContestRetrieval",
         dataset={
@@ -102,9 +245,9 @@ class CodeContestRetrieval(CoIRTasks, AbsTaskRetrieval):
     def load_data(self, **kwargs):
         self._load_data()
         
-class SyntheticText2SQLRetrieval(CoIRTasks, AbsTaskRetrieval):
+class SyntheticText2SQLRetrieval(CoIRTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="SyntheticText2SQL",
+        name="SyntheticText2SQLRetrieval",
         dataset={
             "path": "CoIR-Retrieval/synthetic-text2sql",
             "revision": "",
@@ -117,7 +260,7 @@ class SyntheticText2SQLRetrieval(CoIRTasks, AbsTaskRetrieval):
         sample_creation="found",
         category="p2p",
         eval_splits=[_EVAL_SPLIT],
-        eval_langs=["python-Code"],
+        eval_langs=["sql-Code"],
         main_score="ndcg_at_10",
         date=("2020-01-01", "2021-11-08"),  
         form=["written"],
@@ -146,7 +289,7 @@ class SyntheticText2SQLRetrieval(CoIRTasks, AbsTaskRetrieval):
     def load_data(self, **kwargs):
         self._load_data()
         
-class CodeTranslationContestRetrieval(CoIRTasks, AbsTaskRetrieval):
+class CodeTranslationContestRetrieval(CoIRTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeTranslationContestRetrieval",
         dataset={
@@ -190,7 +333,7 @@ class CodeTranslationContestRetrieval(CoIRTasks, AbsTaskRetrieval):
     def load_data(self, **kwargs):
         self._load_data()
 
-class CodeTranslationDLRetrieval(CoIRTasks, AbsTaskRetrieval):
+class CodeTranslationDLRetrieval(CoIRTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeTranslationDLRetrieval",
         dataset={
@@ -234,7 +377,7 @@ class CodeTranslationDLRetrieval(CoIRTasks, AbsTaskRetrieval):
     def load_data(self, **kwargs):
         self._load_data()
         
-class StackoverflowQARetrieval(CoIRTasks, AbsTaskRetrieval):
+class StackoverflowQARetrieval(CoIRTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="StackoverflowQARetrieval",
         dataset={
@@ -278,7 +421,7 @@ class StackoverflowQARetrieval(CoIRTasks, AbsTaskRetrieval):
     def load_data(self, **kwargs):
         self._load_data()
         
-class CodeFeedbackMTRetrieval(CoIRTasks, AbsTaskRetrieval):
+class CodeFeedbackMTRetrieval(CoIRTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeFeedbackMTRetrieval",
         dataset={
@@ -322,7 +465,7 @@ class CodeFeedbackMTRetrieval(CoIRTasks, AbsTaskRetrieval):
     def load_data(self, **kwargs):
         self._load_data()
         
-class CodeFeedbackSTRetrieval(CoIRTasks, AbsTaskRetrieval):
+class CodeFeedbackSTRetrieval(CoIRTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeFeedbackSTRetrieval",
         dataset={
@@ -366,7 +509,7 @@ class CodeFeedbackSTRetrieval(CoIRTasks, AbsTaskRetrieval):
     def load_data(self, **kwargs):
         self._load_data()
         
-class WebQueryCodeRetrieval(CoIRTasks, AbsTaskRetrieval):
+class WebQueryCodeRetrieval(CoIRTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WebQueryCodeRetrieval",
         dataset={
