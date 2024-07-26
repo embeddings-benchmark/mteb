@@ -129,10 +129,10 @@ class AbsTaskImageClassification(AbsTask):
             )
             # Bootstrap `self.samples_per_label` samples per label for each split
             X_sampled, y_sampled, idxs = self._undersample_data(
-                train_split[self.image_column_name],  # type: ignore
-                train_split[self.label_column_name],  # type: ignore
+                train_split,
+                self.label_column_name,
                 self.samples_per_label,
-                idxs,
+                idxs=idxs,
             )
 
             if self.method == "kNN":
@@ -159,8 +159,13 @@ class AbsTaskImageClassification(AbsTask):
                 evaluator = ImagelogRegClassificationEvaluator(
                     X_sampled,
                     y_sampled,
-                    eval_split[self.image_column_name],  # type: ignore
-                    eval_split[self.label_column_name],  # type: ignore
+                    # instead of slicing out the image column (huge memory),
+                    # we pass the whole eval split in and do dataloader stype operations inside.
+                    eval_split,
+                    self.image_column_name,
+                    self.label_column_name,
+                    # eval_split[self.image_column_name],  # type: ignore
+                    # eval_split[self.label_column_name],  # type: ignore
                     task_name=self.metadata.name,
                     encode_kwargs=encode_kwargs,
                     **params,
@@ -177,17 +182,29 @@ class AbsTaskImageClassification(AbsTask):
         avg_scores["scores_per_experiment"] = scores
         return avg_scores
 
-    def _undersample_data(self, X, y, samples_per_label: int, idxs=None):
-        """Undersample data to have samples_per_label samples of each label"""
-        X_sampled = []
-        y_sampled = []
+    def _undersample_data(
+        self, dataset_split, label_column_name, samples_per_label, idxs=None
+    ):
+        """Undersample data to have samples_per_label samples of each label
+        without loading all images into memory.
+        """
         if idxs is None:
-            idxs = np.arange(len(y))
+            idxs = np.arange(len(dataset_split))
         np.random.shuffle(idxs)
+        if not isinstance(idxs, list):
+            idxs = idxs.tolist()
         label_counter = defaultdict(int)
+        selected_indices = []
+
         for i in idxs:
-            if label_counter[y[i]] < samples_per_label:
-                X_sampled.append(X[i])
-                y_sampled.append(y[i])
-                label_counter[y[i]] += 1
-        return X_sampled, y_sampled, idxs
+            label = dataset_split[i][label_column_name]
+            if label_counter[label] < samples_per_label:
+                selected_indices.append(i)
+                label_counter[label] += 1
+
+        undersampled_dataset = dataset_split.select(selected_indices)
+        return (
+            undersampled_dataset[self.image_column_name],
+            undersampled_dataset[self.label_column_name],
+            idxs,
+        )

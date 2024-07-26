@@ -3,8 +3,10 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from PIL import Image
+import torch
 from sklearn import metrics
+from torch.utils.data import DataLoader
+from torchvision import transforms
 
 from mteb.encoder_interface import Encoder
 
@@ -12,18 +14,45 @@ from ..Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
+transform = transforms.Compose([transforms.PILToTensor()])
+
+
+class ImageDataset(torch.utils.data.Dataset):
+    def __init__(self, hf_dataset, image_column_name: str = "image", transform=None):
+        self.dataset = hf_dataset
+        self.transform = transform
+        self.image_column_name = image_column_name
+
+    def __len__(self):
+        return len(self.dataset)
+
+    def __getitem__(self, idx):
+        image = self.dataset[idx][self.image_column_name]
+        if image.mode != "RGB":
+            image = image.convert("RGB")
+        image = self.transform(image)
+        return image
+
+
+def custom_collate_fn(batch):
+    return batch
+
 
 class ZeroshotClassificationEvaluator(Evaluator):
     def __init__(
         self,
-        images: list[Image.Image],
+        dataset,
+        image_column_name: str,
         labels: list[int],
         candidate_labels: list[str],
         task_name: str | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.images = images
+        self.dataset = ImageDataset(
+            dataset, image_column_name=image_column_name, transform=transform
+        )
+        self.image_column_name = image_column_name
         self.labels = labels
         self.candidate_labels = candidate_labels
         self.task_name = task_name
@@ -32,11 +61,20 @@ class ZeroshotClassificationEvaluator(Evaluator):
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 32
 
+        dataloader = DataLoader(
+            self.dataset,
+            batch_size=encode_kwargs["batch_size"],
+            shuffle=False,
+            collate_fn=custom_collate_fn,
+            num_workers=16,
+        )
+
         text_embeddings = model.get_text_embeddings(
             self.candidate_labels, batch_size=encode_kwargs["batch_size"]
         )
+
         image_embeddings = model.get_image_embeddings(
-            self.images, batch_size=encode_kwargs["batch_size"]
+            dataloader, batch_size=encode_kwargs["batch_size"]
         )
         probs = model.calculate_probs(text_embeddings, image_embeddings)
         predictions = probs.argmax(dim=1)

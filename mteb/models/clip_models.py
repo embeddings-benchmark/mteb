@@ -5,6 +5,7 @@ from typing import Any
 
 import torch
 from PIL import Image
+from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel, AutoProcessor
 
@@ -48,18 +49,30 @@ class CLIPModelWrapper:
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
 
-    def get_image_embeddings(self, images: list[Image.Image], batch_size: int = 32):
+    def get_image_embeddings(
+        self, images: list[Image.Image] | DataLoader, batch_size: int = 32
+    ):
         all_image_embeddings = []
 
-        with torch.no_grad():
-            for i in tqdm(range(0, len(images), batch_size)):
-                batch_images = images[i : i + batch_size]
-                inputs = self.processor(
-                    images=batch_images, return_tensors="pt", padding=True
-                )
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                image_outputs = self.model.get_image_features(**inputs)
-                all_image_embeddings.append(image_outputs.cpu())
+        if isinstance(images, DataLoader):
+            with torch.no_grad():
+                for batch in tqdm(images):
+                    inputs = self.processor(
+                        images=batch, return_tensors="pt", padding=True
+                    )
+                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                    image_outputs = self.model.get_image_features(**inputs)
+                    all_image_embeddings.append(image_outputs.cpu())
+        else:
+            with torch.no_grad():
+                for i in tqdm(range(0, len(images), batch_size)):
+                    batch_images = images[i : i + batch_size]
+                    inputs = self.processor(
+                        images=batch_images, return_tensors="pt", padding=True
+                    )
+                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                    image_outputs = self.model.get_image_features(**inputs)
+                    all_image_embeddings.append(image_outputs.cpu())
 
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
