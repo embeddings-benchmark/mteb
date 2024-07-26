@@ -139,8 +139,9 @@ class AbsTaskImageClassification(AbsTask):
                 evaluator = ImagekNNClassificationEvaluator(
                     X_sampled,
                     y_sampled,
-                    eval_split[self.image_column_name],  # type: ignore
-                    eval_split[self.label_column_name],  # type: ignore
+                    eval_split,
+                    self.image_column_name,
+                    self.label_column_name,
                     task_name=self.metadata.name,
                     encode_kwargs=encode_kwargs,
                     **params,
@@ -149,8 +150,9 @@ class AbsTaskImageClassification(AbsTask):
                 evaluator = ImagekNNClassificationEvaluatorPytorch(
                     X_sampled,
                     y_sampled,
-                    eval_split[self.image_column_name],  # type: ignore
-                    eval_split[self.label_column_name],  # type: ignore
+                    eval_split,
+                    self.image_column_name,
+                    self.label_column_name,
                     task_name=self.metadata.name,
                     encode_kwargs=encode_kwargs,
                     **params,
@@ -164,8 +166,6 @@ class AbsTaskImageClassification(AbsTask):
                     eval_split,
                     self.image_column_name,
                     self.label_column_name,
-                    # eval_split[self.image_column_name],  # type: ignore
-                    # eval_split[self.label_column_name],  # type: ignore
                     task_name=self.metadata.name,
                     encode_kwargs=encode_kwargs,
                     **params,
