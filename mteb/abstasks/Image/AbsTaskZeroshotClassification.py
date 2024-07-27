@@ -43,7 +43,9 @@ class AbsTaskZeroshotClassification(AbsTask):
         candidate_labels = self.get_candidate_labels()
 
         evaluator = ZeroshotClassificationEvaluator(
-            dataset[self.image_column_name],
+            dataset,
+            self.image_column_name,
+            # dataset[self.image_column_name],#broken into dataset and self.image_column_name
             dataset[self.label_column_name],
             candidate_labels,
             task_name=self.metadata.name,

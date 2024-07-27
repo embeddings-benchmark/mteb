@@ -14,6 +14,7 @@ from mteb.models import (
     cohere_models,
     e5_instruct,
     e5_models,
+    e5_v,
     google_models,
     gritlm_models,
     gte_models,
@@ -24,6 +25,7 @@ from mteb.models import (
     ru_sentence_models,
     salesforce_models,
     sentence_transformers_models,
+    vista_models,
     voyage_models,
 )
 
@@ -127,6 +129,7 @@ model_modules = [
     cohere_models,
     e5_instruct,
     e5_models,
+    e5_v,
     gritlm_models,
     gte_models,
     llm2vec_models,
@@ -138,6 +141,7 @@ model_modules = [
     ru_sentence_models,
     salesforce_models,
     sentence_transformers_models,
+    vista_models,
     voyage_models,
     google_models,
 ]
