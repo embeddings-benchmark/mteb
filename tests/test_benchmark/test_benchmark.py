@@ -28,7 +28,9 @@ logging.basicConfig(level=logging.INFO)
 
 @pytest.mark.parametrize("tasks", [MOCK_TASK_TEST_GRID])
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
-def test_mulitple_mteb_tasks(tasks: list[mteb.AbsTask], model: mteb.Encoder, monkeypatch):
+def test_mulitple_mteb_tasks(
+    tasks: list[mteb.AbsTask], model: mteb.Encoder, monkeypatch
+):
     """Test that multiple tasks can be run"""
     eval = mteb.MTEB(tasks=tasks)
     output_folder = "tests/results"
@@ -42,7 +44,9 @@ def test_mulitple_mteb_tasks(tasks: list[mteb.AbsTask], model: mteb.Encoder, mon
         output_path=output_folder + "/model_card.md",
         overwrite=True,
     )
-    monkeypatch.setattr(mteb, "get_task", lambda task_name, **kwargs: tasks_dict[task_name])
+    monkeypatch.setattr(
+        mteb, "get_task", lambda task_name, **kwargs: tasks_dict[task_name]
+    )
     create_meta(args)
 
 
