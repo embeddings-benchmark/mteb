@@ -111,3 +111,48 @@ def test_create_meta():
     command = f"mteb create_meta --results_folder {results} --output_path {output_path} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
+
+
+def test_create_meta_from_existing():
+    """Test create_meta function directly as well as through the command line interface"""
+    test_folder = Path(__file__).parent
+    output_folder = test_folder / "create_meta"
+    results = (
+        output_folder / "all-MiniLM-L6-v2" / "8b3219a92973c328a8e22fadcfa821b5dc75636a"
+    )
+    output_path = output_folder / "model_card.md"
+    existing_readme = output_folder / "existing_readme.md"
+
+    args = Namespace(
+        results_folder=results,
+        output_path=output_path,
+        overwrite=True,
+        from_existing=str(existing_readme),
+    )
+
+    create_meta(args)
+
+    assert output_path.exists(), "Output file not created"
+
+    with output_path.open("r") as f:
+        meta = f.read()
+        meta = meta[meta.index("---") + 3 : meta.index("---", meta.index("---") + 3)]
+        frontmatter = yaml.safe_load(meta)
+
+    with (output_folder / "model_card_gold_existing.md").open("r") as f:
+        gold = f.read()
+        gold = gold[gold.index("---") + 3 : gold.index("---", gold.index("---") + 3)]
+        frontmatter_gold = yaml.safe_load(gold)
+
+    # compare the frontmatter (ignoring the order of keys and other elements)
+    for key in frontmatter_gold:
+        assert key in frontmatter, f"Key {key} not found in output"
+
+        assert (
+            frontmatter[key] == frontmatter_gold[key]
+        ), f"Value for {key} does not match"
+
+    # ensure that the command line interface works as well
+    # command = f"mteb create_meta --results_folder {results} --output_path {output_path} --overwrite"
+    # result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    # assert result.returncode == 0, "Command failed"
