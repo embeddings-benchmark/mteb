@@ -13,6 +13,7 @@ from torch import Tensor
 import mteb
 from mteb.models.bge_models import BGEWrapper
 from mteb.models.e5_models import E5Wrapper
+from mteb.models.mxbai_models import MxbaiWrapper
 
 
 class MockNumpyEncoder(mteb.Encoder):
@@ -68,5 +69,10 @@ class MockE5Wrapper(E5Wrapper):
 
 
 class MockBGEWrapper(BGEWrapper):
+    def __init__(self, **kwargs):
+        self.mdl = MockSentenceTransformer()
+
+
+class MockMxbaiWrapper(MxbaiWrapper):
     def __init__(self, **kwargs):
         self.mdl = MockSentenceTransformer()

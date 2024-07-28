@@ -17,6 +17,7 @@ from mteb.cli import create_meta
 from .mock_models import (
     MockBGEWrapper,
     MockE5Wrapper,
+    MockMxbaiWrapper,
     MockNumpyEncoder,
     MockTorchbf16Encoder,
     MockTorchEncoder,
@@ -59,6 +60,7 @@ def test_mulitple_mteb_tasks(
         MockTorchbf16Encoder(),
         MockBGEWrapper(),
         MockE5Wrapper(),
+        MockMxbaiWrapper(),
     ],
 )
 def test_benchmark_encoders_on_task(
