@@ -302,29 +302,54 @@ def potentially_add_cqadupstack_to_results(results: list[mteb.MTEBResults]) -> N
     results.append(result)
 
 
-def merge_yamls(yaml_dict: Dict[str, Any], existing_readme: str) -> Tuple[Dict[str, Any], str]:
+def merge_yamls(
+    yaml_dict: Dict[str, Any], existing_readme: str
+) -> Tuple[Dict[str, Any], str]:
     if not existing_readme.endswith("md"):
         return yaml_dict, ""
+
     with open(existing_readme) as f:
         existing_file = f.read()
         start_yaml_index = existing_file.index("---") + 3
         end_yaml_index = existing_file.index("---", existing_file.index("---") + 3)
 
     existing_yaml = existing_file[start_yaml_index:end_yaml_index]
-    readme_end = existing_file[end_yaml_index + 3:]
+    readme_end = existing_file[end_yaml_index + 3 :]
     existing_yaml_dict = yaml.safe_load(existing_yaml)
+
+    # Ensure 'mteb' tag is present
+    if "tags" not in existing_yaml_dict:
+        existing_yaml_dict["tags"] = []
     if "mteb" not in existing_yaml_dict["tags"]:
         existing_yaml_dict["tags"].append("mteb")
-    if existing_yaml_dict.get("model-index") is None:
-        yaml_dict = {**yaml_dict, **existing_yaml_dict}
+
+    # Merge model-index results
+    if "model-index" not in existing_yaml_dict:
+        existing_yaml_dict["model-index"] = yaml_dict.get("model-index", [])
     else:
-        scores = existing_yaml_dict["model-index"][0]["results"]
-        for new_score in yaml_dict["model-index"]["results"]:
-            if new_score not in scores:
-                scores.append(new_score)
-        existing_yaml_dict["model-index"]["results"] = scores
-        yaml_dict = existing_yaml_dict
-    return yaml_dict, readme_end
+        existing_model = existing_yaml_dict["model-index"][0]
+        new_model = yaml_dict.get("model-index", [{}])[0]
+
+        if existing_model["name"] != new_model["name"]:
+            raise ValueError("Model names do not match")
+
+        # Merge results
+        existing_results = {
+            (r["dataset"]["name"], r["dataset"].get("config")): r
+            for r in existing_model["results"]
+        }
+        for new_result in new_model["results"]:
+            key = (new_result["dataset"]["name"], new_result["dataset"].get("config"))
+            if key in existing_results:
+                # Update existing result
+                existing_results[key]["metrics"] = new_result["metrics"]
+            else:
+                # Add new result
+                existing_results[key] = new_result
+
+        existing_model["results"] = list(existing_results.values())
+
+    return existing_yaml_dict, readme_end
 
 
 def create_meta(args: argparse.Namespace) -> None:
@@ -447,7 +472,7 @@ def add_create_meta_parser(subparsers) -> None:
         "--from_existing",
         type=str,
         required=False,
-        help="Merge results with existing README.md"
+        help="Merge results with existing README.md",
     )
 
     parser.set_defaults(func=create_meta)

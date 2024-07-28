@@ -83,6 +83,7 @@ def test_create_meta():
         results_folder=results,
         output_path=output_path,
         overwrite=True,
+        from_existing=None,
     )
 
     create_meta(args)
@@ -136,13 +137,19 @@ def test_create_meta_from_existing():
 
     with output_path.open("r") as f:
         meta = f.read()
-        meta = meta[meta.index("---") + 3 : meta.index("---", meta.index("---") + 3)]
+        start_yaml = meta.index("---") + 3
+        end_yaml = meta.index("---", meta.index("---") + 3)
+        meta = meta[start_yaml:end_yaml]
         frontmatter = yaml.safe_load(meta)
+        readme_output = meta[end_yaml + 3 :]
 
     with (output_folder / "model_card_gold_existing.md").open("r") as f:
         gold = f.read()
-        gold = gold[gold.index("---") + 3 : gold.index("---", gold.index("---") + 3)]
+        start_yaml = gold.index("---") + 3
+        end_yaml = gold.index("---", gold.index("---") + 3)
+        gold = gold[start_yaml:end_yaml]
         frontmatter_gold = yaml.safe_load(gold)
+        gold_readme = gold[end_yaml + 3 :]
 
     # compare the frontmatter (ignoring the order of keys and other elements)
     for key in frontmatter_gold:
@@ -151,8 +158,8 @@ def test_create_meta_from_existing():
         assert (
             frontmatter[key] == frontmatter_gold[key]
         ), f"Value for {key} does not match"
-
+    assert readme_output == gold_readme
     # ensure that the command line interface works as well
-    # command = f"mteb create_meta --results_folder {results} --output_path {output_path} --overwrite"
-    # result = subprocess.run(command, shell=True, capture_output=True, text=True)
-    # assert result.returncode == 0, "Command failed"
+    command = f"mteb create_meta --results_folder {results} --output_path {output_path} --from_existing {existing_readme} --overwrite"
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    assert result.returncode == 0, "Command failed"

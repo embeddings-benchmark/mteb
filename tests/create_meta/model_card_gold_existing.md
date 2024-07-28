@@ -37,6 +37,15 @@ model-index:
   results:
   - dataset:
       config: default
+      name: test_dataset
+      revision: test
+      split: test
+      type: test
+    metrics:
+    - type: map_at_1
+      value: 0.0
+  - dataset:
+      config: default
       name: MTEB BSARDRetrieval (default)
       revision: 5effa1b9b5fa3b0f9e12523e6e43e5f86a6e6d59
       split: test

@@ -33,6 +33,17 @@ pipeline_tag: sentence-similarity
 model-index:
 - name: all-MiniLM-L6-v2
   results:
+  # dataset not presented in new
+  - dataset:
+      config: default
+      name: test_dataset
+      revision: test
+      split: test
+      type: test
+    metrics:
+    - type: map_at_1
+      value: 0.0
+  # dataset in results, but missing scores
   - dataset:
       config: default
       name: MTEB BSARDRetrieval (default)
@@ -78,30 +89,28 @@ model-index:
       value: 0.0
     - type: precision_at_1
       value: 0.0
-    - type: precision_at_10
-      value: 0.0
-    - type: precision_at_100
-      value: 0.0
-    - type: precision_at_1000
-      value: 0.002
-    - type: precision_at_3
-      value: 0.0
-    - type: precision_at_5
-      value: 0.0
-    - type: recall_at_1
-      value: 0.0
-    - type: recall_at_10
-      value: 0.0
-    - type: recall_at_100
-      value: 0.0
-    - type: recall_at_1000
-      value: 1.802
-    - type: recall_at_3
-      value: 0.0
-    - type: recall_at_5
-      value: 0.0
+    task:
+      type: Retrieval
+  # dataset metrics full
+  - dataset:
+      config: default
+      name: MTEB BornholmBitextMining (default)
+      revision: 3bc5cfb4ec514264fe2db5615fac9016f7251552
+      split: test
+      type: strombergnlp/bornholmsk_parallel
+    metrics:
+    - type: accuracy
+      value: 36.0
+    - type: f1
+      value: 29.68132161955691
     - type: main_score
-      value: 0.0
+      value: 29.68132161955691
+    - type: precision
+      value: 27.690919913419915
+    - type: recall
+      value: 36.0
+    task:
+      type: BitextMining
 ---
 
 
