@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from argparse import Namespace
 from typing import Union
 
 import numpy as np
@@ -11,24 +12,38 @@ from sentence_transformers import SentenceTransformer
 
 import mteb
 from mteb.benchmarks import Benchmark
+from mteb.cli import create_meta
 
-from .mock_models import MockNumpyEncoder, MockTorchbf16Encoder, MockTorchEncoder
+from .mock_models import MockNumpyEncoder, MockTorchbf16Encoder, MockTorchEncoder, MockBGEWrapper, MockE5Wrapper
 from .task_grid import MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 
 
-@pytest.mark.parametrize("tasks", [MOCK_TASK_TEST_GRID[:2]])
+@pytest.mark.parametrize("tasks", [MOCK_TASK_TEST_GRID])
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
 def test_mulitple_mteb_tasks(tasks: list[mteb.AbsTask], model: mteb.Encoder):
     """Test that multiple tasks can be run"""
     eval = mteb.MTEB(tasks=tasks)
-    eval.run(model, output_folder="tests/results", overwrite_results=True)
+    output_folder = "tests/results"
+    eval.run(model, output_folder=output_folder, overwrite_results=True)
+
+    tasks_dict = {task.metadata.name: task for task in tasks}
+
+    # make sure that all tasks results can be exported
+    args = Namespace(
+        results_folder=output_folder + "/no_model_name_available/no_revision_available",
+        output_path=output_folder + "/model_card.md",
+        overwrite=True,
+    )
+
+    mteb.get_task = lambda task_name, **kwargs: tasks_dict[task_name]
+    create_meta(args)
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
 @pytest.mark.parametrize(
-    "model", [MockNumpyEncoder(), MockTorchEncoder(), MockTorchbf16Encoder()]
+    "model", [MockNumpyEncoder(), MockTorchEncoder(), MockTorchbf16Encoder(), MockBGEWrapper(), MockE5Wrapper()]
 )
 def test_benchmark_encoders_on_task(
     task: Union[str, mteb.AbsTask], model: mteb.Encoder
