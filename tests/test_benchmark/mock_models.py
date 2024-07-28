@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Union, List, Optional, Literal
+from typing import List, Literal, Optional, Union
 
 import numpy as np
 import torch
@@ -50,7 +50,9 @@ class MockSentenceTransformer(SentenceTransformer):
         prompt: Optional[str] = None,
         batch_size: int = 32,
         show_progress_bar: bool = None,
-        output_value: Optional[Literal["sentence_embedding", "token_embeddings"]] = "sentence_embedding",
+        output_value: Optional[
+            Literal["sentence_embedding", "token_embeddings"]
+        ] = "sentence_embedding",
         precision: Literal["float32", "int8", "uint8", "binary", "ubinary"] = "float32",
         convert_to_numpy: bool = True,
         convert_to_tensor: bool = False,

@@ -14,7 +14,13 @@ import mteb
 from mteb.benchmarks import Benchmark
 from mteb.cli import create_meta
 
-from .mock_models import MockNumpyEncoder, MockTorchbf16Encoder, MockTorchEncoder, MockBGEWrapper, MockE5Wrapper
+from .mock_models import (
+    MockBGEWrapper,
+    MockE5Wrapper,
+    MockNumpyEncoder,
+    MockTorchbf16Encoder,
+    MockTorchEncoder,
+)
 from .task_grid import MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
@@ -43,7 +49,14 @@ def test_mulitple_mteb_tasks(tasks: list[mteb.AbsTask], model: mteb.Encoder):
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
 @pytest.mark.parametrize(
-    "model", [MockNumpyEncoder(), MockTorchEncoder(), MockTorchbf16Encoder(), MockBGEWrapper(), MockE5Wrapper()]
+    "model",
+    [
+        MockNumpyEncoder(),
+        MockTorchEncoder(),
+        MockTorchbf16Encoder(),
+        MockBGEWrapper(),
+        MockE5Wrapper(),
+    ],
 )
 def test_benchmark_encoders_on_task(
     task: Union[str, mteb.AbsTask], model: mteb.Encoder
