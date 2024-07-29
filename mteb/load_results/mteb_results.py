@@ -36,7 +36,10 @@ class CQADupstackRetrievalDummy:
         hf_subsets_to_langscripts={
             "default": ["eng-Latn"],
         },
-        dataset={"revision": "revision not applicable"},
+        dataset={
+            "revision": "revision not applicable",
+            "path": "CQADupstackRetrieval_is_a_combined_dataset",
+        },
     )
 
 
@@ -50,7 +53,7 @@ class ScalaNbClassificationDummy:
         hf_subsets_to_langscripts={
             "default": ["nob-Latn"],
         },
-        dataset={"revision": "revision not applicable"},
+        dataset={"revision": "revision_not_applicable"},
     )
 
 
@@ -64,7 +67,7 @@ class ScalaNnClassificationDummy:
         hf_subsets_to_langscripts={
             "default": ["nno-Latn"],
         },
-        dataset={"revision": "revision not applicable"},
+        dataset={"revision": "revision_not_applicable"},
     )
 
 
@@ -78,7 +81,7 @@ class ScalaDaClassificationDummy:
         hf_subsets_to_langscripts={
             "default": ["dan-Latn"],
         },
-        dataset={"revision": "revision not applicable"},
+        dataset={"revision": "revision_not_applicable"},
     )
 
 
@@ -92,7 +95,7 @@ class ScalaSvClassificationDummy:
         hf_subsets_to_langscripts={
             "default": ["swe-Latn"],
         },
-        dataset={"revision": "revision not applicable"},
+        dataset={"revision": "revision_not_applicable"},
     )
 
 
@@ -272,14 +275,38 @@ class MTEBResults(BaseModel):
             or "mteb_version" not in data
         )  # assume it is before 1.11.0 if the version is not present
         try:
-            return cls.model_validate(data)
+            obj = cls.model_validate(data)
         except Exception as e:
             if not pre_1_11_load:
                 raise e
             logger.debug(
                 f"Could not load MTEBResults from disk, got error: {e}. Attempting to load from disk using format from before v1.11.0"
             )
-        return cls._convert_from_before_v1_11_0(data)
+            obj = cls._convert_from_before_v1_11_0(data)
+
+        pre_v_12_48 = "mteb_version" in data and Version(
+            data["mteb_version"]
+        ) < Version("1.12.48")
+
+        if pre_v_12_48:
+            cls._fix_pair_classification_scores(obj)
+
+        return obj
+
+    @classmethod
+    def _fix_pair_classification_scores(cls, obj: MTEBResults) -> None:
+        from mteb import get_task
+
+        task = get_task(obj.task_name)
+        if task.metadata.type == "PairClassification":
+            for split, split_scores in obj.scores.items():
+                for hf_subset_scores in split_scores:
+                    # concatenate score e.g. ["max"]["ap"] -> ["max_ap"]
+                    for key in list(hf_subset_scores.keys()):
+                        if isinstance(hf_subset_scores[key], dict):
+                            for k, v in hf_subset_scores[key].items():
+                                hf_subset_scores[f"{key}_{k}"] = v
+                            hf_subset_scores.pop(key)
 
     @classmethod
     def _convert_from_before_v1_11_0(cls, data: dict) -> MTEBResults:

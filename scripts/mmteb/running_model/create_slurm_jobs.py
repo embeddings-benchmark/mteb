@@ -61,8 +61,8 @@ if __name__ == "__main__":
     slurm_prefix = """#!/bin/bash
 #SBATCH --job-name=mteb
 #SBATCH --nodes=1
-#SBATCH --partition=a3mixed
-#SBATCH --gres=gpu:1                 # number of gpus
+#SBATCH --partition=a3
+#SBATCH --gres=gpu:8                 # number of gpus
 #SBATCH --time 24:00:00             # maximum execution time (HH:MM:SS)
 #SBATCH --output=/data/niklas/jobs/%x-%j.out           # output file name
 #SBATCH --exclusive
@@ -104,7 +104,7 @@ if __name__ == "__main__":
             "Summarization",
         ],
         tasks=[
-            "LivedoorNewsClustering",
+            #"LivedoorNewsClustering",
             #"FaithDial",
             #"STS22",
             #"StatcanDialogueDatasetRetrieval",
@@ -116,21 +116,6 @@ if __name__ == "__main__":
             #"CodeEditSearchRetrieval",
 
         ],
-    )
-
-    tasks = mteb.get_tasks(
-        task_types=[
-            "BitextMining",
-            "Classification",
-            "MultilabelClassification",
-            "PairClassification",
-            "Reranking",
-            "STS",
-            "Summarization",
-            "Clustering",
-            "InstructionRetrieval",
-            "Retrieval",
-        ]
     )
 
     # WE ALSO NEED TO RUN THESE
