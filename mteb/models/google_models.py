@@ -22,13 +22,12 @@ class GoogleTextEmbeddingModel(Encoder):
         titles: List[str] | None = None,
         dimensionality: Optional[int] = 768,
     ) -> List[List[float]]:
-        """
-        Embeds texts with a pre-trained, foundational model.
+        """Embeds texts with a pre-trained, foundational model.
         From https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings#generative-ai-get-text-embedding-python_vertex_ai_sdk
         """
         try:
             from vertexai.language_models import TextEmbeddingInput, TextEmbeddingModel
-        except:
+        except ImportError:
             raise ImportError(
                 "The `vertexai` package is required to run the google API, please install it using `pip install vertexai`"
             )
@@ -36,9 +35,16 @@ class GoogleTextEmbeddingModel(Encoder):
         if titles:
             # Allow title-only embeddings by replacing text with a space
             # Else Google throws google.api_core.exceptions.InvalidArgument: 400 The text content is empty.
-            inputs = [TextEmbeddingInput(text if text else " ", task_type=google_task_type, title=title) for text, title in zip(texts, titles)]
+            inputs = [
+                TextEmbeddingInput(
+                    text if text else " ", task_type=google_task_type, title=title
+                )
+                for text, title in zip(texts, titles)
+            ]
         else:
-            inputs = [TextEmbeddingInput(text, task_type=google_task_type) for text in texts]
+            inputs = [
+                TextEmbeddingInput(text, task_type=google_task_type) for text in texts
+            ]
         kwargs = dict(output_dimensionality=dimensionality) if dimensionality else {}
         try:
             embeddings = model.get_embeddings(inputs, **kwargs)
@@ -49,7 +55,11 @@ class GoogleTextEmbeddingModel(Encoder):
         return np.asarray([embedding.values for embedding in embeddings])
 
     def _embed_genai(
-        self, sentences: list[str], *, google_task_type: str = None, titles: list[str] | None = None
+        self,
+        sentences: list[str],
+        *,
+        google_task_type: str = None,
+        titles: list[str] | None = None,
     ) -> np.ndarray:
         try:
             import google.generativeai as genai
@@ -78,7 +88,7 @@ class GoogleTextEmbeddingModel(Encoder):
         self,
         sentences: list[str],
         prompt_name: str | None = None,
-        google_task_type: str | None = None, # Optional
+        google_task_type: str | None = None,  # Optional
         **kwargs: Any,
     ) -> np.ndarray:
         if prompt_name and google_task_type is None:
@@ -107,7 +117,9 @@ class GoogleTextEmbeddingModel(Encoder):
             for doc in corpus:
                 titles.append(doc["title"])
                 sentences.append(doc["text"])
-        return self._embed(sentences, google_task_type="RETRIEVAL_DOCUMENT", titles=titles)
+        return self._embed(
+            sentences, google_task_type="RETRIEVAL_DOCUMENT", titles=titles
+        )
 
 
 name = "text-embedding-004"

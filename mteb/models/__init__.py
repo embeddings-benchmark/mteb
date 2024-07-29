@@ -9,6 +9,7 @@ from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.model_meta import ModelMeta
 from mteb.models import (
     bge_models,
+    bm25,
     cohere_models,
     e5_instruct,
     e5_models,
@@ -121,6 +122,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
 
 model_modules = [
     bge_models,
+    bm25,
     cohere_models,
     e5_instruct,
     e5_models,
@@ -135,6 +137,7 @@ model_modules = [
     salesforce_models,
     sentence_transformers_models,
     voyage_models,
+    google_models,
 ]
 models = {}
 

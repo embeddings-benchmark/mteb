@@ -15,6 +15,7 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
 
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.model_meta import ModelMeta
 
 from .Evaluator import Evaluator
 from .model_encode import model_encode
@@ -83,6 +84,8 @@ class DenseRetrievalExactSearch:
         top_k: int,
         score_function: str,
         prompt_name: str,
+        instructions: Dict[str, str] | None = None,
+        request_qid: Union[str, None] = None,
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
@@ -98,6 +101,8 @@ class DenseRetrievalExactSearch:
         query_ids = list(queries.keys())
         self.results = {qid: {} for qid in query_ids}
         queries = [queries[qid] for qid in queries]  # type: ignore
+        if instructions:
+            queries = [f"{query} {instructions[query]}".strip() for query in queries]
         if isinstance(queries[0], list):  # type: ignore
             query_embeddings = self.encode_conversations(
                 model=self.model,
@@ -139,21 +144,22 @@ class DenseRetrievalExactSearch:
             # Encode chunk of corpus
             if (
                 self.save_corpus_embeddings
-                and "qid" in kwargs
-                and len(self.corpus_embeddings[kwargs["qid"]])
+                and request_qid
+                and len(self.corpus_embeddings[request_qid])
             ):
                 sub_corpus_embeddings = torch.tensor(
-                    self.corpus_embeddings[kwargs["qid"]][batch_num]
+                    self.corpus_embeddings[request_qid][batch_num]
                 )
             else:
                 # Encode chunk of corpus
                 sub_corpus_embeddings = self.model.encode_corpus(
                     corpus[corpus_start_idx:corpus_end_idx],  # type: ignore
                     prompt_name=prompt_name,
+                    request_qid=request_qid,
                     **self.encode_kwargs,
                 )
-                if self.save_corpus_embeddings and "qid" in kwargs:
-                    self.corpus_embeddings[kwargs["qid"]].append(sub_corpus_embeddings)
+                if self.save_corpus_embeddings and request_qid:
+                    self.corpus_embeddings[request_qid].append(sub_corpus_embeddings)
 
             # Compute similarites using either cosine-similarity or dot product
             cos_scores = self.score_functions[score_function](
@@ -223,7 +229,7 @@ class DenseRetrievalExactSearch:
         corpus: Dict[str, Dict[str, str]],
         queries: Dict[str, Union[str, List[str]]],
         top_k: int,
-        instructions: Dict[str, str] | None = None,
+        instructions: Union[Dict[str, str], None] = None,
         **kwargs,
     ) -> Dict[str, Dict[str, float]]:
         """This function provides support for reranker (or cross-encoder) models that encoder query and document at the same time (typically with attention).
@@ -243,7 +249,7 @@ class DenseRetrievalExactSearch:
             top_n = [k for k, v in list(q_results_sorted.items())[:top_k]]
             query = queries[qid]
             query = (
-                self.convert_conv_history_to_query([query])[0]
+                self.convert_conv_history_to_query(self.model, [query])[0]
                 if isinstance(query, list)
                 else query
             )
@@ -332,6 +338,8 @@ class DRESModel:
     This class converts a model with just an .encode method into DRES format.
     """
 
+    mteb_model_meta: ModelMeta | None
+
     def __init__(self, model, **kwargs):
         self.model = model
         self.use_sbert_model = isinstance(model, SentenceTransformer)
@@ -351,36 +359,28 @@ class DRESModel:
                     "Queries will not be truncated. This could lead to memory issues. In that case please lower the batch_size."
                 )
 
-        if "instructions" in kwargs:
-            if kwargs["instructions"] is not None:
-                queries = [
-                    (query + " " + kwargs["instructions"][query]).strip()
-                    for query in queries
-                ]
-            new_kwargs = {
-                k: v for k, v in kwargs.items() if k not in ["instructions", "qid"]
-            }
-        else:
-            # can't just delete, cuz assign by reference on kwargs
-            new_kwargs = kwargs
-
         return model_encode(
             queries,
             model=self.model,
             prompt_name=prompt_name,
             batch_size=batch_size,
-            **new_kwargs,
+            **kwargs,
         )
 
     def encode_corpus(
-        self, corpus: List[Dict[str, str]], prompt_name: str, batch_size: int, **kwargs
+        self,
+        corpus: List[Dict[str, str]],
+        prompt_name: str,
+        batch_size: int,
+        request_qid: Union[str, None] = None,
+        **kwargs,
     ):
         if (
-            "qid" in kwargs
+            request_qid
             and self.save_corpus_embeddings
             and len(self.corpus_embeddings) > 0
         ):
-            return self.corpus_embeddings[kwargs["qid"]]
+            return self.corpus_embeddings[request_qid]
 
         if isinstance(corpus, dict):
             sentences = [
@@ -397,24 +397,16 @@ class DRESModel:
                 for doc in corpus
             ]
 
-        if "instructions" in kwargs:  # not used on the doc side
-            new_kwargs = {
-                k: v for k, v in kwargs.items() if k not in ["instructions", "qid"]
-            }
-        else:
-            # can't just delete, cuz assign by reference on kwargs
-            new_kwargs = kwargs
-
         corpus_embeddings = model_encode(
             sentences,
             model=self.model,
             prompt_name=prompt_name,
             batch_size=batch_size,
-            **new_kwargs,
+            **kwargs,
         )
 
-        if self.save_corpus_embeddings and "qid" in kwargs:
-            self.corpus_embeddings[kwargs["qid"]] = corpus_embeddings
+        if self.save_corpus_embeddings and request_qid:
+            self.corpus_embeddings[request_qid] = corpus_embeddings
         return corpus_embeddings
 
     def encode(self, sentences: List[str], prompt_name: str, **kwargs):
@@ -431,9 +423,7 @@ def is_dres_compatible(model):
 
 def is_cross_encoder_compatible(model):
     op = getattr(model, "predict", None)
-    if not (callable(op)):
-        return False
-    return True
+    return callable(op)
 
 
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/evaluation.py#L9
@@ -488,6 +478,17 @@ class RetrievalEvaluator(Evaluator):
 
         if self.is_cross_encoder:
             return self.retriever.search_cross_encoder(corpus, queries, self.top_k)
+        elif (
+            hasattr(self.retriever.model, "mteb_model_meta")
+            and self.retriever.model.mteb_model_meta.name == "bm25s"
+        ):
+            return self.retriever.model.search(
+                corpus,
+                queries,
+                self.top_k,
+                self.score_function,
+                prompt_name=self.task_name,  # type: ignore
+            )
         else:
             return self.retriever.search(
                 corpus,
@@ -574,7 +575,7 @@ class RetrievalEvaluator(Evaluator):
         k_values: List[int],
         metric: str,
         output_type: str = "all",
-    ) -> Tuple[Dict[str, float]]:
+    ) -> Tuple[Dict[str, float], Dict[str, float]]:
         if metric.lower() in ["mrr", "mrr@k", "mrr_cut"]:
             metric_scores = mrr(qrels, results, k_values, output_type)
 

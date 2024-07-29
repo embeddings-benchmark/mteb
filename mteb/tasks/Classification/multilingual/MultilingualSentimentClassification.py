@@ -96,8 +96,8 @@ class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTas
     def dataset_transform(self):
         # create a train set from the test set for Welsh language (cym)
         lang = "cym"
-        _dataset = self.dataset[lang]
         if lang in self.dataset.keys():
+            _dataset = self.dataset[lang]
             _dataset = _dataset.class_encode_column("label")
             _dataset = _dataset["test"].train_test_split(
                 test_size=0.3, seed=self.seed, stratify_by_column="label"
@@ -105,4 +105,4 @@ class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTas
             _dataset = self.stratified_subsampling(
                 dataset_dict=_dataset, seed=self.seed, splits=["test"]
             )
-        self.dataset[lang] = _dataset
+            self.dataset[lang] = _dataset

@@ -114,7 +114,12 @@ class VoyageWrapper:
                 and len(batch) < batch_size
                 and batch_tokens < self._max_tpm
             ):
-                batch_tokens += len(self._client.tokenize([sentences[index]]))
+                n_tokens = len(
+                    self._client.tokenize([sentences[index]], model=self._model_name)[0]
+                )
+                if batch_tokens + n_tokens > self._max_tpm:
+                    break
+                batch_tokens += n_tokens
                 batch.append(sentences[index])
                 index += 1
 
@@ -194,7 +199,7 @@ voyage_2 = ModelMeta(
     embed_dim=1024,
     open_source=False,
 )
-
+# see https://blog.voyageai.com/2024/06/10/voyage-multilingual-2-multilingual-embedding-model/"
 voyage_multilingual_2 = ModelMeta(
     name="voyage-multilingual-2",
     revision="1",

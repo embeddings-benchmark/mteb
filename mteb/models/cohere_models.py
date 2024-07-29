@@ -10,17 +10,20 @@ import mteb
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 
+
 # Implementation follows https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/main/src/seb/registered_models/cohere_models.py
 class CohereTextEmbeddingModel(Encoder):
     def __init__(self, model_name: str, sep: str = " ", **kwargs) -> None:
         self.model_name = model_name
         self.sep = sep
 
-    def _embed(self, sentences: list[str], cohere_task_type: str, retries: int = 5) -> torch.Tensor:
+    def _embed(
+        self, sentences: list[str], cohere_task_type: str, retries: int = 5
+    ) -> torch.Tensor:
         import cohere  # type: ignore
-        
+
         client = cohere.Client()
-        while retries > 0: # Cohere's API is not always reliable
+        while retries > 0:  # Cohere's API is not always reliable
             try:
                 response = client.embed(
                     texts=list(sentences),
@@ -106,7 +109,5 @@ cohere_eng_3 = ModelMeta(
 )
 
 if __name__ == "__main__":
-    import mteb
-
     mdl = mteb.get_model(cohere_mult_3.name, cohere_mult_3.revision)
     emb = mdl.encode(["Hello, world!"])

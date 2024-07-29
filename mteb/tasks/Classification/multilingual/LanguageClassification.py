@@ -4,28 +4,28 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks import AbsTaskClassification
 
-_LANGUAGES = {
-    "ar": ["ara-Arab"],
-    "bg": ["bul-Cyrl"],
-    "de": ["deu-Latn"],
-    "el": ["ell-Grek"],
-    "en": ["eng-Latn"],
-    "es": ["spa-Latn"],
-    "fr": ["fra-Latn"],
-    "hi": ["hin-Deva"],
-    "it": ["ita-Latn"],
-    "ja": ["jpn-Jpan"],
-    "nl": ["nld-Latn"],
-    "pl": ["pol-Latn"],
-    "pt": ["por-Latn"],
-    "ru": ["rus-Cyrl"],
-    "sw": ["swa-Latn"],
-    "th": ["tha-Thai"],
-    "tr": ["tur-Latn"],
-    "ur": ["urd-Arab"],
-    "vi": ["vie-Latn"],
-    "zh": ["cmn-Hans"],
-}
+_LANGUAGES = [
+    "ara-Arab",
+    "bul-Cyrl",
+    "deu-Latn",
+    "ell-Grek",
+    "eng-Latn",
+    "spa-Latn",
+    "fra-Latn",
+    "hin-Deva",
+    "ita-Latn",
+    "jpn-Jpan",
+    "nld-Latn",
+    "pol-Latn",
+    "por-Latn",
+    "rus-Cyrl",
+    "swa-Latn",
+    "tha-Thai",
+    "tur-Latn",
+    "urd-Arab",
+    "vie-Latn",
+    "cmn-Hans",
+]
 
 
 class LanguageClassification(AbsTaskClassification):
