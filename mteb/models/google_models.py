@@ -48,41 +48,11 @@ class GoogleTextEmbeddingModel(Encoder):
         kwargs = dict(output_dimensionality=dimensionality) if dimensionality else {}
         try:
             embeddings = model.get_embeddings(inputs, **kwargs)
-        # Except google.api_core.exceptions.InternalServerError
+        # # Except the very rare google.api_core.exceptions.InternalServerError
         except Exception as e:
             print("Retrying once after error:", e)
             embeddings = model.get_embeddings(inputs, **kwargs)
         return np.asarray([embedding.values for embedding in embeddings])
-
-    def _embed_genai(
-        self,
-        sentences: list[str],
-        *,
-        google_task_type: str = None,
-        titles: list[str] | None = None,
-    ) -> np.ndarray:
-        try:
-            import google.generativeai as genai
-        except ImportError:
-            raise ImportError(
-                "`google-generativeai` is required to run the google API, pleae install it using `pip install google-generativeai`"
-            )
-
-        if titles:
-            result = genai.embed_content(  # type: ignore
-                model=self.model_name,
-                content=sentences,
-                task_type=google_task_type,
-                title=titles,
-            )
-        else:
-            result = genai.embed_content(  # type: ignore
-                model=self.model_name,
-                content=sentences,
-                task_type=google_task_type,
-            )
-
-        return np.asarray(result["embedding"])
 
     def encode(
         self,
