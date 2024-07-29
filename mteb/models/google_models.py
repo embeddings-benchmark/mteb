@@ -18,7 +18,7 @@ class GoogleTextEmbeddingModel(Encoder):
     def _embed(
         self,
         texts: List[str],
-        task_type: str = "RETRIEVAL_DOCUMENT",
+        google_task_type: str = None,
         titles: List[str] | None = None,
         dimensionality: Optional[int] = 768,
     ) -> List[List[float]]:
@@ -36,9 +36,9 @@ class GoogleTextEmbeddingModel(Encoder):
         if titles:
             # Allow title-only embeddings by replacing text with a space
             # Else Google throws google.api_core.exceptions.InvalidArgument: 400 The text content is empty.
-            inputs = [TextEmbeddingInput(text if text else " ", task_type=task_type, title=title) for text, title in zip(texts, titles)]
+            inputs = [TextEmbeddingInput(text if text else " ", task_type=google_task_type, title=title) for text, title in zip(texts, titles)]
         else:
-            inputs = [TextEmbeddingInput(text, task_type=task_type) for text in texts]
+            inputs = [TextEmbeddingInput(text, task_type=google_task_type) for text in texts]
         kwargs = dict(output_dimensionality=dimensionality) if dimensionality else {}
         try:
             embeddings = model.get_embeddings(inputs, **kwargs)
@@ -49,7 +49,7 @@ class GoogleTextEmbeddingModel(Encoder):
         return np.asarray([embedding.values for embedding in embeddings])
 
     def _embed_genai(
-        self, sentences: list[str], *, task_type: str, titles: list[str] | None = None
+        self, sentences: list[str], *, google_task_type: str = None, titles: list[str] | None = None
     ) -> np.ndarray:
         try:
             import google.generativeai as genai
@@ -62,14 +62,14 @@ class GoogleTextEmbeddingModel(Encoder):
             result = genai.embed_content(  # type: ignore
                 model=self.model_name,
                 content=sentences,
-                task_type=task_type,
+                task_type=google_task_type,
                 title=titles,
             )
         else:
             result = genai.embed_content(  # type: ignore
                 model=self.model_name,
                 content=sentences,
-                task_type=task_type,
+                task_type=google_task_type,
             )
 
         return np.asarray(result["embedding"])
@@ -78,22 +78,22 @@ class GoogleTextEmbeddingModel(Encoder):
         self,
         sentences: list[str],
         prompt_name: str | None = None,
+        google_task_type: str | None = None, # Optional
         **kwargs: Any,
     ) -> np.ndarray:
-        input_type = "RETRIEVAL_DOCUMENT"  # Default
-        if prompt_name:
+        if prompt_name and google_task_type is None:
             task = mteb.get_task(prompt_name)
             task_type = task.metadata.type
             if task_type in ["Classification", "MultilabelClassification"]:
-                input_type = "CLASSIFICATION"
+                google_task_type = "CLASSIFICATION"
             elif task_type == "Clustering":
-                input_type = "CLUSTERING"
+                google_task_type = "CLUSTERING"
             elif task_type == "STS":
-                input_type = "SIMILARITY"
-        return self._embed(sentences, task_type=input_type)
+                google_task_type = "SIMILARITY"
+        return self._embed(sentences, google_task_type=google_task_type)
 
     def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
-        return self._embed(queries, task_type="RETRIEVAL_QUERY")
+        return self._embed(queries, google_task_type="RETRIEVAL_QUERY")
 
     def encode_corpus(self, corpus: list[dict[str, str]], **kwargs: Any) -> np.ndarray:
         if isinstance(corpus, dict):
@@ -107,7 +107,7 @@ class GoogleTextEmbeddingModel(Encoder):
             for doc in corpus:
                 titles.append(doc["title"])
                 sentences.append(doc["text"])
-        return self._embed(sentences, task_type="RETRIEVAL_DOCUMENT", titles=titles)
+        return self._embed(sentences, google_task_type="RETRIEVAL_DOCUMENT", titles=titles)
 
 
 name = "text-embedding-004"

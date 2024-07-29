@@ -16,7 +16,7 @@ class CohereTextEmbeddingModel(Encoder):
         self.model_name = model_name
         self.sep = sep
 
-    def _embed(self, sentences: list[str], input_type: str, retries: int = 5) -> torch.Tensor:
+    def _embed(self, sentences: list[str], cohere_task_type: str, retries: int = 5) -> torch.Tensor:
         import cohere  # type: ignore
         
         client = cohere.Client()
@@ -25,7 +25,7 @@ class CohereTextEmbeddingModel(Encoder):
                 response = client.embed(
                     texts=list(sentences),
                     model=self.model_name,
-                    input_type=input_type,
+                    input_type=cohere_task_type,
                 )
                 break
             except Exception as e:
@@ -39,20 +39,21 @@ class CohereTextEmbeddingModel(Encoder):
         self,
         sentences: list[str],
         prompt_name: str | None = None,
+        # search_document is recommended if unknown (https://cohere.com/blog/introducing-embed-v3)
+        cohere_task_type: str = "search_document",
         **kwargs: Any,  # noqa: ARG002
     ) -> np.ndarray:
-        input_type = "search_document"
         if prompt_name:
             task = mteb.get_task(prompt_name)
             task_type = task.metadata.type
             if task_type in ["Classification", "MultilabelClassification"]:
-                input_type = "classification"
+                cohere_task_type = "classification"
             elif task_type == "Clustering":
-                input_type = "clustering"
-        return self._embed(sentences, input_type=input_type).numpy()
+                cohere_task_type = "clustering"
+        return self._embed(sentences, cohere_task_type=cohere_task_type).numpy()
 
     def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:  # noqa: ARG002
-        return self._embed(queries, input_type="search_query").numpy()
+        return self._embed(queries, cohere_task_type="search_query").numpy()
 
     def encode_corpus(self, corpus: list[dict[str, str]], **kwargs: Any) -> np.ndarray:  # noqa: ARG002
         if isinstance(corpus, dict):
@@ -69,7 +70,7 @@ class CohereTextEmbeddingModel(Encoder):
                 else doc["text"].strip()
                 for doc in corpus
             ]
-        return self._embed(sentences, input_type="search_document").numpy()
+        return self._embed(sentences, cohere_task_type="search_document").numpy()
 
 
 cohere_mult_3 = ModelMeta(
