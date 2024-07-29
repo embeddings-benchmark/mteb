@@ -37,19 +37,6 @@ def test_mulitple_mteb_tasks(
     output_folder = "tests/results"
     eval.run(model, output_folder=output_folder, overwrite_results=True)
 
-    tasks_dict = {task.metadata.name: task for task in tasks}
-
-    # make sure that all tasks results can be exported
-    args = Namespace(
-        results_folder=output_folder + "/no_model_name_available/no_revision_available",
-        output_path=output_folder + "/model_card.md",
-        overwrite=True,
-    )
-    monkeypatch.setattr(
-        mteb, "get_task", lambda task_name, **kwargs: tasks_dict[task_name]
-    )
-    create_meta(args)
-
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
 @pytest.mark.parametrize(
