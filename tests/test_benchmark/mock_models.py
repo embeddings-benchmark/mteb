@@ -41,9 +41,8 @@ class MockTorchbf16Encoder(mteb.Encoder):
 
 
 class MockSentenceTransformer(SentenceTransformer):
-    """
-    A mock implementation of the SentenceTransformer intended to implement just the encode, method using the same arguments.
-    """
+    """A mock implementation of the SentenceTransformer intended to implement just the encode, method using the same arguments."""
+
     def __init__(self, *args, **kwargs):
         pass
 

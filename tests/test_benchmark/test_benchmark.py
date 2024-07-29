@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-from argparse import Namespace
 from typing import Union
 
 import numpy as np
@@ -12,7 +11,6 @@ from sentence_transformers import SentenceTransformer
 
 import mteb
 from mteb.benchmarks import Benchmark
-from mteb.cli import create_meta
 
 from .mock_models import (
     MockBGEWrapper,
