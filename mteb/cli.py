@@ -319,7 +319,7 @@ def merge_yamls(
 
     if start_yaml_index and end_yaml_index:
         existing_yaml = existing_file[start_yaml_index:end_yaml_index]
-        readme_end = existing_file[end_yaml_index + 3:]
+        readme_end = existing_file[end_yaml_index + 3 :]
         existing_yaml_dict = yaml.safe_load(existing_yaml)
     else:
         existing_yaml_dict = {}

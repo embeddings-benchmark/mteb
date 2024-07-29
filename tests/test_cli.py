@@ -114,10 +114,13 @@ def test_create_meta():
     assert result.returncode == 0, "Command failed"
 
 
-@pytest.mark.parametrize("existing_readme_name, gold_readme_name", [
-    ("existing_readme.md", "model_card_gold_existing.md"),
-    ("model_card_without_frontmatter.md", "model_card_gold_without_frontmatter.md")
-])
+@pytest.mark.parametrize(
+    "existing_readme_name, gold_readme_name",
+    [
+        ("existing_readme.md", "model_card_gold_existing.md"),
+        ("model_card_without_frontmatter.md", "model_card_gold_without_frontmatter.md"),
+    ],
+)
 def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: str):
     """Test create_meta function directly as well as through the command line interface"""
     test_folder = Path(__file__).parent
