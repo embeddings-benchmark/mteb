@@ -114,7 +114,11 @@ def test_create_meta():
     assert result.returncode == 0, "Command failed"
 
 
-def test_create_meta_from_existing():
+@pytest.mark.parametrize("existing_readme_name, gold_readme_name", [
+    ("existing_readme.md", "model_card_gold_existing.md"),
+    ("model_card_without_frontmatter.md", "model_card_gold_without_frontmatter.md")
+])
+def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: str):
     """Test create_meta function directly as well as through the command line interface"""
     test_folder = Path(__file__).parent
     output_folder = test_folder / "create_meta"
@@ -122,7 +126,7 @@ def test_create_meta_from_existing():
         output_folder / "all-MiniLM-L6-v2" / "8b3219a92973c328a8e22fadcfa821b5dc75636a"
     )
     output_path = output_folder / "model_card.md"
-    existing_readme = output_folder / "existing_readme.md"
+    existing_readme = output_folder / existing_readme_name
 
     args = Namespace(
         results_folder=results,
@@ -138,15 +142,15 @@ def test_create_meta_from_existing():
     with output_path.open("r") as f:
         meta = f.read()
         start_yaml = meta.index("---") + 3
-        end_yaml = meta.index("---", meta.index("---") + 3)
+        end_yaml = meta.index("---", start_yaml)
         meta = meta[start_yaml:end_yaml]
         frontmatter = yaml.safe_load(meta)
         readme_output = meta[end_yaml + 3 :]
 
-    with (output_folder / "model_card_gold_existing.md").open("r") as f:
+    with (output_folder / gold_readme_name).open("r") as f:
         gold = f.read()
         start_yaml = gold.index("---") + 3
-        end_yaml = gold.index("---", gold.index("---") + 3)
+        end_yaml = gold.index("---", start_yaml)
         gold = gold[start_yaml:end_yaml]
         frontmatter_gold = yaml.safe_load(gold)
         gold_readme = gold[end_yaml + 3 :]

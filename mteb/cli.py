@@ -306,16 +306,24 @@ def merge_yamls(
     yaml_dict: Dict[str, Any], existing_readme: str
 ) -> Tuple[Dict[str, Any], str]:
     if not existing_readme.endswith("md"):
-        return yaml_dict, ""
+        raise ValueError("Readme file should be markdown and ends with 'md'")
 
     with open(existing_readme) as f:
         existing_file = f.read()
-        start_yaml_index = existing_file.index("---") + 3
-        end_yaml_index = existing_file.index("---", existing_file.index("---") + 3)
 
-    existing_yaml = existing_file[start_yaml_index:end_yaml_index]
-    readme_end = existing_file[end_yaml_index + 3 :]
-    existing_yaml_dict = yaml.safe_load(existing_yaml)
+    start_yaml_index = None
+    end_yaml_index = None
+    if existing_file[:3] == "---" and "\n---" in existing_file:
+        start_yaml_index = existing_file.index("---") + 3
+        end_yaml_index = existing_file.index("\n---", start_yaml_index)
+
+    if start_yaml_index and end_yaml_index:
+        existing_yaml = existing_file[start_yaml_index:end_yaml_index]
+        readme_end = existing_file[end_yaml_index + 3:]
+        existing_yaml_dict = yaml.safe_load(existing_yaml)
+    else:
+        existing_yaml_dict = {}
+        readme_end = existing_file
 
     # Ensure 'mteb' tag is present
     if "tags" not in existing_yaml_dict:
