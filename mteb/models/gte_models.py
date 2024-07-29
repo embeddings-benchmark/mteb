@@ -1,3 +1,43 @@
+"""Script to verify it reproduces https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct#sentence-transformers
+>>> from sentence_transformers import SentenceTransformer
+>>> model = SentenceTransformer("Alibaba-NLP/gte-Qwen2-7B-instruct", trust_remote_code=True)
+Loading checkpoint shards: 100%|█████████████████████████████████████████████████████████| 7/7 [00:10<00:00,  1.52s/it]
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+>>> # In case you want to reduce the maximum length:
+>>> model.max_seq_length = 8192
+>>> queries = [
+...     "how much protein should a female eat",
+...     "summit define",
+... ]
+>>> documents = [
+...     "As a general guideline, the CDC's average requirement of protein for women ages 19 to 70 is 46 grams per day. But, as you can see from this chart, you'll need to increase that if you're expecting or training for a marathon. Check out the chart below to see how much protein you should be eating each day.",
+...     "Definition of summit for English Language Learners. : 1  the highest point of a mountain : the top of a mountain. : 2  the highest level. : 3  a meeting or series of meetings between the leaders of two or more governments.",
+... ]
+>>> query_embeddings = model.encode(queries, prompt_name="query")
+>>> document_embeddings = model.encode(documents)
+>>> scores = (query_embeddings @ document_embeddings.T) * 100
+>>> print(scores.tolist())
+[[70.39706420898438, 3.4318461418151855], [4.516170978546143, 81.91815948486328]]
+
+>>> import mteb
+model_mteb = mteb.get_model("Alibaba-NLP/gte-Qwen2-7B-instruct")
+>>> model_mteb = mteb.get_model("Alibaba-NLP/gte-Qwen2-7B-instruct")
+Loading checkpoint shards: 100%|█████████████████████████████████████████████████████████| 7/7 [00:01<00:00,  5.71it/s]
+Created GritLM: torch.float32 dtype, lasttoken pool, embedding mode, cccc attn
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+----------Using 8 data-parallel GPUs----------
+>>> query_embeddings_mteb = model.encode(queries, instruction="Given a web search query, retrieve relevant passages that answer the query")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: SentenceTransformer.encode() got an unexpected keyword argument 'instruction'
+>>> query_embeddings_mteb = model_mteb.encode(queries, instruction="Given a web search query, retrieve relevant passages that answer the query")
+>>> document_embeddings_mteb = model_mteb.encode(documents)
+>>> scores_mteb = (query_embeddings @ document_embeddings.T) * 100
+>>> print(scores_mteb.tolist())
+[[70.39706420898438, 3.4318461418151855], [4.516170978546143, 81.91815948486328]]
+>>> 
+
+"""
 from __future__ import annotations
 
 from functools import partial
