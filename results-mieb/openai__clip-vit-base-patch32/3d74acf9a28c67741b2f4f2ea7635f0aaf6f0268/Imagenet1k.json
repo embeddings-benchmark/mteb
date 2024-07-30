@@ -1,0 +1,28 @@
+{
+  "dataset_revision": "b24c7a5a3ef12df09089055d1795e2ce7c7e7397",
+  "evaluation_time": 4185.878092765808,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.84",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 0.6102,
+        "f1": 0.607661279811048,
+        "f1_weighted": 0.6076612798110479,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.6102,
+        "scores_per_experiment": [
+          {
+            "accuracy": 0.6102,
+            "f1": 0.607661279811048,
+            "f1_weighted": 0.6076612798110479
+          }
+        ]
+      }
+    ]
+  },
+  "task_name": "Imagenet1k"
+}
