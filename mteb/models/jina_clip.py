@@ -13,7 +13,6 @@ from mteb.model_meta import ModelMeta
 from mteb.models.text_formatting_utils import corpus_to_texts
 
 
-
 class JinaCLIPModelWrapper:
     def __init__(
         self,
@@ -23,8 +22,9 @@ class JinaCLIPModelWrapper:
     ):
         self.model_name = model_name
         self.device = device
-        self.model = AutoModel.from_pretrained(model_name, trust_remote_code=True).to(self.device)
-
+        self.model = AutoModel.from_pretrained(model_name, trust_remote_code=True).to(
+            self.device
+        )
 
     def get_text_embeddings(self, texts: list[str], batch_size: int = 32):
         all_text_embeddings = []
@@ -32,7 +32,9 @@ class JinaCLIPModelWrapper:
         with torch.no_grad():
             for i in tqdm(range(0, len(texts), batch_size)):
                 batch_texts = texts[i : i + batch_size]
-                text_outputs = self.model.encode_text(batch_texts, convert_to_numpy=False, convert_to_tensor=True)
+                text_outputs = self.model.encode_text(
+                    batch_texts, convert_to_numpy=False, convert_to_tensor=True
+                )
                 all_text_embeddings.append(text_outputs.cpu())
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
@@ -46,13 +48,17 @@ class JinaCLIPModelWrapper:
         if isinstance(images, DataLoader):
             with torch.no_grad():
                 for batch in tqdm(images):
-                    image_outputs = self.model.encode_image(batch, convert_to_numpy=False, convert_to_tensor=True)
+                    image_outputs = self.model.encode_image(
+                        batch, convert_to_numpy=False, convert_to_tensor=True
+                    )
                     all_image_embeddings.append(image_outputs.cpu())
         else:
             with torch.no_grad():
                 for i in tqdm(range(0, len(images), batch_size)):
                     batch_images = images[i : i + batch_size]
-                    image_outputs = self.model.encode_image(batch_images, convert_to_numpy=False, convert_to_tensor=True)
+                    image_outputs = self.model.encode_image(
+                        batch_images, convert_to_numpy=False, convert_to_tensor=True
+                    )
                     all_image_embeddings.append(image_outputs.cpu())
 
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
@@ -81,10 +87,20 @@ class JinaCLIPModelWrapper:
         image_embeddings = None
 
         if texts is not None:
-            text_embeddings = self.encode_text(texts, batch_size=batch_size, convert_to_numpy=False, convert_to_tensor=True)
+            text_embeddings = self.encode_text(
+                texts,
+                batch_size=batch_size,
+                convert_to_numpy=False,
+                convert_to_tensor=True,
+            )
 
         if images is not None:
-            image_embeddings = self.encode_image(images, batch_size=batch_size, convert_to_numpy=False, convert_to_tensor=True)
+            image_embeddings = self.encode_image(
+                images,
+                batch_size=batch_size,
+                convert_to_numpy=False,
+                convert_to_tensor=True,
+            )
 
         if text_embeddings is not None and image_embeddings is not None:
             if len(text_embeddings) != len(image_embeddings):
@@ -101,7 +117,7 @@ class JinaCLIPModelWrapper:
             return text_embeddings
         elif image_embeddings is not None:
             return image_embeddings
-    
+
     def encode(  # type: ignore
         self,
         sentences: list[str],
