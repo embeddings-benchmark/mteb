@@ -19,8 +19,6 @@ class NomicWrapper:
         self.model_name = model_name
         self.mdl = SentenceTransformer(model_name, revision=revision, **kwargs)
 
-        # if v1.5, layer norm
-
     def to(self, device: torch.device) -> None:
         self.mdl.to(device)
 
