@@ -47,7 +47,7 @@ class NomicWrapper:
 
         emb = self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
         # v1.5 has a non-trainable layer norm to unit normalize the embeddings for binary quantization
-        # the outputs are similary to if we just normalized but keeping the same for consistency
+        # the outputs are similar to if we just normalized but keeping the same for consistency
         if self.model_name == "nomic-ai/nomic-embed-text-v1.5":
             if not isinstance(emb, torch.Tensor):
                 emb = torch.tensor(emb)
