@@ -49,8 +49,12 @@ class NomicWrapper:
         # v1.5 has a non-trainable layer norm to unit normalize the embeddings for binary quantization
         # the outputs are similary to if we just normalized but keeping the same for consistency
         if self.model_name == "nomic-ai/nomic-embed-text-v1.5":
+            if not isinstance(emb, torch.Tensor):
+                emb = torch.tensor(emb)
             emb = F.layer_norm(emb, normalized_shape=(emb.shape[1],))
             emb = F.normalize(emb, p=2, dim=1)
+            if kwargs.get("convert_to_tensor", False):
+                emb = emb.cpu().detach().numpy()
 
         return emb
 
