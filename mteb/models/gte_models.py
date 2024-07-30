@@ -35,9 +35,10 @@ TypeError: SentenceTransformer.encode() got an unexpected keyword argument 'inst
 >>> scores_mteb = (query_embeddings @ document_embeddings.T) * 100
 >>> print(scores_mteb.tolist())
 [[70.39706420898438, 3.4318461418151855], [4.516170978546143, 81.91815948486328]]
->>> 
+>>>
 
 """
+
 from __future__ import annotations
 
 from functools import partial
