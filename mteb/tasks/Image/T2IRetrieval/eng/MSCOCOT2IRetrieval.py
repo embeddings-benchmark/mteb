@@ -8,7 +8,7 @@ from .....abstasks import AbsTaskT2IRetrieval
 class MSCOCOT2IRetrieval(AbsTaskT2IRetrieval):
     metadata = TaskMetadata(
         name="MSCOCOT2IRetrieval",
-        description="Retrieve captions based on images.",
+        description="Retrieve images based on captions.",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-10602-1_48",
         dataset={
             "path": "MRBench/mbeir_mscoco_task0",
@@ -41,8 +41,8 @@ class MSCOCOT2IRetrieval(AbsTaskT2IRetrieval):
             "n_samples": {"test": 1172},
             "avg_character_length": {
                 "test": {
-                    "average_document_length": 30.94235294117647,
-                    "average_query_length": 131.56569965870307,
+                    "average_document_length": 0.0,
+                    "average_query_length": 0.0,
                     "num_documents": 9350,
                     "num_queries": 1172,
                     "average_relevant_docs_per_query": 1.0,

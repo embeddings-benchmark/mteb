@@ -41,7 +41,6 @@ class AbsTaskZeroshotClassification(AbsTask):
         **kwargs,
     ) -> ScoresDict:
         candidate_labels = self.get_candidate_labels()
-
         evaluator = ZeroshotClassificationEvaluator(
             dataset,
             self.image_column_name,

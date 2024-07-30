@@ -76,10 +76,12 @@ class ZeroshotClassificationEvaluator(Evaluator):
         image_embeddings = model.get_image_embeddings(
             dataloader, batch_size=encode_kwargs["batch_size"]
         )
+
         probs = model.calculate_probs(text_embeddings, image_embeddings)
         predictions = probs.argmax(dim=1)
 
         logger.info("Evaluating...")
+
         accuracy = metrics.accuracy_score(self.labels, predictions)
 
         return {"accuracy": accuracy}
