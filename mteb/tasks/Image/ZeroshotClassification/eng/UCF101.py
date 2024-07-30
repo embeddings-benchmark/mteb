@@ -6,7 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class UCF101Classification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
-        name="UCF101",
+        name="UCF101ZeroShot",
         description="""UCF101 is an action recognition data set of realistic
 action videos collected from YouTube, having 101 action categories. This 
 version of the dataset does not contain images but images saved frame by 
@@ -52,7 +52,7 @@ version train/test list.""",
     def get_candidate_labels(self) -> list[str]:
         return [
             f"a photo of {name}"
-            for name in self.dataset["validation"]
+            for name in self.dataset["test"]
             .features[self.label_column_name]
             .names
         ]

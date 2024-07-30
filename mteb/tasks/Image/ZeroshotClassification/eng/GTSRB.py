@@ -58,10 +58,4 @@ class GTSRBClassification(AbsTaskZeroshotClassification):
         with open(os.path.join(path, "templates/GTSRB_labels.txt")) as f:
             labels = f.readlines()
 
-        prompts = [
-            [f"a zoomed in photo of a '{c}' traffic sign." for c in labels],
-            [f"a centered photo of a '{c}'' traffic sign." for c in labels],
-            [f"a close up photo of a '{c}'' traffic sign." for c in labels],
-        ]
-
-        return list(itertools.chain.from_iterable(prompts))
+        return [f"a close up photo of a '{c}' traffic sign." for c in labels]

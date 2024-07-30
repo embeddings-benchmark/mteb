@@ -53,11 +53,4 @@ class Country211Classification(AbsTaskZeroshotClassification):
         with open(os.path.join(path, "templates/Country211_labels.txt")) as f:
             labels = f.readlines()
 
-        prompts = [
-            [f"a photo i took in {c}." for c in labels],
-            [f"a photo i took while visiting {c}." for c in labels],
-            [f"a photo from my home country of {c}." for c in labels],
-            [f"a photo from my visit to {c}." for c in labels],
-            [f"a photo showing the country of {c}." for c in labels],
-        ]
-        return list(itertools.chain(*prompts))
+        return [f"a photo showing the country of {c}." for c in labels]

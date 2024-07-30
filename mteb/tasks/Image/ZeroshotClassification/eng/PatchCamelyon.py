@@ -67,9 +67,4 @@ isbn="978-3-030-00934-2"
         with open(os.path.join(path, "templates/PatchCamelyon_labels.txt")) as f:
             labels = f.readlines()
 
-        prompts = [
-            [f"a histopathology slide showing {c}" for c in labels],
-            [f"histopathology image of {c}" for c in labels],
-        ]
-
-        return list(itertools.chain(*prompts))
+        return [f"histopathology image of {c}" for c in labels]
