@@ -3,10 +3,10 @@ from __future__ import annotations
 from functools import partial
 
 import torch
-from FlagEmbedding.visual.modeling import Visualized_BGE
 from PIL import Image
 from tqdm import tqdm
 
+from FlagEmbedding.visual.modeling import Visualized_BGE
 from mteb.model_meta import ModelMeta
 
 

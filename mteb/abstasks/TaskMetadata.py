@@ -44,6 +44,8 @@ TASK_SUBTYPE = Literal[
     "Caption Pairing",
     "Emotion recognition",
     "Textures recognition",
+    "Activity recognition",
+    "Tumor detection",
 ]
 
 TASK_DOMAIN = Literal[
