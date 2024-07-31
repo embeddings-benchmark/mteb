@@ -19,6 +19,7 @@ from .mock_tasks import (
     MockClassificationTask,
     MockClusteringFastTask,
     MockClusteringTask,
+    MockInstructionRetrival,
     MockMultilabelClassification,
     MockPairClassificationTask,
     MockRerankingTask,
@@ -100,6 +101,7 @@ MOCK_TASK_TEST_GRID = [
     MockSTSTask(),
     MockMultilabelClassification(),
     MockSummarizationTask(),
+    MockInstructionRetrival(),
 ]
 
 MOCK_TASK_TEST_GRID_AS_STRING = [

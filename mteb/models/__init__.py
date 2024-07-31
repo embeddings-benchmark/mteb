@@ -130,6 +130,7 @@ model_modules = [
     e5_instruct,
     e5_models,
     e5_v,
+    google_models,
     gritlm_models,
     gte_models,
     llm2vec_models,
