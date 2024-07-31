@@ -1,15 +1,14 @@
 from __future__ import annotations
 
+from mteb.abstasks import AbsTaskZeroshotClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from .....abstasks import AbsTaskZeroshotClassification
 
 
 class RenderedSST2(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="RenderedSST2",
         description="RenderedSST2.",
-        reference="https://huggingface.co/datasets/clip-benchmark/wds_renderedsst2/commits/main",
+        reference="https://huggingface.co/datasets/clip-benchmark/wds_renderedsst2",
         dataset={
             "path": "clip-benchmark/wds_renderedsst2",
             "revision": "66b9a461eda025201dd147e5f390f5984c33643a",
