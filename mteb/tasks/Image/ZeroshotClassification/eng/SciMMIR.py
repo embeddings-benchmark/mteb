@@ -51,7 +51,7 @@ class SciMMIR(AbsTaskZeroshotClassification):
             "fig_illustration": 1,
             "fig_architecture": 2,
             "table_parameter": 3,
-            "table_result": 4
+            "table_result": 4,
         }
         for split in self.metadata.eval_splits:
             self.dataset[split] = self.dataset[split].map(
@@ -59,7 +59,7 @@ class SciMMIR(AbsTaskZeroshotClassification):
                     "image": example["image"],
                     "class": class_code[example[self.label_column_name]],
                 }
-            )         
+            )
 
     def get_candidate_labels(self) -> list[str]:
         return [
