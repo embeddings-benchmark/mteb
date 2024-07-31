@@ -64,7 +64,7 @@ class CoIRMultiLingualTask:
     def _load_data(self, **kwargs):
         if self.data_loaded:
             return
-        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
+        self.corpus, self.queries, self.relevant_docs = {l : {} for l in _LANGS}, {l : {} for l in _LANGS}, {l : {} for l in _LANGS}
         task_name = self.metadata_dict["dataset"]["name"]
         
         for lang in _LANGS:
