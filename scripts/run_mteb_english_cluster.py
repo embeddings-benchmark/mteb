@@ -6,6 +6,7 @@ import logging
 
 from mteb import MTEB, get_model, get_tasks
 from mteb.models.bge_models import bge_base_en_v1_5
+from mteb.models.arctic_models import arctic_m_v1_5
 from mteb.models.e5_models import (
     e5_eng_base_v2,
     e5_eng_large_v2,
@@ -57,6 +58,7 @@ MODELS = [
     labse,
     mxbai_embed_large_v1,
     bge_base_en_v1_5,
+    arctic_m_v1_5,
 ]
 
 for model in MODELS:
