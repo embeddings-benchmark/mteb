@@ -3,7 +3,7 @@ from __future__ import annotations
 from .eng.Birdsnap import *
 from .eng.Caltech101 import *
 from .eng.CIFAR import *
-from .eng.CLEVER import *
+from .eng.CLEVR import *
 from .eng.Country211 import *
 from .eng.DTD import *
 from .eng.EuroSAT import *

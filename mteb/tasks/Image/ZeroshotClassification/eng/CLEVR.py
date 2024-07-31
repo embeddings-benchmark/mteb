@@ -4,10 +4,10 @@ from mteb.abstasks import AbsTaskZeroshotClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class CLEVER(AbsTaskZeroshotClassification):
+class CLEVR(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
-        name="CLEVER",
-        description="CLEVER.",
+        name="CLEVR",
+        description="CLEVR.",
         reference="https://openaccess.thecvf.com/content_cvpr_2017/html/Johnson_CLEVR_A_Diagnostic_CVPR_2017_paper.html",
         dataset={
             "path": "clip-benchmark/wds_vtab-clevr_closest_object_distance",
@@ -21,7 +21,7 @@ class CLEVER(AbsTaskZeroshotClassification):
         date=("2016-01-01", "2016-12-20"),
         domains=["Constructed"],
         task_subtypes=["Object recognition"],
-        license=None,
+        license="""""",
         socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],

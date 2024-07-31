@@ -21,7 +21,7 @@ class SciMMIR(AbsTaskZeroshotClassification):
         date=("2023-05-01", "2023-10-30"),
         domains=["Academic"],
         task_subtypes=["Caption Pairing", "Rendered Texts Understanding"],
-        license=None,
+        license="""""",
         socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
