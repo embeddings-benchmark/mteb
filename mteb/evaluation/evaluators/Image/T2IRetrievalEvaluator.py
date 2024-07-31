@@ -10,7 +10,10 @@ from typing import Any, Dict, List, Tuple
 import numpy as np
 import pytrec_eval
 import torch
+from datasets import Dataset
 from PIL import Image
+from torch.utils.data import DataLoader
+from torchvision import transforms
 
 from mteb.encoder_interface import EncoderWithQueryCorpusEncode
 
@@ -28,6 +31,29 @@ from ..utils import (
 )
 
 logger = logging.getLogger(__name__)
+
+transform = transforms.Compose([transforms.PILToTensor()])
+
+
+class ImageDataset(torch.utils.data.Dataset):
+    def __init__(self, hf_dataset, image_column_name: str = "image", transform=None):
+        self.dataset = hf_dataset
+        self.transform = transform
+        self.image_column_name = image_column_name
+
+    def __len__(self):
+        return len(self.dataset)
+
+    def __getitem__(self, idx):
+        image = self.dataset[idx][self.image_column_name]
+        if image.mode != "RGB":
+            image = image.convert("RGB")
+        image = self.transform(image)
+        return image
+
+
+def custom_collate_fn(batch):
+    return batch
 
 
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/search/dense/exact_search.py#L12
@@ -65,8 +91,8 @@ class DenseRetrievalExactSearch:
 
     def search(
         self,
-        corpus: dict[str, Image.Image],
-        queries: dict[str, dict[str, str]],
+        corpus: Dataset,
+        queries: Dataset,
         top_k: int,
         score_function: str,
         return_sorted: bool = False,
@@ -78,16 +104,25 @@ class DenseRetrievalExactSearch:
             )
 
         logger.info("Encoding Queries.")
-        query_ids = list(queries.keys())
+        query_ids = list(queries["id"])
         self.results = {qid: {} for qid in query_ids}
-        queries = [queries[qid]["text"] for qid in queries]
+        queries = queries["text"]
         query_embeddings = self.model.get_text_embeddings(
             queries, batch_size=self.encode_kwargs["batch_size"]
         )
 
         logger.info("Preparing Corpus...")
-        corpus_ids = list(corpus.keys())
-        corpus_images = [corpus[cid] for cid in corpus_ids]
+        corpus_ids = list(corpus["id"])
+        corpus_dataset = ImageDataset(
+            corpus, image_column_name="image", transform=transform
+        )
+        corpus_image_dataloader = DataLoader(
+            corpus_dataset,
+            batch_size=self.encode_kwargs["batch_size"],
+            shuffle=False,
+            collate_fn=custom_collate_fn,
+            num_workers=os.cpu_count(),
+        )
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
         logger.info(
@@ -96,67 +131,39 @@ class DenseRetrievalExactSearch:
             )
         )
 
-        itr = range(0, len(corpus), self.corpus_chunk_size)
+        corpus_embeddings = self.model.get_image_embeddings(
+            images=corpus_image_dataloader, batch_size=self.encode_kwargs["batch_size"]
+        )
 
         result_heaps = {
             qid: [] for qid in query_ids
         }  # Keep only the top-k docs for each query
-        for batch_num, corpus_start_idx in enumerate(itr):
-            logger.info("Encoding Batch {}/{}...".format(batch_num + 1, len(itr)))
-            corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus))
 
-            # Encode chunk of corpus
-            if (
-                self.save_corpus_embeddings
-                and "qid" in kwargs
-                and len(self.corpus_embeddings[kwargs["qid"]])
+        cos_scores = self.score_functions[score_function](
+            query_embeddings, corpus_embeddings
+        )
+        cos_scores[torch.isnan(cos_scores)] = -1
+
+        cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
+            cos_scores,
+            top_k,
+            dim=1,
+            largest=True,
+            sorted=return_sorted,
+        )
+        cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
+        cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
+
+        for query_itr in range(len(query_embeddings)):
+            query_id = query_ids[query_itr]
+            for sub_corpus_id, score in zip(
+                cos_scores_top_k_idx[query_itr], cos_scores_top_k_values[query_itr]
             ):
-                sub_corpus_embeddings = torch.tensor(
-                    self.corpus_embeddings[kwargs["qid"]][batch_num]
-                )
-            else:
-                # Encode chunk of corpus
-                images = corpus_images[corpus_start_idx:corpus_end_idx]
-                sub_corpus_embeddings = self.model.get_image_embeddings(
-                    # corpus[corpus_start_idx:corpus_end_idx],
-                    images,
-                    batch_size=self.encode_kwargs["batch_size"],
-                )
-                if self.save_corpus_embeddings and "qid" in kwargs:
-                    self.corpus_embeddings[kwargs["qid"]].append(sub_corpus_embeddings)
-
-            # Compute similarites using either cosine-similarity or dot product
-            cos_scores = self.score_functions[score_function](
-                query_embeddings, sub_corpus_embeddings
-            )
-            cos_scores[torch.isnan(cos_scores)] = -1
-
-            # Get top-k values
-            cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
-                cos_scores,
-                min(
-                    top_k + 1,
-                    len(cos_scores[1]) if len(cos_scores) > 1 else len(cos_scores[-1]),
-                ),
-                dim=1,
-                largest=True,
-                sorted=return_sorted,
-            )
-            cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
-            cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
-
-            for query_itr in range(len(query_embeddings)):
-                query_id = query_ids[query_itr]
-                for sub_corpus_id, score in zip(
-                    cos_scores_top_k_idx[query_itr], cos_scores_top_k_values[query_itr]
-                ):
-                    corpus_id = corpus_ids[corpus_start_idx + sub_corpus_id]
-                    if len(result_heaps[query_id]) < top_k:
-                        # Push item on the heap
-                        heapq.heappush(result_heaps[query_id], (score, corpus_id))
-                    else:
-                        # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
-                        heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
+                corpus_id = corpus_ids[sub_corpus_id]
+                if len(result_heaps[query_id]) < top_k:
+                    heapq.heappush(result_heaps[query_id], (score, corpus_id))
+                else:
+                    heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
 
         for qid in result_heaps:
             for score, corpus_id in result_heaps[qid]:

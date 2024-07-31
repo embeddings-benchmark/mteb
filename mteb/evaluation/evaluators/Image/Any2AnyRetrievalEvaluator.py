@@ -10,7 +10,10 @@ from typing import Any, Dict, List, Tuple
 import numpy as np
 import pytrec_eval
 import torch
+from datasets import Dataset
 from PIL import Image
+from torch.utils.data import DataLoader
+from torchvision import transforms
 
 from mteb.encoder_interface import EncoderWithQueryCorpusEncode
 
@@ -28,6 +31,29 @@ from ..utils import (
 )
 
 logger = logging.getLogger(__name__)
+
+transform = transforms.Compose([transforms.PILToTensor()])
+
+
+class ImageDataset(torch.utils.data.Dataset):
+    def __init__(self, hf_dataset, image_column_name: str = "image", transform=None):
+        self.dataset = hf_dataset
+        self.transform = transform
+        self.image_column_name = image_column_name
+
+    def __len__(self):
+        return len(self.dataset)
+
+    def __getitem__(self, idx):
+        image = self.dataset[idx][self.image_column_name]
+        if image.mode != "RGB":
+            image = image.convert("RGB")
+        image = self.transform(image)
+        return image
+
+
+def custom_collate_fn(batch):
+    return batch
 
 
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/search/dense/exact_search.py#L12
@@ -65,8 +91,8 @@ class DenseRetrievalExactSearch:
 
     def search(
         self,
-        corpus: dict[str, Dict[str, str | Image.Image]],
-        queries: dict[str, Dict[str, str | Image.Image]],
+        corpus: Dataset,  # solve memoery issues
+        queries: Dataset,  # solve memoery issues
         top_k: int,
         score_function: str,
         return_sorted: bool = False,
@@ -78,57 +104,46 @@ class DenseRetrievalExactSearch:
             )
 
         logger.info("Encoding Queries.")
-        query_ids = list(queries.keys())
+        query_ids = list(queries["id"])
         self.results = {qid: {} for qid in query_ids}
 
-        q_modality = queries[query_ids[0]]["modality"]
+        q_modality = queries[0]["modality"]
 
         if q_modality == "text":
-            query_texts = [queries[qid]["text"] for qid in query_ids]
+            query_texts = queries["text"]
             query_embeddings = self.model.get_text_embeddings(
                 texts=query_texts, batch_size=self.encode_kwargs["batch_size"]
             )
-        elif q_modality == "image":
-            query_images = [queries[qid]["image"] for qid in query_ids]
-            query_embeddings = self.model.get_image_embeddings(
-                images=query_images, batch_size=self.encode_kwargs["batch_size"]
-            )
-        elif q_modality == "image,text":
-            query_texts = [queries[qid]["text"] for qid in query_ids]
-            query_images = [queries[qid]["image"] for qid in query_ids]
-            query_embeddings = self.model.get_fused_embeddings(
-                texts=query_texts,
-                images=query_images,
-                batch_size=self.encode_kwargs["batch_size"],
-            )
         else:
-            raise ValueError(f"Unsupported modality: {q_modality}")
+            queries_dataset = ImageDataset(
+                queries, image_column_name="image", transform=transform
+            )
+            query_image_dataloader = DataLoader(
+                queries_dataset,
+                batch_size=self.encode_kwargs["batch_size"],
+                shuffle=False,
+                collate_fn=custom_collate_fn,
+                num_workers=os.cpu_count(),
+            )
+            if q_modality == "image":
+                query_embeddings = self.model.get_image_embeddings(
+                    images=query_image_dataloader,
+                    batch_size=self.encode_kwargs["batch_size"],
+                )
+            elif q_modality == "image,text":
+                query_texts = queries["text"]
+                query_embeddings = self.model.get_fused_embeddings(
+                    texts=query_texts,
+                    images=query_image_dataloader,
+                    batch_size=self.encode_kwargs["batch_size"],
+                )
+            else:
+                raise ValueError(f"Unsupported modality: {q_modality}")
 
         logger.info("Preparing Corpus...")
-        corpus_ids = list(corpus.keys())
+        corpus_ids = list(corpus["id"])
 
-        corpus_modality = corpus[corpus_ids[0]]["modality"]
-
-        if corpus_modality == "text":
-            corpus_texts = [corpus[cid]["text"] for cid in corpus_ids]
-            corpus_embeddings = self.model.get_text_embeddings(
-                texts=corpus_texts, batch_size=self.encode_kwargs["batch_size"]
-            )
-        elif corpus_modality == "image":
-            corpus_images = [corpus[cid]["image"] for cid in corpus_ids]
-            corpus_embeddings = self.model.get_image_embeddings(
-                images=corpus_images, batch_size=self.encode_kwargs["batch_size"]
-            )
-        elif corpus_modality == "image,text":
-            corpus_texts = [corpus[cid]["text"] for cid in corpus_ids]
-            corpus_images = [corpus[cid]["image"] for cid in corpus_ids]
-            corpus_embeddings = self.model.get_fused_embeddings(
-                texts=corpus_texts,
-                images=corpus_images,
-                batch_size=self.encode_kwargs["batch_size"],
-            )
-        else:
-            raise ValueError(f"Unsupported modality: {corpus_modality}")
+        corpus_modality = corpus[0]["modality"]
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
         logger.info(
@@ -136,6 +151,37 @@ class DenseRetrievalExactSearch:
                 self.score_function_desc[score_function], score_function
             )
         )
+
+        if corpus_modality == "text":
+            corpus_texts = corpus["text"]
+            corpus_embeddings = self.model.get_text_embeddings(
+                texts=corpus_texts, batch_size=self.encode_kwargs["batch_size"]
+            )
+        else:
+            corpus_dataset = ImageDataset(
+                corpus, image_column_name="image", transform=transform
+            )
+            corpus_image_dataloader = DataLoader(
+                corpus_dataset,
+                batch_size=self.encode_kwargs["batch_size"],
+                shuffle=False,
+                collate_fn=custom_collate_fn,
+                num_workers=os.cpu_count(),
+            )
+            if corpus_modality == "image":
+                corpus_embeddings = self.model.get_image_embeddings(
+                    images=corpus_image_dataloader,
+                    batch_size=self.encode_kwargs["batch_size"],
+                )
+            elif corpus_modality == "image,text":
+                corpus_texts = corpus["text"]
+                corpus_embeddings = self.model.get_fused_embeddings(
+                    texts=corpus_texts,
+                    images=corpus_image_dataloader,
+                    batch_size=self.encode_kwargs["batch_size"],
+                )
+            else:
+                raise ValueError(f"Unsupported modality: {corpus_modality}")
 
         result_heaps = {
             qid: [] for qid in query_ids

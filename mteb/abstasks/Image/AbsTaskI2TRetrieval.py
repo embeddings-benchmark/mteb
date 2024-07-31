@@ -219,9 +219,9 @@ class AbsTaskI2TRetrieval(AbsTask):
                 streaming=False,
                 keep_in_memory=False,
             ).load(split=split)
-            # Conversion from DataSet
-            queries = {query["id"]: query["image"] for query in queries}
-            corpus = {doc["id"]: {"text": doc["text"]} for doc in corpus}
+            # Directly pass in queries and corpus datasets to prevent loading into memory
+            # queries = {query["id"]: query["image"] for query in queries}
+            # corpus = {doc["id"]: {"text": doc["text"]} for doc in corpus}
             self.corpus[split], self.queries[split], self.relevant_docs[split] = (
                 corpus,
                 queries,

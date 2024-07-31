@@ -221,9 +221,9 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
                 streaming=False,
                 keep_in_memory=False,
             ).load(split=split)
-            # Conversion from DataSet
-            queries = {query["id"]: query for query in queries}
-            corpus = {doc["id"]: doc for doc in corpus}
+            # directly pass in corpus and queries datasets now to prevent loading into memory
+            # queries = {query["id"]: query for query in queries}
+            # corpus = {doc["id"]: doc for doc in corpus}
             self.corpus[split], self.queries[split], self.relevant_docs[split] = (
                 corpus,
                 queries,

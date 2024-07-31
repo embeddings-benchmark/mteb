@@ -89,7 +89,7 @@ class CLIPModelWrapper:
     def get_fused_embeddings(
         self,
         texts: list[str] = None,
-        images: list[Image.Image] = None,
+        images: list[Image.Image] | DataLoader = None,
         fusion_mode="sum",
         batch_size: int = 32,
     ):
