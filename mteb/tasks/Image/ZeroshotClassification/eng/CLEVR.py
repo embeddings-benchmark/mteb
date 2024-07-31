@@ -56,6 +56,7 @@ year = {2017}
 
         return [f"{c} shapes." for c in labels]
 
+
 class CLEVRCount(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="CLEVRCount",
