@@ -54,4 +54,4 @@ year = {2017}
             "very distant",
         ]
 
-        return [f"{c} shapes." for c in labels]  # objects in the image are
+        return [f"{c} shapes." for c in labels]
