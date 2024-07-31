@@ -57,7 +57,7 @@ class ArcticWrapper:
 
 
 arctic_m_v1_5 = ModelMeta(
-    loader=partial(Arctic, model_name="Snowflake/snowflake-arctic-embed-m-v1.5"),  # type: ignore
+    loader=partial(ArcticWrapper, model_name="Snowflake/snowflake-arctic-embed-m-v1.5"),  # type: ignore
     name="Snowflake/snowflake-arctic-embed-m-v1.5",
     languages=["eng_Latn"],
     open_source=True,
