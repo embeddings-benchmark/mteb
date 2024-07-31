@@ -8,6 +8,7 @@ from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 from mteb.abstasks.AbsTaskMultilabelClassification import (
     AbsTaskMultilabelClassification,
 )
@@ -365,4 +366,74 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
                 ),
             }
         )
+        self.data_loaded = True
+
+
+class MockInstructionRetrival(AbsTaskInstructionRetrieval):
+    do_length_ablation = True
+    metadata = TaskMetadata(
+        type="InstructionRetrieval",
+        name="MockInstructionRetrival",
+        main_score="p-MRR",
+        **general_args,  # type: ignore
+    )
+
+    def load_data(self, **kwargs):
+        self.queries = {
+            "test": {
+                "q1": "This is a test sentence",
+                "q2": "This is another test sentence",
+            }
+        }
+        self.corpus = {
+            "test": {
+                "d1": {"text": "This is a positive sentence"},
+                "d2": {"text": "This is another positive sentence"},
+            }
+        }
+
+        self.og_relevant_docs = {
+            "test": {
+                "q1": {"d1": 1, "d2": 0},
+                "q2": {"d1": 0, "d2": 1},
+            },
+        }
+        self.og_instructions = {
+            "test": {
+                "This is a test sentence": "This is a test instruction",
+                "This is another test sentence": "This is another test instruction",
+            }
+        }
+        self.changed_instructions = {
+            "test": {
+                "This is a test sentence": "This is a changed test instruction",
+                "This is another test sentence": "This is changed another test instruction",
+            }
+        }
+        self.changed_relevant_docs = {
+            "test": {
+                "q1": {"d1": 0, "d2": 1},
+                "q2": {"d1": 1, "d2": 0},
+            }
+        }
+
+        self.top_ranked = {
+            "test": {
+                "q1": ["d1", "d2"],
+                "q2": ["d2", "d1"],
+            }
+        }
+
+        self.keywords = {
+            "test": {
+                "This is a test sentence": "test1",
+                "This is another test sentence": "test2",
+            }
+        }
+        self.short_instructions = {
+            "test": {
+                "This is a test sentence": "short1",
+                "This is another test sentence": "short2",
+            }
+        }
         self.data_loaded = True
