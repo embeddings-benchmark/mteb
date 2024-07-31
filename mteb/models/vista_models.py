@@ -3,17 +3,19 @@ from __future__ import annotations
 from functools import partial
 
 import torch
-
-try:  # a temporal fix for the dependency issues of vista models.
-    from FlagEmbedding.visual.modeling import Visualized_BGE
-except ImportError:
-    Visualized_BGE = None
 from PIL import Image
 from tqdm import tqdm
 
 from mteb.model_meta import ModelMeta
 
-if Visualized_BGE is not None:
+
+def vista_loader(**kwargs):
+    try:  # a temporal fix for the dependency issues of vista models.
+        from FlagEmbedding.visual.modeling import Visualized_BGE
+    except ImportError:
+        raise ImportError(
+            "Please install `pip install FlagEmbedding` to use VisualizedBGE models."
+        )
 
     class VisualizedBGEWrapper(Visualized_BGE):
         def __init__(
@@ -155,41 +157,37 @@ if Visualized_BGE is not None:
             probs = (logits * 100).softmax(dim=-1)
             return probs
 
-    Visualized_BGE_base = ModelMeta(
-        loader=partial(
-            VisualizedBGEWrapper,
-            model_name_bge="BAAI/bge-base-en-v1.5",
-            model_weight="visualized_base_en_V1.5.pth",
-        ),
-        name="BAAI/bge-visualized-base",
-        languages=["eng_Latn"],
-        open_source=True,
-        revision="98db10b10d22620010d06f11733346e1c98c34aa",
-        release_date="2024-06-06",
-    )
+    return VisualizedBGEWrapper(**kwargs)
 
-    Visualized_BGE_base = ModelMeta(
-        loader=partial(
-            VisualizedBGEWrapper,
-            model_name_bge="BAAI/bge-m3",
-            model_weight="visualized_m3.pth",
-        ),
-        name="BAAI/bge-visualized-m3",
-        languages=["eng_Latn"],
-        open_source=True,
-        revision="98db10b10d22620010d06f11733346e1c98c34aa",
-        release_date="2024-06-06",
-    )
+
+visualized_bge_base = ModelMeta(
+    loader=partial(
+        vista_loader,
+        model_name_bge="BAAI/bge-base-en-v1.5",
+        model_weight="visualized_base_en_V1.5.pth",
+    ),
+    name="BAAI/bge-visualized-base",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="98db10b10d22620010d06f11733346e1c98c34aa",
+    release_date="2024-06-06",
+)
+
+visualized_bge_m3 = ModelMeta(
+    loader=partial(
+        vista_loader,
+        model_name_bge="BAAI/bge-m3",
+        model_weight="visualized_m3.pth",
+    ),
+    name="BAAI/bge-visualized-m3",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="98db10b10d22620010d06f11733346e1c98c34aa",
+    release_date="2024-06-06",
+)
 
 if __name__ == "__main__":
-    if (
-        Visualized_BGE is None
-    ):  # a temporal fix to the dependency issues of Vista models.
-        print("Visualized_BGE module is not available.")
-    else:
-        import mteb
+    import mteb
 
-        mdl = mteb.get_model(
-            Visualized_BGE_base.name, Visualized_BGE_base.name.revision
-        )
-        emb = mdl.get_text_embeddings(["Hello, world!"])
+    mdl = mteb.get_model(visualized_bge_base.name, visualized_bge_base.name.revision)
+    emb = mdl.get_text_embeddings(["Hello, world!"])
