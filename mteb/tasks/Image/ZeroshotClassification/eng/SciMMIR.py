@@ -18,9 +18,9 @@ class SciMMIR(AbsTaskZeroshotClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2021-01-01", "2021-12-31"),
+        date=("2023-05-01", "2023-10-30"),
         domains=["Academic"],
-        task_subtypes=[],
+        task_subtypes=["Caption Pairing", "Rendered Texts Understanding"],
         license=None,
         socioeconomic_status="mixed",
         annotations_creators="human-annotated",
@@ -38,8 +38,8 @@ class SciMMIR(AbsTaskZeroshotClassification):
       url={https://arxiv.org/abs/2401.13478}, 
 }""",
         descriptive_stats={
-            "n_samples": {"test": 1000},
-            "avg_character_length": {"test": 10.0},
+            "n_samples": {"test": 16263},
+            "avg_character_length": {"test": 0},
         },
     )
 
