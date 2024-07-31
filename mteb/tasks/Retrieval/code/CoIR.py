@@ -65,14 +65,14 @@ class CoIRMultiLingualTask:
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        _corpus, _queries = {}, {}
         task_name = self.metadata_dict["dataset"]["name"]
         
         for lang in _LANGS:
+            _corpus, _queries = {}, {}
             queries_corpus_dataset = load_dataset(f"CoIR-Retrieval/{task_name}-{lang}-queries-corpus")
             qrels_dataset = load_dataset(f"CoIR-Retrieval/{task_name}-{lang}-qrels")
             corpus_data = [q for q in queries_corpus_dataset['corpus']]
-            query_data = [q for q in queries_corpus_dataset['queries'] if q['partition'] == _EVAL_SPLIT]
+            query_data = [q for q in queries_corpus_dataset['queries'] if q['partition'] in self.metadata_dict["eval_splits"]]
         
             # corpus handling 
             corpus_file = StringIO('\n'.join(json.dumps(doc) for doc in corpus_data))
@@ -113,9 +113,9 @@ class CoIRMultiLingualTask:
 
         self.data_loaded = True
             
-class CodeSummaryRetrieval(CoIRMultiLingualTask, MultilingualTask): 
+class CodeSummaryRetrieval(CoIRMultiLingualTask, MultilingualTask, AbsTaskRetrieval): 
     metadata = TaskMetadata(
-        name="CodeContestRetrieval",
+        name="CodeSummaryRetrieval",
         dataset={
             "path": "CoIR-Retrieval/CodeSearchNet",
             "revision": "",
@@ -128,7 +128,7 @@ class CodeSummaryRetrieval(CoIRMultiLingualTask, MultilingualTask):
         sample_creation="found",
         category="p2p",
         eval_splits=[_EVAL_SPLIT],
-        eval_langs=[f"{lang}-Code" for lang in _LANGS],
+        eval_langs={lang : [f"{lang}-Code"] for lang in _LANGS},
         main_score="ndcg_at_10",
         date=("2020-01-01", "2021-11-08"),  
         form=["written"],
@@ -157,7 +157,7 @@ class CodeSummaryRetrieval(CoIRMultiLingualTask, MultilingualTask):
     def load_data(self, **kwargs):
         self._load_data()
         
-class CodeContextRetrieval(CoIRMultiLingualTask, MultilingualTask): 
+class CodeContextRetrieval(CoIRMultiLingualTask, MultilingualTask, AbsTaskRetrieval): 
     metadata = TaskMetadata(
         name="CodeContextRetrieval",
         dataset={
@@ -172,7 +172,7 @@ class CodeContextRetrieval(CoIRMultiLingualTask, MultilingualTask):
         sample_creation="found",
         category="s2s",
         eval_splits=[_EVAL_SPLIT],
-        eval_langs=[f"{lang}-Code" for lang in _LANGS],
+        eval_langs={lang : [f"{lang}-Code"] for lang in _LANGS},
         main_score="ndcg_at_10",
         date=("2020-01-01", "2021-11-08"),  
         form=["written"],
