@@ -59,24 +59,14 @@ gte_Qwen2_7B_instruct = ModelMeta(
     release_date="2024-06-15",  # initial commit of hf model.
 )
 
-def last_token_pooling(token_embeddings, attention_mask):
-    bs, seq_len, hidden_dim = token_embeddings.shape
-    values, indices = attention_mask.flip(1).max(1)
-    indices = torch.where(values == 0, seq_len - 1, indices)
-    gather_indices = seq_len - indices - 1
-    gather_indices = gather_indices.unsqueeze(-1).repeat(1, hidden_dim)
-    gather_indices = gather_indices.unsqueeze(1)
-    assert gather_indices.shape == (bs, 1, hidden_dim)
-    input_mask_expanded = (
-        attention_mask.unsqueeze(-1).expand(token_embeddings.size()).to(token_embeddings.dtype)
-    )
-    embedding = torch.gather(token_embeddings * input_mask_expanded, 1, gather_indices).squeeze(dim=1)
-    return embedding
 
 if __name__ == "__main__":
     # Verify it reproduces https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct#sentence-transformers
     from sentence_transformers import SentenceTransformer
-    model = SentenceTransformer("Alibaba-NLP/gte-Qwen2-7B-instruct", trust_remote_code=True)
+
+    model = SentenceTransformer(
+        "Alibaba-NLP/gte-Qwen2-7B-instruct", trust_remote_code=True
+    )
     # Loading checkpoint shards: 100%|█████████████████████████████████████████████████████████| 7/7 [00:10<00:00,  1.52s/it]
     # Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
     # In case you want to reduce the maximum length:
@@ -93,12 +83,18 @@ if __name__ == "__main__":
     # [[70.39706420898438, 3.4318461418151855], [4.516170978546143, 81.91815948486328]]
 
     import mteb
-    model_mteb = mteb.get_model("Alibaba-NLP/gte-Qwen2-7B-instruct") # gte_Qwen2_7B_instruct.name, gte_Qwen2_7B_instruct.revision)
+
+    model_mteb = mteb.get_model(
+        "Alibaba-NLP/gte-Qwen2-7B-instruct"
+    )  # gte_Qwen2_7B_instruct.name, gte_Qwen2_7B_instruct.revision)
     # Loading checkpoint shards: 100%|█████████████████████████████████████████████████████████| 7/7 [00:01<00:00,  5.71it/s]
     # Created GritLM: torch.float32 dtype, lasttoken pool, embedding mode, cccc attn
     # Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
     # ----------Using 8 data-parallel GPUs----------
-    query_embeddings_mteb = model_mteb.encode(queries, instruction="Given a web search query, retrieve relevant passages that answer the query")
+    query_embeddings_mteb = model_mteb.encode(
+        queries,
+        instruction="Given a web search query, retrieve relevant passages that answer the query",
+    )
     document_embeddings_mteb = model_mteb.encode_corpus(documents)
     scores_mteb = (query_embeddings_mteb @ document_embeddings_mteb.T) * 100
     print(scores_mteb.tolist())
