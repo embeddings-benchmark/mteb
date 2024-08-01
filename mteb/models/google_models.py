@@ -27,7 +27,7 @@ class GoogleTextEmbeddingModel(Encoder):
         """
         try:
             from vertexai.language_models import TextEmbeddingInput, TextEmbeddingModel
-        except:
+        except ImportError:
             raise ImportError(
                 "The `vertexai` package is required to run the google API, please install it using `pip install vertexai`"
             )
