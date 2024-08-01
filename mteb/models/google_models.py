@@ -48,7 +48,7 @@ class GoogleTextEmbeddingModel(Encoder):
         kwargs = dict(output_dimensionality=dimensionality) if dimensionality else {}
         try:
             embeddings = model.get_embeddings(inputs, **kwargs)
-        # # Except the very rare google.api_core.exceptions.InternalServerError
+        # Except the very rare google.api_core.exceptions.InternalServerError
         except Exception as e:
             print("Retrying once after error:", e)
             embeddings = model.get_embeddings(inputs, **kwargs)
