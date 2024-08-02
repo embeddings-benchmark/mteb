@@ -235,7 +235,7 @@ def test_given_dataset_config_then_it_is_valid():
 
 def test_given_missing_dataset_path_then_it_throws():
     with pytest.raises(ValueError):
-        TaskMetadata(
+        TaskMetadata(  # type: ignore
             name="MyTask",
             description="testing",
             reference=None,
@@ -383,13 +383,13 @@ def test_filled_metadata_is_filled():
     )
 
 
-def test_all_metadata_is_filled():
+def test_all_metadata_is_filled_and_valid():
     all_tasks = get_tasks()
 
     unfilled_metadata = []
     for task in all_tasks:
         if task.metadata.name not in _HISTORIC_DATASETS:
-            if not task.metadata.is_filled():
+            if not task.metadata.is_filled() and task.metadata.is_validated():
                 unfilled_metadata.append(task.metadata.name)
     if unfilled_metadata:
         raise ValueError(
