@@ -196,11 +196,10 @@ class TaskMetadata(BaseModel):
 
     descriptive_stats: dict[METRIC_NAME, Optional[dict[SPLIT_NAME, METRIC_VALUE]]] = {}
 
-    def validate_metadata(self):
+    def validate_metadata(self) -> None:
         self.dataset_path_is_specified(self.dataset)
         self.dataset_revision_is_specified(self.dataset)
         self.eval_langs_are_valid(self.eval_langs)
-        return True
 
     @field_validator("dataset")
     def _check_dataset_path_is_specified(
@@ -217,17 +216,16 @@ class TaskMetadata(BaseModel):
         return dataset
 
     @staticmethod
-    def dataset_path_is_specified(dataset: dict[str, Any]) -> bool:
+    def dataset_path_is_specified(dataset: dict[str, Any]) -> None:
         """This method checks that the dataset path is specified."""
         if "path" not in dataset or dataset["path"] is None:
             raise ValueError(
                 "You must specify the path to the dataset in the dataset dictionary. "
                 "See https://huggingface.co/docs/datasets/main/en/package_reference/loading_methods#datasets.load_dataset"
             )
-        return True
 
     @staticmethod
-    def dataset_revision_is_specified(dataset: dict[str, Any]) -> bool:
+    def dataset_revision_is_specified(dataset: dict[str, Any]) -> None:
         if "revision" not in dataset:
             raise ValueError(
                 "You must explicitly specify a revision for the dataset (either a SHA or None)."
@@ -237,9 +235,8 @@ class TaskMetadata(BaseModel):
                 "Revision missing for the dataset %s. It is encourage to specify a dataset revision for reproducability.",
                 dataset["path"],
             )
-        return True
 
-    def eval_langs_are_valid(self, eval_langs: LANGUAGES) -> bool:
+    def eval_langs_are_valid(self, eval_langs: LANGUAGES) -> None:
         """This method checks that the eval_langs are specified as a list of languages."""
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
@@ -248,7 +245,6 @@ class TaskMetadata(BaseModel):
         else:
             for code in eval_langs:
                 self._check_language_code(code)
-        return True
 
     @staticmethod
     def _check_language_code(code):

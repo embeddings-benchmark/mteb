@@ -389,7 +389,9 @@ def test_all_metadata_is_filled_and_valid():
     unfilled_metadata = []
     for task in all_tasks:
         if task.metadata.name not in _HISTORIC_DATASETS:
-            if not task.metadata.is_filled() and task.metadata.is_validated():
+            if not task.metadata.is_filled() and (
+                not task.metadata.validate_metadata()
+            ):
                 unfilled_metadata.append(task.metadata.name)
     if unfilled_metadata:
         raise ValueError(
