@@ -3,23 +3,24 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+_LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
 _EVAL_SPLIT = "test"
 
 
-class StackOverflowQARetrieval(AbsTaskRetrieval):
+class CodeFeedbackST(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="StackOverflowQA",
-        description="The dataset is a collection of natural language queries and their corresponding code snippets. The task is to retrieve the most relevant code snippet for a given query.",
+        name="CodeFeedbackST",
+        description="The dataset is a collection of user queries and assistant responses. The task is to retrieve the most relevant response for a given query.",
         reference="https://arxiv.org/abs/2407.02883",
         dataset={
-            "path": "mteb/stackoverflow-qa",
-            "revision": "36c682863615a70a713bfba594b3e2a5e65e4bcf",
+            "path": "mteb/codefeedback-st",
+            "revision": "b1a2304593f46cb79695e6e2124953bfa43ffefa",
         },
         type="Retrieval",
         category="p2p",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
-        eval_langs=["eng-Latn"],
+        eval_langs=[lang + "-Code" for lang in _LANGS] + ["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2019-01-01", "2019-12-31"),
         domains=["Programming", "Written"],
@@ -43,10 +44,10 @@ class StackOverflowQARetrieval(AbsTaskRetrieval):
             },
             "avg_character_length": {
                 "test": {
-                    "average_document_length": 1202.4815613867845,
-                    "average_query_length": 1302.6263791374122,
-                    "num_documents": 19931,
-                    "num_queries": 1994,
+                    "average_document_length": 1521.3317148588733,
+                    "average_query_length": 724.2441704465598,
+                    "num_documents": 156526,
+                    "num_queries": 31306,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },

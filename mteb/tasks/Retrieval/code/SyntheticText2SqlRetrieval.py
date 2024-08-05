@@ -1,67 +1,9 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _EVAL_SPLIT = "test"
-
-
-def _load_syntetic_text_2_sql_retrieval(
-    path: str, cache_dir: str = None, revision: str = None
-):
-    split = _EVAL_SPLIT
-
-    corpus = {split: {}}
-    queries = {split: {}}
-    relevant_docs = {split: {}}
-
-    corpus_identifier = "-queries-corpus"
-    dataset = datasets.load_dataset(
-        path + corpus_identifier,
-        cache_dir=cache_dir,
-        revision=revision,
-        trust_remote_code=True,
-    ).filter(lambda example: example["partition"] == "test")
-
-    corpus_data = dataset["corpus"]
-    for row in corpus_data:
-        doc_id = row["_id"]
-        doc_title = row["title"]
-        doc_text = row["text"]
-        corpus[split][doc_id] = {"title": doc_title, "text": doc_text}
-
-    # Load queries data
-    queries_data = dataset["queries"]
-
-    for row in queries_data:
-        query_id = row["_id"]
-        query_text = row["text"]
-        queries[split][query_id] = query_text
-
-    # Load relevant documents data
-    qrels_identifier = "-qrels"
-    qrels_data = datasets.load_dataset(
-        path + qrels_identifier,
-        cache_dir=cache_dir,
-        revision=revision,
-        trust_remote_code=True,
-    )
-
-    for row in qrels_data[split]:
-        query_id = row["query_id"]
-        doc_id = row["corpus_id"]
-        score = row["score"]
-        if query_id not in relevant_docs[split]:
-            relevant_docs[split][query_id] = {}
-        relevant_docs[split][query_id][doc_id] = score
-
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
-
-    return corpus, queries, relevant_docs
 
 
 class SyntheticText2SQLRetrieval(AbsTaskRetrieval):
@@ -70,8 +12,8 @@ class SyntheticText2SQLRetrieval(AbsTaskRetrieval):
         description="The dataset is a collection of natural language queries and their corresponding sql snippets. The task is to retrieve the most relevant code snippet for a given query.",
         reference="https://huggingface.co/datasets/gretelai/synthetic_text_to_sql",
         dataset={
-            "path": "CoIR-Retrieval/synthetic-text2sql",
-            "revision": "main",
+            "path": "mteb/synthetic-text2sql",
+            "revision": "7dc8d317c7efb540f723f7f75ec525a1aa7da675",
         },
         type="Retrieval",
         category="p2p",
@@ -97,19 +39,14 @@ class SyntheticText2SQLRetrieval(AbsTaskRetrieval):
             "n_samples": {
                 _EVAL_SPLIT: 1000,
             },
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 127.07126054548375,
+                    "average_query_length": 82.90582806357888,
+                    "num_documents": 105851,
+                    "num_queries": 5851,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = (
-            _load_syntetic_text_2_sql_retrieval(
-                path=self.metadata_dict["dataset"]["path"],
-                cache_dir=kwargs.get("cache_dir", None),
-                revision=self.metadata_dict["dataset"]["revision"],
-            )
-        )
-
-        self.data_loaded = True
