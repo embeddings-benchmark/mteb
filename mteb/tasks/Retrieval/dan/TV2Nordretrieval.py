@@ -24,7 +24,7 @@ class TV2Nordretrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{flansmose-mikkelsen-etal-2022-ddisco,
+        bibtex_citation=r"""@inproceedings{flansmose-mikkelsen-etal-2022-ddisco,
     title = "{DD}is{C}o: A Discourse Coherence Dataset for {D}anish",
     author = "Flansmose Mikkelsen, Linea  and
       Kinch, Oliver  and
@@ -40,7 +40,7 @@ class TV2Nordretrieval(AbsTaskRetrieval):
       Isahara, Hitoshi  and
       Maegaard, Bente  and
       Mariani, Joseph  and
-      Mazo, H{\'e}l{\\`e}ne  and
+      Mazo, H{\'e}l{\`e}ne  and
       Odijk, Jan  and
       Piperidis, Stelios",
     booktitle = "Proceedings of the Thirteenth Language Resources and Evaluation Conference",
