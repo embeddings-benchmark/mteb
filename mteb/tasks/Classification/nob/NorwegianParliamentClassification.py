@@ -28,14 +28,14 @@ class NorwegianParliamentClassification(AbsTaskClassification):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@inproceedings{kummervold-etal-2021-operationalizing,
+        bibtex_citation=r"""@inproceedings{kummervold-etal-2021-operationalizing,
     title = "Operationalizing a National Digital Library: The Case for a {N}orwegian Transformer Model",
     author = "Kummervold, Per E  and
       De la Rosa, Javier  and
       Wetjen, Freddy  and
       Brygfjeld, Svein Arne",
     editor = "Dobnik, Simon  and
-      {\\O}vrelid, Lilja",
+      {\O}vrelid, Lilja",
     booktitle = "Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)",
     month = may # " 31--2 " # jun,
     year = "2021",
