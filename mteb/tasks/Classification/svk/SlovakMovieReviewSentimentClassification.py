@@ -26,10 +26,10 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
         license="CC BY-NC-SA 4.0",
         annotations_creators="derived",
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
         @article{vstefanik2023resources,
             title={Resources and Few-shot Learners for In-context Learning in Slavic Languages},
-            author={{\v{S}}tef{\'a}nik, Michal and Kadl{\v{c}}{\'\\i}k, Marek and Gramacki, Piotr and Sojka, Petr},
+            author={{\v{S}}tef{\'a}nik, Michal and Kadl{\v{c}}{\'\i}k, Marek and Gramacki, Piotr and Sojka, Petr},
             journal={arXiv preprint arXiv:2304.01922},
             year={2023}
             }
