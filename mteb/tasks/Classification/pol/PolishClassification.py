@@ -27,7 +27,7 @@ class CbdClassification(AbsTaskClassification):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@proceedings{ogr:kob:19:poleval,
+        bibtex_citation=r"""@proceedings{ogr:kob:19:poleval,
   editor    = {Maciej Ogrodniczuk and Łukasz Kobyliński},
   title     = {{Proceedings of the PolEval 2019 Workshop}},
   year      = {2019},
@@ -66,10 +66,10 @@ class PolEmo2InClassification(AbsTaskClassification):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@inproceedings{kocon-etal-2019-multi,
+        bibtex_citation=r"""@inproceedings{kocon-etal-2019-multi,
     title = "Multi-Level Sentiment Analysis of {P}ol{E}mo 2.0: Extended Corpus of Multi-Domain Consumer Reviews",
     author = "Koco{\'n}, Jan  and
-      Mi{\\l}kowski, Piotr  and
+      Mi{\l}kowski, Piotr  and
       Za{\'s}ko-Zieli{\'n}ska, Monika",
     booktitle = "Proceedings of the 23rd Conference on Computational Natural Language Learning (CoNLL)",
     month = nov,
