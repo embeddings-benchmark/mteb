@@ -27,14 +27,14 @@ class PatentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{sharma-etal-2019-bigpatent,
+        bibtex_citation=r"""@inproceedings{sharma-etal-2019-bigpatent,
             title = "{BIGPATENT}: A Large-Scale Dataset for Abstractive and Coherent Summarization",
             author = "Sharma, Eva  and
             Li, Chen  and
             Wang, Lu",
             editor = "Korhonen, Anna  and
             Traum, David  and
-            M{\\`a}rquez, Llu{\'\\i}s",
+            M{\`a}rquez, Llu{\'\i}s",
             booktitle = "Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics",
             month = jul,
             year = "2019",
