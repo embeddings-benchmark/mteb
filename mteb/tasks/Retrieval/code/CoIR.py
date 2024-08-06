@@ -450,7 +450,7 @@ class CodeFeedbackSTRetrieval(CoIRTask, AbsTaskRetrieval):
         dataset={
             "path": "CoIR-Retrieval/codefeedback-st",
             "revision": "",
-            "name": "codefeedback-mt",
+            "name": "codefeedback-st",
         },
         reference="https://huggingface.co/CoIR-Retrieval",
         description=("Retrieving relevant answer in text with some code snippets given a natural language question."),
