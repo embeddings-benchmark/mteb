@@ -26,12 +26,12 @@ class DKHateClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{sigurbergsson-derczynski-2020-offensive,
+        bibtex_citation=r"""@inproceedings{sigurbergsson-derczynski-2020-offensive,
     title = "Offensive Language and Hate Speech Detection for {D}anish",
     author = "Sigurbergsson, Gudbjartur Ingi  and
       Derczynski, Leon",
     editor = "Calzolari, Nicoletta  and
-      B{\\'e}chet, Fr{\\'e}d{\\'e}ric  and
+      B{\'e}chet, Fr{\'e}d{\'e}ric  and
       Blache, Philippe  and
       Choukri, Khalid  and
       Cieri, Christopher  and
@@ -40,7 +40,7 @@ class DKHateClassification(AbsTaskClassification):
       Isahara, Hitoshi  and
       Maegaard, Bente  and
       Mariani, Joseph  and
-      Mazo, H{\\'e}l{\\`e}ne  and
+      Mazo, H{\'e}l{\`e}ne  and
       Moreno, Asuncion  and
       Odijk, Jan  and
       Piperidis, Stelios",
