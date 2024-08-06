@@ -26,8 +26,8 @@ class CzechSubjectivityClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{priban-steinberger-2022-czech,
-    title = "\\{C\\}zech Dataset for Cross-lingual Subjectivity Classification",
+        bibtex_citation=r"""@inproceedings{priban-steinberger-2022-czech,
+    title = "\{C\}zech Dataset for Cross-lingual Subjectivity Classification",
     author = "P{\v{r}}ib{\'a}{\v{n}}, Pavel  and
       Steinberger, Josef",
     booktitle = "Proceedings of the Thirteenth Language Resources and Evaluation Conference",
