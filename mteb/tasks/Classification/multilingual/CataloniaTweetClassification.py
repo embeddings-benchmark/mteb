@@ -36,11 +36,11 @@ class CataloniaTweetClassification(MultilingualTask, AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{zotova-etal-2020-multilingual,
+        bibtex_citation=r"""@inproceedings{zotova-etal-2020-multilingual,
             title = "Multilingual Stance Detection in Tweets: The {C}atalonia Independence Corpus",
             author = "Zotova, Elena  and
             Agerri, Rodrigo  and
-            Nu{\\~n}ez, Manuel  and
+            Nu{\~n}ez, Manuel  and
             Rigau, German",
             editor = "Calzolari, Nicoletta  and
             B{\'e}chet, Fr{\'e}d{\'e}ric  and
@@ -52,7 +52,7 @@ class CataloniaTweetClassification(MultilingualTask, AbsTaskClassification):
             Isahara, Hitoshi  and
             Maegaard, Bente  and
             Mariani, Joseph  and
-            Mazo, H{\'e}l{\\`e}ne  and
+            Mazo, H{\'e}l{\`e}ne  and
             Moreno, Asuncion  and
             Odijk, Jan  and
             Piperidis, Stelios",
