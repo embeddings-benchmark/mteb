@@ -26,7 +26,7 @@ class TweetSarcasmClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=["ara-arab-EG", "ara-arab-LB", "ara-arab-MA", "ara-arab-SA"],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @inproceedings{abu-farha-magdy-2020-arabic,
     title = "From {A}rabic Sentiment Analysis to Sarcasm Detection: The {A}r{S}arcasm Dataset",
     author = "Abu Farha, Ibrahim  and

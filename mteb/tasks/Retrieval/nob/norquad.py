@@ -31,7 +31,7 @@ class NorQuadRetrieval(AbsTaskRetrieval):
       Andreassen, Fredrik  and
       Jentoft, Matias  and
       Wold, Sondre  and
-      {\O}vrelid, Lilja",
+      {\\O}vrelid, Lilja",
     editor = {Alum{\"a}e, Tanel  and
       Fishel, Mark},
     booktitle = "Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)",

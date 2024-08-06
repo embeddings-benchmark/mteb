@@ -27,7 +27,7 @@ class STS14STS(AbsTaskSTS):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{bandhakavi-etal-2014-generating,
+        bibtex_citation=r"""@inproceedings{bandhakavi-etal-2014-generating,
     title = "Generating a Word-Emotion Lexicon from {\#}Emotional Tweets",
     author = "Bandhakavi, Anil  and
       Wiratunga, Nirmalie  and

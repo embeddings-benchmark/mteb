@@ -32,7 +32,7 @@ class Banking77Classification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="""@inproceedings{casanueva-etal-2020-efficient,
     title = "Efficient Intent Detection with Dual Sentence Encoders",
-    author = "Casanueva, I{\~n}igo  and
+    author = "Casanueva, I{\\~n}igo  and
       Tem{\v{c}}inas, Tadas  and
       Gerz, Daniela  and
       Henderson, Matthew  and
@@ -43,7 +43,7 @@ class Banking77Classification(AbsTaskClassification):
       Papangelis, Alexandros  and
       Eric, Mihail  and
       Kumar, Anuj  and
-      Casanueva, I{\~n}igo  and
+      Casanueva, I{\\~n}igo  and
       Shah, Rushin",
     booktitle = "Proceedings of the 2nd Workshop on Natural Language Processing for Conversational AI",
     month = jul,

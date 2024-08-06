@@ -34,7 +34,7 @@ class PatentClassification(AbsTaskClassification):
             Wang, Lu",
             editor = "Korhonen, Anna  and
             Traum, David  and
-            M{\`a}rquez, Llu{\'\i}s",
+            M{\\`a}rquez, Llu{\'\\i}s",
             booktitle = "Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics",
             month = jul,
             year = "2019",

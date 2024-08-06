@@ -114,11 +114,11 @@ class MTEB:
 
     @property
     def available_task_types(self):
-        return set([x.metadata_dict["type"] for x in self.tasks_cls])
+        return {x.metadata_dict["type"] for x in self.tasks_cls}
 
     @property
     def available_task_categories(self):
-        return set([x.metadata_dict["category"] for x in self.tasks_cls])
+        return {x.metadata_dict["category"] for x in self.tasks_cls}
 
     def _extend_lang_code(self):
         # add all possible language codes
@@ -197,9 +197,9 @@ class MTEB:
                 )
             )
             if len(self.tasks) != len(self._tasks):
-                tasks_known = set([x.metadata_dict["name"] for x in self.tasks_cls])
+                tasks_known = {x.metadata_dict["name"] for x in self.tasks_cls}
                 tasks_unknown = (
-                    set(x for x in self._tasks if isinstance(x, str)) - tasks_known
+                    {x for x in self._tasks if isinstance(x, str)} - tasks_known
                 )
                 if tasks_unknown:
                     unknown_str, known_str = (

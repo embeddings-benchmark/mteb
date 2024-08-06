@@ -12,7 +12,7 @@ class TestClusteringEvaluator:
         class Model:
             def encode(
                 self,
-                sentences: List[str],
+                sentences: list[str],
                 prompt_name: str | None = None,
                 batch_size=32,
             ) -> np.ndarray:

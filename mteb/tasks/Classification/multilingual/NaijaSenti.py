@@ -47,7 +47,7 @@ class NaijaSenti(AbsTaskClassification, MultilingualTask):
       Emezue, Chris Chinenye  and
       Abdullahi, Saheed Salahudeen  and
       Aremu, Anuoluwapo  and
-      Jorge, Al{\'\i}pio  and
+      Jorge, Al{\'\\i}pio  and
       Brazdil, Pavel",
         booktitle = "Proceedings of the Thirteenth Language Resources and Evaluation Conference",
         month = jun,

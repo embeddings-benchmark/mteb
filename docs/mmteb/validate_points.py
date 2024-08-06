@@ -46,7 +46,7 @@ def validate_jsonl_files(folder_path):
         if filename.endswith(".jsonl"):
             file_path = os.path.join(folder_path, filename)
             commit_n = os.path.splitext(filename)[0]
-            with open(file_path, "r", encoding="utf-8") as file:
+            with open(file_path, encoding="utf-8") as file:
                 try:
                     # Read JSONL file
                     reader = Reader(file)

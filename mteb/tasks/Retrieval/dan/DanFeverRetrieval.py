@@ -27,10 +27,10 @@ class DanFeverRetrieval(AbsTaskRetrieval):
         bibtex_citation="""
 @inproceedings{norregaard-derczynski-2021-danfever,
     title = "{D}an{FEVER}: claim verification dataset for {D}anish",
-    author = "N{\o}rregaard, Jeppe  and
+    author = "N{\\o}rregaard, Jeppe  and
       Derczynski, Leon",
     editor = "Dobnik, Simon  and
-      {\O}vrelid, Lilja",
+      {\\O}vrelid, Lilja",
     booktitle = "Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)",
     month = may # " 31--2 " # jun,
     year = "2021",
@@ -139,10 +139,10 @@ class DanFever(AbsTaskRetrieval):
         bibtex_citation="""
 @inproceedings{norregaard-derczynski-2021-danfever,
     title = "{D}an{FEVER}: claim verification dataset for {D}anish",
-    author = "N{\o}rregaard, Jeppe  and
+    author = "N{\\o}rregaard, Jeppe  and
       Derczynski, Leon",
     editor = "Dobnik, Simon  and
-      {\O}vrelid, Lilja",
+      {\\O}vrelid, Lilja",
     booktitle = "Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)",
     month = may # " 31--2 " # jun,
     year = "2021",

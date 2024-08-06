@@ -27,7 +27,7 @@ class STS15STS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{bicici-2015-rtm,
+        bibtex_citation=r"""@inproceedings{bicici-2015-rtm,
     title = "{RTM}-{DCU}: Predicting Semantic Similarity with Referential Translation Machines",
     author = "Bi{\c{c}}ici, Ergun",
     editor = "Nakov, Preslav  and

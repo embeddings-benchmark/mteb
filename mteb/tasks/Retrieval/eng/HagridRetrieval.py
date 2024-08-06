@@ -87,7 +87,7 @@ class HagridRetrieval(AbsTaskRetrieval):
 
         self.data_loaded = True
 
-    def preprocess_data(self, dataset: Dict) -> List[Dict]:
+    def preprocess_data(self, dataset: dict) -> list[dict]:
         """Preprocessed the data in a format easirer
         to handle for the loading of queries and corpus
         ------
@@ -111,7 +111,7 @@ class HagridRetrieval(AbsTaskRetrieval):
 
         return preprocessed_data
 
-    def get_best_answer(self, data: Dict) -> str:
+    def get_best_answer(self, data: dict) -> str:
         """Get the best answer among available answers
         of a query.
         WARNING : May return None if no good answer available

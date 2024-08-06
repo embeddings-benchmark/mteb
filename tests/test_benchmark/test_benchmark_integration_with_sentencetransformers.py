@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.INFO)
         "average_word_embeddings_levy_dependency",
     ],
 )
-def test_benchmark_sentence_transformer(task: Union[str, AbsTask], model_name: str):
+def test_benchmark_sentence_transformer(task: str | AbsTask, model_name: str):
     """Test that a task can be fetched and run"""
     if isinstance(model_name, str):
         model = SentenceTransformer(model_name)

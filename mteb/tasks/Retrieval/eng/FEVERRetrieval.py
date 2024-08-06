@@ -33,7 +33,7 @@ class FEVER(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@inproceedings{thorne-etal-2018-fever,
+        bibtex_citation=r"""@inproceedings{thorne-etal-2018-fever,
     title = "{FEVER}: a Large-scale Dataset for Fact Extraction and {VER}ification",
     author = "Thorne, James  and
       Vlachos, Andreas  and

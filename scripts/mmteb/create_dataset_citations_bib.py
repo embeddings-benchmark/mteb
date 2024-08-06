@@ -69,10 +69,8 @@ def task_to_tex_row(task: mteb.AbsTask) -> str:
     )
     n_samples = (
         "{:.2f}".format(
-            (
                 sum(task.metadata.n_samples.values())
                 / len(task.metadata.n_samples.keys())
-            )
         )
         if task.metadata.n_samples
         else ""
@@ -80,10 +78,8 @@ def task_to_tex_row(task: mteb.AbsTask) -> str:
 
     avg_character_length = (
         "{:.2f}".format(
-            (
                 sum(task.metadata.avg_character_length.values())
                 / len(task.metadata.avg_character_length.keys())
-            )
         )
         if task.metadata.avg_character_length
         else ""

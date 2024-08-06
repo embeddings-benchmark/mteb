@@ -24,7 +24,7 @@ class SNLRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@mastersthesis{navjord2023beyond,
+        bibtex_citation=r"""@mastersthesis{navjord2023beyond,
     title={Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
     author={Navjord, J{\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
     year={2023},

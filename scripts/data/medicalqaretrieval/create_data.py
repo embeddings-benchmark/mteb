@@ -8,7 +8,7 @@ from datasets import load_dataset
 from huggingface_hub import create_repo, upload_file
 
 
-def preprocess_data(example: Dict) -> Dict:
+def preprocess_data(example: dict) -> dict:
     """Preprocessed the data in a format easier
     to handle for the loading of queries and corpus
     ------

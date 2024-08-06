@@ -119,7 +119,7 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@article{10.1162/tacl_a_00595,
+        bibtex_citation=r"""@article{10.1162/tacl_a_00595,
     author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
     title = "{MIRACL: A Multilingual Retrieval Dataset Covering 18 Diverse Languages}",
     journal = {Transactions of the Association for Computational Linguistics},

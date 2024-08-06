@@ -42,7 +42,7 @@ class SensitiveTopicsClassification(AbsTaskMultilabelClassification):
         Starko, Vasyl  and
         Steinberger, Josef  and
         Yangarber, Roman  and
-        Marci{\'n}czuk, Micha{\l}  and
+        Marci{\'n}czuk, Micha{\\l}  and
         Pollak, Senja  and
         P{\v{r}}ib{\'a}{\v{n}}, Pavel  and
         Robnik-{\v{S}}ikonja, Marko",

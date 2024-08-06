@@ -29,7 +29,7 @@ class CTKFactsNLI(AbsTaskPairClassification):
         sample_creation="found",
         bibtex_citation="""@article{ullrich2023csfever,
         title={CsFEVER and CTKFacts: acquiring Czech data for fact verification},
-        author={Ullrich, Herbert and Drchal, Jan and R{\`y}par, Martin and Vincourov{\'a}, Hana and Moravec, V{\'a}clav},
+        author={Ullrich, Herbert and Drchal, Jan and R{\\`y}par, Martin and Vincourov{\'a}, Hana and Moravec, V{\'a}clav},
         journal={Language Resources and Evaluation},
         volume={57},
         number={4},

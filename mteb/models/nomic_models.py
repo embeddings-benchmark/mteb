@@ -28,7 +28,7 @@ class NomicWrapper:
         *,
         prompt_name: str | None = None,
         batch_size: int = 32,
-        input_type: Optional[str] = None,
+        input_type: str | None = None,
         **kwargs: Any,
     ):
         if prompt_name:

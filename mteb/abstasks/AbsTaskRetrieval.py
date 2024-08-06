@@ -66,17 +66,17 @@ class HFDataLoader:
     def check(fIn: str, ext: str):
         if not os.path.exists(fIn):
             raise ValueError(
-                "File {} not present! Please provide accurate file.".format(fIn)
+                f"File {fIn} not present! Please provide accurate file."
             )
 
         if not fIn.endswith(ext):
             raise ValueError(
-                "File {} must be present with extension {}".format(fIn, ext)
+                f"File {fIn} must be present with extension {ext}"
             )
 
     def load(
         self, split="test"
-    ) -> Tuple[Dict[str, dict[str, str]], dict[str, str], dict[str, dict[str, int]]]:
+    ) -> tuple[dict[str, dict[str, str]], dict[str, str], dict[str, dict[str, int]]]:
         if not self.hf_repo:
             self.qrels_file = os.path.join(self.qrels_folder, split + ".tsv")
             self.check(fIn=self.corpus_file, ext="jsonl")
@@ -295,7 +295,7 @@ class AbsTaskRetrieval(AbsTask):
         results = retriever(corpus, queries)
         end_time = time()
         logger.info(
-            "Time taken to retrieve: {:.2f} seconds".format(end_time - start_time)
+            f"Time taken to retrieve: {end_time - start_time:.2f} seconds"
         )
 
         save_predictions = kwargs.get("save_predictions", False)

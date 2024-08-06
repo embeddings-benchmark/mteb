@@ -26,7 +26,7 @@ class NepaliNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
         @inproceedings{arora-2020-inltk,
     title = "i{NLTK}: Natural Language Toolkit for Indic Languages",
     author = "Arora, Gaurav",

@@ -60,7 +60,7 @@ class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@article{10.1162/tacl_a_00452,
+        bibtex_citation=r"""@article{10.1162/tacl_a_00452,
     author = {Ramesh, Gowtham and Doddapaneni, Sumanth and Bheemaraj, Aravinth and Jobanputra, Mayank and AK, Raghavan and Sharma, Ajitesh and Sahoo, Sujit and Diddee, Harshita and J, Mahalakshmi and Kakwani, Divyanshu and Kumar, Navneet and Pradeep, Aswin and Nagaraj, Srihari and Deepak, Kumar and Raghavan, Vivek and Kunchukuttan, Anoop and Kumar, Pratyush and Khapra, Mitesh Shantadevi},
     title = "{Samanantar: The Largest Publicly Available Parallel Corpora Collection for 11 Indic Languages}",
     journal = {Transactions of the Association for Computational Linguistics},

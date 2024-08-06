@@ -32,7 +32,7 @@ class HateSpeechPortugueseClassification(AbsTaskClassification):
             @inproceedings{fortuna-etal-2019-hierarchically,
                 title = "A Hierarchically-Labeled {P}ortuguese Hate Speech Dataset",
                 author = "Fortuna, Paula  and
-                Rocha da Silva, Jo{\~a}o  and
+                Rocha da Silva, Jo{\\~a}o  and
                 Soler-Company, Juan  and
                 Wanner, Leo  and
                 Nunes, S{\'e}rgio",

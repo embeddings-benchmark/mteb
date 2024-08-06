@@ -194,7 +194,7 @@ class TaskMetadata(BaseModel):
     sample_creation: SAMPLE_CREATION_METHOD | None = None
     bibtex_citation: str | None = None
 
-    descriptive_stats: dict[METRIC_NAME, Optional[dict[SPLIT_NAME, METRIC_VALUE]]] = {}
+    descriptive_stats: dict[METRIC_NAME, dict[SPLIT_NAME, METRIC_VALUE] | None] = {}
 
     def validate_metadata(self) -> None:
         self.dataset_path_is_specified(self.dataset)
@@ -275,13 +275,13 @@ class TaskMetadata(BaseModel):
 
         if isinstance(self.eval_langs, dict):
             return sorted(
-                set(
+                {
                     get_lang(lang)
                     for langs in self.eval_langs.values()
                     for lang in langs
-                )
+                }
             )
-        return sorted(set([get_lang(lang) for lang in self.eval_langs]))
+        return sorted({get_lang(lang) for lang in self.eval_langs})
 
     @property
     def scripts(self) -> set[str]:
@@ -291,10 +291,10 @@ class TaskMetadata(BaseModel):
             return lang.split("-")[1]
 
         if isinstance(self.eval_langs, dict):
-            return set(
+            return {
                 get_script(lang) for langs in self.eval_langs.values() for lang in langs
-            )
-        return set(get_script(lang) for lang in self.eval_langs)
+            }
+        return {get_script(lang) for lang in self.eval_langs}
 
     def is_filled(self) -> bool:
         """Check if all the metadata fields are filled."""

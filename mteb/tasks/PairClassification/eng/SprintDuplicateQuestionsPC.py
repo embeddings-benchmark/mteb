@@ -27,7 +27,7 @@ class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@inproceedings{shah-etal-2018-adversarial,
+        bibtex_citation=r"""@inproceedings{shah-etal-2018-adversarial,
     title = "Adversarial Domain Adaptation for Duplicate Question Detection",
     author = "Shah, Darsh  and
       Lei, Tao  and
