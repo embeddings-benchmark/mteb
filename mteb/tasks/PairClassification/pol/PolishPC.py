@@ -27,11 +27,11 @@ class SickePLPC(AbsTaskPairClassification):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@inproceedings{dadas-etal-2020-evaluation,
+        bibtex_citation=r"""@inproceedings{dadas-etal-2020-evaluation,
             title = "Evaluation of Sentence Representations in {P}olish",
             author = "Dadas, Slawomir  and
-            Pere{\\l}kiewicz, Micha{\\l}  and
-            Po{\'s}wiata, Rafa{\\l}",
+            Pere{\l}kiewicz, Micha{\l}  and
+            Po{\'s}wiata, Rafa{\l}",
             editor = "Calzolari, Nicoletta  and
             B{\'e}chet, Fr{\'e}d{\'e}ric  and
             Blache, Philippe  and
@@ -42,7 +42,7 @@ class SickePLPC(AbsTaskPairClassification):
             Isahara, Hitoshi  and
             Maegaard, Bente  and
             Mariani, Joseph  and
-            Mazo, H{\'e}l{\\`e}ne  and
+            Mazo, H{\'e}l{\`e}ne  and
             Moreno, Asuncion  and
             Odijk, Jan  and
             Piperidis, Stelios",
