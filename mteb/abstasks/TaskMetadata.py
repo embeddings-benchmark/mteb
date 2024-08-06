@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from datetime import date
-from typing import Any, Dict, List, Mapping, Optional, Union
+from typing import Any, Dict, List, Mapping, Union
 
 from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
 from typing_extensions import Annotated, Literal
@@ -275,11 +275,7 @@ class TaskMetadata(BaseModel):
 
         if isinstance(self.eval_langs, dict):
             return sorted(
-                {
-                    get_lang(lang)
-                    for langs in self.eval_langs.values()
-                    for lang in langs
-                }
+                {get_lang(lang) for langs in self.eval_langs.values() for lang in langs}
             )
         return sorted({get_lang(lang) for lang in self.eval_langs})
 

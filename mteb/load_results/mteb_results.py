@@ -6,7 +6,7 @@ from argparse import Namespace
 from collections import defaultdict
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any, Callable, Type
+from typing import Any, Callable
 
 import numpy as np
 from packaging.version import Version

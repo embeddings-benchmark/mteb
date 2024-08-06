@@ -5,7 +5,7 @@ import logging
 import os
 from collections import defaultdict
 from time import time
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any
 
 import tqdm
 from datasets import Dataset, Features, Value, load_dataset
@@ -523,9 +523,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         results = {k: v for d in all_results for k, v in d.items()}
 
         end_time = time()
-        logger.info(
-            f"Time taken to retrieve: {end_time - start_time:.2f} seconds"
-        )
+        logger.info(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 
         if kwargs.get("save_predictions", False):
             output_folder = kwargs.get("output_folder", "results")

@@ -5,7 +5,6 @@ from __future__ import annotations
 import difflib
 import logging
 from collections import Counter
-from typing import Dict, Set, Type
 
 from mteb.abstasks import AbsTask
 from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE

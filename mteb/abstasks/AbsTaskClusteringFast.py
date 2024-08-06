@@ -4,7 +4,7 @@ import itertools
 import logging
 import random
 from collections import defaultdict
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 import numpy as np
 import sklearn

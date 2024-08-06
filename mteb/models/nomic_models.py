@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Any, Optional
+from typing import Any
 
 import torch
 import torch.nn.functional as F

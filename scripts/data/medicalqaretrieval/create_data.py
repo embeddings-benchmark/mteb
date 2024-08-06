@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import os
 import uuid
-from typing import Dict
 
 from datasets import load_dataset
 from huggingface_hub import create_repo, upload_file

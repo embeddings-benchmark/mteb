@@ -5,7 +5,7 @@ import json
 import logging
 import os
 from collections import defaultdict
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any
 
 import numpy as np
 import pytrec_eval

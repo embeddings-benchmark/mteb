@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Union
 
 import pytest
 from sentence_transformers import SentenceTransformer
