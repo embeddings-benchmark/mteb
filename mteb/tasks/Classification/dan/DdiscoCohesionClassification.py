@@ -32,9 +32,9 @@ class DdiscoCohesionClassification(AbsTaskClassification):
     author = "Flansmose Mikkelsen, Linea  and
       Kinch, Oliver  and
       Jess Pedersen, Anders  and
-      Lacroix, Oph{\'e}lie",
+      Lacroix, Oph{\\'e}lie",
     editor = "Calzolari, Nicoletta  and
-      B{\'e}chet, Fr{\'e}d{\'e}ric  and
+      B{\\'e}chet, Fr{\\'e}d{\\'e}ric  and
       Blache, Philippe  and
       Choukri, Khalid  and
       Cieri, Christopher  and
@@ -43,7 +43,7 @@ class DdiscoCohesionClassification(AbsTaskClassification):
       Isahara, Hitoshi  and
       Maegaard, Bente  and
       Mariani, Joseph  and
-      Mazo, H{\'e}l{\\`e}ne  and
+      Mazo, H{\\'e}l{\\`e}ne  and
       Odijk, Jan  and
       Piperidis, Stelios",
     booktitle = "Proceedings of the Thirteenth Language Resources and Evaluation Conference",
