@@ -17,37 +17,27 @@ class CoIRTask:
         qrels_dataset = load_dataset(f"CoIR-Retrieval/{task_name}-qrels")
 
         corpus_data = [q for q in queries_corpus_dataset['corpus']]
-        query_data = [q for q in queries_corpus_dataset['queries'] if q['partition'] == _EVAL_SPLIT]
         
         # corpus handling 
-        corpus_file = StringIO('\n'.join(json.dumps(doc) for doc in corpus_data))
-        corpus_file.seek(0)
-        for line in corpus_file:
-            doc = json.loads(line)
+        for doc in corpus_data:
             _corpus[doc["_id"]] = {
                 "text": doc.get("text"),
-                "title": doc.get("title")
             }
-            
-        query_file = StringIO('\n'.join(json.dumps(doc) for doc in query_data))
-        query_file.seek(0)
-        for line in query_file:
-            doc = json.loads(line)
-            _queries[doc["_id"]] = {
-                "text": doc.get("text"),
-                "title": doc.get("title")
-            }
-
-        # qrels_data = qrels_dataset['test']
         
         for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
+            
+            #query handling
+            query_data = [q for q in queries_corpus_dataset['queries'] if q['partition'] == split]
+            for doc in query_data:
+                _queries[doc["_id"]] = {
+                    "text": doc.get("text"),
+                }
+
+            #qrel handling
             qrel_split = qrels_dataset[split]
-            qrels_file = StringIO('\n'.join(f"{qrel['query_id']}\t{qrel['corpus_id']}\t{qrel['score']}" for qrel in qrel_split))
-            qrels_file.seek(0)
-            reader = csv.reader(qrels_file, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
             qrels = {}
-            for row in reader:
-                query_id, corpus_id, score = row[0], row[1], int(row[2])
+            for qrel in qrel_split:
+                query_id, corpus_id, score = qrel['query_id'], qrel['corpus_id'], int(qrel['score'])
                 if query_id not in qrels:
                     qrels[query_id] = {corpus_id: score}
                 else:
@@ -72,37 +62,26 @@ class CoIRMultiLingualTask:
             queries_corpus_dataset = load_dataset(f"CoIR-Retrieval/{task_name}-{lang}-queries-corpus")
             qrels_dataset = load_dataset(f"CoIR-Retrieval/{task_name}-{lang}-qrels")
             corpus_data = [q for q in queries_corpus_dataset['corpus']]
-            query_data = [q for q in queries_corpus_dataset['queries'] if q['partition'] in self.metadata_dict["eval_splits"]]
         
             # corpus handling 
-            corpus_file = StringIO('\n'.join(json.dumps(doc) for doc in corpus_data))
-            corpus_file.seek(0)
-            for line in corpus_file:
-                doc = json.loads(line)
+            for doc in corpus_data:
                 _corpus[doc["_id"]] = {
                     "text": doc.get("text"),
-                    "title": doc.get("title")
                 }
-                
-            query_file = StringIO('\n'.join(json.dumps(doc) for doc in query_data))
-            query_file.seek(0)
-            for line in query_file:
-                doc = json.loads(line)
-                _queries[doc["_id"]] = {
-                    "text": doc.get("text"),
-                    "title": doc.get("title")
-                }
-
-            # qrels_data = qrels_dataset['test']
             
             for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
+                # query handling
+                query_data = [q for q in queries_corpus_dataset['queries'] if q['partition'] == split]
+                for doc in query_data:
+                    _queries[doc["_id"]] = {
+                        "text": doc.get("text"),
+                    }
+                
+                #qrel handling
                 qrel_split = qrels_dataset[split]
-                qrels_file = StringIO('\n'.join(f"{qrel['query_id']}\t{qrel['corpus_id']}\t{qrel['score']}" for qrel in qrel_split))
-                qrels_file.seek(0)
-                reader = csv.reader(qrels_file, delimiter="\t", quoting=csv.QUOTE_MINIMAL)
                 qrels = {}
-                for row in reader:
-                    query_id, corpus_id, score = row[0], row[1], int(row[2])
+                for qrel in qrel_split:
+                    query_id, corpus_id, score = qrel['query_id'], qrel['corpus_id'], int(qrel['score'])
                     if query_id not in qrels:
                         qrels[query_id] = {corpus_id: score}
                     else:
