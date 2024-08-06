@@ -28,7 +28,7 @@ class SickBrPC(AbsTaskPairClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="human-translated and localized",
-        bibtex_citation="""
+        bibtex_citation=r"""
         @inproceedings{real18,
         author="Real, Livy
             and Rodrigues, Ana
