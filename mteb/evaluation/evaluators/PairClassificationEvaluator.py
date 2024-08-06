@@ -162,10 +162,13 @@ class PairClassificationEvaluator(Evaluator):
         acc, acc_threshold = PairClassificationEvaluator.find_best_acc_and_threshold(
             scores, labels, high_score_more_similar
         )
-        f1, precision, recall, f1_threshold = (
-            PairClassificationEvaluator.find_best_f1_and_threshold(
-                scores, labels, high_score_more_similar
-            )
+        (
+            f1,
+            precision,
+            recall,
+            f1_threshold,
+        ) = PairClassificationEvaluator.find_best_f1_and_threshold(
+            scores, labels, high_score_more_similar
         )
         ap = PairClassificationEvaluator.ap_score(
             scores, labels, high_score_more_similar

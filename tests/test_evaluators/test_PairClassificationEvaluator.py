@@ -23,10 +23,13 @@ class TestPairClassificationEvaluator:
         labels = [0, 0, 0, 0, 1, 0, 0, 0, 1, 0]
         high_score_more_similar = True
 
-        f1, precision, recall, f1_threshold = (
-            PairClassificationEvaluator.find_best_f1_and_threshold(
-                scores, labels, high_score_more_similar
-            )
+        (
+            f1,
+            precision,
+            recall,
+            f1_threshold,
+        ) = PairClassificationEvaluator.find_best_f1_and_threshold(
+            scores, labels, high_score_more_similar
         )
         assert f1 == pytest.approx(0.66666, TOL)
         assert precision == pytest.approx(1.0, TOL)

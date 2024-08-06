@@ -199,8 +199,8 @@ voyage_2 = ModelMeta(
     embed_dim=1024,
     open_source=False,
 )
-
-voyage_multilingual_2 = ModelMeta(  # reference: https://blog.voyageai.com/2024/06/10/voyage-multilingual-2-multilingual-embedding-model/"
+# see https://blog.voyageai.com/2024/06/10/voyage-multilingual-2-multilingual-embedding-model/"
+voyage_multilingual_2 = ModelMeta(
     name="voyage-multilingual-2",
     revision="1",
     release_date="2024-06-10",
