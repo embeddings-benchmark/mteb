@@ -42,12 +42,12 @@ class STS17Crosslingual(AbsTaskSTS, MultilingualTask):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{cer-etal-2017-semeval,
+        bibtex_citation=r"""@inproceedings{cer-etal-2017-semeval,
     title = "{S}em{E}val-2017 Task 1: Semantic Textual Similarity Multilingual and Crosslingual Focused Evaluation",
     author = "Cer, Daniel  and
       Diab, Mona  and
       Agirre, Eneko  and
-      Lopez-Gazpio, I{\\~n}igo  and
+      Lopez-Gazpio, I{\~n}igo  and
       Specia, Lucia",
     editor = "Bethard, Steven  and
       Carpuat, Marine  and
