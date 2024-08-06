@@ -30,7 +30,7 @@ class JSTS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{kurihara-etal-2022-jglue,
+        bibtex_citation=r"""@inproceedings{kurihara-etal-2022-jglue,
     title = "{JGLUE}: {J}apanese General Language Understanding Evaluation",
     author = "Kurihara, Kentaro  and
       Kawahara, Daisuke  and
@@ -45,7 +45,7 @@ class JSTS(AbsTaskSTS):
       Isahara, Hitoshi  and
       Maegaard, Bente  and
       Mariani, Joseph  and
-      Mazo, H{\'e}l{\\`e}ne  and
+      Mazo, H{\'e}l{\`e}ne  and
       Odijk, Jan  and
       Piperidis, Stelios",
     booktitle = "Proceedings of the Thirteenth Language Resources and Evaluation Conference",
