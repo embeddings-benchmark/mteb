@@ -31,7 +31,7 @@ class FinParaSTS(AbsTaskSTS):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
         @inproceedings{kanerva-etal-2021-finnish,
             title = "{F}innish Paraphrase Corpus",
             author = {Kanerva, Jenna  and
@@ -45,7 +45,7 @@ class FinParaSTS(AbsTaskSTS):
             Sev{\'o}n, Maija  and
             Tarkka, Otto},
             editor = "Dobnik, Simon  and
-            {\\O}vrelid, Lilja",
+            {\O}vrelid, Lilja",
             booktitle = "Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)",
             month = may # " 31--2 " # jun,
             year = "2021",
@@ -53,7 +53,7 @@ class FinParaSTS(AbsTaskSTS):
             publisher = {Link{\"o}ping University Electronic Press, Sweden},
             url = "https://aclanthology.org/2021.nodalida-main.29",
             pages = "288--298",
-            abstract = "In this paper, we introduce the first fully manually annotated paraphrase corpus for Finnish containing 53,572 paraphrase pairs harvested from alternative subtitles and news headings. Out of all paraphrase pairs in our corpus 98{\\%} are manually classified to be paraphrases at least in their given context, if not in all contexts. Additionally, we establish a manual candidate selection method and demonstrate its feasibility in high quality paraphrase selection in terms of both cost and quality.",
+            abstract = "In this paper, we introduce the first fully manually annotated paraphrase corpus for Finnish containing 53,572 paraphrase pairs harvested from alternative subtitles and news headings. Out of all paraphrase pairs in our corpus 98{\%} are manually classified to be paraphrases at least in their given context, if not in all contexts. Additionally, we establish a manual candidate selection method and demonstrate its feasibility in high quality paraphrase selection in terms of both cost and quality.",
         }        
         """,
         descriptive_stats={
