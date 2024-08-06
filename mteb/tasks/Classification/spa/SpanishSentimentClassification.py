@@ -26,9 +26,9 @@ class SpanishSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
         @inproceedings{mollanorozy-etal-2023-cross,
-            title = "Cross-lingual Transfer Learning with \\{P\\}ersian",
+            title = "Cross-lingual Transfer Learning with \{P\}ersian",
             author = "Mollanorozy, Sepideh  and
             Tanti, Marc  and
             Nissim, Malvina",
