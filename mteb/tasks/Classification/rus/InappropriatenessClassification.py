@@ -27,7 +27,7 @@ class InappropriatenessClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{babakov-etal-2021-detecting,
+        bibtex_citation=r"""@inproceedings{babakov-etal-2021-detecting,
         title = "Detecting Inappropriate Messages on Sensitive Topics that Could Harm a Company{'}s Reputation",
         author = "Babakov, Nikolay  and
         Logacheva, Varvara  and
@@ -42,7 +42,7 @@ class InappropriatenessClassification(AbsTaskClassification):
         Starko, Vasyl  and
         Steinberger, Josef  and
         Yangarber, Roman  and
-        Marci{\'n}czuk, Micha{\\l}  and
+        Marci{\'n}czuk, Micha{\l}  and
         Pollak, Senja  and
         P{\v{r}}ib{\'a}{\v{n}}, Pavel  and
         Robnik-{\v{S}}ikonja, Marko",
