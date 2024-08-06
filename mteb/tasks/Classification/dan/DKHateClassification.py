@@ -31,7 +31,7 @@ class DKHateClassification(AbsTaskClassification):
     author = "Sigurbergsson, Gudbjartur Ingi  and
       Derczynski, Leon",
     editor = "Calzolari, Nicoletta  and
-      B{\'e}chet, Fr{\'e}d{\'e}ric  and
+      B{\\'e}chet, Fr{\\'e}d{\\'e}ric  and
       Blache, Philippe  and
       Choukri, Khalid  and
       Cieri, Christopher  and
