@@ -27,7 +27,7 @@ class BiossesSTS(AbsTaskSTS):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@article{10.1093/bioinformatics/btx238,
+        bibtex_citation=r"""@article{10.1093/bioinformatics/btx238,
     author = {Soğancıoğlu, Gizem and Öztürk, Hakime and Özgür, Arzucan},
     title = "{BIOSSES: a semantic sentence similarity estimation system for the biomedical domain}",
     journal = {Bioinformatics},
@@ -40,7 +40,7 @@ class BiossesSTS(AbsTaskSTS):
     issn = {1367-4803},
     doi = {10.1093/bioinformatics/btx238},
     url = {https://doi.org/10.1093/bioinformatics/btx238},
-    eprint = {https://academic.oup.com/bioinformatics/article-pdf/33/14/i49/50315066/bioinformatics\\_33\\_14\\_i49.pdf},
+    eprint = {https://academic.oup.com/bioinformatics/article-pdf/33/14/i49/50315066/bioinformatics\_33\\_14\_i49.pdf},
 }""",
         descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
