@@ -34,7 +34,7 @@ class NaijaSenti(AbsTaskClassification, MultilingualTask):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
         @inproceedings{muhammad-etal-2022-naijasenti,
     title = "{N}aija{S}enti: A {N}igerian {T}witter Sentiment Corpus for Multilingual Sentiment Analysis",
     author = "Muhammad, Shamsuddeen Hassan  and
@@ -47,7 +47,7 @@ class NaijaSenti(AbsTaskClassification, MultilingualTask):
       Emezue, Chris Chinenye  and
       Abdullahi, Saheed Salahudeen  and
       Aremu, Anuoluwapo  and
-      Jorge, Al{\'\\i}pio  and
+      Jorge, Al{\'\i}pio  and
       Brazdil, Pavel",
         booktitle = "Proceedings of the Thirteenth Language Resources and Evaluation Conference",
         month = jun,
