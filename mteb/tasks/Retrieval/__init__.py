@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from .code.CodeEditSearchRetrieval import *
 from .code.CodeSearchNetRetrieval import *
+from .code.CoIR import *
 from .dan.DanFeverRetrieval import *
 from .dan.TV2Nordretrieval import *
 from .dan.TwitterHjerneRetrieval import *
