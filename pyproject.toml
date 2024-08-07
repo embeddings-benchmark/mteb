@@ -84,6 +84,7 @@ exclude = ["tests", "results"]
 "*" = ["*.json"]
 
 [tool.ruff]
+
 target-version = "py38"
 
 [tool.ruff.lint]
@@ -101,6 +102,9 @@ ignore = ["E501",   # line too long
         "D205",     # 1 blank line required between summary line and description
         "D415",     # First line should end with a period
 ]
+
+[tool.ruff.lint.isort]
+required-imports = ["from __future__ import annotations"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"

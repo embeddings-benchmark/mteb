@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import csv
 
 from huggingface_hub import snapshot_download
