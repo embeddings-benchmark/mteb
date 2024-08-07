@@ -43,7 +43,7 @@ class GoogleTextEmbeddingModel(Encoder):
             ]
         else:
             inputs = [TextEmbeddingInput(text, task_type=task_type) for text in texts]
-        kwargs = dict(output_dimensionality=dimensionality) if dimensionality else {}
+        kwargs = {"output_dimensionality": dimensionality} if dimensionality else {}
         try:
             embeddings = model.get_embeddings(inputs, **kwargs)
         # Except the very rare google.api_core.exceptions.InternalServerError

@@ -275,13 +275,9 @@ class TaskMetadata(BaseModel):
 
         if isinstance(self.eval_langs, dict):
             return sorted(
-                set(
-                    get_lang(lang)
-                    for langs in self.eval_langs.values()
-                    for lang in langs
-                )
+                {get_lang(lang) for langs in self.eval_langs.values() for lang in langs}
             )
-        return sorted(set([get_lang(lang) for lang in self.eval_langs]))
+        return sorted({get_lang(lang) for lang in self.eval_langs})
 
     @property
     def scripts(self) -> set[str]:
@@ -291,10 +287,10 @@ class TaskMetadata(BaseModel):
             return lang.split("-")[1]
 
         if isinstance(self.eval_langs, dict):
-            return set(
+            return {
                 get_script(lang) for langs in self.eval_langs.values() for lang in langs
-            )
-        return set(get_script(lang) for lang in self.eval_langs)
+            }
+        return {get_script(lang) for lang in self.eval_langs}
 
     def is_filled(self) -> bool:
         """Check if all the metadata fields are filled."""

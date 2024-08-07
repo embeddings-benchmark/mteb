@@ -73,9 +73,9 @@ def mrr(
         )[0:k_max]
 
     for query_id in top_hits:
-        query_relevant_docs = set(
-            [doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0]
-        )
+        query_relevant_docs = {
+            doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0
+        }
         for k in k_values:
             rr = 0
             for rank, hit in enumerate(top_hits[query_id][0:k]):
@@ -199,9 +199,9 @@ def top_k_accuracy(
         ]
 
     for query_id in top_hits:
-        query_relevant_docs = set(
-            [doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0]
-        )
+        query_relevant_docs = {
+            doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0
+        }
         for k in k_values:
             for relevant_doc_id in query_relevant_docs:
                 if relevant_doc_id in top_hits[query_id][0:k]:

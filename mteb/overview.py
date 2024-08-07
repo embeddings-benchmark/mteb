@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 def create_task_list() -> list[type[AbsTask]]:
-    tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
+    tasks_categories_cls = list(AbsTask.__subclasses__())
     tasks = [
         cls
         for cat_cls in tasks_categories_cls

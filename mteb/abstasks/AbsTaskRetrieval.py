@@ -260,9 +260,7 @@ class AbsTaskRetrieval(AbsTask):
         )
 
         scores = {}
-        hf_subsets = (
-            [l for l in self.hf_subsets] if self.is_multilingual else ["default"]
-        )
+        hf_subsets = list(self.hf_subsets) if self.is_multilingual else ["default"]
 
         for hf_subset in hf_subsets:
             logger.info(f"Subset: {hf_subset}")
@@ -354,7 +352,7 @@ class AbsTaskRetrieval(AbsTask):
                     sorted_docs = sorted(
                         doc_scores.items(), key=lambda x: x[1], reverse=True
                     )[:top_k]
-                    results[qid] = {doc_id: score for doc_id, score in sorted_docs}
+                    results[qid] = dict(sorted_docs)
             for qid, retrieved_docs in results.items():
                 expected_docs = relevant_docs[qid]
                 false_positives = [

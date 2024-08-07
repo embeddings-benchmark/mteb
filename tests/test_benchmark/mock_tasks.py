@@ -19,27 +19,27 @@ from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-general_args = dict(
-    description="a mock task for testing",
-    reference="https://github.com/embeddings-benchmark/mteb",
-    dataset={
+general_args = {
+    "description": "a mock task for testing",
+    "reference": "https://github.com/embeddings-benchmark/mteb",
+    "dataset": {
         "path": "NA",
         "revision": "NA",
     },
-    category="s2s",
-    eval_splits=["test"],
-    eval_langs=["eng-Latn"],
-    date=("2022-12-22", "2022-12-22"),
-    dialect=["Written"],
-    domains=[],
-    task_subtypes=[],
-    license="NA",
-    annotations_creators="derived",
-    modalities=["text"],
-    sample_creation="found",
-    bibtex_citation="",
-    descriptive_stats={},
-)
+    "category": "s2s",
+    "eval_splits": ["test"],
+    "eval_langs": ["eng-Latn"],
+    "date": ("2022-12-22", "2022-12-22"),
+    "dialect": ["Written"],
+    "domains": [],
+    "task_subtypes": [],
+    "license": "NA",
+    "annotations_creators": "derived",
+    "modalities": ["text"],
+    "sample_creation": "found",
+    "bibtex_citation": "",
+    "descriptive_stats": {},
+}
 
 
 class MockClassificationTask(AbsTaskClassification):

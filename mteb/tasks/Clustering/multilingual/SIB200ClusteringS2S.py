@@ -250,11 +250,11 @@ class SIB200ClusteringFast(MultilingualTask, AbsTaskClusteringFast):
     )
 
     def dataset_transform(self):
-        ds = dict()
+        ds = {}
         for lang in self.hf_subsets:
             labels = []
             sentences = []
-            ds[lang] = dict()
+            ds[lang] = {}
             for split in ["train", "validation", "test"]:
                 labels.extend(self.dataset[lang][split]["category"])
                 sentences.extend(self.dataset[lang][split]["text"])
