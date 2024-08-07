@@ -84,10 +84,11 @@ exclude = ["tests", "results"]
 "*" = ["*.json"]
 
 [tool.ruff]
+
 target-version = "py38"
 
 [tool.ruff.lint]
-select = ["F", "I", "E", "D"]
+select = ["F", "I", "E", "D",  "UP", "FA", "C4"]
 ignore = ["E501",   # line too long 
         "E741",     # ambiguous variable name
         "F403",     # undefined import
@@ -101,6 +102,9 @@ ignore = ["E501",   # line too long
         "D205",     # 1 blank line required between summary line and description
         "D415",     # First line should end with a period
 ]
+
+[tool.ruff.lint.isort]
+required-imports = ["from __future__ import annotations"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"

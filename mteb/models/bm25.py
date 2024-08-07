@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from functools import partial
-from typing import Any, List, Optional, Union
+from typing import Any
 
 from mteb.evaluation.evaluators.RetrievalEvaluator import DRESModel
 from mteb.model_meta import ModelMeta
@@ -27,7 +27,7 @@ def bm25_loader(**kwargs):
             self,
             previous_results: str = None,
             stopwords: str = "en",
-            stemmer_language: Optional[str] = "english",
+            stemmer_language: str | None = "english",
             **kwargs,
         ):
             super().__init__(
@@ -50,7 +50,7 @@ def bm25_loader(**kwargs):
         def search(
             self,
             corpus: dict[str, dict[str, str]],
-            queries: dict[str, Union[str, List[str]]],
+            queries: dict[str, str | list[str]],
             top_k: int,
             score_function: str,
             return_sorted: bool = False,
@@ -106,7 +106,7 @@ def bm25_loader(**kwargs):
 
             return self.results
 
-        def encode(self, texts: List[str], **kwargs):
+        def encode(self, texts: list[str], **kwargs):
             """Encode input text as term vectors"""
             return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
 

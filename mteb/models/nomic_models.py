@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Any, Optional
+from typing import Any
 
 import torch
 import torch.nn.functional as F
@@ -28,7 +28,7 @@ class NomicWrapper:
         *,
         prompt_name: str | None = None,
         batch_size: int = 32,
-        input_type: Optional[str] = None,
+        input_type: str | None = None,
         **kwargs: Any,
     ):
         if prompt_name:

@@ -1,5 +1,7 @@
 """tests for the MTEB CLI"""
 
+from __future__ import annotations
+
 import subprocess
 from argparse import Namespace
 from pathlib import Path

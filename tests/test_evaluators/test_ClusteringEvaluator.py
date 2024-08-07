@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import List
-
 import numpy as np
 
 from mteb.evaluation.evaluators import ClusteringEvaluator
@@ -12,7 +10,7 @@ class TestClusteringEvaluator:
         class Model:
             def encode(
                 self,
-                sentences: List[str],
+                sentences: list[str],
                 prompt_name: str | None = None,
                 batch_size=32,
             ) -> np.ndarray:

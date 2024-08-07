@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Union
 
 import numpy as np
 import pytest
@@ -30,9 +29,7 @@ def test_mulitple_mteb_tasks(tasks: list[mteb.AbsTask], model: mteb.Encoder):
 @pytest.mark.parametrize(
     "model", [MockNumpyEncoder(), MockTorchEncoder(), MockTorchbf16Encoder()]
 )
-def test_benchmark_encoders_on_task(
-    task: Union[str, mteb.AbsTask], model: mteb.Encoder
-):
+def test_benchmark_encoders_on_task(task: str | mteb.AbsTask, model: mteb.Encoder):
     """Test that a task can be fetched and run using a variety of encoders"""
     if isinstance(task, str):
         tasks = mteb.get_tasks(tasks=[task])
