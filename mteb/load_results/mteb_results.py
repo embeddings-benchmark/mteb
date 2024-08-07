@@ -449,7 +449,7 @@ class MTEBResults(BaseModel):
 
         task = get_task(self.task_name)
         splits = task.metadata.eval_splits
-        hf_subsets = {s for s in task.metadata.hf_subsets_to_langscripts}
+        hf_subsets = set(task.metadata.hf_subsets_to_langscripts)
 
         new_scores = {}
         seen_splits = set()

@@ -181,7 +181,7 @@ class MTEB:
     def select_tasks(self, **kwargs):
         """Select the tasks to be evaluated."""
         # Get all existing tasks
-        tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
+        tasks_categories_cls = list(AbsTask.__subclasses__())
         self.tasks_cls = [
             cls(hf_subsets=self._task_langs, **kwargs)
             for cat_cls in tasks_categories_cls
@@ -203,8 +203,8 @@ class MTEB:
                 } - tasks_known
                 if tasks_unknown:
                     unknown_str, known_str = (
-                        ",".join(sorted(list(tasks_unknown))),
-                        ",".join(sorted(list(tasks_known))),
+                        ",".join(sorted(tasks_unknown)),
+                        ",".join(sorted(tasks_known)),
                     )
                     logger.warning(
                         f"WARNING: Unknown tasks: {unknown_str}. Known tasks: {known_str}."

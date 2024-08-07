@@ -120,7 +120,7 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
         self.dataset["test"] = self.dataset["test"].cast(
             datasets.Features(
                 sentences=datasets.Value("string"),
-                labels=datasets.ClassLabel(names=sorted(list(frequent_labels))),
+                labels=datasets.ClassLabel(names=sorted(frequent_labels)),
             )
         )
         for split in self.metadata.eval_splits:

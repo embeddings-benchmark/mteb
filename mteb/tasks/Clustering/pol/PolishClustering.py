@@ -139,7 +139,7 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
     )
 
     def dataset_transform(self):
-        ds = dict()
+        ds = {}
         for split in self.metadata.eval_splits:
             labels = list(chain.from_iterable(self.dataset[split]["labels"]))
             sentences = list(chain.from_iterable(self.dataset[split]["sentences"]))
@@ -219,7 +219,7 @@ class PlscClusteringS2SFast(AbsTaskClusteringFast):
     )
 
     def dataset_transform(self):
-        ds = dict()
+        ds = {}
         for split in self.metadata.eval_splits:
             labels = self.dataset[split]["labels"]
             sentences = self.dataset[split]["sentences"]
@@ -308,7 +308,7 @@ class PlscClusteringP2PFast(AbsTaskClusteringFast):
     )
 
     def dataset_transform(self):
-        ds = dict()
+        ds = {}
         for split in self.metadata.eval_splits:
             labels = self.dataset[split]["labels"]
             sentences = self.dataset[split]["sentences"]
