@@ -21,6 +21,7 @@ TASK_SUBTYPE = Literal[
     "Dialect pairing",
     "Dialog Systems",
     "Discourse coherence",
+    "Duplicate Image Retrieval",
     "Language identification",
     "Linguistic acceptability",
     "Political classification",
@@ -103,6 +104,7 @@ TASK_CATEGORY = Literal[
     "s2s",  # Sentence-to-sentence
     "s2p",  # Sentence-to-paragraph
     "p2p",  # Paragraph-to-paragraph
+    "i2i",
     "i2t",
     "t2i",
     "it2t",

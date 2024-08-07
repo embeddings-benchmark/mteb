@@ -40,7 +40,7 @@ class CLIPModelWrapper:
             for i in tqdm(range(0, len(texts), batch_size)):
                 batch_texts = texts[i : i + batch_size]
                 inputs = self.processor(
-                    text=batch_texts, return_tensors="pt", padding=True, truncation = True
+                    text=batch_texts, return_tensors="pt", padding=True, truncation=True
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.model.get_text_features(**inputs)
