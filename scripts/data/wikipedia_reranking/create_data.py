@@ -62,7 +62,7 @@ readme_path = hf_hub_download(
     repo_id=repo_id, filename="README.md", repo_type="dataset"
 )
 
-with open(readme_path, "r") as f:
+with open(readme_path) as f:
     readme_content = f.read()
 
 readme = """

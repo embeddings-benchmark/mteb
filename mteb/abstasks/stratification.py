@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """The following code is a copy of
 https://github.com/scikit-multilearn/scikit-multilearn/blob/master/skmultilearn/model_selection/iterative_stratification.py
 from the amazing scikit-multilearn library. Please try it out: https://github.com/scikit-multilearn/scikit-multilearn
@@ -178,7 +177,7 @@ class IterativeStratification(_BaseKFold):
         self._rng_state = check_random_state(random_state)
         need_shuffle = shuffle or random_state is not None
         self.order = order
-        super(IterativeStratification, self).__init__(
+        super().__init__(
             n_splits,
             shuffle=need_shuffle,
             random_state=self._rng_state if need_shuffle else None,
@@ -369,5 +368,4 @@ class IterativeStratification(_BaseKFold):
         )
         self._distribute_negative_evidence(rows_used, folds)
 
-        for fold in folds:
-            yield fold
+        yield from folds

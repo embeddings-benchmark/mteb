@@ -5,7 +5,7 @@ import json
 import logging
 import os
 from collections import defaultdict
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any
 
 import numpy as np
 import pytrec_eval
@@ -80,12 +80,12 @@ class DenseRetrievalExactSearch:
     def search(
         self,
         corpus: dict[str, dict[str, str]],
-        queries: dict[str, Union[str, List[str]]],
+        queries: dict[str, str | list[str]],
         top_k: int,
         score_function: str,
         prompt_name: str,
-        instructions: Dict[str, str] | None = None,
-        request_qid: Union[str, None] = None,
+        instructions: dict[str, str] | None = None,
+        request_qid: str | None = None,
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
@@ -127,9 +127,7 @@ class DenseRetrievalExactSearch:
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
         logger.info(
-            "Scoring Function: {} ({})".format(
-                self.score_function_desc[score_function], score_function
-            )
+            f"Scoring Function: {self.score_function_desc[score_function]} ({score_function})"
         )
 
         itr = range(0, len(corpus), self.corpus_chunk_size)
@@ -138,7 +136,7 @@ class DenseRetrievalExactSearch:
             qid: [] for qid in query_ids
         }  # Keep only the top-k docs for each query
         for batch_num, corpus_start_idx in enumerate(itr):
-            logger.info("Encoding Batch {}/{}...".format(batch_num + 1, len(itr)))
+            logger.info(f"Encoding Batch {batch_num + 1}/{len(itr)}...")
             corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus))
 
             # Encode chunk of corpus
@@ -218,7 +216,7 @@ class DenseRetrievalExactSearch:
                 )
             self.previous_results = dest_file
 
-        with open(self.previous_results, "r") as f:
+        with open(self.previous_results) as f:
             previous_results = json.load(f)
         assert isinstance(previous_results, dict)
         assert isinstance(previous_results[list(previous_results.keys())[0]], dict)
@@ -226,12 +224,12 @@ class DenseRetrievalExactSearch:
 
     def search_cross_encoder(
         self,
-        corpus: Dict[str, Dict[str, str]],
-        queries: Dict[str, Union[str, List[str]]],
+        corpus: dict[str, dict[str, str]],
+        queries: dict[str, str | list[str]],
         top_k: int,
-        instructions: Union[Dict[str, str], None] = None,
+        instructions: dict[str, str] | None = None,
         **kwargs,
-    ) -> Dict[str, Dict[str, float]]:
+    ) -> dict[str, dict[str, float]]:
         """This function provides support for reranker (or cross-encoder) models that encoder query and document at the same time (typically with attention).
         Some notable examples include MonoBERT, MonoT5, RankLlama, etc.
         Note: you must provide the path to the results to rerank to the __init__ function as `previous_results`
@@ -347,7 +345,7 @@ class DRESModel:
         self.corpus_embeddings = {}
 
     def encode_queries(
-        self, queries: List[str], *, prompt_name: str, batch_size: int, **kwargs
+        self, queries: list[str], *, prompt_name: str, batch_size: int, **kwargs
     ):
         if self.use_sbert_model:
             if isinstance(self.model._first_module(), Transformer):
@@ -369,10 +367,10 @@ class DRESModel:
 
     def encode_corpus(
         self,
-        corpus: List[Dict[str, str]],
+        corpus: list[dict[str, str]],
         prompt_name: str,
         batch_size: int,
-        request_qid: Union[str, None] = None,
+        request_qid: str | None = None,
         **kwargs,
     ):
         if (
@@ -409,7 +407,7 @@ class DRESModel:
             self.corpus_embeddings[request_qid] = corpus_embeddings
         return corpus_embeddings
 
-    def encode(self, sentences: List[str], prompt_name: str, **kwargs):
+    def encode(self, sentences: list[str], prompt_name: str, **kwargs):
         return self.encode_queries(sentences, prompt_name=prompt_name, **kwargs)
 
 
@@ -432,7 +430,7 @@ class RetrievalEvaluator(Evaluator):
         self,
         retriever=None,
         task_name: str | None = None,
-        k_values: List[int] = [1, 3, 5, 10, 20, 100, 1000],
+        k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
         score_function: str = "cos_sim",
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
@@ -471,7 +469,7 @@ class RetrievalEvaluator(Evaluator):
     def __call__(
         self,
         corpus: dict[str, dict[str, str]],
-        queries: dict[str, Union[str, List[str]]],
+        queries: dict[str, str | list[str]],
     ) -> dict[str, dict[str, float]]:
         if not self.retriever:
             raise ValueError("Model/Technique has not been provided!")
@@ -502,9 +500,9 @@ class RetrievalEvaluator(Evaluator):
     def evaluate(
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
-        k_values: List[int],
+        k_values: list[int],
         ignore_identical_ids: bool = False,
-    ) -> Tuple[
+    ) -> tuple[
         dict[str, float],
         dict[str, float],
         dict[str, float],
@@ -572,10 +570,10 @@ class RetrievalEvaluator(Evaluator):
     def evaluate_custom(
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
-        k_values: List[int],
+        k_values: list[int],
         metric: str,
         output_type: str = "all",
-    ) -> Tuple[Dict[str, float], Dict[str, float]]:
+    ) -> tuple[dict[str, float], dict[str, float]]:
         if metric.lower() in ["mrr", "mrr@k", "mrr_cut"]:
             metric_scores = mrr(qrels, results, k_values, output_type)
 
@@ -603,7 +601,7 @@ class RetrievalEvaluator(Evaluator):
     def evaluate_abstention(
         results: dict[str, dict[str, float]],
         metric_scores: dict[str, list[float]],
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997"""
         all_sim_scores = [list(results[qid].values()) for qid in list(results.keys())]
         all_conf_scores = [

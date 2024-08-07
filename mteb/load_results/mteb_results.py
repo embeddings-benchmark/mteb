@@ -6,7 +6,7 @@ from argparse import Namespace
 from collections import defaultdict
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any, Callable, Type
+from typing import Any, Callable
 
 import numpy as np
 from packaging.version import Version
@@ -166,7 +166,7 @@ class MTEBResults(BaseModel):
     @classmethod
     def from_task_results(
         cls,
-        task: AbsTask | Type[AbsTask],
+        task: AbsTask | type[AbsTask],
         scores: dict[Split, dict[HFSubset, ScoresDict]],
         evaluation_time: float,
         kg_co2_emissions: float | None = None,

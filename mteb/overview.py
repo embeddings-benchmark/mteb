@@ -5,7 +5,6 @@ from __future__ import annotations
 import difflib
 import logging
 from collections import Counter
-from typing import Dict, Set, Type
 
 from mteb.abstasks import AbsTask
 from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
@@ -23,7 +22,7 @@ logger = logging.getLogger(__name__)
 # Create task registry
 
 
-def create_task_list() -> list[Type[AbsTask]]:
+def create_task_list() -> list[type[AbsTask]]:
     tasks_categories_cls = [cls for cls in AbsTask.__subclasses__()]
     tasks = [
         cls
@@ -34,7 +33,7 @@ def create_task_list() -> list[Type[AbsTask]]:
     return tasks
 
 
-def create_name_to_task_mapping() -> dict[str, Type[AbsTask]]:
+def create_name_to_task_mapping() -> dict[str, type[AbsTask]]:
     tasks = create_task_list()
     return {cls.metadata.name: cls for cls in tasks}
 
@@ -117,7 +116,7 @@ class MTEBTasks(tuple):
             raise KeyError("Property neither in Task attribute or metadata keys.")
 
     @property
-    def languages(self) -> Set:
+    def languages(self) -> set:
         """Return all languages from tasks"""
         langs = set()
         for task in self:
@@ -125,7 +124,7 @@ class MTEBTasks(tuple):
                 langs.add(lg)
         return langs
 
-    def count_languages(self) -> Dict:
+    def count_languages(self) -> dict:
         """Summarize count of all languages from tasks"""
         langs = []
         for task in self:

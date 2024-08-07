@@ -10,7 +10,7 @@ import json
 import jsonlines
 from tqdm import tqdm
 
-with open("archive/arxiv-metadata-oai-snapshot.json", "r") as file:
+with open("archive/arxiv-metadata-oai-snapshot.json") as file:
     old_lines = file.readlines()
     new_lines = []
     split = 0

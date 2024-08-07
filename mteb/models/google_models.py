@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Any, List, Optional
+from typing import Any
 
 import numpy as np
 
@@ -17,11 +17,11 @@ class GoogleTextEmbeddingModel(Encoder):
 
     def _embed(
         self,
-        texts: List[str],
+        texts: list[str],
         task_type: str = "RETRIEVAL_DOCUMENT",
-        titles: List[str] | None = None,
-        dimensionality: Optional[int] = 768,
-    ) -> List[List[float]]:
+        titles: list[str] | None = None,
+        dimensionality: int | None = 768,
+    ) -> list[list[float]]:
         """Embeds texts with a pre-trained, foundational model.
         From https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings#generative-ai-get-text-embedding-python_vertex_ai_sdk
         """
