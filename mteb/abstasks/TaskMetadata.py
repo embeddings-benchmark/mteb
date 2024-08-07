@@ -127,7 +127,7 @@ PROGRAMMING_LANGS = [
     "swift",
     "scala",
     "shell",
-    "sql"
+    "sql",
 ]
 
 METRIC_NAME = str
