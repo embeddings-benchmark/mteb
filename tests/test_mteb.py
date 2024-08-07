@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Union
 
 import numpy as np
 import pytest
@@ -70,7 +69,7 @@ task_test_cases_only_string = [
         "average_word_embeddings_levy_dependency",
     ],
 )
-def test_mteb_task(task: Union[str, AbsTask], model_name: str):
+def test_mteb_task(task: str | AbsTask, model_name: str):
     """Test that a task can be fetched and run"""
     model = SentenceTransformer(model_name)
     eval = MTEB(tasks=[task])

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from itertools import islice
-from typing import Any, Callable, Iterable, Literal, Optional, Sequence, Type, TypeVar
+from typing import Any, Callable, Iterable, Literal, Sequence, TypeVar
 
 import numpy as np
 import torch
@@ -40,7 +40,7 @@ class E5InstructWrapper(Encoder):
         model_name: str,
         revision: str,
         max_length: int,
-        max_batch_size: Optional[int] = None,
+        max_batch_size: int | None = None,
         device: str = "cpu",
         **kwargs: Any,
     ):
@@ -220,7 +220,7 @@ class E5MistralWrapper(E5InstructWrapper):
 
 
 def _loader(
-    wrapper: Type[E5InstructWrapper], name: str, revision: str, **kwargs
+    wrapper: type[E5InstructWrapper], name: str, revision: str, **kwargs
 ) -> Callable[..., Encoder]:
     _kwargs = kwargs
 

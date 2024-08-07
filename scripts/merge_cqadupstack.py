@@ -45,7 +45,7 @@ logger.info(f"Found CQADupstack files: {files}")
 if len(files) == len(TASK_LIST_CQA):
     all_results = {}
     for file_name in files:
-        with open(file_name, "r", encoding="utf-8") as f:
+        with open(file_name, encoding="utf-8") as f:
             results = json.load(f)
             for split, split_results in results.items():
                 if split not in ("train", "validation", "dev", "test"):

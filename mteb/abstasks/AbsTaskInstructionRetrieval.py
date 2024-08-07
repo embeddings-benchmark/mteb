@@ -5,7 +5,6 @@ import logging
 import os
 from collections import defaultdict
 from time import time
-from typing import Dict, List, Tuple
 
 import tqdm
 from datasets import Features, Value, load_dataset
@@ -69,11 +68,11 @@ class HFDataLoaderInstructions(HFDataLoader):
 
     def load(
         self, split="test"
-    ) -> Tuple[
-        Dict[str, Dict[str, str]],
-        Dict[str, str],
-        Dict[str, Dict[str, int]],
-        Dict[str, Dict[str, int]],
+    ) -> tuple[
+        dict[str, dict[str, str]],
+        dict[str, str],
+        dict[str, dict[str, int]],
+        dict[str, dict[str, int]],
     ]:
         if not self.hf_repo:
             self.og_qrels_file = os.path.join(self.qrels_folder + "_og", split + ".tsv")
@@ -517,11 +516,11 @@ class AbsTaskInstructionRetrieval(AbsTask):
     def _evaluate_subset(
         self,
         retriever: InstructionRetrievalEvaluator,
-        corpus: Dict[str, Dict[str, str]],
-        queries: Dict[str, str],
-        relevant_docs: Dict[str, Dict[str, int]],
-        instructions: Dict[str, str],
-        top_ranked: Dict[str, List[str]],
+        corpus: dict[str, dict[str, str]],
+        queries: dict[str, str],
+        relevant_docs: dict[str, dict[str, int]],
+        instructions: dict[str, str],
+        top_ranked: dict[str, list[str]],
         lang=None,
         **kwargs,
     ):
@@ -548,9 +547,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         results = {k: v for d in all_results for k, v in d.items()}
 
         end_time = time()
-        logger.info(
-            "Time taken to retrieve: {:.2f} seconds".format(end_time - start_time)
-        )
+        logger.info(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 
         if kwargs.get("save_predictions", False):
             output_folder = kwargs.get("output_folder", "results")

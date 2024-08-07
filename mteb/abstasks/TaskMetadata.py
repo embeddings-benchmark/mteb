@@ -200,7 +200,7 @@ class TaskMetadata(BaseModel):
 
     n_samples: dict[SPLIT_NAME, int] | None
     avg_character_length: (
-        Union[dict[SPLIT_NAME, float], dict[SPLIT_NAME, dict[str, Any]]] | None
+        dict[SPLIT_NAME, float] | dict[SPLIT_NAME, dict[str, Any]] | None
     )
 
     @field_validator("dataset")

@@ -32,7 +32,7 @@ def proc_row(row):
         elif label == "0":
             negatives.append(idx)
         else:
-            raise Exception("Unknown label: {}".format(label))
+            raise Exception(f"Unknown label: {label}")
     row["positive"] = [df_news.loc[idx]["text"] for idx in positives]
     row["negative"] = [df_news.loc[idx]["text"] for idx in negatives]
     queries = row["query"].split()
