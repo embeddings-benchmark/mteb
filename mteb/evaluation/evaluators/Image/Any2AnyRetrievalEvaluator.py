@@ -62,7 +62,7 @@ class DenseRetrievalExactSearch:
         self,
         model: EncoderWithQueryCorpusEncode,
         encode_kwargs: dict[str, Any] = {},
-        corpus_chunk_size: int = 50000,
+        corpus_chunk_size: int = 20000,
         previous_results: str | None = None,
         **kwargs: Any,
     ):
@@ -152,66 +152,71 @@ class DenseRetrievalExactSearch:
             )
         )
 
-        if corpus_modality == "text":
-            corpus_texts = corpus["text"]
-            corpus_embeddings = self.model.get_text_embeddings(
-                texts=corpus_texts, batch_size=self.encode_kwargs["batch_size"]
-            )
-        else:
-            corpus_dataset = ImageDataset(
-                corpus, image_column_name="image", transform=transform
-            )
-            corpus_image_dataloader = DataLoader(
-                corpus_dataset,
-                batch_size=self.encode_kwargs["batch_size"],
-                shuffle=False,
-                collate_fn=custom_collate_fn,
-                num_workers=os.cpu_count(),
-            )
-            if corpus_modality == "image":
-                corpus_embeddings = self.model.get_image_embeddings(
-                    images=corpus_image_dataloader,
-                    batch_size=self.encode_kwargs["batch_size"],
+        result_heaps = {qid: [] for qid in query_ids}
+        for chunk_start in range(0, len(corpus), self.corpus_chunk_size):
+            chunk = corpus.select(
+                range(
+                    chunk_start, min(chunk_start + self.corpus_chunk_size, len(corpus))
                 )
-            elif corpus_modality == "image,text":
-                corpus_texts = corpus["text"]
-                corpus_embeddings = self.model.get_fused_embeddings(
-                    texts=corpus_texts,
-                    images=corpus_image_dataloader,
-                    batch_size=self.encode_kwargs["batch_size"],
+            )
+            chunk_ids = corpus_ids[chunk_start : chunk_start + self.corpus_chunk_size]
+
+            if corpus_modality == "text":
+                corpus_texts = chunk["text"]
+                sub_corpus_embeddings = self.model.get_text_embeddings(
+                    texts=corpus_texts, batch_size=self.encode_kwargs["batch_size"]
                 )
             else:
-                raise ValueError(f"Unsupported modality: {corpus_modality}")
-
-        result_heaps = {
-            qid: [] for qid in query_ids
-        }  # Keep only the top-k docs for each query
-
-        cos_scores = self.score_functions[score_function](
-            query_embeddings, corpus_embeddings
-        )
-        cos_scores[torch.isnan(cos_scores)] = -1
-
-        cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
-            cos_scores,
-            top_k,
-            dim=1,
-            largest=True,
-            sorted=return_sorted,
-        )
-        cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
-        cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
-
-        for query_itr in range(len(query_embeddings)):
-            query_id = query_ids[query_itr]
-            for sub_corpus_id, score in zip(
-                cos_scores_top_k_idx[query_itr], cos_scores_top_k_values[query_itr]
-            ):
-                corpus_id = corpus_ids[sub_corpus_id]
-                if len(result_heaps[query_id]) < top_k:
-                    heapq.heappush(result_heaps[query_id], (score, corpus_id))
+                corpus_dataset = ImageDataset(
+                    chunk, image_column_name="image", transform=transform
+                )
+                corpus_image_dataloader = DataLoader(
+                    corpus_dataset,
+                    batch_size=self.encode_kwargs["batch_size"],
+                    shuffle=False,
+                    collate_fn=custom_collate_fn,
+                    num_workers=os.cpu_count(),
+                )
+                if corpus_modality == "image":
+                    sub_corpus_embeddings = self.model.get_image_embeddings(
+                        images=corpus_image_dataloader,
+                        batch_size=self.encode_kwargs["batch_size"],
+                    )
+                elif corpus_modality == "image,text":
+                    corpus_texts = chunk["text"]
+                    sub_corpus_embeddings = self.model.get_fused_embeddings(
+                        texts=corpus_texts,
+                        images=corpus_image_dataloader,
+                        batch_size=self.encode_kwargs["batch_size"],
+                    )
                 else:
-                    heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
+                    raise ValueError(f"Unsupported modality: {corpus_modality}")
+
+            cos_scores = self.score_functions[score_function](
+                query_embeddings, sub_corpus_embeddings
+            )
+            cos_scores[torch.isnan(cos_scores)] = -1
+
+            cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
+                cos_scores,
+                top_k,
+                dim=1,
+                largest=True,
+                sorted=return_sorted,
+            )
+            cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
+            cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
+
+            for query_itr in range(len(query_embeddings)):
+                query_id = query_ids[query_itr]
+                for sub_corpus_id, score in zip(
+                    cos_scores_top_k_idx[query_itr], cos_scores_top_k_values[query_itr]
+                ):
+                    corpus_id = chunk_ids[sub_corpus_id]
+                    if len(result_heaps[query_id]) < top_k:
+                        heapq.heappush(result_heaps[query_id], (score, corpus_id))
+                    else:
+                        heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
 
         for qid in result_heaps:
             for score, corpus_id in result_heaps[qid]:
