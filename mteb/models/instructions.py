@@ -1,4 +1,5 @@
 """This specifies the default instructions for tasks within MTEB. These are optional to use and some models might want to use their own instructions."""
+
 from __future__ import annotations
 
 import mteb
