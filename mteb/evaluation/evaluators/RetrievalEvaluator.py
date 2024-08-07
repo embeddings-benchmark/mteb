@@ -127,9 +127,7 @@ class DenseRetrievalExactSearch:
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
         logger.info(
-            "Scoring Function: {} ({})".format(
-                self.score_function_desc[score_function], score_function
-            )
+            f"Scoring Function: {self.score_function_desc[score_function]} ({score_function})"
         )
 
         itr = range(0, len(corpus), self.corpus_chunk_size)

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path
 
 import bibtexparser
@@ -68,9 +70,7 @@ def task_to_tex_row(task: mteb.AbsTask) -> str:
         "[" + ", ".join(task.metadata.domains) + "]" if task.metadata.domains else ""
     )
     n_samples = (
-        "{:.2f}".format(
-            sum(task.metadata.n_samples.values()) / len(task.metadata.n_samples.keys())
-        )
+        f"{sum(task.metadata.n_samples.values()) / len(task.metadata.n_samples.keys()):.2f}"
         if task.metadata.n_samples
         else ""
     )

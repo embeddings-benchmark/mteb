@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 import logging
 import os
-from typing import Optional
 
 from jsonlines import Reader
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, conint, constr
@@ -21,17 +22,17 @@ commit_exceptions = {
 class JsonObject(BaseModel):
     model_config = ConfigDict(extra="forbid")
     GitHub: constr(min_length=1)
-    new_dataset: Optional[conint(ge=1)] = Field(alias="New dataset", default=None)
-    new_task: Optional[conint(ge=2)] = Field(alias="New task", default=None)
-    dataset_annotations: Optional[conint(ge=1)] = Field(
+    new_dataset: conint(ge=1) | None = Field(alias="New dataset", default=None)
+    new_task: conint(ge=2) | None = Field(alias="New task", default=None)
+    dataset_annotations: conint(ge=1) | None = Field(
         alias="Dataset annotations", default=None
     )
-    bug_fixes: Optional[conint(ge=1)] = Field(alias="Bug fixes", default=None)
-    running_models: Optional[conint(ge=1)] = Field(alias="Running Models", default=None)
-    review_pr: Optional[conint(ge=2)] = Field(alias="Review PR", default=None)
-    paper_writing: Optional[int] = Field(alias="Paper writing", default=None)
-    Ideation: Optional[int] = None
-    Coordination: Optional[int] = None
+    bug_fixes: conint(ge=1) | None = Field(alias="Bug fixes", default=None)
+    running_models: conint(ge=1) | None = Field(alias="Running Models", default=None)
+    review_pr: conint(ge=2) | None = Field(alias="Review PR", default=None)
+    paper_writing: int | None = Field(alias="Paper writing", default=None)
+    Ideation: int | None = None
+    Coordination: int | None = None
 
 
 def check_max_points(obj: JsonObject, commit_n: str):

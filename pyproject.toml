@@ -87,7 +87,7 @@ exclude = ["tests", "results"]
 target-version = "py38"
 
 [tool.ruff.lint]
-select = ["F", "I", "E", "D"]
+select = ["F", "I", "E", "D",  "UP", "FA"]
 ignore = ["E501",   # line too long 
         "E741",     # ambiguous variable name
         "F403",     # undefined import
