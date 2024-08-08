@@ -84,7 +84,7 @@ def filter_results(
 
     iter_models = models if models is not None else results.keys()
     if tasks is not None:
-        task_names = set(t.metadata.name for t in tasks)
+        task_names = {t.metadata.name for t in tasks}
 
     for mdl in iter_models:
         if isinstance(mdl, mteb.ModelMeta):
@@ -317,7 +317,7 @@ def is_candidate_valid_removal(current_tasks: list[str], task_to_remove: str):
     ctasks = mteb.get_tasks(tasks=_current_tasks)
 
     # don't remove a unique task type
-    task_types = set([t.metadata.type for t in ctasks])
+    task_types = {t.metadata.type for t in ctasks}
     if task.metadata.type not in task_types:
         return False
     return True
@@ -470,7 +470,9 @@ if __name__ == "__main__":
 
             # find the most predictable task
             task_scores = calculate_task_scores(
-                performance_predictions, lang_table, spearman # TODO: Decide on how to select the most predictable task
+                performance_predictions,
+                lang_table,
+                spearman,  # TODO: Decide on how to select the most predictable task
             )
             most_pred_tasks = list(
                 task_scores.T.sort_values(by=0, ascending=False).index  # type: ignore
