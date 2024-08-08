@@ -38,6 +38,12 @@ Advanced scripts with different models are available in the [mteb/mtebscripts re
 mteb create_meta --results_folder results/{model_name}/{model_revision} --output_path model_card.md
 ```
 
+If readme of model exists:
+
+```bash
+mteb create_meta --results_folder results/{model_name}/{model_revision} --output_path model_card.md --from_existing your_existing_readme.md 
+```
+
 3. **Add the frontmatter to model repository:**
 
 Copy the content of the `model_card.md` file to the top of a `README.md` file of your model on the Hub. See [here](https://huggingface.co/Muennighoff/SGPT-5.8B-weightedmean-msmarco-specb-bitfit/blob/main/README.md) for an example.

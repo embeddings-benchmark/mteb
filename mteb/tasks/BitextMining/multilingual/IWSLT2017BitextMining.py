@@ -95,7 +95,6 @@ class IWSLT2017BitextMining(AbsTaskBitextMining, MultilingualTask):
         self.dataset = {}
         for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
-                split=_SPLITS,
                 name=f"iwslt2017-{lang}",
                 **self.metadata_dict["dataset"],
             )
@@ -111,7 +110,11 @@ class IWSLT2017BitextMining(AbsTaskBitextMining, MultilingualTask):
             return row
 
         # Convert to standard format
+        dataset = {}
         for lang in self.hf_subsets:
-            self.dataset[lang] = self.dataset[lang].map(
-                lambda x: create_columns(x, lang=lang)
-            )
+            dataset[lang] = {}
+            for split in _SPLITS:
+                dataset[lang][split] = self.dataset[lang][split].map(
+                    lambda x: create_columns(x, lang=lang)
+                )
+        self.dataset = dataset

@@ -9,13 +9,13 @@ from huggingface_hub import upload_file
 repo_name = "bucc-bitext-mining"
 # create_repo(repo_name, organization="mteb", repo_type="dataset")
 
-with open("bucc-data/zh-en/zh-en.training.zh", "r") as f:
+with open("bucc-data/zh-en/zh-en.training.zh") as f:
     sentence1 = f.readlines()
 
-with open("bucc-data/zh-en/zh-en.training.en", "r") as f:
+with open("bucc-data/zh-en/zh-en.training.en") as f:
     sentence2 = f.readlines()
 
-with open("bucc-data/zh-en/zh-en.training.gold", "r") as f:
+with open("bucc-data/zh-en/zh-en.training.gold") as f:
     gold = f.readlines()
 
 
