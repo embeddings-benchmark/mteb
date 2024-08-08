@@ -5,6 +5,7 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks import AbsTaskClustering, MultilingualTask, TaskMetadata
+from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 
 _LANGUAGES = {
     "de": ["deu-Latn"],
@@ -91,7 +92,7 @@ class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
         self.dataset[lang] = _dataset
 
 
-class MLSUMClusteringP2PFast(AbsTaskClustering, MultilingualTask):
+class MLSUMClusteringP2PFast(AbsTaskClusteringFast, MultilingualTask):
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 
@@ -156,7 +157,7 @@ class MLSUMClusteringP2PFast(AbsTaskClustering, MultilingualTask):
             ["summary", "url", "date", "title"]
         ).rename_columns({"topic": "labels", "text": "sentences"})
 
-        lang_dict = dict()
+        lang_dict = {}
         for split in self.metadata.eval_splits:
             labels = _dataset[split]["labels"]
             sentences = _dataset[split]["sentences"]

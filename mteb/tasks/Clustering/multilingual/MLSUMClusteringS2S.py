@@ -147,7 +147,7 @@ class MLSUMClusteringS2SFast(AbsTaskClusteringFast, MultilingualTask):
             ["summary", "url", "date", "title"]
         ).rename_columns({"topic": "labels", "text": "sentences"})
 
-        lang_dict = dict()
+        lang_dict = {}
         for split in self.metadata.eval_splits:
             labels = _dataset[split]["labels"]
             sentences = _dataset[split]["sentences"]

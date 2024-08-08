@@ -57,7 +57,7 @@ class GermanDPR(AbsTaskRetrieval):
     @staticmethod
     def _format_documents(docs, id_prefix="", existing_docs=None):
         if existing_docs is None:
-            existing_docs = dict()
+            existing_docs = {}
         result = {}
         for i, (title, content) in enumerate(zip(docs["title"], docs["text"])):
             formatted_content = content.split("==\n")[-1].replace("\n", " ").lstrip()
@@ -77,10 +77,10 @@ class GermanDPR(AbsTaskRetrieval):
             split=self._EVAL_SPLIT,
             **self.metadata_dict["dataset"],
         )
-        corpus = dict()
-        queries = dict()
-        relevant_docs = dict()
-        all_docs = dict()
+        corpus = {}
+        queries = {}
+        relevant_docs = {}
+        all_docs = {}
         for i, row in enumerate(data):
             q_id = f"q_{i}"
             queries[q_id] = row["question"]

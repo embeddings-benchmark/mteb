@@ -43,7 +43,7 @@ class BitextMiningEvaluator(Evaluator):
         return scores
 
     def compute_metrics(self, model: Encoder, encode_kwargs: dict[str, Any] = {}):
-        pair_elements = set(p for pair in self.pairs for p in pair)
+        pair_elements = {p for pair in self.pairs for p in pair}
         subsets = [
             col for col in self.sentences.features.keys() if col in pair_elements
         ]

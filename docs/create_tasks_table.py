@@ -88,10 +88,10 @@ def create_task_lang_table(tasks: list[mteb.AbsTask]) -> str:
 
     task_names_md = " | ".join(sorted(get_args(TASK_TYPE)))
     horizontal_line_md = "---|---" * len(sorted(get_args(TASK_TYPE)))
-    table = """
-| Language | {} |
-|{}|
-""".format(task_names_md, horizontal_line_md)
+    table = f"""
+| Language | {task_names_md} |
+|{horizontal_line_md}|
+"""
 
     for row in df.iter_rows():
         table += f"| {row[-1]} "

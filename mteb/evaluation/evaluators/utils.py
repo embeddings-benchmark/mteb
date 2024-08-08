@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Dict, List, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -57,9 +56,9 @@ def dot_score(a: torch.Tensor, b: torch.Tensor):
 def mrr(
     qrels: dict[str, dict[str, int]],
     results: dict[str, dict[str, float]],
-    k_values: List[int],
+    k_values: list[int],
     output_type: str = "mean",
-) -> Tuple[Dict[str, float]]:
+) -> tuple[dict[str, float]]:
     MRR = {}
 
     for k in k_values:
@@ -74,9 +73,9 @@ def mrr(
         )[0:k_max]
 
     for query_id in top_hits:
-        query_relevant_docs = set(
-            [doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0]
-        )
+        query_relevant_docs = {
+            doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0
+        }
         for k in k_values:
             rr = 0
             for rank, hit in enumerate(top_hits[query_id][0:k]):
@@ -99,9 +98,9 @@ def mrr(
 def recall_cap(
     qrels: dict[str, dict[str, int]],
     results: dict[str, dict[str, float]],
-    k_values: List[int],
+    k_values: list[int],
     output_type: str = "mean",
-) -> Tuple[Dict[str, float]]:
+) -> tuple[dict[str, float]]:
     capped_recall = {}
 
     for k in k_values:
@@ -140,9 +139,9 @@ def recall_cap(
 def hole(
     qrels: dict[str, dict[str, int]],
     results: dict[str, dict[str, float]],
-    k_values: List[int],
+    k_values: list[int],
     output_type: str = "mean",
-) -> Tuple[Dict[str, float]]:
+) -> tuple[dict[str, float]]:
     Hole = {}
 
     for k in k_values:
@@ -180,9 +179,9 @@ def hole(
 def top_k_accuracy(
     qrels: dict[str, dict[str, int]],
     results: dict[str, dict[str, float]],
-    k_values: List[int],
+    k_values: list[int],
     output_type: str = "mean",
-) -> Tuple[Dict[str, float]]:
+) -> dict[str, float]:
     top_k_acc = {}
 
     for k in k_values:
@@ -200,9 +199,9 @@ def top_k_accuracy(
         ]
 
     for query_id in top_hits:
-        query_relevant_docs = set(
-            [doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0]
-        )
+        query_relevant_docs = {
+            doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0
+        }
         for k in k_values:
             for relevant_doc_id in query_relevant_docs:
                 if relevant_doc_id in top_hits[query_id][0:k]:
@@ -224,7 +223,7 @@ def top_k_accuracy(
 
 def get_rank_from_dict(
     dict_of_results: dict[str, float], doc_id: str
-) -> Tuple[int, float]:
+) -> tuple[int, float]:
     tuple_of_id_score = dict_of_results.items()
     sorted_by_score = sorted(tuple_of_id_score, key=lambda x: x[1], reverse=True)
     for i, (id, score) in enumerate(sorted_by_score):
@@ -237,7 +236,7 @@ def get_rank_from_dict(
 def evaluate_change(
     original_run: dict[str, dict[str, float]],
     new_run: dict[str, dict[str, float]],
-    changed_qrels: dict[str, List[str]],
+    changed_qrels: dict[str, list[str]],
 ) -> dict[str, float]:
     changes = []
     for qid in changed_qrels.keys():
@@ -294,7 +293,7 @@ def download(url: str, fname: str):
             bar.update(size)
 
 
-def convert_conv_history_to_query(conversations: List[List[Union[str, dict]]]) -> str:
+def convert_conv_history_to_query(conversations: list[list[str | dict]]) -> str:
     conversations_converted = []
 
     for conversation in conversations:
@@ -334,7 +333,7 @@ def convert_conv_history_to_query(conversations: List[List[Union[str, dict]]]) -
     return conversations_converted
 
 
-def confidence_scores(sim_scores: List[float]) -> Dict[str, float]:
+def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
     """Computes confidence scores for a single instance = (query, positives, negatives)
 
     Args:

@@ -45,7 +45,7 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClusteringFast):
     )
 
     def dataset_transform(self):
-        ds = dict()
+        ds = {}
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
             sentences = list(
@@ -89,7 +89,7 @@ class ArXivHierarchicalClusteringS2S(AbsTaskClusteringFast):
     )
 
     def dataset_transform(self):
-        ds = dict()
+        ds = {}
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
             sentences = list(
