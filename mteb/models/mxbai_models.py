@@ -27,6 +27,9 @@ class MxbaiWrapper:
         batch_size: int = 32,
         **kwargs: Any,
     ):
+        if "request_qid" in kwargs:
+            kwargs.pop("request_qid")
+
         return self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
 
     def encode_queries(self, queries: list[str], batch_size: int = 32, **kwargs: Any):
@@ -34,6 +37,9 @@ class MxbaiWrapper:
             "Represent this sentence for searching relevant passages: " + sentence
             for sentence in queries
         ]
+        if "request_qid" in kwargs:
+            kwargs.pop("request_qid")
+
         emb = self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
         return emb
 
@@ -44,6 +50,9 @@ class MxbaiWrapper:
         **kwargs: Any,
     ):
         sentences = corpus_to_texts(corpus)
+        if "request_qid" in kwargs:
+            kwargs.pop("request_qid")
+
         emb = self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
         return emb
 
