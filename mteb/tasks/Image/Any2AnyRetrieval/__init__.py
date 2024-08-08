@@ -7,3 +7,4 @@ from .eng.OVENIT2ITRetrieval import *
 from .eng.OVENIT2TRetrieval import *
 from .eng.WebQAT2ITRetrieval import *
 from .eng.WebQAT2TRetrieval import *
+from .eng.StanfordCarsI2IRetrieval import *

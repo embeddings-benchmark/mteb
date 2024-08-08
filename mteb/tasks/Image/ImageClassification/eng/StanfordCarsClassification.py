@@ -8,7 +8,7 @@ from .....abstasks import AbsTaskImageClassification
 class StanfordCarsClassification(AbsTaskImageClassification):
     metadata = TaskMetadata(
         name="StanfordCars",
-        description="Classifying car images from 96 makes.",
+        description="Classifying car images from 196 makes.",
         reference="https://pure.mpg.de/rest/items/item_2029263/component/file_2029262/content",
         dataset={
             "path": "isaacchung/StanfordCars",
@@ -23,10 +23,9 @@ class StanfordCarsClassification(AbsTaskImageClassification):
             "2013-01-01",
             "2013-04-01",
         ),  # Estimated range for the collection of reviews
-        domains=["Scene"],
-        task_subtypes=["Scene recognition"],
+        domains=["Encyclopaedic"],
+        task_subtypes=["Object recognition"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

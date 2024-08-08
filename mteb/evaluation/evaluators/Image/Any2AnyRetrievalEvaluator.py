@@ -107,7 +107,7 @@ class DenseRetrievalExactSearch:
         query_ids = list(queries["id"])
         self.results = {qid: {} for qid in query_ids}
 
-        q_modality = queries[0]["modality"]
+        q_modality = queries["modality"][0]
 
         if q_modality == "text":
             query_texts = queries["text"]
