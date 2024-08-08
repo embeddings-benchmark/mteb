@@ -348,6 +348,8 @@ def save_results(
     n_tasks: list[int],
     spearman_correalation_with_overall: list[float],
     pearson_correlation_with_overall: list[float],
+    predictability_of_task_removed_spearman: list[float],
+    predictability_of_task_removed_mse_with_zscore: list[float],
     task_removal_order: list[str],
     language: str,
     path: Path,
@@ -357,6 +359,8 @@ def save_results(
         "n_tasks": n_tasks,
         "spearman_correalation_with_overall": spearman_correalation_with_overall,
         "pearson_correlation_with_overall": pearson_correlation_with_overall,
+        "predictability_of_task_removed_spearman": predictability_of_task_removed_spearman,
+        "predictability_of_task_removed_mse_with_zscore": predictability_of_task_removed_mse_with_zscore,
         "task_removal_order": task_removal_order,
         "language": language,
     }
@@ -374,6 +378,44 @@ def save_results(
         language,
     )
 
+    create_predictability_plot(
+        task_removal_order,
+        predictability_of_task_removed_spearman,
+        predictability_of_task_removed_mse_with_zscore,
+        language,
+    )
+
+
+def create_predictability_plot(
+    task_removal_order: list[str],
+    predictability_of_task_removed_spearman: list[float],
+    predictability_of_task_removed_mse_with_zscore: list[float],
+    language: str,
+):
+    """Creates a plot showing the predictability of the task removed."""
+    fig, ax = plt.subplots()
+    fig.set_size_inches(7,7)
+    y = predictability_of_task_removed_spearman
+    x = task_removal_order[1:]
+    ax.plot(x, y, label="spearman")
+    y = predictability_of_task_removed_mse_with_zscore
+    ax.plot(x, y, label="mse with zscore")
+    ax.set_xlabel("Task Removed")
+    ax.set_ylabel("Predictability of task removed")
+    ax.legend()
+    ax.set_title(f"Predictability of task removed for language={language}")
+    plt.xticks(rotation=90)
+
+    # save the plot
+    path = Path(__file__).parent / "figures_task_selection"
+    path.mkdir(exist_ok=True)
+    save_path = path / f"task_selection_{language}_predictability.png"
+    plt.tight_layout()
+    # set y ticks to 0 1 with 0.1 steps
+    ax.set_yticks([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
+
+    plt.savefig(save_path, dpi=500)
+
 
 def create_task_selection_plot(
     n_tasks: list[int],
@@ -384,6 +426,7 @@ def create_task_selection_plot(
 ):
     """Create a line plot showing the correlation with the mean score as tasks are removed."""
     fig, ax = plt.subplots()
+    fig.set_size_inches(7,7)
     x_label = [
         f"{task_name} ({n_tasks} tasks)"
         for task_name, n_tasks in zip(task_removal_order, n_tasks)
@@ -398,8 +441,8 @@ def create_task_selection_plot(
     ax.set_ylabel("Correlation with mean score across all tasks")
     ax.legend()
     ax.set_title(f"Task selection for language={language}")
-    ax.set_xticklabels(task_removal_order)
     plt.xticks(rotation=90)
+    ax.set_yticks([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
 
     # save the plot
     path = Path(__file__).parent / "figures_task_selection"
@@ -407,7 +450,7 @@ def create_task_selection_plot(
     save_path = path / f"task_selection_{language}.png"
     plt.tight_layout()
 
-    plt.savefig(save_path, dpi=300)
+    plt.savefig(save_path, dpi=500)
 
 
 if __name__ == "__main__":
@@ -462,6 +505,9 @@ if __name__ == "__main__":
         n_tasks = [len(tasks_to_select_from)]
         spearman_correalation_with_overall = [1.0]
         pearson_correlation_with_overall = [1.0]
+        predictability_of_task_removed_spearman = []
+        predictability_of_task_removed_mse_with_zscore = []
+
         task_removal_order = [""]
         mean_scores = lang_table.mean(axis=1)
 
@@ -472,11 +518,20 @@ if __name__ == "__main__":
             task_scores = calculate_task_scores(
                 performance_predictions,
                 lang_table,
-                spearman,  # TODO: Decide on how to select the most predictable task
+                spearman,
+            )
+            task_scores_mse = calculate_task_scores(
+                performance_predictions,
+                lang_table,
+                mse_with_zscore,
             )
             most_pred_tasks = list(
                 task_scores.T.sort_values(by=0, ascending=False).index  # type: ignore
             )
+            print(
+                f"Most predictable tasks: {task_scores.T.sort_values(by=0, ascending=False).head()}"
+            )
+            
 
             while most_pred_tasks:
                 task_to_remove = most_pred_tasks.pop(0)
@@ -502,6 +557,13 @@ if __name__ == "__main__":
                         pearson(mean_scores, mean_new_scores)
                     )
 
+                    predictability_of_task_removed_spearman.append(
+                        task_scores.T.sort_values(by=0, ascending=False).values[0][0]  # type: ignore
+                    )
+                    predictability_of_task_removed_mse_with_zscore.append(
+                        task_scores_mse.T.sort_values(by=0, ascending=True).values[0][0]  # type: ignore
+                    )
+
                     task_removal_order.append(task_to_remove)
                     break
 
@@ -513,6 +575,8 @@ if __name__ == "__main__":
             n_tasks,
             spearman_correalation_with_overall,
             pearson_correlation_with_overall,
+            predictability_of_task_removed_spearman,
+            predictability_of_task_removed_mse_with_zscore,
             task_removal_order,
             language,
             save_path,
