@@ -6,7 +6,7 @@ from argparse import Namespace
 from collections import defaultdict
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any, Callable, Type
+from typing import Any, Callable
 
 import numpy as np
 from packaging.version import Version
@@ -38,7 +38,7 @@ class CQADupstackRetrievalDummy:
         },
         dataset={
             "revision": "revision not applicable",
-            "path": "CQADupstackRetrieval is a combined dataset",
+            "path": "CQADupstackRetrieval_is_a_combined_dataset",
         },
     )
 
@@ -53,7 +53,7 @@ class ScalaNbClassificationDummy:
         hf_subsets_to_langscripts={
             "default": ["nob-Latn"],
         },
-        dataset={"revision": "revision not applicable"},
+        dataset={"revision": "revision_not_applicable"},
     )
 
 
@@ -67,7 +67,7 @@ class ScalaNnClassificationDummy:
         hf_subsets_to_langscripts={
             "default": ["nno-Latn"],
         },
-        dataset={"revision": "revision not applicable"},
+        dataset={"revision": "revision_not_applicable"},
     )
 
 
@@ -81,7 +81,7 @@ class ScalaDaClassificationDummy:
         hf_subsets_to_langscripts={
             "default": ["dan-Latn"],
         },
-        dataset={"revision": "revision not applicable"},
+        dataset={"revision": "revision_not_applicable"},
     )
 
 
@@ -95,7 +95,7 @@ class ScalaSvClassificationDummy:
         hf_subsets_to_langscripts={
             "default": ["swe-Latn"],
         },
-        dataset={"revision": "revision not applicable"},
+        dataset={"revision": "revision_not_applicable"},
     )
 
 
@@ -166,7 +166,7 @@ class MTEBResults(BaseModel):
     @classmethod
     def from_task_results(
         cls,
-        task: AbsTask | Type[AbsTask],
+        task: AbsTask | type[AbsTask],
         scores: dict[Split, dict[HFSubset, ScoresDict]],
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
@@ -449,7 +449,7 @@ class MTEBResults(BaseModel):
 
         task = get_task(self.task_name)
         splits = task.metadata.eval_splits
-        hf_subsets = set([s for s in task.metadata.hf_subsets_to_langscripts])
+        hf_subsets = set(task.metadata.hf_subsets_to_langscripts)
 
         new_scores = {}
         seen_splits = set()

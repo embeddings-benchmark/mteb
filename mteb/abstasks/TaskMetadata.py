@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from datetime import date
-from typing import Any, Dict, List, Mapping, Optional, Union
+from typing import Any, Dict, List, Mapping, Union
 
 from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
 from typing_extensions import Annotated, Literal
@@ -175,40 +175,58 @@ class TaskMetadata(BaseModel):
 
     name: str
     description: str
-    type: TASK_TYPE
-    modalities: list[Literal["text"]]
-    category: TASK_CATEGORY
-    reference: STR_URL | None  # URL to documentation, e.g. published paper
+    type: TASK_TYPE | None = None
+    modalities: list[Literal["text"]] = ["text"]
+    category: TASK_CATEGORY | None = None
+    reference: STR_URL | None = None
 
-    eval_splits: list[str]
+    eval_splits: list[str] = ["test"]
     eval_langs: LANGUAGES
-    main_score: str  # Might want a literal here
+    main_score: str
 
-    date: tuple[STR_DATE, STR_DATE] | None  # When the data was collected
-    domains: list[TASK_DOMAIN] | None
-    task_subtypes: list[TASK_SUBTYPE] | None
-    license: str | None
+    date: tuple[STR_DATE, STR_DATE] | None = None
+    domains: list[TASK_DOMAIN] | None = None
+    task_subtypes: list[TASK_SUBTYPE] | None = None
+    license: str | None = None
 
-    annotations_creators: ANNOTATOR_TYPE | None
-    dialect: list[str] | None
+    annotations_creators: ANNOTATOR_TYPE | None = None
+    dialect: list[str] | None = None
 
-    sample_creation: SAMPLE_CREATION_METHOD | None
-    bibtex_citation: str | None
+    sample_creation: SAMPLE_CREATION_METHOD | None = None
+    bibtex_citation: str | None = None
 
-    descriptive_stats: dict[METRIC_NAME, Optional[dict[SPLIT_NAME, METRIC_VALUE]]]
+    descriptive_stats: dict[METRIC_NAME, dict[SPLIT_NAME, METRIC_VALUE] | None] = {}
+
+    def validate_metadata(self) -> None:
+        self.dataset_path_is_specified(self.dataset)
+        self.dataset_revision_is_specified(self.dataset)
+        self.eval_langs_are_valid(self.eval_langs)
 
     @field_validator("dataset")
-    def _check_dataset_path_is_specified(cls, dataset):
+    def _check_dataset_path_is_specified(
+        cls, dataset: dict[str, Any]
+    ) -> dict[str, Any]:
+        cls.dataset_path_is_specified(dataset)
+        return dataset
+
+    @field_validator("dataset")
+    def _check_dataset_revision_is_specified(
+        cls, dataset: dict[str, Any]
+    ) -> dict[str, Any]:
+        cls.dataset_revision_is_specified(dataset)
+        return dataset
+
+    @staticmethod
+    def dataset_path_is_specified(dataset: dict[str, Any]) -> None:
         """This method checks that the dataset path is specified."""
         if "path" not in dataset or dataset["path"] is None:
             raise ValueError(
                 "You must specify the path to the dataset in the dataset dictionary. "
                 "See https://huggingface.co/docs/datasets/main/en/package_reference/loading_methods#datasets.load_dataset"
             )
-        return dataset
 
-    @field_validator("dataset")
-    def _check_dataset_revision_is_specified(cls, dataset):
+    @staticmethod
+    def dataset_revision_is_specified(dataset: dict[str, Any]) -> None:
         if "revision" not in dataset:
             raise ValueError(
                 "You must explicitly specify a revision for the dataset (either a SHA or None)."
@@ -218,19 +236,16 @@ class TaskMetadata(BaseModel):
                 "Revision missing for the dataset %s. It is encourage to specify a dataset revision for reproducability.",
                 dataset["path"],
             )
-        return dataset
 
-    @field_validator("eval_langs")
-    def _check_eval_langs(cls, eval_langs):
+    def eval_langs_are_valid(self, eval_langs: LANGUAGES) -> None:
         """This method checks that the eval_langs are specified as a list of languages."""
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
                 for code in langs:
-                    cls._check_language_code(code)
+                    self._check_language_code(code)
         else:
             for code in eval_langs:
-                cls._check_language_code(code)
-        return eval_langs
+                self._check_language_code(code)
 
     @staticmethod
     def _check_language_code(code):
@@ -261,13 +276,9 @@ class TaskMetadata(BaseModel):
 
         if isinstance(self.eval_langs, dict):
             return sorted(
-                set(
-                    get_lang(lang)
-                    for langs in self.eval_langs.values()
-                    for lang in langs
-                )
+                {get_lang(lang) for langs in self.eval_langs.values() for lang in langs}
             )
-        return sorted(set([get_lang(lang) for lang in self.eval_langs]))
+        return sorted({get_lang(lang) for lang in self.eval_langs})
 
     @property
     def scripts(self) -> set[str]:
@@ -277,10 +288,10 @@ class TaskMetadata(BaseModel):
             return lang.split("-")[1]
 
         if isinstance(self.eval_langs, dict):
-            return set(
+            return {
                 get_script(lang) for langs in self.eval_langs.values() for lang in langs
-            )
-        return set(get_script(lang) for lang in self.eval_langs)
+            }
+        return {get_script(lang) for lang in self.eval_langs}
 
     def is_filled(self) -> bool:
         """Check if all the metadata fields are filled."""

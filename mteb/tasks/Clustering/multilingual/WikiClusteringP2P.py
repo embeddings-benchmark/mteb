@@ -91,12 +91,12 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
     )
 
     def dataset_transform(self):
-        ds = dict()
+        ds = {}
         for lang in self.hf_subsets:
             labels = []
             sentences = []
-            ds[lang] = dict()
-            lang_dict = dict()
+            ds[lang] = {}
+            lang_dict = {}
             for split in self.metadata.eval_splits:
                 labels.extend(
                     itertools.chain.from_iterable(self.dataset[lang][split]["labels"])

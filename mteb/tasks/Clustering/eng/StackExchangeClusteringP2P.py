@@ -56,7 +56,7 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
     )
 
     def dataset_transform(self):
-        ds = dict()
+        ds = {}
         for split in self.metadata.eval_splits:
             labels = list(itertools.chain.from_iterable(self.dataset[split]["labels"]))
             sentences = list(

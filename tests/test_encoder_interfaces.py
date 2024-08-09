@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode

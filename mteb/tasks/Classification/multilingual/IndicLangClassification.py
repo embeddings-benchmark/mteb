@@ -113,7 +113,7 @@ class IndicLangClassification(AbsTaskClassification):
         if self.data_loaded:
             return
 
-        labels = sorted(list(_LANGUAGES.keys()))
+        labels = sorted(_LANGUAGES.keys())
 
         data = datasets.load_dataset(**self.metadata_dict["dataset"])["train"]["data"][
             0

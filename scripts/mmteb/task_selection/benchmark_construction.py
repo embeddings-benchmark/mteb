@@ -28,6 +28,8 @@ I believe we have the followign benchmarks to construct:
     - MTEB(Code) or some other domain specific benchmark - shows an example of a domain specific benchmark
 """
 
+from __future__ import annotations
+
 import mteb
 from mteb.benchmarks import MTEB_MAIN_EN, MTEB_MAIN_RU
 

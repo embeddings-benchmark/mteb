@@ -5,7 +5,7 @@ import logging
 import os
 from collections import defaultdict
 from time import time
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any
 
 import tqdm
 from datasets import Dataset, Features, Value, load_dataset
@@ -71,11 +71,11 @@ class HFDataLoaderInstructions(HFDataLoader):
 
     def load(
         self, split="test"
-    ) -> Tuple[
+    ) -> tuple[
         Dataset,
         Dataset,
-        Dict[str, Dict[str, int]],
-        Dict[str, Dict[str, int]],
+        dict[str, dict[str, int]],
+        dict[str, dict[str, int]],
         Dataset,
     ]:
         if not self.hf_repo:
@@ -324,19 +324,19 @@ class AbsTaskInstructionRetrieval(AbsTask):
     def _evaluate_subset_lang(
         self,
         retriever: InstructionRetrievalEvaluator,
-        corpus: Dict,
-        queries: Dict,
-        og_relevant_docs: Dict,
-        changed_relevant_docs: Dict,
-        og_instructions: Dict,
-        changed_instructions: Dict,
-        top_ranked: Dict,
+        corpus: dict,
+        queries: dict,
+        og_relevant_docs: dict,
+        changed_relevant_docs: dict,
+        og_instructions: dict,
+        changed_instructions: dict,
+        top_ranked: dict,
         lang: str,
         split: str,
-        keywords: Union[Dict, None] = None,
-        short_instructions: Union[Dict, None] = None,
+        keywords: dict | None = None,
+        short_instructions: dict | None = None,
         **kwargs,
-    ) -> Dict[str, Union[Dict[str, float], float]]:
+    ) -> dict[str, dict[str, float] | float]:
         corpus, queries = corpus[split], queries[split]
         og_relevant_docs, changed_relevant_docs = (
             og_relevant_docs[split],
@@ -432,9 +432,9 @@ class AbsTaskInstructionRetrieval(AbsTask):
         model: Encoder,
         split: str = "test",
         *,
-        encode_kwargs: Dict[str, Any] = {},
+        encode_kwargs: dict[str, Any] = {},
         **kwargs,
-    ) -> Dict[str, Dict[str, Any]]:
+    ) -> dict[str, dict[str, Any]]:
         retriever = InstructionRetrievalEvaluator(
             retriever=model,
             task_name=self.metadata.name,
@@ -492,14 +492,14 @@ class AbsTaskInstructionRetrieval(AbsTask):
     def _evaluate_subset(
         self,
         retriever: InstructionRetrievalEvaluator,
-        corpus: Dict[str, Dict[str, str]],
-        queries: Dict[str, str],
-        relevant_docs: Dict[str, Dict[str, int]],
-        instructions: Dict[str, str],
-        top_ranked: Dict[str, List[str]],
+        corpus: dict[str, dict[str, str]],
+        queries: dict[str, str],
+        relevant_docs: dict[str, dict[str, int]],
+        instructions: dict[str, str],
+        top_ranked: dict[str, list[str]],
         lang=None,
         **kwargs,
-    ) -> Tuple[Dict[str, float], Dict[str, Dict[str, float]]]:
+    ) -> tuple[dict[str, float], dict[str, dict[str, float]]]:
         start_time = time()
 
         # do the results by query and relevant docs only
@@ -523,9 +523,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         results = {k: v for d in all_results for k, v in d.items()}
 
         end_time = time()
-        logger.info(
-            "Time taken to retrieve: {:.2f} seconds".format(end_time - start_time)
-        )
+        logger.info(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 
         if kwargs.get("save_predictions", False):
             output_folder = kwargs.get("output_folder", "results")
