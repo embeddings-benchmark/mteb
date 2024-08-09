@@ -394,7 +394,7 @@ def create_predictability_plot(
 ):
     """Creates a plot showing the predictability of the task removed."""
     fig, ax = plt.subplots()
-    fig.set_size_inches(7,7)
+    fig.set_size_inches(7, 7)
     y = predictability_of_task_removed_spearman
     x = task_removal_order[1:]
     ax.plot(x, y, label="spearman")
@@ -426,7 +426,7 @@ def create_task_selection_plot(
 ):
     """Create a line plot showing the correlation with the mean score as tasks are removed."""
     fig, ax = plt.subplots()
-    fig.set_size_inches(7,7)
+    fig.set_size_inches(7, 7)
     x_label = [
         f"{task_name} ({n_tasks} tasks)"
         for task_name, n_tasks in zip(task_removal_order, n_tasks)
@@ -486,8 +486,8 @@ if __name__ == "__main__":
             columns=["task"],
             values="main_score",
         )
-        n_tasks = len(lang_table.columns)
         lang_table = lang_table.dropna(axis=1)
+        n_tasks = len(lang_table.columns)
         if n_tasks != len(lang_table.columns):
             lang_tasks = [
                 t for t in lang_tasks if t.metadata.name in lang_table.columns
@@ -531,7 +531,6 @@ if __name__ == "__main__":
             print(
                 f"Most predictable tasks: {task_scores.T.sort_values(by=0, ascending=False).head()}"
             )
-            
 
             while most_pred_tasks:
                 task_to_remove = most_pred_tasks.pop(0)
