@@ -12,8 +12,8 @@ class AppsRetrieval(AbsTaskRetrieval):
         description="The dataset is a collection of natural language queries and their corresponding code snippets. The task is to retrieve the most relevant code snippet for a given query.",
         reference="https://arxiv.org/abs/2105.09938",
         dataset={
-            "path": "mteb/apps",
-            "revision": "d6e9071f1e672797656c30b139c2f9ec7be180b7",
+            "path": "CoIR-Retrieval/apps",
+            "revision": "56ef6c77d95b0fd5ed799c971de0d21bb29e491d",
         },
         type="Retrieval",
         category="p2p",

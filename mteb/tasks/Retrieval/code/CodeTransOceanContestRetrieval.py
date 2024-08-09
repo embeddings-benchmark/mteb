@@ -12,8 +12,8 @@ class CodeTransOceanContestRetrieval(AbsTaskRetrieval):
         description="The dataset is a collection of code snippets and their corresponding natural language queries. The task is to retrieve the most relevant code snippet",
         reference="https://arxiv.org/abs/2310.04951",
         dataset={
-            "path": "mteb/codetrans-contest",
-            "revision": "4c8ab70686e89644fca28bd67b3b993fac4aee22",
+            "path": "CoIR-Retrieval/codetrans-contest",
+            "revision": "aac9212872dc1a43f8ba9f7e32e22afac325342d",
         },
         type="Retrieval",
         category="p2p",

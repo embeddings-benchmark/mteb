@@ -70,17 +70,16 @@ def _load_code_search_code_retrieval(
         queries = queries
         logger.info("Loaded %d %s Queries.", len(queries), split.upper())
 
-    return corpus, queries, relevant_docs
 
-
-class CodeSearchNetCCRetrieval(MultilingualTask, AbsTaskRetrieval):
+class COIRCodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
+    _EVAL_SPLIT = "test"
     metadata = TaskMetadata(
-        name="CodeSearchNetCCRetrieval",
-        description="The dataset is a collection of code snippets. The task is to retrieve the most relevant code snippet for a given code snippet.",
-        reference="https://arxiv.org/abs/2407.02883",
+        name="COIRCodeSearchNetRetrieval",
+        description="The dataset is a collection of code snippets and their corresponding natural language queries. The task is to retrieve the most relevant code summary given a code snippet.",
+        reference="https://huggingface.co/datasets/code_search_net/",
         dataset={
-            "path": "CoIR-Retrieval/CodeSearchNet-ccr",
-            "revision": "512ab2f14f474940cd71e78df6be8e88e76ad8e9",
+            "path": "CoIR-Retrieval/CodeSearchNet",
+            "revision": "22cfd78e966b415643a1f1886b551376ce3fbd56",
         },
         type="Retrieval",
         category="p2p",
@@ -95,15 +94,7 @@ class CodeSearchNetCCRetrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{li2024coircomprehensivebenchmarkcode,
-        title={CoIR: A Comprehensive Benchmark for Code Information Retrieval Models},
-        author={Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
-        year={2024},
-        eprint={2407.02883},
-        archivePrefix={arXiv},
-        primaryClass={cs.IR},
-        url={https://arxiv.org/abs/2407.02883},
-        }""",
+        bibtex_citation="@article{husain2019codesearchnet, title={{CodeSearchNet} challenge: Evaluating the state of semantic code search}, author={Husain, Hamel and Wu, Ho-Hsiang and Gazit, Tiferet and Allamanis, Miltiadis and Brockschmidt, Marc}, journal={arXiv preprint arXiv:1909.09436}, year={2019} }",
         descriptive_stats={
             "n_samples": {
                 _EVAL_SPLIT: 1000,
@@ -111,48 +102,48 @@ class CodeSearchNetCCRetrieval(MultilingualTask, AbsTaskRetrieval):
             "avg_character_length": {
                 "test": {
                     "python": {
-                        "average_document_length": 388.31577184555965,
-                        "average_query_length": 551.7934039415471,
-                        "num_documents": 280652,
-                        "num_queries": 14918,
+                        "average_document_length": 862.842,
+                        "average_query_length": 466.546,
+                        "num_documents": 1000,
+                        "num_queries": 1000,
                         "average_relevant_docs_per_query": 1.0,
                     },
                     "javascript": {
-                        "average_document_length": 276.0730050152605,
-                        "average_query_length": 443.70707991491946,
-                        "num_documents": 65201,
-                        "num_queries": 3291,
+                        "average_document_length": 1415.632,
+                        "average_query_length": 186.018,
+                        "num_documents": 1000,
+                        "num_queries": 1000,
                         "average_relevant_docs_per_query": 1.0,
                     },
                     "go": {
-                        "average_document_length": 185.0307932251621,
-                        "average_query_length": 233.76803742920464,
-                        "num_documents": 182735,
-                        "num_queries": 8122,
+                        "average_document_length": 563.729,
+                        "average_query_length": 125.213,
+                        "num_documents": 1000,
+                        "num_queries": 1000,
                         "average_relevant_docs_per_query": 1.0,
                     },
                     "ruby": {
-                        "average_document_length": 214.86204146730464,
-                        "average_query_length": 266.8731165741475,
-                        "num_documents": 27588,
-                        "num_queries": 1261,
+                        "average_document_length": 577.634,
+                        "average_query_length": 313.818,
+                        "num_documents": 1000,
+                        "num_queries": 1000,
                         "average_relevant_docs_per_query": 1.0,
                     },
                     "java": {
-                        "average_document_length": 281.96280259139183,
-                        "average_query_length": 342.5341853035144,
-                        "num_documents": 181061,
-                        "num_queries": 10955,
+                        "average_document_length": 420.287,
+                        "average_query_length": 690.36,
+                        "num_documents": 1000,
+                        "num_queries": 1000,
                         "average_relevant_docs_per_query": 1.0,
                     },
                     "php": {
-                        "average_document_length": 268.9752569556027,
-                        "average_query_length": 336.62194947909234,
-                        "num_documents": 268237,
-                        "num_queries": 14014,
+                        "average_document_length": 712.129,
+                        "average_query_length": 162.119,
+                        "num_documents": 1000,
+                        "num_queries": 1000,
                         "average_relevant_docs_per_query": 1.0,
                     },
-                }
+                },
             },
         },
     )
