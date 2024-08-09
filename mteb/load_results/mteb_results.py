@@ -297,7 +297,12 @@ class MTEBResults(BaseModel):
     def _fix_pair_classification_scores(cls, obj: MTEBResults) -> None:
         from mteb import get_task
 
-        task = get_task(obj.task_name)
+        task_name = obj.task_name
+        if task_name in outdated_tasks:
+            task = outdated_tasks[task_name]
+        else:
+            task = get_task(obj.task_name)
+
         if task.metadata.type == "PairClassification":
             for split, split_scores in obj.scores.items():
                 for hf_subset_scores in split_scores:
