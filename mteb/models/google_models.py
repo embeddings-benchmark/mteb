@@ -1,5 +1,3 @@
-"""Required python >=3.9 and that the `google-generativeai` package is installed. Additionally the GOOGLE_API_KEY environment variable must be set."""
-
 from __future__ import annotations
 
 from functools import partial
