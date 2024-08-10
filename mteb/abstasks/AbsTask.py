@@ -212,8 +212,9 @@ class AbsTask(ABC):
 
         return all_details
 
+    @abstractmethod
     def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
-        pass
+        raise NotImplementedError
 
     @property
     def metadata_dict(self) -> dict[str, Any]:

@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import logging
-from collections import defaultdict
+from collections import Counter, defaultdict
 from typing import Any
 
 import numpy as np
+import tqdm
 
 from mteb.encoder_interface import Encoder
 
@@ -54,13 +55,6 @@ class AbsTaskClassification(AbsTask):
 
         # kNN parameters
         self.k = k
-
-        # Run metadata validation by instantiating addressing the attribute
-        # This is quite hacky. Ideally, this would be done in the constructor of
-        # each concrete task, but then we have to duplicate the __init__ method's
-        # interface.
-        if hasattr(self, "metadata"):
-            self.metadata
 
     def _add_main_score(self, scores: dict[HFSubset, ScoresDict]) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
@@ -188,3 +182,47 @@ class AbsTaskClassification(AbsTask):
                 y_sampled.append(y[i])
                 label_counter[y[i]] += 1
         return X_sampled, y_sampled, idxs
+
+    def calculate_metadata_metrics(self) -> dict[str, Any]:
+        self.load_data()
+
+        all_details = {}
+        pbar_split = tqdm.tqdm(
+            self.metadata_dict["eval_splits"] + ["train"], desc="Processing Splits..."
+        )
+        for split in pbar_split:
+            pbar_split.set_postfix_str(f"Split: {split}")
+            print(f"Processing metadata for split {split}")
+            if self.is_multilingual:
+                all_details[split] = {}
+
+                pbar_lang = tqdm.tqdm(
+                    self.metadata.eval_langs, desc="Processing Languages..."
+                )
+                for lang in pbar_lang:
+                    pbar_lang.set_postfix_str(f"Language: {lang}")
+                    print(f"Processing metadata for language {lang}")
+                    split_details = self.process_split(split, lang)
+                    all_details[split][lang] = split_details
+            else:
+                split_details = self.process_split(split)
+                all_details[split] = split_details
+
+        return all_details
+
+    def process_split(self, split: str, lang: str | None = None) -> dict[str, Any]:
+        if lang:
+            text = self.dataset[lang][split]["text"]
+            label = self.dataset[lang][split]["label"]
+        else:
+            text = self.dataset[split]["text"]
+            label = self.dataset[split]["label"]
+
+        total_text_len = sum([len(t) for t in text])
+        label_count = Counter(label)
+        return {
+            "num_texts": len(text),
+            "num_labels": len(label),
+            "average_text_length": total_text_len / len(text),
+            **{f"num_label_{k}": v for k, v in label_count.items()},
+        }
