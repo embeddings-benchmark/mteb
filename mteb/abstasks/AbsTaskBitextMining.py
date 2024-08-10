@@ -71,6 +71,12 @@ class AbsTaskBitextMining(AbsTask):
 
         return scores
 
+    def get_pairs(self, parallel: bool) -> list[tuple[str, str]]:
+        pairs = [("sentence1", "sentence2")]
+        if parallel:
+            pairs = [langpair.split("-") for langpair in self.hf_subsets]
+        return pairs
+
     def _evaluate_subset(
         self,
         model: Encoder,
@@ -80,9 +86,7 @@ class AbsTaskBitextMining(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
-        pairs = [("sentence1", "sentence2")]
-        if parallel:
-            pairs = [langpair.split("-") for langpair in self.hf_subsets]
+        pairs = self.get_pairs(parallel)
 
         evaluator = BitextMiningEvaluator(
             data_split,
@@ -100,3 +104,28 @@ class AbsTaskBitextMining(AbsTask):
 
     def _add_main_score(self, scores) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
+
+    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+        pairs_cols = self.get_pairs(self.parallel_subsets)
+        if lang:
+            if self.parallel_subsets:
+                sent_1, sent_2 = lang.split("-")
+                sentence1 = self.dataset[split][sent_1]
+                sentence2 = self.dataset[split][sent_2]
+            else:
+                sent_1, sent_2 = pairs_cols[0]
+                sentence1 = self.dataset[lang][split][sent_1]
+                sentence2 = self.dataset[lang][split][sent_2]
+        else:
+            sent_1, sent_2 = pairs_cols[0]
+            sentence1 = self.dataset[split][sent_1]
+            sentence2 = self.dataset[split][sent_2]
+        total_s1_len = sum([len(s1) for s1 in sentence1])
+        total_s2_len = sum([len(s2) for s2 in sentence2])
+
+        return {
+            "average_sentence1_length": total_s1_len / len(sentence1),
+            "average_sentence2_length": total_s2_len / len(sentence2),
+            "num_sentence1": len(sentence1),
+            "num_sentence2": len(sentence2),
+        }
