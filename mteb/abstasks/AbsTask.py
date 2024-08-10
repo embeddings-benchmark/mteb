@@ -8,6 +8,7 @@ from typing import Any, Dict, Sequence
 import datasets
 import numpy as np
 import torch
+import tqdm
 from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 
@@ -183,6 +184,36 @@ class AbsTask(ABC):
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
         self.dataset_transform()
         self.data_loaded = True
+
+    def calculate_metadata_metrics(self) -> dict[str, Any]:
+        self.load_data()
+
+        all_details = {}
+        pbar_split = tqdm.tqdm(
+            self.metadata_dict["eval_splits"], desc="Processing Splits..."
+        )
+        for split in pbar_split:
+            pbar_split.set_postfix_str(f"Split: {split}")
+            print(f"Processing metadata for split {split}")
+            if self.is_multilingual:
+                all_details[split] = {}
+
+                pbar_lang = tqdm.tqdm(
+                    self.metadata.eval_langs, desc="Processing Languages..."
+                )
+                for lang in pbar_lang:
+                    pbar_lang.set_postfix_str(f"Language: {lang}")
+                    print(f"Processing metadata for language {lang}")
+                    split_details = self.process_split(split, lang)
+                    all_details[split][lang] = split_details
+            else:
+                split_details = self.process_split(split)
+                all_details[split] = split_details
+
+        return all_details
+
+    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+        pass
 
     @property
     def metadata_dict(self) -> dict[str, Any]:

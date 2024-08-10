@@ -8,8 +8,9 @@ from pathlib import Path
 from time import time
 from typing import Any
 
-import tqdm
 from datasets import Features, Value, load_dataset
+
+from mteb.abstasks.TaskMetadata import HFSubset
 
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..load_results.mteb_results import ScoresDict
@@ -251,7 +252,7 @@ class AbsTaskRetrieval(AbsTask):
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
-    ):
+    ) -> dict[HFSubset, ScoresDict]:
         retriever = RetrievalEvaluator(
             retriever=model,
             task_name=self.metadata.name,
@@ -284,7 +285,7 @@ class AbsTaskRetrieval(AbsTask):
 
     def _evaluate_subset(
         self, retriever, corpus, queries, relevant_docs, hf_subset: str, **kwargs
-    ):
+    ) -> ScoresDict:
         start_time = time()
         results = retriever(corpus, queries)
         end_time = time()
@@ -378,75 +379,52 @@ class AbsTaskRetrieval(AbsTask):
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
-    def calculate_metadata_metrics(self) -> None:
-        self.load_data()
+    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+        """We want to get three pieces of information:
+        - the number of documents (and their char length) in the corpus
+        - the number of queries (and their char length)
+        - the average number of relevant documents per query
+        """
+        if lang:
+            queries = self.queries[lang][split]
+            corpus = self.corpus[lang][split]
+            relevant_docs = self.relevant_docs[lang][split]
+        else:
+            queries = self.queries[split]
+            corpus = self.corpus[split]
+            relevant_docs = self.relevant_docs[split]
 
-        all_details = {}
-        pbar_split = tqdm.tqdm(
-            self.metadata_dict["eval_splits"], desc="Processing Splits..."
+        query_len, doc_len = calculate_length(queries, corpus)
+        num_documents = len(corpus)
+        num_queries = len(queries)
+
+        # number of qrels that are not 0
+        num_qrels_non_zero = sum(
+            sum(1 for doc_id in docs if docs[doc_id] != 0)
+            for docs in relevant_docs.values()
         )
-        for split in pbar_split:
-            pbar_split.set_postfix_str(f"Split: {split}")
-            print(f"Processing metadata for split {split}")
-            all_details[split] = {}
-            if self.is_multilingual:
-                pbar_lang = tqdm.tqdm(
-                    self.relevant_docs.keys(), desc="Processing Languages..."
-                )
-                for lang in pbar_lang:
-                    pbar_lang.set_postfix_str(f"Language: {lang}")
-                    print(f"Processing metadata for language {lang}")
-                    split_details = process_language(
-                        self.relevant_docs[lang][split],
-                        self.queries[lang][split],
-                        self.corpus[lang][split],
-                        lang,
-                    )
-                    all_details[split][lang] = split_details
-            else:
-                split_details = process_language(
-                    self.relevant_docs[split], self.queries[split], self.corpus[split]
-                )
-                all_details[split] = split_details
+        qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if num_queries else 0
 
-        return all_details
+        language_description = f" for language {lang}" if lang else ""
+        print(f"Average document character length{language_description} is {doc_len}")
+        print(f"Average query character length{language_description} is {query_len}")
+        print(f"Number of documents{language_description} is {num_documents}")
+        print(f"Number of queries{language_description} is {num_queries}")
+        print(
+            f"Average number of relevant documents per query{language_description} is {qrels_per_doc}"
+        )
+        return {
+            "average_document_length": doc_len,
+            "average_query_length": query_len,
+            "num_documents": num_documents,
+            "num_queries": num_queries,
+            "average_relevant_docs_per_query": qrels_per_doc,
+        }
 
 
-def process_language(relevant_docs, queries, corpus, lang=None):
-    """We want to get three pieces of information:
-    - the number of documents (and their char length) in the corpus
-    - the number of queries (and their char length)
-    - the average number of relevant documents per query
-    """
-    query_len, doc_len = calculate_length(queries, corpus)
-    num_documents = len(corpus)
-    num_queries = len(queries)
-
-    # number of qrels that are not 0
-    num_qrels_non_zero = sum(
-        sum(1 for doc_id in docs if docs[doc_id] != 0)
-        for docs in relevant_docs.values()
-    )
-    qrels_per_doc = num_qrels_non_zero / num_queries if num_queries else 0
-
-    language_description = f" for language {lang}" if lang else ""
-    print(f"Average document character length{language_description} is {doc_len}")
-    print(f"Average query character length{language_description} is {query_len}")
-    print(f"Number of documents{language_description} is {num_documents}")
-    print(f"Number of queries{language_description} is {num_queries}")
-    print(
-        f"Average number of relevant documents per query{language_description} is {qrels_per_doc}"
-    )
-    return {
-        "average_document_length": doc_len,
-        "average_query_length": query_len,
-        "num_documents": num_documents,
-        "num_queries": num_queries,
-        "average_relevant_docs_per_query": qrels_per_doc,
-    }
-
-
-def calculate_length(queries, corpus):
+def calculate_length(
+    queries: dict[str, str], corpus: dict[str, str]
+) -> tuple[float, float]:
     queries_lens = []
     doc_lens = []
     for query in queries.values():
