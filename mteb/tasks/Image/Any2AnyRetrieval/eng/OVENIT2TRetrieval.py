@@ -27,7 +27,7 @@ class OVENIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
-        modalities=["image"],
+        modalities=["text"],
         sample_creation="created",
         bibtex_citation="""@inproceedings{hu2023open,
   title={Open-domain visual entity recognition: Towards recognizing millions of wikipedia entities},
