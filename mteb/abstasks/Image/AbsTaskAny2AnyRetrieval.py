@@ -308,7 +308,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
             with open(qrels_save_path, "w") as f:
                 json.dump(results, f)
 
-        ndcg, _map, recall, precision, naucs = retriever.evaluate(
+        ndcg, _map, recall, precision, cv_recall, naucs = retriever.evaluate(
             relevant_docs,
             results,
             retriever.k_values,
@@ -321,6 +321,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
             **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
             **{f"map_at_{k.split('@')[1]}": v for (k, v) in _map.items()},
             **{f"recall_at_{k.split('@')[1]}": v for (k, v) in recall.items()},
+            **{f"cv_recall_at_{k.split('@')[1]}": v for (k, v) in cv_recall.items()},
             **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
             **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
             **{
