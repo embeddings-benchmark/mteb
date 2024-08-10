@@ -199,7 +199,7 @@ class DenseRetrievalExactSearch:
 
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
                 cos_scores,
-                top_k,
+                min(top_k, cos_scores.size(1)),
                 dim=1,
                 largest=True,
                 sorted=return_sorted,
