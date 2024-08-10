@@ -25,7 +25,7 @@ ds = datasets.load_dataset(
 )
 
 unique, counts = np.unique(ds["subreddit"], return_counts=True)
-unique_to_count = {k: v for k, v in zip(unique, counts)}
+unique_to_count = dict(zip(unique, counts))
 
 # Check top subreddits :)
 # sorted(unique_to_count, key=lambda x: unique_to_count[x], reverse=True)[:10]

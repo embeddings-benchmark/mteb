@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Any, List, Optional
+from typing import Any
 
 import numpy as np
 
@@ -17,11 +17,11 @@ class GoogleTextEmbeddingModel(Encoder):
 
     def _embed(
         self,
-        texts: List[str],
+        texts: list[str],
         google_task_type: str = None,
-        titles: List[str] | None = None,
+        titles: list[str] | None = None,
         dimensionality: Optional[int] = 768,
-    ) -> List[List[float]]:
+    ) -> list[list[float]]:
         """Embeds texts with a pre-trained, foundational model.
         From https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings#generative-ai-get-text-embedding-python_vertex_ai_sdk
         """
@@ -45,7 +45,7 @@ class GoogleTextEmbeddingModel(Encoder):
             inputs = [
                 TextEmbeddingInput(text, task_type=google_task_type) for text in texts
             ]
-        kwargs = dict(output_dimensionality=dimensionality) if dimensionality else {}
+        kwargs = {"output_dimensionality": dimensionality} if dimensionality else {}
         try:
             embeddings = model.get_embeddings(inputs, **kwargs)
         # Except the very rare google.api_core.exceptions.InternalServerError

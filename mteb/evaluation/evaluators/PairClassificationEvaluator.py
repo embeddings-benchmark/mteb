@@ -96,7 +96,7 @@ class PairClassificationEvaluator(Evaluator):
             prompt_name=self.task_name,
             **encode_kwargs,
         )
-        emb_dict = {sent: emb for sent, emb in zip(sentences, embeddings)}
+        emb_dict = dict(zip(sentences, embeddings))
         embeddings1 = [emb_dict[sent] for sent in self.sentences1]
         embeddings2 = [emb_dict[sent] for sent in self.sentences2]
 

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections import Counter
 
 import datasets
@@ -109,18 +111,18 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
         labels_count = Counter(self.dataset["test"]["labels"])
 
         # keep classes with more than 2 samples after stratified_subsampling
-        frequent_labels = set(
+        frequent_labels = {
             label
             for label, count in labels_count.items()
             if count > len(self.dataset["test"]) * 2 / NUM_SAMPLES
-        )
+        }
         self.dataset["test"] = self.dataset["test"].filter(
             lambda row: row["labels"] in frequent_labels
         )
         self.dataset["test"] = self.dataset["test"].cast(
             datasets.Features(
                 sentences=datasets.Value("string"),
-                labels=datasets.ClassLabel(names=sorted(list(frequent_labels))),
+                labels=datasets.ClassLabel(names=sorted(frequent_labels)),
             )
         )
         for split in self.metadata.eval_splits:

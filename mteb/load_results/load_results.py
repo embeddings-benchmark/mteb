@@ -8,6 +8,7 @@ from collections import defaultdict
 from pathlib import Path
 
 import mteb
+from mteb.model_meta import ModelMeta
 
 logger = logging.getLogger(__name__)
 MODEL_NAME = str
@@ -59,14 +60,18 @@ def download_of_results(
     return results_directory
 
 
-def _model_name_and_revision(revision_path: Path) -> tuple[MODEL_NAME, REVISION]:
+def _model_name_and_revision(
+    revision_path: Path, fallback_to_path: bool
+) -> tuple[MODEL_NAME, REVISION] | None:
     model_meta = revision_path / "model_meta.json"
     model_path = revision_path.parent
-    if not model_meta.exists():
+    if not model_meta.exists() and fallback_to_path:
         logger.warning(
             f"model_meta.json not found in {revision_path}, extracting model_name and revision from the path"
         )
         model_name, revision = model_path.name, revision_path.name
+    elif not model_meta.exists():
+        return None
     else:
         with model_meta.open("r") as f:
             model_meta_json = json.load(f)
@@ -79,6 +84,8 @@ def _model_name_and_revision(revision_path: Path) -> tuple[MODEL_NAME, REVISION]
 def load_results(
     results_repo: str = "https://github.com/embeddings-benchmark/results",
     download_latest: bool = True,
+    models: list[str | ModelMeta] | None = None,
+    require_model_meta: bool = True,
 ) -> dict[MODEL_NAME, dict[REVISION, list[mteb.MTEBResults]]]:
     """Loads the results from the latest version of the results repository. The results are cached locally in the MTEB_CACHE directory.
     This directory can be set using the MTEB_CACHE environment variable or defaults to "~/.cache/mteb".
@@ -86,6 +93,9 @@ def load_results(
     Args:
         results_repo: The URL of the results repository on GitHub. Defaults to "https://github.com/embeddings-benchmark/results".
         download_latest: If True it will update the existing version of the results cache. Defaults to True.
+        models: A list of model names to load the results for. If None it will load the results for all models. Defaults to None.
+        require_model_meta: If True it will ignore results that do not have a model_meta.json file. Defaults to True. If false it will
+            extract the model name and revision from the path.
 
     Returns:
         A dictionary where the keys are the model names and the values are dictionaries where the keys are the revisions and the values are lists of MTEBResults objects.
@@ -113,15 +123,36 @@ def load_results(
         ...
     """
     repo_directory = download_of_results(results_repo, download_latest=download_latest)
-    models = [p for p in (repo_directory / "results").glob("*") if p.is_dir()]
+    model_paths = [p for p in (repo_directory / "results").glob("*") if p.is_dir()]
+
+    if models is not None:
+        models_to_keep = {}
+        for model_path in models:
+            if isinstance(model_path, ModelMeta):
+                models_to_keep[model_path.name] = model_path.revision
+            else:
+                models_to_keep[model_path] = None
+    else:
+        models_to_keep = None
 
     results = defaultdict(dict)
 
-    for model in models:
-        model_revisions = model.glob("*")
+    for model_path in model_paths:
+        model_revisions = model_path.glob("*")
 
         for revision_path in model_revisions:
-            model_name, revision = _model_name_and_revision(revision_path)
+            model_name_and_revision = _model_name_and_revision(
+                revision_path, fallback_to_path=(not require_model_meta)
+            )
+            if model_name_and_revision is None:
+                continue
+            model_name, revision = model_name_and_revision
+
+            if models_to_keep is not None and model_name not in models_to_keep:
+                continue
+            elif models_to_keep is not None and models_to_keep[model_name] is not None:
+                if models_to_keep[model_name] != revision:
+                    continue
 
             task_json_files = [
                 f for f in revision_path.glob("*.json") if "model_meta.json" != f.name

@@ -1,4 +1,4 @@
-from typing import Dict, List
+from __future__ import annotations
 
 import datasets
 
@@ -57,14 +57,14 @@ _LANGUAGES = {
 }
 
 
-def _build_lang_pair(langs: List[str]) -> str:
+def _build_lang_pair(langs: list[str]) -> str:
     """Builds a language pair separated by a dash.
     e.g., ['eng-Latn', 'deu-Latn'] -> 'eng-deu'.
     """
     return langs[0].split("-")[0] + "-" + langs[1].split("-")[0]
 
 
-def extend_lang_pairs() -> Dict[str, List[str]]:
+def extend_lang_pairs() -> dict[str, list[str]]:
     eval_langs = {}
     for langs in _LANGUAGES.values():
         lang_pair = _build_lang_pair(langs)
