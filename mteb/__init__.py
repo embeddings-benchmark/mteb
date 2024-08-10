@@ -7,7 +7,7 @@ from mteb.benchmarks import (
     MTEB_MAIN_RU,
     MTEB_RETRIEVAL_LAW,
     MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
-    CoIR
+    CoIR,
 )
 from mteb.evaluation import *
 from mteb.load_results import load_results
