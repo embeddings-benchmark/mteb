@@ -7,6 +7,7 @@ from mteb.benchmarks import (
     MTEB_MAIN_RU,
     MTEB_RETRIEVAL_LAW,
     MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
+    CoIR
 )
 from mteb.evaluation import *
 from mteb.load_results import load_results
@@ -23,6 +24,7 @@ __all__ = [
     "MTEB_MAIN_RU",
     "MTEB_RETRIEVAL_LAW",
     "MTEB_RETRIEVAL_WITH_INSTRUCTIONS",
+    "CoIR",
     "TASKS_REGISTRY",
     "get_tasks",
     "get_task",
