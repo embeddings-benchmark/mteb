@@ -242,3 +242,30 @@ SEB = Benchmark(
       primaryClass={cs.CL}
 }""",
 )
+
+CoIR = Benchmark(
+    name="CoIR",
+    tasks=[
+        "AppsRetrieval",
+        "CosQA",
+        "SyntheticText2SQL",
+        "CodeSearchNetRetrieval",
+        "CodeSearchNetCCRetrieval",
+        "CodeTransOceanDL",
+        "CodeTransOceanContest",
+        "StackOverflowQA",
+        "CodeFeedbackMT",
+        "CodeFeedbackST",
+    ],
+    description="CoIR: A Comprehensive Benchmark for Code Information Retrieval Models",
+    reference="https://github.com/CoIR-team/coir",
+    citation="""@misc{li2024coircomprehensivebenchmarkcode,
+      title={CoIR: A Comprehensive Benchmark for Code Information Retrieval Models}, 
+      author={Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
+      year={2024},
+      eprint={2407.02883},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2407.02883}, 
+    }""",
+)

@@ -73,7 +73,7 @@ import argparse
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, Tuple
+from typing import Any
 
 import torch
 import yaml
@@ -303,8 +303,8 @@ def potentially_add_cqadupstack_to_results(results: list[mteb.MTEBResults]) -> N
 
 
 def merge_yamls(
-    yaml_dict: Dict[str, Any], existing_readme: str
-) -> Tuple[Dict[str, Any], str]:
+    yaml_dict: dict[str, Any], existing_readme: str
+) -> tuple[dict[str, Any], str]:
     if not existing_readme.endswith("md"):
         raise ValueError("Readme file should be markdown and ends with 'md'")
 

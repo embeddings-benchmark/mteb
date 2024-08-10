@@ -43,7 +43,7 @@ def filter_results(
 
     iter_models = models if models is not None else results.keys()
     if tasks is not None:
-        task_names = set(t.metadata.name for t in tasks)
+        task_names = {t.metadata.name for t in tasks}
 
     for mdl in iter_models:
         if isinstance(mdl, mteb.ModelMeta):
@@ -192,7 +192,7 @@ wide_table = results_df.pivot_table(
 nans = wide_table[wide_table.isna().any(axis=1)]
 
 # create list of model names x task names which is missing
-t_names = set([t.metadata.name for t in tasks_which_should_be_there])
+t_names = {t.metadata.name for t in tasks_which_should_be_there}
 
 
 sav_str = ""
