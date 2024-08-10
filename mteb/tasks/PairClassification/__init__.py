@@ -7,6 +7,13 @@ from .eng.LegalBenchPC import *
 from .eng.SprintDuplicateQuestionsPC import *
 from .eng.TwitterSemEval2015PC import *
 from .eng.TwitterURLCorpusPC import *
+from .eng.PubChemWikiParagraphsPC import *
+from .eng.PubChemAISentenceParaphrasePC import *
+from .eng.PubChemAIParagraphsParaphrasePC import *
+from .eng.PubChemSMILESCanonDescPC import *
+from .eng.PubChemSMILESCanonTitlePC import *
+from .eng.PubChemSMILESIsoDescPC import *
+from .eng.PubChemSMILESIsoTitlePC import *
 from .fas.FarsTail import *
 from .hye.ArmenianParaphrasePC import *
 from .ind.IndoNLI import *
