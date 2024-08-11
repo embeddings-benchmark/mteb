@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskMultilabelClassification import (
+    AbsTaskMultilabelClassification,
+)
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskMultilabelClassification
 
 
 class SensitiveTopicsClassification(AbsTaskMultilabelClassification):

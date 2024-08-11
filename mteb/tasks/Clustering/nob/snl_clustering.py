@@ -6,7 +6,8 @@ from typing import Iterable, TypeVar
 
 import datasets
 
-from mteb.abstasks import AbsTaskClustering, TaskMetadata
+from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 T = TypeVar("T")
 

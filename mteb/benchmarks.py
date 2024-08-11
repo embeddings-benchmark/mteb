@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Sequence
 
-from mteb.abstasks import AbsTask
+from mteb.abstasks.AbsTask import AbsTask
 from mteb.overview import get_tasks
 
 
@@ -295,7 +295,7 @@ MTEB_FRA = Benchmark(
             "MLSUMClusteringS2S",
             # Pair Classification
             "OpusparcusPC",
-            "PawsX",
+            "PawsXPairClassification",
             # Reranking
             "SyntecReranking",
             "AlloprofReranking",
@@ -345,13 +345,13 @@ MTEB_DEU = Benchmark(
             "TenKGnadClusteringS2S",
             # Pair Classification
             "FalseFriendsGermanEnglish",
-            "PawsX",
+            "PawsXPairClassification",
             # Reranking
-            "MIRACLReranking"
+            "MIRACLReranking",
             # Retrieval
             "GermanQuAD-Retrieval",
             "GermanDPR",
-            "XMarketDE",
+            "XMarket",
             "GerDaLIR",
             # STS
             "GermanSTSBenchmark",
@@ -378,7 +378,7 @@ MTEB_KOR = Benchmark(
         languages=["kor"],
         tasks=[  # @KennethEnevoldsen: We could probably expand this to a more solid benchamrk, but for now I have left it as is.
             # Classification
-            "KLUE-TC"
+            "KLUE-TC",
             # Reranking
             "MIRACLReranking",
             # Retrieval
@@ -414,7 +414,7 @@ MTEB_pol = Benchmark(
             "PlscClusteringP2P",
             # Pair Classification
             "SICK-E-PL",
-            "PPC",
+            "PpcPC",
             "CDSC-E",
             "PSC",
             # STS
