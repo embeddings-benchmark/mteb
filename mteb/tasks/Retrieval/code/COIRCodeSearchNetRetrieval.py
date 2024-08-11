@@ -79,7 +79,7 @@ class COIRCodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/code_search_net/",
         dataset={
             "path": "CoIR-Retrieval/CodeSearchNet",
-            "revision": "22cfd78e966b415643a1f1886b551376ce3fbd56",
+            "revision": "4adc7bc41202b5c13543c9c886a25f340634dab3",
         },
         type="Retrieval",
         category="p2p",

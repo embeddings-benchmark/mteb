@@ -80,7 +80,7 @@ class CodeSearchNetCCRetrieval(MultilingualTask, AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2407.02883",
         dataset={
             "path": "CoIR-Retrieval/CodeSearchNet-ccr",
-            "revision": "512ab2f14f474940cd71e78df6be8e88e76ad8e9",
+            "revision": "6c44be65132e5721ba829b00e3b4db34071de560",
         },
         type="Retrieval",
         category="p2p",
