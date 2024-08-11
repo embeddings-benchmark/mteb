@@ -5,9 +5,9 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from .....abstasks import AbsTaskAny2AnyRetrieval
 
 
-class CIRRIT2TRetrieval(AbsTaskAny2AnyRetrieval):
+class CIRRIT2IRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
-        name="CIRRIT2TRetrieval",
+        name="CIRRIT2IRetrieval",
         description="Retrieve images based on texts and images.",
         reference="https://openaccess.thecvf.com/content/ICCV2021/html/Liu_Image_Retrieval_on_Real-Life_Images_With_Pre-Trained_Vision-and-Language_Models_ICCV_2021_paper.html",
         dataset={

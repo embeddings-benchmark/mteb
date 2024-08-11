@@ -262,13 +262,20 @@ class I2TRetrievalEvaluator(Evaluator):
                 "For evaluation, we DO NOT ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=True`` to ignore this."
             )
 
-        all_ndcgs, all_aps, all_recalls, all_precisions = {}, {}, {}, {}
+        all_ndcgs, all_aps, all_recalls, all_precisions, all_cv_recalls = (
+            {},
+            {},
+            {},
+            {},
+            {},
+        )
 
         for k in k_values:
             all_ndcgs[f"NDCG@{k}"] = []
             all_aps[f"MAP@{k}"] = []
             all_recalls[f"Recall@{k}"] = []
             all_precisions[f"P@{k}"] = []
+            all_cv_recalls[f"CV_Recall@{k}"] = []  # (new) CV-style Recall
 
         map_string = "map_cut." + ",".join([str(k) for k in k_values])
         ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
@@ -279,18 +286,35 @@ class I2TRetrievalEvaluator(Evaluator):
         )
         scores = evaluator.evaluate(results)
 
+        sorted_results = {
+            qid: sorted(rels.items(), key=lambda item: item[1], reverse=True)
+            for qid, rels in results.items()
+        }
+
         for query_id in scores.keys():
+            top_docs = [
+                doc_id for doc_id, _ in sorted_results.get(query_id, [])
+            ]  # Sorted list of doc IDs
+            relevant_docs = set(qrels.get(query_id, {}).keys())
+
             for k in k_values:
+                top_k_docs = top_docs[:k]
                 all_ndcgs[f"NDCG@{k}"].append(scores[query_id]["ndcg_cut_" + str(k)])
                 all_aps[f"MAP@{k}"].append(scores[query_id]["map_cut_" + str(k)])
                 all_recalls[f"Recall@{k}"].append(scores[query_id]["recall_" + str(k)])
                 all_precisions[f"P@{k}"].append(scores[query_id]["P_" + str(k)])
 
-        ndcg, _map, recall, precision = (
+                if relevant_docs.intersection(top_k_docs):
+                    all_cv_recalls[f"CV_Recall@{k}"].append(1.0)
+                else:
+                    all_cv_recalls[f"CV_Recall@{k}"].append(0.0)
+
+        ndcg, _map, recall, precision, cv_recall = (
             all_ndcgs.copy(),
             all_aps.copy(),
             all_recalls.copy(),
             all_precisions.copy(),
+            all_cv_recalls.copy(),
         )
 
         for k in k_values:
@@ -298,12 +322,16 @@ class I2TRetrievalEvaluator(Evaluator):
             _map[f"MAP@{k}"] = round(sum(_map[f"MAP@{k}"]) / len(scores), 5)
             recall[f"Recall@{k}"] = round(sum(recall[f"Recall@{k}"]) / len(scores), 5)
             precision[f"P@{k}"] = round(sum(precision[f"P@{k}"]) / len(scores), 5)
+            cv_recall[f"CV_Recall@{k}"] = round(
+                sum(cv_recall[f"CV_Recall@{k}"]) / len(scores), 5
+            )
 
         naucs = I2TRetrievalEvaluator.evaluate_abstention(
-            results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
+            results,
+            {**all_ndcgs, **all_aps, **all_recalls, **all_precisions, **all_cv_recalls},
         )
 
-        return ndcg, _map, recall, precision, naucs
+        return ndcg, _map, recall, precision, cv_recall, naucs
 
     @staticmethod
     def evaluate_custom(
