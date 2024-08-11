@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from mteb.abstasks import AbsTaskRetrieval
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.tasks.Retrieval.eng.NFCorpusRetrieval import NFCorpus
 
 
