@@ -41,7 +41,7 @@ class LitSearchRetrieval(AbsTaskRetrieval):
         year={2024}
         }""",
         descriptive_stats={
-            "n_samples": None,
+            "n_samples": 597,
             "avg_character_length": {
                 "test": {
                     "average_document_length": 841.2769,
