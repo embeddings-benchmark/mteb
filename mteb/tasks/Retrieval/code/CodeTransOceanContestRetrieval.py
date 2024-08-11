@@ -13,7 +13,7 @@ class CodeTransOceanContestRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2310.04951",
         dataset={
             "path": "CoIR-Retrieval/codetrans-contest",
-            "revision": "aac9212872dc1a43f8ba9f7e32e22afac325342d",
+            "revision": "20da4eb20a4b17300c0986ee148c90867a7f2a4d",
         },
         type="Retrieval",
         category="p2p",
