@@ -5,12 +5,12 @@ from typing import Any
 
 from datasets import Dataset
 
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.evaluation.evaluators import RerankingEvaluator
 from mteb.load_results.mteb_results import ScoresDict
 
-from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 logger = logging.getLogger(__name__)

@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import datasets
 
+from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskPairClassification, MultilingualTask
 
 _LANGUAGES = {
     "de": ["deu-Latn"],

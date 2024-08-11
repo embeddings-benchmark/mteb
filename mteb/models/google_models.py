@@ -1,5 +1,3 @@
-"""Required python >=3.9 and that the `google-generativeai` package is installed. Additionally the GOOGLE_API_KEY environment variable must be set."""
-
 from __future__ import annotations
 
 from functools import partial
@@ -18,7 +16,7 @@ class GoogleTextEmbeddingModel(Encoder):
     def _embed(
         self,
         texts: list[str],
-        task_type: str = "RETRIEVAL_DOCUMENT",
+        google_task_type: str | None = None,
         titles: list[str] | None = None,
         dimensionality: int | None = 768,
     ) -> list[list[float]]:
@@ -37,12 +35,14 @@ class GoogleTextEmbeddingModel(Encoder):
             # Else Google throws google.api_core.exceptions.InvalidArgument: 400 The text content is empty.
             inputs = [
                 TextEmbeddingInput(
-                    text if text else " ", task_type=task_type, title=title
+                    text if text else " ", task_type=google_task_type, title=title
                 )
                 for text, title in zip(texts, titles)
             ]
         else:
-            inputs = [TextEmbeddingInput(text, task_type=task_type) for text in texts]
+            inputs = [
+                TextEmbeddingInput(text, task_type=google_task_type) for text in texts
+            ]
         kwargs = {"output_dimensionality": dimensionality} if dimensionality else {}
         try:
             embeddings = model.get_embeddings(inputs, **kwargs)
@@ -56,22 +56,22 @@ class GoogleTextEmbeddingModel(Encoder):
         self,
         sentences: list[str],
         prompt_name: str | None = None,
+        google_task_type: str | None = None,  # Optional
         **kwargs: Any,
     ) -> np.ndarray:
-        input_type = None  # Default
-        if prompt_name:
+        if prompt_name and google_task_type is None:
             task = mteb.get_task(prompt_name)
             task_type = task.metadata.type
             if task_type in ["Classification", "MultilabelClassification"]:
-                input_type = "CLASSIFICATION"
+                google_task_type = "CLASSIFICATION"
             elif task_type == "Clustering":
-                input_type = "CLUSTERING"
+                google_task_type = "CLUSTERING"
             elif task_type == "STS":
-                input_type = "SIMILARITY"
-        return self._embed(sentences, task_type=input_type)
+                google_task_type = "SIMILARITY"
+        return self._embed(sentences, google_task_type=google_task_type)
 
     def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
-        return self._embed(queries, task_type="RETRIEVAL_QUERY")
+        return self._embed(queries, google_task_type="RETRIEVAL_QUERY")
 
     def encode_corpus(self, corpus: list[dict[str, str]], **kwargs: Any) -> np.ndarray:
         if isinstance(corpus, dict):
@@ -85,7 +85,9 @@ class GoogleTextEmbeddingModel(Encoder):
             for doc in corpus:
                 titles.append(doc["title"])
                 sentences.append(doc["text"])
-        return self._embed(sentences, task_type="RETRIEVAL_DOCUMENT", titles=titles)
+        return self._embed(
+            sentences, google_task_type="RETRIEVAL_DOCUMENT", titles=titles
+        )
 
 
 name = "text-embedding-004"

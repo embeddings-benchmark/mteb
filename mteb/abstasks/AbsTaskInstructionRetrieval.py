@@ -407,17 +407,18 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 lang,
                 **kwargs,
             )
-            scores_w_short_instr_scores, scores_w_short_instr_result = (
-                self._evaluate_subset(
-                    retriever,
-                    corpus,
-                    queries,
-                    og_relevant_docs,
-                    short_instructions,
-                    top_ranked,
-                    lang,
-                    **kwargs,
-                )
+            (
+                scores_w_short_instr_scores,
+                scores_w_short_instr_result,
+            ) = self._evaluate_subset(
+                retriever,
+                corpus,
+                queries,
+                og_relevant_docs,
+                short_instructions,
+                top_ranked,
+                lang,
+                **kwargs,
             )
             overall_changed_scores["length_ablation"] = {
                 "keywords": scores_w_keywords_scores,
