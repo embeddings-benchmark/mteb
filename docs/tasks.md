@@ -455,6 +455,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [STSBenchmark](https://github.com/PhilipMay/stsb-multi-mt/) (Philip May, 2021) | ['eng'] | STS | s2s |  | None | None |
 | [STSBenchmarkMultilingualSTS](https://github.com/PhilipMay/stsb-multi-mt/) (Philip May, 2021) | ['cmn', 'deu', 'eng', 'fra', 'ita', 'nld', 'pol', 'por', 'rus', 'spa'] | STS | s2s | [News, Social, Web, Spoken, Written] | {'dev': 30000, 'test': 27580} | {'dev': 66.5, 'test': 56.1} |
 | [STSES](https://huggingface.co/datasets/PlanTL-GOB-ES/sts-es) (Agirre et al., 2015) | ['spa'] | STS | s2s |  | None | None |
+| [SadeemQuestionRetrieval](https://huggingface.co/datasets/sadeem-ai/sadeem-ar-eval-retrieval-questions) | ['ara'] | Retrieval | s2p | [Written, Written] | {'test': 22979} | {'test': 500.0} |
 | [SanskritShlokasClassification](https://github.com/goru001/nlp-for-sanskrit) | ['san'] | Classification | s2s | [Religious, Written] | {'train': 383, 'validation': 96} | {'train': 98.415, 'validation': 96.635} |
 | [ScalaClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['dan', 'nno', 'nob', 'swe'] | Classification | s2s | [Fiction, News, Non-fiction, Blog, Spoken, Web, Written] | {'test': 4096} | {'test': 102.72} |
 | [SciDocsRR](https://allenai.org/data/scidocs) | ['eng'] | Reranking | s2s | [Academic, Non-fiction, Written] | {'test': 19599} | {'test': 69.0} |
@@ -643,7 +644,7 @@ The following tables give you an overview of the tasks in MTEB.
 | apu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | apw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | apz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ara | 2 | 12 | 0 | 0 | 0 | 2 | 1 | 6 | 2 | 0 | 0 |
+| ara | 2 | 12 | 0 | 0 | 0 | 2 | 1 | 7 | 2 | 0 | 0 |
 | arb | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 |
 | are | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | arl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1632,7 +1633,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1394 | 794 | 304 | 3 | 28 | 67 | 47 | 401 | 85 | 2 | 2 |
+| Total | 1394 | 794 | 304 | 3 | 28 | 67 | 47 | 402 | 85 | 2 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
