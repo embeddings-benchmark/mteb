@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable, List
+from typing import Any, Callable, List
 
 import pandas as pd
 from scipy.stats import pearsonr, spearmanr, zscore
@@ -16,25 +16,28 @@ REVISION = str
 METRIC = Callable[[List[float], List[float]], float]
 
 
-def spearman(x: List[float], y: List[float]) -> float:
+def spearman(x: list[float], y: list[float]) -> float:
     return spearmanr(x, y)[0]
 
 
-def pearson(x: List[float], y: List[float]) -> float:
+def pearson(x: list[float], y: list[float]) -> float:
     return pearsonr(x, y)[0]
 
 
-def mse_with_zscore(x: List[float], y: List[float]) -> float:
+def mse_with_zscore(x: list[float], y: list[float]) -> float:
     return float(mean_squared_error(zscore(x), zscore(y)))
 
 
 def results_to_dataframe(
-    mteb_results: dict[MODEL, dict[REVISION, list[mteb.MTEBResults]]], **kwargs
+    mteb_results: dict[MODEL, dict[REVISION, list[mteb.MTEBResults]]],
+    drop_na: bool = True,
+    **kwargs: Any,
 ) -> pd.DataFrame:
     """Convert the results of the MTEB evaluation to a pandas DataFrame.
 
     Args:
         mteb_results: The results of the MTEB evaluation.
+        drop_na: Whether to drop missing values from the DataFrame.
         **kwargs: Additional keyword arguments to be passed to the `get_score` method of the `MTEBResults` class.
     """
     data = []
@@ -50,6 +53,9 @@ def results_to_dataframe(
                     }
                 )
     df = pd.DataFrame(data)
+
+    if drop_na:
+        df = df.dropna(axis=1)
     return df.pivot_table(
         index=["model", "revision"],
         columns=["task"],

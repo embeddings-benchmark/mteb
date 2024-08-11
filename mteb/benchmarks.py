@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Sequence
+
+from mteb.abstasks.AbsTask import AbsTask
 
 
 @dataclass
 class Benchmark:
     name: str
-    tasks: list[str]
+    tasks: Sequence[str] | Sequence[AbsTask]
     description: str | None = None
     reference: str | None = None
     citation: str | None = None

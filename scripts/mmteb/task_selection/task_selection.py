@@ -203,7 +203,7 @@ def is_candidate_valid_removal(current_tasks: list[str], task_to_remove: str):
 
 # Load data
 tasks = get_eu_tasks()
-models: list[ModelMeta] = get_models()
+models = get_models()
 mteb_results = mteb.load_results()
 mteb_results = filter_results(mteb_results, tasks=tasks, models=models)
 mteb_results = normalize_results(mteb_results)
@@ -226,4 +226,3 @@ if n_tasks != len(lang_table.columns):
 
 # Predict performance
 most_pred_tasks = task_selector.most_predictable_task(lang_table)
-

@@ -6,6 +6,7 @@ import os
 import subprocess
 from collections import defaultdict
 from pathlib import Path
+from typing import Sequence
 
 import mteb
 from mteb.model_meta import ModelMeta
@@ -84,7 +85,9 @@ def _model_name_and_revision(
 def load_results(
     results_repo: str = "https://github.com/embeddings-benchmark/results",
     download_latest: bool = True,
-    models: list[str | ModelMeta] | None = None,
+    models: Sequence[ModelMeta] | Sequence[str] | None = None,
+    tasks: Sequence[mteb.AbsTask] | Sequence[str] | None = None,
+    validate_and_filter: bool = True,
     require_model_meta: bool = True,
 ) -> dict[MODEL_NAME, dict[REVISION, list[mteb.MTEBResults]]]:
     """Loads the results from the latest version of the results repository. The results are cached locally in the MTEB_CACHE directory.
@@ -94,8 +97,11 @@ def load_results(
         results_repo: The URL of the results repository on GitHub. Defaults to "https://github.com/embeddings-benchmark/results".
         download_latest: If True it will update the existing version of the results cache. Defaults to True.
         models: A list of model names to load the results for. If None it will load the results for all models. Defaults to None.
+        tasks: A list of task names to load the results for. If None it will load the results for all tasks. Defaults to None.
         require_model_meta: If True it will ignore results that do not have a model_meta.json file. Defaults to True. If false it will
             extract the model name and revision from the path.
+        validate_and_filter: If True it will validate that the results object for the task contains the correct splits and filter out
+            splits from the results object that are not default in the task metadata. Defaults to True.
 
     Returns:
         A dictionary where the keys are the model names and the values are dictionaries where the keys are the revisions and the values are lists of MTEBResults objects.
@@ -135,6 +141,14 @@ def load_results(
     else:
         models_to_keep = None
 
+    if tasks is not None:
+        task_names = set()
+        for task in tasks:
+            if isinstance(task, mteb.AbsTask):
+                task_names.add(task.metadata.name)
+            else:
+                task_names.add(task)
+
     results = defaultdict(dict)
 
     for model_path in model_paths:
@@ -157,8 +171,24 @@ def load_results(
             task_json_files = [
                 f for f in revision_path.glob("*.json") if "model_meta.json" != f.name
             ]
-            results[model_name][revision] = [
-                mteb.MTEBResults.from_disk(f) for f in task_json_files
-            ]
+            _results = [mteb.MTEBResults.from_disk(f) for f in task_json_files]
+
+            # filter out tasks that are not in the tasks list
+            if tasks is not None:
+                _results = [r for r in _results if r.task_name in task_names]
+
+            if validate_and_filter:
+                filtered_results = []
+                for r in _results:
+                    try:
+                        r.validate_and_filter_scores()
+                        filtered_results.append(r)
+                    except Exception as e:
+                        logger.warning(
+                            f"Validation failed for {r.task_name} in {model_name} {revision}: {e}"
+                        )
+                _results = filtered_results
+
+            results[model_name][revision] = _results
 
     return dict(results)
