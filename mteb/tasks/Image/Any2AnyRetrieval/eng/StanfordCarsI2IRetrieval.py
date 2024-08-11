@@ -14,8 +14,8 @@ class StanfordCarsI2I(AbsTaskAny2AnyRetrieval):
         description="Retrieve car images from 196 makes.",
         reference="https://pure.mpg.de/rest/items/item_2029263/component/file_2029262/content",
         dataset={
-            "path": "isaacchung/StanfordCars",
-            "revision": "09ffe9bc7864d3f1e851529e5c4b7e05601a04fb",
+            "path": "isaacchung/stanford_cars_retrieval",
+            "revision": "b27a0612211af3598bd11fe28af20928f20cce06",
         },
         type="Retrieval",
         category="i2i",
@@ -50,42 +50,3 @@ class StanfordCarsI2I(AbsTaskAny2AnyRetrieval):
             },
         },
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-        # fetch both subsets of the dataset
-        eval_split = self.metadata_dict["eval_splits"][0]
-        data_raw = datasets.load_dataset(**self.metadata_dict["dataset"])[eval_split]
-
-        queries = {eval_split: {"id": [], "modality": [], "image": []}}
-        corpus = {eval_split: {"id": [], "modality": [], "image": []}}
-        relevant_docs = {eval_split: {}}
-
-        label_ids = {
-            label: label
-            for label in set(data_raw["label"])
-        }
-
-        for row in data_raw:
-            image = row["image"]
-            label = row["label"]
-            query_id = row["id"]
-            queries[eval_split]["id"].append(query_id)
-            queries[eval_split]["image"].append(image)
-            queries[eval_split]["modality"].append("image")
-
-            doc_id = label_ids[label]
-            corpus[eval_split]["id"].append(doc_id)
-            corpus[eval_split]["image"].append(image)
-            corpus[eval_split]["modality"].append("image")
-
-            if query_id not in relevant_docs[eval_split]:
-                relevant_docs[eval_split][query_id] = {}
-            relevant_docs[eval_split][query_id][doc_id] = 1
-
-        self.corpus = datasets.DatasetDict(corpus)
-        self.queries = datasets.DatasetDict(queries)
-        self.relevant_docs = datasets.DatasetDict(relevant_docs)
-
-        self.data_loaded = True
