@@ -1,11 +1,7 @@
 from __future__ import annotations
 
-from hashlib import sha256
-
-import datasets
-
-from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.abstasks import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class StanfordCarsI2I(AbsTaskAny2AnyRetrieval):

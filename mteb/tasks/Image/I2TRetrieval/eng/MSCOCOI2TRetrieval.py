@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-
 from mteb.abstasks import AbsTaskI2TRetrieval
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class MSCOCOI2TRetrieval(AbsTaskI2TRetrieval):

@@ -173,7 +173,7 @@ class HFDataLoader:
                 delimiter="\t",
                 keep_in_memory=self.keep_in_memory,
             )
-        
+
         if "Q0" in qrels_ds.column_names:
             qrels_ds = qrels_ds.remove_columns("Q0")
         features = Features(
