@@ -32,7 +32,7 @@ class LitSearchRetrieval(AbsTaskRetrieval):
         domains=["Academic", "Non-fiction", "Written"],
         task_subtypes=["Article retrieval"],
         license="MIT",
-        annotations_creators="LM-generated and verified",
+        annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found", #queries LLM generated, corpus samples are found (extracted from S2ORC)
         bibtex_citation="""@article{ajith2024litsearch,
