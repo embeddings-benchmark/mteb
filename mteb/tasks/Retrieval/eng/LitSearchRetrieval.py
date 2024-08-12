@@ -34,7 +34,7 @@ class LitSearchRetrieval(AbsTaskRetrieval):
         license="MIT",
         annotations_creators="LM-generated",
         dialect=[],
-        sample_creation="found", #queries LLM generated, corpus samples are found (extracted from S2ORC)
+        sample_creation="found",  # queries LLM generated, corpus samples are found (extracted from S2ORC)
         bibtex_citation="""@article{ajith2024litsearch,
         title={LitSearch: A Retrieval Benchmark for Scientific Literature Search},
         author={Ajith, Anirudh and Xia, Mengzhou and Chevalier, Alexis and Goyal, Tanya and Chen, Danqi and Gao, Tianyu},
