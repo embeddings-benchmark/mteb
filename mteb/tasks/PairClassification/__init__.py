@@ -14,6 +14,7 @@ from .eng.PubChemSMILESCanonDescPC import *
 from .eng.PubChemSMILESCanonTitlePC import *
 from .eng.PubChemSMILESIsoDescPC import *
 from .eng.PubChemSMILESIsoTitlePC import *
+from .eng.PubChemSynonymPC import *
 from .fas.FarsTail import *
 from .hye.ArmenianParaphrasePC import *
 from .ind.IndoNLI import *

@@ -27,6 +27,8 @@ from .eng.AlphaNLIRetrieval import *
 from .eng.ARCChallengeRetrieval import *
 from .eng.ArguAnaRetrieval import *
 from .eng.BrightRetrieval import *
+from .eng.ChemNQRetrieval import *
+from .eng.ChemHotpotQARetrieval import *
 from .eng.ClimateFEVERRetrieval import *
 from .eng.CQADupstackAndroidRetrieval import *
 from .eng.CQADupstackEnglishRetrieval import *
