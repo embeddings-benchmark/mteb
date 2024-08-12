@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from datasets import load_dataset
 
-from mteb.abstasks import AbsTaskRetrieval, MultilingualTask, TaskMetadata
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.MultilingualTask import MultilingualTask
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _EVAL_SPLIT = "test"
 

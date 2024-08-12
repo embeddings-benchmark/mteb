@@ -4,8 +4,8 @@ import logging
 
 import datasets
 
-from mteb.abstasks import MultilingualTask
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = ["python", "javascript", "go", "ruby", "java", "php"]

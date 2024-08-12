@@ -3,9 +3,9 @@ from __future__ import annotations
 import datasets
 import numpy as np
 
+from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskClustering, MultilingualTask
 
 _LANGUAGES = {
     "amh": ["amh-Ethi"],
