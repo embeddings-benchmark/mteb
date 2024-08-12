@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskClassification  # type: ignore
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+
+# type: ignore
 from mteb.abstasks.TaskMetadata import TaskMetadata  # type: ignore
 
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .ara.SadeemQuestionRetrieval import *
 from .code.AppsRetrieval import *
 from .code.CodeEditSearchRetrieval import *
 from .code.CodeFeedbackMTRetrieval import *
