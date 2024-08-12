@@ -183,7 +183,6 @@ class TaskMetadata(BaseModel):
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
         license: The license of the data.
-        socioeconomic_status: The socioeconomic status of the data. Includes "high", "medium", "low", "mixed".
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
         dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.

@@ -1,28 +1,24 @@
 from __future__ import annotations
 
+from mteb.abstasks import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from .....abstasks import AbsTaskImageClassification
 
-
-class StanfordCarsClassification(AbsTaskImageClassification):
+class StanfordCarsI2I(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
-        name="StanfordCars",
-        description="Classifying car images from 196 makes.",
+        name="StanfordCarsI2IRetrieval",
+        description="Retrieve car images from 196 makes.",
         reference="https://pure.mpg.de/rest/items/item_2029263/component/file_2029262/content",
         dataset={
-            "path": "isaacchung/StanfordCars",
-            "revision": "09ffe9bc7864d3f1e851529e5c4b7e05601a04fb",
+            "path": "isaacchung/stanford_cars_retrieval",
+            "revision": "b27a0612211af3598bd11fe28af20928f20cce06",
         },
-        type="Classification",
-        category="i2t",
+        type="Retrieval",
+        category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
-        date=(
-            "2013-01-01",
-            "2013-04-01",
-        ),  # Estimated range for the collection of reviews
+        main_score="recall_at_1",
+        date=("2012-01-01", "2013-04-01"),
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
         license="Not specified",
@@ -38,7 +34,15 @@ class StanfordCarsClassification(AbsTaskImageClassification):
         }
         """,
         descriptive_stats={
-            "n_samples": {"test": 8041},
-            "avg_character_length": {"test": 431.4},
+            "n_samples": {"default": 8041},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 1074.894348894349,
+                    "average_query_length": 77.06142506142506,
+                    "num_documents": 8041,
+                    "num_queries": 8041,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
