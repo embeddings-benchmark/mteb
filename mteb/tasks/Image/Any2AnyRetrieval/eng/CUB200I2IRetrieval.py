@@ -47,3 +47,4 @@ class CUB200I2I(AbsTaskAny2AnyRetrieval):
             },
         },
     )
+    skip_first_result = True

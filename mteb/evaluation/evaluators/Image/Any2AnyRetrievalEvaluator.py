@@ -294,6 +294,7 @@ class Any2AnyRetrievalEvaluator(Evaluator):
         results: dict[str, dict[str, float]],
         k_values: List[int],
         ignore_identical_ids: bool = False,
+        skip_first_result: bool = False,
     ) -> Tuple[
         dict[str, float],
         dict[str, float],
@@ -301,6 +302,9 @@ class Any2AnyRetrievalEvaluator(Evaluator):
         dict[str, float],
         dict[str, float],
     ]:
+        if skip_first_result:
+            for qid, rels in results.items():
+                del results[qid][next(iter(rels))]
         if ignore_identical_ids:
             logger.debug(
                 "For evaluation, ``ignore_identical_ids=True`` is set to True, the evaluator will ignore identical query and document ids."
