@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskSummarization
+from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 

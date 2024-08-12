@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks import TaskMetadata
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 N_SAMPLES = 2048
 

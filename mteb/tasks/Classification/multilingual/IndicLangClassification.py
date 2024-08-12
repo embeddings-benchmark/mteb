@@ -4,9 +4,8 @@ from typing import Any
 
 import datasets
 
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskClassification
 
 _LANGUAGES = {
     "asm_Beng": ["asm-Beng"],
