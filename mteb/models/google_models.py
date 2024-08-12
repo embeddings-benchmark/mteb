@@ -16,9 +16,9 @@ class GoogleTextEmbeddingModel(Encoder):
     def _embed(
         self,
         texts: list[str],
-        google_task_type: str = None,
+        google_task_type: str | None = None,
         titles: list[str] | None = None,
-        dimensionality: Optional[int] = 768,
+        dimensionality: int | None = 768,
     ) -> list[list[float]]:
         """Embeds texts with a pre-trained, foundational model.
         From https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings#generative-ai-get-text-embedding-python_vertex_ai_sdk

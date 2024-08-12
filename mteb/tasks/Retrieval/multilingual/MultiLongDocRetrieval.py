@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import datasets
 
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import AbsTaskRetrieval, MultilingualTask
 from ....abstasks.AbsTaskRetrieval import *
 
 _LANGUAGES = {
