@@ -4,21 +4,21 @@ from mteb.abstasks import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class StanfordCarsI2I(AbsTaskAny2AnyRetrieval):
+class CUB200I2I(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
-        name="StanfordCarsI2IRetrieval",
-        description="Retrieve car images from 196 makes.",
-        reference="https://pure.mpg.de/rest/items/item_2029263/component/file_2029262/content",
+        name="CUB200I2IRetrieval",
+        description="Retrieve bird images from 200 classes.",
+        reference="https://www.florian-schroff.de/publications/CUB-200.pdf",
         dataset={
-            "path": "isaacchung/stanford_cars_retrieval",
-            "revision": "b27a0612211af3598bd11fe28af20928f20cce06",
+            "path": "isaacchung/cub200_retrieval",
+            "revision": "ad08c1307b15a226bf1b64e62656a17f1f85f7ec",
         },
         type="Retrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cv_recall_at_1",
-        date=("2012-01-01", "2013-04-01"),
+        date=("2009-01-01", "2010-04-01"),
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
         license="Not specified",
@@ -26,21 +26,22 @@ class StanfordCarsI2I(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{Krause2013CollectingAL,
-        title={Collecting a Large-scale Dataset of Fine-grained Cars},
-        author={Jonathan Krause and Jia Deng and Michael Stark and Li Fei-Fei},
-        year={2013},
-        url={https://api.semanticscholar.org/CorpusID:16632981}
+        bibtex_citation="""@article{article,
+        author = {Welinder, Peter and Branson, Steve and Mita, Takeshi and Wah, Catherine and Schroff, Florian and Belongie, Serge and Perona, Pietro},
+        year = {2010},
+        month = {09},
+        pages = {},
+        title = {Caltech-UCSD Birds 200}
         }
         """,
         descriptive_stats={
-            "n_samples": {"default": 8041},
+            "n_samples": {"default": 5794},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 1074.894348894349,
                     "average_query_length": 77.06142506142506,
-                    "num_documents": 8041,
-                    "num_queries": 8041,
+                    "num_documents": 5794,
+                    "num_queries": 5794,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },

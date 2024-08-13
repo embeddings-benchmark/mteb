@@ -294,6 +294,7 @@ class Any2AnyRetrievalEvaluator(Evaluator):
         results: dict[str, dict[str, float]],
         k_values: List[int],
         ignore_identical_ids: bool = False,
+        skip_first_result: bool = False,
     ) -> Tuple[
         dict[str, float],
         dict[str, float],
@@ -343,6 +344,10 @@ class Any2AnyRetrievalEvaluator(Evaluator):
             qid: sorted(rels.items(), key=lambda item: item[1], reverse=True)
             for qid, rels in results.items()
         }
+
+        if skip_first_result:
+            for qid, rels in sorted_results.items():
+                sorted_results[qid].pop(0)
 
         for query_id in scores.keys():
             top_docs = [

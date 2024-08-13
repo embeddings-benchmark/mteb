@@ -207,6 +207,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
     """
 
     ignore_identical_ids: bool = False
+    skip_first_result: bool = False
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -315,6 +316,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
             results,
             retriever.k_values,
             ignore_identical_ids=self.ignore_identical_ids,
+            skip_first_result=self.skip_first_result,
         )
         mrr, naucs_mrr = retriever.evaluate_custom(
             relevant_docs, results, retriever.k_values, "mrr"

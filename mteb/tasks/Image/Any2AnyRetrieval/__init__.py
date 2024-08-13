@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .eng.CIRRIT2IRetrieval import *
+from .eng.CUB200I2IRetrieval import *
 from .eng.FashionIQIT2IRetrieval import *
 from .eng.InfoSeekIT2ITRetrieval import *
 from .eng.InfoSeekIT2TRetrieval import *
