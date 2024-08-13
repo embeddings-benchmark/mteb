@@ -302,9 +302,6 @@ class Any2AnyRetrievalEvaluator(Evaluator):
         dict[str, float],
         dict[str, float],
     ]:
-        if skip_first_result:
-            for qid, rels in results.items():
-                del results[qid][next(iter(rels))]
         if ignore_identical_ids:
             logger.debug(
                 "For evaluation, ``ignore_identical_ids=True`` is set to True, the evaluator will ignore identical query and document ids."
@@ -347,6 +344,10 @@ class Any2AnyRetrievalEvaluator(Evaluator):
             qid: sorted(rels.items(), key=lambda item: item[1], reverse=True)
             for qid, rels in results.items()
         }
+
+        if skip_first_result:
+            for qid, rels in sorted_results.items():
+                sorted_results[qid].pop(0)
 
         for query_id in scores.keys():
             top_docs = [

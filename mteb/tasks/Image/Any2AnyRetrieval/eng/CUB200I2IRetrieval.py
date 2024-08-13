@@ -17,7 +17,7 @@ class CUB200I2I(AbsTaskAny2AnyRetrieval):
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="recall_at_1",
+        main_score="cv_recall_at_1",
         date=("2009-01-01", "2010-04-01"),
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
