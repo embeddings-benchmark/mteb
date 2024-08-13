@@ -1,26 +1,26 @@
 from __future__ import annotations
 
+from mteb.abstasks import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from .....abstasks import AbsTaskT2IRetrieval
 
-
-class MSCOCOT2IRetrieval(AbsTaskT2IRetrieval):
+class MSCOCOI2TRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
-        name="MSCOCOT2IRetrieval",
-        description="Retrieve images based on captions.",
+        name="MSCOCOI2TRetrieval",
+        description="Retrieve captions based on images.",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-10602-1_48",
         dataset={
-            "path": "MRBench/mbeir_mscoco_task0",
-            "revision": "cfe15bd2791dde5f8f20aebecf0b4eb3812972d6",
+            "path": "MRBench/mbeir_mscoco_task3",
+            "revision": "cca3a3e223763e6519a4d68936bc9279034d75d2",
             "trust_remote_code": True,
         },
         type="Retrieval",
-        category="t2i",
+        category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2018-01-01", "2018-12-31"),
+        form=["written"],
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
         license="CC BY-SA 4.0",
@@ -41,8 +41,8 @@ class MSCOCOT2IRetrieval(AbsTaskT2IRetrieval):
             "n_samples": {"test": 1172},
             "avg_character_length": {
                 "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
+                    "average_document_length": 30.94235294117647,
+                    "average_query_length": 131.56569965870307,
                     "num_documents": 9350,
                     "num_queries": 1172,
                     "average_relevant_docs_per_query": 1.0,

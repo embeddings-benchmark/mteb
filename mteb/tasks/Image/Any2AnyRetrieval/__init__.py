@@ -2,9 +2,13 @@ from __future__ import annotations
 
 from .eng.CIRRIT2IRetrieval import *
 from .eng.CUB200I2IRetrieval import *
+from .eng.Fashion200kI2TRetrieval import *
+from .eng.Fashion200kT2IRetrieval import *
 from .eng.FashionIQIT2IRetrieval import *
 from .eng.InfoSeekIT2ITRetrieval import *
 from .eng.InfoSeekIT2TRetrieval import *
+from .eng.MSCOCOI2TRetrieval import *
+from .eng.MSCOCOT2IRetrieval import *
 from .eng.NIGHTSI2IRetrieval import *
 from .eng.OVENIT2ITRetrieval import *
 from .eng.OVENIT2TRetrieval import *

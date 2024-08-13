@@ -1,11 +1,10 @@
 from __future__ import annotations
 
+from mteb.abstasks import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from .....abstasks import AbsTaskT2IRetrieval
 
-
-class Fashion200kT2IRetrieval(AbsTaskT2IRetrieval):
+class Fashion200kT2IRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="Fashion200kT2IRetrieval",
         description="Retrieve clothes based on descriptions.",
