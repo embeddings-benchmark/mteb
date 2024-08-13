@@ -238,7 +238,7 @@ class AFQMC(AbsTaskSTS):
         type="STS",
         category="s2s",
         modalities=["text"],
-        eval_splits=["validation", "test"],
+        eval_splits=["validation"],
         eval_langs=["cmn-Hans"],
         main_score="cosine_spearman",
         date=None,
