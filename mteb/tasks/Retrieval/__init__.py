@@ -58,6 +58,7 @@ from .eng.LEMBPasskeyRetrieval import *
 from .eng.LEMBQMSumRetrieval import *
 from .eng.LEMBSummScreenFDRetrieval import *
 from .eng.LEMBWikimQARetrieval import *
+from .eng.LitSearchRetrieval import *
 from .eng.MedicalQARetrieval import *
 from .eng.MLQuestions import *
 from .eng.MSMARCORetrieval import *

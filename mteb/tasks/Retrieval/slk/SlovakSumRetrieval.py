@@ -61,7 +61,7 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         dataset_path = self.metadata_dict["dataset"]["path"]
-        n_sample = self.metadata_dict["n_samples"]["test"]
+        n_sample = self.metadata_dict["descriptive_stats"]["n_samples"]["test"]
 
         for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
             split_ds = datasets.load_dataset(
