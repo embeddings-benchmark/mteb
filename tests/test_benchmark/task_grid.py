@@ -10,6 +10,9 @@ from mteb.tasks.Classification.multilingual.IndicSentimentClassification import 
 from mteb.tasks.Clustering.eng.TwentyNewsgroupsClustering import (
     TwentyNewsgroupsClusteringFast,
 )
+from mteb.tasks.Image.Clustering import TinyImageNet
+from mteb.tasks.Image.ImageTextPairClassification import Winoground
+from mteb.tasks.Image.ZeroshotClassification import RenderedSST2
 
 from .mock_tasks import (
     MockBitextMiningTask,
@@ -54,8 +57,39 @@ TASK_TEST_GRID_AS_STRING = [
 ]
 
 
+def dataset_transform(self):
+    for split in self.metadata.eval_splits:
+        self.dataset[split] = self.dataset[split].select([0, 1])
+
+
+tiny_imagenet = TinyImageNet()
+renderedSST2 = RenderedSST2()
+winoground = Winoground()
+
+## method override to speed up tests
+tiny_imagenet.dataset_transform = dataset_transform.__get__(tiny_imagenet)
+renderedSST2.dataset_transform = dataset_transform.__get__(renderedSST2)
+winoground.dataset_transform = dataset_transform.__get__(winoground)
+
+
+MIEB_TASK_TEST_GRID = [
+    tiny_imagenet,  # image clustering
+    # winoground,  # pair classification. Gated
+    renderedSST2,  # zero shot classification
+    # The following takes a long time. Consider creating a mock class.
+    # "CIRRIT2TRetrieval",  # it2i retrieval
+    # "MSCOCOI2TRetrieval",  # i2t retrieval
+    # "MSCOCOT2IRetrieval",  # t2i retrieval
+    # oxford_flowers,  # image classification
+]
+
+MIEB_TASK_TEST_GRID_AS_STRING = [
+    t.metadata.name if isinstance(t, AbsTask) else t for t in MIEB_TASK_TEST_GRID
+]
+
+
 # Mock tasks for testing - intended to be faster and avoid downloading data leading to false positive potential failures in CI
-# Not all tasks are implemnted as Mock tasks yet
+# Not all tasks are implemented as Mock tasks yet
 MOCK_TASK_TEST_GRID = [
     MockBitextMiningTask(),
     MockClassificationTask(),

@@ -1,0 +1,19 @@
+{
+  "dataset_revision": "e09b9dea248d579376684268cbedba28cd66b9b4",
+  "evaluation_time": 235.52802658081055,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.80",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 0.4057266342517558,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.4057266342517558
+      }
+    ]
+  },
+  "task_name": "BirdsnapZeroShot"
+}

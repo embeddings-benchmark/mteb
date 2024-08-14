@@ -3,6 +3,9 @@ from __future__ import annotations
 from .BitextMining import *
 from .Classification import *
 from .Clustering import *
+from .Image.ImageClassification import *
+from .Image.ImageTextPairClassification import *
+from .Image.ZeroshotClassification import *
 from .InstructionRetrieval import *
 from .MultiLabelClassification import *
 from .PairClassification import *

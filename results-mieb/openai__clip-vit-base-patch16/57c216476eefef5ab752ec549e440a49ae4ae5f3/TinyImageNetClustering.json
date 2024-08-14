@@ -1,0 +1,19 @@
+{
+  "dataset_revision": "5a77092c28e51558c5586e9c5eb71a7e17a5e43f",
+  "evaluation_time": 401.41785073280334,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.67",
+  "scores": {
+    "valid": [
+      {
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.6290288786644828,
+        "v_measure": 0.6290288786644828
+      }
+    ]
+  },
+  "task_name": "TinyImageNetClustering"
+}

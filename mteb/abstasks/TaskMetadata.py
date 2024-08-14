@@ -21,6 +21,7 @@ TASK_SUBTYPE = Literal[
     "Dialect pairing",
     "Dialog Systems",
     "Discourse coherence",
+    "Duplicate Image Retrieval",
     "Language identification",
     "Linguistic acceptability",
     "Political classification",
@@ -37,6 +38,15 @@ TASK_SUBTYPE = Literal[
     "Counterfactual Detection",
     "Emotion classification",
     "Reasoning as Retrieval",
+    "Rendered Texts Understanding",
+    "Image Text Retrieval",
+    "Object recognition",
+    "Scene recognition",
+    "Caption Pairing",
+    "Emotion recognition",
+    "Textures recognition",
+    "Activity recognition",
+    "Tumor detection",
 ]
 
 TASK_DOMAIN = Literal[
@@ -53,6 +63,7 @@ TASK_DOMAIN = Literal[
     "Poetry",
     "Religious",
     "Reviews",
+    "Scene",
     "Social",
     "Spoken",
     "Subtitles",
@@ -85,12 +96,27 @@ TASK_TYPE = Literal[
     "Summarization",
     "InstructionRetrieval",
     "Speed",
+    "ZeroShotClassification",
+    "ImageTextPairClassification",
 ]
 
 TASK_CATEGORY = Literal[
     "s2s",  # Sentence-to-sentence
     "s2p",  # Sentence-to-paragraph
     "p2p",  # Paragraph-to-paragraph
+    "i2i",
+    "i2t",
+    "t2i",
+    "it2t",
+    "it2i",
+    "i2it",
+    "t2it",
+    "it2it",
+]
+
+MODALITIES = Literal[
+    "text",
+    "image",
 ]
 
 ANNOTATOR_TYPE = Literal[
@@ -157,7 +183,6 @@ class TaskMetadata(BaseModel):
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
         license: The license of the data.
-        socioeconomic_status: The socioeconomic status of the data. Includes "high", "medium", "low", "mixed".
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
         dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
@@ -175,7 +200,7 @@ class TaskMetadata(BaseModel):
     name: str
     description: str
     type: TASK_TYPE
-    modalities: list[Literal["text"]]
+    modalities: list[MODALITIES]
     category: TASK_CATEGORY
     reference: STR_URL | None  # URL to documentation, e.g. published paper
 

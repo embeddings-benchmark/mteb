@@ -13,6 +13,7 @@ from mteb.abstasks import AbsTask
 from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
+from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
 from mteb.overview import TASKS_REGISTRY
 
@@ -34,6 +35,7 @@ def test_load_data(
     # TODO: We skip because this load_data is completely different.
     if (
         isinstance(task, AbsTaskRetrieval)
+        or isinstance(task, AbsTaskAny2AnyRetrieval)
         or isinstance(task, AbsTaskInstructionRetrieval)
         or isinstance(task, MultiSubsetLoader)
         or isinstance(task, AbsTaskSpeedTask)
