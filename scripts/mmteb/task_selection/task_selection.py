@@ -3,11 +3,11 @@ from __future__ import annotations
 from importlib import reload
 from typing import Iterable
 
-import task_selector
+import mteb.task_selection as task_selection
 
 import mteb
 
-reload(task_selector)
+reload(task_selection)
 
 
 eu_languages = [
@@ -214,7 +214,7 @@ lang_tasks = [t for t in tasks if language in t.metadata.languages]
 lang_tasks_names = [t.metadata.name for t in lang_tasks]
 mteb_results = filter_results(mteb_results, tasks=lang_tasks, models=models)
 
-results_df = task_selector.results_to_dataframe(mteb_results, languages=["dan"])
+results_df = task_selection.results_to_dataframe(mteb_results, languages=["dan"])
 lang_table = results_df.dropna(axis=1)
 
 n_tasks = len(lang_table.columns)
@@ -225,4 +225,4 @@ if n_tasks != len(lang_table.columns):
 
 
 # Predict performance
-most_pred_tasks = task_selector.most_predictable_task(lang_table)
+most_pred_tasks = task_selection.most_predictable_task(lang_table)

@@ -6,14 +6,17 @@ import os
 import subprocess
 from collections import defaultdict
 from pathlib import Path
-from typing import Sequence
+from typing import Dict, List, Sequence
 
-import mteb
+from mteb.abstasks.AbsTask import AbsTask
+from mteb.load_results.mteb_results import MTEBResults
 from mteb.model_meta import ModelMeta
 
 logger = logging.getLogger(__name__)
 MODEL_NAME = str
 REVISION = str
+
+RESULTS = Dict[MODEL_NAME, Dict[REVISION, List[MTEBResults]]]
 
 
 def download_of_results(
@@ -86,10 +89,10 @@ def load_results(
     results_repo: str = "https://github.com/embeddings-benchmark/results",
     download_latest: bool = True,
     models: Sequence[ModelMeta] | Sequence[str] | None = None,
-    tasks: Sequence[mteb.AbsTask] | Sequence[str] | None = None,
+    tasks: Sequence[AbsTask] | Sequence[str] | None = None,
     validate_and_filter: bool = True,
     require_model_meta: bool = True,
-) -> dict[MODEL_NAME, dict[REVISION, list[mteb.MTEBResults]]]:
+) -> RESULTS:
     """Loads the results from the latest version of the results repository. The results are cached locally in the MTEB_CACHE directory.
     This directory can be set using the MTEB_CACHE environment variable or defaults to "~/.cache/mteb".
 
@@ -144,7 +147,7 @@ def load_results(
     if tasks is not None:
         task_names = set()
         for task in tasks:
-            if isinstance(task, mteb.AbsTask):
+            if isinstance(task, AbsTask):
                 task_names.add(task.metadata.name)
             else:
                 task_names.add(task)
@@ -171,7 +174,7 @@ def load_results(
             task_json_files = [
                 f for f in revision_path.glob("*.json") if "model_meta.json" != f.name
             ]
-            _results = [mteb.MTEBResults.from_disk(f) for f in task_json_files]
+            _results = [MTEBResults.from_disk(f) for f in task_json_files]
 
             # filter out tasks that are not in the tasks list
             if tasks is not None:
