@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
-
 from mteb.abstasks import AbsTaskZeroshotClassification
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class CIFAR10ZeroShotClassification(AbsTaskZeroshotClassification):

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from importlib.metadata import version
 
+from mteb.abstasks import AbsTask, TaskMetadata
 from mteb.benchmarks import (
     MTEB_MAIN_EN,
     MTEB_MAIN_RU,
@@ -9,11 +10,14 @@ from mteb.benchmarks import (
     MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
     CoIR,
 )
-
-from mteb.abstasks import AbsTask, TaskMetadata
-from mteb.encoder_interface import Encoder, EncoderWithConversationEncode, EncoderWithQueryCorpusEncode, EncoderWithSimilarity
+from mteb.encoder_interface import (
+    Encoder,
+    EncoderWithConversationEncode,
+    EncoderWithQueryCorpusEncode,
+    EncoderWithSimilarity,
+)
 from mteb.evaluation import *
-from mteb.load_results import load_results, MTEBResults
+from mteb.load_results import MTEBResults, load_results
 from mteb.models import get_model, get_model_meta
 from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
 
