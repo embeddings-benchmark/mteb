@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, List, Union
+from typing import Any
 
 from datasets import Dataset
 from tqdm import tqdm
@@ -26,15 +26,15 @@ class AbsTaskImageTextPairClassification(AbsTask):
     """
 
     # it can be ["image_0", "image_1"]; ["text_0", "text_1"] for datasets like WinoGround
-    images_column_names: Union[str, List[str]] = "image"
-    texts_column_names: Union[str, List[str]] = "caption"
+    images_column_names: str | list[str] = "image"
+    texts_column_names: str | list[str] = "caption"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def _preprocess_column(
-        self, dataset: Dataset, column_names: Union[str, List[str]]
-    ) -> List[List[Any]]:
+        self, dataset: Dataset, column_names: str | list[str]
+    ) -> list[list[Any]]:
         """Group examples from the columns into a list of examples."""
         if isinstance(column_names, str):
             return dataset[column_names]
