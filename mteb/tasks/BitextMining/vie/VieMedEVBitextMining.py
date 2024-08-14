@@ -4,7 +4,7 @@ import random
 
 import datasets
 
-from mteb.abstasks import AbsTaskBitextMining
+from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 TEST_SAMPLES = 2048

@@ -5,8 +5,9 @@ import itertools
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks import AbsTaskClustering, MultilingualTask
+from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -91,12 +92,12 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
     )
 
     def dataset_transform(self):
-        ds = dict()
+        ds = {}
         for lang in self.hf_subsets:
             labels = []
             sentences = []
-            ds[lang] = dict()
-            lang_dict = dict()
+            ds[lang] = {}
+            lang_dict = {}
             for split in self.metadata.eval_splits:
                 labels.extend(
                     itertools.chain.from_iterable(self.dataset[lang][split]["labels"])

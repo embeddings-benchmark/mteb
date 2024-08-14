@@ -4,7 +4,7 @@ import itertools
 import logging
 import random
 from collections import defaultdict
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 import numpy as np
 import sklearn
@@ -30,7 +30,7 @@ def evaluate_clustering_bootstrapped(
     n_clusters: int,
     cluster_size: int,
     kmean_batch_size: int,
-    max_depth: Optional[int],
+    max_depth: int | None,
     rng_state: random.Random = random.Random(),
 ) -> dict[str, list[float]]:
     """Bootstrapped evaluation of clustering performance using V-measure.

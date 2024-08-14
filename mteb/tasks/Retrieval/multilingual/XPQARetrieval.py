@@ -1,8 +1,10 @@
-from typing import List
+from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks import AbsTaskRetrieval, MultilingualTask, TaskMetadata
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.MultilingualTask import MultilingualTask
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _EVAL_LANGS = {
     "ara-ara": ["ara-Arab", "ara-Arab"],
@@ -423,7 +425,7 @@ class XPQARetrieval(AbsTaskRetrieval, MultilingualTask):
         self.data_loaded = True
 
 
-def _load_dataset_csv(path: str, revision: str, eval_splits: List[str]):
+def _load_dataset_csv(path: str, revision: str, eval_splits: list[str]):
     data_files = {
         eval_split: f"https://huggingface.co/datasets/{path}/resolve/{revision}/{eval_split}.csv"
         for eval_split in eval_splits

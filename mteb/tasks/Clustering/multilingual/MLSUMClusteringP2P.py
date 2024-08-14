@@ -4,8 +4,10 @@ import datasets
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks import AbsTaskClustering, MultilingualTask, TaskMetadata
+from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.MultilingualTask import MultilingualTask
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
     "de": ["deu-Latn"],
@@ -157,7 +159,7 @@ class MLSUMClusteringP2PFast(AbsTaskClusteringFast, MultilingualTask):
             ["summary", "url", "date", "title"]
         ).rename_columns({"topic": "labels", "text": "sentences"})
 
-        lang_dict = dict()
+        lang_dict = {}
         for split in self.metadata.eval_splits:
             labels = _dataset[split]["labels"]
             sentences = _dataset[split]["sentences"]

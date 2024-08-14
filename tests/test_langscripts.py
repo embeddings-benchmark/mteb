@@ -17,21 +17,21 @@ class LangScriptTestCase:
 
 test_cases = [
     LangScriptTestCase(
-        args=dict(languages=["fra"], scripts=None),
+        args={"languages": ["fra"], "scripts": None},
         contains_language=["fra", "fra-Latn"],
         not_contains_language=["eng"],
         contains_script=[],
         not_contains_script=["Latn"],
     ),
     LangScriptTestCase(
-        args=dict(languages=["fra", "eng"], scripts=["Latn"]),
+        args={"languages": ["fra", "eng"], "scripts": ["Latn"]},
         contains_language=["fra", "fra-Latn", "eng", "eng-Latn"],
         not_contains_language=["deu"],
         contains_script=["Latn"],
         not_contains_script=["Cyrl"],
     ),
     LangScriptTestCase(
-        args=dict(languages=["fra-Latn"]),
+        args={"languages": ["fra-Latn"]},
         contains_language=["fra", "fra-Latn"],
         not_contains_language=["eng", "eng-Latn"],
         contains_script=["Latn"],
