@@ -17,10 +17,8 @@ from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
 
-from ..abstasks import *
 from ..abstasks import AbsTask
 from ..load_results.mteb_results import MTEBResults
-from ..tasks import *
 from . import LangMapping
 
 logger = logging.getLogger(__name__)

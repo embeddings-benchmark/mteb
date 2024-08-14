@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from .....abstasks import AbsTaskAny2AnyRetrieval
+from mteb.abstasks import AbsTaskAny2AnyRetrieval
 
 
 class FashionIQIT2IRetrieval(AbsTaskAny2AnyRetrieval):
