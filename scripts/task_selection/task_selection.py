@@ -3,9 +3,8 @@ from __future__ import annotations
 from importlib import reload
 from typing import Iterable
 
-import mteb.task_selection as task_selection
-
 import mteb
+import mteb.task_selection as task_selection
 
 reload(task_selection)
 
