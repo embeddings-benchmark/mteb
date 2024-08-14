@@ -81,6 +81,8 @@ class LLM2VecWrapper:
     ) -> np.ndarray:
         sentences = corpus_to_texts(corpus, sep=" ")
         sentences = [["", sentence] for sentence in sentences]
+        if "request_qid" in kwargs:
+            kwargs.pop("request_qid")
         return self.model.encode(sentences, **kwargs)
 
     def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:

@@ -293,6 +293,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [LegalReasoningCausalityLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | {'test': 55} | {'test': 1563.76} |
 | [LegalSummarization](https://github.com/lauramanor/legal_summarization) | ['eng'] | Retrieval | s2p | [Legal, Written] | None | {'test': {'average_document_length': 606.1643835616438, 'average_query_length': 103.19014084507042, 'num_documents': 438, 'num_queries': 284, 'average_relevant_docs_per_query': 1.545774647887324}} |
 | [LinceMTBitextMining](https://ritual.uh.edu/lince/) (Aguilar et al., 2020) | ['eng', 'hin'] | BitextMining | s2s | [Social, Written] | {'train': 8060} | {'train': 58.67} |
+| [LitSearchRetrieval](https://github.com/princeton-nlp/LitSearch) (Ajith et al., 2024) | ['eng'] | Retrieval | s2p | [Academic, Non-fiction, Written] | {'test': 597} | {'test': {'average_document_length': 841.2769, 'average_query_length': 141.2, 'num_documents': 64183, 'num_queries': 597, 'average_relevant_docs_per_query': 1.070351}} |
 | [LivedoorNewsClustering.v2](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Clustering | s2s | [News, Written] | {'test': 1106} | {'test': 1082.61} |
 | [MAUDLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | {'test': 2048} | {'test': 1802.93} |
 | [MIRACLReranking](https://project-miracl.github.io/) (Zhang et al., 2023) | ['ara', 'ben', 'deu', 'eng', 'fas', 'fin', 'fra', 'hin', 'ind', 'jpn', 'kor', 'rus', 'spa', 'swa', 'tel', 'tha', 'yor', 'zho'] | Reranking | s2s | [Encyclopaedic, Written] | {'dev': 44608} | {'dev': 506.3} |
@@ -455,6 +456,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [STSBenchmark](https://github.com/PhilipMay/stsb-multi-mt/) (Philip May, 2021) | ['eng'] | STS | s2s |  | None | None |
 | [STSBenchmarkMultilingualSTS](https://github.com/PhilipMay/stsb-multi-mt/) (Philip May, 2021) | ['cmn', 'deu', 'eng', 'fra', 'ita', 'nld', 'pol', 'por', 'rus', 'spa'] | STS | s2s | [News, Social, Web, Spoken, Written] | {'dev': 30000, 'test': 27580} | {'dev': 66.5, 'test': 56.1} |
 | [STSES](https://huggingface.co/datasets/PlanTL-GOB-ES/sts-es) (Agirre et al., 2015) | ['spa'] | STS | s2s |  | None | None |
+| [SadeemQuestionRetrieval](https://huggingface.co/datasets/sadeem-ai/sadeem-ar-eval-retrieval-questions) | ['ara'] | Retrieval | s2p | [Written, Written] | {'test': 22979} | {'test': 500.0} |
 | [SanskritShlokasClassification](https://github.com/goru001/nlp-for-sanskrit) | ['san'] | Classification | s2s | [Religious, Written] | {'train': 383, 'validation': 96} | {'train': 98.415, 'validation': 96.635} |
 | [ScalaClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['dan', 'nno', 'nob', 'swe'] | Classification | s2s | [Fiction, News, Non-fiction, Blog, Spoken, Web, Written] | {'test': 4096} | {'test': 102.72} |
 | [SciDocsRR](https://allenai.org/data/scidocs) | ['eng'] | Reranking | s2s | [Academic, Non-fiction, Written] | {'test': 19599} | {'test': 69.0} |
@@ -643,7 +645,7 @@ The following tables give you an overview of the tasks in MTEB.
 | apu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | apw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | apz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| ara | 2 | 12 | 0 | 0 | 0 | 2 | 1 | 6 | 2 | 0 | 0 |
+| ara | 2 | 12 | 0 | 0 | 0 | 2 | 1 | 7 | 2 | 0 | 0 |
 | arb | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 |
 | are | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | arl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -860,7 +862,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | 3 | 6 | 1 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 |
 | emi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | emp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eng | 16 | 143 | 16 | 3 | 1 | 8 | 7 | 80 | 13 | 2 | 1 |
+| eng | 16 | 143 | 16 | 3 | 1 | 8 | 7 | 81 | 13 | 2 | 1 |
 | enq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | epo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | eri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1632,7 +1634,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1394 | 794 | 304 | 3 | 28 | 67 | 47 | 401 | 85 | 2 | 2 |
+| Total | 1394 | 794 | 304 | 3 | 28 | 67 | 47 | 403 | 85 | 2 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
