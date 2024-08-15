@@ -26,7 +26,7 @@ class STSES(AbsTaskSTS):
         date=None,
         domains=None,
         task_subtypes=None,
-        license=None,
+        license="cc-by-4.0",
         annotations_creators=None,
         dialect=None,
         sample_creation=None,

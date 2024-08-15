@@ -23,6 +23,8 @@ class Benchmark:
 
     def __getitem__(self, index):
         return self.tasks[index]
+    
+    
 
 
 MTEB_MAIN_EN = Benchmark(

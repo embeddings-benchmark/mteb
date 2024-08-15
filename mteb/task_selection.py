@@ -3,10 +3,11 @@ from __future__ import annotations
 from typing import Any, Callable, List
 
 import pandas as pd
-from scipy.stats import pearsonr, spearmanr, zscore
+from scipy.stats import pearsonr, spearmanr
 from sklearn.base import BaseEstimator
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import StandardScaler
 from tqdm import tqdm
 
 import mteb
@@ -25,7 +26,12 @@ def pearson(x: list[float], y: list[float]) -> float:
 
 
 def mse_with_zscore(x: list[float], y: list[float]) -> float:
-    return float(mean_squared_error(zscore(x), zscore(y)))
+    # using StandardScaler
+    # fit on x and transform x and y
+    scaler = StandardScaler()
+    x_z = scaler.fit_transform(pd.DataFrame(x))
+    y_z = scaler.transform(pd.DataFrame(y))
+    return float(mean_squared_error(x_z, y_z))
 
 
 def results_to_dataframe(
@@ -123,7 +129,7 @@ def most_predictable_task(
 
         task_results = {}
         for metric in metrics:
-            task_results[metric.__name__] = metric(task_predictions, task_scores)  # type: ignore
+            task_results[metric.__name__] = metric(task_scores, task_predictions)  # type: ignore
 
         most_pred_tasks.append({task: task_results})
 
