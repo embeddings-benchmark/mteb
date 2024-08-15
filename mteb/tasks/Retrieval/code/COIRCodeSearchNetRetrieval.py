@@ -4,7 +4,7 @@ import logging
 
 import datasets
 
-from mteb.abstasks import MultilingualTask
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
