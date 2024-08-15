@@ -4,7 +4,8 @@ from typing import Any
 
 import datasets
 
-from mteb.abstasks import AbsTaskClassification, MultilingualTask
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 

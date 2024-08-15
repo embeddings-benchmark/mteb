@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .ara.SadeemQuestionRetrieval import *
 from .code.AppsRetrieval import *
 from .code.CodeEditSearchRetrieval import *
 from .code.CodeFeedbackMTRetrieval import *
@@ -58,6 +59,7 @@ from .eng.LEMBPasskeyRetrieval import *
 from .eng.LEMBQMSumRetrieval import *
 from .eng.LEMBSummScreenFDRetrieval import *
 from .eng.LEMBWikimQARetrieval import *
+from .eng.LitSearchRetrieval import *
 from .eng.MedicalQARetrieval import *
 from .eng.MLQuestions import *
 from .eng.MSMARCORetrieval import *

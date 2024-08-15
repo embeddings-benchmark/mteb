@@ -4,8 +4,10 @@ import datasets
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks import AbsTaskClustering, MultilingualTask, TaskMetadata
+from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.MultilingualTask import MultilingualTask
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
     "de": ["deu-Latn"],

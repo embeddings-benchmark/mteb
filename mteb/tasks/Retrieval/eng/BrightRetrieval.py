@@ -4,9 +4,9 @@ from collections import defaultdict
 
 import datasets
 
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskRetrieval, MultilingualTask
 
 DOMAINS_LONG = [
     "biology",

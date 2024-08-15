@@ -105,3 +105,5 @@ Please also add your first name and last name are as you want them to appear in 
 | artemsnegirev     | Artem      | Snegirev   | artem.s.snegirev@gmail.com   | ~Artem_Snegirev1     | SaluteDevices, Russia                                 |
 | anpalmak2003      | Anna       | Maksimova  | anpalmak@gmail.com           | ~Anna_Maksimova1     | SaluteDevices, Russia                                 |
 | MariyaTikhonova   | Maria      | Tikhonova  | m_tikhonova94@mail.ru        | ~Maria_Tikhonova1    | SaluteDevices, HSE University, Russia                 |
+| guenthermi        | Michael    | Günther    | michael.guenther@jina.ai     | ~Michael_Günther1    | Jina AI                                               |
+| violenil          | Isabelle   | Mohr       | isabelle.mohr@jina.ai        | ~Isabelle_Mohr1      | Jina AI                                               |

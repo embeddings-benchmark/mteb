@@ -65,9 +65,9 @@ TASK_DOMAIN = Literal[
 SAMPLE_CREATION_METHOD = Literal[
     "found",
     "created",
-    "machine-translated",
     "human-translated and localized",
     "human-translated",
+    "machine-translated",
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",
