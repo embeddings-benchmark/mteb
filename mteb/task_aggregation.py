@@ -23,13 +23,13 @@ def mean(results: RESULTS) -> AGGREGATION:
             for result in res:
                 unique_tasks.add(result.task_name)
 
-    def _mean(model: str, rev: str, results: list[MTEBResults]) -> float:
+    def _mean(model_name: str, rev: str, results: list[MTEBResults]) -> float:
         """Calculate the mean of the main score of the given results."""
         scores: list[float] = [result.get_score() for result in results]
 
         if len(scores) != len(unique_tasks):
             logger.warning(
-                f"Model {model} revision {rev} has missing scores for some tasks"
+                f"Model {model_name} revision {rev} has missing scores for some tasks"
             )
 
         if scores:

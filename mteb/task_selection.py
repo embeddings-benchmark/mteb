@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 import mteb
 
-MODEL = str
+MODEL_NAME = str
 REVISION = str
 METRIC = Callable[[List[float], List[float]], float]
 
@@ -29,7 +29,7 @@ def mse_with_zscore(x: list[float], y: list[float]) -> float:
 
 
 def results_to_dataframe(
-    mteb_results: dict[MODEL, dict[REVISION, list[mteb.MTEBResults]]],
+    mteb_results: dict[MODEL_NAME, dict[REVISION, list[mteb.MTEBResults]]],
     drop_na: bool = True,
     **kwargs: Any,
 ) -> pd.DataFrame:
