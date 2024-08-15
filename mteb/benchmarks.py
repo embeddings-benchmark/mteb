@@ -120,23 +120,36 @@ MTEB_MAIN_EN = Benchmark(
 MTEB_MAIN_RU = Benchmark(
     name="MTEB(rus)",
     tasks=[
+        # Classification
         "GeoreviewClassification",
-        "GeoreviewClusteringP2P",
         "HeadlineClassification",
         "InappropriatenessClassification",
         "KinopoiskClassification",
         "MassiveIntentClassification",
         "MassiveScenarioClassification",
-        "RiaNewsRetrieval",
-        "RuBQRetrieval",
         "RuReviewsClassification",
         "RuSciBenchGRNTIClassification",
-        "RuSciBenchGRNTIClusteringP2P",
         "RuSciBenchOECDClassification",
+        # Clustering
+        "GeoreviewClusteringP2P",
+        "RuSciBenchGRNTIClusteringP2P",
         "RuSciBenchOECDClusteringP2P",
+        # MultiLabelClassification
+        "CEDRClassification",
+        "SensitiveTopicsClassification",
+        # PairClassification
+        "TERRa",
+        # Reranking
+        "MIRACLReranking",
+        "RuBQReranking",
+        # Retrieval
+        "MIRACLRetrieval",
+        "RiaNewsRetrieval",
+        "RuBQRetrieval",
+        # STS
+        "RUParaPhraserSTS",
         "RuSTSBenchmarkSTS",
         "STS22",
-        "TERRa",
     ],
     description="Main Russian benchmarks from MTEB",
     reference="https://aclanthology.org/2023.eacl-main.148/",
