@@ -4,7 +4,7 @@
 To add a new dataset to MTEB, you need to do three things:
 
 1) Implement a task with the desired dataset, by subclassing an abstract task
-2) Add metadata to the task
+2) Add metadata to the task (run `calculate_metadata_metrics()`)
 3) Submit the edits to the [MTEB](https://github.com/embeddings-benchmark/mteb) repository
 
 If you have any questions regarding this process feel free to open a discussion [thread](https://github.com/embeddings-benchmark/mteb/discussions).
@@ -159,7 +159,6 @@ class VGClustering(AbsTaskClustering):
         self.dataset = datasets.DatasetDict(ds)
 ```
 
-</details>
 
 
 ## 2) Creating the metadata object
@@ -170,14 +169,14 @@ To get an overview of the fields in the metadata object, you can look at the [Ta
 
 Note that these fields can be left blank if the information is not available and can be extended if necessary. We do not include any machine-translated (without verification) datasets in the benchmark.
 
-<details closed>
+<details>
 <summary>Domains</summary>
 <br>
 
 The domains follow the categories used in the [Universal Dependencies project](https://universaldependencies.org), though we updated them where deemed appropriate. These do not have to be mutually exclusive.
 
 | **Domain**    | **Description**                                                  |
-| ------------- | ---------------------------------------------------------------- |
+|---------------|------------------------------------------------------------------|
 | Academic      | Academic writing                                                 |
 | Religious     | Religious text e.g. bibles                                       |
 | Blog          | [Blogpost, weblog etc.](https://en.wikipedia.org/wiki/Blog)      |
@@ -199,7 +198,7 @@ The domains follow the categories used in the [Universal Dependencies project](h
 
 
 <br>
-<details closed>
+<details>
 <summary>Task Subtypes</summary>
 <br>
 
@@ -208,7 +207,7 @@ These domains subtypes were introduced in the [Scandinavian Embedding Benchmark]
 
 
 | Formalization           | Task                     | Description                                                                                                     |
-| ----------------------- | ------------------------ | --------------------------------------------------------------------------------------------------------------- |
+|-------------------------|--------------------------|-----------------------------------------------------------------------------------------------------------------|
 | **Retrieval**           |                          | Retrieval focuses on locating and providing relevant information or documents based on a query.                 |
 |                         | Question answering       | Finding answers to queries in a dataset, focusing on exact answers or relevant passages.                        |
 |                         | Article retrieval        | Identifying and retrieving full articles that are relevant to a given query.                                    |
