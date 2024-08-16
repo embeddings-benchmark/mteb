@@ -56,3 +56,27 @@ class AbsTaskSummarization(AbsTask):
 
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
+
+    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+        if lang:
+            text = self.dataset[lang][split]["text"]
+            human_summaries = self.dataset[lang][split]["human_summaries"]
+            machine_summaries = self.dataset[lang][split]["machine_summaries"]
+            relevance = self.dataset[lang][split]["relevance"]
+        else:
+            text = self.dataset[split]["text"]
+            human_summaries = self.dataset[split]["human_summaries"]
+            machine_summaries = self.dataset[split]["machine_summaries"]
+            relevance = self.dataset[split]["relevance"]
+
+        total_text_len = sum(len(x) for x in text)
+        total_human_summaries_len = sum(len(x) for x in human_summaries)
+        total_machine_summaries_len = sum(len(x) for x in machine_summaries)
+        total_relevance = sum(sum(x) / len(x) for x in relevance)
+        return {
+            "num_samples": len(text),
+            "avg_text_len": total_text_len / len(text),
+            "avg_human_summaries_len": total_human_summaries_len / len(text),
+            "avg_machine_summaries_len": total_machine_summaries_len / len(text),
+            "avg_relevance": total_relevance / len(relevance),
+        }

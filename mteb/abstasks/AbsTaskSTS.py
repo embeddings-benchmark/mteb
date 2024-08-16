@@ -51,3 +51,28 @@ class AbsTaskSTS(AbsTask):
 
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
+
+    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+        """sentence1: str
+        sentence2: str
+        score: float
+        """
+        if lang:
+            sentence1 = self.dataset[lang][split]["sentence1"]
+            sentence2 = self.dataset[lang][split]["sentence2"]
+            score = self.dataset[lang][split]["score"]
+        else:
+            sentence1 = self.dataset[split]["sentence1"]
+            sentence2 = self.dataset[split]["sentence2"]
+            score = self.dataset[split]["score"]
+
+        total_sentence1_len = sum([len(s) for s in sentence1])
+        total_sentence2_len = sum([len(s) for s in sentence2])
+        avg_score = sum(score) / len(score)
+        return {
+            "num_sentence1": len(sentence1),
+            "num_sentence2": len(sentence2),
+            "average_sentence1_len": total_sentence1_len / len(sentence1),
+            "average_sentence2_len": total_sentence2_len / len(sentence2),
+            "avg_score": avg_score,
+        }

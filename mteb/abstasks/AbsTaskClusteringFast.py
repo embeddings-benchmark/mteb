@@ -190,6 +190,30 @@ class AbsTaskClusteringFast(AbsTask):
         self._add_main_score(scores)
         return scores
 
+    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+        if lang:
+            sentences = self.dataset[lang][split]["sentences"]
+            labels = self.dataset[lang][split]["labels"]
+        else:
+            sentences = self.dataset[split]["sentences"]
+            labels = self.dataset[split]["labels"]
+
+        total_text_len = sum([len(t) for t in sentences])
+        total_labels = []
+        for label in labels:
+            if label is list:
+                total_labels.extend(label)
+            else:
+                total_labels.append(label)
+
+        return {
+            "num_texts": len(sentences),
+            "num_labels": len(labels),
+            "average_text_length": total_text_len / len(sentences),
+            "average_label_count": len(total_labels) / len(labels),
+            "unique_labels": len(set(total_labels)),
+        }
+
 
 def clustering_downsample(
     dataset: DatasetDict, seed: int, max_samples_in_cluster: int = 2048

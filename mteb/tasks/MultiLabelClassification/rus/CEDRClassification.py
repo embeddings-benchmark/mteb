@@ -39,6 +39,19 @@ class CEDRClassification(AbsTaskMultilabelClassification):
         """,
         descriptive_stats={
             "n_samples": {"test": 1882},
-            "avg_character_length": {"test": 91.2},
+            "avg_character_length": {
+                "test": {
+                    "average_label_length": 0.620616365568544,
+                    "average_text_length": 91.20563230605738,
+                    "num_label_0": 353,
+                    "num_label_1": 379,
+                    "num_label_2": 170,
+                    "num_label_3": 141,
+                    "num_label_4": 125,
+                    "num_label_None": 734,
+                    "num_labels": 1882,
+                    "num_text": 1882,
+                }
+            },
         },
     )

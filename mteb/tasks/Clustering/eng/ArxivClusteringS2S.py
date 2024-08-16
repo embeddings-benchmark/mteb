@@ -38,6 +38,14 @@ class ArxivClusteringS2S(AbsTaskClustering):
 }""",
         descriptive_stats={
             "n_samples": {"test": 732723},
-            "avg_character_length": {"test": 74},
+            "avg_character_length": {
+                "test": {
+                    "average_label_count": 23636.225806451614,
+                    "average_text_length": 23636.225806451614,
+                    "num_labels": 31,
+                    "num_texts": 31,
+                    "unique_labels": 180,
+                }
+            },
         },
     )

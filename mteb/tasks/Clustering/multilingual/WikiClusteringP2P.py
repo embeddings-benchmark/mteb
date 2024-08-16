@@ -53,7 +53,108 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         bibtex_citation=None,  # None exists
         descriptive_stats={
             "n_samples": {"test": 71680},
-            "avg_character_length": {"test": 625.3},
+            "avg_character_length": {
+                "test": {
+                    "bs": {
+                        "num_texts": 10,
+                        "num_labels": 10,
+                        "average_text_length": 512.0,
+                        "average_label_count": 512.0,
+                        "unique_labels": 17,
+                    },
+                    "ca": {
+                        "num_texts": 10,
+                        "num_labels": 10,
+                        "average_text_length": 512.0,
+                        "average_label_count": 512.0,
+                        "unique_labels": 8,
+                    },
+                    "cs": {
+                        "num_texts": 10,
+                        "num_labels": 10,
+                        "average_text_length": 512.0,
+                        "average_label_count": 512.0,
+                        "unique_labels": 21,
+                    },
+                    "da": {
+                        "num_texts": 10,
+                        "num_labels": 10,
+                        "average_text_length": 512.0,
+                        "average_label_count": 512.0,
+                        "unique_labels": 20,
+                    },
+                    "eu": {
+                        "num_texts": 10,
+                        "num_labels": 10,
+                        "average_text_length": 512.0,
+                        "average_label_count": 512.0,
+                        "unique_labels": 5,
+                    },
+                    "gv": {
+                        "num_texts": 10,
+                        "num_labels": 10,
+                        "average_text_length": 512.0,
+                        "average_label_count": 512.0,
+                        "unique_labels": 28,
+                    },
+                    "ilo": {
+                        "num_texts": 10,
+                        "num_labels": 10,
+                        "average_text_length": 512.0,
+                        "average_label_count": 512.0,
+                        "unique_labels": 34,
+                    },
+                    "ku": {
+                        "num_texts": 10,
+                        "num_labels": 10,
+                        "average_text_length": 512.0,
+                        "average_label_count": 512.0,
+                        "unique_labels": 39,
+                    },
+                    "lv": {
+                        "num_texts": 10,
+                        "num_labels": 10,
+                        "average_text_length": 512.0,
+                        "average_label_count": 512.0,
+                        "unique_labels": 16,
+                    },
+                    "min": {
+                        "num_texts": 10,
+                        "num_labels": 10,
+                        "average_text_length": 512.0,
+                        "average_label_count": 512.0,
+                        "unique_labels": 16,
+                    },
+                    "mt": {
+                        "num_texts": 10,
+                        "num_labels": 10,
+                        "average_text_length": 512.0,
+                        "average_label_count": 512.0,
+                        "unique_labels": 27,
+                    },
+                    "sco": {
+                        "num_texts": 10,
+                        "num_labels": 10,
+                        "average_text_length": 512.0,
+                        "average_label_count": 512.0,
+                        "unique_labels": 23,
+                    },
+                    "sq": {
+                        "num_texts": 10,
+                        "num_labels": 10,
+                        "average_text_length": 512.0,
+                        "average_label_count": 512.0,
+                        "unique_labels": 36,
+                    },
+                    "wa": {
+                        "num_texts": 10,
+                        "num_labels": 10,
+                        "average_text_length": 512.0,
+                        "average_label_count": 512.0,
+                        "unique_labels": 6,
+                    },
+                }
+            },
         },
     )
 
@@ -86,7 +187,108 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
         bibtex_citation="",  # None exists
         descriptive_stats={
             "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 625.3},
+            "avg_character_length": {
+                "test": {
+                    "bs": {
+                        "num_texts": 2048,
+                        "num_labels": 2048,
+                        "average_text_length": 1046.25732421875,
+                        "average_label_count": 1.0,
+                        "unique_labels": 17,
+                    },
+                    "ca": {
+                        "num_texts": 2048,
+                        "num_labels": 2048,
+                        "average_text_length": 600.73291015625,
+                        "average_label_count": 1.0,
+                        "unique_labels": 8,
+                    },
+                    "cs": {
+                        "num_texts": 2048,
+                        "num_labels": 2048,
+                        "average_text_length": 659.2294921875,
+                        "average_label_count": 1.0,
+                        "unique_labels": 21,
+                    },
+                    "da": {
+                        "num_texts": 2048,
+                        "num_labels": 2048,
+                        "average_text_length": 767.58935546875,
+                        "average_label_count": 1.0,
+                        "unique_labels": 20,
+                    },
+                    "eu": {
+                        "num_texts": 2048,
+                        "num_labels": 2048,
+                        "average_text_length": 405.16015625,
+                        "average_label_count": 1.0,
+                        "unique_labels": 5,
+                    },
+                    "gv": {
+                        "num_texts": 2048,
+                        "num_labels": 2048,
+                        "average_text_length": 368.01123046875,
+                        "average_label_count": 1.0,
+                        "unique_labels": 28,
+                    },
+                    "ilo": {
+                        "num_texts": 2048,
+                        "num_labels": 2048,
+                        "average_text_length": 617.90771484375,
+                        "average_label_count": 1.0,
+                        "unique_labels": 29,
+                    },
+                    "ku": {
+                        "num_texts": 2048,
+                        "num_labels": 2048,
+                        "average_text_length": 421.17333984375,
+                        "average_label_count": 1.0,
+                        "unique_labels": 39,
+                    },
+                    "lv": {
+                        "num_texts": 2048,
+                        "num_labels": 2048,
+                        "average_text_length": 770.67138671875,
+                        "average_label_count": 1.0,
+                        "unique_labels": 16,
+                    },
+                    "min": {
+                        "num_texts": 2048,
+                        "num_labels": 2048,
+                        "average_text_length": 631.74072265625,
+                        "average_label_count": 1.0,
+                        "unique_labels": 15,
+                    },
+                    "mt": {
+                        "num_texts": 2048,
+                        "num_labels": 2048,
+                        "average_text_length": 821.22265625,
+                        "average_label_count": 1.0,
+                        "unique_labels": 27,
+                    },
+                    "sco": {
+                        "num_texts": 2048,
+                        "num_labels": 2048,
+                        "average_text_length": 1065.21044921875,
+                        "average_label_count": 1.0,
+                        "unique_labels": 23,
+                    },
+                    "sq": {
+                        "num_texts": 2048,
+                        "num_labels": 2048,
+                        "average_text_length": 425.486328125,
+                        "average_label_count": 1.0,
+                        "unique_labels": 36,
+                    },
+                    "wa": {
+                        "num_texts": 2048,
+                        "num_labels": 2048,
+                        "average_text_length": 216.00390625,
+                        "average_label_count": 1.0,
+                        "unique_labels": 6,
+                    },
+                }
+            },
         },
     )
 

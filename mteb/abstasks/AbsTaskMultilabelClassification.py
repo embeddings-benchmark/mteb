@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import itertools
 import logging
-from collections import defaultdict
+from collections import Counter, defaultdict
 from typing import Any
 
 import numpy as np
@@ -47,7 +47,7 @@ class AbsTaskMultilabelClassification(AbsTask):
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
         text: str
-        label: list[Hashable]
+        label: list[list[int]]
     """
 
     classifier = KNeighborsClassifier(n_neighbors=5)
@@ -202,3 +202,25 @@ class AbsTaskMultilabelClassification(AbsTask):
                 for label in y[i]:
                     label_counter[label] += 1
         return sample_indices, idxs
+
+    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+        if lang:
+            text = self.dataset[lang][split]["text"]
+            label = self.dataset[lang][split]["label"]
+        else:
+            text = self.dataset[split]["text"]
+            label = self.dataset[split]["label"]
+
+        total_text_len = sum(len(t) for t in text)
+        total_label_len = sum(len(l) for l in label)
+        total_labels = []
+        for l in label:
+            total_labels.extend(l if len(l) > 0 else [None])
+        label_count = Counter(total_labels)
+        return {
+            "average_text_length": total_text_len / len(text),
+            "average_label_length": total_label_len / len(label),
+            "num_text": len(text),
+            "num_labels": len(label),
+            **{f"num_label_{k}": v for k, v in label_count.items()},
+        }

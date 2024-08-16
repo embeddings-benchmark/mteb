@@ -67,7 +67,87 @@ class STS17Crosslingual(AbsTaskSTS, MultilingualTask):
 }""",
         descriptive_stats={
             "n_samples": {"test": 500},
-            "avg_character_length": {"test": 43.3},
+            "avg_character_length": {
+                "test": {
+                    "ko-ko": {
+                        "num_sentence1": 2846,
+                        "num_sentence2": 2846,
+                        "average_sentence1_len": 31.991918482080113,
+                        "average_sentence2_len": 32.44483485593816,
+                        "avg_score": 2.469359920356055,
+                    },
+                    "ar-ar": {
+                        "num_sentence1": 250,
+                        "num_sentence2": 250,
+                        "average_sentence1_len": 32.208,
+                        "average_sentence2_len": 32.78,
+                        "avg_score": 2.216800000000001,
+                    },
+                    "en-ar": {
+                        "num_sentence1": 250,
+                        "num_sentence2": 250,
+                        "average_sentence1_len": 42.36,
+                        "average_sentence2_len": 32.696,
+                        "avg_score": 2.1423999999999994,
+                    },
+                    "en-de": {
+                        "num_sentence1": 250,
+                        "num_sentence2": 250,
+                        "average_sentence1_len": 43.952,
+                        "average_sentence2_len": 44.756,
+                        "avg_score": 2.2776000000000014,
+                    },
+                    "en-en": {
+                        "num_sentence1": 250,
+                        "num_sentence2": 250,
+                        "average_sentence1_len": 43.952,
+                        "average_sentence2_len": 42.724,
+                        "avg_score": 2.2776000000000014,
+                    },
+                    "en-tr": {
+                        "num_sentence1": 250,
+                        "num_sentence2": 250,
+                        "average_sentence1_len": 41.916,
+                        "average_sentence2_len": 41.6,
+                        "avg_score": 2.1335999999999986,
+                    },
+                    "es-en": {
+                        "num_sentence1": 250,
+                        "num_sentence2": 250,
+                        "average_sentence1_len": 50.84,
+                        "average_sentence2_len": 42.024,
+                        "avg_score": 2.1464000000000003,
+                    },
+                    "es-es": {
+                        "num_sentence1": 250,
+                        "num_sentence2": 250,
+                        "average_sentence1_len": 49.836,
+                        "average_sentence2_len": 51.224,
+                        "avg_score": 2.2312000000000007,
+                    },
+                    "fr-en": {
+                        "num_sentence1": 250,
+                        "num_sentence2": 250,
+                        "average_sentence1_len": 49.624,
+                        "average_sentence2_len": 42.724,
+                        "avg_score": 2.2776000000000014,
+                    },
+                    "it-en": {
+                        "num_sentence1": 250,
+                        "num_sentence2": 250,
+                        "average_sentence1_len": 50.028,
+                        "average_sentence2_len": 42.724,
+                        "avg_score": 2.2776000000000014,
+                    },
+                    "nl-en": {
+                        "num_sentence1": 250,
+                        "num_sentence2": 250,
+                        "average_sentence1_len": 46.816,
+                        "average_sentence2_len": 42.724,
+                        "avg_score": 2.2776000000000014,
+                    },
+                }
+            },
         },
     )
 

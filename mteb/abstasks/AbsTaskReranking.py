@@ -44,3 +44,29 @@ class AbsTaskReranking(AbsTask):
 
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
+
+    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+        """query: str
+        positive: list[str]
+        negative: list[str]
+        """
+        if lang:
+            query = self.dataset[lang][split]["query"]
+            positive = self.dataset[lang][split]["positive"]
+            negative = self.dataset[lang][split]["negative"]
+        else:
+            query = self.dataset[split]["query"]
+            positive = self.dataset[split]["positive"]
+            negative = self.dataset[split]["negative"]
+
+        total_len_query = sum([len(q) for q in query])
+        total_len_positive = sum([len(p) for p in positive])
+        total_len_negative = sum([len(n) for n in negative])
+        return {
+            "num_query": len(query),
+            "num_positive": len(positive),
+            "num_negative": len(negative),
+            "avg_query_len": total_len_query / len(query),
+            "avg_positive_len": total_len_positive / len(positive),
+            "avg_negative_len": total_len_negative / len(negative),
+        }

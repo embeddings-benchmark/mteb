@@ -404,15 +404,6 @@ class AbsTaskRetrieval(AbsTask):
             for docs in relevant_docs.values()
         )
         qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if num_queries else 0
-
-        language_description = f" for language {lang}" if lang else ""
-        print(f"Average document character length{language_description} is {doc_len}")
-        print(f"Average query character length{language_description} is {query_len}")
-        print(f"Number of documents{language_description} is {num_documents}")
-        print(f"Number of queries{language_description} is {num_queries}")
-        print(
-            f"Average number of relevant documents per query{language_description} is {qrels_per_doc}"
-        )
         return {
             "average_document_length": doc_len,
             "average_query_length": query_len,

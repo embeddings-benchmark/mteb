@@ -40,7 +40,15 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClusteringFast):
         bibtex_citation="@misc{arXiv.org e-Print archive, url={https://arxiv.org/} }",
         descriptive_stats={
             "n_samples": {"test": N_SAMPLES},
-            "avg_character_length": {"test": 1009.98},
+            "avg_character_length": {
+                "test": {
+                    "num_texts": 2048,
+                    "num_labels": 2048,
+                    "average_text_length": 1008.439453125,
+                    "average_label_count": 1.46337890625,
+                    "unique_labels": 129,
+                }
+            },
         },
     )
 
