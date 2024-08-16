@@ -106,3 +106,6 @@ class AbsTaskSpeedTask(AbsTask):
 
     def _add_main_score(self, scores) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
+
+    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+        pass

@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from abc import ABC
+
 from .AbsTask import AbsTask
 from .MultiSubsetLoader import MultiSubsetLoader
 
 
-class MultilingualTask(MultiSubsetLoader, AbsTask):
+class MultilingualTask(MultiSubsetLoader, AbsTask, ABC):
     def __init__(self, hf_subsets: list[str] | None = None, **kwargs):
         super().__init__(**kwargs)
         if isinstance(hf_subsets, list):
