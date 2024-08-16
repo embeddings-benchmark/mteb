@@ -123,7 +123,7 @@ class DenseRetrievalExactSearch:
                 batch_size=self.encode_kwargs["batch_size"],
                 shuffle=False,
                 collate_fn=custom_collate_fn,
-                num_workers=os.cpu_count(),
+                num_workers=max(1, os.cpu_count() // 2),
             )
             if q_modality == "image":
                 query_embeddings = self.model.get_image_embeddings(
@@ -175,7 +175,7 @@ class DenseRetrievalExactSearch:
                     batch_size=self.encode_kwargs["batch_size"],
                     shuffle=False,
                     collate_fn=custom_collate_fn,
-                    num_workers=os.cpu_count(),
+                    num_workers=max(1, os.cpu_count() // 2),
                 )
                 if corpus_modality == "image":
                     sub_corpus_embeddings = self.model.get_image_embeddings(

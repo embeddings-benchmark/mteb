@@ -1,0 +1,55 @@
+from __future__ import annotations
+
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from .....abstasks import AbsTaskAny2AnyRetrieval
+
+
+class TUBerlinT2IRetrieval(AbsTaskAny2AnyRetrieval):
+    metadata = TaskMetadata(
+        name="TUBerlinT2IRetrieval",
+        description="Retrieve sketch images based on text descriptions.",
+        reference="https://dl.acm.org/doi/pdf/10.1145/2185520.2185540?casa_token=tq-eUx5UROYAAAAA:_694nPzE7tali6LCkxQc0M-mlo9xslasPMcVnFPMy9tDfvt7lg7p1RTe-k8VWCjuv9gmkQqasKUZ",
+        dataset={
+            "path": "gowitheflow/tu-berlin",
+            "revision": "dcd8328b8b27cd39ed6c066862532a5dcd35f012",
+            "trust_remote_code": True,
+        },
+        type="Retrieval",
+        category="t2i",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        date=("2012-01-01", "2012-12-31"),
+        form=["written"],
+        domains=["Encyclopaedic"],
+        task_subtypes=["Image Text Retrieval"],
+        license="CC BY-SA 4.0",
+        socioeconomic_status="medium",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["text", "image"],
+        sample_creation="found",
+        bibtex_citation="""@article{eitz2012humans,
+  title={How do humans sketch objects?},
+  author={Eitz, Mathias and Hays, James and Alexa, Marc},
+  journal={ACM Transactions on graphics (TOG)},
+  volume={31},
+  number={4},
+  pages={1--10},
+  year={2012},
+  publisher={Acm New York, NY, USA}
+}""",
+        descriptive_stats={
+            "n_samples": {"test": 250},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 0.0,
+                    "average_query_length": 0.0,
+                    "num_documents": 20000,
+                    "num_queries": 250,
+                    "average_relevant_docs_per_query": 80.0,
+                }
+            },
+        },
+    )
