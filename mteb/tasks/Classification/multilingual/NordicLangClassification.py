@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskClassification
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -28,13 +28,13 @@ class NordicLangClassification(AbsTaskClassification):
             "fao-Latn",
         ],
         main_score="accuracy",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("2020-01-01", "2021-12-31"),  # best guess, year of publication
+        domains=["Encyclopaedic"],
+        task_subtypes=["Language identification"],
+        license="cc-by-sa-3.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation="""@inproceedings{haas-derczynski-2021-discriminating,
     title = "Discriminating Between Similar {N}ordic Languages",
     author = "Haas, Ren{\'e}  and
