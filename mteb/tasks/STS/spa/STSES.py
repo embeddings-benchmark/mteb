@@ -24,7 +24,7 @@ class STSES(AbsTaskSTS):
         eval_langs=["spa-Latn"],
         main_score="cosine_spearman",
         date=None,
-        domains=None,
+        domains=["Written"],
         task_subtypes=None,
         license="cc-by-4.0",
         annotations_creators=None,
