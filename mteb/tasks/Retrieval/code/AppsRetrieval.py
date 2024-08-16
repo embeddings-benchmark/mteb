@@ -13,7 +13,7 @@ class AppsRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2105.09938",
         dataset={
             "path": "CoIR-Retrieval/apps",
-            "revision": "56ef6c77d95b0fd5ed799c971de0d21bb29e491d",
+            "revision": "f22508f96b7a36c2415181ed8bb76f76e04ae2d5",
         },
         type="Retrieval",
         category="p2p",

@@ -13,7 +13,7 @@ class CodeFeedbackMT(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2402.14658",
         dataset={
             "path": "CoIR-Retrieval/codefeedback-mt",
-            "revision": "f3e9a21ebce060632e6997481ababc12f36aec50",
+            "revision": "b0f12fa0c0dd67f59c95a5c33d02aeeb4c398c5f",
         },
         type="Retrieval",
         category="p2p",

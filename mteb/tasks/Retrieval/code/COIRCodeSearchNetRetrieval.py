@@ -4,14 +4,15 @@ import logging
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
 _EVAL_SPLIT = "test"
 
 logger = logging.getLogger(__name__)
+
 
 def _load_code_search_code_retrieval(
     path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
@@ -70,6 +71,7 @@ def _load_code_search_code_retrieval(
         logger.info("Loaded %d %s Queries.", len(queries), split.upper())
 
     return corpus, queries, relevant_docs
+
 
 class COIRCodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
