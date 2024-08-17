@@ -5,6 +5,8 @@ from .kat.TbilisiCityHallBitextMining import *
 from .multilingual.BibleNLPBitextMining import *
 from .multilingual.BUCCBitextMining import *
 from .multilingual.BUCCBitextMiningFast import *
+from .multilingual.CoconutSmiles2NameBitextMining1 import *
+from .multilingual.CoconutSmiles2NameBitextMining2 import *
 from .multilingual.DiaBLaBitextMining import *
 from .multilingual.FloresBitextMining import *
 from .multilingual.IN22ConvBitextMining import *
