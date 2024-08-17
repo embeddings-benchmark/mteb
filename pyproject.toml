@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.14.0"
+version = "1.14.2"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -51,7 +51,7 @@ homepage = "https://github.com/embeddings-benchmark/mteb"
 mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
-dev = ["ruff>=0.0.254", "pytest", "pytest-xdist", "pytest-coverage"]
+dev = ["ruff>=0.6.0", "pytest", "pytest-xdist", "pytest-coverage"]
 codecarbon = ["codecarbon"]
 speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]
 
