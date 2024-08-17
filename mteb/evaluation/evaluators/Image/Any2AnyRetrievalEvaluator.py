@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import heapq
+import io
 import json
 import logging
 import os
@@ -46,6 +47,11 @@ class ImageDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         image = self.dataset[idx][self.image_column_name]
+        if isinstance(image, bytes):
+            image = Image.open(io.BytesIO(image))
+        else:
+            # Assume the image is already in a usable format (e.g., PIL Image)
+            image = image
         if image.mode != "RGB":
             image = image.convert("RGB")
         image = self.transform(image)
