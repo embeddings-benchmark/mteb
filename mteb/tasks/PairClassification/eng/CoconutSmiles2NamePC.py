@@ -16,9 +16,9 @@ _DATASET_COLUMN_MAP = {
 }
 
 
-class CoconutSmiles2NamePairClassification(AbsTaskPairClassification):
+class CoconutSmiles2NamePC(AbsTaskPairClassification):
     metadata = TaskMetadata(
-        name="CoconutSmiles2NamePairClassification",
+        name="CoconutSmiles2NamePC",
         description="""TBW""",
         reference="https://coconut.naturalproducts.net/",
         dataset={
