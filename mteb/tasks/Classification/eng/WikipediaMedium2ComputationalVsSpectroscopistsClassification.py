@@ -4,9 +4,9 @@ from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class WikipediaMedium2ComputationalVsSpectroscopists(AbsTaskClassification):
+class WikipediaMedium2ComputationalVsSpectroscopistsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="WikipediaMedium2ComputationalVsSpectroscopists",
+        name="WikipediaMedium2ComputationalVsSpectroscopistsClassification",
         description="TBW",
         reference="https://wikipedia.org",
         dataset={

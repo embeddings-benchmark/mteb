@@ -4,9 +4,9 @@ from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class WikipediaMedium2CrystallographyVsChromatographyTitrationpH(AbsTaskClassification):
+class WikipediaMedium2CrystallographyVsChromatographyTitrationpHClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="WikipediaMedium2CrystallographyVsChromatographyTitrationpH",
+        name="WikipediaMedium2CrystallographyVsChromatographyTitrationpHClassification",
         description="TBW",
         reference="https://wikipedia.org",
         dataset={

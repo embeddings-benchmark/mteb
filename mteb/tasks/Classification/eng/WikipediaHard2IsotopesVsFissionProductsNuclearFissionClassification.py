@@ -4,9 +4,9 @@ from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class WikipediaHard2IsotopesVsFissionProductsNuclearFission(AbsTaskClassification):
+class WikipediaHard2IsotopesVsFissionProductsNuclearFissionClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="WikipediaHard2IsotopesVsFissionProductsNuclearFission",
+        name="WikipediaHard2IsotopesVsFissionProductsNuclearFissionClassification",
         description="TBW",
         reference="https://wikipedia.org",
         dataset={

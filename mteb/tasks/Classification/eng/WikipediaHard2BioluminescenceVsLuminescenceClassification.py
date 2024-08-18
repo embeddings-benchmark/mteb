@@ -4,9 +4,9 @@ from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class WikipediaHard2BioluminescenceVsLuminescence(AbsTaskClassification):
+class WikipediaHard2BioluminescenceVsLuminescenceClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="WikipediaHard2BioluminescenceVsLuminescence",
+        name="WikipediaHard2BioluminescenceVsLuminescenceClassification",
         description="TBW",
         reference="https://wikipedia.org",
         dataset={

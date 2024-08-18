@@ -4,9 +4,9 @@ from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class WikipediaEasy2GreenhouseVsEnantiopure(AbsTaskClassification):
+class WikipediaEasy2GreenhouseVsEnantiopureClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="WikipediaEasy2GreenhouseVsEnantiopure",
+        name="WikipediaEasy2GreenhouseVsEnantiopureClassification",
         description="TBW",
         reference="https://wikipedia.org",
         dataset={

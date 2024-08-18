@@ -4,9 +4,9 @@ from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class WikipediaHard2SaltsVsSemiconductorMaterials(AbsTaskClassification):
+class WikipediaHard2SaltsVsSemiconductorMaterialsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="WikipediaHard2SaltsVsSemiconductorMaterials",
+        name="WikipediaHard2SaltsVsSemiconductorMaterialsClassification",
         description="TBW",
         reference="https://wikipedia.org",
         dataset={

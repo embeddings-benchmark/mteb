@@ -4,9 +4,9 @@ from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class WikipediaEasy2SolidStateVsColloidal(AbsTaskClassification):
+class WikipediaEasy2SolidStateVsColloidalClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="WikipediaEasy2SolidStateVsColloidal",
+        name="WikipediaEasy2SolidStateVsColloidalClassification",
         description="TBW",
         reference="https://wikipedia.org",
         dataset={
