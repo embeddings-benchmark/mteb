@@ -15,9 +15,22 @@ from ..evaluation.evaluators import (
     logRegClassificationEvaluator,
 )
 from ..load_results.mteb_results import HFSubset, ScoresDict
-from .AbsTask import AbsTask
+from .AbsTask import AbsDescriptiveStatistics, AbsTask
 
 logger = logging.getLogger(__name__)
+
+
+class ClassificationDescriptiveStatistics(AbsDescriptiveStatistics):
+    """Descriptive statistics for Classification
+
+    average_text_length: Average length of text
+    unique_labels: Number of unique labels
+    labels: dict of label frequencies
+    """
+
+    average_text_length: float
+    unique_labels: int
+    labels: dict[str, dict[str, int]]
 
 
 class AbsTaskClassification(AbsTask):
@@ -183,7 +196,9 @@ class AbsTaskClassification(AbsTask):
                 label_counter[y[i]] += 1
         return X_sampled, y_sampled, idxs
 
-    def calculate_metadata_metrics(self) -> dict[str, Any]:
+    def calculate_metadata_metrics(
+        self,
+    ) -> dict[str, AbsDescriptiveStatistics | dict[str, AbsDescriptiveStatistics]]:
         self.load_data()
 
         all_details = {}
@@ -202,15 +217,17 @@ class AbsTaskClassification(AbsTask):
                 for lang in pbar_lang:
                     pbar_lang.set_postfix_str(f"Language: {lang}")
                     print(f"Processing metadata for language {lang}")
-                    split_details = self.process_split(split, lang)
+                    split_details = self._calculate_metrics_from_split(split, lang)
                     all_details[split][lang] = split_details
             else:
-                split_details = self.process_split(split)
+                split_details = self._calculate_metrics_from_split(split)
                 all_details[split] = split_details
 
         return all_details
 
-    def process_split(self, split: str, lang: str | None = None) -> dict[str, Any]:
+    def _calculate_metrics_from_split(
+        self, split: str, lang: str | None = None
+    ) -> ClassificationDescriptiveStatistics:
         if lang:
             text = self.dataset[lang][split]["text"]
             label = self.dataset[lang][split]["label"]
@@ -221,8 +238,8 @@ class AbsTaskClassification(AbsTask):
         total_text_len = sum([len(t) for t in text])
         label_count = Counter(label)
         return {
-            "num_texts": len(text),
-            "num_labels": len(label),
+            "num_samples": len(text),
             "average_text_length": total_text_len / len(text),
-            **{f"num_label_{k}": v for k, v in label_count.items()},
+            "unique_labels": len(label_count),
+            "labels": {label: {"count": count} for label, count in label_count.items()},
         }

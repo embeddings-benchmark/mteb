@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import random
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Sequence
+from typing import Any, Dict, Sequence, TypedDict
 
 import datasets
 import numpy as np
@@ -50,6 +50,15 @@ def _multilabel_subsampling(
         )
         dataset_dict.update({split: Dataset.from_dict(dataset_dict[split][test_idx])})
     return dataset_dict
+
+
+class AbsDescriptiveStatistics(TypedDict):
+    """Abstract class for descriptive statistics.
+
+    num_samples: number of samples in the dataset.
+    """
+
+    num_samples: int
 
 
 class AbsTask(ABC):
@@ -185,7 +194,9 @@ class AbsTask(ABC):
         self.dataset_transform()
         self.data_loaded = True
 
-    def calculate_metadata_metrics(self) -> dict[str, Any]:
+    def calculate_metadata_metrics(
+        self,
+    ) -> dict[str, AbsDescriptiveStatistics | dict[str, AbsDescriptiveStatistics]]:
         self.load_data()
 
         all_details = {}
@@ -204,16 +215,18 @@ class AbsTask(ABC):
                 for lang in pbar_lang:
                     pbar_lang.set_postfix_str(f"Language: {lang}")
                     print(f"Processing metadata for language {lang}")
-                    split_details = self.process_split(split, lang)
+                    split_details = self._calculate_metrics_from_split(split, lang)
                     all_details[split][lang] = split_details
             else:
-                split_details = self.process_split(split)
+                split_details = self._calculate_metrics_from_split(split)
                 all_details[split] = split_details
 
         return all_details
 
     @abstractmethod
-    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+    def _calculate_metrics_from_split(
+        self, split: str, lang: str | None = None
+    ) -> AbsDescriptiveStatistics:
         raise NotImplementedError
 
     @property

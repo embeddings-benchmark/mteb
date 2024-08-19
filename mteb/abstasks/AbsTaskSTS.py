@@ -5,9 +5,22 @@ from typing import Any
 
 from ..evaluation.evaluators import STSEvaluator
 from ..load_results.mteb_results import ScoresDict
-from .AbsTask import AbsTask
+from .AbsTask import AbsDescriptiveStatistics, AbsTask
 
 logger = logging.getLogger(__name__)
+
+
+class STSDescriptiveStatistics(AbsDescriptiveStatistics):
+    """Descriptive statistics for STS
+
+    average_sentence1_len: Average length of sentence1
+    average_sentence2_len: Average length of sentence2
+    avg_score: Average score
+    """
+
+    average_sentence1_len: float
+    average_sentence2_len: float
+    avg_score: float
 
 
 class AbsTaskSTS(AbsTask):
@@ -52,7 +65,9 @@ class AbsTaskSTS(AbsTask):
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
-    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+    def _calculate_metrics_from_split(
+        self, split: str, lang: str | None = None
+    ) -> STSDescriptiveStatistics:
         """sentence1: str
         sentence2: str
         score: float
@@ -70,8 +85,7 @@ class AbsTaskSTS(AbsTask):
         total_sentence2_len = sum([len(s) for s in sentence2])
         avg_score = sum(score) / len(score)
         return {
-            "num_sentence1": len(sentence1),
-            "num_sentence2": len(sentence2),
+            "num_samples": len(sentence1),
             "average_sentence1_len": total_sentence1_len / len(sentence1),
             "average_sentence2_len": total_sentence2_len / len(sentence2),
             "avg_score": avg_score,

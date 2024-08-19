@@ -9,9 +9,24 @@ from mteb.encoder_interface import Encoder
 from mteb.load_results.mteb_results import ScoresDict
 
 from ..evaluation.evaluators import SummarizationEvaluator
-from .AbsTask import AbsTask
+from .AbsTask import AbsDescriptiveStatistics, AbsTask
 
 logger = logging.getLogger(__name__)
+
+
+class SummarizationDescriptiveStatistics(AbsDescriptiveStatistics):
+    """Descriptive statistics for Summarization
+
+    avg_text_len: Average length of text
+    avg_human_summaries_len: Average length of human summaries
+    avg_machine_summaries_len: Average length of machine summaries
+    avg_relevance: Average relevance score
+    """
+
+    avg_text_len: float
+    avg_human_summaries_len: float
+    avg_machine_summaries_len: float
+    avg_relevance: float
 
 
 class AbsTaskSummarization(AbsTask):
@@ -57,7 +72,9 @@ class AbsTaskSummarization(AbsTask):
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
-    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+    def _calculate_metrics_from_split(
+        self, split: str, lang: str | None = None
+    ) -> SummarizationDescriptiveStatistics:
         if lang:
             text = self.dataset[lang][split]["text"]
             human_summaries = self.dataset[lang][split]["human_summaries"]

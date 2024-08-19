@@ -16,7 +16,7 @@ from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators.model_encode import model_encode
 from ..load_results.mteb_results import HFSubset, ScoresDict
-from .AbsTask import AbsTask
+from .AbsTask import AbsDescriptiveStatistics, AbsTask
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +39,21 @@ def evaluate_classifier(
     lrap = label_ranking_average_precision_score(y_test, y_pred)
     scores["lrap"] = lrap
     return scores
+
+
+class MultilabelClassificationDescriptiveStatistics(AbsDescriptiveStatistics):
+    """Descriptive statistics for MultilabelClassification
+
+    average_text_length: Average length of text
+    average_label_per_text: Average number of labels per text
+    unique_labels: Number of unique labels
+    labels: dict of label frequencies
+    """
+
+    average_text_length: float
+    average_label_per_text: float
+    unique_labels: int
+    labels: dict[str, dict[str, int]]
 
 
 class AbsTaskMultilabelClassification(AbsTask):
@@ -203,7 +218,9 @@ class AbsTaskMultilabelClassification(AbsTask):
                     label_counter[label] += 1
         return sample_indices, idxs
 
-    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+    def _calculate_metrics_from_split(
+        self, split: str, lang: str | None = None
+    ) -> MultilabelClassificationDescriptiveStatistics:
         if lang:
             text = self.dataset[lang][split]["text"]
             label = self.dataset[lang][split]["label"]
@@ -219,8 +236,13 @@ class AbsTaskMultilabelClassification(AbsTask):
         label_count = Counter(total_labels)
         return {
             "average_text_length": total_text_len / len(text),
-            "average_label_length": total_label_len / len(label),
-            "num_text": len(text),
-            "num_labels": len(label),
-            **{f"num_label_{k}": v for k, v in label_count.items()},
+            "average_label_per_text": total_label_len / len(label),
+            "num_samples": len(text),
+            "unique_labels": len(label_count),
+            "labels": {
+                label: {
+                    "count": value,
+                }
+                for label, value in label_count.items()
+            },
         }

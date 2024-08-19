@@ -9,9 +9,20 @@ from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators import BitextMiningEvaluator
 from ..load_results.mteb_results import HFSubset, ScoresDict
-from .AbsTask import AbsTask
+from .AbsTask import AbsDescriptiveStatistics, AbsTask
 
 logger = logging.getLogger(__name__)
+
+
+class BitextDescriptiveStatistics(AbsDescriptiveStatistics):
+    """Descriptive statistics for Bitext
+
+    average_sentence1_length: Average length of sentence1
+    average_sentence2_length: Average length of sentence2
+    """
+
+    average_sentence1_length: float
+    average_sentence2_length: float
 
 
 class AbsTaskBitextMining(AbsTask):
@@ -105,7 +116,9 @@ class AbsTaskBitextMining(AbsTask):
     def _add_main_score(self, scores) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
-    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+    def _calculate_metrics_from_split(
+        self, split: str, lang: str | None = None
+    ) -> BitextDescriptiveStatistics:
         pairs_cols = self.get_pairs(self.parallel_subsets)
         if lang:
             if self.parallel_subsets:
@@ -126,6 +139,5 @@ class AbsTaskBitextMining(AbsTask):
         return {
             "average_sentence1_length": total_s1_len / len(sentence1),
             "average_sentence2_length": total_s2_len / len(sentence2),
-            "num_sentence1": len(sentence1),
-            "num_sentence2": len(sentence2),
+            "num_samples": len(sentence1),
         }

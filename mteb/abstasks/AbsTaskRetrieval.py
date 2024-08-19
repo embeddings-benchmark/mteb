@@ -14,7 +14,7 @@ from mteb.abstasks.TaskMetadata import HFSubset
 
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..load_results.mteb_results import ScoresDict
-from .AbsTask import AbsTask
+from .AbsTask import AbsDescriptiveStatistics, AbsTask
 
 logger = logging.getLogger(__name__)
 
@@ -190,6 +190,21 @@ class HFDataLoader:
         )
         qrels_ds = qrels_ds.cast(features)
         self.qrels = qrels_ds
+
+
+class RetrievalDescriptiveStatistics(AbsDescriptiveStatistics):
+    """Descriptive statistics for Retrieval
+
+    average_document_length: Average length of documents
+    average_query_length: Average length of queries
+    num_documents: Number of documents
+    average_relevant_docs_per_query: Average number of relevant documents per query
+    """
+
+    average_document_length: float
+    average_query_length: float
+    num_documents: int
+    average_relevant_docs_per_query: float
 
 
 class AbsTaskRetrieval(AbsTask):
@@ -379,12 +394,9 @@ class AbsTaskRetrieval(AbsTask):
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
-    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
-        """We want to get three pieces of information:
-        - the number of documents (and their char length) in the corpus
-        - the number of queries (and their char length)
-        - the average number of relevant documents per query
-        """
+    def _calculate_metrics_from_split(
+        self, split: str, lang: str | None = None
+    ) -> RetrievalDescriptiveStatistics:
         if lang:
             queries = self.queries[lang][split]
             corpus = self.corpus[lang][split]
@@ -408,7 +420,7 @@ class AbsTaskRetrieval(AbsTask):
             "average_document_length": doc_len,
             "average_query_length": query_len,
             "num_documents": num_documents,
-            "num_queries": num_queries,
+            "num_samples": num_queries,
             "average_relevant_docs_per_query": qrels_per_doc,
         }
 

@@ -8,9 +8,24 @@ from datasets import Dataset
 from ..encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from ..evaluation.evaluators import PairClassificationEvaluator
 from ..load_results.mteb_results import ScoresDict
-from .AbsTask import AbsTask
+from .AbsTask import AbsDescriptiveStatistics, AbsTask
 
 logger = logging.getLogger(__name__)
+
+
+class PairClassificationDescriptiveStatistics(AbsDescriptiveStatistics):
+    """Descriptive statistics for PairClassification
+
+    avg_sentence1_len: Average length of sentence1
+    avg_sentence2_len: Average length of sentence2
+    unique_labels: Number of unique labels
+    labels: dict of label frequencies
+    """
+
+    avg_sentence1_len: float
+    avg_sentence2_len: float
+    unique_labels: int
+    labels: dict[str, dict[str, int]]
 
 
 class AbsTaskPairClassification(AbsTask):
@@ -54,12 +69,9 @@ class AbsTaskPairClassification(AbsTask):
         self._add_main_score(scores)
         return scores
 
-    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
-        """self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
-        sentence1: list[str]
-        sentence2: list[str]
-        labels: list[int]
-        """
+    def _calculate_metrics_from_split(
+        self, split: str, lang: str | None = None
+    ) -> PairClassificationDescriptiveStatistics:
         if lang:
             dataset = self.dataset[lang][split]
             if isinstance(dataset, list):
@@ -89,5 +101,5 @@ class AbsTaskPairClassification(AbsTask):
             "avg_sentence1_len": total_sentence1_len / len(sentence1),
             "avg_sentence2_len": total_sentence2_len / len(sentence2),
             "unique_labels": len(set(labels)),
-            **{f"num_label_{k}": v for k, v in label_count.items()},
+            "labels": {label: {"count": count} for label, count in label_count.items()},
         }

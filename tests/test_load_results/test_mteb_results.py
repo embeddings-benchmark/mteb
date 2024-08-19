@@ -45,7 +45,9 @@ class DummyTask(AbsTask):
     def _evaluate_subset(self, **kwargs):
         pass
 
-    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+    def _calculate_metrics_from_split(
+        self, split: str, lang: str | None = None
+    ) -> dict[str, float]:
         pass
 
 

@@ -16,7 +16,7 @@ from ..evaluation.evaluators import utils
 from ..evaluation.evaluators.InstructionRetrievalEvaluator import (
     InstructionRetrievalEvaluator,
 )
-from .AbsTask import AbsTask
+from .AbsTask import AbsDescriptiveStatistics, AbsTask
 from .AbsTaskRetrieval import HFDataLoader
 
 logger = logging.getLogger(__name__)
@@ -216,6 +216,28 @@ class HFDataLoaderInstructions(HFDataLoader):
             self.changed_qrels = qrels_ds
         else:
             self.og_qrels = qrels_ds
+
+
+class InstructionRetrievalDescriptiveStatistics(AbsDescriptiveStatistics):
+    """Descriptive statistics for Instruction Retrieval tasks
+
+    num_docs: Number of documents
+    num_queries: Number of queries
+    average_document_length: Average length of documents
+    average_query_length: Average length of queries
+    average_instruction_length: Average length of instructions
+    average_changed_instruction_length: Average length of changed instructions
+    average_relevant_docs_per_query: Average number of relevant docs per query
+    average_top_ranked_per_query: Average number of top ranked docs per query
+    """
+
+    num_docs: int
+    average_document_length: float
+    average_query_length: float
+    average_instruction_length: float
+    average_changed_instruction_length: float
+    average_relevant_docs_per_query: float
+    average_top_ranked_per_query: float
 
 
 class AbsTaskInstructionRetrieval(AbsTask):
@@ -580,7 +602,9 @@ class AbsTaskInstructionRetrieval(AbsTask):
 
         return newly_irrelevant_qrels
 
-    def process_split(self, split: str, lang: str | None = None) -> dict[str, float]:
+    def _calculate_metrics_from_split(
+        self, split: str, lang: str | None = None
+    ) -> InstructionRetrievalDescriptiveStatistics:
         if lang:
             corpus = self.corpus[lang][split]
             queries = self.queries[lang][split]
@@ -618,7 +642,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         )
         return {
             "num_docs": len(corpus),
-            "num_queries": len(queries),
+            "num_samples": len(queries),
             "average_document_length": (
                 total_corpus_len / len(corpus) if len(corpus) else 0
             ),
