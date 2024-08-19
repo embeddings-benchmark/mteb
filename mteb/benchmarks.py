@@ -119,25 +119,41 @@ MTEB_MAIN_EN = Benchmark(
 
 MTEB_MAIN_RU = Benchmark(
     name="MTEB(rus)",
-    tasks=[
-        "GeoreviewClassification",
-        "GeoreviewClusteringP2P",
-        "HeadlineClassification",
-        "InappropriatenessClassification",
-        "KinopoiskClassification",
-        "MassiveIntentClassification",
-        "MassiveScenarioClassification",
-        "RiaNewsRetrieval",
-        "RuBQRetrieval",
-        "RuReviewsClassification",
-        "RuSciBenchGRNTIClassification",
-        "RuSciBenchGRNTIClusteringP2P",
-        "RuSciBenchOECDClassification",
-        "RuSciBenchOECDClusteringP2P",
-        "RuSTSBenchmarkSTS",
-        "STS22",
-        "TERRa",
-    ],
+    tasks=get_tasks(
+        languages=["rus"],
+        tasks=[
+            # Classification
+            "GeoreviewClassification",
+            "HeadlineClassification",
+            "InappropriatenessClassification",
+            "KinopoiskClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "RuReviewsClassification",
+            "RuSciBenchGRNTIClassification",
+            "RuSciBenchOECDClassification",
+            # Clustering
+            "GeoreviewClusteringP2P",
+            "RuSciBenchGRNTIClusteringP2P",
+            "RuSciBenchOECDClusteringP2P",
+            # MultiLabelClassification
+            "CEDRClassification",
+            "SensitiveTopicsClassification",
+            # PairClassification
+            "TERRa",
+            # Reranking
+            "MIRACLReranking",
+            "RuBQReranking",
+            # Retrieval
+            "MIRACLRetrieval",
+            "RiaNewsRetrieval",
+            "RuBQRetrieval",
+            # STS
+            "RUParaPhraserSTS",
+            "RuSTSBenchmarkSTS",
+            "STS22",
+        ],
+    ),
     description="Main Russian benchmarks from MTEB",
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation=None,
