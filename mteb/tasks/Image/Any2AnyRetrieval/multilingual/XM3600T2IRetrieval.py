@@ -154,7 +154,7 @@ class XM3600T2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
-                "dev": {
+                "test": {
                     "ar": {
                         "average_document_length": 0.0,
                         "average_query_length": 0.0,
