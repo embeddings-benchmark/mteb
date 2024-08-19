@@ -144,3 +144,9 @@ tests/create_meta/model_card.md
 
 # removed results from mteb repo they are now available at: https://github.com/embeddings-benchmark/results
 results/
+
+# Weights and Biases
+wandb/
+
+# Chemical results 
+chem_results/
