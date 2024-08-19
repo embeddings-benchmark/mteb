@@ -9,17 +9,17 @@ _EVAL_SPLIT = "test"
 class CodeTransOceanDLRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeTransOceanDL",
-        description="The dataset is a collection of code snippets and their corresponding natural language queries. The task is to retrieve the most relevant code snippet",
+        description="The dataset is a collection of equivalent Python Deep Learning code snippets written in different machine learning framework. The task is to retrieve the equivalent code snippet in another framework, given a query code snippet from one framework.",
         reference="https://arxiv.org/abs/2310.04951",
         dataset={
-            "path": "mteb/codetrans-dl",
-            "revision": "ced14bd1adc47a2f83dd99228d5088d4fd6676c0",
+            "path": "CoIR-Retrieval/codetrans-dl",
+            "revision": "281562cb8a1265ab5c0824bfa6ddcd9b0a15618f",
         },
         type="Retrieval",
         category="p2p",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
-        eval_langs=["eng-Latn"],
+        eval_langs=["python-Code"],
         main_score="ndcg_at_10",
         date=("2023-10-08", "2023-10-08"),
         domains=["Programming", "Written"],

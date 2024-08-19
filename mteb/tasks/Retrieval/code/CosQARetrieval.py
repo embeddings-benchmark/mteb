@@ -12,8 +12,8 @@ class CosQARetrieval(AbsTaskRetrieval):
         description="The dataset is a collection of natural language queries and their corresponding code snippets. The task is to retrieve the most relevant code snippet for a given query.",
         reference="https://arxiv.org/abs/2105.13239",
         dataset={
-            "path": "mteb/cosqa",
-            "revision": "60b9d6532d06381c6e1fa54fde4f6c86a47dee3a",
+            "path": "CoIR-Retrieval/cosqa",
+            "revision": "bc5efb7e9d437246ce393ed19d772e08e4a79535",
         },
         type="Retrieval",
         category="p2p",
