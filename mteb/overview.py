@@ -155,7 +155,7 @@ class MTEBTasks(tuple):
             markdown_table += " |\n"
         return markdown_table
 
-    def to_table(
+    def to_dataframe(
         self, properties: list[str] = ["type", "license", "languages"]
     ) -> pd.DataFrame:
         """Generate pandas DataFrame with tasks summary
