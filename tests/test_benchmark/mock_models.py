@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Literal, Optional, Union
+from typing import Literal
 
 import numpy as np
 import torch
@@ -48,20 +48,19 @@ class MockSentenceTransformer(SentenceTransformer):
 
     def encode(
         self,
-        sentences: Union[str, List[str]],
-        prompt_name: Optional[str] = None,
-        prompt: Optional[str] = None,
+        sentences: str | list[str],
+        prompt_name: str | None = None,
+        prompt: str | None = None,
         batch_size: int = 32,
-        show_progress_bar: bool = None,
-        output_value: Optional[
-            Literal["sentence_embedding", "token_embeddings"]
-        ] = "sentence_embedding",
+        show_progress_bar: bool | None = None,
+        output_value: Literal["sentence_embedding", "token_embeddings"]
+        | None = "sentence_embedding",
         precision: Literal["float32", "int8", "uint8", "binary", "ubinary"] = "float32",
         convert_to_numpy: bool = True,
         convert_to_tensor: bool = False,
-        device: str = None,
+        device: str | None = None,
         normalize_embeddings: bool = False,
-    ) -> Union[List[Tensor], ndarray, Tensor]:
+    ) -> list[Tensor] | ndarray | Tensor:
         return torch.randn(len(sentences), 10)
 
 
