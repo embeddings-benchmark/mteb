@@ -36,11 +36,11 @@ class SummEvalSummarization(AbsTaskSummarization):
             "n_samples": {"test": 2800},
             "avg_character_length": {
                 "test": {
+                    "num_samples": 100,
+                    "avg_text_len": 2100.35,
                     "avg_human_summaries_len": 11.0,
                     "avg_machine_summaries_len": 16.0,
                     "avg_relevance": 3.7770833333333336,
-                    "avg_text_len": 2100.35,
-                    "num_samples": 100,
                 }
             },
         },

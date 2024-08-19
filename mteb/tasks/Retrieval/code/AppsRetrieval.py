@@ -43,7 +43,7 @@ class AppsRetrieval(AbsTaskRetrieval):
                     "average_document_length": 575.0086708499715,
                     "average_query_length": 1669.8284196547145,
                     "num_documents": 8765,
-                    "num_queries": 3765,
+                    "num_samples": 3765,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },

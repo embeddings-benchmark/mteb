@@ -21,7 +21,6 @@ class ClusteringDescriptiveStatistics(AbsDescriptiveStatistics):
     """Descriptive statistics for Clustering
 
     average_text_length: Average length of text
-    average_label_count: Average number of labels per text
     average_labels_per_text: Average number of labels per text
     unique_labels: Number of unique labels
     labels: dict of label frequencies
@@ -85,15 +84,16 @@ class AbsTaskClustering(AbsTask):
 
         total_text_len = sum([len(t) for t in sentences])
         total_labels = []
-        labels_lengths = []
-        for label_list in labels:
-            total_labels.extend(label_list)
-            labels_lengths.append(len(label_list))
+        for label in labels:
+            if isinstance(label, list):
+                total_labels.extend(label)
+            else:
+                total_labels.append(label)
         label_counter = Counter(total_labels)
         return {
             "num_samples": len(sentences),
             "average_text_length": total_text_len / len(sentences),
-            "average_labels_per_text": sum(labels_lengths) / len(labels_lengths),
+            "average_labels_per_text": len(total_labels) / len(sentences),
             "unique_labels": len(label_counter),
             "labels": {
                 label: {

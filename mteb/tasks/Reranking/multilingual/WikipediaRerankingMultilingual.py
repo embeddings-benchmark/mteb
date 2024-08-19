@@ -74,7 +74,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
             "avg_character_length": {
                 "test": {
                     "bg": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 60.82666666666667,
@@ -82,7 +82,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_negative_len": 8.0,
                     },
                     "bn": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 47.266666666666666,
@@ -90,7 +90,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_negative_len": 8.0,
                     },
                     "cs": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 56.272,
@@ -98,7 +98,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_negative_len": 8.0,
                     },
                     "da": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 56.75066666666667,
@@ -106,7 +106,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_negative_len": 8.0,
                     },
                     "de": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 70.004,
@@ -114,7 +114,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_negative_len": 8.0,
                     },
                     "en": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 68.372,
@@ -122,7 +122,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_negative_len": 8.0,
                     },
                     "fa": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 48.66733333333333,
@@ -130,7 +130,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_negative_len": 8.0,
                     },
                     "fi": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 55.343333333333334,
@@ -138,7 +138,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_negative_len": 8.0,
                     },
                     "hi": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 50.77733333333333,
@@ -146,7 +146,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_negative_len": 8.0,
                     },
                     "it": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 70.05466666666666,
@@ -154,7 +154,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_negative_len": 8.0,
                     },
                     "nl": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 65.34466666666667,
@@ -162,7 +162,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_negative_len": 8.0,
                     },
                     "pt": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 65.11933333333333,
@@ -170,7 +170,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_negative_len": 8.0,
                     },
                     "ro": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 61.973333333333336,
@@ -178,7 +178,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_negative_len": 8.0,
                     },
                     "sr": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 55.669333333333334,
@@ -186,7 +186,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_negative_len": 8.0,
                     },
                     "no": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 55.288,
@@ -194,7 +194,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_negative_len": 8.0,
                     },
                     "sv": {
-                        "num_query": 1500,
+                        "num_samples": 1500,
                         "num_positive": 1500,
                         "num_negative": 1500,
                         "avg_query_len": 57.73,

@@ -40,7 +40,7 @@ class Core17InstructionRetrieval(AbsTaskInstructionRetrieval):
             "avg_character_length": {
                 "test": {
                     "num_docs": 19899,
-                    "num_queries": 20,
+                    "num_samples": 20,
                     "average_document_length": 2233.0329664807277,
                     "average_query_length": 109.75,
                     "average_instruction_length": 295.55,

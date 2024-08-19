@@ -217,19 +217,16 @@ class AbsTaskClusteringFast(AbsTask):
 
         total_text_len = sum([len(t) for t in sentences])
         total_labels = []
-        labels_lengths = []
         for label in labels:
-            if label is list:
+            if isinstance(label, list):
                 total_labels.extend(label)
-                labels_lengths.append(len(label))
             else:
                 total_labels.append(label)
-                labels_lengths.append(1)
         label_counter = Counter(total_labels)
         return {
             "num_samples": len(sentences),
             "average_text_length": total_text_len / len(sentences),
-            "average_labels_per_text": sum(labels_lengths) / len(labels_lengths),
+            "average_labels_per_text": len(total_labels) / len(sentences),
             "unique_labels": len(label_counter),
             "labels": {
                 label: {

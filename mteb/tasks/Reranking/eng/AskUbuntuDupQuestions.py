@@ -39,7 +39,7 @@ class AskUbuntuDupQuestions(AbsTaskReranking):
             "n_samples": {"test": 2255},
             "avg_character_length": {
                 "test": {
-                    "num_query": 375,
+                    "num_samples": 375,
                     "num_positive": 375,
                     "num_negative": 375,
                     "avg_query_len": 50.205333333333336,
