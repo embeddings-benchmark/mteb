@@ -95,7 +95,7 @@ class WITT2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="WITT2IRetrieval",
         description="Retrieve images based on multilingual descriptions.",
-        reference="https://aclanthology.org/2022.emnlp-main.45/",
+        reference="https://proceedings.mlr.press/v162/bugliarello22a/bugliarello22a.pdf",
         dataset={
             "path": "mteb/wit",
             "revision": "91ac153f1371a98b209ed763205e25e115ecd06e",
@@ -116,12 +116,13 @@ class WITT2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{thapliyal2022crossmodal,
-  title={Crossmodal-3600: A Massively Multilingual Multimodal Evaluation Dataset},
-  author={Thapliyal, Ashish V and Tuset, Jordi Pont and Chen, Xi and Soricut, Radu},
-  booktitle={Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing},
-  pages={715--729},
-  year={2022}
+        bibtex_citation="""@inproceedings{bugliarello2022iglue,
+  title={IGLUE: A benchmark for transfer learning across modalities, tasks, and languages},
+  author={Bugliarello, Emanuele and Liu, Fangyu and Pfeiffer, Jonas and Reddy, Siva and Elliott, Desmond and Ponti, Edoardo Maria and Vuli{\'c}, Ivan},
+  booktitle={International Conference on Machine Learning},
+  pages={2370--2392},
+  year={2022},
+  organization={PMLR}
 }""",
         descriptive_stats={
             "n_samples": None,
