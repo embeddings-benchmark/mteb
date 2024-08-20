@@ -23,9 +23,10 @@ logger = logging.getLogger(__name__)
 class ClassificationDescriptiveStatistics(AbsDescriptiveStatistics):
     """Descriptive statistics for Classification
 
-    average_text_length: Average length of text
-    unique_labels: Number of unique labels
-    labels: dict of label frequencies
+    Attributes:
+      average_text_length: Average length of text
+      unique_labels: Number of unique labels
+      labels: dict of label frequencies
     """
 
     average_text_length: float

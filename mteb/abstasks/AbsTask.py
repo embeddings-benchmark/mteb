@@ -52,8 +52,8 @@ def _multilabel_subsampling(
     return dataset_dict
 
 
-class AbsDescriptiveStatistics(TypedDict):
-    """Abstract class for descriptive statistics.
+class DescriptiveStatistics(TypedDict):
+    """Class for descriptive statistics.
 
     num_samples: number of samples in the dataset.
     """
