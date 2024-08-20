@@ -16,7 +16,7 @@ from ..evaluation.evaluators import utils
 from ..evaluation.evaluators.InstructionRetrievalEvaluator import (
     InstructionRetrievalEvaluator,
 )
-from .AbsTask import AbsDescriptiveStatistics, AbsTask
+from .AbsTask import DescriptiveStatistics, AbsTask
 from .AbsTaskRetrieval import HFDataLoader
 
 logger = logging.getLogger(__name__)
@@ -218,17 +218,17 @@ class HFDataLoaderInstructions(HFDataLoader):
             self.og_qrels = qrels_ds
 
 
-class InstructionRetrievalDescriptiveStatistics(AbsDescriptiveStatistics):
+class InstructionRetrievalDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Instruction Retrieval tasks
 
-    num_docs: Number of documents
-    num_queries: Number of queries
-    average_document_length: Average length of documents
-    average_query_length: Average length of queries
-    average_instruction_length: Average length of instructions
-    average_changed_instruction_length: Average length of changed instructions
-    average_relevant_docs_per_query: Average number of relevant docs per query
-    average_top_ranked_per_query: Average number of top ranked docs per query
+    Attributes:
+        num_docs: Number of documents
+        average_document_length: Average length of documents
+        average_query_length: Average length of queries
+        average_instruction_length: Average length of instructions
+        average_changed_instruction_length: Average length of changed instructions
+        average_relevant_docs_per_query: Average number of relevant docs per query
+        average_top_ranked_per_query: Average number of top ranked docs per query
     """
 
     num_docs: int

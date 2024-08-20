@@ -15,12 +15,12 @@ from ..evaluation.evaluators import (
     logRegClassificationEvaluator,
 )
 from ..load_results.mteb_results import HFSubset, ScoresDict
-from .AbsTask import AbsDescriptiveStatistics, AbsTask
+from .AbsTask import DescriptiveStatistics, AbsTask
 
 logger = logging.getLogger(__name__)
 
 
-class ClassificationDescriptiveStatistics(AbsDescriptiveStatistics):
+class ClassificationDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Classification
 
     Attributes:

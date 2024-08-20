@@ -14,7 +14,7 @@ from mteb.abstasks.TaskMetadata import HFSubset
 
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..load_results.mteb_results import ScoresDict
-from .AbsTask import AbsDescriptiveStatistics, AbsTask
+from .AbsTask import DescriptiveStatistics, AbsTask
 
 logger = logging.getLogger(__name__)
 
@@ -192,13 +192,14 @@ class HFDataLoader:
         self.qrels = qrels_ds
 
 
-class RetrievalDescriptiveStatistics(AbsDescriptiveStatistics):
+class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Retrieval
 
-    average_document_length: Average length of documents
-    average_query_length: Average length of queries
-    num_documents: Number of documents
-    average_relevant_docs_per_query: Average number of relevant documents per query
+    Attributes:
+        average_document_length: Average length of documents
+        average_query_length: Average length of queries
+        num_documents: Number of documents
+        average_relevant_docs_per_query: Average number of relevant documents per query
     """
 
     average_document_length: float

@@ -20,10 +20,11 @@ logger = logging.getLogger(__name__)
 class ClusteringDescriptiveStatistics(AbsDescriptiveStatistics):
     """Descriptive statistics for Clustering
 
-    average_text_length: Average length of text
-    average_labels_per_text: Average number of labels per text
-    unique_labels: Number of unique labels
-    labels: dict of label frequencies
+    Attributes:
+        average_text_length: Average length of text
+        average_labels_per_text: Average number of labels per text
+        unique_labels: Number of unique labels
+        labels: dict of label frequencies
     """
 
     average_text_length: float

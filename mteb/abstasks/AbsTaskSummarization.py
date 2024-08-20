@@ -9,18 +9,19 @@ from mteb.encoder_interface import Encoder
 from mteb.load_results.mteb_results import ScoresDict
 
 from ..evaluation.evaluators import SummarizationEvaluator
-from .AbsTask import AbsDescriptiveStatistics, AbsTask
+from .AbsTask import DescriptiveStatistics, AbsTask
 
 logger = logging.getLogger(__name__)
 
 
-class SummarizationDescriptiveStatistics(AbsDescriptiveStatistics):
+class SummarizationDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Summarization
 
-    avg_text_len: Average length of text
-    avg_human_summaries_len: Average length of human summaries
-    avg_machine_summaries_len: Average length of machine summaries
-    avg_relevance: Average relevance score
+    Attributes:
+        avg_text_len: Average length of text
+        avg_human_summaries_len: Average length of human summaries
+        avg_machine_summaries_len: Average length of machine summaries
+        avg_relevance: Average relevance score
     """
 
     avg_text_len: float

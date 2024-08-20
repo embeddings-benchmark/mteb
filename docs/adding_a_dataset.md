@@ -4,7 +4,7 @@
 To add a new dataset to MTEB, you need to do three things:
 
 1) Implement a task with the desired dataset, by subclassing an abstract task
-2) Add metadata to the task (run `calculate_metadata_metrics()`)
+2) Add metadata to the task (run `task.calculate_metadata_metrics()`)
 3) Submit the edits to the [MTEB](https://github.com/embeddings-benchmark/mteb) repository
 
 If you have any questions regarding this process feel free to open a discussion [thread](https://github.com/embeddings-benchmark/mteb/discussions).

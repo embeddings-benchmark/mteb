@@ -9,16 +9,17 @@ from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators import BitextMiningEvaluator
 from ..load_results.mteb_results import HFSubset, ScoresDict
-from .AbsTask import AbsDescriptiveStatistics, AbsTask
+from .AbsTask import DescriptiveStatistics, AbsTask
 
 logger = logging.getLogger(__name__)
 
 
-class BitextDescriptiveStatistics(AbsDescriptiveStatistics):
+class BitextDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Bitext
 
-    average_sentence1_length: Average length of sentence1
-    average_sentence2_length: Average length of sentence2
+    Attributes:
+        average_sentence1_length: Average length of sentence1
+        average_sentence2_length: Average length of sentence2
     """
 
     average_sentence1_length: float

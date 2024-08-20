@@ -5,17 +5,18 @@ from typing import Any
 
 from ..evaluation.evaluators import STSEvaluator
 from ..load_results.mteb_results import ScoresDict
-from .AbsTask import AbsDescriptiveStatistics, AbsTask
+from .AbsTask import DescriptiveStatistics, AbsTask
 
 logger = logging.getLogger(__name__)
 
 
-class STSDescriptiveStatistics(AbsDescriptiveStatistics):
+class STSDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for STS
 
-    average_sentence1_len: Average length of sentence1
-    average_sentence2_len: Average length of sentence2
-    avg_score: Average score
+    Attributes:
+        average_sentence1_len: Average length of sentence1
+        average_sentence2_len: Average length of sentence2
+        avg_score: Average score
     """
 
     average_sentence1_len: float

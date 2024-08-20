@@ -8,18 +8,19 @@ from datasets import Dataset
 from ..encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from ..evaluation.evaluators import PairClassificationEvaluator
 from ..load_results.mteb_results import ScoresDict
-from .AbsTask import AbsDescriptiveStatistics, AbsTask
+from .AbsTask import DescriptiveStatistics, AbsTask
 
 logger = logging.getLogger(__name__)
 
 
-class PairClassificationDescriptiveStatistics(AbsDescriptiveStatistics):
+class PairClassificationDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for PairClassification
 
-    avg_sentence1_len: Average length of sentence1
-    avg_sentence2_len: Average length of sentence2
-    unique_labels: Number of unique labels
-    labels: dict of label frequencies
+    Attributes:
+        avg_sentence1_len: Average length of sentence1
+        avg_sentence2_len: Average length of sentence2
+        unique_labels: Number of unique labels
+        labels: dict of label frequencies
     """
 
     avg_sentence1_len: float

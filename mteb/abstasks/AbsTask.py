@@ -55,7 +55,8 @@ def _multilabel_subsampling(
 class DescriptiveStatistics(TypedDict):
     """Class for descriptive statistics.
 
-    num_samples: number of samples in the dataset.
+    Attributes:
+        num_samples: number of samples in the dataset.
     """
 
     num_samples: int
@@ -196,7 +197,7 @@ class AbsTask(ABC):
 
     def calculate_metadata_metrics(
         self,
-    ) -> dict[str, AbsDescriptiveStatistics | dict[str, AbsDescriptiveStatistics]]:
+    ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
         self.load_data()
 
         all_details = {}
@@ -226,7 +227,7 @@ class AbsTask(ABC):
     @abstractmethod
     def _calculate_metrics_from_split(
         self, split: str, lang: str | None = None
-    ) -> AbsDescriptiveStatistics:
+    ) -> DescriptiveStatistics:
         raise NotImplementedError
 
     @property

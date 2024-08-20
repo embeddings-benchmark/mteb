@@ -8,17 +8,18 @@ from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.load_results.mteb_results import ScoresDict
 
 from ..evaluation.evaluators import RerankingEvaluator
-from .AbsTask import AbsDescriptiveStatistics, AbsTask
+from .AbsTask import DescriptiveStatistics, AbsTask
 
 
-class RerankingDescriptiveStatistics(AbsDescriptiveStatistics):
+class RerankingDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Reranking
 
-    num_positive: Number of positive examples
-    num_negative: Number of negative examples
-    avg_query_len: Average length of queries
-    avg_positive_len: Average length of positive examples
-    avg_negative_len: Average length of negative examples
+    Attributes:
+        num_positive: Number of positive examples
+        num_negative: Number of negative examples
+        avg_query_len: Average length of queries
+        avg_positive_len: Average length of positive examples
+        avg_negative_len: Average length of negative examples
     """
 
     num_positive: int
