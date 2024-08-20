@@ -243,15 +243,15 @@ class AbsTaskMultilabelClassification(AbsTask):
         for l in label:
             total_labels.extend(l if len(l) > 0 else [None])
         label_count = Counter(total_labels)
-        return {
-            "average_text_length": total_text_len / len(text),
-            "average_label_per_text": total_label_len / len(label),
-            "num_samples": len(text),
-            "unique_labels": len(label_count),
-            "labels": {
+        return MultilabelClassificationDescriptiveStatistics(
+            average_text_length=total_text_len / len(text),
+            average_label_per_text=total_label_len / len(label),
+            num_samples=len(text),
+            unique_labels=len(label_count),
+            labels={
                 label: {
                     "count": value,
                 }
                 for label, value in label_count.items()
             },
-        }
+        )

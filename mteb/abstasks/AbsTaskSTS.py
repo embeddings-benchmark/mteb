@@ -91,9 +91,9 @@ class AbsTaskSTS(AbsTask):
         total_sentence1_len = sum([len(s) for s in sentence1])
         total_sentence2_len = sum([len(s) for s in sentence2])
         avg_score = sum(score) / len(score)
-        return {
-            "num_samples": len(sentence1),
-            "average_sentence1_len": total_sentence1_len / len(sentence1),
-            "average_sentence2_len": total_sentence2_len / len(sentence2),
-            "avg_score": avg_score,
-        }
+        return STSDescriptiveStatistics(
+            num_samples=len(sentence1),
+            average_sentence1_len=total_sentence1_len / len(sentence1),
+            average_sentence2_len=total_sentence2_len / len(sentence2),
+            avg_score=avg_score,
+        )

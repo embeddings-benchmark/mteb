@@ -253,9 +253,9 @@ class AbsTaskClassification(AbsTask):
 
         total_text_len = sum([len(t) for t in text])
         label_count = Counter(label)
-        return {
-            "num_samples": len(text),
-            "average_text_length": total_text_len / len(text),
-            "unique_labels": len(label_count),
-            "labels": {label: {"count": count} for label, count in label_count.items()},
-        }
+        return ClassificationDescriptiveStatistics(
+            num_samples=len(text),
+            average_text_length=total_text_len / len(text),
+            unique_labels=len(label_count),
+            labels={label: {"count": count} for label, count in label_count.items()},
+        )

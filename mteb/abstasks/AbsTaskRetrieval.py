@@ -427,13 +427,13 @@ class AbsTaskRetrieval(AbsTask):
             for docs in relevant_docs.values()
         )
         qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if num_queries else 0
-        return {
-            "average_document_length": doc_len,
-            "average_query_length": query_len,
-            "num_documents": num_documents,
-            "num_queries": num_queries,
-            "average_relevant_docs_per_query": qrels_per_doc,
-        }
+        return RetrievalDescriptiveStatistics(
+            average_document_length=doc_len,
+            average_query_length=query_len,
+            num_documents=num_documents,
+            num_queries=num_queries,
+            average_relevant_docs_per_query=qrels_per_doc,
+        )
 
 
 def calculate_length(

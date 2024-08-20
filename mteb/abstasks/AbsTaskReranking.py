@@ -88,11 +88,11 @@ class AbsTaskReranking(AbsTask):
         total_len_query = sum([len(q) for q in query])
         total_len_positive = sum([len(p) for p in positive])
         total_len_negative = sum([len(n) for n in negative])
-        return {
-            "num_samples": len(query),
-            "num_positive": len(positive),
-            "num_negative": len(negative),
-            "avg_query_len": total_len_query / len(query),
-            "avg_positive_len": total_len_positive / len(positive),
-            "avg_negative_len": total_len_negative / len(negative),
-        }
+        return RerankingDescriptiveStatistics(
+            num_samples=len(query),
+            num_positive=len(positive),
+            num_negative=len(negative),
+            avg_query_len=total_len_query / len(query),
+            avg_positive_len=total_len_positive / len(positive),
+            avg_negative_len=total_len_negative / len(negative),
+        )

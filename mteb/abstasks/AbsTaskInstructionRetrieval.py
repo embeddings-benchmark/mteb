@@ -656,21 +656,21 @@ class AbsTaskInstructionRetrieval(AbsTask):
             if len(queries)
             else 0
         )
-        return {
-            "num_docs": len(corpus),
-            "num_queries": len(queries),
-            "average_document_length": (
+        return InstructionRetrievalDescriptiveStatistics(
+            num_docs=len(corpus),
+            num_queries=len(queries),
+            average_document_length=(
                 total_corpus_len / len(corpus) if len(corpus) else 0
             ),
-            "average_query_length": (
+            average_query_length=(
                 total_queries_len / len(queries) if len(queries) else 0
             ),
-            "average_instruction_length": (
+            average_instruction_length=(
                 total_instructions_len / len(queries) if len(queries) else 0
             ),
-            "average_changed_instruction_length": (
+            average_changed_instruction_length=(
                 total_changed_instructions_len / len(queries) if len(queries) else 0
             ),
-            "average_relevant_docs_per_query": qrels_per_doc,
-            "average_top_ranked_per_query": top_ranked_per_query,
-        }
+            average_relevant_docs_per_query=qrels_per_doc,
+            average_top_ranked_per_query=top_ranked_per_query,
+        )

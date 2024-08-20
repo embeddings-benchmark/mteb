@@ -107,10 +107,10 @@ class AbsTaskPairClassification(AbsTask):
         total_sentence1_len = sum([len(sentence) for sentence in sentence1])
         total_sentence2_len = sum([len(sentence) for sentence in sentence2])
         label_count = Counter(labels)
-        return {
-            "num_samples": len(sentence1),
-            "avg_sentence1_len": total_sentence1_len / len(sentence1),
-            "avg_sentence2_len": total_sentence2_len / len(sentence2),
-            "unique_labels": len(set(labels)),
-            "labels": {label: {"count": count} for label, count in label_count.items()},
-        }
+        return PairClassificationDescriptiveStatistics(
+            num_samples=len(sentence1),
+            avg_sentence1_len=total_sentence1_len / len(sentence1),
+            avg_sentence2_len=total_sentence2_len / len(sentence2),
+            unique_labels=len(set(labels)),
+            labels={label: {"count": count} for label, count in label_count.items()},
+        )

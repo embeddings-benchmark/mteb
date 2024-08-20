@@ -232,18 +232,18 @@ class AbsTaskClusteringFast(AbsTask):
             else:
                 total_labels.append(label)
         label_counter = Counter(total_labels)
-        return {
-            "num_samples": len(sentences),
-            "average_text_length": total_text_len / len(sentences),
-            "average_labels_per_text": len(total_labels) / len(sentences),
-            "unique_labels": len(label_counter),
-            "labels": {
+        return ClusteringFastDescriptiveStatistics(
+            num_samples=len(sentences),
+            average_text_length=total_text_len / len(sentences),
+            average_labels_per_text=len(total_labels) / len(sentences),
+            unique_labels=len(label_counter),
+            labels={
                 label: {
                     "count": value,
                 }
                 for label, value in label_counter.items()
             },
-        }
+        )
 
 
 def clustering_downsample(

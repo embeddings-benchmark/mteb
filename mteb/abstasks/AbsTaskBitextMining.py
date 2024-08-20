@@ -152,8 +152,8 @@ class AbsTaskBitextMining(AbsTask):
         total_s1_len = sum([len(s1) for s1 in sentence1])
         total_s2_len = sum([len(s2) for s2 in sentence2])
 
-        return {
-            "average_sentence1_length": total_s1_len / len(sentence1),
-            "average_sentence2_length": total_s2_len / len(sentence2),
-            "num_samples": len(sentence1),
-        }
+        return BitextDescriptiveStatistics(
+            average_sentence1_length=total_s1_len / len(sentence1),
+            average_sentence2_length=total_s2_len / len(sentence2),
+            num_samples=len(sentence1),
+        )

@@ -106,10 +106,10 @@ class AbsTaskSummarization(AbsTask):
         total_human_summaries_len = sum(len(x) for x in human_summaries)
         total_machine_summaries_len = sum(len(x) for x in machine_summaries)
         total_relevance = sum(sum(x) / len(x) for x in relevance)
-        return {
-            "num_samples": len(text),
-            "avg_text_len": total_text_len / len(text),
-            "avg_human_summaries_len": total_human_summaries_len / len(text),
-            "avg_machine_summaries_len": total_machine_summaries_len / len(text),
-            "avg_relevance": total_relevance / len(relevance),
-        }
+        return SummarizationDescriptiveStatistics(
+            num_samples=len(text),
+            avg_text_len=total_text_len / len(text),
+            avg_human_summaries_len=total_human_summaries_len / len(text),
+            avg_machine_summaries_len=total_machine_summaries_len / len(text),
+            avg_relevance=total_relevance / len(relevance),
+        )
