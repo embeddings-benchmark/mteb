@@ -72,8 +72,35 @@ class MultiEURLEXMultilabelClassification(
         """,
         descriptive_stats={
             "n_samples": {"test": 5000},
-            "avg_character_length": {
-                "test": {
+            "test": {
+                "average_text_length": 12014.408930434782,
+                "average_label_per_text": 3.5938,
+                "num_samples": 115000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {"count": 50784},
+                    "15": {"count": 30981},
+                    "5": {"count": 24978},
+                    "6": {"count": 45080},
+                    "3": {"count": 63687},
+                    "17": {"count": 37743},
+                    "1": {"count": 15019},
+                    "20": {"count": 14030},
+                    "0": {"count": 17802},
+                    "2": {"count": 22402},
+                    "19": {"count": 10212},
+                    "9": {"count": 3772},
+                    "4": {"count": 9062},
+                    "10": {"count": 7705},
+                    "11": {"count": 12213},
+                    "7": {"count": 14306},
+                    "12": {"count": 11799},
+                    "8": {"count": 13800},
+                    "13": {"count": 2346},
+                    "14": {"count": 4255},
+                    "16": {"count": 1311},
+                },
+                "hf_subset_descriptive_stats": {
                     "en": {
                         "average_text_length": 11720.2926,
                         "average_label_per_text": 3.5938,
@@ -741,7 +768,7 @@ class MultiEURLEXMultilabelClassification(
                             "16": {"count": 57},
                         },
                     },
-                }
+                },
             },
         },
     )

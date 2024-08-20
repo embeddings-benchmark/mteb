@@ -67,8 +67,12 @@ class STS17Crosslingual(AbsTaskSTS, MultilingualTask):
 }""",
         descriptive_stats={
             "n_samples": {"test": 500},
-            "avg_character_length": {
-                "test": {
+            "test": {
+                "num_samples": 5346,
+                "average_sentence1_len": 38.14665170220726,
+                "average_sentence2_len": 36.72502805836139,
+                "avg_score": 2.3554804214989464,
+                "hf_subset_descriptive_stats": {
                     "ko-ko": {
                         "num_samples": 2846,
                         "average_sentence1_len": 31.991918482080113,
@@ -135,7 +139,7 @@ class STS17Crosslingual(AbsTaskSTS, MultilingualTask):
                         "average_sentence2_len": 42.724,
                         "avg_score": 2.2776000000000014,
                     },
-                }
+                },
             },
         },
     )

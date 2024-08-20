@@ -47,8 +47,13 @@ class PawsXPairClassification(MultilingualTask, AbsTaskPairClassification):
 }""",
         descriptive_stats={
             "n_samples": {"validation": 14000, "test": 14000},
-            "avg_character_length": {
-                "test": {
+            "test": {
+                "num_samples": 14000,
+                "avg_sentence1_len": 91.17892857142857,
+                "avg_sentence2_len": 91.10121428571429,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 6285}, "0": {"count": 7715}},
+                "hf_subset_descriptive_stats": {
                     "de": {
                         "num_samples": 2000,
                         "avg_sentence1_len": 119.7815,
@@ -99,7 +104,14 @@ class PawsXPairClassification(MultilingualTask, AbsTaskPairClassification):
                         "labels": {"1": {"count": 894}, "0": {"count": 1106}},
                     },
                 },
-                "validation": {
+            },
+            "validation": {
+                "num_samples": 14000,
+                "avg_sentence1_len": 90.12585714285714,
+                "avg_sentence2_len": 90.2045,
+                "unique_labels": 2,
+                "labels": {"1": {"count": 5948}, "0": {"count": 8052}},
+                "hf_subset_descriptive_stats": {
                     "de": {
                         "num_samples": 2000,
                         "avg_sentence1_len": 116.82,

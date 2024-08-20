@@ -101,8 +101,11 @@ url={https://openreview.net/forum?id=vfT4YuzAYA},
 note={}
 }""",
         descriptive_stats={
-            "avg_character_length": {
-                "test": {
+            "test": {
+                "average_sentence1_length": 54.32948595562498,
+                "average_sentence2_length": 54.32948595562498,
+                "num_samples": 760518,
+                "hf_subset_descriptive_stats": {
                     "asm_Beng-ben_Beng": {
                         "average_sentence1_length": 53.753825681969396,
                         "average_sentence2_length": 50.03060545575516,
@@ -2633,8 +2636,8 @@ note={}
                         "average_sentence2_length": 51.16300731869594,
                         "num_samples": 1503,
                     },
-                }
-            },
+                },
+            }
         },
     )
 

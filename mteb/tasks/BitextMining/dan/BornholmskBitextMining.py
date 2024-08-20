@@ -43,12 +43,10 @@ class BornholmBitextMining(AbsTaskBitextMining):
 """,
         descriptive_stats={
             "n_samples": {"test": 500},
-            "avg_character_length": {
-                "test": {
-                    "average_sentence1_length": 49.834,
-                    "average_sentence2_length": 38.888,
-                    "num_samples": 500,
-                }
+            "test": {
+                "average_sentence1_length": 49.834,
+                "average_sentence2_length": 38.888,
+                "num_samples": 500,
             },
         },
     )

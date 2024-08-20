@@ -53,8 +53,11 @@ class NusaTranslationBitextMining(AbsTaskBitextMining, MultilingualTask):
         """,
         descriptive_stats={
             "n_samples": {"train": 50200},
-            "avg_character_length": {
-                "train": {
+            "train": {
+                "average_sentence1_length": 145.4552390438247,
+                "average_sentence2_length": 148.56607569721115,
+                "num_samples": 50200,
+                "hf_subset_descriptive_stats": {
                     "ind-abs": {
                         "average_sentence1_length": 148.366,
                         "average_sentence2_length": 147.314,
@@ -110,7 +113,7 @@ class NusaTranslationBitextMining(AbsTaskBitextMining, MultilingualTask):
                         "average_sentence2_length": 150.9880303030303,
                         "num_samples": 6600,
                     },
-                }
+                },
             },
         },
     )

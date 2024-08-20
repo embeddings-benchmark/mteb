@@ -38,14 +38,12 @@ class AppsRetrieval(AbsTaskRetrieval):
             "n_samples": {
                 _EVAL_SPLIT: 1000,
             },
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 575.0086708499715,
-                    "average_query_length": 1669.8284196547145,
-                    "num_documents": 8765,
-                    "num_samples": 3765,
-                    "average_relevant_docs_per_query": 1.0,
-                }
+            "test": {
+                "average_document_length": 575.0086708499715,
+                "average_query_length": 1669.8284196547145,
+                "num_documents": 8765,
+                "num_samples": 3765,
+                "average_relevant_docs_per_query": 1.0,
             },
         },
     )

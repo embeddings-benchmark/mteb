@@ -71,8 +71,14 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                 "no": 1500,
                 "sv": 1500,
             },
-            "avg_character_length": {
-                "test": {
+            "test": {
+                "num_samples": 24000,
+                "num_positive": 24000,
+                "num_negative": 24000,
+                "avg_query_len": 59.091208333333334,
+                "avg_positive_len": 1.0,
+                "avg_negative_len": 8.0,
+                "hf_subset_descriptive_stats": {
                     "bg": {
                         "num_samples": 1500,
                         "num_positive": 1500,
@@ -201,7 +207,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
                         "avg_positive_len": 1.0,
                         "avg_negative_len": 8.0,
                     },
-                }
+                },
             },
         },
     )

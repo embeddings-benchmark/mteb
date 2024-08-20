@@ -405,13 +405,13 @@ class AbsTaskRetrieval(AbsTask):
             corpus = self.corpus[lang][split]
             relevant_docs = self.relevant_docs[lang][split]
         elif compute_overall:
-            queries = []
-            corpus = []
-            relevant_docs = []
+            queries = {}
+            corpus = {}
+            relevant_docs = {}
             for lang in self.metadata.eval_langs:
-                queries.extend(self.queries[lang][split])
-                corpus.extend(self.corpus[lang][split])
-                relevant_docs.extend(self.relevant_docs[lang][split])
+                queries.update(self.queries[lang][split])
+                corpus.update(self.corpus[lang][split])
+                relevant_docs.update(self.relevant_docs[lang][split])
         else:
             queries = self.queries[split]
             corpus = self.corpus[split]

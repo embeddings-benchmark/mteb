@@ -62,8 +62,13 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
         """,
         descriptive_stats={
             "n_samples": {"validation": 2163, "test": 2460},
-            "avg_character_length": {
-                "test": {
+            "test": {
+                "num_samples": 19110,
+                "avg_sentence1_len": 103.23793825222397,
+                "avg_sentence2_len": 48.88895866038723,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 9562}, "1": {"count": 9548}},
+                "hf_subset_descriptive_stats": {
                     "ar": {
                         "num_samples": 1365,
                         "avg_sentence1_len": 89.57362637362637,
@@ -163,7 +168,14 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
                         "labels": {"0": {"count": 683}, "1": {"count": 682}},
                     },
                 },
-                "validation": {
+            },
+            "validation": {
+                "num_samples": 19110,
+                "avg_sentence1_len": 103.20790162218734,
+                "avg_sentence2_len": 49.01909994767138,
+                "unique_labels": 2,
+                "labels": {"0": {"count": 9562}, "1": {"count": 9548}},
+                "hf_subset_descriptive_stats": {
                     "ar": {
                         "num_samples": 1365,
                         "avg_sentence1_len": 88.31868131868131,
