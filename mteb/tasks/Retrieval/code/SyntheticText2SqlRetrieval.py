@@ -12,8 +12,8 @@ class SyntheticText2SQLRetrieval(AbsTaskRetrieval):
         description="The dataset is a collection of natural language queries and their corresponding sql snippets. The task is to retrieve the most relevant code snippet for a given query.",
         reference="https://huggingface.co/datasets/gretelai/synthetic_text_to_sql",
         dataset={
-            "path": "mteb/synthetic-text2sql",
-            "revision": "7dc8d317c7efb540f723f7f75ec525a1aa7da675",
+            "path": "CoIR-Retrieval/synthetic-text2sql",
+            "revision": "686b87296c3a0191b5d9415a00526c62db9fce09",
         },
         type="Retrieval",
         category="p2p",

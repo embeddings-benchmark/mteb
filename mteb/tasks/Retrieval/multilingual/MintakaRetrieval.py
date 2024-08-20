@@ -21,7 +21,12 @@ _LANGS = {
 
 
 def _load_mintaka_data(
-    path: str, langs: list, split: str, cache_dir: str = None, revision: str = None
+    path: str,
+    langs: list,
+    split: str,
+    trust_remote_code: bool,
+    cache_dir: str = None,
+    revision: str = None,
 ):
     queries = {lang: {split: {}} for lang in langs}
     corpus = {lang: {split: {}} for lang in langs}
@@ -34,6 +39,7 @@ def _load_mintaka_data(
             split=split,
             cache_dir=cache_dir,
             revision=revision,
+            trust_remote_code=trust_remote_code,
         )
         question_ids = {
             question: _id for _id, question in enumerate(set(data["question"]))
@@ -169,6 +175,7 @@ class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
             split=self.metadata_dict["eval_splits"][0],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
+            trust_remote_code=self.metadata_dict["dataset"]["trust_remote_code"],
         )
 
         self.data_loaded = True
