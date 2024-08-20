@@ -196,14 +196,14 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Retrieval
 
     Attributes:
-        num_samples: number of samples in the dataset
+        num_queries: number of samples in the dataset
         average_document_length: Average length of documents
         average_query_length: Average length of queries
         num_documents: Number of documents
         average_relevant_docs_per_query: Average number of relevant documents per query
     """
 
-    num_samples: int
+    num_queries: int
     average_document_length: float
     average_query_length: float
     num_documents: int
@@ -431,7 +431,7 @@ class AbsTaskRetrieval(AbsTask):
             "average_document_length": doc_len,
             "average_query_length": query_len,
             "num_documents": num_documents,
-            "num_samples": num_queries,
+            "num_queries": num_queries,
             "average_relevant_docs_per_query": qrels_per_doc,
         }
 
