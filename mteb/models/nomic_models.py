@@ -77,6 +77,9 @@ class NomicWrapper:
         if "prompt_name" in kwargs:
             kwargs.pop("prompt_name")
 
+        if "request_qid" in kwargs:
+            kwargs.pop("request_qid")
+
         sentences = corpus_to_texts(corpus)
         emb = self.encode(
             sentences, batch_size=batch_size, input_type="search_document", **kwargs
