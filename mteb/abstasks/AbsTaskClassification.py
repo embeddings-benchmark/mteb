@@ -199,7 +199,7 @@ class AbsTaskClassification(AbsTask):
 
     def calculate_metadata_metrics(
         self,
-    ) -> dict[str, AbsDescriptiveStatistics | dict[str, AbsDescriptiveStatistics]]:
+    ) -> dict[str, ClassificationDescriptiveStatistics | dict[str, ClassificationDescriptiveStatistics]]:
         self.load_data()
 
         all_details = {}
