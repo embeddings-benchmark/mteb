@@ -42,6 +42,8 @@ class AbsTaskSummarization(AbsTask):
         relevance: list[float] (the score of the machine generated summaries)
     """
 
+    evalutor = SummarizationEvaluator
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -60,7 +62,7 @@ class AbsTaskSummarization(AbsTask):
             (np.array(x) - self.min_score) / (self.max_score - self.min_score)
             for x in data_split["relevance"]
         ]
-        evaluator = SummarizationEvaluator(
+        evaluator = self.evalutor(
             machine_summaries=data_split["machine_summaries"],
             human_summaries=data_split["human_summaries"],
             texts=data_split["text"],

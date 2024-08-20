@@ -268,7 +268,7 @@ CoIR = Benchmark(
         "AppsRetrieval",
         "CosQA",
         "SyntheticText2SQL",
-        "CodeSearchNetRetrieval",
+        "COIRCodeSearchNetRetrieval",
         "CodeSearchNetCCRetrieval",
         "CodeTransOceanDL",
         "CodeTransOceanContest",
