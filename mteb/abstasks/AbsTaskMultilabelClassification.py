@@ -16,7 +16,7 @@ from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators.model_encode import model_encode
 from ..load_results.mteb_results import HFSubset, ScoresDict
-from .AbsTask import DescriptiveStatistics, AbsTask
+from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -45,12 +45,14 @@ class MultilabelClassificationDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for MultilabelClassification
 
     Attributes:
+        num_samples: number of samples in the dataset.
         average_text_length: Average length of text
         average_label_per_text: Average number of labels per text
         unique_labels: Number of unique labels
         labels: dict of label frequencies
     """
 
+    num_samples: int
     average_text_length: float
     average_label_per_text: float
     unique_labels: int
@@ -220,11 +222,17 @@ class AbsTaskMultilabelClassification(AbsTask):
         return sample_indices, idxs
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None
+        self, split: str, lang: str | None = None, compute_overall: bool = False
     ) -> MultilabelClassificationDescriptiveStatistics:
         if lang:
             text = self.dataset[lang][split]["text"]
             label = self.dataset[lang][split]["label"]
+        elif compute_overall:
+            text = []
+            label = []
+            for lang in self.metadata.eval_langs:
+                text.extend(self.dataset[lang][split]["text"])
+                label.extend(self.dataset[lang][split]["label"])
         else:
             text = self.dataset[split]["text"]
             label = self.dataset[split]["label"]

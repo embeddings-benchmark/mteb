@@ -14,7 +14,7 @@ from mteb.abstasks.TaskMetadata import HFSubset
 
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..load_results.mteb_results import ScoresDict
-from .AbsTask import DescriptiveStatistics, AbsTask
+from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -196,12 +196,14 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Retrieval
 
     Attributes:
+        num_samples: number of samples in the dataset
         average_document_length: Average length of documents
         average_query_length: Average length of queries
         num_documents: Number of documents
         average_relevant_docs_per_query: Average number of relevant documents per query
     """
 
+    num_samples: int
     average_document_length: float
     average_query_length: float
     num_documents: int
@@ -396,12 +398,20 @@ class AbsTaskRetrieval(AbsTask):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None
+        self, split: str, lang: str | None = None, compute_overall: bool = False
     ) -> RetrievalDescriptiveStatistics:
         if lang:
             queries = self.queries[lang][split]
             corpus = self.corpus[lang][split]
             relevant_docs = self.relevant_docs[lang][split]
+        elif compute_overall:
+            queries = []
+            corpus = []
+            relevant_docs = []
+            for lang in self.metadata.eval_langs:
+                queries.extend(self.queries[lang][split])
+                corpus.extend(self.corpus[lang][split])
+                relevant_docs.extend(self.relevant_docs[lang][split])
         else:
             queries = self.queries[split]
             corpus = self.corpus[split]

@@ -53,13 +53,9 @@ def _multilabel_subsampling(
 
 
 class DescriptiveStatistics(TypedDict):
-    """Class for descriptive statistics.
+    """Class for descriptive statistics."""
 
-    Attributes:
-        num_samples: number of samples in the dataset.
-    """
-
-    num_samples: int
+    pass
 
 
 class AbsTask(ABC):
@@ -208,7 +204,10 @@ class AbsTask(ABC):
             pbar_split.set_postfix_str(f"Split: {split}")
             print(f"Processing metadata for split {split}")
             if self.is_multilingual:
-                all_details[split] = {}
+                all_details[split] = self._calculate_metrics_from_split(
+                    split, compute_overall=True
+                )
+                all_details[split]["hf_subset_descriptive_stats"] = {}
 
                 pbar_lang = tqdm.tqdm(
                     self.metadata.eval_langs, desc="Processing Languages..."
@@ -217,7 +216,9 @@ class AbsTask(ABC):
                     pbar_lang.set_postfix_str(f"Language: {lang}")
                     print(f"Processing metadata for language {lang}")
                     split_details = self._calculate_metrics_from_split(split, lang)
-                    all_details[split][lang] = split_details
+                    all_details[split]["hf_subset_descriptive_stats"][lang] = (
+                        split_details
+                    )
             else:
                 split_details = self._calculate_metrics_from_split(split)
                 all_details[split] = split_details
@@ -226,7 +227,7 @@ class AbsTask(ABC):
 
     @abstractmethod
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None
+        self, split: str, lang: str | None = None, compute_overall: bool = False
     ) -> DescriptiveStatistics:
         raise NotImplementedError
 

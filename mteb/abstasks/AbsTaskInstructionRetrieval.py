@@ -16,7 +16,7 @@ from ..evaluation.evaluators import utils
 from ..evaluation.evaluators.InstructionRetrievalEvaluator import (
     InstructionRetrievalEvaluator,
 )
-from .AbsTask import DescriptiveStatistics, AbsTask
+from .AbsTask import AbsTask, DescriptiveStatistics
 from .AbsTaskRetrieval import HFDataLoader
 
 logger = logging.getLogger(__name__)
@@ -222,6 +222,7 @@ class InstructionRetrievalDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Instruction Retrieval tasks
 
     Attributes:
+        num_queries: Number of queries
         num_docs: Number of documents
         average_document_length: Average length of documents
         average_query_length: Average length of queries
@@ -231,6 +232,7 @@ class InstructionRetrievalDescriptiveStatistics(DescriptiveStatistics):
         average_top_ranked_per_query: Average number of top ranked docs per query
     """
 
+    num_queries: int
     num_docs: int
     average_document_length: float
     average_query_length: float
@@ -603,7 +605,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         return newly_irrelevant_qrels
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None
+        self, split: str, lang: str | None = None, compute_overall: bool = False
     ) -> InstructionRetrievalDescriptiveStatistics:
         if lang:
             corpus = self.corpus[lang][split]
@@ -612,6 +614,20 @@ class AbsTaskInstructionRetrieval(AbsTask):
             og_instructions = self.og_instructions[lang][split]
             changed_instructions = self.changed_instructions[lang][split]
             top_ranked = self.top_ranked[lang][split]
+        elif compute_overall:
+            corpus = []
+            queries = []
+            relevant_docs = []
+            og_instructions = []
+            changed_instructions = []
+            top_ranked = []
+            for lang in self.metadata.eval_langs:
+                corpus.extend(self.corpus[lang][split])
+                queries.extend(self.queries[lang][split])
+                relevant_docs.extend(self.og_relevant_docs[lang][split])
+                og_instructions.extend(self.og_instructions[lang][split])
+                changed_instructions.extend(self.changed_instructions[lang][split])
+                top_ranked.extend(self.top_ranked[lang][split])
         else:
             corpus = self.corpus[split]
             queries = self.queries[split]
@@ -642,7 +658,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         )
         return {
             "num_docs": len(corpus),
-            "num_samples": len(queries),
+            "num_queries": len(queries),
             "average_document_length": (
                 total_corpus_len / len(corpus) if len(corpus) else 0
             ),

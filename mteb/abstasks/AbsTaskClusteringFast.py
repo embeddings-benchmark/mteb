@@ -16,7 +16,7 @@ from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators.model_encode import model_encode
 from ..load_results.mteb_results import HFSubset
-from .AbsTask import DescriptiveStatistics, AbsTask
+from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -83,12 +83,14 @@ class ClusteringFastDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Clustering
 
     Attributes:
+        num_samples: number of samples in the dataset.
         average_text_length: Average length of text
         average_labels_per_text: Average number of labels per text
         unique_labels: Number of unique labels
         labels: dict of label frequencies
     """
 
+    num_samples: int
     average_text_length: float
     average_labels_per_text: float
     unique_labels: int
@@ -207,11 +209,17 @@ class AbsTaskClusteringFast(AbsTask):
         return scores
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None
+        self, split: str, lang: str | None = None, compute_overall: bool = False
     ) -> ClusteringFastDescriptiveStatistics:
         if lang:
             sentences = self.dataset[lang][split]["sentences"]
             labels = self.dataset[lang][split]["labels"]
+        elif compute_overall:
+            sentences = []
+            labels = []
+            for lang in self.metadata.eval_langs:
+                sentences.extend(self.dataset[lang][split]["sentences"])
+                labels.extend(self.dataset[lang][split]["labels"])
         else:
             sentences = self.dataset[split]["sentences"]
             labels = self.dataset[split]["labels"]

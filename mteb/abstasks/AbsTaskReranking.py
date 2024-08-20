@@ -8,13 +8,14 @@ from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.load_results.mteb_results import ScoresDict
 
 from ..evaluation.evaluators import RerankingEvaluator
-from .AbsTask import DescriptiveStatistics, AbsTask
+from .AbsTask import AbsTask, DescriptiveStatistics
 
 
 class RerankingDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Reranking
 
     Attributes:
+        num_samples: number of samples in the dataset.
         num_positive: Number of positive examples
         num_negative: Number of negative examples
         avg_query_len: Average length of queries
@@ -22,6 +23,7 @@ class RerankingDescriptiveStatistics(DescriptiveStatistics):
         avg_negative_len: Average length of negative examples
     """
 
+    num_samples: int
     num_positive: int
     num_negative: int
     avg_query_len: float
@@ -64,12 +66,20 @@ class AbsTaskReranking(AbsTask):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None
+        self, split: str, lang: str | None = None, compute_overall: bool = False
     ) -> RerankingDescriptiveStatistics:
         if lang:
             query = self.dataset[lang][split]["query"]
             positive = self.dataset[lang][split]["positive"]
             negative = self.dataset[lang][split]["negative"]
+        elif compute_overall:
+            query = []
+            positive = []
+            negative = []
+            for lang in self.metadata.eval_langs:
+                query.extend(self.dataset[lang][split]["query"])
+                positive.extend(self.dataset[lang][split]["positive"])
+                negative.extend(self.dataset[lang][split]["negative"])
         else:
             query = self.dataset[split]["query"]
             positive = self.dataset[split]["positive"]

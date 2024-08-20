@@ -15,7 +15,7 @@ from ..evaluation.evaluators import (
     logRegClassificationEvaluator,
 )
 from ..load_results.mteb_results import HFSubset, ScoresDict
-from .AbsTask import DescriptiveStatistics, AbsTask
+from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -24,11 +24,13 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Classification
 
     Attributes:
+      num_samples: number of samples in the dataset.
       average_text_length: Average length of text
       unique_labels: Number of unique labels
       labels: dict of label frequencies
     """
 
+    num_samples: int
     average_text_length: float
     unique_labels: int
     labels: dict[str, dict[str, int]]
@@ -199,18 +201,25 @@ class AbsTaskClassification(AbsTask):
 
     def calculate_metadata_metrics(
         self,
-    ) -> dict[str, ClassificationDescriptiveStatistics | dict[str, ClassificationDescriptiveStatistics]]:
+    ) -> dict[
+        str,
+        ClassificationDescriptiveStatistics
+        | dict[str, ClassificationDescriptiveStatistics],
+    ]:
         self.load_data()
 
         all_details = {}
         pbar_split = tqdm.tqdm(
-            self.metadata_dict["eval_splits"] + ["train"], desc="Processing Splits..."
+            self.metadata.eval_splits + ["train"], desc="Processing Splits..."
         )
         for split in pbar_split:
             pbar_split.set_postfix_str(f"Split: {split}")
             print(f"Processing metadata for split {split}")
             if self.is_multilingual:
-                all_details[split] = {}
+                all_details[split] = self._calculate_metrics_from_split(
+                    split, compute_overall=True
+                )
+                all_details[split]["hf_subset_descriptive_stats"] = {}
 
                 pbar_lang = tqdm.tqdm(
                     self.metadata.eval_langs, desc="Processing Languages..."
@@ -227,11 +236,17 @@ class AbsTaskClassification(AbsTask):
         return all_details
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None
+        self, split: str, lang: str | None = None, compute_overall: bool = False
     ) -> ClassificationDescriptiveStatistics:
         if lang:
             text = self.dataset[lang][split]["text"]
             label = self.dataset[lang][split]["label"]
+        elif compute_overall:
+            text = []
+            label = []
+            for lang in self.metadata.eval_langs:
+                text.extend(self.dataset[lang][split]["text"])
+                label.extend(self.dataset[lang][split]["label"])
         else:
             text = self.dataset[split]["text"]
             label = self.dataset[split]["label"]

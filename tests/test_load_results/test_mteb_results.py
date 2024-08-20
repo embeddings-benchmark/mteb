@@ -46,7 +46,7 @@ class DummyTask(AbsTask):
         pass
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None
+        self, split: str, lang: str | None = None, compute_overall=False
     ) -> dict[str, float]:
         pass
 

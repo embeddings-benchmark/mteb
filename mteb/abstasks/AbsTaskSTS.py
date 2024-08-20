@@ -5,7 +5,7 @@ from typing import Any
 
 from ..evaluation.evaluators import STSEvaluator
 from ..load_results.mteb_results import ScoresDict
-from .AbsTask import DescriptiveStatistics, AbsTask
+from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -14,11 +14,13 @@ class STSDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for STS
 
     Attributes:
+        num_samples: number of samples in the dataset.
         average_sentence1_len: Average length of sentence1
         average_sentence2_len: Average length of sentence2
         avg_score: Average score
     """
 
+    num_samples: int
     average_sentence1_len: float
     average_sentence2_len: float
     avg_score: float
@@ -67,16 +69,20 @@ class AbsTaskSTS(AbsTask):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None
+        self, split: str, lang: str | None = None, compute_overall: bool = False
     ) -> STSDescriptiveStatistics:
-        """sentence1: str
-        sentence2: str
-        score: float
-        """
         if lang:
             sentence1 = self.dataset[lang][split]["sentence1"]
             sentence2 = self.dataset[lang][split]["sentence2"]
             score = self.dataset[lang][split]["score"]
+        elif compute_overall:
+            sentence1 = []
+            sentence2 = []
+            score = []
+            for lang in self.metadata.eval_langs:
+                sentence1.extend(self.dataset[lang][split]["sentence1"])
+                sentence2.extend(self.dataset[lang][split]["sentence2"])
+                score.extend(self.dataset[lang][split]["score"])
         else:
             sentence1 = self.dataset[split]["sentence1"]
             sentence2 = self.dataset[split]["sentence2"]

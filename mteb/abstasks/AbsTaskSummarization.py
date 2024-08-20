@@ -9,7 +9,7 @@ from mteb.encoder_interface import Encoder
 from mteb.load_results.mteb_results import ScoresDict
 
 from ..evaluation.evaluators import SummarizationEvaluator
-from .AbsTask import DescriptiveStatistics, AbsTask
+from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -18,12 +18,14 @@ class SummarizationDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Summarization
 
     Attributes:
+        num_samples: number of samples in the dataset.
         avg_text_len: Average length of text
         avg_human_summaries_len: Average length of human summaries
         avg_machine_summaries_len: Average length of machine summaries
         avg_relevance: Average relevance score
     """
 
+    num_samples: int
     avg_text_len: float
     avg_human_summaries_len: float
     avg_machine_summaries_len: float
@@ -74,13 +76,24 @@ class AbsTaskSummarization(AbsTask):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None
+        self, split: str, lang: str | None = None, compute_overall: bool = False
     ) -> SummarizationDescriptiveStatistics:
         if lang:
             text = self.dataset[lang][split]["text"]
             human_summaries = self.dataset[lang][split]["human_summaries"]
             machine_summaries = self.dataset[lang][split]["machine_summaries"]
             relevance = self.dataset[lang][split]["relevance"]
+        elif compute_overall:
+            text = []
+            human_summaries = []
+            machine_summaries = []
+            relevance = []
+
+            for lang in self.metadata.eval_langs:
+                text.extend(self.dataset[lang][split]["text"])
+                human_summaries.extend(self.dataset[lang][split]["human_summaries"])
+                machine_summaries.extend(self.dataset[lang][split]["machine_summaries"])
+                relevance.extend(self.dataset[lang][split]["relevance"])
         else:
             text = self.dataset[split]["text"]
             human_summaries = self.dataset[split]["human_summaries"]
