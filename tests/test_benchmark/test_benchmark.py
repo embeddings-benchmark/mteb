@@ -11,23 +11,41 @@ from sentence_transformers import SentenceTransformer
 import mteb
 from mteb.benchmarks import Benchmark
 
-from .mock_models import MockNumpyEncoder, MockTorchbf16Encoder, MockTorchEncoder
+from .mock_models import (
+    MockBGEWrapper,
+    MockE5Wrapper,
+    MockMxbaiWrapper,
+    MockNumpyEncoder,
+    MockTorchbf16Encoder,
+    MockTorchEncoder,
+)
 from .task_grid import MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 
 
-@pytest.mark.parametrize("tasks", [MOCK_TASK_TEST_GRID[:2]])
+@pytest.mark.parametrize("tasks", [MOCK_TASK_TEST_GRID])
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
-def test_mulitple_mteb_tasks(tasks: list[mteb.AbsTask], model: mteb.Encoder):
+def test_mulitple_mteb_tasks(
+    tasks: list[mteb.AbsTask], model: mteb.Encoder, monkeypatch
+):
     """Test that multiple tasks can be run"""
     eval = mteb.MTEB(tasks=tasks)
-    eval.run(model, output_folder="tests/results", overwrite_results=True)
+    output_folder = "tests/results"
+    eval.run(model, output_folder=output_folder, overwrite_results=True)
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
 @pytest.mark.parametrize(
-    "model", [MockNumpyEncoder(), MockTorchEncoder(), MockTorchbf16Encoder()]
+    "model",
+    [
+        MockNumpyEncoder(),
+        MockTorchEncoder(),
+        MockTorchbf16Encoder(),
+        MockBGEWrapper(),
+        MockE5Wrapper(),
+        MockMxbaiWrapper(),
+    ],
 )
 def test_benchmark_encoders_on_task(task: str | mteb.AbsTask, model: mteb.Encoder):
     """Test that a task can be fetched and run using a variety of encoders"""

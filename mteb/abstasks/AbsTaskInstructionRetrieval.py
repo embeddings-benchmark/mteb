@@ -16,7 +16,7 @@ from ..evaluation.evaluators import utils
 from ..evaluation.evaluators.InstructionRetrievalEvaluator import (
     InstructionRetrievalEvaluator,
 )
-from .AbsTask import AbsTask
+from .AbsTask import AbsTask, DescriptiveStatistics
 from .AbsTaskRetrieval import HFDataLoader
 
 logger = logging.getLogger(__name__)
@@ -216,6 +216,30 @@ class HFDataLoaderInstructions(HFDataLoader):
             self.changed_qrels = qrels_ds
         else:
             self.og_qrels = qrels_ds
+
+
+class InstructionRetrievalDescriptiveStatistics(DescriptiveStatistics):
+    """Descriptive statistics for Instruction Retrieval tasks
+
+    Attributes:
+        num_queries: Number of queries
+        num_docs: Number of documents
+        average_document_length: Average length of documents
+        average_query_length: Average length of queries
+        average_instruction_length: Average length of instructions
+        average_changed_instruction_length: Average length of changed instructions
+        average_relevant_docs_per_query: Average number of relevant docs per query
+        average_top_ranked_per_query: Average number of top ranked docs per query
+    """
+
+    num_queries: int
+    num_docs: int
+    average_document_length: float
+    average_query_length: float
+    average_instruction_length: float
+    average_changed_instruction_length: float
+    average_relevant_docs_per_query: float
+    average_top_ranked_per_query: float
 
 
 class AbsTaskInstructionRetrieval(AbsTask):
@@ -580,56 +604,73 @@ class AbsTaskInstructionRetrieval(AbsTask):
 
         return newly_irrelevant_qrels
 
-    def calculate_metadata_metrics(self) -> None:
-        self.load_data()
+    def _calculate_metrics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ) -> InstructionRetrievalDescriptiveStatistics:
+        if hf_subset:
+            corpus = self.corpus[hf_subset][split]
+            queries = self.queries[hf_subset][split]
+            relevant_docs = self.og_relevant_docs[hf_subset][split]
+            og_instructions = self.og_instructions[hf_subset][split]
+            changed_instructions = self.changed_instructions[hf_subset][split]
+            top_ranked = self.top_ranked[hf_subset][split]
+        elif compute_overall:
+            corpus = []
+            queries = []
+            relevant_docs = []
+            og_instructions = []
+            changed_instructions = []
+            top_ranked = []
+            for hf_subset in self.metadata.eval_langs:
+                corpus.extend(self.corpus[hf_subset][split])
+                queries.extend(self.queries[hf_subset][split])
+                relevant_docs.extend(self.og_relevant_docs[hf_subset][split])
+                og_instructions.extend(self.og_instructions[hf_subset][split])
+                changed_instructions.extend(self.changed_instructions[hf_subset][split])
+                top_ranked.extend(self.top_ranked[hf_subset][split])
+        else:
+            corpus = self.corpus[split]
+            queries = self.queries[split]
+            relevant_docs = self.og_relevant_docs[split]
+            og_instructions = self.og_instructions[split]
+            changed_instructions = self.changed_instructions[split]
+            top_ranked = self.top_ranked[split]
 
-        for split in self.metadata_dict["eval_splits"]:
-            if self.is_multilingual:
-                for lang in self.og_relevant_docs.keys():
-                    process_language(
-                        self.og_relevant_docs[lang][split],
-                        self.queries[lang][split],
-                        self.corpus[lang][split],
-                        self.changed_instructions[lang][split],
-                        lang,
-                    )
-            else:
-                process_language(
-                    self.og_relevant_docs[split],
-                    self.queries[split],
-                    self.corpus[split],
-                    self.changed_instructions[split],
-                )
-
-
-def process_language(relevant_docs, queries, corpus, instructions, lang=None):
-    total_length, num_pairs = calculate_length_and_count(
-        relevant_docs, queries, corpus, instructions
-    )
-    average_length = total_length / num_pairs if num_pairs else 0
-    num_documents = len(queries) + len(corpus)
-
-    language_description = f" for language {lang}" if lang else ""
-    print(
-        f"Average character length for changed{language_description} is {average_length}"
-    )
-    print(
-        f"Number of queries and documents{language_description} is {num_documents} (repeated 2x)"
-    )
-
-
-def calculate_length_and_count(relevant_docs, queries, corpus, instructions):
-    total_length = 0
-    num_pairs = 0
-    for query_id, docs in relevant_docs.items():
-        query = queries[query_id]
-        query += " " + instructions[query]
-        for doc_id in docs:
-            # not relevant
-            if docs[doc_id] == 0:
-                continue
-            doc = corpus[doc_id]
-            doc_text = doc["title"] + doc["text"]
-            total_length += len(query) + len(doc_text)
-            num_pairs += 1
-    return total_length, num_pairs
+        total_corpus_len = sum(
+            [len(doc.get("title", "")) + len(doc["text"]) for doc in corpus.values()]
+        )
+        total_queries_len = sum([len(query) for query in queries.values()])
+        total_instructions_len = sum(
+            [len(instruction) for instruction in og_instructions.values()]
+        )
+        total_changed_instructions_len = sum(
+            [len(instruction) for instruction in changed_instructions.values()]
+        )
+        num_qrels_non_zero = sum(
+            sum(1 for doc_id in docs if docs[doc_id] != 0)
+            for docs in relevant_docs.values()
+        )
+        qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if len(queries) else 0
+        top_ranked_per_query = (
+            sum(len(docs) for docs in top_ranked.values()) / len(queries)
+            if len(queries)
+            else 0
+        )
+        return InstructionRetrievalDescriptiveStatistics(
+            num_docs=len(corpus),
+            num_queries=len(queries),
+            average_document_length=(
+                total_corpus_len / len(corpus) if len(corpus) else 0
+            ),
+            average_query_length=(
+                total_queries_len / len(queries) if len(queries) else 0
+            ),
+            average_instruction_length=(
+                total_instructions_len / len(queries) if len(queries) else 0
+            ),
+            average_changed_instruction_length=(
+                total_changed_instructions_len / len(queries) if len(queries) else 0
+            ),
+            average_relevant_docs_per_query=qrels_per_doc,
+            average_top_ranked_per_query=top_ranked_per_query,
+        )
