@@ -205,10 +205,10 @@ class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
         descriptive_stats={
             "n_samples": {_EVAL_SPLIT: 103500},
             "test": {
-                "average_document_length": 590.5348360655738,
-                "average_query_length": 70.52666666666667,
-                "num_documents": 488,
-                "num_queries": 900,
+                "average_document_length": 487.3975028339728,
+                "average_query_length": 74.49551684802204,
+                "num_documents": 183488,
+                "num_queries": 338378,
                 "average_relevant_docs_per_query": 1.0,
                 "hf_subset_descriptive_stats": {
                     "acm_Arab-acm_Arab": {

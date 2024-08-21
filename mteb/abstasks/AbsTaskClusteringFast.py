@@ -238,7 +238,7 @@ class AbsTaskClusteringFast(AbsTask):
             average_labels_per_text=len(total_labels) / len(sentences),
             unique_labels=len(label_counter),
             labels={
-                label: {
+                str(label): {
                     "count": value,
                 }
                 for label, value in label_counter.items()

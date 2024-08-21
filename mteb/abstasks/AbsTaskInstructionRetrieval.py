@@ -615,19 +615,29 @@ class AbsTaskInstructionRetrieval(AbsTask):
             changed_instructions = self.changed_instructions[hf_subset][split]
             top_ranked = self.top_ranked[hf_subset][split]
         elif compute_overall:
-            corpus = []
-            queries = []
-            relevant_docs = []
-            og_instructions = []
-            changed_instructions = []
-            top_ranked = []
+            corpus = {}
+            queries = {}
+            relevant_docs = {}
+            og_instructions = {}
+            changed_instructions = {}
+            top_ranked = {}
             for hf_subset in self.metadata.eval_langs:
-                corpus.extend(self.corpus[hf_subset][split])
-                queries.extend(self.queries[hf_subset][split])
-                relevant_docs.extend(self.og_relevant_docs[hf_subset][split])
-                og_instructions.extend(self.og_instructions[hf_subset][split])
-                changed_instructions.extend(self.changed_instructions[hf_subset][split])
-                top_ranked.extend(self.top_ranked[hf_subset][split])
+                corpus.update(process_docs(self.corpus, hf_subset, split))
+                queries.update(process_docs(self.queries, hf_subset, split))
+                relevant_docs.update(
+                    process_relevant_docs(self.og_relevant_docs, hf_subset, split)
+                )
+                og_instructions.update(
+                    process_docs(
+                        self.og_instructions,
+                        hf_subset,
+                        split,
+                    )
+                )
+                changed_instructions.update(
+                    process_docs(self.changed_instructions, hf_subset, split)
+                )
+                top_ranked.update(process_top_ranked(self.top_ranked, hf_subset, split))
         else:
             corpus = self.corpus[split]
             queries = self.queries[split]
@@ -674,3 +684,37 @@ class AbsTaskInstructionRetrieval(AbsTask):
             average_relevant_docs_per_query=qrels_per_doc,
             average_top_ranked_per_query=top_ranked_per_query,
         )
+
+
+def process_docs(
+    collection: dict[str, dict[str, dict[str, str]]], hf_subset: str, split: str
+) -> dict[str, str]:
+    """Collections can contain overlapping ids in different splits. Prepend split to avoid this"""
+    return {
+        f"{split}_{hf_subset}_{k}": v for k, v in collection[hf_subset][split].items()
+    }
+
+
+def process_relevant_docs(
+    collection: dict[str, dict[str, dict[str, dict[str, int]]]],
+    hf_subset: str,
+    split: str,
+) -> dict[str, dict[str, int]]:
+    """Collections can contain overlapping ids in different splits. Prepend split to avoid this"""
+    return_collection = {}
+    for query_id, relevant in collection[hf_subset][split].items():
+        return_collection[f"{split}_{hf_subset}_{query_id}"] = {
+            f"{split}_{hf_subset}_{doc_id}": value for doc_id, value in relevant.items()
+        }
+    return return_collection
+
+
+def process_top_ranked(
+    collection: dict[str, dict[str, dict[str, list[str]]]], hf_subset: str, split: str
+) -> dict[str, list[str]]:
+    return_collection = {}
+    for query_id, docs_id in collection[hf_subset][split].items():
+        return_collection[f"{split}_{hf_subset}_{query_id}"] = [
+            f"{split}_{hf_subset}_{doc_id}" for doc_id in docs_id
+        ]
+    return return_collection

@@ -112,5 +112,7 @@ class AbsTaskPairClassification(AbsTask):
             avg_sentence1_len=total_sentence1_len / len(sentence1),
             avg_sentence2_len=total_sentence2_len / len(sentence2),
             unique_labels=len(set(labels)),
-            labels={label: {"count": count} for label, count in label_count.items()},
+            labels={
+                str(label): {"count": count} for label, count in label_count.items()
+            },
         )
