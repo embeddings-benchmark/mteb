@@ -80,7 +80,7 @@ MOCK_TASK_TEST_GRID = [
     MockMultilingualClusteringFastTask(),
     MockPairClassificationTask(),
     MockMultilingualPairClassificationTask(),
-    MockRerankingTask(),  # 11
+    MockRerankingTask(),
     MockMultilingualRerankingTask(),
     MockRetrievalTask(),
     MockMultilingualRetrievalTask(),
