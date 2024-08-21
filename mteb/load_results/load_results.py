@@ -145,12 +145,12 @@ def load_results(
         models_to_keep = None
 
     if tasks is not None:
-        task_names = set()
+        task_names = {}
         for task in tasks:
             if isinstance(task, AbsTask):
-                task_names.add(task.metadata.name)
+                task_names[task.metadata.name] = task
             else:
-                task_names.add(task)
+                task_names[task] = None
 
     results = defaultdict(dict)
 
@@ -184,7 +184,7 @@ def load_results(
                 filtered_results = []
                 for r in _results:
                     try:
-                        r.validate_and_filter_scores()
+                        r.validate_and_filter_scores(task_names[r.task_name])
                         filtered_results.append(r)
                     except Exception as e:
                         logger.warning(

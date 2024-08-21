@@ -446,13 +446,18 @@ class MTEBResults(BaseModel):
     def __repr__(self) -> str:
         return f"MTEBResults(task_name={self.task_name}, scores=...)"
 
-    def validate_and_filter_scores(self):
+    def validate_and_filter_scores(self, task: AbsTask | None = None) -> None:
         """This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
         Additionally it also ensure that all of the splits required as well as the languages are present in the scores.
+
+        Args:
+            task: The task to validate the scores against. E.g. if the task supplied is limited to certain splits and languages,
+                the scores will be filtered to only include those splits and languages. If None it will attempt to get the task from the task_name.
         """
         from mteb.overview import get_task
 
-        task = get_task(self.task_name)
+        if task is None:
+            task = get_task(self.task_name)
         splits = task.metadata.eval_splits
         hf_subsets = set(task.metadata.hf_subsets_to_langscripts)
 

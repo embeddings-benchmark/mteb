@@ -67,7 +67,7 @@ def _load_mintaka_data(
 class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MintakaRetrieval",
-        description="MintakaRetrieval",
+        description="We introduce Mintaka, a complex, natural, and multilingual dataset designed for experimenting with end-to-end question-answering models. Mintaka is composed of 20,000 question-answer pairs collected in English, annotated with Wikidata entities, and translated into Arabic, French, German, Hindi, Italian, Japanese, Portuguese, and Spanish for a total of 180,000 samples. Mintaka includes 8 types of complex questions, including superlative, intersection, and multi-hop questions, which were naturally elicited from crowd workers. ",
         reference=None,
         dataset={
             "path": "jinaai/mintakaqa",
@@ -80,13 +80,13 @@ class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGS,
         main_score="ndcg_at_10",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("2022-01-01", "2022-01-01"),  # best guess: based on the date of the paper
+        domains=["Encyclopaedic", "Written"],
+        task_subtypes=["Question answering"],
+        license="CC-BY-4.0",
+        annotations_creators="derived",  # best guess
+        dialect=[],
+        sample_creation="human-translated",
         bibtex_citation="""@inproceedings{sen-etal-2022-mintaka,
     title = "Mintaka: A Complex, Natural, and Multilingual Dataset for End-to-End Question Answering",
     author = "Sen, Priyanka  and

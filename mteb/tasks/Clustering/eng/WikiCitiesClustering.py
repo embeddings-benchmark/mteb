@@ -21,7 +21,7 @@ class WikiCitiesClustering(AbsTaskClustering):
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=("2000-01-01", "2021-12-31"),  # very rough estimate
-        domains=None,
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=[],
         license="cc-by-sa-4.0",
         annotations_creators="derived",

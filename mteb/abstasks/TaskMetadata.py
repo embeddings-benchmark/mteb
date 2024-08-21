@@ -311,3 +311,13 @@ class TaskMetadata(BaseModel):
         if isinstance(self.eval_langs, dict):
             return self.eval_langs
         return {"default": self.eval_langs}  # type: ignore
+
+    @property
+    def intext_citation(self, include_cite: bool = True) -> str:
+        """Create an in-text citation for the dataset."""
+        cite = ""
+        if self.bibtex_citation:
+            cite = f"{self.bibtex_citation.split(',')[0].split('{')[1]}"
+        if include_cite:
+            return f"\\cite{{{cite}}}"
+        return cite
