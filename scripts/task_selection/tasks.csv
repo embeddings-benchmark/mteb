@@ -1,0 +1,114 @@
+,Name,Type,Languages,Domains,License,Description
+0,BornholmBitextMining,BitextMining,{'dan'},"['Web', 'Social', 'Fiction', 'Written']",CC-BY-4.0,"Danish Bornholmsk Parallel Corpus. Bornholmsk is a Danish dialect spoken on the island of Bornholm, Denmark. Historically it is a part of east Danish which was also spoken in Scania and Halland, Sweden."
+1,BibleNLPBitextMining,BitextMining,"{'ces', 'ita', 'lit', 'spa', 'swe', 'dan', 'fra', 'eng', 'hrv', 'pol', 'nld', 'hun', 'por', 'ron', 'deu'}","['Religious', 'Written']",CC-BY-SA-4.0,"Partial Bible translations in 829 languages, aligned by verse."
+2,BUCC.v2,BitextMining,"{'fra', 'eng', 'deu'}",['Written'],Unknown,BUCC bitext mining dataset
+3,FloresBitextMining,BitextMining,"{'ell', 'dan', 'fin', 'nob', 'nld', 'ita', 'spa', 'swe', 'fra', 'slv', 'est', 'eng', 'bul', 'hrv', 'pol', 'slk', 'nno', 'por', 'deu', 'ces', 'mlt', 'ron', 'gle', 'isl', 'lit', 'hun', 'eus'}","['Non-fiction', 'Encyclopaedic', 'Written']",CC BY-SA 4.0,FLORES is a benchmark dataset for machine translation between English and low-resource languages.
+4,IWSLT2017BitextMining,BitextMining,"{'ita', 'fra', 'eng', 'nld', 'ron', 'deu'}","['Non-fiction', 'Fiction', 'Written']",CC-BY-NC-ND-4.0,"The IWSLT 2017 Multilingual Task addresses text translation, including zero-shot translation, with a single MT system across all directions including English, German, Dutch, Italian and Romanian."
+5,NorwegianCourtsBitextMining,BitextMining,"{'nno', 'nob'}","['Legal', 'Written']",CC BY 4.0,"Nynorsk and Bokmål parallel corpus from Norwegian courts. Norwegian courts have two standardised written languages. Bokmål is a variant closer to Danish, while Nynorsk was created to resemble regional dialects of Norwegian."
+6,NTREXBitextMining,BitextMining,"{'ell', 'dan', 'fin', 'nob', 'nld', 'ita', 'spa', 'swe', 'fra', 'slv', 'eng', 'bul', 'hrv', 'pol', 'slk', 'nno', 'por', 'deu', 'ces', 'mlt', 'ron', 'gle', 'isl', 'lit', 'lav', 'hun', 'eus'}","['News', 'Written']",CC-BY-SA-4.0,"NTREX is a News Test References dataset for Machine Translation Evaluation, covering translation from English into 128 languages. We select language pairs according to the M2M-100 language grouping strategy, resulting in 1916 directions."
+7,Tatoeba,BitextMining,"{'ell', 'dan', 'fin', 'nob', 'nld', 'ita', 'spa', 'swe', 'fra', 'slv', 'est', 'eng', 'bul', 'hrv', 'pol', 'slk', 'nno', 'por', 'deu', 'ces', 'ron', 'gle', 'isl', 'lit', 'hun', 'eus'}",['Written'],CC BY 2.0,"1,000 English-aligned sentence pairs for each language based on the Tatoeba corpus"
+8,SRNCorpusBitextMining,BitextMining,{'nld'},"['Social', 'Web', 'Written']",CC-BY-SA-4.0,SRNCorpus is a machine translation corpus for creole language Sranantongo and Dutch.
+9,VieMedEVBitextMining,BitextMining,{'eng'},"['Medical', 'Written']",cc-by-nc,A high-quality Vietnamese-English parallel data from the medical domain for machine translation
+10,BulgarianStoreReviewSentimentClassfication,Classification,{'bul'},"['Reviews', 'Written']",cc-by-4.0,Bulgarian online store review dataset for sentiment classification.
+11,CzechProductReviewSentimentClassification,Classification,{'ces'},"['Reviews', 'Written']",CC BY-NC-SA 4.0,"User reviews of products on Czech e-shop Mall.cz with 3 sentiment classes (positive, neutral, negative)"
+12,GreekLegalCodeClassification,Classification,{'ell'},"['Legal', 'Written']",cc-by-4.0,Greek Legal Code Dataset for Classification. (subset = chapter)
+13,DBpediaClassification,Classification,{'eng'},"['Encyclopaedic', 'Written']",cc-by-sa-3.0,"DBpedia14 is a dataset of English texts from Wikipedia articles, categorized into 14 non-overlapping classes based on their DBpedia ontology."
+14,FinancialPhrasebankClassification,Classification,{'eng'},"['News', 'Written']",cc-by-nc-sa-3.0,"Polar sentiment dataset of sentences from financial news, categorized by sentiment into positive, negative, or neutral."
+15,PoemSentimentClassification,Classification,{'eng'},"['Reviews', 'Written']",CC-BY-4.0,Poem Sentiment is a sentiment dataset of poem verses from Project Gutenberg.
+16,ToxicConversationsClassification,Classification,{'eng'},"['Social', 'Written']",CC BY 4.0,Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not.
+17,EstonianValenceClassification,Classification,{'est'},"['News', 'Written']",CC BY 4.0,Dataset containing annotated Estonian news data from the Postimees and Õhtuleht newspapers.
+18,ItaCaseholdClassification,Classification,{'ita'},"['Legal', 'Government', 'Written']",Apache 2.0,An Italian Dataset consisting of 1101 pairs of judgments and their official holdings between the years 2019 and 2022 from the archives of Italian Administrative Justice categorized with 64 subjects.
+19,AmazonCounterfactualClassification,Classification,"{'eng', 'deu'}","['Reviews', 'Written']",CC BY 4.0,A collection of Amazon customer reviews annotated for counterfactual detection pair classification.
+20,AmazonReviewsClassification,Classification,"{'fra', 'eng', 'spa', 'deu'}","['Reviews', 'Written']",https://docs.opendata.aws/amazon-reviews-ml/license.txt,A collection of Amazon reviews specifically designed to aid research in multilingual text classification.
+21,CataloniaTweetClassification,Classification,{'spa'},"['Social', 'Government', 'Written']",cc-by-sa-4.0,"This dataset contains two corpora in Spanish and Catalan that consist of annotated Twitter
+        messages for automatic stance detection. The data was collected over 12 days during February and March
+        of 2019 from tweets posted in Barcelona, and during September of 2018 from tweets posted in the town of Terrassa, Catalonia.
+        Each corpus is annotated with three classes: AGAINST, FAVOR and NEUTRAL, which express the stance
+        towards the target - independence of Catalonia.
+        "
+22,MassiveIntentClassification,Classification,"{'ita', 'isl', 'spa', 'ell', 'swe', 'dan', 'fin', 'nob', 'fra', 'slv', 'eng', 'lav', 'pol', 'nld', 'hun', 'por', 'ron', 'deu'}",['Spoken'],Apache 2.0,MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages
+23,MassiveScenarioClassification,Classification,"{'ita', 'isl', 'spa', 'ell', 'swe', 'dan', 'fin', 'nob', 'fra', 'slv', 'eng', 'lav', 'pol', 'nld', 'hun', 'por', 'ron', 'deu'}",['Spoken'],Apache 2.0,MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages
+24,MTOPDomainClassification,Classification,"{'fra', 'eng', 'spa', 'deu'}","['Spoken', 'Spoken']",Not specified,MTOP: Multilingual Task-Oriented Semantic Parsing
+25,MTOPIntentClassification,Classification,"{'fra', 'eng', 'spa', 'deu'}","['Spoken', 'Spoken']",Not specified,MTOP: Multilingual Task-Oriented Semantic Parsing
+26,MultiHateClassification,Classification,"{'ita', 'spa', 'fra', 'eng', 'pol', 'nld', 'por', 'deu'}","['Constructed', 'Written']",cc-by-4.0,"Hate speech detection dataset with binary
+                       (hateful vs non-hateful) labels. Includes 25+ distinct types of hate
+                       and challenging non-hate, and 11 languages.
+                     "
+27,NordicLangClassification,Classification,"{'isl', 'swe', 'dan', 'nob', 'nno'}",['Encyclopaedic'],cc-by-sa-3.0,A dataset for Nordic language identification.
+28,ScalaClassification,Classification,"{'swe', 'dan', 'nob', 'nno'}","['Fiction', 'News', 'Non-fiction', 'Blog', 'Spoken', 'Web', 'Written']",CC BY-SA 4.0,"ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks. 
+        Published as part of 'ScandEval: A Benchmark for Scandinavian Natural Language Processing'"
+29,SwissJudgementClassification,Classification,"{'fra', 'ita', 'deu'}","['Legal', 'Written']",CC-BY-4.0,"Multilingual, diachronic dataset of Swiss Federal Supreme Court cases annotated with the respective binarized judgment outcome (approval/dismissal)"
+30,TweetSentimentClassification,Classification,"{'ita', 'spa', 'fra', 'eng', 'por', 'deu'}","['Social', 'Written']",cc-by-3.0,A multilingual Sentiment Analysis dataset consisting of tweets in 8 different languages.
+31,PolEmo2.0-OUT,Classification,{'pol'},"['Written', 'Social']",cc-by-sa-4.0,"A collection of Polish online reviews from four domains: medicine, hotels, products and school. The PolEmo2.0-OUT task is to predict the sentiment of out-of-domain (products and school) reviews using models train on reviews from medicine and hotels domains."
+32,CSFDSKMovieReviewSentimentClassification,Classification,{'slk'},"['Reviews', 'Written']",CC-BY-SA-4.0,The dataset contains 30k user reviews from csfd.cz in Slovak.
+33,DalajClassification,Classification,{'swe'},"['Non-fiction', 'Written']",CC-BY-4.0,A Swedish dataset for linguistic acceptability. Available as a part of Superlim.
+34,WikiCitiesClustering,Clustering,{'eng'},,cc-by-sa-4.0,"Clustering of Wikipedia articles of cities by country from https://huggingface.co/datasets/wikipedia. Test set includes 126 countries, and a total of 3531 cities."
+35,RomaniBibleClustering,Clustering,{'rom'},"['Religious', 'Written']",MIT,Clustering verses from the Bible in Kalderash Romani by book.
+36,BigPatentClustering.v2,Clustering,{'eng'},"['Legal', 'Written']",cc-by-4.0,"Clustering of documents from the Big Patent dataset. Test set only includes documentsbelonging to a single category, with a total of 9 categories."
+37,StackExchangeClusteringP2P.v2,Clustering,{'eng'},"['Web', 'Written']",Not specified,Clustering of title+body from stackexchange. Clustering of 5 sets of 10k paragraphs and 5 sets of 5k paragraphs.
+38,AlloProfClusteringS2S.v2,Clustering,{'fra'},"['Encyclopaedic', 'Written']",mit,Clustering of document titles from Allo Prof dataset. Clustering of 10 sets on the document topic.
+39,HALClusteringS2S.v2,Clustering,{'fra'},"['Academic', 'Written']",Apache-2.0,Clustering of titles from HAL (https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s)
+40,MLSUMClusteringP2P.v2,Clustering,"{'fra', 'spa', 'deu'}","['News', 'Written']",Not specified,Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.
+41,MLSUMClusteringS2S.v2,Clustering,"{'fra', 'spa', 'deu'}","['News', 'Written']",Not specified,Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.
+42,SIB200ClusteringS2S,Clustering,"{'ell', 'dan', 'fin', 'nob', 'nld', 'ita', 'spa', 'swe', 'fra', 'slv', 'est', 'eng', 'bul', 'hrv', 'pol', 'slk', 'nno', 'por', 'deu', 'ces', 'mlt', 'ron', 'gle', 'isl', 'lit', 'hun', 'eus'}","['News', 'Written']",cc-by-sa-4.0,"SIB-200 is the largest publicly available topic classification
+        dataset based on Flores-200 covering 205 languages and dialects annotated. The dataset is
+        annotated in English for the topics,  science/technology, travel, politics, sports,
+        health, entertainment, and geography. The labels are then transferred to the other languages
+        in Flores-200 which are machine-translated.
+        "
+43,WikiClusteringP2P.v2,Clustering,"{'ces', 'dan', 'lav', 'eus', 'mlt'}","['Encyclopaedic', 'Written']",cc-by-sa-3.0,"Clustering of wikipedia articles inspired by BlubrbsClusteringP2P. Labels are taken from top-level categories of the respective languages (e.g., https://lv.wikipedia.org/wiki/Kategorija:Pamatkategorijas)."
+44,CodeTransOceanDL,Retrieval,{'eng'},"['Programming', 'Written']",Apache-2.0,The dataset is a collection of code snippets and their corresponding natural language queries. The task is to retrieve the most relevant code snippet
+45,TwitterHjerneRetrieval,Retrieval,{'dan'},"['Social', 'Written']",CC BY 4.0,Danish question asked on Twitter with the Hashtag #Twitterhjerne ('Twitter brain') and their corresponding answer.
+46,ArguAna,Retrieval,{'eng'},"['Medical', 'Written']",cc-by-sa-4.0,NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval
+47,HagridRetrieval,Retrieval,{'eng'},"['Encyclopaedic', 'Written']",apache-2.0,HAGRID (Human-in-the-loop Attributable Generative Retrieval for Information-seeking Dataset)is a dataset for generative information-seeking scenarios. It consists of queriesalong with a set of manually labelled relevant passages
+48,LegalBenchCorporateLobbying,Retrieval,{'eng'},"['Legal', 'Written']",CC BY 4.0,The dataset includes bill titles and bill summaries related to corporate lobbying.
+49,LEMBPasskeyRetrieval,Retrieval,{'eng'},"['Fiction', 'Written']",Not specified,passkey subset of dwzhu/LongEmbed dataset.
+50,SCIDOCS,Retrieval,{'eng'},"['Academic', 'Written', 'Non-fiction']",cc-by-sa-4.0,"SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation."
+51,SpartQA,Retrieval,{'eng'},"['Encyclopaedic', 'Written']",MIT,Measuring the ability to retrieve the groundtruth answers to reasoning task queries on SpartQA.
+52,TempReasonL1,Retrieval,{'eng'},"['Encyclopaedic', 'Written']",CC BY-SA 3.0,Measuring the ability to retrieve the groundtruth answers to reasoning task queries on TempReason l1.
+53,WinoGrande,Retrieval,{'eng'},"['Encyclopaedic', 'Written']",CC BY,Measuring the ability to retrieve the groundtruth answers to reasoning task queries on winogrande.
+54,AlloprofRetrieval,Retrieval,{'fra'},"['Encyclopaedic', 'Written']",cc-by-nc-sa-4.0,"This dataset was provided by AlloProf, an organisation in Quebec, Canada offering resources and a help forum curated by a large number of teachers to students on all subjects taught from in primary and secondary school"
+55,BelebeleRetrieval,Retrieval,"{'ell', 'dan', 'fin', 'nob', 'nld', 'ita', 'spa', 'swe', 'fra', 'slv', 'est', 'eng', 'bul', 'hrv', 'pol', 'slk', 'por', 'deu', 'ces', 'mlt', 'ron', 'isl', 'lit', 'hun', 'eus'}","['Web', 'News', 'Written']",CC-BY-SA-4.0,Belebele is a multiple-choice machine reading comprehension (MRC) dataset spanning 122 language variants (including 115 distinct languages and their scripts)
+56,MintakaRetrieval,Retrieval,"{'ita', 'spa', 'fra', 'por', 'deu'}",,,MintakaRetrieval
+57,MLQARetrieval,Retrieval,"{'eng', 'spa', 'deu'}","['Encyclopaedic', 'Written']",cc-by-sa-3.0,"MLQA (MultiLingual Question Answering) is a benchmark dataset for evaluating cross-lingual question answering performance.
+        MLQA consists of over 5K extractive QA instances (12K in English) in SQuAD format in seven languages - English, Arabic,
+        German, Spanish, Hindi, Vietnamese and Simplified Chinese. MLQA is highly parallel, with QA instances parallel between
+        4 different languages on average."
+58,MultiLongDocRetrieval,Retrieval,"{'ita', 'spa', 'fra', 'eng', 'por', 'deu'}","['Encyclopaedic', 'Written', 'Web', 'Non-fiction', 'Fiction']",mit,"Multi Long Doc Retrieval (MLDR) 'is curated by the multilingual articles from Wikipedia, Wudao and mC4 (see Table 7), and NarrativeQA (Kocˇisky ́ et al., 2018; Gu ̈nther et al., 2023), which is only for English.' (Chen et al., 2024). 
+        It is constructed by sampling lengthy articles from Wikipedia, Wudao and mC4 datasets and randomly choose paragraphs from them. Then we use GPT-3.5 to generate questions based on these paragraphs. The generated question and the sampled article constitute a new text pair to the dataset."
+59,StatcanDialogueDatasetRetrieval,Retrieval,"{'fra', 'eng'}","['Government', 'Web', 'Written']",https://huggingface.co/datasets/McGill-NLP/statcan-dialogue-dataset-retrieval/blob/main/LICENSE.md,"A Dataset for Retrieving Data Tables through Conversations with Genuine Intents, available in English and French."
+60,WikipediaRetrievalMultilingual,Retrieval,"{'ces', 'ita', 'swe', 'dan', 'fin', 'bul', 'eng', 'nld', 'por', 'ron', 'deu'}","['Encyclopaedic', 'Written']",cc-by-sa-3.0,The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.
+61,XPQARetrieval,Retrieval,"{'ita', 'spa', 'fra', 'eng', 'pol', 'por', 'deu'}","['Reviews', 'Written']",CDLA-Sharing-1.0,XPQARetrieval
+62,XQuADRetrieval,Retrieval,"{'spa', 'ell', 'eng', 'ron', 'deu'}","['Web', 'Written']",CC BY-SA 4.0,XQuAD is a benchmark dataset for evaluating cross-lingual question answering performance. It is repurposed retrieving relevant context for each question.
+63,Core17InstructionRetrieval,InstructionRetrieval,{'eng'},"['News', 'Written']",MIT,Measuring retrieval instruction following ability on Core17 narratives.
+64,News21InstructionRetrieval,InstructionRetrieval,{'eng'},"['News', 'Written']",MIT,Measuring retrieval instruction following ability on News21 narratives.
+65,Robust04InstructionRetrieval,InstructionRetrieval,{'eng'},"['News', 'Written']",MIT,Measuring retrieval instruction following ability on Robust04 narratives.
+66,MalteseNewsClassification,MultilabelClassification,{'mlt'},"['Constructed', 'Written']",cc-by-nc-sa-4.0,"A multi-label topic classification dataset for Maltese News
+        Articles. The data was collected from the press_mt subset from Korpus
+        Malti v4.0. Article contents were cleaned to filter out JavaScript, CSS,
+        & repeated non-Maltese sub-headings. The labels are based on the category
+        field from this corpus. 
+        "
+67,MultiEURLEXMultilabelClassification,MultilabelClassification,"{'ell', 'dan', 'fin', 'nld', 'ita', 'spa', 'fra', 'slv', 'swe', 'est', 'bul', 'eng', 'hrv', 'pol', 'slk', 'por', 'deu', 'ces', 'mlt', 'ron', 'lit', 'lav', 'hun'}","['Legal', 'Government', 'Written']",CC BY-SA 4.0,EU laws in 23 EU languages containing gold labels.
+68,CTKFactsNLI,PairClassification,{'ces'},"['News', 'Written']",CC-BY-SA-3.0,"Czech Natural Language Inference dataset of around 3K evidence-claim pairs labelled with SUPPORTS, REFUTES or NOT ENOUGH INFO veracity labels. Extracted from a round of fact-checking experiments."
+69,SprintDuplicateQuestions,PairClassification,{'eng'},"['Programming', 'Written']",Not specified,Duplicate questions from the Sprint community.
+70,OpusparcusPC,PairClassification,"{'fra', 'fin', 'swe', 'eng', 'deu'}","['Spoken', 'Spoken']",cc-by-nc-4.0,"Opusparcus is a paraphrase corpus for six European language: German, English, Finnish, French, Russian, and Swedish. The paraphrases consist of subtitles from movies and TV shows."
+71,PawsXPairClassification,PairClassification,"{'fra', 'eng', 'spa', 'deu'}","['Web', 'Encyclopaedic', 'Written']",Custom (commercial),{PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification
+72,RTE3,PairClassification,"{'fra', 'ita', 'eng', 'deu'}","['News', 'Web', 'Encyclopaedic', 'Written']",cc-by-4.0,Recognising Textual Entailment Challenge (RTE-3) aim to provide the NLP community with a benchmark to test progress in recognizing textual entailment
+73,XNLI,PairClassification,"{'spa', 'ell', 'fra', 'eng', 'bul', 'deu'}","['Non-fiction', 'Fiction', 'Government', 'Written']",Not specified,
+74,PpcPC,PairClassification,{'pol'},"['Fiction', 'Non-fiction', 'Web', 'Written', 'Spoken', 'Social', 'News']",GPL-3.0,Polish Paraphrase Corpus
+75,AskUbuntuDupQuestions,Reranking,{'eng'},,,AskUbuntu Question Dataset - Questions from AskUbuntu with manual annotations marking pairs of questions as similar or non-similar
+76,WebLINXCandidatesReranking,Reranking,{'eng'},"['Academic', 'Web', 'Written']",CC BY-NC-SA 4.0,WebLINX is a large-scale benchmark of 100K interactions across 2300 expert demonstrations of conversational web navigation. The reranking task focuses on finding relevant elements at every given step in the trajectory.
+77,AlloprofReranking,Reranking,{'fra'},"['Web', 'Academic', 'Written']",CC BY-NC-SA 4.0,"This dataset was provided by AlloProf, an organisation in Quebec, Canada offering resources and a help forum curated by a large number of teachers to students on all subjects taught from in primary and secondary school"
+78,WikipediaRerankingMultilingual,Reranking,"{'ces', 'ita', 'swe', 'dan', 'fin', 'bul', 'eng', 'nld', 'por', 'ron', 'deu'}","['Encyclopaedic', 'Written']",cc-by-sa-3.0,The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.
+79,GermanSTSBenchmark,STS,{'deu'},,,Semantic Textual Similarity Benchmark (STSbenchmark) dataset translated into German. Translations were originally done by T-Systems on site services GmbH.
+80,SICK-R,STS,{'eng'},,,Semantic Textual Similarity SICK-R dataset as described here:
+81,STS12,STS,{'eng'},"['Encyclopaedic', 'News', 'Written']",Not specified,SemEval-2012 Task 6.
+82,STS14,STS,{'eng'},"['Blog', 'Web', 'Spoken']",Not specified,SemEval STS 2014 dataset. Currently only the English dataset
+83,STS15,STS,{'eng'},"['Blog', 'News', 'Web', 'Written', 'Spoken']",Not specified,SemEval STS 2015 dataset
+84,STSBenchmark,STS,{'eng'},,,Semantic Textual Similarity Benchmark (STSbenchmark) dataset.
+85,FinParaSTS,STS,{'fin'},"['News', 'Subtitles', 'Written']",cc-by-sa-4.0,Finnish paraphrase-based semantic similarity corpus
+86,SemRel24STS,STS,{'eng'},"['Spoken', 'Written']",Not specified,"SemRel2024 is a collection of Semantic Textual Relatedness (STR) datasets for 14 languages, including African and Asian languages. The datasets are composed of sentence pairs, each assigned a relatedness score between 0 (completely) unrelated and 1 (maximally related) with a large range of expected relatedness values."
+87,STS17,STS,"{'ita', 'spa', 'fra', 'eng', 'nld', 'deu'}","['News', 'Web', 'Written']",Not specified,Semeval-2017 task 1: Semantic textual similarity-multilingual and cross-lingual focused evaluation
+88,STS22.v2,STS,"{'ita', 'spa', 'fra', 'eng', 'pol', 'deu'}","['News', 'Written']",Not specified,SemEval 2022 Task 8: Multilingual News Article Similarity. Version 2 filters updated on STS22 by removing pairs where one of entries contain empty sentences.
+89,STSES,STS,{'spa'},['Written'],cc-by-4.0,"Spanish test sets from SemEval-2014 (Agirre et al., 2014) and SemEval-2015 (Agirre et al., 2015)"

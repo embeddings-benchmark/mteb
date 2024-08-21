@@ -44,7 +44,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
         domains=["Encyclopaedic", "Written"],
         task_subtypes=[],
         license="cc-by-sa-3.0",
-        annotations_creators="LM-generated",
+        annotations_creators="LM-generated and reviewed",
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation="""@ONLINE{wikidump,

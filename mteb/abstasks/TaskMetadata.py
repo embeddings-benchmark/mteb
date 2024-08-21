@@ -37,6 +37,7 @@ TASK_SUBTYPE = Literal[
     "Counterfactual Detection",
     "Emotion classification",
     "Reasoning as Retrieval",
+    "Duplicate Detection",
 ]
 
 TASK_DOMAIN = Literal[
@@ -94,7 +95,11 @@ TASK_CATEGORY = Literal[
 ]
 
 ANNOTATOR_TYPE = Literal[
-    "expert-annotated", "human-annotated", "derived", "LM-generated"
+    "expert-annotated",
+    "human-annotated",
+    "derived",
+    "LM-generated",
+    "LM-generated and reviewed",  # reviewed by humans
 ]
 
 http_url_adapter = TypeAdapter(AnyUrl)
@@ -129,6 +134,7 @@ PROGRAMMING_LANGS = [
     "shell",
     "sql",
 ]
+
 
 METRIC_NAME = str
 METRIC_VALUE = Union[int, float, Dict[str, Any]]

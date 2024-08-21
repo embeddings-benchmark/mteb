@@ -89,7 +89,15 @@ exclude = ["tests", "results"]
 target-version = "py38"
 
 [tool.ruff.lint]
-select = ["F", "I", "E", "D",  "UP", "FA", "C4"]
+select = [
+    "F",  # pyflakes rules, 
+    "I",  # sorting for imports
+    "E",  # formatting for docs
+    "D",  # formatting for docs
+    "UP", # upgrade to latest syntax if possible
+    "FA", # Future annotations
+    "C4", # cleaner comprehensions 
+]
 ignore = ["E501",   # line too long 
         "E741",     # ambiguous variable name
         "F403",     # undefined import

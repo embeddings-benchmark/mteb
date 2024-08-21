@@ -6,6 +6,8 @@ import difflib
 import logging
 from collections import Counter
 
+import pandas as pd
+
 from mteb.abstasks import AbsTask
 from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
 from mteb.languages import (
@@ -152,6 +154,29 @@ class MTEBTasks(tuple):
             )
             markdown_table += " |\n"
         return markdown_table
+
+    def to_dataframe(
+        self, properties: list[str] = ["type", "license", "languages"]
+    ) -> pd.DataFrame:
+        """Generate pandas DataFrame with tasks summary
+
+        Args:
+            properties: list of metadata to summarize from a Task class.
+
+        Returns:
+            pandas DataFrame.
+        """
+        data = []
+        for task in self:
+            data.append(
+                {
+                    "Task": task.metadata.name,
+                    **{
+                        p: self._extract_property_from_task(task, p) for p in properties
+                    },
+                }
+            )
+        return pd.DataFrame(data)
 
 
 def get_tasks(
