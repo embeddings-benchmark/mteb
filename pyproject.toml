@@ -97,7 +97,6 @@ select = [
     "UP", # upgrade to latest syntax if possible
     "FA", # Future annotations
     "C4", # cleaner comprehensions 
-    "ISC001"
 ]
 ignore = ["E501",   # line too long 
         "E741",     # ambiguous variable name
