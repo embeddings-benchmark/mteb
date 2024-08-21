@@ -45,6 +45,11 @@ if __name__ == "__main__":
               "intfloat/multilingual-e5-large": "4dc6d853a804b9c8886ede6dda8a073b7dc08a81",
               "nomic-ai/nomic-embed-text-v1": "0759316f275aa0cb93a5b830973843ca66babcf5",
               "nomic-ai/nomic-embed-text-v1.5": "b0753ae76394dd36bcfb912a46018088bca48be0",
+              "recobo/chemical-bert-uncased": "498698d28fcf7ce5954852a0444c864bdf232b64",
+              "all-mpnet-base-v2": "84f2bcc00d77236f9e89c8a360a00fb1139bf47d",
+              "multi-qa-mpnet-base-dot-v1": "3af7c6da5b3e1bea796ef6c97fe237538cbe6e7f",
+              "all-MiniLM-L12-v2": "a05860a77cef7b37e0048a7864658139bc18a854",
+              "all-MiniLM-L6-v2": "8b3219a92973c328a8e22fadcfa821b5dc75636a"
               }
 
     all_tasks = [
@@ -96,7 +101,6 @@ if __name__ == "__main__":
         evaluation = mteb.MTEB(tasks=tasks)
         evaluation.run(model, output_folder="chem_results",
                        overwrite_results=False)
-        table = wandb.Table(columns=["Task", "Metric", "Score"])
 
         for task_name in tqdm(all_tasks):
             data = read_json(os.path.join(
