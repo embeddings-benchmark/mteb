@@ -89,7 +89,10 @@ if __name__ == "__main__":
     tasks = mteb.get_tasks(tasks=all_tasks)
 
     for model_full_name, model_rev in tqdm(models.items()):
-        model_name = model_full_name.split("/")[1]
+        if "/" in model_full_name:
+            model_name = model_full_name.split("/")[1]
+        else:
+            model_name = model_full_name
 
         if is_run_available(model_name, model_rev):
             print(f"Skipping {model_name} - {model_rev}")
