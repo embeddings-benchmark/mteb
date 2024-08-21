@@ -208,6 +208,8 @@ class AbsTaskClassification(AbsTask):
     ]:
         self.load_data()
 
+        # same function from parent class, but added explicitly train to splits
+
         all_details = {}
         pbar_split = tqdm.tqdm(
             self.metadata.eval_splits + ["train"], desc="Processing Splits..."
@@ -221,14 +223,14 @@ class AbsTaskClassification(AbsTask):
                 )
                 all_details[split]["hf_subset_descriptive_stats"] = {}
 
-                pbar_lang = tqdm.tqdm(
+                pbar_subset = tqdm.tqdm(
                     self.metadata.eval_langs, desc="Processing Languages..."
                 )
-                for lang in pbar_lang:
-                    pbar_lang.set_postfix_str(f"Language: {lang}")
-                    print(f"Processing metadata for language {lang}")
-                    split_details = self._calculate_metrics_from_split(split, lang)
-                    all_details[split][lang] = split_details
+                for hf_subset in pbar_subset:
+                    pbar_subset.set_postfix_str(f"Language: {hf_subset}")
+                    print(f"Processing metadata for language {hf_subset}")
+                    split_details = self._calculate_metrics_from_split(split, hf_subset)
+                    all_details[split][hf_subset] = split_details
             else:
                 split_details = self._calculate_metrics_from_split(split)
                 all_details[split] = split_details

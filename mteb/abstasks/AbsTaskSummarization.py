@@ -93,8 +93,12 @@ class AbsTaskSummarization(AbsTask):
 
             for hf_subset in self.metadata.eval_langs:
                 text.extend(self.dataset[hf_subset][split]["text"])
-                human_summaries.extend(self.dataset[hf_subset][split]["human_summaries"])
-                machine_summaries.extend(self.dataset[hf_subset][split]["machine_summaries"])
+                human_summaries.extend(
+                    self.dataset[hf_subset][split]["human_summaries"]
+                )
+                machine_summaries.extend(
+                    self.dataset[hf_subset][split]["machine_summaries"]
+                )
                 relevance.extend(self.dataset[hf_subset][split]["relevance"])
         else:
             text = self.dataset[split]["text"]
