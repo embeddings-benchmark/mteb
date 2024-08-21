@@ -605,15 +605,15 @@ class AbsTaskInstructionRetrieval(AbsTask):
         return newly_irrelevant_qrels
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None, compute_overall: bool = False
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> InstructionRetrievalDescriptiveStatistics:
-        if lang:
-            corpus = self.corpus[lang][split]
-            queries = self.queries[lang][split]
-            relevant_docs = self.og_relevant_docs[lang][split]
-            og_instructions = self.og_instructions[lang][split]
-            changed_instructions = self.changed_instructions[lang][split]
-            top_ranked = self.top_ranked[lang][split]
+        if hf_subset:
+            corpus = self.corpus[hf_subset][split]
+            queries = self.queries[hf_subset][split]
+            relevant_docs = self.og_relevant_docs[hf_subset][split]
+            og_instructions = self.og_instructions[hf_subset][split]
+            changed_instructions = self.changed_instructions[hf_subset][split]
+            top_ranked = self.top_ranked[hf_subset][split]
         elif compute_overall:
             corpus = []
             queries = []
@@ -621,13 +621,13 @@ class AbsTaskInstructionRetrieval(AbsTask):
             og_instructions = []
             changed_instructions = []
             top_ranked = []
-            for lang in self.metadata.eval_langs:
-                corpus.extend(self.corpus[lang][split])
-                queries.extend(self.queries[lang][split])
-                relevant_docs.extend(self.og_relevant_docs[lang][split])
-                og_instructions.extend(self.og_instructions[lang][split])
-                changed_instructions.extend(self.changed_instructions[lang][split])
-                top_ranked.extend(self.top_ranked[lang][split])
+            for hf_subset in self.metadata.eval_langs:
+                corpus.extend(self.corpus[hf_subset][split])
+                queries.extend(self.queries[hf_subset][split])
+                relevant_docs.extend(self.og_relevant_docs[hf_subset][split])
+                og_instructions.extend(self.og_instructions[hf_subset][split])
+                changed_instructions.extend(self.changed_instructions[hf_subset][split])
+                top_ranked.extend(self.top_ranked[hf_subset][split])
         else:
             corpus = self.corpus[split]
             queries = self.queries[split]

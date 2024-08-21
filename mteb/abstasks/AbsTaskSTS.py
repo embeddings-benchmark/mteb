@@ -69,20 +69,20 @@ class AbsTaskSTS(AbsTask):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None, compute_overall: bool = False
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> STSDescriptiveStatistics:
-        if lang:
-            sentence1 = self.dataset[lang][split]["sentence1"]
-            sentence2 = self.dataset[lang][split]["sentence2"]
-            score = self.dataset[lang][split]["score"]
+        if hf_subset:
+            sentence1 = self.dataset[hf_subset][split]["sentence1"]
+            sentence2 = self.dataset[hf_subset][split]["sentence2"]
+            score = self.dataset[hf_subset][split]["score"]
         elif compute_overall:
             sentence1 = []
             sentence2 = []
             score = []
-            for lang in self.metadata.eval_langs:
-                sentence1.extend(self.dataset[lang][split]["sentence1"])
-                sentence2.extend(self.dataset[lang][split]["sentence2"])
-                score.extend(self.dataset[lang][split]["score"])
+            for hf_subset in self.metadata.eval_langs:
+                sentence1.extend(self.dataset[hf_subset][split]["sentence1"])
+                sentence2.extend(self.dataset[hf_subset][split]["sentence2"])
+                score.extend(self.dataset[hf_subset][split]["score"])
         else:
             sentence1 = self.dataset[split]["sentence1"]
             sentence2 = self.dataset[split]["sentence2"]

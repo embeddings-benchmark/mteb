@@ -209,14 +209,14 @@ class AbsTask(ABC):
                 )
                 all_details[split]["hf_subset_descriptive_stats"] = {}
 
-                pbar_lang = tqdm.tqdm(
+                pbar_subsets = tqdm.tqdm(
                     self.metadata.eval_langs, desc="Processing Languages..."
                 )
-                for lang in pbar_lang:
-                    pbar_lang.set_postfix_str(f"Language: {lang}")
-                    print(f"Processing metadata for language {lang}")
-                    split_details = self._calculate_metrics_from_split(split, lang)
-                    all_details[split]["hf_subset_descriptive_stats"][lang] = (
+                for hf_subset in pbar_subsets:
+                    pbar_subsets.set_postfix_str(f"Language: {hf_subset}")
+                    print(f"Processing metadata for language {hf_subset}")
+                    split_details = self._calculate_metrics_from_split(split, hf_subset)
+                    all_details[split]["hf_subset_descriptive_stats"][hf_subset] = (
                         split_details
                     )
             else:
@@ -227,7 +227,7 @@ class AbsTask(ABC):
 
     @abstractmethod
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None, compute_overall: bool = False
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> DescriptiveStatistics:
         raise NotImplementedError
 

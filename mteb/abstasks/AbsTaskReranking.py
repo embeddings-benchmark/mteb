@@ -66,20 +66,20 @@ class AbsTaskReranking(AbsTask):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None, compute_overall: bool = False
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> RerankingDescriptiveStatistics:
-        if lang:
-            query = self.dataset[lang][split]["query"]
-            positive = self.dataset[lang][split]["positive"]
-            negative = self.dataset[lang][split]["negative"]
+        if hf_subset:
+            query = self.dataset[hf_subset][split]["query"]
+            positive = self.dataset[hf_subset][split]["positive"]
+            negative = self.dataset[hf_subset][split]["negative"]
         elif compute_overall:
             query = []
             positive = []
             negative = []
-            for lang in self.metadata.eval_langs:
-                query.extend(self.dataset[lang][split]["query"])
-                positive.extend(self.dataset[lang][split]["positive"])
-                negative.extend(self.dataset[lang][split]["negative"])
+            for hf_subset in self.metadata.eval_langs:
+                query.extend(self.dataset[hf_subset][split]["query"])
+                positive.extend(self.dataset[hf_subset][split]["positive"])
+                negative.extend(self.dataset[hf_subset][split]["negative"])
         else:
             query = self.dataset[split]["query"]
             positive = self.dataset[split]["positive"]

@@ -73,16 +73,16 @@ class AbsTaskPairClassification(AbsTask):
         return scores
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None, compute_overall: bool = False
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> PairClassificationDescriptiveStatistics:
-        if lang:
-            dataset = self.dataset[lang][split]
+        if hf_subset:
+            dataset = self.dataset[hf_subset][split]
             if isinstance(dataset, list):
                 dataset = dataset[0]
         elif compute_overall:
             dataset = defaultdict(list)
-            for lang in self.metadata.eval_langs:
-                cur_dataset = self.dataset[lang][split]
+            for hf_subset in self.metadata.eval_langs:
+                cur_dataset = self.dataset[hf_subset][split]
                 if isinstance(cur_dataset, list):
                     cur_dataset = cur_dataset[0]
                 for key, value in cur_dataset.items():

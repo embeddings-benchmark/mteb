@@ -78,24 +78,24 @@ class AbsTaskSummarization(AbsTask):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None, compute_overall: bool = False
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> SummarizationDescriptiveStatistics:
-        if lang:
-            text = self.dataset[lang][split]["text"]
-            human_summaries = self.dataset[lang][split]["human_summaries"]
-            machine_summaries = self.dataset[lang][split]["machine_summaries"]
-            relevance = self.dataset[lang][split]["relevance"]
+        if hf_subset:
+            text = self.dataset[hf_subset][split]["text"]
+            human_summaries = self.dataset[hf_subset][split]["human_summaries"]
+            machine_summaries = self.dataset[hf_subset][split]["machine_summaries"]
+            relevance = self.dataset[hf_subset][split]["relevance"]
         elif compute_overall:
             text = []
             human_summaries = []
             machine_summaries = []
             relevance = []
 
-            for lang in self.metadata.eval_langs:
-                text.extend(self.dataset[lang][split]["text"])
-                human_summaries.extend(self.dataset[lang][split]["human_summaries"])
-                machine_summaries.extend(self.dataset[lang][split]["machine_summaries"])
-                relevance.extend(self.dataset[lang][split]["relevance"])
+            for hf_subset in self.metadata.eval_langs:
+                text.extend(self.dataset[hf_subset][split]["text"])
+                human_summaries.extend(self.dataset[hf_subset][split]["human_summaries"])
+                machine_summaries.extend(self.dataset[hf_subset][split]["machine_summaries"])
+                relevance.extend(self.dataset[hf_subset][split]["relevance"])
         else:
             text = self.dataset[split]["text"]
             human_summaries = self.dataset[split]["human_summaries"]

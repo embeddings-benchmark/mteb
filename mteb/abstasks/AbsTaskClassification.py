@@ -236,17 +236,17 @@ class AbsTaskClassification(AbsTask):
         return all_details
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None, compute_overall: bool = False
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClassificationDescriptiveStatistics:
-        if lang:
-            text = self.dataset[lang][split]["text"]
-            label = self.dataset[lang][split]["label"]
+        if hf_subset:
+            text = self.dataset[hf_subset][split]["text"]
+            label = self.dataset[hf_subset][split]["label"]
         elif compute_overall:
             text = []
             label = []
-            for lang in self.metadata.eval_langs:
-                text.extend(self.dataset[lang][split]["text"])
-                label.extend(self.dataset[lang][split]["label"])
+            for hf_subset in self.metadata.eval_langs:
+                text.extend(self.dataset[hf_subset][split]["text"])
+                label.extend(self.dataset[hf_subset][split]["label"])
         else:
             text = self.dataset[split]["text"]
             label = self.dataset[split]["label"]

@@ -108,6 +108,6 @@ class AbsTaskSpeedTask(AbsTask):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None, compute_overall: bool = False
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> dict[str, float]:
         pass

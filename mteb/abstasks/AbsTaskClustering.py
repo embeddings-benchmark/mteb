@@ -76,17 +76,17 @@ class AbsTaskClustering(AbsTask):
         return scores
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None, compute_overall: bool = False
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClusteringDescriptiveStatistics:
-        if lang:
-            sentences = self.dataset[lang][split]["sentences"]
-            labels = self.dataset[lang][split]["labels"]
+        if hf_subset:
+            sentences = self.dataset[hf_subset][split]["sentences"]
+            labels = self.dataset[hf_subset][split]["labels"]
         elif compute_overall:
             sentences = []
             labels = []
-            for lang in self.metadata.eval_langs:
-                sentences.extend(self.dataset[lang][split]["sentences"])
-                labels.extend(self.dataset[lang][split]["labels"])
+            for hf_subset in self.metadata.eval_langs:
+                sentences.extend(self.dataset[hf_subset][split]["sentences"])
+                labels.extend(self.dataset[hf_subset][split]["labels"])
         else:
             sentences = self.dataset[split]["sentences"]
             labels = self.dataset[split]["labels"]

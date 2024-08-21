@@ -120,31 +120,31 @@ class AbsTaskBitextMining(AbsTask):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None, compute_overall: bool = False
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> BitextDescriptiveStatistics:
         pairs_cols = self.get_pairs(self.parallel_subsets)
-        if lang:
+        if hf_subset:
             if self.parallel_subsets:
-                sent_1, sent_2 = lang.split("-")
+                sent_1, sent_2 = hf_subset.split("-")
                 sentence1 = self.dataset[split][sent_1]
                 sentence2 = self.dataset[split][sent_2]
             else:
                 sent_1, sent_2 = pairs_cols[0]
-                sentence1 = self.dataset[lang][split][sent_1]
-                sentence2 = self.dataset[lang][split][sent_2]
+                sentence1 = self.dataset[hf_subset][split][sent_1]
+                sentence2 = self.dataset[hf_subset][split][sent_2]
         elif compute_overall:
             sentence1 = []
             sentence2 = []
             if self.parallel_subsets:
-                for lang in self.metadata.eval_langs:
-                    sent_1, sent_2 = lang.split("-")
+                for hf_subset in self.metadata.eval_langs:
+                    sent_1, sent_2 = hf_subset.split("-")
                     sentence1.extend(self.dataset[split][sent_1])
                     sentence2.extend(self.dataset[split][sent_2])
             else:
                 sent_1, sent_2 = pairs_cols[0]
-                for lang in self.metadata.eval_langs:
-                    sentence1.extend(self.dataset[lang][split][sent_1])
-                    sentence2.extend(self.dataset[lang][split][sent_2])
+                for hf_subset in self.metadata.eval_langs:
+                    sentence1.extend(self.dataset[hf_subset][split][sent_1])
+                    sentence2.extend(self.dataset[hf_subset][split][sent_2])
         else:
             sent_1, sent_2 = pairs_cols[0]
             sentence1 = self.dataset[split][sent_1]

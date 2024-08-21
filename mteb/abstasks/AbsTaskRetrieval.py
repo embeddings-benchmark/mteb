@@ -398,20 +398,20 @@ class AbsTaskRetrieval(AbsTask):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
-        self, split: str, lang: str | None = None, compute_overall: bool = False
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> RetrievalDescriptiveStatistics:
-        if lang:
-            queries = self.queries[lang][split]
-            corpus = self.corpus[lang][split]
-            relevant_docs = self.relevant_docs[lang][split]
+        if hf_subset:
+            queries = self.queries[hf_subset][split]
+            corpus = self.corpus[hf_subset][split]
+            relevant_docs = self.relevant_docs[hf_subset][split]
         elif compute_overall:
             queries = {}
             corpus = {}
             relevant_docs = {}
-            for lang in self.metadata.eval_langs:
-                queries.update(self.queries[lang][split])
-                corpus.update(self.corpus[lang][split])
-                relevant_docs.update(self.relevant_docs[lang][split])
+            for hf_subset in self.metadata.eval_langs:
+                queries.update(self.queries[hf_subset][split])
+                corpus.update(self.corpus[hf_subset][split])
+                relevant_docs.update(self.relevant_docs[hf_subset][split])
         else:
             queries = self.queries[split]
             corpus = self.corpus[split]
