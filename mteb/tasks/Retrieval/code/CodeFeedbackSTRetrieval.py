@@ -3,7 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-_LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
 _EVAL_SPLIT = "test"
 
 
@@ -13,14 +12,14 @@ class CodeFeedbackST(AbsTaskRetrieval):
         description="The dataset is a collection of user queries and assistant responses. The task is to retrieve the most relevant response for a given query.",
         reference="https://arxiv.org/abs/2407.02883",
         dataset={
-            "path": "mteb/codefeedback-st",
-            "revision": "b1a2304593f46cb79695e6e2124953bfa43ffefa",
+            "path": "CoIR-Retrieval/codefeedback-st",
+            "revision": "d213819e87aab9010628da8b73ab4eb337c89340",
         },
         type="Retrieval",
         category="p2p",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
-        eval_langs=[lang + "-Code" for lang in _LANGS] + ["eng-Latn"],
+        eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2019-01-01", "2019-12-31"),
         domains=["Programming", "Written"],

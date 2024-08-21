@@ -45,21 +45,24 @@ def task_to_markdown_row(task: mteb.AbsTask) -> str:
         if "n_samples" in task.metadata.descriptive_stats
         else ""
     )
-    avg_character_length = (
-        task.metadata.descriptive_stats["avg_character_length"]
-        if "avg_character_length" in task.metadata.descriptive_stats
-        else ""
-    )
+    dataset_statistics = ""
+    if "avg_character_length" in task.metadata.descriptive_stats:
+        dataset_statistics = task.metadata.descriptive_stats["avg_character_length"]
+    elif len(task.metadata.descriptive_stats) > 1:
+        all_stat = task.metadata.descriptive_stats
+        all_stat.pop("n_samples")
+        if len(all_stat) > 0:
+            dataset_statistics = all_stat
 
     name_w_reference += author_from_bibtex(task.metadata.bibtex_citation)
 
-    return f"| {name_w_reference} | {task.metadata.languages} | {task.metadata.type} | {task.metadata.category} | {domains} | {n_samples} | {avg_character_length} |"
+    return f"| {name_w_reference} | {task.metadata.languages} | {task.metadata.type} | {task.metadata.category} | {domains} | {n_samples} | {dataset_statistics} |"
 
 
 def create_tasks_table(tasks: list[mteb.AbsTask]) -> str:
     table = """
-| Name | Languages | Type | Category | Domains | # Samples | Avg. Length (Char.) |
-|------|-----------|------|----------|---------|-----------|---------------------|
+| Name | Languages | Type | Category | Domains | # Samples | Dataset statistics |
+|------|-----------|------|----------|---------|-----------|--------------------|
 """
     for task in tasks:
         table += task_to_markdown_row(task) + "\n"
