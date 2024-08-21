@@ -611,11 +611,13 @@ class MockMultilingualPairClassificationTask(
         # "this is a test sentence", "this does not match the above"
         labels = [1, 0]
         data = {
-            "test": [{
-                "sentence1": sentence1,
-                "sentence2": sentence2,
-                "labels": labels,
-            }]
+            "test": [
+                {
+                    "sentence1": sentence1,
+                    "sentence2": sentence2,
+                    "labels": labels,
+                }
+            ]
         }
 
         self.dataset = DatasetDict(
