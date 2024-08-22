@@ -88,6 +88,7 @@ exclude = ["tests", "results"]
 
 target-version = "py38"
 
+
 [tool.ruff.lint]
 select = [
     "F",  # pyflakes rules, 
@@ -115,6 +116,7 @@ ignore = ["E501",   # line too long
         "D205",     # 1 blank line required between summary line and description
         "D415",     # First line should end with a period
 ]
+
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false
