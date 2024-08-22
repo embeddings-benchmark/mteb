@@ -259,5 +259,7 @@ class AbsTaskClassification(AbsTask):
             num_samples=len(text),
             average_text_length=total_text_len / len(text),
             unique_labels=len(label_count),
-            labels={label: {"count": count} for label, count in label_count.items()},
+            labels={
+                str(label): {"count": count} for label, count in label_count.items()
+            },
         )

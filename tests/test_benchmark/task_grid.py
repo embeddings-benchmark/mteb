@@ -18,6 +18,18 @@ from .mock_tasks import (
     MockClusteringTask,
     MockInstructionRetrival,
     MockMultilabelClassification,
+    MockMultilingualBitextMiningTask,
+    MockMultilingualClassificationTask,
+    MockMultilingualClusteringFastTask,
+    MockMultilingualClusteringTask,
+    MockMultilingualInstructionRetrival,
+    MockMultilingualMultilabelClassification,
+    MockMultilingualPairClassificationTask,
+    MockMultilingualParallelBitextMiningTask,
+    MockMultilingualRerankingTask,
+    MockMultilingualRetrievalTask,
+    MockMultilingualSTSTask,
+    MockMultilingualSummarizationTask,
     MockPairClassificationTask,
     MockRerankingTask,
     MockRetrievalTask,
@@ -55,19 +67,31 @@ TASK_TEST_GRID_AS_STRING = [
 
 
 # Mock tasks for testing - intended to be faster and avoid downloading data leading to false positive potential failures in CI
-# Not all tasks are implemnted as Mock tasks yet
+# Not all tasks are implemented as Mock tasks yet
 MOCK_TASK_TEST_GRID = [
     MockBitextMiningTask(),
+    MockMultilingualBitextMiningTask(),
+    MockMultilingualParallelBitextMiningTask(),
     MockClassificationTask(),
+    MockMultilingualClassificationTask(),
     MockClusteringTask(),
+    MockMultilingualClusteringTask(),
     MockClusteringFastTask(),
+    MockMultilingualClusteringFastTask(),
     MockPairClassificationTask(),
+    MockMultilingualPairClassificationTask(),
     MockRerankingTask(),
+    MockMultilingualRerankingTask(),
     MockRetrievalTask(),
+    MockMultilingualRetrievalTask(),
     MockSTSTask(),
+    MockMultilingualSTSTask(),
     MockMultilabelClassification(),
+    MockMultilingualMultilabelClassification(),
     MockSummarizationTask(),
+    MockMultilingualSummarizationTask(),
     MockInstructionRetrival(),
+    MockMultilingualInstructionRetrival(),
 ]
 
 MOCK_TASK_TEST_GRID_AS_STRING = [

@@ -249,7 +249,7 @@ class AbsTaskMultilabelClassification(AbsTask):
             num_samples=len(text),
             unique_labels=len(label_count),
             labels={
-                label: {
+                str(label): {
                     "count": value,
                 }
                 for label, value in label_count.items()
