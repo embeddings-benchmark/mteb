@@ -409,9 +409,11 @@ class AbsTaskRetrieval(AbsTask):
             corpus = {}
             relevant_docs = {}
             for hf_subset in self.metadata.eval_langs:
-                queries.update(self.queries[hf_subset][split])
-                corpus.update(self.corpus[hf_subset][split])
-                relevant_docs.update(self.relevant_docs[hf_subset][split])
+                queries.update(process_docs(self.queries, hf_subset, split))
+                corpus.update(process_docs(self.corpus, hf_subset, split))
+                relevant_docs.update(
+                    process_relevant_docs(self.relevant_docs, hf_subset, split)
+                )
         else:
             queries = self.queries[split]
             corpus = self.corpus[split]
@@ -453,3 +455,26 @@ def calculate_length(
     doc_len = sum(doc_lens) / len(doc_lens) if doc_lens else 0
     query_len = sum(queries_lens) / len(queries_lens) if queries_lens else 0
     return query_len, doc_len
+
+
+def process_docs(
+    collection: dict[str, dict[str, dict[str, str] | str]], hf_subset: str, split: str
+) -> dict[str, str]:
+    """Collections can contain overlapping ids in different splits. Prepend split to avoid this"""
+    return {
+        f"{split}_{hf_subset}_{k}": v for k, v in collection[hf_subset][split].items()
+    }
+
+
+def process_relevant_docs(
+    collection: dict[str, dict[str, dict[str, dict[str, int]]]],
+    hf_subset: str,
+    split: str,
+) -> dict[str, dict[str, int]]:
+    """Collections can contain overlapping ids in different splits. Prepend split to avoid this"""
+    return_collection = {}
+    for query_id, relevant in collection[hf_subset][split].items():
+        return_collection[f"{split}_{hf_subset}_{query_id}"] = {
+            f"{split}_{hf_subset}_{doc_id}": value for doc_id, value in relevant.items()
+        }
+    return return_collection
