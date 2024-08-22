@@ -228,7 +228,7 @@ class TaskMetadata(BaseModel):
         if "path" not in dataset or dataset["path"] is None:
             raise ValueError(
                 "You must specify the path to the dataset in the dataset dictionary. "
-                "See https://huggingface.co/docs/datasets/main/en/package_reference/loading_methods#datasets.load_dataset"
+                + "See https://huggingface.co/docs/datasets/main/en/package_reference/loading_methods#datasets.load_dataset"
             )
 
     @staticmethod

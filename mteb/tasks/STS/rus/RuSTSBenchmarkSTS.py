@@ -13,7 +13,7 @@ class RuSTSBenchmarkSTS(AbsTaskSTS):
             "revision": "7cf24f325c6da6195df55bef3d86b5e0616f3018",
         },
         description="Semantic Textual Similarity Benchmark (STSbenchmark) dataset translated into Russian and verified. "
-        "The dataset was checked with RuCOLA model to ensure that the translation is good and filtered.",
+        + "The dataset was checked with RuCOLA model to ensure that the translation is good and filtered.",
         reference="https://github.com/PhilipMay/stsb-multi-mt/",
         type="STS",
         category="s2s",
