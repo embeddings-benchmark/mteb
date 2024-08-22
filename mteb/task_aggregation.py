@@ -79,7 +79,7 @@ def task_category_weighted_mean(
             means[f"mean ({task_type})"] = _mean
 
         _mean = sum(means.values()) / len(task_types)
-        means["mean (wieghted by task type)"] = _mean
+        means["mean (weighted by task type)"] = _mean
         return means
 
     return {
