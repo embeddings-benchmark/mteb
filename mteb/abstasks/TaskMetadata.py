@@ -318,6 +318,11 @@ class TaskMetadata(BaseModel):
         cite = ""
         if self.bibtex_citation:
             cite = f"{self.bibtex_citation.split(',')[0].split('{')[1]}"
-        if include_cite:
+        if include_cite and cite:
+            # check for whitespace in the citation
+            if " " in cite:
+                logger.warning(
+                    "Citation contains whitespace. Please ensure that the citation is correctly formatted."
+                )
             return f"\\cite{{{cite}}}"
         return cite
