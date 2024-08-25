@@ -37,6 +37,7 @@ TASK_SUBTYPE = Literal[
     "Counterfactual Detection",
     "Emotion classification",
     "Reasoning as Retrieval",
+    "Duplicate Detection",
 ]
 
 TASK_DOMAIN = Literal[
@@ -94,7 +95,11 @@ TASK_CATEGORY = Literal[
 ]
 
 ANNOTATOR_TYPE = Literal[
-    "expert-annotated", "human-annotated", "derived", "LM-generated"
+    "expert-annotated",
+    "human-annotated",
+    "derived",
+    "LM-generated",
+    "LM-generated and reviewed",  # reviewed by humans
 ]
 
 http_url_adapter = TypeAdapter(AnyUrl)
@@ -129,6 +134,7 @@ PROGRAMMING_LANGS = [
     "shell",
     "sql",
 ]
+
 
 METRIC_NAME = str
 METRIC_VALUE = Union[int, float, Dict[str, Any]]
@@ -305,3 +311,13 @@ class TaskMetadata(BaseModel):
         if isinstance(self.eval_langs, dict):
             return self.eval_langs
         return {"default": self.eval_langs}  # type: ignore
+
+    @property
+    def intext_citation(self, include_cite: bool = True) -> str:
+        """Create an in-text citation for the dataset."""
+        cite = ""
+        if self.bibtex_citation:
+            cite = f"{self.bibtex_citation.split(',')[0].split('{')[1]}"
+        if include_cite:
+            return f"\\cite{{{cite}}}"
+        return cite

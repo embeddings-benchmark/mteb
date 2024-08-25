@@ -1,0 +1,32 @@
+,Name,Type,Languages,Domains,License,Description
+0,IN22ConvBitextMining,BitextMining,"{'ory', 'kas', 'asm', 'snd', 'hin', 'mar', 'tam', 'san', 'kan', 'urd', 'mni', 'npi', 'guj', 'tel', 'doi', 'pan', 'mal', 'ben', 'gom', 'mai'}","['Social', 'Spoken', 'Fiction', 'Spoken']",CC-BY-4.0,IN22-Conv is a n-way parallel conversation domain benchmark dataset for machine translation spanning English and 22 Indic languages.
+1,IN22GenBitextMining,BitextMining,"{'ory', 'kas', 'asm', 'snd', 'hin', 'mar', 'tam', 'san', 'kan', 'urd', 'mni', 'npi', 'guj', 'tel', 'doi', 'pan', 'mal', 'ben', 'gom', 'mai'}","['Web', 'Legal', 'Government', 'News', 'Religious', 'Non-fiction', 'Written']",CC-BY-4.0,IN22-Gen is a n-way parallel general-purpose multi-domain benchmark dataset for machine translation spanning English and 22 Indic languages.
+2,IndicGenBenchFloresBitextMining,BitextMining,"{'ory', 'asm', 'gbm', 'hin', 'nep', 'mar', 'tam', 'bgc', 'mup', 'mwr', 'kan', 'san', 'urd', 'awa', 'mni', 'guj', 'tel', 'pan', 'raj', 'mal', 'hne', 'ben', 'gom', 'mai', 'bho'}","['Web', 'News', 'Written']",CC-BY-SA-4.0,Flores-IN dataset is an extension of Flores dataset released as a part of the IndicGenBench by Google
+3,LinceMTBitextMining,BitextMining,{'hin'},"['Social', 'Written']",Unknown,LinceMT is a parallel corpus for machine translation pairing code-mixed Hinglish (a fusion of Hindi and English commonly used in modern India) with human-generated English translations.
+4,BengaliSentimentAnalysis,Classification,{'ben'},"['Reviews', 'Written']",CC BY 4.0,dataset contains 3307 Negative reviews and 8500 Positive reviews collected and manually annotated from Youtube Bengali drama.
+5,GujaratiNewsClassification,Classification,{'guj'},"['News', 'Written']",MIT,A Gujarati dataset for 3-class classification of Gujarati news articles
+6,HindiDiscourseClassification,Classification,{'hin'},"['Fiction', 'Social', 'Written']",MIT,A Hindi Discourse dataset in Hindi with values for coherence.
+7,SentimentAnalysisHindi,Classification,{'hin'},"['Reviews', 'Written']",CC BY-NC-SA 4.0,Hindi Sentiment Analysis Dataset
+8,MalayalamNewsClassification,Classification,{'mal'},"['News', 'Written']",MIT,A Malayalam dataset for 3-class classification of Malayalam news articles
+9,IndicLangClassification,Classification,"{'ory', 'kas', 'asm', 'snd', 'hin', 'mar', 'tam', 'san', 'kan', 'urd', 'mni', 'npi', 'guj', 'tel', 'doi', 'pan', 'mal', 'ben', 'gom', 'mai'}","['Web', 'Non-fiction', 'Written']",CC0,A language identification test set for native-script as well as Romanized text which spans 22 Indic languages.
+10,MTOPIntentClassification,Classification,{'hin'},"['Spoken', 'Spoken']",Not specified,MTOP: Multilingual Task-Oriented Semantic Parsing
+11,MultiHateClassification,Classification,{'hin'},"['Constructed', 'Written']",cc-by-4.0,"Hate speech detection dataset with binary
+                       (hateful vs non-hateful) labels. Includes 25+ distinct types of hate
+                       and challenging non-hate, and 11 languages.
+                     "
+12,TweetSentimentClassification,Classification,{'hin'},"['Social', 'Written']",cc-by-3.0,A multilingual Sentiment Analysis dataset consisting of tweets in 8 different languages.
+13,NepaliNewsClassification,Classification,{'nep'},"['News', 'Written']",CC BY-SA 4.0,A Nepali dataset for 7500 news articles 
+14,PunjabiNewsClassification,Classification,{'pan'},"['News', 'Written']",MIT,A Punjabi dataset for 2-class classification of Punjabi news articles
+15,SanskritShlokasClassification,Classification,{'san'},"['Religious', 'Written']",CC BY-SA 4.0,This data set contains ~500 Shlokas  
+16,UrduRomanSentimentClassification,Classification,{'urd'},"['Social', 'Written']",MIT,"The Roman Urdu dataset is a data corpus comprising of more than 20000 records tagged for sentiment (Positive, Negative, Neutral)"
+17,SIB200ClusteringS2S,Clustering,"{'ory', 'kas', 'asm', 'snd', 'hin', 'mar', 'tam', 'san', 'kan', 'urd', 'awa', 'mni', 'npi', 'guj', 'tel', 'pan', 'mal', 'hne', 'ben', 'mai', 'bho'}","['News', 'Written']",cc-by-sa-4.0,"SIB-200 is the largest publicly available topic classification
+        dataset based on Flores-200 covering 205 languages and dialects annotated. The dataset is
+        annotated in English for the topics,  science/technology, travel, politics, sports,
+        health, entertainment, and geography. The labels are then transferred to the other languages
+        in Flores-200 which are machine-translated.
+        "
+18,BelebeleRetrieval,Retrieval,"{'mal', 'ory', 'ben', 'mar', 'tam', 'npi', 'guj', 'asm', 'snd', 'kan', 'urd', 'tel', 'pan', 'hin'}","['Web', 'News', 'Written']",CC-BY-SA-4.0,Belebele is a multiple-choice machine reading comprehension (MRC) dataset spanning 122 language variants (including 115 distinct languages and their scripts)
+19,XQuADRetrieval,Retrieval,{'hin'},"['Web', 'Written']",CC BY-SA 4.0,XQuAD is a benchmark dataset for evaluating cross-lingual question answering performance. It is repurposed retrieving relevant context for each question.
+20,XNLI,PairClassification,{'hin'},"['Non-fiction', 'Fiction', 'Government', 'Written']",Not specified,
+21,WikipediaRerankingMultilingual,Reranking,"{'hin', 'ben'}","['Encyclopaedic', 'Written']",cc-by-sa-3.0,The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.
+22,IndicCrosslingualSTS,STS,"{'mal', 'ory', 'ben', 'mar', 'tam', 'guj', 'asm', 'kan', 'urd', 'tel', 'pan', 'hin'}","['News', 'Non-fiction', 'Web', 'Spoken', 'Government', 'Written', 'Spoken']",CC0,This is a Semantic Textual Similarity testset between English and 12 high-resource Indic languages.

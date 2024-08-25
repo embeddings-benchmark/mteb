@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import logging
-from collections import defaultdict
+from collections import Counter, defaultdict
 from typing import Any
 
 import numpy as np
+import tqdm
 
 from mteb.encoder_interface import Encoder
 
@@ -14,9 +15,25 @@ from ..evaluation.evaluators import (
     logRegClassificationEvaluator,
 )
 from ..load_results.mteb_results import HFSubset, ScoresDict
-from .AbsTask import AbsTask
+from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
+
+
+class ClassificationDescriptiveStatistics(DescriptiveStatistics):
+    """Descriptive statistics for Classification
+
+    Attributes:
+      num_samples: number of samples in the dataset.
+      average_text_length: Average length of text
+      unique_labels: Number of unique labels
+      labels: dict of label frequencies
+    """
+
+    num_samples: int
+    average_text_length: float
+    unique_labels: int
+    labels: dict[str, dict[str, int]]
 
 
 class AbsTaskClassification(AbsTask):
@@ -54,13 +71,6 @@ class AbsTaskClassification(AbsTask):
 
         # kNN parameters
         self.k = k
-
-        # Run metadata validation by instantiating addressing the attribute
-        # This is quite hacky. Ideally, this would be done in the constructor of
-        # each concrete task, but then we have to duplicate the __init__ method's
-        # interface.
-        if hasattr(self, "metadata"):
-            self.metadata
 
     def _add_main_score(self, scores: dict[HFSubset, ScoresDict]) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
@@ -188,3 +198,68 @@ class AbsTaskClassification(AbsTask):
                 y_sampled.append(y[i])
                 label_counter[y[i]] += 1
         return X_sampled, y_sampled, idxs
+
+    def calculate_metadata_metrics(
+        self,
+    ) -> dict[
+        str,
+        ClassificationDescriptiveStatistics
+        | dict[str, ClassificationDescriptiveStatistics],
+    ]:
+        self.load_data()
+
+        # same function from parent class, but added explicitly train to splits
+
+        all_details = {}
+        pbar_split = tqdm.tqdm(
+            self.metadata.eval_splits + ["train"], desc="Processing Splits..."
+        )
+        for split in pbar_split:
+            pbar_split.set_postfix_str(f"Split: {split}")
+            print(f"Processing metadata for split {split}")
+            if self.is_multilingual:
+                all_details[split] = self._calculate_metrics_from_split(
+                    split, compute_overall=True
+                )
+                all_details[split]["hf_subset_descriptive_stats"] = {}
+
+                pbar_subset = tqdm.tqdm(
+                    self.metadata.eval_langs, desc="Processing Languages..."
+                )
+                for hf_subset in pbar_subset:
+                    pbar_subset.set_postfix_str(f"Language: {hf_subset}")
+                    print(f"Processing metadata for language {hf_subset}")
+                    split_details = self._calculate_metrics_from_split(split, hf_subset)
+                    all_details[split][hf_subset] = split_details
+            else:
+                split_details = self._calculate_metrics_from_split(split)
+                all_details[split] = split_details
+
+        return all_details
+
+    def _calculate_metrics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ) -> ClassificationDescriptiveStatistics:
+        if hf_subset:
+            text = self.dataset[hf_subset][split]["text"]
+            label = self.dataset[hf_subset][split]["label"]
+        elif compute_overall:
+            text = []
+            label = []
+            for hf_subset in self.metadata.eval_langs:
+                text.extend(self.dataset[hf_subset][split]["text"])
+                label.extend(self.dataset[hf_subset][split]["label"])
+        else:
+            text = self.dataset[split]["text"]
+            label = self.dataset[split]["label"]
+
+        total_text_len = sum([len(t) for t in text])
+        label_count = Counter(label)
+        return ClassificationDescriptiveStatistics(
+            num_samples=len(text),
+            average_text_length=total_text_len / len(text),
+            unique_labels=len(label_count),
+            labels={
+                str(label): {"count": count} for label, count in label_count.items()
+            },
+        )

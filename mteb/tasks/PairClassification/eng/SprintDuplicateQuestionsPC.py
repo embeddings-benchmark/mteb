@@ -20,13 +20,16 @@ class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
         eval_splits=["validation", "test"],
         eval_langs=["eng-Latn"],
         main_score="max_ap",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=(
+            "2018-10-01",
+            "2018-12-30",
+        ),  # not found in the paper or data. This is just a rough guess based on the paper's publication date
+        domains=["Programming", "Written"],
+        task_subtypes=["Duplicate Detection"],
+        license="Not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation="""@inproceedings{shah-etal-2018-adversarial,
     title = "Adversarial Domain Adaptation for Duplicate Question Detection",
     author = "Shah, Darsh  and

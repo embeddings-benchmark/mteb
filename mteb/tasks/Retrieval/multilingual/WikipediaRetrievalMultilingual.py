@@ -108,7 +108,7 @@ class WikipediaRetrievalMultilingual(MultilingualTask, AbsTaskRetrieval):
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Question answering", "Article retrieval"],
         license="cc-by-sa-3.0",
-        annotations_creators="LM-generated",
+        annotations_creators="LM-generated and reviewed",
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation="",
