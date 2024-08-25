@@ -156,7 +156,16 @@ MTEB_MAIN_RU = Benchmark(
     ),
     description="Main Russian benchmarks from MTEB",
     reference="https://aclanthology.org/2023.eacl-main.148/",
-    citation=None,
+    citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
+      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design}, 
+      author={Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
+      year={2024},
+      eprint={2408.12503},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2408.12503}, 
+}
+""",
 )
 
 MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
