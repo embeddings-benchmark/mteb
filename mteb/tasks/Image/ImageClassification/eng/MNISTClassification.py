@@ -13,6 +13,7 @@ class MNISTClassification(AbsTaskImageClassification):
         dataset={
             "path": "ylecun/mnist",
             "revision": "b06aab39e05f7bcd9635d18ed25d06eae523c574",
+            "trust_remote_code": True,
         },
         type="Classification",
         category="i2t",
