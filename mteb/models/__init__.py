@@ -8,6 +8,7 @@ from sentence_transformers import SentenceTransformer
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.model_meta import ModelMeta
 from mteb.models import (
+    align_models,
     bge_models,
     bm25,
     clip_models,
@@ -127,6 +128,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
 
 
 model_modules = [
+    align_models,
     bge_models,
     bm25,
     cohere_models,
