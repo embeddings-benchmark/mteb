@@ -5,6 +5,7 @@ from typing import Any
 
 import numpy as np
 import torch
+from datasets import Dataset
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     accuracy_score,
@@ -74,6 +75,11 @@ class ImagekNNClassificationEvaluator(Evaluator):
 
         self.images_train = images_train
         self.y_train = y_train
+        self.dataset_train = ImageDataset(
+            Dataset.from_dict({"image": images_train, "label": y_train}),
+            image_column_name=image_column_name,
+            transform=transform,
+        )
         self.dataset_test = ImageDataset(
             dataset_test, image_column_name=image_column_name, transform=transform
         )
@@ -91,8 +97,15 @@ class ImagekNNClassificationEvaluator(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
+        dataloader_train = DataLoader(
+            self.dataset_train,
+            batch_size=self.encode_kwargs["batch_size"],
+            shuffle=False,
+            collate_fn=custom_collate_fn,
+            num_workers=16,
+        )
         X_train = model.get_image_embeddings(
-            self.images_train, batch_size=self.encode_kwargs["batch_size"]
+            dataloader_train, batch_size=self.encode_kwargs["batch_size"]
         )
         dataloader = DataLoader(
             self.dataset_test,
@@ -150,6 +163,11 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             dataset_test = dataset_test[:limit]
 
         self.images_train = images_train
+        self.dataset_train = ImageDataset(
+            Dataset.from_dict({"image": images_train, "label": y_train}),
+            image_column_name=image_column_name,
+            transform=transform,
+        )
         self.y_train = y_train
         self.dataset_test = ImageDataset(
             dataset_test, image_column_name=image_column_name, transform=transform
@@ -168,8 +186,16 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
+
+        dataloader_train = DataLoader(
+            self.dataset_train,
+            batch_size=self.encode_kwargs["batch_size"],
+            shuffle=False,
+            collate_fn=custom_collate_fn,
+            num_workers=16,
+        )
         X_train = model.get_image_embeddings(
-            self.images_train, batch_size=self.encode_kwargs["batch_size"]
+            dataloader_train, batch_size=self.encode_kwargs["batch_size"]
         )
 
         dataloader = DataLoader(
@@ -309,6 +335,11 @@ class ImagelogRegClassificationEvaluator(Evaluator):
 
         self.images_train = images_train
         self.y_train = y_train
+        self.dataset_train = ImageDataset(
+            Dataset.from_dict({"image": images_train, "label": y_train}),
+            image_column_name=image_column_name,
+            transform=transform,
+        )
         self.dataset_test = ImageDataset(
             dataset_test, image_column_name=image_column_name, transform=transform
         )
@@ -325,8 +356,15 @@ class ImagelogRegClassificationEvaluator(Evaluator):
             max_iter=self.max_iter,
             verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
         )
+        dataloader_train = DataLoader(
+            self.dataset_train,
+            batch_size=self.encode_kwargs["batch_size"],
+            shuffle=False,
+            collate_fn=custom_collate_fn,
+            num_workers=16,
+        )
         X_train = model.get_image_embeddings(
-            self.images_train, batch_size=self.encode_kwargs["batch_size"]
+            dataloader_train, batch_size=self.encode_kwargs["batch_size"]
         )
         dataloader = DataLoader(
             self.dataset_test,
