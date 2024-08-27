@@ -21,3 +21,4 @@ from .eng.WebQAT2TRetrieval import *
 from .multilingual.WITT2IRetrieval import *
 from .multilingual.XFlickr30kCoT2IRetrieval import *
 from .multilingual.XM3600T2IRetrieval import *
+from .eng.FORBI2IRetrieval import *
