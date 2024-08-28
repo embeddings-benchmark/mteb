@@ -105,3 +105,5 @@ Please also add your first name and last name are as you want them to appear in 
 | artemsnegirev     | Artem      | Snegirev   | artem.s.snegirev@gmail.com   | ~Artem_Snegirev1     | SaluteDevices, Russia                                 |
 | anpalmak2003      | Anna       | Maksimova  | anpalmak@gmail.com           | ~Anna_Maksimova1     | SaluteDevices, Russia                                 |
 | MariyaTikhonova   | Maria      | Tikhonova  | m_tikhonova94@mail.ru        | ~Maria_Tikhonova1    | SaluteDevices, HSE University, Russia                 |
+| vaibhavad | Vaibhav    | Adlakha | vaibhav.adlakha@mila.quebec | ~Vaibhav_Adlakha1 | McGill University && Mila - Quebec AI Institute && ServiceNow Research                            |
+| sivareddyg | Siva    | Reddy | siva.reddy@mila.quebec | ~Siva_Reddy1 | McGill University && Mila - Quebec AI Institute && ServiceNow Research && Facebook CIFAR AI Chair                            |
