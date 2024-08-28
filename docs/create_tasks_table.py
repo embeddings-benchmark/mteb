@@ -40,20 +40,29 @@ def task_to_markdown_row(task: mteb.AbsTask) -> str:
     domains = (
         "[" + ", ".join(task.metadata.domains) + "]" if task.metadata.domains else ""
     )
-    n_samples = task.metadata.n_samples if task.metadata.n_samples else ""
-    avg_character_length = (
-        task.metadata.avg_character_length if task.metadata.avg_character_length else ""
+    n_samples = (
+        task.metadata.descriptive_stats["n_samples"]
+        if "n_samples" in task.metadata.descriptive_stats
+        else ""
     )
+    dataset_statistics = ""
+    if "avg_character_length" in task.metadata.descriptive_stats:
+        dataset_statistics = task.metadata.descriptive_stats["avg_character_length"]
+    elif len(task.metadata.descriptive_stats) > 1:
+        all_stat = task.metadata.descriptive_stats
+        all_stat.pop("n_samples")
+        if len(all_stat) > 0:
+            dataset_statistics = all_stat
 
     name_w_reference += author_from_bibtex(task.metadata.bibtex_citation)
 
-    return f"| {name_w_reference} | {task.metadata.languages} | {task.metadata.type} | {task.metadata.category} | {domains} | {n_samples} | {avg_character_length} |"
+    return f"| {name_w_reference} | {task.metadata.languages} | {task.metadata.type} | {task.metadata.category} | {domains} | {n_samples} | {dataset_statistics} |"
 
 
 def create_tasks_table(tasks: list[mteb.AbsTask]) -> str:
     table = """
-| Name | Languages | Type | Category | Domains | # Samples | Avg. Length (Char.) |
-|------|-----------|------|----------|---------|-----------|---------------------|
+| Name | Languages | Type | Category | Domains | # Samples | Dataset statistics |
+|------|-----------|------|----------|---------|-----------|--------------------|
 """
     for task in tasks:
         table += task_to_markdown_row(task) + "\n"
@@ -82,10 +91,10 @@ def create_task_lang_table(tasks: list[mteb.AbsTask]) -> str:
 
     task_names_md = " | ".join(sorted(get_args(TASK_TYPE)))
     horizontal_line_md = "---|---" * len(sorted(get_args(TASK_TYPE)))
-    table = """
-| Language | {} |
-|{}|
-""".format(task_names_md, horizontal_line_md)
+    table = f"""
+| Language | {task_names_md} |
+|{horizontal_line_md}|
+"""
 
     for row in df.iter_rows():
         table += f"| {row[-1]} "

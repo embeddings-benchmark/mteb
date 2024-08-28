@@ -1,0 +1,57 @@
+{
+  "dataset_revision": "7335288588f14e5a687d97fc979194c2abe6f4e7",
+  "evaluation_time": 0.2702820301055908,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.75",
+  "scores": {
+    "test": [
+      {
+        "cosine_accuracy": 0.5053449951409135,
+        "cosine_accuracy_threshold": 1.0,
+        "cosine_ap": 0.5043816778458392,
+        "cosine_f1": 0.6709760827407886,
+        "cosine_f1_threshold": 0.5,
+        "cosine_precision": 0.504863813229572,
+        "cosine_recall": 1.0,
+        "dot_accuracy": 0.5053449951409135,
+        "dot_accuracy_threshold": 0.0,
+        "dot_ap": 0.5043731778425656,
+        "dot_f1": 0.6709760827407886,
+        "dot_f1_threshold": 0.0,
+        "dot_precision": 0.504863813229572,
+        "dot_recall": 1.0,
+        "euclidean_accuracy": 0.5053449951409135,
+        "euclidean_accuracy_threshold": 0.0,
+        "euclidean_ap": 0.5043816778458392,
+        "euclidean_f1": 0.6709760827407886,
+        "euclidean_f1_threshold": 1.0,
+        "euclidean_precision": 0.504863813229572,
+        "euclidean_recall": 1.0,
+        "hf_subset": "default",
+        "languages": [
+          "fas-Arab"
+        ],
+        "main_score": 0.5043816778458392,
+        "manhattan_accuracy": 0.5053449951409135,
+        "manhattan_accuracy_threshold": 0.0,
+        "manhattan_ap": 0.5043816778458392,
+        "manhattan_f1": 0.6709760827407886,
+        "manhattan_f1_threshold": 14.147068977355957,
+        "manhattan_precision": 0.504863813229572,
+        "manhattan_recall": 1.0,
+        "max_ap": 0.5043816778458392,
+        "max_f1": 0.6709760827407886,
+        "max_precision": 0.504863813229572,
+        "max_recall": 1.0,
+        "similarity_accuracy": 0.5053449951409135,
+        "similarity_accuracy_threshold": 0.0,
+        "similarity_ap": 0.5043731778425656,
+        "similarity_f1": 0.6709760827407886,
+        "similarity_f1_threshold": 0.0,
+        "similarity_precision": 0.504863813229572,
+        "similarity_recall": 1.0
+      }
+    ]
+  },
+  "task_name": "FarsTail"
+}

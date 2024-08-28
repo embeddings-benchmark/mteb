@@ -1,8 +1,10 @@
-from typing import Dict, List
+from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks import AbsTaskRetrieval, MultilingualTask, TaskMetadata
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.MultilingualTask import MultilingualTask
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
     "wmt21.de.fr": ["deu-Latn", "fra-Latn"],
@@ -10,14 +12,14 @@ _LANGUAGES = {
 }
 
 
-def _build_lang_pair(langs: List[str]) -> str:
+def _build_lang_pair(langs: list[str]) -> str:
     """Builds a language pair separated by a dash.
     e.g., ['eng-Latn', 'deu-Latn'] -> 'eng-deu'.
     """
     return langs[0].split("-")[0] + "-" + langs[1].split("-")[0]
 
 
-def extend_lang_pairs() -> Dict[str, List[str]]:
+def extend_lang_pairs() -> dict[str, list[str]]:
     eval_langs = {}
     for langs in _LANGUAGES.values():
         lang_pair = _build_lang_pair(langs)
@@ -39,35 +41,36 @@ class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval, MultilingualTask
         reference="https://huggingface.co/datasets/Andrianos/clsd_wmt19_21",
         type="Retrieval",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_EVAL_LANGS,
         main_score="recall_at_1",
         date=("2020-01-01", "2023-12-12"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Cross-Lingual Semantic Discrimination"],
         license="CC BY-SA 4.0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="LM-generated and verified",
+        sample_creation="LM-generated and verified",
         bibtex_citation="preprint_coming",
-        n_samples={"test": 1786},
-        avg_character_length={
-            "test": {
-                "deu-fra": {
-                    "average_document_length": 177.26270996640537,
-                    "average_query_length": 171.73012318029114,
-                    "num_documents": 4465,
-                    "num_queries": 893,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-                "fra-deu": {
-                    "average_document_length": 174.45061590145576,
-                    "average_query_length": 176.99216125419932,
-                    "num_documents": 4465,
-                    "num_queries": 893,
-                    "average_relevant_docs_per_query": 1.0,
+        descriptive_stats={
+            "n_samples": {"test": 1786},
+            "avg_character_length": {
+                "test": {
+                    "deu-fra": {
+                        "average_document_length": 177.26270996640537,
+                        "average_query_length": 171.73012318029114,
+                        "num_documents": 4465,
+                        "num_queries": 893,
+                        "average_relevant_docs_per_query": 1.0,
+                    },
+                    "fra-deu": {
+                        "average_document_length": 174.45061590145576,
+                        "average_query_length": 176.99216125419932,
+                        "num_documents": 4465,
+                        "num_queries": 893,
+                        "average_relevant_docs_per_query": 1.0,
+                    },
                 },
             },
         },

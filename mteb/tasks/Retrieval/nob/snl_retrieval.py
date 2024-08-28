@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import datasets
 
-from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class SNLRetrieval(AbsTaskRetrieval):
@@ -14,31 +17,32 @@ class SNLRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/navjordj/SNL_summarization",
         type="Retrieval",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],
         main_score="ndcg_at_10",
         date=("2020-01-01", "2024-12-31"),  # best guess
-        form=["written"],
-        domains=["Encyclopaedic", "Non-fiction"],
-        license=None,
-        socioeconomic_status="high",
+        domains=["Encyclopaedic", "Non-fiction", "Written"],
+        license="CC-BY-NC",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@mastersthesis{navjord2023beyond,
     title={Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
     author={Navjord, J{\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
     year={2023},
     school={Norwegian University of Life Sciences, {\AA}s}
 }""",
-        n_samples={"test": 2048},
-        avg_character_length={
-            "test": {
-                "average_document_length": 1986.9453846153847,
-                "average_query_length": 14.906153846153845,
-                "num_documents": 1300,
-                "num_queries": 1300,
-                "average_relevant_docs_per_query": 1.0,
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 1986.9453846153847,
+                    "average_query_length": 14.906153846153845,
+                    "num_documents": 1300,
+                    "num_queries": 1300,
+                    "average_relevant_docs_per_query": 1.0,
+                },
             },
         },
         task_subtypes=["Article retrieval"],

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskClassification
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -16,18 +16,17 @@ class NoRecClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],
         main_score="accuracy",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
+        date=("1998-01-01", "2018-01-01"),  # based on plot in paper
+        domains=["Written", "Reviews"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="cc-by-nc-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation="""@inproceedings{velldal-etal-2018-norec,
     title = "{N}o{R}e{C}: The {N}orwegian Review Corpus",
     author = "Velldal, Erik  and
@@ -58,6 +57,8 @@ class NoRecClassification(AbsTaskClassification):
     url = "https://aclanthology.org/L18-1661",
 }
 """,
-        n_samples={"test": 2050},
-        avg_character_length={"test": 82},
+        descriptive_stats={
+            "n_samples": {"test": 2050},
+            "avg_character_length": {"test": 82},
+        },
     )

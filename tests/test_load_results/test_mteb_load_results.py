@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 from pathlib import Path
 
@@ -5,7 +7,7 @@ import mteb
 
 
 def test_mteb_load_results():
-    tests_path = Path(__file__).parent.parent
+    tests_path = Path(__file__).parent.parent / "mock_mteb_cache"
 
     os.environ["MTEB_CACHE"] = str(tests_path)
 

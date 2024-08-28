@@ -16,18 +16,17 @@ class LegalQuAD(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=["Question answering"],
         license="CC BY 4.0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=None,
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@INPROCEEDINGS{9723721,
   author={Hoppe, Christoph and Pelkmann, David and Migenda, Nico and Hötte, Daniel and Schenck, Wolfram},
   booktitle={2021 IEEE Fourth International Conference on Artificial Intelligence and Knowledge Engineering (AIKE)}, 
@@ -39,14 +38,16 @@ class LegalQuAD(AbsTaskRetrieval):
   keywords={Knowledge engineering;Law;Semantic search;Conferences;Bit error rate;NLP;knowledge extraction;question-answering;semantic search;document retrieval;German language},
   doi={10.1109/AIKE52691.2021.00011}
   }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "average_document_length": 19481.955,
-                "average_query_length": 71.965,
-                "num_documents": 200,
-                "num_queries": 200,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 19481.955,
+                    "average_query_length": 71.965,
+                    "num_documents": 200,
+                    "num_queries": 200,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )

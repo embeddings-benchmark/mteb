@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from datasets import load_dataset
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -23,18 +25,17 @@ class FaithDialRetrieval(AbsTaskRetrieval):
         ),
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2022-01-01", "2022-03-31"),
-        form=["written"],
-        domains=["Encyclopaedic"],
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=["Conversational retrieval"],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @article{dziri2022faithdial,
             title = "{FaithDial: A Faithful Benchmark for Information-Seeking Dialogue}",
@@ -48,15 +49,17 @@ class FaithDialRetrieval(AbsTaskRetrieval):
             doi={10.1162/tacl_a_00529}
             }
         """,
-        n_samples={"test": 2042},
-        avg_character_length={
-            "test": {
-                "average_document_length": 140.61062447018932,
-                "average_query_length": 4.926542605288932,
-                "num_documents": 3539,
-                "num_queries": 2042,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        descriptive_stats={
+            "n_samples": {"test": 2042},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 140.61062447018932,
+                    "average_query_length": 4.926542605288932,
+                    "num_documents": 3539,
+                    "num_queries": 2042,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

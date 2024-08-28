@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = {
     "ind-abs": ["ind-Latn", "abs-Latn"],
@@ -30,18 +30,17 @@ class NusaTranslationBitextMining(AbsTaskBitextMining, MultilingualTask):
         reference="https://huggingface.co/datasets/indonlp/nusatranslation_mt",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=_LANGUAGES,
         main_score="f1",
         date=("2021-08-01", "2022-07-01"),
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=[],
         license="CC BY-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""
         @inproceedings{cahyawijaya2023nusawrites,
             title={NusaWrites: Constructing High-Quality Corpora for Underrepresented and Extremely Low-Resource Languages},
@@ -52,6 +51,69 @@ class NusaTranslationBitextMining(AbsTaskBitextMining, MultilingualTask):
         }
 
         """,
-        n_samples={"train": 50200},
-        avg_character_length={"train": 147.01},
+        descriptive_stats={
+            "n_samples": {"train": 50200},
+            "train": {
+                "average_sentence1_length": 145.4552390438247,
+                "average_sentence2_length": 148.56607569721115,
+                "num_samples": 50200,
+                "hf_subset_descriptive_stats": {
+                    "ind-abs": {
+                        "average_sentence1_length": 148.366,
+                        "average_sentence2_length": 147.314,
+                        "num_samples": 1000,
+                    },
+                    "ind-btk": {
+                        "average_sentence1_length": 145.36666666666667,
+                        "average_sentence2_length": 146.74045454545455,
+                        "num_samples": 6600,
+                    },
+                    "ind-bew": {
+                        "average_sentence1_length": 145.4280303030303,
+                        "average_sentence2_length": 148.40530303030303,
+                        "num_samples": 6600,
+                    },
+                    "ind-bhp": {
+                        "average_sentence1_length": 133.528,
+                        "average_sentence2_length": 128.138,
+                        "num_samples": 1000,
+                    },
+                    "ind-jav": {
+                        "average_sentence1_length": 145.42772727272728,
+                        "average_sentence2_length": 145.8089393939394,
+                        "num_samples": 6600,
+                    },
+                    "ind-mad": {
+                        "average_sentence1_length": 145.35545454545453,
+                        "average_sentence2_length": 153.6228787878788,
+                        "num_samples": 6600,
+                    },
+                    "ind-mak": {
+                        "average_sentence1_length": 145.42772727272728,
+                        "average_sentence2_length": 150.6128787878788,
+                        "num_samples": 6600,
+                    },
+                    "ind-min": {
+                        "average_sentence1_length": 145.42772727272728,
+                        "average_sentence2_length": 148.0621212121212,
+                        "num_samples": 6600,
+                    },
+                    "ind-mui": {
+                        "average_sentence1_length": 150.454,
+                        "average_sentence2_length": 150.994,
+                        "num_samples": 1000,
+                    },
+                    "ind-rej": {
+                        "average_sentence1_length": 151.622,
+                        "average_sentence2_length": 139.583,
+                        "num_samples": 1000,
+                    },
+                    "ind-sun": {
+                        "average_sentence1_length": 145.42772727272728,
+                        "average_sentence2_length": 150.9880303030303,
+                        "num_samples": 6600,
+                    },
+                },
+            },
+        },
     )

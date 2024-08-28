@@ -99,7 +99,7 @@ Please also add your first name and last name are as you want them to appear in 
 | gowitheflow-1998          | Chenghao     | Xiao    | chenghao.xiao@durham.ac.uk        |   ~Chenghao_Xiao1            | Durham University   |
 | mariyahendriksen          | Mariya     | Hendriksen    | mariya.hendriksen@gmail.com   |   ~Mariya_Hendriksen1            | University of Amsterdam   |
 | dokato          | Dominik     | Krzemiński    | dkk33@cantab.ac.uk   |   ~Dominik_Krzemiński1            | Cohere For AI Community   |
-| Samoed | Roman | Solomatin | risolomatin@gmail.com | | ITMO                                                      |
+| Samoed            | Roman      | Solomatin  | risolomatin@gmail.com        | ~Roman_Solomatin1    | ITMO                                                  |
 | Alenush           | Alena      | Fenogenova | alenush93@gmail.com          | ~Alena_Fenogenova1   | SaluteDevices, Russia                                 |
 | Ab1992ao          | Aleksandr  | Abramov    | andril772@gmail.com          | ~Aleksandr_Abramov1  | SaluteDevices, Russia                                 |
 | artemsnegirev     | Artem      | Snegirev   | artem.s.snegirev@gmail.com   | ~Artem_Snegirev1     | SaluteDevices, Russia                                 |
@@ -107,3 +107,5 @@ Please also add your first name and last name are as you want them to appear in 
 | MariyaTikhonova   | Maria      | Tikhonova  | m_tikhonova94@mail.ru        | ~Maria_Tikhonova1    | SaluteDevices, HSE University, Russia                 |
 | vaibhavad | Vaibhav    | Adlakha | vaibhav.adlakha@mila.quebec | ~Vaibhav_Adlakha1 | McGill University && Mila - Quebec AI Institute && ServiceNow Research                            |
 | sivareddyg | Siva    | Reddy | siva.reddy@mila.quebec | ~Siva_Reddy1 | McGill University && Mila - Quebec AI Institute && ServiceNow Research && Facebook CIFAR AI Chair                            |
+| guenthermi        | Michael    | Günther    | michael.guenther@jina.ai     | ~Michael_Günther1    | Jina AI                                               |
+| violenil          | Isabelle   | Mohr       | isabelle.mohr@jina.ai        | ~Isabelle_Mohr1      | Jina AI                                               |

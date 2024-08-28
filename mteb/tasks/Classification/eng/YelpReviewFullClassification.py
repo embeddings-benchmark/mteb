@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskClassification
 
 
 class YelpReviewFullClassification(AbsTaskClassification):
@@ -16,18 +15,17 @@ class YelpReviewFullClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2015-01-01", "2015-12-31"),  # reviews from 2015
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Other",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{NIPS2015_250cf8b5,
         author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
@@ -41,8 +39,7 @@ class YelpReviewFullClassification(AbsTaskClassification):
         year = {2015}
         }
         """,
-        n_samples={"test": 50000},
-        avg_character_length={},
+        descriptive_stats={"n_samples": {"test": 50000}, "avg_character_length": {}},
     )
 
     @property

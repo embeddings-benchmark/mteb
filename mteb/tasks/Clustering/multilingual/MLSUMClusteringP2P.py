@@ -4,7 +4,10 @@ import datasets
 import numpy as np
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks import AbsTaskClustering, MultilingualTask, TaskMetadata
+from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.MultilingualTask import MultilingualTask
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
     "de": ["deu-Latn"],
@@ -31,26 +34,27 @@ class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=_LANGUAGES,
         main_score="v_measure",
         date=("2010-01-01", "2018-09-30"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{scialom2020mlsum,
         title={MLSUM: The Multilingual Summarization Corpus},
         author={Scialom, Thomas and Dray, Paul-Alexis and Lamprier, Sylvain and Piwowarski, Benjamin and Staiano, Jacopo},
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        n_samples={"validation": 38561, "test": 41206},
-        avg_character_length={"validation": 4613, "test": 4810},
+        descriptive_stats={
+            "n_samples": {"validation": 38561, "test": 41206},
+            "avg_character_length": {"validation": 4613, "test": 4810},
+        },
     )
 
     def load_data(self, **kwargs):
@@ -90,7 +94,7 @@ class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
         self.dataset[lang] = _dataset
 
 
-class MLSUMClusteringP2PFast(AbsTaskClustering, MultilingualTask):
+class MLSUMClusteringP2PFast(AbsTaskClusteringFast, MultilingualTask):
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 
@@ -105,26 +109,27 @@ class MLSUMClusteringP2PFast(AbsTaskClustering, MultilingualTask):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="v_measure",
         date=("2010-01-01", "2018-09-30"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@article{scialom2020mlsum,
         title={MLSUM: The Multilingual Summarization Corpus},
         author={Scialom, Thomas and Dray, Paul-Alexis and Lamprier, Sylvain and Piwowarski, Benjamin and Staiano, Jacopo},
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        n_samples={"validation": N_SAMPLES, "test": N_SAMPLES},
-        avg_character_length={"validation": 4613, "test": 4810},
+        descriptive_stats={
+            "n_samples": {"validation": N_SAMPLES, "test": N_SAMPLES},
+            "avg_character_length": {"validation": 4613, "test": 4810},
+        },
     )
 
     def load_data(self, **kwargs):
@@ -154,7 +159,7 @@ class MLSUMClusteringP2PFast(AbsTaskClustering, MultilingualTask):
             ["summary", "url", "date", "title"]
         ).rename_columns({"topic": "labels", "text": "sentences"})
 
-        lang_dict = dict()
+        lang_dict = {}
         for split in self.metadata.eval_splits:
             labels = _dataset[split]["labels"]
             sentences = _dataset[split]["sentences"]

@@ -16,18 +16,17 @@ class TRECCOVID(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="""@misc{roberts2021searching,
       title={Searching for Scientific Evidence in a Pandemic: An Overview of TREC-COVID}, 
       author={Kirk Roberts and Tasmeer Alam and Steven Bedrick and Dina Demner-Fushman and Kyle Lo and Ian Soboroff and Ellen Voorhees and Lucy Lu Wang and William R Hersh},
@@ -36,14 +35,16 @@ class TRECCOVID(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "average_document_length": 1116.7434221277986,
-                "average_query_length": 69.24,
-                "num_documents": 171332,
-                "num_queries": 50,
-                "average_relevant_docs_per_query": 493.5,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 1116.7434221277986,
+                    "average_query_length": 69.24,
+                    "num_documents": 171332,
+                    "num_queries": 50,
+                    "average_relevant_docs_per_query": 493.5,
+                }
+            },
         },
     )

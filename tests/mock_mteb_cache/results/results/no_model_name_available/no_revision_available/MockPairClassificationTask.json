@@ -1,0 +1,57 @@
+{
+  "dataset_revision": "NA",
+  "evaluation_time": 0.002724885940551758,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.75",
+  "scores": {
+    "test": [
+      {
+        "cosine_accuracy": 1.0,
+        "cosine_accuracy_threshold": 1.0,
+        "cosine_ap": 0.5,
+        "cosine_f1": 1.0,
+        "cosine_f1_threshold": 1.0,
+        "cosine_precision": 1.0,
+        "cosine_recall": 1.0,
+        "dot_accuracy": 1.0,
+        "dot_accuracy_threshold": 0.0,
+        "dot_ap": 0.5,
+        "dot_f1": 1.0,
+        "dot_f1_threshold": 0.0,
+        "dot_precision": 1.0,
+        "dot_recall": 1.0,
+        "euclidean_accuracy": 1.0,
+        "euclidean_accuracy_threshold": 0.0,
+        "euclidean_ap": 0.5,
+        "euclidean_f1": 1.0,
+        "euclidean_f1_threshold": 0.0,
+        "euclidean_precision": 1.0,
+        "euclidean_recall": 1.0,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.5,
+        "manhattan_accuracy": 1.0,
+        "manhattan_accuracy_threshold": 0.0,
+        "manhattan_ap": 0.5,
+        "manhattan_f1": 1.0,
+        "manhattan_f1_threshold": 0.0,
+        "manhattan_precision": 1.0,
+        "manhattan_recall": 1.0,
+        "max_ap": 0.5,
+        "max_f1": 1.0,
+        "max_precision": 1.0,
+        "max_recall": 1.0,
+        "similarity_accuracy": 1.0,
+        "similarity_accuracy_threshold": 1.0,
+        "similarity_ap": 0.5,
+        "similarity_f1": 1.0,
+        "similarity_f1_threshold": 1.0,
+        "similarity_precision": 1.0,
+        "similarity_recall": 1.0
+      }
+    ]
+  },
+  "task_name": "MockPairClassificationTask"
+}

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 import pytest
@@ -7,23 +9,10 @@ from mteb.overview import get_tasks
 
 # Historic datasets without filled metadata. Do NOT add new datasets to this list.
 _HISTORIC_DATASETS = [
-    "AmazonReviewsClassification",
-    "MasakhaNEWSClassification",
-    "MassiveIntentClassification",
-    "MassiveScenarioClassification",
-    "MTOPDomainClassification",
-    "MTOPIntentClassification",
-    "NordicLangClassification",
-    "ScalaClassification",
-    "NoRecClassification",
-    "NorwegianParliamentClassification",
-    "PunjabiNewsClassification",
-    "CBD",
     "PolEmo2.0-IN",
     "PolEmo2.0-OUT",
     "AllegroReviews",
     "PAC",
-    "SweRecClassification",
     "TNews",
     "IFlyTek",
     "MultilingualSentiment",
@@ -37,10 +26,6 @@ _HISTORIC_DATASETS = [
     "ArxivClusteringP2P",
     "ArxivClusteringS2S",
     "BigPatentClustering",
-    "BiorxivClusteringP2P",
-    "BiorxivClusteringS2S",
-    "MedrxivClusteringP2P",
-    "MedrxivClusteringS2S",
     "RedditClustering",
     "RedditClusteringP2P",
     "StackExchangeClustering",
@@ -54,11 +39,8 @@ _HISTORIC_DATASETS = [
     "MLSUMClusteringS2S",
     "MasakhaNEWSClusteringP2P",
     "MasakhaNEWSClusteringS2S",
-    "SNLClustering",
-    "VGClustering",
     "EightTagsClustering",
     "RomaniBibleClustering",
-    "FloresClusteringS2S",
     "SpanishNewsClusteringP2P",
     "SwednClustering",
     "CLSClusteringS2S",
@@ -92,7 +74,6 @@ _HISTORIC_DATASETS = [
     "FEVER",
     "FiQA2018",
     "HagridRetrieval",
-    "HotpotQA",
     "LegalBenchConsumerContractsQA",
     "LegalBenchCorporateLobbying",
     "LegalSummarization",
@@ -159,7 +140,6 @@ _HISTORIC_DATASETS = [
     "StackOverflowDupQuestions",
     "AlloprofReranking",
     "SyntecReranking",
-    "MIRACLReranking",
     "T2Reranking",
     "MMarcoReranking",
     "CMedQAv1-reranking",
@@ -193,12 +173,8 @@ _HISTORIC_DATASETS = [
     "QBQTC",
     "SummEval",
     "SummEvalFr",
-    "ArxivClusteringP2P.v2",
-    "SwednClusteringP2P",
-    "SwednClusteringS2S",
     "MalayalamNewsClassification",
     "TamilNewsClassification",
-    "ArxivClusteringP2P.v3",
     "TenKGnadClusteringP2P.v2",
     "TenKGnadClusteringS2S.v2",
 ]
@@ -215,21 +191,19 @@ def test_given_dataset_config_then_it_is_valid():
         reference=None,
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="map",
         date=None,
-        form=None,
         domains=None,
         license=None,
         task_subtypes=None,
-        socioeconomic_status=None,
         annotations_creators=None,
         dialect=None,
-        text_creation=None,
+        sample_creation=None,
         bibtex_citation="",
-        avg_character_length=None,
-        n_samples=None,
+        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
     assert my_task.dataset["path"] == "test/dataset"
     assert my_task.dataset["revision"] == "1.0"
@@ -237,27 +211,25 @@ def test_given_dataset_config_then_it_is_valid():
 
 def test_given_missing_dataset_path_then_it_throws():
     with pytest.raises(ValueError):
-        TaskMetadata(
+        TaskMetadata(  # type: ignore
             name="MyTask",
             description="testing",
             reference=None,
             type="Classification",
             category="s2s",
+            modalities=["text"],
             eval_splits=["test"],
             eval_langs=["eng-Latn"],
             main_score="map",
             date=None,
-            form=None,
             domains=None,
             license=None,
             task_subtypes=None,
-            socioeconomic_status=None,
             annotations_creators=None,
             dialect=None,
-            text_creation=None,
+            sample_creation=None,
             bibtex_citation="",
-            avg_character_length=None,
-            n_samples=None,
+            descriptive_stats={"n_samples": None, "avg_character_length": None},
         )
 
 
@@ -272,21 +244,19 @@ def test_given_missing_revision_path_then_it_throws():
             reference=None,
             type="Classification",
             category="s2s",
+            modalities=["text"],
             eval_splits=["test"],
             eval_langs=["eng-Latn"],
             main_score="map",
             date=None,
-            form=None,
             domains=None,
             license=None,
             task_subtypes=None,
-            socioeconomic_status=None,
             annotations_creators=None,
             dialect=None,
-            text_creation=None,
+            sample_creation=None,
             bibtex_citation="",
-            avg_character_length=None,
-            n_samples=None,
+            descriptive_stats={"n_samples": None, "avg_character_length": None},
         )
 
 
@@ -299,21 +269,19 @@ def test_given_none_revision_path_then_it_logs_warning(caplog):
             reference=None,
             type="Classification",
             category="s2s",
+            modalities=["text"],
             eval_splits=["test"],
             eval_langs=["eng-Latn"],
             main_score="map",
             date=None,
-            form=None,
             domains=None,
             license=None,
             task_subtypes=None,
-            socioeconomic_status=None,
             annotations_creators=None,
             dialect=None,
-            text_creation=None,
+            sample_creation=None,
             bibtex_citation="",
-            avg_character_length=None,
-            n_samples=None,
+            descriptive_stats={"n_samples": None, "avg_character_length": None},
         )
 
         assert my_task.dataset["revision"] is None
@@ -340,21 +308,19 @@ def test_unfilled_metadata_is_not_filled():
             reference=None,
             type="Classification",
             category="s2s",
+            modalities=["text"],
             eval_splits=["test"],
             eval_langs=["eng-Latn"],
             main_score="map",
             date=None,
-            form=None,
             domains=None,
             license=None,
             task_subtypes=None,
-            socioeconomic_status=None,
             annotations_creators=None,
             dialect=None,
-            text_creation=None,
+            sample_creation=None,
             bibtex_citation="",
-            avg_character_length=None,
-            n_samples=None,
+            descriptive_stats={"n_samples": None, "avg_character_length": None},
         ).is_filled()
         is False
     )
@@ -372,33 +338,36 @@ def test_filled_metadata_is_filled():
             reference="https://aclanthology.org/W19-6138/",
             type="Classification",
             category="s2s",
+            modalities=["text"],
             eval_splits=["test"],
             eval_langs=["eng-Latn"],
             main_score="map",
             date=("2021-01-01", "2021-12-31"),
-            form=["written"],
-            domains=["Non-fiction"],
+            domains=["Non-fiction", "Written"],
             license="mit",
             task_subtypes=["Thematic clustering"],
-            socioeconomic_status="high",
             annotations_creators="expert-annotated",
             dialect=[],
-            text_creation="found",
+            sample_creation="found",
             bibtex_citation="Someone et al",
-            avg_character_length={"train": 1},
-            n_samples={"train": 1},
+            descriptive_stats={
+                "n_samples": {"train": 1},
+                "avg_character_length": {"train": 1},
+            },
         ).is_filled()
         is True
     )
 
 
-def test_all_metadata_is_filled():
+def test_all_metadata_is_filled_and_valid():
     all_tasks = get_tasks()
 
     unfilled_metadata = []
     for task in all_tasks:
         if task.metadata.name not in _HISTORIC_DATASETS:
-            if not task.metadata.is_filled():
+            if not task.metadata.is_filled() and (
+                not task.metadata.validate_metadata()
+            ):
                 unfilled_metadata.append(task.metadata.name)
     if unfilled_metadata:
         raise ValueError(

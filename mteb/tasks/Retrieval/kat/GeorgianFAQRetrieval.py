@@ -21,29 +21,30 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         ),
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kat-Geor"],
         main_score="ndcg_at_10",
-        domains=["Web"],
-        text_creation="created",
-        n_samples={_EVAL_SPLIT: 2566},
+        domains=["Web", "Written"],
+        sample_creation="created",
         reference="https://huggingface.co/datasets/jupyterjazz/georgian-faq",
         date=("2024-05-02", "2024-05-03"),
-        form=["written"],
         task_subtypes=["Question answering"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         bibtex_citation="",
-        avg_character_length={
-            "test": {
-                "average_document_length": 511.24668745128605,
-                "average_query_length": 61.69551656920078,
-                "num_documents": 2566,
-                "num_queries": 2565,
-                "average_relevant_docs_per_query": 1.0003898635477584,
-            }
+        descriptive_stats={
+            "n_samples": {_EVAL_SPLIT: 2566},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 511.24668745128605,
+                    "average_query_length": 61.69551656920078,
+                    "num_documents": 2566,
+                    "num_queries": 2565,
+                    "average_relevant_docs_per_query": 1.0003898635477584,
+                }
+            },
         },
     )
 

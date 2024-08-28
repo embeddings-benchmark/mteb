@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskClustering, TaskMetadata
+from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class RomaniBibleClustering(AbsTaskClustering):
@@ -14,19 +15,20 @@ class RomaniBibleClustering(AbsTaskClustering):
         },
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rom-Latn"],
         main_score="v_measure",
         date=("2020-01-01", "2020-12-31"),
-        form=["written"],
-        domains=["Religious"],
+        domains=["Religious", "Written"],
         task_subtypes=["Thematic clustering"],
         license="MIT",
-        socioeconomic_status="low",
         annotations_creators="derived",
         dialect=["Kalderash"],
-        text_creation="human-translated and localized",
+        sample_creation="human-translated and localized",
         bibtex_citation=None,
-        n_samples={"test": 2048},
-        avg_character_length={"test": 132.2},
+        descriptive_stats={
+            "n_samples": {"test": 2048},
+            "avg_character_length": {"test": 132.2},
+        },
     )

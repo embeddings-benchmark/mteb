@@ -17,18 +17,20 @@ class TRECCOVIDPL(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="ndcg_at_10",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
+        date=(
+            "2019-12-01",
+            "2022-12-31",
+        ),  # approximate date of covid pandemic start and end (best guess)
+        domains=["Academic", "Non-fiction", "Written"],
+        task_subtypes=["Article retrieval"],
+        license="Not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="machine-translated",
         bibtex_citation="""@misc{wojtasik2024beirpl,
       title={BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language}, 
       author={Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
@@ -37,14 +39,16 @@ class TRECCOVIDPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "average_document_length": 1159.8020276422385,
-                "average_query_length": 69.42,
-                "num_documents": 171332,
-                "num_queries": 50,
-                "average_relevant_docs_per_query": 493.5,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 1159.8020276422385,
+                    "average_query_length": 69.42,
+                    "num_documents": 171332,
+                    "num_queries": 50,
+                    "average_relevant_docs_per_query": 493.5,
+                }
+            },
         },
     )

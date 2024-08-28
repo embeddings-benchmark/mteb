@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskClassification
 
 
 class ImdbClassification(AbsTaskClassification):
@@ -16,6 +15,7 @@ class ImdbClassification(AbsTaskClassification):
         reference="http://www.aclweb.org/anthology/P11-1015",
         type="Classification",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -23,14 +23,12 @@ class ImdbClassification(AbsTaskClassification):
             "2000-01-01",
             "2010-12-31",
         ),  # Estimated range for the collection of movie reviews
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{maas-etal-2011-learning,
     title = "Learning Word Vectors for Sentiment Analysis",
     author = "Maas, Andrew L.  and
@@ -50,6 +48,8 @@ class ImdbClassification(AbsTaskClassification):
     url = "https://aclanthology.org/P11-1015",
     pages = "142--150",
 }""",
-        n_samples={"test": 25000},
-        avg_character_length={"test": 1293.8},
+        descriptive_stats={
+            "n_samples": {"test": 25000},
+            "avg_character_length": {"test": 1293.8},
+        },
     )

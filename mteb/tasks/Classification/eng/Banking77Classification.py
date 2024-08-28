@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskClassification
 
 
 class Banking77Classification(AbsTaskClassification):
@@ -16,6 +15,7 @@ class Banking77Classification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -23,14 +23,12 @@ class Banking77Classification(AbsTaskClassification):
             "2019-01-01",
             "2019-12-31",
         ),  # Estimated range for the collection of queries
-        form=["written"],
-        domains=[],
+        domains=["Written"],
         task_subtypes=[],
         license="MIT",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{casanueva-etal-2020-efficient,
     title = "Efficient Intent Detection with Dual Sentence Encoders",
     author = "Casanueva, I{\~n}igo  and
@@ -55,6 +53,8 @@ class Banking77Classification(AbsTaskClassification):
     doi = "10.18653/v1/2020.nlp4convai-1.5",
     pages = "38--45",
 }""",
-        n_samples={"test": 3080},
-        avg_character_length={"test": 54.2},
+        descriptive_stats={
+            "n_samples": {"test": 3080},
+            "avg_character_length": {"test": 54.2},
+        },
     )

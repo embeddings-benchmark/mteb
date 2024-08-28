@@ -5,9 +5,25 @@ from typing import Any
 
 from ..evaluation.evaluators import STSEvaluator
 from ..load_results.mteb_results import ScoresDict
-from .AbsTask import AbsTask
+from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
+
+
+class STSDescriptiveStatistics(DescriptiveStatistics):
+    """Descriptive statistics for STS
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+        average_sentence1_len: Average length of sentence1
+        average_sentence2_len: Average length of sentence2
+        avg_score: Average score
+    """
+
+    num_samples: int
+    average_sentence1_len: float
+    average_sentence2_len: float
+    avg_score: float
 
 
 class AbsTaskSTS(AbsTask):
@@ -51,3 +67,33 @@ class AbsTaskSTS(AbsTask):
 
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
+
+    def _calculate_metrics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ) -> STSDescriptiveStatistics:
+        if hf_subset:
+            sentence1 = self.dataset[hf_subset][split]["sentence1"]
+            sentence2 = self.dataset[hf_subset][split]["sentence2"]
+            score = self.dataset[hf_subset][split]["score"]
+        elif compute_overall:
+            sentence1 = []
+            sentence2 = []
+            score = []
+            for hf_subset in self.metadata.eval_langs:
+                sentence1.extend(self.dataset[hf_subset][split]["sentence1"])
+                sentence2.extend(self.dataset[hf_subset][split]["sentence2"])
+                score.extend(self.dataset[hf_subset][split]["score"])
+        else:
+            sentence1 = self.dataset[split]["sentence1"]
+            sentence2 = self.dataset[split]["sentence2"]
+            score = self.dataset[split]["score"]
+
+        total_sentence1_len = sum([len(s) for s in sentence1])
+        total_sentence2_len = sum([len(s) for s in sentence2])
+        avg_score = sum(score) / len(score)
+        return STSDescriptiveStatistics(
+            num_samples=len(sentence1),
+            average_sentence1_len=total_sentence1_len / len(sentence1),
+            average_sentence2_len=total_sentence2_len / len(sentence2),
+            avg_score=avg_score,
+        )

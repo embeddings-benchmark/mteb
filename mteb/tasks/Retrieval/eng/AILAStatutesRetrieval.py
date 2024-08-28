@@ -16,18 +16,17 @@ class AILAStatutes(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        form=["written"],
-        domains=["Legal"],
+        domains=["Legal", "Written"],
         task_subtypes=["Article retrieval"],
         license="CC BY 4.0",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=None,
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@dataset{paheli_bhattacharya_2020_4063986,
   author       = {Paheli Bhattacharya and
                   Kripabandhu Ghosh and
@@ -43,14 +42,16 @@ class AILAStatutes(AbsTaskRetrieval):
   doi          = {10.5281/zenodo.4063986},
   url          = {https://doi.org/10.5281/zenodo.4063986}
 }""",
-        n_samples=None,
-        avg_character_length={
-            "test": {
-                "average_document_length": 1973.6341463414635,
-                "average_query_length": 3038.42,
-                "num_documents": 82,
-                "num_queries": 50,
-                "average_relevant_docs_per_query": 4.34,
-            }
+        descriptive_stats={
+            "n_samples": None,
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 1973.6341463414635,
+                    "average_query_length": 3038.42,
+                    "num_documents": 82,
+                    "num_queries": 50,
+                    "average_relevant_docs_per_query": 4.34,
+                }
+            },
         },
     )

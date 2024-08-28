@@ -5,7 +5,8 @@ from collections import Counter
 import datasets
 from datasets import DatasetDict
 
-from mteb.abstasks import AbsTaskClassification, MultilingualTask
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -20,6 +21,7 @@ class TurkicClassification(MultilingualTask, AbsTaskClassification):
         reference="https://huggingface.co/datasets/Electrotubbie/classification_Turkic_languages/",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs={
             "ky": ["kir-Cyrl"],
@@ -28,18 +30,18 @@ class TurkicClassification(MultilingualTask, AbsTaskClassification):
         },
         main_score="accuracy",
         date=("2023-02-16", "2023-09-03"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="Not specified",
-        socioeconomic_status="low",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         """,
-        n_samples={"train": 193056},
-        avg_character_length={"train": 1103.13},
+        descriptive_stats={
+            "n_samples": {"train": 193056},
+            "avg_character_length": {"train": 1103.13},
+        },
     )
 
     def transform_data(self, dataset, lang):

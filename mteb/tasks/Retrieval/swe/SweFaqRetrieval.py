@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import datasets
 
-from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class SweFaqRetrieval(AbsTaskRetrieval):
@@ -16,28 +19,35 @@ class SweFaqRetrieval(AbsTaskRetrieval):
         reference="https://spraakbanken.gu.se/en/resources/superlim",
         type="Retrieval",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["swe-Latn"],
         main_score="ndcg_at_10",
         date=("2000-01-01", "2024-12-31"),  # best guess
-        form=["written"],
         task_subtypes=["Question answering"],
-        domains=["Government", "Non-fiction"],
+        domains=["Government", "Non-fiction", "Written"],
         license="CC-BY-SA-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
-        bibtex_citation=None,
-        n_samples={"test": 1024},
-        avg_character_length={
-            "test": {
-                "average_document_length": 319.8473581213307,
-                "average_query_length": 70.51461988304094,
-                "num_documents": 511,
-                "num_queries": 513,
-                "average_relevant_docs_per_query": 1.0,
-            }
+        sample_creation="found",
+        bibtex_citation="""@inproceedings{berdivcevskis2023superlim,
+  title={Superlim: A Swedish language understanding evaluation benchmark},
+  author={Berdi{\v{c}}evskis, Aleksandrs and Bouma, Gerlof and Kurtz, Robin and Morger, Felix and {\"O}hman, Joey and Adesam, Yvonne and Borin, Lars and Dann{\'e}lls, Dana and Forsberg, Markus and Isbister, Tim and others},
+  booktitle={Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
+  pages={8137--8153},
+  year={2023}
+}""",  # for the benchmark in which this dataset is used
+        descriptive_stats={
+            "n_samples": {"test": 1024},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 319.8473581213307,
+                    "average_query_length": 70.51461988304094,
+                    "num_documents": 511,
+                    "num_queries": 513,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )
 

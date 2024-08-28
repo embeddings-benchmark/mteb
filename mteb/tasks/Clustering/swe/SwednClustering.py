@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks import TaskMetadata
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 def dataset_transform(self):
@@ -70,26 +70,27 @@ class SwednClusteringP2P(AbsTaskClusteringFast):
         reference="https://spraakbanken.gu.se/en/resources/swedn",
         type="Clustering",
         category="p2p",
+        modalities=["text"],
         eval_splits=["summaries", "articles"],
         eval_langs=["swe-Latn"],
         main_score="v_measure",
         date=("2000-01-01", "2020-12-31"),  # best guess
-        form=["written"],
-        domains=["News", "Non-fiction"],
-        license=None,
-        socioeconomic_status="mixed",
+        domains=["News", "Non-fiction", "Written"],
+        license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
         task_subtypes=["Thematic clustering"],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{monsen2021method,
   title={A method for building non-english corpora for abstractive text summarization},
   author={Monsen, Julius and J{\"o}nsson, Arne},
   booktitle={Proceedings of CLARIN Annual Conference},
   year={2021}
 }""",
-        n_samples={"all": 2048},
-        avg_character_length={"all": 1619.71},
+        descriptive_stats={
+            "n_samples": {"all": 2048},
+            "avg_character_length": {"all": 1619.71},
+        },
     )
 
     def dataset_transform(self):
@@ -112,26 +113,27 @@ class SwednClusteringFastS2S(AbsTaskClusteringFast):
         reference="https://spraakbanken.gu.se/en/resources/swedn",
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["headlines"],
         eval_langs=["swe-Latn"],
         main_score="v_measure",
         date=("2000-01-01", "2020-12-31"),  # best guess
-        form=["written"],
-        domains=["News", "Non-fiction"],
-        license=None,
-        socioeconomic_status="mixed",
+        domains=["News", "Non-fiction", "Written"],
+        license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
         task_subtypes=["Thematic clustering"],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{monsen2021method,
   title={A method for building non-english corpora for abstractive text summarization},
   author={Monsen, Julius and J{\"o}nsson, Arne},
   booktitle={Proceedings of CLARIN Annual Conference},
   year={2021}
 }""",
-        n_samples={"all": 2048},
-        avg_character_length={"all": 1619.71},
+        descriptive_stats={
+            "n_samples": {"all": 2048},
+            "avg_character_length": {"all": 1619.71},
+        },
     )
 
     def dataset_transform(self):

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -18,21 +20,22 @@ class LivedoorNewsClusteringv2(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],
         main_score="v_measure",
         date=("2000-01-01", "2014-02-09"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="cc-by-nd-2.1-jp",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",
-        n_samples={"test": 1106},
-        avg_character_length={"test": 1082.61},
+        descriptive_stats={
+            "n_samples": {"test": 1106},
+            "avg_character_length": {"test": 1082.61},
+        },
     )
 
     def dataset_transform(self):
@@ -64,21 +67,22 @@ class LivedoorNewsClustering(AbsTaskClusteringFast):
         },
         type="Clustering",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],
         main_score="v_measure",
         date=("2000-01-01", "2014-02-09"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="cc-by-nd-2.1-jp",
-        socioeconomic_status="high",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="",
-        n_samples={"test": 1107},
-        avg_character_length={"test": 1082.61},
+        descriptive_stats={
+            "n_samples": {"test": 1107},
+            "avg_character_length": {"test": 1082.61},
+        },
     )
 
     def dataset_transform(self):

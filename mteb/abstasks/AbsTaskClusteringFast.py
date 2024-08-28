@@ -3,8 +3,8 @@ from __future__ import annotations
 import itertools
 import logging
 import random
-from collections import defaultdict
-from typing import Any, Dict, Optional
+from collections import Counter, defaultdict
+from typing import Any, Dict
 
 import numpy as np
 import sklearn
@@ -16,7 +16,7 @@ from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators.model_encode import model_encode
 from ..load_results.mteb_results import HFSubset
-from .AbsTask import AbsTask
+from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +30,7 @@ def evaluate_clustering_bootstrapped(
     n_clusters: int,
     cluster_size: int,
     kmean_batch_size: int,
-    max_depth: Optional[int],
+    max_depth: int | None,
     rng_state: random.Random = random.Random(),
 ) -> dict[str, list[float]]:
     """Bootstrapped evaluation of clustering performance using V-measure.
@@ -77,6 +77,24 @@ def evaluate_clustering_bootstrapped(
             v_measures[f"Level {i_level}"].append(v_measure)
 
     return v_measures
+
+
+class ClusteringFastDescriptiveStatistics(DescriptiveStatistics):
+    """Descriptive statistics for Clustering
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+        average_text_length: Average length of text
+        average_labels_per_text: Average number of labels per text
+        unique_labels: Number of unique labels
+        labels: dict of label frequencies
+    """
+
+    num_samples: int
+    average_text_length: float
+    average_labels_per_text: float
+    unique_labels: int
+    labels: dict[str, dict[str, int]]
 
 
 class AbsTaskClusteringFast(AbsTask):
@@ -143,11 +161,14 @@ class AbsTaskClusteringFast(AbsTask):
         ):
             downsampled_dataset = dataset
         else:
-            max_documents_to_embed = min(len(dataset), self.max_document_to_embed)  # type: ignore
             if self.max_fraction_of_documents_to_embed is not None:
                 max_documents_to_embed = int(
                     self.max_fraction_of_documents_to_embed * len(dataset)
                 )
+            else:
+                max_documents_to_embed = self.max_document_to_embed
+
+            max_documents_to_embed = min(len(dataset), max_documents_to_embed)  # type: ignore
             example_indices = rng_state.sample(
                 range(len(dataset)), k=max_documents_to_embed
             )
@@ -186,6 +207,43 @@ class AbsTaskClusteringFast(AbsTask):
         }
         self._add_main_score(scores)
         return scores
+
+    def _calculate_metrics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ) -> ClusteringFastDescriptiveStatistics:
+        if hf_subset:
+            sentences = self.dataset[hf_subset][split]["sentences"]
+            labels = self.dataset[hf_subset][split]["labels"]
+        elif compute_overall:
+            sentences = []
+            labels = []
+            for hf_subset in self.metadata.eval_langs:
+                sentences.extend(self.dataset[hf_subset][split]["sentences"])
+                labels.extend(self.dataset[hf_subset][split]["labels"])
+        else:
+            sentences = self.dataset[split]["sentences"]
+            labels = self.dataset[split]["labels"]
+
+        total_text_len = sum([len(t) for t in sentences])
+        total_labels = []
+        for label in labels:
+            if isinstance(label, list):
+                total_labels.extend(label)
+            else:
+                total_labels.append(label)
+        label_counter = Counter(total_labels)
+        return ClusteringFastDescriptiveStatistics(
+            num_samples=len(sentences),
+            average_text_length=total_text_len / len(sentences),
+            average_labels_per_text=len(total_labels) / len(sentences),
+            unique_labels=len(label_counter),
+            labels={
+                str(label): {
+                    "count": value,
+                }
+                for label, value in label_counter.items()
+            },
+        )
 
 
 def clustering_downsample(

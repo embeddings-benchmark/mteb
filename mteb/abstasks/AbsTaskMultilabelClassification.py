@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import itertools
 import logging
-from collections import defaultdict
+from collections import Counter, defaultdict
 from typing import Any
 
 import numpy as np
@@ -16,7 +16,7 @@ from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators.model_encode import model_encode
 from ..load_results.mteb_results import HFSubset, ScoresDict
-from .AbsTask import AbsTask
+from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -41,13 +41,31 @@ def evaluate_classifier(
     return scores
 
 
+class MultilabelClassificationDescriptiveStatistics(DescriptiveStatistics):
+    """Descriptive statistics for MultilabelClassification
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+        average_text_length: Average length of text
+        average_label_per_text: Average number of labels per text
+        unique_labels: Number of unique labels
+        labels: dict of label frequencies
+    """
+
+    num_samples: int
+    average_text_length: float
+    average_label_per_text: float
+    unique_labels: int
+    labels: dict[str, dict[str, int]]
+
+
 class AbsTaskMultilabelClassification(AbsTask):
     """Abstract class for multioutput classification tasks
     The similarity is computed between pairs and the results are ranked.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
         text: str
-        label: list[Hashable]
+        label: list[list[int]]
     """
 
     classifier = KNeighborsClassifier(n_neighbors=5)
@@ -90,7 +108,7 @@ class AbsTaskMultilabelClassification(AbsTask):
             self.load_data()
 
         scores = {}
-        hf_subsets = [l for l in self.dataset] if self.is_multilingual else ["default"]
+        hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
 
         for hf_subset in hf_subsets:
             logger.info(
@@ -202,3 +220,38 @@ class AbsTaskMultilabelClassification(AbsTask):
                 for label in y[i]:
                     label_counter[label] += 1
         return sample_indices, idxs
+
+    def _calculate_metrics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ) -> MultilabelClassificationDescriptiveStatistics:
+        if hf_subset:
+            text = self.dataset[hf_subset][split]["text"]
+            label = self.dataset[hf_subset][split]["label"]
+        elif compute_overall:
+            text = []
+            label = []
+            for hf_subset in self.metadata.eval_langs:
+                text.extend(self.dataset[hf_subset][split]["text"])
+                label.extend(self.dataset[hf_subset][split]["label"])
+        else:
+            text = self.dataset[split]["text"]
+            label = self.dataset[split]["label"]
+
+        total_text_len = sum(len(t) for t in text)
+        total_label_len = sum(len(l) for l in label)
+        total_labels = []
+        for l in label:
+            total_labels.extend(l if len(l) > 0 else [None])
+        label_count = Counter(total_labels)
+        return MultilabelClassificationDescriptiveStatistics(
+            average_text_length=total_text_len / len(text),
+            average_label_per_text=total_label_len / len(label),
+            num_samples=len(text),
+            unique_labels=len(label_count),
+            labels={
+                str(label): {
+                    "count": value,
+                }
+                for label, value in label_count.items()
+            },
+        )

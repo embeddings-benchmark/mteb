@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskSTS, MultilingualTask
 
 _LANGUAGES = {
     "en": ["eng-Latn"],
@@ -38,18 +38,17 @@ class STS22CrosslingualSTSv2(AbsTaskSTS, MultilingualTask):
         reference="https://competitions.codalab.org/competitions/33835",
         type="STS",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="cosine_spearman",
         date=("2020-01-01", "2020-06-11"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=[],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{chen-etal-2022-semeval,
     title = "{S}em{E}val-2022 Task 8: Multilingual news article similarity",
     author = {Chen, Xi  and
@@ -78,8 +77,10 @@ class STS22CrosslingualSTSv2(AbsTaskSTS, MultilingualTask):
     doi = "10.18653/v1/2022.semeval-1.155",
     pages = "1094--1106",
 }""",
-        n_samples={"test": 3958},
-        avg_character_length={"test": 1993.6},
+        descriptive_stats={
+            "n_samples": {"test": 3958},
+            "avg_character_length": {"test": 1993.6},
+        },
     )
 
     @property
@@ -103,18 +104,17 @@ class STS22CrosslingualSTS(AbsTaskSTS, MultilingualTask):
         reference="https://competitions.codalab.org/competitions/33835",
         type="STS",
         category="p2p",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="cosine_spearman",
         date=("2020-01-01", "2020-06-11"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=[],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{chen-etal-2022-semeval,
     title = "{S}em{E}val-2022 Task 8: Multilingual news article similarity",
     author = {Chen, Xi  and
@@ -143,8 +143,10 @@ class STS22CrosslingualSTS(AbsTaskSTS, MultilingualTask):
     doi = "10.18653/v1/2022.semeval-1.155",
     pages = "1094--1106",
 }""",
-        n_samples={"test": 8056},
-        avg_character_length={"test": 1993.6},
+        descriptive_stats={
+            "n_samples": {"test": 8056},
+            "avg_character_length": {"test": 1993.6},
+        },
     )
 
     @property

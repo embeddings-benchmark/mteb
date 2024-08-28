@@ -21,26 +21,27 @@ class SadeemQuestionRetrieval(AbsTaskRetrieval):
         description="SadeemQuestion: A Benchmark Data Set for Community Question-Retrieval Research",
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["ara-Arab"],
         main_score="ndcg_at_10",
         date=("2024-01-01", "2024-04-01"),
-        form=["written"],
-        domains=["written"],
+        domains=["Written", "Written"],
         task_subtypes=["Article retrieval"],
         license="Not specified",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @inproceedings{sadeem-2024-ar-retrieval-questions,
             title = "SadeemQuestionRetrieval: A New Benchmark for Arabic questions-based Articles Searching.",
             author = "abubakr.soliman@sadeem.app"
             }
         """,
-        n_samples={_EVAL_SPLIT: 22979},
-        avg_character_length={_EVAL_SPLIT: 500.0},
+        descriptive_stats={
+            "n_samples": {_EVAL_SPLIT: 22979},
+            "avg_character_length": {_EVAL_SPLIT: 500.0},
+        },
     )
 
     def load_data(self, **kwargs):

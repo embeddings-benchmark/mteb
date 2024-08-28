@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskClassification
 
 
 class TweetSentimentExtractionClassification(AbsTaskClassification):
@@ -16,6 +15,7 @@ class TweetSentimentExtractionClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -23,14 +23,12 @@ class TweetSentimentExtractionClassification(AbsTaskClassification):
             "2020-01-01",
             "2020-12-31",
         ),  # Estimated range for the collection of tweets
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{tweet-sentiment-extraction,
     author = {Maggie, Phil Culliton, Wei Chen},
     title = {Tweet Sentiment Extraction},
@@ -38,8 +36,10 @@ class TweetSentimentExtractionClassification(AbsTaskClassification):
     year = {2020},
     url = {https://kaggle.com/competitions/tweet-sentiment-extraction}
 }""",
-        n_samples={"test": 3534},
-        avg_character_length={"test": 67.8},
+        descriptive_stats={
+            "n_samples": {"test": 3534},
+            "avg_character_length": {"test": 67.8},
+        },
     )
 
     @property

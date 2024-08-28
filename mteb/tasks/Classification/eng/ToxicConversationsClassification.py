@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskClassification
 
 
 class ToxicConversationsClassification(AbsTaskClassification):
@@ -16,6 +15,7 @@ class ToxicConversationsClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -23,14 +23,12 @@ class ToxicConversationsClassification(AbsTaskClassification):
             "2017-01-01",
             "2018-12-31",
         ),  # Estimated range for the collection of comments
-        form=["written"],
-        domains=["Social"],
+        domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="CC BY 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""@misc{jigsaw-unintended-bias-in-toxicity-classification,
     author = {cjadams, Daniel Borkan, inversion, Jeffrey Sorensen, Lucas Dixon, Lucy Vasserman, nithum},
     title = {Jigsaw Unintended Bias in Toxicity Classification},
@@ -38,8 +36,10 @@ class ToxicConversationsClassification(AbsTaskClassification):
     year = {2019},
     url = {https://kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification}
 }""",
-        n_samples={"test": 50000},
-        avg_character_length={"test": 296.6},
+        descriptive_stats={
+            "n_samples": {"test": 50000},
+            "avg_character_length": {"test": 296.6},
+        },
     )
 
     @property

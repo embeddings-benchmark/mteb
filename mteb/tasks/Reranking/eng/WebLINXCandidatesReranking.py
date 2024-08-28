@@ -19,6 +19,7 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
         },
         type="Reranking",
         category="p2p",
+        modalities=["text"],
         eval_splits=[
             "validation",
             "test_iid",
@@ -30,14 +31,12 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
         eval_langs=["eng-Latn"],
         main_score="mrr",
         date=("2023-03-01", "2023-10-30"),
-        form=["written"],
-        domains=["Academic", "Web"],
+        domains=["Academic", "Web", "Written"],
         task_subtypes=["Code retrieval", "Conversational retrieval"],
         license="CC BY-NC-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="created",
+        sample_creation="created",
         bibtex_citation="""
 @misc{lù2024weblinx,
       title={WebLINX: Real-World Website Navigation with Multi-Turn Dialogue}, 
@@ -48,21 +47,23 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
       primaryClass={cs.CL}
 }
         """,
-        n_samples={
-            "validation": 1301,
-            "test_iid": 1438,
-            "test_cat": 3560,
-            "test_web": 3144,
-            "test_vis": 5298,
-            "test_geo": 4916,
-        },
-        avg_character_length={
-            "validation": 1647.52,
-            "test_iid": 1722.63,
-            "test_cat": 2149.66,
-            "test_web": 1831.46,
-            "test_vis": 1737.26,
-            "test_geo": 1742.66,
+        descriptive_stats={
+            "n_samples": {
+                "validation": 1301,
+                "test_iid": 1438,
+                "test_cat": 3560,
+                "test_web": 3144,
+                "test_vis": 5298,
+                "test_geo": 4916,
+            },
+            "avg_character_length": {
+                "validation": 1647.52,
+                "test_iid": 1722.63,
+                "test_cat": 2149.66,
+                "test_web": 1831.46,
+                "test_vis": 1737.26,
+                "test_geo": 1742.66,
+            },
         },
     )
 

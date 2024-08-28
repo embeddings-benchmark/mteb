@@ -1,1 +1,0 @@
-{"name": "cohere/embed-multilingual-v3.0", "revision": null, "release_date": "2023-11-02", "languages": [], "n_parameters": null, "memory_usage": null, "max_tokens": null, "embed_dim": null, "license": null, "open_source": false, "similarity_fn_name": null, "framework": [], "loader": "CohereTextEmbeddingModel"}

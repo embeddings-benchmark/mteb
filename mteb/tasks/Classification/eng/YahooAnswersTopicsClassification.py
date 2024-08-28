@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskClassification
 
 
 class YahooAnswersTopicsClassification(AbsTaskClassification):
@@ -17,18 +16,17 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-01-25", "2022-01-25"),
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=["Topic classification"],
         license="Not specified",
-        socioeconomic_status="low",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
        @inproceedings{NIPS2015_250cf8b5,
         author = {Zhang, Xiang and Zhao, Junbo and LeCun, Yann},
@@ -41,8 +39,10 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
         volume = {28},
         year = {2015}
         }""",
-        n_samples={"test": 60000},
-        avg_character_length={"test": 346.35},
+        descriptive_stats={
+            "n_samples": {"test": 60000},
+            "avg_character_length": {"test": 346.35},
+        },
     )
 
     @property

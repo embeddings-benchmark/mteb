@@ -4,9 +4,9 @@ from typing import Any
 
 import datasets
 
+from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = [
     "aai_Latn",  # Apinayé
@@ -872,21 +872,22 @@ class BibleNLPBitextMining(AbsTaskBitextMining, MultilingualTask):
         reference="https://arxiv.org/abs/2304.09919",
         type="BitextMining",
         category="s2s",
+        modalities=["text"],
         eval_splits=_SPLIT,
         eval_langs=_LANGUAGES_MAPPING,
         main_score="f1",
         # World English Bible (WEB) first draft 1997, finished 2020
         date=("1997-01-01", "2020-12-31"),
-        form=["written"],
-        domains=["Religious"],
+        domains=["Religious", "Written"],
         task_subtypes=[],
         license="CC-BY-SA-4.0",
-        socioeconomic_status="medium",
         annotations_creators="expert-annotated",
         dialect=[],
-        text_creation="created",
-        n_samples={"train": _N},
-        avg_character_length={"train": 120},
+        sample_creation="created",
+        descriptive_stats={
+            "n_samples": {"train": _N},
+            "avg_character_length": {"train": 120},
+        },
         bibtex_citation="""@article{akerman2023ebible,
             title={The eBible Corpus: Data and Model Benchmarks for Bible Translation for Low-Resource Languages},
             author={Akerman, Vesa and Baines, David and Daspit, Damien and Hermjakob, Ulf and Jang, Taeho and Leong, Colin and Martin, Michael and Mathew, Joel and Robie, Jonathan and Schwarting, Marcus},
@@ -922,7 +923,7 @@ class BibleNLPBitextMining(AbsTaskBitextMining, MultilingualTask):
     def dataset_transform(self) -> None:
         # Convert to standard format
         for lang in self.hf_subsets:
-            l1, l2 = [l.split("_")[0] for l in lang.split("-")]
+            l1, l2 = (l.split("_")[0] for l in lang.split("-"))
 
             self.dataset[lang] = self.dataset[lang].rename_columns(
                 {l1: "sentence1", l2: "sentence2"}

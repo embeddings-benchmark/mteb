@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks import MultilingualTask
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
@@ -18,69 +18,69 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "code-search-net/code_search_net",
             "revision": "fdc6a9e39575768c27eb8a2a5f702bf846eb4759",
-            "trust_remote_code": True,
         },
         type="Retrieval",
         category="p2p",
+        modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs={lang: [lang + "-Code"] for lang in _LANGS},
         main_score="ndcg_at_10",
         date=("2019-01-01", "2019-12-31"),
-        form=["written"],
-        domains=["Programming"],
+        domains=["Programming", "Written"],
         task_subtypes=["Code retrieval"],
-        license="Not specified",
-        socioeconomic_status="high",
+        license="MIT",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="@article{husain2019codesearchnet, title={{CodeSearchNet} challenge: Evaluating the state of semantic code search}, author={Husain, Hamel and Wu, Ho-Hsiang and Gazit, Tiferet and Allamanis, Miltiadis and Brockschmidt, Marc}, journal={arXiv preprint arXiv:1909.09436}, year={2019} }",
-        n_samples={
-            _EVAL_SPLIT: 1000,
-        },
-        avg_character_length={
-            "test": {
-                "python": {
-                    "average_document_length": 862.842,
-                    "average_query_length": 466.546,
-                    "num_documents": 1000,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-                "javascript": {
-                    "average_document_length": 1415.632,
-                    "average_query_length": 186.018,
-                    "num_documents": 1000,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-                "go": {
-                    "average_document_length": 563.729,
-                    "average_query_length": 125.213,
-                    "num_documents": 1000,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-                "ruby": {
-                    "average_document_length": 577.634,
-                    "average_query_length": 313.818,
-                    "num_documents": 1000,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-                "java": {
-                    "average_document_length": 420.287,
-                    "average_query_length": 690.36,
-                    "num_documents": 1000,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-                "php": {
-                    "average_document_length": 712.129,
-                    "average_query_length": 162.119,
-                    "num_documents": 1000,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.0,
+        descriptive_stats={
+            "n_samples": {
+                _EVAL_SPLIT: 1000,
+            },
+            "avg_character_length": {
+                "test": {
+                    "python": {
+                        "average_document_length": 862.842,
+                        "average_query_length": 466.546,
+                        "num_documents": 1000,
+                        "num_queries": 1000,
+                        "average_relevant_docs_per_query": 1.0,
+                    },
+                    "javascript": {
+                        "average_document_length": 1415.632,
+                        "average_query_length": 186.018,
+                        "num_documents": 1000,
+                        "num_queries": 1000,
+                        "average_relevant_docs_per_query": 1.0,
+                    },
+                    "go": {
+                        "average_document_length": 563.729,
+                        "average_query_length": 125.213,
+                        "num_documents": 1000,
+                        "num_queries": 1000,
+                        "average_relevant_docs_per_query": 1.0,
+                    },
+                    "ruby": {
+                        "average_document_length": 577.634,
+                        "average_query_length": 313.818,
+                        "num_documents": 1000,
+                        "num_queries": 1000,
+                        "average_relevant_docs_per_query": 1.0,
+                    },
+                    "java": {
+                        "average_document_length": 420.287,
+                        "average_query_length": 690.36,
+                        "num_documents": 1000,
+                        "num_queries": 1000,
+                        "average_relevant_docs_per_query": 1.0,
+                    },
+                    "php": {
+                        "average_document_length": 712.129,
+                        "average_query_length": 162.119,
+                        "num_documents": 1000,
+                        "num_queries": 1000,
+                        "average_relevant_docs_per_query": 1.0,
+                    },
                 },
             },
         },
@@ -117,7 +117,10 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
 
         for lang, sub in lang_subs.items():
             sub = sub[
-                : min(len(sub), self.metadata_dict["n_samples"][self._EVAL_SPLIT])
+                : min(
+                    len(sub),
+                    self.metadata.descriptive_stats["n_samples"][self._EVAL_SPLIT],
+                )
             ]
 
             self.queries[lang] = {

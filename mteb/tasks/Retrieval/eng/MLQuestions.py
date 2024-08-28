@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import csv
 
 from huggingface_hub import snapshot_download
@@ -23,6 +25,7 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
         ),
         type="Retrieval",
         category="s2p",
+        modalities=["text"],
         eval_splits=["dev", "test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
@@ -30,14 +33,12 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
             "2021-01-01",
             "2021-03-31",
         ),  # The period here is for both wiki articles and queries
-        form=["written"],
-        domains=["Encyclopaedic", "Academic"],
+        domains=["Encyclopaedic", "Academic", "Written"],
         task_subtypes=["Question answering"],
         license="cc-by-nc-sa-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
             @inproceedings{kulshreshtha-etal-2021-back,
                 title = "Back-Training excels Self-Training at Unsupervised Domain Adaptation of Question Generation and Passage Retrieval",
@@ -55,21 +56,23 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
                 abstract = "In this work, we introduce back-training, an alternative to self-training for unsupervised domain adaptation (UDA). While self-training generates synthetic training data where natural inputs are aligned with noisy outputs, back-training results in natural outputs aligned with noisy inputs. This significantly reduces the gap between target domain and synthetic data distribution, and reduces model overfitting to source domain. We run UDA experiments on question generation and passage retrieval from the Natural Questions domain to machine learning and biomedical domains. We find that back-training vastly outperforms self-training by a mean improvement of 7.8 BLEU-4 points on generation, and 17.6{\%} top-20 retrieval accuracy across both domains. We further propose consistency filters to remove low-quality synthetic data before training. We also release a new domain-adaptation dataset - MLQuestions containing 35K unaligned questions, 50K unaligned passages, and 3K aligned question-passage pairs.",
             }
         """,
-        n_samples={"dev": 1500, "test": 1500},
-        avg_character_length={
-            "dev": {
-                "average_document_length": 258.8772727272727,
-                "average_query_length": 45.05533333333333,
-                "num_documents": 11000,
-                "num_queries": 1500,
-                "average_relevant_docs_per_query": 1.0,
-            },
-            "test": {
-                "average_document_length": 258.8772727272727,
-                "average_query_length": 45.75333333333333,
-                "num_documents": 11000,
-                "num_queries": 1500,
-                "average_relevant_docs_per_query": 1.0,
+        descriptive_stats={
+            "n_samples": {"dev": 1500, "test": 1500},
+            "avg_character_length": {
+                "dev": {
+                    "average_document_length": 258.8772727272727,
+                    "average_query_length": 45.05533333333333,
+                    "num_documents": 11000,
+                    "num_queries": 1500,
+                    "average_relevant_docs_per_query": 1.0,
+                },
+                "test": {
+                    "average_document_length": 258.8772727272727,
+                    "average_query_length": 45.75333333333333,
+                    "num_documents": 11000,
+                    "num_queries": 1500,
+                    "average_relevant_docs_per_query": 1.0,
+                },
             },
         },
     )
@@ -97,7 +100,7 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
         queries, corpus, qrels = {}, {}, {}
 
         dataset_path = f"{download_dir}/{split}.csv"
-        with open(dataset_path, "r") as csvfile:
+        with open(dataset_path) as csvfile:
             reader = csv.DictReader(csvfile)
             for i, row in enumerate(reader):
                 query_id = f"Q{str(i)}"
@@ -108,7 +111,7 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
 
         # Same corpus for all splits
         corpus_path = f"{download_dir}/test_passages.csv"
-        with open(corpus_path, "r") as csvfile:
+        with open(corpus_path) as csvfile:
             reader = csv.DictReader(csvfile)
             for i, row in enumerate(reader):
                 doc_id = f"C{str(i)}"

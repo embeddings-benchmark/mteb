@@ -1,5 +1,7 @@
 """This specifies the default instructions for tasks within MTEB. These are optional to use and some models might want to use their own instructions."""
 
+from __future__ import annotations
+
 import mteb
 
 # Prompts from
@@ -54,6 +56,15 @@ TASKNAME2INSTRUCTIONS = {
     "JDReview": "Classify the customer review for iPhone on e-commerce platform into positive or negative",
     "OnlineShopping": "Classify the customer review for online shopping into positive or negative",
     "Waimai": "Classify the customer review from a food takeaway platform into positive or negative",
+    "RuReviewsClassification": "Classify product reviews into positive, negative or neutral sentiment",
+    "KinopoiskClassification": "Classify the sentiment expressed in the given movie review text",
+    "HeadlineClassification": "Classify the topic or theme of the given news headline",
+    "CEDRClassification": "Given a comment as query, find expressed emotions (joy, sadness, surprise, fear, and anger)",
+    "GeoreviewClassification": "Classify the organization rating based on the reviews",
+    "InappropriatenessClassification": "Classify the given message as either sensitive topic or not",
+    "RuSciBenchGRNTIClassification": "Classify the category of scientific papers based on the titles and abstracts",
+    "RuSciBenchOECDClassification": "Classify the category of scientific papers based on the titles and abstracts",
+    "SensitiveTopicsClassification": "Given a sentence as query, find sensitive topics",
     # Clustering
     "VGHierarchicalClusteringP2P": "Identify the categories (e.g. sports) of given articles in Norwegian",
     "VGHierarchicalClusteringS2S": "Identify the categories (e.g. sports) of given articles in Norwegian",
@@ -76,6 +87,9 @@ TASKNAME2INSTRUCTIONS = {
     "CLSClusteringP2P": "Identify the main category of scholar papers based on the titles and abstracts",
     "ThuNewsClusteringS2S": "Identify the topic or theme of the given news articles based on the titles",
     "ThuNewsClusteringP2P": "Identify the topic or theme of the given news articles based on the titles and contents",
+    "GeoreviewClusteringP2P": "Identify the organization category based on the reviews",
+    "RuSciBenchOECDClusteringP2P": "Identify the category of scientific papers based on the titles and abstracts",
+    "RuSciBenchGRNTIClusteringP2P": "Identify the category of scientific papers based on the titles and abstracts",
     # Reranking and pair classification
     "AskUbuntuDupQuestions": "Retrieve duplicate questions from AskUbuntu forum",
     "MindSmallReranking": "Retrieve relevant news articles based on user browsing history",
@@ -91,6 +105,15 @@ TASKNAME2INSTRUCTIONS = {
     "CMedQAv2": "Given a Chinese community medical question, retrieve replies that best answer the question",
     "Ocnli": "Retrieve semantically similar text.",
     "Cmnli": "Retrieve semantically similar text.",
+    "TERRa": "Given a premise, retrieve a hypothesis that is entailed by the premise",
+    "RuBQReranking": (
+        "Given a question, retrieve Wikipedia passages that answer the question",
+        "",
+    ),
+    "MIRACLReranking": (
+        "Given a question, retrieve Wikipedia passages that answer the question",
+        "",
+    ),
     # Retrieval - 1st item is query instruction; 2nd is corpus instruction
     "TwitterHjerneRetrieval": (
         "Retrieve answers to questions asked in Danish tweets",
@@ -264,6 +287,15 @@ TASKNAME2INSTRUCTIONS = {
         "Given the following sentence, retrieve an appropriate answer to fill in the missing underscored part.",
         "",
     ),
+    "RuBQRetrieval": (
+        "Given a question, retrieve Wikipedia passages that answer the question",
+        "",
+    ),
+    "MIRACLRetrieval": (
+        "Given a question, retrieve Wikipedia passages that answer the question",
+        "",
+    ),
+    "RiaNewsRetrieval": ("Given a news title, retrieve relevant news article", ""),
 }
 
 

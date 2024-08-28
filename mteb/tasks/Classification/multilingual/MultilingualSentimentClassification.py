@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskClassification, MultilingualTask, TaskMetadata
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.MultilingualTask import MultilingualTask
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
     "urd": ["urd-Arab"],
@@ -51,18 +53,17 @@ class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTas
         reference="https://huggingface.co/datasets/mteb/multilingual-sentiment-classification",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
         main_score="accuracy",
         date=("2022-08-01", "2022-08-01"),
-        form=["written"],
-        domains=["Reviews"],
+        domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=["ar-dz"],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @inproceedings{mollanorozy-etal-2023-cross,
             title = "Cross-lingual Transfer Learning with \{P\}ersian",
@@ -88,15 +89,17 @@ class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTas
             pages = "89--95",
         }
         """,
-        n_samples={"test": 7000},
-        avg_character_length={"test": 56},
+        descriptive_stats={
+            "n_samples": {"test": 7000},
+            "avg_character_length": {"test": 56},
+        },
     )
 
     def dataset_transform(self):
         # create a train set from the test set for Welsh language (cym)
         lang = "cym"
-        _dataset = self.dataset[lang]
         if lang in self.dataset.keys():
+            _dataset = self.dataset[lang]
             _dataset = _dataset.class_encode_column("label")
             _dataset = _dataset["test"].train_test_split(
                 test_size=0.3, seed=self.seed, stratify_by_column="label"
@@ -104,4 +107,4 @@ class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTas
             _dataset = self.stratified_subsampling(
                 dataset_dict=_dataset, seed=self.seed, splits=["test"]
             )
-        self.dataset[lang] = _dataset
+            self.dataset[lang] = _dataset

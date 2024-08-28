@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskClassification
 
 
 class KannadaNewsClassification(AbsTaskClassification):
@@ -16,18 +15,17 @@ class KannadaNewsClassification(AbsTaskClassification):
         reference="https://github.com/goru001/nlp-for-kannada",
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["train"],
         eval_langs=["kan-Knda"],
         main_score="accuracy",
         date=("2019-03-17", "2020-08-06"),
-        form=["written"],
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="CC-BY-SA-4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
-        text_creation="found",
+        sample_creation="found",
         bibtex_citation="""
         @article{kunchukuttan2020indicnlpcorpus,
     title={AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
@@ -35,8 +33,10 @@ class KannadaNewsClassification(AbsTaskClassification):
     year={2020},
     journal={arXiv preprint arXiv:2005.00085},
 }""",
-        n_samples={"train": 6460},
-        avg_character_length={"train": 65.88},
+        descriptive_stats={
+            "n_samples": {"train": 6460},
+            "avg_character_length": {"train": 65.88},
+        },
     )
 
     def dataset_transform(self):
