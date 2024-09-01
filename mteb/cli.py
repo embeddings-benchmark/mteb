@@ -126,6 +126,10 @@ def run(args: argparse.Namespace) -> None:
     if args.batch_size is not None:
         encode_kwargs["batch_size"] = args.batch_size
 
+    save_predictions = (
+        args.save_predictions if hasattr(args, "save_predictions") else False
+    )
+
     eval.run(
         model,
         verbosity=args.verbosity,
@@ -134,6 +138,7 @@ def run(args: argparse.Namespace) -> None:
         co2_tracker=args.co2_tracker,
         overwrite_results=args.overwrite,
         encode_kwargs=encode_kwargs,
+        save_predictions=save_predictions,
     )
 
     _save_model_metadata(model, Path(args.output_folder))
@@ -247,6 +252,12 @@ def add_run_parser(subparsers) -> None:
         action="store_true",
         default=False,
         help="Overwrite the output file if it already exists",
+    )
+    parser.add_argument(
+        "--save_predictions",
+        action="store_true",
+        default=False,
+        help="For retrieval tasks. Saves the predictions file in output_folder.",
     )
 
     parser.set_defaults(func=run)

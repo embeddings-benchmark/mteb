@@ -175,3 +175,12 @@ def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: 
     command = f"mteb create_meta --results_folder {results} --output_path {output_path} --from_existing {existing_readme} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
+
+
+def test_save_predictions():
+    command = "mteb run -m all-MiniLM-L6-v2 -t NFCorpus --output_folder tests/results --save_predictions"
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    assert result.returncode == 0, "Command failed"
+    test_folder = Path(__file__).parent
+    results_path = test_folder / "results" / "NFCorpus_default_predictions.json"
+    assert results_path.exists(), "Predictions file not created"
