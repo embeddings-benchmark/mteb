@@ -38,5 +38,5 @@ if __name__ == "__main__":
     file_path = Path(__file__).parent / "points"
     save_path = Path(__file__).parent / "points_table.md"
 
-    df = load_data(file_path)
+    df = load_data()
     save_to_markdown(df, save_path)
