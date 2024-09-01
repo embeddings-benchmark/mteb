@@ -73,13 +73,11 @@ import argparse
 import json
 import logging
 from pathlib import Path
-from typing import Any
 
 import torch
-import yaml
 
 import mteb
-from mteb.load_results.mteb_results import CQADupstackRetrievalDummy, MTEBResults
+from mteb.create_meta import generate_readme
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
@@ -128,6 +126,10 @@ def run(args: argparse.Namespace) -> None:
     if args.batch_size is not None:
         encode_kwargs["batch_size"] = args.batch_size
 
+    save_predictions = (
+        args.save_predictions if hasattr(args, "save_predictions") else False
+    )
+
     eval.run(
         model,
         verbosity=args.verbosity,
@@ -136,6 +138,7 @@ def run(args: argparse.Namespace) -> None:
         co2_tracker=args.co2_tracker,
         overwrite_results=args.overwrite,
         encode_kwargs=encode_kwargs,
+        save_predictions=save_predictions,
     )
 
     _save_model_metadata(model, Path(args.output_folder))
@@ -250,207 +253,31 @@ def add_run_parser(subparsers) -> None:
         default=False,
         help="Overwrite the output file if it already exists",
     )
+    parser.add_argument(
+        "--save_predictions",
+        action="store_true",
+        default=False,
+        help="For retrieval tasks. Saves the predictions file in output_folder.",
+    )
 
     parser.set_defaults(func=run)
-
-
-def potentially_add_cqadupstack_to_results(results: list[mteb.MTEBResults]) -> None:
-    """If all CQADupstack tasks are present in the results, combine them into a single CQADupstackRetrieval task and add it to the results."""
-    TASK_LIST_CQA = {
-        "CQADupstackAndroidRetrieval",
-        "CQADupstackEnglishRetrieval",
-        "CQADupstackGamingRetrieval",
-        "CQADupstackGisRetrieval",
-        "CQADupstackMathematicaRetrieval",
-        "CQADupstackPhysicsRetrieval",
-        "CQADupstackProgrammersRetrieval",
-        "CQADupstackStatsRetrieval",
-        "CQADupstackTexRetrieval",
-        "CQADupstackUnixRetrieval",
-        "CQADupstackWebmastersRetrieval",
-        "CQADupstackWordpressRetrieval",
-    }
-
-    task_names = {result.task_name for result in results}
-
-    if not TASK_LIST_CQA.issubset(task_names):
-        return None
-    cqa_results = [result for result in results if result.task_name in TASK_LIST_CQA]
-
-    evaluation_time = sum([result.evaluation_time for result in cqa_results])
-    main_scores = [r.get_score(splits=["test"]) for r in cqa_results]
-    main_score = float(sum(main_scores) / len(main_scores))
-    scores = {
-        "test": [
-            {
-                "main_score": main_score,
-                "ndcg_at_10": main_score,
-                "hf_subset": "default",
-                "languages": ["eng_Latn"],
-            }
-        ]
-    }
-
-    result = mteb.MTEBResults(
-        task_name="CQADupstackRetrieval",
-        dataset_revision="CQADupstackRetrieval_is_a_combined_dataset",
-        mteb_version="NA",
-        scores=scores,
-        evaluation_time=evaluation_time,
-        kg_co2_emissions=None,
-    )
-    results.append(result)
-
-
-def merge_yamls(
-    yaml_dict: dict[str, Any], existing_readme: str
-) -> tuple[dict[str, Any], str]:
-    if not existing_readme.endswith("md"):
-        raise ValueError("Readme file should be markdown and ends with 'md'")
-
-    with open(existing_readme) as f:
-        existing_file = f.read()
-
-    start_yaml_index = None
-    end_yaml_index = None
-    if existing_file[:3] == "---" and "\n---" in existing_file:
-        start_yaml_index = existing_file.index("---") + 3
-        end_yaml_index = existing_file.index("\n---", start_yaml_index)
-
-    if start_yaml_index and end_yaml_index:
-        existing_yaml = existing_file[start_yaml_index:end_yaml_index]
-        readme_end = existing_file[end_yaml_index + 3 :]
-        existing_yaml_dict = yaml.safe_load(existing_yaml)
-    else:
-        existing_yaml_dict = {}
-        readme_end = existing_file
-
-    # Ensure 'mteb' tag is present
-    if "tags" not in existing_yaml_dict:
-        existing_yaml_dict["tags"] = []
-    if "mteb" not in existing_yaml_dict["tags"]:
-        existing_yaml_dict["tags"].append("mteb")
-
-    # Merge model-index results
-    if "model-index" not in existing_yaml_dict:
-        existing_yaml_dict["model-index"] = yaml_dict.get("model-index", [])
-    else:
-        existing_model = existing_yaml_dict["model-index"][0]
-        new_model = yaml_dict.get("model-index", [{}])[0]
-
-        if existing_model["name"] != new_model["name"]:
-            raise ValueError("Model names do not match")
-
-        # Merge results
-        existing_results = {
-            (r["dataset"]["name"], r["dataset"].get("config")): r
-            for r in existing_model["results"]
-        }
-        for new_result in new_model["results"]:
-            key = (new_result["dataset"]["name"], new_result["dataset"].get("config"))
-            if key in existing_results:
-                # Update existing result
-                existing_results[key]["metrics"] = new_result["metrics"]
-            else:
-                # Add new result
-                existing_results[key] = new_result
-
-        existing_model["results"] = list(existing_results.values())
-
-    return existing_yaml_dict, readme_end
 
 
 def create_meta(args: argparse.Namespace) -> None:
     results_folder = Path(args.results_folder)
     output_path = Path(args.output_path)
-
-    if output_path.exists() and args.overwrite:
+    overwrite = args.overwrite
+    from_existing = Path(args.from_existing) if args.from_existing else None
+    if output_path.exists() and overwrite:
         logger.warning("Output path already exists, overwriting.")
     elif output_path.exists():
         raise FileExistsError(
             "Output path already exists, use --overwrite to overwrite."
         )
 
-    json_files = [
-        r
-        for r in results_folder.glob("*.json")
-        if r.is_file() and r.name != "model_meta.json"
-    ]
-
-    task_results = [MTEBResults.from_disk(path) for path in json_files]
-    task_results = [
-        results
-        for results in task_results
-        if results.task_name not in ["GPUSpeedTask", "CPUSpeedTask"]
-    ]
-    potentially_add_cqadupstack_to_results(
-        task_results
-    )  # We should ideally find better way in the future to aggregate scores for tasks like CQADupstack
-    task_results = sorted(task_results, key=lambda x: x.task_name)
-
-    yaml_results = []
-    for task_result in task_results:
-        if (
-            task_result.task_name == "CQADupstackRetrieval"
-        ):  # CQADupstackRetrieval is a combined dataset (special case atm.)
-            task = CQADupstackRetrievalDummy()
-        else:
-            task = mteb.get_task(task_result.task_name)
-
-        for split, hf_subset_scores in task_result.scores.items():
-            for hf_subset_score in hf_subset_scores:
-                metrics = [
-                    {
-                        "type": k,
-                        "value": v
-                        * 100,  # convert to percentage (for consistency with the leaderboard and to make it more readable)
-                    }
-                    for k, v in hf_subset_score.items()
-                    if isinstance(v, (int, float))
-                ]
-                if task.metadata.main_score not in hf_subset_score:
-                    raise ValueError(
-                        f"Main score {task.metadata.main_score} not found in metrics or is not a number."
-                    )
-
-                yaml_result = {
-                    "task": {"type": task.metadata.type},
-                    "dataset": {
-                        "type": task.metadata.dataset["path"],
-                        "name": f"MTEB {task.metadata.name} ({hf_subset_score['hf_subset']})",
-                        "config": hf_subset_score["hf_subset"],
-                        "split": split,
-                        "revision": task_result.dataset_revision,
-                    },
-                    "metrics": metrics,
-                }
-                yaml_results.append(yaml_result)
-
-    model_name = "PLACEHOLDER"
-    # if model_meta.json exists, use the model name from there
-    if (results_folder / "model_meta.json").exists():
-        with (results_folder / "model_meta.json").open("r") as f:
-            model_meta = json.load(f)
-            model_name = model_meta["name"]
-
-    yaml_dict = {
-        "tags": ["mteb"],
-        "model-index": [
-            {
-                "name": model_name,
-                # should we add the revision here?
-                "results": yaml_results,
-            }
-        ],
-    }
-    readme_end = ""
-
-    if args.from_existing:
-        yaml_dict, readme_end = merge_yamls(yaml_dict, args.from_existing)
+    frontmatter = generate_readme(results_folder, from_existing)
 
     with output_path.open("w") as f:
-        yaml_str = yaml.dump(yaml_dict)
-        frontmatter = "---\n" + yaml_str + "---\n" + readme_end
         f.write(frontmatter)
 
 

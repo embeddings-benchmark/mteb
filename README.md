@@ -282,7 +282,72 @@ for task in ["NFCorpus"]:
 
 </details>
 
+<details>
+  <summary>  Saving retrieval task predictions </summary>
+
+### Saving retrieval task predictions
+
+To save the predictions from a retrieval task, add the `--save_predictions` flag in the CLI or set `save_predictions=True` in the run method. The filename will be in the "{task_name}_{subset}_predictions.json" format.
+
+Python:
+```python
+from mteb import MTEB
+import mteb
+from sentence_transformers import SentenceTransformer
+
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+tasks = mteb.get_tasks( tasks=["NFCorpus"], languages=["eng"])
+
+evaluation = MTEB(tasks=tasks)
+evaluation.run(
+    model,
+    eval_splits=["test"],
+    save_predictions=True,
+    output_folder="results",
+)
+```
+
+CLI:
+```
+mteb run -t NFCorpus -m all-MiniLM-L6-v2 --output_folder results --save_predictions
+```
+
+</details>
+
+<details>
+  <summary> Fetching result from the results repository </summary>
+
+Multiple models have already been run on tasks avaiable within MTEB. These results are available results [repository](https://github.com/embeddings-benchmark/results).
+
+To make the results more easily accecible we have designed custom functionality for retrieving from the repository. For instance, you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
+
+```python
+import mteb
+from mteb.task_selection import results_to_dataframe
+
+tasks = mteb.get_tasks(
+    task_types=["Retrieval"], languages=["eng", "fra"], domains=["Legal"]
+)
+
+model_names = [
+    "GritLM/GritLM-7B",
+    "intfloat/multilingual-e5-small",
+    "intfloat/multilingual-e5-base",
+    "intfloat/multilingual-e5-large",
+]
+models = [mteb.get_model_meta(name) for name in model_names]
+
+results = mteb.load_results(models=models, tasks=tasks)
+
+df = results_to_dataframe(results)
+```
+
+</details>
+
 <br /> 
+
+
 
 ## Documentation
 
