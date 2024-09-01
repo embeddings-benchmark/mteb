@@ -144,21 +144,24 @@ def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: 
 
     assert output_path.exists(), "Output file not created"
 
+    yaml_start_sep = "---"
+    yaml_end_sep = "\n---\n"  # newline to avoid matching "---" in the content
+
     with output_path.open("r") as f:
         meta = f.read()
-        start_yaml = meta.index("---") + 3
-        end_yaml = meta.index("---", start_yaml)
+        start_yaml = meta.index(yaml_start_sep) + len(yaml_start_sep)
+        end_yaml = meta.index(yaml_end_sep, start_yaml)
+        readme_output = meta[end_yaml + len(yaml_end_sep) :]
         meta = meta[start_yaml:end_yaml]
         frontmatter = yaml.safe_load(meta)
-        readme_output = meta[end_yaml + 3 :]
 
     with (output_folder / gold_readme_name).open("r") as f:
         gold = f.read()
-        start_yaml = gold.index("---") + 3
-        end_yaml = gold.index("---", start_yaml)
+        start_yaml = gold.index(yaml_start_sep) + len(yaml_start_sep)
+        end_yaml = gold.index(yaml_end_sep, start_yaml)
+        gold_readme = gold[end_yaml + len(yaml_end_sep) :]
         gold = gold[start_yaml:end_yaml]
         frontmatter_gold = yaml.safe_load(gold)
-        gold_readme = gold[end_yaml + 3 :]
 
     # compare the frontmatter (ignoring the order of keys and other elements)
     for key in frontmatter_gold:

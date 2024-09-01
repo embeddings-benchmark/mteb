@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.14.12"
+version = "1.14.13"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -88,6 +88,7 @@ exclude = ["tests", "results"]
 
 target-version = "py38"
 
+
 [tool.ruff.lint]
 select = [
     "F",  # pyflakes rules, 
@@ -97,8 +98,11 @@ select = [
     "UP", # upgrade to latest syntax if possible
     "FA", # Future annotations
     "C4", # cleaner comprehensions 
-    "ISC001"
+    "ISC",
 ]
+unfixable = ["ISC001"]  
+
+
 ignore = ["E501",   # line too long 
         "E741",     # ambiguous variable name
         "F403",     # undefined import
@@ -112,6 +116,10 @@ ignore = ["E501",   # line too long
         "D205",     # 1 blank line required between summary line and description
         "D415",     # First line should end with a period
 ]
+
+
+[tool.ruff.lint.flake8-implicit-str-concat]
+allow-multiline = false
 
 [tool.ruff.lint.isort]
 required-imports = ["from __future__ import annotations"]

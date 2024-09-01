@@ -21,7 +21,7 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
         reference="https://github.com/McGill-NLP/MLQuestions",
         description=(
             "MLQuestions is a domain adaptation dataset for the machine learning domain"
-            "It consists of ML questions along with passages from Wikipedia machine learning pages (https://en.wikipedia.org/wiki/Category:Machine_learning)"
+            + "It consists of ML questions along with passages from Wikipedia machine learning pages (https://en.wikipedia.org/wiki/Category:Machine_learning)"
         ),
         type="Retrieval",
         category="s2p",

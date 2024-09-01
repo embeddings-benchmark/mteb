@@ -23,9 +23,9 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
         },
         reference="https://mcgill-nlp.github.io/topiocqa",
         description=(
-            "TopiOCQA (Human-in-the-loop Attributable Generative Retrieval for Information-seeking Dataset)"
-            "is information-seeking conversational dataset with challenging topic switching phenomena."
-            "It consists of conversation histories along with manually labelled relevant/gold passage."
+            "TopiOCQA (Human-in-the-loop Attributable Generative Retrieval for Information-seeking Dataset) "
+            + "is information-seeking conversational dataset with challenging topic switching phenomena. "
+            + "It consists of conversation histories along with manually labelled relevant/gold passage."
         ),
         type="Retrieval",
         category="s2p",

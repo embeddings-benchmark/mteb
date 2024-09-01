@@ -228,7 +228,7 @@ class TaskMetadata(BaseModel):
         if "path" not in dataset or dataset["path"] is None:
             raise ValueError(
                 "You must specify the path to the dataset in the dataset dictionary. "
-                "See https://huggingface.co/docs/datasets/main/en/package_reference/loading_methods#datasets.load_dataset"
+                + "See https://huggingface.co/docs/datasets/main/en/package_reference/loading_methods#datasets.load_dataset"
             )
 
     @staticmethod
@@ -318,6 +318,11 @@ class TaskMetadata(BaseModel):
         cite = ""
         if self.bibtex_citation:
             cite = f"{self.bibtex_citation.split(',')[0].split('{')[1]}"
-        if include_cite:
+        if include_cite and cite:
+            # check for whitespace in the citation
+            if " " in cite:
+                logger.warning(
+                    "Citation contains whitespace. Please ensure that the citation is correctly formatted."
+                )
             return f"\\cite{{{cite}}}"
         return cite
