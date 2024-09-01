@@ -183,8 +183,10 @@ class HFDataLoader:
                 "score": Value("float"),
             }
         )
-        # Some datasets may have extra columns, e.g. `difficulty` in qrels for FORB. 
-        qrels_ds = qrels_ds.select_columns(["query-id", "corpus-id", "score"]).cast(features)
+        # Some datasets may have extra columns, e.g. `difficulty` in qrels for FORB.
+        qrels_ds = qrels_ds.select_columns(["query-id", "corpus-id", "score"]).cast(
+            features
+        )
         self.qrels = qrels_ds
 
 

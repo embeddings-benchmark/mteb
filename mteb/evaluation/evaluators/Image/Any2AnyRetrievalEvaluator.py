@@ -31,6 +31,8 @@ from ..utils import (
     top_k_accuracy,
 )
 
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 logger = logging.getLogger(__name__)
 
 transform = transforms.Compose([transforms.PILToTensor()])
