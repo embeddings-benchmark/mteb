@@ -242,7 +242,43 @@ evaluation.run(model)
 
 </details>
 
+
+<details>
+  <summary> Fetching result from the results repository </summary>
+
+Multiple models have already been run on tasks avaiable within MTEB. These results are available results [repository](https://github.com/embeddings-benchmark/results).
+
+To make the results more easily accecible we have designed custom functionality for retrieving from the repository. For instance, you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
+
+```python
+import mteb
+from mteb.task_selection import results_to_dataframe
+
+tasks = mteb.get_tasks(
+    task_types=["Retrieval"], languages=["eng", "fra"], domains=["Legal"]
+)
+
+model_names = [
+    "GritLM/GritLM-7B",
+    "intfloat/multilingual-e5-small",
+    "intfloat/multilingual-e5-base",
+    "intfloat/multilingual-e5-large",
+]
+models = [mteb.get_model_meta(name) for name in model_names]
+
+results = mteb.load_results(models=models, tasks=tasks)
+
+df = results_to_dataframe(results)
+```
+
+
+
+
+</details>
+
 <br /> 
+
+
 
 ## Documentation
 
