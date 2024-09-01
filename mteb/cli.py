@@ -250,6 +250,12 @@ def add_run_parser(subparsers) -> None:
         default=False,
         help="Overwrite the output file if it already exists",
     )
+    parser.add_argument(
+        "--save_predictions",
+        action="store_true",
+        default=False,
+        help="For retrieval tasks. Saves the predictions file in output_folder.",
+    )
 
     parser.set_defaults(func=run)
 
