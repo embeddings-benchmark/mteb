@@ -257,17 +257,15 @@ from sentence_transformers import SentenceTransformer
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
-for task in ["NFCorpus"]: 
-    eval_splits = ["test"]
-    evaluation = MTEB(
-        tasks=[task], task_langs=["en"]
-    )
-    evaluation.run(
-        model,
-        eval_splits=eval_splits,
-        save_predictions=True,
-        output_folder="results",
-    )
+evaluation = MTEB(
+    tasks=["NFCorpus"], task_langs=["en"]
+)
+evaluation.run(
+    model,
+    eval_splits=["test"],
+    save_predictions=True,
+    output_folder="results",
+)
 ```
 
 CLI:
