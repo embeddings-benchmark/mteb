@@ -253,13 +253,14 @@ To save the predictions from a retrieval task, add the `--save_predictions` flag
 Python:
 ```python
 from mteb import MTEB
+import mteb
 from sentence_transformers import SentenceTransformer
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
-evaluation = MTEB(
-    tasks=["NFCorpus"], task_langs=["en"]
-)
+tasks = mteb.get_tasks( tasks=["NFCorpus"], languages=["eng"])
+
+evaluation = MTEB(tasks=tasks)
 evaluation.run(
     model,
     eval_splits=["test"],
