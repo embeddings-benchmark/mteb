@@ -252,32 +252,31 @@ To use a cross encoder for reranking, you can directly use a CrossEncoder from S
 
 ```python
 from mteb import MTEB
+import mteb
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 cross_encoder = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
 dual_encoder = SentenceTransformer("all-MiniLM-L6-v2")
 
+tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
+
 subset = "default" # subset name used in the NFCorpus dataset
 
-for task in ["NFCorpus"]: 
-    eval_splits = ["test"]
-    evaluation = MTEB(
-        tasks=[task], task_langs=["en"]
-    )
-    evaluation.run(
-        dual_encoder,
-        eval_splits=eval_splits,
-        save_predictions=True,
-        output_folder="results/stage1",
-    )
-    evaluation.run(
-        cross_encoder,
-        eval_splits=eval_splits,
-        top_k=5,
-        save_predictions=True,
-        output_folder="results/stage2",
-        previous_results=f"results/stage1/{task}_{subset}_predictions.json",
-    )
+evaluation = MTEB(tasks=tasks)
+evaluation.run(
+    dual_encoder,
+    eval_splits=eval_splits,
+    save_predictions=True,
+    output_folder="results/stage1",
+)
+evaluation.run(
+    cross_encoder,
+    eval_splits=eval_splits,
+    top_k=5,
+    save_predictions=True,
+    output_folder="results/stage2",
+    previous_results=f"results/stage1/{task}_{subset}_predictions.json",
+)
 ```
 
 </details>
