@@ -5,6 +5,9 @@ from .eng.CUB200I2IRetrieval import *
 from .eng.Fashion200kI2TRetrieval import *
 from .eng.Fashion200kT2IRetrieval import *
 from .eng.FashionIQIT2IRetrieval import *
+from .eng.FORBI2IRetrieval import *
+from .eng.HatefulMemesI2TRetrieval import *
+from .eng.HatefulMemesT2IRetrieval import *
 from .eng.InfoSeekIT2ITRetrieval import *
 from .eng.InfoSeekIT2TRetrieval import *
 from .eng.MSCOCOI2TRetrieval import *
@@ -21,4 +24,3 @@ from .eng.WebQAT2TRetrieval import *
 from .multilingual.WITT2IRetrieval import *
 from .multilingual.XFlickr30kCoT2IRetrieval import *
 from .multilingual.XM3600T2IRetrieval import *
-from .eng.FORBI2IRetrieval import *
