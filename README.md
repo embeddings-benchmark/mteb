@@ -261,6 +261,7 @@ dual_encoder = SentenceTransformer("all-MiniLM-L6-v2")
 tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
 
 subset = "default" # subset name used in the NFCorpus dataset
+eval_splits = ["test"]
 
 evaluation = MTEB(tasks=tasks)
 evaluation.run(
@@ -275,7 +276,7 @@ evaluation.run(
     top_k=5,
     save_predictions=True,
     output_folder="results/stage2",
-    previous_results=f"results/stage1/{task}_{subset}_predictions.json",
+    previous_results=f"results/stage1/NFCorpus_{subset}_predictions.json",
 )
 ```
 
