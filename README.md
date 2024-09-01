@@ -242,6 +242,41 @@ evaluation.run(model)
 
 </details>
 
+<details>
+  <summary>  Saving retrieval task predictions </summary>
+
+
+### Saving retrieval task predictions
+
+To save the predictions from a retrieval task, add the `--save_predictions` flag in the CLI or set `save_predictions=True` in the run method. The filename will be in the "{task_name}_{subset}_predictions.json" format.
+
+Python:
+```python
+from mteb import MTEB
+from sentence_transformers import SentenceTransformer
+
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+for task in ["NFCorpus"]: 
+    eval_splits = ["test"]
+    evaluation = MTEB(
+        tasks=[task], task_langs=["en"]
+    )
+    evaluation.run(
+        model,
+        eval_splits=eval_splits,
+        save_predictions=True,
+        output_folder="results",
+    )
+```
+
+CLI:
+```
+mteb run -t NFCorpus -m all-MiniLM-L6-v2 --output_folder results --save_predictions
+```
+
+</details>
+
 <br /> 
 
 ## Documentation
