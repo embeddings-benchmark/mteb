@@ -243,8 +243,47 @@ evaluation.run(model)
 </details>
 
 <details>
-  <summary>  Saving retrieval task predictions </summary>
+  <summary>  Using a cross encoder for reranking</summary>
 
+
+### Using a cross encoder for reranking
+
+To use a cross encoder for reranking, you can directly use a CrossEncoder from SentenceTransformers. The following code shows a two-stage run with the second stage reading results saved from the first stage. 
+
+```python
+from mteb import MTEB
+import mteb
+from sentence_transformers import CrossEncoder, SentenceTransformer
+
+cross_encoder = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
+dual_encoder = SentenceTransformer("all-MiniLM-L6-v2")
+
+tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
+
+subset = "default" # subset name used in the NFCorpus dataset
+eval_splits = ["test"]
+
+evaluation = MTEB(tasks=tasks)
+evaluation.run(
+    dual_encoder,
+    eval_splits=eval_splits,
+    save_predictions=True,
+    output_folder="results/stage1",
+)
+evaluation.run(
+    cross_encoder,
+    eval_splits=eval_splits,
+    top_k=5,
+    save_predictions=True,
+    output_folder="results/stage2",
+    previous_results=f"results/stage1/NFCorpus_{subset}_predictions.json",
+)
+```
+
+</details>
+
+<details>
+  <summary>  Saving retrieval task predictions </summary>
 
 ### Saving retrieval task predictions
 
