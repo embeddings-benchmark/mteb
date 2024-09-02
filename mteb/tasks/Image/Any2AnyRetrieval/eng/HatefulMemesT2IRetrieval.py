@@ -70,7 +70,7 @@ class HatefulMemesT2IRetrieval(AbsTaskAny2AnyRetrieval):
             # "trust_remote_code": True,
         },
         type="Retrieval",
-        category="i2t",
+        category="t2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
