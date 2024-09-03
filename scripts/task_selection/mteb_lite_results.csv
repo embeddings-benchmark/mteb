@@ -1,0 +1,13 @@
+,model,revision,mean,mean (STS),mean (Classification),mean (Reranking),mean (Retrieval),mean (Clustering),mean (PairClassification),mean (weighted by task type),borda_count,Total Evaluation time (hours)
+11,intfloat/e5-mistral-7b-instruct,07163b72af1488142a360786df853f237b1a3ca1,0.691,0.84,0.674,0.498,0.573,0.518,0.884,0.665,275.0,1.453
+2,GritLM/GritLM-7B,13f00a0e36500c80ce12870ea513846a066004af,0.686,0.828,0.695,0.496,0.572,0.5,0.873,0.661,265.0,1.707
+7,intfloat/multilingual-e5-large-instruct,baa7be480a7de1539afce709c8f13f833a510e0a,0.678,0.846,0.642,0.487,0.547,0.499,0.862,0.647,256.0,1.127
+3,intfloat/multilingual-e5-large,4dc6d853a804b9c8886ede6dda8a073b7dc08a81,0.643,0.815,0.658,0.447,0.493,0.427,0.847,0.615,190.0,1.211
+9,intfloat/multilingual-e5-base,d13f1b27baf31030b7fd040960d60d909913633f,0.627,0.799,0.639,0.443,0.459,0.427,0.836,0.6,147.0,0.72
+6,sentence-transformers/all-mpnet-base-v2,84f2bcc00d77236f9e89c8a360a00fb1139bf47d,0.595,0.724,0.513,0.484,0.469,0.458,0.83,0.58,143.0,0.741
+4,sentence-transformers/paraphrase-multilingual-mpnet-base-v2,79f2382ceacceacdf38563d7c5d16b9ff8d725d6,0.605,0.801,0.637,0.452,0.342,0.423,0.817,0.579,130.0,0.694
+8,sentence-transformers/all-MiniLM-L12-v2,a05860a77cef7b37e0048a7864658139bc18a854,0.581,0.711,0.523,0.475,0.433,0.438,0.825,0.568,122.0,0.571
+10,sentence-transformers/all-MiniLM-L6-v2,8b3219a92973c328a8e22fadcfa821b5dc75636a,0.579,0.708,0.515,0.471,0.43,0.446,0.824,0.566,106.0,0.521
+0,intfloat/multilingual-e5-small,e4ce9877abf3edfe10b0d82785e83bdcb973e22e,0.611,0.785,0.62,0.432,0.43,0.413,0.827,0.584,102.0,0.565
+5,sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,bf3bf13ab40c3157080a7ab344c831b9ad18b5eb,0.584,0.778,0.59,0.454,0.328,0.411,0.8,0.56,76.0,0.618
+1,sentence-transformers/LaBSE,e34fab64a3011d2176c99545a93d5cbddc9a91b7,0.533,0.712,0.637,0.413,0.184,0.37,0.789,0.518,36.0,0.675

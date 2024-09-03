@@ -16,7 +16,7 @@ class BigPatentClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="BigPatentClustering",
         description="Clustering of documents from the Big Patent dataset. Test set only includes documents"
-        "belonging to a single category, with a total of 9 categories.",
+        + "belonging to a single category, with a total of 9 categories.",
         reference="https://www.kaggle.com/datasets/big_patent",
         dataset={
             "path": "jinaai/big-patent-clustering",
@@ -61,7 +61,7 @@ class BigPatentClusteringFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
         name="BigPatentClustering.v2",
         description="Clustering of documents from the Big Patent dataset. Test set only includes documents"
-        "belonging to a single category, with a total of 9 categories.",
+        + "belonging to a single category, with a total of 9 categories.",
         reference="https://huggingface.co/datasets/NortheasternUniversity/big_patent",
         dataset={
             "path": "mteb/big-patent",
