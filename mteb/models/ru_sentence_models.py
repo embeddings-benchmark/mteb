@@ -4,9 +4,7 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta
-
-from .e5_models import E5Wrapper
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 rubert_tiny2 = ModelMeta(
     name="cointegrated/rubert-tiny2",
@@ -41,7 +39,12 @@ sbert_large_mt_nlu_ru = ModelMeta(
 )
 
 user_base_ru = ModelMeta(
-    loader=partial(E5Wrapper, model_name="deepvk/USER-base"),  # type: ignore
+    loader=partial(
+        sentence_transformers_loader,
+        model_name="deepvk/USER-base",
+        revision="436a489a2087d61aa670b3496a9915f84e46c861",
+        prompts={"query": "query: ", "passage": "passage: "},
+    ),
     name="deepvk/USER-base",
     languages=["rus_Cyrl"],
     open_source=True,

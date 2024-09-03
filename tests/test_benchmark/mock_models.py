@@ -11,7 +11,6 @@ from sentence_transformers import SentenceTransformer
 from torch import Tensor
 
 import mteb
-from mteb.models.e5_models import E5Wrapper
 
 
 class MockNumpyEncoder(mteb.Encoder):
@@ -60,8 +59,3 @@ class MockSentenceTransformer(SentenceTransformer):
         normalize_embeddings: bool = False,
     ) -> list[Tensor] | ndarray | Tensor:
         return torch.randn(len(sentences), 10)
-
-
-class MockE5Wrapper(E5Wrapper):
-    def __init__(self, **kwargs):
-        self.mdl = MockSentenceTransformer()
