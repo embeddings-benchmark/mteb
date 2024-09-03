@@ -109,5 +109,6 @@ Please also add your first name and last name are as you want them to appear in 
 | sivareddyg | Siva    | Reddy | siva.reddy@mila.quebec | ~Siva_Reddy1 | McGill University && Mila - Quebec AI Institute && ServiceNow Research && Facebook CIFAR AI Chair                            |
 | guenthermi        | Michael    | Günther    | michael.guenther@jina.ai     | ~Michael_Günther1    | Jina AI                                               |
 | violenil          | Isabelle   | Mohr       | isabelle.mohr@jina.ai        | ~Isabelle_Mohr1      | Jina AI                                               |
+| akshita-sukhlecha | Akshita    | Sukhlecha  | sukhlecha.akshita@gmail.com  |                      | N/A                                                   |
 | Muennighoff          | Niklas   | Muennighoff       | n.muennighoff@gmail.com        |       | Contextual AI                                               |
 | AlexeyVatolin          | Aleksei   | Vatolin       | vatolinalex@gmail.com        | ~Aleksei_Vatolin1      | FRC CSC RAS                                               |
