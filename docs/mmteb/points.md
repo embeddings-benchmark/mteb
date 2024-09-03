@@ -111,3 +111,4 @@ Please also add your first name and last name are as you want them to appear in 
 | violenil          | Isabelle   | Mohr       | isabelle.mohr@jina.ai        | ~Isabelle_Mohr1      | Jina AI                                               |
 | Muennighoff          | Niklas   | Muennighoff       | n.muennighoff@gmail.com        |       | Contextual AI                                               |
 | AlexeyVatolin          | Aleksei   | Vatolin       | vatolinalex@gmail.com        | ~Aleksei_Vatolin1      | FRC CSC RAS                                               |
+| tomaarsen          | Tom   | Aarsen       |                           | ~Tom_Aarsen1      | Hugging Face |
