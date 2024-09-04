@@ -17,6 +17,8 @@ from .eng.MSCOCOT2IRetrieval import *
 from .eng.NIGHTSI2IRetrieval import *
 from .eng.OVENIT2ITRetrieval import *
 from .eng.OVENIT2TRetrieval import *
+from .eng.SciMMIRI2TRetrieval import *
+from .eng.SciMMIRT2IRetrieval import *
 from .eng.StanfordCarsI2IRetrieval import *
 from .eng.TUBerlinT2IRetrieval import *
 from .eng.VisualNewsI2TRetrieval import *
