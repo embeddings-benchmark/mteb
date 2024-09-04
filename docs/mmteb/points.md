@@ -113,3 +113,4 @@ Please also add your first name and last name are as you want them to appear in 
 | Muennighoff          | Niklas   | Muennighoff       | n.muennighoff@gmail.com        |       | Contextual AI                                               |
 | AlexeyVatolin          | Aleksei   | Vatolin       | vatolinalex@gmail.com        | ~Aleksei_Vatolin1      | FRC CSC RAS                                               |
 | xhluca | Xing Han | Lù | xing.han.lu@mail.mcgill.ca | ~Xing_Han_Lù1 | McGill University && Mila - Quebec AI Institute |
+| crystina-z | Xinyu | Zhang | xinyucrystina.zhang@uwaterloo.ca | ~Crystina_Zhang1 | University of Waterloo |
