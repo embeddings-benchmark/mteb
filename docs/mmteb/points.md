@@ -114,3 +114,4 @@ Please also add your first name and last name are as you want them to appear in 
 | AlexeyVatolin          | Aleksei   | Vatolin       | vatolinalex@gmail.com        | ~Aleksei_Vatolin1      | FRC CSC RAS                                               |
 | tomaarsen          | Tom   | Aarsen       |                           | ~Tom_Aarsen1      | Hugging Face |
 | crystina-z | Xinyu | Zhang | xinyucrystina.zhang@uwaterloo.ca | ~Crystina_Zhang1 | University of Waterloo |
+| mrshu | Marek | Suppa | marek.suppa@fmph.uniba.sk | ~Marek_Suppa1 | Comenius University in Bratislava && Cisco Systems |
