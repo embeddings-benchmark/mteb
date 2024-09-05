@@ -19,7 +19,7 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
         reference="https://metatext.io/datasets/narrativeqa",
         description=(
             "NarrativeQA is a dataset for the task of question answering on long narratives. It consists of "
-            "realistic QA instances collected from literature (fiction and non-fiction) and movie scripts. "
+            + "realistic QA instances collected from literature (fiction and non-fiction) and movie scripts. "
         ),
         type="Retrieval",
         category="s2p",

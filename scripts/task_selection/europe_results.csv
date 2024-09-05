@@ -1,0 +1,13 @@
+,model,revision,mean,mean (Classification),mean (Retrieval),mean (PairClassification),mean (BitextMining),mean (Clustering),mean (MultilabelClassification),mean (STS),mean (Reranking),mean (InstructionRetrieval),mean (wieghted by task type),borda_count,Total Evaluation time (hours)
+2,GritLM/GritLM-7B,13f00a0e36500c80ce12870ea513846a066004af,0.607,0.643,0.571,0.894,0.708,0.435,0.176,0.755,0.589,0.035,0.534,680.0,6.408
+7,intfloat/multilingual-e5-large-instruct,baa7be480a7de1539afce709c8f13f833a510e0a,0.61,0.635,0.555,0.899,0.767,0.46,0.173,0.772,0.575,-0.004,0.537,679.0,4.463
+11,intfloat/e5-mistral-7b-instruct,07163b72af1488142a360786df853f237b1a3ca1,0.592,0.625,0.524,0.907,0.702,0.445,0.155,0.76,0.585,-0.006,0.522,643.0,5.718
+3,intfloat/multilingual-e5-large,4dc6d853a804b9c8886ede6dda8a073b7dc08a81,0.571,0.609,0.513,0.887,0.69,0.367,0.15,0.756,0.552,-0.031,0.499,527.0,5.765
+9,intfloat/multilingual-e5-base,d13f1b27baf31030b7fd040960d60d909913633f,0.557,0.583,0.506,0.876,0.683,0.367,0.149,0.734,0.53,-0.027,0.489,438.0,2.712
+4,sentence-transformers/paraphrase-multilingual-mpnet-base-v2,79f2382ceacceacdf38563d7c5d16b9ff8d725d6,0.512,0.554,0.393,0.906,0.554,0.343,0.069,0.741,0.516,-0.011,0.451,387.0,14.898
+0,intfloat/multilingual-e5-small,e4ce9877abf3edfe10b0d82785e83bdcb973e22e,0.537,0.565,0.465,0.869,0.66,0.355,0.14,0.71,0.534,-0.024,0.475,347.0,1.901
+1,sentence-transformers/LaBSE,e34fab64a3011d2176c99545a93d5cbddc9a91b7,0.498,0.54,0.338,0.85,0.723,0.335,0.163,0.657,0.488,-0.03,0.452,296.0,2.439
+5,sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,bf3bf13ab40c3157080a7ab344c831b9ad18b5eb,0.484,0.517,0.355,0.888,0.513,0.327,0.057,0.724,0.492,-0.013,0.429,252.0,1.809
+6,sentence-transformers/all-mpnet-base-v2,84f2bcc00d77236f9e89c8a360a00fb1139bf47d,0.433,0.485,0.359,0.796,0.236,0.36,0.109,0.63,0.472,-0.031,0.379,241.5,2.887
+8,sentence-transformers/all-MiniLM-L12-v2,a05860a77cef7b37e0048a7864658139bc18a854,0.431,0.487,0.345,0.809,0.256,0.323,0.076,0.635,0.47,-0.008,0.377,221.0,1.78
+10,sentence-transformers/all-MiniLM-L6-v2,8b3219a92973c328a8e22fadcfa821b5dc75636a,0.425,0.475,0.366,0.796,0.218,0.335,0.088,0.618,0.445,-0.028,0.368,172.5,1.606

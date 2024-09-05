@@ -1,0 +1,13 @@
+,model,revision,mean,mean (BitextMining),mean (Classification),mean (Retrieval),mean (STS),mean (Reranking),mean (Clustering),mean (PairClassification),mean (wieghted by task type),borda_count,Total Evaluation time (hours)
+7,intfloat/multilingual-e5-large-instruct,baa7be480a7de1539afce709c8f13f833a510e0a,0.718,0.703,0.709,0.887,0.537,0.91,0.472,0.785,0.715,224.0,1.887
+3,intfloat/multilingual-e5-large,4dc6d853a804b9c8886ede6dda8a073b7dc08a81,0.645,0.644,0.631,0.875,0.439,0.897,0.237,0.739,0.637,190.0,1.269
+2,GritLM/GritLM-7B,13f00a0e36500c80ce12870ea513846a066004af,0.646,0.607,0.652,0.832,0.272,0.91,0.361,0.741,0.625,165.0,2.136
+9,intfloat/multilingual-e5-base,d13f1b27baf31030b7fd040960d60d909913633f,0.625,0.612,0.619,0.833,0.411,0.877,0.216,0.71,0.611,164.0,0.851
+11,intfloat/e5-mistral-7b-instruct,07163b72af1488142a360786df853f237b1a3ca1,0.637,0.616,0.636,0.808,0.23,0.903,0.387,0.779,0.623,154.0,1.644
+0,intfloat/multilingual-e5-small,e4ce9877abf3edfe10b0d82785e83bdcb973e22e,0.619,0.612,0.613,0.808,0.408,0.87,0.239,0.69,0.606,150.0,0.736
+1,sentence-transformers/LaBSE,e34fab64a3011d2176c99545a93d5cbddc9a91b7,0.607,0.636,0.6,0.716,0.528,0.809,0.188,0.652,0.59,135.0,0.809
+4,sentence-transformers/paraphrase-multilingual-mpnet-base-v2,79f2382ceacceacdf38563d7c5d16b9ff8d725d6,0.571,0.42,0.602,0.696,0.341,0.822,0.241,0.827,0.564,127.0,0.785
+5,sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,bf3bf13ab40c3157080a7ab344c831b9ad18b5eb,0.5,0.236,0.563,0.641,0.198,0.785,0.194,0.789,0.486,91.0,0.668
+6,sentence-transformers/all-mpnet-base-v2,84f2bcc00d77236f9e89c8a360a00fb1139bf47d,0.364,0.072,0.472,0.323,-0.025,0.647,0.089,0.584,0.309,52.0,0.84
+8,sentence-transformers/all-MiniLM-L12-v2,a05860a77cef7b37e0048a7864658139bc18a854,0.359,0.078,0.46,0.329,-0.053,0.692,0.076,0.584,0.31,39.0,0.689
+10,sentence-transformers/all-MiniLM-L6-v2,8b3219a92973c328a8e22fadcfa821b5dc75636a,0.351,0.063,0.463,0.294,-0.063,0.645,0.066,0.574,0.292,27.0,0.629

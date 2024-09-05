@@ -306,7 +306,7 @@ def convert_conv_history_to_query(conversations: list[list[str | dict]]) -> str:
             for i, turn in enumerate(conversation):
                 error_msg = (
                     "When converting conversations lists of dictionary to string, each turn in the conversation "
-                    "must be a dictionary with 'role' and 'content' keys"
+                    + "must be a dictionary with 'role' and 'content' keys"
                 )
                 if not isinstance(turn, dict):
                     raise ValueError(f"Turn {i} is not a dictionary. " + error_msg)

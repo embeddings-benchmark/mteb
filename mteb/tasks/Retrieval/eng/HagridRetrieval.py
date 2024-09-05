@@ -20,8 +20,8 @@ class HagridRetrieval(AbsTaskRetrieval):
         reference="https://github.com/project-miracl/hagrid",
         description=(
             "HAGRID (Human-in-the-loop Attributable Generative Retrieval for Information-seeking Dataset)"
-            "is a dataset for generative information-seeking scenarios. It consists of queries"
-            "along with a set of manually labelled relevant passages"
+            + "is a dataset for generative information-seeking scenarios. It consists of queries"
+            + "along with a set of manually labelled relevant passages"
         ),
         type="Retrieval",
         category="s2p",

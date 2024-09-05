@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -10,6 +11,7 @@ from sentence_transformers import SentenceTransformer
 
 import mteb
 from mteb.benchmarks import Benchmark
+from mteb.create_meta import generate_readme
 
 from .mock_models import (
     MockBGEWrapper,
@@ -33,6 +35,12 @@ def test_mulitple_mteb_tasks(
     eval = mteb.MTEB(tasks=tasks)
     output_folder = "tests/results"
     eval.run(model, output_folder=output_folder, overwrite_results=True)
+
+    tasks_dict = {task.metadata.name: task for task in tasks}
+    monkeypatch.setattr(
+        mteb, "get_task", lambda task_name, **kwargs: tasks_dict[task_name]
+    )
+    generate_readme(Path(output_folder))
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)

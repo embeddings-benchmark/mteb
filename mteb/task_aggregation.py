@@ -12,7 +12,7 @@ from mteb.overview import get_task
 
 logger = logging.getLogger(__name__)
 
-AGGREGATION = Dict[MODEL_NAME, Dict[REVISION, float]]
+AGGREGATION = Dict[MODEL_NAME, Dict[REVISION, Dict[str, float]]]
 
 
 def mean(results: RESULTS) -> AGGREGATION:
@@ -37,7 +37,7 @@ def mean(results: RESULTS) -> AGGREGATION:
         return np.nan
 
     return {
-        model: {rev: _mean(model, rev, res) for rev, res in revs.items()}
+        model: {rev: {"mean": _mean(model, rev, res)} for rev, res in revs.items()}
         for model, revs in results.items()
     }
 
@@ -58,7 +58,7 @@ def task_category_weighted_mean(
 
     def _task_category_weighted_mean(
         model: str, rev: str, results: list[MTEBResults]
-    ) -> float:
+    ) -> dict[str, float]:
         """Calculate the mean of the main score of the given results, weighted by the number of tasks of each type."""
         _task_types = {task_type: [] for task_type in task_types.keys()}
 
@@ -68,16 +68,19 @@ def task_category_weighted_mean(
             _task_types[task_type].append(result.get_score())
 
         # mean pr task type then mean of means
-        means = []
+        means = {}
         for task_type, scores in _task_types.items():
             if len(scores) != len(task_types[task_type]):
                 logger.warning(
                     f"Model {model} revision {rev} has missing scores for some tasks of type {task_type}"
                 )
             _mean = sum(scores) / len(task_types[task_type]) if scores else np.nan
-            means.append(_mean)
+            # means.append(_mean)
+            means[f"mean ({task_type})"] = _mean
 
-        return sum(means) / len(task_types)
+        _mean = sum(means.values()) / len(task_types)
+        means["mean (weighted by task type)"] = _mean
+        return means
 
     return {
         model: {
@@ -142,7 +145,10 @@ def borda_count(
         for task_result in tied_group:
             candidate_scores[task_result[0]][task_result[1]] += score / len(tied_group)
 
-    return candidate_scores
+    return {
+        model: {rev: {"borda_count": score} for rev, score in revs.items()}
+        for model, revs in candidate_scores.items()
+    }
 
 
 aggregation_methods = {

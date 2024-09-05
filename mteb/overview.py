@@ -206,7 +206,7 @@ class MTEBTasks(tuple):
                 if isinstance(df[col].iloc[0], (list, set)):
                     _col = []
                     for val in df[col]:
-                        if len(val) > limit_n_entries:
+                        if val is not None and len(val) > limit_n_entries:
                             ending = "]" if isinstance(val, list) else "}"
                             str_col = str(val[:limit_n_entries])[:-1] + ", ..." + ending
                         else:
