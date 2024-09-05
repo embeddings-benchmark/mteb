@@ -27,7 +27,7 @@ class SyntecRetrieval(AbsTaskRetrieval):
         date=None,  # not specified
         domains=["Legal", "Written"],
         task_subtypes=[],
-        license="not specified.",
+        license="Not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",

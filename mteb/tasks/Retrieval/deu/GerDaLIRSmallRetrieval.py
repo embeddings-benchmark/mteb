@@ -23,7 +23,7 @@ class GerDaLIRSmall(AbsTaskRetrieval):
         date=None,
         domains=["Legal", "Written"],
         task_subtypes=["Article retrieval"],
-        license="MIT license",
+        license="MIT",
         annotations_creators="derived",
         dialect=None,
         sample_creation="found",

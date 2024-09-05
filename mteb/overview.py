@@ -6,6 +6,8 @@ import difflib
 import logging
 from collections import Counter
 
+import pandas as pd
+
 from mteb.abstasks import AbsTask
 from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
 from mteb.languages import (
@@ -108,12 +110,14 @@ class MTEBTasks(tuple):
 
     @staticmethod
     def _extract_property_from_task(task, property):
-        if hasattr(task, property):
+        if hasattr(task.metadata, property):
+            return getattr(task.metadata, property)
+        elif hasattr(task, property):
             return getattr(task, property)
         elif property in task.metadata_dict:
             return task.metadata_dict[property]
         else:
-            raise KeyError("Property neither in Task attribute or metadata keys.")
+            raise KeyError("Property neither in Task attribute or in task metadata.")
 
     @property
     def languages(self) -> set:
@@ -152,6 +156,71 @@ class MTEBTasks(tuple):
             )
             markdown_table += " |\n"
         return markdown_table
+
+    def to_dataframe(
+        self,
+        properties: list[str] = ["name", "type", "languages", "domains", "license"],
+    ) -> pd.DataFrame:
+        """Generate pandas DataFrame with tasks summary
+
+        Args:
+            properties: list of metadata to summarize from a Task class.
+
+        Returns:
+            pandas DataFrame.
+        """
+        data = []
+        for task in self:
+            data.append(
+                {p: self._extract_property_from_task(task, p) for p in properties}
+            )
+        return pd.DataFrame(data)
+
+    def to_latex(
+        self,
+        properties: list[str] = ["name", "type", "languages", "domains", "license"],
+        group_indices: list[str] | None = ["type", "name"],
+        include_citation_in_name: bool = True,
+        limit_n_entries: int | None = 3,
+    ) -> str:
+        """Generate a LaTeX table of the tasks.
+
+        Args:
+            properties: list of metadata to summarize from a Task class.
+            group_indices: list of properties to group the table by.
+            include_citation_in_name: Whether to include the citation in the name.
+            limit_n_entries: Limit the number of entries for cell values, e.g. number of languages and domains. Will use "..." to indicate that
+                there are more entries.
+        """
+        if include_citation_in_name and "name" in properties:
+            properties += ["intext_citation"]
+            df = self.to_dataframe(properties)
+            df["name"] = df["name"] + " " + df["intext_citation"]
+            df = df.drop(columns=["intext_citation"])
+        else:
+            df = self.to_dataframe(properties)
+
+        if limit_n_entries and df.shape[0]:  # ensure that there are entries
+            for col in df.columns:
+                # check if content is a list or set
+                if isinstance(df[col].iloc[0], (list, set)):
+                    _col = []
+                    for val in df[col]:
+                        if val is not None and len(val) > limit_n_entries:
+                            ending = "]" if isinstance(val, list) else "}"
+                            str_col = str(val[:limit_n_entries])[:-1] + ", ..." + ending
+                        else:
+                            str_col = str(val)
+
+                        # escape } and { characters
+                        str_col = str_col.replace("{", "\\{").replace("}", "\\}")
+                        _col.append(str_col)
+                    df[col] = _col
+
+        if group_indices:
+            df = df.set_index(group_indices)
+
+        return df.to_latex()
 
 
 def get_tasks(

@@ -45,6 +45,11 @@ class DummyTask(AbsTask):
     def _evaluate_subset(self, **kwargs):
         pass
 
+    def _calculate_metrics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall=False
+    ) -> dict[str, float]:
+        pass
+
 
 def test_mteb_results():
     """Test MTEBResults class (this is the same as the example in the docstring)"""

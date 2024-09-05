@@ -76,7 +76,7 @@ class MassiveIntentClassification(MultilingualTask, AbsTaskClassification):
         eval_langs=_LANGUAGES,
         main_score="accuracy",
         date=("2022-01-01", "2022-04-22"),
-        domains=["Spoken", "Spoken"],
+        domains=["Spoken"],
         task_subtypes=[],
         license="Apache 2.0",
         annotations_creators="human-annotated",

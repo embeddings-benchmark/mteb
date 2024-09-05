@@ -31,7 +31,7 @@ class SNLHierarchicalClusteringP2P(AbsTaskClusteringFast):
         main_score="v_measure",
         date=("2020-01-01", "2024-12-31"),  # best guess
         domains=["Encyclopaedic", "Non-fiction", "Written"],
-        license="Not specified",
+        license="CC-BY-NC",
         annotations_creators="derived",
         dialect=[],
         task_subtypes=["Thematic clustering"],
@@ -76,7 +76,7 @@ class SNLHierarchicalClusteringS2S(AbsTaskClusteringFast):
         main_score="v_measure",
         date=("2020-01-01", "2024-12-31"),  # best guess
         domains=["Encyclopaedic", "Non-fiction", "Written"],
-        license="Not specified",
+        license="CC-BY-NC",
         annotations_creators="derived",
         dialect=[],
         task_subtypes=["Thematic clustering"],

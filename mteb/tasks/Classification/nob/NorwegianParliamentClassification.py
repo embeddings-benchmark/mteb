@@ -21,13 +21,13 @@ class NorwegianParliamentClassification(AbsTaskClassification):
         eval_langs=["nob-Latn"],
         # assumed to be bokmål
         main_score="accuracy",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("1999-01-01", "2016-01-01"),  # based on dates within the dataset
+        domains=["Government", "Spoken"],
+        task_subtypes=["Political classification"],
+        license="cc-by-4.0",
+        annotations_creators="derived",  # based on the speaker affiliation
+        dialect=[],  # unknown
+        sample_creation="found",
         bibtex_citation="""@inproceedings{kummervold-etal-2021-operationalizing,
     title = "Operationalizing a National Digital Library: The Case for a {N}orwegian Transformer Model",
     author = "Kummervold, Per E  and
