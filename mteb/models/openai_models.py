@@ -32,8 +32,10 @@ class OpenAIWrapper:
             )
 
         max_batch_size = 2048
-        sublists = [sentences[i:i + max_batch_size]
-                    for i in range(0, len(sentences), max_batch_size)]
+        sublists = [
+            sentences[i : i + max_batch_size]
+            for i in range(0, len(sentences), max_batch_size)
+        ]
 
         all_embeddings = []
 

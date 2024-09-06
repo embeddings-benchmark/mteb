@@ -29,7 +29,8 @@ logging.basicConfig(level=logging.INFO)
 @pytest.mark.parametrize("tasks", [MOCK_TASK_TEST_GRID])
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
 def test_mulitple_mteb_tasks(
-    tasks: list[mteb.AbsTask], model: mteb.Encoder, tmp_path: Path):
+    tasks: list[mteb.AbsTask], model: mteb.Encoder, tmp_path: Path
+):
     """Test that multiple tasks can be run"""
     eval = mteb.MTEB(tasks=tasks)
     eval.run(model, output_folder=str(tmp_path), overwrite_results=True)
