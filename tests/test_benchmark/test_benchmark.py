@@ -29,18 +29,13 @@ logging.basicConfig(level=logging.INFO)
 @pytest.mark.parametrize("tasks", [MOCK_TASK_TEST_GRID])
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
 def test_mulitple_mteb_tasks(
-    tasks: list[mteb.AbsTask], model: mteb.Encoder, monkeypatch
-):
+    tasks: list[mteb.AbsTask], model: mteb.Encoder, tmp_path: Path):
     """Test that multiple tasks can be run"""
     eval = mteb.MTEB(tasks=tasks)
-    output_folder = "tests/results"
-    eval.run(model, output_folder=output_folder, overwrite_results=True)
+    eval.run(model, output_folder=str(tmp_path), overwrite_results=True)
 
-    tasks_dict = {task.metadata.name: task for task in tasks}
-    monkeypatch.setattr(
-        mteb, "get_task", lambda task_name, **kwargs: tasks_dict[task_name]
-    )
-    generate_readme(Path(output_folder))
+    # ensure that we can generate a readme from the output folder
+    generate_readme(tmp_path)
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)

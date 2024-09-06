@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import subprocess
+import sys
 from argparse import Namespace
 from pathlib import Path
 
@@ -13,7 +14,7 @@ from mteb.cli import create_meta, run
 
 
 def test_available_tasks():
-    command = "mteb available_tasks"
+    command = "{sys.executable} -m mteb available_tasks"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
     assert (
@@ -111,7 +112,7 @@ def test_create_meta():
         ), f"Value for {key} does not match"
 
     # ensure that the command line interface works as well
-    command = f"mteb create_meta --results_folder {results} --output_path {output_path} --overwrite"
+    command = f"{sys.executable} -m mteb create_meta --results_folder {results} --output_path {output_path} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
 
@@ -172,13 +173,13 @@ def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: 
         ), f"Value for {key} does not match"
     assert readme_output == gold_readme
     # ensure that the command line interface works as well
-    command = f"mteb create_meta --results_folder {results} --output_path {output_path} --from_existing {existing_readme} --overwrite"
+    command = f"{sys.executable} -m mteb create_meta --results_folder {results} --output_path {output_path} --from_existing {existing_readme} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
 
 
 def test_save_predictions():
-    command = "mteb run -m all-MiniLM-L6-v2 -t NFCorpus --output_folder tests/results --save_predictions"
+    command = f"{sys.executable} -m mteb run -m all-MiniLM-L6-v2 -t NFCorpus --output_folder tests/results --save_predictions"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
     test_folder = Path(__file__).parent
