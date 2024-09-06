@@ -14,7 +14,7 @@ from mteb.cli import create_meta, run
 
 
 def test_available_tasks():
-    command = "{sys.executable} -m mteb available_tasks"
+    command = f"{sys.executable} -m mteb available_tasks"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
     assert (
