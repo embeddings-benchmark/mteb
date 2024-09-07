@@ -6,7 +6,7 @@ import os
 from collections import defaultdict
 from pathlib import Path
 from time import time
-from typing import Any, Dict, Tuple
+from typing import Any
 
 import tqdm
 from datasets import Features, Value, load_dataset
@@ -66,19 +66,19 @@ class HFDataLoader:
     def check(fIn: str, ext: str):
         if not os.path.exists(fIn):
             raise ValueError(
-                "File {} not present! Please provide accurate file.".format(fIn)
+                f"File {fIn} not present! Please provide accurate file."
             )
 
         if not fIn.endswith(ext):
             raise ValueError(
-                "File {} must be present with extension {}".format(fIn, ext)
+                f"File {fIn} must be present with extension {ext}"
             )
 
     def load(
         self, split="test"
-    ) -> Tuple[
-        Dict[str, Dict[str, str | Image.Image]],
-        Dict[str, Dict[str, str | Image.Image]],
+    ) -> tuple[
+        dict[str, dict[str, str | Image.Image]],
+        dict[str, dict[str, str | Image.Image]],
         dict[str, dict[str, int]],
     ]:
         if not self.hf_repo:
@@ -255,7 +255,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
 
         scores = {}
         hf_subsets = (
-            [l for l in self.hf_subsets] if self.is_multilingual else ["default"]
+            list(self.hf_subsets) if self.is_multilingual else ["default"]
         )
 
         for hf_subset in hf_subsets:
@@ -285,7 +285,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
         results = retriever(corpus, queries)
         end_time = time()
         logger.info(
-            "Time taken to retrieve: {:.2f} seconds".format(end_time - start_time)
+            f"Time taken to retrieve: {end_time - start_time:.2f} seconds"
         )
 
         save_predictions = kwargs.get("save_predictions", False)
@@ -352,7 +352,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
                     sorted_docs = sorted(
                         doc_scores.items(), key=lambda x: x[1], reverse=True
                     )[:top_k]
-                    results[qid] = {doc_id: score for doc_id, score in sorted_docs}
+                    results[qid] = dict(sorted_docs)
             for qid, retrieved_docs in results.items():
                 expected_docs = relevant_docs[qid]
                 false_positives = [

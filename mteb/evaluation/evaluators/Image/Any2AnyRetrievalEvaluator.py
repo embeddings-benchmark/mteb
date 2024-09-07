@@ -6,7 +6,7 @@ import json
 import logging
 import os
 from collections import defaultdict
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 import numpy as np
 import pytrec_eval
@@ -155,9 +155,7 @@ class DenseRetrievalExactSearch:
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
         logger.info(
-            "Scoring Function: {} ({})".format(
-                self.score_function_desc[score_function], score_function
-            )
+            f"Scoring Function: {self.score_function_desc[score_function]} ({score_function})"
         )
 
         result_heaps = {qid: [] for qid in query_ids}
@@ -250,7 +248,7 @@ class DenseRetrievalExactSearch:
                 )
             self.previous_results = dest_file
 
-        with open(self.previous_results, "r") as f:
+        with open(self.previous_results) as f:
             previous_results = json.load(f)
         assert isinstance(previous_results, dict)
         assert isinstance(previous_results[list(previous_results.keys())[0]], dict)
@@ -263,7 +261,7 @@ class Any2AnyRetrievalEvaluator(Evaluator):
         self,
         retriever=None,
         task_name: str | None = None,
-        k_values: List[int] = [1, 3, 5, 10, 20, 100, 1000],
+        k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
         score_function: str = "cos_sim",
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
@@ -282,8 +280,8 @@ class Any2AnyRetrievalEvaluator(Evaluator):
 
     def __call__(
         self,
-        corpus: dict[str, Dict[str, str | Image.Image]],
-        queries: dict[str, Dict[str, str | Image.Image]],
+        corpus: dict[str, dict[str, str | Image.Image]],
+        queries: dict[str, dict[str, str | Image.Image]],
     ) -> dict[str, dict[str, float]]:
         if not self.retriever:
             raise ValueError("Model/Technique has not been provided!")
@@ -300,10 +298,10 @@ class Any2AnyRetrievalEvaluator(Evaluator):
     def evaluate(
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
-        k_values: List[int],
+        k_values: list[int],
         ignore_identical_ids: bool = False,
         skip_first_result: bool = False,
-    ) -> Tuple[
+    ) -> tuple[
         dict[str, float],
         dict[str, float],
         dict[str, float],
@@ -403,10 +401,10 @@ class Any2AnyRetrievalEvaluator(Evaluator):
     def evaluate_custom(
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
-        k_values: List[int],
+        k_values: list[int],
         metric: str,
         output_type: str = "all",
-    ) -> Tuple[Dict[str, float]]:
+    ) -> tuple[dict[str, float]]:
         if metric.lower() in ["mrr", "mrr@k", "mrr_cut"]:
             metric_scores = mrr(qrels, results, k_values, output_type)
 
@@ -434,7 +432,7 @@ class Any2AnyRetrievalEvaluator(Evaluator):
     def evaluate_abstention(
         results: dict[str, dict[str, float]],
         metric_scores: dict[str, list[float]],
-    ) -> Dict[str, float]:
+    ) -> dict[str, float]:
         """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997"""
         all_sim_scores = [list(results[qid].values()) for qid in list(results.keys())]
         all_conf_scores = [

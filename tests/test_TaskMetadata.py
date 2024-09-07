@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 import pytest
@@ -316,7 +318,7 @@ def test_given_none_revision_path_then_it_logs_warning(caplog):
         assert len(warning_logs) == 1
         assert (
             warning_logs[0].message == "Revision missing for the dataset test/dataset. "
-            "It is encourage to specify a dataset revision for reproducability."
+            + "It is encourage to specify a dataset revision for reproducability."
         )
 
 

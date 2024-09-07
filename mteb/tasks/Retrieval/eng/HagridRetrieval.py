@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import uuid
-from typing import Dict, List
 
 import datasets
 
@@ -21,8 +20,8 @@ class HagridRetrieval(AbsTaskRetrieval):
         reference="https://github.com/project-miracl/hagrid",
         description=(
             "HAGRID (Human-in-the-loop Attributable Generative Retrieval for Information-seeking Dataset)"
-            "is a dataset for generative information-seeking scenarios. It consists of queries"
-            "along with a set of manually labelled relevant passages"
+            + "is a dataset for generative information-seeking scenarios. It consists of queries"
+            + "along with a set of manually labelled relevant passages"
         ),
         type="Retrieval",
         category="s2p",
@@ -87,7 +86,7 @@ class HagridRetrieval(AbsTaskRetrieval):
 
         self.data_loaded = True
 
-    def preprocess_data(self, dataset: Dict) -> List[Dict]:
+    def preprocess_data(self, dataset: dict) -> list[dict]:
         """Preprocessed the data in a format easirer
         to handle for the loading of queries and corpus
         ------
@@ -111,7 +110,7 @@ class HagridRetrieval(AbsTaskRetrieval):
 
         return preprocessed_data
 
-    def get_best_answer(self, data: Dict) -> str:
+    def get_best_answer(self, data: dict) -> str:
         """Get the best answer among available answers
         of a query.
         WARNING : May return None if no good answer available

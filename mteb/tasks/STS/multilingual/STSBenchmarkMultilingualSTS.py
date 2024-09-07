@@ -30,7 +30,7 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
         },
         description=(
             "Semantic Textual Similarity Benchmark (STSbenchmark) dataset,"
-            "but translated using DeepL API."
+            + "but translated using DeepL API."
         ),
         reference="https://github.com/PhilipMay/stsb-multi-mt/",
         type="STS",

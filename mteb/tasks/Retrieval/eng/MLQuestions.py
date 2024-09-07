@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import csv
 
 from huggingface_hub import snapshot_download
@@ -19,7 +21,7 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
         reference="https://github.com/McGill-NLP/MLQuestions",
         description=(
             "MLQuestions is a domain adaptation dataset for the machine learning domain"
-            "It consists of ML questions along with passages from Wikipedia machine learning pages (https://en.wikipedia.org/wiki/Category:Machine_learning)"
+            + "It consists of ML questions along with passages from Wikipedia machine learning pages (https://en.wikipedia.org/wiki/Category:Machine_learning)"
         ),
         type="Retrieval",
         category="s2p",
@@ -98,7 +100,7 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
         queries, corpus, qrels = {}, {}, {}
 
         dataset_path = f"{download_dir}/{split}.csv"
-        with open(dataset_path, "r") as csvfile:
+        with open(dataset_path) as csvfile:
             reader = csv.DictReader(csvfile)
             for i, row in enumerate(reader):
                 query_id = f"Q{str(i)}"
@@ -109,7 +111,7 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
 
         # Same corpus for all splits
         corpus_path = f"{download_dir}/test_passages.csv"
-        with open(corpus_path, "r") as csvfile:
+        with open(corpus_path) as csvfile:
             reader = csv.DictReader(csvfile)
             for i, row in enumerate(reader):
                 doc_id = f"C{str(i)}"

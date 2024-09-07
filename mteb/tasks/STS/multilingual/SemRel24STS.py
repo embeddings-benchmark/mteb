@@ -29,9 +29,9 @@ class SemRel24STS(AbsTaskSTS, MultilingualTask):
         },
         description=(
             "SemRel2024 is a collection of Semantic Textual Relatedness (STR) datasets for 14 languages, "
-            "including African and Asian languages. The datasets are composed of sentence pairs, each assigned a "
-            "relatedness score between 0 (completely) unrelated and 1 (maximally related) with a large range of "
-            "expected relatedness values."
+            + "including African and Asian languages. The datasets are composed of sentence pairs, each assigned a "
+            + "relatedness score between 0 (completely) unrelated and 1 (maximally related) with a large range of "
+            + "expected relatedness values."
         ),
         reference="https://huggingface.co/datasets/SemRel/SemRel2024",
         type="STS",

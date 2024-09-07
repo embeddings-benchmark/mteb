@@ -105,7 +105,7 @@ class AbsTask(ABC):
 
         scores = {}
         hf_subsets = (
-            [l for l in self.dataset.keys()] if self.is_multilingual else ["default"]
+            list(self.dataset.keys()) if self.is_multilingual else ["default"]
         )
 
         for hf_subset in hf_subsets:

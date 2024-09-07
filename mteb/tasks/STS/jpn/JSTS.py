@@ -15,7 +15,7 @@ class JSTS(AbsTaskSTS):
             "trust_remote_code": True,
         },
         description="Japanese Semantic Textual Similarity Benchmark dataset construct from YJ Image Captions Dataset"
-        "(Miyazaki and Shimizu, 2016) and annotated by crowdsource annotators.",
+        + "(Miyazaki and Shimizu, 2016) and annotated by crowdsource annotators.",
         reference="https://aclanthology.org/2022.lrec-1.317.pdf#page=2.00",
         type="STS",
         category="s2s",

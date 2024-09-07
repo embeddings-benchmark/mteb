@@ -52,7 +52,7 @@ class AbsTaskImageClassification(AbsTask):
         self.samples_per_label: int = (  # type: ignore
             samples_per_label
             if samples_per_label is not None
-            else self.metadata_dict.get("samples_per_label", 16)
+            else self.metadata_dict.get("samples_per_label", 64)
         )
 
         # kNN parameters
@@ -81,7 +81,7 @@ class AbsTaskImageClassification(AbsTask):
             self.load_data()
 
         scores = {}
-        hf_subsets = [l for l in self.dataset] if self.is_multilingual else ["default"]
+        hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
 
         for hf_subset in hf_subsets:
             logger.info(

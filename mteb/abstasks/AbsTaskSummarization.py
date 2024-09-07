@@ -38,13 +38,8 @@ class AbsTaskSummarization(AbsTask):
     def _evaluate_subset(
         self, model: Encoder, data_split, *, encode_kwargs: dict[str, Any], **kwargs
     ) -> ScoresDict:
-        normalized_scores = list(
-            map(
-                lambda x: (np.array(x) - self.min_score)
-                / (self.max_score - self.min_score),
-                data_split["relevance"],
-            )
-        )
+        normalized_scores = [(np.array(x) - self.min_score)
+                / (self.max_score - self.min_score) for x in data_split["relevance"]]
         evaluator = SummarizationEvaluator(
             machine_summaries=data_split["machine_summaries"],
             human_summaries=data_split["human_summaries"],

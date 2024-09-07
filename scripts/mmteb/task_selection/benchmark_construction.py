@@ -27,6 +27,7 @@ I believe we have the followign benchmarks to construct:
     - MTEB(Scandinavian, v2) - an version of the Mainland Scandinavian benchmark - shows an example of a semi-local language benchmark
     - MTEB(Code) or some other domain specific benchmark - shows an example of a domain specific benchmark
 """
+from __future__ import annotations
 
 import mteb
 from mteb.benchmarks import MTEB_MAIN_EN, MTEB_MAIN_RU
@@ -178,7 +179,7 @@ task_lists = {
                 "yue",
                 "jpn",
                 "kor",
-                "mon"
+                "mon",
                 # south asian - indic
                 # (south asian - dravidian)
                 "hin",

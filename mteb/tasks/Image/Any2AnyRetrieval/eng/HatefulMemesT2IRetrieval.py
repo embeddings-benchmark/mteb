@@ -17,7 +17,7 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
         cache_dir=cache_dir,
         revision=revision,
     )
-    dataset_splits = [split for split in dataset]
+    dataset_splits = list(dataset)
     shared_corpus = concatenate_datasets([dataset[split] for split in dataset_splits])
 
     shared_corpus = shared_corpus.map(

@@ -20,7 +20,7 @@ def filter_results(
 
     iter_models = models if models is not None else results.keys()
     if tasks is not None:
-        task_names = set(t.metadata.name for t in tasks)
+        task_names = {t.metadata.name for t in tasks}
 
     for mdl in iter_models:
         if isinstance(mdl, mteb.ModelMeta):

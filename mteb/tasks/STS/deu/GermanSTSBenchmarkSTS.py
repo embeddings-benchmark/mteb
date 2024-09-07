@@ -13,7 +13,7 @@ class GermanSTSBenchmarkSTS(AbsTaskSTS):
             "revision": "e36907544d44c3a247898ed81540310442329e20",
         },
         description="Semantic Textual Similarity Benchmark (STSbenchmark) dataset translated into German. "
-        "Translations were originally done by T-Systems on site services GmbH.",
+        + "Translations were originally done by T-Systems on site services GmbH.",
         reference="https://github.com/t-systems-on-site-services-gmbh/german-STSbenchmark",
         type="STS",
         category="s2s",
