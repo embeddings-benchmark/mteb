@@ -120,12 +120,17 @@ if __name__ == "__main__":
             print(f"Skipping {model_name} - {model_rev}")
             continue
 
-        wandb.init(project='Chembedding - Benchmarking', name=model_name,
-                   config={"revision": model_rev})
-        model = mteb.get_model(model_full_name)
-        evaluation = mteb.MTEB(tasks=tasks)
-        evaluation.run(model, output_folder="chem_results",
-                       overwrite_results=False)
+        try:
+            wandb.init(project='Chembedding - Benchmarking', name=model_name,
+                    config={"revision": model_rev})
+            model = mteb.get_model(model_full_name)
+            evaluation = mteb.MTEB(tasks=tasks)
+            evaluation.run(model, output_folder="chem_results",
+                        overwrite_results=False)
+        except Exception as e:
+            print(f"Error Evaluating Model {model_name}: {e}")
+            wandb.finish()
+            continue
 
         for task_name in tqdm(all_tasks):
             data = read_json(os.path.join(
