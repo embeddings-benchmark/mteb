@@ -31,6 +31,8 @@ def json_parser(data):
         output["Bitext Mining (F1)"] = data["scores"]["test"][0]["main_score"]
     elif task_name.endswith("Retrieval"):
         output["Retrieval (NDCG@10)"] = data["scores"]["test"][0]["main_score"]
+    elif task_name.endswith("Clustering"):
+        output["Clustering (V Measure)"] = data["scores"]["test"][0]["main_score"]
     return output
 
 
@@ -56,6 +58,9 @@ if __name__ == "__main__":
               "BAAI/bge-small-en": "2275a7bdee235e9b4f01fa73aa60d3311983cfea",
               "BAAI/bge-base-en": "b737bf5dcc6ee8bdc530531266b4804a5d77b5d8",
               "BAAI/bge-large-en": "abe7d9d814b775ca171121fb03f394dc42974275",
+              "BAAI/bge-small-en-v1.5": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+              "BAAI/bge-base-en-v1.5": "a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",
+              "BAAI/bge-large-en-v1.5": "d4aa6901d3a41ba39fb536a557fa166f842b0e09",
               "all-mpnet-base-v2": "84f2bcc00d77236f9e89c8a360a00fb1139bf47d",
               "multi-qa-mpnet-base-dot-v1": "3af7c6da5b3e1bea796ef6c97fe237538cbe6e7f",
               "all-MiniLM-L12-v2": "a05860a77cef7b37e0048a7864658139bc18a854",
