@@ -24,13 +24,13 @@ def json_parser(data):
     task_name = data["task_name"]
     output = {}
     if task_name.endswith("PC"):
-        output["Max F1"] = data["scores"]["test"][0]["main_score"]
+        output["PairClassification (Max F1)"] = data["scores"]["test"][0]["main_score"]
     elif task_name.endswith("Classification"):
-        output["Accuracy"] = data["scores"]["test"][0]["main_score"]
-    elif "BitextMining" in task_name:
-        output["F1"] = data["scores"]["test"][0]["main_score"]
+        output["Classification (Accuracy)"] = data["scores"]["test"][0]["main_score"]
+    elif "BitextMining" in task_name or task_name.endswith("BM"):
+        output["Bitext Mining (F1)"] = data["scores"]["test"][0]["main_score"]
     elif task_name.endswith("Retrieval"):
-        output["NDCG@10"] = data["scores"]["test"][0]["main_score"]
+        output["Retrieval (NDCG@10)"] = data["scores"]["test"][0]["main_score"]
     return output
 
 
