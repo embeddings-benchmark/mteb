@@ -67,6 +67,7 @@ if __name__ == "__main__":
               }
 
     all_tasks = [
+        # Pair Classification
         "CoconutSmiles2NamePC",
         "PubChemAIParagraphsParaphrasePC",
         "PubChemAISentenceParaphrasePC",
@@ -76,7 +77,7 @@ if __name__ == "__main__":
         "PubChemSMILESIsoTitlePC",
         "PubChemSynonymPC",
         "PubChemWikiParagraphsPC",
-
+        # Classification
         "WikipediaEasy2GeneExpressionVsMetallurgyClassification",
         "WikipediaEasy2GreenhouseVsEnantiopureClassification",
         "WikipediaEasy2SolidStateVsColloidalClassification",
@@ -92,16 +93,19 @@ if __name__ == "__main__":
         "WikipediaMedium2ComputationalVsSpectroscopistsClassification",
         "WikipediaMedium2CrystallographyVsChromatographyTitrationpHClassification",
         "WikipediaMedium5Classification",
-
+        # Retrieval
         "ChemNQRetrieval",
         "ChemHotpotQARetrieval",
-
+        # Bitext Mining
         "CoconutSmiles2NameBitextMining1",
         "CoconutSmiles2NameBitextMining2",
         "PubChemSMILESISoTitleBM",
         "PubChemSMILESCanonTitleBM",
         "PubChemSMILESISoDescBM",
-        "PubChemSMILESCanonDescBM"
+        "PubChemSMILESCanonDescBM",
+        # Clustering
+        "WikipediaEasy10Clustering",
+        "WikipediaMedium5Clustering"
     ]
 
     tasks = mteb.get_tasks(tasks=all_tasks)
