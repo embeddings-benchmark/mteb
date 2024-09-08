@@ -88,7 +88,11 @@ if __name__ == "__main__":
         "ChemHotpotQARetrieval",
 
         "CoconutSmiles2NameBitextMining1",
-        "CoconutSmiles2NameBitextMining2"
+        "CoconutSmiles2NameBitextMining2",
+        "PubChemSMILESISoTitleBM",
+        "PubChemSMILESCanonTitleBM",
+        "PubChemSMILESISoDescBM",
+        "PubChemSMILESCanonDescBM"
     ]
 
     tasks = mteb.get_tasks(tasks=all_tasks)

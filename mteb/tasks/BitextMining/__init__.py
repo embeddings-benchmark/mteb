@@ -20,6 +20,10 @@ from .multilingual.NTREXBitextMining import *
 from .multilingual.NusaTranslationBitextMining import *
 from .multilingual.NusaXBitextMining import *
 from .multilingual.PhincBitextMining import *
+from .multilingual.PubChemSMILESCanonDescBM import *
+from .multilingual.PubChemSMILESCanonTitleBM import *
+from .multilingual.PubChemSMILESISoDescBM import *
+from .multilingual.PubChemSMILESISoTitleBM import *
 from .multilingual.RomaTalesBitextMining import *
 from .multilingual.TatoebaBitextMining import *
 from .srn.SRNCorpusBitextMining import *
