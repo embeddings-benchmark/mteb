@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from datasets import DatasetDict, load_dataset
 
+from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = {
     "kat_Geor": "ka",

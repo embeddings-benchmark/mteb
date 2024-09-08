@@ -238,9 +238,9 @@ class DenseRetrievalExactSearch:
         for qid in queries.keys():
             q_results = self.previous_results[qid]
             # take the top-k only
-            q_results_sorted = dict(sorted(
-                    q_results.items(), key=lambda item: item[1], reverse=True
-                ))
+            q_results_sorted = dict(
+                sorted(q_results.items(), key=lambda item: item[1], reverse=True)
+            )
             top_n = [k for k, v in list(q_results_sorted.items())[:top_k]]
             query = queries[qid]
             query = (

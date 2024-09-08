@@ -12,9 +12,9 @@ import tqdm
 from datasets import Features, Value, load_dataset
 from PIL import Image
 
+from ..AbsTask import AbsTask
 from ...evaluation.evaluators import Any2AnyRetrievalEvaluator
 from ...load_results.mteb_results import ScoresDict
-from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 
@@ -65,14 +65,10 @@ class HFDataLoader:
     @staticmethod
     def check(fIn: str, ext: str):
         if not os.path.exists(fIn):
-            raise ValueError(
-                f"File {fIn} not present! Please provide accurate file."
-            )
+            raise ValueError(f"File {fIn} not present! Please provide accurate file.")
 
         if not fIn.endswith(ext):
-            raise ValueError(
-                f"File {fIn} must be present with extension {ext}"
-            )
+            raise ValueError(f"File {fIn} must be present with extension {ext}")
 
     def load(
         self, split="test"
@@ -254,9 +250,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
         )
 
         scores = {}
-        hf_subsets = (
-            list(self.hf_subsets) if self.is_multilingual else ["default"]
-        )
+        hf_subsets = list(self.hf_subsets) if self.is_multilingual else ["default"]
 
         for hf_subset in hf_subsets:
             logger.info(f"Subset: {hf_subset}")
@@ -284,9 +278,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
         start_time = time()
         results = retriever(corpus, queries)
         end_time = time()
-        logger.info(
-            f"Time taken to retrieve: {end_time - start_time:.2f} seconds"
-        )
+        logger.info(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 
         save_predictions = kwargs.get("save_predictions", False)
         export_errors = kwargs.get("export_errors", False)
@@ -377,6 +369,11 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
 
     def _add_main_score(self, scores: ScoresDict) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
+
+    def _calculate_metrics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ):
+        pass
 
     def calculate_metadata_metrics(self) -> None:
         self.load_data()

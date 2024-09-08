@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class TurHistQuadRetrieval(AbsTaskRetrieval):

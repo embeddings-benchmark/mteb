@@ -6,10 +6,10 @@ from typing import Any
 from datasets import Dataset
 from tqdm import tqdm
 
-from mteb.abstasks import AbsTask
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
-from mteb.evaluation.evaluators import ImageTextPairClassificationEvaluator
-from mteb.load_results.mteb_results import ScoresDict
+from ..AbsTask import AbsTask
+from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from ...evaluation.evaluators import ImageTextPairClassificationEvaluator
+from ...load_results.mteb_results import ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +46,11 @@ class AbsTaskImageTextPairClassification(AbsTask):
 
     def _add_main_score(self, scores) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
+
+    def _calculate_metrics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ):
+        pass
 
     def _evaluate_subset(
         self,

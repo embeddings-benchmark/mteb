@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.12.90"
+version = "1.14.15"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -31,6 +31,7 @@ dependencies = [
     "scikit_learn>=1.0.2",
     "scipy>=0.0.0",
     "sentence_transformers>=3.0.0",
+    "typing-extensions>=4.5.0",
     "torch>1.0.0",
     "tqdm>1.0.0",
     "rich>=0.0.0",
@@ -85,20 +86,23 @@ exclude = ["tests", "results"]
 "*" = ["*.json"]
 
 [tool.ruff]
+
 target-version = "py38"
+
 
 [tool.ruff.lint]
 select = [
-    "F", 
-    "I", 
-    "E", 
-    "D",
-    "UP",
-    "FA",
-    "C4",
+    "F",  # pyflakes rules, 
+    "I",  # sorting for imports
+    "E",  # formatting for docs
+    "D",  # formatting for docs
+    "UP", # upgrade to latest syntax if possible
+    "FA", # Future annotations
+    "C4", # cleaner comprehensions 
     "ISC",
 ]
-unfixable = ["ISC001"]
+unfixable = ["ISC001"]  
+
 
 ignore = ["E501",   # line too long 
         "E741",     # ambiguous variable name

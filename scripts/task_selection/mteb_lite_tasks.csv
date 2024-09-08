@@ -1,0 +1,29 @@
+,name,type,languages,domains,license
+0,AmazonCounterfactualClassification,Classification,"['deu', 'eng', 'jpn']","['Reviews', 'Written']",CC BY 4.0
+1,ArguAna,Retrieval,['eng'],"['Medical', 'Written']",cc-by-sa-4.0
+2,ArXivHierarchicalClusteringP2P,Clustering,['eng'],"['Academic', 'Written']",CC0
+3,AskUbuntuDupQuestions,Reranking,['eng'],,
+4,BIOSSES,STS,['eng'],,
+5,BiorxivClusteringP2P.v2,Clustering,['eng'],"['Academic', 'Written']",https://www.biorxiv.org/content/about-biorxiv
+6,CQADupstackGamingRetrieval,Retrieval,['eng'],,
+7,FiQA2018,Retrieval,['eng'],,
+8,MassiveIntentClassification,Classification,"['afr', 'amh', 'ara', 'aze', 'ben', 'cmo', 'cym', 'dan', 'deu', 'ell', 'eng', 'fas', 'fin', 'fra', 'heb', 'hin', 'hun', 'hye', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kan', 'kat', 'khm', 'kor', 'lav', 'mal', 'mon', 'msa', 'mya', 'nld', 'nob', 'pol', 'por', 'ron', 'rus', 'slv', 'spa', 'sqi', 'swa', 'swe', 'tam', 'tel', 'tgl', 'tha', 'tur', 'urd', 'vie']",['Spoken'],Apache 2.0
+9,MedrxivClusteringP2P.v2,Clustering,['eng'],"['Academic', 'Medical', 'Written']",https://www.medrxiv.org/content/about-medrxiv
+10,MindSmallReranking,Reranking,['eng'],"['News', 'Written']",https://github.com/msnews/MIND/blob/master/MSR%20License_Data.pdf
+11,SCIDOCS,Retrieval,['eng'],"['Academic', 'Written', 'Non-fiction']",cc-by-sa-4.0
+12,SICK-R,STS,['eng'],,
+13,STS12,STS,['eng'],"['Encyclopaedic', 'News', 'Written']",Not specified
+14,STS13,STS,['eng'],"['Web', 'News', 'Non-fiction', 'Written']",Not specified
+15,STS15,STS,['eng'],"['Blog', 'News', 'Web', 'Written', 'Spoken']",Not specified
+16,STS16,STS,['eng'],"['Blog', 'Web', 'Spoken']",Not specified
+17,STS17,STS,"['ara', 'deu', 'eng', 'fra', 'ita', 'kor', 'nld', 'spa', 'tur']","['News', 'Web', 'Written']",Not specified
+18,STS22.v2,STS,"['ara', 'cmn', 'deu', 'eng', 'fra', 'ita', 'pol', 'rus', 'spa', 'tur']","['News', 'Written']",Not specified
+19,STSBenchmark,STS,['eng'],,
+20,SprintDuplicateQuestions,PairClassification,['eng'],"['Programming', 'Written']",Not specified
+21,StackExchangeClustering.v2,Clustering,['eng'],"['Web', 'Written']",Not specified
+22,StackExchangeClusteringP2P.v2,Clustering,['eng'],"['Web', 'Written']",Not specified
+23,TRECCOVID,Retrieval,['eng'],,
+24,ToxicConversationsClassification,Classification,['eng'],"['Social', 'Written']",CC BY 4.0
+25,TweetSentimentExtractionClassification,Classification,['eng'],"['Social', 'Written']",Not specified
+26,TwitterSemEval2015,PairClassification,['eng'],,
+27,TwitterURLCorpus,PairClassification,['eng'],,

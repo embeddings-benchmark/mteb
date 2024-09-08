@@ -1,0 +1,6 @@
+# from .AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+# from .AbsTaskImageClassification import AbsTaskImageClassification
+# from .AbsTaskImageClustering import AbsTaskImageClustering
+# from .AbsTaskImageMultilabelClassification import AbsTaskImageMultilabelClassification
+# from .AbsTaskImageTextPairClassification import AbsTaskImageTextPairClassification
+# from .AbsTaskZeroshotClassification import AbsTaskZeroshotClassification

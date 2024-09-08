@@ -18,9 +18,9 @@ class FaithDialRetrieval(AbsTaskRetrieval):
         reference="https://mcgill-nlp.github.io/FaithDial",
         description=(
             "FaithDial is a faithful knowledge-grounded dialogue benchmark."
-            + "It was curated by asking annotators to amend hallucinated utterances in Wizard of Wikipedia (WoW)."
-            + "It consists of conversation histories along with manually labelled relevant passage."
-            + "For the purpose of retrieval, we only consider the instances marked as 'Edification' in the VRM field,"
+            + "It was curated by asking annotators to amend hallucinated utterances in Wizard of Wikipedia (WoW). "
+            + "It consists of conversation histories along with manually labelled relevant passage. "
+            + "For the purpose of retrieval, we only consider the instances marked as 'Edification' in the VRM field, "
             + "as the gold passage associated with these instances is non-ambiguous."
         ),
         type="Retrieval",

@@ -198,9 +198,9 @@ class MTEB:
             )
             if len(self.tasks) != len(self._tasks):
                 tasks_known = {x.metadata_dict["name"] for x in self.tasks_cls}
-                tasks_unknown = (
-                    {x for x in self._tasks if isinstance(x, str)} - tasks_known
-                )
+                tasks_unknown = {
+                    x for x in self._tasks if isinstance(x, str)
+                } - tasks_known
                 if tasks_unknown:
                     unknown_str, known_str = (
                         ",".join(sorted(tasks_unknown)),

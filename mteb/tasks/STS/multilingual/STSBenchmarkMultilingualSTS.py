@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskSTS, MultilingualTask
 
 _LANGUAGES = {
     "en": ["eng-Latn"],
@@ -29,7 +29,7 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
             "revision": "29afa2569dcedaaa2fe6a3dcfebab33d28b82e8c",
         },
         description=(
-            "Semantic Textual Similarity Benchmark (STSbenchmark) dataset,"
+            "Semantic Textual Similarity Benchmark (STSbenchmark) dataset, "
             + "but translated using DeepL API."
         ),
         reference="https://github.com/PhilipMay/stsb-multi-mt/",

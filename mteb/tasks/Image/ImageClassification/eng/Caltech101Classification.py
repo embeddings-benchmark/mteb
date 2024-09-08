@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from .....abstasks import AbsTaskImageClassification
+from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
 
 
 class Caltech101Classification(AbsTaskImageClassification):

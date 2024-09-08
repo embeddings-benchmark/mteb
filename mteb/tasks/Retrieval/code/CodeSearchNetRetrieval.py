@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks import MultilingualTask
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
@@ -18,7 +18,6 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "code-search-net/code_search_net",
             "revision": "fdc6a9e39575768c27eb8a2a5f702bf846eb4759",
-            "trust_remote_code": True,
         },
         type="Retrieval",
         category="p2p",
@@ -29,7 +28,7 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         date=("2019-01-01", "2019-12-31"),
         domains=["Programming", "Written"],
         task_subtypes=["Code retrieval"],
-        license="Not specified",
+        license="MIT",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
@@ -118,7 +117,10 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
 
         for lang, sub in lang_subs.items():
             sub = sub[
-                : min(len(sub), self.metadata_dict["n_samples"][self._EVAL_SPLIT])
+                : min(
+                    len(sub),
+                    self.metadata.descriptive_stats["n_samples"][self._EVAL_SPLIT],
+                )
             ]
 
             self.queries[lang] = {

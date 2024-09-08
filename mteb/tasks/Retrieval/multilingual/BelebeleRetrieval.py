@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from datasets import load_dataset
 
-from mteb.abstasks import AbsTaskRetrieval, MultilingualTask, TaskMetadata
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.MultilingualTask import MultilingualTask
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _EVAL_SPLIT = "test"
 
@@ -202,8 +204,13 @@ class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
         dialect=[],
         descriptive_stats={
             "n_samples": {_EVAL_SPLIT: 103500},
-            "avg_character_length": {
-                "test": {
+            "test": {
+                "average_document_length": 487.3975028339728,
+                "average_query_length": 74.49551684802204,
+                "num_documents": 183488,
+                "num_queries": 338378,
+                "average_relevant_docs_per_query": 1.0,
+                "hf_subset_descriptive_stats": {
                     "acm_Arab-acm_Arab": {
                         "average_document_length": 416.4733606557377,
                         "average_query_length": 55.84,
@@ -2836,7 +2843,7 @@ class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
                         "num_queries": 900,
                         "average_relevant_docs_per_query": 1.0,
                     },
-                }
+                },
             },
         },
         bibtex_citation="""@article{bandarkar2023belebele,

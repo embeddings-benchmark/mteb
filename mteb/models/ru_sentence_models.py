@@ -1,4 +1,7 @@
 """Sentence models for evaluation on the Russian part of MTEB"""
+
+from __future__ import annotations
+
 from __future__ import annotations
 
 from functools import partial

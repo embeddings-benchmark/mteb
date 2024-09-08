@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskClassification
 
 
 class ToxicConversationsClassification(AbsTaskClassification):
@@ -31,7 +30,7 @@ class ToxicConversationsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="""@misc{jigsaw-unintended-bias-in-toxicity-classification,
-    author = {cjadams, Daniel Borkan, inversion, Jeffrey Sorensen, Lucas Dixon, Lucy Vasserman, nithum},
+    author = {cjadams and Daniel Borkan and inversion and Jeffrey Sorensen and Lucas Dixon and Lucy Vasserman and nithum},
     title = {Jigsaw Unintended Bias in Toxicity Classification},
     publisher = {Kaggle},
     year = {2019},

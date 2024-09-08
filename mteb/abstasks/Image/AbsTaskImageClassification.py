@@ -6,15 +6,14 @@ from typing import Any
 
 import numpy as np
 
-from mteb.encoder_interface import Encoder
-
+from ..AbsTask import AbsTask
+from ...encoder_interface import Encoder
 from ...evaluation.evaluators import (
     ImagekNNClassificationEvaluator,
     ImagekNNClassificationEvaluatorPytorch,
     ImagelogRegClassificationEvaluator,
 )
 from ...load_results.mteb_results import HFSubset, ScoresDict
-from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +51,7 @@ class AbsTaskImageClassification(AbsTask):
         self.samples_per_label: int = (  # type: ignore
             samples_per_label
             if samples_per_label is not None
-            else self.metadata_dict.get("samples_per_label", 64)
+            else self.metadata_dict.get("samples_per_label", 16)
         )
 
         # kNN parameters
@@ -67,6 +66,11 @@ class AbsTaskImageClassification(AbsTask):
 
     def _add_main_score(self, scores: dict[HFSubset, ScoresDict]) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
+
+    def _calculate_metrics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ):
+        pass
 
     def evaluate(
         self,

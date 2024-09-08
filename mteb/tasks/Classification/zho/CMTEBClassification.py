@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskClassification
 
 
 class TNews(AbsTaskClassification):
@@ -17,7 +16,7 @@ class TNews(AbsTaskClassification):
         type="Classification",
         category="s2s",
         modalities=["text"],
-        eval_splits=["validation", "test"],
+        eval_splits=["validation"],
         eval_langs=["cmn-Hans"],
         main_score="accuracy",
         date=None,
@@ -92,7 +91,7 @@ class IFlyTek(AbsTaskClassification):
         type="Classification",
         category="s2s",
         modalities=["text"],
-        eval_splits=["validation", "test"],
+        eval_splits=["validation"],
         eval_langs=["cmn-Hans"],
         main_score="accuracy",
         date=None,

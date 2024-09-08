@@ -12,9 +12,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
-from mteb.abstasks import AbsTask
-from mteb.encoder_interface import Encoder
-from mteb.load_results.mteb_results import HFSubset, ScoresDict
+from ..AbsTask import AbsTask
+from ...encoder_interface import Encoder
+from ...load_results.mteb_results import HFSubset, ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -77,6 +77,11 @@ class AbsTaskImageMultilabelClassification(AbsTask):
 
     def _add_main_score(self, scores):
         scores["main_score"] = scores[self.metadata.main_score]
+
+    def _calculate_metrics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ):
+        pass
 
     def evaluate(
         self,

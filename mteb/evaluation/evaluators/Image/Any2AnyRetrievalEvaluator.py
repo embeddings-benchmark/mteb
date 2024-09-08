@@ -65,7 +65,7 @@ def custom_collate_fn(batch):
 
 
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/search/dense/exact_search.py#L12
-class DenseRetrievalExactSearch:
+class Any2AnyDenseRetrievalExactSearch:
     def __init__(
         self,
         model: EncoderWithQueryCorpusEncode,
@@ -268,7 +268,7 @@ class Any2AnyRetrievalEvaluator(Evaluator):
     ):
         super().__init__(**kwargs)
 
-        self.retriever = DenseRetrievalExactSearch(
+        self.retriever = Any2AnyDenseRetrievalExactSearch(
             retriever, encode_kwargs=encode_kwargs, **kwargs
         )
         self.k_values = k_values

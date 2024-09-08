@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import os
 
-from mteb.abstasks import AbsTaskZeroshotClassification
+from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
+    AbsTaskZeroshotClassification,
+)
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
