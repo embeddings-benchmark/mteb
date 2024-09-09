@@ -10,7 +10,7 @@ import pytest
 from sentence_transformers import SentenceTransformer
 
 import mteb
-from mteb.benchmarks import Benchmark
+from mteb.benchmarks.benchmarks import Benchmark
 from mteb.create_meta import generate_readme
 
 from .mock_models import (
@@ -127,9 +127,26 @@ def test_encode_kwargs_passed_to_all_encodes(task_name: str | mteb.AbsTask):
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
 def test_run_using_benchmark(model: mteb.Encoder):
     """Test that a benchmark object can be run using the MTEB class."""
-    bench = Benchmark(name="test_bench", tasks=["STS12", "SummEval"])
+    bench = Benchmark(name="test_bench", tasks=mteb.get_tasks(["STS12", "SummEval"]))
 
     eval = mteb.MTEB(tasks=bench)
     eval.run(
         model, output_folder="tests/results", overwrite_results=True
     )  # we just want to test that it runs
+
+
+def test_benchmark_names_must_be_unique():
+    import mteb.benchmarks.benchmarks as benchmark_module
+
+    names = [
+        inst.name
+        for nam, inst in benchmark_module.__dict__.items()
+        if isinstance(inst, Benchmark)
+    ]
+    assert len(names) == len(set(names))
+
+
+@pytest.mark.parametrize("name", ["MTEB(eng)", "MTEB(rus)", "MTEB(Scandinavian)"])
+def test_get_benchmarks(name):
+    benchmark = mteb.get_benchmark(benchmark_name=name)
+    assert isinstance(benchmark, mteb.Benchmark)

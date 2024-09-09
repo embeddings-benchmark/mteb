@@ -3,16 +3,34 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Sequence
 
+from pydantic import AnyUrl, BeforeValidator, TypeAdapter
+from typing_extensions import Annotated
+
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.overview import get_tasks
+
+http_url_adapter = TypeAdapter(AnyUrl)
+STR_URL = Annotated[
+    str, BeforeValidator(lambda value: str(http_url_adapter.validate_python(value)))
+]  # Allows the type to be a string, but ensures that the string is a URL
 
 
 @dataclass
 class Benchmark:
+    """A benchmark object intended to run certain a full benchmark within MTEB.
+
+    Args:
+        name: The name of the benchmark
+        tasks: The tasks within the benchmark.
+        description: A description of the benchmark, should include its intended goal and potentially a description of its construction
+        reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
+        citation: A bibtex citation
+    """
+
     name: str
-    tasks: Sequence[str] | Sequence[AbsTask]
+    tasks: Sequence[AbsTask]
     description: str | None = None
-    reference: str | None = None
+    reference: STR_URL | None = None
     citation: str | None = None
 
     def __iter__(self):
@@ -25,77 +43,91 @@ class Benchmark:
         return self.tasks[index]
 
 
+def create_benchmark_list() -> list[type[Benchmark]]:
+    benchmark_categories_cls = list(Benchmark.__subclasses__())
+    benchmarks = [
+        cls
+        for cat_cls in benchmark_categories_cls
+        for cls in cat_cls.__subclasses__()
+        if cat_cls.__name__.startswith("Benchmark")
+    ]
+    return benchmarks
+
+
 MTEB_MAIN_EN = Benchmark(
     name="MTEB(eng)",
-    tasks=[
-        "AmazonCounterfactualClassification",
-        "AmazonPolarityClassification",
-        "AmazonReviewsClassification",
-        "ArguAna",
-        "ArxivClusteringP2P",
-        "ArxivClusteringS2S",
-        "AskUbuntuDupQuestions",
-        "BIOSSES",
-        "Banking77Classification",
-        "BiorxivClusteringP2P",
-        "BiorxivClusteringS2S",
-        "CQADupstackAndroidRetrieval",
-        "CQADupstackEnglishRetrieval",
-        "CQADupstackGamingRetrieval",
-        "CQADupstackGisRetrieval",
-        "CQADupstackMathematicaRetrieval",
-        "CQADupstackPhysicsRetrieval",
-        "CQADupstackProgrammersRetrieval",
-        "CQADupstackStatsRetrieval",
-        "CQADupstackTexRetrieval",
-        "CQADupstackUnixRetrieval",
-        "CQADupstackWebmastersRetrieval",
-        "CQADupstackWordpressRetrieval",
-        "ClimateFEVER",
-        "DBPedia",
-        "EmotionClassification",
-        "FEVER",
-        "FiQA2018",
-        "HotpotQA",
-        "ImdbClassification",
-        "MSMARCO",
-        "MTOPDomainClassification",
-        "MTOPIntentClassification",
-        "MassiveIntentClassification",
-        "MassiveScenarioClassification",
-        "MedrxivClusteringP2P",
-        "MedrxivClusteringS2S",
-        "MindSmallReranking",
-        "NFCorpus",
-        "NQ",
-        "QuoraRetrieval",
-        "RedditClustering",
-        "RedditClusteringP2P",
-        "SCIDOCS",
-        "SICK-R",
-        "STS12",
-        "STS13",
-        "STS14",
-        "STS15",
-        "STS16",
-        "STS17",
-        "STS22",
-        "STSBenchmark",
-        "SciDocsRR",
-        "SciFact",
-        "SprintDuplicateQuestions",
-        "StackExchangeClustering",
-        "StackExchangeClusteringP2P",
-        "StackOverflowDupQuestions",
-        "SummEval",
-        "TRECCOVID",
-        "Touche2020",
-        "ToxicConversationsClassification",
-        "TweetSentimentExtractionClassification",
-        "TwentyNewsgroupsClustering",
-        "TwitterSemEval2015",
-        "TwitterURLCorpus",
-    ],
+    tasks=get_tasks(
+        tasks=[
+            "AmazonCounterfactualClassification",
+            "AmazonPolarityClassification",
+            "AmazonReviewsClassification",
+            "ArguAna",
+            "ArxivClusteringP2P",
+            "ArxivClusteringS2S",
+            "AskUbuntuDupQuestions",
+            "BIOSSES",
+            "Banking77Classification",
+            "BiorxivClusteringP2P",
+            "BiorxivClusteringS2S",
+            "CQADupstackAndroidRetrieval",
+            "CQADupstackEnglishRetrieval",
+            "CQADupstackGamingRetrieval",
+            "CQADupstackGisRetrieval",
+            "CQADupstackMathematicaRetrieval",
+            "CQADupstackPhysicsRetrieval",
+            "CQADupstackProgrammersRetrieval",
+            "CQADupstackStatsRetrieval",
+            "CQADupstackTexRetrieval",
+            "CQADupstackUnixRetrieval",
+            "CQADupstackWebmastersRetrieval",
+            "CQADupstackWordpressRetrieval",
+            "ClimateFEVER",
+            "DBPedia",
+            "EmotionClassification",
+            "FEVER",
+            "FiQA2018",
+            "HotpotQA",
+            "ImdbClassification",
+            "MSMARCO",
+            "MTOPDomainClassification",
+            "MTOPIntentClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "MedrxivClusteringP2P",
+            "MedrxivClusteringS2S",
+            "MindSmallReranking",
+            "NFCorpus",
+            "NQ",
+            "QuoraRetrieval",
+            "RedditClustering",
+            "RedditClusteringP2P",
+            "SCIDOCS",
+            "SICK-R",
+            "STS12",
+            "STS13",
+            "STS14",
+            "STS15",
+            "STS16",
+            "STS17",
+            "STS22",
+            "STSBenchmark",
+            "SciDocsRR",
+            "SciFact",
+            "SprintDuplicateQuestions",
+            "StackExchangeClustering",
+            "StackExchangeClusteringP2P",
+            "StackOverflowDupQuestions",
+            "SummEval",
+            "TRECCOVID",
+            "Touche2020",
+            "ToxicConversationsClassification",
+            "TweetSentimentExtractionClassification",
+            "TwentyNewsgroupsClustering",
+            "TwitterSemEval2015",
+            "TwitterURLCorpus",
+        ],
+        languages=["eng"],
+    ),
     description="Main English benchmarks from MTEB",
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
     title = "{MTEB}: Massive Text Embedding Benchmark",
@@ -170,11 +202,13 @@ MTEB_MAIN_RU = Benchmark(
 
 MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
     name="MTEB(Retrieval w/Instructions)",
-    tasks=[
-        "Robust04InstructionRetrieval",
-        "News21InstructionRetrieval",
-        "Core17InstructionRetrieval",
-    ],
+    tasks=get_tasks(
+        tasks=[
+            "Robust04InstructionRetrieval",
+            "News21InstructionRetrieval",
+            "Core17InstructionRetrieval",
+        ]
+    ),
     description="Retrieval w/Instructions is the task of finding relevant documents for a query that has detailed instructions.",
     reference="https://arxiv.org/abs/2403.15246",
     citation="""@misc{weller2024followir,
@@ -188,33 +222,37 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
 )
 
 MTEB_RETRIEVAL_LAW = Benchmark(
-    name="MTEB(law)",
-    tasks=[
-        "LegalSummarization",
-        "LegalBenchConsumerContractsQA",
-        "LegalBenchCorporateLobbying",
-        "AILACasedocs",
-        "AILAStatutes",
-        "LeCaRDv2",
-        "LegalQuAD",
-        "GerDaLIRSmall",
-    ],
-    description="Legal benchmarks from MTEB",
+    name="MTEB(law)",  # This benchmark is likely in the need of an update
+    tasks=get_tasks(
+        tasks=[
+            "LegalSummarization",
+            "LegalBenchConsumerContractsQA",
+            "LegalBenchCorporateLobbying",
+            "AILACasedocs",
+            "AILAStatutes",
+            "LeCaRDv2",
+            "LegalQuAD",
+            "GerDaLIRSmall",
+        ]
+    ),
+    description="Legal benchmarks from MTEB.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation=None,
 )
 
 MTEB_MINERS_BITEXT_MINING = Benchmark(
     name="MINERSBitextMining",
-    tasks=[
-        "BUCCBitextMining",
-        "LinceMTBitextMining",
-        "NollySentiBitextMining",
-        "NusaXBitextMining",
-        "NusaTranslationBitextMining",
-        "PhincBitextMining",
-        "TatoebaBitextMining",
-    ],
+    tasks=get_tasks(
+        tasks=[
+            "BUCC",
+            "LinceMTBitextMining",
+            "NollySentiBitextMining",
+            "NusaXBitextMining",
+            "NusaTranslationBitextMining",
+            "PhincBitextMining",
+            "Tatoeba",
+        ]
+    ),
     description="BitextMining benchmark from MINERS",
     reference="https://arxiv.org/pdf/2406.07424",
     citation="""
@@ -228,37 +266,40 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
 )
 SEB = Benchmark(
     name="MTEB(Scandinavian)",
-    tasks=[
-        "BornholmBitextMining",
-        "NorwegianCourtsBitextMining",
-        "AngryTweetsClassification",
-        "DanishPoliticalCommentsClassification",
-        "DKHateClassification",
-        "LccSentimentClassification",
-        "MassiveIntentClassification",
-        "MassiveScenarioClassification",
-        "NordicLangClassification",
-        "ScalaClassification",
-        "NoRecClassification",
-        "NorwegianParliamentClassification",
-        "DalajClassification",
-        "SwedishSentimentClassification",
-        "SweRecClassification",
-        "DanFEVER",
-        "TV2Nordretrieval",
-        "TwitterHjerneRetrieval",
-        "NorQuadRetrieval",
-        "SNLRetrieval",
-        "SwednRetrieval",
-        "SweFaqRetrieval",
-        "WikiClusteringP2P.v2",
-        "SNLHierarchicalClusteringP2P",
-        "SNLHierarchicalClusteringS2S",
-        "VGHierarchicalClusteringP2P",
-        "VGHierarchicalClusteringS2S",
-        "SwednClusteringP2P",
-        "SwednClusteringS2S",
-    ],
+    tasks=get_tasks(
+        tasks=[
+            "BornholmBitextMining",
+            "NorwegianCourtsBitextMining",
+            "AngryTweetsClassification",
+            "DanishPoliticalCommentsClassification",
+            "DKHateClassification",
+            "LccSentimentClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "NordicLangClassification",
+            "ScalaClassification",
+            "NoRecClassification",
+            "NorwegianParliamentClassification",
+            "DalajClassification",
+            "SwedishSentimentClassification",
+            "SweRecClassification",
+            "DanFEVER",
+            "TV2Nordretrieval",
+            "TwitterHjerneRetrieval",
+            "NorQuadRetrieval",
+            "SNLRetrieval",
+            "SwednRetrieval",
+            "SweFaqRetrieval",
+            "WikiClusteringP2P.v2",
+            "SNLHierarchicalClusteringP2P",
+            "SNLHierarchicalClusteringS2S",
+            "VGHierarchicalClusteringP2P",
+            "VGHierarchicalClusteringS2S",
+            "SwednClusteringP2P",
+            "SwednClusteringS2S",
+        ],
+        languages=["dan", "swe", "nno", "nob"],
+    ),
     description="A curated selection of tasks coverering the Scandinavian languages; Danish, Swedish and Norwegian, including Bokmål and Nynorsk.",
     reference="https://kennethenevoldsen.github.io/scandinavian-embedding-benchmark/",
     citation="""@misc{enevoldsen2024scandinavian,
@@ -273,18 +314,20 @@ SEB = Benchmark(
 
 CoIR = Benchmark(
     name="CoIR",
-    tasks=[
-        "AppsRetrieval",
-        "CosQA",
-        "SyntheticText2SQL",
-        "COIRCodeSearchNetRetrieval",
-        "CodeSearchNetCCRetrieval",
-        "CodeTransOceanDL",
-        "CodeTransOceanContest",
-        "StackOverflowQA",
-        "CodeFeedbackMT",
-        "CodeFeedbackST",
-    ],
+    tasks=get_tasks(
+        tasks=[
+            "AppsRetrieval",
+            "CosQA",
+            "SyntheticText2SQL",
+            "COIRCodeSearchNetRetrieval",
+            "CodeSearchNetCCRetrieval",
+            "CodeTransOceanDL",
+            "CodeTransOceanContest",
+            "StackOverflowQA",
+            "CodeFeedbackMT",
+            "CodeFeedbackST",
+        ]
+    ),
     description="CoIR: A Comprehensive Benchmark for Code Information Retrieval Models",
     reference="https://github.com/CoIR-team/coir",
     citation="""@misc{li2024coircomprehensivebenchmarkcode,

@@ -38,7 +38,7 @@ pip install mteb
 
 ## Usage
 
-* Using a python script (see [scripts/run_mteb_english.py](https://github.com/embeddings-benchmark/mteb/blob/main/scripts/run_mteb_english.py) and [mteb/mtebscripts](https://github.com/embeddings-benchmark/mtebscripts) for more):
+* Using a python script:
 
 ```python
 import mteb
@@ -77,11 +77,11 @@ Click on each section below to see the details.
 <br /> 
 
 <details>
-  <summary>  Dataset selection </summary>
+  <summary>  Task selection </summary>
 
-### Dataset selection
+### Task selection
 
-Datasets can be selected by providing the list of datasets, but also
+Tasks can be selected by providing the list of datasets, but also
 
 * by their task (e.g. "Clustering" or "Classification")
 
@@ -121,11 +121,17 @@ evaluation = mteb.MTEB(tasks=[
 # for an example of a HF subset see "Subset" in the dataset viewer at: https://huggingface.co/datasets/mteb/bucc-bitext-mining
 ```
 
-There are also presets available for certain task collections, e.g. to select the 56 English datasets that form the "Overall MTEB English leaderboard":
+</details>
+
+<details>
+  <summary>  Running a benchmark </summary>
+
+`mteb` comes with a set of predefined benchmarks. These can be fetched using `get_benchmark` and run in a similar fashion to other sets of tasks. 
+For instance to select the 56 English datasets that form the "Overall MTEB English leaderboard":
 
 ```python
-from mteb import MTEB_MAIN_EN
-evaluation = mteb.MTEB(tasks=MTEB_MAIN_EN, task_langs=["en"])
+mteb_eng = mteb.get_benchmark("MTEB(eng)")
+evaluation = mteb.MTEB(tasks=mteb_eng, eval_splits=["test"])
 ```
 
 </details>
