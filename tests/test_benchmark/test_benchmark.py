@@ -127,7 +127,7 @@ def test_encode_kwargs_passed_to_all_encodes(task_name: str | mteb.AbsTask):
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
 def test_run_using_benchmark(model: mteb.Encoder):
     """Test that a benchmark object can be run using the MTEB class."""
-    bench = Benchmark(name="test_bench", tasks=mteb.get_tasks(["STS12", "SummEval"]))
+    bench = Benchmark(name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"]))
 
     eval = mteb.MTEB(tasks=bench)
     eval.run(
