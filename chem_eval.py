@@ -69,6 +69,8 @@ if __name__ == "__main__":
               "text-embedding-ada-002": "1",
               "text-embedding-3-small": "1",
               "text-embedding-3-large": "1",
+              "amazon-titan-embed-text-v1": "1",
+              "amazon-titan-embed-text-v2": "1",
               }
 
     all_tasks = [
