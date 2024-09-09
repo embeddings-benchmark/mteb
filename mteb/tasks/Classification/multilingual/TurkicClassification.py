@@ -32,7 +32,7 @@ class TurkicClassification(MultilingualTask, AbsTaskClassification):
         date=("2023-02-16", "2023-09-03"),
         domains=["News", "Written"],
         task_subtypes=["Topic classification"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

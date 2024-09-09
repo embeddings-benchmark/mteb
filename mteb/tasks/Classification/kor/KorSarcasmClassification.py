@@ -31,7 +31,7 @@ class KorSarcasmClassification(AbsTaskClassification):
         date=("2018-10-31", "2019-09-28"),  # estimated based on git history
         domains=["Social", "Written"],
         task_subtypes=["Topic classification"],
-        license="MIT",
+        license="mit",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",

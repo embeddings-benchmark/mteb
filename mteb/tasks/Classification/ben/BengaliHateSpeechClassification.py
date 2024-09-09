@@ -23,7 +23,7 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
         dialect=[],
         domains=["News", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="MIT",
+        license="mit",
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation="""@inproceedings{karim2020BengaliNLP,

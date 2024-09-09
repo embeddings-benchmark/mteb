@@ -23,7 +23,7 @@ class PatentClassification(AbsTaskClassification):
         date=("2021-11-05", "2022-10-22"),
         domains=["Legal", "Written"],
         task_subtypes=["Topic classification"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

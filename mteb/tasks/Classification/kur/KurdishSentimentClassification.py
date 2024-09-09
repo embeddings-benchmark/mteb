@@ -22,7 +22,7 @@ class KurdishSentimentClassification(AbsTaskClassification):
         date=("2023-01-01", "2024-01-02"),
         domains=["Web", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="CC BY 4.0",
+        license="cc-by-4.0",
         annotations_creators="derived",
         dialect=["Sorani"],
         sample_creation="found",

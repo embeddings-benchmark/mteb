@@ -26,7 +26,7 @@ class SweFaqRetrieval(AbsTaskRetrieval):
         date=("2000-01-01", "2024-12-31"),  # best guess
         task_subtypes=["Question answering"],
         domains=["Government", "Non-fiction", "Written"],
-        license="CC-BY-SA-4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

@@ -34,7 +34,7 @@ class ScalaClassification(AbsTaskClassification, MultilingualTask):
         ),  # derived from dependency treebank, this a the best guess
         domains=["Fiction", "News", "Non-fiction", "Blog", "Spoken", "Web", "Written"],
         task_subtypes=["Linguistic acceptability"],
-        license="CC BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",

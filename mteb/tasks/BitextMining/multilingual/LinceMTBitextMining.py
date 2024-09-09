@@ -27,7 +27,7 @@ class LinceMTBitextMining(AbsTaskBitextMining, MultilingualTask):
         date=("2019-01-01", "2020-01-01"),
         domains=["Social", "Written"],
         task_subtypes=[],
-        license="Unknown",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

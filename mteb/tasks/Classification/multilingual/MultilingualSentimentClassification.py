@@ -60,7 +60,7 @@ class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTas
         date=("2022-08-01", "2022-08-01"),
         domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=["ar-dz"],
         sample_creation="found",

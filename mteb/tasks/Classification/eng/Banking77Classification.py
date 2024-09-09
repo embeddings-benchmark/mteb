@@ -25,7 +25,7 @@ class Banking77Classification(AbsTaskClassification):
         ),  # Estimated range for the collection of queries
         domains=["Written"],
         task_subtypes=[],
-        license="MIT",
+        license="mit",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

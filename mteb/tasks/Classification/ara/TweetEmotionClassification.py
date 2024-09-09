@@ -25,7 +25,7 @@ class TweetEmotionClassification(AbsTaskClassification):
         date=("2014-01-01", "2016-08-31"),
         domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=["ara-arab-EG", "ara-arab-LB", "ara-arab-JO", "ara-arab-SA"],
         sample_creation="found",

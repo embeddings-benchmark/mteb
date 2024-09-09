@@ -33,7 +33,7 @@ class PawsXPairClassification(MultilingualTask, AbsTaskPairClassification):
         date=("2016-01-01", "2018-12-31"),
         domains=["Web", "Encyclopaedic", "Written"],
         task_subtypes=["Textual Entailment"],
-        license="Custom (commercial)",
+        license="https://huggingface.co/datasets/google-research-datasets/paws-x#licensing-information",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="human-translated",

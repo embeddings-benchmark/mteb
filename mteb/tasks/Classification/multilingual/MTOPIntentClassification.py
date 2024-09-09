@@ -33,7 +33,7 @@ class MTOPIntentClassification(MultilingualTask, AbsTaskClassification):
         date=("2020-01-01", "2020-12-31"),
         domains=["Spoken", "Spoken"],
         task_subtypes=[],
-        license="Not specified",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",

@@ -25,7 +25,7 @@ class SwednRetrieval(AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=("2000-01-01", "2020-12-31"),
         domains=["News", "Non-fiction", "Written"],
-        license="CC BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         task_subtypes=["Article retrieval"],

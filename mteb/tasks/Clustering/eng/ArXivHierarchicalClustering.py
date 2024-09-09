@@ -33,7 +33,7 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClusteringFast):
         date=("1991-01-01", "2021-01-01"),  # 1991-01-01 is the first arxiv paper
         domains=["Academic", "Written"],
         task_subtypes=[],
-        license="CC0",
+        license="cc0-1.0",
         annotations_creators="derived",
         dialect=["Thematic clustering"],
         sample_creation="found",
@@ -213,7 +213,7 @@ class ArXivHierarchicalClusteringS2S(AbsTaskClusteringFast):
         date=("1991-01-01", "2021-01-01"),  # 1991-01-01 is the first arxiv paper
         domains=["Academic", "Written"],
         task_subtypes=["Thematic clustering"],
-        license="CC0",
+        license="cc0-1.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

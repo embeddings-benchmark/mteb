@@ -23,7 +23,7 @@ class ItaCaseholdClassification(AbsTaskClassification):
         domains=["Legal", "Government", "Written"],
         dialect=[],
         task_subtypes=[],
-        license="Apache 2.0",
+        license="apache-2.0",
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation="""

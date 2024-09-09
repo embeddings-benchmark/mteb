@@ -45,7 +45,7 @@ class SemRel24STS(AbsTaskSTS, MultilingualTask):
         date=("2023-01-01", "2023-12-31"),
         domains=["Spoken", "Written"],
         task_subtypes=[],
-        license="Not specified",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",

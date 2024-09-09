@@ -23,7 +23,7 @@ class DanFeverRetrieval(AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=("2020-01-01", "2021-12-31"),  # best guess
         domains=["Encyclopaedic", "Non-fiction", "Spoken"],
-        license="CC BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
@@ -135,7 +135,7 @@ class DanFever(AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=("2020-01-01", "2021-12-31"),  # best guess
         domains=["Encyclopaedic", "Non-fiction", "Spoken"],
-        license="CC BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

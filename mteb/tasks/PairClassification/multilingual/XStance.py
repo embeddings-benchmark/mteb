@@ -31,7 +31,7 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
         date=("2011-01-01", "2020-12-31"),
         domains=["Social", "Written"],
         task_subtypes=["Political classification"],
-        license="cc by-nc 4.0",
+        license="cc-by-nc-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",

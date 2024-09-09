@@ -29,7 +29,7 @@ class DiaBLaBitextMining(AbsTaskBitextMining, MultilingualTask):
         date=("2016-01-01", "2017-12-31"),
         domains=["Social", "Written"],
         task_subtypes=[],
-        license="CC BY-NC-SA 4.0",
+        license="cc-by-nc-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",

@@ -23,7 +23,7 @@ class SNLRetrieval(AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=("2020-01-01", "2024-12-31"),  # best guess
         domains=["Encyclopaedic", "Non-fiction", "Written"],
-        license="CC-BY-NC",
+        license="cc-by-nc-4.0",  # version assumed (not specified beforehand)
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

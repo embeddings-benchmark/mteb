@@ -24,7 +24,7 @@ class KlueSTS(AbsTaskSTS):
         date=("2011-01-01", "2021-11-02"),  # rough estimate,
         domains=["Reviews", "News", "Spoken", "Written", "Spoken"],
         task_subtypes=None,
-        license="CC-BY-SA-4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

@@ -23,7 +23,7 @@ class KorSTS(AbsTaskSTS):
         date=("2012-01-01", "2017-01-01"),  # rough approximates
         domains=["News", "Web"],
         task_subtypes=None,
-        license="CC-BY-SA-4.0",
+        license="cc-by-sa-4.0",
         annotations_creators=None,
         dialect=[],
         sample_creation="machine-translated and localized",
