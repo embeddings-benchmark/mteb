@@ -34,7 +34,7 @@ general_args = {
     "dialect": ["Written"],
     "domains": [],
     "task_subtypes": [],
-    "license": "NA",
+    "license": "cc-by-4.0",
     "annotations_creators": "derived",
     "modalities": ["text"],
     "sample_creation": "found",
