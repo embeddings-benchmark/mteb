@@ -52,7 +52,8 @@ homepage = "https://github.com/embeddings-benchmark/mteb"
 mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
-dev = ["ruff>=0.6.0", "pytest", "pytest-xdist", "pytest-coverage"]
+dev = ["ruff==0.6.4", # locked so we don't get PRs which fail only due to a lint update
+"pytest", "pytest-xdist", "pytest-coverage"]
 codecarbon = ["codecarbon"]
 speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]
 
@@ -97,10 +98,8 @@ select = [
     "D",  # formatting for docs
     "UP", # upgrade to latest syntax if possible
     "FA", # Future annotations
-    "C4", # cleaner comprehensions 
-    "ISC",
+    "C4", # cleaner comprehensions
 ]
-unfixable = ["ISC001"]  
 
 
 ignore = ["E501",   # line too long 
