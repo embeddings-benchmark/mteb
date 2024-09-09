@@ -10,14 +10,14 @@ from mteb.abstasks.AbsTask import AbsTask
 from mteb.overview import get_tasks
 
 http_url_adapter = TypeAdapter(AnyUrl)
-STR_URL = Annotated[
+UrlString = Annotated[
     str, BeforeValidator(lambda value: str(http_url_adapter.validate_python(value)))
 ]  # Allows the type to be a string, but ensures that the string is a URL
 
 
 @dataclass
 class Benchmark:
-    """A benchmark object intended to run certain a full benchmark within MTEB.
+    """A benchmark object intended to run a certain benchmark within MTEB.
 
     Args:
         name: The name of the benchmark
@@ -30,7 +30,7 @@ class Benchmark:
     name: str
     tasks: Sequence[AbsTask]
     description: str | None = None
-    reference: STR_URL | None = None
+    reference: UrlString | None = None
     citation: str | None = None
 
     def __iter__(self):
@@ -43,15 +43,6 @@ class Benchmark:
         return self.tasks[index]
 
 
-def create_benchmark_list() -> list[type[Benchmark]]:
-    benchmark_categories_cls = list(Benchmark.__subclasses__())
-    benchmarks = [
-        cls
-        for cat_cls in benchmark_categories_cls
-        for cls in cat_cls.__subclasses__()
-        if cat_cls.__name__.startswith("Benchmark")
-    ]
-    return benchmarks
 
 
 MTEB_MAIN_EN = Benchmark(
@@ -225,14 +216,14 @@ MTEB_RETRIEVAL_LAW = Benchmark(
     name="MTEB(law)",  # This benchmark is likely in the need of an update
     tasks=get_tasks(
         tasks=[
-            "LegalSummarization",
-            "LegalBenchConsumerContractsQA",
-            "LegalBenchCorporateLobbying",
             "AILACasedocs",
             "AILAStatutes",
-            "LeCaRDv2",
-            "LegalQuAD",
+            "LegalSummarization",
             "GerDaLIRSmall",
+            "LeCaRDv2",
+            "LegalBenchConsumerContractsQA",
+            "LegalBenchCorporateLobbying",
+            "LegalQuAD",
         ]
     ),
     description="Legal benchmarks from MTEB.",
@@ -268,35 +259,38 @@ SEB = Benchmark(
     name="MTEB(Scandinavian)",
     tasks=get_tasks(
         tasks=[
+            # Bitext
             "BornholmBitextMining",
             "NorwegianCourtsBitextMining",
+            # Classification
             "AngryTweetsClassification",
             "DanishPoliticalCommentsClassification",
+            "DalajClassification",
             "DKHateClassification",
             "LccSentimentClassification",
             "MassiveIntentClassification",
             "MassiveScenarioClassification",
             "NordicLangClassification",
-            "ScalaClassification",
             "NoRecClassification",
             "NorwegianParliamentClassification",
-            "DalajClassification",
+            "ScalaClassification",
             "SwedishSentimentClassification",
             "SweRecClassification",
+            # Retrieval
             "DanFEVER",
-            "TV2Nordretrieval",
-            "TwitterHjerneRetrieval",
             "NorQuadRetrieval",
             "SNLRetrieval",
             "SwednRetrieval",
             "SweFaqRetrieval",
-            "WikiClusteringP2P.v2",
-            "SNLHierarchicalClusteringP2P",
+            "TV2Nordretrieval",
+            "TwitterHjerneRetrieval",
+            # Clustering
             "SNLHierarchicalClusteringS2S",
-            "VGHierarchicalClusteringP2P",
-            "VGHierarchicalClusteringS2S",
+            "SNLHierarchicalClusteringP2P",
             "SwednClusteringP2P",
             "SwednClusteringS2S",
+            "VGHierarchicalClusteringS2S",
+            "VGHierarchicalClusteringP2P",
         ],
         languages=["dan", "swe", "nno", "nob"],
     ),
@@ -317,15 +311,15 @@ CoIR = Benchmark(
     tasks=get_tasks(
         tasks=[
             "AppsRetrieval",
-            "CosQA",
-            "SyntheticText2SQL",
-            "COIRCodeSearchNetRetrieval",
-            "CodeSearchNetCCRetrieval",
-            "CodeTransOceanDL",
-            "CodeTransOceanContest",
-            "StackOverflowQA",
             "CodeFeedbackMT",
             "CodeFeedbackST",
+            "CodeSearchNetCCRetrieval",
+            "CodeTransOceanContest",
+            "CodeTransOceanDL",
+            "CosQA",
+            "COIRCodeSearchNetRetrieval",
+            "StackOverflowQA",
+            "SyntheticText2SQL",
         ]
     ),
     description="CoIR: A Comprehensive Benchmark for Code Information Retrieval Models",
@@ -365,19 +359,19 @@ MTEB_FRA = Benchmark(
             "OpusparcusPC",
             "PawsXPairClassification",
             # Reranking
-            "SyntecReranking",
             "AlloprofReranking",
+            "SyntecReranking",
             # Retrieval
             "AlloprofRetrieval",
             "BSARDRetrieval",
+            "MintakaRetrieval",
             "SyntecRetrieval",
             "XPQARetrieval",
-            "MintakaRetrieval",
             # STS
-            "SummEvalFr",
-            "STSBenchmarkMultilingualSTS",
-            "STS22",
             "SICKFr",
+            "STS22",
+            "STSBenchmarkMultilingualSTS",
+            "SummEvalFr",
         ],
     ),
     description="Main French benchmarks from MTEB",
@@ -469,27 +463,27 @@ MTEB_pol = Benchmark(
         languages=["pol"],
         tasks=[
             # Classification
-            "CBD",
-            "PolEmo2.0-IN",
-            "PolEmo2.0-OUT",
             "AllegroReviews",
-            "PAC",
+            "CBD",
             "MassiveIntentClassification",
             "MassiveScenarioClassification",
+            "PolEmo2.0-IN",
+            "PolEmo2.0-OUT",
+            "PAC",
             # Clustering
             "EightTagsClustering",
             "PlscClusteringS2S",
             "PlscClusteringP2P",
             # Pair Classification
-            "SICK-E-PL",
-            "PpcPC",
             "CDSC-E",
+            "PpcPC",
             "PSC",
+            "SICK-E-PL",
             # STS
-            "SICK-R-PL",
             "CDSC-R",
             "STS22",
             "STSBenchmarkMultilingualSTS",
+            "SICK-R-PL",
         ],
     ),
     description="Main Polish benchmarks from MTEB",

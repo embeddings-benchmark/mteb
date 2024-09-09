@@ -130,6 +130,7 @@ evaluation = mteb.MTEB(tasks=[
 For instance to select the 56 English datasets that form the "Overall MTEB English leaderboard":
 
 ```python
+import mteb
 mteb_eng = mteb.get_benchmark("MTEB(eng)")
 evaluation = mteb.MTEB(tasks=mteb_eng, eval_splits=["test"])
 ```
