@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 from collections import defaultdict
 
 import datasets
 
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskRetrieval, MultilingualTask
 
 DOMAINS_LONG = [
     "biology",
@@ -55,11 +57,15 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
         sample_creation="found",
         modalities=["text"],
         bibtex_citation="""
-            @misc{BRIGHT,
-            title={BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval},
-            author={Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and Sun, Ruoxi and Yoon, Jinsung and Arik, Sercan O and Chen, Danqi and Yu, Tao},
-            year={2024},
-            }
+@misc{su2024brightrealisticchallengingbenchmark,
+    title={BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval}, 
+    author={Hongjin Su and Howard Yen and Mengzhou Xia and Weijia Shi and Niklas Muennighoff and Han-yu Wang and Haisu Liu and Quan Shi and Zachary S. Siegel and Michael Tang and Ruoxi Sun and Jinsung Yoon and Sercan O. Arik and Danqi Chen and Tao Yu},
+    year={2024},
+    eprint={2407.12883},
+    archivePrefix={arXiv},
+    primaryClass={cs.CL},
+    url={https://arxiv.org/abs/2407.12883}, 
+}
         """,
         descriptive_stats={
             "n_samples": {"standard": 1334914, "long": 7048},

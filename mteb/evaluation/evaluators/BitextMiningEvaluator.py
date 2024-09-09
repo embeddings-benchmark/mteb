@@ -5,6 +5,7 @@ from typing import Any
 
 import torch
 import tqdm
+from datasets import Dataset
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from mteb.encoder_interface import Encoder
@@ -22,7 +23,7 @@ DEFAULT_PAIR = [("sentence1", "sentence2")]
 class BitextMiningEvaluator(Evaluator):
     def __init__(
         self,
-        sentences,
+        sentences: Dataset,
         task_name: str | None = None,
         pair_columns: list[tuple[str, str]] = DEFAULT_PAIR,
         **kwargs,
@@ -43,7 +44,7 @@ class BitextMiningEvaluator(Evaluator):
         return scores
 
     def compute_metrics(self, model: Encoder, encode_kwargs: dict[str, Any] = {}):
-        pair_elements = set(p for pair in self.pairs for p in pair)
+        pair_elements = {p for pair in self.pairs for p in pair}
         subsets = [
             col for col in self.sentences.features.keys() if col in pair_elements
         ]

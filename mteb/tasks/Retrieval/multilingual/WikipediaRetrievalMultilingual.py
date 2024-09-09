@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from datasets import load_dataset
 
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks import MultilingualTask
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 _EVAL_LANGS = {
@@ -108,7 +108,7 @@ class WikipediaRetrievalMultilingual(MultilingualTask, AbsTaskRetrieval):
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Question answering", "Article retrieval"],
         license="cc-by-sa-3.0",
-        annotations_creators="LM-generated",
+        annotations_creators="LM-generated and reviewed",
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation="",

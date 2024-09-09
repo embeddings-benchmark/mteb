@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import datasets
 
-from mteb.abstasks import AbsTaskRetrieval, TaskMetadata
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class SNLRetrieval(AbsTaskRetrieval):
@@ -20,7 +23,7 @@ class SNLRetrieval(AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=("2020-01-01", "2024-12-31"),  # best guess
         domains=["Encyclopaedic", "Non-fiction", "Written"],
-        license=None,
+        license="CC-BY-NC",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

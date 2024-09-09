@@ -1,15 +1,15 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, List, Union
+from typing import Any
 
 from datasets import Dataset
 from tqdm import tqdm
 
-from mteb.abstasks import AbsTask
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
-from mteb.evaluation.evaluators import ImageTextPairClassificationEvaluator
-from mteb.load_results.mteb_results import ScoresDict
+from ..AbsTask import AbsTask
+from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from ...evaluation.evaluators import ImageTextPairClassificationEvaluator
+from ...load_results.mteb_results import ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -26,15 +26,15 @@ class AbsTaskImageTextPairClassification(AbsTask):
     """
 
     # it can be ["image_0", "image_1"]; ["text_0", "text_1"] for datasets like WinoGround
-    images_column_names: Union[str, List[str]] = "image"
-    texts_column_names: Union[str, List[str]] = "caption"
+    images_column_names: str | list[str] = "image"
+    texts_column_names: str | list[str] = "caption"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def _preprocess_column(
-        self, dataset: Dataset, column_names: Union[str, List[str]]
-    ) -> List[List[Any]]:
+        self, dataset: Dataset, column_names: str | list[str]
+    ) -> list[list[Any]]:
         """Group examples from the columns into a list of examples."""
         if isinstance(column_names, str):
             return dataset[column_names]
@@ -46,6 +46,11 @@ class AbsTaskImageTextPairClassification(AbsTask):
 
     def _add_main_score(self, scores) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
+
+    def _calculate_metrics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ):
+        pass
 
     def _evaluate_subset(
         self,

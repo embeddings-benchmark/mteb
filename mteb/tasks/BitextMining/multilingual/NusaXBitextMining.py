@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = {
     "eng-ace": ["eng-Latn", "ace-Latn"],

@@ -1,5 +1,9 @@
 """Implementation of Sentence Transformers model validated in MTEB."""
 
+from __future__ import annotations
+
+from __future__ import annotations
+
 from mteb.model_meta import ModelMeta
 
 paraphrase_langs = [

@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 import json
 from pathlib import Path
 
 import pandas as pd
 
 
-def load_data(file_path: Path) -> pd.DataFrame:
+def load_data() -> pd.DataFrame:
     file_path = Path(__file__).parent / "points"
     files = file_path.glob("*.jsonl")
 
@@ -36,5 +38,5 @@ if __name__ == "__main__":
     file_path = Path(__file__).parent / "points"
     save_path = Path(__file__).parent / "points_table.md"
 
-    df = load_data(file_path)
+    df = load_data()
     save_to_markdown(df, save_path)

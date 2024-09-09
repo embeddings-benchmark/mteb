@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 import logging
-from typing import Dict, Union
 
 from .RetrievalEvaluator import (
     RetrievalEvaluator,
@@ -12,12 +13,12 @@ class InstructionRetrievalEvaluator(RetrievalEvaluator):
     # only added to extend the RetrievalEvaluator to pass along the instructions
     def __call__(
         self,
-        corpus: Dict[str, Dict[str, str]],
-        queries: Dict[str, str],
-        instructions: Dict[str, str],
-        qid: Union[str, None] = None,
+        corpus: dict[str, dict[str, str]],
+        queries: dict[str, str],
+        instructions: dict[str, str],
+        qid: str | None = None,
         **kwargs,
-    ) -> Dict[str, Dict[str, float]]:
+    ) -> dict[str, dict[str, float]]:
         if not self.retriever:
             raise ValueError("Model/Technique has not been provided!")
 

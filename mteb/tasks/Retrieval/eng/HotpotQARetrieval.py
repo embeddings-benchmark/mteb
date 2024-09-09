@@ -14,7 +14,7 @@ class HotpotQA(AbsTaskRetrieval):
         },
         description=(
             "HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong"
-            " supervision for supporting facts to enable more explainable question answering systems."
+            + " supervision for supporting facts to enable more explainable question answering systems."
         ),
         reference="https://hotpotqa.github.io/",
         type="Retrieval",
@@ -23,13 +23,13 @@ class HotpotQA(AbsTaskRetrieval):
         eval_splits=["train", "dev", "test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("2018-01-01", "2018-12-31"),  # best guess: based on publication date
+        domains=["Web", "Written"],
+        task_subtypes=["Question answering"],
+        license="cc-by-sa-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation="""@inproceedings{yang-etal-2018-hotpotqa,
     title = "{H}otpot{QA}: A Dataset for Diverse, Explainable Multi-hop Question Answering",
     author = "Yang, Zhilin  and

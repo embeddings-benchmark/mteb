@@ -96,7 +96,7 @@ class PairClassificationEvaluator(Evaluator):
             prompt_name=self.task_name,
             **encode_kwargs,
         )
-        emb_dict = {sent: emb for sent, emb in zip(sentences, embeddings)}
+        emb_dict = dict(zip(sentences, embeddings))
         embeddings1 = [emb_dict[sent] for sent in self.sentences1]
         embeddings2 = [emb_dict[sent] for sent in self.sentences2]
 
@@ -140,7 +140,7 @@ class PairClassificationEvaluator(Evaluator):
                 max_scores[metric_name].append(metric_value)
 
         for metric in max_scores:
-            if metric in ["f1", "ap", "f1", "precision", "recall"]:
+            if metric in ["f1", "ap", "f1", "precision", "recall", "accuracy"]:
                 output_scores[f"max_{metric}"] = max(max_scores[metric])
 
         return output_scores
@@ -162,10 +162,13 @@ class PairClassificationEvaluator(Evaluator):
         acc, acc_threshold = PairClassificationEvaluator.find_best_acc_and_threshold(
             scores, labels, high_score_more_similar
         )
-        f1, precision, recall, f1_threshold = (
-            PairClassificationEvaluator.find_best_f1_and_threshold(
-                scores, labels, high_score_more_similar
-            )
+        (
+            f1,
+            precision,
+            recall,
+            f1_threshold,
+        ) = PairClassificationEvaluator.find_best_f1_and_threshold(
+            scores, labels, high_score_more_similar
         )
         ap = PairClassificationEvaluator.ap_score(
             scores, labels, high_score_more_similar

@@ -25,7 +25,7 @@ class SickBrSTS(AbsTaskSTS):
         date=("2018-01-01", "2018-09-01"),  # rough estimate
         domains=["Web", "Written"],
         task_subtypes=["Textual Entailment"],
-        license="unknown",
+        license="Unknown",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="human-translated and localized",

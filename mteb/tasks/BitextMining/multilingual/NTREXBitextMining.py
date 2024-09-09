@@ -4,7 +4,8 @@ from typing import Any
 
 import datasets
 
-from mteb.abstasks import AbsTaskBitextMining, MultilingualTask
+from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _BRIDGE_LANGUAGES = (

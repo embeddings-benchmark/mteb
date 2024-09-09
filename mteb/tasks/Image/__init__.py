@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from .Any2AnyRetrieval import *
 from .Clustering import *
 from .ImageClassification import *

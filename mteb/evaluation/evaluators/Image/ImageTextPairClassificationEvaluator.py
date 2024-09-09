@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import itertools
 import logging
-from typing import Any, List
+from typing import Any
 
 import torch
 import torch.nn.functional as F
@@ -30,8 +30,8 @@ class ImageTextPairClassificationEvaluator(Evaluator):
 
     def __init__(
         self,
-        images: List[List[Image.Image]],
-        texts: List[List[str]],
+        images: list[list[Image.Image]],
+        texts: list[list[str]],
         task_name: str | None = None,
         limit: int | None = None,
         **kwargs,

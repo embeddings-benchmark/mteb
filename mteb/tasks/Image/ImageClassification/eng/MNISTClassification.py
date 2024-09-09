@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from .....abstasks import AbsTaskImageClassification
+from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
 
 
 class MNISTClassification(AbsTaskImageClassification):
@@ -13,7 +13,6 @@ class MNISTClassification(AbsTaskImageClassification):
         dataset={
             "path": "ylecun/mnist",
             "revision": "b06aab39e05f7bcd9635d18ed25d06eae523c574",
-            "trust_remote_code": True,
         },
         type="Classification",
         category="i2t",

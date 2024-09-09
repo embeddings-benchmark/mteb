@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from time import sleep
 
 from datasets import DatasetDict, Features, Value, load_dataset
@@ -87,7 +89,7 @@ for lang in languages:
         repo_id=repo_id, filename="README.md", repo_type="dataset"
     )
 
-    with open(readme_path, "r") as f:
+    with open(readme_path) as f:
         readme_content = f.read()
 
     readme = """

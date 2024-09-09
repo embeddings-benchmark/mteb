@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks import TaskMetadata
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 def dataset_transform(self):
@@ -76,7 +76,7 @@ class SwednClusteringP2P(AbsTaskClusteringFast):
         main_score="v_measure",
         date=("2000-01-01", "2020-12-31"),  # best guess
         domains=["News", "Non-fiction", "Written"],
-        license=None,
+        license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
         task_subtypes=["Thematic clustering"],
@@ -119,7 +119,7 @@ class SwednClusteringFastS2S(AbsTaskClusteringFast):
         main_score="v_measure",
         date=("2000-01-01", "2020-12-31"),  # best guess
         domains=["News", "Non-fiction", "Written"],
-        license=None,
+        license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
         task_subtypes=["Thematic clustering"],
