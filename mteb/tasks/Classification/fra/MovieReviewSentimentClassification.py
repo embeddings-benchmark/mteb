@@ -24,7 +24,7 @@ class MovieReviewSentimentClassification(AbsTaskClassification):
         date=("2006-01-01", "2020-01-01"),
         domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="MIT",
+        license="mit",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

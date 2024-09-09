@@ -23,7 +23,7 @@ class TV2Nordretrieval(AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=("2020-01-01", "2024-12-31"),  # best guess
         domains=["News", "Non-fiction", "Written"],
-        license="CC0",
+        license="cc0-1.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

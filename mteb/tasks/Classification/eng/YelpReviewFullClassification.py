@@ -22,7 +22,7 @@ class YelpReviewFullClassification(AbsTaskClassification):
         date=("2015-01-01", "2015-12-31"),  # reviews from 2015
         domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="Other",
+        license="https://huggingface.co/datasets/Yelp/yelp_review_full#licensing-information",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

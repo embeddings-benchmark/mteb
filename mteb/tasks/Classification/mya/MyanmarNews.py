@@ -23,7 +23,7 @@ class MyanmarNews(AbsTaskClassification):
         date=("2017-10-01", "2017-10-31"),
         domains=["News", "Written"],
         task_subtypes=["Topic classification"],
-        license="GPL 3.0",
+        license="gpl-3.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

@@ -22,7 +22,7 @@ class GujaratiNewsClassification(AbsTaskClassification):
         main_score="accuracy",
         domains=["News", "Written"],
         task_subtypes=["Topic classification"],
-        license="MIT",
+        license="mit",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

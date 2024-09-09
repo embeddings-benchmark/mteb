@@ -31,14 +31,24 @@ class OpenAIWrapper:
                 "Reducing embedding size available only for text-embedding-3-* models"
             )
 
-        return self._to_numpy(
-            self._client.embeddings.create(
-                input=sentences,
+        max_batch_size = 2048
+        sublists = [
+            sentences[i : i + max_batch_size]
+            for i in range(0, len(sentences), max_batch_size)
+        ]
+
+        all_embeddings = []
+
+        for sublist in sublists:
+            response = self._client.embeddings.create(
+                input=sublist,
                 model=self._model_name,
                 encoding_format="float",
                 dimensions=self._embed_dim or NotGiven(),
             )
-        )
+            all_embeddings.extend(self._to_numpy(response))
+
+        return np.array(all_embeddings)
 
     def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
         return self.encode(queries, **kwargs)

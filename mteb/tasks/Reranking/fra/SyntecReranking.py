@@ -25,7 +25,7 @@ class SyntecReranking(AbsTaskReranking):
         date=("2022-12-01", "2022-12-02"),
         domains=["Legal", "Written"],
         task_subtypes=None,
-        license="CC BY-NC-SA 4.0",
+        license="cc-by-nc-sa-4.0",
         annotations_creators="human-annotated",
         dialect=None,
         sample_creation="found",

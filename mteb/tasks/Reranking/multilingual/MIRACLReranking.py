@@ -69,7 +69,7 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         date=("2022-06-01", "2023-01-30"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=[],
-        license="CC BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",

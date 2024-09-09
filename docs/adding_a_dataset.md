@@ -104,7 +104,7 @@ class VGClustering(AbsTaskClustering):
         form="Written",
         domains=["Academic", "Non-fiction"],
         task_subtypes=["Scientific Reranking"],
-        license="cc-by-nc",
+        license="cc-by-nc-4.0",
         annotations_creators="derived",
         dialect=[],
         text_creation="found",

@@ -24,7 +24,7 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
         date=("2021-01-01", "2021-10-13"),
         task_subtypes=["Question answering"],
         domains=["Encyclopaedic", "Non-fiction", "Academic", "Written"],
-        license="MIT",
+        license="mit",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

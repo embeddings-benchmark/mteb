@@ -22,7 +22,7 @@ class GermanPoliticiansTwitterSentimentClassification(AbsTaskClassification):
         date=("2021-01-01", "2021-12-31"),
         domains=["Social", "Government", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

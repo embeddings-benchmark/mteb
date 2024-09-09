@@ -56,7 +56,7 @@ class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
             "Spoken",
         ],
         task_subtypes=[],
-        license="CC0",
+        license="cc0-1.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",

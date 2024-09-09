@@ -29,7 +29,7 @@ class VieMedEVBitextMining(AbsTaskBitextMining):
         date=("2024-08-28", "2022-03-28"),
         domains=["Medical", "Written"],
         task_subtypes=[],
-        license="cc-by-nc",
+        license="cc-by-nc-4.0",  # version is assumed, but was previously unspecified
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="human-translated and localized",

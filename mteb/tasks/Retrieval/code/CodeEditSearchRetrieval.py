@@ -42,7 +42,7 @@ class CodeEditSearchRetrieval(MultilingualTask, AbsTaskRetrieval):
         date=("2011-02-12", "2016-01-01"),
         domains=["Programming", "Written"],
         task_subtypes=["Code retrieval"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

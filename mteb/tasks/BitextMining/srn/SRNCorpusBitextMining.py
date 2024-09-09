@@ -42,7 +42,7 @@ class SRNCorpusBitextMining(AbsTaskBitextMining, MultilingualTask):
         date=("2022-04-01", "2022-07-31"),
         domains=["Social", "Web", "Written"],
         task_subtypes=[],
-        license="CC-BY-SA-4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

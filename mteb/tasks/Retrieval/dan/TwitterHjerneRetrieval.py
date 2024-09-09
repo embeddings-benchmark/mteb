@@ -23,7 +23,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=("2006-01-01", "2024-12-31"),  # best guess
         domains=["Social", "Written"],
-        license="CC BY 4.0",
+        license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

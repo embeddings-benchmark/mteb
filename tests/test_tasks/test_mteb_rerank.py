@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
-import os
+from pathlib import Path
 
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
@@ -11,7 +11,7 @@ from mteb import MTEB
 logging.basicConfig(level=logging.INFO)
 
 
-def test_mteb_rerank():
+def test_mteb_rerank(tmp_path: Path):
     # Test that reranking works
     # unfortunately, we need all the query ids to pretend to have this
     scifact_keys = [
@@ -323,7 +323,8 @@ def test_mteb_rerank():
         ]
     )
     # create fake first stage results
-    with open("tmp.json", "w") as f:
+    tmp_file = tmp_path / "tmp.json"
+    with open(tmp_file, "w") as f:
         f.write(
             json.dumps(
                 {
@@ -344,10 +345,10 @@ def test_mteb_rerank():
         overwrite_results=True,
         eval_splits=["test"],
         top_k=2,
-        previous_results="tmp.json",
+        previous_results=tmp_file,
         save_predictions=True,
     )
-    os.remove("tmp.json")
+    tmp_file.unlink()
 
     # read in the results
     with open("tests/results/SciFact_default_predictions.json") as f:

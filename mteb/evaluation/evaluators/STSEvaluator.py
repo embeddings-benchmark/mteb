@@ -77,8 +77,8 @@ class STSEvaluator(Evaluator):
             similarity_scores = np.array(_similarity_scores)
 
         if similarity_scores is not None:
-            pearson = pearsonr(self.gold_scores, similarity_scores)
-            spearman = spearmanr(self.gold_scores, similarity_scores)
+            pearson, _ = pearsonr(self.gold_scores, similarity_scores)
+            spearman, _ = spearmanr(self.gold_scores, similarity_scores)
         else:
             # if model does not have a similarity function, we assume the cosine similarity
             pearson = cosine_pearson

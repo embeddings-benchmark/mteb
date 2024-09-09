@@ -23,7 +23,7 @@ class Robust04InstructionRetrieval(AbsTaskInstructionRetrieval):
         date=("2023-08-01", "2024-04-01"),
         domains=["News", "Written"],
         task_subtypes=[],
-        license="MIT",
+        license="mit",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

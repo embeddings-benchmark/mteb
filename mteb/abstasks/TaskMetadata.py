@@ -60,7 +60,6 @@ TASK_DOMAIN = Literal[
     "Web",
     "Written",
     "Programming",
-    None,
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -135,6 +134,32 @@ PROGRAMMING_LANGS = [
     "sql",
 ]
 
+LICENSES = (  # this list can be extended as needed
+    Literal[  # we use lowercase for the licenses similar to the huggingface datasets
+        "not specified",  # or none found
+        "mit",
+        "cc-by-2.0",
+        "cc-by-3.0",
+        "cc-by-4.0",
+        "cc-by-sa-3.0",
+        "cc-by-sa-4.0",
+        "cc-by-nc-4.0",
+        "cc-by-nc-sa-3.0",
+        "cc-by-nc-sa-4.0",
+        "cc-by-nc-nd-4.0",
+        "openrail",
+        "openrail++",
+        "odc-by",
+        "afl-3.0",
+        "apache-2.0",
+        "cc-by-nd-2.1-jp",
+        "cc0-1.0",
+        "bsd-3-clause",
+        "gpl-3.0",
+        "cdla-sharing-1.0",
+        "mpl-2.0",
+    ]
+)
 
 METRIC_NAME = str
 METRIC_VALUE = Union[int, float, Dict[str, Any]]
@@ -163,7 +188,7 @@ class TaskMetadata(BaseModel):
         domains: The domains of the data. These includes "Non-fiction", "Social", "Fiction", "News", "Academic", "Blog", "Encyclopaedic",
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
-        license: The license of the data.
+        license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
         socioeconomic_status: The socioeconomic status of the data. Includes "high", "medium", "low", "mixed".
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
@@ -193,7 +218,7 @@ class TaskMetadata(BaseModel):
     date: tuple[STR_DATE, STR_DATE] | None = None
     domains: list[TASK_DOMAIN] | None = None
     task_subtypes: list[TASK_SUBTYPE] | None = None
-    license: str | None = None
+    license: LICENSES | STR_URL | None = None
 
     annotations_creators: ANNOTATOR_TYPE | None = None
     dialect: list[str] | None = None

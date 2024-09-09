@@ -26,7 +26,7 @@ class JSTS(AbsTaskSTS):
         date=("2016-01-01", "2022-12-31"),
         domains=["Web", "Written"],
         task_subtypes=[],
-        license="CC BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

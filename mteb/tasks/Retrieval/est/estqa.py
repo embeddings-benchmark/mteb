@@ -28,7 +28,7 @@ class EstQA(AbsTaskRetrieval):
         ),  # birth of Estonian Wikipedia to publishing the article
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Question answering"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

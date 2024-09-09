@@ -24,7 +24,7 @@ class WRIMEClassification(AbsTaskClassification):
         date=("2011-06-01", "2020-05-31"),
         domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="The dataset is available for research purposes only. Redistribution of the dataset is prohibited.",
+        license="https://huggingface.co/datasets/shunk031/wrime#licensing-information",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

@@ -23,7 +23,7 @@ class DutchBookReviewSentimentClassification(AbsTaskClassification):
         main_score="accuracy",
         domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="CC BY-NC-SA 4.0",
+        license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

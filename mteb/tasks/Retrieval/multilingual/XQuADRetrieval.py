@@ -43,7 +43,7 @@ class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
         date=("2019-05-21", "2019-11-21"),
         domains=["Web", "Written"],
         task_subtypes=["Question answering"],
-        license="CC BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",

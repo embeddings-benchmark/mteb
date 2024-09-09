@@ -24,7 +24,7 @@ class NorQuadRetrieval(AbsTaskRetrieval):
         date=("2022-01-01", "2023-12-31"),
         task_subtypes=["Question answering"],
         domains=["Encyclopaedic", "Non-fiction", "Written"],
-        license="CC-BY-SA-4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

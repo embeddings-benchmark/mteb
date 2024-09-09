@@ -5,6 +5,7 @@ import json
 import logging
 import os
 from collections import defaultdict
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -42,7 +43,7 @@ class DenseRetrievalExactSearch:
         model: EncoderWithQueryCorpusEncode,
         encode_kwargs: dict[str, Any] = {},
         corpus_chunk_size: int = 50000,
-        previous_results: str | None = None,
+        previous_results: str | Path | None = None,
         **kwargs: Any,
     ):
         # Model is class that provides encode_corpus() and encode_queries()
@@ -62,7 +63,10 @@ class DenseRetrievalExactSearch:
             "dot": "Dot Product",
         }
         self.corpus_chunk_size = corpus_chunk_size
-        self.previous_results = previous_results
+        if isinstance(previous_results, Path):
+            self.previous_results = str(previous_results)
+        else:
+            self.previous_results = previous_results
         self.batch_size = encode_kwargs.get("batch_size")
         self.show_progress_bar = encode_kwargs.get("show_progress_bar")
         self.save_corpus_embeddings = kwargs.get("save_corpus_embeddings", False)

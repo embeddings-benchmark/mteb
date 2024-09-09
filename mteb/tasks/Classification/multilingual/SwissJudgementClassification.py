@@ -30,7 +30,7 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
         task_subtypes=[
             "Political classification",
         ],
-        license="CC-BY-4.0",
+        license="cc-by-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",

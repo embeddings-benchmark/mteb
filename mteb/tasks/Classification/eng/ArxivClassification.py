@@ -23,7 +23,7 @@ class ArxivClassification(AbsTaskClassification):
         date=("1998-11-11", "2019-03-28"),
         domains=["Academic", "Written"],
         task_subtypes=["Topic classification"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
