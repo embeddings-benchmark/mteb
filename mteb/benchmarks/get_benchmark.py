@@ -3,7 +3,7 @@ from __future__ import annotations
 import difflib
 
 import mteb.benchmarks.benchmarks as benchmark_module
-from mteb.benchmarks.benchmarks import Benchmark
+from mteb.benchmarks import Benchmark
 
 BENCHMARK_REGISTRY = {
     inst.name: inst
