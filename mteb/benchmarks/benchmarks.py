@@ -25,6 +25,16 @@ class Benchmark:
         description: A description of the benchmark, should include its intended goal and potentially a description of its construction
         reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
         citation: A bibtex citation
+
+    Example:
+        >>> Benchmark(
+        ...     name="MTEB(custom)",
+        ...     tasks=mteb.get_tasks(
+        ...         tasks=["AmazonCounterfactualClassification", "AmazonPolarityClassification"],
+        ...         languages=["eng"],
+        ...     ),
+        ...     description="A custom benchmark"
+        ... )
     """
 
     name: str
@@ -41,8 +51,6 @@ class Benchmark:
 
     def __getitem__(self, index):
         return self.tasks[index]
-
-
 
 
 MTEB_MAIN_EN = Benchmark(
