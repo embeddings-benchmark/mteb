@@ -29,7 +29,7 @@ mteb run -m {model_name} -t {task_names}
 
 These will save the results in a folder called `results/{model_name}/{model_revision}`.
 
-For reference you can also look at [scripts/run_mteb_english.py](https://github.com/embeddings-benchmark/mteb/blob/main/scripts/data/run_mteb_english.py) for all MTEB English datasets used in the main ranking.
+For reference you can also look at [scripts/data/run_mteb_english.py](https://github.com/embeddings-benchmark/mteb/blob/main/scripts/data/run_mteb_english.py) for all MTEB English datasets used in the main ranking.
 Advanced scripts with different models are available in the [mteb/mtebscripts repo](https://github.com/embeddings-benchmark/mtebscripts).
 
 2. **Format the results using the CLI:**
