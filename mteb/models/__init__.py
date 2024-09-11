@@ -12,6 +12,7 @@ from mteb.models import (
     bge_models,
     bm25,
     cohere_models,
+    cohere_bedrock_models,
     e5_instruct,
     e5_models,
     google_models,
@@ -125,6 +126,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
 model_modules = [
     bge_models,
     bm25,
+    cohere_bedrock_models,
     cohere_models,
     e5_instruct,
     e5_models,
