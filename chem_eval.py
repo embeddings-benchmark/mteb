@@ -71,6 +71,8 @@ if __name__ == "__main__":
               "text-embedding-3-large": "1",
               "amazon-titan-embed-text-v1": "1",
               "amazon-titan-embed-text-v2": "1",
+              "cohere-embed-english-v3": "1",
+              "cohere-embed-multilingual-v3": "1"
               }
 
     all_tasks = [
