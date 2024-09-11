@@ -341,9 +341,7 @@ class MTEB:
                     continue
             try:
                 task_eval_splits = (
-                    eval_splits
-                    if eval_splits is not None
-                    else task.metadata_dict.get("eval_splits", [])
+                    eval_splits if eval_splits is not None else task.eval_splits
                 )
 
                 # load data

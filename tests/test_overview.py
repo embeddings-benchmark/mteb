@@ -3,7 +3,8 @@ from __future__ import annotations
 import pytest
 
 import mteb
-from mteb import get_tasks
+from mteb import get_task, get_tasks
+from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
 from mteb.overview import MTEBTasks
 
@@ -19,12 +20,23 @@ def test_get_tasks_size_differences():
     )
 
 
+@pytest.mark.parametrize("task_name", ["BornholmBitextMining"])
+@pytest.mark.parametrize("eval_splits", [["test"], None])
+def test_get_task(task_name: str, eval_splits: list[str] | None):
+    task = get_task(task_name, eval_splits=eval_splits)
+    assert isinstance(task, AbsTask)
+    assert task.metadata.name == task_name
+    if eval_splits:
+        for split in task.eval_splits:
+            assert split in eval_splits
+
+
 @pytest.mark.parametrize("languages", [["eng", "deu"], ["eng"], None])
 @pytest.mark.parametrize("script", [["Latn"], ["Cyrl"], None])
 @pytest.mark.parametrize("domains", [["Legal"], ["Medical", "Non-fiction"], None])
 @pytest.mark.parametrize("task_types", [["Classification"], ["Clustering"], None])
 @pytest.mark.parametrize("exclude_superseeded_datasets", [True, False])
-def test_get_task(
+def test_get_tasks(
     languages: list[str],
     script: list[str],
     domains: list[TASK_DOMAIN],

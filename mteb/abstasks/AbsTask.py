@@ -67,6 +67,7 @@ class AbsTask(ABC):
         self.data_loaded = False
         self.is_multilingual = False
         self.save_suffix = kwargs.get("save_suffix", "")
+        self._eval_splits = None
 
         self.seed = seed
         random.seed(self.seed)
@@ -255,6 +256,11 @@ class AbsTask(ABC):
 
         return self.metadata.languages
 
+    def filter_eval_splits(self, eval_splits: list[str] | None) -> AbsTask:
+        """Filter the evaluation splits of the task."""
+        self._eval_splits = eval_splits
+        return self
+
     def filter_languages(
         self, languages: list[str] | None, script: list[str] | None = None
     ) -> AbsTask:
@@ -284,6 +290,12 @@ class AbsTask(ABC):
 
         self.hf_subsets = subsets_to_keep
         return self
+
+    @property
+    def eval_splits(self) -> list[str]:
+        if self._eval_splits:
+            return self._eval_splits
+        return self.metadata.eval_splits
 
     def __repr__(self) -> str:
         """Format the representation of the task such that it appears as:
