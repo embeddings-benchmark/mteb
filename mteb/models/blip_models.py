@@ -5,9 +5,10 @@ from typing import Any
 
 import torch
 from PIL import Image
+from torch.nn.functional import normalize
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import AutoModel, AutoProcessor
+from transformers import BlipForImageTextRetrieval, BlipProcessor
 
 from mteb.model_meta import ModelMeta
 
@@ -21,8 +22,10 @@ class BLIPModelWrapper:
     ):
         self.model_name = model_name
         self.device = device
-        self.model = AutoModel.from_pretrained(model_name).to(self.device)
-        self.processor = AutoProcessor.from_pretrained(model_name)
+        self.model = BlipForImageTextRetrieval.from_pretrained(model_name).to(
+            self.device
+        )
+        self.processor = BlipProcessor.from_pretrained(model_name)
 
     def preprocess(
         self,
@@ -43,7 +46,12 @@ class BLIPModelWrapper:
                     text=batch_texts, return_tensors="pt", padding=True, truncation=True
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                text_outputs = self.model.get_text_features(**inputs)
+                # different to CLIPModelWrapper: text_encoder instead of get_text_features and apply projection and normalization
+                text_outputs = self.model.text_encoder(**inputs)
+                text_outputs = text_outputs[0]
+                text_outputs = normalize(
+                    self.model.text_proj(text_outputs[:, 0, :]), dim=-1
+                )
                 all_text_embeddings.append(text_outputs.cpu())
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
@@ -61,7 +69,11 @@ class BLIPModelWrapper:
                         images=batch, return_tensors="pt", padding=True
                     )
                     inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                    image_outputs = self.model.get_image_features(**inputs)
+                    image_outputs = self.model.vision_model(**inputs)
+                    image_outputs = image_outputs[0]
+                    image_outputs = normalize(
+                        self.model.vision_proj(image_outputs[:, 0, :]), dim=-1
+                    )
                     all_image_embeddings.append(image_outputs.cpu())
         else:
             with torch.no_grad():
@@ -72,6 +84,11 @@ class BLIPModelWrapper:
                     )
                     inputs = {k: v.to(self.device) for k, v in inputs.items()}
                     image_outputs = self.model.get_image_features(**inputs)
+                    image_outputs = self.model.vision_model(**inputs)
+                    image_outputs = image_outputs[0]
+                    image_outputs = normalize(
+                        self.model.vision_proj(image_outputs[:, 0, :]), dim=-1
+                    )
                     all_image_embeddings.append(image_outputs.cpu())
 
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
@@ -93,7 +110,6 @@ class BLIPModelWrapper:
         fusion_mode="sum",
         batch_size: int = 32,
     ):
-        # TODO: find out if BLIP has a prescribed way of fusing text and image embeddings
         if texts is None and images is None:
             raise ValueError("Either texts or images must be provided")
 
@@ -123,42 +139,6 @@ class BLIPModelWrapper:
             return image_embeddings
 
 
-"""
-TODO: implement all model variants
-
-Salesforce/blip-image-captioning-large
-Image-to-Text • Updated Dec 7, 2023 •
-1.16M •
-•
-1.04k
-Salesforce/blip-image-captioning-base
-Image-to-Text • Updated Aug 1, 2023 •
-857k •
-•
-475
-Salesforce/blip-vqa-base
-Visual Question Answering • Updated Dec 7, 2023 •
-168k •
-119
-Salesforce/blip-vqa-capfilt-large
-Visual Question Answering • Updated Jan 22 •
-90.6k •
-44
-Salesforce/blip-itm-base-coco
-Updated Aug 1, 2023 •
-12.8k •
-16
-Salesforce/blip-itm-large-coco
-Updated Aug 1, 2023 •
-9.9k
-Salesforce/blip-itm-base-flickr
-Updated Aug 1, 2023 •
-65
-Salesforce/blip-itm-large-flickr
-Updated Aug 1, 2023 •
-459 •
-2
-"""
 # in descending order of usage (downloads from huggingface)
 blip_image_captioning_large = ModelMeta(
     loader=partial(
@@ -261,8 +241,13 @@ blip_itm_large_flickr = ModelMeta(
 if __name__ == "__main__":
     import mteb
 
-    mdl = mteb.get_model(
-        blip_image_captioning_base.name, blip_image_captioning_base.revision
-    )
+    mdl = mteb.get_model(blip_itm_base_coco.name, blip_itm_base_coco.revision)
     emb = mdl.get_text_embeddings(["Hello, world!"])
-    print(emb.shape)
+    emb2 = mdl.get_text_embeddings(["Hello there, world!"])
+    emb3 = mdl.get_text_embeddings(["Goodbye, person!"])
+
+    sim = torch.nn.functional.cosine_similarity(emb, emb2)
+    print(sim)
+
+    sim = torch.nn.functional.cosine_similarity(emb, emb3)
+    print(sim)

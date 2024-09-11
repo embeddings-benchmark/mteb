@@ -4,8 +4,8 @@ from functools import partial
 from typing import Any
 
 import torch
-from torch.nn.functional import normalize
 from PIL import Image
+from torch.nn.functional import normalize
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import BlipForImageTextRetrieval, BlipProcessor
@@ -22,7 +22,9 @@ class BLIP2ModelWrapper:
     ):
         self.model_name = model_name
         self.device = device
-        self.model = BlipForImageTextRetrieval.from_pretrained(model_name).to(self.device)
+        self.model = BlipForImageTextRetrieval.from_pretrained(model_name).to(
+            self.device
+        )
         self.processor = BlipProcessor.from_pretrained(model_name)
 
     def preprocess(
@@ -47,7 +49,9 @@ class BLIP2ModelWrapper:
                 # different to CLIPModelWrapper: text_encoder instead of get_text_features and apply projection and normalization
                 text_outputs = self.model.text_encoder(**inputs)
                 text_outputs = text_outputs[0]
-                text_outputs = normalize(self.model.text_proj(text_outputs[:,0,:]), dim=-1)
+                text_outputs = normalize(
+                    self.model.text_proj(text_outputs[:, 0, :]), dim=-1
+                )
                 all_text_embeddings.append(text_outputs.cpu())
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
@@ -67,7 +71,9 @@ class BLIP2ModelWrapper:
                     inputs = {k: v.to(self.device) for k, v in inputs.items()}
                     image_outputs = self.model.vision_model(**inputs)
                     image_outputs = image_outputs[0]
-                    image_outputs = normalize(self.model.vision_proj(image_outputs[:,0,:]), dim=-1)
+                    image_outputs = normalize(
+                        self.model.vision_proj(image_outputs[:, 0, :]), dim=-1
+                    )
                     all_image_embeddings.append(image_outputs.cpu())
         else:
             with torch.no_grad():
@@ -80,7 +86,9 @@ class BLIP2ModelWrapper:
                     image_outputs = self.model.get_image_features(**inputs)
                     image_outputs = self.model.vision_model(**inputs)
                     image_outputs = image_outputs[0]
-                    image_outputs = normalize(self.model.vision_proj(image_outputs[:,0,:]), dim=-1)
+                    image_outputs = normalize(
+                        self.model.vision_proj(image_outputs[:, 0, :]), dim=-1
+                    )
                     all_image_embeddings.append(image_outputs.cpu())
 
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
@@ -220,16 +228,13 @@ blip2_flan_t5_xl = ModelMeta(
 if __name__ == "__main__":
     import mteb
 
-    mdl = mteb.get_model(
-        blip2_opt_2_7b.name, blip2_opt_2_7b.revision
-    )
+    mdl = mteb.get_model(blip2_opt_2_7b.name, blip2_opt_2_7b.revision)
     emb = mdl.get_text_embeddings(["Hello, world!"])
     emb2 = mdl.get_text_embeddings(["Hello there, world!"])
     emb3 = mdl.get_text_embeddings(["Goodbye, person!"])
-    
+
     sim = torch.nn.functional.cosine_similarity(emb, emb2)
     print(sim)
 
     sim = torch.nn.functional.cosine_similarity(emb, emb3)
     print(sim)
-    
