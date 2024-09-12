@@ -102,6 +102,8 @@ if __name__ == "__main__":
         "WikipediaMedium2ComputationalVsSpectroscopistsClassification",
         "WikipediaMedium2CrystallographyVsChromatographyTitrationpHClassification",
         "WikipediaMedium5Classification",
+        "SDSEyeProtectionClassification",
+        "SDSGlovesClassification",
         # Retrieval
         "ChemNQRetrieval",
         "ChemHotpotQARetrieval",
