@@ -1,0 +1,1 @@
+from .multilingual.STSBenchmarkMultilingualVisualSTS import *

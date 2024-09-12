@@ -7,6 +7,7 @@ from .Image.Any2AnyRetrievalEvaluator import *
 from .Image.ClassificationEvaluator import *
 from .Image.ClusteringEvaluator import *
 from .Image.ImageTextPairClassificationEvaluator import *
+from .Image.VisualSTSEvaluator import *
 from .Image.ZeroshotClassificationEvaluator import *
 from .PairClassificationEvaluator import *
 from .RerankingEvaluator import *
