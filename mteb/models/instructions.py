@@ -311,3 +311,11 @@ def task_to_instruction(task_name: str, is_query: bool = True) -> str:
 
     meta = mteb.get_task(task_name).metadata
     return DEFAULT_PROMPTS.get(meta.type, "")
+
+
+def represent_sentence_instruction(instruction: str) -> str:
+    return "Represent this sentence for searching relevant passages: "
+
+
+def gte_instruction(instruction: str) -> str:
+    return f"Instruct: {instruction}\nQuery: "

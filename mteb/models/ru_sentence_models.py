@@ -5,8 +5,8 @@ from __future__ import annotations
 from functools import partial
 
 from mteb.model_meta import ModelMeta
-
-from .e5_models import E5Wrapper
+from mteb.models.base_wrappers import SentenceTransformerWrapper
+from mteb.models.e5_models import corpus_instruction, query_instruction
 
 rubert_tiny2 = ModelMeta(
     name="cointegrated/rubert-tiny2",
@@ -41,7 +41,12 @@ sbert_large_mt_nlu_ru = ModelMeta(
 )
 
 user_base_ru = ModelMeta(
-    loader=partial(E5Wrapper, model_name="deepvk/USER-base"),  # type: ignore
+    loader=partial(
+        SentenceTransformerWrapper,
+        model_name="deepvk/USER-base",
+        query_instruction=query_instruction,
+        corpus_instruction=corpus_instruction,
+    ),  # type: ignore
     name="deepvk/USER-base",
     languages=["rus_Cyrl"],
     open_source=True,

@@ -4,11 +4,7 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta
 
-from .instructions import task_to_instruction
-
-
-def gte_instruction(instruction: str) -> str:
-    return f"Instruct: {instruction}\nQuery: "
+from .instructions import gte_instruction, task_to_instruction
 
 
 def gte_loader(**kwargs):
@@ -100,4 +96,5 @@ if __name__ == "__main__":
     document_embeddings_mteb = model_mteb.encode_corpus(documents)
     scores_mteb = (query_embeddings_mteb @ document_embeddings_mteb.T) * 100
     print(scores_mteb.tolist())
+    # [[70.39706420898438, 3.4318461418151855], [4.516170978546143, 81.91815948486328]]
     # [[70.39706420898438, 3.4318461418151855], [4.516170978546143, 81.91815948486328]]

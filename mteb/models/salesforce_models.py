@@ -6,11 +6,7 @@ import torch
 
 from mteb.model_meta import ModelMeta
 
-from .instructions import task_to_instruction
-
-
-def sfr_instruction(instruction: str) -> str:
-    return f"Instruct: {instruction}\nQuery: "
+from .instructions import gte_instruction, task_to_instruction
 
 
 def sfr_loader(**kwargs):
@@ -34,7 +30,7 @@ def sfr_loader(**kwargs):
             else:
                 instruction = kwargs.pop("instruction", "")
             if instruction:
-                kwargs["instruction"] = sfr_instruction(instruction)
+                kwargs["instruction"] = gte_instruction(instruction)
             return super().encode(*args, **kwargs)
 
         def encode_corpus(self, *args, **kwargs):

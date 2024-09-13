@@ -16,6 +16,7 @@ from mteb.models import (
     google_models,
     gritlm_models,
     gte_models,
+    linq_models,
     llm2vec_models,
     mxbai_models,
     nomic_models,
@@ -23,6 +24,7 @@ from mteb.models import (
     ru_sentence_models,
     salesforce_models,
     sentence_transformers_models,
+    stella_models,
     voyage_models,
 )
 
@@ -77,9 +79,7 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
         logger.info(
             f"Attempting to extract metadata by loading the model ({model_name}) using sentence-transformers."
         )
-        model = SentenceTransformer(
-            model_name, revision=revision, trust_remote_code=True
-        )
+        model = SentenceTransformer(model_name, revision=revision, trust_remote_code=True)
         meta = model_meta_from_sentence_transformers(model)
 
         meta.revision = revision
@@ -127,8 +127,10 @@ model_modules = [
     e5_instruct,
     e5_models,
     google_models,
+    google_models,
     gritlm_models,
     gte_models,
+    linq_models,
     llm2vec_models,
     mxbai_models,
     nomic_models,
@@ -136,8 +138,8 @@ model_modules = [
     ru_sentence_models,
     salesforce_models,
     sentence_transformers_models,
+    stella_models,
     voyage_models,
-    google_models,
 ]
 models = {}
 
