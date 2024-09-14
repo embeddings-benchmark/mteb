@@ -60,7 +60,7 @@ class DescriptiveStatistics(TypedDict):
 
 class AbsTask(ABC):
     metadata: TaskMetadata
-    _eval_splits: list[str] | None
+    _eval_splits: list[str] | None = None
     superseded_by: None | str = None
     dataset: dict[HFSubset, DatasetDict] | None = None  # type: ignore
     data_loaded: bool = False
