@@ -68,6 +68,7 @@ class AbsTaskSummarization(AbsTask):
             texts=data_split["text"],
             gold_scores=normalized_scores,
             task_name=self.metadata.name,
+            task_type=self.metadata.type,
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)

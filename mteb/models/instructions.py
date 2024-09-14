@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import mteb
-
 # Prompts from
 # SEB: https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/c8376f967d1294419be1d3eb41217d04cd3a65d3/src/seb/registered_models/e5_instruct_models.py
 # E5: https://github.com/microsoft/unilm/blob/9c0f1ff7ca53431fe47d2637dfe253643d94185b/e5/utils.py#L106
@@ -299,7 +297,7 @@ TASKNAME2INSTRUCTIONS = {
 }
 
 
-def task_to_instruction(task_name: str, is_query: bool = True) -> str:
+def task_to_instruction(task_name: str, task_type: str, is_query: bool = True) -> str:
     if task_name in TASKNAME2INSTRUCTIONS:
         if isinstance(TASKNAME2INSTRUCTIONS[task_name], tuple):
             return (
@@ -309,8 +307,7 @@ def task_to_instruction(task_name: str, is_query: bool = True) -> str:
             )
         return TASKNAME2INSTRUCTIONS[task_name]
 
-    meta = mteb.get_task(task_name).metadata
-    return DEFAULT_PROMPTS.get(meta.type, "")
+    return DEFAULT_PROMPTS.get(task_type, "")
 
 
 def represent_sentence_instruction(instruction: str) -> str:

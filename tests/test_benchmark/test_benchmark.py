@@ -14,10 +14,8 @@ from mteb.benchmarks.benchmarks import Benchmark
 from mteb.create_meta import generate_readme
 
 from .mock_models import (
-    MockBGEWrapper,
-    MockE5Wrapper,
-    MockMxbaiWrapper,
     MockNumpyEncoder,
+    MockSentenceTransformerWrapper,
     MockTorchbf16Encoder,
     MockTorchEncoder,
 )
@@ -46,9 +44,7 @@ def test_mulitple_mteb_tasks(
         MockNumpyEncoder(),
         MockTorchEncoder(),
         MockTorchbf16Encoder(),
-        MockBGEWrapper(),
-        MockE5Wrapper(),
-        MockMxbaiWrapper(),
+        MockSentenceTransformerWrapper(),
     ],
 )
 def test_benchmark_encoders_on_task(task: str | mteb.AbsTask, model: mteb.Encoder):
@@ -70,15 +66,26 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
     _task_name = (
         task_name.metadata.name if isinstance(task_name, mteb.AbsTask) else task_name
     )
+    _task_type = (
+        task_name.metadata.type if isinstance(task_name, mteb.AbsTask) else None
+    )
 
     class MockEncoderWithInstructions(mteb.Encoder):
-        def encode(self, sentences, prompt_name: str | None = None, **kwargs):
+        def encode(
+            self,
+            sentences,
+            prompt_name: str | None = None,
+            task_type: str | None = None,
+            **kwargs,
+        ):
             assert prompt_name == _task_name
+            assert task_type == _task_type
             return np.zeros((len(sentences), 10))
 
     class EncoderWithoutInstructions(SentenceTransformer):
         def encode(self, sentences, **kwargs):
             assert "prompt_name" not in kwargs
+            assert "task_type" not in kwargs
             return super().encode(sentences, **kwargs)
 
     if isinstance(task_name, mteb.AbsTask):
@@ -103,7 +110,13 @@ def test_encode_kwargs_passed_to_all_encodes(task_name: str | mteb.AbsTask):
     my_encode_kwargs = {"no_one_uses_this_args": "but_its_here"}
 
     class MockEncoderWithKwargs(mteb.Encoder):
-        def encode(self, sentences, prompt_name: str | None = None, **kwargs):
+        def encode(
+            self,
+            sentences,
+            prompt_name: str | None = None,
+            task_type: str | None = None,
+            **kwargs,
+        ):
             assert kwargs == my_encode_kwargs
             return np.zeros((len(sentences), 10))
 

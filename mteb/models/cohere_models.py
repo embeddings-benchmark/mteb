@@ -42,13 +42,12 @@ class CohereTextEmbeddingModel(Encoder):
         self,
         sentences: list[str],
         prompt_name: str | None = None,
+        task_type: str | None = None,
         # search_document is recommended if unknown (https://cohere.com/blog/introducing-embed-v3)
         cohere_task_type: str = "search_document",
         **kwargs: Any,  # noqa: ARG002
     ) -> np.ndarray:
-        if prompt_name:
-            task = mteb.get_task(prompt_name)
-            task_type = task.metadata.type
+        if task_type:
             if task_type in ["Classification", "MultilabelClassification"]:
                 cohere_task_type = "classification"
             elif task_type == "Clustering":

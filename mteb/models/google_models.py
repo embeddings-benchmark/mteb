@@ -56,12 +56,11 @@ class GoogleTextEmbeddingModel(Encoder):
         self,
         sentences: list[str],
         prompt_name: str | None = None,
+        task_type: str | None = None,
         google_task_type: str | None = None,  # Optional
         **kwargs: Any,
     ) -> np.ndarray:
-        if prompt_name and google_task_type is None:
-            task = mteb.get_task(prompt_name)
-            task_type = task.metadata.type
+        if task_type and google_task_type is None:
             if task_type in ["Classification", "MultilabelClassification"]:
                 google_task_type = "CLASSIFICATION"
             elif task_type == "Clustering":
@@ -90,10 +89,9 @@ class GoogleTextEmbeddingModel(Encoder):
         )
 
 
-name = "text-embedding-004"
 google_emb_004 = ModelMeta(
-    loader=partial(GoogleTextEmbeddingModel, model_name=name),
-    name=name,
+    loader=partial(GoogleTextEmbeddingModel, model_name="text-embedding-004"),
+    name="text-embedding-004",
     languages=["eng-Latn"],
     open_source=False,
     revision="1",  # revision is intended for implementation

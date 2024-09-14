@@ -92,6 +92,7 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
             samples=data_split,
             evaluator_type="miracl",
             task_name=self.metadata.name,
+            task_type=self.metadata.type,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )

@@ -463,6 +463,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         retriever = InstructionRetrievalEvaluator(
             retriever=model,
             task_name=self.metadata.name,
+            task_type=self.metadata.type,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )

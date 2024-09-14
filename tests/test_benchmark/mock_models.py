@@ -11,9 +11,7 @@ from sentence_transformers import SentenceTransformer
 from torch import Tensor
 
 import mteb
-from mteb.models.bge_models import BGEWrapper
-from mteb.models.e5_models import E5Wrapper
-from mteb.models.mxbai_models import MxbaiWrapper
+from mteb.models.base_wrappers import SentenceTransformerWrapper
 
 
 class MockNumpyEncoder(mteb.Encoder):
@@ -64,16 +62,8 @@ class MockSentenceTransformer(SentenceTransformer):
         return torch.randn(len(sentences), 10)
 
 
-class MockE5Wrapper(E5Wrapper):
+class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
     def __init__(self, **kwargs):
         self.mdl = MockSentenceTransformer()
-
-
-class MockBGEWrapper(BGEWrapper):
-    def __init__(self, **kwargs):
-        self.mdl = MockSentenceTransformer()
-
-
-class MockMxbaiWrapper(MxbaiWrapper):
-    def __init__(self, **kwargs):
-        self.mdl = MockSentenceTransformer()
+        self._query_instruction = None
+        self._corpus_instruction = None

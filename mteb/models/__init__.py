@@ -8,6 +8,7 @@ from sentence_transformers import SentenceTransformer
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.model_meta import ModelMeta
 from mteb.models import (
+    arctic_models,
     bge_models,
     bm25,
     cohere_models,
@@ -79,7 +80,9 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
         logger.info(
             f"Attempting to extract metadata by loading the model ({model_name}) using sentence-transformers."
         )
-        model = SentenceTransformer(model_name, revision=revision, trust_remote_code=True)
+        model = SentenceTransformer(
+            model_name, revision=revision, trust_remote_code=True
+        )
         meta = model_meta_from_sentence_transformers(model)
 
         meta.revision = revision
@@ -121,6 +124,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
 
 
 model_modules = [
+    arctic_models,
     bge_models,
     bm25,
     cohere_models,

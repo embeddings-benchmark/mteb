@@ -19,13 +19,15 @@ def sfr_loader(**kwargs):
 
     class SFRWrapper(GritLM):
         def encode(self, *args, **kwargs):
-            if "prompt_name" in kwargs:
+            if "prompt_name" in kwargs and "task_type" in kwargs:
                 if "instruction" in kwargs:
                     raise ValueError(
                         "Cannot specify both `prompt_name` and `instruction`."
                     )
                 instruction = task_to_instruction(
-                    kwargs.pop("prompt_name"), kwargs.pop("is_query", True)
+                    kwargs.pop("prompt_name"),
+                    kwargs.pop("task_type"),
+                    kwargs.pop("is_query", True),
                 )
             else:
                 instruction = kwargs.pop("instruction", "")

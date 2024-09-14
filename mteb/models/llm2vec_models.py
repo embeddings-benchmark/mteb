@@ -57,7 +57,8 @@ class LLM2VecWrapper:
         self,
         sentences: list[str],
         *,
-        prompt_name: str = None,
+        prompt_name: str | None = None,
+        task_type: str | None = None,
         **kwargs: Any,  # noqa
     ) -> np.ndarray:
         if prompt_name is not None:
@@ -65,7 +66,7 @@ class LLM2VecWrapper:
                 self.task_to_instructions[prompt_name]
                 if self.task_to_instructions
                 and prompt_name in self.task_to_instructions
-                else llm2vec_instruction(task_to_instruction(prompt_name))
+                else llm2vec_instruction(task_to_instruction(prompt_name, task_type))
             )
         else:
             instruction = ""
@@ -76,7 +77,8 @@ class LLM2VecWrapper:
     def encode_corpus(
         self,
         corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
-        prompt_name: str = None,
+        prompt_name: str | None = None,
+        task_type: str | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
         sentences = corpus_to_texts(corpus, sep=" ")

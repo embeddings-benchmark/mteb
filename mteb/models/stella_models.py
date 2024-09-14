@@ -20,7 +20,7 @@ stella_en_400M_v5 = ModelMeta(
     release_date="2024-07-12",  # initial commit of hf model.
 )
 
-stella_en_400M_v5 = ModelMeta(
+stella_en_1_5B_v5 = ModelMeta(
     loader=partial(
         SentenceTransformerWrapper,
         model_name="dunzhang/stella_en_1.5B_v5",

@@ -3,8 +3,7 @@ from __future__ import annotations
 from functools import partial
 
 from mteb.model_meta import ModelMeta
-
-from .instructions import gte_instruction, task_to_instruction
+from mteb.models.instructions import gte_instruction, task_to_instruction
 
 
 def gte_loader(**kwargs):
@@ -17,13 +16,15 @@ def gte_loader(**kwargs):
 
     class GTEWrapper(GritLM):
         def encode(self, *args, **kwargs):
-            if "prompt_name" in kwargs:
+            if "prompt_name" in kwargs and "task_type" in kwargs:
                 if "instruction" in kwargs:
                     raise ValueError(
                         "Cannot specify both `prompt_name` and `instruction`."
                     )
                 instruction = task_to_instruction(
-                    kwargs.pop("prompt_name"), kwargs.pop("is_query", True)
+                    kwargs.pop("prompt_name"),
+                    kwargs.pop("task_type"),
+                    kwargs.pop("is_query", True),
                 )
             else:
                 instruction = kwargs.pop("instruction", "")
@@ -96,5 +97,4 @@ if __name__ == "__main__":
     document_embeddings_mteb = model_mteb.encode_corpus(documents)
     scores_mteb = (query_embeddings_mteb @ document_embeddings_mteb.T) * 100
     print(scores_mteb.tolist())
-    # [[70.39706420898438, 3.4318461418151855], [4.516170978546143, 81.91815948486328]]
     # [[70.39706420898438, 3.4318461418151855], [4.516170978546143, 81.91815948486328]]

@@ -12,6 +12,7 @@ class TestClusteringEvaluator:
                 self,
                 sentences: list[str],
                 prompt_name: str | None = None,
+                task_type: str | None = None,
                 batch_size=32,
             ) -> np.ndarray:
                 return np.eye(len(sentences))
