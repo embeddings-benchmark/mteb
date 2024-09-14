@@ -60,14 +60,14 @@ class DescriptiveStatistics(TypedDict):
 
 class AbsTask(ABC):
     metadata: TaskMetadata
+    _eval_splits: list[str] | None
     superseded_by: None | str = None
+    dataset: dict[HFSubset, DatasetDict] | None = None  # type: ignore
+    data_loaded: bool = False
+    is_multilingual: bool = False
 
     def __init__(self, seed: int = 42, **kwargs: Any):
-        self.dataset = None
-        self.data_loaded = False
-        self.is_multilingual = False
         self.save_suffix = kwargs.get("save_suffix", "")
-        self._eval_splits = None
 
         self.seed = seed
         random.seed(self.seed)

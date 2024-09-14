@@ -7,7 +7,7 @@
     # pip install codecarbon
 # ensure latest version of sentnece-transformers is installed:
     # pip install sentence-transformers --upgrade
-# ensure that the the huggingface token is set and accecible using:
+# ensure that the the huggingface token is set and accessible using:
     # huggingface-cli login
 
 echo "Running model on a sample set of tasks" # this is to check tasks are running correctly

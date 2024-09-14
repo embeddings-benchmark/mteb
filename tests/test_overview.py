@@ -29,6 +29,8 @@ def test_get_task(task_name: str, eval_splits: list[str] | None):
     if eval_splits:
         for split in task.eval_splits:
             assert split in eval_splits
+    else:
+        assert task.eval_splits == task.metadata.eval_splits
 
 
 @pytest.mark.parametrize("languages", [["eng", "deu"], ["eng"], None])

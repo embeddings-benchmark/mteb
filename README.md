@@ -144,7 +144,7 @@ import mteb
 benchmarks = mteb.get_benchmarks()
 ```
 
-generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark. In case of a language we use the three letter language code. For large groups of language we use the group notation, e.g. `MTEB(Scandinavian)` for Scandinavian languages. External benchmarks implemented in MTEB like `CoIR` use their original name. When using a benchmark from MTEB please cite `mteb` along with the citations of the benchmark which you can access using:
+Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark. In case of a language we use the three letter language code. For large groups of language we use the group notation, e.g. `MTEB(Scandinavian)` for Scandinavian languages. External benchmarks implemented in MTEB like `CoIR` use their original name. When using a benchmark from MTEB please cite `mteb` along with the citations of the benchmark which you can access using:
 
 ```python
 benchmark.citation
@@ -344,7 +344,7 @@ mteb run -t NFCorpus -m all-MiniLM-L6-v2 --output_folder results --save_predicti
 
 Multiple models have already been run on tasks avaiable within MTEB. These results are available results [repository](https://github.com/embeddings-benchmark/results).
 
-To make the results more easily accecible we have designed custom functionality for retrieving from the repository. For instance, you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
+To make the results more easily accessible, we have designed custom functionality for retrieving from the repository. For instance, you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
 
 ```python
 import mteb
