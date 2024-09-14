@@ -16,7 +16,7 @@ def model_encode(
     *,
     model: Encoder,
     task_name: str | None,
-    prompt_type: str | None,
+    prompt_type: str | None = None,
     **kwargs,
 ) -> np.ndarray:
     """A wrapper function around the model.encode method that handles the prompt_name argument and standardizes the output to a numpy array.
