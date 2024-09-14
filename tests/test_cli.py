@@ -31,7 +31,7 @@ run_task_fixures = [
     (
         "intfloat/multilingual-e5-small",
         "BornholmBitextMining",
-        "e4ce9877abf3edfe10b0d82785e83bdcb973e22e",
+        "fd1525a9fd15316a2d503bf26ab031a61d056e98",
     ),
 ]
 
