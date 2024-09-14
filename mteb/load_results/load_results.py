@@ -144,8 +144,8 @@ def load_results(
     else:
         models_to_keep = None
 
+    task_names = {}
     if tasks is not None:
-        task_names = {}
         for task in tasks:
             if isinstance(task, AbsTask):
                 task_names[task.metadata.name] = task
@@ -184,7 +184,11 @@ def load_results(
                 filtered_results = []
                 for r in _results:
                     try:
-                        r.validate_and_filter_scores(task_names[r.task_name])
+                        if task_names:
+                            task = task_names[r.task_name]
+                        else:
+                            task = None
+                        r.validate_and_filter_scores(task=task)
                         filtered_results.append(r)
                     except Exception as e:
                         logger.warning(
