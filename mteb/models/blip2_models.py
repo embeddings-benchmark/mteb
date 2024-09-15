@@ -2,26 +2,29 @@ from __future__ import annotations
 
 from functools import partial
 from typing import Any
-from types import SimpleNamespace
 
 import torch
 from PIL import Image
 from torch.nn.functional import normalize
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import Blip2Processor, BertTokenizer
+from transformers import Blip2Processor
 
 from mteb.model_meta import ModelMeta
+
 
 def blip2_loader(**kwargs):
     try:  # a temporal fix for the dependency issues of vista models.
         from lavis.models import load_model_and_preprocess
-        from lavis.models.blip2_models.blip2_image_text_matching import Blip2ITM, Blip2Qformer
+        from lavis.models.blip2_models.blip2_image_text_matching import (
+            Blip2ITM,
+            Blip2Qformer,
+        )
     except ImportError:
         raise ImportError(
             "Please install `pip install salesforce-lavis` to use BLIP-2 models."
         )
-    
+
     class BLIP2ModelWrapper:
         def __init__(
             self,
@@ -57,7 +60,7 @@ def blip2_loader(**kwargs):
                         return_tensors="pt",
                     ).to(self.device)
                     text_outputs = self.model.forward_text(text_tokens)
-                    #text_outputs = normalize(self.model.text_proj(text_outputs))
+                    # text_outputs = normalize(self.model.text_proj(text_outputs))
                     all_text_embeddings.append(text_outputs.cpu())
 
             all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
@@ -74,9 +77,11 @@ def blip2_loader(**kwargs):
                         inputs = self.processor(
                             images=batch, return_tensors="pt", padding=True
                         )
-                        image_outputs = self.model.forward_image(inputs["pixel_values"].to(self.device))
+                        image_outputs = self.model.forward_image(
+                            inputs["pixel_values"].to(self.device)
+                        )
                         image_outputs = image_outputs[0][:, 0, :]
-                        #image_outputs = normalize(self.model.vision_proj(image_outputs), dim=-1)
+                        # image_outputs = normalize(self.model.vision_proj(image_outputs), dim=-1)
                         all_image_embeddings.append(image_outputs.cpu())
             else:
                 with torch.no_grad():
@@ -95,23 +100,22 @@ def blip2_loader(**kwargs):
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
             return all_image_embeddings
 
-        def get_multimodal_embeddings(
-            self, texts, images, batch_size=32
-        ):
+        def get_multimodal_embeddings(self, texts, images, batch_size=32):
             all_multimodal_embeddings = []
 
             with torch.no_grad():
                 if isinstance(images, DataLoader):
-                    for batch_images, i in tqdm(zip(images, range(0, len(texts), batch_size))):
+                    for batch_images, i in tqdm(
+                        zip(images, range(0, len(texts), batch_size))
+                    ):
                         batch_texts = texts[i : i + batch_size]
-                        
-                        image_inputs  = self.processor(
+
+                        image_inputs = self.processor(
                             images=batch_images, return_tensors="pt", padding=True
                         )["pixel_values"].to(self.device)
-                        multimodal_outputs = self.model.extract_features({
-                            "text_input": batch_texts,
-                            "image": image_inputs
-                        }).multimodal_embeds[:,0,:]
+                        multimodal_outputs = self.model.extract_features(
+                            {"text_input": batch_texts, "image": image_inputs}
+                        ).multimodal_embeds[:, 0, :]
 
                         all_multimodal_embeddings.append(multimodal_outputs.cpu())
                 else:
@@ -119,21 +123,21 @@ def blip2_loader(**kwargs):
                         batch_images = images[i : i + batch_size]
                         batch_texts = texts[i : i + batch_size]
 
-                        image_inputs  = self.processor(
+                        image_inputs = self.processor(
                             images=batch_images, return_tensors="pt", padding=True
                         )["pixel_values"].to(self.device)
-                        multimodal_outputs = self.model.extract_features({
-                            "text_input": batch_texts,
-                            "image": image_inputs
-                        }).multimodal_embeds[:,0,:]
+                        multimodal_outputs = self.model.extract_features(
+                            {"text_input": batch_texts, "image": image_inputs}
+                        ).multimodal_embeds[:, 0, :]
 
                         all_multimodal_embeddings.append(multimodal_outputs.cpu())
-                        
 
             return torch.cat(all_multimodal_embeddings, dim=0)
 
         def calculate_probs(self, text_embeddings, image_embeddings):
-            text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
+            text_embeddings = text_embeddings / text_embeddings.norm(
+                dim=-1, keepdim=True
+            )
             image_embeddings = image_embeddings / image_embeddings.norm(
                 dim=-1, keepdim=True
             )
@@ -169,42 +173,22 @@ def blip2_loader(**kwargs):
                 if fusion_mode == "sum":
                     fused_embeddings = text_embeddings + image_embeddings
                 if fusion_mode == "multimodal":
-                    fused_embeddings = self.get_multimodal_embeddings(texts, images, batch_size)
+                    fused_embeddings = self.get_multimodal_embeddings(
+                        texts, images, batch_size
+                    )
                 else:
                     # to do: add other fusion mode
-                    raise ValueError(f"fusion mode {fusion_mode} hasn't been implemented")
+                    raise ValueError(
+                        f"fusion mode {fusion_mode} hasn't been implemented"
+                    )
                 return fused_embeddings
             elif text_embeddings is not None:
                 return text_embeddings
             elif image_embeddings is not None:
                 return image_embeddings
-    
+
     return BLIP2ModelWrapper(**kwargs)
 
-
-"""
-Salesforce/blip2-opt-2.7b
-Image-to-Text • Updated Mar 22 •
-588k •
-296
-Salesforce/blip2-flan-t5-xxl
-Image-to-Text • Updated Mar 29 •
-9.23k •
-84
-Salesforce/blip2-opt-6.7b-coco
-Image-to-Text • Updated Mar 31 •
-1.51k •
-28
-Salesforce/blip2-opt-6.7b
-Image-to-Text • Updated Mar 27 •
-4.93k •
-71
-Salesforce/blip2-flan-t5-xl
-Image-to-Text • Updated Dec 13, 2023 •
-95.9k •
-56
-"""
-# in descending order of usage (downloads from huggingface)
 
 blip2_image_text_matching = ModelMeta(
     loader=partial(
@@ -220,10 +204,12 @@ blip2_image_text_matching = ModelMeta(
 
 
 if __name__ == "__main__":
-    import mteb
-    import PIL.Image
 
-    mdl = mteb.get_model(blip2_image_text_matching.name, blip2_image_text_matching.revision, device="cpu")
+    import mteb
+
+    mdl = mteb.get_model(
+        blip2_image_text_matching.name, blip2_image_text_matching.revision, device="cpu"
+    )
     emb = mdl.get_text_embeddings(["Hello, world!"])
     emb2 = mdl.get_text_embeddings(["Hello there, world!"])
     emb3 = mdl.get_text_embeddings(["Goodbye, person!"])
@@ -247,6 +233,3 @@ if __name__ == "__main__":
     sim2 = torch.nn.functional.cosine_similarity(multi_cat_emb, text_dog_emb)
 
     print(sim1, sim2)
-
-
-
