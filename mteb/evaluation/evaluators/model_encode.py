@@ -53,6 +53,9 @@ def model_encode(
                 "No combination of task name and prompt type was found in model prompts. Removing prompt_name argument."
             )
             kwargs.pop("prompt_name", None)
+    else:
+        kwargs["prompt_name"] = task_name
+
     logger.info(f"Encoding {len(sentences)} sentences.")
 
     embeddings = model.encode(sentences, **kwargs)
