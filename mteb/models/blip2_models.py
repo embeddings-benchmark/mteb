@@ -57,7 +57,7 @@ def blip2_loader(**kwargs):
                         return_tensors="pt",
                     ).to(self.device)
                     text_outputs = self.model.forward_text(text_tokens)
-                    text_outputs = normalize(self.model.text_proj(text_outputs))
+                    #text_outputs = normalize(self.model.text_proj(text_outputs))
                     all_text_embeddings.append(text_outputs.cpu())
 
             all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
@@ -75,10 +75,8 @@ def blip2_loader(**kwargs):
                             images=batch, return_tensors="pt", padding=True
                         )
                         image_outputs = self.model.forward_image(inputs["pixel_values"].to(self.device))
-                        image_outputs = image_outputs[0]
-                        image_outputs = normalize(
-                            self.model.vision_proj(image_outputs[:, 0, :]), dim=-1
-                        )
+                        image_outputs = image_outputs[0][:, 0, :]
+                        #image_outputs = normalize(self.model.vision_proj(image_outputs), dim=-1)
                         all_image_embeddings.append(image_outputs.cpu())
             else:
                 with torch.no_grad():
@@ -98,7 +96,7 @@ def blip2_loader(**kwargs):
             return all_image_embeddings
 
         def get_multimodal_embeddings(
-            self, texts, images, batch_size
+            self, texts, images, batch_size=32
         ):
             all_multimodal_embeddings = []
 
@@ -113,7 +111,7 @@ def blip2_loader(**kwargs):
                         multimodal_outputs = self.model.extract_features({
                             "text_input": batch_texts,
                             "image": image_inputs
-                        }).multimodal_embeds
+                        }).multimodal_embeds[:,0,:]
 
                         all_multimodal_embeddings.append(multimodal_outputs.cpu())
                 else:
@@ -127,7 +125,7 @@ def blip2_loader(**kwargs):
                         multimodal_outputs = self.model.extract_features({
                             "text_input": batch_texts,
                             "image": image_inputs
-                        }).multimodal_embeds
+                        }).multimodal_embeds[:,0,:]
 
                         all_multimodal_embeddings.append(multimodal_outputs.cpu())
                         
@@ -239,6 +237,16 @@ if __name__ == "__main__":
     cat_img = Image.open("cat.jpg")
     cat_text = "An image of a cat"
 
-    multi_emv = mdl.get_multimodal_embeddings([cat_text], [cat_img], 32)
+    multi_cat_emb = mdl.get_multimodal_embeddings([cat_text], [cat_img])
+    text_cat_emb = mdl.get_text_embeddings(["An photo of a cat"])
+    text_dog_emb = mdl.get_text_embeddings(["An image of a dog"])
+
+    print(multi_cat_emb.shape)
+
+    sim1 = torch.nn.functional.cosine_similarity(multi_cat_emb, text_cat_emb)
+    sim2 = torch.nn.functional.cosine_similarity(multi_cat_emb, text_dog_emb)
+
+    print(sim1, sim2)
+
 
 
