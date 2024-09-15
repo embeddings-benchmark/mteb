@@ -6,7 +6,7 @@ from typing import Sequence
 import numpy as np
 import torch
 
-from mteb.encoder_interface import Encoder
+from mteb.encoder_interface import Encoder, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ def model_encode(
     *,
     model: Encoder,
     task_name: str | None,
-    prompt_type: str | None = None,
+    prompt_type: PromptType | None = None,
     **kwargs,
 ) -> np.ndarray:
     """A wrapper function around the model.encode method that handles the prompt_name argument and standardizes the output to a numpy array.

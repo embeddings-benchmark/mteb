@@ -15,7 +15,7 @@ import tqdm
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
 
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode, PromptType
 from mteb.model_meta import ModelMeta
 
 from .Evaluator import Evaluator
@@ -351,7 +351,7 @@ class DRESModel:
         *,
         task_name: str,
         batch_size: int,
-        prompt_type: str = "query",
+        prompt_type: str = PromptType.query,
         **kwargs,
     ):
         if self.use_sbert_model:
@@ -378,7 +378,7 @@ class DRESModel:
         corpus: list[dict[str, str]],
         task_name: str,
         batch_size: int,
-        prompt_type: str = "passage",
+        prompt_type: str = PromptType.passage,
         request_qid: str | None = None,
         **kwargs,
     ):

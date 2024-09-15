@@ -1,11 +1,17 @@
 from __future__ import annotations
 
+from enum import Enum
 from typing import Any, Dict, List, Protocol, Sequence, Union, runtime_checkable
 
 import numpy as np
 import torch
 
 Corpus = Union[List[Dict[str, str]], Dict[str, List[str]]]
+
+
+class PromptType(str, Enum):
+    query = "query"
+    passage = "passage"
 
 
 @runtime_checkable
@@ -96,7 +102,7 @@ class EncoderWithQueryCorpusEncode(Encoder, Protocol):
         queries: Sequence[str],
         *,
         task_name: str | None = None,
-        prompt_type: str = "query",
+        prompt_type: str = PromptType.query,
         **kwargs: Any,
     ) -> torch.Tensor | np.ndarray:
         """Encodes the given queries using the encoder.
@@ -117,7 +123,7 @@ class EncoderWithQueryCorpusEncode(Encoder, Protocol):
         corpus: Corpus,
         *,
         task_name: str | None = None,
-        prompt_type: str = "passage",
+        prompt_type: str = PromptType.passage,
         **kwargs: Any,
     ) -> torch.Tensor | np.ndarray:
         """Encodes the given corpus using the encoder.
