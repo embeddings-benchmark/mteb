@@ -18,7 +18,6 @@ def blip2_loader(**kwargs):
         from lavis.models import load_model_and_preprocess
         from lavis.models.blip2_models.blip2_image_text_matching import (
             Blip2ITM,
-            Blip2Qformer,
         )
     except ImportError:
         raise ImportError(
@@ -34,7 +33,8 @@ def blip2_loader(**kwargs):
         ):
             self.model_name = model_name
             self.device = device
-            self.model = Blip2ITM.from_pretrained("pretrain").to(self.device).float()
+            model_type = "coco" if "coco" in model_name else "pretrain"
+            self.model = Blip2ITM.from_pretrained(model_type).to(self.device).float()
             self.processor = Blip2Processor.from_pretrained(model_name)
 
         def preprocess(
@@ -190,7 +190,7 @@ def blip2_loader(**kwargs):
     return BLIP2ModelWrapper(**kwargs)
 
 
-blip2_image_text_matching = ModelMeta(
+blip2_opt_2_7b = ModelMeta(
     loader=partial(
         blip2_loader,
         model_name="Salesforce/blip2-opt-2.7b",
@@ -202,13 +202,25 @@ blip2_image_text_matching = ModelMeta(
     release_date="2024-03-22",
 )
 
+blip2_opt_6_7b_coco = ModelMeta(
+    loader=partial(
+        blip2_loader,
+        model_name="Salesforce/blip2-opt-6.7b-coco",
+    ),
+    name="Salesforce/blip2-opt-6.7b-coco",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="0d580de59320a25a4d2c386387bcef310d5f286e",
+    release_date="2024-03-31",
+)
+
 
 if __name__ == "__main__":
 
     import mteb
 
     mdl = mteb.get_model(
-        blip2_image_text_matching.name, blip2_image_text_matching.revision, device="cpu"
+        blip2_opt_2_7b.name, blip2_opt_2_7b.revision, device="cpu"
     )
     emb = mdl.get_text_embeddings(["Hello, world!"])
     emb2 = mdl.get_text_embeddings(["Hello there, world!"])
