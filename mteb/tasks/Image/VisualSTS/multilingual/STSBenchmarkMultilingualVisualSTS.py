@@ -54,7 +54,7 @@ class STSBenchmarkMultilingualVisualSTS(AbsTaskVisualSTS, MultilingualTask):
   year={2024}
 }""",
         descriptive_stats={
-            "n_samples": {"dev": 30000, "test": 27580},
+            "n_samples": {"dev": 15000, "test": 13790},
             "avg_character_length": {"dev": 1.0, "test": 1.0},
         },
     )
