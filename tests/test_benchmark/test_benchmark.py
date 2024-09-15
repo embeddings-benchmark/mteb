@@ -56,6 +56,28 @@ def test_benchmark_encoders_on_task(task: str | mteb.AbsTask, model: mteb.Encode
     eval.run(model, output_folder="tests/results", overwrite_results=True)
 
 
+@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID[:1])
+@pytest.mark.parametrize("model", [MockNumpyEncoder()])
+def test_reload_results(task: str | mteb.AbsTask, model: mteb.Encoder, tmp_path: Path):
+    """Test that when rerunning the results are reloaded correctly"""
+    if isinstance(task, str):
+        tasks = mteb.get_tasks(tasks=[task])
+    else:
+        tasks = [task]
+
+    eval = mteb.MTEB(tasks=tasks)
+    results = eval.run(model, output_folder=str(tmp_path), overwrite_results=True)
+
+    assert isinstance(results, list)
+    assert isinstance(results[0], mteb.MTEBResults)
+
+    # reload the results
+    results = eval.run(model, output_folder=str(tmp_path), overwrite_results=False)
+
+    assert isinstance(results, list)
+    assert isinstance(results[0], mteb.MTEBResults)
+
+
 @pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID)
 def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
     """Test that all tasks correctly pass down the task_name to the encoder which supports it, and that the encoder which does not support it does not
