@@ -7,6 +7,7 @@ import numpy as np
 import torch
 from transformers import AutoModel, AutoTokenizer
 import torch.nn.functional as F
+import tqdm
 
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
@@ -34,14 +35,15 @@ class RepLLaMAWrapper:
         self.model = PeftModel.from_pretrained(self.base_model, kwargs["peft_model_name_or_path"])
         self.model = self.model.merge_and_unload()
 
-        self.tokenizer = AutoTokenizer.from_pretrained(self.base_model)
+        self.tokenizer = AutoTokenizer.from_pretrained(kwargs["base_model_name_or_path"])
         self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
         self.tokenizer.pad_token = self.tokenizer.eos_token
         self.tokenizer.padding_side = "right"
-        self.model.config.max_length = 4096
-        self.tokenizer.model_max_length = 4096
+        # set the max_length for the evals as they did, although the model can handle longer
+        self.model.config.max_length = 512
+        self.tokenizer.model_max_length = 512
 
-    def create_batch_dict(self, tokenizer, input_texts, always_add_eos="last"):
+    def create_batch_dict(self, tokenizer, input_texts):
         max_length = self.model.config.max_length
         batch_dict = tokenizer(
             input_texts,
@@ -68,22 +70,22 @@ class RepLLaMAWrapper:
         prompt_name: str = None,
         **kwargs: Any,  # noqa
     ) -> np.ndarray:
-        batch_size = 32 if "batch_size" not in kwargs else kwargs.pop("batch_size")
+        batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
-        for i in range(0, len(sentences), batch_size):
+        for i in tqdm.tqdm(range(0, len(sentences), batch_size)):
             batch_texts = sentences[i:i+batch_size]
             
-            batch_dict = self.create_batch_dict(self.tokenizer, batch_texts, always_add_eos="last")
+            batch_dict = self.create_batch_dict(self.tokenizer, batch_texts)
             batch_dict = {key: value.to(self.model.device) for key, value in batch_dict.items()}
 
             with torch.cuda.amp.autocast():
                 with torch.no_grad():
                     outputs = self.model(**batch_dict)
-                    attention_mask = batch_dict['attention_mask']
-                    last_hidden = outputs.last_hidden_state.masked_fill(~attention_mask[..., None].bool(), 0.0)
-                    sequence_lengths = attention_mask.sum(dim=1) - 1
-                    embeddings = last_hidden[torch.arange(batch_size, device=last_hidden.device), sequence_lengths]
-                    embeddings = F.normalize(embeddings, p=2, dim=-1)
+                    last_hidden_state = outputs.last_hidden_state
+                    sequence_lengths = batch_dict["attention_mask"].sum(dim=1) - 1
+                    batch_size = last_hidden_state.shape[0]
+                    reps = last_hidden_state[torch.arange(batch_size, device=last_hidden_state.device), sequence_lengths]
+                    embeddings = F.normalize(reps, p=2, dim=-1)
                     all_embeddings.append(embeddings.cpu().numpy())
 
         return np.concatenate(all_embeddings, axis=0)
@@ -97,12 +99,17 @@ class RepLLaMAWrapper:
         sentences = corpus_to_texts(corpus, sep=" ")
         if "request_qid" in kwargs:
             kwargs.pop("request_qid")
-        # add prefix, two spaces
+        # NOTE: two spaces after the colon
         sentences = [f"passage:  {sentence}".strip() for sentence in sentences]
-        return self.model.encode(sentences, **kwargs)
+        print(f"Encoding corpus of length {len(sentences)}")
+        print(f"First sentence: {sentences[0]}")
+        return self.encode(sentences, **kwargs)
 
     def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
-        queries = [f"query:  {query}".strip() for query in queries]
+        # NOTE: two spaces after the colon
+        queries = [f"query:  {query.strip()}".strip() for query in queries]
+        print(f"Encoding queries of length {len(queries)}")
+        print(queries[0])
         return self.encode(queries, **kwargs)
 
 
@@ -146,4 +153,11 @@ repllama_llama2_reproduced = ModelMeta(
     release_date="2024-09-15",
 )
 
+
+## Debug code
+# import mteb
+# model = mteb.get_model("samaya-ai/RepLLaMA-reproduced")
+# tasks = mteb.get_tasks(tasks=["SciFact"], languages=["eng"])
+# evaluation = mteb.MTEB(tasks=tasks)
+# evaluation.run(model)
 

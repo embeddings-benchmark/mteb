@@ -63,11 +63,11 @@ promptriever_llama3 = ModelMeta(
     loader=_loader(
         RepLLaMAWrapper,
         base_model_name_or_path="meta-llama/Meta-Llama-3.1-8B",
-        peft_model_name_or_path="samaya-ai/promptriever-llama3.1-7b-v1",
+        peft_model_name_or_path="samaya-ai/promptriever-llama3.1-8b-v1",
         device_map="auto",
         torch_dtype=torch.bfloat16,
     ),
-    name="samaya-ai/promptriever-llama3.1-7b-v1",
+    name="samaya-ai/promptriever-llama3.1-8b-v1",
     languages=["eng_Latn"],
     open_source=True,
     revision=None,  # TODO: Not sure what to put here as a model is made of two peft repos, each with a different revision
@@ -79,11 +79,11 @@ promptriever_llama3_instruct = ModelMeta(
     loader=_loader(
         RepLLaMAWrapper,
         base_model_name_or_path="meta-llama/Meta-Llama-3.1-8B-Instruct",
-        peft_model_name_or_path="samaya-ai/promptriever-llama3.1-7b-instruct-v1",
+        peft_model_name_or_path="samaya-ai/promptriever-llama3.1-8b-instruct-v1",
         device_map="auto",
         torch_dtype=torch.bfloat16,
     ),
-    name="samaya-ai/promptriever-llama3.1-7b-instruct-v1",
+    name="samaya-ai/promptriever-llama3.1-8b-instruct-v1",
     languages=["eng_Latn"],
     open_source=True,
     revision=None,  # TODO: Not sure what to put here as a model is made of two peft repos, each with a different revision
