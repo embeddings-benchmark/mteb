@@ -35,6 +35,8 @@ def blip2_loader(**kwargs):
             self.device = device
             model_type = "coco" if "coco" in model_name else "pretrain"
             self.model = Blip2ITM.from_pretrained(model_type).to(self.device).float()
+            # print numbr of parameters
+            print(f"Number of parameters: {sum(p.numel() for p in self.model.parameters())}")
             self.processor = Blip2Processor.from_pretrained(model_name)
 
         def preprocess(
@@ -60,7 +62,7 @@ def blip2_loader(**kwargs):
                         return_tensors="pt",
                     ).to(self.device)
                     text_outputs = self.model.forward_text(text_tokens)
-                    # text_outputs = normalize(self.model.text_proj(text_outputs))
+                    #text_outputs = normalize(self.model.text_proj(text_outputs))
                     all_text_embeddings.append(text_outputs.cpu())
 
             all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
@@ -81,7 +83,7 @@ def blip2_loader(**kwargs):
                             inputs["pixel_values"].to(self.device)
                         )
                         image_outputs = image_outputs[0][:, 0, :]
-                        # image_outputs = normalize(self.model.vision_proj(image_outputs), dim=-1)
+                        #image_outputs = normalize(self.model.vision_proj(image_outputs), dim=-1)
                         all_image_embeddings.append(image_outputs.cpu())
             else:
                 with torch.no_grad():
@@ -91,10 +93,8 @@ def blip2_loader(**kwargs):
                             images=batch_images, return_tensors="pt", padding=True
                         )["pixel_values"].to(self.device)
                         image_outputs = self.model.forward_image(inputs)
-                        image_outputs = image_outputs[0]
-                        image_outputs = normalize(
-                            self.model.vision_proj(image_outputs[:, 0, :]), dim=-1
-                        )
+                        image_outputs = image_outputs[0][:, 0, :]
+                        #image_outputs = normalize(self.model.vision_proj(image_outputs), dim=-1)
                         all_image_embeddings.append(image_outputs.cpu())
 
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
@@ -105,6 +105,11 @@ def blip2_loader(**kwargs):
 
             with torch.no_grad():
                 if isinstance(images, DataLoader):
+                    # check dataloader batch size is the same as batch size
+                    if images.batch_size != batch_size:
+                        raise ValueError(
+                            "Image DataLoader batch size must be the same as the given batch size: " + str(batch_size)
+                        )
                     for batch_images, i in tqdm(
                         zip(images, range(0, len(texts), batch_size))
                     ):
@@ -116,6 +121,8 @@ def blip2_loader(**kwargs):
                         multimodal_outputs = self.model.extract_features(
                             {"text_input": batch_texts, "image": image_inputs}
                         ).multimodal_embeds[:, 0, :]
+
+                        #multimodal_outputs = normalize(self.model.text_proj(multimodal_outputs), dim=-1)
 
                         all_multimodal_embeddings.append(multimodal_outputs.cpu())
                 else:
@@ -129,6 +136,8 @@ def blip2_loader(**kwargs):
                         multimodal_outputs = self.model.extract_features(
                             {"text_input": batch_texts, "image": image_inputs}
                         ).multimodal_embeds[:, 0, :]
+
+                        #multimodal_outputs = normalize(self.model.text_proj(multimodal_outputs), dim=-1)
 
                         all_multimodal_embeddings.append(multimodal_outputs.cpu())
 
@@ -172,7 +181,7 @@ def blip2_loader(**kwargs):
                     )
                 if fusion_mode == "sum":
                     fused_embeddings = text_embeddings + image_embeddings
-                if fusion_mode == "multimodal":
+                elif fusion_mode == "multimodal":
                     fused_embeddings = self.get_multimodal_embeddings(
                         texts, images, batch_size
                     )
@@ -235,13 +244,21 @@ if __name__ == "__main__":
     cat_img = Image.open("cat.jpg")
     cat_text = "An image of a cat"
 
-    multi_cat_emb = mdl.get_multimodal_embeddings([cat_text], [cat_img])
+    multi_cat_emb = mdl.get_fused_embeddings(["A photo of an animal"], [cat_img], fusion_mode="multimodal")
+    multi_conflicting_emb = mdl.get_fused_embeddings(["A photo of a dog"], [cat_img], fusion_mode="multimodal")
+    image_cat_emb = mdl.get_image_embeddings([cat_img])
     text_cat_emb = mdl.get_text_embeddings(["An photo of a cat"])
     text_dog_emb = mdl.get_text_embeddings(["An image of a dog"])
 
     print(multi_cat_emb.shape)
 
-    sim1 = torch.nn.functional.cosine_similarity(multi_cat_emb, text_cat_emb)
-    sim2 = torch.nn.functional.cosine_similarity(multi_cat_emb, text_dog_emb)
+    sim1 = torch.nn.functional.cosine_similarity(image_cat_emb, text_cat_emb)
+    sim2 = torch.nn.functional.cosine_similarity(image_cat_emb, text_dog_emb)
+    sim3 = torch.nn.functional.cosine_similarity(multi_cat_emb, text_cat_emb)
+    sim4 = torch.nn.functional.cosine_similarity(multi_cat_emb, text_dog_emb)
+    sim5 = torch.nn.functional.cosine_similarity(multi_conflicting_emb, text_cat_emb)
+
 
     print(sim1, sim2)
+
+    print(sim3, sim4, sim5)
