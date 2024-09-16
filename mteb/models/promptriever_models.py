@@ -5,22 +5,16 @@ from typing import Any, Callable, Literal
 
 import numpy as np
 import torch
-from transformers import AutoModel, AutoTokenizer
-from peft import PeftModel
-import torch.nn.functional as F
 
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
-from mteb.models.text_formatting_utils import corpus_to_texts
 
-from .instructions import task_to_instruction
 from .repllama_models import RepLLaMAWrapper
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 EncodeTypes = Literal["query", "passage"]
-
 
 
 class PromptrieverWrapper(RepLLaMAWrapper):
@@ -30,8 +24,14 @@ class PromptrieverWrapper(RepLLaMAWrapper):
     def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
         queries = [f"query:  {query}" for query in queries]
         if "instruction" in kwargs:
-            end_punct_list = ["?" if query.strip()[-1] not in ["?", ".", "!"] else "" for query in queries]
-            queries = [f"{query}{end_punct_list[i]} {kwargs['instruction']}" for i, query in enumerate(queries)]
+            end_punct_list = [
+                "?" if query.strip()[-1] not in ["?", ".", "!"] else ""
+                for query in queries
+            ]
+            queries = [
+                f"{query}{end_punct_list[i]} {kwargs['instruction']}"
+                for i, query in enumerate(queries)
+            ]
         return self.encode(queries, **kwargs)
 
 

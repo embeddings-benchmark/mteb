@@ -5,21 +5,18 @@ from typing import Any, Callable, Literal
 
 import numpy as np
 import torch
-from transformers import AutoModel, AutoTokenizer
 import torch.nn.functional as F
 import tqdm
+from transformers import AutoModel, AutoTokenizer
 
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models.text_formatting_utils import corpus_to_texts
 
-from .instructions import task_to_instruction
-
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 EncodeTypes = Literal["query", "passage"]
-
 
 
 class RepLLaMAWrapper:
@@ -31,11 +28,19 @@ class RepLLaMAWrapper:
                 "To use the RepLLaMA based models `peft` is required. Please install it with `pip install peft`."
             )
 
-        self.base_model = AutoModel.from_pretrained(kwargs["base_model_name_or_path"], torch_dtype=kwargs["torch_dtype"], device_map=kwargs["device_map"])
-        self.model = PeftModel.from_pretrained(self.base_model, kwargs["peft_model_name_or_path"])
+        self.base_model = AutoModel.from_pretrained(
+            kwargs["base_model_name_or_path"],
+            torch_dtype=kwargs["torch_dtype"],
+            device_map=kwargs["device_map"],
+        )
+        self.model = PeftModel.from_pretrained(
+            self.base_model, kwargs["peft_model_name_or_path"]
+        )
         self.model = self.model.merge_and_unload()
 
-        self.tokenizer = AutoTokenizer.from_pretrained(kwargs["base_model_name_or_path"])
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            kwargs["base_model_name_or_path"]
+        )
         self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
         self.tokenizer.pad_token = self.tokenizer.eos_token
         self.tokenizer.padding_side = "right"
@@ -51,9 +56,12 @@ class RepLLaMAWrapper:
             return_token_type_ids=False,
             return_attention_mask=False,
             padding=False,
-            truncation=True
+            truncation=True,
         )
-        batch_dict['input_ids'] = [input_ids + [tokenizer.eos_token_id] for input_ids in batch_dict['input_ids']]
+        batch_dict["input_ids"] = [
+            input_ids + [tokenizer.eos_token_id]
+            for input_ids in batch_dict["input_ids"]
+        ]
         return tokenizer.pad(
             batch_dict,
             padding=True,
@@ -61,7 +69,6 @@ class RepLLaMAWrapper:
             return_attention_mask=True,
             return_tensors="pt",
         )
-
 
     def encode(
         self,
@@ -73,10 +80,12 @@ class RepLLaMAWrapper:
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
         for i in tqdm.tqdm(range(0, len(sentences), batch_size)):
-            batch_texts = sentences[i:i+batch_size]
-            
+            batch_texts = sentences[i : i + batch_size]
+
             batch_dict = self.create_batch_dict(self.tokenizer, batch_texts)
-            batch_dict = {key: value.to(self.model.device) for key, value in batch_dict.items()}
+            batch_dict = {
+                key: value.to(self.model.device) for key, value in batch_dict.items()
+            }
 
             with torch.cuda.amp.autocast():
                 with torch.no_grad():
@@ -84,7 +93,10 @@ class RepLLaMAWrapper:
                     last_hidden_state = outputs.last_hidden_state
                     sequence_lengths = batch_dict["attention_mask"].sum(dim=1) - 1
                     batch_size = last_hidden_state.shape[0]
-                    reps = last_hidden_state[torch.arange(batch_size, device=last_hidden_state.device), sequence_lengths]
+                    reps = last_hidden_state[
+                        torch.arange(batch_size, device=last_hidden_state.device),
+                        sequence_lengths,
+                    ]
                     embeddings = F.normalize(reps, p=2, dim=-1)
                     all_embeddings.append(embeddings.cpu().numpy())
 
@@ -160,4 +172,3 @@ repllama_llama2_reproduced = ModelMeta(
 # tasks = mteb.get_tasks(tasks=["SciFact"], languages=["eng"])
 # evaluation = mteb.MTEB(tasks=tasks)
 # evaluation.run(model)
-
