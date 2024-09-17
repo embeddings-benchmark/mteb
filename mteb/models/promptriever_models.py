@@ -55,7 +55,7 @@ promptriever_llama2 = ModelMeta(
     name="samaya-ai/promptriever-llama2-7b-v1",
     languages=["eng_Latn"],
     open_source=True,
-    revision=None,  # TODO: Not sure what to put here as a model is made of two peft repos, each with a different revision
+    revision="01c7f73d771dfac7d292323805ebc428287df4f9-30b14e3813c0fa45facfd01a594580c3fe5ecf23",  # base-peft revision
     release_date="2024-09-15",
 )
 
@@ -70,7 +70,7 @@ promptriever_llama3 = ModelMeta(
     name="samaya-ai/promptriever-llama3.1-8b-v1",
     languages=["eng_Latn"],
     open_source=True,
-    revision=None,  # TODO: Not sure what to put here as a model is made of two peft repos, each with a different revision
+    revision="48d6d0fc4e02fb1269b36940650a1b7233035cbb-2ead22cfb1b0e0c519c371c63c2ab90ffc511b8a",  # base-peft revision
     release_date="2024-09-15",
 )
 
@@ -86,7 +86,7 @@ promptriever_llama3_instruct = ModelMeta(
     name="samaya-ai/promptriever-llama3.1-8b-instruct-v1",
     languages=["eng_Latn"],
     open_source=True,
-    revision=None,  # TODO: Not sure what to put here as a model is made of two peft repos, each with a different revision
+    revision="5206a32e0bd3067aef1ce90f5528ade7d866253f-8b677258615625122c2eb7329292b8c402612c21",  # base-peft revision
     release_date="2024-09-15",
 )
 
@@ -101,21 +101,6 @@ promptriever_mistral_v1 = ModelMeta(
     name="samaya-ai/promptriever-mistral-v0.1-7b-v1",
     languages=["eng_Latn"],
     open_source=True,
-    revision=None,  # TODO: Not sure what to put here as a model is made of two peft repos, each with a different revision
-    release_date="2024-09-15",
-)
-
-promptriever_mistral_v3 = ModelMeta(
-    loader=_loader(
-        RepLLaMAWrapper,
-        base_model_name_or_path="mistralai/Mistral-7B-v0.3",
-        peft_model_name_or_path="samaya-ai/promptriever-mistral-v0.3-7b-v1",
-        device_map="auto",
-        torch_dtype=torch.bfloat16,
-    ),
-    name="samaya-ai/promptriever-mistral-v0.3-7b-v1",
-    languages=["eng_Latn"],
-    open_source=True,
-    revision=None,  # TODO: Not sure what to put here as a model is made of two peft repos, each with a different revision
+    revision="7231864981174d9bee8c7687c24c8344414eae6b-876d63e49b6115ecb6839893a56298fadee7e8f5",  # base-peft revision
     release_date="2024-09-15",
 )
