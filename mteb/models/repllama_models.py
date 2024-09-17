@@ -25,7 +25,7 @@ class RepLLaMAWrapper:
             from peft import PeftModel
         except ImportError:
             raise ImportError(
-                "To use the RepLLaMA based models `peft` is required. Please install it with `pip install peft`."
+                "To use the RepLLaMA based models `peft` is required. Please install it with `pip install 'mteb[peft]'`."
             )
 
         self.base_model = AutoModel.from_pretrained(
