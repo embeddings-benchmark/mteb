@@ -14,7 +14,7 @@ class AmazonPolarityClassification(AbsTaskClassification):
             "revision": "e2d317d38cd51312af73b3d32a06d1a08b442046",
         },
         type="Classification",
-        category="s2s",
+        category="p2p",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -126,6 +126,7 @@ MTEB_MAIN_EN = Benchmark(
             "TwitterURLCorpus",
         ],
         languages=["eng"],
+        eval_splits=["test"],
     ),
     description="Main English benchmarks from MTEB",
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
@@ -263,6 +264,7 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
     }
     """,
 )
+
 SEB = Benchmark(
     name="MTEB(Scandinavian)",
     tasks=get_tasks(
