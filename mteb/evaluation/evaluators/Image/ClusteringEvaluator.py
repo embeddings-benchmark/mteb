@@ -5,8 +5,10 @@ from typing import Any
 
 import sklearn
 import sklearn.cluster
+import numpy as np
 from PIL import Image
 from sklearn import metrics
+from scipy.optimize import linear_sum_assignment
 
 from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.Evaluator import Evaluator
@@ -53,6 +55,16 @@ class ImageClusteringEvaluator(Evaluator):
 
         logger.info("Evaluating...")
         v_measure = metrics.cluster.v_measure_score(self.labels, cluster_assignment)
-        accuracy = metrics.accuracy_score(self.labels, cluster_assignment)
+        nmi = metrics.cluster.normalized_mutual_info_score(self.labels, cluster_assignment)
+        ari = metrics.cluster.adjusted_rand_score(self.labels, cluster_assignment)
 
-        return {"v_measure": v_measure, "accuracy": accuracy}
+        accuracy = metrics.accuracy_score(self.labels, cluster_assignment)
+        
+        matrix = metrics.confusion_matrix(self.labels, cluster_assignment)
+        
+        # get linear sum assignment
+        row_ind, col_ind = linear_sum_assignment(matrix, maximize=True)
+        total_correct = matrix[row_ind, col_ind].sum()
+        clustering_accuracy = total_correct / len(self.labels)
+
+        return {"v_measure": v_measure, "accuracy": accuracy, "nmi": nmi, "ari": ari, "cluster_accuracy": clustering_accuracy}
