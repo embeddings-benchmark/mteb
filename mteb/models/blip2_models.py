@@ -158,7 +158,7 @@ def blip2_loader(**kwargs):
             self,
             texts: list[str] = None,
             images: list[Image.Image] | DataLoader = None,
-            fusion_mode="multimodal",
+            fusion_mode="sum",
             batch_size: int = 32,
         ):
             # TODO: find out if BLIP has a prescribed way of fusing text and image embeddings
