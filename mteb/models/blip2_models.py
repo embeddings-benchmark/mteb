@@ -5,7 +5,6 @@ from typing import Any
 
 import torch
 from PIL import Image
-from torch.nn.functional import normalize
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import Blip2Processor
@@ -36,7 +35,9 @@ def blip2_loader(**kwargs):
             model_type = "coco" if "coco" in model_name else "pretrain"
             self.model = Blip2ITM.from_pretrained(model_type).to(self.device).float()
             # print numbr of parameters
-            print(f"Number of parameters: {sum(p.numel() for p in self.model.parameters())}")
+            print(
+                f"Number of parameters: {sum(p.numel() for p in self.model.parameters())}"
+            )
             self.processor = Blip2Processor.from_pretrained(model_name)
 
         def preprocess(
@@ -62,7 +63,7 @@ def blip2_loader(**kwargs):
                         return_tensors="pt",
                     ).to(self.device)
                     text_outputs = self.model.forward_text(text_tokens)
-                    #text_outputs = normalize(self.model.text_proj(text_outputs))
+                    # text_outputs = normalize(self.model.text_proj(text_outputs))
                     all_text_embeddings.append(text_outputs.cpu())
 
             all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
@@ -83,7 +84,7 @@ def blip2_loader(**kwargs):
                             inputs["pixel_values"].to(self.device)
                         )
                         image_outputs = image_outputs[0][:, 0, :]
-                        #image_outputs = normalize(self.model.vision_proj(image_outputs), dim=-1)
+                        # image_outputs = normalize(self.model.vision_proj(image_outputs), dim=-1)
                         all_image_embeddings.append(image_outputs.cpu())
             else:
                 with torch.no_grad():
@@ -94,7 +95,7 @@ def blip2_loader(**kwargs):
                         )["pixel_values"].to(self.device)
                         image_outputs = self.model.forward_image(inputs)
                         image_outputs = image_outputs[0][:, 0, :]
-                        #image_outputs = normalize(self.model.vision_proj(image_outputs), dim=-1)
+                        # image_outputs = normalize(self.model.vision_proj(image_outputs), dim=-1)
                         all_image_embeddings.append(image_outputs.cpu())
 
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
@@ -108,7 +109,8 @@ def blip2_loader(**kwargs):
                     # check dataloader batch size is the same as batch size
                     if images.batch_size != batch_size:
                         raise ValueError(
-                            "Image DataLoader batch size must be the same as the given batch size: " + str(batch_size)
+                            "Image DataLoader batch size must be the same as the given batch size: "
+                            + str(batch_size)
                         )
                     for batch_images, i in tqdm(
                         zip(images, range(0, len(texts), batch_size))
@@ -122,7 +124,7 @@ def blip2_loader(**kwargs):
                             {"text_input": batch_texts, "image": image_inputs}
                         ).multimodal_embeds[:, 0, :]
 
-                        #multimodal_outputs = normalize(self.model.text_proj(multimodal_outputs), dim=-1)
+                        # multimodal_outputs = normalize(self.model.text_proj(multimodal_outputs), dim=-1)
 
                         all_multimodal_embeddings.append(multimodal_outputs.cpu())
                 else:
@@ -137,7 +139,7 @@ def blip2_loader(**kwargs):
                             {"text_input": batch_texts, "image": image_inputs}
                         ).multimodal_embeds[:, 0, :]
 
-                        #multimodal_outputs = normalize(self.model.text_proj(multimodal_outputs), dim=-1)
+                        # multimodal_outputs = normalize(self.model.text_proj(multimodal_outputs), dim=-1)
 
                         all_multimodal_embeddings.append(multimodal_outputs.cpu())
 
@@ -225,12 +227,9 @@ blip2_opt_6_7b_coco = ModelMeta(
 
 
 if __name__ == "__main__":
-
     import mteb
 
-    mdl = mteb.get_model(
-        blip2_opt_2_7b.name, blip2_opt_2_7b.revision, device="cpu"
-    )
+    mdl = mteb.get_model(blip2_opt_2_7b.name, blip2_opt_2_7b.revision, device="cpu")
     emb = mdl.get_text_embeddings(["Hello, world!"])
     emb2 = mdl.get_text_embeddings(["Hello there, world!"])
     emb3 = mdl.get_text_embeddings(["Goodbye, person!"])
@@ -244,8 +243,12 @@ if __name__ == "__main__":
     cat_img = Image.open("cat.jpg")
     cat_text = "An image of a cat"
 
-    multi_cat_emb = mdl.get_fused_embeddings(["A photo of an animal"], [cat_img], fusion_mode="multimodal")
-    multi_conflicting_emb = mdl.get_fused_embeddings(["A photo of a dog"], [cat_img], fusion_mode="multimodal")
+    multi_cat_emb = mdl.get_fused_embeddings(
+        ["A photo of an animal"], [cat_img], fusion_mode="multimodal"
+    )
+    multi_conflicting_emb = mdl.get_fused_embeddings(
+        ["A photo of a dog"], [cat_img], fusion_mode="multimodal"
+    )
     image_cat_emb = mdl.get_image_embeddings([cat_img])
     text_cat_emb = mdl.get_text_embeddings(["An photo of a cat"])
     text_dog_emb = mdl.get_text_embeddings(["An image of a dog"])
@@ -257,7 +260,6 @@ if __name__ == "__main__":
     sim3 = torch.nn.functional.cosine_similarity(multi_cat_emb, text_cat_emb)
     sim4 = torch.nn.functional.cosine_similarity(multi_cat_emb, text_dog_emb)
     sim5 = torch.nn.functional.cosine_similarity(multi_conflicting_emb, text_cat_emb)
-
 
     print(sim1, sim2)
 
