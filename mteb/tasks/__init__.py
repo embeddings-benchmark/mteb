@@ -8,6 +8,7 @@ from .Image.Clustering import *
 from .Image.ImageClassification import *
 from .Image.ImageMultilabelClassification import *
 from .Image.ImageTextPairClassification import *
+from .Image.VisualSTS import *
 from .Image.ZeroshotClassification import *
 from .InstructionRetrieval import *
 from .MultiLabelClassification import *

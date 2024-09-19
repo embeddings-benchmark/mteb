@@ -5,4 +5,5 @@ from .Clustering import *
 from .ImageClassification import *
 from .ImageMultilabelClassification import *
 from .ImageTextPairClassification import *
+from .VisualSTS import *
 from .ZeroshotClassification import *
