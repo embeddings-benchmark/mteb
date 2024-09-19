@@ -47,6 +47,8 @@ Copy the content of the `model_card.md` file to the top of a `README.md` file of
 
 3. **Wait for a refresh the leaderboard:**
 
-The leaderboard will then automatically refresh daily so once submitted all you have to do is wait for the automatic refresh.
+The leaderboard [automatically refreshes daily](https://github.com/embeddings-benchmark/leaderboard/commits/main/) so once submitted you only need to wait for the automatic refresh. You can find the workflows for the leaderboard refresh [here](https://github.com/embeddings-benchmark/leaderboard/tree/main/.github/workflows). If you experience issues with the leaderboard please create an [issue](https://github.com/embeddings-benchmark/mteb/issues).
 
-You can find the workflows for the leaderboard refresh [here](https://github.com/embeddings-benchmark/leaderboard/tree/main/.github/workflows). If you experience issues with the leaderboard please create an [issue](https://github.com/embeddings-benchmark/mteb/issues).
+**Notes:**
+- We remove models with scores that cannot be reproduced, so please ensure that your model is accessible and scores can be reproduced.
+- An alternative way of submitting to the leaderboard is by opening a PR with your results [here](https://github.com/embeddings-benchmark/results) & checking that they are displayed correctly by [locally running the leaderboard](https://github.com/embeddings-benchmark/leaderboard?tab=readme-ov-file#developer-setup)
