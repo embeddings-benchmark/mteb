@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.Image.AbsTaskImageClustering import AbsTaskImageClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+
 class ImageNetDog15Clustering(AbsTaskImageClustering):
     metadata = TaskMetadata(
         name="ImageNetDog15Clustering",
