@@ -6,7 +6,6 @@ from typing import Any
 
 import numpy as np
 
-from ..AbsTask import AbsTask
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import (
     ImagekNNClassificationEvaluator,
@@ -14,6 +13,7 @@ from ...evaluation.evaluators import (
     ImagelogRegClassificationEvaluator,
 )
 from ...load_results.mteb_results import HFSubset, ScoresDict
+from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 

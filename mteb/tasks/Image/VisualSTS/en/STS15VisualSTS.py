@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.abstasks.Image.AbsTaskVisualSTS import AbsTaskVisualSTS
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class STS15VisualSTS(AbsTaskVisualSTS):

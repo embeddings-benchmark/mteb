@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from .en.STS12VisualSTS import *
 from .en.STS13VisualSTS import *
 from .en.STS14VisualSTS import *
