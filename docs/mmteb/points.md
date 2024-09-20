@@ -119,3 +119,4 @@ Please also add your first name and last name are as you want them to appear in 
 | mrshu | Marek | Suppa | marek.suppa@fmph.uniba.sk | ~Marek_Suppa1 | Comenius University in Bratislava && Cisco Systems |
 | swj0419 | Weijia | Shi | swj0419@uw.edu | ~Weijia_Shi1 | University of Washington |
 | xiamengzhou | Mengzhou | Xia | mengzhou@princeton.edu | ~Mengzhou_Xia1 | Princeton University |
+| john-b-yang | John | Yang | | ~John_Yang3 | Princeton University |
