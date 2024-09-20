@@ -43,3 +43,43 @@ class ImageNetDog15Clustering(AbsTaskImageClustering):
             # "avg_character_length": {"test": 431.4},
         },
     )
+
+class ImageNet10Clustering(AbsTaskImageClustering):
+    metadata = TaskMetadata(
+        name="ImageNet10Clustering",
+        description="Clustering images from an 10-class subset of ImageNet which are generally easy to distinguish.",
+        reference="https://www.kaggle.com/datasets/liusha249/imagenet10",
+        dataset={
+            "path": "JamieSJS/imagenet-10",
+            "revision": "88f8a6d47c257895094c5ad81e67ba751771fc99",
+        },
+        type="Clustering",
+        category="i2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="accuracy",
+        date=("2009-06-20", "2009-06-20"),  # Conference date
+        domains=["Web"],
+        task_subtypes=["Object recognition"],
+        license="Not specified",
+        socioeconomic_status="mixed",
+        annotations_creators="derived",
+        dialect=[],
+        modalities=["image"],
+        sample_creation="created",
+        bibtex_citation=""" @INPROCEEDINGS{5206848,
+  author={Deng, Jia and Dong, Wei and Socher, Richard and Li, Li-Jia and Kai Li and Li Fei-Fei},
+  booktitle={2009 IEEE Conference on Computer Vision and Pattern Recognition}, 
+  title={ImageNet: A large-scale hierarchical image database}, 
+  year={2009},
+  volume={},
+  number={},
+  pages={248-255},
+  keywords={Large-scale systems;Image databases;Explosions;Internet;Robustness;Information retrieval;Image retrieval;Multimedia databases;Ontologies;Spine},
+  doi={10.1109/CVPR.2009.5206848}}
+        """,
+        descriptive_stats={
+            "n_samples": {"test": 13000},
+            # "avg_character_length": {"test": 431.4},
+        },
+    )
