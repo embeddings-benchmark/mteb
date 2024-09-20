@@ -44,6 +44,7 @@ class ImageNetDog15Clustering(AbsTaskImageClustering):
         },
     )
 
+
 class ImageNet10Clustering(AbsTaskImageClustering):
     metadata = TaskMetadata(
         name="ImageNet10Clustering",
