@@ -15,7 +15,7 @@ class SugarCrepe(AbsTaskImageTextPairClassification):
     metadata = TaskMetadata(
         name="SugarCrepe",
         description="Compositionality Evaluation of images to their captions.",
-        reference="https://openreview.net/forum?id=KRLUvxh8uaX",
+        reference="https://proceedings.neurips.cc/paper_files/paper/2023/hash/63461de0b4cb760fc498e85b18a7fe81-Abstract-Datasets_and_Benchmarks.html",
         dataset={
             "path": "yjkimstats/SUGARCREPE_fmt",
             "revision": "134abf9ade6a32f9fdae0e89022ff227a70b87e5",
