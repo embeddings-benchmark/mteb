@@ -10,6 +10,8 @@ from mteb.model_meta import ModelMeta
 from mteb.models import (
     align_models,
     bge_models,
+    blip2_models,
+    blip_models,
     bm25,
     clip_models,
     cohere_models,
@@ -130,6 +132,8 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
 model_modules = [
     align_models,
     bge_models,
+    blip_models,
+    blip2_models,
     bm25,
     cohere_models,
     dino_models,
