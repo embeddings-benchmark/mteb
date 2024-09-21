@@ -5,10 +5,10 @@ from typing import Any
 
 from datasets import Dataset
 
-from ..AbsTask import AbsTask
 from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from ...evaluation.evaluators import ImageClusteringEvaluator
 from ...load_results.mteb_results import HFSubset, ScoresDict
+from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 

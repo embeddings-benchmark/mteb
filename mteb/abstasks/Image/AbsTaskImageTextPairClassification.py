@@ -6,10 +6,10 @@ from typing import Any
 from datasets import Dataset
 from tqdm import tqdm
 
-from ..AbsTask import AbsTask
 from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from ...evaluation.evaluators import ImageTextPairClassificationEvaluator
 from ...load_results.mteb_results import ScoresDict
+from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +62,6 @@ class AbsTaskImageTextPairClassification(AbsTask):
     ) -> ScoresDict:
         images = self._preprocess_column(dataset, self.images_column_names)
         texts = self._preprocess_column(dataset, self.texts_column_names)
-
         evaluator = ImageTextPairClassificationEvaluator(
             images,
             texts,

@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+import math
 import os
+from typing import Any
 
 import numpy as np
+import torch
 from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics.pairwise import (
     paired_cosine_distances,
     paired_euclidean_distances,
     paired_manhattan_distances,
 )
-import math
-import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
