@@ -13,7 +13,7 @@ from mteb.model_meta import ModelMeta
 
 
 def blip2_loader(**kwargs):
-    try:  # a temporal fix for the dependency issues of vista models.
+    try:  # a temporal fix for the dependency issues.
         from lavis.models.blip2_models.blip2_image_text_matching import (
             Blip2ITM,
         )
