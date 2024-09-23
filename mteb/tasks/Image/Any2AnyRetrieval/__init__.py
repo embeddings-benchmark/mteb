@@ -12,6 +12,7 @@ from .eng.InfoSeekIT2ITRetrieval import *
 from .eng.InfoSeekIT2TRetrieval import *
 from .eng.MemotionI2TRetrieval import *
 from .eng.MemotionT2IRetrieval import *
+from .eng.METI2IRetrieval import *
 from .eng.MSCOCOI2TRetrieval import *
 from .eng.MSCOCOT2IRetrieval import *
 from .eng.NIGHTSI2IRetrieval import *
