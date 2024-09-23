@@ -11,7 +11,7 @@ class SOPI2IRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://www.florian-schroff.de/publications/CUB-200.pdf",
         dataset={
             "path": "JamieSJS/stanford-online-products",
-            "revision": "34e35aeeb47a240e9a60609efa21dd00d6e2478f",
+            "revision": "0b3a1622902e6258425e673405bdfb1e5dfa8618",
         },
         type="Retrieval",
         category="i2i",
