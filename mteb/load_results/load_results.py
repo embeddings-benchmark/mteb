@@ -9,14 +9,14 @@ from pathlib import Path
 from typing import Dict, List, Sequence
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.load_results.mteb_results import MTEBResults
+from mteb.load_results.mteb_results import TaskResult
 from mteb.model_meta import ModelMeta
 
 logger = logging.getLogger(__name__)
 MODEL_NAME = str
 REVISION = str
 
-RESULTS = Dict[MODEL_NAME, Dict[REVISION, List[MTEBResults]]]
+RESULTS = Dict[MODEL_NAME, Dict[REVISION, List[TaskResult]]]
 
 
 def download_of_results(
@@ -107,26 +107,26 @@ def load_results(
             splits from the results object that are not default in the task metadata. Defaults to True.
 
     Returns:
-        A dictionary where the keys are the model names and the values are dictionaries where the keys are the revisions and the values are lists of MTEBResults objects.
+        A dictionary where the keys are the model names and the values are dictionaries where the keys are the revisions and the values are lists of TaskResult objects.
 
     Example:
         >>> results = load_results()
         >>> results
         {'mixedbread-ai/mxbai-embed-large-v1':
             {'990580e27d329c7408b3741ecff85876e128e203': [
-                MTEBResults(task_name=TwentyNewsgroupsClustering.v2, scores=...),
-                MTEBResults(task_name=MedrxivClusteringP2P, scores=...),
-                MTEBResults(task_name=StackExchangeClustering, scores=...),
-                MTEBResults(task_name=BiorxivClusteringP2P.v2, scores=...),
-                MTEBResults(task_name=MedrxivClusteringS2S.v2, scores=...),
-                MTEBResults(task_name=MedrxivClusteringS2S, scores=...),
+                TaskResult(task_name=TwentyNewsgroupsClustering.v2, scores=...),
+                TaskResult(task_name=MedrxivClusteringP2P, scores=...),
+                TaskResult(task_name=StackExchangeClustering, scores=...),
+                TaskResult(task_name=BiorxivClusteringP2P.v2, scores=...),
+                TaskResult(task_name=MedrxivClusteringS2S.v2, scores=...),
+                TaskResult(task_name=MedrxivClusteringS2S, scores=...),
                 ...
             ]},
          'intfloat/multilingual-e5-small':
             {'e4ce9877abf3edfe10b0d82785e83bdcb973e22e': [
-                MTEBResults(task_name=IndicGenBenchFloresBitextMining, scores=...),
-                MTEBResults(task_name=PpcPC, scores=...),
-                MTEBResults(task_name=TwentyNewsgroupsClustering.v2, scores=...),
+                TaskResult(task_name=IndicGenBenchFloresBitextMining, scores=...),
+                TaskResult(task_name=PpcPC, scores=...),
+                TaskResult(task_name=TwentyNewsgroupsClustering.v2, scores=...),
                 ...
             ]},
         ...
@@ -174,7 +174,7 @@ def load_results(
             task_json_files = [
                 f for f in revision_path.glob("*.json") if "model_meta.json" != f.name
             ]
-            _results = [MTEBResults.from_disk(f) for f in task_json_files]
+            _results = [TaskResult.from_disk(f) for f in task_json_files]
 
             # filter out tasks that are not in the tasks list
             if tasks is not None:

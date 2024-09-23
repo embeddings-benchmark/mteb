@@ -19,7 +19,7 @@ def test_mteb_load_results():
         for revision in results[model]:
             assert isinstance(results[model][revision], list)
             for result in results[model][revision]:
-                assert isinstance(result, mteb.MTEBResults)
+                assert isinstance(result, mteb.TaskResult)
 
     known_model = "sentence-transformers/average_word_embeddings_levy_dependency"
     known_revision = "6d9c09a789ad5dd126b476323fccfeeafcd90509"

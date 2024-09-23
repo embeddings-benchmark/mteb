@@ -19,7 +19,7 @@ from mteb.models import model_meta_from_sentence_transformers
 
 from ..abstasks import *
 from ..abstasks import AbsTask
-from ..load_results.mteb_results import MTEBResults
+from ..load_results.mteb_results import TaskResult
 from ..tasks import *
 from . import LangMapping
 
@@ -297,7 +297,7 @@ class MTEB:
             kwargs: Additional arguments to be passed to `_run_eval` method and task.load_data.
 
         Returns:
-            A list of MTEBResults objects, one for each task evaluated.
+            A list of TaskResult objects, one for each task evaluated.
         """
         if "batch_size" in kwargs:
             logger.warning(
@@ -398,7 +398,7 @@ class MTEB:
                     if verbosity >= 1:
                         logger.info(f"Scores: {results}")
 
-                mteb_task_result = MTEBResults.from_task_results(
+                mteb_task_result = TaskResult.from_task_results(
                     task,
                     task_results,
                     evaluation_time=evaluation_time,

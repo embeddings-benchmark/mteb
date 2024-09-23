@@ -7,7 +7,7 @@ import pytest
 
 import mteb
 from mteb import AbsTask
-from mteb.load_results.mteb_results import MTEBResults
+from mteb.load_results.mteb_results import TaskResult
 
 tests_folder = Path(__file__).parent.parent
 
@@ -52,7 +52,7 @@ class DummyTask(AbsTask):
 
 
 def test_mteb_results():
-    """Test MTEBResults class (this is the same as the example in the docstring)"""
+    """Test TaskResult class (this is the same as the example in the docstring)"""
     scores = {
         "train": {
             "en-de": {
@@ -66,7 +66,7 @@ def test_mteb_results():
 
     evaluation_time = 100
 
-    mteb_results = MTEBResults.from_task_results(
+    mteb_results = TaskResult.from_task_results(
         task=DummyTask(), scores=scores, evaluation_time=evaluation_time
     )
 
@@ -101,5 +101,5 @@ def test_mteb_results():
     "path", list((tests_folder / "historic_results").glob("*.json"))
 )
 def test_mteb_results_from_historic(path: Path):
-    mteb_result = MTEBResults.from_disk(path, load_historic_data=True)
-    assert isinstance(mteb_result, MTEBResults)
+    mteb_result = TaskResult.from_disk(path, load_historic_data=True)
+    assert isinstance(mteb_result, TaskResult)

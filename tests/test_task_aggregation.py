@@ -4,7 +4,7 @@ import mteb
 import mteb.task_aggregation as task_aggregation
 
 # define some test data
-bitext1_1 = mteb.MTEBResults(
+bitext1_1 = mteb.TaskResult(
     dataset_revision="test_rev",
     task_name="BornholmBitextMining",
     mteb_version="test_version",
@@ -12,7 +12,7 @@ bitext1_1 = mteb.MTEBResults(
     scores={"test": [{"main_score": 1, "hf_subset": "NaN", "languages": ["eng-Latn"]}]},
 )
 
-bitext1_2 = mteb.MTEBResults(
+bitext1_2 = mteb.TaskResult(
     dataset_revision="test_rev",
     task_name="BornholmBitextMining",
     mteb_version="test_version",
@@ -20,7 +20,7 @@ bitext1_2 = mteb.MTEBResults(
     scores={"test": [{"main_score": 2, "hf_subset": "NaN", "languages": ["eng-Latn"]}]},
 )
 
-classification1_1 = mteb.MTEBResults(
+classification1_1 = mteb.TaskResult(
     dataset_revision="test_rev",
     task_name="Banking77Classification",
     mteb_version="test_version",
@@ -28,7 +28,7 @@ classification1_1 = mteb.MTEBResults(
     scores={"test": [{"main_score": 1, "hf_subset": "NaN", "languages": ["eng-Latn"]}]},
 )
 
-classification1_2 = mteb.MTEBResults(
+classification1_2 = mteb.TaskResult(
     dataset_revision="test_rev",
     task_name="Banking77Classification",
     mteb_version="test_version",
@@ -36,7 +36,7 @@ classification1_2 = mteb.MTEBResults(
     scores={"test": [{"main_score": 2, "hf_subset": "NaN", "languages": ["eng-Latn"]}]},
 )
 
-classification2_1 = mteb.MTEBResults(
+classification2_1 = mteb.TaskResult(
     dataset_revision="test_rev",
     task_name="AfriSentiClassification",
     mteb_version="test_version",
