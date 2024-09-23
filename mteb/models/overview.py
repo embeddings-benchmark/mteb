@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import Any, Iterable
 
 from sentence_transformers import SentenceTransformer
 
@@ -40,6 +40,42 @@ for module in model_modules:
     for mdl in vars(module).values():
         if isinstance(mdl, ModelMeta):
             MODEL_REGISTRY[mdl.name] = mdl
+
+
+def get_model_metas(
+    model_names: Iterable[str] | None = None,
+    languages: Iterable[str] | None = None,
+    open_source: bool | None = None,
+    frameworks: Iterable[str] | None = None,
+    n_parameters_range: tuple[int | None, int | None] = (None, None),
+) -> list[ModelMeta]:
+    """Load all models' metadata that fit the specified criteria."""
+    res = []
+    model_names = set(model_names) if model_names is not None else None
+    languages = set(languages) if languages is not None else None
+    frameworks = set(frameworks) if frameworks is not None else None
+    for model_meta in MODEL_REGISTRY.values():
+        if (model_names is not None) and (model_meta.name not in model_names):
+            continue
+        if languages is not None:
+            if (model_meta.languages is None) or not (
+                languages <= set(model_meta.languages)
+            ):
+                continue
+        if (open_source is not None) and (model_meta.open_source != open_source):
+            continue
+        if (frameworks is not None) and not (frameworks <= set(model_meta.framework)):
+            continue
+        upper, lower = n_parameters_range
+        n_parameters = model_meta.n_parameters
+        if upper is not None:
+            if (n_parameters is None) or (n_parameters > upper):
+                continue
+        if lower is not None:
+            if (n_parameters is None) or (n_parameters < lower):
+                continue
+        res.append(model_meta)
+    return res
 
 
 def get_model(
