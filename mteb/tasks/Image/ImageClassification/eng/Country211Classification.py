@@ -25,7 +25,6 @@ class Country211Classification(AbsTaskImageClassification):
         domains=["Scene"],
         task_subtypes=["Scene recognition"],
         license="CC BY-SA 4.0",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

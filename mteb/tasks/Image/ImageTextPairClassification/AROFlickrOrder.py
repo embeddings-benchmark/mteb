@@ -34,11 +34,9 @@ class AROFlickrOrder(AbsTaskImageTextPairClassification):
             "2022-01-01",
             "2022-12-31",
         ),  # Estimated range for the collection of data
-        form=["written"],
         domains=["Encyclopaedic"],
         task_subtypes=["Caption Pairing"],
-        license="Not specified",
-        socioeconomic_status="mixed",
+        license="MIT",
         annotations_creators="expert-annotated",
         dialect=[],
         modalities=["text", "image"],

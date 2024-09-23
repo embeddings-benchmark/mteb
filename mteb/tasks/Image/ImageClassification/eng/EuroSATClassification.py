@@ -25,7 +25,6 @@ class EuroSATClassification(AbsTaskImageClassification):
         domains=["Encyclopaedic"],
         task_subtypes=["Scene recognition"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],
