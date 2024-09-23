@@ -8,7 +8,7 @@ class SOPI2IRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="SOPI2IRetrieval",
         description="Retrieve product photos of 22634 online products.",
-        reference="https://www.florian-schroff.de/publications/CUB-200.pdf",
+        reference="https://paperswithcode.com/dataset/stanford-online-products",
         dataset={
             "path": "JamieSJS/stanford-online-products",
             "revision": "0b3a1622902e6258425e673405bdfb1e5dfa8618",
@@ -19,7 +19,7 @@ class SOPI2IRetrieval(AbsTaskAny2AnyRetrieval):
         eval_langs=["eng-Latn"],
         main_score="cv_recall_at_1",
         date=("2009-01-01", "2010-04-01"),
-        domains=["Encyclopaedic"],
+        domains=["Web"],
         task_subtypes=["Object recognition"],
         license="Not specified",
         annotations_creators="derived",
