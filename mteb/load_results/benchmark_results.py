@@ -1,3 +1,4 @@
+import json
 from collections import defaultdict
 from pathlib import Path
 from typing import Iterable, Literal
@@ -205,3 +206,22 @@ class BenchmarkResults(BaseModel):
                     )
                 )
         return cls(model_results=model_results)
+
+    def to_dict(self) -> dict:
+        return self.model_dump()
+
+    @classmethod
+    def from_dict(cls, data: dict) -> TaskResult:
+        return cls.model_validate(data)
+
+    def to_disk(self, path: Path | str) -> None:
+        path = Path(path)
+        with path.open("w") as out_file:
+            out_file.write(self.model_dump_json(indent=2))
+
+    @classmethod
+    def from_disk(cls, path: Path | str) -> "BenchmarkResults":
+        path = Path(path)
+        with path.open() as in_file:
+            data = json.loads(in_file.read())
+        return cls.from_dict(data)
