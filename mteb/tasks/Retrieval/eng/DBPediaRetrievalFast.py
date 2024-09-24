@@ -12,7 +12,7 @@ class DBPediaFast(AbsTaskRetrieval):
         reference="https://github.com/iai-group/DBpedia-Entity/",
         dataset={
             "path": "mteb/DBPedia_test_top_250_only_w_correct",
-            "revision": "latest",
+            "revision": "efbe63af6ea3bd1622bcd416c77b0572c089533e",
         },
         type="Retrieval",
         category="s2p",
@@ -38,7 +38,7 @@ class DBPediaFast(AbsTaskRetrieval):
  publisher = {ACM}
 }""",
         descriptive_stats={
-            "n_samples": None,
+            "n_samples": {"test": 400},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 338.65365967056323,

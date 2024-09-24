@@ -64,7 +64,7 @@ class NeuCLIR2022RetrievalFast(MultilingualTask, AbsTaskRetrieval):
         reference="https://neuclir.github.io/",
         dataset={
             "path": "mteb/neuclir-2022-fast",
-            "revision": "latest",
+            "revision": "b94a5147a3b3046581c8b4524d9409f94594c5a4",
             "trust_remote_code": True,
         },
         type="Retrieval",

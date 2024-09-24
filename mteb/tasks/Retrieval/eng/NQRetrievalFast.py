@@ -10,7 +10,7 @@ class NQFast(AbsTaskRetrieval):
         name="NQ-Fast",
         dataset={
             "path": "mteb/nq_test_top_250_only_w_correct",
-            "revision": "latest",
+            "revision": "cd13dd9a902e4edbbf42a69b3cffcd8feae5daaa",
         },
         description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
         reference="https://ai.google.com/research/NaturalQuestions/",
@@ -34,7 +34,7 @@ class NQFast(AbsTaskRetrieval):
         and Slav Petrov},year	= {2019},journal	= {Transactions of the Association of Computational 
         Linguistics}}""",
         descriptive_stats={
-            "n_samples": {"test": 10000},
+            "n_samples": {"test": 1000},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 596.3618630215394,

@@ -12,7 +12,7 @@ class QuoraPLRetrievalFast(AbsTaskRetrieval):
         reference="https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs",
         dataset={
             "path": "mteb/quora-pl_test_top_250_only_w_correct",
-            "revision": "latest",
+            "revision": "main",
             "trust_remote_code": True,
         },
         type="Retrieval",
@@ -37,7 +37,7 @@ class QuoraPLRetrievalFast(AbsTaskRetrieval):
       primaryClass={cs.IR}
 }""",
         descriptive_stats={
-            "n_samples": None,
+            "n_samples": {"test": 1000},
             "avg_character_length": {
                 "validation": {
                     "average_document_length": 65.82473022253414,

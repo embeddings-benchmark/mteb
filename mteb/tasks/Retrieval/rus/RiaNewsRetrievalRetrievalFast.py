@@ -12,7 +12,7 @@ class RiaNewsRetrievalFast(AbsTaskRetrieval):
         name="RiaNewsRetrieval-Fast",
         dataset={
             "path": "mteb/RiaNewsRetrieval_test_top_250_only_w_correct",
-            "revision": "latest",
+            "revision": "3bcecc2cbe22b1461837e2213e51ae6da64db70c",
         },
         description="News article retrieval by headline. Based on Rossiya Segodnya dataset.",
         reference="https://arxiv.org/abs/1901.07786",
@@ -36,13 +36,13 @@ class RiaNewsRetrievalFast(AbsTaskRetrieval):
         year={2019}
         }""",
         descriptive_stats={
-            "n_samples": {"test": 10000},
+            "n_samples": {"test": 1000},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 1194.344323696284,
                     "average_query_length": 62.57272727272727,
                     "num_documents": 604196,
-                    "num_queries": 990,
+                    "num_queries": 1000,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },

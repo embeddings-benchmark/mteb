@@ -10,7 +10,7 @@ class TopiOCQARetrievalFast(AbsTaskRetrieval):
         name="TopiOCQA-Fast",
         dataset={
             "path": "mteb/TopiOCQA_validation_top_250_only_w_correct",
-            "revision": "latest",
+            "revision": "395e23160f25b3de4755f90b29caf4ebf717c7b4",
             "trust_remote_code": True,
         },
         reference="https://mcgill-nlp.github.io/topiocqa",
@@ -43,7 +43,7 @@ class TopiOCQARetrievalFast(AbsTaskRetrieval):
         }
         """,
         descriptive_stats={
-            "n_samples": None,
+            "n_samples": {"test": 1000},
             "avg_character_length": {
                 "validation": {
                     "average_document_length": 525.5101748190006,

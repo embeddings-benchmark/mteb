@@ -14,7 +14,7 @@ class MSMARCOPLFast(AbsTaskRetrieval):
         reference="https://microsoft.github.io/msmarco/",
         dataset={
             "path": "mteb/msmarco-pl_test_top_250_only_w_correct",
-            "revision": "latest",
+            "revision": "main",
             "trust_remote_code": True,
         },
         type="Retrieval",
@@ -39,7 +39,7 @@ class MSMARCOPLFast(AbsTaskRetrieval):
       primaryClass={cs.IR}
 }""",
         descriptive_stats={
-            "n_samples": None,
+            "n_samples": {"test": 43},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 349.3574939240471,

@@ -12,7 +12,7 @@ class QuoraRetrievalFast(AbsTaskRetrieval):
         name="QuoraRetrieval-Fast",
         dataset={
             "path": "mteb/QuoraRetrieval_test_top_250_only_w_correct",
-            "revision": "latest",
+            "revision": "4fd5f24639bf4e81055261ddfd1cfe44f73e4507",
         },
         description=(
             "QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a"
@@ -40,7 +40,7 @@ class QuoraRetrievalFast(AbsTaskRetrieval):
     url = {https://kaggle.com/competitions/quora-question-pairs}
 }""",
         descriptive_stats={
-            "n_samples": None,
+            "n_samples": {"test": 1000},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 61.371302161846586,

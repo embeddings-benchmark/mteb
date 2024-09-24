@@ -12,7 +12,7 @@ class ClimateFEVERFast(AbsTaskRetrieval):
         reference="https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html",
         dataset={
             "path": "mteb/ClimateFEVER_test_top_250_only_w_correct",
-            "revision": "latest",
+            "revision": "a0e6c997bb9732a65673b96760a84d9c9d26ab05",
         },
         type="Retrieval",
         category="s2p",
@@ -36,13 +36,13 @@ class ClimateFEVERFast(AbsTaskRetrieval):
       primaryClass={cs.CL}
 }""",
         descriptive_stats={
-            "n_samples": None,
+            "n_samples": {"test": 1000},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 1252.2511669715511,
                     "average_query_length": 122.23336745138178,
                     "num_documents": 63412,
-                    "num_queries": 977,
+                    "num_queries": 1000,
                     "average_relevant_docs_per_query": 2.7768924302788847,
                 }
             },

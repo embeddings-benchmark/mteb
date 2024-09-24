@@ -12,7 +12,7 @@ class MSMARCOFast(AbsTaskRetrieval):
         name="MSMARCO-Fast",
         dataset={
             "path": "mteb/MSMARCO_test_top_250_only_w_correct",
-            "revision": "latest",
+            "revision": "5d3d15761bd3e6d0885f01e10237c1cb13eb6370",
         },
         description="MS MARCO is a collection of datasets focused on deep learning in search",
         reference="https://microsoft.github.io/msmarco/",

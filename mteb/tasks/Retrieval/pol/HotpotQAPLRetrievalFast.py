@@ -12,7 +12,7 @@ class HotpotQAPLFast(AbsTaskRetrieval):
         reference="https://hotpotqa.github.io/",
         dataset={
             "path": "mteb/hotpotqa-pl_test_top_250_only_w_correct",
-            "revision": "latest",
+            "revision": "main",
             "trust_remote_code": True,
         },
         type="Retrieval",
@@ -37,7 +37,7 @@ class HotpotQAPLFast(AbsTaskRetrieval):
       primaryClass={cs.IR}
 }""",
         descriptive_stats={
-            "n_samples": None,
+            "n_samples": {"test": 1000},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 292.26835882093405,

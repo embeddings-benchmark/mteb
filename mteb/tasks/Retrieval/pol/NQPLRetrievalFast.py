@@ -12,7 +12,7 @@ class NQPLFast(AbsTaskRetrieval):
         reference="https://ai.google.com/research/NaturalQuestions/",
         dataset={
             "path": "mteb/nq-pl_test_top_250_only_w_correct",
-            "revision": "latest",
+            "revision": "main",
             "trust_remote_code": True,
         },
         type="Retrieval",
@@ -37,7 +37,7 @@ class NQPLFast(AbsTaskRetrieval):
       primaryClass={cs.IR}
 }""",
         descriptive_stats={
-            "n_samples": None,
+            "n_samples": {"test": 1000},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 502.14302128535564,

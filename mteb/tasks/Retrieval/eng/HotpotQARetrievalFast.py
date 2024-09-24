@@ -10,7 +10,7 @@ class HotpotQAFast(AbsTaskRetrieval):
         name="HotpotQA-Fast",
         dataset={
             "path": "mteb/hotpotqa_test_top_250_only_w_correct",
-            "revision": "latest",
+            "revision": "0d4cc90462aeb15de5d11a911a3bb7bd2da0e9cb",
         },
         description=(
             "HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong"
@@ -54,7 +54,7 @@ class HotpotQAFast(AbsTaskRetrieval):
     abstract = "Existing question answering (QA) datasets fail to train QA systems to perform complex reasoning and provide explanations for answers. We introduce HotpotQA, a new dataset with 113k Wikipedia-based question-answer pairs with four key features: (1) the questions require finding and reasoning over multiple supporting documents to answer; (2) the questions are diverse and not constrained to any pre-existing knowledge bases or knowledge schemas; (3) we provide sentence-level supporting facts required for reasoning, allowing QA systems to reason with strong supervision and explain the predictions; (4) we offer a new type of factoid comparison questions to test QA systems{'} ability to extract relevant facts and perform necessary comparison. We show that HotpotQA is challenging for the latest QA systems, and the supporting facts enable models to improve performance and make explainable predictions.",
 }""",
         descriptive_stats={
-            "n_samples": None,
+            "n_samples": {"test": 1000},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 357.91445598233946,

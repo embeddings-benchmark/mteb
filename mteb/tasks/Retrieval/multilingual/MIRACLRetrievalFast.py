@@ -170,7 +170,7 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
         reference="http://miracl.ai",
         dataset={
             "path": "mteb/miracl-fast",
-            "revision": "main",
+            "revision": "74532329bc23a24f3a30d5b27317638db5b5ba74",
         },
         type="Retrieval",
         category="s2p",
