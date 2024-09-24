@@ -126,6 +126,7 @@ MTEB_MAIN_EN = Benchmark(
             "TwitterURLCorpus",
         ],
         languages=["eng"],
+        eval_splits=["test"],
     ),
     description="Main English benchmarks from MTEB",
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
@@ -263,6 +264,7 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
     }
     """,
 )
+
 SEB = Benchmark(
     name="MTEB(Scandinavian)",
     tasks=get_tasks(
@@ -502,4 +504,43 @@ MTEB_pol = Benchmark(
     journal={arXiv preprint arXiv:2405.10138},
     year={2024}
 }""",
+)
+
+MTEB_code = Benchmark(
+    name="MTEB(code)",
+    tasks=get_tasks(
+        tasks=[
+            # Retrieval
+            "AppsRetrieval",
+            "CodeEditSearchRetrieval",
+            "CodeFeedbackMT",
+            "CodeFeedbackST",
+            "CodeSearchNetCCRetrieval",
+            "CodeSearchNetRetrieval",
+            "CodeTransOceanContest",
+            "CodeTransOceanDL",
+            "CosQA",
+            "COIRCodeSearchNetRetrieval",
+            "StackOverflowQA",
+            "SyntheticText2SQL",
+        ],
+        languages=[
+            "c",
+            "c++",
+            "go",
+            "java",
+            "javascript",
+            "php",
+            "python",
+            "ruby",
+            "rust",
+            "scala",
+            "shell",
+            "swift",
+            "typescript",
+        ],
+    ),
+    description="Main code benchmarks from MTEB",
+    reference=None,
+    citation=None,
 )

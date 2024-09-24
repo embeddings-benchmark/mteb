@@ -25,3 +25,11 @@ def get_benchmark(
             suggestion = f"KeyError: '{benchmark_name}' not found and no similar keys were found."
         raise KeyError(suggestion)
     return BENCHMARK_REGISTRY[benchmark_name]
+
+
+def get_benchmarks(
+    names: list[str] | None,
+) -> list[Benchmark]:
+    if names is None:
+        names = list(BENCHMARK_REGISTRY.keys())
+    return [BENCHMARK_REGISTRY[name] for name in names]

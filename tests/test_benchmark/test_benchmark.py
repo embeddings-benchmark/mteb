@@ -165,6 +165,6 @@ def test_benchmark_names_must_be_unique():
 
 
 @pytest.mark.parametrize("name", ["MTEB(eng)", "MTEB(rus)", "MTEB(Scandinavian)"])
-def test_get_benchmarks(name):
+def test_get_benchmark(name):
     benchmark = mteb.get_benchmark(benchmark_name=name)
     assert isinstance(benchmark, mteb.Benchmark)

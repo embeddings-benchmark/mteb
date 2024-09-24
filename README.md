@@ -36,7 +36,7 @@
 pip install mteb
 ```
 
-## Usage
+## Example Usage
 
 * Using a python script:
 
@@ -71,7 +71,7 @@ mteb run -m sentence-transformers/all-MiniLM-L6-v2 \
 
 
 
-## Advanced Usage
+## Usage Documentation
 Click on each section below to see the details.
 
 <br /> 
@@ -126,13 +126,28 @@ evaluation = mteb.MTEB(tasks=[
 <details>
   <summary>  Running a benchmark </summary>
 
+### Running a Benchmark
+
 `mteb` comes with a set of predefined benchmarks. These can be fetched using `get_benchmark` and run in a similar fashion to other sets of tasks. 
 For instance to select the 56 English datasets that form the "Overall MTEB English leaderboard":
 
 ```python
 import mteb
-mteb_eng = mteb.get_benchmark("MTEB(eng)")
-evaluation = mteb.MTEB(tasks=mteb_eng, eval_splits=["test"])
+benchmark = mteb.get_benchmark("MTEB(eng)")
+evaluation = mteb.MTEB(tasks=benchmark)
+```
+
+The benchmark specified not only a list of tasks, but also what splits and language to run on. To get an overview of all available benhcmarks simply run:
+
+```python
+import mteb
+benchmarks = mteb.get_benchmarks()
+```
+
+Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark. In case of a language we use the three letter language code. For large groups of language we use the group notation, e.g. `MTEB(Scandinavian)` for Scandinavian languages. External benchmarks implemented in MTEB like `CoIR` use their original name. When using a benchmark from MTEB please cite `mteb` along with the citations of the benchmark which you can access using:
+
+```python
+benchmark.citation
 ```
 
 </details>
@@ -325,9 +340,11 @@ mteb run -t NFCorpus -m all-MiniLM-L6-v2 --output_folder results --save_predicti
 <details>
   <summary> Fetching result from the results repository </summary>
 
+### Fetching result from the results repository
+
 Multiple models have already been run on tasks avaiable within MTEB. These results are available results [repository](https://github.com/embeddings-benchmark/results).
 
-To make the results more easily accecible we have designed custom functionality for retrieving from the repository. For instance, you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
+To make the results more easily accessible, we have designed custom functionality for retrieving from the repository. For instance, you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
 
 ```python
 import mteb
