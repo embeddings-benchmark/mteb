@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from datasets import load_dataset
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -11,7 +9,7 @@ class TopiOCQARetrievalFast(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="TopiOCQA-Fast",
         dataset={
-            "path": f"mteb/TopiOCQA_validation_top_250_only_w_correct",
+            "path": "mteb/TopiOCQA_validation_top_250_only_w_correct",
             "revision": "latest",
             "trust_remote_code": True,
         },
@@ -47,7 +45,13 @@ class TopiOCQARetrievalFast(AbsTaskRetrieval):
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
-                "validation": {"average_document_length": 525.5101748190006, "average_query_length": 12.85, "num_documents": 141575, "num_queries": 1000, "average_relevant_docs_per_query": 1.0}
+                "validation": {
+                    "average_document_length": 525.5101748190006,
+                    "average_query_length": 12.85,
+                    "num_documents": 141575,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.0,
+                }
             },
         },
     )

@@ -11,7 +11,7 @@ class QuoraRetrievalFast(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="QuoraRetrieval-Fast",
         dataset={
-            "path": f"mteb/QuoraRetrieval_test_top_250_only_w_correct",
+            "path": "mteb/QuoraRetrieval_test_top_250_only_w_correct",
             "revision": "latest",
         },
         description=(
@@ -42,7 +42,13 @@ class QuoraRetrievalFast(AbsTaskRetrieval):
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
-                "test": {"average_document_length": 61.371302161846586, "average_query_length": 51.228, "num_documents": 459052, "num_queries": 1000, "average_relevant_docs_per_query": 1.5672}
+                "test": {
+                    "average_document_length": 61.371302161846586,
+                    "average_query_length": 51.228,
+                    "num_documents": 459052,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.5672,
+                }
             },
         },
     )

@@ -11,7 +11,7 @@ class ClimateFEVERFast(AbsTaskRetrieval):
         description="CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. ",
         reference="https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html",
         dataset={
-            "path": f"mteb/ClimateFEVER_test_top_250_only_w_correct",
+            "path": "mteb/ClimateFEVER_test_top_250_only_w_correct",
             "revision": "latest",
         },
         type="Retrieval",
@@ -43,7 +43,7 @@ class ClimateFEVERFast(AbsTaskRetrieval):
                     "average_query_length": 122.23336745138178,
                     "num_documents": 63412,
                     "num_queries": 977,
-                    "average_relevant_docs_per_query": 2.7768924302788847
+                    "average_relevant_docs_per_query": 2.7768924302788847,
                 }
             },
         },

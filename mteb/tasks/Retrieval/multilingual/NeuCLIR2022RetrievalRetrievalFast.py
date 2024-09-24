@@ -63,7 +63,7 @@ class NeuCLIR2022RetrievalFast(MultilingualTask, AbsTaskRetrieval):
         description="The task involves identifying and retrieving the documents that are relevant to the queries.",
         reference="https://neuclir.github.io/",
         dataset={
-            "path": f"mteb/neuclir-2022-fast",
+            "path": "mteb/neuclir-2022-fast",
             "revision": "latest",
             "trust_remote_code": True,
         },
@@ -89,7 +89,36 @@ class NeuCLIR2022RetrievalFast(MultilingualTask, AbsTaskRetrieval):
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
-                "test": {"average_document_length": 2220.6705525948482, "average_query_length": 65.06432748538012, "num_documents": 63048, "num_queries": 342, "average_relevant_docs_per_query": 19.807142857142857, "hf_subset_descriptive_stats": {"fas": {"average_document_length": 3010.529632371083, "average_query_length": 85.4298245614035, "num_documents": 20265, "num_queries": 114, "average_relevant_docs_per_query": 14.217391304347826}, "rus": {"average_document_length": 2623.860809712729, "average_query_length": 85.58771929824562, "num_documents": 20921, "num_queries": 114, "average_relevant_docs_per_query": 24.177777777777777}, "zho": {"average_document_length": 1102.6741377733053, "average_query_length": 24.17543859649123, "num_documents": 21862, "num_queries": 114, "average_relevant_docs_per_query": 21.040816326530614}}}
+                "test": {
+                    "average_document_length": 2220.6705525948482,
+                    "average_query_length": 65.06432748538012,
+                    "num_documents": 63048,
+                    "num_queries": 342,
+                    "average_relevant_docs_per_query": 19.807142857142857,
+                    "hf_subset_descriptive_stats": {
+                        "fas": {
+                            "average_document_length": 3010.529632371083,
+                            "average_query_length": 85.4298245614035,
+                            "num_documents": 20265,
+                            "num_queries": 114,
+                            "average_relevant_docs_per_query": 14.217391304347826,
+                        },
+                        "rus": {
+                            "average_document_length": 2623.860809712729,
+                            "average_query_length": 85.58771929824562,
+                            "num_documents": 20921,
+                            "num_queries": 114,
+                            "average_relevant_docs_per_query": 24.177777777777777,
+                        },
+                        "zho": {
+                            "average_document_length": 1102.6741377733053,
+                            "average_query_length": 24.17543859649123,
+                            "num_documents": 21862,
+                            "num_queries": 114,
+                            "average_relevant_docs_per_query": 21.040816326530614,
+                        },
+                    },
+                }
             },
         },
     )

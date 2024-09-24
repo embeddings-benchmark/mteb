@@ -11,7 +11,7 @@ class FEVERFast(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="FEVER-Fast",
         dataset={
-            "path": f"mteb/FEVER_test_top_250_only_w_correct",
+            "path": "mteb/FEVER_test_top_250_only_w_correct",
             "revision": "latest",
         },
         description=(
@@ -55,7 +55,13 @@ class FEVERFast(AbsTaskRetrieval):
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
-                "test": {"average_document_length": 689.4130474947403, "average_query_length": 49.62, "num_documents": 503361, "num_queries": 1000, "average_relevant_docs_per_query": 1.1752175217521752}
+                "test": {
+                    "average_document_length": 689.4130474947403,
+                    "average_query_length": 49.62,
+                    "num_documents": 503361,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.1752175217521752,
+                }
             },
         },
     )

@@ -11,7 +11,7 @@ class MSMARCOFast(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSMARCO-Fast",
         dataset={
-            "path": f"mteb/MSMARCO_test_top_250_only_w_correct",
+            "path": "mteb/MSMARCO_test_top_250_only_w_correct",
             "revision": "latest",
         },
         description="MS MARCO is a collection of datasets focused on deep learning in search",
@@ -52,7 +52,13 @@ class MSMARCOFast(AbsTaskRetrieval):
         descriptive_stats={
             "n_samples": {"test": 43},
             "avg_character_length": {
-                "test": {"average_document_length": 354.2790134664851, "average_query_length": 32.74418604651163, "num_documents": 6609, "num_queries": 43, "average_relevant_docs_per_query": 48.02325581395349}
+                "test": {
+                    "average_document_length": 354.2790134664851,
+                    "average_query_length": 32.74418604651163,
+                    "num_documents": 6609,
+                    "num_queries": 43,
+                    "average_relevant_docs_per_query": 48.02325581395349,
+                }
             },
         },
     )

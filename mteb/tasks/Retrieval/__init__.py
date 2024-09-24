@@ -31,7 +31,6 @@ from .eng.ArguAnaRetrieval import *
 from .eng.BrightRetrieval import *
 from .eng.ClimateFEVERRetrieval import *
 from .eng.ClimateFEVERRetrievalFast import *
-from .eng.FEVERRetrievalFast import *
 from .eng.CQADupstackAndroidRetrieval import *
 from .eng.CQADupstackEnglishRetrieval import *
 from .eng.CQADupstackGamingRetrieval import *
@@ -49,6 +48,7 @@ from .eng.DBPediaRetrievalFast import *
 from .eng.FaithDialRetrieval import *
 from .eng.FeedbackQARetrieval import *
 from .eng.FEVERRetrieval import *
+from .eng.FEVERRetrievalFast import *
 from .eng.FiQA2018Retrieval import *
 from .eng.HagridRetrieval import *
 from .eng.HellaSwagRetrieval import *

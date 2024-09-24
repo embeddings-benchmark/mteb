@@ -8,7 +8,7 @@ from pathlib import Path
 from time import time
 from typing import Any
 
-from datasets import Features, Value, load_dataset, DownloadMode
+from datasets import DownloadMode, Features, Value, load_dataset
 
 from mteb.abstasks.TaskMetadata import HFSubset
 
@@ -124,7 +124,7 @@ class HFDataLoader:
                 "corpus",
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
-                download_mode=DownloadMode.FORCE_REDOWNLOAD
+                download_mode=DownloadMode.FORCE_REDOWNLOAD,
             )
         else:
             corpus_ds = load_dataset(
@@ -152,7 +152,7 @@ class HFDataLoader:
                 "queries",
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
-                download_mode=DownloadMode.FORCE_REDOWNLOAD
+                download_mode=DownloadMode.FORCE_REDOWNLOAD,
             )
         else:
             queries_ds = load_dataset(
@@ -175,7 +175,7 @@ class HFDataLoader:
                 self.hf_repo_qrels,
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
-                download_mode=DownloadMode.FORCE_REDOWNLOAD
+                download_mode=DownloadMode.FORCE_REDOWNLOAD,
             )[split]
         else:
             qrels_ds = load_dataset(

@@ -42,7 +42,23 @@ def _load_miracl_data(
 
     for lang in langs:
         # subsampled langs: th,en,de,fr,es,ru,ja,fa,ar,fi,ko,id,te,hi,zh
-        if lang in ["th", "en", "de", "fr", "es", "ru", "ja", "fa", "ar", "fi", "ko", "id", "te", "hi", "zh"]:
+        if lang in [
+            "th",
+            "en",
+            "de",
+            "fr",
+            "es",
+            "ru",
+            "ja",
+            "fa",
+            "ar",
+            "fi",
+            "ko",
+            "id",
+            "te",
+            "hi",
+            "zh",
+        ]:
             # load the fast miracle dataset
             # Load corpus data
             print(lang)
@@ -93,7 +109,7 @@ def _load_miracl_data(
                 if query_id not in relevant_docs[lang][split]:
                     relevant_docs[lang][split][query_id] = {}
                 relevant_docs[lang][split][query_id][doc_id] = score
-        
+
         else:
             corpus_identifier = f"corpus-{lang}"
             corpus_data = datasets.load_dataset(
@@ -187,131 +203,138 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
             "n_samples": None,
             "avg_character_length": {
                 "dev": {
-                    "ar": {
-                        "average_document_length": 318.6539598547405,
-                        "average_query_length": 29.480662983425415,
-                        "num_documents": 2061414,
-                        "num_queries": 2896,
-                        "average_relevant_docs_per_query": 1.953729281767956,
-                    },
-                    "bn": {
-                        "average_document_length": 383.2428136511194,
-                        "average_query_length": 46.98053527980535,
-                        "num_documents": 297265,
-                        "num_queries": 411,
-                        "average_relevant_docs_per_query": 2.099756690997567,
-                    },
-                    "de": {
-                        "average_document_length": 414.28004442393404,
-                        "average_query_length": 46.0,
-                        "num_documents": 15866222,
-                        "num_queries": 305,
-                        "average_relevant_docs_per_query": 2.6590163934426227,
-                    },
-                    "en": {
-                        "average_document_length": 401.0042914921588,
-                        "average_query_length": 40.247809762202756,
-                        "num_documents": 32893221,
-                        "num_queries": 799,
-                        "average_relevant_docs_per_query": 2.911138923654568,
-                    },
-                    "es": {
-                        "average_document_length": 403.71153493754986,
-                        "average_query_length": 47.373456790123456,
-                        "num_documents": 10373953,
-                        "num_queries": 648,
-                        "average_relevant_docs_per_query": 4.609567901234568,
-                    },
-                    "fa": {
-                        "average_document_length": 262.6478385010321,
-                        "average_query_length": 41.1503164556962,
-                        "num_documents": 2207172,
-                        "num_queries": 632,
-                        "average_relevant_docs_per_query": 2.079113924050633,
-                    },
-                    "fi": {
-                        "average_document_length": 359.87767671935734,
-                        "average_query_length": 38.63493312352478,
-                        "num_documents": 1883509,
-                        "num_queries": 1271,
-                        "average_relevant_docs_per_query": 1.925255704169945,
-                    },
-                    "fr": {
-                        "average_document_length": 343.6283550271699,
-                        "average_query_length": 43.883381924198254,
-                        "num_documents": 14636953,
-                        "num_queries": 343,
-                        "average_relevant_docs_per_query": 2.131195335276968,
-                    },
-                    "hi": {
-                        "average_document_length": 370.96196845914386,
-                        "average_query_length": 53.34,
-                        "num_documents": 506264,
-                        "num_queries": 350,
-                        "average_relevant_docs_per_query": 2.1485714285714286,
-                    },
-                    "id": {
-                        "average_document_length": 350.2785651811673,
-                        "average_query_length": 37.958333333333336,
-                        "num_documents": 1446315,
-                        "num_queries": 960,
-                        "average_relevant_docs_per_query": 3.216666666666667,
-                    },
-                    "ja": {
-                        "average_document_length": 145.8538220556965,
-                        "average_query_length": 17.71395348837209,
-                        "num_documents": 6953614,
-                        "num_queries": 860,
-                        "average_relevant_docs_per_query": 2.0813953488372094,
-                    },
-                    "ko": {
-                        "average_document_length": 173.97649170809927,
-                        "average_query_length": 21.624413145539908,
-                        "num_documents": 1486752,
-                        "num_queries": 213,
-                        "average_relevant_docs_per_query": 2.568075117370892,
-                    },
-                    "ru": {
-                        "average_document_length": 332.2475377512674,
-                        "average_query_length": 44.13258785942492,
-                        "num_documents": 9543918,
-                        "num_queries": 1252,
-                        "average_relevant_docs_per_query": 2.8434504792332267,
-                    },
-                    "sw": {
-                        "average_document_length": 228.71348655286377,
-                        "average_query_length": 38.97095435684647,
-                        "num_documents": 131924,
-                        "num_queries": 482,
-                        "average_relevant_docs_per_query": 1.887966804979253,
-                    },
-                    "te": {
-                        "average_document_length": 396.2108674545774,
-                        "average_query_length": 38.11231884057971,
-                        "num_documents": 518079,
-                        "num_queries": 828,
-                        "average_relevant_docs_per_query": 1.0314009661835748,
-                    },
-                    "th": {
-                        "average_document_length": 356.8283496198581,
-                        "average_query_length": 42.87585266030014,
-                        "num_documents": 542166,
-                        "num_queries": 733,
-                        "average_relevant_docs_per_query": 1.8321964529331514,
-                    },
-                    "yo": {
-                        "average_document_length": 159.35250698366738,
-                        "average_query_length": 37.6890756302521,
-                        "num_documents": 49043,
-                        "num_queries": 119,
-                        "average_relevant_docs_per_query": 1.2100840336134453,
-                    },
-                    "zh": {
-                        "average_document_length": 119.9458931721347,
-                        "average_query_length": 10.867684478371501,
-                        "num_documents": 4934368,
-                        "num_queries": 393,
-                        "average_relevant_docs_per_query": 2.5292620865139948,
+                    "average_document_length": 419.0049268922039,
+                    "average_query_length": 37.46957385337667,
+                    "num_documents": 2784108,
+                    "num_queries": 11076,
+                    "average_relevant_docs_per_query": 2.289007486472463,
+                    "hf_subset_descriptive_stats": {
+                        "ar": {
+                            "average_document_length": 426.5111760859585,
+                            "average_query_length": 29.584,
+                            "num_documents": 431278,
+                            "num_queries": 1000,
+                            "average_relevant_docs_per_query": 1.9437154696132597,
+                        },
+                        "bn": {
+                            "average_document_length": 383.2428136511194,
+                            "average_query_length": 46.98053527980535,
+                            "num_documents": 297265,
+                            "num_queries": 411,
+                            "average_relevant_docs_per_query": 2.099756690997567,
+                        },
+                        "de": {
+                            "average_document_length": 513.6786163873892,
+                            "average_query_length": 46.0,
+                            "num_documents": 71494,
+                            "num_queries": 305,
+                            "average_relevant_docs_per_query": 2.6590163934426227,
+                        },
+                        "en": {
+                            "average_document_length": 529.0259906785898,
+                            "average_query_length": 40.247809762202756,
+                            "num_documents": 179372,
+                            "num_queries": 799,
+                            "average_relevant_docs_per_query": 2.8385481852315393,
+                        },
+                        "es": {
+                            "average_document_length": 535.6423647193866,
+                            "average_query_length": 47.373456790123456,
+                            "num_documents": 147231,
+                            "num_queries": 648,
+                            "average_relevant_docs_per_query": 4.609567901234568,
+                        },
+                        "fa": {
+                            "average_document_length": 411.05307733635794,
+                            "average_query_length": 41.1503164556962,
+                            "num_documents": 134012,
+                            "num_queries": 632,
+                            "average_relevant_docs_per_query": 2.079113924050633,
+                        },
+                        "fi": {
+                            "average_document_length": 461.00697711742,
+                            "average_query_length": 38.646,
+                            "num_documents": 236774,
+                            "num_queries": 1000,
+                            "average_relevant_docs_per_query": 1.9133858267716535,
+                        },
+                        "fr": {
+                            "average_document_length": 460.33350970950846,
+                            "average_query_length": 43.883381924198254,
+                            "num_documents": 75596,
+                            "num_queries": 343,
+                            "average_relevant_docs_per_query": 2.131195335276968,
+                        },
+                        "hi": {
+                            "average_document_length": 498.55261327346886,
+                            "average_query_length": 53.34,
+                            "num_documents": 63254,
+                            "num_queries": 350,
+                            "average_relevant_docs_per_query": 2.1485714285714286,
+                        },
+                        "id": {
+                            "average_document_length": 493.96505208981864,
+                            "average_query_length": 37.958333333333336,
+                            "num_documents": 168651,
+                            "num_queries": 960,
+                            "average_relevant_docs_per_query": 3.171875,
+                        },
+                        "ja": {
+                            "average_document_length": 206.1113071923557,
+                            "average_query_length": 17.71395348837209,
+                            "num_documents": 185864,
+                            "num_queries": 860,
+                            "average_relevant_docs_per_query": 2.0547147846332945,
+                        },
+                        "ko": {
+                            "average_document_length": 257.7614288017319,
+                            "average_query_length": 21.624413145539908,
+                            "num_documents": 43421,
+                            "num_queries": 213,
+                            "average_relevant_docs_per_query": 2.5305164319248825,
+                        },
+                        "ru": {
+                            "average_document_length": 474.7900288882676,
+                            "average_query_length": 44.055,
+                            "num_documents": 268275,
+                            "num_queries": 1000,
+                            "average_relevant_docs_per_query": 2.801916932907348,
+                        },
+                        "sw": {
+                            "average_document_length": 228.71348655286377,
+                            "average_query_length": 38.97095435684647,
+                            "num_documents": 131924,
+                            "num_queries": 482,
+                            "average_relevant_docs_per_query": 1.887966804979253,
+                        },
+                        "te": {
+                            "average_document_length": 601.5159486978657,
+                            "average_query_length": 38.11231884057971,
+                            "num_documents": 102140,
+                            "num_queries": 828,
+                            "average_relevant_docs_per_query": 1.0314769975786926,
+                        },
+                        "th": {
+                            "average_document_length": 478.8321933034646,
+                            "average_query_length": 42.87585266030014,
+                            "num_documents": 116956,
+                            "num_queries": 733,
+                            "average_relevant_docs_per_query": 1.8267394270122783,
+                        },
+                        "yo": {
+                            "average_document_length": 159.35250698366738,
+                            "average_query_length": 37.6890756302521,
+                            "num_documents": 49043,
+                            "num_queries": 119,
+                            "average_relevant_docs_per_query": 1.2100840336134453,
+                        },
+                        "zh": {
+                            "average_document_length": 147.34962848524975,
+                            "average_query_length": 10.867684478371501,
+                            "num_documents": 81558,
+                            "num_queries": 393,
+                            "average_relevant_docs_per_query": 2.5292620865139948,
+                        },
                     },
                 }
             },
@@ -321,7 +344,7 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
-        
+
         self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
             path=self.metadata_dict["dataset"]["path"],
             langs=self.hf_subsets,

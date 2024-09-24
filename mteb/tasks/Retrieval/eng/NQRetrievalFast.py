@@ -9,7 +9,7 @@ class NQFast(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NQ-Fast",
         dataset={
-            "path": f"mteb/nq_test_top_250_only_w_correct",
+            "path": "mteb/nq_test_top_250_only_w_correct",
             "revision": "latest",
         },
         description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
@@ -36,7 +36,13 @@ class NQFast(AbsTaskRetrieval):
         descriptive_stats={
             "n_samples": {"test": 10000},
             "avg_character_length": {
-                "test": {"average_document_length": 596.3618630215394, "average_query_length": 47.878, "num_documents": 545093, "num_queries": 1000, "average_relevant_docs_per_query": 1.2169756662804172}
+                "test": {
+                    "average_document_length": 596.3618630215394,
+                    "average_query_length": 47.878,
+                    "num_documents": 545093,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.2169756662804172,
+                }
             },
         },
     )

@@ -9,7 +9,7 @@ class HotpotQAFast(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HotpotQA-Fast",
         dataset={
-            "path": f"mteb/hotpotqa_test_top_250_only_w_correct",
+            "path": "mteb/hotpotqa_test_top_250_only_w_correct",
             "revision": "latest",
         },
         description=(
@@ -56,7 +56,13 @@ class HotpotQAFast(AbsTaskRetrieval):
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
-                "test": {"average_document_length": 357.91445598233946, "average_query_length": 92.584, "num_documents": 1043229, "num_queries": 1000, "average_relevant_docs_per_query": 2.0}
+                "test": {
+                    "average_document_length": 357.91445598233946,
+                    "average_query_length": 92.584,
+                    "num_documents": 1043229,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 2.0,
+                }
             },
         },
     )

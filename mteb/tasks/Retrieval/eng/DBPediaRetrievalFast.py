@@ -11,7 +11,7 @@ class DBPediaFast(AbsTaskRetrieval):
         description="DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base",
         reference="https://github.com/iai-group/DBpedia-Entity/",
         dataset={
-            "path": f"mteb/DBPedia_test_top_250_only_w_correct",
+            "path": "mteb/DBPedia_test_top_250_only_w_correct",
             "revision": "latest",
         },
         type="Retrieval",
@@ -40,7 +40,13 @@ class DBPediaFast(AbsTaskRetrieval):
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
-                "test": {"average_document_length": 338.65365967056323, "average_query_length": 34.085, "num_documents": 90336, "num_queries": 400, "average_relevant_docs_per_query": 38.215}
+                "test": {
+                    "average_document_length": 338.65365967056323,
+                    "average_query_length": 34.085,
+                    "num_documents": 90336,
+                    "num_queries": 400,
+                    "average_relevant_docs_per_query": 38.215,
+                }
             },
         },
     )

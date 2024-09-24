@@ -11,7 +11,7 @@ class NQPLFast(AbsTaskRetrieval):
         description="Natural Questions: A Benchmark for Question Answering Research",
         reference="https://ai.google.com/research/NaturalQuestions/",
         dataset={
-            "path": f"mteb/nq-pl_test_top_250_only_w_correct",
+            "path": "mteb/nq-pl_test_top_250_only_w_correct",
             "revision": "latest",
             "trust_remote_code": True,
         },

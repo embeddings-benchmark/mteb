@@ -11,7 +11,7 @@ class RiaNewsRetrievalFast(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="RiaNewsRetrieval-Fast",
         dataset={
-            "path": f"mteb/RiaNewsRetrieval_test_top_250_only_w_correct",
+            "path": "mteb/RiaNewsRetrieval_test_top_250_only_w_correct",
             "revision": "latest",
         },
         description="News article retrieval by headline. Based on Rossiya Segodnya dataset.",
@@ -38,7 +38,13 @@ class RiaNewsRetrievalFast(AbsTaskRetrieval):
         descriptive_stats={
             "n_samples": {"test": 10000},
             "avg_character_length": {
-                "test": {"average_document_length": 1194.344323696284, "average_query_length": 62.57272727272727, "num_documents": 604196, "num_queries": 990, "average_relevant_docs_per_query": 1.0}
+                "test": {
+                    "average_document_length": 1194.344323696284,
+                    "average_query_length": 62.57272727272727,
+                    "num_documents": 604196,
+                    "num_queries": 990,
+                    "average_relevant_docs_per_query": 1.0,
+                }
             },
         },
     )

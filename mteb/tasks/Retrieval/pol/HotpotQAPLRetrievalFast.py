@@ -11,7 +11,7 @@ class HotpotQAPLFast(AbsTaskRetrieval):
         description="HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems.",
         reference="https://hotpotqa.github.io/",
         dataset={
-            "path": f"mteb/hotpotqa-pl_test_top_250_only_w_correct",
+            "path": "mteb/hotpotqa-pl_test_top_250_only_w_correct",
             "revision": "latest",
             "trust_remote_code": True,
         },
