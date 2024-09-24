@@ -4,16 +4,12 @@ import logging
 from datetime import date
 from typing import Any, Dict, List, Mapping, Union
 
-from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
+from pydantic import (AnyUrl, BaseModel, BeforeValidator, TypeAdapter,
+                      field_validator)
 from typing_extensions import Annotated, Literal
 
-from ..languages import (
-    ISO_LANGUAGE_SCRIPT,
-    ISO_TO_LANGUAGE,
-    ISO_TO_SCRIPT,
-    path_to_lang_codes,
-    path_to_lang_scripts,
-)
+from ..languages import (ISO_LANGUAGE_SCRIPT, ISO_TO_LANGUAGE, ISO_TO_SCRIPT,
+                         path_to_lang_codes, path_to_lang_scripts)
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
@@ -351,3 +347,6 @@ class TaskMetadata(BaseModel):
                 )
             return f"\\cite{{{cite}}}"
         return cite
+
+    def __hash__(self) -> int:
+        return hash(self.model_dump_json())
