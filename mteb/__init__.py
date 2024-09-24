@@ -5,6 +5,7 @@ from importlib.metadata import version
 from mteb.benchmarks.benchmarks import (MTEB_MAIN_EN, MTEB_MAIN_RU,
                                         MTEB_RETRIEVAL_LAW,
                                         MTEB_RETRIEVAL_WITH_INSTRUCTIONS, CoIR)
+from mteb.benchmars import get_benchmark, get_benchmarks
 from mteb.evaluation import *
 from mteb.load_results import load_results
 from mteb.models import get_model, get_model_meta, get_model_metas
