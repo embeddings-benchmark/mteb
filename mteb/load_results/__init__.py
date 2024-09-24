@@ -1,6 +1,7 @@
 from __future__ import annotations
 
+from .benchmark_results import BenchmarkResults, ModelResult
 from .load_results import load_results
-from .mteb_results import TaskResult
+from .task_results import TaskResult
 
-__all__ = ["load_results", "TaskResult"]
+__all__ = ["load_results", "TaskResult", "ModelResult", "BenchmarkResults"]

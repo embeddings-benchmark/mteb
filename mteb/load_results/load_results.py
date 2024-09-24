@@ -9,14 +9,13 @@ from pathlib import Path
 from typing import Dict, List, Sequence
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.load_results.mteb_results import TaskResult
+from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
+from mteb.load_results.task_results import TaskResult
 from mteb.model_meta import ModelMeta
 
 logger = logging.getLogger(__name__)
 MODEL_NAME = str
 REVISION = str
-
-RESULTS = Dict[MODEL_NAME, Dict[REVISION, List[TaskResult]]]
 
 
 def download_of_results(
@@ -92,7 +91,7 @@ def load_results(
     tasks: Sequence[AbsTask] | Sequence[str] | None = None,
     validate_and_filter: bool = True,
     require_model_meta: bool = True,
-) -> RESULTS:
+) -> BenchmarkResults:
     """Loads the results from the latest version of the results repository. The results are cached locally in the MTEB_CACHE directory.
     This directory can be set using the MTEB_CACHE environment variable or defaults to "~/.cache/mteb".
 
@@ -107,29 +106,7 @@ def load_results(
             splits from the results object that are not default in the task metadata. Defaults to True.
 
     Returns:
-        A dictionary where the keys are the model names and the values are dictionaries where the keys are the revisions and the values are lists of TaskResult objects.
 
-    Example:
-        >>> results = load_results()
-        >>> results
-        {'mixedbread-ai/mxbai-embed-large-v1':
-            {'990580e27d329c7408b3741ecff85876e128e203': [
-                TaskResult(task_name=TwentyNewsgroupsClustering.v2, scores=...),
-                TaskResult(task_name=MedrxivClusteringP2P, scores=...),
-                TaskResult(task_name=StackExchangeClustering, scores=...),
-                TaskResult(task_name=BiorxivClusteringP2P.v2, scores=...),
-                TaskResult(task_name=MedrxivClusteringS2S.v2, scores=...),
-                TaskResult(task_name=MedrxivClusteringS2S, scores=...),
-                ...
-            ]},
-         'intfloat/multilingual-e5-small':
-            {'e4ce9877abf3edfe10b0d82785e83bdcb973e22e': [
-                TaskResult(task_name=IndicGenBenchFloresBitextMining, scores=...),
-                TaskResult(task_name=PpcPC, scores=...),
-                TaskResult(task_name=TwentyNewsgroupsClustering.v2, scores=...),
-                ...
-            ]},
-        ...
     """
     repo_directory = download_of_results(results_repo, download_latest=download_latest)
     model_paths = [p for p in (repo_directory / "results").glob("*") if p.is_dir()]
@@ -152,8 +129,7 @@ def load_results(
             else:
                 task_names[task] = None
 
-    results = defaultdict(dict)
-
+    model_results = []
     for model_path in model_paths:
         model_revisions = model_path.glob("*")
 
@@ -195,7 +171,12 @@ def load_results(
                             f"Validation failed for {r.task_name} in {model_name} {revision}: {e}"
                         )
                 _results = filtered_results
+            model_results.append(
+                ModelResult(
+                    model_name=model_name,
+                    model_revision=revision,
+                    task_results=_results,
+                )
+            )
 
-            results[model_name][revision] = _results
-
-    return dict(results)
+    return BenchmarkResults(model_results=model_results)

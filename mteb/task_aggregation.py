@@ -6,17 +6,20 @@ from typing import Dict
 
 import numpy as np
 
-from mteb.load_results.load_results import MODEL_NAME, RESULTS, REVISION
-from mteb.load_results.mteb_results import TaskResult
+from mteb.load_results.benchmark_results import BenchmarkResults
+from mteb.load_results.task_results import TaskResult
 from mteb.overview import get_task
 
 logger = logging.getLogger(__name__)
 
+REVISION = str
+MODEL_NAME = str
 AGGREGATION = Dict[MODEL_NAME, Dict[REVISION, Dict[str, float]]]
 
 
-def mean(results: RESULTS) -> AGGREGATION:
+def mean(results: BenchmarkResults) -> AGGREGATION:
     """Calculate the mean of the main score of the given results."""
+    results = results.to_legacy_dict()
     unique_tasks = set()
     for model, revisions in results.items():
         for revision, res in revisions.items():
@@ -43,9 +46,10 @@ def mean(results: RESULTS) -> AGGREGATION:
 
 
 def task_category_weighted_mean(
-    results: RESULTS,
+    results: BenchmarkResults,
 ) -> AGGREGATION:
     """Calculate the mean of the main score of the given results, weighted by the number of tasks of each type."""
+    results = results.to_legacy_dict()
     unique_tasks = set()
     task_types = defaultdict(set)
     for model, revisions in results.items():
@@ -92,7 +96,7 @@ def task_category_weighted_mean(
 
 
 def borda_count(
-    results: RESULTS,
+    results: BenchmarkResults,
 ) -> AGGREGATION:
     """Calculate the Borda count of the given results.
 
@@ -103,6 +107,7 @@ def borda_count(
     # consider each model a candidate and each task a voter
     # each voter ranks the candidates
 
+    results = results.to_legacy_dict()
     n_candidates = sum(len(revs) for revs in results.values())
     candidate_scores = {
         model: {revision: 0.0 for revision in revisions}

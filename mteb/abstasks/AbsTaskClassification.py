@@ -9,12 +9,10 @@ import tqdm
 
 from mteb.encoder_interface import Encoder
 
-from ..evaluation.evaluators import (
-    kNNClassificationEvaluator,
-    kNNClassificationEvaluatorPytorch,
-    logRegClassificationEvaluator,
-)
-from ..load_results.mteb_results import HFSubset, ScoresDict
+from ..evaluation.evaluators import (kNNClassificationEvaluator,
+                                     kNNClassificationEvaluatorPytorch,
+                                     logRegClassificationEvaluator)
+from ..load_results.task_results import HFSubset, ScoresDict
 from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)

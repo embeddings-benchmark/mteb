@@ -19,7 +19,7 @@ from mteb.models import model_meta_from_sentence_transformers
 
 from ..abstasks import *
 from ..abstasks import AbsTask
-from ..load_results.mteb_results import TaskResult
+from ..load_results.task_results import TaskResult
 from ..tasks import *
 from . import LangMapping
 

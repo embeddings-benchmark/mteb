@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 
 import mteb
+from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
 
 
 def test_mteb_load_results():
@@ -13,15 +14,15 @@ def test_mteb_load_results():
 
     results = mteb.load_results(download_latest=False)
 
-    assert isinstance(results, dict)
-    for model in results:
-        assert isinstance(results[model], dict)
-        for revision in results[model]:
-            assert isinstance(results[model][revision], list)
-            for result in results[model][revision]:
-                assert isinstance(result, mteb.TaskResult)
+    assert isinstance(results, BenchmarkResults)
+    for model_result in results:
+        assert isinstance(model_result, ModelResult)
+        for res in model_result:
+            assert isinstance(res, mteb.TaskResult)
 
     known_model = "sentence-transformers/average_word_embeddings_levy_dependency"
     known_revision = "6d9c09a789ad5dd126b476323fccfeeafcd90509"
-    assert known_model in results
-    assert known_revision in results[known_model]
+    assert known_model in [res.model_name for res in results]
+    assert known_revision in [
+        res.model_revision for res in results if res.model_name == known_model
+    ]

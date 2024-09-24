@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import mteb
 import mteb.task_aggregation as task_aggregation
+from mteb.load_results.benchmark_results import BenchmarkResults
 
 # define some test data
 bitext1_1 = mteb.TaskResult(
@@ -54,6 +55,7 @@ mteb_results = {
         "rev2": [bitext1_2, classification1_1, classification2_1],
     },
 }
+mteb_results = BenchmarkResults.from_legacy_dict(mteb_results)
 
 
 def test_mean():
@@ -103,14 +105,16 @@ def test_task_category_weighted_mean():
 
 
 def test_borda_count_simple():
-    mteb_results_simple = {
-        "model1": {
-            "rev1": [bitext1_1],
-        },
-        "model2": {
-            "rev2": [bitext1_2],
-        },
-    }
+    mteb_results_simple = BenchmarkResults.from_legacy_dict(
+        {
+            "model1": {
+                "rev1": [bitext1_1],
+            },
+            "model2": {
+                "rev2": [bitext1_2],
+            },
+        }
+    )
     expected = {
         "model1": {
             "rev1": {"borda_count": 0},
@@ -143,6 +147,9 @@ def test_borda_count_simple_with_tie():
             "rev2": {"borda_count": 2.5},
         },
     }
+    mteb_results_simple_with_tie = BenchmarkResults.from_legacy_dict(
+        mteb_results_simple_with_tie
+    )
     assert task_aggregation.borda_count(mteb_results_simple_with_tie) == expected
 
 
