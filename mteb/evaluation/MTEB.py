@@ -278,7 +278,7 @@ class MTEB:
         co2_tracker: bool = False,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
-    ) -> list[MTEBResults]:
+    ) -> list[TaskResult]:
         """Run the evaluation pipeline on the selected tasks.
 
         Args:
@@ -337,7 +337,7 @@ class MTEB:
                     logger.info(
                         f"{task.metadata.name} results already exists. Loading results from disk. Set overwrite_results=True to overwrite."
                     )
-                    mteb_results = MTEBResults.from_disk(save_path)
+                    mteb_results = TaskResult.from_disk(save_path)
                     evaluation_results.append(mteb_results)
                     del self.tasks[0]  # empty memory
                     continue
