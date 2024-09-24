@@ -1,7 +1,9 @@
 from collections import defaultdict
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Literal
 
+import numpy as np
+import pandas as pd
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks import AbsTask
@@ -144,6 +146,39 @@ class BenchmarkResults(BaseModel):
             if (model_res.model_name, model_res.model_revision) in model_revision_pairs:
                 new_model_results.append(model_res)
         return type(self)(model_results=new_model_results)
+
+    def to_table(self, format: Literal["wide", "long"] = "wide") -> pd.DataFrame:
+        if format == "wide":
+            entries = []
+            for model_res in self:
+                entry = dict(
+                    model_name=model_res.model_name,
+                    model_revision=model_res.model_revision,
+                )
+                for task_res in model_res:
+                    entry[task_res.task_name] = task_res.get_score()
+                entries.append(entry)
+            return pd.DataFrame(entries).set_index(["model_name", "model_revision"])
+        elif format == "long":
+            entries = []
+            for model_res in self:
+                for task_res in model_res:
+                    entry = dict(
+                        model_name=model_res.model_name,
+                        model_revision=model_res.model_revision,
+                        task_name=task_res.task_name,
+                        score=task_res.get_score(),
+                        mteb_version=task_res.mteb_version,
+                        dataset_revision=task_res.dataset_revision,
+                        evaluation_time=task_res.evaluation_time,
+                        kg_co2_emissions=task_res.kg_co2_emissions,
+                    )
+                    entries.append(entry)
+            return pd.DataFrame(entries)
+        else:
+            raise ValueError(
+                f"Table format can either be 'long' or 'wide', not {format}"
+            )
 
     def __iter__(self):
         return iter(self.model_results)
