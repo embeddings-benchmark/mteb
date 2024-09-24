@@ -18,7 +18,7 @@ class METI2IRetrieval(AbsTaskAny2AnyRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cv_recall_at_1",
-        date=("2021-12-06", "2021-12-14"), # conference dates
+        date=("2021-12-06", "2021-12-14"),  # conference dates
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
         license="Not specified",
@@ -34,7 +34,7 @@ class METI2IRetrieval(AbsTaskAny2AnyRetrieval):
 }
         """,
         descriptive_stats={
-            #"n_samples": {"default": 397121},
+            # "n_samples": {"default": 397121},
         },
     )
     skip_first_result = True
