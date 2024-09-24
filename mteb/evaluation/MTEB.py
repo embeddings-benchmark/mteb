@@ -278,7 +278,7 @@ class MTEB:
         co2_tracker: bool = False,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
-    ):
+    ) -> list[MTEBResults]:
         """Run the evaluation pipeline on the selected tasks.
 
         Args:
@@ -335,15 +335,15 @@ class MTEB:
                 save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
                 if save_path.exists() and not overwrite_results:
                     logger.info(
-                        f"{task.metadata.name} results already exists. Skipping. Set overwrite_results=True to overwrite."
+                        f"{task.metadata.name} results already exists. Loading results from disk. Set overwrite_results=True to overwrite."
                     )
-                    del self.tasks[0]
+                    mteb_results = MTEBResults.from_disk(save_path)
+                    evaluation_results.append(mteb_results)
+                    del self.tasks[0]  # empty memory
                     continue
             try:
                 task_eval_splits = (
-                    eval_splits
-                    if eval_splits is not None
-                    else task.metadata_dict.get("eval_splits", [])
+                    eval_splits if eval_splits is not None else task.eval_splits
                 )
 
                 # load data
