@@ -505,3 +505,42 @@ MTEB_pol = Benchmark(
     year={2024}
 }""",
 )
+
+MTEB_code = Benchmark(
+    name="MTEB(code)",
+    tasks=get_tasks(
+        tasks=[
+            # Retrieval
+            "AppsRetrieval",
+            "CodeEditSearchRetrieval",
+            "CodeFeedbackMT",
+            "CodeFeedbackST",
+            "CodeSearchNetCCRetrieval",
+            "CodeSearchNetRetrieval",
+            "CodeTransOceanContest",
+            "CodeTransOceanDL",
+            "CosQA",
+            "COIRCodeSearchNetRetrieval",
+            "StackOverflowQA",
+            "SyntheticText2SQL",
+        ],
+        languages=[
+            "c",
+            "c++",
+            "go",
+            "java",
+            "javascript",
+            "php",
+            "python",
+            "ruby",
+            "rust",
+            "scala",
+            "shell",
+            "swift",
+            "typescript",
+        ],
+    ),
+    description="Main code benchmarks from MTEB",
+    reference=None,
+    citation=None,
+)
