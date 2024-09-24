@@ -1,11 +1,13 @@
 from collections import defaultdict
 from pathlib import Path
+from typing import Iterable
 
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks import AbsTask
 from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
 from mteb.load_results.task_results import TaskResult
+from mteb.models.overview import get_model_metas
 from mteb.overview import get_tasks
 
 
@@ -91,6 +93,9 @@ class ModelResult(BaseModel):
 
 class BenchmarkResults(BaseModel):
     model_results: list[ModelResult]
+    model_config = ConfigDict(
+        protected_namespaces=(),
+    )
 
     def __repr__(self) -> str:
         n_models = len(self.model_results)
@@ -119,8 +124,26 @@ class BenchmarkResults(BaseModel):
             for res in self.model_results
         ]
         return type(self)(
-            model_results=[res for res in model_results if model_results.task_results]
+            model_results=[res for res in model_results if res.task_results]
         )
+
+    def filter_models(
+        self,
+        model_names: Iterable[str] | None = None,
+        languages: Iterable[str] | None = None,
+        open_source: bool | None = None,
+        frameworks: Iterable[str] | None = None,
+        n_parameters_range: tuple[int | None, int | None] = (None, None),
+    ) -> "BenchmarkResults":
+        model_metas = get_model_metas(
+            model_names, languages, open_source, frameworks, n_parameters_range
+        )
+        model_revision_pairs = {(meta.name, meta.revision) for meta in model_metas}
+        new_model_results = []
+        for model_res in self:
+            if (model_res.model_name, model_res.model_revision) in model_revision_pairs:
+                new_model_results.append(model_res)
+        return type(self)(model_results=new_model_results)
 
     def __iter__(self):
         return iter(self.model_results)
