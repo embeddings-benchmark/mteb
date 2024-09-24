@@ -4,7 +4,7 @@ import logging
 from typing import Any
 
 from ..evaluation.evaluators import STSEvaluator
-from ..load_results.mteb_results import ScoresDict
+from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)

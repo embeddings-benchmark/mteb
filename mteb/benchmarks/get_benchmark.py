@@ -3,7 +3,7 @@ from __future__ import annotations
 import difflib
 
 import mteb.benchmarks.benchmarks as benchmark_module
-from mteb.benchmarks import Benchmark
+from mteb.benchmarks.benchmarks import Benchmark
 
 BENCHMARK_REGISTRY = {
     inst.name: inst
@@ -28,7 +28,7 @@ def get_benchmark(
 
 
 def get_benchmarks(
-    names: list[str] | None,
+    names: list[str] | None = None,
 ) -> list[Benchmark]:
     if names is None:
         names = list(BENCHMARK_REGISTRY.keys())

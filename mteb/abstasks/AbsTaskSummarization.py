@@ -6,7 +6,7 @@ from typing import Any
 import numpy as np
 
 from mteb.encoder_interface import Encoder
-from mteb.load_results.mteb_results import ScoresDict
+from mteb.load_results.task_results import ScoresDict
 
 from ..evaluation.evaluators import SummarizationEvaluator
 from .AbsTask import AbsTask, DescriptiveStatistics
