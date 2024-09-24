@@ -18,7 +18,7 @@ class SOPI2IRetrieval(AbsTaskAny2AnyRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cv_recall_at_1",
-        date=("2009-01-01", "2010-04-01"),
+        date=("2019-07-17", "2019-07-17"),
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
         license="Not specified",
