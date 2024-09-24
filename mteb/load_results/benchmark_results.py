@@ -72,11 +72,14 @@ class ModelResult(BaseModel):
             tasks=tasks,
             exclude_superseeded=exclude_superseeded,
         )
-        filtered_tasks = {task.metadata.name: task for task in filtered_tasks}
+        return self.select_tasks(filtered_tasks)
+
+    def select_tasks(self, tasks: list[AbsTask]) -> "ModelResult":
+        tasks = {task.metadata.name: task for task in tasks}
         new_task_results = [
-            restrict_task_results(res, filtered_tasks[res.task_name])
+            restrict_task_results(res, tasks[res.task_name])
             for res in self.task_results
-            if res.task_name in filtered_tasks
+            if res.task_name in tasks
         ]
         return type(self)(
             model_name=self.model_name,
@@ -126,6 +129,12 @@ class BenchmarkResults(BaseModel):
             )
             for res in self.model_results
         ]
+        return type(self)(
+            model_results=[res for res in model_results if res.task_results]
+        )
+
+    def select_tasks(self, tasks: list[AbsTask]) -> "BenchmarkResults":
+        model_results = [res.select_tasks(tasks) for res in self.model_results]
         return type(self)(
             model_results=[res for res in model_results if res.task_results]
         )
