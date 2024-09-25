@@ -53,7 +53,7 @@ class ClimateFEVER(AbsTaskRetrieval):
 class ClimateFEVERHardNegatives(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ClimateFEVERHardNegatives",
-        description="CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. ",
+        description="CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html",
         dataset={
             "path": "mteb/ClimateFEVER_test_top_250_only_w_correct",

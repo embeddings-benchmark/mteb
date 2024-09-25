@@ -120,7 +120,7 @@ class TopiOCQARetrievalHardNegatives(AbsTaskRetrieval):
         description=(
             "TopiOCQA (Human-in-the-loop Attributable Generative Retrieval for Information-seeking Dataset) "
             + "is information-seeking conversational dataset with challenging topic switching phenomena. "
-            + "It consists of conversation histories along with manually labelled relevant/gold passage."
+            + "It consists of conversation histories along with manually labelled relevant/gold passage. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct."
         ),
         type="Retrieval",
         category="s2p",

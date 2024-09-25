@@ -418,7 +418,7 @@ def _load_miracl_data_hard_negatives(
 class MIRACLRetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MIRACLRetrievalHardNegatives",
-        description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.",
+        description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="http://miracl.ai",
         dataset={
             "path": "mteb/miracl-fast",
@@ -597,12 +597,14 @@ class MIRACLRetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = _load_miracl_data_hard_negatives(
-            path=self.metadata_dict["dataset"]["path"],
-            langs=self.hf_subsets,
-            splits=self.metadata_dict["eval_splits"],
-            cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+        self.corpus, self.queries, self.relevant_docs = (
+            _load_miracl_data_hard_negatives(
+                path=self.metadata_dict["dataset"]["path"],
+                langs=self.hf_subsets,
+                splits=self.metadata_dict["eval_splits"],
+                cache_dir=kwargs.get("cache_dir", None),
+                revision=self.metadata_dict["dataset"]["revision"],
+            )
         )
 
         self.data_loaded = True

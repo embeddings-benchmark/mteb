@@ -91,7 +91,7 @@ class HotpotQAHardNegatives(AbsTaskRetrieval):
         },
         description=(
             "HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong"
-            + " supervision for supporting facts to enable more explainable question answering systems."
+            + " supervision for supporting facts to enable more explainable question answering systems.  The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct."
         ),
         reference="https://hotpotqa.github.io/",
         type="Retrieval",

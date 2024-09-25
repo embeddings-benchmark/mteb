@@ -54,7 +54,7 @@ class NQPL(AbsTaskRetrieval):
 class NQPLHardNegatives(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NQ-PLHardNegatives",
-        description="Natural Questions: A Benchmark for Question Answering Research",
+        description="Natural Questions: A Benchmark for Question Answering Research. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://ai.google.com/research/NaturalQuestions/",
         dataset={
             "path": "mteb/nq-pl_test_top_250_only_w_correct",

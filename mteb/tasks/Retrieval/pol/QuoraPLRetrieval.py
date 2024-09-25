@@ -61,7 +61,7 @@ class QuoraPLRetrieval(AbsTaskRetrieval):
 class QuoraPLRetrievalHardNegatives(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Quora-PLHardNegatives",
-        description="QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions.",
+        description="QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs",
         dataset={
             "path": "mteb/quora-pl_test_top_250_only_w_correct",

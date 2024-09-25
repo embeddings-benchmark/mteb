@@ -55,7 +55,7 @@ class NQHardNegatives(AbsTaskRetrieval):
             "path": "mteb/nq_test_top_250_only_w_correct",
             "revision": "cd13dd9a902e4edbbf42a69b3cffcd8feae5daaa",
         },
-        description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
+        description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://ai.google.com/research/NaturalQuestions/",
         type="Retrieval",
         category="s2p",

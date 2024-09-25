@@ -72,7 +72,7 @@ class QuoraRetrievalHardNegatives(AbsTaskRetrieval):
         },
         description=(
             "QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a"
-            + " question, find other (duplicate) questions."
+            + " question, find other (duplicate) questions. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct."
         ),
         reference="https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs",
         type="Retrieval",

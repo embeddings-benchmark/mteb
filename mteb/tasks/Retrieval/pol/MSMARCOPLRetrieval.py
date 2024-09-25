@@ -58,7 +58,7 @@ class MSMARCOPLHardNegatives(AbsTaskRetrieval):
 
     metadata = TaskMetadata(
         name="MSMARCO-PLHardNegatives",
-        description="MS MARCO is a collection of datasets focused on deep learning in search",
+        description="MS MARCO is a collection of datasets focused on deep learning in search. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://microsoft.github.io/msmarco/",
         dataset={
             "path": "mteb/msmarco-pl_test_top_250_only_w_correct",
@@ -99,4 +99,3 @@ class MSMARCOPLHardNegatives(AbsTaskRetrieval):
             },
         },
     )
-

@@ -59,7 +59,7 @@ class RiaNewsRetrievalHardNegatives(AbsTaskRetrieval):
             "path": "mteb/RiaNewsRetrieval_test_top_250_only_w_correct",
             "revision": "3bcecc2cbe22b1461837e2213e51ae6da64db70c",
         },
-        description="News article retrieval by headline. Based on Rossiya Segodnya dataset.",
+        description="News article retrieval by headline. Based on Rossiya Segodnya dataset. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://arxiv.org/abs/1901.07786",
         type="Retrieval",
         category="s2p",
