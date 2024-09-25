@@ -70,7 +70,7 @@ class Any2AnyDenseRetrievalExactSearch:
         self,
         model: EncoderWithQueryCorpusEncode,
         encode_kwargs: dict[str, Any] = {},
-        corpus_chunk_size: int = 20000,
+        corpus_chunk_size: int = 2000,
         previous_results: str | None = None,
         **kwargs: Any,
     ):
