@@ -2,9 +2,6 @@ from __future__ import annotations
 
 from collections import Counter
 from pathlib import Path
-from typing import get_args
-
-import polars as pl
 
 import mteb
 from docs.create_tasks_table import insert_tables
@@ -12,12 +9,10 @@ from docs.create_tasks_table import insert_tables
 
 def benchmark_to_markdown_row(b: mteb.Benchmark) -> str:
     name = b.name
-    name_w_reference = (
-        f"[{name}]({b.reference})" if b.reference else name
-    )
+    name_w_reference = f"[{name}]({b.reference})" if b.reference else name
     num_tasks = len(b.tasks)
     n_tasks = f"{num_tasks}"
-    
+
     agg_domains = set()
     agg_langs = set()
     for t in b.tasks:
@@ -26,10 +21,8 @@ def benchmark_to_markdown_row(b: mteb.Benchmark) -> str:
         if t.metadata.languages:
             agg_langs.update(t.languages)
 
-    langs = ",".join(list(agg_langs))    
-    domains = (
-        "[" + ", ".join(agg_domains) + "]" if agg_domains else ""
-    )
+    langs = ",".join(list(agg_langs))
+    domains = "[" + ", ".join(agg_domains) + "]" if agg_domains else ""
 
     task_types = dict(Counter([t.metadata.type for t in b.tasks]))
 
