@@ -11,7 +11,6 @@ from .eng.FGVCAircraftClassification import *
 from .eng.Food101Classification import *
 from .eng.GTSRBClassification import *
 from .eng.Imagenet1k import *
-from .eng.Kinetics700Classification import *
 from .eng.MNISTClassification import *
 from .eng.OxfordFlowersClassification import *
 from .eng.OxfordPetsClassification import *
