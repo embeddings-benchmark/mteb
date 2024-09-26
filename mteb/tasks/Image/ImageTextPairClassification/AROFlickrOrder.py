@@ -1,24 +1,29 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SugarCrepe(AbsTaskImageTextPairClassification):
+class AROFlickrOrder(AbsTaskImageTextPairClassification):
     images_column_names = ["images"]
-    texts_column_names = ["caption", "negative_caption"]
+    texts_column_names = [
+        "correct_caption",
+        "hard_text_1",
+        "hard_text_2",
+        "hard_text_3",
+        "hard_text_4",
+    ]
 
     metadata = TaskMetadata(
-        name="SugarCrepe",
-        description="Compositionality Evaluation of images to their captions.",
+        name="AROFlickrOrder",
+        description="Compositionality Evaluation of images to their captions."
+        + "Each capation has four hard negatives created by order permutations.",
         reference="https://proceedings.neurips.cc/paper_files/paper/2023/hash/63461de0b4cb760fc498e85b18a7fe81-Abstract-Datasets_and_Benchmarks.html",
         dataset={
-            "path": "yjkimstats/SUGARCREPE_fmt",
-            "revision": "134abf9ade6a32f9fdae0e89022ff227a70b87e5",
+            "path": "gowitheflow/ARO-Flickr-Order",
+            "revision": "1f9485f69c87947812378a1aedf86410c86a0aa8",
         },
         type="ImageTextPairClassification",
         category="i2t",
@@ -44,16 +49,7 @@ class SugarCrepe(AbsTaskImageTextPairClassification):
   year={2024}
 }""",
         descriptive_stats={
-            "n_samples": {"test": 7511},
+            "n_samples": {"test": 5000},
             "avg_character_length": {"test": 1},
         },
     )
-
-    def load_data(self, **kwargs):
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
-        self.dataset = datasets.DatasetDict({"test": self.dataset["train"]})
-        self.dataset_transform()
-        self.data_loaded = True

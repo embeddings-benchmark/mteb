@@ -23,7 +23,6 @@ class MSCOCOT2IRetrieval(AbsTaskAny2AnyRetrieval):
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
         license="CC BY-SA 4.0",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],

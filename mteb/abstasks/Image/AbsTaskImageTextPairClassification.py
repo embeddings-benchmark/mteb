@@ -4,7 +4,6 @@ import logging
 from typing import Any
 
 from datasets import Dataset
-from tqdm import tqdm
 
 from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from ...evaluation.evaluators import ImageTextPairClassificationEvaluator
@@ -32,18 +31,6 @@ class AbsTaskImageTextPairClassification(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def _preprocess_column(
-        self, dataset: Dataset, column_names: str | list[str]
-    ) -> list[list[Any]]:
-        """Group examples from the columns into a list of examples."""
-        if isinstance(column_names, str):
-            return dataset[column_names]
-
-        return [
-            [example[col] for col in column_names]
-            for example in tqdm(dataset, desc=f"Processing columns {column_names}")
-        ]
-
     def _add_main_score(self, scores) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
@@ -60,11 +47,10 @@ class AbsTaskImageTextPairClassification(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
-        images = self._preprocess_column(dataset, self.images_column_names)
-        texts = self._preprocess_column(dataset, self.texts_column_names)
         evaluator = ImageTextPairClassificationEvaluator(
-            images,
-            texts,
+            dataset,
+            images_column_names=self.images_column_names,
+            texts_column_names=self.texts_column_names,
             task_name=self.metadata.name,
             **kwargs,
         )
