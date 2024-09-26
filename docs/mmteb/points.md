@@ -120,3 +120,4 @@ Please also add your first name and last name are as you want them to appear in 
 | swj0419 | Weijia | Shi | swj0419@uw.edu | ~Weijia_Shi1 | University of Washington |
 | xiamengzhou | Mengzhou | Xia | mengzhou@princeton.edu | ~Mengzhou_Xia1 | Princeton University |
 | john-b-yang | John | Yang | johnby@stanford.edu | ~John_Yang3 | Stanford University |
+| sarahooker | Sara | Hooker | | ~Sara_Hooker2 | Cohere For AI |
