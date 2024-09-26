@@ -28,7 +28,7 @@ def get_benchmark(
 
 
 def get_benchmarks(
-    names: list[str] | None,
+    names: list[str] | None = None,
 ) -> list[Benchmark]:
     if names is None:
         names = list(BENCHMARK_REGISTRY.keys())
