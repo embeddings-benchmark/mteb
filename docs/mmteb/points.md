@@ -39,7 +39,7 @@ Please also add your first name and last name are as you want them to appear in 
 | ----------------- | ---------- | ---------- | ---------------------------- | -------------------- | ----------------------------------------------------- |
 | KennethEnevoldsen | Kenneth    | Enevoldsen | kennethcenevoldsen@gmail.com | ~Kenneth_Enevoldsen1 | Aarhus University, Denmark                            |
 | x-tabdeveloping   | Márton     | Kardos     | martonkardos@cas.au.dk       | ~Márton_Kardos1      | Aarhus University, Denmark                            |
-| imenelydiaker     | Imene      | Kerboua    |                              |                      | Esker, Lyon, France && INSA Lyon, LIRIS, Lyon, France |
+| imenelydiaker     | Imene      | Kerboua    |                              |                      | INSA Lyon, LIRIS, France |
 | wissam-sib        | Wissam     | Siblini    |  wissam.siblini92@gmail.com    |   ~Wissam_Siblini1                   | N/A                                                   |
 | GabrielSequeira   | Gabriel    | Sequeira   |                              |                      | N/A                                                   |
 | schmarion         | Marion     | Schaeffer  |                              |  ~Marion_Schaeffer1  |  Wikit, Lyon, France                                  |
