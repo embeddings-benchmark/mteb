@@ -25,7 +25,6 @@ class PatchCamelyonClassification(AbsTaskImageClassification):
         domains=["Medical"],
         task_subtypes=["Tumor detection"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

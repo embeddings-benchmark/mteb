@@ -25,7 +25,6 @@ class OxfordFlowersClassification(AbsTaskImageClassification):
         domains=["Reviews"],
         task_subtypes=["Sentiment/Hate speech"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

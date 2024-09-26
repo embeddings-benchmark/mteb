@@ -26,7 +26,6 @@ class Caltech101Classification(AbsTaskImageClassification):
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],
