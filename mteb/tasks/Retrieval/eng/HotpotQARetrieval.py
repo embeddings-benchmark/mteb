@@ -86,7 +86,7 @@ class HotpotQAHardNegatives(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HotpotQAHardNegatives",
         dataset={
-            "path": "mteb/hotpotqa_test_top_250_only_w_correct",
+            "path": "mteb/HotpotQA_test_top_250_only_w_correct",
             "revision": "0d4cc90462aeb15de5d11a911a3bb7bd2da0e9cb",
         },
         description=(
