@@ -15,7 +15,7 @@ from mteb.models import get_model, get_model_meta
 from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
 
 from .benchmarks.benchmarks import Benchmark
-from .benchmarks.get_benchmark import get_benchmark
+from .benchmarks.get_benchmark import get_benchmark, get_benchmarks
 
 __version__ = version("mteb")  # fetch version from install metadata
 
@@ -34,4 +34,5 @@ __all__ = [
     "load_results",
     "Benchmark",
     "get_benchmark",
+    "get_benchmarks",
 ]
