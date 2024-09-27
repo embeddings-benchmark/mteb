@@ -64,8 +64,8 @@ class QuoraPLRetrievalHardNegatives(AbsTaskRetrieval):
         description="QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs",
         dataset={
-            "path": "mteb/quora-pl_test_top_250_only_w_correct",
-            "revision": "main",
+            "path": "mteb/Quora_PL_test_top_250_only_w_correct",
+            "revision": "8fdbe747f5a80539d15aeae6942af10e2c4606a1",
             "trust_remote_code": True,
         },
         type="Retrieval",
@@ -92,20 +92,13 @@ class QuoraPLRetrievalHardNegatives(AbsTaskRetrieval):
         descriptive_stats={
             "n_samples": {"test": 1000},
             "avg_character_length": {
-                "validation": {
-                    "average_document_length": 65.82473022253414,
-                    "average_query_length": 54.6006,
-                    "num_documents": 522931,
-                    "num_queries": 5000,
-                    "average_relevant_docs_per_query": 1.5252,
-                },
                 "test": {
-                    "average_document_length": 65.82473022253414,
-                    "average_query_length": 54.5354,
-                    "num_documents": 522931,
-                    "num_queries": 10000,
-                    "average_relevant_docs_per_query": 1.5675,
-                },
+                    "average_document_length": 66.38585583321208,
+                    "average_query_length": 53.846,
+                    "num_documents": 453558,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.5660830415207603,
+                }
             },
         },
     )

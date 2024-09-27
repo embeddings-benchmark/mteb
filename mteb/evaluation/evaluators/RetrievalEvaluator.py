@@ -561,8 +561,13 @@ class RetrievalEvaluator(Evaluator):
             recall[f"Recall@{k}"] = round(sum(recall[f"Recall@{k}"]) / len(scores), 5)
             precision[f"P@{k}"] = round(sum(precision[f"P@{k}"]) / len(scores), 5)
 
+        # results needs to be only those with qrels
+        abstention_results = {
+            key: value for key, value in scores.items() if key in qrels
+        }
         naucs = RetrievalEvaluator.evaluate_abstention(
-            results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
+            abstention_results,
+            {**all_ndcgs, **all_aps, **all_recalls, **all_precisions},
         )
 
         return ndcg, _map, recall, precision, naucs
