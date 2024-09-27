@@ -66,7 +66,7 @@ Please also add your first name and last name are as you want them to appear in 
 | davidstap         | David      | Stap       | dd.stap@gmail.com            | ~David_Stap          | University of Amsterdam.                         |
 | HLasse            | Lasse      | Hansen     | lasseh0310@gmail.com         | ~Lasse_Hansen2       | Aarhus University, Denmark                            |
 | jaygala24         | Jay        | Gala       | jaygala24@gmail.com          | ~Jay_Gala1           | MBZUAI                          |
-| digantamisra98    | Diganta    | Misra      | diganta.misra@mila.quebec    | ~Diganta_Misra1       | Mila - Quebec AI Institute                           |
+| digantamisra98    | Diganta    | Misra      | diganta.misra@tue.ellis.eu   | ~Diganta_Misra1       | ELLIS Institute Tübingen, Max Planck Institut für Intelligente Systeme                           |
 | PranjalChitale    | Pranjal    | Chitale    | cs21s022@smail.iitm.ac.in    | ~Pranjal_A_Chitale1       | Indian Institute of Technology Madras            |
 | Akash190104       | Akash      | Kundu      | akashkundu2xx4@gmail.com      |~Akash_Kundu2             | Heritage Institute of Technology, Kolkata && Apart Research |
 | dwzhu-pku         | Dawei      | Zhu        | dwzhu@pku.edu.cn             | ~Dawei_Zhu2       | Peking University            |
