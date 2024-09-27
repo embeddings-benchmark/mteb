@@ -116,7 +116,7 @@ Please also add your first name and last name are as you want them to appear in 
 | crystina-z | Xinyu | Zhang | xinyucrystina.zhang@uwaterloo.ca | ~Crystina_Zhang1 | University of Waterloo |
 | tomaarsen          | Tom   | Aarsen       |                           | ~Tom_Aarsen1      | Hugging Face |
 | crystina-z | Xinyu | Zhang | xinyucrystina.zhang@uwaterloo.ca | ~Crystina_Zhang1 | University of Waterloo |
-| mrshu | Marek | Suppa | marek.suppa@fmph.uniba.sk | ~Marek_Suppa1 | Comenius University in Bratislava && Cisco Systems |
+| mrshu | Marek | Šuppa | marek.suppa@fmph.uniba.sk | ~Marek_Suppa1 | Comenius University in Bratislava && Cisco Systems |
 | swj0419 | Weijia | Shi | swj0419@uw.edu | ~Weijia_Shi1 | University of Washington |
 | xiamengzhou | Mengzhou | Xia | mengzhou@princeton.edu | ~Mengzhou_Xia1 | Princeton University |
 | john-b-yang | John | Yang | johnby@stanford.edu | ~John_Yang3 | Stanford University |
