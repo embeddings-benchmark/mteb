@@ -11,7 +11,7 @@ class METI2IRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://arxiv.org/abs/2202.01747",
         dataset={
             "path": "JamieSJS/met",
-            "revision": "0603c2ff57f406191e1510d15d3de82db2f720c9",
+            "revision": "08ceaa61c0d172214abb3b8e82971d8f69d2aec0",
         },
         type="Retrieval",
         category="i2i",
