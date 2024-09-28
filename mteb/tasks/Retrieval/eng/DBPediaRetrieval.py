@@ -58,8 +58,8 @@ class DBPediaHardNegatives(AbsTaskRetrieval):
         description="DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://github.com/iai-group/DBpedia-Entity/",
         dataset={
-            "path": "mteb/DBPedia_test_top_250_only_w_correct",
-            "revision": "efbe63af6ea3bd1622bcd416c77b0572c089533e",
+            "path": "mteb/DBPedia_test_top_250_only_w_correct-v2",
+            "revision": "943ec7fdfef3728b2ad1966c5b6479ff9ffd26c9",
         },
         type="Retrieval",
         category="s2p",
@@ -86,14 +86,6 @@ class DBPediaHardNegatives(AbsTaskRetrieval):
 }""",
         descriptive_stats={
             "n_samples": {"test": 400},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 338.65365967056323,
-                    "average_query_length": 34.085,
-                    "num_documents": 90336,
-                    "num_queries": 400,
-                    "average_relevant_docs_per_query": 38.215,
-                }
-            },
+            "avg_character_length": {"test": {"average_document_length": 338.58561119129564, "average_query_length": 34.085, "num_documents": 90070, "num_queries": 400, "average_relevant_docs_per_query": 38.215}}
         },
     )

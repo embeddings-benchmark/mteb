@@ -130,14 +130,83 @@ class NeuCLIR2022Retrieval(MultilingualTask, AbsTaskRetrieval):
         self.data_loaded = True
 
 
+
+def load_neuclir_data_hard_negatives(
+    path: str,
+    langs: list,
+    eval_splits: list,
+    cache_dir: str | None = None,
+    revision: str | None = None,
+):
+    split = "test"
+    corpus = {lang: {split: None for split in eval_splits} for lang in langs}
+    queries = {lang: {split: None for split in eval_splits} for lang in langs}
+    relevant_docs = {lang: {split: None for split in eval_splits} for lang in langs}
+
+    for lang in langs:
+        corpus_identifier = f"corpus-{lang}"
+        corpus_data = datasets.load_dataset(
+            path,
+            corpus_identifier,
+            cache_dir=cache_dir,
+            revision=revision,
+            trust_remote_code=True,
+        )
+        corpus[lang][split] = {}
+        for row in corpus_data["corpus"]:
+            docid = row["_id"]
+            doc_title = row["title"]
+            doc_text = row["text"]
+            corpus[lang][split][docid] = {"title": doc_title, "text": doc_text}
+
+        # Load queries data
+        queries_identifier = f"queries-{lang}"
+        queries_data = datasets.load_dataset(
+            path,
+            queries_identifier,
+            cache_dir=cache_dir,
+            revision=revision,
+            trust_remote_code=True,
+        )
+        queries[lang][split] = {}
+        for row in queries_data["queries"]:
+            query_id = row["_id"]
+            query_text = row["text"]
+            queries[lang][split][query_id] = query_text
+
+        # Load relevant documents data
+        qrels_identifier = f"{lang}"
+        qrels_data = datasets.load_dataset(
+            path,
+            qrels_identifier,
+            cache_dir=cache_dir,
+            revision=revision,
+            trust_remote_code=True,
+        )
+        relevant_docs[lang][split] = {}
+        for row in qrels_data[split]:
+            query_id = row["query-id"]
+            doc_id = row["corpus-id"]
+            score = row["score"]
+            if query_id not in relevant_docs[lang][split]:
+                relevant_docs[lang][split][query_id] = {}
+            relevant_docs[lang][split][query_id][doc_id] = score
+
+    corpus = datasets.DatasetDict(corpus)
+    queries = datasets.DatasetDict(queries)
+    relevant_docs = datasets.DatasetDict(relevant_docs)
+
+    return corpus, queries, relevant_docs
+
+
 class NeuCLIR2022RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NeuCLIR2022RetrievalHardNegatives",
         description="The task involves identifying and retrieving the documents that are relevant to the queries. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://neuclir.github.io/",
         dataset={
-            "path": "mteb/neuclir-2022-fast",
-            "revision": "b94a5147a3b3046581c8b4524d9409f94594c5a4",
+            "path": "mteb/neuclir-2022-hard-negatives",
+            "revision": "35dd709a0d846ae987541cf8ca978562636260f0",
             "trust_remote_code": True,
         },
         type="Retrieval",
@@ -161,38 +230,7 @@ class NeuCLIR2022RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
 }""",
         descriptive_stats={
             "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 2220.6705525948482,
-                    "average_query_length": 65.06432748538012,
-                    "num_documents": 63048,
-                    "num_queries": 342,
-                    "average_relevant_docs_per_query": 19.807142857142857,
-                    "hf_subset_descriptive_stats": {
-                        "fas": {
-                            "average_document_length": 3010.529632371083,
-                            "average_query_length": 85.4298245614035,
-                            "num_documents": 20265,
-                            "num_queries": 114,
-                            "average_relevant_docs_per_query": 14.217391304347826,
-                        },
-                        "rus": {
-                            "average_document_length": 2623.860809712729,
-                            "average_query_length": 85.58771929824562,
-                            "num_documents": 20921,
-                            "num_queries": 114,
-                            "average_relevant_docs_per_query": 24.177777777777777,
-                        },
-                        "zho": {
-                            "average_document_length": 1102.6741377733053,
-                            "average_query_length": 24.17543859649123,
-                            "num_documents": 21862,
-                            "num_queries": 114,
-                            "average_relevant_docs_per_query": 21.040816326530614,
-                        },
-                    },
-                }
-            },
+            "avg_character_length": {"test": {"average_document_length": 2066.9453653646488, "average_query_length": 63.529411764705884, "num_documents": 27931, "num_queries": 136, "average_relevant_docs_per_query": 40.39705882352941, "hf_subset_descriptive_stats": {"fas": {"average_document_length": 2816.847782031074, "average_query_length": 83.26666666666667, "num_documents": 8882, "num_queries": 45, "average_relevant_docs_per_query": 32.71111111111111}, "rus": {"average_document_length": 2446.5574277854193, "average_query_length": 85.56818181818181, "num_documents": 8724, "num_queries": 44, "average_relevant_docs_per_query": 42.93181818181818}, "zho": {"average_document_length": 1101.0984987893462, "average_query_length": 24.0, "num_documents": 10325, "num_queries": 47, "average_relevant_docs_per_query": 45.38297872340426}}}}
         },
     )
 
@@ -200,7 +238,7 @@ class NeuCLIR2022RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_neuclir_data(
+        self.corpus, self.queries, self.relevant_docs = load_neuclir_data_hard_negatives(
             path=self.metadata_dict["dataset"]["path"],
             langs=self.metadata.eval_langs,
             eval_splits=self.metadata_dict["eval_splits"],

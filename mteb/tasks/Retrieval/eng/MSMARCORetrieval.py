@@ -84,8 +84,8 @@ class MSMARCOHardNegatives(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MSMARCOHardNegatives",
         dataset={
-            "path": "mteb/MSMARCO_test_top_250_only_w_correct",
-            "revision": "5d3d15761bd3e6d0885f01e10237c1cb13eb6370",
+            "path": "mteb/MSMARCO_test_top_250_only_w_correct-v2",
+            "revision": "67c0b4f7f15946e0b15cf6cf3b8993d04cb3efc6",
         },
         description="MS MARCO is a collection of datasets focused on deep learning in search. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://microsoft.github.io/msmarco/",
@@ -124,14 +124,6 @@ class MSMARCOHardNegatives(AbsTaskRetrieval):
 }""",
         descriptive_stats={
             "n_samples": {"test": 43},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 354.2790134664851,
-                    "average_query_length": 32.74418604651163,
-                    "num_documents": 6609,
-                    "num_queries": 43,
-                    "average_relevant_docs_per_query": 48.02325581395349,
-                }
-            },
+            "avg_character_length": {"test": {"average_document_length": 355.2909668633681, "average_query_length": 32.74418604651163, "num_documents": 8812, "num_queries": 43, "average_relevant_docs_per_query": 95.3953488372093}}
         },
     )

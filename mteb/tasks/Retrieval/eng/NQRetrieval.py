@@ -52,8 +52,8 @@ class NQHardNegatives(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NQHardNegatives",
         dataset={
-            "path": "mteb/NQ_test_top_250_only_w_correct",
-            "revision": "cd13dd9a902e4edbbf42a69b3cffcd8feae5daaa",
+            "path": "mteb/NQ_test_top_250_only_w_correct-v2",
+            "revision": "d700fe4f167a5db8e6c9b03e8c26e7eaf66faf97",
         },
         description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://ai.google.com/research/NaturalQuestions/",
@@ -78,14 +78,6 @@ class NQHardNegatives(AbsTaskRetrieval):
         Linguistics}}""",
         descriptive_stats={
             "n_samples": {"test": 1000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 596.3618630215394,
-                    "average_query_length": 47.878,
-                    "num_documents": 545093,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.2169756662804172,
-                }
-            },
+            "avg_character_length": {"test": {"average_document_length": 602.7903551179953, "average_query_length": 47.878, "num_documents": 198779, "num_queries": 1000, "average_relevant_docs_per_query": 1.213}}
         },
     )

@@ -112,8 +112,8 @@ class TopiOCQARetrievalHardNegatives(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="TopiOCQAHardNegatives",
         dataset={
-            "path": "mteb/TopiOCQA_validation_top_250_only_w_correct",
-            "revision": "395e23160f25b3de4755f90b29caf4ebf717c7b4",
+            "path": "mteb/TopiOCQA_validation_top_250_only_w_correct-v2",
+            "revision": "b4cc09fb8bb3a9e0ce0f94dc69c96397a2a47c18",
             "trust_remote_code": True,
         },
         reference="https://mcgill-nlp.github.io/topiocqa",
@@ -147,14 +147,6 @@ class TopiOCQARetrievalHardNegatives(AbsTaskRetrieval):
         """,
         descriptive_stats={
             "n_samples": {"test": 1000},
-            "avg_character_length": {
-                "validation": {
-                    "average_document_length": 525.5101748190006,
-                    "average_query_length": 12.85,
-                    "num_documents": 141575,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
+            "avg_character_length": {"validation": {"average_document_length": 538.7586536643946, "average_query_length": 12.85, "num_documents": 89933, "num_queries": 1000, "average_relevant_docs_per_query": 1.0}}
         },
     )

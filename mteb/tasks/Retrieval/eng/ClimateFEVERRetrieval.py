@@ -56,8 +56,8 @@ class ClimateFEVERHardNegatives(AbsTaskRetrieval):
         description="CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html",
         dataset={
-            "path": "mteb/ClimateFEVER_test_top_250_only_w_correct",
-            "revision": "a0e6c997bb9732a65673b96760a84d9c9d26ab05",
+            "path": "mteb/ClimateFEVER_test_top_250_only_w_correct-v2",
+            "revision": "3a309e201f3c2c4b13bd4a367a8f37eee2ec1d21",
         },
         type="Retrieval",
         category="s2p",
@@ -82,14 +82,6 @@ class ClimateFEVERHardNegatives(AbsTaskRetrieval):
 }""",
         descriptive_stats={
             "n_samples": {"test": 1000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1252.2511669715511,
-                    "average_query_length": 122.23336745138178,
-                    "num_documents": 63412,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 2.7768924302788847,
-                }
-            },
+            "avg_character_length": {"test": {"average_document_length": 1245.4236333727013, "average_query_length": 121.879, "num_documents": 47416, "num_queries": 1000, "average_relevant_docs_per_query": 3.048}}
         },
     )

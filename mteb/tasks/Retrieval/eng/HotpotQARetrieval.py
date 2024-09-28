@@ -86,8 +86,8 @@ class HotpotQAHardNegatives(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HotpotQAHardNegatives",
         dataset={
-            "path": "mteb/HotpotQA_test_top_250_only_w_correct",
-            "revision": "0d4cc90462aeb15de5d11a911a3bb7bd2da0e9cb",
+            "path": "mteb/HotpotQA_test_top_250_only_w_correct-v2",
+            "revision": "617612fa63afcb60e3b134bed8b7216a99707c37",
         },
         description=(
             "HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong"
@@ -132,14 +132,6 @@ class HotpotQAHardNegatives(AbsTaskRetrieval):
 }""",
         descriptive_stats={
             "n_samples": {"test": 1000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 357.91445598233946,
-                    "average_query_length": 92.584,
-                    "num_documents": 1043229,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 2.0,
-                }
-            },
+            "avg_character_length": {"test": {"average_document_length": 373.558822095461, "average_query_length": 92.584, "num_documents": 225621, "num_queries": 1000, "average_relevant_docs_per_query": 2.0}}
         },
     )

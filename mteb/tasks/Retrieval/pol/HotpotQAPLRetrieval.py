@@ -57,8 +57,8 @@ class HotpotQAPLHardNegatives(AbsTaskRetrieval):
         description="HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
         reference="https://hotpotqa.github.io/",
         dataset={
-            "path": "mteb/HotpotQA_PL_test_top_250_only_w_correct",
-            "revision": "1328766cef1f8d57bf2904bc832872ce3b793d68",
+            "path": "mteb/HotpotQA_PL_test_top_250_only_w_correct-v2",
+            "revision": "0642cadffa3205c6b21c9af901fdffcd60d6f31e",
             "trust_remote_code": True,
         },
         type="Retrieval",
@@ -84,14 +84,6 @@ class HotpotQAPLHardNegatives(AbsTaskRetrieval):
 }""",
         descriptive_stats={
             "n_samples": {"test": 1000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 406.1780886114403,
-                    "average_query_length": 95.161,
-                    "num_documents": 964503,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 2.0,
-                }
-            },
+            "avg_character_length": {"test": {"average_document_length": 438.3888210025661, "average_query_length": 95.161, "num_documents": 212774, "num_queries": 1000, "average_relevant_docs_per_query": 2.0}}
         },
     )

@@ -67,8 +67,8 @@ class QuoraRetrievalHardNegatives(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="QuoraRetrievalHardNegatives",
         dataset={
-            "path": "mteb/QuoraRetrieval_test_top_250_only_w_correct",
-            "revision": "4fd5f24639bf4e81055261ddfd1cfe44f73e4507",
+            "path": "mteb/QuoraRetrieval_test_top_250_only_w_correct-v2",
+            "revision": "907a33577e9506221d3ba20f5a851b7c3f8dc6d3",
         },
         description=(
             "QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a"
@@ -97,14 +97,6 @@ class QuoraRetrievalHardNegatives(AbsTaskRetrieval):
 }""",
         descriptive_stats={
             "n_samples": {"test": 1000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 61.371302161846586,
-                    "average_query_length": 51.228,
-                    "num_documents": 459052,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.5672,
-                }
-            },
+            "avg_character_length": {"test": {"average_document_length": 58.96963812985781, "average_query_length": 51.228, "num_documents": 177163, "num_queries": 1000, "average_relevant_docs_per_query": 1.641}}
         },
     )
