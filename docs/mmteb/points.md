@@ -122,3 +122,4 @@ Please also add your first name and last name are as you want them to appear in 
 | loicmagne | Loic | Magne | ~Loïc_Magne1 |Individual Contributor |
 | sarahooker | Sara | Hooker | | ~Sara_Hooker2 | Cohere For AI |
 | kwojtasi | Konrad |  Wojtasik | ~Konrad_Wojtasik1 | Wrocław University of Science and Technology |
+| tmp_handle | Jimmy | Lin | ~Jimmy_Lin2 | University of Waterloo |
