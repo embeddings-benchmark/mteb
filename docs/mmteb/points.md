@@ -119,9 +119,9 @@ Please also add your first name and last name are as you want them to appear in 
 | xiamengzhou | Mengzhou | Xia | mengzhou@princeton.edu | ~Mengzhou_Xia1 | Princeton University |
 | john-b-yang | John | Yang | johnby@stanford.edu | ~John_Yang3 | Stanford University |
 | thakur-nandan | Nandan | Thakur | | ~Nandan_Thakur1 | University of Waterloo |
-| loicmagne | Loic | Magne | ~Loïc_Magne1 |Individual Contributor |
+| loicmagne | Loic | Magne | | ~Loïc_Magne1 |Individual Contributor |
 | sarahooker | Sara | Hooker | | ~Sara_Hooker2 | Cohere For AI |
-| kwojtasi | Konrad |  Wojtasik | ~Konrad_Wojtasik1 | Wrocław University of Science and Technology |
-| tmp_handle | Jimmy | Lin | ~Jimmy_Lin2 | University of Waterloo |
-| hongjin-su | Hongjin | Su | ~Hongjin_SU1 | University of Hong Kong |
-| howard-yen | Howard | Yen | ~Howard_Yen1 | Princeton University |
+| kwojtasi | Konrad |  Wojtasik | | ~Konrad_Wojtasik1 | Wrocław University of Science and Technology |
+| tmp_handle | Jimmy | Lin | | ~Jimmy_Lin2 | University of Waterloo |
+| hongjin-su | Hongjin | Su | | ~Hongjin_SU1 | University of Hong Kong |
+| howard-yen | Howard | Yen | | ~Howard_Yen1 | Princeton University |
