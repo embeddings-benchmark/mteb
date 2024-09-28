@@ -147,6 +147,14 @@ class TopiOCQARetrievalHardNegatives(AbsTaskRetrieval):
         """,
         descriptive_stats={
             "n_samples": {"test": 1000},
-            "avg_character_length": {"validation": {"average_document_length": 538.7586536643946, "average_query_length": 12.85, "num_documents": 89933, "num_queries": 1000, "average_relevant_docs_per_query": 1.0}}
+            "avg_character_length": {
+                "validation": {
+                    "average_document_length": 538.7586536643946,
+                    "average_query_length": 12.85,
+                    "num_documents": 89933,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.0,
+                }
+            },
         },
     )

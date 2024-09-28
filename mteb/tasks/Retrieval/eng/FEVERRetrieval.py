@@ -130,6 +130,14 @@ class FEVERHardNegatives(AbsTaskRetrieval):
 }""",
         descriptive_stats={
             "n_samples": {"test": 1000},
-            "avg_character_length":{"test": {"average_document_length": 695.4370242764114, "average_query_length": 49.62, "num_documents": 163698, "num_queries": 1000, "average_relevant_docs_per_query": 1.171}}
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 695.4370242764114,
+                    "average_query_length": 49.62,
+                    "num_documents": 163698,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.171,
+                }
+            },
         },
     )

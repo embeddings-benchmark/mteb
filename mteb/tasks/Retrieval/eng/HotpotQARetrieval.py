@@ -132,6 +132,14 @@ class HotpotQAHardNegatives(AbsTaskRetrieval):
 }""",
         descriptive_stats={
             "n_samples": {"test": 1000},
-            "avg_character_length": {"test": {"average_document_length": 373.558822095461, "average_query_length": 92.584, "num_documents": 225621, "num_queries": 1000, "average_relevant_docs_per_query": 2.0}}
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 373.558822095461,
+                    "average_query_length": 92.584,
+                    "num_documents": 225621,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 2.0,
+                }
+            },
         },
     )

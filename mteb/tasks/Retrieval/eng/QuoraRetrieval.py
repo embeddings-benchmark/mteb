@@ -97,6 +97,14 @@ class QuoraRetrievalHardNegatives(AbsTaskRetrieval):
 }""",
         descriptive_stats={
             "n_samples": {"test": 1000},
-            "avg_character_length": {"test": {"average_document_length": 58.96963812985781, "average_query_length": 51.228, "num_documents": 177163, "num_queries": 1000, "average_relevant_docs_per_query": 1.641}}
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 58.96963812985781,
+                    "average_query_length": 51.228,
+                    "num_documents": 177163,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.641,
+                }
+            },
         },
     )

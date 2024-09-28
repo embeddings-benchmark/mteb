@@ -562,7 +562,7 @@ class RetrievalEvaluator(Evaluator):
             precision[f"P@{k}"] = round(sum(precision[f"P@{k}"]) / len(scores), 5)
 
         naucs = RetrievalEvaluator.evaluate_abstention(
-            results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions},
+            results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
         )
 
         return ndcg, _map, recall, precision, naucs

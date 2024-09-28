@@ -78,6 +78,14 @@ class NQHardNegatives(AbsTaskRetrieval):
         Linguistics}}""",
         descriptive_stats={
             "n_samples": {"test": 1000},
-            "avg_character_length": {"test": {"average_document_length": 602.7903551179953, "average_query_length": 47.878, "num_documents": 198779, "num_queries": 1000, "average_relevant_docs_per_query": 1.213}}
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 602.7903551179953,
+                    "average_query_length": 47.878,
+                    "num_documents": 198779,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.213,
+                }
+            },
         },
     )

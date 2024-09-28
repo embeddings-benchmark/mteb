@@ -232,7 +232,38 @@ class NeuCLIR2023RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
 }""",
         descriptive_stats={
             "n_samples": None,
-            "avg_character_length": {"test": {"average_document_length": 2236.175955333482, "average_query_length": 54.10267857142857, "num_documents": 49433, "num_queries": 224, "average_relevant_docs_per_query": 61.816964285714285, "hf_subset_descriptive_stats": {"fas": {"average_document_length": 2895.869857421016, "average_query_length": 65.89189189189189, "num_documents": 15921, "num_queries": 74, "average_relevant_docs_per_query": 68.08108108108108}, "rus": {"average_document_length": 2724.294762109928, "average_query_length": 74.41333333333333, "num_documents": 16247, "num_queries": 75, "average_relevant_docs_per_query": 63.053333333333335}, "zho": {"average_document_length": 1168.4984071821605, "average_query_length": 22.16, "num_documents": 17265, "num_queries": 75, "average_relevant_docs_per_query": 54.4}}}}
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 2236.175955333482,
+                    "average_query_length": 54.10267857142857,
+                    "num_documents": 49433,
+                    "num_queries": 224,
+                    "average_relevant_docs_per_query": 61.816964285714285,
+                    "hf_subset_descriptive_stats": {
+                        "fas": {
+                            "average_document_length": 2895.869857421016,
+                            "average_query_length": 65.89189189189189,
+                            "num_documents": 15921,
+                            "num_queries": 74,
+                            "average_relevant_docs_per_query": 68.08108108108108,
+                        },
+                        "rus": {
+                            "average_document_length": 2724.294762109928,
+                            "average_query_length": 74.41333333333333,
+                            "num_documents": 16247,
+                            "num_queries": 75,
+                            "average_relevant_docs_per_query": 63.053333333333335,
+                        },
+                        "zho": {
+                            "average_document_length": 1168.4984071821605,
+                            "average_query_length": 22.16,
+                            "num_documents": 17265,
+                            "num_queries": 75,
+                            "average_relevant_docs_per_query": 54.4,
+                        },
+                    },
+                }
+            },
         },
     )
 
@@ -240,11 +271,13 @@ class NeuCLIR2023RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = load_neuclir_data_hard_negatives(
-            path=self.metadata_dict["dataset"]["path"],
-            langs=self.metadata.eval_langs,
-            eval_splits=self.metadata_dict["eval_splits"],
-            cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+        self.corpus, self.queries, self.relevant_docs = (
+            load_neuclir_data_hard_negatives(
+                path=self.metadata_dict["dataset"]["path"],
+                langs=self.metadata.eval_langs,
+                eval_splits=self.metadata_dict["eval_splits"],
+                cache_dir=kwargs.get("cache_dir", None),
+                revision=self.metadata_dict["dataset"]["revision"],
+            )
         )
         self.data_loaded = True

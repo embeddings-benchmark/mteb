@@ -86,6 +86,14 @@ class DBPediaHardNegatives(AbsTaskRetrieval):
 }""",
         descriptive_stats={
             "n_samples": {"test": 400},
-            "avg_character_length": {"test": {"average_document_length": 338.58561119129564, "average_query_length": 34.085, "num_documents": 90070, "num_queries": 400, "average_relevant_docs_per_query": 38.215}}
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 338.58561119129564,
+                    "average_query_length": 34.085,
+                    "num_documents": 90070,
+                    "num_queries": 400,
+                    "average_relevant_docs_per_query": 38.215,
+                }
+            },
         },
     )

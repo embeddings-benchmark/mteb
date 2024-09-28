@@ -84,6 +84,14 @@ class NQPLHardNegatives(AbsTaskRetrieval):
 }""",
         descriptive_stats={
             "n_samples": {"test": 1000},
-            "avg_character_length": {"test": {"average_document_length": 610.7449138094336, "average_query_length": 48.381, "num_documents": 184765, "num_queries": 1000, "average_relevant_docs_per_query": 1.213}}
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 610.7449138094336,
+                    "average_query_length": 48.381,
+                    "num_documents": 184765,
+                    "num_queries": 1000,
+                    "average_relevant_docs_per_query": 1.213,
+                }
+            },
         },
     )
