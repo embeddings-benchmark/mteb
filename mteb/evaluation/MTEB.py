@@ -6,6 +6,7 @@ import os
 import traceback
 from copy import copy
 from datetime import datetime
+from itertools import chain
 from pathlib import Path
 from time import time
 from typing import Any, Iterable
@@ -58,6 +59,10 @@ class MTEB:
 
         if tasks is not None:
             self._tasks = tasks
+            if not isinstance(
+                tasks[0], AbsTask
+            ):  # So that passing in a list of Benchmarks works too. Trying to import Benchmark causes circular import.
+                self._tasks = list(chain.from_iterable(tasks))
             assert (
                 task_types is None and task_categories is None
             ), "Cannot specify both `tasks` and `task_types`/`task_categories`"
