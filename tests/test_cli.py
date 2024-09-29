@@ -22,6 +22,15 @@ def test_available_tasks():
     ), "Sample task Banking77Classification task not found in available tasks"
 
 
+def test_available_benchmarks():
+    command = f"{sys.executable} -m mteb available_benchmarks"
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    assert result.returncode == 0, "Command failed"
+    assert (
+        "MTEB(eng)" in result.stdout
+    ), "Sample benchmark MTEB(eng) task not found in available bencmarks"
+
+
 run_task_fixures = [
     (
         "average_word_embeddings_komninos",

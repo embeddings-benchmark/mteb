@@ -30,6 +30,14 @@ mteb available_tasks # list all available tasks
 mteb available_tasks --task_types Clustering # list tasks of type Clustering
 ```
 
+## Listing Available Benchmarks
+
+To list the available benchmarks within MTEB, use the `mteb available_benchmarks` command. For example:
+
+```bash
+mteb available_benchmarks # list all available benchmarks
+```
+
 
 ## Creating Model Metadata
 
@@ -144,6 +152,12 @@ def run(args: argparse.Namespace) -> None:
     _save_model_metadata(model, Path(args.output_folder))
 
 
+def available_benchmarks(args: argparse.Namespace) -> None:
+    benchmarks = mteb.get_benchmarks()
+    eval = mteb.MTEB(tasks=benchmarks)
+    eval.mteb_benchmarks()
+
+
 def available_tasks(args: argparse.Namespace) -> None:
     tasks = mteb.get_tasks(
         categories=args.categories,
@@ -196,6 +210,15 @@ def add_available_tasks_parser(subparsers) -> None:
     add_task_selection_args(parser)
 
     parser.set_defaults(func=available_tasks)
+
+
+def add_available_benchmarks_parser(subparsers) -> None:
+    parser = subparsers.add_parser(
+        "available_benchmarks", help="List the available benchmarks within MTEB"
+    )
+    add_task_selection_args(parser)
+
+    parser.set_defaults(func=available_benchmarks)
 
 
 def add_run_parser(subparsers) -> None:
@@ -321,6 +344,7 @@ def main():
     )
     add_run_parser(subparsers)
     add_available_tasks_parser(subparsers)
+    add_available_benchmarks_parser(subparsers)
     add_create_meta_parser(subparsers)
 
     args = parser.parse_args()
