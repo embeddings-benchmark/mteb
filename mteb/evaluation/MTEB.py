@@ -168,6 +168,12 @@ class MTEB:
                     console.print(f"{prefix}{name}{category}{multilingual}")
                 console.print("\n")
 
+    def mteb_benchmarks(self):
+        """Get all benchmarks available in the MTEB."""
+        for benchmark in self._tasks:
+            name = benchmark.name
+            self._display_tasks(benchmark.tasks, name=name)
+
     @classmethod
     def mteb_tasks(cls):
         """Get all tasks available in the MTEB."""
