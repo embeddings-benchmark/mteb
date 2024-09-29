@@ -159,6 +159,19 @@ def test_run_using_benchmark(model: mteb.Encoder):
     )  # we just want to test that it runs
 
 
+@pytest.mark.parametrize("model", [MockNumpyEncoder()])
+def test_run_using_list_of_benchmark(model: mteb.Encoder):
+    """Test that a list of benchmark objects can be run using the MTEB class."""
+    bench = [
+        Benchmark(name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"]))
+    ]
+
+    eval = mteb.MTEB(tasks=bench)
+    eval.run(
+        model, output_folder="tests/results", overwrite_results=True
+    )  # we just want to test that it runs
+
+
 def test_benchmark_names_must_be_unique():
     import mteb.benchmarks.benchmarks as benchmark_module
 
