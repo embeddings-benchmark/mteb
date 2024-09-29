@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.model_meta import ModelMeta
@@ -90,8 +90,8 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
     return meta
 
 
-def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMeta:
-    try:
+def model_meta_from_sentence_transformers(model: CrossEncoder | SentenceTransformer) -> ModelMeta:
+    if isinstance(model, SentenceTransformer):
         name = (
             model.model_card_data.model_name
             if model.model_card_data.model_name
@@ -110,9 +110,18 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             framework=["Sentence Transformers"],
             similarity_fn_name=model.similarity_fn_name,
         )
-    except AttributeError as e:
+    elif isinstance(model, CrossEncoder):
+        meta = ModelMeta(
+            name=model.config._name_or_path,
+            revision=None,
+            release_date=None,
+            languages=None,
+            framework=["Sentence Transformers"],
+            similarity_fn_name=None,
+        )
+    else:
         logger.warning(
-            f"Failed to extract metadata from model: {e}. Upgrading to sentence-transformers v3.0.0 or above is recommended."
+            "Failed to extract metadata from model. Upgrading to sentence-transformers v3.0.0 or above is recommended."
         )
         meta = ModelMeta(
             name=None,
