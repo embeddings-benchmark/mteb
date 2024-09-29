@@ -72,7 +72,7 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
                 f"Model revision {revision} not found for model {model_name}. Expected {models[model_name].revision}."
             )
         return models[model_name]
-    
+
     # assume it is a sentence-transformers model
     logger.info(
         "Model not found in model registry, assuming it is a sentence-transformers model."
@@ -80,9 +80,7 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
     logger.info(
         f"Attempting to extract metadata by loading the model ({model_name}) using sentence-transformers."
     )
-    model = SentenceTransformer(
-        model_name, revision=revision, trust_remote_code=True
-    )
+    model = SentenceTransformer(model_name, revision=revision, trust_remote_code=True)
     meta = model_meta_from_sentence_transformers(model)
 
     meta.revision = revision
@@ -90,7 +88,9 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
     return meta
 
 
-def model_meta_from_sentence_transformers(model: CrossEncoder | SentenceTransformer) -> ModelMeta:
+def model_meta_from_sentence_transformers(
+    model: CrossEncoder | SentenceTransformer,
+) -> ModelMeta:
     if isinstance(model, SentenceTransformer):
         name = (
             model.model_card_data.model_name
