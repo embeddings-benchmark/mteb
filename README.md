@@ -378,6 +378,7 @@ df = results_to_dataframe(results)
 | Documentation                  |                        |
 | ------------------------------ | ---------------------- |
 | 📋 [Tasks] | Overview of available tasks |
+| 📐 [Benchmarks] | Overview of available benchmarks |
 | 📈 [Leaderboard] | The interactive leaderboard of the benchmark |
 | 🤖 [Adding a model] | Information related to how to submit a model to the leaderboard |
 | 👩‍🔬 [Reproducible workflows] | Information related to how to reproduce and create reproducible workflows with MTEB |
@@ -387,6 +388,7 @@ df = results_to_dataframe(results)
 | 🌐 [MMTEB] | An open-source effort to extend MTEB to cover a broad set of languages |  
 
 [Tasks]: docs/tasks.md
+[Benchmarks]: docs/benchmarks.md
 [Contributing]: CONTRIBUTING.md
 [Adding a model]: docs/adding_a_model.md
 [Adding a dataset]: docs/adding_a_dataset.md
