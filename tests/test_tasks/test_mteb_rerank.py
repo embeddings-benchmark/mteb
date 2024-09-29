@@ -351,7 +351,7 @@ def test_mteb_rerank(tmp_path: Path):
     tmp_file.unlink()
 
     # read in the results
-    with open("tests/results/SciFact_default_predictions.json") as f:
+    with open("tests/results/SciFact_predictions.json") as f:
         results = json.load(f)
 
     # check that only the top two results are re-orderd
