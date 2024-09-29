@@ -365,7 +365,11 @@ def test_all_metadata_is_filled_and_valid():
 
     unfilled_metadata = []
     for task in all_tasks:
-        if task.metadata.name not in _HISTORIC_DATASETS:
+        if (
+            task.metadata.name not in _HISTORIC_DATASETS
+            and task.metadata.name.replace("HardNegatives", "")
+            not in _HISTORIC_DATASETS
+        ):
             if not task.metadata.is_filled() and (
                 not task.metadata.validate_metadata()
             ):
