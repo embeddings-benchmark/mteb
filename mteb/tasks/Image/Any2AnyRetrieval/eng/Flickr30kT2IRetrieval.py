@@ -38,7 +38,7 @@ class Flickr30kT2IRetrieval(AbsTaskAny2AnyRetrieval):
   url={https://api.semanticscholar.org/CorpusID:3104920}
 }""",
         descriptive_stats={
-              "n_samples": {"default": 31014}, # qrels
+            "n_samples": {"default": 31014},  # qrels
         },
     )
 
@@ -46,5 +46,12 @@ class Flickr30kT2IRetrieval(AbsTaskAny2AnyRetrieval):
         super().load_data(**kwargs)
         # swap corpus and query
         for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
-            self.queries[split], self.corpus[split] = self.corpus[split], self.queries[split]
-            self.relevant_docs[split] = {cid: {qid: score} for qid, cid_score in self.relevant_docs[split].items() for cid, score in cid_score.items()}
+            self.queries[split], self.corpus[split] = (
+                self.corpus[split],
+                self.queries[split],
+            )
+            self.relevant_docs[split] = {
+                cid: {qid: score}
+                for qid, cid_score in self.relevant_docs[split].items()
+                for cid, score in cid_score.items()
+            }
