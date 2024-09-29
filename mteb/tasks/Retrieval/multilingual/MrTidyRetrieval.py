@@ -26,7 +26,7 @@ _EVAL_SPLIT = "test"
 logger = logging.getLogger(__name__)
 
 
-def _load_code_search_code_retrieval(
+def _load_data_retrieval(
     path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
 ):
     corpus = {lang: {split: {} for split in splits} for lang in langs}
@@ -99,7 +99,7 @@ class MrTidyRetrieval(MultilingualTask, AbsTaskRetrieval):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_EVAL_LANGS,
-        main_score="map",
+        main_score="ndcg_at_10",
         date=("2023-11-01", "2024-05-15"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=[],
@@ -120,18 +120,12 @@ class MrTidyRetrieval(MultilingualTask, AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = (
-            _load_code_search_code_retrieval(
-                path=self.metadata_dict["dataset"]["path"],
-                langs=self.hf_subsets,
-                splits=self.metadata_dict["eval_splits"],
-                cache_dir=kwargs.get("cache_dir", None),
-                revision=self.metadata_dict["dataset"]["revision"],
-            )
+        self.corpus, self.queries, self.relevant_docs = _load_data_retrieval(
+            path=self.metadata_dict["dataset"]["path"],
+            langs=self.hf_subsets,
+            splits=self.metadata_dict["eval_splits"],
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata_dict["dataset"]["revision"],
         )
 
         self.data_loaded = True
-
-
-if __name__ == "__main__":
-    print(MrTidyRetrieval().calculate_metadata_metrics())
