@@ -65,6 +65,7 @@ def test_run_task(
         co2_tracker=None,
         overwrite=True,
         eval_splits=None,
+        benchmarks=None,
     )
 
     run(args)

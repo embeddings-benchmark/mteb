@@ -62,6 +62,7 @@ class MTEB:
             if not isinstance(
                 tasks[0], AbsTask
             ):  # So that passing in a list of Benchmarks works too. Trying to import Benchmark causes circular import.
+                self.benchmarks = tasks
                 self._tasks = list(chain.from_iterable(tasks))
             assert (
                 task_types is None and task_categories is None
@@ -175,7 +176,7 @@ class MTEB:
 
     def mteb_benchmarks(self):
         """Get all benchmarks available in the MTEB."""
-        for benchmark in self._tasks:
+        for benchmark in self.benchmarks:
             name = benchmark.name
             self._display_tasks(benchmark.tasks, name=name)
 
