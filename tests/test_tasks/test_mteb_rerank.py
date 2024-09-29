@@ -390,7 +390,7 @@ def test_reranker_same_ndcg1():
         stage1 = json.load(f)
 
     with open(
-        "tests/results/stage2/no_model_name_available/no_revision_available/SciFact.json"
+        "tests/results/stage2/cross-encoder__ms-marco-TinyBERT-L-2-v2/no_revision_available/SciFact.json"
     ) as f:
         stage2 = json.load(f)
 

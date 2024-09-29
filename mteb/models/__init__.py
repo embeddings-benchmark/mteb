@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.model_meta import ModelMeta
@@ -72,25 +72,26 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
                 f"Model revision {revision} not found for model {model_name}. Expected {models[model_name].revision}."
             )
         return models[model_name]
-    else:  # assume it is a sentence-transformers model
-        logger.info(
-            "Model not found in model registry, assuming it is a sentence-transformers model."
-        )
-        logger.info(
-            f"Attempting to extract metadata by loading the model ({model_name}) using sentence-transformers."
-        )
-        model = SentenceTransformer(
-            model_name, revision=revision, trust_remote_code=True
-        )
-        meta = model_meta_from_sentence_transformers(model)
 
-        meta.revision = revision
-        meta.name = model_name
+    # assume it is a sentence-transformers model
+    logger.info(
+        "Model not found in model registry, assuming it is a sentence-transformers model."
+    )
+    logger.info(
+        f"Attempting to extract metadata by loading the model ({model_name}) using sentence-transformers."
+    )
+    model = SentenceTransformer(model_name, revision=revision, trust_remote_code=True)
+    meta = model_meta_from_sentence_transformers(model)
+
+    meta.revision = revision
+    meta.name = model_name
     return meta
 
 
-def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMeta:
-    try:
+def model_meta_from_sentence_transformers(
+    model: CrossEncoder | SentenceTransformer,
+) -> ModelMeta:
+    if isinstance(model, SentenceTransformer):
         name = (
             model.model_card_data.model_name
             if model.model_card_data.model_name
@@ -109,9 +110,18 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             framework=["Sentence Transformers"],
             similarity_fn_name=model.similarity_fn_name,
         )
-    except AttributeError as e:
+    elif isinstance(model, CrossEncoder):
+        meta = ModelMeta(
+            name=model.config._name_or_path,
+            revision=None,
+            release_date=None,
+            languages=None,
+            framework=["Sentence Transformers"],
+            similarity_fn_name=None,
+        )
+    else:
         logger.warning(
-            f"Failed to extract metadata from model: {e}. Upgrading to sentence-transformers v3.0.0 or above is recommended."
+            "Failed to extract metadata from model. Upgrading to sentence-transformers v3.0.0 or above is recommended."
         )
         meta = ModelMeta(
             name=None,
