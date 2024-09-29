@@ -1,5 +1,5 @@
 ## Available benchmarks
-The following tables give you an overview of the benchmarks in MTEB.
+The following table gives you an overview of the benchmarks in MTEB.
 
 <details>
 
