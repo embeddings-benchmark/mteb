@@ -72,20 +72,21 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
                 f"Model revision {revision} not found for model {model_name}. Expected {models[model_name].revision}."
             )
         return models[model_name]
-    else:  # assume it is a sentence-transformers model
-        logger.info(
-            "Model not found in model registry, assuming it is a sentence-transformers model."
-        )
-        logger.info(
-            f"Attempting to extract metadata by loading the model ({model_name}) using sentence-transformers."
-        )
-        model = SentenceTransformer(
-            model_name, revision=revision, trust_remote_code=True
-        )
-        meta = model_meta_from_sentence_transformers(model)
+    
+    # assume it is a sentence-transformers model
+    logger.info(
+        "Model not found in model registry, assuming it is a sentence-transformers model."
+    )
+    logger.info(
+        f"Attempting to extract metadata by loading the model ({model_name}) using sentence-transformers."
+    )
+    model = SentenceTransformer(
+        model_name, revision=revision, trust_remote_code=True
+    )
+    meta = model_meta_from_sentence_transformers(model)
 
-        meta.revision = revision
-        meta.name = model_name
+    meta.revision = revision
+    meta.name = model_name
     return meta
 
 
