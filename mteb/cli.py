@@ -132,9 +132,6 @@ def run(args: argparse.Namespace) -> None:
             tasks=args.tasks,
         )
 
-    import pdb
-
-    pdb.set_trace()
     eval = mteb.MTEB(tasks=tasks)
 
     encode_kwargs = {}

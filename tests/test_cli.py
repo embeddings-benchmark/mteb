@@ -28,7 +28,7 @@ def test_available_benchmarks():
     assert result.returncode == 0, "Command failed"
     assert (
         "MTEB(eng)" in result.stdout
-    ), "Sample benchmark MTEB(eng) task not found in available bencmarks"
+    ), "Sample benchmark MTEB(eng) task not found in available benchmarks"
 
 
 run_task_fixures = [
