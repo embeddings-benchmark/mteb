@@ -24,7 +24,7 @@ class JaqketRetrieval(AbsTaskRetrieval):
         task_subtypes=["Question answering"],
         license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
-        dialect=None,
+        dialect=[],
         sample_creation="found",
         bibtex_citation="""@InProceedings{Kurihara_nlp2020,
 author =  "鈴木正敏 and 鈴木潤 and 松田耕史 and ⻄田京介 and 井之上直也",
