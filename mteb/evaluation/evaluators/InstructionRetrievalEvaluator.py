@@ -2,9 +2,7 @@ from __future__ import annotations
 
 import logging
 
-from .RetrievalEvaluator import (
-    RetrievalEvaluator,
-)
+from .RetrievalEvaluator import RetrievalEvaluator
 
 logger = logging.getLogger(__name__)
 
@@ -35,5 +33,6 @@ class InstructionRetrievalEvaluator(RetrievalEvaluator):
                 instructions=instructions,
                 request_qid=qid,
                 prompt_name=self.task_name,
+                task_type=self.task_type,
                 **kwargs,
             )

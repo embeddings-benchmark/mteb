@@ -1,13 +1,9 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Any
-
-import torch
-from sentence_transformers import SentenceTransformer
 
 from mteb.model_meta import ModelMeta
-from mteb.models.text_formatting_utils import corpus_to_texts
+from mteb.models.base_wrappers import SentenceTransformerWrapper
 
 E5_PAPER_RELEASE_DATE = "2024-02-08"
 XLMR_LANGUAGES = [
@@ -113,60 +109,21 @@ XLMR_LANGUAGES = [
 ]
 
 
-class E5Wrapper:
-    """following the implementation within the Scandinavian Embedding Benchmark and the intfloat/multilingual-e5-small documentation."""
+def query_instruction(instruction: str) -> str:
+    return "query: "
 
-    def __init__(
-        self,
-        model_name: str,
-        sep: str = " ",
-        prompt_name: str | None = None,
-        **kwargs: Any,
-    ):
-        self.model_name = model_name
-        self.mdl = SentenceTransformer(model_name)
-        self.sep = sep
 
-    def to(self, device: torch.device) -> None:
-        self.mdl.to(device)
-
-    def encode(  # type: ignore
-        self,
-        sentences: list[str],
-        *,
-        batch_size: int = 32,
-        **kwargs: Any,
-    ):
-        return self.encode_queries(sentences, batch_size=batch_size, **kwargs)
-
-    def encode_queries(
-        self,
-        queries: list[str],
-        batch_size: int = 32,
-        prompt_name: str | None = None,
-        **kwargs: Any,
-    ):
-        sentences = ["query: " + sentence for sentence in queries]
-        emb = self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
-        return emb
-
-    def encode_corpus(
-        self,
-        corpus: list[dict[str, str]] | dict[str, list[str]],
-        prompt_name: str | None = None,
-        batch_size: int = 32,
-        **kwargs: Any,
-    ):
-        if "request_qid" in kwargs:
-            kwargs.pop("request_qid")
-        sentences = corpus_to_texts(corpus)
-        sentences = ["passage: " + sentence for sentence in sentences]
-        emb = self.mdl.encode(sentences, batch_size=batch_size, **kwargs)
-        return emb
+def corpus_instruction(instruction: str) -> str:
+    return "passage: "
 
 
 e5_mult_small = ModelMeta(
-    loader=partial(E5Wrapper, model_name="intfloat/multilingual-e5-small"),  # type: ignore
+    loader=partial(
+        SentenceTransformerWrapper,
+        model_name="intfloat/multilingual-e5-small",
+        query_instruction=query_instruction,
+        corpus_instruction=corpus_instruction,
+    ),  # type: ignore
     name="intfloat/multilingual-e5-small",
     languages=XLMR_LANGUAGES,
     open_source=True,
@@ -175,7 +132,12 @@ e5_mult_small = ModelMeta(
 )
 
 e5_mult_base = ModelMeta(
-    loader=partial(E5Wrapper, model_name="intfloat/multilingual-e5-base"),  # type: ignore
+    loader=partial(
+        SentenceTransformerWrapper,
+        model_name="intfloat/multilingual-e5-base",
+        query_instruction=query_instruction,
+        corpus_instruction=corpus_instruction,
+    ),  # type: ignore
     name="intfloat/multilingual-e5-base",
     languages=XLMR_LANGUAGES,
     open_source=True,
@@ -184,7 +146,12 @@ e5_mult_base = ModelMeta(
 )
 
 e5_mult_large = ModelMeta(
-    loader=partial(E5Wrapper, model_name="intfloat/multilingual-e5-large"),  # type: ignore
+    loader=partial(
+        SentenceTransformerWrapper,
+        model_name="intfloat/multilingual-e5-large",
+        query_instruction=query_instruction,
+        corpus_instruction=corpus_instruction,
+    ),  # type: ignore
     name="intfloat/multilingual-e5-large",
     languages=XLMR_LANGUAGES,
     open_source=True,
@@ -193,7 +160,12 @@ e5_mult_large = ModelMeta(
 )
 
 e5_eng_small_v2 = ModelMeta(
-    loader=partial(E5Wrapper, model_name="intfloat/e5-small-v2"),  # type: ignore
+    loader=partial(
+        SentenceTransformerWrapper,
+        model_name="intfloat/e5-small-v2",
+        query_instruction=query_instruction,
+        corpus_instruction=corpus_instruction,
+    ),  # type: ignore
     name="intfloat/e5-small-v2",
     languages=["eng_Latn"],
     open_source=True,
@@ -202,7 +174,12 @@ e5_eng_small_v2 = ModelMeta(
 )
 
 e5_eng_small = ModelMeta(
-    loader=partial(E5Wrapper, model_name="intfloat/e5-small"),  # type: ignore
+    loader=partial(
+        SentenceTransformerWrapper,
+        model_name="intfloat/e5-small",
+        query_instruction=query_instruction,
+        corpus_instruction=corpus_instruction,
+    ),  # type: ignore
     name="intfloat/e5-small",
     languages=["eng_Latn"],
     open_source=True,
@@ -211,7 +188,12 @@ e5_eng_small = ModelMeta(
 )
 
 e5_eng_base_v2 = ModelMeta(
-    loader=partial(E5Wrapper, model_name="intfloat/e5-base-v2"),  # type: ignore
+    loader=partial(
+        SentenceTransformerWrapper,
+        model_name="intfloat/e5-base-v2",
+        query_instruction=query_instruction,
+        corpus_instruction=corpus_instruction,
+    ),  # type: ignore
     name="intfloat/e5-base-v2",
     languages=["eng_Latn"],
     open_source=True,
@@ -220,7 +202,12 @@ e5_eng_base_v2 = ModelMeta(
 )
 
 e5_eng_large_v2 = ModelMeta(
-    loader=partial(E5Wrapper, model_name="intfloat/e5-large-v2"),  # type: ignore
+    loader=partial(
+        SentenceTransformerWrapper,
+        model_name="intfloat/e5-large-v2",
+        query_instruction=query_instruction,
+        corpus_instruction=corpus_instruction,
+    ),  # type: ignore
     name="intfloat/e5-large-v2",
     languages=["eng_Latn"],
     open_source=True,

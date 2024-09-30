@@ -25,6 +25,7 @@ class BitextMiningEvaluator(Evaluator):
         self,
         sentences: Dataset,
         task_name: str | None = None,
+        task_type: str | None = None,
         pair_columns: list[tuple[str, str]] = DEFAULT_PAIR,
         **kwargs,
     ):
@@ -38,6 +39,7 @@ class BitextMiningEvaluator(Evaluator):
             else sentences["gold"]
         )
         self.task_name = task_name
+        self.task_type = task_type
 
     def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
         scores = self.compute_metrics(model, encode_kwargs=encode_kwargs)
@@ -56,6 +58,7 @@ class BitextMiningEvaluator(Evaluator):
                 self.sentences[sub],
                 model=model,
                 prompt_name=self.task_name,
+                task_type=self.task_type,
                 **encode_kwargs,
             )
 

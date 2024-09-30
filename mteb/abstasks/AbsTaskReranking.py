@@ -54,6 +54,7 @@ class AbsTaskReranking(AbsTask):
         evaluator = RerankingEvaluator(
             data_split,
             task_name=self.metadata.name,
+            task_type=self.metadata.type,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )

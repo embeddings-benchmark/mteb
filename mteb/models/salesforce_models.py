@@ -6,11 +6,7 @@ import torch
 
 from mteb.model_meta import ModelMeta
 
-from .instructions import task_to_instruction
-
-
-def sfr_instruction(instruction: str) -> str:
-    return f"Instruct: {instruction}\nQuery: "
+from .instructions import gte_instruction, task_to_instruction
 
 
 def sfr_loader(**kwargs):
@@ -23,18 +19,20 @@ def sfr_loader(**kwargs):
 
     class SFRWrapper(GritLM):
         def encode(self, *args, **kwargs):
-            if "prompt_name" in kwargs:
+            if "prompt_name" in kwargs and "task_type" in kwargs:
                 if "instruction" in kwargs:
                     raise ValueError(
                         "Cannot specify both `prompt_name` and `instruction`."
                     )
                 instruction = task_to_instruction(
-                    kwargs.pop("prompt_name"), kwargs.pop("is_query", True)
+                    kwargs.pop("prompt_name"),
+                    kwargs.pop("task_type"),
+                    kwargs.pop("is_query", True),
                 )
             else:
                 instruction = kwargs.pop("instruction", "")
             if instruction:
-                kwargs["instruction"] = sfr_instruction(instruction)
+                kwargs["instruction"] = gte_instruction(instruction)
             return super().encode(*args, **kwargs)
 
         def encode_corpus(self, *args, **kwargs):

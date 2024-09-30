@@ -43,6 +43,7 @@ class PairClassificationEvaluator(Evaluator):
         sentences2,
         labels,
         task_name: str | None = None,
+        task_type: str | None = None,
         limit: int | None = None,
         **kwargs,
     ):
@@ -55,6 +56,7 @@ class PairClassificationEvaluator(Evaluator):
         self.sentences2 = sentences2
         self.labels = labels
         self.task_name = task_name
+        self.task_type = task_type
 
         assert len(self.sentences1) == len(self.sentences2)
         assert len(self.sentences1) == len(self.labels)
@@ -94,6 +96,7 @@ class PairClassificationEvaluator(Evaluator):
             sentences,
             model=model,
             prompt_name=self.task_name,
+            task_type=self.task_type,
             **encode_kwargs,
         )
         emb_dict = dict(zip(sentences, embeddings))

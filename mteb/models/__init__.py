@@ -8,6 +8,7 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 from mteb.model_meta import ModelMeta
 from mteb.models import (
+    arctic_models,
     bge_models,
     bm25,
     cohere_models,
@@ -16,6 +17,7 @@ from mteb.models import (
     google_models,
     gritlm_models,
     gte_models,
+    linq_models,
     llm2vec_models,
     mxbai_models,
     nomic_models,
@@ -25,6 +27,7 @@ from mteb.models import (
     ru_sentence_models,
     salesforce_models,
     sentence_transformers_models,
+    stella_models,
     voyage_models,
 )
 
@@ -133,14 +136,17 @@ def model_meta_from_sentence_transformers(
 
 
 model_modules = [
+    arctic_models,
     bge_models,
     bm25,
     cohere_models,
     e5_instruct,
     e5_models,
     google_models,
+    google_models,
     gritlm_models,
     gte_models,
+    linq_models,
     llm2vec_models,
     mxbai_models,
     nomic_models,
@@ -150,8 +156,8 @@ model_modules = [
     ru_sentence_models,
     salesforce_models,
     sentence_transformers_models,
+    stella_models,
     voyage_models,
-    google_models,
 ]
 models = {}
 

@@ -27,13 +27,12 @@ class NomicWrapper:
         sentences: list[str],
         *,
         prompt_name: str | None = None,
+        task_type: str | None = None,
         batch_size: int = 32,
         input_type: str | None = None,
         **kwargs: Any,
     ):
-        if prompt_name:
-            task = mteb.get_task(prompt_name)
-            task_type = task.metadata.type
+        if task_type:
             if task_type in ["Classification", "MultilabelClassification"]:
                 input_type = "classification"
             elif task_type == "Clustering":
@@ -122,6 +121,7 @@ if __name__ == "__main__":
         ["test"],
         convert_to_tensor=True,
         prompt_name="AmazonCounterfactualClassification",
+        task_type="Classification",
     )
     print(emb.shape)
 

@@ -3,12 +3,7 @@ from __future__ import annotations
 from functools import partial
 
 from mteb.model_meta import ModelMeta
-
-from .instructions import task_to_instruction
-
-
-def gte_instruction(instruction: str) -> str:
-    return f"Instruct: {instruction}\nQuery: "
+from mteb.models.instructions import gte_instruction, task_to_instruction
 
 
 def gte_loader(**kwargs):
@@ -21,13 +16,15 @@ def gte_loader(**kwargs):
 
     class GTEWrapper(GritLM):
         def encode(self, *args, **kwargs):
-            if "prompt_name" in kwargs:
+            if "prompt_name" in kwargs and "task_type" in kwargs:
                 if "instruction" in kwargs:
                     raise ValueError(
                         "Cannot specify both `prompt_name` and `instruction`."
                     )
                 instruction = task_to_instruction(
-                    kwargs.pop("prompt_name"), kwargs.pop("is_query", True)
+                    kwargs.pop("prompt_name"),
+                    kwargs.pop("task_type"),
+                    kwargs.pop("is_query", True),
                 )
             else:
                 instruction = kwargs.pop("instruction", "")

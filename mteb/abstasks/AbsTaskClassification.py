@@ -149,6 +149,7 @@ class AbsTaskClassification(AbsTask):
                     eval_split["text"],  # type: ignore
                     eval_split["label"],  # type: ignore
                     task_name=self.metadata.name,
+                    task_type=self.metadata.type,
                     encode_kwargs=encode_kwargs,
                     **params,
                 )
@@ -159,6 +160,7 @@ class AbsTaskClassification(AbsTask):
                     eval_split["text"],  # type: ignore
                     eval_split["label"],  # type: ignore
                     task_name=self.metadata.name,
+                    task_type=self.metadata.type,
                     encode_kwargs=encode_kwargs,
                     **params,
                 )
@@ -169,6 +171,7 @@ class AbsTaskClassification(AbsTask):
                     eval_split["text"],  # type: ignore
                     eval_split["label"],  # type: ignore
                     task_name=self.metadata.name,
+                    task_type=self.metadata.type,
                     encode_kwargs=encode_kwargs,
                     **params,
                 )
