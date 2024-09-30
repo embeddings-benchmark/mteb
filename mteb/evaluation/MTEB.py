@@ -59,8 +59,8 @@ class MTEB:
 
         if tasks is not None:
             self._tasks = tasks
-            if not isinstance(
-                tasks[0], AbsTask
+            if (
+                not isinstance(tasks[0], AbsTask) and not isinstance(tasks[0], str)
             ):  # So that passing in a list of Benchmarks works too. Trying to import Benchmark causes circular import.
                 self.benchmarks = tasks
                 self._tasks = list(chain.from_iterable(tasks))
