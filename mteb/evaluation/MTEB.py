@@ -339,14 +339,26 @@ class MTEB:
             # skip evaluation if results folder exists and overwrite_results is False
             if output_path:
                 save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
-                if save_path.exists() and not overwrite_results:
-                    logger.info(
-                        f"{task.metadata.name} results already exists. Loading results from disk. Set overwrite_results=True to overwrite."
+                existing_results = self.load_existing_results(save_path)
+                if existing_results and not overwrite_results:
+                    task_eval_splits = (
+                        eval_splits if eval_splits is not None else task.eval_splits
                     )
-                    mteb_results = MTEBResults.from_disk(save_path)
-                    evaluation_results.append(mteb_results)
-                    del self.tasks[0]  # empty memory
-                    continue
+                    missing_splits = self.compare_splits_and_subsets(existing_results, task_eval_splits)
+                    if not missing_splits:
+                        logger.info(
+                            f"{task.metadata.name} results already exists. Loading results from disk. Set overwrite_results=True to overwrite."
+                        )
+                        mteb_results = MTEBResults.from_disk(save_path)
+                        evaluation_results.append(mteb_results)
+                        del self.tasks[0]  # empty memory
+                        continue
+                    else:
+                        logger.info(
+                            f"{task.metadata.name} results exist but missing splits: {missing_splits}. Running evaluation for missing splits."
+                        )
+                        task_eval_splits = missing_splits
+
             try:
                 task_eval_splits = (
                     eval_splits if eval_splits is not None else task.eval_splits
@@ -488,3 +500,16 @@ class MTEB:
 
         with save_path.open("w") as f:
             json.dump(model_meta.to_dict(), f)
+
+    def load_existing_results(self, save_path):
+        if save_path.exists():
+            with open(save_path, "r") as f:
+                return json.load(f)
+        return None
+
+    def compare_splits_and_subsets(self, existing_results, task_eval_splits):
+        missing_splits = []
+        for split in task_eval_splits:
+            if split not in existing_results:
+                missing_splits.append(split)
+        return missing_splits
