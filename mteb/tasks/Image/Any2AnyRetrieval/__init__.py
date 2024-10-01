@@ -20,7 +20,9 @@ from .eng.MSCOCOT2IRetrieval import *
 from .eng.NIGHTSI2IRetrieval import *
 from .eng.OVENIT2ITRetrieval import *
 from .eng.OVENIT2TRetrieval import *
+from .eng.ROxfordI2IRetrieval import *
 from .eng.RP2kI2IRetrieval import *
+from .eng.RParisI2IRetrieval import *
 from .eng.SciMMIRI2TRetrieval import *
 from .eng.SciMMIRT2IRetrieval import *
 from .eng.SOPI2IRetrieval import *
