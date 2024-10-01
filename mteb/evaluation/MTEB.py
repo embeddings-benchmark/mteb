@@ -344,7 +344,9 @@ class MTEB:
                     task_eval_splits = (
                         eval_splits if eval_splits is not None else task.eval_splits
                     )
-                    missing_splits = self.compare_splits_and_subsets(existing_results, task_eval_splits)
+                    missing_splits = self.compare_splits_and_subsets(
+                        existing_results, task_eval_splits
+                    )
                     if not missing_splits:
                         logger.info(
                             f"{task.metadata.name} results already exists. Loading results from disk. Set overwrite_results=True to overwrite."
@@ -503,7 +505,7 @@ class MTEB:
 
     def load_existing_results(self, save_path):
         if save_path.exists():
-            with open(save_path, "r") as f:
+            with open(save_path) as f:
                 return json.load(f)
         return None
 
