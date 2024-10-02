@@ -100,17 +100,40 @@ class ModelResult(BaseModel):
         scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
         getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
         aggregation: Callable[[list[Score]], Any] = np.mean,
-    ) -> dict[str, float]:
-        return {
-            res.task_name: res.get_score(
-                splits=splits,
-                languages=languages,
-                scripts=scripts,
-                getter=getter,
-                aggregation=aggregation,
-            )
-            for res in self.task_results
-        }
+        format: Literal["wide", "long"] = "wide",
+    ) -> dict | list:
+        if format == "wide":
+            scores = {
+                res.task_name: res.get_score(
+                    splits=splits,
+                    languages=languages,
+                    scripts=scripts,
+                    getter=getter,
+                    aggregation=aggregation,
+                )
+                for res in self.task_results
+            }
+            return scores
+        if format == "long":
+            entries = []
+            for task_res in self.task_results:
+                entry = dict(
+                    model_name=self.model_name,
+                    model_revision=self.model_revision,
+                    task_name=task_res.task_name,
+                    score=task_res.get_score(
+                        splits=splits,
+                        languages=languages,
+                        getter=getter,
+                        aggregation=aggregation,
+                    ),
+                    mteb_version=task_res.mteb_version,
+                    dataset_revision=task_res.dataset_revision,
+                    evaluation_time=task_res.evaluation_time,
+                    kg_co2_emissions=task_res.kg_co2_emissions,
+                )
+                entries.append(entry)
+            return entries
 
     def __iter__(self):
         return iter(self.task_results)
@@ -186,67 +209,39 @@ class BenchmarkResults(BaseModel):
         scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
         getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
         aggregation: Callable[[list[Score]], Any] = np.mean,
-    ) -> list[dict[str, Any]]:
-        res = []
-        for model_res in self:
-            model_scores = model_res.get_scores(
-                splits=splits,
-                languages=languages,
-                scripts=scripts,
-                getter=getter,
-                aggregation=aggregation,
-            )
-            res.append(
-                {
-                    "model": model_res.model_name,
-                    "revision": model_res.model_revision,
-                    **model_scores,
-                }
-            )
-        return res
-
-    def to_table(
-        self,
-        splits: list[Split] | None = None,
-        languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
-        scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
-        getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
-        aggregation: Callable[[list[Score]], Any] = np.mean,
         format: Literal["wide", "long"] = "wide",
-    ) -> pd.DataFrame:
+    ) -> list[dict]:
+        entries = []
         if format == "wide":
-            entries = self.get_scores(
-                splits=splits,
-                languages=languages,
-                getter=getter,
-                aggregation=aggregation,
-            )
-            return pd.DataFrame(entries).set_index(["model_name", "model_revision"])
-        elif format == "long":
-            entries = []
             for model_res in self:
-                for task_res in model_res:
-                    entry = dict(
-                        model_name=model_res.model_name,
-                        model_revision=model_res.model_revision,
-                        task_name=task_res.task_name,
-                        score=task_res.get_score(
-                            splits=splits,
-                            languages=languages,
-                            getter=getter,
-                            aggregation=aggregation,
-                        ),
-                        mteb_version=task_res.mteb_version,
-                        dataset_revision=task_res.dataset_revision,
-                        evaluation_time=task_res.evaluation_time,
-                        kg_co2_emissions=task_res.kg_co2_emissions,
+                model_scores = model_res.get_scores(
+                    splits=splits,
+                    languages=languages,
+                    scripts=scripts,
+                    getter=getter,
+                    aggregation=aggregation,
+                    format="wide",
+                )
+                entries.append(
+                    {
+                        "model": model_res.model_name,
+                        "revision": model_res.model_revision,
+                        **model_scores,
+                    }
+                )
+        if format == "long":
+            for model_res in self:
+                entries.extend(
+                    model_res.get_scores(
+                        splits=splits,
+                        languages=languages,
+                        scripts=scripts,
+                        getter=getter,
+                        aggregation=aggregation,
+                        format="long",
                     )
-                    entries.append(entry)
-            return pd.DataFrame(entries)
-        else:
-            raise ValueError(
-                f"Table format can either be 'long' or 'wide', not {format}"
-            )
+                )
+        return entries
 
     def __iter__(self):
         return iter(self.model_results)
