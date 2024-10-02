@@ -46,6 +46,8 @@ class Benchmark:
     name: str
     task_names: list[str] | None = None
     languages: list[str] | None = None
+    domains: list[str] | None = None
+    task_types: list[str] | None = None
     eval_splits: list[str] | None = None
     description: str | None = None
     reference: UrlString | None = None
@@ -66,6 +68,21 @@ class Benchmark:
             tasks=self.task_names,
             languages=self.languages,
             eval_splits=self.eval_splits,
+            domains=self.domains,
+            task_types=self.task_types,
+        )
+
+    def to_dict(self) -> dict:
+        return dict(
+            name=self.name,
+            task_names=self.task_names,
+            languages=self.languages,
+            task_types=self.task_types,
+            eval_splits=self.eval_splits,
+            domains=self.domains,
+            description=self.description,
+            reference=self.reference,
+            citation=self.citation,
         )
 
     def get_results(
@@ -79,6 +96,7 @@ class Benchmark:
 
     def get_scores(
         self,
+        *,
         getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
         aggregation: Callable[[list[Score]], Any] = np.mean,
         format: Literal["wide", "long"] = "wide",
@@ -99,6 +117,8 @@ class Benchmark:
             "task_names": self.task_names,
             "languages": self.languages,
             "eval_splits": self.eval_splits,
+            "domains": self.domains,
+            "task_types": self.task_types,
         }
         return hash_dict
 
