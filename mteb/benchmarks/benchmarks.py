@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from functools import cached_property
 from typing import Any, Callable, Literal
@@ -91,6 +92,21 @@ class Benchmark:
             aggregation=aggregation,
             format=format,
         )
+
+    @property
+    def _hash_dict(self) -> dict:
+        hash_dict = {
+            "task_names": self.task_names,
+            "languages": self.languages,
+            "eval_splits": self.eval_splits,
+        }
+        return hash_dict
+
+    def __hash__(self) -> int:
+        return hash(json.dumps(self._hash_dict))
+
+    def __eq__(self, other) -> int:
+        return self._hash_dict == self._hash_dict
 
 
 # Marton: This should probably be changed to something slightly more useful
