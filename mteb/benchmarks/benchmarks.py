@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import cached_property
 from typing import Sequence
 
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
@@ -21,7 +22,9 @@ class Benchmark:
 
     Args:
         name: The name of the benchmark
-        tasks: The tasks within the benchmark.
+        task_names: The tasks within the benchmark.
+        languages
+        eval_splits
         description: A description of the benchmark, should include its intended goal and potentially a description of its construction
         reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
         citation: A bibtex citation
@@ -29,16 +32,16 @@ class Benchmark:
     Example:
         >>> Benchmark(
         ...     name="MTEB(custom)",
-        ...     tasks=mteb.get_tasks(
-        ...         tasks=["AmazonCounterfactualClassification", "AmazonPolarityClassification"],
-        ...         languages=["eng"],
-        ...     ),
+    ...         task_names=["AmazonCounterfactualClassification", "AmazonPolarityClassification"],
+    ...         languages=["eng"],
         ...     description="A custom benchmark"
         ... )
     """
 
     name: str
-    tasks: Sequence[AbsTask]
+    task_names: list[str]
+    languages: list[str] | None = None
+    eval_splits: list[str] | None = None
     description: str | None = None
     reference: UrlString | None = None
     citation: str | None = None
@@ -52,82 +55,88 @@ class Benchmark:
     def __getitem__(self, index):
         return self.tasks[index]
 
+    @cached_property
+    def tasks(self) -> list[AbsTask]:
+        return get_tasks(
+            tasks=self.task_names,
+            languages=self.languages,
+            eval_splits=self.eval_splits,
+        )
+
 
 MTEB_MAIN_EN = Benchmark(
     name="MTEB(eng)",
-    tasks=get_tasks(
-        tasks=[
-            "AmazonCounterfactualClassification",
-            "AmazonPolarityClassification",
-            "AmazonReviewsClassification",
-            "ArguAna",
-            "ArxivClusteringP2P",
-            "ArxivClusteringS2S",
-            "AskUbuntuDupQuestions",
-            "BIOSSES",
-            "Banking77Classification",
-            "BiorxivClusteringP2P",
-            "BiorxivClusteringS2S",
-            "CQADupstackAndroidRetrieval",
-            "CQADupstackEnglishRetrieval",
-            "CQADupstackGamingRetrieval",
-            "CQADupstackGisRetrieval",
-            "CQADupstackMathematicaRetrieval",
-            "CQADupstackPhysicsRetrieval",
-            "CQADupstackProgrammersRetrieval",
-            "CQADupstackStatsRetrieval",
-            "CQADupstackTexRetrieval",
-            "CQADupstackUnixRetrieval",
-            "CQADupstackWebmastersRetrieval",
-            "CQADupstackWordpressRetrieval",
-            "ClimateFEVER",
-            "DBPedia",
-            "EmotionClassification",
-            "FEVER",
-            "FiQA2018",
-            "HotpotQA",
-            "ImdbClassification",
-            "MSMARCO",
-            "MTOPDomainClassification",
-            "MTOPIntentClassification",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "MedrxivClusteringP2P",
-            "MedrxivClusteringS2S",
-            "MindSmallReranking",
-            "NFCorpus",
-            "NQ",
-            "QuoraRetrieval",
-            "RedditClustering",
-            "RedditClusteringP2P",
-            "SCIDOCS",
-            "SICK-R",
-            "STS12",
-            "STS13",
-            "STS14",
-            "STS15",
-            "STS16",
-            "STS17",
-            "STS22",
-            "STSBenchmark",
-            "SciDocsRR",
-            "SciFact",
-            "SprintDuplicateQuestions",
-            "StackExchangeClustering",
-            "StackExchangeClusteringP2P",
-            "StackOverflowDupQuestions",
-            "SummEval",
-            "TRECCOVID",
-            "Touche2020",
-            "ToxicConversationsClassification",
-            "TweetSentimentExtractionClassification",
-            "TwentyNewsgroupsClustering",
-            "TwitterSemEval2015",
-            "TwitterURLCorpus",
-        ],
-        languages=["eng"],
-        eval_splits=["test"],
-    ),
+    task_names=[
+        "AmazonCounterfactualClassification",
+        "AmazonPolarityClassification",
+        "AmazonReviewsClassification",
+        "ArguAna",
+        "ArxivClusteringP2P",
+        "ArxivClusteringS2S",
+        "AskUbuntuDupQuestions",
+        "BIOSSES",
+        "Banking77Classification",
+        "BiorxivClusteringP2P",
+        "BiorxivClusteringS2S",
+        "CQADupstackAndroidRetrieval",
+        "CQADupstackEnglishRetrieval",
+        "CQADupstackGamingRetrieval",
+        "CQADupstackGisRetrieval",
+        "CQADupstackMathematicaRetrieval",
+        "CQADupstackPhysicsRetrieval",
+        "CQADupstackProgrammersRetrieval",
+        "CQADupstackStatsRetrieval",
+        "CQADupstackTexRetrieval",
+        "CQADupstackUnixRetrieval",
+        "CQADupstackWebmastersRetrieval",
+        "CQADupstackWordpressRetrieval",
+        "ClimateFEVER",
+        "DBPedia",
+        "EmotionClassification",
+        "FEVER",
+        "FiQA2018",
+        "HotpotQA",
+        "ImdbClassification",
+        "MSMARCO",
+        "MTOPDomainClassification",
+        "MTOPIntentClassification",
+        "MassiveIntentClassification",
+        "MassiveScenarioClassification",
+        "MedrxivClusteringP2P",
+        "MedrxivClusteringS2S",
+        "MindSmallReranking",
+        "NFCorpus",
+        "NQ",
+        "QuoraRetrieval",
+        "RedditClustering",
+        "RedditClusteringP2P",
+        "SCIDOCS",
+        "SICK-R",
+        "STS12",
+        "STS13",
+        "STS14",
+        "STS15",
+        "STS16",
+        "STS17",
+        "STS22",
+        "STSBenchmark",
+        "SciDocsRR",
+        "SciFact",
+        "SprintDuplicateQuestions",
+        "StackExchangeClustering",
+        "StackExchangeClusteringP2P",
+        "StackOverflowDupQuestions",
+        "SummEval",
+        "TRECCOVID",
+        "Touche2020",
+        "ToxicConversationsClassification",
+        "TweetSentimentExtractionClassification",
+        "TwentyNewsgroupsClustering",
+        "TwitterSemEval2015",
+        "TwitterURLCorpus",
+    ],
+    languages=["eng"],
+    eval_splits=["test"],
     description="Main English benchmarks from MTEB",
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
     title = "{MTEB}: Massive Text Embedding Benchmark",
@@ -151,41 +160,39 @@ MTEB_MAIN_EN = Benchmark(
 
 MTEB_MAIN_RU = Benchmark(
     name="MTEB(rus)",
-    tasks=get_tasks(
-        languages=["rus"],
-        tasks=[
-            # Classification
-            "GeoreviewClassification",
-            "HeadlineClassification",
-            "InappropriatenessClassification",
-            "KinopoiskClassification",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "RuReviewsClassification",
-            "RuSciBenchGRNTIClassification",
-            "RuSciBenchOECDClassification",
-            # Clustering
-            "GeoreviewClusteringP2P",
-            "RuSciBenchGRNTIClusteringP2P",
-            "RuSciBenchOECDClusteringP2P",
-            # MultiLabelClassification
-            "CEDRClassification",
-            "SensitiveTopicsClassification",
-            # PairClassification
-            "TERRa",
-            # Reranking
-            "MIRACLReranking",
-            "RuBQReranking",
-            # Retrieval
-            "MIRACLRetrieval",
-            "RiaNewsRetrieval",
-            "RuBQRetrieval",
-            # STS
-            "RUParaPhraserSTS",
-            "RuSTSBenchmarkSTS",
-            "STS22",
-        ],
-    ),
+    languages=["rus"],
+    task_names=[
+        # Classification
+        "GeoreviewClassification",
+        "HeadlineClassification",
+        "InappropriatenessClassification",
+        "KinopoiskClassification",
+        "MassiveIntentClassification",
+        "MassiveScenarioClassification",
+        "RuReviewsClassification",
+        "RuSciBenchGRNTIClassification",
+        "RuSciBenchOECDClassification",
+        # Clustering
+        "GeoreviewClusteringP2P",
+        "RuSciBenchGRNTIClusteringP2P",
+        "RuSciBenchOECDClusteringP2P",
+        # MultiLabelClassification
+        "CEDRClassification",
+        "SensitiveTopicsClassification",
+        # PairClassification
+        "TERRa",
+        # Reranking
+        "MIRACLReranking",
+        "RuBQReranking",
+        # Retrieval
+        "MIRACLRetrieval",
+        "RiaNewsRetrieval",
+        "RuBQRetrieval",
+        # STS
+        "RUParaPhraserSTS",
+        "RuSTSBenchmarkSTS",
+        "STS22",
+    ],
     description="Main Russian benchmarks from MTEB",
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
@@ -202,13 +209,11 @@ MTEB_MAIN_RU = Benchmark(
 
 MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
     name="MTEB(Retrieval w/Instructions)",
-    tasks=get_tasks(
-        tasks=[
-            "Robust04InstructionRetrieval",
-            "News21InstructionRetrieval",
-            "Core17InstructionRetrieval",
-        ]
-    ),
+    task_names=[
+        "Robust04InstructionRetrieval",
+        "News21InstructionRetrieval",
+        "Core17InstructionRetrieval",
+    ],
     description="Retrieval w/Instructions is the task of finding relevant documents for a query that has detailed instructions.",
     reference="https://arxiv.org/abs/2403.15246",
     citation="""@misc{weller2024followir,
@@ -223,18 +228,16 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
 
 MTEB_RETRIEVAL_LAW = Benchmark(
     name="MTEB(law)",  # This benchmark is likely in the need of an update
-    tasks=get_tasks(
-        tasks=[
-            "AILACasedocs",
-            "AILAStatutes",
-            "LegalSummarization",
-            "GerDaLIRSmall",
-            "LeCaRDv2",
-            "LegalBenchConsumerContractsQA",
-            "LegalBenchCorporateLobbying",
-            "LegalQuAD",
-        ]
-    ),
+    task_names=[
+        "AILACasedocs",
+        "AILAStatutes",
+        "LegalSummarization",
+        "GerDaLIRSmall",
+        "LeCaRDv2",
+        "LegalBenchConsumerContractsQA",
+        "LegalBenchCorporateLobbying",
+        "LegalQuAD",
+    ],
     description="Legal benchmarks from MTEB.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation=None,
@@ -242,17 +245,15 @@ MTEB_RETRIEVAL_LAW = Benchmark(
 
 MTEB_MINERS_BITEXT_MINING = Benchmark(
     name="MINERSBitextMining",
-    tasks=get_tasks(
-        tasks=[
-            "BUCC",
-            "LinceMTBitextMining",
-            "NollySentiBitextMining",
-            "NusaXBitextMining",
-            "NusaTranslationBitextMining",
-            "PhincBitextMining",
-            "Tatoeba",
-        ]
-    ),
+    task_names=[
+        "BUCC",
+        "LinceMTBitextMining",
+        "NollySentiBitextMining",
+        "NusaXBitextMining",
+        "NusaTranslationBitextMining",
+        "PhincBitextMining",
+        "Tatoeba",
+    ],
     description="BitextMining benchmark from MINERS",
     reference="https://arxiv.org/pdf/2406.07424",
     citation="""
@@ -267,43 +268,41 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
 
 SEB = Benchmark(
     name="MTEB(Scandinavian)",
-    tasks=get_tasks(
-        tasks=[
-            # Bitext
-            "BornholmBitextMining",
-            "NorwegianCourtsBitextMining",
-            # Classification
-            "AngryTweetsClassification",
-            "DanishPoliticalCommentsClassification",
-            "DalajClassification",
-            "DKHateClassification",
-            "LccSentimentClassification",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "NordicLangClassification",
-            "NoRecClassification",
-            "NorwegianParliamentClassification",
-            "ScalaClassification",
-            "SwedishSentimentClassification",
-            "SweRecClassification",
-            # Retrieval
-            "DanFEVER",
-            "NorQuadRetrieval",
-            "SNLRetrieval",
-            "SwednRetrieval",
-            "SweFaqRetrieval",
-            "TV2Nordretrieval",
-            "TwitterHjerneRetrieval",
-            # Clustering
-            "SNLHierarchicalClusteringS2S",
-            "SNLHierarchicalClusteringP2P",
-            "SwednClusteringP2P",
-            "SwednClusteringS2S",
-            "VGHierarchicalClusteringS2S",
-            "VGHierarchicalClusteringP2P",
-        ],
-        languages=["dan", "swe", "nno", "nob"],
-    ),
+    task_names=[
+        # Bitext
+        "BornholmBitextMining",
+        "NorwegianCourtsBitextMining",
+        # Classification
+        "AngryTweetsClassification",
+        "DanishPoliticalCommentsClassification",
+        "DalajClassification",
+        "DKHateClassification",
+        "LccSentimentClassification",
+        "MassiveIntentClassification",
+        "MassiveScenarioClassification",
+        "NordicLangClassification",
+        "NoRecClassification",
+        "NorwegianParliamentClassification",
+        "ScalaClassification",
+        "SwedishSentimentClassification",
+        "SweRecClassification",
+        # Retrieval
+        "DanFEVER",
+        "NorQuadRetrieval",
+        "SNLRetrieval",
+        "SwednRetrieval",
+        "SweFaqRetrieval",
+        "TV2Nordretrieval",
+        "TwitterHjerneRetrieval",
+        # Clustering
+        "SNLHierarchicalClusteringS2S",
+        "SNLHierarchicalClusteringP2P",
+        "SwednClusteringP2P",
+        "SwednClusteringS2S",
+        "VGHierarchicalClusteringS2S",
+        "VGHierarchicalClusteringP2P",
+    ],
+    languages=["dan", "swe", "nno", "nob"],
     description="A curated selection of tasks coverering the Scandinavian languages; Danish, Swedish and Norwegian, including Bokmål and Nynorsk.",
     reference="https://kennethenevoldsen.github.io/scandinavian-embedding-benchmark/",
     citation="""@misc{enevoldsen2024scandinavian,
@@ -318,20 +317,18 @@ SEB = Benchmark(
 
 CoIR = Benchmark(
     name="CoIR",
-    tasks=get_tasks(
-        tasks=[
-            "AppsRetrieval",
-            "CodeFeedbackMT",
-            "CodeFeedbackST",
-            "CodeSearchNetCCRetrieval",
-            "CodeTransOceanContest",
-            "CodeTransOceanDL",
-            "CosQA",
-            "COIRCodeSearchNetRetrieval",
-            "StackOverflowQA",
-            "SyntheticText2SQL",
-        ]
-    ),
+    task_names=[
+        "AppsRetrieval",
+        "CodeFeedbackMT",
+        "CodeFeedbackST",
+        "CodeSearchNetCCRetrieval",
+        "CodeTransOceanContest",
+        "CodeTransOceanDL",
+        "CosQA",
+        "COIRCodeSearchNetRetrieval",
+        "StackOverflowQA",
+        "SyntheticText2SQL",
+    ],
     description="CoIR: A Comprehensive Benchmark for Code Information Retrieval Models",
     reference="https://github.com/CoIR-team/coir",
     citation="""@misc{li2024coircomprehensivebenchmarkcode,
@@ -347,43 +344,41 @@ CoIR = Benchmark(
 
 MTEB_FRA = Benchmark(
     name="MTEB(fra)",
-    tasks=get_tasks(
-        languages=["fra"],
-        tasks=[
-            # Classification
-            "AmazonReviewsClassification",
-            "MasakhaNEWSClassification",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "MTOPDomainClassification",
-            "MTOPIntentClassification",
-            # Clustering
-            "AlloProfClusteringP2P",
-            "AlloProfClusteringS2S",
-            "HALClusteringS2S",
-            "MasakhaNEWSClusteringP2P",
-            "MasakhaNEWSClusteringS2S",
-            "MLSUMClusteringP2P",
-            "MLSUMClusteringS2S",
-            # Pair Classification
-            "OpusparcusPC",
-            "PawsXPairClassification",
-            # Reranking
-            "AlloprofReranking",
-            "SyntecReranking",
-            # Retrieval
-            "AlloprofRetrieval",
-            "BSARDRetrieval",
-            "MintakaRetrieval",
-            "SyntecRetrieval",
-            "XPQARetrieval",
-            # STS
-            "SICKFr",
-            "STS22",
-            "STSBenchmarkMultilingualSTS",
-            "SummEvalFr",
-        ],
-    ),
+    languages=["fra"],
+    task_names=[
+        # Classification
+        "AmazonReviewsClassification",
+        "MasakhaNEWSClassification",
+        "MassiveIntentClassification",
+        "MassiveScenarioClassification",
+        "MTOPDomainClassification",
+        "MTOPIntentClassification",
+        # Clustering
+        "AlloProfClusteringP2P",
+        "AlloProfClusteringS2S",
+        "HALClusteringS2S",
+        "MasakhaNEWSClusteringP2P",
+        "MasakhaNEWSClusteringS2S",
+        "MLSUMClusteringP2P",
+        "MLSUMClusteringS2S",
+        # Pair Classification
+        "OpusparcusPC",
+        "PawsXPairClassification",
+        # Reranking
+        "AlloprofReranking",
+        "SyntecReranking",
+        # Retrieval
+        "AlloprofRetrieval",
+        "BSARDRetrieval",
+        "MintakaRetrieval",
+        "SyntecRetrieval",
+        "XPQARetrieval",
+        # STS
+        "SICKFr",
+        "STS22",
+        "STSBenchmarkMultilingualSTS",
+        "SummEvalFr",
+    ],
     description="Main French benchmarks from MTEB",
     reference="https://arxiv.org/abs/2405.20468",
     citation="""@misc{ciancone2024mtebfrenchresourcesfrenchsentence,
@@ -400,36 +395,34 @@ MTEB_FRA = Benchmark(
 
 MTEB_DEU = Benchmark(
     name="MTEB(deu)",
-    tasks=get_tasks(
-        languages=["deu"],
-        tasks=[
-            # Classification
-            "AmazonCounterfactualClassification",
-            "AmazonReviewsClassification",
-            "MTOPDomainClassification",
-            "MTOPIntentClassification",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            # Clustering
-            "BlurbsClusteringP2P",
-            "BlurbsClusteringS2S",
-            "TenKGnadClusteringP2P",
-            "TenKGnadClusteringS2S",
-            # Pair Classification
-            "FalseFriendsGermanEnglish",
-            "PawsXPairClassification",
-            # Reranking
-            "MIRACLReranking",
-            # Retrieval
-            "GermanQuAD-Retrieval",
-            "GermanDPR",
-            "XMarket",
-            "GerDaLIR",
-            # STS
-            "GermanSTSBenchmark",
-            "STS22",
-        ],
-    ),
+    languages=["deu"],
+    task_names=[
+        # Classification
+        "AmazonCounterfactualClassification",
+        "AmazonReviewsClassification",
+        "MTOPDomainClassification",
+        "MTOPIntentClassification",
+        "MassiveIntentClassification",
+        "MassiveScenarioClassification",
+        # Clustering
+        "BlurbsClusteringP2P",
+        "BlurbsClusteringS2S",
+        "TenKGnadClusteringP2P",
+        "TenKGnadClusteringS2S",
+        # Pair Classification
+        "FalseFriendsGermanEnglish",
+        "PawsXPairClassification",
+        # Reranking
+        "MIRACLReranking",
+        # Retrieval
+        "GermanQuAD-Retrieval",
+        "GermanDPR",
+        "XMarket",
+        "GerDaLIR",
+        # STS
+        "GermanSTSBenchmark",
+        "STS22",
+    ],
     description="Main German benchmarks from MTEB",
     reference="https://arxiv.org/html/2401.02709v1",
     citation="""@misc{wehrli2024germantextembeddingclustering,
@@ -446,21 +439,19 @@ MTEB_DEU = Benchmark(
 
 MTEB_KOR = Benchmark(
     name="MTEB(kor)",
-    tasks=get_tasks(
-        languages=["kor"],
-        tasks=[  # @KennethEnevoldsen: We could probably expand this to a more solid benchamrk, but for now I have left it as is.
-            # Classification
-            "KLUE-TC",
-            # Reranking
-            "MIRACLReranking",
-            # Retrieval
-            "MIRACLRetrieval",
-            "Ko-StrategyQA",
-            # STS
-            "KLUE-STS",
-            "KorSTS",
-        ],
-    ),
+    languages=["kor"],
+    task_names=[  # @KennethEnevoldsen: We could probably expand this to a more solid benchamrk, but for now I have left it as is.
+        # Classification
+        "KLUE-TC",
+        # Reranking
+        "MIRACLReranking",
+        # Retrieval
+        "MIRACLRetrieval",
+        "Ko-StrategyQA",
+        # STS
+        "KLUE-STS",
+        "KorSTS",
+    ],
     description="Main Korean benchmarks from MTEB",
     reference=None,
     citation=None,
@@ -469,33 +460,31 @@ MTEB_KOR = Benchmark(
 
 MTEB_pol = Benchmark(
     name="MTEB(pol)",
-    tasks=get_tasks(
-        languages=["pol"],
-        tasks=[
-            # Classification
-            "AllegroReviews",
-            "CBD",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "PolEmo2.0-IN",
-            "PolEmo2.0-OUT",
-            "PAC",
-            # Clustering
-            "EightTagsClustering",
-            "PlscClusteringS2S",
-            "PlscClusteringP2P",
-            # Pair Classification
-            "CDSC-E",
-            "PpcPC",
-            "PSC",
-            "SICK-E-PL",
-            # STS
-            "CDSC-R",
-            "STS22",
-            "STSBenchmarkMultilingualSTS",
-            "SICK-R-PL",
-        ],
-    ),
+    languages=["pol"],
+    task_names=[
+        # Classification
+        "AllegroReviews",
+        "CBD",
+        "MassiveIntentClassification",
+        "MassiveScenarioClassification",
+        "PolEmo2.0-IN",
+        "PolEmo2.0-OUT",
+        "PAC",
+        # Clustering
+        "EightTagsClustering",
+        "PlscClusteringS2S",
+        "PlscClusteringP2P",
+        # Pair Classification
+        "CDSC-E",
+        "PpcPC",
+        "PSC",
+        "SICK-E-PL",
+        # STS
+        "CDSC-R",
+        "STS22",
+        "STSBenchmarkMultilingualSTS",
+        "SICK-R-PL",
+    ],
     description="Main Polish benchmarks from MTEB",
     reference="https://arxiv.org/abs/2405.10138",
     citation="""@article{poswiata2024plmteb,
