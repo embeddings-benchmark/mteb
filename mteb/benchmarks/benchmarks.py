@@ -93,6 +93,12 @@ class Benchmark:
         )
 
 
+# Marton: This should probably be changed to something slightly more useful
+MTEB_MAIN_MULTI = Benchmark(
+    name="MTEB(Multilingual)",
+    task_names=[task.metadata.name for task in get_tasks()],
+)
+
 MTEB_MAIN_EN = Benchmark(
     name="MTEB(eng)",
     task_names=[
