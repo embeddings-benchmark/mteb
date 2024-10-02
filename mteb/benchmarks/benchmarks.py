@@ -2,18 +2,22 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from functools import cached_property
-from typing import Sequence
+from typing import Any, Callable, Literal
 
+import numpy as np
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 from typing_extensions import Annotated
 
 from mteb.abstasks.AbsTask import AbsTask
+from mteb.load_results.benchmark_results import BenchmarkResults
+from mteb.load_results.load_results import load_results
 from mteb.overview import get_tasks
 
 http_url_adapter = TypeAdapter(AnyUrl)
 UrlString = Annotated[
     str, BeforeValidator(lambda value: str(http_url_adapter.validate_python(value)))
 ]  # Allows the type to be a string, but ensures that the string is a URL
+Score = Any
 
 
 @dataclass
@@ -39,7 +43,7 @@ class Benchmark:
     """
 
     name: str
-    task_names: list[str]
+    task_names: list[str] | None = None
     languages: list[str] | None = None
     eval_splits: list[str] | None = None
     description: str | None = None
@@ -61,6 +65,31 @@ class Benchmark:
             tasks=self.task_names,
             languages=self.languages,
             eval_splits=self.eval_splits,
+        )
+
+    def get_results(
+        self, base_results: BenchmarkResults | None = None
+    ) -> BenchmarkResults:
+        if base_results is None:
+            results = load_results(tasks=self.tasks)
+            return results
+        else:
+            return base_results.select_tasks(self.tasks)
+
+    def get_scores(
+        self,
+        getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
+        aggregation: Callable[[list[Score]], Any] = np.mean,
+        format: Literal["wide", "long"] = "wide",
+        base_results: BenchmarkResults | None = None,
+    ) -> list[dict]:
+        results = self.get_results(base_results)
+        return results.get_scores(
+            languages=self.languages,
+            splits=self.eval_splits,
+            getter=getter,
+            aggregation=aggregation,
+            format=format,
         )
 
 
