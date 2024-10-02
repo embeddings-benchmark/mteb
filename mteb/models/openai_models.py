@@ -18,7 +18,7 @@ class OpenAIWrapper:
         requires_package(self, "openai", "Openai text embedding")
         from openai import OpenAI
 
-        self._client = OpenAI(base_url="http://localhost:8000/v1")
+        self._client = OpenAI()
         self._model_name = model_name
         self._embed_dim = embed_dim
 

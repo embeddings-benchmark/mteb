@@ -26,7 +26,6 @@ def e5_loader(**kwargs):
 
     class E5InstructWrapper(GritLM):
         def encode(self, *args, **kwargs):
-            breakpoint()
             if "prompt_name" in kwargs:
                 if "instruction" in kwargs:
                     raise ValueError(
