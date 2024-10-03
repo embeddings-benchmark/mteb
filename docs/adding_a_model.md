@@ -52,3 +52,17 @@ The leaderboard [automatically refreshes daily](https://github.com/embeddings-be
 **Notes:**
 - We remove models with scores that cannot be reproduced, so please ensure that your model is accessible and scores can be reproduced.
 - An alternative way of submitting to the leaderboard is by opening a PR with your results [here](https://github.com/embeddings-benchmark/results) & checking that they are displayed correctly by [locally running the leaderboard](https://github.com/embeddings-benchmark/leaderboard?tab=readme-ov-file#developer-setup)
+
+- ##### Using Prompts with Sentence Transformers
+
+    If your model uses Sentence Transformers and requires different prompts for encoding the queries and corpus, you can take advantage of the `prompts` [parameter](https://sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer). 
+    
+    Internally, `mteb` uses the prompt named `query` for encoding the queries and `passage` as the prompt name for encoding the corpus. This is aligned with the default names used by Sentence Transformers.
+
+    ###### Adding the prompts in the model configuration (Preferred)
+
+    You can directly add the prompts when saving and uploading your model to the Hub. For an example, refer to this [configuration file](https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5/blob/3b5a16eaf17e47bd997da998988dce5877a57092/config_sentence_transformers.json).
+
+    ###### Instantiating the Model with Prompts
+
+    If you are unable to directly add the prompts in the model configuration, you can instantiate the model using the `sentence_transformers_loader` and pass `prompts` as an argument. For more details, see the `mteb/models/bge_models.py` file.

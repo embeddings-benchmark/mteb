@@ -165,7 +165,7 @@ class AbsTaskMultilabelClassification(AbsTask):
         _unique_train_embeddings = model_encode(
             unique_train_sentences,
             model=model,
-            prompt_name=self.metadata.name,
+            task_name=self.metadata.name,
             **encode_kwargs,
         )
         unique_train_embeddings = dict(
@@ -184,7 +184,7 @@ class AbsTaskMultilabelClassification(AbsTask):
             logger.warning("Couldn't subsample, continuing with the entire test set.")
 
         X_test = model_encode(
-            test_text, model=model, prompt_name=self.metadata.name, **encode_kwargs
+            test_text, model=model, task_name=self.metadata.name, **encode_kwargs
         )
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
