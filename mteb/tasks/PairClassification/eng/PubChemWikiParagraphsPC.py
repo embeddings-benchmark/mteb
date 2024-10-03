@@ -16,7 +16,7 @@ class PubChemWikiParagraphsPC(AbsTaskPairClassification):
         reference="https://pubchem.ncbi.nlm.nih.gov/",
         dataset={
             "path": "BASF-We-Create-Chemistry/PubChemWikiParagraphsPC",
-            "revision": "3a12c34da3bdfeaca47058b624e8223513c7ae46"
+            "revision": "36c2aabe8e5bdb034701d0a226cac3c27d09575c"
         },
         type="PairClassification",
         category="p2p",

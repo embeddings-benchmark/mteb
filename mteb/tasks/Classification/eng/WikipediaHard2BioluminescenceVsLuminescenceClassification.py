@@ -10,8 +10,8 @@ class WikipediaHard2BioluminescenceVsLuminescenceClassification(AbsTaskClassific
         description="TBW",
         reference="https://wikipedia.org",
         dataset={
-            "path": "BASF-We-Create-Chemistry/Wikipedia_Hard_2_Class_Bioluminescence_vs_Luminescence",
-            "revision": "907895e5fe3138626c1c8d8ff26ac90b3c447cf2",
+            "path": "BASF-We-Create-Chemistry/WikipediaHard2BioluminescenceVsLuminescenceClassification",
+            "revision": "21c4dcebe2c5b36a35292e6441e7a10b59bf4896",
         },
         type="Classification",
         category="s2s",

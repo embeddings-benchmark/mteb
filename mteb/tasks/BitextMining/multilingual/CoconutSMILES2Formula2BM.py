@@ -7,12 +7,12 @@ from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class CoconutSmiles2NameBitextMining2(AbsTaskBitextMining, MultilingualTask):
+class CoconutSMILES2Formula2BM(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
-        name="CoconutSmiles2NameBitextMining2",
+        name="CoconutSMILES2Formula2BM",
         dataset={
             "path": "BASF-We-Create-Chemistry/CoconutSmiles2NameBitextMining2",
-            "revision": "9613249c6b80f794d6cfd4c732c5889e94d7c96e"
+            "revision": "5db4895bbfbf84db8e3f876285b5178828f6ebee"
         },
         description="TBW",
         reference="https://coconut.naturalproducts.net/",
@@ -52,8 +52,8 @@ class CoconutSmiles2NameBitextMining2(AbsTaskBitextMining, MultilingualTask):
     def dataset_transform(self):
         def create_columns(row):
             """Put all English titles in column 'sentence1' and SMILES strings in 'sentence2' column"""
-            row["sentence1"] = row["name"]
-            row["sentence2"] = row["canonical_smiles"]
+            row["sentence1"] = row["formula"]
+            row["sentence2"] = row["smiles"]
             return row
 
         # Convert to standard format

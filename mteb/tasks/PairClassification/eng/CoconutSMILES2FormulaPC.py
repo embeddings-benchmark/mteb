@@ -16,14 +16,14 @@ _DATASET_COLUMN_MAP = {
 }
 
 
-class CoconutSmiles2NamePC(AbsTaskPairClassification):
+class CoconutSMILES2FormulaPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
-        name="CoconutSmiles2NamePC",
+        name="CoconutSMILES2FormulaPC",
         description="""TBW""",
         reference="https://coconut.naturalproducts.net/",
         dataset={
-            "path": "BASF-We-Create-Chemistry/CoconutSmiles2NamePairClassification",
-            "revision": "6e7c8b5419a8b437fc1217bb35101a198e723db6"
+            "path": "BASF-We-Create-Chemistry/CoconutSMILES2FormulaPC",
+            "revision": "76bb5eaa5cd86e795dfeb734692dca619d2aed74"
         },
         type="PairClassification",
         category="p2p",

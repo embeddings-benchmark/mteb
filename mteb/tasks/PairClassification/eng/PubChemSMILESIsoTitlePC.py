@@ -23,7 +23,7 @@ class PubChemSMILESIsoTitlePC(AbsTaskPairClassification):
         reference="https://pubchem.ncbi.nlm.nih.gov/",
         dataset={
             "path": "BASF-We-Create-Chemistry/PubChemSMILESIsoTitlePC",
-            "revision": "d8865a1b3a269aa2f4b4059a13c1037a9adfbc5d"
+            "revision": "1b0d57516ec7c168b8da44f80148b5418ba394b3"
         },
         type="PairClassification",
         category="s2s",

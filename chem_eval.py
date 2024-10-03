@@ -77,8 +77,8 @@ if __name__ == "__main__":
 
     all_tasks = [
         # Pair Classification
-        "CoconutSmiles2NamePC",
-        "PubChemAIParagraphsParaphrasePC",
+        "CoconutSMILES2FormulaPC",
+        "WikipediaAIParagraphsParaphrasePC",
         "PubChemAISentenceParaphrasePC",
         "PubChemSMILESCanonDescPC",
         "PubChemSMILESCanonTitlePC",
@@ -107,9 +107,10 @@ if __name__ == "__main__":
         # Retrieval
         "ChemNQRetrieval",
         "ChemHotpotQARetrieval",
+        "CoconutRetrieval"
         # Bitext Mining
-        "CoconutSmiles2NameBitextMining1",
-        "CoconutSmiles2NameBitextMining2",
+        "CoconutSMILES2Formula1BM",
+        "CoconutSMILES2Formula2BM",
         "PubChemSMILESISoTitleBM",
         "PubChemSMILESCanonTitleBM",
         "PubChemSMILESISoDescBM",

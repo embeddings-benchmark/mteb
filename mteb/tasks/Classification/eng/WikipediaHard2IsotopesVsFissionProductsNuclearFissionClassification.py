@@ -10,8 +10,8 @@ class WikipediaHard2IsotopesVsFissionProductsNuclearFissionClassification(AbsTas
         description="TBW",
         reference="https://wikipedia.org",
         dataset={
-            "path": "BASF-We-Create-Chemistry/Wikipedia_Hard_2_Class_Isotopes_vs_Fission_Products_Nuclear_Fission",
-            "revision": "9c3974e039e774828742e739a3cc7bced7b337d5",
+            "path": "BASF-We-Create-Chemistry/WikipediaHard2IsotopesVsFissionProductsNuclearFissionClassification",
+            "revision": "897743346c7c794264f7dbfadc3978aa2895e8e2",
         },
         type="Classification",
         category="s2s",

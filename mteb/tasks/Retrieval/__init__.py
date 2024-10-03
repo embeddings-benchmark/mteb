@@ -32,6 +32,7 @@ from .eng.BrightRetrieval import *
 from .eng.ChemNQRetrieval import *
 from .eng.ChemHotpotQARetrieval import *
 from .eng.ClimateFEVERRetrieval import *
+from .eng.CoconutRetrieval import *
 from .eng.CQADupstackAndroidRetrieval import *
 from .eng.CQADupstackEnglishRetrieval import *
 from .eng.CQADupstackGamingRetrieval import *

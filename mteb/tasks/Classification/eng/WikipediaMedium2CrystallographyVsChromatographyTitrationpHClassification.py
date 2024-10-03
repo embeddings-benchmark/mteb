@@ -10,8 +10,8 @@ class WikipediaMedium2CrystallographyVsChromatographyTitrationpHClassification(A
         description="TBW",
         reference="https://wikipedia.org",
         dataset={
-            "path": "BASF-We-Create-Chemistry/Wikipedia_Medium_2_Class_Crystallography_vs_Chromatography_Titration_pH",
-            "revision": "f1b8f8ca2afd4e8e988e077ac7f42aeae1e1a51c",
+            "path": "BASF-We-Create-Chemistry/WikipediaMedium2CrystallographyVsChromatographyTitrationpHClassification",
+            "revision": "740565a6a853aaed1114a13bdfd5fd46857b4f11",
         },
         type="Classification",
         category="s2s",

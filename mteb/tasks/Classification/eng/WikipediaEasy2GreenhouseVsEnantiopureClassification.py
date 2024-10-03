@@ -10,8 +10,8 @@ class WikipediaEasy2GreenhouseVsEnantiopureClassification(AbsTaskClassification)
         description="TBW",
         reference="https://wikipedia.org",
         dataset={
-            "path": "BASF-We-Create-Chemistry/Wikipedia_Easy_2_Class_Greenhouse_vs_Enantiopure",
-            "revision": "92cddec63a3c8ef29dc72ebaba7204625d864a2b",
+            "path": "BASF-We-Create-Chemistry/WikipediaEasy2GreenhouseVsEnantiopureClassification",
+            "revision": "0cfc1a83b6ed832454e8f4f93f7a0e26208274d9",
         },
         type="Classification",
         category="s2s",

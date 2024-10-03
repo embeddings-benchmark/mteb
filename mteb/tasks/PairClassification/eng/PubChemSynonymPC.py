@@ -23,7 +23,7 @@ class PubChemSynonymPC(AbsTaskPairClassification):
         reference="https://pubchem.ncbi.nlm.nih.gov/",
         dataset={
             "path": "BASF-We-Create-Chemistry/PubChemSynonymPC",
-            "revision": "dcd82d56e7a8388db23aa962c99d59fe9a2ba7e3"
+            "revision": "5037d69d177c9628fb79cb57eea1299178b28c1b"
         },
         type="PairClassification",
         category="s2s",

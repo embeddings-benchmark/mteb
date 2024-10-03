@@ -3,9 +3,8 @@ from __future__ import annotations
 from .ara.ArEntail import *
 from .ces.CTKFactsNLI import *
 from .deu.FalseFriendsDeEnPC import *
-from .eng.CoconutSmiles2NamePC import *
+from .eng.CoconutSMILES2FormulaPC import *
 from .eng.LegalBenchPC import *
-from .eng.PubChemAIParagraphsParaphrasePC import *
 from .eng.PubChemAISentenceParaphrasePC import *
 from .eng.PubChemSMILESCanonDescPC import *
 from .eng.PubChemSMILESCanonTitlePC import *
@@ -16,6 +15,7 @@ from .eng.PubChemWikiParagraphsPC import *
 from .eng.SprintDuplicateQuestionsPC import *
 from .eng.TwitterSemEval2015PC import *
 from .eng.TwitterURLCorpusPC import *
+from .eng.WikipediaAIParagraphsParaphrasePC import *
 from .fas.FarsTail import *
 from .hye.ArmenianParaphrasePC import *
 from .ind.IndoNLI import *

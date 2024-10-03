@@ -9,14 +9,14 @@ from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class PubChemAIParagraphsParaphrasePC(AbsTaskPairClassification):
+class WikipediaAIParagraphsParaphrasePC(AbsTaskPairClassification):
     metadata = TaskMetadata(
-        name="PubChemAIParagraphsParaphrasePC",
+        name="WikipediaAIParagraphsParaphrasePC",
         description="""TBW""",
         reference="https://pubchem.ncbi.nlm.nih.gov/",
         dataset={
-            "path": "BASF-We-Create-Chemistry/PubChemAIParagraphsParaphrasePC",
-            "revision": "bc3efec1bde242c3cdc3b7870c094f4e5a935fee"
+            "path": "BASF-We-Create-Chemistry/WikipediaAIParagraphsParaphrasePC",
+            "revision": "a430437ea6c6fe0e6461e6d6659f647d0bf62496"
         },
         type="PairClassification",
         category="p2p",

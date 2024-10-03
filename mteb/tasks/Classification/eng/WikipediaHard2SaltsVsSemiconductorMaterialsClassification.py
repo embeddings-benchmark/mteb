@@ -10,8 +10,8 @@ class WikipediaHard2SaltsVsSemiconductorMaterialsClassification(AbsTaskClassific
         description="TBW",
         reference="https://wikipedia.org",
         dataset={
-            "path": "BASF-We-Create-Chemistry/Wikipedia_Hard_2_Class_Salts_vs_Semiconductor_Materials",
-            "revision": "b8f1f0eb9c3f54db47a6a6080938dcfdf307ef9f",
+            "path": "BASF-We-Create-Chemistry/WikipediaHard2SaltsVsSemiconductorMaterialsClassification",
+            "revision": "9e5415a096012fa2d1f3a929952cf9859e4550e7",
         },
         type="Classification",
         category="s2s",

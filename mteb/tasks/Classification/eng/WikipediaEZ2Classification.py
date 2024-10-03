@@ -10,8 +10,8 @@ class WikipediaEZ2Classification(AbsTaskClassification):
         description="TBW",
         reference="https://wikipedia.org",
         dataset={
-            "path": "BASF-We-Create-Chemistry/WikipediaEZ2Class",
-            "revision": "03d7df0886b6c450a182f221d11f555a95507417",
+            "path": "BASF-We-Create-Chemistry/WikipediaEZ2Classification",
+            "revision": "1e4c5cbdfca9b7dab2d0822eff88a0bf5f79c429",
         },
         type="Classification",
         category="s2s",

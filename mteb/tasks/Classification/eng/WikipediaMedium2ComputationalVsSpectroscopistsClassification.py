@@ -10,8 +10,8 @@ class WikipediaMedium2ComputationalVsSpectroscopistsClassification(AbsTaskClassi
         description="TBW",
         reference="https://wikipedia.org",
         dataset={
-            "path": "BASF-We-Create-Chemistry/Wikipedia_Medium_2_Class_Computational_vs_Spectroscopists",
-            "revision": "e74c1a94e9a0aca888324e89df2b7086a2f0923f",
+            "path": "BASF-We-Create-Chemistry/WikipediaMedium2ComputationalVsSpectroscopistsClassification",
+            "revision": "474d706a22b0451b5846d623aa4b4234ba5b0513",
         },
         type="Classification",
         category="s2s",

@@ -12,7 +12,7 @@ class PubChemSMILESISoDescBM(AbsTaskBitextMining, MultilingualTask):
         name="PubChemSMILESISoDescBM",
         dataset={
             "path": "BASF-We-Create-Chemistry/PubChemSMILESIsoDescBM",
-            "revision": "a08846b55a60a0361a9ee77a1b2487af4740172d"
+            "revision": "33a2064662e851ea5e42653b303eb9e0f6878a07"
         },
         description="TBW",
         reference="https://pubchem.ncbi.nlm.nih.gov/",
