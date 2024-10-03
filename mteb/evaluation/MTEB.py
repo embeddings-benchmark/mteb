@@ -53,15 +53,15 @@ class MTEB:
             err_logs_path: Path to save error logs.
             kwargs: Additional arguments to be passed to the tasks
         """
+        from mteb.benchmarks import Benchmark
+
         self.deprecation_warning(
             task_types, task_categories, task_langs, tasks, version
         )
 
         if tasks is not None:
             self._tasks = tasks
-            if (
-                not isinstance(tasks[0], AbsTask) and not isinstance(tasks[0], str)
-            ):  # So that passing in a list of Benchmarks works too. Trying to import Benchmark causes circular import.
+            if isinstance(tasks[0], Benchmark):
                 self.benchmarks = tasks
                 self._tasks = list(chain.from_iterable(tasks))
             assert (
