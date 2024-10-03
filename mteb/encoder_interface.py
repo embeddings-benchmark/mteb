@@ -1,11 +1,17 @@
 from __future__ import annotations
 
+from enum import Enum
 from typing import Any, Dict, List, Protocol, Sequence, Union, runtime_checkable
 
 import numpy as np
 import torch
 
 Corpus = Union[List[Dict[str, str]], Dict[str, List[str]]]
+
+
+class PromptType(str, Enum):
+    query = "query"
+    passage = "passage"
 
 
 @runtime_checkable
@@ -24,13 +30,13 @@ class Encoder(Protocol):
         """
 
     def encode(
-        self, sentences: Sequence[str], *, prompt_name: str | None = None, **kwargs: Any
+        self, sentences: Sequence[str], *, task_name: str | None = None, **kwargs: Any
     ) -> torch.Tensor | np.ndarray:
         """Encodes the given sentences using the encoder.
 
         Args:
             sentences: The sentences to encode.
-            prompt_name: The name of the prompt. This will just be the name of the task. Sentence-transformers uses this to
+            task_name: The name of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
             **kwargs: Additional arguments to pass to the encoder.
 
@@ -92,14 +98,19 @@ class EncoderWithQueryCorpusEncode(Encoder, Protocol):
     """The optional interface for an encoder that supports encoding queries and a corpus."""
 
     def encode_queries(
-        self, queries: Sequence[str], *, prompt_name: str | None = None, **kwargs: Any
+        self,
+        queries: Sequence[str],
+        *,
+        task_name: str | None = None,
+        prompt_type: str = PromptType.query,
+        **kwargs: Any,
     ) -> torch.Tensor | np.ndarray:
         """Encodes the given queries using the encoder.
 
         Args:
             queries: The queries to encode.
-            prompt_name: The name of the prompt. This will just be the name of the task. Sentence-transformers uses this to
-                determine which prompt to use from a specified dictionary.
+            task_name: The name of the task. Sentence-transformers uses this to determine which prompt to use from a specified dictionary.
+            prompt_type: By default, SentenceTransformers uses "query" in the model prompts dictionnary for models that require so.
             **kwargs: Additional arguments to pass to the encoder.
 
         Returns:
@@ -108,14 +119,19 @@ class EncoderWithQueryCorpusEncode(Encoder, Protocol):
         ...
 
     def encode_corpus(
-        self, corpus: Corpus, *, prompt_name: str | None = None, **kwargs: Any
+        self,
+        corpus: Corpus,
+        *,
+        task_name: str | None = None,
+        prompt_type: str = PromptType.passage,
+        **kwargs: Any,
     ) -> torch.Tensor | np.ndarray:
         """Encodes the given corpus using the encoder.
 
         Args:
             corpus: The corpus to encode.
-            prompt_name: The name of the prompt. This will just be the name of the task. Sentence-transformers uses this to
-                determine which prompt to use from a specified dictionary.
+            task_name: The name of the task. Sentence-transformers uses this to determine which prompt to use from a specified dictionary.
+            prompt_type: By default, SentenceTransformers uses "passage" in the model prompts dictionnary for models that require so.
             **kwargs: Additional arguments to pass to the encoder.
 
         Returns:
@@ -132,14 +148,14 @@ class EncoderWithConversationEncode(Encoder, Protocol):
         self,
         conversations: Sequence[Sequence[str]],
         *,
-        prompt_name: str | None = None,
+        task_name: str | None = None,
         **kwargs: Any,
     ) -> torch.Tensor | np.ndarray:
         """Encodes the given conversations using the encoder.
 
         Args:
             conversations: The conversations to encode.
-            prompt_name: The name of the prompt. This will just be the name of the task. Sentence-transformers uses this to
+            task_name: The name of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
             **kwargs: Additional arguments to pass to the encoder.
 

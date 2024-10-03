@@ -177,7 +177,7 @@ class AbsTaskClusteringFast(AbsTask):
         embeddings = model_encode(
             downsampled_dataset["sentences"],  # type: ignore
             model=model,
-            prompt_name=self.metadata.name,
+            task_name=self.metadata.name,
             **encode_kwargs,
         )
 

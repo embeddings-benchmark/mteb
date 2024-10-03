@@ -93,7 +93,7 @@ class PairClassificationEvaluator(Evaluator):
         embeddings = model_encode(
             sentences,
             model=model,
-            prompt_name=self.task_name,
+            task_name=self.task_name,
             **encode_kwargs,
         )
         emb_dict = dict(zip(sentences, embeddings))

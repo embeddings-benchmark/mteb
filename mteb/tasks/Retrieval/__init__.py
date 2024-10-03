@@ -97,6 +97,7 @@ from .fra.FQuADRetrieval import *
 from .fra.SyntecRetrieval import *
 from .hun.HunSum2 import *
 from .jpn.JaGovFaqsRetrieval import *
+from .jpn.JaqketRetrieval import *
 from .jpn.JaQuADRetrieval import *
 from .jpn.NLPJournalAbsIntroRetrieval import *
 from .jpn.NLPJournalTitleAbsRetrieval import *
@@ -110,6 +111,7 @@ from .multilingual.IndicQARetrieval import *
 from .multilingual.MintakaRetrieval import *
 from .multilingual.MIRACLRetrieval import *
 from .multilingual.MLQARetrieval import *
+from .multilingual.MrTidyRetrieval import *
 from .multilingual.MultiLongDocRetrieval import *
 from .multilingual.NeuCLIR2022Retrieval import *
 from .multilingual.NeuCLIR2023Retrieval import *
