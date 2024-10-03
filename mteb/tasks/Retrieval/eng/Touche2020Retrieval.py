@@ -58,9 +58,9 @@ class Touche2020(AbsTaskRetrieval):
     )
 
 
-class Touche2020v3(AbsTaskRetrieval):
+class Touche2020v3Retrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="Touche2020v3",
+        name="Touche2020v3Retrieval",
         description="Touché Task 1: Argument Retrieval for Controversial Questions",
         reference="https://github.com/castorini/touche-error-analysis",
         dataset={
