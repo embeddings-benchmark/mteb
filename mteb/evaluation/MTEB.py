@@ -114,7 +114,7 @@ class MTEB:
 
     @property
     def available_task_types(self):
-        #sort the task types
+        # sort the task types
         task_types = {x.metadata_dict["type"] for x in self.tasks_cls}
         task_types = sorted(task_types)
         return task_types
@@ -151,7 +151,7 @@ class MTEB:
         console = Console()
         if name:
             console.rule(f"[bold]{name}\n", style="grey15")
-        for task_type in self.available_task_types: #iterate through sorted task_types
+        for task_type in self.available_task_types:  # iterate through sorted task_types
             current_type_tasks = list(
                 filter(lambda x: x.metadata.type == task_type, task_list)
             )
@@ -159,7 +159,9 @@ class MTEB:
                 continue
             else:
                 console.print(f"[bold]{task_type}[/]")
-                for task in current_type_tasks: #will be sorted as input to this function
+                for (
+                    task
+                ) in current_type_tasks:  # will be sorted as input to this function
                     prefix = "    - "
                     name = f"{task.metadata.name}"
                     category = f", [italic grey39]{task.metadata.category}[/]"
@@ -174,20 +176,25 @@ class MTEB:
     def mteb_benchmarks(self):
         """Get all benchmarks available in the MTEB."""
         from mteb.overview import MTEBTasks
-        #get all the MTEB specific benchmarks:
-        mteb_tasks = [t for t in self._tasks ]
 
-        mteb_tasks, remaining_tasks = ([t for t in self._tasks if 'MTEB' in t.name],  
-                [t for t in self._tasks if 'MTEB' not in t.name]) 
+        # get all the MTEB specific benchmarks:
+        mteb_tasks = [t for t in self._tasks]
+
+        mteb_tasks, remaining_tasks = (
+            [t for t in self._tasks if "MTEB" in t.name],
+            [t for t in self._tasks if "MTEB" not in t.name],
+        )
 
         mteb_tasks = sorted(mteb_tasks, key=lambda obj: obj.name.lower())
         remaining_tasks = sorted(remaining_tasks, key=lambda obj: obj.name.lower())
 
         sorted_tasks = mteb_tasks + remaining_tasks
 
-        #task ordering within each benchmark should be alphabetical
+        # task ordering within each benchmark should be alphabetical
         for st in sorted_tasks:
-            st.tasks = MTEBTasks(sorted(st.tasks, key=lambda obj: obj.metadata.name.lower()))
+            st.tasks = MTEBTasks(
+                sorted(st.tasks, key=lambda obj: obj.metadata.name.lower())
+            )
 
         for benchmark in sorted_tasks:
             name = benchmark.name
