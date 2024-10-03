@@ -14,7 +14,7 @@ class CoconutRetrieval(AbsTaskRetrieval):
         name="CoconutRetrieval",
         dataset={
             "path": "BASF-We-Create-Chemistry/CoconutRetrieval",
-            "revision": "fdb30de349565a819d481f1eb7ef6f851ff150fc",
+            "revision": "4c23111a06ff9162dc8521dfe8096c544ab9548b",
         },
         description="COCONUT: the COlleCtion of Open NatUral producTs",
         reference="https://coconut.naturalproducts.net/",
