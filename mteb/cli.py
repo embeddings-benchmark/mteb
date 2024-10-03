@@ -122,12 +122,16 @@ def run(args: argparse.Namespace) -> None:
 
     model = mteb.get_model(args.model, args.model_revision, device=device)
 
-    tasks = mteb.get_tasks(
-        categories=args.categories,
-        task_types=args.task_types,
-        languages=args.languages,
-        tasks=args.tasks,
-    )
+    if args.benchmarks:
+        tasks = mteb.get_benchmarks(names=args.benchmarks)
+    else:
+        tasks = mteb.get_tasks(
+            categories=args.categories,
+            task_types=args.task_types,
+            languages=args.languages,
+            tasks=args.tasks,
+        )
+
     eval = mteb.MTEB(tasks=tasks)
 
     encode_kwargs = {}
@@ -153,7 +157,7 @@ def run(args: argparse.Namespace) -> None:
 
 
 def available_benchmarks(args: argparse.Namespace) -> None:
-    benchmarks = mteb.get_benchmarks()
+    benchmarks = mteb.get_benchmarks(names=args.benchmarks)
     eval = mteb.MTEB(tasks=benchmarks)
     eval.mteb_benchmarks()
 
@@ -167,6 +171,18 @@ def available_tasks(args: argparse.Namespace) -> None:
     )
     eval = mteb.MTEB(tasks=tasks)
     eval.mteb_tasks()
+
+
+def add_benchmark_selection_args(parser: argparse.ArgumentParser) -> None:
+    """Adds arguments to the parser for filtering benchmarks by name."""
+    parser.add_argument(
+        "-b",
+        "--benchmarks",
+        nargs="+",
+        type=str,
+        default=None,
+        help="List of benchmark to be evaluated.",
+    )
 
 
 def add_task_selection_args(parser: argparse.ArgumentParser) -> None:
@@ -216,7 +232,7 @@ def add_available_benchmarks_parser(subparsers) -> None:
     parser = subparsers.add_parser(
         "available_benchmarks", help="List the available benchmarks within MTEB"
     )
-    add_task_selection_args(parser)
+    add_benchmark_selection_args(parser)
 
     parser.set_defaults(func=available_benchmarks)
 
@@ -232,6 +248,7 @@ def add_run_parser(subparsers) -> None:
     )
 
     add_task_selection_args(parser)
+    add_benchmark_selection_args(parser)
 
     parser.add_argument(
         "--device", type=int, default=None, help="Device to use for computation"
