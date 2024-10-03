@@ -15,7 +15,7 @@ import tqdm
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from sentence_transformers.models import Transformer, WordEmbeddings
 
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode, PromptType
 from mteb.model_meta import ModelMeta
 
 from .Evaluator import Evaluator
@@ -87,7 +87,7 @@ class DenseRetrievalExactSearch:
         queries: dict[str, str | list[str]],
         top_k: int,
         score_function: str,
-        prompt_name: str,
+        task_name: str,
         instructions: dict[str, str] | None = None,
         request_qid: str | None = None,
         return_sorted: bool = False,
@@ -111,13 +111,13 @@ class DenseRetrievalExactSearch:
             query_embeddings = self.encode_conversations(
                 model=self.model,
                 conversations=queries,  # type: ignore
-                prompt_name=prompt_name,
+                task_name=task_name,
                 **self.encode_kwargs,
             )
         else:
             query_embeddings = self.model.encode_queries(
                 queries,  # type: ignore
-                prompt_name=prompt_name,
+                task_name=task_name,
                 **self.encode_kwargs,
             )
 
@@ -156,7 +156,7 @@ class DenseRetrievalExactSearch:
                 # Encode chunk of corpus
                 sub_corpus_embeddings = self.model.encode_corpus(
                     corpus[corpus_start_idx:corpus_end_idx],  # type: ignore
-                    prompt_name=prompt_name,
+                    task_name=task_name,
                     request_qid=request_qid,
                     **self.encode_kwargs,
                 )
@@ -312,16 +312,16 @@ class DenseRetrievalExactSearch:
         )
 
     def encode_conversations(
-        self, model: Encoder, conversations: list[list[str]], prompt_name: str, **kwargs
+        self, model: Encoder, conversations: list[list[str]], task_name: str, **kwargs
     ):
         if callable(getattr(self.model, "encode_conversations", None)):
             return model.encode_conversations(  # type: ignore
-                conversations, prompt_name=prompt_name, **kwargs
+                conversations, task_name=task_name, **kwargs
             )
         # otherwise fallback to default implementation
         # TODO: add a warning here
         queries = self.convert_conv_history_to_query(model, conversations)  # type: ignore
-        return model.encode_queries(queries, prompt_name=prompt_name, **kwargs)  # type: ignore
+        return model.encode_queries(queries, task_name=task_name, **kwargs)  # type: ignore
 
     @staticmethod
     def convert_conv_history_to_query(
@@ -346,7 +346,13 @@ class DRESModel:
         self.corpus_embeddings = {}
 
     def encode_queries(
-        self, queries: list[str], *, prompt_name: str, batch_size: int, **kwargs
+        self,
+        queries: list[str],
+        *,
+        task_name: str,
+        batch_size: int,
+        prompt_type: str = PromptType.query,
+        **kwargs,
     ):
         if self.use_sbert_model:
             if isinstance(self.model._first_module(), Transformer):
@@ -361,7 +367,8 @@ class DRESModel:
         return model_encode(
             queries,
             model=self.model,
-            prompt_name=prompt_name,
+            task_name=task_name,
+            prompt_type=prompt_type,
             batch_size=batch_size,
             **kwargs,
         )
@@ -369,8 +376,9 @@ class DRESModel:
     def encode_corpus(
         self,
         corpus: list[dict[str, str]],
-        prompt_name: str,
+        task_name: str,
         batch_size: int,
+        prompt_type: str = PromptType.passage,
         request_qid: str | None = None,
         **kwargs,
     ):
@@ -399,7 +407,8 @@ class DRESModel:
         corpus_embeddings = model_encode(
             sentences,
             model=self.model,
-            prompt_name=prompt_name,
+            task_name=task_name,
+            prompt_type=prompt_type,
             batch_size=batch_size,
             **kwargs,
         )
@@ -408,8 +417,8 @@ class DRESModel:
             self.corpus_embeddings[request_qid] = corpus_embeddings
         return corpus_embeddings
 
-    def encode(self, sentences: list[str], prompt_name: str, **kwargs):
-        return self.encode_queries(sentences, prompt_name=prompt_name, **kwargs)
+    def encode(self, sentences: list[str], task_name: str, **kwargs):
+        return self.encode_queries(sentences, task_name=task_name, **kwargs)
 
 
 def is_dres_compatible(model):
@@ -486,7 +495,7 @@ class RetrievalEvaluator(Evaluator):
                 queries,
                 self.top_k,
                 self.score_function,
-                prompt_name=self.task_name,  # type: ignore
+                task_name=self.task_name,  # type: ignore
             )
         else:
             return self.retriever.search(
@@ -494,7 +503,7 @@ class RetrievalEvaluator(Evaluator):
                 queries,
                 self.top_k,
                 self.score_function,
-                prompt_name=self.task_name,  # type: ignore
+                task_name=self.task_name,  # type: ignore
             )
 
     @staticmethod
