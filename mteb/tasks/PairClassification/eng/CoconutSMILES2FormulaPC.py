@@ -10,8 +10,8 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 _DATASET_COLUMN_MAP = {
-    "sentence1": "name",
-    "sentence2": "canonical_smiles",
+    "sentence1": "formula",
+    "sentence2": "smiles",
     "labels": "label",
 }
 
@@ -23,7 +23,7 @@ class CoconutSMILES2FormulaPC(AbsTaskPairClassification):
         reference="https://coconut.naturalproducts.net/",
         dataset={
             "path": "BASF-We-Create-Chemistry/CoconutSMILES2FormulaPC",
-            "revision": "76bb5eaa5cd86e795dfeb734692dca619d2aed74"
+            "revision": "e46d4868e417703bdcf32aadbe5d0e05a1b7f085"
         },
         type="PairClassification",
         category="p2p",
