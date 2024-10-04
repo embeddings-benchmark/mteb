@@ -13,6 +13,7 @@ from typing import Any, Iterable
 import datasets
 from sentence_transformers import SentenceTransformer
 
+from mteb.abstasks.AbsTask import ScoresDict
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
@@ -273,6 +274,59 @@ class MTEB:
         tock = time()
         return results, tick, tock
 
+    @staticmethod
+    def _get_missing_splits(
+        existing_results: MTEBResults | None, task_eval_splits: list[str], task: AbsTask
+    ) -> list[str]:
+        if existing_results is None:
+            return task_eval_splits
+
+        missing_splits = []
+        for split in task_eval_splits:
+            if split not in existing_results.scores:
+                missing_splits.append(split)
+            elif not existing_results.scores[
+                split
+            ]:  # Check if the split has any scores
+                missing_splits.append(split)
+
+        return missing_splits
+
+    @staticmethod
+    def _merge_results(
+        existing_results: MTEBResults, new_results: MTEBResults
+    ) -> MTEBResults:
+        merged_scores = existing_results.scores.copy()
+
+        for split, scores in new_results.scores.items():
+            if split in merged_scores:
+                merged_scores[split] = MTEB._merge_split_scores(
+                    merged_scores[split], scores
+                )
+            else:
+                merged_scores[split] = scores
+
+        merged_results = MTEBResults(
+            dataset_revision=existing_results.dataset_revision,
+            task_name=existing_results.task_name,
+            mteb_version=existing_results.mteb_version,
+            scores=merged_scores,
+            evaluation_time=existing_results.evaluation_time
+            + new_results.evaluation_time,
+            kg_co2_emissions=existing_results.kg_co2_emissions,
+        )
+
+        return merged_results
+
+    @staticmethod
+    def _merge_split_scores(
+        existing_scores: list[ScoresDict], new_scores: list[ScoresDict]
+    ) -> list[ScoresDict]:
+        merged = {score["hf_subset"]: score for score in existing_scores}
+        for score in new_scores:
+            merged[score["hf_subset"]] = score
+        return list(merged.values())
+
     def run(
         self,
         model: SentenceTransformer | Encoder,
@@ -336,38 +390,36 @@ class MTEB:
                 f"\n\n********************** Evaluating {task.metadata.name} **********************"
             )
 
-            # skip evaluation if results folder exists and overwrite_results is False
             if output_path:
                 save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
-                existing_results = self.load_existing_results(save_path)
-                if existing_results and not overwrite_results:
-                    task_eval_splits = (
-                        eval_splits if eval_splits is not None else task.eval_splits
-                    )
-                    missing_splits = self.compare_splits_and_subsets(
-                        existing_results, task_eval_splits
-                    )
-                    if not missing_splits:
-                        logger.info(
-                            f"{task.metadata.name} results already exists. Loading results from disk. Set overwrite_results=True to overwrite."
-                        )
-                        mteb_results = MTEBResults.from_disk(save_path)
-                        evaluation_results.append(mteb_results)
-                        del self.tasks[0]  # empty memory
-                        continue
-                    else:
-                        logger.info(
-                            f"{task.metadata.name} results exist but missing splits: {missing_splits}. Running evaluation for missing splits."
-                        )
-                        task_eval_splits = missing_splits
+                existing_results = None
+                if save_path.exists() and not overwrite_results:
+                    try:
+                        existing_results = MTEBResults.from_disk(save_path)
+                    except Exception as e:
+                        logger.warning(f"Error loading existing results: {e}")
 
-            try:
                 task_eval_splits = (
                     eval_splits if eval_splits is not None else task.eval_splits
                 )
+                missing_splits = self._get_missing_splits(
+                    existing_results, task_eval_splits, task
+                )
 
-                # load data
-                logger.info(f"Loading dataset for {task.metadata_dict['name']}")
+                if not missing_splits and existing_results:
+                    logger.info(
+                        f"{task.metadata.name} results already exist. Loading results from disk."
+                    )
+                    evaluation_results.append(existing_results)
+                    del self.tasks[0]
+                    continue
+
+                if missing_splits:
+                    logger.info(
+                        f"Running evaluation for missing splits: {missing_splits}"
+                    )
+
+            try:
                 task.check_if_dataset_is_superseeded()
                 task.load_data(eval_splits=task_eval_splits, **kwargs)
 
@@ -375,7 +427,8 @@ class MTEB:
                 task_results = {}
                 evaluation_time = 0
                 kg_co2_emissions: int | None = 0 if co2_tracker else None
-                for split in task_eval_splits:
+
+                for split in missing_splits:
                     if co2_tracker:
                         try:
                             from codecarbon import EmissionsTracker
@@ -418,21 +471,22 @@ class MTEB:
                     if verbosity >= 1:
                         logger.info(f"Scores: {results}")
 
-                mteb_task_result = MTEBResults.from_task_results(
+                new_results = MTEBResults.from_task_results(
                     task,
                     task_results,
                     evaluation_time=evaluation_time,
                     kg_co2_emissions=kg_co2_emissions,
                 )
 
-                # save results
-                if output_path:
-                    with open(save_path, "w") as f_out:
-                        json.dump(
-                            mteb_task_result.to_dict(), f_out, indent=2, sort_keys=True
-                        )
+                if existing_results:
+                    merged_results = self._merge_results(existing_results, new_results)
+                else:
+                    merged_results = new_results
 
-                evaluation_results.append(mteb_task_result)
+                if output_path:
+                    merged_results.to_disk(save_path)
+
+                evaluation_results.append(merged_results)
 
             except Exception as e:
                 logger.error(
@@ -451,7 +505,6 @@ class MTEB:
             # empty memory
             del self.tasks[0]
 
-        # restore original tasks
         self.tasks = original_tasks
         return evaluation_results
 
@@ -502,16 +555,3 @@ class MTEB:
 
         with save_path.open("w") as f:
             json.dump(model_meta.to_dict(), f)
-
-    def load_existing_results(self, save_path):
-        if save_path.exists():
-            with open(save_path) as f:
-                return json.load(f)
-        return None
-
-    def compare_splits_and_subsets(self, existing_results, task_eval_splits):
-        missing_splits = []
-        for split in task_eval_splits:
-            if split not in existing_results:
-                missing_splits.append(split)
-        return missing_splits
