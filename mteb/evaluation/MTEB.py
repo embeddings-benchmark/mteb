@@ -4,7 +4,7 @@ import json
 import logging
 import os
 import traceback
-from copy import copy
+from copy import copy, deepcopy
 from datetime import datetime
 from pathlib import Path
 from time import time
@@ -76,6 +76,8 @@ class MTEB:
 
         self._version = version
         self.err_logs_path = err_logs_path
+
+        self.last_evaluated_splits = {}
 
         self.select_tasks(**kwargs)
 
@@ -384,6 +386,7 @@ class MTEB:
         original_tasks = (
             self.tasks.copy()
         )  # save them in case we re-use the object (e.g. for reranking)
+        self.last_evaluated_splits = {}
         while len(self.tasks) > 0:
             task = self.tasks[0]
             logger.info(
@@ -411,6 +414,7 @@ class MTEB:
                         f"{task.metadata.name} results already exist. Loading results from disk."
                     )
                     evaluation_results.append(existing_results)
+                    self.last_evaluated_splits[task.metadata.name] = []  # Add this line
                     del self.tasks[0]
                     continue
 
@@ -470,6 +474,10 @@ class MTEB:
                     task_results[split] = results
                     if verbosity >= 1:
                         logger.info(f"Scores: {results}")
+
+                    if task.metadata_dict["name"] not in self.last_evaluated_splits:
+                        self.last_evaluated_splits[task.metadata_dict["name"]] = set()
+                    self.last_evaluated_splits[task.metadata_dict["name"]].add(split)
 
                 new_results = MTEBResults.from_task_results(
                     task,
@@ -555,3 +563,11 @@ class MTEB:
 
         with save_path.open("w") as f:
             json.dump(model_meta.to_dict(), f)
+
+    def get_last_evaluated_splits(self):
+        """Returns a dictionary of tasks and their evaluated splits from the most recent run.
+        Tasks with empty lists indicate that results already existed and no splits were evaluated.
+        """
+        return deepcopy(
+            {task: list(splits) for task, splits in self.last_evaluated_splits.items()}
+        )
