@@ -17,20 +17,20 @@ def nfcorpus_tasks():
     return mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
 
 
-# def test_all_splits_evaluated(model, nfcorpus_tasks, tmp_path):
-#     evaluation = MTEB(tasks=nfcorpus_tasks)
-#     evaluation.run(
-#         model,
-#         eval_splits=["train", "test"],
-#         save_predictions=True,
-#         output_folder=str(tmp_path / "testcase1"),
-#         verbosity=2,
-#     )
-#     last_evaluated_splits = evaluation.get_last_evaluated_splits()
-#     print(last_evaluated_splits)
-#     assert "NFCorpus" in last_evaluated_splits
-#     assert set(last_evaluated_splits["NFCorpus"]) == {"train", "test"}
-#     assert len(last_evaluated_splits["NFCorpus"]) == 2
+def test_all_splits_evaluated(model, nfcorpus_tasks, tmp_path):
+    evaluation = MTEB(tasks=nfcorpus_tasks)
+    evaluation.run(
+        model,
+        eval_splits=["train", "test"],
+        save_predictions=True,
+        output_folder=str(tmp_path / "testcase1"),
+        verbosity=2,
+    )
+    last_evaluated_splits = evaluation.get_last_evaluated_splits()
+    print(last_evaluated_splits)
+    assert "NFCorpus" in last_evaluated_splits
+    assert set(last_evaluated_splits["NFCorpus"]) == {"train", "test"}
+    assert len(last_evaluated_splits["NFCorpus"]) == 2
 
 
 def test_one_missing_split(model, nfcorpus_tasks, tmp_path):
