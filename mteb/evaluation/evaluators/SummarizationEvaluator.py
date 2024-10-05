@@ -193,6 +193,7 @@ class DeprecatedSummarizationEvaluator(Evaluator):
     def __init__(
         self,
         task_name: str | None = None,
+        task_type: str | None = None,
         human_summaries=None,
         machine_summaries=None,
         texts=None,
@@ -215,6 +216,7 @@ class DeprecatedSummarizationEvaluator(Evaluator):
         self.texts = texts
         self.gold_scores = gold_scores
         self.task_name = task_name
+        self.task_type = task_type
 
     def __call__(
         self,
