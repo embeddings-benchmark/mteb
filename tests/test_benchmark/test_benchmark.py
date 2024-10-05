@@ -8,6 +8,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 import torch
+from sentence_transformers import SentenceTransformer
 
 import mteb
 from mteb.benchmarks.benchmarks import Benchmark
