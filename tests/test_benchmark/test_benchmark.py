@@ -101,7 +101,7 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
             assert prompt_name == _task_name
             return np.zeros((len(sentences), 10))
 
-    class EncoderWithoutInstructions(MockSentenceTransformer):
+    class EncoderWithoutInstructions(SentenceTransformer):
         def encode(self, sentences, **kwargs):
             assert "prompt_name" not in kwargs
             return super().encode(sentences, **kwargs)
@@ -126,7 +126,7 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
     model = MockEncoderWithInstructions()
     eval.run(model, output_folder="tests/results", overwrite_results=True)
     # Test that the task_name is not passed down to the encoder
-    model = EncoderWithoutInstructions()
+    model = EncoderWithoutInstructions("average_word_embeddings_levy_dependency")
     assert model.prompts == {}, "The encoder should not have any prompts"
     eval.run(model, output_folder="tests/results", overwrite_results=True)
     # Test that the task_name is passed down to the encoder and used as a prompt
