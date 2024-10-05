@@ -118,7 +118,7 @@ rosberta_ru_en = ModelMeta(
             "classification": "classification: ",
             "clustering": "clustering: ",
             "query": "search_query: ",
-            "corpus": "search_document: ",
+            "passage": "search_document: ",
         },
     ),
     name="ai-forever/ru-en-RoSBERTa",
