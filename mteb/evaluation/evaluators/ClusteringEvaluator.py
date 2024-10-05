@@ -21,6 +21,7 @@ class ClusteringEvaluator(Evaluator):
         sentences,
         labels,
         task_name: str | None = None,
+        task_type: str | None = None,
         clustering_batch_size: int = 500,
         limit: int | None = None,
         **kwargs,
@@ -33,6 +34,7 @@ class ClusteringEvaluator(Evaluator):
         self.labels = labels
         self.clustering_batch_size = clustering_batch_size
         self.task_name = task_name
+        self.task_type = task_type
 
     def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
         if "batch_size" not in encode_kwargs:
@@ -42,6 +44,7 @@ class ClusteringEvaluator(Evaluator):
             self.sentences,
             model=model,
             task_name=self.task_name,
+            task_type=self.task_type,
             **encode_kwargs,
         )
 

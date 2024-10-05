@@ -16,6 +16,7 @@ def model_encode(
     *,
     model: Encoder,
     task_name: str | None,
+    task_type: str | None,
     prompt_type: PromptType | None = None,
     **kwargs,
 ) -> np.ndarray:
@@ -25,13 +26,16 @@ def model_encode(
         sentences: The sentences to encode
         model: The model to use for encoding
         task_name: The task name to use for building the encoding prompt
+        task_type: The task type to use for building the encoding prompt
         prompt_type: The prompt type (e.g. "query" | "passage") to use for building the encoding prompt
         **kwargs: Additional arguments to pass to the model.encode method
     """
     ## The order of priorities are:
     # 1. Composed prompt of task name + prompt type
     # 2. Specific task prompt
-    # 3. Specific prompt type
+    # 3. Composed prompt of task type + prompt type
+    # 4. Specific task type prompt
+    # 5. Specific prompt type
 
     if hasattr(model, "prompts"):
         # check if prompts is an empty dict
@@ -41,12 +45,18 @@ def model_encode(
             )
             kwargs.pop("prompt_name", None)
 
-        if task_name and prompt_type and f"{task_name}-{ prompt_type}" in model.prompts:
-            kwargs["prompt_name"] = f"{task_name}-{ prompt_type}"
+        if task_name and prompt_type and f"{task_name}-{prompt_type}" in model.prompts:
+            kwargs["prompt_name"] = f"{task_name}-{prompt_type}"
         elif task_name and task_name in model.prompts:
             kwargs["prompt_name"] = task_name
+        elif (
+            task_type and prompt_type and f"{task_type}-{prompt_type}" in model.prompts
+        ):
+            kwargs["prompt_name"] = f"{task_type}-{prompt_type}"
+        elif task_type and task_type in model.prompts:
+            kwargs["prompt_name"] = task_type
         elif prompt_type and prompt_type in model.prompts:
-            kwargs["prompt_name"] = prompt_type
+            kwargs["prompt_name"] = prompt_type.value
 
         else:  # type: ignore
             logger.info(

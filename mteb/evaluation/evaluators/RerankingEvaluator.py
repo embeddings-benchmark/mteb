@@ -11,7 +11,7 @@ from sklearn.metrics import average_precision_score
 
 from mteb.evaluation.evaluators.RetrievalEvaluator import RetrievalEvaluator
 
-from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode, PromptType
 from .Evaluator import Evaluator
 from .model_encode import model_encode
 from .utils import confidence_scores, cos_sim, nAUC
@@ -34,6 +34,7 @@ class RerankingEvaluator(Evaluator):
         self,
         samples,
         task_name: str | None = None,
+        task_type: str | None = None,
         mrr_at_k: int = 10,
         name: str = "",
         similarity_fct=cos_sim,
@@ -53,6 +54,7 @@ class RerankingEvaluator(Evaluator):
         self.similarity_fct = similarity_fct
         self.use_batched_encoding = use_batched_encoding
         self.task_name = task_name
+        self.task_type = task_type
         self.k_values = k_values
         self.evaluator_type = evaluator_type
         self.encode_kwargs = encode_kwargs
@@ -104,6 +106,8 @@ class RerankingEvaluator(Evaluator):
                 encode_queries_func(
                     [sample["query"] for sample in self.samples],
                     task_name=self.task_name,
+                    task_type=self.task_type,
+                    prompt_type=PromptType.query,
                     **self.encode_kwargs,
                 )
             )
@@ -116,6 +120,8 @@ class RerankingEvaluator(Evaluator):
                 all_query_flattened,
                 encode_queries_func,
                 task_name=self.task_name,
+                task_type=self.task_type,
+                prompt_type=PromptType.query,
                 **self.encode_kwargs,
             )
         else:
@@ -210,6 +216,8 @@ class RerankingEvaluator(Evaluator):
             all_docs,
             encode_corpus_func,
             task_name=self.task_name,
+            task_type=self.task_type,
+            prompt_type=PromptType.passage,
             **self.encode_kwargs,
         )
 
@@ -262,8 +270,24 @@ class RerankingEvaluator(Evaluator):
             if isinstance(query, str):
                 # .encoding interface requires List[str] as input
                 query = [query]
-            query_emb = np.asarray(encode_queries_func(query, **self.encode_kwargs))
-            docs_emb = np.asarray(encode_corpus_func(docs, **self.encode_kwargs))
+            query_emb = np.asarray(
+                encode_queries_func(
+                    query,
+                    task_name=self.task_name,
+                    task_type=self.task_type,
+                    prompt_type=PromptType.query,
+                    **self.encode_kwargs,
+                )
+            )
+            docs_emb = np.asarray(
+                encode_corpus_func(
+                    docs,
+                    task_name=self.task_name,
+                    task_type=self.task_type,
+                    prompt_type=PromptType.passage,
+                    **self.encode_kwargs,
+                )
+            )
             self._apply_sim_scores(
                 query_emb,
                 docs_emb,
@@ -306,7 +330,13 @@ class RerankingEvaluator(Evaluator):
             all_docs.extend(sample["candidates"])
 
         all_docs_embs = np.asarray(
-            encode_corpus_func(all_docs, task_name=self.task_name, **self.encode_kwargs)
+            encode_corpus_func(
+                all_docs,
+                task_name=self.task_name,
+                task_type=self.task_type,
+                prompt_type=PromptType.passage,
+                **self.encode_kwargs,
+            )
         )
 
         # Compute scores
@@ -347,9 +377,23 @@ class RerankingEvaluator(Evaluator):
             if isinstance(query, str):
                 # .encoding interface requires List[str] as input
                 query_emb = np.asarray(
-                    encode_queries_func([query], **self.encode_kwargs)
+                    encode_queries_func(
+                        [query],
+                        task_name=self.task_name,
+                        task_type=self.task_type,
+                        prompt_type=PromptType.query,
+                        **self.encode_kwargs,
+                    )
                 )
-                docs_emb = np.asarray(encode_corpus_func(docs, **self.encode_kwargs))
+                docs_emb = np.asarray(
+                    encode_corpus_func(
+                        docs,
+                        task_name=self.task_name,
+                        task_type=self.task_type,
+                        prompt_type=PromptType.passage,
+                        **self.encode_kwargs,
+                    )
+                )
 
             fake_qid = str(i)
             results[fake_qid] = self.rerank(query_emb, docs_emb)
@@ -420,6 +464,8 @@ class RerankingEvaluator(Evaluator):
         all_texts: list[str],
         encode_fn: Callable,
         task_name: str | None,
+        task_type: str | None,
+        prompt_type: PromptType | None,
         **encode_kwargs: Any,
     ):
         index_map, all_unique_texts, all_texts_indexes = {}, [], []
@@ -433,7 +479,13 @@ class RerankingEvaluator(Evaluator):
             f"A total on {len(all_texts) - len(all_unique_texts)}/{len(all_texts)} duplicate texts were found during encoding. Only encoding unique text and duplicating embeddings across."
         )
         all_unique_texts_embs = np.asarray(
-            encode_fn(all_unique_texts, task_name=task_name, **encode_kwargs)
+            encode_fn(
+                all_unique_texts,
+                task_name=task_name,
+                task_type=task_type,
+                prompt_type=prompt_type,
+                **encode_kwargs,
+            )
         )
         return all_unique_texts_embs[all_texts_indexes]
 

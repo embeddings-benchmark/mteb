@@ -26,6 +26,7 @@ class STSEvaluator(Evaluator):
         sentences2,
         gold_scores,
         task_name: str | None = None,
+        task_type: str | None = None,
         limit: int | None = None,
         **kwargs,
     ):
@@ -38,6 +39,7 @@ class STSEvaluator(Evaluator):
         self.sentences2 = sentences2
         self.gold_scores = gold_scores
         self.task_name = task_name
+        self.task_type = task_type
 
     def __call__(
         self,
@@ -46,10 +48,18 @@ class STSEvaluator(Evaluator):
         encode_kwargs: dict[str, Any] = {},
     ):
         embeddings1 = model_encode(
-            self.sentences1, model=model, task_name=self.task_name, **encode_kwargs
+            self.sentences1,
+            model=model,
+            task_name=self.task_name,
+            task_type=self.task_type,
+            **encode_kwargs,
         )
         embeddings2 = model_encode(
-            self.sentences2, model=model, task_name=self.task_name, **encode_kwargs
+            self.sentences2,
+            model=model,
+            task_name=self.task_name,
+            task_type=self.task_type,
+            **encode_kwargs,
         )
 
         logger.info("Evaluating...")

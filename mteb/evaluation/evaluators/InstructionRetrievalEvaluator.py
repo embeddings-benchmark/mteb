@@ -35,5 +35,6 @@ class InstructionRetrievalEvaluator(RetrievalEvaluator):
                 instructions=instructions,
                 request_qid=qid,
                 task_name=self.task_name,
+                task_type=self.task_type,
                 **kwargs,
             )

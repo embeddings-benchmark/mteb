@@ -107,3 +107,23 @@ labse_ru_turbo = ModelMeta(
     revision="1940b046c6b5e125df11722b899130329d0a46da",
     release_date="2024-06-27",
 )
+
+
+rosberta_ru_en = ModelMeta(
+    loader=partial(
+        sentence_transformers_loader,
+        model_name="ai-forever/ru-en-RoSBERTa",
+        revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
+        prompts={
+            "classification": "classification: ",
+            "clustering": "clustering: ",
+            "query": "search_query: ",
+            "corpus": "search_document: ",
+        },
+    ),
+    name="ai-forever/ru-en-RoSBERTa",
+    languages=["rus_Cyrl"],
+    open_source=True,
+    revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
+    release_date="2024-07-29",
+)

@@ -30,13 +30,20 @@ class Encoder(Protocol):
         """
 
     def encode(
-        self, sentences: Sequence[str], *, task_name: str | None = None, **kwargs: Any
+        self,
+        sentences: Sequence[str],
+        *,
+        task_name: str | None = None,
+        task_type: str | None = None,
+        **kwargs: Any,
     ) -> torch.Tensor | np.ndarray:
         """Encodes the given sentences using the encoder.
 
         Args:
             sentences: The sentences to encode.
             task_name: The name of the task. Sentence-transformers uses this to
+                determine which prompt to use from a specified dictionary.
+            task_type: The type of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
             **kwargs: Additional arguments to pass to the encoder.
 
@@ -102,6 +109,7 @@ class EncoderWithQueryCorpusEncode(Encoder, Protocol):
         queries: Sequence[str],
         *,
         task_name: str | None = None,
+        task_type: str | None = None,
         prompt_type: str = PromptType.query,
         **kwargs: Any,
     ) -> torch.Tensor | np.ndarray:
@@ -110,6 +118,7 @@ class EncoderWithQueryCorpusEncode(Encoder, Protocol):
         Args:
             queries: The queries to encode.
             task_name: The name of the task. Sentence-transformers uses this to determine which prompt to use from a specified dictionary.
+            task_type: The type of the task. Sentence-transformers uses this to determine which prompt to use from a specified dictionary.
             prompt_type: By default, SentenceTransformers uses "query" in the model prompts dictionnary for models that require so.
             **kwargs: Additional arguments to pass to the encoder.
 
@@ -123,6 +132,7 @@ class EncoderWithQueryCorpusEncode(Encoder, Protocol):
         corpus: Corpus,
         *,
         task_name: str | None = None,
+        task_type: str | None = None,
         prompt_type: str = PromptType.passage,
         **kwargs: Any,
     ) -> torch.Tensor | np.ndarray:
@@ -131,6 +141,7 @@ class EncoderWithQueryCorpusEncode(Encoder, Protocol):
         Args:
             corpus: The corpus to encode.
             task_name: The name of the task. Sentence-transformers uses this to determine which prompt to use from a specified dictionary.
+            task_type: The type of the task. Sentence-transformers uses this to determine which prompt to use from a specified dictionary.
             prompt_type: By default, SentenceTransformers uses "passage" in the model prompts dictionnary for models that require so.
             **kwargs: Additional arguments to pass to the encoder.
 
@@ -149,6 +160,7 @@ class EncoderWithConversationEncode(Encoder, Protocol):
         conversations: Sequence[Sequence[str]],
         *,
         task_name: str | None = None,
+        task_type: str | None = None,
         **kwargs: Any,
     ) -> torch.Tensor | np.ndarray:
         """Encodes the given conversations using the encoder.
@@ -156,6 +168,8 @@ class EncoderWithConversationEncode(Encoder, Protocol):
         Args:
             conversations: The conversations to encode.
             task_name: The name of the task. Sentence-transformers uses this to
+                determine which prompt to use from a specified dictionary.
+            task_type: The type of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
             **kwargs: Additional arguments to pass to the encoder.
 

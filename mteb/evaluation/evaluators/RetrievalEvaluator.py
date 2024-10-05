@@ -88,6 +88,7 @@ class DenseRetrievalExactSearch:
         top_k: int,
         score_function: str,
         task_name: str,
+        task_type: str,
         instructions: dict[str, str] | None = None,
         request_qid: str | None = None,
         return_sorted: bool = False,
@@ -112,12 +113,14 @@ class DenseRetrievalExactSearch:
                 model=self.model,
                 conversations=queries,  # type: ignore
                 task_name=task_name,
+                task_type=task_type,
                 **self.encode_kwargs,
             )
         else:
             query_embeddings = self.model.encode_queries(
                 queries,  # type: ignore
                 task_name=task_name,
+                task_type=task_type,
                 **self.encode_kwargs,
             )
 
@@ -157,6 +160,7 @@ class DenseRetrievalExactSearch:
                 sub_corpus_embeddings = self.model.encode_corpus(
                     corpus[corpus_start_idx:corpus_end_idx],  # type: ignore
                     task_name=task_name,
+                    task_type=task_type,
                     request_qid=request_qid,
                     **self.encode_kwargs,
                 )
@@ -312,16 +316,23 @@ class DenseRetrievalExactSearch:
         )
 
     def encode_conversations(
-        self, model: Encoder, conversations: list[list[str]], task_name: str, **kwargs
+        self,
+        model: Encoder,
+        conversations: list[list[str]],
+        task_name: str,
+        task_type: str,
+        **kwargs,
     ):
         if callable(getattr(self.model, "encode_conversations", None)):
             return model.encode_conversations(  # type: ignore
-                conversations, task_name=task_name, **kwargs
+                conversations, task_name=task_name, task_type=task_type, **kwargs
             )
         # otherwise fallback to default implementation
         # TODO: add a warning here
         queries = self.convert_conv_history_to_query(model, conversations)  # type: ignore
-        return model.encode_queries(queries, task_name=task_name, **kwargs)  # type: ignore
+        return model.encode_queries(
+            queries, task_name=task_name, task_type=task_type, **kwargs
+        )  # type: ignore
 
     @staticmethod
     def convert_conv_history_to_query(
@@ -350,8 +361,9 @@ class DRESModel:
         queries: list[str],
         *,
         task_name: str,
+        task_type: str,
         batch_size: int,
-        prompt_type: str = PromptType.query,
+        prompt_type: PromptType = PromptType.query,
         **kwargs,
     ):
         if self.use_sbert_model:
@@ -368,6 +380,7 @@ class DRESModel:
             queries,
             model=self.model,
             task_name=task_name,
+            task_type=task_type,
             prompt_type=prompt_type,
             batch_size=batch_size,
             **kwargs,
@@ -377,8 +390,9 @@ class DRESModel:
         self,
         corpus: list[dict[str, str]],
         task_name: str,
+        task_type: str,
         batch_size: int,
-        prompt_type: str = PromptType.passage,
+        prompt_type: PromptType = PromptType.passage,
         request_qid: str | None = None,
         **kwargs,
     ):
@@ -408,6 +422,7 @@ class DRESModel:
             sentences,
             model=self.model,
             task_name=task_name,
+            task_type=task_type,
             prompt_type=prompt_type,
             batch_size=batch_size,
             **kwargs,
@@ -417,8 +432,10 @@ class DRESModel:
             self.corpus_embeddings[request_qid] = corpus_embeddings
         return corpus_embeddings
 
-    def encode(self, sentences: list[str], task_name: str, **kwargs):
-        return self.encode_queries(sentences, task_name=task_name, **kwargs)
+    def encode(self, sentences: list[str], task_name: str, task_type: str, **kwargs):
+        return self.encode_queries(
+            sentences, task_name=task_name, task_type=task_type, **kwargs
+        )
 
 
 def is_dres_compatible(model):
@@ -440,6 +457,7 @@ class RetrievalEvaluator(Evaluator):
         self,
         retriever=None,
         task_name: str | None = None,
+        task_type: str | None = None,
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
         score_function: str = "cos_sim",
         encode_kwargs: dict[str, Any] = {},
@@ -475,6 +493,7 @@ class RetrievalEvaluator(Evaluator):
         )  # can lower it if reranking
         self.score_function = score_function
         self.task_name = task_name
+        self.task_type = task_type
 
     def __call__(
         self,
@@ -496,6 +515,7 @@ class RetrievalEvaluator(Evaluator):
                 self.top_k,
                 self.score_function,
                 task_name=self.task_name,  # type: ignore
+                task_type=self.task_type,
             )
         else:
             return self.retriever.search(
@@ -504,6 +524,7 @@ class RetrievalEvaluator(Evaluator):
                 self.top_k,
                 self.score_function,
                 task_name=self.task_name,  # type: ignore
+                task_type=self.task_type,
             )
 
     @staticmethod
