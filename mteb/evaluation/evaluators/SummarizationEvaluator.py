@@ -248,6 +248,7 @@ class DeprecatedSummarizationEvaluator(Evaluator):
             ],
             model=model,
             task_name=self.task_name,
+            task_type=self.task_type,
             **encode_kwargs,
         )
 
@@ -260,6 +261,7 @@ class DeprecatedSummarizationEvaluator(Evaluator):
             ],
             model=model,
             task_name=self.task_name,
+            task_type=self.task_type,
             **encode_kwargs,
         )
 
