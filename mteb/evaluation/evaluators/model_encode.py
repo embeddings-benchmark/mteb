@@ -36,10 +36,11 @@ def model_encode(
         prompt_type: The prompt type (e.g. "query" | "passage") to use for building the encoding prompt
         **kwargs: Additional arguments to pass to the model.encode method
     """
-    task = mteb.get_task(task_name=task_name)
-    task_type = task.metadata.type
 
     if hasattr(model, "prompts"):
+        task = mteb.get_task(task_name=task_name)
+        task_type = task.metadata.type
+
         # check if prompts is an empty dict
         if not model.prompts:  # type: ignore
             logger.info(
@@ -70,7 +71,7 @@ def model_encode(
 
     logger.info(
         f"Using {kwargs.get('prompt_name', None)} prompt name for "
-        f"task={task_name} task_type={task_type} prompt_type={prompt_type}"
+        f"task={task_name} prompt_type={prompt_type}"
     )
     logger.info(f"Encoding {len(sentences)} sentences.")
 

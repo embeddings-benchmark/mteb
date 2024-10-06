@@ -29,20 +29,15 @@ from .mock_tasks import (
     MockRerankingTask,
     MockRetrievalTask,
 )
-from .task_grid import MOCK_TASK_REGISTRY, MOCK_TASK_TEST_GRID
+from .task_grid import MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
-
-
-@pytest.fixture(autouse=True)
-def mock_mteb_get_task(monkeypatch):
-    monkeypatch.setattr(mteb.overview, "TASKS_REGISTRY", MOCK_TASK_REGISTRY)
 
 
 @pytest.mark.parametrize("tasks", [MOCK_TASK_TEST_GRID])
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
 def test_mulitple_mteb_tasks(
-    tasks: list[mteb.AbsTask], model: mteb.Encoder, tmp_path: Path
+    tasks: list[mteb.AbsTask], model: mteb.Encoder, tmp_path: Path, mock_mteb_get_task
 ):
     """Test that multiple tasks can be run"""
     eval = mteb.MTEB(tasks=tasks)
@@ -61,7 +56,9 @@ def test_mulitple_mteb_tasks(
         MockTorchbf16Encoder(),
     ],
 )
-def test_benchmark_encoders_on_task(task: str | mteb.AbsTask, model: mteb.Encoder):
+def test_benchmark_encoders_on_task(
+    task: str | mteb.AbsTask, model: mteb.Encoder, mock_mteb_get_task
+):
     """Test that a task can be fetched and run using a variety of encoders"""
     if isinstance(task, str):
         tasks = mteb.get_tasks(tasks=[task])
@@ -74,7 +71,9 @@ def test_benchmark_encoders_on_task(task: str | mteb.AbsTask, model: mteb.Encode
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID[:1])
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
-def test_reload_results(task: str | mteb.AbsTask, model: mteb.Encoder, tmp_path: Path):
+def test_reload_results(
+    task: str | mteb.AbsTask, model: mteb.Encoder, tmp_path: Path, mock_mteb_get_task
+):
     """Test that when rerunning the results are reloaded correctly"""
     if isinstance(task, str):
         tasks = mteb.get_tasks(tasks=[task])
@@ -95,7 +94,9 @@ def test_reload_results(task: str | mteb.AbsTask, model: mteb.Encoder, tmp_path:
 
 
 @pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID)
-def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
+def test_prompt_name_passed_to_all_encodes(
+    task_name: str | mteb.AbsTask, mock_mteb_get_task
+):
     """Test that all tasks correctly pass down the prompt_name to the encoder which supports it, and that the encoder which does not support it does not
     receive it.
     """
@@ -130,7 +131,9 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
 
 
 @pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID)
-def test_encode_kwargs_passed_to_all_encodes(task_name: str | mteb.AbsTask):
+def test_encode_kwargs_passed_to_all_encodes(
+    task_name: str | mteb.AbsTask, mock_mteb_get_task
+):
     """Test that all tasks correctly pass down the encode_kwargs to the encoder."""
     my_encode_kwargs = {"no_one_uses_this_args": "but_its_here"}
 
@@ -201,7 +204,9 @@ def test_get_benchmark(name):
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
 @pytest.mark.parametrize("is_task_name", [True, False])
-def test_prompt_name_passed_to_all_encodes_with_prompts(task, is_task_name):
+def test_prompt_name_passed_to_all_encodes_with_prompts(
+    task: mteb.AbsTask | str, is_task_name: bool, mock_mteb_get_task
+):
     """Test that all tasks and task_types correctly pass down the prompt_name to the encoder with prompts."""
     _task_name = task.metadata.name if isinstance(task, mteb.AbsTask) else task
 
@@ -238,7 +243,9 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(task, is_task_name):
     ],
 )
 @pytest.mark.parametrize("is_task_name", [True, False])
-def test_model_query_passage_prompts_task_type(task, is_task_name):
+def test_model_query_passage_prompts_task_type(
+    task: mteb.AbsTask | str, is_task_name: bool, mock_mteb_get_task
+):
     """Test that the model with prompts is correctly called."""
     tasks = [task]
 
