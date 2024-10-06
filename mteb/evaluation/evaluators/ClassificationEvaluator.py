@@ -66,14 +66,14 @@ class kNNClassificationEvaluator(Evaluator):
         X_train = model_encode(
             self.sentences_train,
             model=model,
-            prompt_name=self.task_name,
+            task_name=self.task_name,
             **self.encode_kwargs,
         )
         if test_cache is None:
             X_test = model_encode(
                 self.sentences_test,
                 model=model,
-                prompt_name=self.task_name,
+                task_name=self.task_name,
                 **self.encode_kwargs,
             )
             test_cache = X_test
@@ -142,7 +142,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         X_train = model_encode(
             self.sentences_train,
             model=model,
-            prompt_name=self.task_name,
+            task_name=self.task_name,
             **self.encode_kwargs,
         )
 
@@ -150,7 +150,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
             X_test = model_encode(
                 self.sentences_test,
                 model=model,
-                prompt_name=self.task_name,
+                task_name=self.task_name,
                 **self.encode_kwargs,
             )
             test_cache = X_test
@@ -296,14 +296,14 @@ class logRegClassificationEvaluator(Evaluator):
         X_train = model_encode(
             self.sentences_train,
             model=model,
-            prompt_name=self.task_name,
+            task_name=self.task_name,
             **self.encode_kwargs,
         )
         if test_cache is None:
             X_test = model_encode(
                 self.sentences_test,
                 model=model,
-                prompt_name=self.task_name,
+                task_name=self.task_name,
                 **self.encode_kwargs,
             )
             test_cache = X_test

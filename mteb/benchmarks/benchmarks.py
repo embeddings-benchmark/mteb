@@ -687,3 +687,37 @@ MTEB_multilingual = Benchmark(
     reference=None,
     citation=None,
 )
+
+MTEB_JPN = Benchmark(
+    name="MTEB(jpn)",
+    tasks=get_tasks(
+        languages=["jpn"],
+        tasks=[
+            # clustering
+            "LivedoorNewsClustering.v2",
+            "MewsC16JaClustering",
+            # classification
+            "AmazonReviewsClassification",
+            "AmazonCounterfactualClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            # STS
+            "JSTS",
+            "JSICK",
+            # pair classification
+            "PawsXPairClassification",
+            # retrieval
+            "JaqketRetrieval",
+            "MrTidyRetrieval",
+            "JaGovFaqsRetrieval",
+            "NLPJournalTitleAbsRetrieval",
+            "NLPJournalAbsIntroRetrieval",
+            "NLPJournalTitleIntroRetrieval",
+            # reranking
+            "ESCIReranking",
+        ],
+    ),
+    description="Main Japanese benchmarks from MTEB",
+    reference="https://github.com/sbintuitions/JMTEB",
+    citation=None,
+)

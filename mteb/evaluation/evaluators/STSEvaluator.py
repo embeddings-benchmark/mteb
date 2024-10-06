@@ -46,10 +46,10 @@ class STSEvaluator(Evaluator):
         encode_kwargs: dict[str, Any] = {},
     ):
         embeddings1 = model_encode(
-            self.sentences1, model=model, prompt_name=self.task_name, **encode_kwargs
+            self.sentences1, model=model, task_name=self.task_name, **encode_kwargs
         )
         embeddings2 = model_encode(
-            self.sentences2, model=model, prompt_name=self.task_name, **encode_kwargs
+            self.sentences2, model=model, task_name=self.task_name, **encode_kwargs
         )
 
         logger.info("Evaluating...")
