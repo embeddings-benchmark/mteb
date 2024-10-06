@@ -36,7 +36,6 @@ def model_encode(
         prompt_type: The prompt type (e.g. "query" | "passage") to use for building the encoding prompt
         **kwargs: Additional arguments to pass to the model.encode method
     """
-
     task = mteb.get_task(task_name=task_name)
     task_type = task.metadata.type
 

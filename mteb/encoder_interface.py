@@ -109,7 +109,6 @@ class EncoderWithQueryCorpusEncode(Encoder, Protocol):
         queries: Sequence[str],
         *,
         task_name: str | None = None,
-        task_type: str | None = None,
         prompt_type: str = PromptType.query,
         **kwargs: Any,
     ) -> torch.Tensor | np.ndarray:
@@ -132,7 +131,6 @@ class EncoderWithQueryCorpusEncode(Encoder, Protocol):
         corpus: Corpus,
         *,
         task_name: str | None = None,
-        task_type: str | None = None,
         prompt_type: str = PromptType.passage,
         **kwargs: Any,
     ) -> torch.Tensor | np.ndarray:
@@ -160,7 +158,6 @@ class EncoderWithConversationEncode(Encoder, Protocol):
         conversations: Sequence[Sequence[str]],
         *,
         task_name: str | None = None,
-        task_type: str | None = None,
         **kwargs: Any,
     ) -> torch.Tensor | np.ndarray:
         """Encodes the given conversations using the encoder.

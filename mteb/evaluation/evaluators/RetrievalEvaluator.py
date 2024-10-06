@@ -325,9 +325,7 @@ class DenseRetrievalExactSearch:
         # otherwise fallback to default implementation
         # TODO: add a warning here
         queries = self.convert_conv_history_to_query(model, conversations)  # type: ignore
-        return model.encode_queries(
-            queries, task_name=task_name, **kwargs
-        )  # type: ignore
+        return model.encode_queries(queries, task_name=task_name, **kwargs)  # type: ignore
 
     @staticmethod
     def convert_conv_history_to_query(
@@ -424,9 +422,7 @@ class DRESModel:
         return corpus_embeddings
 
     def encode(self, sentences: list[str], task_name: str, **kwargs):
-        return self.encode_queries(
-            sentences, task_name=task_name, **kwargs
-        )
+        return self.encode_queries(sentences, task_name=task_name, **kwargs)
 
 
 def is_dres_compatible(model):
