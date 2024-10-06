@@ -11,6 +11,7 @@ import torch
 from sentence_transformers import SentenceTransformer
 
 import mteb
+import mteb.overview
 from mteb.benchmarks.benchmarks import Benchmark
 from mteb.create_meta import generate_readme
 
@@ -28,9 +29,14 @@ from .mock_tasks import (
     MockRerankingTask,
     MockRetrievalTask,
 )
-from .task_grid import MOCK_TASK_TEST_GRID
+from .task_grid import MOCK_TASK_REGISTRY, MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
+
+
+@pytest.fixture(autouse=True)
+def mock_mteb_get_task(monkeypatch):
+    monkeypatch.setattr(mteb.overview, "TASKS_REGISTRY", MOCK_TASK_REGISTRY)
 
 
 @pytest.mark.parametrize("tasks", [MOCK_TASK_TEST_GRID])
@@ -197,9 +203,7 @@ def test_get_benchmark(name):
 @pytest.mark.parametrize("is_task_name", [True, False])
 def test_prompt_name_passed_to_all_encodes_with_prompts(task, is_task_name):
     """Test that all tasks and task_types correctly pass down the prompt_name to the encoder with prompts."""
-    _task_name = (
-        task.metadata.name if isinstance(task, mteb.AbsTask) else task
-    )
+    _task_name = task.metadata.name if isinstance(task, mteb.AbsTask) else task
 
     if isinstance(task, mteb.AbsTask):
         tasks = [task]
