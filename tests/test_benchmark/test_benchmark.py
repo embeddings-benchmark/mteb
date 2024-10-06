@@ -193,19 +193,21 @@ def test_get_benchmark(name):
     assert isinstance(benchmark, mteb.Benchmark)
 
 
-@pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID)
+@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
 @pytest.mark.parametrize("is_task_name", [True, False])
-def test_prompt_name_passed_to_all_encodes_with_prompts(task_name, is_task_name):
+def test_prompt_name_passed_to_all_encodes_with_prompts(monkeypatch, task, is_task_name):
     """Test that all tasks and task_types correctly pass down the prompt_name to the encoder with prompts."""
     _task_name = (
-        task_name.metadata.name if isinstance(task_name, mteb.AbsTask) else task_name
+        task.metadata.name if isinstance(task, mteb.AbsTask) else task
     )
 
-    if isinstance(task_name, mteb.AbsTask):
-        tasks = [task_name]
-        _task_type = task_name.metadata.type
+    monkeypatch.setattr(mteb, "get_task", lambda task_name: task)
+
+    if isinstance(task, mteb.AbsTask):
+        tasks = [task]
+        _task_type = task.metadata.type
     else:
-        tasks = mteb.get_tasks(tasks=[task_name])
+        tasks = mteb.get_tasks(tasks=[task])
         _task_type = tasks[0].metadata.type
 
     class MockEncoderWithPrompts(mteb.Encoder):
@@ -234,11 +236,13 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(task_name, is_task_name)
     ],
 )
 @pytest.mark.parametrize("is_task_name", [True, False])
-def test_model_query_passage_prompts_task_type(task, is_task_name):
+def test_model_query_passage_prompts_task_type(monkeypatch, task, is_task_name):
     """Test that the model with prompts is correctly called."""
     tasks = [task]
 
     task_name = task.metadata.name if is_task_name else task.metadata.type
+
+    monkeypatch.setattr(mteb, "get_task", lambda task_name: task)
 
     def check_prompt(prompt_name, is_query):
         prompt_type = "query" if is_query else "passage"
