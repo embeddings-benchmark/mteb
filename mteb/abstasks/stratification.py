@@ -113,7 +113,7 @@ def _get_most_desired_combination(samples_with_combination):
 
     Parameters
     ----------
-    samples_with_combination : Dict[Combination, List[int]], :code:`(n_combinations)`
+    samples_with_combination : dict[Combination, list[int]], :code:`(n_combinations)`
             map from each label combination present in y to list of sample indexes that have this combination assigned
 
     Returns:
@@ -155,7 +155,7 @@ class IterativeStratification(_BaseKFold):
     order : int, >= 1
         the order of label relationship to take into account when balancing sample distribution across labels
 
-    sample_distribution_per_fold : None or List[float], :code:`(n_splits)`
+    sample_distribution_per_fold : None or list[float], :code:`(n_splits)`
         desired percentage of samples in each of the folds, if None and equal distribution of samples per fold
         is assumed i.e. 1/n_splits for each fold. The value is held in :code:`self.percentage_per_fold`.
 
@@ -195,7 +195,7 @@ class IterativeStratification(_BaseKFold):
     def _prepare_stratification(self, y):
         """Prepares variables for performing stratification
 
-        For the purpose of clarity, the type Combination denotes List[int], :code:`(self.order)` and represents a
+        For the purpose of clarity, the type Combination denotes list[int], :code:`(self.order)` and represents a
         label combination of the order we want to preserve among folds in stratification. The total number of
         combinations present in :code:`(y)` will be denoted as :code:`(n_combinations)`.
 
@@ -208,7 +208,7 @@ class IterativeStratification(_BaseKFold):
         self.desired_samples_per_fold: np.array[Float], :code:`(n_splits)`
             number of samples desired per fold
 
-        self.desired_samples_per_combination_per_fold: Dict[Combination, np.array[Float]], :code:`(n_combinations, n_splits)`
+        self.desired_samples_per_combination_per_fold: dict[Combination, np.array[Float]], :code:`(n_combinations, n_splits)`
             number of samples evidencing each combination desired per each fold
 
         Parameters
@@ -218,22 +218,22 @@ class IterativeStratification(_BaseKFold):
 
         Returns:
         -------
-        rows : List[List[int]], :code:`(n_samples, n_labels)`
+        rows : list[list[int]], :code:`(n_samples, n_labels)`
             list of label indices assigned to each sample
 
-        rows_used : Dict[int, bool], :code:`(n_samples)`
+        rows_used : dict[int, bool], :code:`(n_samples)`
             boolean map from a given sample index to boolean value whether it has been already assigned to a fold or not
 
-        all_combinations :  List[Combination], :code:`(n_combinations)`
+        all_combinations :  list[Combination], :code:`(n_combinations)`
             list of all label combinations of order self.order present in y
 
-        per_row_combinations : List[Combination], :code:`(n_samples)`
+        per_row_combinations : list[Combination], :code:`(n_samples)`
             list of all label combinations of order self.order present in y per row
 
-        samples_with_combination : Dict[Combination, List[int]], :code:`(n_combinations)`
+        samples_with_combination : dict[Combination, list[int]], :code:`(n_combinations)`
             map from each label combination present in y to list of sample indexes that have this combination assigned
 
-        folds: List[List[int]] (n_splits)
+        folds: list[list[int]] (n_splits)
             list of lists to be populated with samples
 
         """
@@ -353,7 +353,7 @@ class IterativeStratification(_BaseKFold):
 
         Yields:
         ------
-        fold : List[int]
+        fold : list[int]
             indexes of test samples for a given fold, yielded for each of the folds
         """
         (
