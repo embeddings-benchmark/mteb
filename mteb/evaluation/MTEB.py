@@ -182,7 +182,9 @@ class MTEB:
         from mteb.overview import MTEBTasks
 
         # get all the MTEB specific benchmarks:
-        sorted_mteb_benchmarks = sorted(self.benchmarks, key=lambda obj: obj.name.lower())
+        sorted_mteb_benchmarks = sorted(
+            self.benchmarks, key=lambda obj: obj.name.lower()
+        )
 
         mteb_b, remaining_b = [], []
         for b in sorted_mteb_benchmarks:
