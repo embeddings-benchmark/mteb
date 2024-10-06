@@ -5,8 +5,8 @@ import logging
 import os
 import subprocess
 from collections import defaultdict
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Dict, List, Sequence
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.mteb_results import MTEBResults
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 MODEL_NAME = str
 REVISION = str
 
-RESULTS = Dict[MODEL_NAME, Dict[REVISION, List[MTEBResults]]]
+RESULTS = dict[MODEL_NAME, dict[REVISION, list[MTEBResults]]]
 
 
 def download_of_results(

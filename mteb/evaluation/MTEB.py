@@ -4,12 +4,13 @@ import json
 import logging
 import os
 import traceback
+from collections.abc import Iterable
 from copy import copy
 from datetime import datetime
 from itertools import chain
 from pathlib import Path
 from time import time
-from typing import Any, Iterable
+from typing import Any
 
 import datasets
 from sentence_transformers import SentenceTransformer
