@@ -90,7 +90,7 @@ def test_reload_results(task: str | mteb.AbsTask, model: mteb.Encoder, tmp_path:
 
 @pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID)
 def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
-    """Test that all tasks correctly pass down the task_name to the encoder which supports it, and that the encoder which does not support it does not
+    """Test that all tasks correctly pass down the prompt_name to the encoder which supports it, and that the encoder which does not support it does not
     receive it.
     """
     _task_name = (
@@ -114,13 +114,6 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
         tasks = mteb.get_tasks(tasks=[task_name])
         _task_type = tasks[0].metadata.type
 
-    class MockEncoderWithPrompts(mteb.Encoder):
-        prompts = {_task_type: _task_type}
-
-        def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-            assert prompt_name == _task_type
-            return np.zeros((len(sentences), 10))
-
     eval = mteb.MTEB(tasks=tasks)
 
     # Test that the task_name is passed down to the encoder
@@ -129,9 +122,6 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
     # Test that the task_name is not passed down to the encoder
     model = EncoderWithoutInstructions("average_word_embeddings_levy_dependency")
     assert model.prompts == {}, "The encoder should not have any prompts"
-    eval.run(model, output_folder="tests/results", overwrite_results=True)
-    # Test that the task_name is passed down to the encoder and used as a prompt
-    model = MockEncoderWithPrompts()
     eval.run(model, output_folder="tests/results", overwrite_results=True)
 
 
@@ -203,6 +193,37 @@ def test_benchmark_names_must_be_unique():
 def test_get_benchmark(name):
     benchmark = mteb.get_benchmark(benchmark_name=name)
     assert isinstance(benchmark, mteb.Benchmark)
+
+@pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID)
+@pytest.mark.parametrize("is_task_name", [True, False])
+def test_prompt_name_passed_to_all_encodes_with_prompts(task_name, is_task_name):
+    """Test that all tasks and task_types correctly pass down the prompt_name to the encoder with prompts.
+    """
+    _task_name = (
+        task_name.metadata.name if isinstance(task_name, mteb.AbsTask) else task_name
+    )
+
+
+    if isinstance(task_name, mteb.AbsTask):
+        tasks = [task_name]
+        _task_type = task_name.metadata.type
+    else:
+        tasks = mteb.get_tasks(tasks=[task_name])
+        _task_type = tasks[0].metadata.type
+
+    class MockEncoderWithPrompts(mteb.Encoder):
+        prompts = {_task_type: _task_type}
+
+        def encode(self, sentences, prompt_name: str | None = None, **kwargs):
+            assert prompt_name == _task_type
+            return np.zeros((len(sentences), 10))
+
+    eval = mteb.MTEB(tasks=tasks)
+
+    # Test that the task_name is passed down to the encoder
+    model = MockEncoderWithPrompts()
+    eval.run(model, output_folder="tests/results", overwrite_results=True)
+
 
 
 @pytest.mark.parametrize(
