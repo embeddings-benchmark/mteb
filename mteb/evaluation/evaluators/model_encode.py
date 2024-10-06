@@ -21,12 +21,12 @@ def model_encode(
     **kwargs,
 ) -> np.ndarray:
     """A wrapper function around the model.encode method that handles the prompt_name argument and standardizes the output to a numpy array.
-    The order of priorities are:
-    1. Composed prompt of task name + prompt type
-    2. Specific task prompt
-    3. Composed prompt of task type + prompt type
-    4. Specific task type prompt
-    5. Specific prompt type
+    The order of priorities for prompt selection are:
+        1. Composed prompt of task name + prompt type (query or passage)
+        2. Specific task prompt
+        3. Composed prompt of task type + prompt type (query or passage)
+        4. Specific task type prompt
+        5. Specific prompt type (query or passage)
 
 
     Args:

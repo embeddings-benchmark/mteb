@@ -48,11 +48,11 @@ class Encoder(Protocol):
             **kwargs: Additional arguments to pass to the encoder.
 
             The order of priorities for prompt selection are:
-                1. Composed prompt of task name + prompt type
+                1. Composed prompt of task name + prompt type (query or passage)
                 2. Specific task prompt
-                3. Composed prompt of task type + prompt type
+                3. Composed prompt of task type + prompt type (query or passage)
                 4. Specific task type prompt
-                5. Specific prompt type
+                5. Specific prompt type (query or passage)
 
 
         Returns:
@@ -129,11 +129,11 @@ class EncoderWithQueryCorpusEncode(Encoder, Protocol):
             **kwargs: Additional arguments to pass to the encoder.
 
             The order of priorities for prompt selection are:
-                1. Composed prompt of task name + prompt type
+                1. Composed prompt of task name + prompt type (query or passage)
                 2. Specific task prompt
-                3. Composed prompt of task type + prompt type
+                3. Composed prompt of task type + prompt type (query or passage)
                 4. Specific task type prompt
-                5. Specific prompt type
+                5. Specific prompt type (query or passage)
 
 
         Returns:
@@ -158,11 +158,11 @@ class EncoderWithQueryCorpusEncode(Encoder, Protocol):
             **kwargs: Additional arguments to pass to the encoder.
 
             The order of priorities for prompt selection are:
-                1. Composed prompt of task name + prompt type
+                1. Composed prompt of task name + prompt type (query or passage)
                 2. Specific task prompt
-                3. Composed prompt of task type + prompt type
+                3. Composed prompt of task type + prompt type (query or passage)
                 4. Specific task type prompt
-                5. Specific prompt type
+                5. Specific prompt type (query or passage)
 
         Returns:
             The encoded corpus.
@@ -190,11 +190,11 @@ class EncoderWithConversationEncode(Encoder, Protocol):
             **kwargs: Additional arguments to pass to the encoder.
 
             The order of priorities for prompt selection are:
-                1. Composed prompt of task name + prompt type
+                1. Composed prompt of task name + prompt type (query or passage)
                 2. Specific task prompt
-                3. Composed prompt of task type + prompt type
+                3. Composed prompt of task type + prompt type (query or passage)
                 4. Specific task type prompt
-                5. Specific prompt type
+                5. Specific prompt type (query or passage)
 
         Returns:
             The encoded conversations.
