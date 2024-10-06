@@ -47,6 +47,14 @@ class Encoder(Protocol):
                 determine which prompt to use from a specified dictionary.
             **kwargs: Additional arguments to pass to the encoder.
 
+            The order of priorities for prompt selection are:
+                1. Composed prompt of task name + prompt type
+                2. Specific task prompt
+                3. Composed prompt of task type + prompt type
+                4. Specific task type prompt
+                5. Specific prompt type
+
+
         Returns:
             The encoded sentences.
         """
@@ -117,9 +125,16 @@ class EncoderWithQueryCorpusEncode(Encoder, Protocol):
         Args:
             queries: The queries to encode.
             task_name: The name of the task. Sentence-transformers uses this to determine which prompt to use from a specified dictionary.
-            task_type: The type of the task. Sentence-transformers uses this to determine which prompt to use from a specified dictionary.
             prompt_type: By default, SentenceTransformers uses "query" in the model prompts dictionnary for models that require so.
             **kwargs: Additional arguments to pass to the encoder.
+
+            The order of priorities for prompt selection are:
+                1. Composed prompt of task name + prompt type
+                2. Specific task prompt
+                3. Composed prompt of task type + prompt type
+                4. Specific task type prompt
+                5. Specific prompt type
+
 
         Returns:
             The encoded queries.
@@ -139,9 +154,15 @@ class EncoderWithQueryCorpusEncode(Encoder, Protocol):
         Args:
             corpus: The corpus to encode.
             task_name: The name of the task. Sentence-transformers uses this to determine which prompt to use from a specified dictionary.
-            task_type: The type of the task. Sentence-transformers uses this to determine which prompt to use from a specified dictionary.
             prompt_type: By default, SentenceTransformers uses "passage" in the model prompts dictionnary for models that require so.
             **kwargs: Additional arguments to pass to the encoder.
+
+            The order of priorities for prompt selection are:
+                1. Composed prompt of task name + prompt type
+                2. Specific task prompt
+                3. Composed prompt of task type + prompt type
+                4. Specific task type prompt
+                5. Specific prompt type
 
         Returns:
             The encoded corpus.
@@ -166,9 +187,14 @@ class EncoderWithConversationEncode(Encoder, Protocol):
             conversations: The conversations to encode.
             task_name: The name of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
-            task_type: The type of the task. Sentence-transformers uses this to
-                determine which prompt to use from a specified dictionary.
             **kwargs: Additional arguments to pass to the encoder.
+
+            The order of priorities for prompt selection are:
+                1. Composed prompt of task name + prompt type
+                2. Specific task prompt
+                3. Composed prompt of task type + prompt type
+                4. Specific task type prompt
+                5. Specific prompt type
 
         Returns:
             The encoded conversations.
