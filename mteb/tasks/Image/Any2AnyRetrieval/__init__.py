@@ -5,6 +5,8 @@ from .eng.CUB200I2IRetrieval import *
 from .eng.Fashion200kI2TRetrieval import *
 from .eng.Fashion200kT2IRetrieval import *
 from .eng.FashionIQIT2IRetrieval import *
+from .eng.Flickr30kI2TRetrieval import *
+from .eng.Flickr30kT2IRetrieval import *
 from .eng.FORBI2IRetrieval import *
 from .eng.HatefulMemesI2TRetrieval import *
 from .eng.HatefulMemesT2IRetrieval import *
@@ -12,11 +14,13 @@ from .eng.InfoSeekIT2ITRetrieval import *
 from .eng.InfoSeekIT2TRetrieval import *
 from .eng.MemotionI2TRetrieval import *
 from .eng.MemotionT2IRetrieval import *
+from .eng.METI2IRetrieval import *
 from .eng.MSCOCOI2TRetrieval import *
 from .eng.MSCOCOT2IRetrieval import *
 from .eng.NIGHTSI2IRetrieval import *
 from .eng.OVENIT2ITRetrieval import *
 from .eng.OVENIT2TRetrieval import *
+from .eng.RP2kI2IRetrieval import *
 from .eng.SciMMIRI2TRetrieval import *
 from .eng.SciMMIRT2IRetrieval import *
 from .eng.SOPI2IRetrieval import *
