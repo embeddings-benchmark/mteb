@@ -39,7 +39,7 @@ def model_encode(
     if hasattr(model, "prompts"):
         task = mteb.get_task(task_name=task_name)
         task_type = task.metadata.type
-        prompt_type_value = prompt_type.value
+        prompt_type_value = prompt_type.value if prompt_type else None
 
         # check if prompts is an empty dict
         if not model.prompts:  # type: ignore
