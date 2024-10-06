@@ -182,17 +182,17 @@ class MTEB:
         from mteb.overview import MTEBTasks
 
         # get all the MTEB specific benchmarks:
-        sorted_mteb_benchmarks = sorted(self._tasks, key=lambda obj: obj.name.lower())
+        sorted_mteb_benchmarks = sorted(self.benchmarks, key=lambda obj: obj.name.lower())
 
-        mteb_tasks, remaining_tasks = [], []
-        for t in sorted_mteb_benchmarks:
-            if "MTEB" in t.name:
-                mteb_tasks.append(t)
+        mteb_b, remaining_b = [], []
+        for b in sorted_mteb_benchmarks:
+            if "MTEB" in b.name:
+                mteb_b.append(b)
             else:
-                remaining_tasks.append(t)
+                remaining_b.append(b)
 
         # place mteb first, then remaining
-        sorted_mteb_benchmarks = mteb_tasks + remaining_tasks
+        sorted_mteb_benchmarks = mteb_b + remaining_b
 
         # task ordering within each benchmark should be alphabetical
         for st in sorted_mteb_benchmarks:
