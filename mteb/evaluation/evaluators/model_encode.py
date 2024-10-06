@@ -39,6 +39,7 @@ def model_encode(
     if hasattr(model, "prompts"):
         task = mteb.get_task(task_name=task_name)
         task_type = task.metadata.type
+        prompt_type_value = prompt_type.value
 
         # check if prompts is an empty dict
         if not model.prompts:  # type: ignore
@@ -47,18 +48,24 @@ def model_encode(
             )
             kwargs.pop("prompt_name", None)
 
-        if task_name and prompt_type and f"{task_name}-{prompt_type}" in model.prompts:
-            kwargs["prompt_name"] = f"{task_name}-{prompt_type}"
+        if (
+            task_name
+            and prompt_type
+            and f"{task_name}-{prompt_type_value}" in model.prompts
+        ):
+            kwargs["prompt_name"] = f"{task_name}-{prompt_type_value}"
         elif task_name and task_name in model.prompts:
             kwargs["prompt_name"] = task_name
         elif (
-            task_type and prompt_type and f"{task_type}-{prompt_type}" in model.prompts
+            task_type
+            and prompt_type
+            and f"{task_type}-{prompt_type_value}" in model.prompts
         ):
-            kwargs["prompt_name"] = f"{task_type}-{prompt_type}"
+            kwargs["prompt_name"] = f"{task_type}-{prompt_type_value}"
         elif task_type and task_type in model.prompts:
             kwargs["prompt_name"] = task_type
         elif prompt_type and prompt_type in model.prompts:
-            kwargs["prompt_name"] = prompt_type.value
+            kwargs["prompt_name"] = prompt_type_value
 
         else:  # type: ignore
             logger.info(
