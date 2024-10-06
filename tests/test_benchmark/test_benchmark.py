@@ -109,10 +109,8 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
 
     if isinstance(task_name, mteb.AbsTask):
         tasks = [task_name]
-        _task_type = task_name.metadata.type
     else:
         tasks = mteb.get_tasks(tasks=[task_name])
-        _task_type = tasks[0].metadata.type
 
     eval = mteb.MTEB(tasks=tasks)
 

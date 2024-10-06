@@ -274,7 +274,6 @@ class AbsTaskRetrieval(AbsTask):
         retriever = RetrievalEvaluator(
             retriever=model,
             task_name=self.metadata.name,
-            task_type=self.metadata.type,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )

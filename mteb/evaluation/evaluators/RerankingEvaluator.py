@@ -34,7 +34,6 @@ class RerankingEvaluator(Evaluator):
         self,
         samples,
         task_name: str | None = None,
-        task_type: str | None = None,
         mrr_at_k: int = 10,
         name: str = "",
         similarity_fct=cos_sim,
@@ -54,7 +53,6 @@ class RerankingEvaluator(Evaluator):
         self.similarity_fct = similarity_fct
         self.use_batched_encoding = use_batched_encoding
         self.task_name = task_name
-        self.task_type = task_type
         self.k_values = k_values
         self.evaluator_type = evaluator_type
         self.encode_kwargs = encode_kwargs
@@ -106,7 +104,6 @@ class RerankingEvaluator(Evaluator):
                 encode_queries_func(
                     [sample["query"] for sample in self.samples],
                     task_name=self.task_name,
-                    task_type=self.task_type,
                     prompt_type=PromptType.query,
                     **self.encode_kwargs,
                 )
@@ -120,7 +117,6 @@ class RerankingEvaluator(Evaluator):
                 all_query_flattened,
                 encode_queries_func,
                 task_name=self.task_name,
-                task_type=self.task_type,
                 prompt_type=PromptType.query,
                 **self.encode_kwargs,
             )
@@ -216,7 +212,6 @@ class RerankingEvaluator(Evaluator):
             all_docs,
             encode_corpus_func,
             task_name=self.task_name,
-            task_type=self.task_type,
             prompt_type=PromptType.passage,
             **self.encode_kwargs,
         )
@@ -274,7 +269,6 @@ class RerankingEvaluator(Evaluator):
                 encode_queries_func(
                     query,
                     task_name=self.task_name,
-                    task_type=self.task_type,
                     prompt_type=PromptType.query,
                     **self.encode_kwargs,
                 )
@@ -283,7 +277,6 @@ class RerankingEvaluator(Evaluator):
                 encode_corpus_func(
                     docs,
                     task_name=self.task_name,
-                    task_type=self.task_type,
                     prompt_type=PromptType.passage,
                     **self.encode_kwargs,
                 )
@@ -333,7 +326,6 @@ class RerankingEvaluator(Evaluator):
             encode_corpus_func(
                 all_docs,
                 task_name=self.task_name,
-                task_type=self.task_type,
                 prompt_type=PromptType.passage,
                 **self.encode_kwargs,
             )
@@ -380,7 +372,6 @@ class RerankingEvaluator(Evaluator):
                     encode_queries_func(
                         [query],
                         task_name=self.task_name,
-                        task_type=self.task_type,
                         prompt_type=PromptType.query,
                         **self.encode_kwargs,
                     )
@@ -389,7 +380,6 @@ class RerankingEvaluator(Evaluator):
                     encode_corpus_func(
                         docs,
                         task_name=self.task_name,
-                        task_type=self.task_type,
                         prompt_type=PromptType.passage,
                         **self.encode_kwargs,
                     )
@@ -464,7 +454,6 @@ class RerankingEvaluator(Evaluator):
         all_texts: list[str],
         encode_fn: Callable,
         task_name: str | None,
-        task_type: str | None,
         prompt_type: PromptType | None,
         **encode_kwargs: Any,
     ):
@@ -482,7 +471,6 @@ class RerankingEvaluator(Evaluator):
             encode_fn(
                 all_unique_texts,
                 task_name=task_name,
-                task_type=task_type,
                 prompt_type=prompt_type,
                 **encode_kwargs,
             )

@@ -6,6 +6,7 @@ from typing import Sequence
 import numpy as np
 import torch
 
+import mteb
 from mteb.encoder_interface import Encoder, PromptType
 
 logger = logging.getLogger(__name__)
@@ -16,26 +17,28 @@ def model_encode(
     *,
     model: Encoder,
     task_name: str | None,
-    task_type: str | None,
     prompt_type: PromptType | None = None,
     **kwargs,
 ) -> np.ndarray:
     """A wrapper function around the model.encode method that handles the prompt_name argument and standardizes the output to a numpy array.
+    The order of priorities are:
+    1. Composed prompt of task name + prompt type
+    2. Specific task prompt
+    3. Composed prompt of task type + prompt type
+    4. Specific task type prompt
+    5. Specific prompt type
+
 
     Args:
         sentences: The sentences to encode
         model: The model to use for encoding
         task_name: The task name to use for building the encoding prompt
-        task_type: The task type to use for building the encoding prompt
         prompt_type: The prompt type (e.g. "query" | "passage") to use for building the encoding prompt
         **kwargs: Additional arguments to pass to the model.encode method
     """
-    ## The order of priorities are:
-    # 1. Composed prompt of task name + prompt type
-    # 2. Specific task prompt
-    # 3. Composed prompt of task type + prompt type
-    # 4. Specific task type prompt
-    # 5. Specific prompt type
+
+    task = mteb.get_task(task_name=task_name)
+    task_type = task.metadata.type
 
     if hasattr(model, "prompts"):
         # check if prompts is an empty dict

@@ -34,7 +34,6 @@ class kNNClassificationEvaluator(Evaluator):
         sentences_test,
         y_test,
         task_name: str | None = None,
-        task_type: str | None = None,
         k: int = 1,
         encode_kwargs: dict[str, Any] = {},
         limit: int | None = None,
@@ -52,7 +51,6 @@ class kNNClassificationEvaluator(Evaluator):
         self.y_test = y_test
 
         self.task_name = task_name
-        self.task_type = task_type
         self.encode_kwargs = encode_kwargs
 
         if "batch_size" not in self.encode_kwargs:
@@ -69,7 +67,6 @@ class kNNClassificationEvaluator(Evaluator):
             self.sentences_train,
             model=model,
             task_name=self.task_name,
-            task_type=self.task_type,
             **self.encode_kwargs,
         )
         if test_cache is None:
@@ -77,7 +74,6 @@ class kNNClassificationEvaluator(Evaluator):
                 self.sentences_test,
                 model=model,
                 task_name=self.task_name,
-                task_type=self.task_type,
                 **self.encode_kwargs,
             )
             test_cache = X_test
@@ -265,7 +261,6 @@ class logRegClassificationEvaluator(Evaluator):
         sentences_test,
         y_test,
         task_name: str,
-        task_type: str,
         max_iter: int = 100,
         encode_kwargs: dict[str, Any] = {},
         limit: int | None = None,
@@ -289,7 +284,6 @@ class logRegClassificationEvaluator(Evaluator):
 
         self.max_iter = max_iter
         self.task_name = task_name
-        self.task_type = task_type
 
     def __call__(self, model, test_cache=None):
         scores = {}
@@ -303,7 +297,6 @@ class logRegClassificationEvaluator(Evaluator):
             self.sentences_train,
             model=model,
             task_name=self.task_name,
-            task_type=self.task_type,
             **self.encode_kwargs,
         )
         if test_cache is None:
@@ -311,7 +304,6 @@ class logRegClassificationEvaluator(Evaluator):
                 self.sentences_test,
                 model=model,
                 task_name=self.task_name,
-                task_type=self.task_type,
                 **self.encode_kwargs,
             )
             test_cache = X_test

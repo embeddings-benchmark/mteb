@@ -166,7 +166,6 @@ class AbsTaskMultilabelClassification(AbsTask):
             unique_train_sentences,
             model=model,
             task_name=self.metadata.name,
-            task_type=self.metadata.type,
             **encode_kwargs,
         )
         unique_train_embeddings = dict(
@@ -188,7 +187,6 @@ class AbsTaskMultilabelClassification(AbsTask):
             test_text,
             model=model,
             task_name=self.metadata.name,
-            task_type=self.metadata.type,
             **encode_kwargs,
         )
         for i_experiment, sample_indices in enumerate(train_samples):

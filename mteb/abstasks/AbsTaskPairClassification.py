@@ -65,7 +65,6 @@ class AbsTaskPairClassification(AbsTask):
             data_split["sentence2"],
             data_split["labels"],
             task_name=self.metadata.name,
-            task_type=self.metadata.type,
             **kwargs,
         )
         scores = evaluator.compute_metrics(model, encode_kwargs=encode_kwargs)

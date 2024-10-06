@@ -178,7 +178,6 @@ class AbsTaskClusteringFast(AbsTask):
             downsampled_dataset["sentences"],  # type: ignore
             model=model,
             task_name=self.metadata.name,
-            task_type=self.metadata.type,
             **encode_kwargs,
         )
 
