@@ -34,7 +34,6 @@ class Encoder(Protocol):
         sentences: Sequence[str],
         *,
         task_name: str | None = None,
-        task_type: str | None = None,
         **kwargs: Any,
     ) -> torch.Tensor | np.ndarray:
         """Encodes the given sentences using the encoder.
@@ -42,8 +41,6 @@ class Encoder(Protocol):
         Args:
             sentences: The sentences to encode.
             task_name: The name of the task. Sentence-transformers uses this to
-                determine which prompt to use from a specified dictionary.
-            task_type: The type of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
             **kwargs: Additional arguments to pass to the encoder.
 
