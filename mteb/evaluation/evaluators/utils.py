@@ -398,7 +398,7 @@ def nAUC(
         Returns:
             abst_curve: Abstention curve of length `len(abstention_rates)`
         """
-        conf_scores_argsort = np.argsort(conf_scores)
+        conf_scores_argsort = np.argsort(conf_scores, stable=True)
         abst_curve = np.zeros(len(abstention_rates))
 
         for i, rate in enumerate(abstention_rates):
