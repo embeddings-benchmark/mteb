@@ -2,11 +2,10 @@ from __future__ import annotations
 
 from datetime import date
 from functools import partial
-from typing import Any, Callable, Literal
+from typing import Annotated, Any, Callable, Literal
 
 from pydantic import BaseModel, BeforeValidator, TypeAdapter
 from sentence_transformers import SentenceTransformer
-from typing_extensions import Annotated
 
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 

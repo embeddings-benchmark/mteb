@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from typing import Dict
 
 import numpy as np
 
@@ -12,7 +11,7 @@ from mteb.overview import get_task
 
 logger = logging.getLogger(__name__)
 
-AGGREGATION = Dict[MODEL_NAME, Dict[REVISION, Dict[str, float]]]
+AGGREGATION = dict[MODEL_NAME, dict[REVISION, dict[str, float]]]
 
 
 def mean(results: RESULTS) -> AGGREGATION:

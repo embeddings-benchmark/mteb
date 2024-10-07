@@ -70,9 +70,9 @@ class DanFeverRetrieval(AbsTaskRetrieval):
     def dataset_transform(self) -> None:
         """And transform to a retrieval datset, which have the following attributes
 
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
-        self.queries = Dict[query_id, str] #id => query
-        self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
+        self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text
+        self.queries = dict[query_id, str] #id => query
+        self.relevant_docs = dict[query_id, dict[[doc_id, score]]
         """
         self.corpus = {}
         self.relevant_docs = {}
@@ -182,9 +182,9 @@ class DanFever(AbsTaskRetrieval):
     def dataset_transform(self) -> None:
         """And transform to a retrieval datset, which have the following attributes
 
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document data like title and text
-        self.queries = Dict[query_id, str] #id => query
-        self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
+        self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text
+        self.queries = dict[query_id, str] #id => query
+        self.relevant_docs = dict[query_id, dict[[doc_id, score]]
         """
         self.corpus = {}
         self.relevant_docs = {}
