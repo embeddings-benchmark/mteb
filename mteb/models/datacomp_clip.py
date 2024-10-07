@@ -26,7 +26,6 @@ class DataCLIPModelWrapper:
         )
         self.processor = AutoProcessor.from_pretrained(model_name)
 
-
     def get_text_embeddings(self, texts: list[str], batch_size: int = 32):
         all_text_embeddings = []
 
@@ -70,11 +69,8 @@ class DataCLIPModelWrapper:
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
 
-
     def calculate_probs(self, text_embeddings, image_embeddings):
-        text_embeddings = text_embeddings / text_embeddings.norm(
-            dim=-1, keepdim=True
-        )
+        text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
         image_embeddings = image_embeddings / image_embeddings.norm(
             dim=-1, keepdim=True
         )
@@ -110,15 +106,12 @@ class DataCLIPModelWrapper:
                 fused_embeddings = text_embeddings + image_embeddings
             else:
                 # to do: add other fusion mode
-                raise ValueError(
-                    f"fusion mode {fusion_mode} hasn't been implemented"
-                )
+                raise ValueError(f"fusion mode {fusion_mode} hasn't been implemented")
             return fused_embeddings
         elif text_embeddings is not None:
             return text_embeddings
         elif image_embeddings is not None:
             return image_embeddings
-
 
 
 datacomp_clip_vit_large_patch14 = ModelMeta(
@@ -156,4 +149,3 @@ datacomp_clip_vit_base_patch16 = ModelMeta(
     revision="d110532e8d4ff91c574ee60a342323f28468b287",
     release_date="2023-04-26",
 )
-
