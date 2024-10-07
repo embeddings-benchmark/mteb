@@ -184,7 +184,10 @@ class AbsTaskMultilabelClassification(AbsTask):
             logger.warning("Couldn't subsample, continuing with the entire test set.")
 
         X_test = model_encode(
-            test_text, model=model, task_name=self.metadata.name, **encode_kwargs
+            test_text,
+            model=model,
+            task_name=self.metadata.name,
+            **encode_kwargs,
         )
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(

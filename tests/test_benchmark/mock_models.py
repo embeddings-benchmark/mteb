@@ -41,7 +41,7 @@ class MockSentenceTransformer(SentenceTransformer):
     """A mock implementation of the SentenceTransformer intended to implement just the encode, method using the same arguments."""
 
     def __init__(self, *args, **kwargs):
-        pass
+        super().__init__(*args, **kwargs)
 
     def encode(
         self,

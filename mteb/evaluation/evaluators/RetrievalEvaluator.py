@@ -312,7 +312,11 @@ class DenseRetrievalExactSearch:
         )
 
     def encode_conversations(
-        self, model: Encoder, conversations: list[list[str]], task_name: str, **kwargs
+        self,
+        model: Encoder,
+        conversations: list[list[str]],
+        task_name: str,
+        **kwargs,
     ):
         if callable(getattr(self.model, "encode_conversations", None)):
             return model.encode_conversations(  # type: ignore
@@ -351,7 +355,7 @@ class DRESModel:
         *,
         task_name: str,
         batch_size: int,
-        prompt_type: str = PromptType.query,
+        prompt_type: PromptType = PromptType.query,
         **kwargs,
     ):
         if self.use_sbert_model:
@@ -378,7 +382,7 @@ class DRESModel:
         corpus: list[dict[str, str]],
         task_name: str,
         batch_size: int,
-        prompt_type: str = PromptType.passage,
+        prompt_type: PromptType = PromptType.passage,
         request_qid: str | None = None,
         **kwargs,
     ):

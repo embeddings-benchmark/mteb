@@ -7,16 +7,27 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+import torch
 from sentence_transformers import SentenceTransformer
 
 import mteb
+import mteb.overview
 from mteb.benchmarks.benchmarks import Benchmark
 from mteb.create_meta import generate_readme
 
 from .mock_models import (
     MockNumpyEncoder,
+    MockSentenceTransformer,
     MockTorchbf16Encoder,
     MockTorchEncoder,
+)
+from .mock_tasks import (
+    MockInstructionRetrival,
+    MockMultilingualInstructionRetrival,
+    MockMultilingualRerankingTask,
+    MockMultilingualRetrievalTask,
+    MockRerankingTask,
+    MockRetrievalTask,
 )
 from .task_grid import MOCK_TASK_TEST_GRID
 
@@ -26,7 +37,7 @@ logging.basicConfig(level=logging.INFO)
 @pytest.mark.parametrize("tasks", [MOCK_TASK_TEST_GRID])
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
 def test_mulitple_mteb_tasks(
-    tasks: list[mteb.AbsTask], model: mteb.Encoder, tmp_path: Path
+    tasks: list[mteb.AbsTask], model: mteb.Encoder, tmp_path: Path, mock_mteb_get_task
 ):
     """Test that multiple tasks can be run"""
     eval = mteb.MTEB(tasks=tasks)
@@ -45,7 +56,9 @@ def test_mulitple_mteb_tasks(
         MockTorchbf16Encoder(),
     ],
 )
-def test_benchmark_encoders_on_task(task: str | mteb.AbsTask, model: mteb.Encoder):
+def test_benchmark_encoders_on_task(
+    task: str | mteb.AbsTask, model: mteb.Encoder, mock_mteb_get_task
+):
     """Test that a task can be fetched and run using a variety of encoders"""
     if isinstance(task, str):
         tasks = mteb.get_tasks(tasks=[task])
@@ -58,7 +71,9 @@ def test_benchmark_encoders_on_task(task: str | mteb.AbsTask, model: mteb.Encode
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID[:1])
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
-def test_reload_results(task: str | mteb.AbsTask, model: mteb.Encoder, tmp_path: Path):
+def test_reload_results(
+    task: str | mteb.AbsTask, model: mteb.Encoder, tmp_path: Path, mock_mteb_get_task
+):
     """Test that when rerunning the results are reloaded correctly"""
     if isinstance(task, str):
         tasks = mteb.get_tasks(tasks=[task])
@@ -79,8 +94,10 @@ def test_reload_results(task: str | mteb.AbsTask, model: mteb.Encoder, tmp_path:
 
 
 @pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID)
-def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
-    """Test that all tasks correctly pass down the task_name to the encoder which supports it, and that the encoder which does not support it does not
+def test_prompt_name_passed_to_all_encodes(
+    task_name: str | mteb.AbsTask, mock_mteb_get_task
+):
+    """Test that all tasks correctly pass down the prompt_name to the encoder which supports it, and that the encoder which does not support it does not
     receive it.
     """
     _task_name = (
@@ -114,7 +131,9 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
 
 
 @pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID)
-def test_encode_kwargs_passed_to_all_encodes(task_name: str | mteb.AbsTask):
+def test_encode_kwargs_passed_to_all_encodes(
+    task_name: str | mteb.AbsTask, mock_mteb_get_task
+):
     """Test that all tasks correctly pass down the encode_kwargs to the encoder."""
     my_encode_kwargs = {"no_one_uses_this_args": "but_its_here"}
 
@@ -181,3 +200,86 @@ def test_benchmark_names_must_be_unique():
 def test_get_benchmark(name):
     benchmark = mteb.get_benchmark(benchmark_name=name)
     assert isinstance(benchmark, mteb.Benchmark)
+
+
+@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
+@pytest.mark.parametrize("is_task_name", [True, False])
+def test_prompt_name_passed_to_all_encodes_with_prompts(
+    task: mteb.AbsTask | str, is_task_name: bool, mock_mteb_get_task
+):
+    """Test that all tasks and task_types correctly pass down the prompt_name to the encoder with prompts."""
+    _task_name = task.metadata.name if isinstance(task, mteb.AbsTask) else task
+
+    if isinstance(task, mteb.AbsTask):
+        tasks = [task]
+        _task_type = task.metadata.type
+    else:
+        tasks = mteb.get_tasks(tasks=[task])
+        _task_type = tasks[0].metadata.type
+
+    class MockEncoderWithPrompts(mteb.Encoder):
+        prompts = {_task_type: _task_type}
+
+        def encode(self, sentences, prompt_name: str | None = None, **kwargs):
+            assert prompt_name == _task_type
+            return np.zeros((len(sentences), 10))
+
+    eval = mteb.MTEB(tasks=tasks)
+
+    # Test that the task_name is passed down to the encoder
+    model = MockEncoderWithPrompts()
+    eval.run(model, output_folder="tests/results", overwrite_results=True)
+
+
+@pytest.mark.parametrize(
+    "task",
+    [
+        MockRerankingTask(),
+        MockMultilingualRerankingTask(),
+        MockInstructionRetrival(),
+        MockMultilingualInstructionRetrival(),
+        MockRetrievalTask(),
+        MockMultilingualRetrievalTask(),
+    ],
+)
+@pytest.mark.parametrize("is_task_name", [True, False])
+def test_model_query_passage_prompts_task_type(
+    task: mteb.AbsTask | str, is_task_name: bool, mock_mteb_get_task
+):
+    """Test that the model with prompts is correctly called."""
+    tasks = [task]
+
+    task_name = task.metadata.name if is_task_name else task.metadata.type
+
+    def check_prompt(prompt_name, is_query):
+        prompt_type = "query" if is_query else "passage"
+        assert prompt_name == f"{task_name}-{prompt_type}"
+
+    prompt_list = {
+        f"{task_name}-query": "query",
+        f"{task_name}-passage": "passage",
+    }
+
+    class MockEncoderWithPrompts(mteb.Encoder):
+        prompts = prompt_list
+        is_query = True
+
+        def encode(self, sentences, prompt_name: str | None = None, **kwargs):
+            check_prompt(prompt_name, self.is_query)
+            self.is_query = not self.is_query
+            return np.zeros((len(sentences), 10))
+
+    class MockSentenceEncoderWithPrompts(MockSentenceTransformer):
+        is_query = True
+
+        def encode(self, sentences, prompt_name: str | None = None, *args, **kwargs):
+            check_prompt(prompt_name, self.is_query)
+            self.is_query = not self.is_query
+            return torch.randn(len(sentences), 10)
+
+    eval = mteb.MTEB(tasks=tasks)
+    model = MockEncoderWithPrompts()
+    eval.run(model, output_folder="tests/results", overwrite_results=True)
+
+    model = MockSentenceEncoderWithPrompts(prompts=prompt_list)
+    eval.run(model, output_folder="tests/results", overwrite_results=True)
