@@ -1,0 +1,1 @@
+{"name": "laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K", "revision": "84c9828e63dc9a9351d1fe637c346d4c1c4db341", "release_date": "2023-04-26", "languages": ["eng_Latn"], "n_parameters": null, "memory_usage": null, "max_tokens": null, "embed_dim": null, "license": null, "open_source": true, "similarity_fn_name": null, "framework": [], "loader": "DataCLIPModelWrapper"}
