@@ -22,6 +22,7 @@ class Encoder(Protocol):
         Args:
             device: The device to use for encoding. Can be ignored if the encoder is not using a device (e.g. for API)
         """
+        self.device = device
 
     def encode(
         self, sentences: Sequence[str], *, prompt_name: str | None = None, **kwargs: Any
