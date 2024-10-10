@@ -1,0 +1,19 @@
+{
+  "dataset_revision": "default",
+  "evaluation_time": 6.079412221908569,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.14.15",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 0.5030769230769231,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.5030769230769231
+      }
+    ]
+  },
+  "task_name": "CVBenchRelation"
+}
