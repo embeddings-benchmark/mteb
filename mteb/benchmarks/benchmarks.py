@@ -467,7 +467,7 @@ MTEB_KOR = Benchmark(
 )
 
 
-MTEB_pol = Benchmark(
+MTEB_POL = Benchmark(
     name="MTEB(pol)",
     tasks=get_tasks(
         languages=["pol"],
