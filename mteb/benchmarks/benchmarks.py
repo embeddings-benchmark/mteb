@@ -681,6 +681,7 @@ MTEB_multilingual = Benchmark(
             "STS22.v2",
             "STSES",
             "STSB",
+            "MIRACLRetrievalHardNegatives",
         ],
     ),
     description="The Multilingual benchmarks from MMTEB. Currently under development.",
