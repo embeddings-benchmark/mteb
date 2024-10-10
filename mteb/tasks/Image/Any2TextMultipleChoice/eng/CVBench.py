@@ -28,7 +28,7 @@ class CVBenchCount(AbsTaskAny2TextMultipleChoice):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2024-01-01", "2024-12-31"),
+        date=("2024-01-01", "2024-06-24"),
         domains=["Academic"],
         task_subtypes=["Question answering"],
         license="MIT",
@@ -53,8 +53,6 @@ class CVBenchCount(AbsTaskAny2TextMultipleChoice):
     )
 
     def load_data(self, **kwargs):
-        # if self.data_loaded:
-        #     return
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
         self.dataset_transform()
         self.dataset = self.dataset.filter(lambda example: example["task"] == "Count")
@@ -90,7 +88,7 @@ class CVBenchRelation(AbsTaskAny2TextMultipleChoice):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2024-01-01", "2024-12-31"),
+        date=("2024-01-01", "2024-06-24"),
         domains=["Academic"],
         task_subtypes=["Question answering"],
         license="MIT",
@@ -115,8 +113,6 @@ class CVBenchRelation(AbsTaskAny2TextMultipleChoice):
     )
 
     def load_data(self, **kwargs):
-        # if self.data_loaded:
-        #     return
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
         self.dataset_transform()
         self.dataset = self.dataset.filter(
@@ -154,7 +150,7 @@ class CVBenchDepth(AbsTaskAny2TextMultipleChoice):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2024-01-01", "2024-12-31"),
+        date=("2024-01-01", "2024-06-24"),
         domains=["Academic"],
         task_subtypes=["Question answering"],
         license="MIT",
@@ -179,8 +175,6 @@ class CVBenchDepth(AbsTaskAny2TextMultipleChoice):
     )
 
     def load_data(self, **kwargs):
-        # if self.data_loaded:
-        #     return
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
         self.dataset_transform()
         self.dataset = self.dataset.filter(lambda example: example["task"] == "Depth")
@@ -216,7 +210,7 @@ class CVBenchDistance(AbsTaskAny2TextMultipleChoice):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2024-01-01", "2024-12-31"),
+        date=("2024-01-01", "2024-06-24"),
         domains=["Academic"],
         task_subtypes=["Question answering"],
         license="MIT",
@@ -241,8 +235,6 @@ class CVBenchDistance(AbsTaskAny2TextMultipleChoice):
     )
 
     def load_data(self, **kwargs):
-        # if self.data_loaded:
-        #     return
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
         self.dataset_transform()
         self.dataset = self.dataset.filter(
