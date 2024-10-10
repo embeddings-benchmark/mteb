@@ -100,6 +100,7 @@ TASK_TYPE = Literal[
     "Speed",
     "ZeroShotClassification",
     "ImageTextPairClassification",
+    "Any2TextMutipleChoice",
 ]
 
 TASK_CATEGORY = Literal[
