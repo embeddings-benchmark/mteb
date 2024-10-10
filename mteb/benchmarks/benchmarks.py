@@ -722,3 +722,45 @@ MTEB_JPN = Benchmark(
     reference="https://github.com/sbintuitions/JMTEB",
     citation=None,
 )
+
+
+MTEB_INDIC = Benchmark(
+    name="MTEB(indic)",
+    tasks=get_tasks(
+        tasks=[
+            # Bitext
+            "IN22ConvBitextMining",
+            "IN22GenBitextMining",
+            "IndicGenBenchFloresBitextMining",
+            "LinceMTBitextMining",
+            # clustering
+            "SIB200ClusteringS2S",
+            # classification
+            "BengaliSentimentAnalysis",
+            "GujaratiNewsClassification",
+            "HindiDiscourseClassification",
+            "SentimentAnalysisHindi",
+            "MalayalamNewsClassification",
+            "IndicLangClassification",
+            "MTOPIntentClassification",
+            "MultiHateClassification",
+            "TweetSentimentClassification",
+            "NepaliNewsClassification",
+            "PunjabiNewsClassification",
+            "SanskritShlokasClassification",
+            "UrduRomanSentimentClassification",
+            # STS
+            "IndicCrosslingualSTS",
+            # pair classification
+            "XNLI",
+            # retrieval
+            "BelebeleRetrieval",
+            "XQuADRetrieval",
+            # reranking
+            "WikipediaRerankingMultilingual",
+        ],
+    ),
+    description="Main Indic benchmark from MMTEB",
+    reference=None,
+    citation=None,
+)
