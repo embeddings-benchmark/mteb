@@ -24,9 +24,10 @@ class Any2TextMultipleChoiceEvaluator(Evaluator):
     forms the correct answer of the interleaved query.
 
     Args:
-        images: Each row is a list of images.
-        texts: Each row is a list of captions.
-        batch_size: Batch size used to compute embeddings
+        query_modalities: the modality of queries; supports image and text or either at the moment,
+        query_column_names: column names of queries; should align with query modalities.
+        label_column_name: column name of labels;
+        choices_column_names: column name of candidate choices;
     """
 
     def __init__(
