@@ -319,7 +319,7 @@ from sentence_transformers import SentenceTransformer
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
-tasks = mteb.get_tasks( tasks=["NFCorpus"], languages=["eng"])
+tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
 
 evaluation = MTEB(tasks=tasks)
 evaluation.run(
@@ -331,7 +331,7 @@ evaluation.run(
 ```
 
 CLI:
-```
+```bash
 mteb run -t NFCorpus -m all-MiniLM-L6-v2 --output_folder results --save_predictions
 ```
 
