@@ -118,7 +118,7 @@ MTEB_MAIN_EN = Benchmark(
             "StackOverflowDupQuestions",
             "SummEval",
             "TRECCOVID",
-            "Touche2020",
+            "Touche2020Retrieval.v3",
             "ToxicConversationsClassification",
             "TweetSentimentExtractionClassification",
             "TwentyNewsgroupsClustering",
