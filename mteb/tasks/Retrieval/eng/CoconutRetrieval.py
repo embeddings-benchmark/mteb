@@ -13,8 +13,8 @@ class CoconutRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CoconutRetrieval",
         dataset={
-            "path": "BASF-We-Create-Chemistry/CoconutRetrieval",
-            "revision": "4c23111a06ff9162dc8521dfe8096c544ab9548b",
+            "path": "BASF-We-Create-Chemistry/SmallCoconutRetrieval",
+            "revision": "831d292c3959eae59e4f89b8758738feee97d6cf",
         },
         description="COCONUT: the COlleCtion of Open NatUral producTs",
         reference="https://coconut.naturalproducts.net/",
