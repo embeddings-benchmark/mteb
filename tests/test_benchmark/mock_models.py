@@ -34,7 +34,7 @@ class MockTorchbf16Encoder(mteb.Encoder):
         pass
 
     def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-        return torch.randn(len(sentences), 10, dtype=torch.bfloat16).float().numpy()
+        return torch.randn(len(sentences), 10, dtype=torch.bfloat16)
 
 
 class MockSentenceTransformer(SentenceTransformer):

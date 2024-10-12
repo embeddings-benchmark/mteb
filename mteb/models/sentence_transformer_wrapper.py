@@ -81,13 +81,12 @@ class SentenceTransformerWrapper:
 
         embeddings = self.model.encode(
             sentences,
-            convert_to_numpy=True,
             prompt_name=prompt_name,
             prompt=prompt,
             **kwargs,  # sometimes in kwargs can be return_tensors=True
         )
         if isinstance(embeddings, torch.Tensor):
-            embeddings = embeddings.cpu().detach().float()
+            embeddings = embeddings.cpu().detach().float().numpy()
         return embeddings
 
     def predict(
