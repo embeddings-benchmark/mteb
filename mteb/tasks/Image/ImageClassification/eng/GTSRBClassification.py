@@ -25,7 +25,6 @@ class GTSRBClassification(AbsTaskImageClassification):
         task_subtypes=["Activity recognition"],
         domains=["Scene"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

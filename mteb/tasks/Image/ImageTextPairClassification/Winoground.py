@@ -28,11 +28,9 @@ class Winoground(AbsTaskImageTextPairClassification):
             "2022-01-01",
             "2022-04-07",
         ),  # Estimated range for the collection of data
-        form=["written"],
         domains=["Social"],  # Getty Images. Could be constructed?
         task_subtypes=["Caption Pairing"],
-        license="Not specified",
-        socioeconomic_status="mixed",
+        license="META Images Reseaerch License",
         annotations_creators="expert-annotated",
         dialect=[],
         modalities=["text", "image"],

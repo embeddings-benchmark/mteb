@@ -25,7 +25,6 @@ class DTDClassification(AbsTaskImageClassification):
         domains=["Encyclopaedic"],
         task_subtypes=["Textures recognition"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],
