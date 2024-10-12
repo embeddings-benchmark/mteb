@@ -248,12 +248,12 @@ class AbsTaskInstructionRetrieval(AbsTask):
         instruction: A relevant document will provide the projected or actual date of completion of the project, its estimated or actual total cost, or the estimated or ongoing electrical output of the finished project. Discussions of the social, political, or ecological impact of the project are not relevant.
 
     Child-classes must implement the following properties:
-    self.corpus = Dict[corpus_id, Dict[str, str]] #id => dict with document datas like title and text
-    self.queries = Dict[query_id, str] #id => query
-    self.relevant_docs = Dict[query_id, Dict[corpus_id, int]]
-    self.og_instructions = Dict[str, str] query => original instruction
-    self.changed_instructions = Dict[str, str] query => changed instruction
-    self.top_ranked = Dict[query_id, List[corpus_id]] #id => list of top ranked document ids
+    self.corpus = dict[corpus_id, dict[str, str]] #id => dict with document datas like title and text
+    self.queries = dict[query_id, str] #id => query
+    self.relevant_docs = dict[query_id, dict[corpus_id, int]]
+    self.og_instructions = dict[str, str] query => original instruction
+    self.changed_instructions = dict[str, str] query => changed instruction
+    self.top_ranked = dict[query_id, list[corpus_id]] #id => list of top ranked document ids
 
     See https://arxiv.org/abs/2403.15246 for more details
     """

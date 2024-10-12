@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import random
+from collections.abc import Iterable
 from itertools import islice
-from typing import Iterable, TypeVar
+from typing import TypeVar
 
 import datasets
 

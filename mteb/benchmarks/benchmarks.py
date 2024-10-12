@@ -1,10 +1,10 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Sequence
+from typing import Annotated
 
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
-from typing_extensions import Annotated
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.overview import get_tasks

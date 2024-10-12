@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from enum import Enum
-from typing import Any, Dict, List, Protocol, Sequence, Union, runtime_checkable
+from typing import Any, Protocol, Union, runtime_checkable
 
 import numpy as np
 import torch
 
-Corpus = Union[List[Dict[str, str]], Dict[str, List[str]]]
+Corpus = Union[list[dict[str, str]], dict[str, list[str]]]
 
 
 class PromptType(str, Enum):

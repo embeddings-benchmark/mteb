@@ -245,7 +245,7 @@ class RerankingEvaluator(Evaluator):
             is_relevant = [True] * len(positive) + [False] * len(negative)
 
             if isinstance(query, str):
-                # .encoding interface requires List[str] as input
+                # .encoding interface requires list[str] as input
                 query = [query]
             query_emb = np.asarray(
                 encode_queries_func(
@@ -349,7 +349,7 @@ class RerankingEvaluator(Evaluator):
             docs = list(instance["candidates"])
 
             if isinstance(query, str):
-                # .encoding interface requires List[str] as input
+                # .encoding interface requires list[str] as input
                 query_emb = np.asarray(
                     encode_queries_func(
                         [query],
@@ -567,8 +567,8 @@ class RerankingEvaluator(Evaluator):
         """Computes AP score
 
         Args:
-            is_relevant (`List[bool]` of length `num_pos+num_neg`): True if the document is relevant
-            pred_scores (`List[float]` of length `num_pos+num_neg`): Predicted similarity scores
+            is_relevant (`list[bool]` of length `num_pos+num_neg`): True if the document is relevant
+            pred_scores (`list[float]` of length `num_pos+num_neg`): Predicted similarity scores
 
         Returns:
             ap_score (`float`): AP score

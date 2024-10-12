@@ -4,7 +4,7 @@ import itertools
 import logging
 import random
 from collections import Counter, defaultdict
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 import sklearn
@@ -20,7 +20,7 @@ from .AbsTask import AbsTask, DescriptiveStatistics
 logger = logging.getLogger(__name__)
 
 
-MultilingualDataset = Dict[HFSubset, DatasetDict]
+MultilingualDataset = dict[HFSubset, DatasetDict]
 
 
 def evaluate_clustering_bootstrapped(
