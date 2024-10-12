@@ -82,9 +82,7 @@ class AbsTaskSpeedTask(AbsTask):
             info["gpu_info"] = list_gpus
         return info
 
-    def _evaluate_subset(
-        self, model: EncoderWithQueryCorpusEncode | Encoder, data_split, **kwargs
-    ) -> ScoresDict:
+    def _evaluate_subset(self, model: Encoder, data_split, **kwargs) -> ScoresDict:
         model.encode(["encode this"], device=self.device)  # ensure model is loaded
 
         timings = []

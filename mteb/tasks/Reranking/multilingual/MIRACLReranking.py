@@ -82,7 +82,7 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
 
     def _evaluate_subset(
         self,
-        model: Encoder | EncoderWithQueryCorpusEncode,
+        model: Encoder,
         data_split: Dataset,
         *,
         encode_kwargs: dict[str, Any] = {},

@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 import numpy as np
 import torch
-from sentence_transformers import SentenceTransformer, CrossEncoder
+from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.encoder_interface import PromptType
 
@@ -14,12 +15,12 @@ logger = logging.getLogger(__name__)
 
 class SentenceTransformerWrapper:
     def __init__(
-            self,
-            model: str | SentenceTransformer | CrossEncoder,
-            revision: str | None = None,
-            task_to_prompt_name: dict[str, str] | None = None,
-            model_prompts: dict[str, str] | None = None,
-            **kwargs,
+        self,
+        model: str | SentenceTransformer | CrossEncoder,
+        revision: str | None = None,
+        task_to_prompt_name: dict[str, str] | None = None,
+        model_prompts: dict[str, str] | None = None,
+        **kwargs,
     ) -> None:
         if isinstance(model, str):
             self.model = SentenceTransformer(
@@ -28,7 +29,11 @@ class SentenceTransformerWrapper:
         else:
             self.model = model
         self.task_to_prompt_name = task_to_prompt_name
-        if hasattr(self.model, "prompts") and self.model.prompts is not None and task_to_prompt_name is not None:
+        if (
+            hasattr(self.model, "prompts")
+            and self.model.prompts is not None
+            and task_to_prompt_name is not None
+        ):
             if model_prompts is None:
                 model_prompts = task_to_prompt_name
             logger.info(f"Model prompts will be overrided with {model_prompts}")
@@ -36,12 +41,12 @@ class SentenceTransformerWrapper:
             self.model.prompts = model_prompts
 
     def encode(
-            self,
-            sentences: Sequence[str],
-            *,
-            task_name: str,
-            prompt_type: PromptType | None = None,
-            **kwargs: Any,
+        self,
+        sentences: Sequence[str],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
     ) -> np.ndarray:
         """Encodes the given sentences using the encoder.
 
@@ -86,9 +91,9 @@ class SentenceTransformerWrapper:
         return embeddings
 
     def predict(
-            self,
-            sentences: Sequence[str],
-            **kwargs: Any,
+        self,
+        sentences: Sequence[str],
+        **kwargs: Any,
     ) -> np.ndarray:
         return self.model.predict(
             sentences,
@@ -98,7 +103,7 @@ class SentenceTransformerWrapper:
 
 
 def get_prompt_name(
-        task_to_prompt: dict[str, str], task_name: str, prompt_type: PromptType | None
+    task_to_prompt: dict[str, str], task_name: str, prompt_type: PromptType | None
 ) -> str | None:
     """A wrapper function around the model.encode method that handles the prompt_name argument and standardizes the output to a numpy array.
     The order of priorities for prompt selection are:
@@ -121,17 +126,17 @@ def get_prompt_name(
     prompt_type_value = prompt_type.value if prompt_type else None
 
     if (
-            task_name
-            and prompt_type
-            and f"{task_name}-{prompt_type_value}" in task_to_prompt
+        task_name
+        and prompt_type
+        and f"{task_name}-{prompt_type_value}" in task_to_prompt
     ):
         return f"{task_name}-{prompt_type_value}"
     if task_name and task_name in task_to_prompt:
         return task_name
     if (
-            task_type
-            and prompt_type
-            and f"{task_type}-{prompt_type_value}" in task_to_prompt
+        task_type
+        and prompt_type
+        and f"{task_type}-{prompt_type_value}" in task_to_prompt
     ):
         return f"{task_type}-{prompt_type_value}"
     if task_type and task_type in task_to_prompt:

@@ -6,7 +6,9 @@ from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 prompt_params = {
     "task_to_prompt_name": {"query": "query"},
-    "model_prompts": {"query": "Represent this sentence for searching relevant passages: "},
+    "model_prompts": {
+        "query": "Represent this sentence for searching relevant passages: "
+    },
 }
 
 bge_small_en_v1_5 = ModelMeta(
@@ -28,7 +30,7 @@ bge_base_en_v1_5 = ModelMeta(
         sentence_transformers_loader,
         model_name="BAAI/bge-base-en-v1.5",
         revision="a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",
-        **prompt_params
+        **prompt_params,
     ),
     name="BAAI/bge-base-en-v1.5",
     languages=["eng_Latn"],
@@ -42,7 +44,7 @@ bge_large_en_v1_5 = ModelMeta(
         sentence_transformers_loader,
         model_name="BAAI/bge-large-en-v1.5",
         revision="d4aa6901d3a41ba39fb536a557fa166f842b0e09",
-        **prompt_params
+        **prompt_params,
     ),
     name="BAAI/bge-large-en-v1.5",
     languages=["eng_Latn"],

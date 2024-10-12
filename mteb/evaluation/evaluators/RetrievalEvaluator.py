@@ -34,7 +34,9 @@ from .utils import (
 logger = logging.getLogger(__name__)
 
 
-def corpus_to_str(corpus: list[dict[str, str]] | dict[str, list[str]] | list[str]) -> list[str]:
+def corpus_to_str(
+    corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
+) -> list[str]:
     if isinstance(corpus, dict):
         sentences = [
             (corpus["title"][i] + " " + corpus["text"][i]).strip()

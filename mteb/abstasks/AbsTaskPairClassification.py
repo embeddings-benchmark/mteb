@@ -50,7 +50,7 @@ class AbsTaskPairClassification(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder | EncoderWithQueryCorpusEncode,
+        model: Encoder,
         dataset: Dataset,
         *,
         encode_kwargs: dict[str, str] = {},

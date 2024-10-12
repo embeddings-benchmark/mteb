@@ -123,7 +123,12 @@ def test_prompt_name_passed_to_all_encodes(
 
     # Test that the task_name is passed down to the encoder
     model = MockEncoderWithInstructions()
-    eval.run(model, task_to_prompt_name={tasks[0].metadata.name:tasks[0].metadata.name}, output_folder="tests/results", overwrite_results=True)
+    eval.run(
+        model,
+        task_to_prompt_name={tasks[0].metadata.name: tasks[0].metadata.name},
+        output_folder="tests/results",
+        overwrite_results=True,
+    )
     # Test that the task_name is not passed down to the encoder
     model = EncoderWithoutInstructions("average_word_embeddings_levy_dependency")
     assert model.prompts == {}, "The encoder should not have any prompts"
@@ -140,7 +145,10 @@ def test_encode_kwargs_passed_to_all_encodes(
     class MockEncoderWithKwargs(mteb.Encoder):
         def encode(self, sentences, prompt_name: str | None = None, **kwargs):
             assert "no_one_uses_this_args" in kwargs
-            assert my_encode_kwargs["no_one_uses_this_args"] == kwargs["no_one_uses_this_args"]
+            assert (
+                my_encode_kwargs["no_one_uses_this_args"]
+                == kwargs["no_one_uses_this_args"]
+            )
             return np.zeros((len(sentences), 10))
 
     if isinstance(task_name, mteb.AbsTask):
@@ -229,7 +237,12 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
 
     # Test that the task_name is passed down to the encoder
     model = MockEncoderWithPrompts()
-    eval.run(model, task_to_prompt_name={to_compare: to_compare}, output_folder="tests/results", overwrite_results=True)
+    eval.run(
+        model,
+        task_to_prompt_name={to_compare: to_compare},
+        output_folder="tests/results",
+        overwrite_results=True,
+    )
 
 
 @pytest.mark.parametrize(
@@ -279,7 +292,17 @@ def test_model_query_passage_prompts_task_type(
 
     eval = mteb.MTEB(tasks=tasks)
     model = MockEncoderWithPrompts()
-    eval.run(model, task_to_prompt_name=prompt_list, output_folder="tests/results", overwrite_results=True)
+    eval.run(
+        model,
+        task_to_prompt_name=prompt_list,
+        output_folder="tests/results",
+        overwrite_results=True,
+    )
 
     model = MockSentenceEncoderWithPrompts()
-    eval.run(model, task_to_prompt_name=prompt_list, output_folder="tests/results", overwrite_results=True)
+    eval.run(
+        model,
+        task_to_prompt_name=prompt_list,
+        output_folder="tests/results",
+        overwrite_results=True,
+    )

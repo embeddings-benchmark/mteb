@@ -13,8 +13,7 @@ class TestInstructionRetrievalEvaluator:
         """
         # checks that it loads
         self.evaluator = InstructionRetrievalEvaluator.InstructionRetrievalEvaluator(
-            SentenceTransformerWrapper(MockNumpyEncoder()),
-            task_name="test"
+            SentenceTransformerWrapper(MockNumpyEncoder()), task_name="test"
         )
 
     def test_p_mrr(self):

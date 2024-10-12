@@ -61,13 +61,14 @@ class CohereTextEmbeddingModel(Encoder):
             cohere_task_type = "search_document"
         return self._embed(sentences, cohere_task_type=cohere_task_type).numpy()
 
+
 prompts = {
-            "Classification": "classification",
-            "MultilabelClassification": "classification",
-            "Clustering": "clustering",
-            PromptType.query.value: "search_query",
-            PromptType.passage.value: "search_document",
-        }
+    "Classification": "classification",
+    "MultilabelClassification": "classification",
+    "Clustering": "clustering",
+    PromptType.query.value: "search_query",
+    PromptType.passage.value: "search_document",
+}
 
 cohere_mult_3 = ModelMeta(
     loader=partial(

@@ -2,13 +2,16 @@ from __future__ import annotations
 
 from datetime import date
 from functools import partial
-from typing import Any, Callable, Literal
+from typing import TYPE_CHECKING, Annotated, Any, Callable, Literal
 
 from pydantic import BaseModel, BeforeValidator, TypeAdapter
-from typing_extensions import Annotated
 
 from mteb.encoder_interface import Encoder
+
 from .languages import ISO_LANGUAGE_SCRIPT
+
+if TYPE_CHECKING:
+    from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 Frameworks = Literal["Sentence Transformers", "PyTorch"]
 
@@ -20,12 +23,10 @@ STR_DATE = Annotated[
 
 def sentence_transformers_loader(
     model_name: str, revision: str | None, **kwargs
-) -> "SentenceTransformerWrapper":
+) -> SentenceTransformerWrapper:
     from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
-    return SentenceTransformerWrapper(
-        model=model_name, revision=revision, **kwargs
-    )
+    return SentenceTransformerWrapper(model=model_name, revision=revision, **kwargs)
 
 
 def get_loader_name(

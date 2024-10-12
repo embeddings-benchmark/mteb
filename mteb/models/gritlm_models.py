@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Sequence
 from functools import partial
-from typing import Any, Sequence
+from typing import Any
 
 import numpy as np
 

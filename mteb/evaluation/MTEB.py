@@ -358,7 +358,11 @@ class MTEB:
         meta = self.create_model_meta(model)
         output_path = self.create_output_folder(meta, output_folder)
         if not isinstance(model, SentenceTransformerWrapper):
-            model = SentenceTransformerWrapper(model, task_to_prompt_name=task_to_prompt_name, model_prompts=model_prompts)
+            model = SentenceTransformerWrapper(
+                model,
+                task_to_prompt_name=task_to_prompt_name,
+                model_prompts=model_prompts,
+            )
 
         if output_path:
             self._save_model_metadata(meta, output_path)

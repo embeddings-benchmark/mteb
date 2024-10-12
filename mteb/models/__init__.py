@@ -24,17 +24,15 @@ from mteb.models import (
     repllama_models,
     ru_sentence_models,
     salesforce_models,
+    sentence_transformer_wrapper,  # noqa: F401
     sentence_transformers_models,
     voyage_models,
-    sentence_transformer_wrapper,
 )
 
 logger = logging.getLogger(__name__)
 
 
-def get_model(
-    model_name: str, revision: str | None = None, **kwargs: Any
-) -> Encoder:
+def get_model(model_name: str, revision: str | None = None, **kwargs: Any) -> Encoder:
     """A function to fetch a model object by name.
 
     Args:
