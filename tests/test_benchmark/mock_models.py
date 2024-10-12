@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing import Literal
+from collections.abc import Sequence
+from typing import Any, Literal
 
 import numpy as np
 import torch
@@ -11,6 +12,9 @@ from sentence_transformers import SentenceTransformer
 from torch import Tensor
 
 import mteb
+from mteb import SentenceTransformerWrapper
+from mteb.encoder_interface import PromptType
+from tests.test_benchmark.task_grid import MOCK_TASK_TEST_GRID
 
 
 class MockNumpyEncoder(mteb.Encoder):
@@ -59,3 +63,62 @@ class MockSentenceTransformer(SentenceTransformer):
         normalize_embeddings: bool = False,
     ) -> list[Tensor] | ndarray | Tensor:
         return torch.randn(len(sentences), 10).numpy()
+
+
+class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
+    def encode(
+        self,
+        sentences: Sequence[str],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        prompt = None
+        prompt_name = None
+        if self.task_to_prompt_name is not None:
+            prompt_name = get_mock_prompt_name(
+                self.task_to_prompt_name, task_name, prompt_type
+            )
+
+        embeddings = self.model.encode(
+            sentences,
+            prompt_name=prompt_name,
+            prompt=prompt,
+            **kwargs,  # sometimes in kwargs can be return_tensors=True
+        )
+        if isinstance(embeddings, torch.Tensor):
+            embeddings = embeddings.cpu().detach().float().numpy()
+        return embeddings
+
+
+def get_mock_prompt_name(
+    task_to_prompt: dict[str, str], task_name: str, prompt_type: PromptType | None
+) -> str | None:
+    task = [
+        mock_task
+        for mock_task in MOCK_TASK_TEST_GRID
+        if mock_task.metadata.name == task_name
+    ][0]
+    task_type = task.metadata.type
+    prompt_type_value = prompt_type.value if prompt_type else None
+
+    if (
+        task_name
+        and prompt_type
+        and f"{task_name}-{prompt_type_value}" in task_to_prompt
+    ):
+        return f"{task_name}-{prompt_type_value}"
+    if task_name and task_name in task_to_prompt:
+        return task_name
+    if (
+        task_type
+        and prompt_type
+        and f"{task_type}-{prompt_type_value}" in task_to_prompt
+    ):
+        return f"{task_type}-{prompt_type_value}"
+    if task_type and task_type in task_to_prompt:
+        return task_type
+    if prompt_type and prompt_type in task_to_prompt:
+        return prompt_type_value
+    return None
