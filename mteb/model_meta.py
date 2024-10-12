@@ -5,12 +5,12 @@ from functools import partial
 from typing import Any, Callable, Literal
 
 from pydantic import BaseModel, BeforeValidator, TypeAdapter
-from sentence_transformers import SentenceTransformer
 from typing_extensions import Annotated
 
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 
 from .languages import ISO_LANGUAGE_SCRIPT
+from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 Frameworks = Literal["Sentence Transformers", "PyTorch"]
 
@@ -22,8 +22,8 @@ STR_DATE = Annotated[
 
 def sentence_transformers_loader(
     model_name: str, revision: str | None, **kwargs
-) -> SentenceTransformer:
-    return SentenceTransformer(
+) -> SentenceTransformerWrapper:
+    return SentenceTransformerWrapper(
         model_name_or_path=model_name, revision=revision, **kwargs
     )
 

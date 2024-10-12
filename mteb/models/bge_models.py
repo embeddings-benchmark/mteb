@@ -4,6 +4,7 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
+# todo check if query in sentence transformer config
 bge_small_en_v1_5 = ModelMeta(
     loader=partial(
         sentence_transformers_loader,

@@ -2,11 +2,9 @@ from __future__ import annotations
 
 import logging
 from functools import partial
-from typing import Any
 
 from mteb.evaluation.evaluators.RetrievalEvaluator import DRESModel
 from mteb.model_meta import ModelMeta
-from mteb.models.text_formatting_utils import corpus_to_texts
 
 logger = logging.getLogger(__name__)
 
@@ -109,23 +107,6 @@ def bm25_loader(**kwargs):
         def encode(self, texts: list[str], **kwargs):
             """Encode input text as term vectors"""
             return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
-
-        def encode_queries(
-            self,
-            queries: list[str],
-            batch_size: int = 32,
-            **kwargs: Any,
-        ):
-            return self.encode(queries, kwargs=kwargs)
-
-        def encode_corpus(
-            self,
-            corpus: list[dict[str, str]] | dict[str, list[str]],
-            batch_size: int = 32,
-            **kwargs: Any,
-        ):
-            sentences = corpus_to_texts(corpus)
-            return self.encode(sentences, kwargs=kwargs)
 
     return BM25Search(**kwargs)
 

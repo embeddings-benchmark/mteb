@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 from functools import partial
+from typing import Any, Sequence
 
+import numpy as np
 import torch
 
 from mteb.model_meta import ModelMeta
 
+from ..encoder_interface import PromptType
 from .instructions import task_to_instruction
 
 
@@ -22,24 +25,24 @@ def sfr_loader(**kwargs):
         )
 
     class SFRWrapper(GritLM):
-        def encode(self, *args, **kwargs):
-            if "prompt_name" in kwargs:
-                if "instruction" in kwargs:
-                    raise ValueError(
-                        "Cannot specify both `prompt_name` and `instruction`."
-                    )
-                instruction = task_to_instruction(
-                    kwargs.pop("prompt_name"), kwargs.pop("is_query", True)
-                )
-            else:
+        def encode(
+            self,
+            sentences: Sequence[str],
+            *args,
+            task_name: str,
+            prompt_type: PromptType | None = None,
+            **kwargs: Any,
+        ) -> np.ndarray:
+            # TODO check sentences and API (what it returns)
+            if "instruction" in kwargs:
                 instruction = kwargs.pop("instruction", "")
+            else:
+                instruction = task_to_instruction(
+                    task_name, prompt_type == PromptType.query
+                )
             if instruction:
                 kwargs["instruction"] = sfr_instruction(instruction)
             return super().encode(*args, **kwargs)
-
-        def encode_corpus(self, *args, **kwargs):
-            kwargs["is_query"] = False
-            return super().encode_corpus(*args, **kwargs)
 
     return SFRWrapper(**kwargs)
 
@@ -62,9 +65,3 @@ SFR_Embedding_2_R = ModelMeta(
     revision="91762139d94ed4371a9fa31db5551272e0b83818",
     release_date="2024-06-14",  # initial commit of hf model.
 )
-
-if __name__ == "__main__":
-    import mteb
-
-    mdl = mteb.get_model(SFR_Embedding_2_R.name, SFR_Embedding_2_R.revision)
-    emb = mdl.encode(["Hello, world!"])

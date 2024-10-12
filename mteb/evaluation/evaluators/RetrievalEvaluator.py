@@ -13,13 +13,11 @@ import pytrec_eval
 import torch
 import tqdm
 from sentence_transformers import CrossEncoder, SentenceTransformer
-from sentence_transformers.models import Transformer, WordEmbeddings
 
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode, PromptType
+from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
 
 from .Evaluator import Evaluator
-from .model_encode import model_encode
 from .utils import (
     confidence_scores,
     convert_conv_history_to_query,
@@ -36,11 +34,29 @@ from .utils import (
 logger = logging.getLogger(__name__)
 
 
+def corpus_to_str(corpus: list[dict[str, str]] | dict[str, list[str]]) -> list[str]:
+    if isinstance(corpus, dict):
+        sentences = [
+            (corpus["title"][i] + " " + corpus["text"][i]).strip()
+            if "title" in corpus
+            else corpus["text"][i].strip()
+            for i in range(len(corpus["text"]))
+        ]
+    else:
+        sentences = [
+            (doc["title"] + " " + doc["text"]).strip()
+            if "title" in doc
+            else doc["text"].strip()
+            for doc in corpus
+        ]
+    return sentences
+
+
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/search/dense/exact_search.py#L12
 class DenseRetrievalExactSearch:
     def __init__(
         self,
-        model: EncoderWithQueryCorpusEncode,
+        model: Encoder,
         encode_kwargs: dict[str, Any] = {},
         corpus_chunk_size: int = 50000,
         previous_results: str | Path | None = None,
@@ -93,7 +109,7 @@ class DenseRetrievalExactSearch:
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
-        # Create embeddings for all queries using model.encode_queries()
+        # Create embeddings for all queries using model.encode
         # Runs semantic search against the corpus embeddings
         # Returns a ranked list with the corpus ids
         if score_function not in self.score_functions:
@@ -115,9 +131,10 @@ class DenseRetrievalExactSearch:
                 **self.encode_kwargs,
             )
         else:
-            query_embeddings = self.model.encode_queries(
+            query_embeddings = self.model.encode(
                 queries,  # type: ignore
                 task_name=task_name,
+                prompt_type=PromptType.query,
                 **self.encode_kwargs,
             )
 
@@ -154,9 +171,10 @@ class DenseRetrievalExactSearch:
                 )
             else:
                 # Encode chunk of corpus
-                sub_corpus_embeddings = self.model.encode_corpus(
+                sub_corpus_embeddings = self.model.encode(
                     corpus[corpus_start_idx:corpus_end_idx],  # type: ignore
                     task_name=task_name,
+                    prompt_type=PromptType.passage,
                     request_qid=request_qid,
                     **self.encode_kwargs,
                 )
@@ -322,10 +340,13 @@ class DenseRetrievalExactSearch:
             return model.encode_conversations(  # type: ignore
                 conversations, task_name=task_name, **kwargs
             )
-        # otherwise fallback to default implementation
-        # TODO: add a warning here
+        logger.warning(
+            "Model doesn't have encode_conversations fallback to default implementation"
+        )
         queries = self.convert_conv_history_to_query(model, conversations)  # type: ignore
-        return model.encode_queries(queries, task_name=task_name, **kwargs)  # type: ignore
+        return model.encode(
+            queries, task_name=task_name, prompt_type=PromptType.query, **kwargs
+        )  # type: ignore
 
     @staticmethod
     def convert_conv_history_to_query(
@@ -337,7 +358,7 @@ class DenseRetrievalExactSearch:
 
 
 class DRESModel:
-    """Dense Retrieval Exact Search (DRES) requires an encode_queries & encode_corpus method.
+    """Dense Retrieval Exact Search (DRES).
     This class converts a model with just an .encode method into DRES format.
     """
 
@@ -348,34 +369,6 @@ class DRESModel:
         self.use_sbert_model = isinstance(model, SentenceTransformer)
         self.save_corpus_embeddings = kwargs.get("save_corpus_embeddings", False)
         self.corpus_embeddings = {}
-
-    def encode_queries(
-        self,
-        queries: list[str],
-        *,
-        task_name: str,
-        batch_size: int,
-        prompt_type: PromptType = PromptType.query,
-        **kwargs,
-    ):
-        if self.use_sbert_model:
-            if isinstance(self.model._first_module(), Transformer):
-                logger.info(
-                    f"Queries will be truncated to {self.model.get_max_seq_length()} tokens."
-                )
-            elif isinstance(self.model._first_module(), WordEmbeddings):
-                logger.warning(
-                    "Queries will not be truncated. This could lead to memory issues. In that case please lower the batch_size."
-                )
-
-        return model_encode(
-            queries,
-            model=self.model,
-            task_name=task_name,
-            prompt_type=prompt_type,
-            batch_size=batch_size,
-            **kwargs,
-        )
 
     def encode_corpus(
         self,
@@ -393,24 +386,9 @@ class DRESModel:
         ):
             return self.corpus_embeddings[request_qid]
 
-        if isinstance(corpus, dict):
-            sentences = [
-                (corpus["title"][i] + " " + corpus["text"][i]).strip()
-                if "title" in corpus
-                else corpus["text"][i].strip()
-                for i in range(len(corpus["text"]))
-            ]
-        else:
-            sentences = [
-                (doc["title"] + " " + doc["text"]).strip()
-                if "title" in doc
-                else doc["text"].strip()
-                for doc in corpus
-            ]
-
-        corpus_embeddings = model_encode(
+        sentences = corpus_to_str(corpus)
+        corpus_embeddings = self.model.encode(
             sentences,
-            model=self.model,
             task_name=task_name,
             prompt_type=prompt_type,
             batch_size=batch_size,
@@ -421,16 +399,20 @@ class DRESModel:
             self.corpus_embeddings[request_qid] = corpus_embeddings
         return corpus_embeddings
 
-    def encode(self, sentences: list[str], task_name: str, **kwargs):
-        return self.encode_queries(sentences, task_name=task_name, **kwargs)
-
-
-def is_dres_compatible(model):
-    for method in ["encode_queries", "encode_corpus"]:
-        op = getattr(model, method, None)
-        if not (callable(op)):
-            return False
-    return True
+    def encode(
+        self,
+        sentences: list[str],
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs,
+    ):
+        if prompt_type and prompt_type == PromptType.passage:
+            return self.encode_corpus(
+                sentences, task_name, prompt_type=prompt_type, **kwargs
+            )
+        return self.encode(
+            sentences, task_name=task_name, prompt_type=prompt_type, **kwargs
+        )
 
 
 def is_cross_encoder_compatible(model):
@@ -459,17 +441,7 @@ class RetrievalEvaluator(Evaluator):
                 retriever, encode_kwargs=encode_kwargs, **kwargs
             )
             self.is_cross_encoder = True
-        elif is_dres_compatible(retriever):
-            logger.info(
-                "The custom encode_queries and encode_corpus functions of the model will be used"
-            )
-            self.retriever = DenseRetrievalExactSearch(
-                retriever, encode_kwargs=encode_kwargs, **kwargs
-            )
         else:
-            logger.info(
-                "The model does not have the optional encode_queries and encode_corpus functions. Wrapping it in DRESModel."
-            )
             self.retriever = DenseRetrievalExactSearch(
                 DRESModel(retriever), encode_kwargs=encode_kwargs, **kwargs
             )

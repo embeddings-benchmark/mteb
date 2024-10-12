@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any, Callable
 
 import numpy as np
@@ -11,9 +10,8 @@ from sklearn.metrics import average_precision_score
 
 from mteb.evaluation.evaluators.RetrievalEvaluator import RetrievalEvaluator
 
-from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode, PromptType
+from ...encoder_interface import Encoder, PromptType
 from .Evaluator import Evaluator
-from .model_encode import model_encode
 from .utils import confidence_scores, cos_sim, nAUC
 
 logger = logging.getLogger(__name__)
@@ -81,27 +79,16 @@ class RerankingEvaluator(Evaluator):
             else self.compute_metrics_individual(model)
         )
 
-    def compute_metrics_batched(self, model: Encoder | EncoderWithQueryCorpusEncode):
+    def compute_metrics_batched(self, model: Encoder):
         """Computes the metrices in a batched way, by batching all queries and
         all documents together
         """
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
-        encode_queries_func = (
-            model.encode_queries
-            if isinstance(model, EncoderWithQueryCorpusEncode)
-            else partial(model_encode, model=model)
-        )
-        encode_corpus_func = (
-            model.encode_corpus
-            if isinstance(model, EncoderWithQueryCorpusEncode)
-            else partial(model_encode, model=model)
-        )
-
         logger.info("Encoding queries...")
         if isinstance(self.samples[0]["query"], str):
             all_query_embs = np.asarray(
-                encode_queries_func(
+                model.encode(
                     [sample["query"] for sample in self.samples],
                     task_name=self.task_name,
                     prompt_type=PromptType.query,
@@ -115,7 +102,7 @@ class RerankingEvaluator(Evaluator):
             ]
             all_query_embs = self._encode_unique_texts(
                 all_query_flattened,
-                encode_queries_func,
+                model.encode,
                 task_name=self.task_name,
                 prompt_type=PromptType.query,
                 **self.encode_kwargs,
@@ -127,15 +114,15 @@ class RerankingEvaluator(Evaluator):
 
         if self.evaluator_type == "standard":
             results = self._encode_candidates(
-                encode_queries_func=encode_queries_func,
-                encode_corpus_func=encode_corpus_func,
+                encode_queries_func=model.encode,
+                encode_corpus_func=model.encode,
                 batched=True,
                 all_query_embs=all_query_embs,
             )
         elif self.evaluator_type == "miracl":
             results = self._encode_candidates_miracl(
-                encode_queries_func=encode_queries_func,
-                encode_corpus_func=encode_corpus_func,
+                encode_queries_func=model.encode,
+                encode_corpus_func=model.encode,
                 batched=True,
                 all_query_embs=all_query_embs,
             )
@@ -149,22 +136,17 @@ class RerankingEvaluator(Evaluator):
         """
         # using encode_queries and encode_corpus functions if they exists,
         # which can be defined by users to add different instructions for query and passage conveniently
-        encode_queries_func = (
-            model.encode_queries if hasattr(model, "encode_queries") else model.encode
-        )
-        encode_corpus_func = (
-            model.encode_corpus if hasattr(model, "encode_corpus") else model.encode
-        )
+
         if self.evaluator_type == "standard":
             results = self._encode_candidates(
-                encode_queries_func=encode_queries_func,
-                encode_corpus_func=encode_corpus_func,
+                encode_queries_func=model.encode,
+                encode_corpus_func=model.encode,
                 batched=False,
             )
         elif self.evaluator_type == "miracl":
             results = self._encode_candidates_miracl(
-                encode_queries_func=encode_queries_func,
-                encode_corpus_func=encode_corpus_func,
+                encode_queries_func=model.encode,
+                encode_corpus_func=model.encode,
                 batched=False,
             )
         return results

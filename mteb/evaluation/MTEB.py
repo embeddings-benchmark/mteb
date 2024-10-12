@@ -21,6 +21,7 @@ from mteb.models import model_meta_from_sentence_transformers
 from ..abstasks import *
 from ..abstasks import AbsTask
 from ..load_results.mteb_results import MTEBResults
+from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from ..tasks import *
 from . import LangMapping
 
@@ -325,6 +326,8 @@ class MTEB:
 
         meta = self.create_model_meta(model)
         output_path = self.create_output_folder(meta, output_folder)
+        if not isinstance(SentenceTransformerWrapper, model):
+            model = SentenceTransformerWrapper(model)
 
         if output_path:
             self._save_model_metadata(meta, output_path)

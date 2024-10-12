@@ -14,7 +14,6 @@ from sklearn.metrics.pairwise import (
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 
 from .Evaluator import Evaluator
-from .model_encode import model_encode
 
 logger = logging.getLogger(__name__)
 
@@ -45,15 +44,13 @@ class STSEvaluator(Evaluator):
         *,
         encode_kwargs: dict[str, Any] = {},
     ):
-        embeddings1 = model_encode(
+        embeddings1 = model.encode(
             self.sentences1,
-            model=model,
             task_name=self.task_name,
             **encode_kwargs,
         )
-        embeddings2 = model_encode(
+        embeddings2 = model.encode(
             self.sentences2,
-            model=model,
             task_name=self.task_name,
             **encode_kwargs,
         )

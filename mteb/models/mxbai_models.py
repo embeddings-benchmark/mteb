@@ -4,12 +4,16 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
+# TODO check more prompts
 mxbai_embed_large_v1 = ModelMeta(
     loader=partial(
         sentence_transformers_loader,
         model_name="mixedbread-ai/mxbai-embed-large-v1",
         revision="990580e27d329c7408b3741ecff85876e128e203",
-        prompts={"query": "Represent this sentence for searching relevant passages: "},
+        model_prompts={"query": "query"},
+        task_to_prompt={
+            "query": "Represent this sentence for searching relevant passages: "
+        },
     ),
     name="mixedbread-ai/mxbai-embed-large-v1",
     languages=["eng_Latn"],

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Callable, Literal
+from typing import Any, Callable
 
 import numpy as np
 import torch
@@ -11,12 +11,10 @@ from mteb.model_meta import ModelMeta
 
 from .repllama_models import RepLLaMAWrapper
 
-logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
-EncodeTypes = Literal["query", "passage"]
 
-
+# todo PromptrieverWrapper(RepLLaMAWrapper
 class PromptrieverWrapper(RepLLaMAWrapper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

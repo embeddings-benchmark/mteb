@@ -10,7 +10,6 @@ from sklearn import metrics
 from mteb.encoder_interface import Encoder
 
 from .Evaluator import Evaluator
-from .model_encode import model_encode
 
 logger = logging.getLogger(__name__)
 
@@ -38,9 +37,8 @@ class ClusteringEvaluator(Evaluator):
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 32
 
-        corpus_embeddings = model_encode(
+        corpus_embeddings = model.encode(
             self.sentences,
-            model=model,
             task_name=self.task_name,
             **encode_kwargs,
         )
