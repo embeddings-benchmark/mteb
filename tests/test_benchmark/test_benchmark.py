@@ -111,7 +111,7 @@ def test_prompt_name_passed_to_all_encodes(
 
     class EncoderWithoutInstructions(SentenceTransformer):
         def encode(self, sentences, **kwargs):
-            assert "prompt_name" not in kwargs
+            assert kwargs["prompt_name"] is None
             return super().encode(sentences, **kwargs)
 
     if isinstance(task_name, mteb.AbsTask):
@@ -123,7 +123,7 @@ def test_prompt_name_passed_to_all_encodes(
 
     # Test that the task_name is passed down to the encoder
     model = MockEncoderWithInstructions()
-    eval.run(model, output_folder="tests/results", overwrite_results=True)
+    eval.run(model, task_to_prompt_name={tasks[0].metadata.name:tasks[0].metadata.name}, output_folder="tests/results", overwrite_results=True)
     # Test that the task_name is not passed down to the encoder
     model = EncoderWithoutInstructions("average_word_embeddings_levy_dependency")
     assert model.prompts == {}, "The encoder should not have any prompts"
@@ -139,7 +139,8 @@ def test_encode_kwargs_passed_to_all_encodes(
 
     class MockEncoderWithKwargs(mteb.Encoder):
         def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-            assert kwargs == my_encode_kwargs
+            assert "no_one_uses_this_args" in kwargs
+            assert my_encode_kwargs["no_one_uses_this_args"] == kwargs["no_one_uses_this_args"]
             return np.zeros((len(sentences), 10))
 
     if isinstance(task_name, mteb.AbsTask):
@@ -217,18 +218,18 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
         tasks = mteb.get_tasks(tasks=[task])
         _task_type = tasks[0].metadata.type
 
-    class MockEncoderWithPrompts(mteb.Encoder):
-        prompts = {_task_type: _task_type}
+    to_compare = _task_name if is_task_name else _task_type
 
+    class MockEncoderWithPrompts(mteb.Encoder):
         def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-            assert prompt_name == _task_type
+            assert prompt_name == to_compare
             return np.zeros((len(sentences), 10))
 
     eval = mteb.MTEB(tasks=tasks)
 
     # Test that the task_name is passed down to the encoder
     model = MockEncoderWithPrompts()
-    eval.run(model, output_folder="tests/results", overwrite_results=True)
+    eval.run(model, task_to_prompt_name={to_compare: to_compare}, output_folder="tests/results", overwrite_results=True)
 
 
 @pytest.mark.parametrize(
@@ -261,7 +262,6 @@ def test_model_query_passage_prompts_task_type(
     }
 
     class MockEncoderWithPrompts(mteb.Encoder):
-        prompts = prompt_list
         is_query = True
 
         def encode(self, sentences, prompt_name: str | None = None, **kwargs):
@@ -275,11 +275,11 @@ def test_model_query_passage_prompts_task_type(
         def encode(self, sentences, prompt_name: str | None = None, *args, **kwargs):
             check_prompt(prompt_name, self.is_query)
             self.is_query = not self.is_query
-            return torch.randn(len(sentences), 10)
+            return torch.randn(len(sentences), 10).numpy()
 
     eval = mteb.MTEB(tasks=tasks)
     model = MockEncoderWithPrompts()
-    eval.run(model, output_folder="tests/results", overwrite_results=True)
+    eval.run(model, task_to_prompt_name=prompt_list, output_folder="tests/results", overwrite_results=True)
 
-    model = MockSentenceEncoderWithPrompts(prompts=prompt_list)
-    eval.run(model, output_folder="tests/results", overwrite_results=True)
+    model = MockSentenceEncoderWithPrompts()
+    eval.run(model, task_to_prompt_name=prompt_list, output_folder="tests/results", overwrite_results=True)

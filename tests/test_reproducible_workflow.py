@@ -6,7 +6,7 @@ import pytest
 
 import mteb
 from mteb import MTEB
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 
 logging.basicConfig(level=logging.INFO)
@@ -24,7 +24,7 @@ def test_reproducibility_workflow(task_name: str, model_name: str, model_revisio
     assert isinstance(task, mteb.AbsTask)
 
     model = mteb.get_model(model_name, revision=model_revision)
-    assert isinstance(model, (Encoder, EncoderWithQueryCorpusEncode))
+    assert isinstance(model, Encoder)
 
     eval = MTEB(tasks=[task])
     eval.run(model, output_folder="tests/results", overwrite_results=True)

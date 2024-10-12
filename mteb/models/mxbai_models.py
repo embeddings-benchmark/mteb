@@ -4,7 +4,6 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
-# TODO check more prompts
 mxbai_embed_large_v1 = ModelMeta(
     loader=partial(
         sentence_transformers_loader,

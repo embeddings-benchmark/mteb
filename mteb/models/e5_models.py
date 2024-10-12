@@ -109,11 +109,11 @@ XLMR_LANGUAGES = [
 ]
 
 prompt_params = {
-    "model_prompts": {
+    "task_to_prompt_name": {
         PromptType.query.value: PromptType.query.value,
         PromptType.passage.value: PromptType.passage.value,
     },
-    "task_to_prompt": {
+    "model_prompts": {
         PromptType.query.value: "query: ",
         PromptType.passage.value: "passage: ",
     },

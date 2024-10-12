@@ -32,7 +32,6 @@ def gte_loader(**kwargs):
             prompt_type: PromptType | None = None,
             **kwargs: Any,
         ) -> np.ndarray:
-            # TODO check sentences and API (what it returns)
             if "instruction" in kwargs:
                 instruction = kwargs.pop("instruction", "")
             else:
@@ -41,7 +40,7 @@ def gte_loader(**kwargs):
                 )
             if instruction:
                 kwargs["instruction"] = gte_instruction(instruction)
-            return super().encode(*args, **kwargs)
+            return super().encode(sentences=sentences, *args, **kwargs)
 
     return GTEWrapper(**kwargs)
 

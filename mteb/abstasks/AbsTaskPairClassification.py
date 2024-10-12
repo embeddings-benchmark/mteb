@@ -5,7 +5,7 @@ from collections import Counter, defaultdict
 
 from datasets import Dataset
 
-from ..encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from ..encoder_interface import Encoder
 from ..evaluation.evaluators import PairClassificationEvaluator
 from ..load_results.mteb_results import ScoresDict
 from .AbsTask import AbsTask, DescriptiveStatistics

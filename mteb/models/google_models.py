@@ -15,11 +15,11 @@ class GoogleTextEmbeddingModel(Encoder):
         self,
         model_name: str,
         sep: str = " ",
-        task_to_prompt: dict[str, str] | None = None,
+        task_to_prompt_name: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
         self.model_name = model_name
-        self.task_to_propmpt = task_to_prompt
+        self.task_to_prompt_name = task_to_prompt_name
 
     def _embed(
         self,
@@ -67,7 +67,7 @@ class GoogleTextEmbeddingModel(Encoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        google_task_type = get_prompt_name(self.task_to_propmpt, task_name, prompt_type)
+        google_task_type = get_prompt_name(self.task_to_prompt_name, task_name, prompt_type)
         return self._embed(sentences, google_task_type=google_task_type)
 
 
@@ -98,10 +98,3 @@ google_emb_004 = ModelMeta(
     similarity_fn_name="cosine",  # assumed
     framework=[],
 )
-
-
-if __name__ == "__main__":
-    import mteb
-
-    mdl = mteb.get_model(google_emb_004.name, google_emb_004.revision)
-    emb = mdl.encode(["Hello, world!"])

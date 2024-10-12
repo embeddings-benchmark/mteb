@@ -26,7 +26,7 @@ class MockTorchEncoder(mteb.Encoder):
         pass
 
     def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-        return torch.randn(len(sentences), 10)
+        return torch.randn(len(sentences), 10).numpy()
 
 
 class MockTorchbf16Encoder(mteb.Encoder):
@@ -34,7 +34,7 @@ class MockTorchbf16Encoder(mteb.Encoder):
         pass
 
     def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-        return torch.randn(len(sentences), 10, dtype=torch.bfloat16)
+        return torch.randn(len(sentences), 10, dtype=torch.bfloat16).float().numpy()
 
 
 class MockSentenceTransformer(SentenceTransformer):
@@ -58,4 +58,4 @@ class MockSentenceTransformer(SentenceTransformer):
         device: str | None = None,
         normalize_embeddings: bool = False,
     ) -> list[Tensor] | ndarray | Tensor:
-        return torch.randn(len(sentences), 10)
+        return torch.randn(len(sentences), 10).numpy()

@@ -2,16 +2,13 @@ from __future__ import annotations
 
 from datetime import date
 from functools import partial
-from typing import Annotated, Any, Callable, Literal
+from typing import Any, Callable, Literal
 
 from pydantic import BaseModel, BeforeValidator, TypeAdapter
-from sentence_transformers import SentenceTransformer
 from typing_extensions import Annotated
 
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
-
+from mteb.encoder_interface import Encoder
 from .languages import ISO_LANGUAGE_SCRIPT
-from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 Frameworks = Literal["Sentence Transformers", "PyTorch"]
 
@@ -23,14 +20,16 @@ STR_DATE = Annotated[
 
 def sentence_transformers_loader(
     model_name: str, revision: str | None, **kwargs
-) -> SentenceTransformerWrapper:
+) -> "SentenceTransformerWrapper":
+    from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
+
     return SentenceTransformerWrapper(
-        model_name_or_path=model_name, revision=revision, **kwargs
+        model=model_name, revision=revision, **kwargs
     )
 
 
 def get_loader_name(
-    loader: Callable[..., Encoder | EncoderWithQueryCorpusEncode] | None,
+    loader: Callable[..., Encoder] | None,
 ) -> str | None:
     if loader is None:
         return None
@@ -65,7 +64,7 @@ class ModelMeta(BaseModel):
     revision: str | None
     release_date: STR_DATE | None
     languages: list[ISO_LANGUAGE_SCRIPT] | None
-    loader: Callable[..., Encoder | EncoderWithQueryCorpusEncode] | None = None
+    loader: Callable[..., Encoder] | None = None
     n_parameters: int | None = None
     memory_usage: float | None = None
     max_tokens: int | None = None
@@ -81,19 +80,18 @@ class ModelMeta(BaseModel):
         dict_repr["loader"] = get_loader_name(loader)
         return dict_repr
 
-    def load_model(self, **kwargs: Any) -> Encoder | EncoderWithQueryCorpusEncode:
+    def load_model(self, **kwargs: Any) -> Encoder:
         if self.loader is None:
             loader = partial(
                 sentence_transformers_loader,
                 model_name=self.name,
                 revision=self.revision,
-                trust_remote_code=True,
                 **kwargs,
             )
         else:
             loader = self.loader
 
-        model: Encoder | EncoderWithQueryCorpusEncode = loader(**kwargs)  # type: ignore
+        model: Encoder = loader(**kwargs)  # type: ignore
         return model
 
     def model_name_as_path(self) -> str:

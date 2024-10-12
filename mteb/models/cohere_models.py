@@ -17,12 +17,12 @@ class CohereTextEmbeddingModel(Encoder):
         self,
         model_name: str,
         sep: str = " ",
-        task_to_prompt: dict[str, str] | None = None,
+        task_to_prompt_name: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
         self.model_name = model_name
         self.sep = sep
-        self.task_to_prompt_name = task_to_prompt
+        self.task_to_prompt_name = task_to_prompt_name
 
     def _embed(
         self, sentences: list[str], cohere_task_type: str, retries: int = 5
@@ -61,18 +61,19 @@ class CohereTextEmbeddingModel(Encoder):
             cohere_task_type = "search_document"
         return self._embed(sentences, cohere_task_type=cohere_task_type).numpy()
 
-
-cohere_mult_3 = ModelMeta(
-    loader=partial(
-        CohereTextEmbeddingModel,
-        model_name="embed-multilingual-v3.0",
-        task_to_prompt={
+prompts = {
             "Classification": "classification",
             "MultilabelClassification": "classification",
             "Clustering": "clustering",
             PromptType.query.value: "search_query",
             PromptType.passage.value: "search_document",
-        },
+        }
+
+cohere_mult_3 = ModelMeta(
+    loader=partial(
+        CohereTextEmbeddingModel,
+        model_name="embed-multilingual-v3.0",
+        task_to_prompt_name=prompts,
     ),
     name="embed-multilingual-v3.0",
     languages=[],  # Unknown, but support >100 languages
@@ -92,13 +93,7 @@ cohere_eng_3 = ModelMeta(
     loader=partial(
         CohereTextEmbeddingModel,
         model_name="embed-multilingual-v3.0",
-        task_to_prompt={
-            "Classification": "classification",
-            "MultilabelClassification": "classification",
-            "Clustering": "clustering",
-            PromptType.query.value: "search_query",
-            PromptType.passage.value: "search_document",
-        },
+        task_to_prompt_name=prompts,
     ),
     name="embed-english-v3.0",
     languages=["eng-Latn"],

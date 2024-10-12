@@ -23,7 +23,7 @@ def llm2vec_instruction(instruction):
 class LLM2VecWrapper:
     def __init__(
         self,
-        task_to_prompt: dict[str, str] | None = None,
+        task_to_prompt_name: dict[str, str] | None = None,
         device: str | None = None,
         *args,
         **kwargs,
@@ -43,7 +43,7 @@ class LLM2VecWrapper:
             logger.warning(
                 "LLM2Vec models were trained with flash attention enabled. For optimal performance, please install the `flash_attn` package with `pip install flash-attn --no-build-isolation`."
             )
-        self.task_to_prompt_name = task_to_prompt
+        self.task_to_prompt_name = task_to_prompt_name
 
         if device:
             kwargs["device_map"] = device

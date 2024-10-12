@@ -34,7 +34,7 @@ from .utils import (
 logger = logging.getLogger(__name__)
 
 
-def corpus_to_str(corpus: list[dict[str, str]] | dict[str, list[str]]) -> list[str]:
+def corpus_to_str(corpus: list[dict[str, str]] | dict[str, list[str]] | list[str]) -> list[str]:
     if isinstance(corpus, dict):
         sentences = [
             (corpus["title"][i] + " " + corpus["text"][i]).strip()
@@ -42,13 +42,15 @@ def corpus_to_str(corpus: list[dict[str, str]] | dict[str, list[str]]) -> list[s
             else corpus["text"][i].strip()
             for i in range(len(corpus["text"]))
         ]
-    else:
+    elif isinstance(corpus, list) and isinstance(corpus[0], dict):
         sentences = [
             (doc["title"] + " " + doc["text"]).strip()
             if "title" in doc
             else doc["text"].strip()
             for doc in corpus
         ]
+    else:
+        sentences = corpus
     return sentences
 
 
@@ -141,7 +143,6 @@ class DenseRetrievalExactSearch:
         logger.info("Sorting Corpus by document length (Longest first)...")
         corpus_ids = sorted(
             corpus,
-            key=lambda k: len(corpus[k].get("title", "") + corpus[k].get("text", "")),
             reverse=True,
         )
         corpus = [corpus[cid] for cid in corpus_ids]  # type: ignore
@@ -271,13 +272,10 @@ class DenseRetrievalExactSearch:
                 else query
             )
             for doc_id in top_n:
-                corpus_item = (
-                    corpus[doc_id].get("title", "") + " " + corpus[doc_id]["text"]
-                ).strip()
                 pairs.append(
                     (
                         query,
-                        corpus_item,
+                        corpus[doc_id],
                         instructions[query] if instructions is not None else None,
                         qid,
                         doc_id,
@@ -306,7 +304,7 @@ class DenseRetrievalExactSearch:
                 len(queries_in_pair) == len(corpus_in_pair) == len(instructions_in_pair)
             )
 
-            if isinstance(self.model, CrossEncoder):
+            if isinstance(self.model.model, CrossEncoder):
                 # can't take instructions, so add them here
                 queries_in_pair = [
                     f"{q} {i}".strip()
@@ -410,13 +408,13 @@ class DRESModel:
             return self.encode_corpus(
                 sentences, task_name, prompt_type=prompt_type, **kwargs
             )
-        return self.encode(
+        return self.model.encode(
             sentences, task_name=task_name, prompt_type=prompt_type, **kwargs
         )
 
 
-def is_cross_encoder_compatible(model):
-    op = getattr(model, "predict", None)
+def is_cross_encoder_compatible(model) -> bool:
+    op = getattr(model.model, "predict", None)
     return callable(op)
 
 
@@ -424,7 +422,7 @@ def is_cross_encoder_compatible(model):
 class RetrievalEvaluator(Evaluator):
     def __init__(
         self,
-        retriever=None,
+        retriever,
         task_name: str | None = None,
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
         score_function: str = "cos_sim",

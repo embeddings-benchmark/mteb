@@ -44,7 +44,7 @@ def gritlm_loader(**kwargs):
                 )
             if instruction:
                 kwargs["instruction"] = gritlm_instruction(instruction)
-            return super().encode(*args, **kwargs)
+            return super().encode(sentences=sentences, *args, **kwargs)
 
     return GritLMWrapper(**kwargs)
 

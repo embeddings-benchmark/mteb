@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from mteb import SentenceTransformerWrapper
 from mteb.evaluation.evaluators import InstructionRetrievalEvaluator, utils
+from tests.test_benchmark.mock_models import MockNumpyEncoder
 
 
 class TestInstructionRetrievalEvaluator:
@@ -11,6 +13,7 @@ class TestInstructionRetrievalEvaluator:
         """
         # checks that it loads
         self.evaluator = InstructionRetrievalEvaluator.InstructionRetrievalEvaluator(
+            SentenceTransformerWrapper(MockNumpyEncoder()),
             task_name="test"
         )
 

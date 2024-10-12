@@ -22,12 +22,12 @@ class NomicWrapper:
         self,
         model_name: str,
         revision: str,
-        task_to_prompt: dict[str, str] | None = None,
+        task_to_prompt_name: dict[str, str] | None = None,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
-        self.task_to_prompt_name = task_to_prompt
+        self.task_to_prompt_name = task_to_prompt_name
 
     def to(self, device: torch.device) -> None:
         self.model.to(device)
@@ -64,7 +64,7 @@ class NomicWrapper:
 
 
 prompt_params = {
-    "task_to_prompt": {
+    "task_to_prompt_name": {
         "Classification": "classification",
         "MultilabelClassification": "classification",
         "Clustering": "clustering",

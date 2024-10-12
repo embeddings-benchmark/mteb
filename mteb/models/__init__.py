@@ -5,7 +5,7 @@ from typing import Any
 
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (
     bge_models,
@@ -26,6 +26,7 @@ from mteb.models import (
     salesforce_models,
     sentence_transformers_models,
     voyage_models,
+    sentence_transformer_wrapper,
 )
 
 logger = logging.getLogger(__name__)
@@ -33,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 def get_model(
     model_name: str, revision: str | None = None, **kwargs: Any
-) -> Encoder | EncoderWithQueryCorpusEncode:
+) -> Encoder:
     """A function to fetch a model object by name.
 
     Args:
