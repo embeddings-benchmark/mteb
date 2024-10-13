@@ -95,7 +95,7 @@ class VidoreArxivQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="VidoreArxivQARetrieval",
         description="Retrieve associated pages according to questions.",
-        reference="https://aclanthology.org/placeholder/",
+        reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/arxivqa_test_subsampled",
             "revision": "fe2b0e055eaac82d8f6801ebc8e85d8832248133",
@@ -113,10 +113,10 @@ class VidoreArxivQARetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{placeholder,
-  title={Placeholder},
-  author={placeholder, placeholder},
-  journal={arXiv preprint arXiv:2401.13478},
+        bibtex_citation="""@article{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models},
+  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
         descriptive_stats={
@@ -148,7 +148,7 @@ class VidoreDocVQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="VidoreDocVQARetrieval",
         description="Retrieve associated pages according to questions.",
-        reference="https://aclanthology.org/placeholder/",
+        reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/docvqa_test_subsampled",
             "revision": "b1d89eda849e636676df6ead8002602fb1858600",
@@ -166,10 +166,10 @@ class VidoreDocVQARetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{placeholder,
-  title={Placeholder},
-  author={placeholder, placeholder},
-  journal={arXiv preprint arXiv:2401.13478},
+        bibtex_citation="""@article{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models},
+  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
         descriptive_stats={
@@ -201,7 +201,7 @@ class VidoreInfoVQARetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="VidoreInfoVQARetrieval",
         description="Retrieve associated pages according to questions.",
-        reference="https://aclanthology.org/placeholder/",
+        reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/infovqa_test_subsampled",
             "revision": "fec9c59496ddf4a34e01ca8080515722bd3cf970",
@@ -219,10 +219,10 @@ class VidoreInfoVQARetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{placeholder,
-  title={Placeholder},
-  author={placeholder, placeholder},
-  journal={arXiv preprint arXiv:2401.13478},
+        bibtex_citation="""@article{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models},
+  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
         descriptive_stats={
@@ -254,7 +254,7 @@ class VidoreTabfquadRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="VidoreTabfquadRetrieval",
         description="Retrieve associated pages according to questions.",
-        reference="https://aclanthology.org/placeholder/",
+        reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/tabfquad_test_subsampled",
             "revision": "501f02a80aff50c90045b0feaa81565c4e8f889e",
@@ -272,10 +272,10 @@ class VidoreTabfquadRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{placeholder,
-  title={Placeholder},
-  author={placeholder, placeholder},
-  journal={arXiv preprint arXiv:2401.13478},
+        bibtex_citation="""@article{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models},
+  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
         descriptive_stats={
@@ -307,7 +307,7 @@ class VidoreTatdqaRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="VidoreTatdqaRetrieval",
         description="Retrieve associated pages according to questions.",
-        reference="https://aclanthology.org/placeholder/",
+        reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/tatdqa_test",
             "revision": "9c3a626c16c811f15514689c3e7e95a4f2b9b8c3",
@@ -325,10 +325,10 @@ class VidoreTatdqaRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{placeholder,
-  title={Placeholder},
-  author={placeholder, placeholder},
-  journal={arXiv preprint arXiv:2401.13478},
+        bibtex_citation="""@article{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models},
+  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
         descriptive_stats={
@@ -360,7 +360,7 @@ class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="VidoreShiftProjectRetrieval",
         description="Retrieve associated pages according to questions.",
-        reference="https://aclanthology.org/placeholder/",
+        reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/shiftproject_test",
             "revision": "9e7df4c35994683a7ba88002fb22917ffa15067e",
@@ -378,10 +378,10 @@ class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{placeholder,
-  title={Placeholder},
-  author={placeholder, placeholder},
-  journal={arXiv preprint arXiv:2401.13478},
+        bibtex_citation="""@article{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models},
+  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
         descriptive_stats={
@@ -413,7 +413,7 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="VidoreSyntheticDocQAAIRetrieval",
         description="Retrieve associated pages according to questions.",
-        reference="https://aclanthology.org/placeholder/",
+        reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/syntheticDocQA_artificial_intelligence_test",
             "revision": "5fe59d7e52732b86d11ee0e9c4a8cdb0e8ba7a6e",
@@ -431,10 +431,10 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{placeholder,
-  title={Placeholder},
-  author={placeholder, placeholder},
-  journal={arXiv preprint arXiv:2401.13478},
+        bibtex_citation="""@article{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models},
+  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
         descriptive_stats={
@@ -466,7 +466,7 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="VidoreSyntheticDocQAEnergyRetrieval",
         description="Retrieve associated pages according to questions.",
-        reference="https://aclanthology.org/placeholder/",
+        reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/syntheticDocQA_energy_test",
             "revision": "0821bc71310cfa51d5c8131d4d8b9c4d537bd8c8",
@@ -484,10 +484,10 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{placeholder,
-  title={Placeholder},
-  author={placeholder, placeholder},
-  journal={arXiv preprint arXiv:2401.13478},
+        bibtex_citation="""@article{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models},
+  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
         descriptive_stats={
@@ -519,7 +519,7 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="VidoreSyntheticDocQAGovernmentReportsRetrieval",
         description="Retrieve associated pages according to questions.",
-        reference="https://aclanthology.org/placeholder/",
+        reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/syntheticDocQA_government_reports_test",
             "revision": "8270b3751ce6b95bec362fb38fbcd2a4aa400cfc",
@@ -537,10 +537,10 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{placeholder,
-  title={Placeholder},
-  author={placeholder, placeholder},
-  journal={arXiv preprint arXiv:2401.13478},
+        bibtex_citation="""@article{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models},
+  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
         descriptive_stats={
@@ -572,7 +572,7 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="VidoreSyntheticDocQAHealthcareIndustryRetrieval",
         description="Retrieve associated pages according to questions.",
-        reference="https://aclanthology.org/placeholder/",
+        reference="https://arxiv.org/pdf/2407.01449",
         dataset={
             "path": "vidore/syntheticDocQA_healthcare_industry_test",
             "revision": "86f09ebc1703516c76e5f931465e2ed7626a5e52",
@@ -590,10 +590,10 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{placeholder,
-  title={Placeholder},
-  author={placeholder, placeholder},
-  journal={arXiv preprint arXiv:2401.13478},
+        bibtex_citation="""@article{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models},
+  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
         descriptive_stats={
