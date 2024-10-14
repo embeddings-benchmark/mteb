@@ -22,7 +22,7 @@ STR_DATE = Annotated[
 
 
 def sentence_transformers_loader(
-    model_name: str, revision: str | None, **kwargs
+    model_name: str, revision: str | None = None, **kwargs
 ) -> SentenceTransformerWrapper:
     from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
 

@@ -85,7 +85,7 @@ google_emb_004 = ModelMeta(
     loader=partial(
         GoogleTextEmbeddingModel,
         model_name=name,
-        task_to_prompt={
+        task_to_prompt_name={
             "Classification": "CLASSIFICATION",
             "MultilabelClassification": "CLASSIFICATION",
             "Clustering": "CLUSTERING",

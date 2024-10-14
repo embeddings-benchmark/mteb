@@ -150,6 +150,7 @@ e5_mult_large = ModelMeta(
     loader=partial(
         sentence_transformers_loader,
         model_name="intfloat/multilingual-e5-large",
+        revision="ab10c1a7f42e74530fe7ae5be82e6d4f11a719eb",
         **prompt_params,
     ),
     name="intfloat/multilingual-e5-large",

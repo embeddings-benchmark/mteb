@@ -72,7 +72,6 @@ class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
         revision: str | None = None,
         task_to_prompt_name: dict[str, str] | None = None,
         model_prompts: dict[str, str] | None = None,
-        override_prompts: bool = False,
         **kwargs,
     ) -> None:
         """Wrapper for SentenceTransformer models.
@@ -85,7 +84,6 @@ class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
             model_prompts: A dictionary mapping prompt names with prompts. If not provided, the model's prompts will be used.
-            override_prompts: Whether to override the model's existing prompts with the provided model_prompts.
             **kwargs: Additional arguments to pass to the SentenceTransformer model.
         """
         if isinstance(model, str):
@@ -99,9 +97,6 @@ class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
             if model_prompts is None:
                 model_prompts = {v: v + " " for v in task_to_prompt_name.values()}
             if len(self.model.prompts) == 0:
-                self.model.prompts = model_prompts
-            elif override_prompts:
-                # override existing model prompts
                 self.model.prompts = model_prompts
 
     def encode(
