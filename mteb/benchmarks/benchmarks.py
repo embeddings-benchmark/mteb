@@ -53,6 +53,8 @@ class Benchmark:
         return self.tasks[index]
 
 
+MTEB_MAIN_MULTILINGUAL = Benchmark(name="MTEB(multilingual)", tasks=get_tasks())
+
 MTEB_MAIN_EN = Benchmark(
     name="MTEB(eng)",
     tasks=get_tasks(
