@@ -45,6 +45,5 @@ class RP2kI2IRetrieval(AbsTaskAny2AnyRetrieval):
                 }
             },
         },
-
     )
     skip_first_result = True

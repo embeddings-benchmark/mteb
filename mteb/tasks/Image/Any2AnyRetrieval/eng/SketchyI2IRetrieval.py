@@ -45,6 +45,5 @@ class SketchyI2IRetrieval(AbsTaskAny2AnyRetrieval):
                 }
             },
         },
-
     )
     skip_first_result = False
