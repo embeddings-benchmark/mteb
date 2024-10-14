@@ -44,7 +44,11 @@ class LLM2VecWrapper:
             logger.warning(
                 "LLM2Vec models were trained with flash attention enabled. For optimal performance, please install the `flash_attn` package with `pip install flash-attn --no-build-isolation`."
             )
-        self.task_to_prompt_name = validate_task_to_prompt_name(task_to_prompt_name)
+        self.task_to_prompt_name = (
+            validate_task_to_prompt_name(task_to_prompt_name)
+            if task_to_prompt_name
+            else None
+        )
 
         if device:
             kwargs["device_map"] = device

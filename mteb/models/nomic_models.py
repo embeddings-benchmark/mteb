@@ -30,7 +30,11 @@ class NomicWrapper:
     ):
         self.model_name = model_name
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
-        self.task_to_prompt_name = validate_task_to_prompt_name(task_to_prompt_name)
+        self.task_to_prompt_name = (
+            validate_task_to_prompt_name(task_to_prompt_name)
+            if task_to_prompt_name
+            else None
+        )
 
     def to(self, device: torch.device) -> None:
         self.model.to(device)

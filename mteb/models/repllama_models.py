@@ -51,7 +51,11 @@ class RepLLaMAWrapper:
         # set the max_length for the evals as they did, although the model can handle longer
         self.model.config.max_length = 512
         self.tokenizer.model_max_length = 512
-        self.task_to_prompt_name = validate_task_to_prompt_name(task_to_prompt_name)
+        self.task_to_prompt_name = (
+            validate_task_to_prompt_name(task_to_prompt_name)
+            if task_to_prompt_name
+            else None
+        )
 
     def create_batch_dict(self, tokenizer, input_texts):
         max_length = self.model.config.max_length

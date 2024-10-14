@@ -25,7 +25,11 @@ class CohereTextEmbeddingModel(Encoder):
     ) -> None:
         self.model_name = model_name
         self.sep = sep
-        self.task_to_prompt_name = validate_task_to_prompt_name(task_to_prompt_name)
+        self.task_to_prompt_name = (
+            validate_task_to_prompt_name(task_to_prompt_name)
+            if task_to_prompt_name
+            else None
+        )
 
     def _embed(
         self, sentences: list[str], cohere_task_type: str, retries: int = 5

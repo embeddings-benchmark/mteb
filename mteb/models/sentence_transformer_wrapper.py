@@ -44,7 +44,11 @@ class SentenceTransformerWrapper:
             )
         else:
             self.model = model
-        self.task_to_prompt_name = validate_task_to_prompt_name(task_to_prompt_name)
+        self.task_to_prompt_name = (
+            validate_task_to_prompt_name(task_to_prompt_name)
+            if task_to_prompt_name
+            else None
+        )
         if hasattr(self.model, "prompts") and task_to_prompt_name is not None:
             if model_prompts is None:
                 model_prompts = {v: v + " " for v in task_to_prompt_name.values()}
@@ -118,7 +122,9 @@ class SentenceTransformerWrapper:
 
 
 def get_prompt_name(
-    task_to_prompt: dict[str, str], task_name: str, prompt_type: PromptType | None
+    task_to_prompt: dict[str, str] | None,
+    task_name: str,
+    prompt_type: PromptType | None,
 ) -> str | None:
     """A wrapper function around the model.encode method that handles the prompt_name argument and standardizes the output to a numpy array.
     The order of priorities for prompt selection are:
