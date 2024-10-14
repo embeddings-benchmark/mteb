@@ -22,8 +22,22 @@ class SentenceTransformerWrapper:
         revision: str | None = None,
         task_to_prompt_name: dict[str, str] | None = None,
         model_prompts: dict[str, str] | None = None,
+        override_prompts: bool = False,
         **kwargs,
     ) -> None:
+        """Wrapper for SentenceTransformer models.
+
+        Args:
+            model: The SentenceTransformer model to use. Can be a string (model name), a SentenceTransformer model, or a CrossEncoder model.
+            revision: The revision of the model to use.
+            task_to_prompt_name: A dictionary mapping task names to prompt names.
+                First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
+                then to the composed prompt of task type + prompt type, then to the specific task type prompt,
+                and finally to the specific prompt type.
+            model_prompts: A dictionary mapping prompt names with prompts. If not provided, the model's prompts will be used.
+            override_prompts: Whether to override the model's existing prompts with the provided model_prompts.
+            **kwargs: Additional arguments to pass to the SentenceTransformer model.
+        """
         if isinstance(model, str):
             self.model = SentenceTransformer(
                 model, revision=revision, trust_remote_code=True, **kwargs
@@ -31,15 +45,16 @@ class SentenceTransformerWrapper:
         else:
             self.model = model
         self.task_to_prompt_name = validate_task_to_prompt_name(task_to_prompt_name)
-        if (
-            hasattr(self.model, "prompts")
-            and self.model.prompts is not None
-            and task_to_prompt_name is not None
-        ):
+        if hasattr(self.model, "prompts") and task_to_prompt_name is not None:
             if model_prompts is None:
-                model_prompts = task_to_prompt_name
-            logger.info(f"Model prompts will be overrided with {model_prompts}")
-            self.model.prompts = model_prompts
+                model_prompts = {v: v + " " for v in task_to_prompt_name.values()}
+            if len(self.model.prompts) == 0:
+                self.model.prompts = model_prompts
+                logger.info(f"Model prompts will be overrided with {model_prompts}")
+            elif override_prompts:
+                # override existing model prompts
+                self.model.prompts = model_prompts
+                logger.info(f"Model prompts will be overrided with {model_prompts}")
 
     def encode(
         self,
