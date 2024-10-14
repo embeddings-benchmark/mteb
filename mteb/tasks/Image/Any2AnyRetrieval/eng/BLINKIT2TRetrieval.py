@@ -4,18 +4,18 @@ from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class BLINKIT2IRetrieval(AbsTaskAny2AnyRetrieval):
+class BLINKIT2TRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
-        name="BLINKIT2IRetrieval",
+        name="BLINKIT2TRetrieval",
         description="Retrieve images based on images and specific retrieval instructions.",
         reference="https://arxiv.org/abs/2404.12390",
         dataset={
-            "path": "JamieSJS/blink-it2i",
-            "revision": "359b66f11c25d19bc8f7108d98e660a5857f3d26",
+            "path": "JamieSJS/blink-it2t",
+            "revision": "4ab83c87ac5b24e3b730f86d585671493a3a423c",
             "trust_remote_code": True,
         },
         type="Retrieval",
-        category="it2i",
+        category="it2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
@@ -35,13 +35,13 @@ class BLINKIT2IRetrieval(AbsTaskAny2AnyRetrieval):
 }
 """,
         descriptive_stats={
-            "n_samples": {"test": 402},
+            "n_samples": {"test": 1073},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 804,
-                    "num_queries": 402,
+                    "num_documents": 3080,
+                    "num_queries": 1073,
                     "average_relevant_docs_per_query": 1,
                 }
             },

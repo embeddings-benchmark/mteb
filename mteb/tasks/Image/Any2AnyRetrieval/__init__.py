@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .eng.BLINKIT2IRetrieval import *
+from .eng.BLINKIT2TRetrieval import *
 from .eng.CIRRIT2IRetrieval import *
 from .eng.CUB200I2IRetrieval import *
 from .eng.Fashion200kI2TRetrieval import *
