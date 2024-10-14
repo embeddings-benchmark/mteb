@@ -15,6 +15,9 @@ from mteb.load_results.task_results import TaskResult
 from mteb.models.overview import get_model_metas
 from mteb.overview import get_tasks
 
+Split = str
+Score = Any
+
 
 def restrict_task_results(res: TaskResult, task: AbsTask) -> TaskResult:
     splits = task.metadata.eval_splits
@@ -43,10 +46,6 @@ def restrict_task_results(res: TaskResult, task: AbsTask) -> TaskResult:
     return new_res
 
 
-Split = str
-Score = Any
-
-
 class ModelResult(BaseModel):
     model_name: str
     model_revision: str | None
@@ -61,31 +60,38 @@ class ModelResult(BaseModel):
 
     def filter_tasks(
         self,
+        task_names: list[str] | None = None,
         languages: list[str] | None = None,
-        script: list[str] | None = None,
         domains: list[TASK_DOMAIN] | None = None,
         task_types: list[TASK_TYPE] | None = None,
-        categories: list[TASK_CATEGORY] | None = None,
-        tasks: list[str] | None = None,
-        exclude_superseeded: bool = True,
     ) -> "ModelResult":
-        filtered_tasks = get_tasks(
-            languages=languages,
-            script=script,
-            domains=domains,
-            task_types=task_types,
-            categories=categories,
-            tasks=tasks,
-            exclude_superseeded=exclude_superseeded,
+        new_task_results = []
+        for task_result in self.task_results:
+            if (task_names is not None) and (task_result.task_name not in task_names):
+                continue
+            if languages is not None:
+                task_languages = task_result.languages
+                if not any([lang in task_languages for lang in languages]):
+                    continue
+            if domains is not None:
+                task_domains = task_result.domains
+                if not any([domain in task_domains for domain in domains]):
+                    continue
+            if (task_types is not None) and (task_result.task_type not in task_types):
+                continue
+            new_task_results.append(task_result)
+        return type(self)(
+            model_name=self.model_name,
+            model_revision=self.model_revision,
+            task_results=new_task_results,
         )
-        return self.select_tasks(filtered_tasks)
 
     def select_tasks(self, tasks: list[AbsTask]) -> "ModelResult":
-        tasks = {task.metadata.name: task for task in tasks}
+        task_name_to_task = {task.metadata.name: task for task in tasks}
         new_task_results = [
-            restrict_task_results(res, tasks[res.task_name])
-            for res in self.task_results
-            if res.task_name in tasks
+            restrict_task_results(task_res, task_name_to_task[task_res.task_name])
+            for task_res in self.task_results
+            if task_res.task_name in task_name_to_task
         ]
         return type(self)(
             model_name=self.model_name,
@@ -141,6 +147,28 @@ class ModelResult(BaseModel):
     def __getitem__(self, index) -> TaskResult:
         return self.task_results[index]
 
+    @property
+    def languages(self) -> list[str]:
+        langs = []
+        for task_res in self.task_results:
+            langs.extend(task_res.languages)
+        return list(set(langs))
+
+    @property
+    def domains(self) -> list[str]:
+        ds = []
+        for task_res in self.task_results:
+            ds.extend(task_res.domains)
+        return list(set(ds))
+
+    @property
+    def task_types(self) -> list[str]:
+        return list(set([task_res.task_type for task_res in self.task_results]))
+
+    @property
+    def task_names(self) -> list[str]:
+        return [task_res.task_name for task_res in self.task_results]
+
 
 class BenchmarkResults(BaseModel):
     model_results: list[ModelResult]
@@ -154,23 +182,17 @@ class BenchmarkResults(BaseModel):
 
     def filter_tasks(
         self,
+        task_names: list[str] | None = None,
         languages: list[str] | None = None,
-        script: list[str] | None = None,
         domains: list[TASK_DOMAIN] | None = None,
         task_types: list[TASK_TYPE] | None = None,
-        categories: list[TASK_CATEGORY] | None = None,
-        tasks: list[str] | None = None,
-        exclude_superseeded: bool = True,
     ) -> "BenchmarkResults":
         model_results = [
             res.filter_tasks(
+                task_names=task_names,
                 languages=languages,
-                script=script,
                 domains=domains,
                 task_types=task_types,
-                categories=categories,
-                tasks=tasks,
-                exclude_superseeded=exclude_superseeded,
             )
             for res in self.model_results
         ]
@@ -179,10 +201,10 @@ class BenchmarkResults(BaseModel):
         )
 
     def select_tasks(self, tasks: list[AbsTask]) -> "BenchmarkResults":
-        model_results = [res.select_tasks(tasks) for res in self.model_results]
-        return type(self)(
-            model_results=[res for res in model_results if res.task_results]
-        )
+        new_model_results = [
+            model_res.select_tasks(tasks) for model_res in self.model_results
+        ]
+        return type(self)(model_results=new_model_results)
 
     def filter_models(
         self,
@@ -287,3 +309,31 @@ class BenchmarkResults(BaseModel):
         with path.open() as in_file:
             data = json.loads(in_file.read())
         return cls.from_dict(data)
+
+    @property
+    def languages(self) -> list[str]:
+        langs = []
+        for model_res in self.model_results:
+            langs.extend(model_res.languages)
+        return list(set(langs))
+
+    @property
+    def domains(self) -> list[str]:
+        ds = []
+        for model_res in self.model_results:
+            ds.extend(model_res.domains)
+        return list(set(ds))
+
+    @property
+    def task_types(self) -> list[str]:
+        ts = []
+        for model_res in self.model_results:
+            ts.extend(model_res.task_types)
+        return list(set(ts))
+
+    @property
+    def task_names(self) -> list[str]:
+        names = []
+        for model_res in self.model_results:
+            names.extend(model_res.task_names)
+        return list(set(names))

@@ -4,6 +4,7 @@ import json
 import logging
 from argparse import Namespace
 from collections import defaultdict
+from functools import cached_property
 from importlib.metadata import version
 from pathlib import Path
 from typing import Any, Callable
@@ -215,6 +216,31 @@ class TaskResult(BaseModel):
             _ = json.dumps(scores)
         except Exception as e:
             raise ValueError(f"Scores are not json serializable: {e}")
+
+    @property
+    def languages(self) -> list[str]:
+        langs = []
+        for split, split_res in self.scores.items():
+            for entry in split_res:
+                langs.extend([lang.split("-")[0] for lang in entry["languages"]])
+        return list(set(langs))
+
+    @cached_property
+    def task(self) -> AbsTask:
+        from mteb.overview import get_task
+
+        return get_task(self.task_name)
+
+    @property
+    def domains(self) -> list[str]:
+        doms = self.task.metadata.domains
+        if doms is None:
+            doms = []
+        return doms
+
+    @property
+    def task_type(self) -> str:
+        return self.task.metadata.type
 
     def to_dict(self) -> dict:
         return self.model_dump()
