@@ -7,6 +7,9 @@ from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 from typing_extensions import Annotated
 
 from mteb.abstasks.AbsTask import AbsTask
+from mteb.load_results.benchmark_results import (BenchmarkResults, ModelResult,
+                                                 TaskResult)
+from mteb.load_results.load_results import load_results
 from mteb.overview import get_tasks
 
 http_url_adapter = TypeAdapter(AnyUrl)
@@ -51,6 +54,13 @@ class Benchmark:
 
     def __getitem__(self, index):
         return self.tasks[index]
+
+    def load_results(
+        self, base_results: None | BenchmarkResults = None
+    ) -> BenchmarkResults:
+        if base_results is None:
+            base_results = load_results()
+        return base_results.select_tasks(self.tasks)
 
 
 MTEB_MAIN_MULTILINGUAL = Benchmark(name="MTEB(multilingual)", tasks=get_tasks())
