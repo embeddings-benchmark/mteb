@@ -35,7 +35,16 @@ class ROxfordI2IRetrieval(AbsTaskAny2AnyRetrieval):
 }
         """,
         descriptive_stats={
-            "n_samples": {"default": 3555537},
+            "n_samples": {"test": 3555537},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 0.0,
+                    "average_query_length": 0.0,
+                    "num_documents": 5063,
+                    "num_queries": 5063,
+                    "average_relevant_docs_per_query": 702,
+                }
+            },
         },
     )
     skip_first_result = True

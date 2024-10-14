@@ -34,7 +34,17 @@ class SketchyI2IRetrieval(AbsTaskAny2AnyRetrieval):
 }
         """,
         descriptive_stats={
-            # "n_samples": {"default": 397121},
+            "n_samples": {"test": 452886},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 0.0,
+                    "average_query_length": 7.24,
+                    "num_documents": 25000,
+                    "num_queries": 452886,
+                    "average_relevant_docs_per_query": 3623.0,
+                }
+            },
         },
+
     )
     skip_first_result = False
