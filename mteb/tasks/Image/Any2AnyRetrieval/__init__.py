@@ -12,6 +12,7 @@ from .eng.Flickr30kT2IRetrieval import *
 from .eng.FORBI2IRetrieval import *
 from .eng.HatefulMemesI2TRetrieval import *
 from .eng.HatefulMemesT2IRetrieval import *
+from .eng.ImageCoDeT2IRetrieval import *
 from .eng.InfoSeekIT2ITRetrieval import *
 from .eng.InfoSeekIT2TRetrieval import *
 from .eng.MemotionI2TRetrieval import *
