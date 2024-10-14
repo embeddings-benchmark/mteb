@@ -7,6 +7,7 @@ import pandas as pd
 import requests
 import torch
 import tqdm
+from packaging.version import Version
 from sklearn.metrics import auc
 
 
@@ -398,7 +399,11 @@ def nAUC(
         Returns:
             abst_curve: Abstention curve of length `len(abstention_rates)`
         """
-        conf_scores_argsort = np.argsort(conf_scores, stable=True)
+        # argsort stable=True is default in numpy >2.0.0
+        if Version(np.__version__) < Version("2.0.0"):
+            conf_scores_argsort = np.argsort(conf_scores)
+        else:
+            conf_scores_argsort = np.argsort(conf_scores, stable=True)
         abst_curve = np.zeros(len(abstention_rates))
 
         for i, rate in enumerate(abstention_rates):
