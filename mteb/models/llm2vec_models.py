@@ -10,6 +10,7 @@ from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
 
 from .instructions import task_to_instruction
+from .sentence_transformer_wrapper import validate_task_to_prompt_name
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +44,7 @@ class LLM2VecWrapper:
             logger.warning(
                 "LLM2Vec models were trained with flash attention enabled. For optimal performance, please install the `flash_attn` package with `pip install flash-attn --no-build-isolation`."
             )
-        self.task_to_prompt_name = task_to_prompt_name
+        self.task_to_prompt_name = validate_task_to_prompt_name(task_to_prompt_name)
 
         if device:
             kwargs["device_map"] = device

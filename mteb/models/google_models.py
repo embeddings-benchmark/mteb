@@ -7,7 +7,10 @@ import numpy as np
 
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import get_prompt_name
+from mteb.models.sentence_transformer_wrapper import (
+    get_prompt_name,
+    validate_task_to_prompt_name,
+)
 
 
 class GoogleTextEmbeddingModel(Encoder):
@@ -19,7 +22,7 @@ class GoogleTextEmbeddingModel(Encoder):
         **kwargs,
     ) -> None:
         self.model_name = model_name
-        self.task_to_prompt_name = task_to_prompt_name
+        self.task_to_prompt_name = validate_task_to_prompt_name(task_to_prompt_name)
 
     def _embed(
         self,

@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Sequence
-from typing import Any
+from typing import Any, get_args
 
 import numpy as np
 import torch
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
+import mteb
+from mteb.abstasks.TaskMetadata import TASK_TYPE
 from mteb.encoder_interface import PromptType
 
 logger = logging.getLogger(__name__)
@@ -28,7 +30,7 @@ class SentenceTransformerWrapper:
             )
         else:
             self.model = model
-        self.task_to_prompt_name = task_to_prompt_name
+        self.task_to_prompt_name = validate_task_to_prompt_name(task_to_prompt_name)
         if (
             hasattr(self.model, "prompts")
             and self.model.prompts is not None
@@ -37,7 +39,6 @@ class SentenceTransformerWrapper:
             if model_prompts is None:
                 model_prompts = task_to_prompt_name
             logger.info(f"Model prompts will be overrided with {model_prompts}")
-            # todo validate task_to_prompt
             self.model.prompts = model_prompts
 
     def encode(
@@ -146,3 +147,22 @@ def get_prompt_name(
         "No combination of task name and prompt type was found in model prompts."
     )
     return None
+
+
+def validate_task_to_prompt_name(task_to_prompt_name: dict[str, str]) -> dict[str, str]:
+    task_types = get_args(TASK_TYPE)
+    prompt_types = [e.value for e in PromptType]
+    for task_name in task_to_prompt_name:
+        if "-" in task_name:
+            task_name, prompt_type = task_name.split("-")
+            if prompt_type not in prompt_types:
+                raise ValueError(
+                    f"Prompt type {prompt_type} is not valid. Valid prompt types are {prompt_types}"
+                )
+        if task_name not in task_types and task_name not in prompt_types:
+            task = mteb.get_task(task_name=task_name)
+            if not task:
+                raise ValueError(
+                    f"Task name {task_name} is not valid. Valid task names are task types [{task_types}], prompt types [{prompt_types}] and task names"
+                )
+    return task_to_prompt_name

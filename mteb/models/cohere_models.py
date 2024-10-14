@@ -8,7 +8,10 @@ import torch
 
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import get_prompt_name
+from mteb.models.sentence_transformer_wrapper import (
+    get_prompt_name,
+    validate_task_to_prompt_name,
+)
 
 
 # Implementation follows https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/main/src/seb/registered_models/cohere_models.py
@@ -22,7 +25,7 @@ class CohereTextEmbeddingModel(Encoder):
     ) -> None:
         self.model_name = model_name
         self.sep = sep
-        self.task_to_prompt_name = task_to_prompt_name
+        self.task_to_prompt_name = validate_task_to_prompt_name(task_to_prompt_name)
 
     def _embed(
         self, sentences: list[str], cohere_task_type: str, retries: int = 5

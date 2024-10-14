@@ -37,7 +37,6 @@ def e5_loader(**kwargs):
             prompt_type: PromptType | None = None,
             **kwargs: Any,
         ) -> np.ndarray:
-            # TODO check sentences and API (what it returns)
             if "instruction" in kwargs:
                 instruction = kwargs.pop("instruction", "")
             else:
@@ -46,7 +45,7 @@ def e5_loader(**kwargs):
                 )
             if instruction:
                 kwargs["instruction"] = e5_instruction(instruction)
-            return super().encode(*args, **kwargs)
+            return super().encode(sentences, *args, **kwargs)
 
     return E5InstructWrapper(**kwargs)
 

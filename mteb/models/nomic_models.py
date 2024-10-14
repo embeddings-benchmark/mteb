@@ -10,7 +10,10 @@ from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import get_prompt_name
+from mteb.models.sentence_transformer_wrapper import (
+    get_prompt_name,
+    validate_task_to_prompt_name,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +30,7 @@ class NomicWrapper:
     ):
         self.model_name = model_name
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
-        self.task_to_prompt_name = task_to_prompt_name
+        self.task_to_prompt_name = validate_task_to_prompt_name(task_to_prompt_name)
 
     def to(self, device: torch.device) -> None:
         self.model.to(device)

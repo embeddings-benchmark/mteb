@@ -11,7 +11,10 @@ from transformers import AutoModel, AutoTokenizer
 
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import get_prompt_name
+from mteb.models.sentence_transformer_wrapper import (
+    get_prompt_name,
+    validate_task_to_prompt_name,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +26,7 @@ class RepLLaMAWrapper:
         peft_model_name_or_path: str,
         torch_dtype: torch.dtype,
         device_map: str,
-        task_to_prompt: dict[str, str] | None = None,
+        task_to_prompt_name: dict[str, str] | None = None,
         **kwargs,
     ):
         try:
@@ -48,7 +51,7 @@ class RepLLaMAWrapper:
         # set the max_length for the evals as they did, although the model can handle longer
         self.model.config.max_length = 512
         self.tokenizer.model_max_length = 512
-        self.task_to_prompt = task_to_prompt
+        self.task_to_prompt_name = validate_task_to_prompt_name(task_to_prompt_name)
 
     def create_batch_dict(self, tokenizer, input_texts):
         max_length = self.model.config.max_length
@@ -82,7 +85,7 @@ class RepLLaMAWrapper:
     ) -> np.ndarray:
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
-        prompt = get_prompt_name(self.task_to_prompt, task_name, prompt_type)
+        prompt = get_prompt_name(self.task_to_prompt_name, task_name, prompt_type)
         if prompt:
             sentences = [f"{prompt}{sentence}".strip() for sentence in sentences]
         for i in tqdm.tqdm(range(0, len(sentences), batch_size)):
@@ -119,7 +122,7 @@ def _loader(wrapper: type[RepLLaMAWrapper], **kwargs) -> Callable[..., Encoder]:
 
 
 prompt_params = {
-    "task_to_prompt": {
+    "task_to_prompt_name": {
         PromptType.query.value: "query:  ",
         PromptType.passage.value: "passage:  ",
     }

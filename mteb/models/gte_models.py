@@ -41,7 +41,7 @@ def gte_loader(**kwargs):
                 )
             if instruction:
                 kwargs["instruction"] = gte_instruction(instruction)
-            return super().encode(sentences=sentences, *args, **kwargs)
+            return super().encode(sentences, *args, **kwargs)
 
     return GTEWrapper(**kwargs)
 

@@ -34,7 +34,6 @@ def sfr_loader(**kwargs):
             prompt_type: PromptType | None = None,
             **kwargs: Any,
         ) -> np.ndarray:
-            # TODO check sentences and API (what it returns)
             if "instruction" in kwargs:
                 instruction = kwargs.pop("instruction", "")
             else:

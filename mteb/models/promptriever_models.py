@@ -14,7 +14,6 @@ from .repllama_models import RepLLaMAWrapper
 logger = logging.getLogger(__name__)
 
 
-# todo PromptrieverWrapper(RepLLaMAWrapper
 class PromptrieverWrapper(RepLLaMAWrapper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

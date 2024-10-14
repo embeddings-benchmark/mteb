@@ -8,7 +8,10 @@ import numpy as np
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import get_prompt_name
+from mteb.models.sentence_transformer_wrapper import (
+    get_prompt_name,
+    validate_task_to_prompt_name,
+)
 from mteb.requires_package import requires_package
 
 
@@ -70,7 +73,7 @@ class VoyageWrapper:
         max_retries: int = 5,
         max_rpm: int = 300,
         max_tpm: int = 1_000_000,
-        task_to_prompt: dict[str, str] | None = None,
+        task_to_prompt_name: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
         requires_package(self, "voyageai", "Voyage")
@@ -80,7 +83,7 @@ class VoyageWrapper:
         self._embed_func = rate_limit(max_rpm)(token_limit(max_tpm)(self._client.embed))
         self._model_name = model_name
         self._max_tpm = max_tpm
-        self.task_to_prompt = task_to_prompt
+        self.task_to_prompt_name = validate_task_to_prompt_name(task_to_prompt_name)
 
     def encode(
         self,
@@ -92,7 +95,8 @@ class VoyageWrapper:
         **kwargs: Any,
     ) -> np.ndarray:
         input_type = (
-            get_prompt_name(self.task_to_prompt, task_name, prompt_type) or "document"
+            get_prompt_name(self.task_to_prompt_name, task_name, prompt_type)
+            or "document"
         )
         return self._batched_encode(sentences, batch_size, input_type)
 
@@ -132,7 +136,7 @@ class VoyageWrapper:
 
 
 prompt_params = {
-    "task_to_prompt": {
+    "task_to_prompt_name": {
         PromptType.query.value: "query",
         PromptType.passage.value: "document",
     }
