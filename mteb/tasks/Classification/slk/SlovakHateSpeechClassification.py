@@ -24,7 +24,7 @@ class SlovakHateSpeechClassification(AbsTaskClassification):
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
-        dialect=None,
+        dialect=[],
         sample_creation="found",
         descriptive_stats={
             "n_samples": {"test": 1319},
