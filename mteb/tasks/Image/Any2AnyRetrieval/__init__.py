@@ -34,6 +34,8 @@ from .eng.StanfordCarsI2IRetrieval import *
 from .eng.TUBerlinT2IRetrieval import *
 from .eng.VisualNewsI2TRetrieval import *
 from .eng.VisualNewsT2IRetrieval import *
+from .eng.VizWizIT2TRetrieval import *
+from .eng.VQA2IT2TRetrieval import *
 from .eng.WebQAT2ITRetrieval import *
 from .eng.WebQAT2TRetrieval import *
 from .multilingual.WITT2IRetrieval import *
