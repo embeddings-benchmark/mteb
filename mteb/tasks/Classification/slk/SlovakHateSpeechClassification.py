@@ -16,7 +16,7 @@ class SlovakHateSpeechClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         modalities=["text"],
-        date=None,
+        date=("2024-05-25", "2024-06-06"),
         eval_splits=["test"],
         eval_langs=["slk-Latn"],
         main_score="accuracy",
@@ -26,6 +26,7 @@ class SlovakHateSpeechClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        bibtex_citation="",
         descriptive_stats={
             "n_samples": {"test": 1319},
             "avg_character_length": {"test": 92.71},
