@@ -11,7 +11,7 @@ class VizWizIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/papers/Gurari_VizWiz_Grand_Challenge_CVPR_2018_paper.pdf",
         dataset={
             "path": "JamieSJS/vizwiz",
-            "revision": "723c6ffed034eb9dcbb44777e1a9ddf97c5ee28a",
+            "revision": "044af162d55f82ab603fa16ffcf7f1e4dbf300e9",
             "trust_remote_code": True,
         },
         type="Retrieval",
