@@ -25,7 +25,7 @@ class CohereTextEmbeddingModel(Encoder):
     ) -> None:
         self.model_name = model_name
         self.sep = sep
-        self.task_to_prompt_name = (
+        self.model_prompts = (
             validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
 
@@ -58,9 +58,7 @@ class CohereTextEmbeddingModel(Encoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        cohere_task_type = get_prompt_name(
-            self.task_to_prompt_name, task_name, prompt_type
-        )
+        cohere_task_type = get_prompt_name(self.model_prompts, task_name, prompt_type)
         if cohere_task_type is None:
             # search_document is recommended if unknown (https://cohere.com/blog/introducing-embed-v3)
             cohere_task_type = "search_document"

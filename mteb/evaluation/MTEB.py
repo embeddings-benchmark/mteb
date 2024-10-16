@@ -310,8 +310,6 @@ class MTEB:
     def run(
         self,
         model: SentenceTransformer | Encoder,
-        task_to_prompt_name: dict[str, str] | None = None,
-        model_prompts: dict[str, str] | None = None,
         verbosity: int = 1,
         output_folder: str | None = "results",
         eval_splits=None,
@@ -325,8 +323,6 @@ class MTEB:
 
         Args:
             model: Model to be used for evaluation
-            task_to_prompt_name: Dictionary mapping task names to prompt names. If None, the default prompt names are used.
-            model_prompts: Dictionary mapping task types to prompt names. If None, the default prompt names are used.
             verbosity: Verbosity level. Default is 1.
                 0: print tasks tqdm progress bar
                 1: print tasks tqdm progress bar and scores
@@ -358,11 +354,7 @@ class MTEB:
         meta = self.create_model_meta(model)
         output_path = self.create_output_folder(meta, output_folder)
         if not isinstance(model, SentenceTransformerWrapper):
-            model = SentenceTransformerWrapper(
-                model,
-                task_to_prompt_name=task_to_prompt_name,
-                model_prompts=model_prompts,
-            )
+            model = SentenceTransformerWrapper(model)
 
         if output_path:
             self._save_model_metadata(meta, output_path)

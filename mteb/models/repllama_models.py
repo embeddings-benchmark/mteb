@@ -123,11 +123,9 @@ def _loader(wrapper: type[RepLLaMAWrapper], **kwargs) -> Callable[..., Encoder]:
     return loader_inner
 
 
-prompt_params = {
-    "task_to_prompt_name": {
-        PromptType.query.value: "query:  ",
-        PromptType.passage.value: "passage:  ",
-    }
+model_prompts = {
+    PromptType.query.value: "query:  ",
+    PromptType.passage.value: "passage:  ",
 }
 
 repllama_llama2_original = ModelMeta(
@@ -137,7 +135,7 @@ repllama_llama2_original = ModelMeta(
         peft_model_name_or_path="castorini/repllama-v1-7b-lora-passage",
         device_map="auto",
         torch_dtype=torch.bfloat16,
-        **prompt_params,
+        model_prompts=model_prompts,
     ),
     name="castorini/repllama-v1-7b-lora-passage",
     languages=["eng_Latn"],
@@ -154,7 +152,7 @@ repllama_llama2_reproduced = ModelMeta(
         peft_model_name_or_path="samaya-ai/RepLLaMA-reproduced",
         device_map="auto",
         torch_dtype=torch.bfloat16,
-        **prompt_params,
+        model_prompts=model_prompts,
     ),
     name="samaya-ai/RepLLaMA-reproduced",
     languages=["eng_Latn"],

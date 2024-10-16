@@ -119,7 +119,7 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
     # Test that the task_name is passed down to the encoder
     model = MockSentenceTransformerWrapper(
         MockEncoderWithInstructions(),
-        task_to_prompt_name={tasks[0].metadata.name: tasks[0].metadata.name},
+        model_prompts={tasks[0].metadata.name: tasks[0].metadata.name},
     )
 
     eval.run(
@@ -225,6 +225,8 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     to_compare = _task_name if is_task_name else _task_type
 
     class MockEncoderWithPrompts(mteb.Encoder):
+        prompts = {}
+
         def encode(self, sentences, prompt_name: str | None = None, **kwargs):
             assert prompt_name == to_compare
             return np.zeros((len(sentences), 10))
@@ -233,7 +235,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
 
     # Test that the task_name is passed down to the encoder
     model = MockSentenceTransformerWrapper(
-        MockEncoderWithPrompts(), task_to_prompt_name={to_compare: to_compare}
+        MockEncoderWithPrompts(), model_prompts={to_compare: to_compare}
     )
     eval.run(
         model,
@@ -289,22 +291,22 @@ def test_model_query_passage_prompts_task_type(
 
     eval = mteb.MTEB(tasks=tasks)
     model = MockSentenceTransformerWrapper(
-        MockEncoderWithPrompts(), task_to_prompt_name=prompt_list
+        MockEncoderWithPrompts(), model_prompts=prompt_list
     )
 
     eval.run(
         model,
-        task_to_prompt_name=prompt_list,
+        model_prompts=prompt_list,
         output_folder="tests/results",
         overwrite_results=True,
     )
     model = MockSentenceTransformerWrapper(
-        MockSentenceEncoderWithPrompts(), task_to_prompt_name=prompt_list
+        MockSentenceEncoderWithPrompts(), model_prompts=prompt_list
     )
 
     eval.run(
         model,
-        task_to_prompt_name=prompt_list,
+        model_prompts=prompt_list,
         output_folder="tests/results",
         overwrite_results=True,
     )
