@@ -108,15 +108,9 @@ XLMR_LANGUAGES = [
     "zho_Hans",
 ]
 
-prompt_params = {
-    "task_to_prompt_name": {
-        PromptType.query.value: PromptType.query.value,
-        PromptType.passage.value: PromptType.passage.value,
-    },
-    "model_prompts": {
-        PromptType.query.value: "query: ",
-        PromptType.passage.value: "passage: ",
-    },
+model_prompts = {
+    PromptType.query.value: "query: ",
+    PromptType.passage.value: "passage: ",
 }
 
 e5_mult_small = ModelMeta(
@@ -124,7 +118,7 @@ e5_mult_small = ModelMeta(
         sentence_transformers_loader,
         model_name="intfloat/multilingual-e5-small",
         revision="fd1525a9fd15316a2d503bf26ab031a61d056e98",
-        **prompt_params,
+        model_prompts=model_prompts,
     ),
     name="intfloat/multilingual-e5-small",
     languages=XLMR_LANGUAGES,
@@ -137,7 +131,7 @@ e5_mult_base = ModelMeta(
     loader=partial(
         sentence_transformers_loader,
         model_name="intfloat/multilingual-e5-base",
-        **prompt_params,
+        model_prompts=model_prompts,
     ),
     name="intfloat/multilingual-e5-base",
     languages=XLMR_LANGUAGES,
@@ -151,7 +145,7 @@ e5_mult_large = ModelMeta(
         sentence_transformers_loader,
         model_name="intfloat/multilingual-e5-large",
         revision="ab10c1a7f42e74530fe7ae5be82e6d4f11a719eb",
-        **prompt_params,
+        model_prompts=model_prompts,
     ),
     name="intfloat/multilingual-e5-large",
     languages=XLMR_LANGUAGES,
@@ -162,7 +156,9 @@ e5_mult_large = ModelMeta(
 
 e5_eng_small_v2 = ModelMeta(
     loader=partial(
-        sentence_transformers_loader, model_name="intfloat/e5-small-v2", **prompt_params
+        sentence_transformers_loader,
+        model_name="intfloat/e5-small-v2",
+        model_prompts=model_prompts,
     ),
     name="intfloat/e5-small-v2",
     languages=["eng_Latn"],
@@ -176,7 +172,7 @@ e5_eng_small = ModelMeta(
         sentence_transformers_loader,
         model_name="intfloat/e5-small",
         revision="e272f3049e853b47cb5ca3952268c6662abda68f",
-        **prompt_params,
+        model_prompts=model_prompts,
     ),
     name="intfloat/e5-small",
     languages=["eng_Latn"],
@@ -190,7 +186,7 @@ e5_eng_base_v2 = ModelMeta(
         sentence_transformers_loader,
         model_name="intfloat/e5-base-v2",
         revision="1c644c92ad3ba1efdad3f1451a637716616a20e8",
-        **prompt_params,
+        model_prompts=model_prompts,
     ),
     name="intfloat/e5-base-v2",
     languages=["eng_Latn"],
@@ -204,7 +200,7 @@ e5_eng_large_v2 = ModelMeta(
         sentence_transformers_loader,
         model_name="intfloat/e5-large-v2",
         revision="b322e09026e4ea05f42beadf4d661fb4e101d311",
-        **prompt_params,
+        model_prompts=model_prompts,
     ),
     name="intfloat/e5-large-v2",
     languages=["eng_Latn"],

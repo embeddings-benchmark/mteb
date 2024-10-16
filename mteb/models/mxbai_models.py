@@ -9,8 +9,7 @@ mxbai_embed_large_v1 = ModelMeta(
         sentence_transformers_loader,
         model_name="mixedbread-ai/mxbai-embed-large-v1",
         revision="990580e27d329c7408b3741ecff85876e128e203",
-        model_prompts={"query": "query"},
-        task_to_prompt_name={
+        model_prompts={
             "query": "Represent this sentence for searching relevant passages: "
         },
     ),

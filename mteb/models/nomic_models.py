@@ -25,15 +25,13 @@ class NomicWrapper:
         self,
         model_name: str,
         revision: str,
-        task_to_prompt_name: dict[str, str] | None = None,
+        model_prompts: dict[str, str] | None = None,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
-        self.task_to_prompt_name = (
-            validate_task_to_prompt_name(task_to_prompt_name)
-            if task_to_prompt_name
-            else None
+        self.model_prompts = (
+            validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
 
     def to(self, device: torch.device) -> None:
@@ -48,7 +46,7 @@ class NomicWrapper:
         batch_size: int = 32,
         **kwargs: Any,
     ):
-        input_type = get_prompt_name(self.task_to_prompt_name, task_name, prompt_type)
+        input_type = get_prompt_name(self.model_prompts, task_name, prompt_type)
 
         # default to search_document if input_type and prompt_name are not provided
         if input_type is None:
@@ -70,14 +68,12 @@ class NomicWrapper:
         return emb
 
 
-prompt_params = {
-    "task_to_prompt_name": {
-        "Classification": "classification",
-        "MultilabelClassification": "classification",
-        "Clustering": "clustering",
-        PromptType.query.value: "search_query",
-        PromptType.passage.value: "search_document",
-    },
+model_prompts = {
+    "Classification": "classification",
+    "MultilabelClassification": "classification",
+    "Clustering": "clustering",
+    PromptType.query.value: "search_query",
+    PromptType.passage.value: "search_document",
 }
 
 nomic_embed_v1_5 = ModelMeta(
@@ -86,7 +82,7 @@ nomic_embed_v1_5 = ModelMeta(
         trust_remote_code=True,
         model_name="nomic-ai/nomic-embed-text-v1.5",
         revision="b0753ae76394dd36bcfb912a46018088bca48be0",
-        **prompt_params,
+        model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v1.5",
     languages=["eng-Latn"],
@@ -101,7 +97,7 @@ nomic_embed_v1 = ModelMeta(
         trust_remote_code=True,
         model_name="nomic-ai/nomic-embed-text-v1",
         revision="0759316f275aa0cb93a5b830973843ca66babcf5",
-        **prompt_params,
+        model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v1",
     languages=["eng-Latn"],

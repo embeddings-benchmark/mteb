@@ -73,7 +73,7 @@ class VoyageWrapper:
         max_retries: int = 5,
         max_rpm: int = 300,
         max_tpm: int = 1_000_000,
-        task_to_prompt_name: dict[str, str] | None = None,
+        model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
         requires_package(self, "voyageai", "Voyage")
@@ -83,10 +83,8 @@ class VoyageWrapper:
         self._embed_func = rate_limit(max_rpm)(token_limit(max_tpm)(self._client.embed))
         self._model_name = model_name
         self._max_tpm = max_tpm
-        self.task_to_prompt_name = (
-            validate_task_to_prompt_name(task_to_prompt_name)
-            if task_to_prompt_name
-            else None
+        self.model_prompts = (
+            validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
 
     def encode(
@@ -99,8 +97,7 @@ class VoyageWrapper:
         **kwargs: Any,
     ) -> np.ndarray:
         input_type = (
-            get_prompt_name(self.task_to_prompt_name, task_name, prompt_type)
-            or "document"
+            get_prompt_name(self.model_prompts, task_name, prompt_type) or "document"
         )
         return self._batched_encode(sentences, batch_size, input_type)
 
@@ -139,11 +136,9 @@ class VoyageWrapper:
         return np.array(embeddings)
 
 
-prompt_params = {
-    "task_to_prompt_name": {
-        PromptType.query.value: "query",
-        PromptType.passage.value: "document",
-    }
+model_prompts = {
+    PromptType.query.value: "query",
+    PromptType.passage.value: "document",
 }
 
 voyage_large_2_instruct = ModelMeta(
@@ -152,7 +147,9 @@ voyage_large_2_instruct = ModelMeta(
     release_date="2024-05-05",
     languages=None,  # supported languages not specified
     loader=partial(
-        VoyageWrapper, model_name="voyage-large-2-instruct", **prompt_params
+        VoyageWrapper,
+        model_name="voyage-large-2-instruct",
+        model_prompts=model_prompts,
     ),
     max_tokens=16000,
     embed_dim=1024,
@@ -164,7 +161,11 @@ voyage_finance_2 = ModelMeta(
     revision="1",
     release_date="2024-05-30",
     languages=None,  # supported languages not specified
-    loader=partial(VoyageWrapper, model_name="voyage-finance-2", **prompt_params),
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-finance-2",
+        model_prompts=model_prompts,
+    ),
     max_tokens=32000,
     embed_dim=1024,
     open_source=False,
@@ -175,7 +176,11 @@ voyage_law_2 = ModelMeta(
     revision="1",
     release_date="2024-04-15",
     languages=None,  # supported languages not specified
-    loader=partial(VoyageWrapper, model_name="voyage-law-2", **prompt_params),
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-law-2",
+        model_prompts=model_prompts,
+    ),
     max_tokens=16000,
     embed_dim=1024,
     open_source=False,
@@ -186,7 +191,11 @@ voyage_code_2 = ModelMeta(
     revision="1",
     release_date="2024-01-23",
     languages=None,  # supported languages not specified
-    loader=partial(VoyageWrapper, model_name="voyage-code-2", **prompt_params),
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-code-2",
+        model_prompts=model_prompts,
+    ),
     max_tokens=16000,
     embed_dim=1536,
     open_source=False,
@@ -197,7 +206,11 @@ voyage_large_2 = ModelMeta(
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
-    loader=partial(VoyageWrapper, model_name="voyage-large-2", **prompt_params),
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-large-2",
+        model_prompts=model_prompts,
+    ),
     max_tokens=16000,
     embed_dim=1536,
     open_source=False,
@@ -208,7 +221,11 @@ voyage_2 = ModelMeta(
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
-    loader=partial(VoyageWrapper, model_name="voyage-2", **prompt_params),
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-2",
+        model_prompts=model_prompts,
+    ),
     max_tokens=4000,
     embed_dim=1024,
     open_source=False,
@@ -219,7 +236,11 @@ voyage_multilingual_2 = ModelMeta(
     revision="1",
     release_date="2024-06-10",
     languages=None,  # supported languages not specified
-    loader=partial(VoyageWrapper, model_name="voyage-multilingual-2", **prompt_params),
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-multilingual-2",
+        model_prompts=model_prompts,
+    ),
     max_tokens=32000,
     embed_dim=1024,
     open_source=False,

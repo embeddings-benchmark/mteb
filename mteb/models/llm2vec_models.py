@@ -24,7 +24,7 @@ def llm2vec_instruction(instruction):
 class LLM2VecWrapper:
     def __init__(
         self,
-        task_to_prompt_name: dict[str, str] | None = None,
+        model_prompts: dict[str, str] | None = None,
         device: str | None = None,
         *args,
         **kwargs,
@@ -44,10 +44,8 @@ class LLM2VecWrapper:
             logger.warning(
                 "LLM2Vec models were trained with flash attention enabled. For optimal performance, please install the `flash_attn` package with `pip install flash-attn --no-build-isolation`."
             )
-        self.task_to_prompt_name = (
-            validate_task_to_prompt_name(task_to_prompt_name)
-            if task_to_prompt_name
-            else None
+        self.model_prompts = (
+            validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
 
         if device:

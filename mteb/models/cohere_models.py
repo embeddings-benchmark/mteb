@@ -20,15 +20,13 @@ class CohereTextEmbeddingModel(Encoder):
         self,
         model_name: str,
         sep: str = " ",
-        task_to_prompt_name: dict[str, str] | None = None,
+        model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
         self.model_name = model_name
         self.sep = sep
         self.task_to_prompt_name = (
-            validate_task_to_prompt_name(task_to_prompt_name)
-            if task_to_prompt_name
-            else None
+            validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
 
     def _embed(
@@ -69,7 +67,7 @@ class CohereTextEmbeddingModel(Encoder):
         return self._embed(sentences, cohere_task_type=cohere_task_type).numpy()
 
 
-prompts = {
+model_prompts = {
     "Classification": "classification",
     "MultilabelClassification": "classification",
     "Clustering": "clustering",
@@ -81,7 +79,7 @@ cohere_mult_3 = ModelMeta(
     loader=partial(
         CohereTextEmbeddingModel,
         model_name="embed-multilingual-v3.0",
-        task_to_prompt_name=prompts,
+        model_prompts=model_prompts,
     ),
     name="embed-multilingual-v3.0",
     languages=[],  # Unknown, but support >100 languages
@@ -101,7 +99,7 @@ cohere_eng_3 = ModelMeta(
     loader=partial(
         CohereTextEmbeddingModel,
         model_name="embed-multilingual-v3.0",
-        task_to_prompt_name=prompts,
+        model_prompts=model_prompts,
     ),
     name="embed-english-v3.0",
     languages=["eng-Latn"],

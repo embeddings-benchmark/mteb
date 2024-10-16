@@ -8,7 +8,7 @@ from typing import Any, Literal
 import numpy as np
 import torch
 from numpy import ndarray
-from sentence_transformers import SentenceTransformer, CrossEncoder
+from sentence_transformers import CrossEncoder, SentenceTransformer
 from torch import Tensor
 
 import mteb
@@ -70,7 +70,6 @@ class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
         self,
         model: str | SentenceTransformer | CrossEncoder,
         revision: str | None = None,
-        task_to_prompt_name: dict[str, str] | None = None,
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
@@ -79,11 +78,10 @@ class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
         Args:
             model: The SentenceTransformer model to use. Can be a string (model name), a SentenceTransformer model, or a CrossEncoder model.
             revision: The revision of the model to use.
-            task_to_prompt_name: A dictionary mapping task names to prompt names.
+            model_prompts: A dictionary mapping task names to prompt names.
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
-            model_prompts: A dictionary mapping prompt names with prompts. If not provided, the model's prompts will be used.
             **kwargs: Additional arguments to pass to the SentenceTransformer model.
         """
         if isinstance(model, str):
@@ -92,12 +90,9 @@ class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
             )
         else:
             self.model = model
-        self.task_to_prompt_name = task_to_prompt_name
-        if hasattr(self.model, "prompts") and task_to_prompt_name is not None:
-            if model_prompts is None:
-                model_prompts = {v: v + " " for v in task_to_prompt_name.values()}
-            if len(self.model.prompts) == 0:
-                self.model.prompts = model_prompts
+        self.model_prompts = model_prompts
+        if model_prompts is not None and hasattr(self.model, "prompts"):
+            self.model.prompts = model_prompts
 
     def encode(
         self,
@@ -107,17 +102,15 @@ class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        prompt = None
         prompt_name = None
-        if self.task_to_prompt_name is not None:
+        if self.model_prompts is not None:
             prompt_name = get_mock_prompt_name(
-                self.task_to_prompt_name, task_name, prompt_type
+                self.model_prompts, task_name, prompt_type
             )
 
         embeddings = self.model.encode(
             sentences,
             prompt_name=prompt_name,
-            prompt=prompt,
             **kwargs,  # sometimes in kwargs can be return_tensors=True
         )
         if isinstance(embeddings, torch.Tensor):

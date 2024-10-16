@@ -26,7 +26,7 @@ class RepLLaMAWrapper:
         peft_model_name_or_path: str,
         torch_dtype: torch.dtype,
         device_map: str,
-        task_to_prompt_name: dict[str, str] | None = None,
+        model_prompts: dict[str, str] | None = None,
         **kwargs,
     ):
         try:
@@ -51,10 +51,8 @@ class RepLLaMAWrapper:
         # set the max_length for the evals as they did, although the model can handle longer
         self.model.config.max_length = 512
         self.tokenizer.model_max_length = 512
-        self.task_to_prompt_name = (
-            validate_task_to_prompt_name(task_to_prompt_name)
-            if task_to_prompt_name
-            else None
+        self.model_prompts = (
+            validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
 
     def create_batch_dict(self, tokenizer, input_texts):
@@ -89,7 +87,7 @@ class RepLLaMAWrapper:
     ) -> np.ndarray:
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
-        prompt = get_prompt_name(self.task_to_prompt_name, task_name, prompt_type)
+        prompt = get_prompt_name(self.model_prompts, task_name, prompt_type)
         if prompt:
             sentences = [f"{prompt}{sentence}".strip() for sentence in sentences]
         for i in tqdm.tqdm(range(0, len(sentences), batch_size)):

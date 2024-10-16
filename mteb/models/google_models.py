@@ -18,14 +18,12 @@ class GoogleTextEmbeddingModel(Encoder):
         self,
         model_name: str,
         sep: str = " ",
-        task_to_prompt_name: dict[str, str] | None = None,
+        model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
         self.model_name = model_name
-        self.task_to_prompt_name = (
-            validate_task_to_prompt_name(task_to_prompt_name)
-            if task_to_prompt_name
-            else None
+        self.model_prompts = (
+            validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
 
     def _embed(
@@ -74,9 +72,7 @@ class GoogleTextEmbeddingModel(Encoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        google_task_type = get_prompt_name(
-            self.task_to_prompt_name, task_name, prompt_type
-        )
+        google_task_type = get_prompt_name(self.model_prompts, task_name, prompt_type)
         return self._embed(sentences, google_task_type=google_task_type)
 
 
@@ -85,7 +81,7 @@ google_emb_004 = ModelMeta(
     loader=partial(
         GoogleTextEmbeddingModel,
         model_name=name,
-        task_to_prompt_name={
+        model_prompts={
             "Classification": "CLASSIFICATION",
             "MultilabelClassification": "CLASSIFICATION",
             "Clustering": "CLUSTERING",

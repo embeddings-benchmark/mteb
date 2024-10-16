@@ -20,7 +20,6 @@ class SentenceTransformerWrapper:
         self,
         model: str | SentenceTransformer | CrossEncoder,
         revision: str | None = None,
-        task_to_prompt_name: dict[str, str] | None = None,
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
@@ -29,11 +28,10 @@ class SentenceTransformerWrapper:
         Args:
             model: The SentenceTransformer model to use. Can be a string (model name), a SentenceTransformer model, or a CrossEncoder model.
             revision: The revision of the model to use.
-            task_to_prompt_name: A dictionary mapping task names to prompt names.
+            model_prompts: A dictionary mapping task names to prompt names.
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
-            model_prompts: A dictionary mapping prompt names with prompts. If not provided, the model's prompts will be used.
             **kwargs: Additional arguments to pass to the SentenceTransformer model.
         """
         if isinstance(model, str):
@@ -42,17 +40,10 @@ class SentenceTransformerWrapper:
             )
         else:
             self.model = model
-        self.task_to_prompt_name = (
-            validate_task_to_prompt_name(task_to_prompt_name)
-            if task_to_prompt_name
-            else None
-        )
-        if hasattr(self.model, "prompts") and task_to_prompt_name is not None:
-            if model_prompts is None:
-                model_prompts = {v: v + " " for v in task_to_prompt_name.values()}
-            if len(self.model.prompts) == 0:
-                self.model.prompts = model_prompts
-                logger.info(f"Model prompts will be overwritten with {model_prompts}")
+        self.model_prompts = model_prompts
+        if model_prompts is not None and hasattr(self.model, "prompts"):
+            logger.info(f"Model prompts will be overwritten with {model_prompts}")
+            self.model.prompts = model_prompts
 
     def encode(
         self,
@@ -82,12 +73,9 @@ class SentenceTransformerWrapper:
         Returns:
             The encoded sentences.
         """
-        prompt = None
         prompt_name = None
-        if self.task_to_prompt_name is not None:
-            prompt_name = get_prompt_name(
-                self.task_to_prompt_name, task_name, prompt_type
-            )
+        if self.model_prompts is not None:
+            prompt_name = get_prompt_name(self.model_prompts, task_name, prompt_type)
             logger.info(
                 f"Using {prompt_name} prompt name for task={task_name} prompt_type={prompt_type}"
             )
@@ -96,10 +84,10 @@ class SentenceTransformerWrapper:
         embeddings = self.model.encode(
             sentences,
             prompt_name=prompt_name,
-            prompt=prompt,
-            **kwargs,  # sometimes in kwargs can be return_tensors=True
+            **kwargs,
         )
         if isinstance(embeddings, torch.Tensor):
+            # sometimes in kwargs can be return_tensors=True
             embeddings = embeddings.cpu().detach().float().numpy()
         return embeddings
 
@@ -156,7 +144,7 @@ def get_prompt_name(
         return f"{task_type}-{prompt_type_value}"
     if task_type and task_type in task_to_prompt:
         return task_type
-    if prompt_type and prompt_type in task_to_prompt:
+    if prompt_type and prompt_type_value in task_to_prompt:
         return prompt_type_value
     logger.info(
         "No combination of task name and prompt type was found in model prompts."
