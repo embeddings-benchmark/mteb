@@ -40,10 +40,13 @@ class SentenceTransformerWrapper:
             )
         else:
             self.model = model
-        self.model_prompts = model_prompts
-        if model_prompts is not None and hasattr(self.model, "prompts"):
+
+        if model_prompts is None and hasattr(self.model, "prompts"):
+            model_prompts = self.model.prompts
+        elif model_prompts is not None and hasattr(self.model, "prompts"):
             logger.info(f"Model prompts will be overwritten with {model_prompts}")
             self.model.prompts = model_prompts
+        self.model_prompts = model_prompts
 
     def encode(
         self,
