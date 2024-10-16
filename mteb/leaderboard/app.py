@@ -8,6 +8,7 @@ import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
+from mteb.leaderboard.table import scores_to_table
 from mteb.leaderboard.utils import get_model_size_range
 
 
@@ -21,11 +22,7 @@ def load_results():
         return mteb.BenchmarkResults.from_disk(results_cache_path)
 
 
-def scores_to_table(scores: list) -> pd.DataFrame:
-    return pd.DataFrame.from_records(scores)
-
-
-all_results = load_results()
+all_results = load_results().filter_models()
 
 max_model_size, min_model_size = get_model_size_range()
 
@@ -69,7 +66,14 @@ task_select = gr.Dropdown(
     info="Select specific tasks to include",
 )
 
-with gr.Blocks(fill_width=True, theme=gr.themes.Base()) as demo:
+css = """
+.scrollable {
+    overflow-y: scroll;
+    max-height: 400px
+}
+"""
+
+with gr.Blocks(fill_width=True, theme=gr.themes.Base(), css=css) as demo:
     gr.Markdown(
         """
     ### Model Selection
@@ -122,7 +126,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base()) as demo:
     Or create one from scratch based on your use case.
     """
     )
-    with gr.Group():
+    with gr.Group(elem_classes="scrollable"):
         with gr.Row():
             with gr.Column():
                 benchmark_select.render()
@@ -134,27 +138,15 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base()) as demo:
             with gr.Column():
                 # with gr.Accordion("Add and remove tasks:", open=False):
                 task_select.render()
-    scores = gr.State(default_results.get_scores())
+    scores = gr.State(default_results.get_scores(format="long"))
     dataframe = gr.DataFrame(
         scores_to_table,
         inputs=[scores],
-        # datatype=["html"] + ["markdown"] * (len(table.columns) - 1),
     )
-
-    def update_criteria(languages, types, domains, eval_splits, task_names):
-        criteria = {
-            "languages": languages,
-            "task_types": types,
-            "domains": domains,
-            "eval_splits": eval_splits,
-            "task_names": task_names,
-        }
-        return criteria
 
     @gr.on(
         inputs=[benchmark_select],
         outputs=[
-            task_select,
             lang_select,
             type_select,
             domain_select,
@@ -164,11 +156,19 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base()) as demo:
         benchmark = mteb.get_benchmark(benchmark_name)
         benchmark_results = benchmark.load_results(base_results=all_results)
         return (
-            benchmark_results.task_names,
             benchmark_results.languages,
             benchmark_results.task_types,
             benchmark_results.domains,
         )
+
+    @gr.on(
+        inputs=[benchmark_select, lang_select, type_select, domain_select],
+        outputs=[task_select],
+    )
+    def update_task_list(benchmark_name, languages, task_types, domains):
+        benchmark = mteb.get_benchmark(benchmark_name)
+        benchmark_results = benchmark.load_results(base_results=all_results)
+        return benchmark_results.task_names
 
     @gr.on(
         inputs=[
@@ -189,8 +189,8 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base()) as demo:
             task_types=task_types,
             domains=domains,
         )
-        scores = benchmark_results.get_scores(languages=languages, format="wide")
-        return benchmark_results.get_scores(languages=languages, format="wide")
+        scores = benchmark_results.get_scores(languages=languages, format="long")
+        return scores
 
 
 if __name__ == "__main__":
