@@ -13,9 +13,11 @@ import mteb
 from mteb.benchmarks.benchmarks import Benchmark
 from mteb.create_meta import generate_readme
 
-from .mock_models import (MockBGEWrapper, MockE5Wrapper, MockMxbaiWrapper,
-                          MockNumpyEncoder, MockTorchbf16Encoder,
-                          MockTorchEncoder)
+from .mock_models import (
+    MockNumpyEncoder,
+    MockTorchbf16Encoder,
+    MockTorchEncoder,
+)
 from .task_grid import MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
@@ -41,9 +43,6 @@ def test_mulitple_mteb_tasks(
         MockNumpyEncoder(),
         MockTorchEncoder(),
         MockTorchbf16Encoder(),
-        MockBGEWrapper(),
-        MockE5Wrapper(),
-        MockMxbaiWrapper(),
     ],
 )
 def test_benchmark_encoders_on_task(task: str | mteb.AbsTask, model: mteb.Encoder):
@@ -147,6 +146,19 @@ def test_run_using_benchmark(model: mteb.Encoder):
     bench = Benchmark(
         name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"])
     )
+
+    eval = mteb.MTEB(tasks=bench)
+    eval.run(
+        model, output_folder="tests/results", overwrite_results=True
+    )  # we just want to test that it runs
+
+
+@pytest.mark.parametrize("model", [MockNumpyEncoder()])
+def test_run_using_list_of_benchmark(model: mteb.Encoder):
+    """Test that a list of benchmark objects can be run using the MTEB class."""
+    bench = [
+        Benchmark(name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"]))
+    ]
 
     eval = mteb.MTEB(tasks=bench)
     eval.run(

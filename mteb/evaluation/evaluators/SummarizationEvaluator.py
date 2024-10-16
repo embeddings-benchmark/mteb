@@ -82,7 +82,7 @@ class SummarizationEvaluator(Evaluator):
                 for summary in human_summaries
             ],
             model=model,
-            prompt_name=self.task_name,
+            task_name=self.task_name,
             **encode_kwargs,
         )
 
@@ -94,7 +94,7 @@ class SummarizationEvaluator(Evaluator):
                 for summary in machine_summaries
             ],
             model=model,
-            prompt_name=self.task_name,
+            task_name=self.task_name,
             **encode_kwargs,
         )
 
@@ -243,7 +243,7 @@ class DeprecatedSummarizationEvaluator(Evaluator):
                 for summary in human_summaries
             ],
             model=model,
-            prompt_name=self.task_name,
+            task_name=self.task_name,
             **encode_kwargs,
         )
 
@@ -255,7 +255,7 @@ class DeprecatedSummarizationEvaluator(Evaluator):
                 for summary in machine_summaries
             ],
             model=model,
-            prompt_name=self.task_name,
+            task_name=self.task_name,
             **encode_kwargs,
         )
 

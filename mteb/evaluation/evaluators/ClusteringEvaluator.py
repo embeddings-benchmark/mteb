@@ -41,7 +41,7 @@ class ClusteringEvaluator(Evaluator):
         corpus_embeddings = model_encode(
             self.sentences,
             model=model,
-            prompt_name=self.task_name,
+            task_name=self.task_name,
             **encode_kwargs,
         )
 

@@ -4,11 +4,13 @@ import json
 import logging
 import os
 import traceback
+from collections.abc import Iterable
 from copy import copy
 from datetime import datetime
+from itertools import chain
 from pathlib import Path
 from time import time
-from typing import Any, Iterable
+from typing import Any
 
 import datasets
 from sentence_transformers import SentenceTransformer
@@ -52,12 +54,17 @@ class MTEB:
             err_logs_path: Path to save error logs.
             kwargs: Additional arguments to be passed to the tasks
         """
+        from mteb.benchmarks import Benchmark
+
         self.deprecation_warning(
             task_types, task_categories, task_langs, tasks, version
         )
 
         if tasks is not None:
             self._tasks = tasks
+            if isinstance(tasks[0], Benchmark):
+                self.benchmarks = tasks
+                self._tasks = list(chain.from_iterable(tasks))
             assert (
                 task_types is None and task_categories is None
             ), "Cannot specify both `tasks` and `task_types`/`task_categories`"
@@ -114,7 +121,8 @@ class MTEB:
 
     @property
     def available_task_types(self):
-        return {x.metadata_dict["type"] for x in self.tasks_cls}
+        # sort the task types
+        return sorted({x.metadata_dict["type"] for x in self.tasks_cls})
 
     @property
     def available_task_categories(self):
@@ -148,7 +156,7 @@ class MTEB:
         console = Console()
         if name:
             console.rule(f"[bold]{name}\n", style="grey15")
-        for task_type in self.available_task_types:
+        for task_type in self.available_task_types:  # iterate through sorted task_types
             current_type_tasks = list(
                 filter(lambda x: x.metadata.type == task_type, task_list)
             )
@@ -156,7 +164,9 @@ class MTEB:
                 continue
             else:
                 console.print(f"[bold]{task_type}[/]")
-                for task in current_type_tasks:
+                for (
+                    task
+                ) in current_type_tasks:  # will be sorted as input to this function
                     prefix = "    - "
                     name = f"{task.metadata.name}"
                     category = f", [italic grey39]{task.metadata.category}[/]"
@@ -167,6 +177,35 @@ class MTEB:
                     )
                     console.print(f"{prefix}{name}{category}{multilingual}")
                 console.print("\n")
+
+    def mteb_benchmarks(self):
+        """Get all benchmarks available in the MTEB."""
+        from mteb.overview import MTEBTasks
+
+        # get all the MTEB specific benchmarks:
+        sorted_mteb_benchmarks = sorted(
+            self.benchmarks, key=lambda obj: obj.name.lower()
+        )
+
+        mteb_b, remaining_b = [], []
+        for b in sorted_mteb_benchmarks:
+            if "MTEB" in b.name:
+                mteb_b.append(b)
+            else:
+                remaining_b.append(b)
+
+        # place mteb first, then remaining
+        sorted_mteb_benchmarks = mteb_b + remaining_b
+
+        # task ordering within each benchmark should be alphabetical
+        for st in sorted_mteb_benchmarks:
+            st.tasks = MTEBTasks(
+                sorted(st.tasks, key=lambda obj: obj.metadata.name.lower())
+            )
+
+        for benchmark in sorted_mteb_benchmarks:
+            name = benchmark.name
+            self._display_tasks(benchmark.tasks, name=name)
 
     @classmethod
     def mteb_tasks(cls):

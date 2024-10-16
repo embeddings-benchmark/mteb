@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Mapping
 from datetime import date
-from typing import Any, Dict, List, Mapping, Union
+from typing import Annotated, Any, Union
 
 from pydantic import (AnyUrl, BaseModel, BeforeValidator, TypeAdapter,
                       field_validator)
@@ -110,7 +111,7 @@ STR_DATE = Annotated[
 SPLIT_NAME = str
 HFSubset = str
 LANGUAGES = Union[
-    List[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, List[ISO_LANGUAGE_SCRIPT]]
+    list[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, list[ISO_LANGUAGE_SCRIPT]]
 ]
 
 PROGRAMMING_LANGS = [
@@ -158,7 +159,7 @@ LICENSES = (  # this list can be extended as needed
 )
 
 METRIC_NAME = str
-METRIC_VALUE = Union[int, float, Dict[str, Any]]
+METRIC_VALUE = Union[int, float, dict[str, Any]]
 
 logger = logging.getLogger(__name__)
 

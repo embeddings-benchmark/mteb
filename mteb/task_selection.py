@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Callable, List
+from typing import Any, Callable
 
 import pandas as pd
 from scipy.stats import pearsonr, spearmanr
@@ -14,7 +14,7 @@ import mteb
 
 MODEL_NAME = str
 REVISION = str
-METRIC = Callable[[List[float], List[float]], float]
+METRIC = Callable[[list[float], list[float]], float]
 
 
 def spearman(x: list[float], y: list[float]) -> float:

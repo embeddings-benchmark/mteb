@@ -34,6 +34,6 @@ class InstructionRetrievalEvaluator(RetrievalEvaluator):
                 self.score_function,
                 instructions=instructions,
                 request_qid=qid,
-                prompt_name=self.task_name,
+                task_name=self.task_name,
                 **kwargs,
             )

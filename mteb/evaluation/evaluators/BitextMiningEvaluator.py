@@ -55,7 +55,7 @@ class BitextMiningEvaluator(Evaluator):
             embeddings[sub] = model_encode(
                 self.sentences[sub],
                 model=model,
-                prompt_name=self.task_name,
+                task_name=self.task_name,
                 **encode_kwargs,
             )
 

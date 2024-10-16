@@ -3,7 +3,8 @@ from __future__ import annotations
 import logging
 import random
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Sequence, TypedDict
+from collections.abc import Sequence
+from typing import Any, TypedDict
 
 import datasets
 import numpy as np
@@ -19,7 +20,7 @@ from mteb.languages import LanguageScripts
 
 logger = logging.getLogger(__name__)
 
-ScoresDict = Dict[str, Any]
+ScoresDict = dict[str, Any]
 # ^ e.g {'main_score': 0.5, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']}
 
 

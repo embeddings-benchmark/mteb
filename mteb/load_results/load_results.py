@@ -5,8 +5,8 @@ import logging
 import os
 import subprocess
 from collections import defaultdict
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Dict, List, Sequence
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
@@ -43,7 +43,7 @@ def download_of_results(
         cache_directory.mkdir(parents=True)
 
     # if "results" folder already exists update it
-    results_directory = cache_directory / "results"
+    results_directory = cache_directory / os.path.basename(results_repo)
     if results_directory.exists():
         if download_latest:
             logger.info(
