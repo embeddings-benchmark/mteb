@@ -55,6 +55,37 @@ evaluation = mteb.MTEB(tasks=tasks)
 results = evaluation.run(model, output_folder=f"results/{model_name}")
 ```
 
+<details>
+  <summary> Running SentneceTransformermer model with prompts </summary>
+
+Prompts can be passed to the SentenceTransformer model using the `prompts` parameter. The following code shows how to use prompts with SentenceTransformer:
+
+```python
+from sentence_transformers import SentenceTransformer
+
+
+model = SentenceTransformer("average_word_embeddings_komninos", prompts={"query": "Query:", "passage": "Passage:"})
+evaluation = mteb.MTEB(tasks=tasks)
+```
+
+In prompts the key can be:
+1. Prompt types (`passage`, `query`) - they will be used in reranking and retrieval tasks 
+2. Task type - these prompts will be used in all tasks of the given type
+   1. `BitextMining`
+   2. `Classification`
+   3. `MultilabelClassification`
+   4. `Clustering`
+   5. `PairClassification`
+   6. `Reranking`
+   7. `Retrieval`
+   8. `STS`
+   9. `Summarization`
+   10. `InstructionRetrieval`
+3. Pair of task type and prompt type like `Retrival-query` - these prompts will be used in all classification tasks
+4. Task name - these prompts will be used in the specific task
+5. Pair of task name and prompt type like `NFCorpus-query` - these prompts will be used in the specific task
+</details>
+
 * Using CLI
 
 ```bash
@@ -161,7 +192,7 @@ benchmark.citation
 To pass in arguments to the model's `encode` function, you can use the encode keyword arguments (`encode_kwargs`):
 
 ```python
-evaluation.run(model, encode_kwargs={"batch_size": 32}
+evaluation.run(model, encode_kwargs={"batch_size": 32})
 ```
 </details>
 
@@ -189,53 +220,33 @@ Note that the public leaderboard uses the test splits for all datasets except MS
 Models should implement the following interface, implementing an `encode` function taking as inputs a list of sentences, and returning a list of embeddings (embeddings can be `np.array`, `torch.tensor`, etc.). For inspiration, you can look at the [mteb/mtebscripts repo](https://github.com/embeddings-benchmark/mtebscripts) used for running diverse models via SLURM scripts for the paper.
 
 ```python
-class MyModel():
-    def encode(
-        self, sentences: list[str], **kwargs: Any
-    ) -> torch.Tensor | np.ndarray:
-        """Encodes the given sentences using the encoder.
+from mteb.encoder_interface import PromptType
 
+class CustomModel:
+    def encode(
+        self,
+        sentences: list[str],
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs,
+    ) -> np.ndarray:
+        """Encodes the given sentences using the encoder.
+        
         Args:
             sentences: The sentences to encode.
+            task_name: The name of the task.
+            prompt_type: The prompt type to use.
             **kwargs: Additional arguments to pass to the encoder.
-
+            
         Returns:
             The encoded sentences.
         """
         pass
 
-model = MyModel()
+model = CustomModel()
 tasks = mteb.get_task("Banking77Classification")
 evaluation = MTEB(tasks=tasks)
 evaluation.run(model)
-```
-
-If you'd like to use different encoding functions for query and corpus when evaluating on Retrieval or Reranking tasks, you can add separate methods for `encode_queries` and `encode_corpus`. If these methods exist, they will be automatically used for those tasks. You can refer to the `DRESModel` at `mteb/evaluation/evaluators/RetrievalEvaluator.py` for an example of these functions.
-
-```python
-class MyModel():
-    def encode_queries(self, queries: list[str], **kwargs) -> list[np.ndarray] | list[torch.Tensor]:
-        """
-        Returns a list of embeddings for the given sentences.
-        Args:
-            queries: List of sentences to encode
-
-        Returns:
-            List of embeddings for the given sentences
-        """
-        pass
-
-    def encode_corpus(self, corpus: list[str] | list[dict[str, str]], **kwargs) -> list[np.ndarray] | list[torch.Tensor]:
-        """
-        Returns a list of embeddings for the given sentences.
-        Args:
-            corpus: List of sentences to encode
-                or list of dictionaries with keys "title" and "text"
-
-        Returns:
-            List of embeddings for the given sentences
-        """
-        pass
 ```
 
 </details>
@@ -331,7 +342,7 @@ evaluation.run(
 ```
 
 CLI:
-```
+```bash
 mteb run -t NFCorpus -m all-MiniLM-L6-v2 --output_folder results --save_predictions
 ```
 
