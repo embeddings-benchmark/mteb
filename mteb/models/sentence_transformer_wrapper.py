@@ -41,7 +41,7 @@ class SentenceTransformerWrapper:
         else:
             self.model = model
 
-        if model_prompts is None and hasattr(self.model, "prompts"):
+        if model_prompts is None and hasattr(self.model, "prompts") and len(self.model.prompts) > 0:
             model_prompts = self.model.prompts
         elif model_prompts is not None and hasattr(self.model, "prompts"):
             logger.info(f"Model prompts will be overwritten with {model_prompts}")
