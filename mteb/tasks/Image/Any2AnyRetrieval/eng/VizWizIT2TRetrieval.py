@@ -44,7 +44,7 @@ class VizWizIT2TRetrieval(AbsTaskAny2AnyRetrieval):
                     "average_query_length": 0.0,
                     "num_documents": 2143540,
                     "num_queries": 214354,
-                    "average_relevant_docs_per_query": 10,
+                    "average_relevant_docs_per_query": 1,
                 }
             },
         },

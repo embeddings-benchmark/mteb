@@ -11,7 +11,7 @@ class VQA2IT2TRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://openaccess.thecvf.com/content_cvpr_2017/html/Goyal_Making_the_v_CVPR_2017_paper.html",
         dataset={
             "path": "JamieSJS/vqa-2",
-            "revision": "addc919d80589a767212ca455657f4e6c55e71f8",
+            "revision": "69882b6ba0b443dd62e633e546725b0f13b7e3aa",
             "trust_remote_code": True,
         },
         type="Retrieval",
@@ -36,14 +36,14 @@ year = {2017}
 }
 """,
         descriptive_stats={
-            "n_samples": {"test": 214354},
+            "n_samples": {"test": 4319},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 2143540,
-                    "num_queries": 214354,
-                    "average_relevant_docs_per_query": 10,
+                    "num_documents": 2091,
+                    "num_queries": 4319,
+                    "average_relevant_docs_per_query": 1,
                 }
             },
         },
