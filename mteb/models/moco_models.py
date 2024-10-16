@@ -29,7 +29,10 @@ def mocov3_loader(**kwargs):
         ):
             self.model_name = model_name
             self.device = device
-            model = timm.create_model('vit_base_patch16_224', pretrained=True, num_classes=0, pretrained_cfg_overlay=dict(hf_hub_id=model_name))
+            name = 'vit_base_patch16_224'
+            if 'vit-l' in model_name:
+                name = 'vit_large_patch16_224'
+            model = timm.create_model(name, pretrained=True, num_classes=0, pretrained_cfg_overlay=dict(hf_hub_id=model_name))
 
             self.model = model.eval()
 
