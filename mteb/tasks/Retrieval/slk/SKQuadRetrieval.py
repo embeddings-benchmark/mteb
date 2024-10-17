@@ -25,14 +25,15 @@ class SKQuadRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["slk-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("2024-05-30", "2024-06-13"),
         domains=["Encyclopaedic"],
         task_subtypes=["Question answering"],
         license="cc-by-nc-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
+        bibtex_citation="",
         descriptive_stats={
-            "n_samples": None,
+            "n_samples": {"test": 1134},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 1180.5071792496526,
@@ -45,7 +46,7 @@ class SKQuadRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, eval_splits=None):
+    def load_data(self, eval_splits=None, **kwargs):
         """Load and preprocess datasets for retrieval task."""
         eval_splits = eval_splits or ["test"]
 
