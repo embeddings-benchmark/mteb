@@ -11,6 +11,7 @@ from .eng.Flickr30kI2TRetrieval import *
 from .eng.Flickr30kT2IRetrieval import *
 from .eng.FORBI2IRetrieval import *
 from .eng.GLDv2I2TRetrieval import *
+from .eng.GLDv2I2IRetrieval import *
 from .eng.HatefulMemesI2TRetrieval import *
 from .eng.HatefulMemesT2IRetrieval import *
 from .eng.ImageCoDeT2IRetrieval import *
