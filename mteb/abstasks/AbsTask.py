@@ -310,3 +310,6 @@ class AbsTask(ABC):
         return (
             f"{self.__class__.__name__}(name='{self.metadata.name}', languages={langs})"
         )
+
+    def __hash__(self) -> int:
+        return hash(self.metadata)
