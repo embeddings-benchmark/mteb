@@ -54,7 +54,7 @@ class Cmnli(AbsTaskPairClassification):
         type="PairClassification",
         category="s2s",
         modalities=["text"],
-        eval_splits=["validation", "test"],
+        eval_splits=["validation"],
         eval_langs=["cmn-Hans"],
         main_score="max_accuracy",
         date=None,
