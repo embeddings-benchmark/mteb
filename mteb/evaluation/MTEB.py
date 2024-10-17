@@ -353,7 +353,8 @@ class MTEB:
 
         meta = self.create_model_meta(model)
         output_path = self.create_output_folder(meta, output_folder)
-        if not isinstance(model, SentenceTransformerWrapper):
+        if isinstance(model, SentenceTransformer):
+            # wrap only sentence transformer, to not break other wrappers
             model = SentenceTransformerWrapper(model)
 
         if output_path:
