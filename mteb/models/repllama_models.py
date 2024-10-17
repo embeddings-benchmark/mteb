@@ -15,11 +15,12 @@ from mteb.models.sentence_transformer_wrapper import (
     get_prompt_name,
     validate_task_to_prompt_name,
 )
+from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
 
-class RepLLaMAWrapper:
+class RepLLaMAWrapper(Wrapper):
     def __init__(
         self,
         base_model_name_or_path: str,

@@ -18,6 +18,7 @@ from sentence_transformers import SentenceTransformer
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
+from ..models.wrapper import Wrapper
 
 from ..abstasks import *
 from ..abstasks import AbsTask
@@ -353,8 +354,7 @@ class MTEB:
 
         meta = self.create_model_meta(model)
         output_path = self.create_output_folder(meta, output_folder)
-        if isinstance(model, SentenceTransformer):
-            # wrap only sentence transformer, to not break other wrappers
+        if not isinstance(model, Wrapper):
             model = SentenceTransformerWrapper(model)
 
         if output_path:

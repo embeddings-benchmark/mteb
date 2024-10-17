@@ -9,6 +9,7 @@ import numpy as np
 
 from mteb.model_meta import ModelMeta
 
+from .wrapper import Wrapper
 from ..encoder_interface import PromptType
 from .instructions import task_to_instruction
 
@@ -27,7 +28,7 @@ def gritlm_loader(**kwargs):
     except ImportError:
         raise ImportError("Please install `pip install gritlm` to use GritLM models.")
 
-    class GritLMWrapper(GritLM):
+    class GritLMWrapper(GritLM, Wrapper):
         def encode(
             self,
             sentences: Sequence[str],

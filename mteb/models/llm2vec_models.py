@@ -11,6 +11,7 @@ from mteb.model_meta import ModelMeta
 
 from .instructions import task_to_instruction
 from .sentence_transformer_wrapper import validate_task_to_prompt_name
+from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ def llm2vec_instruction(instruction):
     return instruction
 
 
-class LLM2VecWrapper:
+class LLM2VecWrapper(Wrapper):
     def __init__(
         self,
         model_prompts: dict[str, str] | None = None,

@@ -243,6 +243,26 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
         overwrite_results=True,
     )
 
+    class MockEncoderWithExistingPrompts(mteb.Encoder):
+        prompts = {to_compare: to_compare}
+
+        def encode(self, sentences, prompt_name: str | None = None, **kwargs):
+            assert prompt_name == to_compare
+            return np.zeros((len(sentences), 10))
+
+    eval = mteb.MTEB(tasks=tasks)
+
+    # Test that the task_name is passed down to the encoder
+    model = MockSentenceTransformerWrapper(
+        MockEncoderWithExistingPrompts()
+    )
+    eval.run(
+        model,
+        output_folder="tests/results",
+        overwrite_results=True,
+    )
+
+
 
 @pytest.mark.parametrize(
     "task",

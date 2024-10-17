@@ -9,6 +9,7 @@ import numpy as np
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
+from .wrapper import Wrapper
 from .instructions import task_to_instruction
 
 
@@ -24,7 +25,7 @@ def gte_loader(**kwargs):
             "Please install `pip install gritlm` to use gte-Qwen2-7B-instruct."
         )
 
-    class GTEWrapper(GritLM):
+    class GTEWrapper(GritLM, Wrapper):
         def encode(
             self,
             sentences: Sequence[str],

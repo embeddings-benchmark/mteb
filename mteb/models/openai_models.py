@@ -6,13 +6,14 @@ from typing import Any
 
 import numpy as np
 
+from .wrapper import Wrapper
 from mteb.model_meta import ModelMeta
 from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
 
-class OpenAIWrapper:
+class OpenAIWrapper(Wrapper):
     def __init__(self, model_name: str, embed_dim: int | None = None, **kwargs) -> None:
         requires_package(self, "openai", "Openai text embedding")
         from openai import OpenAI

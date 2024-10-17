@@ -12,6 +12,7 @@ from mteb.models.sentence_transformer_wrapper import (
     get_prompt_name,
     validate_task_to_prompt_name,
 )
+from .wrapper import Wrapper
 from mteb.requires_package import requires_package
 
 
@@ -66,7 +67,7 @@ def rate_limit(max_rpm: int, interval: int = 60):
     return decorator
 
 
-class VoyageWrapper:
+class VoyageWrapper(Wrapper):
     def __init__(
         self,
         model_name: str,

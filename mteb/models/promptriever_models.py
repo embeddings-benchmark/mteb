@@ -10,11 +10,12 @@ from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 
 from .repllama_models import RepLLaMAWrapper
+from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
 
-class PromptrieverWrapper(RepLLaMAWrapper):
+class PromptrieverWrapper(RepLLaMAWrapper, Wrapper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

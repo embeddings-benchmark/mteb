@@ -6,16 +6,17 @@ from typing import Any
 import numpy as np
 import torch
 
-from mteb.encoder_interface import Encoder, PromptType
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import (
     get_prompt_name,
     validate_task_to_prompt_name,
 )
+from .wrapper import Wrapper
 
 
 # Implementation follows https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/main/src/seb/registered_models/cohere_models.py
-class CohereTextEmbeddingModel(Encoder):
+class CohereTextEmbeddingModel(Wrapper):
     def __init__(
         self,
         model_name: str,

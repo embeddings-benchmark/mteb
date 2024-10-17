@@ -9,6 +9,7 @@ import torch
 
 from mteb.model_meta import ModelMeta
 
+from .wrapper import Wrapper
 from ..encoder_interface import PromptType
 from .instructions import task_to_instruction
 
@@ -25,7 +26,7 @@ def sfr_loader(**kwargs):
             "Please install `pip install gritlm` to use SFR_Embedding_2_R."
         )
 
-    class SFRWrapper(GritLM):
+    class SFRWrapper(GritLM, Wrapper):
         def encode(
             self,
             sentences: Sequence[str],

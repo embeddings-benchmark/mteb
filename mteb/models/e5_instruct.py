@@ -9,6 +9,7 @@ import torch
 
 from mteb.model_meta import ModelMeta
 
+from .wrapper import Wrapper
 from ..encoder_interface import PromptType
 from .e5_models import E5_PAPER_RELEASE_DATE, XLMR_LANGUAGES
 from .instructions import task_to_instruction
@@ -28,7 +29,7 @@ def e5_loader(**kwargs):
             "Please install `pip install gritlm` to use E5 Instruct models."
         )
 
-    class E5InstructWrapper(GritLM):
+    class E5InstructWrapper(GritLM, Wrapper):
         def encode(
             self,
             sentences: Sequence[str],

@@ -11,9 +11,10 @@ from mteb.models.sentence_transformer_wrapper import (
     get_prompt_name,
     validate_task_to_prompt_name,
 )
+from .wrapper import Wrapper
 
 
-class GoogleTextEmbeddingModel(Encoder):
+class GoogleTextEmbeddingModel(Encoder, Wrapper):
     def __init__(
         self,
         model_name: str,

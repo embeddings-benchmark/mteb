@@ -90,9 +90,16 @@ class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
             )
         else:
             self.model = model
-        self.model_prompts = model_prompts
-        if model_prompts is not None and hasattr(self.model, "prompts"):
+
+        if (
+            model_prompts is None
+            and hasattr(self.model, "prompts")
+            and len(self.model.prompts) > 0
+        ):
+            model_prompts = self.model.prompts
+        elif model_prompts is not None and hasattr(self.model, "prompts"):
             self.model.prompts = model_prompts
+        self.model_prompts = model_prompts
 
     def encode(
         self,

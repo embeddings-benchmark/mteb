@@ -9,13 +9,14 @@ import torch
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
+from .wrapper import Wrapper
 from mteb.abstasks.TaskMetadata import TASK_TYPE
 from mteb.encoder_interface import PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class SentenceTransformerWrapper:
+class SentenceTransformerWrapper(Wrapper):
     def __init__(
         self,
         model: str | SentenceTransformer | CrossEncoder,
@@ -46,11 +47,14 @@ class SentenceTransformerWrapper:
             and hasattr(self.model, "prompts")
             and len(self.model.prompts) > 0
         ):
-            model_prompts = self.model.prompts
+            try:
+                model_prompts = validate_task_to_prompt_name(self.model.prompts)
+            except ValueError:
+                model_prompts = None
         elif model_prompts is not None and hasattr(self.model, "prompts"):
             logger.info(f"Model prompts will be overwritten with {model_prompts}")
             self.model.prompts = model_prompts
-        self.model_prompts = model_prompts
+        self.model_prompts = validate_task_to_prompt_name(model_prompts)
 
     def encode(
         self,
@@ -159,7 +163,9 @@ def get_prompt_name(
     return None
 
 
-def validate_task_to_prompt_name(task_to_prompt_name: dict[str, str]) -> dict[str, str]:
+def validate_task_to_prompt_name(task_to_prompt_name: dict[str, str] | None) -> dict[str, str] | None:
+    if task_to_prompt_name is None:
+        return task_to_prompt_name
     task_types = get_args(TASK_TYPE)
     prompt_types = [e.value for e in PromptType]
     for task_name in task_to_prompt_name:
