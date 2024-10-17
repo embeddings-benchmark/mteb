@@ -2,9 +2,13 @@ from __future__ import annotations
 
 from importlib.metadata import version
 
-from mteb.benchmarks.benchmarks import (MTEB_MAIN_EN, MTEB_MAIN_RU,
-                                        MTEB_RETRIEVAL_LAW,
-                                        MTEB_RETRIEVAL_WITH_INSTRUCTIONS, CoIR)
+from mteb.benchmarks.benchmarks import (
+    MTEB_MAIN_EN,
+    MTEB_MAIN_RU,
+    MTEB_RETRIEVAL_LAW,
+    MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
+    CoIR,
+)
 from mteb.evaluation import *
 from mteb.load_results import BenchmarkResults, load_results
 from mteb.models import get_model, get_model_meta, get_model_metas

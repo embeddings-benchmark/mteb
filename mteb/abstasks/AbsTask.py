@@ -218,9 +218,9 @@ class AbsTask(ABC):
                     pbar_subsets.set_postfix_str(f"Language: {hf_subset}")
                     print(f"Processing metadata for language {hf_subset}")
                     split_details = self._calculate_metrics_from_split(split, hf_subset)
-                    all_details[split]["hf_subset_descriptive_stats"][
-                        hf_subset
-                    ] = split_details
+                    all_details[split]["hf_subset_descriptive_stats"][hf_subset] = (
+                        split_details
+                    )
             else:
                 split_details = self._calculate_metrics_from_split(split)
                 all_details[split] = split_details
