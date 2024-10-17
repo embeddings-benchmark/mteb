@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 REVISION = str
 MODEL_NAME = str
-AGGREGATION = Dict[MODEL_NAME, Dict[REVISION, Dict[str, float]]]
+AGGREGATION = dict[MODEL_NAME, dict[REVISION, dict[str, float]]]
 
 
 def mean(results: BenchmarkResults) -> AGGREGATION:
