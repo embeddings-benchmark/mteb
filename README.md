@@ -18,7 +18,7 @@
 <h4 align="center">
     <p>
         <a href="#installation">Installation</a> |
-        <a href="#usage">Usage</a> |
+        <a href="#usage-documentation">Usage</a> |
         <a href="https://huggingface.co/spaces/mteb/leaderboard">Leaderboard</a> |
         <a href="#documentation">Documentation</a> |
         <a href="#citing">Citing</a>
@@ -38,7 +38,7 @@ pip install mteb
 
 ## Example Usage
 
-* Using a python script:
+* Using a Python script:
 
 ```python
 import mteb
@@ -168,14 +168,14 @@ benchmark = mteb.get_benchmark("MTEB(eng)")
 evaluation = mteb.MTEB(tasks=benchmark)
 ```
 
-The benchmark specified not only a list of tasks, but also what splits and language to run on. To get an overview of all available benhcmarks simply run:
+The benchmark specified not only a list of tasks, but also what splits and language to run on. To get an overview of all available benchmarks simply run:
 
 ```python
 import mteb
 benchmarks = mteb.get_benchmarks()
 ```
 
-Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark. In case of a language we use the three letter language code. For large groups of language we use the group notation, e.g. `MTEB(Scandinavian)` for Scandinavian languages. External benchmarks implemented in MTEB like `CoIR` use their original name. When using a benchmark from MTEB please cite `mteb` along with the citations of the benchmark which you can access using:
+Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark. In the case of a language, we use the three-letter language code. For large groups of languages, we use the group notation, e.g., `MTEB(Scandinavian)` for Scandinavian languages. External benchmarks implemented in MTEB like `CoIR` use their original name. When using a benchmark from MTEB please cite `mteb` along with the citations of the benchmark which you can access using:
 
 ```python
 benchmark.citation
@@ -330,7 +330,7 @@ from sentence_transformers import SentenceTransformer
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
-tasks = mteb.get_tasks( tasks=["NFCorpus"], languages=["eng"])
+tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
 
 evaluation = MTEB(tasks=tasks)
 evaluation.run(
@@ -351,11 +351,11 @@ mteb run -t NFCorpus -m all-MiniLM-L6-v2 --output_folder results --save_predicti
 <details>
   <summary> Fetching result from the results repository </summary>
 
-### Fetching result from the results repository
+### Fetching results from the results repository
 
-Multiple models have already been run on tasks avaiable within MTEB. These results are available results [repository](https://github.com/embeddings-benchmark/results).
+Multiple models have already been run on tasks available within MTEB. These results are available results [repository](https://github.com/embeddings-benchmark/results).
 
-To make the results more easily accessible, we have designed custom functionality for retrieving from the repository. For instance, you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
+To make the results more easily accessible, we have designed custom functionality for retrieving from the repository. For instance, if you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
 
 ```python
 import mteb
