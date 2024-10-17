@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 from collections import defaultdict
 from pathlib import Path
@@ -8,12 +10,8 @@ import pandas as pd
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.TaskMetadata import (
-    ISO_LANGUAGE_SCRIPT,
-    TASK_CATEGORY,
-    TASK_DOMAIN,
-    TASK_TYPE,
-)
+from mteb.abstasks.TaskMetadata import (ISO_LANGUAGE_SCRIPT, TASK_CATEGORY,
+                                        TASK_DOMAIN, TASK_TYPE)
 from mteb.languages import ISO_LANGUAGE
 from mteb.load_results.task_results import TaskResult
 from mteb.models.overview import get_model_metas
