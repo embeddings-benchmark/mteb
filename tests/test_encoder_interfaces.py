@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from sentence_transformers import SentenceTransformer
 
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.RetrievalEvaluator import DRESModel
 
 
@@ -16,4 +16,3 @@ def test_wrapped_sentence_is_encoder_with_query_corpus_encode():
     model = DRESModel(model)
 
     assert isinstance(model, Encoder)
-    assert isinstance(model, EncoderWithQueryCorpusEncode)

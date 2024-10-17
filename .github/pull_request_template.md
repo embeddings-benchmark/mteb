@@ -34,6 +34,6 @@ see also https://github.com/embeddings-benchmark/mteb/blob/main/docs/reproducibl
 
  - [ ] I have filled out the ModelMeta object to the extent possible
  - [ ] I have ensured that my model can be loaded using
-   - [ ] `mteb.get_model(model_name, revision_id)` and
-   - [ ] `mteb.get_model_meta(model_name, revision_id)`
+   - [ ] `mteb.get_model(model_name, revision)` and
+   - [ ] `mteb.get_model_meta(model_name, revision)`
  - [ ] I have tested the implementation works on a representative set of tasks.

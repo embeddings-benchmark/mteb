@@ -11,7 +11,7 @@ class TestClusteringEvaluator:
             def encode(
                 self,
                 sentences: list[str],
-                prompt_name: str | None = None,
+                task_name: str | None = None,
                 batch_size=32,
             ) -> np.ndarray:
                 return np.eye(len(sentences))

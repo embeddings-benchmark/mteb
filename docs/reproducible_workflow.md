@@ -8,13 +8,13 @@ This section introduces how MTEB uses reproducible workflows. The main goal is t
 
 Using a reproducible workflow:
 
-```{python}
+```python
 import mteb
 
 model_name = "intfloat/multilingual-e5-small"
 revision = "4dc6d853a804b9c8886ede6dda8a073b7dc08a81"
 
-model = mteb.get_model(model_name, revision_id=revision) # load model using registry implementation if available, otherwise use SentenceTransformers
+model = mteb.get_model(model_name, revision=revision) # load model using registry implementation if available, otherwise use SentenceTransformers
 
 tasks = mteb.get_tasks(tasks = ["MIRACLReranking"], languages = ["eng"])
 
@@ -40,12 +40,16 @@ You may additionally want to specify parameters like whether the model is open-s
 
 2. **If your model is not compatible with SentenceTransformer**
 
-Additionally specify the `loader` in the ModelMeta object. This is a function that loads the model and returns a mteb compatible `Encoder` model. For the `Encoder` class, see `mteb/encoder_interface.py`.
+Additionally specify the `loader` in the ModelMeta object. This is a function that loads the model and returns a mteb compatible `Encoder` model. For the `Encoder` class, see `mteb/encoder_interface.py`. Loader should contain:
+    - loader_function (for `SentenceTransformers` models, this is `sentence_transformers_loader`)
+    - `model_name`: The name of the model
+    - `revision`: The revision id of the model
+    - Optional `model_prompts`: A dictionary of prompts to be used in encoding.
 
 3. **Submit a pull request**
 
 Submit a pull request with the new model. The model will be reviewed and added to the model repository. Please include the checklist in the pull request:
 
 - [ ] I have filled out the ModelMeta object to the extent possible
-- [ ] I have ensured that my model can be loaded using `mteb.get_model(model_name, revision_id)` and `mteb.get_model_meta(model_name, revision_id)`
+- [ ] I have ensured that my model can be loaded using `mteb.get_model(model_name, revision)` and `mteb.get_model_meta(model_name, revision)`
 - [ ] I have tested the implementation works for a representative set of tasks.
