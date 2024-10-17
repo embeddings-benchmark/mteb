@@ -253,15 +253,12 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     eval = mteb.MTEB(tasks=tasks)
 
     # Test that the task_name is passed down to the encoder
-    model = MockSentenceTransformerWrapper(
-        MockEncoderWithExistingPrompts()
-    )
+    model = MockSentenceTransformerWrapper(MockEncoderWithExistingPrompts())
     eval.run(
         model,
         output_folder="tests/results",
         overwrite_results=True,
     )
-
 
 
 @pytest.mark.parametrize(

@@ -9,9 +9,9 @@ import torch
 
 from mteb.model_meta import ModelMeta
 
-from .wrapper import Wrapper
 from ..encoder_interface import PromptType
 from .instructions import task_to_instruction
+from .wrapper import Wrapper
 
 
 def sfr_instruction(instruction: str) -> str:

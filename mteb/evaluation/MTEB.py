@@ -18,12 +18,12 @@ from sentence_transformers import SentenceTransformer
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
-from ..models.wrapper import Wrapper
 
 from ..abstasks import *
 from ..abstasks import AbsTask
 from ..load_results.mteb_results import MTEBResults
 from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from ..models.wrapper import Wrapper
 from ..tasks import *
 from . import LangMapping
 

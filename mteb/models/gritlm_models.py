@@ -9,9 +9,9 @@ import numpy as np
 
 from mteb.model_meta import ModelMeta
 
-from .wrapper import Wrapper
 from ..encoder_interface import PromptType
 from .instructions import task_to_instruction
+from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 

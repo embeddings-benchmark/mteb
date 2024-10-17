@@ -11,6 +11,7 @@ from mteb.models.sentence_transformer_wrapper import (
     get_prompt_name,
     validate_task_to_prompt_name,
 )
+
 from .wrapper import Wrapper
 
 

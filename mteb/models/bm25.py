@@ -3,9 +3,10 @@ from __future__ import annotations
 import logging
 from functools import partial
 
-from .wrapper import Wrapper
 from mteb.evaluation.evaluators.RetrievalEvaluator import DRESModel
 from mteb.model_meta import ModelMeta
+
+from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 

@@ -6,9 +6,10 @@ from typing import Any
 
 import numpy as np
 
-from .wrapper import Wrapper
 from mteb.model_meta import ModelMeta
 from mteb.requires_package import requires_package
+
+from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 

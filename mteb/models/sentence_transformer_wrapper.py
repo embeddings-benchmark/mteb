@@ -9,9 +9,10 @@ import torch
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
-from .wrapper import Wrapper
 from mteb.abstasks.TaskMetadata import TASK_TYPE
 from mteb.encoder_interface import PromptType
+
+from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -163,7 +164,9 @@ def get_prompt_name(
     return None
 
 
-def validate_task_to_prompt_name(task_to_prompt_name: dict[str, str] | None) -> dict[str, str] | None:
+def validate_task_to_prompt_name(
+    task_to_prompt_name: dict[str, str] | None,
+) -> dict[str, str] | None:
     if task_to_prompt_name is None:
         return task_to_prompt_name
     task_types = get_args(TASK_TYPE)

@@ -9,10 +9,10 @@ import torch
 
 from mteb.model_meta import ModelMeta
 
-from .wrapper import Wrapper
 from ..encoder_interface import PromptType
 from .e5_models import E5_PAPER_RELEASE_DATE, XLMR_LANGUAGES
 from .instructions import task_to_instruction
+from .wrapper import Wrapper
 
 MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
 
