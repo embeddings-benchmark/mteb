@@ -9,7 +9,6 @@ from gradio_rangeslider import RangeSlider
 
 import mteb
 from mteb.leaderboard.table import scores_to_table
-from mteb.leaderboard.utils import get_model_size_range
 
 
 def load_results():
