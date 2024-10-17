@@ -19,7 +19,7 @@ Split = str
 Score = Any
 
 
-def restrict_task_results(res: TaskResult, task: AbsTask) -> TaskResult:
+def _restrict_task_results(task_result: TaskResult, task: AbsTask) -> TaskResult:
     splits = task.metadata.eval_splits
     hf_subsets = set(task.metadata.hf_subsets_to_langscripts)
     new_scores = {}
