@@ -24,7 +24,8 @@ def load_results():
 
 all_results = load_results().filter_models()
 
-max_model_size, min_model_size = get_model_size_range()
+# Model sizes in million parameters
+min_model_size, max_model_size = 8, 46703
 
 benchmarks = mteb.get_benchmarks()
 
