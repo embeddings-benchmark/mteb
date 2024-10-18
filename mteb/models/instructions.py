@@ -4,28 +4,9 @@ from __future__ import annotations
 
 import mteb
 
-# Prompts from
-# SEB: https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/c8376f967d1294419be1d3eb41217d04cd3a65d3/src/seb/registered_models/e5_instruct_models.py
-# E5: https://github.com/microsoft/unilm/blob/9c0f1ff7ca53431fe47d2637dfe253643d94185b/e5/utils.py#L106
-DEFAULT_PROMPTS = {
-    "STS": "Retrieve semantically similar text.",
-    "Summarization": "Given a news summary, retrieve other semantically similar summaries",
-    "BitextMining": "Retrieve parallel sentences.",
-    "Classification": "Classify user passages",
-    "Clustering": "Identify categories in user passages",
-    "Reranking": "Retrieve text based on user query.",
-    "Retrieval": "Retrieve text based on user query.",
-    "InstructionRetrieval": "Retrieve text based on user query.",
-    "PairClassification": "Retrieve text that are semantically similar to the given text",
-}
-
-
 # This list is NOT comprehensive even for the tasks within MTEB
 # TODO: We should probably move this prompt to the task object
 TASKNAME2INSTRUCTIONS = {
-    # BitextMining
-    "BornholmBitextMining": "Retrieve parallel sentences in Danish and Bornholmsk",
-    "NorwegianCourtsBitextMining ": "Retrieve parallel sentences in Norwegian Bokmål and Nynorsk",
     # Classification
     "AngryTweetsClassification": "Classify Danish tweets by sentiment. (positive, negative, neutral)",
     "DKHateClassification": "Classify Danish tweets based on offensiveness (offensive, not offensive)",
@@ -106,14 +87,6 @@ TASKNAME2INSTRUCTIONS = {
     "Ocnli": "Retrieve semantically similar text.",
     "Cmnli": "Retrieve semantically similar text.",
     "TERRa": "Given a premise, retrieve a hypothesis that is entailed by the premise",
-    "RuBQReranking": (
-        "Given a question, retrieve Wikipedia passages that answer the question",
-        "",
-    ),
-    "MIRACLReranking": (
-        "Given a question, retrieve Wikipedia passages that answer the question",
-        "",
-    ),
     # Retrieval - 1st item is query instruction; 2nd is corpus instruction
     "TwitterHjerneRetrieval": (
         "Retrieve answers to questions asked in Danish tweets",
@@ -310,4 +283,4 @@ def task_to_instruction(task_name: str, is_query: bool = True) -> str:
         return TASKNAME2INSTRUCTIONS[task_name]
 
     meta = mteb.get_task(task_name).metadata
-    return DEFAULT_PROMPTS.get(meta.type, "")
+    return ""
