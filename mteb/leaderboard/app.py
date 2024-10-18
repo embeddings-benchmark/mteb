@@ -1,5 +1,6 @@
 import functools
 import json
+from collections import defaultdict
 from pathlib import Path
 
 import gradio as gr
@@ -168,7 +169,24 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), css=css) as demo:
     def update_task_list(benchmark_name, languages, task_types, domains):
         benchmark = mteb.get_benchmark(benchmark_name)
         benchmark_results = benchmark.load_results(base_results=all_results)
-        return benchmark_results.task_names
+        task_to_lang_set = defaultdict(set)
+        task_to_type = dict()
+        task_to_domains = defaultdict(set)
+        for model_res in benchmark_results:
+            for task_res in model_res:
+                task_to_lang_set[task_res.task_name] |= set(task_res.languages)
+                task_to_domains[task_res.task_name] |= set(task_res.domains)
+                task_to_type[task_res.task_name] = task_res.task_type
+        res = []
+        for task_name in benchmark_results.task_names:
+            if not (task_to_domains[task_name] & set(domains)):
+                continue
+            if not (task_to_lang_set[task_name] & set(languages)):
+                continue
+            if not (task_to_type[task_name] in task_types):
+                continue
+            res.append(task_name)
+        return res
 
     @gr.on(
         inputs=[
