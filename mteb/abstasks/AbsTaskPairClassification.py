@@ -41,6 +41,7 @@ class AbsTaskPairClassification(AbsTask):
         sentence2: list[str]
         labels: list[int]
     """
+    task_prompt = "Retrieve text that are semantically similar to the given text."
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
