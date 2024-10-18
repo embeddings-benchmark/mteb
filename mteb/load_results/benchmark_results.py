@@ -26,12 +26,12 @@ def _restrict_task_results(task_result: TaskResult, task: AbsTask) -> TaskResult
     hf_subsets = set(task.metadata.hf_subsets_to_langscripts)
     new_scores = {}
     seen_splits = set()
-    for split in res.scores:
+    for split in task_result.scores:
         if split not in splits:
             continue
         new_scores[split] = []
         seen_subsets = set()
-        for _scores in res.scores[split]:
+        for _scores in task_result.scores[split]:
             if _scores["hf_subset"] not in hf_subsets:
                 continue
             new_scores[split].append(_scores)
@@ -43,7 +43,7 @@ def _restrict_task_results(task_result: TaskResult, task: AbsTask) -> TaskResult
         seen_splits.add(split)
     if seen_splits != set(splits):
         raise ValueError(f"Missing splits {set(splits) - seen_splits}")
-    new_res = {**res.to_dict(), "scores": new_scores}
+    new_res = {**task_result.to_dict(), "scores": new_scores}
     new_res = TaskResult.from_dict(new_res)
     return new_res
 
@@ -91,7 +91,7 @@ class ModelResult(BaseModel):
     def select_tasks(self, tasks: list[AbsTask]) -> "ModelResult":
         task_name_to_task = {task.metadata.name: task for task in tasks}
         new_task_results = [
-            restrict_task_results(task_res, task_name_to_task[task_res.task_name])
+            _restrict_task_results(task_res, task_name_to_task[task_res.task_name])
             for task_res in self.task_results
             if task_res.task_name in task_name_to_task
         ]
