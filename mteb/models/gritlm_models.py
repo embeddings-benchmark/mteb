@@ -1,13 +1,18 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Sequence
 from functools import partial
+from typing import Any
+
+import numpy as np
 
 from mteb.model_meta import ModelMeta
 
+from ..encoder_interface import PromptType
 from .instructions import task_to_instruction
+from .wrapper import Wrapper
 
-logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
@@ -23,24 +28,24 @@ def gritlm_loader(**kwargs):
     except ImportError:
         raise ImportError("Please install `pip install gritlm` to use GritLM models.")
 
-    class GritLMWrapper(GritLM):
-        def encode(self, *args, **kwargs):
-            if "prompt_name" in kwargs:
-                if "instruction" in kwargs:
-                    raise ValueError(
-                        "Cannot specify both `prompt_name` and `instruction`."
-                    )
-                instruction = task_to_instruction(
-                    kwargs.pop("prompt_name"), kwargs.pop("is_query", True)
-                )
-            else:
+    class GritLMWrapper(GritLM, Wrapper):
+        def encode(
+            self,
+            sentences: Sequence[str],
+            *args,
+            task_name: str,
+            prompt_type: PromptType | None = None,
+            **kwargs: Any,
+        ) -> np.ndarray:
+            if "instruction" in kwargs:
                 instruction = kwargs.pop("instruction", "")
-            kwargs["instruction"] = gritlm_instruction(instruction)
-            return super().encode(*args, **kwargs)
-
-        def encode_corpus(self, *args, **kwargs):
-            kwargs["is_query"] = False
-            return super().encode_corpus(*args, **kwargs)
+            else:
+                instruction = task_to_instruction(
+                    task_name, prompt_type == PromptType.query
+                )
+            if instruction:
+                kwargs["instruction"] = gritlm_instruction(instruction)
+            return super().encode(sentences, *args, **kwargs)
 
     return GritLMWrapper(**kwargs)
 

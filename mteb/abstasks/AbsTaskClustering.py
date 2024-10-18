@@ -8,7 +8,7 @@ import numpy as np
 import tqdm
 from datasets import Dataset
 
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder
 from mteb.load_results.mteb_results import ScoresDict
 
 from ..evaluation.evaluators import ClusteringEvaluator
@@ -52,7 +52,7 @@ class AbsTaskClustering(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: EncoderWithQueryCorpusEncode | Encoder,
+        model: Encoder,
         dataset: Dataset,
         *,
         encode_kwargs: dict[str, Any] = {},

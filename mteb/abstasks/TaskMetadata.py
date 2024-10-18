@@ -207,7 +207,7 @@ class TaskMetadata(BaseModel):
 
     name: str
     description: str
-    type: TASK_TYPE | None = None
+    type: TASK_TYPE
     modalities: list[Literal["text"]] = ["text"]
     category: TASK_CATEGORY | None = None
     reference: STR_URL | None = None

@@ -6,8 +6,10 @@ import pytest
 
 import mteb
 from mteb import MTEB
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import validate_task_to_prompt_name
+from tests.test_benchmark.task_grid import TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 
@@ -24,7 +26,50 @@ def test_reproducibility_workflow(task_name: str, model_name: str, model_revisio
     assert isinstance(task, mteb.AbsTask)
 
     model = mteb.get_model(model_name, revision=model_revision)
-    assert isinstance(model, (Encoder, EncoderWithQueryCorpusEncode))
+    assert isinstance(model, Encoder)
 
     eval = MTEB(tasks=[task])
     eval.run(model, output_folder="tests/results", overwrite_results=True)
+
+
+@pytest.mark.parametrize(
+    "task_name",
+    TASK_TEST_GRID
+    + [
+        "BitextMining",
+        "Classification",
+        "MultilabelClassification",
+        "Clustering",
+        "PairClassification",
+        "Reranking",
+        "Retrieval",
+        "STS",
+        "Summarization",
+        "InstructionRetrieval",
+        "Speed",
+    ],
+)
+def test_validate_task_to_prompt_name(task_name: str | mteb.AbsTask):
+    if isinstance(task_name, mteb.AbsTask):
+        task_names = [task_name.metadata.name]
+    else:
+        task_names = [task_name]
+
+    model_prompts = {task_name: "prompt_name" for task_name in task_names}
+    model_prompts |= {task_name + "-query": "prompt_name" for task_name in task_names}
+    model_prompts |= {task_name + "-passage": "prompt_name" for task_name in task_names}
+    model_prompts |= {
+        "query": "prompt_name",
+        "passage": "prompt_name",
+    }
+    validate_task_to_prompt_name(model_prompts)
+
+
+def test_validate_task_to_prompt_name_fail():
+    with pytest.raises(KeyError):
+        validate_task_to_prompt_name(
+            {"task_name": "prompt_name", "task_name-query": "prompt_name"}
+        )
+
+    with pytest.raises(ValueError):
+        validate_task_to_prompt_name({"task_name-task_name": "prompt_name"})
