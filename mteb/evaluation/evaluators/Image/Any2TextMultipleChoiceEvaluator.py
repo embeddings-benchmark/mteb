@@ -62,7 +62,7 @@ class Any2TextMultipleChoiceEvaluator(Evaluator):
             encode_kwargs["batch_size"] = 64
 
         label_list = list(
-            set([x for n in self.dataset[self.choices_column_name] for x in n])
+            {x for n in self.dataset[self.choices_column_name] for x in n}
         )
         label_embeddings = model.get_text_embeddings(label_list)
         label_embedding_dict = {}
