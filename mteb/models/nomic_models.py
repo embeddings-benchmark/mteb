@@ -71,11 +71,11 @@ class NomicWrapper(Wrapper):
 
 
 model_prompts = {
-    "Classification": "classification",
-    "MultilabelClassification": "classification",
-    "Clustering": "clustering",
-    PromptType.query.value: "search_query",
-    PromptType.passage.value: "search_document",
+    "Classification": "classification: ",
+    "MultilabelClassification": "classification: ",
+    "Clustering": "clustering: ",
+    PromptType.query.value: "search_query: ",
+    PromptType.passage.value: "search_document: ",
 }
 
 nomic_embed_v1_5 = ModelMeta(
