@@ -322,7 +322,7 @@ class AbsTaskAny2AnyMultiChoice(AbsTask):
         scores = {
             **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
             **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
-            "accuracy": recall["Recall@1"]
+            "accuracy": recall["Recall@1"],
         }
         self._add_main_score(scores)
 
