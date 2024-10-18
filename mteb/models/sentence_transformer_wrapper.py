@@ -88,10 +88,14 @@ class SentenceTransformerWrapper(Wrapper):
         prompt_name = None
         if self.model_prompts is not None:
             prompt_name = get_prompt_name(self.model_prompts, task_name, prompt_type)
-            if prompt_name:
-                logger.info(
-                    f"Using `{prompt_name}` prompt name for task={task_name} prompt_type={prompt_type}"
-                )
+        if prompt_name:
+            logger.info(
+                f"Using prompt_nane={prompt_name} for task={task_name} prompt_type={prompt_type}"
+            )
+        else:
+            logger.info(
+                f"No model prompts found for task={task_name} prompt_type={prompt_type}"
+            )
         logger.info(f"Encoding {len(sentences)} sentences.")
 
         embeddings = self.model.encode(
