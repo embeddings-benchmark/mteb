@@ -6,7 +6,7 @@ from datetime import date
 from typing import Annotated, Any, Union
 
 from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator, ConfigDict
-from typing_extensions import Literal
+from typing_extensions import Literal, TypedDict
 
 from ..languages import (
     ISO_LANGUAGE_SCRIPT,
@@ -165,6 +165,20 @@ LICENSES = (  # this list can be extended as needed
 METRIC_NAME = str
 METRIC_VALUE = Union[int, float, dict[str, Any]]
 
+
+class DatasetDict(TypedDict, total=False):
+    """A dictionary containing the dataset path and revision.
+
+    Args:
+        path: The path to the dataset.
+        revision: The revision of the dataset.
+        trust_remote_code: Whether to trust the remote code.
+    """
+    path: str
+    revision: str
+    trust_remote_code: bool
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -207,7 +221,7 @@ class TaskMetadata(BaseModel):
 
     model_config = ConfigDict(extra='forbid')
 
-    dataset: dict
+    dataset: DatasetDict
 
     name: str
     description: str
