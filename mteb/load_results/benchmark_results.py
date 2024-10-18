@@ -23,10 +23,13 @@ Score = Any
 
 def _restrict_task_results(task_result: TaskResult, task: AbsTask) -> TaskResult:
     splits = task.metadata.eval_splits
-    hf_subsets = getattr(
-        task, "hf_subsets", task.metadata.hf_subsets_to_langscripts.keys()
-    )
-    hf_subsets = set(hf_subsets)
+    if task.is_multilingual:
+        hf_subsets = getattr(
+            task, "hf_subsets", task.metadata.hf_subsets_to_langscripts.keys()
+        )
+        hf_subsets = set(hf_subsets)
+    else:
+        hf_subsets = {"default"}
     new_scores = {}
     seen_splits = set()
     for split in task_result.scores:
