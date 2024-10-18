@@ -3,6 +3,7 @@ from __future__ import annotations
 from .BitextMiningEvaluator import *
 from .ClassificationEvaluator import *
 from .ClusteringEvaluator import *
+from .Image.Any2AnyMultiChoiceEvaluator import *
 from .Image.Any2AnyRetrievalEvaluator import *
 from .Image.ClassificationEvaluator import *
 from .Image.ClusteringEvaluator import *

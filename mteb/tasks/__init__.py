@@ -3,6 +3,7 @@ from __future__ import annotations
 from .BitextMining import *
 from .Classification import *
 from .Clustering import *
+from .Image.Any2AnyMultiChoice import *
 from .Image.Any2AnyRetrieval import *
 from .Image.Clustering import *
 from .Image.ImageClassification import *
