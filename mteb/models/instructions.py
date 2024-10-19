@@ -13,16 +13,11 @@ TASKNAME2INSTRUCTIONS = {
     "SciDocsRR": "Given a title of a scientific paper, retrieve the titles of other relevant papers",
     "StackOverflowDupQuestions": "Retrieve duplicate questions from StackOverflow forum",
     "SprintDuplicateQuestions": "Retrieve duplicate questions from Sprint forum",
-    "TwitterSemEval2015": "Retrieve tweets that are semantically similar to the given tweet",
-    "TwitterURLCorpus": "Retrieve tweets that are semantically similar to the given tweet",
     "T2Reranking": "Given a Chinese search query, retrieve web passages that answer the question",
     "MMarcoReranking": "Given a Chinese search query, retrieve web passages that answer the question",
     "VoyageMMarcoReranking": "Given a Japanese search query, retrieve web passages that answer the question",
     "CMedQAv1": "Given a Chinese community medical question, retrieve replies that best answer the question",
     "CMedQAv2": "Given a Chinese community medical question, retrieve replies that best answer the question",
-    "Ocnli": "Retrieve semantically similar text.",
-    "Cmnli": "Retrieve semantically similar text.",
-    "TERRa": "Given a premise, retrieve a hypothesis that is entailed by the premise",
     # Retrieval - 1st item is query instruction; 2nd is corpus instruction
     "TwitterHjerneRetrieval": (
         "Retrieve answers to questions asked in Danish tweets",
