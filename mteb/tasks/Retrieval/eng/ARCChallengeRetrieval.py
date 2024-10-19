@@ -41,6 +41,7 @@ class ARCChallenge(AbsTaskRetrieval):
   year={2018}
 }
 """,
+        query_prompt="Retrieve the answer to the question.",
         descriptive_stats={
             "n_samples": {"test": 1172},
             "avg_character_length": {

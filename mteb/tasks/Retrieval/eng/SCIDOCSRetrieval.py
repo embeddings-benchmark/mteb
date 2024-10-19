@@ -36,6 +36,7 @@ class SCIDOCS(AbsTaskRetrieval):
   booktitle={ACL},
   year={2020}
 }""",
+        query_prompt="Given a scientific paper title, retrieve paper abstracts that are cited by the given paper",
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

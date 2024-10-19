@@ -44,6 +44,7 @@ class DanFeverRetrieval(AbsTaskRetrieval):
     abstract = "We present a dataset, DanFEVER, intended for multilingual misinformation research. The dataset is in Danish and has the same format as the well-known English FEVER dataset. It can be used for testing methods in multilingual settings, as well as for creating models in production for the Danish language.",
 }
 """,
+        query_prompt="Given a claim in Danish, retrieve documents that support the claim",
         descriptive_stats={
             "n_samples": {"train": 8897},
             "avg_character_length": {
@@ -156,6 +157,7 @@ class DanFever(AbsTaskRetrieval):
     abstract = "We present a dataset, DanFEVER, intended for multilingual misinformation research. The dataset is in Danish and has the same format as the well-known English FEVER dataset. It can be used for testing methods in multilingual settings, as well as for creating models in production for the Danish language.",
 }
 """,
+        query_prompt="Given a claim in Danish, retrieve documents that support the claim",
         descriptive_stats={
             "n_samples": {"train": 8897},
             "avg_character_length": {

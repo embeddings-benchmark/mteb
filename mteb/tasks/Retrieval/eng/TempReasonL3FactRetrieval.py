@@ -41,6 +41,7 @@ class TempReasonL3Fact(AbsTaskRetrieval):
   year={2023}
 }
 """,
+        query_prompt="Given the following question and facts, retrieve the correct answer.",
         descriptive_stats={
             "n_samples": {"test": 4426},
             "avg_character_length": {

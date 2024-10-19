@@ -44,6 +44,7 @@ class Quail(AbsTaskRetrieval):
   year={2020}
 }
 """,
+        query_prompt="Given the following context and question, retrieve the correct answer.",
         descriptive_stats={
             "n_samples": {"test": 2720},
             "avg_character_length": {

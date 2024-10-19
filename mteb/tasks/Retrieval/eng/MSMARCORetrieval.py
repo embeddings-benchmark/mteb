@@ -49,6 +49,7 @@ class MSMARCO(AbsTaskRetrieval):
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 }""",
+        query_prompt="Given a web search query, retrieve relevant passages that answer the query",
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
