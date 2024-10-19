@@ -87,6 +87,7 @@ class SwednClusteringP2P(AbsTaskClusteringFast):
   booktitle={Proceedings of CLARIN Annual Conference},
   year={2021}
 }""",
+        prompt="Identify news categories in Swedish passages",
         descriptive_stats={
             "n_samples": {"all": 2048},
             "avg_character_length": {"all": 1619.71},
@@ -130,6 +131,7 @@ class SwednClusteringFastS2S(AbsTaskClusteringFast):
   booktitle={Proceedings of CLARIN Annual Conference},
   year={2021}
 }""",
+        prompt="Identify news categories in Swedish passages",
         descriptive_stats={
             "n_samples": {"all": 2048},
             "avg_character_length": {"all": 1619.71},

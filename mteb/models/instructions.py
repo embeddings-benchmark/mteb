@@ -7,31 +7,6 @@ import mteb
 # This list is NOT comprehensive even for the tasks within MTEB
 # TODO: We should probably move this prompt to the task object
 TASKNAME2INSTRUCTIONS = {
-    # Clustering
-    "VGHierarchicalClusteringP2P": "Identify the categories (e.g. sports) of given articles in Norwegian",
-    "VGHierarchicalClusteringS2S": "Identify the categories (e.g. sports) of given articles in Norwegian",
-    "SNLHierarchicalClusteringP2P": "Identify categories in a Norwegian lexicon",
-    "SNLHierarchicalClusteringS2S": "Identify categories in a Norwegian lexicon",
-    "SwednClusteringP2P": "Identify news categories in Swedish passages",
-    "SwednClusteringS2S": "Identify news categories in Swedish passages",
-    "ArxivClusteringP2P": "Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
-    "ArxivClusteringS2S": "Identify the main and secondary category of Arxiv papers based on the titles",
-    "BiorxivClusteringP2P": "Identify the main category of Biorxiv papers based on the titles and abstracts",
-    "BiorxivClusteringS2S": "Identify the main category of Biorxiv papers based on the titles",
-    "MedrxivClusteringP2P": "Identify the main category of Medrxiv papers based on the titles and abstracts",
-    "MedrxivClusteringS2S": "Identify the main category of Medrxiv papers based on the titles",
-    "RedditClustering": "Identify the topic or theme of Reddit posts based on the titles",
-    "RedditClusteringP2P": "Identify the topic or theme of Reddit posts based on the titles and posts",
-    "StackExchangeClustering": "Identify the topic or theme of StackExchange posts based on the titles",
-    "StackExchangeClusteringP2P": "Identify the topic or theme of StackExchange posts based on the given paragraphs",
-    "TwentyNewsgroupsClustering": "Identify the topic or theme of the given news articles",
-    "CLSClusteringS2S": "Identify the main category of scholar papers based on the titles",
-    "CLSClusteringP2P": "Identify the main category of scholar papers based on the titles and abstracts",
-    "ThuNewsClusteringS2S": "Identify the topic or theme of the given news articles based on the titles",
-    "ThuNewsClusteringP2P": "Identify the topic or theme of the given news articles based on the titles and contents",
-    "GeoreviewClusteringP2P": "Identify the organization category based on the reviews",
-    "RuSciBenchOECDClusteringP2P": "Identify the category of scientific papers based on the titles and abstracts",
-    "RuSciBenchGRNTIClusteringP2P": "Identify the category of scientific papers based on the titles and abstracts",
     # Reranking and pair classification
     "AskUbuntuDupQuestions": "Retrieve duplicate questions from AskUbuntu forum",
     "MindSmallReranking": "Retrieve relevant news articles based on user browsing history",
