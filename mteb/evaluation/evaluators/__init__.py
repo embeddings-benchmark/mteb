@@ -5,6 +5,7 @@ from .ClassificationEvaluator import *
 from .ClusteringEvaluator import *
 from .Image.Any2AnyMultiChoiceEvaluator import *
 from .Image.Any2AnyRetrievalEvaluator import *
+from .Image.Any2TextMultipleChoiceEvaluator import *
 from .Image.ClassificationEvaluator import *
 from .Image.ClusteringEvaluator import *
 from .Image.ImageTextPairClassificationEvaluator import *

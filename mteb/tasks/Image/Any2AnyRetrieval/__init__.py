@@ -33,6 +33,7 @@ from .eng.SketchyI2IRetrieval import *
 from .eng.SOPI2IRetrieval import *
 from .eng.StanfordCarsI2IRetrieval import *
 from .eng.TUBerlinT2IRetrieval import *
+from .eng.VidoreBenchRetrieval import *
 from .eng.VisualNewsI2TRetrieval import *
 from .eng.VisualNewsT2IRetrieval import *
 from .eng.VizWizIT2TRetrieval import *

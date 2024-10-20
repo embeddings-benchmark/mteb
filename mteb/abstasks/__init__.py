@@ -15,6 +15,7 @@ from .AbsTaskSTS import *
 from .AbsTaskSummarization import *
 from .Image.AbsTaskAny2AnyMultiChoice import *
 from .Image.AbsTaskAny2AnyRetrieval import *
+from .Image.AbsTaskAny2TextMultipleChoice import *
 from .Image.AbsTaskImageClassification import *
 from .Image.AbsTaskImageClustering import *
 from .Image.AbsTaskImageMultilabelClassification import *
