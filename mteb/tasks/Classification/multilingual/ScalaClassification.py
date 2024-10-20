@@ -51,6 +51,7 @@ class ScalaClassification(AbsTaskClassification, MultilingualTask):
             url = "https://aclanthology.org/2023.nodalida-1.20",
             pages = "185--201",
         }""",
+        prompt="Classify passages in Scandinavian Languages based on linguistic acceptability",
         descriptive_stats={
             "n_samples": {"test": len(_LANGS) * 1024},
             "avg_character_length": {"test": 102.72},

@@ -34,6 +34,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
   year={2024}
 }
 """,
+        query_prompt="Retrieve answers to questions asked in Danish tweets",
         descriptive_stats={
             "n_samples": {"train": 340},
             "avg_character_length": {

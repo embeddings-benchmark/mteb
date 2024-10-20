@@ -47,6 +47,7 @@ class CLSClusteringFastS2S(AbsTaskClusteringFast):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
+        prompt="Identify the main category of scholar papers based on the titles",
         descriptive_stats={
             "n_samples": {"test": NUM_SAMPLES},
             "avg_character_length": {},
@@ -107,6 +108,7 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
+        prompt="Identify the main category of scholar papers based on the titles and abstracts",
         descriptive_stats={
             "n_samples": {"test": NUM_SAMPLES},
             "avg_character_length": {},
@@ -166,6 +168,7 @@ class CLSClusteringS2S(AbsTaskClustering):
   year={2022}
 }
 """,
+        prompt="Identify the main category of scholar papers based on the titles",
         descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )
 
@@ -200,6 +203,7 @@ class CLSClusteringP2P(AbsTaskClustering):
   journal={arXiv preprint arXiv:2209.05034},
   year={2022}
 }""",
+        prompt="Identify the main category of scholar papers based on the titles and abstracts",
         descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )
 
@@ -237,6 +241,7 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
   publisher = {THU Natural Language Processing Lab},
   url = {https://github.com/thunlp/THUCTC}
 }""",
+        prompt="Identify the topic or theme of the given news articles based on the titles",
         descriptive_stats={
             "n_samples": {"test": NUM_SAMPLES},
             "avg_character_length": {},
@@ -297,6 +302,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
   publisher = {THU Natural Language Processing Lab},
   url = {https://github.com/thunlp/THUCTC}
 }""",
+        prompt="Identify the topic or theme of the given news articles based on the titles and contents",
         descriptive_stats={
             "n_samples": {"test": NUM_SAMPLES},
             "avg_character_length": {},
@@ -363,6 +369,7 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
   year={2006}
 }
 """,
+        prompt="Identify the topic or theme of the given news articles based on the titles",
         descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )
 
@@ -406,5 +413,6 @@ class ThuNewsClusteringP2P(AbsTaskClustering):
   year={2006}
 }
 """,
+        prompt="Identify the topic or theme of the given news articles based on the titles and contents",
         descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )

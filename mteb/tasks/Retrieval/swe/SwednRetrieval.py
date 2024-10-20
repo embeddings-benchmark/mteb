@@ -36,6 +36,7 @@ class SwednRetrieval(AbsTaskRetrieval):
     booktitle={Proceedings of CLARIN Annual Conference},
     year={2021}
 }""",
+        query_prompt="Given a Swedish news headline retrieve summaries or news articles",
         descriptive_stats={
             "n_samples": {"test": 2048},
             "avg_character_length": {

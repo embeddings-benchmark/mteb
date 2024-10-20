@@ -59,6 +59,7 @@ class T2Retrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        query_prompt="Given a Chinese search query, retrieve web passages that answer the question",
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -119,6 +120,7 @@ class MMarcoRetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
+        query_prompt="Given a web search query, retrieve relevant passages that answer the query",
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -177,6 +179,7 @@ class DuRetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
+        query_prompt="Given a Chinese search query, retrieve web passages that answer the question",
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -228,6 +231,7 @@ class CovidRetrieval(AbsTaskRetrieval):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
+        query_prompt="Given a question on COVID-19, retrieve news articles that answer the question",
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -279,6 +283,7 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
+        query_prompt="Given a Chinese community medical question, retrieve replies that best answer the question",
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -332,6 +337,7 @@ class EcomRetrieval(AbsTaskRetrieval):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
+        query_prompt="Given a user query from an e-commerce website, retrieve description sentences of relevant products",
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -385,6 +391,7 @@ class MedicalRetrieval(AbsTaskRetrieval):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
+        query_prompt="Given a medical question, retrieve user replies that best answer the question",
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -438,6 +445,7 @@ class VideoRetrieval(AbsTaskRetrieval):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
+        query_prompt="Given a video search query, retrieve the titles of relevant videos",
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

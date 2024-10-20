@@ -41,6 +41,7 @@ class TempReasonL1(AbsTaskRetrieval):
   year={2023}
 }
 """,
+        query_prompt="Given the following question about time, retrieve the correct answer.",
         descriptive_stats={
             "n_samples": {"test": 4000},
             "avg_character_length": {

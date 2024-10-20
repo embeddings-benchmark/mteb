@@ -5,8 +5,8 @@ from collections.abc import Mapping
 from datetime import date
 from typing import Annotated, Any, Union
 
-from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
-from typing_extensions import Literal
+from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator, ConfigDict
+from typing_extensions import Literal, TypedDict
 
 from ..languages import (
     ISO_LANGUAGE_SCRIPT,
@@ -165,6 +165,20 @@ LICENSES = (  # this list can be extended as needed
 METRIC_NAME = str
 METRIC_VALUE = Union[int, float, dict[str, Any]]
 
+
+class DatasetDict(TypedDict, total=False):
+    """A dictionary containing the dataset path and revision.
+
+    Args:
+        path: The path to the dataset.
+        revision: The revision of the dataset.
+        trust_remote_code: Whether to trust the remote code.
+    """
+    path: str
+    revision: str
+    trust_remote_code: bool
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -190,12 +204,14 @@ class TaskMetadata(BaseModel):
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
         license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
-        socioeconomic_status: The socioeconomic status of the data. Includes "high", "medium", "low", "mixed".
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
         dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
         sample_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
+        prompt: The prompt used for the task.
+        query_prompt: The prompt used for the queries in the task. This is the prompt used for the queries in the retrieval task.
+        passage_prompt: The prompt used for the passages in the task. This is the prompt used for the passages in the retrieval task.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
         n_samples: The number of samples in the dataset. This should only be for the splits evaluated on. For retrieval tasks, this should be the
             number of query-document pairs.
@@ -203,7 +219,9 @@ class TaskMetadata(BaseModel):
             retrieval tasks, this will be a dict containing the character length of the queries and documents separately, as well as the total number of queries, documents, and relevance judgements per query.
     """
 
-    dataset: dict
+    model_config = ConfigDict(extra='forbid')
+
+    dataset: DatasetDict
 
     name: str
     description: str
@@ -226,6 +244,10 @@ class TaskMetadata(BaseModel):
 
     sample_creation: SAMPLE_CREATION_METHOD | None = None
     bibtex_citation: str | None = None
+
+    prompt: str | None = None
+    query_prompt: str | None = None
+    passage_prompt: str | None = None
 
     descriptive_stats: dict[METRIC_NAME, dict[SPLIT_NAME, METRIC_VALUE] | None] = {}
 

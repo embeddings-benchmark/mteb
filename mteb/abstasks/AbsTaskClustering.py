@@ -44,6 +44,8 @@ class AbsTaskClustering(AbsTask):
         labels: list of str
     """
 
+    task_prompt = "Identify categories in user passages."
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 

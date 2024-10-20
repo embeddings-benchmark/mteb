@@ -35,6 +35,7 @@ class RiaNewsRetrieval(AbsTaskRetrieval):
         booktitle={Proceedings of the 41st European Conference on Information Retrieval},
         year={2019}
         }""",
+        query_prompt="Given a news title, retrieve relevant news article",
         descriptive_stats={
             "n_samples": {"test": 10000},
             "avg_character_length": {
