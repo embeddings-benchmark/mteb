@@ -4,45 +4,45 @@ from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SOPI2IRetrieval(AbsTaskAny2AnyRetrieval):
+class RParisI2IRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
-        name="SOPI2IRetrieval",
-        description="Retrieve product photos of 22634 online products.",
-        reference="https://paperswithcode.com/dataset/stanford-online-products",
+        name="RParisI2IRetrieval",
+        description="Retrieve photos of landmarks in Paris.",
+        reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",
         dataset={
-            "path": "JamieSJS/stanford-online-products",
-            "revision": "0b3a1622902e6258425e673405bdfb1e5dfa8618",
+            "path": "JamieSJS/r-paris",
+            "revision": "bafc3a08fdffd72558021ce3a41250833d7e0e88",
         },
         type="Retrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cv_recall_at_1",
-        date=("2019-07-17", "2019-07-17"),
-        domains=["Encyclopaedic"],
+        date=("2009-01-01", "2010-04-01"),
+        domains=["Web"],
         task_subtypes=["Object recognition"],
         license="Not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{oh2016deep,
-  title={Deep metric learning via lifted structured feature embedding},
-  author={Oh Song, Hyun and Xiang, Yu and Jegelka, Stefanie and Savarese, Silvio},
+        bibtex_citation="""@inproceedings{radenovic2018revisiting,
+  title={Revisiting oxford and paris: Large-scale image retrieval benchmarking},
+  author={Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
   booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
-  pages={4004--4012},
-  year={2016}
+  pages={5706--5715},
+  year={2018}
 }
         """,
         descriptive_stats={
-            "n_samples": {"test": 120053},
+            "n_samples": {"test": 6392},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 120053,
-                    "num_queries": 120053,
-                    "average_relevant_docs_per_query": 7,
+                    "num_documents": 6392,
+                    "num_queries": 6392,
+                    "average_relevant_docs_per_query": 734,
                 }
             },
         },
