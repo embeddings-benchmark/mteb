@@ -131,6 +131,7 @@ from .pol.SciFactPLRetrieval import *
 from .pol.TRECCOVIDPLRetrieval import *
 from .rus.RiaNewsRetrieval import *
 from .rus.RuBQRetrieval import *
+from .slk.SKQuadRetrieval import *
 from .slk.SlovakSumRetrieval import *
 from .spa.SpanishPassageRetrievalS2P import *
 from .spa.SpanishPassageRetrievalS2S import *
