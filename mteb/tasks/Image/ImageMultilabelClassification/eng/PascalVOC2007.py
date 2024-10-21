@@ -16,7 +16,7 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
             "name": "voc2007_main",
             "revision": "dbafdb9e1506c9c419c5c4672e409463cd21ba50",
         },
-        type="MultilabelClassification",
+        type="ImageMultilabelClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

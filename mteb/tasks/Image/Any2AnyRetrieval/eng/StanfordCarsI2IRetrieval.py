@@ -13,7 +13,7 @@ class StanfordCarsI2I(AbsTaskAny2AnyRetrieval):
             "path": "isaacchung/stanford_cars_retrieval",
             "revision": "b27a0612211af3598bd11fe28af20928f20cce06",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

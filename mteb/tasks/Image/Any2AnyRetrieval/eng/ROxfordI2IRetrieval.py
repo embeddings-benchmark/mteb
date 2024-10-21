@@ -13,7 +13,7 @@ class ROxfordI2IRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "JamieSJS/r-oxford",
             "revision": "d8daad98b4e4896a7f7fa1b3485a22420242d4fc",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

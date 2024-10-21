@@ -13,7 +13,7 @@ class ImageCoDeT2IRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "JamieSJS/imagecode",
             "revision": "a424cd523ffb157b69a875fb5e71c1d51be54089",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="t2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -13,7 +13,7 @@ class MNISTClassification(AbsTaskImageClassification):
             "path": "ylecun/mnist",
             "revision": "b06aab39e05f7bcd9635d18ed25d06eae523c574",
         },
-        type="Classification",
+        type="ImageClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

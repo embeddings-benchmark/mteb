@@ -100,7 +100,7 @@ class VidoreArxivQARetrieval(AbsTaskAny2AnyRetrieval):
             "path": "vidore/arxivqa_test_subsampled",
             "revision": "fe2b0e055eaac82d8f6801ebc8e85d8832248133",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="t2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

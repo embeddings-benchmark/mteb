@@ -129,7 +129,7 @@ class XM3600T2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
             "revision": "8d3e5665526c55a5855cd6ddfbaba2032bc7cee4",
             # "trust_remote_code": True,
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="t2i",
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

@@ -14,7 +14,7 @@ class Fashion200kT2IRetrieval(AbsTaskAny2AnyRetrieval):
             "revision": "1b86e2dde50e671d5c83d07a79e8b1d8c696964b",
             # "trust_remote_code": True,
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="t2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

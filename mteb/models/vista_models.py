@@ -1,12 +1,17 @@
 from __future__ import annotations
 
 from functools import partial
+from typing import Any
 
 import torch
 from PIL import Image
+from torch.utils.data import DataLoader
+from torchvision import transforms
 from tqdm import tqdm
 
 from mteb.model_meta import ModelMeta
+
+tensor_to_image = transforms.Compose([transforms.ToPILImage()])
 
 
 def vista_loader(**kwargs):
@@ -27,6 +32,7 @@ def vista_loader(**kwargs):
             negatives_cross_device: bool = False,
             temperature: float = 0.02,
             from_pretrained=None,
+            **kwargs: Any,
         ):
             super().__init__(
                 model_name_bge=model_name_bge,
@@ -88,15 +94,21 @@ def vista_loader(**kwargs):
                 t_reps = torch.nn.functional.normalize(t_reps, dim=-1)
             return t_reps.contiguous()
 
-        def encode(self, images=None, texts=None):
+        def encode(self, images=None, texts=None, tensors=False):
             if images is not None:
                 if isinstance(images, list):
-                    images = [
-                        self.preprocess_val(
-                            img if isinstance(img, Image.Image) else Image.open(img)
-                        )
-                        for img in images
-                    ]
+                    if not tensors:
+                        images = [
+                            self.preprocess_val(
+                                img if isinstance(img, Image.Image) else Image.open(img)
+                            )
+                            for img in images
+                        ]
+                    else:
+                        images = [
+                            self.preprocess_val(tensor_to_image(image))
+                            for image in images
+                        ]
                     images = torch.stack(images)
                 if texts is not None:
                     texts = self.tokenizer(texts, return_tensors="pt", padding=True)
@@ -119,31 +131,52 @@ def vista_loader(**kwargs):
                 all_text_embeddings.append(batch_embeddings.cpu())
             return torch.cat(all_text_embeddings, dim=0)
 
-        def get_image_embeddings(self, images: list[Image.Image], batch_size: int = 32):
+        def get_image_embeddings(
+            self, images: list[Image.Image] | DataLoader, batch_size: int = 32
+        ):
             all_image_embeddings = []
-            for i in tqdm(range(0, len(images), batch_size)):
-                batch_images = images[i : i + batch_size]
+
+            if isinstance(images, DataLoader):
                 with torch.no_grad():
-                    batch_embeddings = self.encode(images=batch_images)
-                all_image_embeddings.append(batch_embeddings.cpu())
+                    for batch in tqdm(images):
+                        batch_embeddings = self.encode(images=batch, tensors=True)
+                        all_image_embeddings.append(batch_embeddings.cpu())
+            else:
+                with torch.no_grad():
+                    for i in tqdm(range(0, len(images), batch_size)):
+                        batch_images = images[i : i + batch_size]
+                        batch_embeddings = self.encode(images=batch_images)
+                        all_image_embeddings.append(batch_embeddings.cpu())
             return torch.cat(all_image_embeddings, dim=0)
 
         def get_fused_embeddings(
             self,
             texts: list[str] = None,
-            images: list[Image.Image] = None,
+            images: list[Image.Image] | DataLoader = None,
             batch_size: int = 32,
         ):
             all_embeddings = []
-            assert len(texts) == len(images)
-            for i in tqdm(range(0, len(texts), batch_size)):
-                batch_texts = texts[i : i + batch_size]
-                batch_images = images[i : i + batch_size]
+
+            if isinstance(images, DataLoader):
                 with torch.no_grad():
-                    batch_embeddings = self.encode(
-                        images=batch_images, texts=batch_texts
-                    )
-                all_embeddings.append(batch_embeddings.cpu())
+                    for index, batch_images in enumerate(tqdm(images)):
+                        batch_texts = texts[
+                            index * batch_size : (index + 1) * batch_size
+                        ]
+                        batch_embeddings = self.encode(
+                            images=batch_images, texts=batch_texts, tensors=True
+                        )
+                        all_embeddings.append(batch_embeddings.cpu())
+            else:
+                assert len(texts) == len(images)
+                with torch.no_grad():
+                    for i in tqdm(range(0, len(texts), batch_size)):
+                        batch_texts = texts[i : i + batch_size]
+                        batch_images = images[i : i + batch_size]
+                        batch_embeddings = self.encode(
+                            images=batch_images, texts=batch_texts
+                        )
+                        all_embeddings.append(batch_embeddings.cpu())
             return torch.cat(all_embeddings, dim=0)
 
         def calculate_probs(self, text_embeddings, image_embeddings):

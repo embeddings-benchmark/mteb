@@ -13,7 +13,7 @@ class SketchyI2IRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "JamieSJS/sketchy",
             "revision": "c8b8c1b7a2f0a92f1bfaaa1c9afc22aa42c61d5b",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

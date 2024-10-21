@@ -13,7 +13,7 @@ class OVENIT2TRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "MRBench/mbeir_oven_task6",
             "revision": "2192074af29422bc1dc41cf07936f198b8c69bd0",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="it2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

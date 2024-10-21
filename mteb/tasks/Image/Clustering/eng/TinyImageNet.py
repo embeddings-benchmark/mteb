@@ -13,7 +13,7 @@ class TinyImageNet(AbsTaskImageClustering):
             "path": "zh-plus/tiny-imagenet",
             "revision": "5a77092c28e51558c5586e9c5eb71a7e17a5e43f",
         },
-        type="Clustering",
+        type="ImageClustering",
         category="s2s",
         eval_splits=["valid"],
         eval_langs=["eng-Latn"],

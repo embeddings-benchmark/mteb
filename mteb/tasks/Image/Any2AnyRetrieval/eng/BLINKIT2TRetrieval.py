@@ -14,7 +14,7 @@ class BLINKIT2TRetrieval(AbsTaskAny2AnyRetrieval):
             "revision": "4ab83c87ac5b24e3b730f86d585671493a3a423c",
             "trust_remote_code": True,
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="it2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

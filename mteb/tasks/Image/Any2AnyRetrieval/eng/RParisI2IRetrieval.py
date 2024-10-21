@@ -13,7 +13,7 @@ class RParisI2IRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "JamieSJS/r-paris",
             "revision": "bafc3a08fdffd72558021ce3a41250833d7e0e88",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
