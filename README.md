@@ -379,7 +379,7 @@ There are times you may want to cache the embeddings so you can re-use them. Thi
 
 ```python
 ... # define your task and model above as normal
-evaluation.run(model, encode_kwargs={'cache_embeddings': 'path_to_cache_dir', "vector_dim": 512}) # setting this flag will create/use the cache
+evaluation.run(model, encode_kwargs={'cache_embeddings': 'path_to_cache_dir'}) # setting this flag will create/use the cache
 ```
 
 </details>

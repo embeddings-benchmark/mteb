@@ -19,16 +19,16 @@ class TextVectorMap:
     def __init__(
         self,
         directory: Union[str, Path],
-        vector_dim: int = 768,
         initial_vectors: int = 100000,
     ):
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)
         self.vectors_file = self.directory / "vectors.npy"
         self.index_file = self.directory / "index.pkl"
+        self.dimension_file = self.directory / "dimension"
         self.hash_to_index: Dict[str, int] = {}
         self.vectors: Optional[np.memmap] = None
-        self.vector_dim: int = vector_dim
+        self.vector_dim: Optional[int] = None
         self.initial_vectors = initial_vectors
         logger.info(f"Initialized TextVectorMap in directory: {self.directory}")
         self._initialize_vectors_file()
@@ -38,6 +38,12 @@ class TextVectorMap:
 
     def add(self, text: str, vector: np.ndarray) -> None:
         try:
+            if self.vector_dim is None:
+                self.vector_dim = vector.shape[0]
+                self._initialize_vectors_file()
+                self._save_dimension()
+                logger.info(f"Initialized vector dimension to {self.vector_dim}")
+
             text_hash = self._hash_text(text)
             if text_hash in self.hash_to_index:
                 logger.warning(
@@ -59,6 +65,10 @@ class TextVectorMap:
             raise
 
     def _initialize_vectors_file(self):
+        if self.vector_dim is None:
+            logger.info("Vector dimension not set. Waiting for first add() call.")
+            return
+
         if not self.vectors_file.exists():
             logger.info(
                 f"Creating initial vectors file with {self.initial_vectors} vectors"
@@ -88,11 +98,32 @@ class TextVectorMap:
         new_vectors[:current_size] = self.vectors[:]
         self.vectors = new_vectors
 
+    def _save_dimension(self):
+        with open(self.dimension_file, "w") as f:
+            f.write(str(self.vector_dim))
+        logger.info(
+            f"Saved vector dimension {self.vector_dim} to {self.dimension_file}"
+        )
+
+    def _load_dimension(self):
+        if self.dimension_file.exists():
+            with open(self.dimension_file) as f:
+                self.vector_dim = int(f.read().strip())
+            logger.info(
+                f"Loaded vector dimension {self.vector_dim} from {self.dimension_file}"
+            )
+        else:
+            logger.warning(
+                "Dimension file not found. Vector dimension remains uninitialized."
+            )
+
     def save(self) -> None:
         try:
-            self.vectors.flush()
+            if self.vectors is not None:
+                self.vectors.flush()
             with open(self.index_file, "wb") as f:
                 pickle.dump(self.hash_to_index, f, protocol=pickle.HIGHEST_PROTOCOL)
+            self._save_dimension()
             logger.info(f"Saved TextVectorMap to {self.directory}")
         except Exception as e:
             logger.error(f"Error saving TextVectorMap: {str(e)}")
@@ -101,17 +132,25 @@ class TextVectorMap:
     def load(self, name: str = None) -> None:
         name_details = name if name else ""
         try:
+            self._load_dimension()
             if self.index_file.exists() and self.vectors_file.exists():
                 with open(self.index_file, "rb") as f:
                     self.hash_to_index = pickle.load(f)
 
-                self.vectors = np.memmap(self.vectors_file, dtype="float32", mode="r+")
-                self.vectors = self.vectors.reshape(-1, self.vector_dim)
+                if self.vector_dim is not None:
+                    self.vectors = np.memmap(
+                        self.vectors_file, dtype="float32", mode="r+"
+                    )
+                    self.vectors = self.vectors.reshape(-1, self.vector_dim)
+                    logger.info(f"Loaded vectors file with shape: {self.vectors.shape}")
+                else:
+                    logger.warning(
+                        "Vector dimension not set. Unable to load vectors file."
+                    )
 
                 logger.info(
                     f"Loaded TextVectorMap ({name_details}) from {self.directory}"
                 )
-                logger.info(f"Loaded vectors file with shape: {self.vectors.shape}")
             else:
                 logger.warning(
                     f"No existing files found. Initialized empty TextVectorMap ({name_details})."
@@ -134,12 +173,12 @@ class TextVectorMap:
 
     def __contains__(self, text: str) -> bool:
         return self._hash_text(text) in self.hash_to_index
-    
+
     def __del__(self):
         self.close()
 
     def close(self):
-        if hasattr(self, 'vectors') and self.vectors is not None:
+        if hasattr(self, "vectors") and self.vectors is not None:
             self.vectors.flush()
             del self.vectors
             self.vectors = None
@@ -147,28 +186,21 @@ class TextVectorMap:
 
 
 class CachedEmbeddingWrapper:
-    def __init__(self, model: Any, cache_path: Union[str, Path], vector_dim: int = 768):
+    def __init__(self, model: Any, cache_path: Union[str, Path]):
         self._model = model
         self.cache_path = Path(cache_path)
         self.cache_path.mkdir(parents=True, exist_ok=True)
-        self.vector_dim = vector_dim
 
         if hasattr(model, "encode_queries") and hasattr(model, "encode_corpus"):
             self.encode_method = "split"
-            self.query_cache = TextVectorMap(
-                self.cache_path / "query_cache", vector_dim=self.vector_dim
-            )
-            self.corpus_cache = TextVectorMap(
-                self.cache_path / "corpus_cache", vector_dim=self.vector_dim
-            )
+            self.query_cache = TextVectorMap(self.cache_path / "query_cache")
+            self.corpus_cache = TextVectorMap(self.cache_path / "corpus_cache")
             self.query_cache.load(name="query_cache")
             self.corpus_cache.load(name="corpus_cache")
             self._wrap_split_encode_methods()
         elif hasattr(model, "encode"):
             self.encode_method = "single"
-            self.cache = TextVectorMap(
-                self.cache_path / "cache", vector_dim=self.vector_dim
-            )
+            self.cache = TextVectorMap(self.cache_path / "cache")
             self.cache.load(name="cache")
             self._wrap_single_encode_method()
         else:
@@ -269,17 +301,17 @@ class CachedEmbeddingWrapper:
 
     def __dir__(self) -> List[str]:
         return list(set(super().__dir__() + dir(self._model)))
-    
+
     def __del__(self):
         self.close()
 
     def close(self):
         if self.encode_method == "split":
-            if hasattr(self, 'query_cache'):
+            if hasattr(self, "query_cache"):
                 self.query_cache.close()
-            if hasattr(self, 'corpus_cache'):
+            if hasattr(self, "corpus_cache"):
                 self.corpus_cache.close()
         else:
-            if hasattr(self, 'cache'):
+            if hasattr(self, "cache"):
                 self.cache.close()
         logger.info("Closed CachedEmbeddingWrapper")
