@@ -13,7 +13,7 @@ from datasets import Features, Value, load_dataset
 from mteb.abstasks.TaskMetadata import HFSubset
 
 from ..evaluation.evaluators import RetrievalEvaluator
-from ..load_results.mteb_results import ScoresDict
+from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)

@@ -7,7 +7,7 @@ from datasets import Dataset
 
 from ..encoder_interface import Encoder
 from ..evaluation.evaluators import PairClassificationEvaluator
-from ..load_results.mteb_results import ScoresDict
+from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
