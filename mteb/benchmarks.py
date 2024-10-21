@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Sequence
+
+from mteb.abstasks.AbsTask import AbsTask
+from mteb.overview import get_tasks
 
 
 @dataclass
 class Benchmark:
     name: str
-    tasks: list[str]
+    tasks: Sequence[str] | Sequence[AbsTask]
     description: str | None = None
     reference: str | None = None
     citation: str | None = None
@@ -115,28 +119,53 @@ MTEB_MAIN_EN = Benchmark(
 
 MTEB_MAIN_RU = Benchmark(
     name="MTEB(rus)",
-    tasks=[
-        "GeoreviewClassification",
-        "GeoreviewClusteringP2P",
-        "HeadlineClassification",
-        "InappropriatenessClassification",
-        "KinopoiskClassification",
-        "MassiveIntentClassification",
-        "MassiveScenarioClassification",
-        "RiaNewsRetrieval",
-        "RuBQRetrieval",
-        "RuReviewsClassification",
-        "RuSciBenchGRNTIClassification",
-        "RuSciBenchGRNTIClusteringP2P",
-        "RuSciBenchOECDClassification",
-        "RuSciBenchOECDClusteringP2P",
-        "RuSTSBenchmarkSTS",
-        "STS22",
-        "TERRa",
-    ],
+    tasks=get_tasks(
+        languages=["rus"],
+        tasks=[
+            # Classification
+            "GeoreviewClassification",
+            "HeadlineClassification",
+            "InappropriatenessClassification",
+            "KinopoiskClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "RuReviewsClassification",
+            "RuSciBenchGRNTIClassification",
+            "RuSciBenchOECDClassification",
+            # Clustering
+            "GeoreviewClusteringP2P",
+            "RuSciBenchGRNTIClusteringP2P",
+            "RuSciBenchOECDClusteringP2P",
+            # MultiLabelClassification
+            "CEDRClassification",
+            "SensitiveTopicsClassification",
+            # PairClassification
+            "TERRa",
+            # Reranking
+            "MIRACLReranking",
+            "RuBQReranking",
+            # Retrieval
+            "MIRACLRetrieval",
+            "RiaNewsRetrieval",
+            "RuBQRetrieval",
+            # STS
+            "RUParaPhraserSTS",
+            "RuSTSBenchmarkSTS",
+            "STS22",
+        ],
+    ),
     description="Main Russian benchmarks from MTEB",
     reference="https://aclanthology.org/2023.eacl-main.148/",
-    citation=None,
+    citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
+      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design}, 
+      author={Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
+      year={2024},
+      eprint={2408.12503},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2408.12503}, 
+}
+""",
 )
 
 MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
@@ -197,7 +226,6 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
     }
     """,
 )
-
 SEB = Benchmark(
     name="MTEB(Scandinavian)",
     tasks=[
@@ -240,5 +268,193 @@ SEB = Benchmark(
       eprint={2406.02396},
       archivePrefix={arXiv},
       primaryClass={cs.CL}
+}""",
+)
+
+CoIR = Benchmark(
+    name="CoIR",
+    tasks=[
+        "AppsRetrieval",
+        "CosQA",
+        "SyntheticText2SQL",
+        "COIRCodeSearchNetRetrieval",
+        "CodeSearchNetCCRetrieval",
+        "CodeTransOceanDL",
+        "CodeTransOceanContest",
+        "StackOverflowQA",
+        "CodeFeedbackMT",
+        "CodeFeedbackST",
+    ],
+    description="CoIR: A Comprehensive Benchmark for Code Information Retrieval Models",
+    reference="https://github.com/CoIR-team/coir",
+    citation="""@misc{li2024coircomprehensivebenchmarkcode,
+      title={CoIR: A Comprehensive Benchmark for Code Information Retrieval Models}, 
+      author={Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
+      year={2024},
+      eprint={2407.02883},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2407.02883}, 
+    }""",
+)
+
+MTEB_FRA = Benchmark(
+    name="MTEB(fra)",
+    tasks=get_tasks(
+        languages=["fra"],
+        tasks=[
+            # Classification
+            "AmazonReviewsClassification",
+            "MasakhaNEWSClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "MTOPDomainClassification",
+            "MTOPIntentClassification",
+            # Clustering
+            "AlloProfClusteringP2P",
+            "AlloProfClusteringS2S",
+            "HALClusteringS2S",
+            "MasakhaNEWSClusteringP2P",
+            "MasakhaNEWSClusteringS2S",
+            "MLSUMClusteringP2P",
+            "MLSUMClusteringS2S",
+            # Pair Classification
+            "OpusparcusPC",
+            "PawsXPairClassification",
+            # Reranking
+            "SyntecReranking",
+            "AlloprofReranking",
+            # Retrieval
+            "AlloprofRetrieval",
+            "BSARDRetrieval",
+            "SyntecRetrieval",
+            "XPQARetrieval",
+            "MintakaRetrieval",
+            # STS
+            "SummEvalFr",
+            "STSBenchmarkMultilingualSTS",
+            "STS22",
+            "SICKFr",
+        ],
+    ),
+    description="Main French benchmarks from MTEB",
+    reference="https://arxiv.org/abs/2405.20468",
+    citation="""@misc{ciancone2024mtebfrenchresourcesfrenchsentence,
+      title={MTEB-French: Resources for French Sentence Embedding Evaluation and Analysis}, 
+      author={Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
+      year={2024},
+      eprint={2405.20468},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2405.20468}, 
+}""",
+)
+
+
+MTEB_DEU = Benchmark(
+    name="MTEB(deu)",
+    tasks=get_tasks(
+        languages=["deu"],
+        tasks=[
+            # Classification
+            "AmazonCounterfactualClassification",
+            "AmazonReviewsClassification",
+            "MTOPDomainClassification",
+            "MTOPIntentClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            # Clustering
+            "BlurbsClusteringP2P",
+            "BlurbsClusteringS2S",
+            "TenKGnadClusteringP2P",
+            "TenKGnadClusteringS2S",
+            # Pair Classification
+            "FalseFriendsGermanEnglish",
+            "PawsXPairClassification",
+            # Reranking
+            "MIRACLReranking",
+            # Retrieval
+            "GermanQuAD-Retrieval",
+            "GermanDPR",
+            "XMarket",
+            "GerDaLIR",
+            # STS
+            "GermanSTSBenchmark",
+            "STS22",
+        ],
+    ),
+    description="Main German benchmarks from MTEB",
+    reference="https://arxiv.org/html/2401.02709v1",
+    citation="""@misc{wehrli2024germantextembeddingclustering,
+      title={German Text Embedding Clustering Benchmark}, 
+      author={Silvan Wehrli and Bert Arnrich and Christopher Irrgang},
+      year={2024},
+      eprint={2401.02709},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2401.02709}, 
+}""",
+)
+
+
+MTEB_KOR = Benchmark(
+    name="MTEB(kor)",
+    tasks=get_tasks(
+        languages=["kor"],
+        tasks=[  # @KennethEnevoldsen: We could probably expand this to a more solid benchamrk, but for now I have left it as is.
+            # Classification
+            "KLUE-TC",
+            # Reranking
+            "MIRACLReranking",
+            # Retrieval
+            "MIRACLRetrieval",
+            "Ko-StrategyQA",
+            # STS
+            "KLUE-STS",
+            "KorSTS",
+        ],
+    ),
+    description="Main Korean benchmarks from MTEB",
+    reference=None,
+    citation=None,
+)
+
+
+MTEB_pol = Benchmark(
+    name="MTEB(pol)",
+    tasks=get_tasks(
+        languages=["pol"],
+        tasks=[
+            # Classification
+            "CBD",
+            "PolEmo2.0-IN",
+            "PolEmo2.0-OUT",
+            "AllegroReviews",
+            "PAC",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            # Clustering
+            "EightTagsClustering",
+            "PlscClusteringS2S",
+            "PlscClusteringP2P",
+            # Pair Classification
+            "SICK-E-PL",
+            "PpcPC",
+            "CDSC-E",
+            "PSC",
+            # STS
+            "SICK-R-PL",
+            "CDSC-R",
+            "STS22",
+            "STSBenchmarkMultilingualSTS",
+        ],
+    ),
+    description="Main Polish benchmarks from MTEB",
+    reference="https://arxiv.org/abs/2405.10138",
+    citation="""@article{poswiata2024plmteb,
+    title={PL-MTEB: Polish Massive Text Embedding Benchmark},
+    author={Rafał Poświata and Sławomir Dadas and Michał Perełkiewicz},
+    journal={arXiv preprint arXiv:2405.10138},
+    year={2024}
 }""",
 )

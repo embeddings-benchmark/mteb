@@ -4,9 +4,8 @@ from typing import Any
 
 import datasets
 
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskClassification
 
 _LANGUAGES = {
     "asm_Beng": ["asm-Beng"],
@@ -113,7 +112,7 @@ class IndicLangClassification(AbsTaskClassification):
         if self.data_loaded:
             return
 
-        labels = sorted(list(_LANGUAGES.keys()))
+        labels = sorted(_LANGUAGES.keys())
 
         data = datasets.load_dataset(**self.metadata_dict["dataset"])["train"]["data"][
             0

@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from .....abstasks import AbsTaskImageClassification
 
 
 class BirdsnapClassification(AbsTaskImageClassification):
@@ -26,7 +25,6 @@ class BirdsnapClassification(AbsTaskImageClassification):
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

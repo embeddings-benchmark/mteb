@@ -13,7 +13,7 @@ class TERRa(AbsTaskPairClassification):
             "revision": "7b58f24536063837d644aab9a023c62199b2a612",
         },
         description="Textual Entailment Recognition for Russian. This task requires to recognize, given two text fragments, "
-        "whether the meaning of one text is entailed (can be inferred) from the other text.",
+        + "whether the meaning of one text is entailed (can be inferred) from the other text.",
         reference="https://arxiv.org/pdf/2010.15925",
         type="PairClassification",
         category="s2s",

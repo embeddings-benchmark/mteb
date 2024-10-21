@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskBitextMining
+from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -43,7 +43,11 @@ class BornholmBitextMining(AbsTaskBitextMining):
 """,
         descriptive_stats={
             "n_samples": {"test": 500},
-            "avg_character_length": {"test": 89.7},
+            "test": {
+                "average_sentence1_length": 49.834,
+                "average_sentence2_length": 38.888,
+                "num_samples": 500,
+            },
         },
     )
 

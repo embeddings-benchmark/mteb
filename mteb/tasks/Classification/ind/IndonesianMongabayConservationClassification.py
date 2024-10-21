@@ -5,7 +5,7 @@ import ast
 import datasets
 import numpy as np
 
-from mteb.abstasks import AbsTaskClassification
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 

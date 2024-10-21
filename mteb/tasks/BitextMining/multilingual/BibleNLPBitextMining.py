@@ -4,9 +4,9 @@ from typing import Any
 
 import datasets
 
+from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskBitextMining, MultilingualTask
 
 _LANGUAGES = [
     "aai_Latn",  # Apinayé
@@ -923,7 +923,7 @@ class BibleNLPBitextMining(AbsTaskBitextMining, MultilingualTask):
     def dataset_transform(self) -> None:
         # Convert to standard format
         for lang in self.hf_subsets:
-            l1, l2 = [l.split("_")[0] for l in lang.split("-")]
+            l1, l2 = (l.split("_")[0] for l in lang.split("-"))
 
             self.dataset[lang] = self.dataset[lang].rename_columns(
                 {l1: "sentence1", l2: "sentence2"}

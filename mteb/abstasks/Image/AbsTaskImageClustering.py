@@ -5,10 +5,10 @@ from typing import Any
 
 from datasets import Dataset
 
-from mteb.abstasks import AbsTask
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
-from mteb.evaluation.evaluators import ImageClusteringEvaluator
-from mteb.load_results.mteb_results import HFSubset, ScoresDict
+from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from ...evaluation.evaluators import ImageClusteringEvaluator
+from ...load_results.mteb_results import HFSubset, ScoresDict
+from ..AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +30,11 @@ class AbsTaskImageClustering(AbsTask):
 
     def _add_main_score(self, scores: dict[HFSubset, ScoresDict]) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
+
+    def _calculate_metrics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ):
+        pass
 
     def _evaluate_subset(
         self,

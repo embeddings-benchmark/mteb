@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskImageMultilabelClassification
+from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (
+    AbsTaskImageMultilabelClassification,
+)
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -26,7 +28,6 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

@@ -14,7 +14,7 @@ class SCIDOCS(AbsTaskRetrieval):
         },
         description=(
             "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation"
-            " prediction, to document classification and recommendation."
+            + " prediction, to document classification and recommendation."
         ),
         reference="https://allenai.org/data/scidocs",
         type="Retrieval",
@@ -24,12 +24,12 @@ class SCIDOCS(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
+        domains=["Academic", "Written", "Non-fiction"],
+        task_subtypes=[],
+        license="cc-by-sa-4.0",
         annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        dialect=[],
+        sample_creation="found",
         bibtex_citation="""@inproceedings{specter2020cohan,
   title={SPECTER: Document-level Representation Learning using Citation-informed Transformers},
   author={Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},

@@ -3,11 +3,12 @@ from __future__ import annotations
 import logging
 import random
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Sequence
+from typing import Any, Dict, Sequence, TypedDict
 
 import datasets
 import numpy as np
 import torch
+import tqdm
 from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 
@@ -49,6 +50,12 @@ def _multilabel_subsampling(
         )
         dataset_dict.update({split: Dataset.from_dict(dataset_dict[split][test_idx])})
     return dataset_dict
+
+
+class DescriptiveStatistics(TypedDict):
+    """Class for descriptive statistics."""
+
+    pass
 
 
 class AbsTask(ABC):
@@ -104,9 +111,7 @@ class AbsTask(ABC):
         self.dataset: dict[HFSubset, DatasetDict]
 
         scores = {}
-        hf_subsets = (
-            [l for l in self.dataset.keys()] if self.is_multilingual else ["default"]
-        )
+        hf_subsets = list(self.dataset.keys()) if self.is_multilingual else ["default"]
 
         for hf_subset in hf_subsets:
             logger.info(
@@ -185,6 +190,46 @@ class AbsTask(ABC):
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
         self.dataset_transform()
         self.data_loaded = True
+
+    def calculate_metadata_metrics(
+        self,
+    ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
+        self.load_data()
+
+        all_details = {}
+        pbar_split = tqdm.tqdm(
+            self.metadata_dict["eval_splits"], desc="Processing Splits..."
+        )
+        for split in pbar_split:
+            pbar_split.set_postfix_str(f"Split: {split}")
+            print(f"Processing metadata for split {split}")
+            if self.is_multilingual:
+                all_details[split] = self._calculate_metrics_from_split(
+                    split, compute_overall=True
+                )
+                all_details[split]["hf_subset_descriptive_stats"] = {}
+
+                pbar_subsets = tqdm.tqdm(
+                    self.metadata.eval_langs, desc="Processing Languages..."
+                )
+                for hf_subset in pbar_subsets:
+                    pbar_subsets.set_postfix_str(f"Language: {hf_subset}")
+                    print(f"Processing metadata for language {hf_subset}")
+                    split_details = self._calculate_metrics_from_split(split, hf_subset)
+                    all_details[split]["hf_subset_descriptive_stats"][hf_subset] = (
+                        split_details
+                    )
+            else:
+                split_details = self._calculate_metrics_from_split(split)
+                all_details[split] = split_details
+
+        return all_details
+
+    @abstractmethod
+    def _calculate_metrics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ) -> DescriptiveStatistics:
+        raise NotImplementedError
 
     @property
     def metadata_dict(self) -> dict[str, Any]:

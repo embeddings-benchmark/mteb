@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import logging
-from typing import Any, Callable, Dict, List, Literal, Type, Union
+from typing import Any, Callable, Literal
 
 import numpy as np
 import torch
@@ -53,7 +55,7 @@ class LLM2VecWrapper:
 
     def encode(
         self,
-        sentences: List[str],
+        sentences: list[str],
         *,
         prompt_name: str = None,
         **kwargs: Any,  # noqa
@@ -73,19 +75,21 @@ class LLM2VecWrapper:
 
     def encode_corpus(
         self,
-        corpus: Union[List[Dict[str, str]], Dict[str, List[str]], List[str]],
+        corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
         prompt_name: str = None,
         **kwargs: Any,
     ) -> np.ndarray:
         sentences = corpus_to_texts(corpus, sep=" ")
         sentences = [["", sentence] for sentence in sentences]
+        if "request_qid" in kwargs:
+            kwargs.pop("request_qid")
         return self.model.encode(sentences, **kwargs)
 
-    def encode_queries(self, queries: List[str], **kwargs: Any) -> np.ndarray:
+    def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
         return self.encode(queries, **kwargs)
 
 
-def _loader(wrapper: Type[LLM2VecWrapper], **kwargs) -> Callable[..., Encoder]:
+def _loader(wrapper: type[LLM2VecWrapper], **kwargs) -> Callable[..., Encoder]:
     _kwargs = kwargs
 
     def loader_inner(**kwargs: Any) -> Encoder:

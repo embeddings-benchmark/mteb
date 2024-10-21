@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -23,7 +23,6 @@ class Fashion200kI2TRetrieval(AbsTaskAny2AnyRetrieval):
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
         license="Apache-2.0",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],

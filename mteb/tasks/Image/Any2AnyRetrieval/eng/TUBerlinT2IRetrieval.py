@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from .....abstasks import AbsTaskAny2AnyRetrieval
 
 
 class TUBerlinT2IRetrieval(AbsTaskAny2AnyRetrieval):
@@ -12,8 +11,8 @@ class TUBerlinT2IRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://dl.acm.org/doi/pdf/10.1145/2185520.2185540?casa_token=tq-eUx5UROYAAAAA:_694nPzE7tali6LCkxQc0M-mlo9xslasPMcVnFPMy9tDfvt7lg7p1RTe-k8VWCjuv9gmkQqasKUZ",
         dataset={
             "path": "gowitheflow/tu-berlin",
-            "revision": "dcd8328b8b27cd39ed6c066862532a5dcd35f012",
-            "trust_remote_code": True,
+            "revision": "0cd78cd1ddbd3cafa9f319c638ebd77836ec9ff6",
+            # "trust_remote_code": True,
         },
         type="Retrieval",
         category="t2i",
@@ -21,11 +20,9 @@ class TUBerlinT2IRetrieval(AbsTaskAny2AnyRetrieval):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2012-01-01", "2012-12-31"),
-        form=["written"],
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
         license="CC BY-SA 4.0",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],
@@ -45,7 +42,7 @@ class TUBerlinT2IRetrieval(AbsTaskAny2AnyRetrieval):
             "avg_character_length": {
                 "test": {
                     "average_document_length": 0.0,
-                    "average_query_length": 0.0,
+                    "average_query_length": 7.24,
                     "num_documents": 20000,
                     "num_queries": 250,
                     "average_relevant_docs_per_query": 80.0,

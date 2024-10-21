@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from .....abstasks import AbsTaskAny2AnyRetrieval
 
 
 class OVENIT2TRetrieval(AbsTaskAny2AnyRetrieval):
@@ -20,11 +19,9 @@ class OVENIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2023-01-01", "2023-12-31"),
-        form=["written"],
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
         license="CC BY-SA 4.0",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
         modalities=["text"],

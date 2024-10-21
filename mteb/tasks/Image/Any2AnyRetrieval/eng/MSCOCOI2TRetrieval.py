@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -20,11 +20,9 @@ class MSCOCOI2TRetrieval(AbsTaskAny2AnyRetrieval):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2018-01-01", "2018-12-31"),
-        form=["written"],
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
         license="CC BY-SA 4.0",
-        socioeconomic_status="medium",
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],

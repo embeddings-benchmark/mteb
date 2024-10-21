@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks import AbsTaskClassification, MultilingualTask
 
 _LANGUAGES = {
     "af": ["afr-Latn"],
@@ -76,12 +76,12 @@ class MassiveIntentClassification(MultilingualTask, AbsTaskClassification):
         eval_langs=_LANGUAGES,
         main_score="accuracy",
         date=("2022-01-01", "2022-04-22"),
-        domains=["Spoken", "Spoken"],
+        domains=["Spoken"],
         task_subtypes=[],
         license="Apache 2.0",
         annotations_creators="human-annotated",
         dialect=[],
-        sample_creation="created",
+        sample_creation="human-translated and localized",  # with the exception of the English data
         bibtex_citation="""@misc{fitzgerald2022massive,
       title={MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages}, 
       author={Jack FitzGerald and Christopher Hench and Charith Peris and Scott Mackie and Kay Rottmann and Ana Sanchez and Aaron Nash and Liam Urbach and Vishesh Kakarala and Richa Singh and Swetha Ranganath and Laurie Crist and Misha Britan and Wouter Leeuwis and Gokhan Tur and Prem Natarajan},

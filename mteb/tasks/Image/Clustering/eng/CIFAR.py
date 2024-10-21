@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.Image.AbsTaskImageClustering import AbsTaskImageClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from .....abstasks import AbsTaskImageClustering
 
 
 class CIFAR10Clustering(AbsTaskImageClustering):
@@ -26,7 +25,6 @@ class CIFAR10Clustering(AbsTaskImageClustering):
         domains=["Web"],
         task_subtypes=["Object recognition"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

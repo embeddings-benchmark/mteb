@@ -1,8 +1,7 @@
 from __future__ import annotations
 
+from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from .....abstasks import AbsTaskImageClassification
 
 
 class SUN397Classification(AbsTaskImageClassification):
@@ -26,7 +25,6 @@ class SUN397Classification(AbsTaskImageClassification):
         domains=["Encyclopaedic"],
         task_subtypes=["Scene recognition"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

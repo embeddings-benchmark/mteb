@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskImageClassification
+from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -29,7 +29,6 @@ version train/test list.""",
         domains=["Scene"],
         task_subtypes=["Activity recognition"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

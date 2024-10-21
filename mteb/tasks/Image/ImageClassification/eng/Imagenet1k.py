@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskImageClassification
+from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -25,7 +25,6 @@ class Imagenet1kClassification(AbsTaskImageClassification):
         domains=["Scene"],
         task_subtypes=["Object recognition"],
         license="Not specified",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["image"],

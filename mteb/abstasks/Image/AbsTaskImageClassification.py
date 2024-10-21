@@ -6,8 +6,7 @@ from typing import Any
 
 import numpy as np
 
-from mteb.encoder_interface import Encoder
-
+from ...encoder_interface import Encoder
 from ...evaluation.evaluators import (
     ImagekNNClassificationEvaluator,
     ImagekNNClassificationEvaluatorPytorch,
@@ -68,6 +67,11 @@ class AbsTaskImageClassification(AbsTask):
     def _add_main_score(self, scores: dict[HFSubset, ScoresDict]) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
+    def _calculate_metrics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ):
+        pass
+
     def evaluate(
         self,
         model,
@@ -81,7 +85,7 @@ class AbsTaskImageClassification(AbsTask):
             self.load_data()
 
         scores = {}
-        hf_subsets = [l for l in self.dataset] if self.is_multilingual else ["default"]
+        hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
 
         for hf_subset in hf_subsets:
             logger.info(

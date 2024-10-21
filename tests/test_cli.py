@@ -1,5 +1,7 @@
 """tests for the MTEB CLI"""
 
+from __future__ import annotations
+
 import subprocess
 from argparse import Namespace
 from pathlib import Path
@@ -83,6 +85,7 @@ def test_create_meta():
         results_folder=results,
         output_path=output_path,
         overwrite=True,
+        from_existing=None,
     )
 
     create_meta(args)
@@ -111,3 +114,73 @@ def test_create_meta():
     command = f"mteb create_meta --results_folder {results} --output_path {output_path} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
+
+
+@pytest.mark.parametrize(
+    "existing_readme_name, gold_readme_name",
+    [
+        ("existing_readme.md", "model_card_gold_existing.md"),
+        ("model_card_without_frontmatter.md", "model_card_gold_without_frontmatter.md"),
+    ],
+)
+def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: str):
+    """Test create_meta function directly as well as through the command line interface"""
+    test_folder = Path(__file__).parent
+    output_folder = test_folder / "create_meta"
+    results = (
+        output_folder / "all-MiniLM-L6-v2" / "8b3219a92973c328a8e22fadcfa821b5dc75636a"
+    )
+    output_path = output_folder / "model_card.md"
+    existing_readme = output_folder / existing_readme_name
+
+    args = Namespace(
+        results_folder=results,
+        output_path=output_path,
+        overwrite=True,
+        from_existing=str(existing_readme),
+    )
+
+    create_meta(args)
+
+    assert output_path.exists(), "Output file not created"
+
+    yaml_start_sep = "---"
+    yaml_end_sep = "\n---\n"  # newline to avoid matching "---" in the content
+
+    with output_path.open("r") as f:
+        meta = f.read()
+        start_yaml = meta.index(yaml_start_sep) + len(yaml_start_sep)
+        end_yaml = meta.index(yaml_end_sep, start_yaml)
+        readme_output = meta[end_yaml + len(yaml_end_sep) :]
+        meta = meta[start_yaml:end_yaml]
+        frontmatter = yaml.safe_load(meta)
+
+    with (output_folder / gold_readme_name).open("r") as f:
+        gold = f.read()
+        start_yaml = gold.index(yaml_start_sep) + len(yaml_start_sep)
+        end_yaml = gold.index(yaml_end_sep, start_yaml)
+        gold_readme = gold[end_yaml + len(yaml_end_sep) :]
+        gold = gold[start_yaml:end_yaml]
+        frontmatter_gold = yaml.safe_load(gold)
+
+    # compare the frontmatter (ignoring the order of keys and other elements)
+    for key in frontmatter_gold:
+        assert key in frontmatter, f"Key {key} not found in output"
+
+        assert (
+            frontmatter[key] == frontmatter_gold[key]
+        ), f"Value for {key} does not match"
+    assert readme_output == gold_readme
+    # ensure that the command line interface works as well
+    command = f"mteb create_meta --results_folder {results} --output_path {output_path} --from_existing {existing_readme} --overwrite"
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    assert result.returncode == 0, "Command failed"
+
+
+def test_save_predictions():
+    command = "mteb run -m all-MiniLM-L6-v2 -t NFCorpus --output_folder tests/results --save_predictions"
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    assert result.returncode == 0, "Command failed"
+    test_folder = Path(__file__).parent
+    results_path = test_folder / "results" / "NFCorpus_default_predictions.json"
+    assert results_path.exists(), "Predictions file not created"

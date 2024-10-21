@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -11,7 +11,7 @@ class FORBI2I(AbsTaskAny2AnyRetrieval):
         reference="https://github.com/pxiangwu/FORB",
         dataset={
             "path": "isaacchung/forb_retrieval",
-            "revision": "aad5c7252a22f7c542cf0d580fa27aedbc31aa2b",
+            "revision": "26ab4bd972854becada339afc80f5f3ffc047e2b",
         },
         type="Retrieval",
         category="i2i",

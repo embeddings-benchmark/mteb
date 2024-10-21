@@ -1,4 +1,8 @@
-from mteb.abstasks import AbsTaskClassification  # type: ignore
+from __future__ import annotations
+
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+
+# type: ignore
 from mteb.abstasks.TaskMetadata import TaskMetadata  # type: ignore
 
 
@@ -22,7 +26,7 @@ class HebrewSentimentAnalysis(AbsTaskClassification):
         date=("2015-10-01", "2015-10-31"),
         domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="MIT License",
+        license="MIT",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
