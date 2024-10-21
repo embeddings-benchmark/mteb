@@ -5,7 +5,7 @@ from collections import Counter, defaultdict
 
 from datasets import Dataset
 
-from ..encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from ..encoder_interface import Encoder
 from ..evaluation.evaluators import PairClassificationEvaluator
 from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask, DescriptiveStatistics
@@ -50,7 +50,7 @@ class AbsTaskPairClassification(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder | EncoderWithQueryCorpusEncode,
+        model: Encoder,
         dataset: Dataset,
         *,
         encode_kwargs: dict[str, str] = {},

@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import pytest
 
+from mteb import SentenceTransformerWrapper
 from mteb.evaluation.evaluators import RetrievalEvaluator
+from tests.test_benchmark.mock_models import MockNumpyEncoder
 
 TOL = 0.0001
 
@@ -13,7 +15,9 @@ class TestRetrievalEvaluator:
 
         setup_method is invoked for every test method of a class.
         """
-        self.evaluator = RetrievalEvaluator()
+        self.evaluator = RetrievalEvaluator(
+            SentenceTransformerWrapper(MockNumpyEncoder()),
+        )
 
     @pytest.mark.parametrize(
         "relevant_docs, results, ignore_identical_ids, expected_metrics",

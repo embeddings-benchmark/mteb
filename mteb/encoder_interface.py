@@ -31,15 +31,29 @@ class Encoder(Protocol):
         """
 
     def encode(
-        self, sentences: Sequence[str], *, task_name: str | None = None, **kwargs: Any
-    ) -> torch.Tensor | np.ndarray:
+        self,
+        sentences: Sequence[str],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> np.ndarray:
         """Encodes the given sentences using the encoder.
 
         Args:
             sentences: The sentences to encode.
             task_name: The name of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
+            prompt_type: The name type of prompt. (query or passage)
             **kwargs: Additional arguments to pass to the encoder.
+
+            The order of priorities for prompt selection are:
+                1. Composed prompt of task name + prompt type (query or passage)
+                2. Specific task prompt
+                3. Composed prompt of task type + prompt type (query or passage)
+                4. Specific task type prompt
+                5. Specific prompt type (query or passage)
+
 
         Returns:
             The encoded sentences.
@@ -95,53 +109,6 @@ class EncoderWithSimilarity(Encoder, Protocol):
 
 
 @runtime_checkable
-class EncoderWithQueryCorpusEncode(Encoder, Protocol):
-    """The optional interface for an encoder that supports encoding queries and a corpus."""
-
-    def encode_queries(
-        self,
-        queries: Sequence[str],
-        *,
-        task_name: str | None = None,
-        prompt_type: str = PromptType.query,
-        **kwargs: Any,
-    ) -> torch.Tensor | np.ndarray:
-        """Encodes the given queries using the encoder.
-
-        Args:
-            queries: The queries to encode.
-            task_name: The name of the task. Sentence-transformers uses this to determine which prompt to use from a specified dictionary.
-            prompt_type: By default, SentenceTransformers uses "query" in the model prompts dictionnary for models that require so.
-            **kwargs: Additional arguments to pass to the encoder.
-
-        Returns:
-            The encoded queries.
-        """
-        ...
-
-    def encode_corpus(
-        self,
-        corpus: Corpus,
-        *,
-        task_name: str | None = None,
-        prompt_type: str = PromptType.passage,
-        **kwargs: Any,
-    ) -> torch.Tensor | np.ndarray:
-        """Encodes the given corpus using the encoder.
-
-        Args:
-            corpus: The corpus to encode.
-            task_name: The name of the task. Sentence-transformers uses this to determine which prompt to use from a specified dictionary.
-            prompt_type: By default, SentenceTransformers uses "passage" in the model prompts dictionnary for models that require so.
-            **kwargs: Additional arguments to pass to the encoder.
-
-        Returns:
-            The encoded corpus.
-        """
-        ...
-
-
-@runtime_checkable
 class EncoderWithConversationEncode(Encoder, Protocol):
     """The optional interface for an encoder that supports encoding conversations."""
 
@@ -159,6 +126,13 @@ class EncoderWithConversationEncode(Encoder, Protocol):
             task_name: The name of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
             **kwargs: Additional arguments to pass to the encoder.
+
+            The order of priorities for prompt selection are:
+                1. Composed prompt of task name + prompt type (query or passage)
+                2. Specific task prompt
+                3. Composed prompt of task type + prompt type (query or passage)
+                4. Specific task type prompt
+                5. Specific prompt type (query or passage)
 
         Returns:
             The encoded conversations.

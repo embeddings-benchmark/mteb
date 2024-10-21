@@ -6,7 +6,7 @@ from datetime import date
 from typing import Annotated, Any, Union
 
 from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
-from typing_extensions import Annotated, Literal
+from typing_extensions import Literal
 
 from ..languages import (
     ISO_LANGUAGE_SCRIPT,
@@ -207,7 +207,7 @@ class TaskMetadata(BaseModel):
 
     name: str
     description: str
-    type: TASK_TYPE | None = None
+    type: TASK_TYPE
     modalities: list[Literal["text"]] = ["text"]
     category: TASK_CATEGORY | None = None
     reference: STR_URL | None = None

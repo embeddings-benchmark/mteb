@@ -252,8 +252,7 @@ class AbsTaskRetrieval(AbsTask):
             # Conversion from DataSet
             queries = {query["id"]: query["text"] for query in queries}
             corpus = {
-                doc["id"]: {"title": doc["title"], "text": doc["text"]}
-                for doc in corpus
+                doc["id"]: doc.get("title", "") + " " + doc["text"] for doc in corpus
             }
             self.corpus[split], self.queries[split], self.relevant_docs[split] = (
                 corpus,
@@ -447,10 +446,7 @@ def calculate_length(
         queries_lens.append(len(query))
 
     for doc in corpus.values():
-        if isinstance(doc, dict):
-            doc_lens.append(len(doc.get("title", "")) + len(doc["text"]))
-        else:
-            doc_lens.append(len(doc))
+        doc_lens.append(len(doc))
 
     doc_len = sum(doc_lens) / len(doc_lens) if doc_lens else 0
     query_len = sum(queries_lens) / len(queries_lens) if queries_lens else 0

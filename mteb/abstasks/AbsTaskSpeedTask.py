@@ -7,7 +7,7 @@ from pathlib import Path
 
 import numpy as np
 
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder
 from mteb.load_results.task_results import ScoresDict
 
 from .AbsTask import AbsTask
@@ -39,7 +39,9 @@ class AbsTaskSpeedTask(AbsTask):
 
     def _get_time_taken(self, model: Encoder, data_split) -> float:
         start = time.time()
-        model.encode(data_split["text"], device=self.device)
+        model.encode(
+            data_split["text"], device=self.device, task_name=self.metadata.name
+        )
         time_taken = time.time() - start
         return time_taken
 
@@ -82,10 +84,10 @@ class AbsTaskSpeedTask(AbsTask):
             info["gpu_info"] = list_gpus
         return info
 
-    def _evaluate_subset(
-        self, model: EncoderWithQueryCorpusEncode | Encoder, data_split, **kwargs
-    ) -> ScoresDict:
-        model.encode(["encode this"], device=self.device)  # ensure model is loaded
+    def _evaluate_subset(self, model: Encoder, data_split, **kwargs) -> ScoresDict:
+        model.encode(
+            ["encode this"], device=self.device, task_name=self.metadata.name
+        )  # ensure model is loaded
 
         timings = []
         for _ in range(self.num_loops):

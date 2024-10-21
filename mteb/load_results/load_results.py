@@ -4,7 +4,6 @@ import json
 import logging
 import os
 import subprocess
-from collections import defaultdict
 from collections.abc import Sequence
 from pathlib import Path
 
