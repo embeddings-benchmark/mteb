@@ -2,24 +2,22 @@ from __future__ import annotations
 
 import json
 from collections import defaultdict
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Callable, Iterable, Literal
+from typing import Any, Callable, Literal
 
 import numpy as np
-import pandas as pd
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
 from mteb.abstasks.TaskMetadata import (
     ISO_LANGUAGE_SCRIPT,
-    TASK_CATEGORY,
     TASK_DOMAIN,
     TASK_TYPE,
 )
 from mteb.languages import ISO_LANGUAGE
 from mteb.load_results.task_results import TaskResult
 from mteb.models.overview import get_model_metas
-from mteb.overview import get_tasks
 
 Split = str
 Score = Any
@@ -43,7 +41,7 @@ class ModelResult(BaseModel):
         languages: list[str] | None = None,
         domains: list[TASK_DOMAIN] | None = None,
         task_types: list[TASK_TYPE] | None = None,
-    ) -> "ModelResult":
+    ) -> ModelResult:
         new_task_results = []
         for task_result in self.task_results:
             if (task_names is not None) and (task_result.task_name not in task_names):
@@ -65,7 +63,7 @@ class ModelResult(BaseModel):
             task_results=new_task_results,
         )
 
-    def select_tasks(self, tasks: list[AbsTask]) -> "ModelResult":
+    def select_tasks(self, tasks: list[AbsTask]) -> ModelResult:
         task_name_to_task = {task.metadata.name: task for task in tasks}
         new_task_results = [
             task_res.validate_and_filter_scores(task_name_to_task[task_res.task_name])
@@ -165,7 +163,7 @@ class BenchmarkResults(BaseModel):
         languages: list[str] | None = None,
         domains: list[TASK_DOMAIN] | None = None,
         task_types: list[TASK_TYPE] | None = None,
-    ) -> "BenchmarkResults":
+    ) -> BenchmarkResults:
         model_results = [
             res.filter_tasks(
                 task_names=task_names,
@@ -179,7 +177,7 @@ class BenchmarkResults(BaseModel):
             model_results=[res for res in model_results if res.task_results]
         )
 
-    def select_tasks(self, tasks: list[AbsTask]) -> "BenchmarkResults":
+    def select_tasks(self, tasks: list[AbsTask]) -> BenchmarkResults:
         new_model_results = [
             model_res.select_tasks(tasks) for model_res in self.model_results
         ]
@@ -192,7 +190,7 @@ class BenchmarkResults(BaseModel):
         open_source: bool | None = None,
         frameworks: Iterable[str] | None = None,
         n_parameters_range: tuple[int | None, int | None] = (None, None),
-    ) -> "BenchmarkResults":
+    ) -> BenchmarkResults:
         model_metas = get_model_metas(
             model_names, languages, open_source, frameworks, n_parameters_range
         )
@@ -283,7 +281,7 @@ class BenchmarkResults(BaseModel):
             out_file.write(self.model_dump_json(indent=2))
 
     @classmethod
-    def from_disk(cls, path: Path | str) -> "BenchmarkResults":
+    def from_disk(cls, path: Path | str) -> BenchmarkResults:
         path = Path(path)
         with path.open() as in_file:
             data = json.loads(in_file.read())

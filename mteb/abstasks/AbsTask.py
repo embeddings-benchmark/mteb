@@ -15,7 +15,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks.stratification import _iterative_train_test_split
 from mteb.abstasks.TaskMetadata import HFSubset, TaskMetadata
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder
 from mteb.languages import LanguageScripts
 
 logger = logging.getLogger(__name__)
@@ -91,7 +91,7 @@ class AbsTask(ABC):
 
     def evaluate(
         self,
-        model: Encoder | EncoderWithQueryCorpusEncode,
+        model: Encoder,
         split: str = "test",
         *,
         encode_kwargs: dict[str, Any] = {},

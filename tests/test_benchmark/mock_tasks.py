@@ -994,8 +994,8 @@ class MockRetrievalTask(AbsTaskRetrieval):
         }
         self.corpus = {
             "test": {
-                "d1": {"text": "This is a positive sentence"},
-                "d2": {"text": "This is another positive sentence"},
+                "d1": "This is a positive sentence",
+                "d2": "This is another positive sentence",
             }
         }
 
@@ -1052,8 +1052,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval, MultilingualTask):
         self.queries = {"eng": queries, "fra": queries}
         corpus = {
             "test": {
-                "d1": {"text": "This is a positive sentence"},
-                "d2": {"text": "This is another positive sentence"},
+                "d1": "This is a positive sentence",
+                "d2": "This is another positive sentence",
             }
         }
         self.corpus = {"eng": corpus, "fra": corpus}
