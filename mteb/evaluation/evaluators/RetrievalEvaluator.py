@@ -240,10 +240,10 @@ class DenseRetrievalExactSearch:
         """
         pairs = []  # create the pairs for reranking
         for qid in queries.keys():
-            if self.previous_results is None or id not in self.previous_results:
+            if self.previous_results is None:
                 # try to use all of them
-                logging.warning(
-                    f"previous_results is None or qid {qid} not present. Using all the documents to rerank: {len(corpus)}"
+                logging.logging(
+                    f"previous_results is None. Using all the documents to rerank: {len(corpus)}"
                 )
                 q_results = {doc_id: 0.0 for doc_id in corpus.keys()}
             else:
