@@ -134,6 +134,16 @@ class TextVectorMap:
 
     def __contains__(self, text: str) -> bool:
         return self._hash_text(text) in self.hash_to_index
+    
+    def __del__(self):
+        self.close()
+
+    def close(self):
+        if hasattr(self, 'vectors') and self.vectors is not None:
+            self.vectors.flush()
+            del self.vectors
+            self.vectors = None
+        logger.info(f"Closed TextVectorMap in directory: {self.directory}")
 
 
 class CachedEmbeddingWrapper:
@@ -259,3 +269,17 @@ class CachedEmbeddingWrapper:
 
     def __dir__(self) -> List[str]:
         return list(set(super().__dir__() + dir(self._model)))
+    
+    def __del__(self):
+        self.close()
+
+    def close(self):
+        if self.encode_method == "split":
+            if hasattr(self, 'query_cache'):
+                self.query_cache.close()
+            if hasattr(self, 'corpus_cache'):
+                self.corpus_cache.close()
+        else:
+            if hasattr(self, 'cache'):
+                self.cache.close()
+        logger.info("Closed CachedEmbeddingWrapper")
