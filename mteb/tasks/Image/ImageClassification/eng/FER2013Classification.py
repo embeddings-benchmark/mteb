@@ -13,7 +13,7 @@ class FER2013Classification(AbsTaskImageClassification):
             "path": "clip-benchmark/wds_fer2013",
             "revision": "9399b94167523fe5c40b3a857e24ef931ee4395b",
         },
-        type="Classification",
+        type="ImageClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

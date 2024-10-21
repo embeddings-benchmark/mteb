@@ -14,7 +14,7 @@ class Caltech101Classification(AbsTaskImageClassification):
             "name": "with_background_category",
             "revision": "851374102055782c84f89b1b4e9d128a6568847b",
         },
-        type="Classification",
+        type="ImageClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

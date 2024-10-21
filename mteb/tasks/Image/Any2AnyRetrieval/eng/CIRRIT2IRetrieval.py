@@ -14,7 +14,7 @@ class CIRRIT2IRetrieval(AbsTaskAny2AnyRetrieval):
             "revision": "503301cd99348035b9675883a543aa1ded0cf07c",
             "trust_remote_code": True,
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="it2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

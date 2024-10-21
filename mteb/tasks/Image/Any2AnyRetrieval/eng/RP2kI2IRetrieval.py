@@ -13,7 +13,7 @@ class RP2kI2IRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "JamieSJS/rp2k",
             "revision": "f8f82d4eb1aa4dc4dbf2c768596c8110a3703765",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -14,7 +14,7 @@ class InfoSeekIT2TRetrieval(AbsTaskAny2AnyRetrieval):
             "revision": "d4f4606f7a42bbf311c2957419ef3734fe81c47f",
             "trust_remote_code": True,
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="it2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -13,7 +13,7 @@ class VisualNewsI2TRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "MRBench/mbeir_visualnews_task3",
             "revision": "aaee58895a66e4d619168849267ed2bb40d37043",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

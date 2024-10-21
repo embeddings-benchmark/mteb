@@ -13,7 +13,7 @@ class OxfordPetsClassification(AbsTaskImageClassification):
             "path": "isaacchung/OxfordPets",
             "revision": "557b480fae8d69247be74d9503b378a09425096f",
         },
-        type="Classification",
+        type="ImageClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

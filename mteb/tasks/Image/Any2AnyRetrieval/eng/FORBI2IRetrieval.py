@@ -13,7 +13,7 @@ class FORBI2I(AbsTaskAny2AnyRetrieval):
             "path": "isaacchung/forb_retrieval",
             "revision": "336607d5bcc853fb7f7276c2c9721d4b5b1ca8e4",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

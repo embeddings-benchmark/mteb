@@ -73,7 +73,7 @@ class SciMMIRT2IRetrieval(AbsTaskAny2AnyRetrieval):
             "revision": "eea276dc58c52eab33e9476acb137ff5530b78e9",
             # "trust_remote_code": True,
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="t2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

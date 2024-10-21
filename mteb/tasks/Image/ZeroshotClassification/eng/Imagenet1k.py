@@ -17,7 +17,7 @@ class Imagenet1kClassification(AbsTaskZeroshotClassification):
             "path": "clip-benchmark/wds_imagenet1k",
             "revision": "b24c7a5a3ef12df09089055d1795e2ce7c7e7397",
         },
-        type="Classification",
+        type="ZeroShotClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -13,7 +13,7 @@ class FGVCAircraftClassification(AbsTaskImageClassification):
             "path": "HuggingFaceM4/FGVC-Aircraft",
             "revision": "91860adfc9a09aabca5cddb5247442109b38e213",
         },
-        type="Classification",
+        type="ImageClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

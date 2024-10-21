@@ -13,7 +13,7 @@ class OxfordFlowersClassification(AbsTaskImageClassification):
             "path": "nelorth/oxford-flowers",
             "revision": "a37b1891609c0376fa81eced756e7863e1bd873b",
         },
-        type="Classification",
+        type="ImageClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

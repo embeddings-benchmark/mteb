@@ -101,7 +101,7 @@ class WITT2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
             "revision": "91ac153f1371a98b209ed763205e25e115ecd06e",
             # "trust_remote_code": True,
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="t2i",
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
