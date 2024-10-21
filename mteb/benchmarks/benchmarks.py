@@ -9,8 +9,6 @@ from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.benchmark_results import (
     BenchmarkResults,
-    ModelResult,
-    TaskResult,
 )
 from mteb.load_results.load_results import load_results
 from mteb.overview import get_tasks

@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
 from sentence_transformers import SentenceTransformer
 
@@ -91,9 +92,7 @@ def get_model_metas(
     return res
 
 
-def get_model(
-    model_name: str, revision: str | None = None, **kwargs: Any
-) -> Encoder:
+def get_model(model_name: str, revision: str | None = None, **kwargs: Any) -> Encoder:
     """A function to fetch a model object by name.
 
     Args:

@@ -142,9 +142,7 @@ class RerankingEvaluator(Evaluator):
             )
         return results
 
-    def _encode_candidates(
-        self, model: Encoder, batched: bool, all_query_embs=None
-    ):
+    def _encode_candidates(self, model: Encoder, batched: bool, all_query_embs=None):
         all_mrr_scores = []
         all_ap_scores = []
         all_conf_scores = []
@@ -326,9 +324,7 @@ class RerankingEvaluator(Evaluator):
         scores_miracl = self._collect_miracl_results(results, qrels)
         return scores_miracl
 
-    def _encode_candidates_miracl_individual(
-        self, model: Encoder
-    ):
+    def _encode_candidates_miracl_individual(self, model: Encoder):
         results, qrels = {}, {}
         for i, instance in enumerate(tqdm.tqdm(self.samples, desc="Samples")):
             query = instance["query"]

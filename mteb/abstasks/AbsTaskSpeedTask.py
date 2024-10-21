@@ -39,7 +39,9 @@ class AbsTaskSpeedTask(AbsTask):
 
     def _get_time_taken(self, model: Encoder, data_split) -> float:
         start = time.time()
-        model.encode(data_split["text"], device=self.device, task_name=self.metadata.name)
+        model.encode(
+            data_split["text"], device=self.device, task_name=self.metadata.name
+        )
         time_taken = time.time() - start
         return time_taken
 
@@ -83,7 +85,9 @@ class AbsTaskSpeedTask(AbsTask):
         return info
 
     def _evaluate_subset(self, model: Encoder, data_split, **kwargs) -> ScoresDict:
-        model.encode(["encode this"], device=self.device, task_name=self.metadata.name)  # ensure model is loaded
+        model.encode(
+            ["encode this"], device=self.device, task_name=self.metadata.name
+        )  # ensure model is loaded
 
         timings = []
         for _ in range(self.num_loops):
