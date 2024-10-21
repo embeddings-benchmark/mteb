@@ -36,4 +36,5 @@ __all__ = [
     "Benchmark",
     "get_benchmark",
     "get_benchmarks",
+    "BenchmarkResults",
 ]
