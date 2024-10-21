@@ -49,6 +49,7 @@ class RParisEasyI2IRetrieval(AbsTaskAny2AnyRetrieval):
     )
     skip_first_result = False
 
+
 class RParisMediumI2IRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="RParisMediumI2IRetrieval",
@@ -93,6 +94,7 @@ class RParisMediumI2IRetrieval(AbsTaskAny2AnyRetrieval):
         },
     )
     skip_first_result = False
+
 
 class RParisHardI2IRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(

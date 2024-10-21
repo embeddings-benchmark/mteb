@@ -49,6 +49,7 @@ class ROxfordEasyI2IRetrieval(AbsTaskAny2AnyRetrieval):
     )
     skip_first_result = False
 
+
 class ROxfordMediumI2IRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="ROxfordMediumI2IRetrieval",
@@ -93,6 +94,7 @@ class ROxfordMediumI2IRetrieval(AbsTaskAny2AnyRetrieval):
         },
     )
     skip_first_result = False
+
 
 class ROxfordHardI2IRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
