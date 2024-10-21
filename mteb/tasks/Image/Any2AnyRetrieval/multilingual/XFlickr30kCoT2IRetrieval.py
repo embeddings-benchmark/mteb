@@ -84,7 +84,7 @@ class XFlickr30kCoT2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
             "revision": "0af2c2eba58b27a71898787e286be04befdd7a20",
             # "trust_remote_code": True,
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="t2i",
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

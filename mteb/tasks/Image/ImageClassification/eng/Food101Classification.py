@@ -13,7 +13,7 @@ class Food101Classification(AbsTaskImageClassification):
             "path": "ethz/food101",
             "revision": "e06acf2a88084f04bce4d4a525165d68e0a36c38",
         },
-        type="Classification",
+        type="ImageClassification",
         category="i2t",
         eval_splits=["validation"],
         eval_langs=["eng-Latn"],

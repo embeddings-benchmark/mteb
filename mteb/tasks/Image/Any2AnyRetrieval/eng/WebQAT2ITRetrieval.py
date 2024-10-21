@@ -13,7 +13,7 @@ class WebQAT2ITRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "MRBench/mbeir_webqa_task2",
             "revision": "53db4c9f9c93cb74926a1c9d04dea7d7acac2f21",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="t2it",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

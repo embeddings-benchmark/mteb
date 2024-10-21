@@ -13,7 +13,7 @@ class STL10Classification(AbsTaskImageClassification):
             "path": "tanganke/stl10",
             "revision": "49ae7f94508f7feae62baf836db284306eab0b0f",
         },
-        type="Classification",
+        type="ImageClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

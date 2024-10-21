@@ -13,7 +13,7 @@ class BirdsnapClassification(AbsTaskImageClassification):
             "path": "isaacchung/birdsnap",
             "revision": "e09b9dea248d579376684268cbedba28cd66b9b4",
         },
-        type="Classification",
+        type="ImageClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

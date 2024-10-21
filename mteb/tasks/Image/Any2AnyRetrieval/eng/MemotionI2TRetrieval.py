@@ -97,7 +97,7 @@ class MemotionI2TRetrieval(AbsTaskAny2AnyRetrieval):
             "revision": "cdb15b61d84d56db73e0e59535dfea81ea3c22f4",
             # "trust_remote_code": True,
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

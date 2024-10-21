@@ -14,7 +14,7 @@ class VizWizIT2TRetrieval(AbsTaskAny2AnyRetrieval):
             "revision": "044af162d55f82ab603fa16ffcf7f1e4dbf300e9",
             "trust_remote_code": True,
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="it2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

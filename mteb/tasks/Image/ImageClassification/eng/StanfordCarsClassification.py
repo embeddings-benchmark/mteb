@@ -13,7 +13,7 @@ class StanfordCarsClassification(AbsTaskImageClassification):
             "path": "isaacchung/StanfordCars",
             "revision": "09ffe9bc7864d3f1e851529e5c4b7e05601a04fb",
         },
-        type="Classification",
+        type="ImageClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

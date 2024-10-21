@@ -13,7 +13,7 @@ class NIGHTSI2IRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "MRBench/mbeir_nights_task4",
             "revision": "c9583e052be7ad52d870c62a207a2e887ba9b8aa",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

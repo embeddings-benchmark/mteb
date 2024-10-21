@@ -14,7 +14,7 @@ class MSCOCOT2IRetrieval(AbsTaskAny2AnyRetrieval):
             "revision": "cfe15bd2791dde5f8f20aebecf0b4eb3812972d6",
             "trust_remote_code": True,
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="t2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

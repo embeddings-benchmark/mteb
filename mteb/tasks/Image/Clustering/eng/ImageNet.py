@@ -13,7 +13,7 @@ class ImageNetDog15Clustering(AbsTaskImageClustering):
             "path": "JamieSJS/imagenet-dog-15",
             "revision": "bfb6ad3b2109d26c9daddf14f98d315daa35ee72",
         },
-        type="Clustering",
+        type="ImageClustering",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

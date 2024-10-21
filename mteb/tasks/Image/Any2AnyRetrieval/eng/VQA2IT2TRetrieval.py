@@ -14,7 +14,7 @@ class VQA2IT2TRetrieval(AbsTaskAny2AnyRetrieval):
             "revision": "69882b6ba0b443dd62e633e546725b0f13b7e3aa",
             "trust_remote_code": True,
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="it2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

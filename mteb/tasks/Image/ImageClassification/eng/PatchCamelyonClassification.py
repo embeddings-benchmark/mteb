@@ -13,7 +13,7 @@ class PatchCamelyonClassification(AbsTaskImageClassification):
             "path": "clip-benchmark/wds_vtab-pcam",
             "revision": "502695fe1a141108650e3c5b91c8b5e0ff84ed49",
         },
-        type="Classification",
+        type="ImageClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

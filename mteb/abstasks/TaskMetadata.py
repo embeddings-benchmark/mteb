@@ -98,9 +98,15 @@ TASK_TYPE = Literal[
     "Summarization",
     "InstructionRetrieval",
     "Speed",
-    "ZeroShotClassification",
-    "ImageTextPairClassification",
+    "Any2AnyMultiChoice",
+    "Any2AnyRetrieval",
     "Any2TextMutipleChoice",
+    "ImageClustering",
+    "ImageClassification",
+    "ImageMultilabelClassification",
+    "ImageTextPairClassification",
+    "VisualSTS",
+    "ZeroShotClassification",
 ]
 
 TASK_CATEGORY = Literal[

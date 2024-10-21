@@ -14,7 +14,7 @@ class TUBerlinT2IRetrieval(AbsTaskAny2AnyRetrieval):
             "revision": "0cd78cd1ddbd3cafa9f319c638ebd77836ec9ff6",
             # "trust_remote_code": True,
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="t2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
