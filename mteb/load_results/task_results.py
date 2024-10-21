@@ -469,9 +469,10 @@ class TaskResult(BaseModel):
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, scores=...)"
 
-    def validate_and_filter_scores(self, task: AbsTask | None = None) -> None:
+    def validate_and_filter_scores(self, task: AbsTask | None = None) -> AbsTask:
         """This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
         Additionally it also ensure that all of the splits required as well as the languages are present in the scores.
+        Returns new TaskResult object.
 
         Args:
             task: The task to validate the scores against. E.g. if the task supplied is limited to certain splits and languages,
@@ -482,30 +483,32 @@ class TaskResult(BaseModel):
         if task is None:
             task = get_task(self.task_name)
         splits = task.metadata.eval_splits
-        hf_subsets = set(task.metadata.hf_subsets_to_langscripts)
-
+        if task.is_multilingual:
+            hf_subsets = getattr(
+                task, "hf_subsets", task.metadata.hf_subsets_to_langscripts.keys()
+            )
+            hf_subsets = set(hf_subsets)
+        else:
+            hf_subsets = {"default"}
         new_scores = {}
         seen_splits = set()
-        for split in self.scores:
+        for split in task_result.scores:
             if split not in splits:
                 continue
             new_scores[split] = []
-
             seen_subsets = set()
-            for _scores in self.scores[split]:
+            for _scores in task_result.scores[split]:
                 if _scores["hf_subset"] not in hf_subsets:
                     continue
                 new_scores[split].append(_scores)
                 seen_subsets.add(_scores["hf_subset"])
-
             if seen_subsets != hf_subsets:
                 raise ValueError(
                     f"Missing subsets {hf_subsets - seen_subsets} for split {split}"
                 )
-
             seen_splits.add(split)
-
         if seen_splits != set(splits):
             raise ValueError(f"Missing splits {set(splits) - seen_splits}")
-
-        self.scores = new_scores
+        new_res = {**task_result.to_dict(), "scores": new_scores}
+        new_res = TaskResult.from_dict(new_res)
+        return new_res

@@ -164,7 +164,7 @@ def load_results(
                             task = task_names[r.task_name]
                         else:
                             task = None
-                        r.validate_and_filter_scores(task=task)
+                        r = r.validate_and_filter_scores(task=task)
                         filtered_results.append(r)
                     except Exception as e:
                         logger.warning(

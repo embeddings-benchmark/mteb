@@ -25,39 +25,6 @@ Split = str
 Score = Any
 
 
-def _restrict_task_results(task_result: TaskResult, task: AbsTask) -> TaskResult:
-    splits = task.metadata.eval_splits
-    if task.is_multilingual:
-        hf_subsets = getattr(
-            task, "hf_subsets", task.metadata.hf_subsets_to_langscripts.keys()
-        )
-        hf_subsets = set(hf_subsets)
-    else:
-        hf_subsets = {"default"}
-    new_scores = {}
-    seen_splits = set()
-    for split in task_result.scores:
-        if split not in splits:
-            continue
-        new_scores[split] = []
-        seen_subsets = set()
-        for _scores in task_result.scores[split]:
-            if _scores["hf_subset"] not in hf_subsets:
-                continue
-            new_scores[split].append(_scores)
-            seen_subsets.add(_scores["hf_subset"])
-        if seen_subsets != hf_subsets:
-            raise ValueError(
-                f"Missing subsets {hf_subsets - seen_subsets} for split {split}"
-            )
-        seen_splits.add(split)
-    if seen_splits != set(splits):
-        raise ValueError(f"Missing splits {set(splits) - seen_splits}")
-    new_res = {**task_result.to_dict(), "scores": new_scores}
-    new_res = TaskResult.from_dict(new_res)
-    return new_res
-
-
 class ModelResult(BaseModel):
     model_name: str
     model_revision: str | None
@@ -101,7 +68,7 @@ class ModelResult(BaseModel):
     def select_tasks(self, tasks: list[AbsTask]) -> "ModelResult":
         task_name_to_task = {task.metadata.name: task for task in tasks}
         new_task_results = [
-            _restrict_task_results(task_res, task_name_to_task[task_res.task_name])
+            task_res.validate_and_filter_scores(task_name_to_task[task_res.task_name])
             for task_res in self.task_results
             if task_res.task_name in task_name_to_task
         ]
