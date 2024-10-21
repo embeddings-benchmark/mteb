@@ -70,9 +70,9 @@ class TestCachedEmbeddingWrapper:
 
         # Verify that cache files were created
         assert (cache_dir / "query_cache" / "vectors.npy").exists()
-        assert (cache_dir / "query_cache" / "index.json").exists()
+        assert (cache_dir / "query_cache" / "index.pkl").exists()
         assert (cache_dir / "corpus_cache" / "vectors.npy").exists()
-        assert (cache_dir / "corpus_cache" / "index.json").exists()
+        assert (cache_dir / "corpus_cache" / "index.pkl").exists()
 
         # Test with a new query - should use cache for existing queries and compute for new one
         new_queries = queries + ["What is the role of insulin in diabetes?"]
