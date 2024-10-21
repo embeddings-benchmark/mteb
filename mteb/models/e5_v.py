@@ -11,6 +11,7 @@ from transformers import LlavaNextForConditionalGeneration, LlavaNextProcessor
 
 from mteb.model_meta import ModelMeta
 
+
 class E5VWrapper:
     def __init__(
         self,

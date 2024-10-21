@@ -13,7 +13,7 @@ class CUB200I2I(AbsTaskAny2AnyRetrieval):
             "path": "isaacchung/cub200_retrieval",
             "revision": "ad08c1307b15a226bf1b64e62656a17f1f85f7ec",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

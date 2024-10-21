@@ -68,7 +68,7 @@ class HatefulMemesT2IRetrieval(AbsTaskAny2AnyRetrieval):
             "revision": "c9a9a6c3ef0765622a6de0af6ebb68f323ad73ba",
             # "trust_remote_code": True,
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="t2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

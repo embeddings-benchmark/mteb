@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
+from typing import Any
 
 import torch
 from PIL import Image
@@ -31,6 +32,7 @@ def vista_loader(**kwargs):
             negatives_cross_device: bool = False,
             temperature: float = 0.02,
             from_pretrained=None,
+            **kwargs: Any,
         ):
             super().__init__(
                 model_name_bge=model_name_bge,

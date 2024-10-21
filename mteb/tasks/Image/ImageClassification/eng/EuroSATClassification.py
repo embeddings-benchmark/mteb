@@ -13,7 +13,7 @@ class EuroSATClassification(AbsTaskImageClassification):
             "path": "timm/eurosat-rgb",
             "revision": "b4e28552cd5f3932b6abc37eb20d3e84901ad728",
         },
-        type="Classification",
+        type="ImageClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -13,7 +13,7 @@ class GTSRBClassification(AbsTaskImageClassification):
             "path": "clip-benchmark/wds_gtsrb",
             "revision": "1c13eff0803d2b02c9dc8dfe85e67770b3f0f3c5",
         },
-        type="Classification",
+        type="ImageClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
