@@ -40,7 +40,7 @@ class BLINKIT2TRetrieval(AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 3080,
+                    "num_documents": 26,
                     "num_queries": 1073,
                     "average_relevant_docs_per_query": 1,
                 }
