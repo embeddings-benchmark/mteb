@@ -69,13 +69,13 @@ def test_reload_results(task: str | mteb.AbsTask, model: mteb.Encoder, tmp_path:
     results = eval.run(model, output_folder=str(tmp_path), overwrite_results=True)
 
     assert isinstance(results, list)
-    assert isinstance(results[0], mteb.MTEBResults)
+    assert isinstance(results[0], mteb.TaskResult)
 
     # reload the results
     results = eval.run(model, output_folder=str(tmp_path), overwrite_results=False)
 
     assert isinstance(results, list)
-    assert isinstance(results[0], mteb.MTEBResults)
+    assert isinstance(results[0], mteb.TaskResult)
 
 
 @pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID)

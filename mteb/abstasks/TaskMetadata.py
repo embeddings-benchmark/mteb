@@ -6,7 +6,7 @@ from datetime import date
 from typing import Annotated, Any, Union
 
 from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
-from typing_extensions import Literal
+from typing_extensions import Annotated, Literal
 
 from ..languages import (
     ISO_LANGUAGE_SCRIPT,
@@ -352,3 +352,6 @@ class TaskMetadata(BaseModel):
                 )
             return f"\\cite{{{cite}}}"
         return cite
+
+    def __hash__(self) -> int:
+        return hash(self.model_dump_json())
