@@ -285,8 +285,8 @@ monot5_small = ModelMeta(
     name="castorini/monot5-small-msmarco-10k",
     languages=["eng_Latn"],
     open_source=True,
-    revision="latest",
-    release_date="2024-02-15",
+    revision="77f8e3f7b1eb1afe353aa21a7c3a2fc8feca702e",
+    release_date="2022-03-28",
 )
 
 monot5_base = ModelMeta(
@@ -299,8 +299,8 @@ monot5_base = ModelMeta(
     name="castorini/monot5-base-msmarco-10k",
     languages=["eng_Latn"],
     open_source=True,
-    revision="latest",
-    release_date="2024-02-15",
+    revision="f15657ab3d2a5dd0b9a30c8c0b6a0a73c9cb5884",
+    release_date="2022-03-28",
 )
 
 monot5_large = ModelMeta(
@@ -313,8 +313,8 @@ monot5_large = ModelMeta(
     name="castorini/monot5-large-msmarco-10k",
     languages=["eng_Latn"],
     open_source=True,
-    revision="latest",
-    release_date="2024-02-15",
+    revision="48cfad1d8dd587670393f27ee8ec41fde63e3d98",
+    release_date="2022-03-28",
 )
 
 monot5_3b = ModelMeta(
@@ -327,8 +327,8 @@ monot5_3b = ModelMeta(
     name="castorini/monot5-3b-msmarco-10k",
     languages=["eng_Latn"],
     open_source=True,
-    revision="latest",
-    release_date="2024-02-15",
+    revision="bc0c419a438c81f592f878ce32430a1823f5db6c",
+    release_date="2022-03-28",
 )
 
 flant5_base = ModelMeta(
@@ -341,8 +341,8 @@ flant5_base = ModelMeta(
     name="google/flan-t5-base",
     languages=["eng_Latn"],
     open_source=True,
-    revision="latest",
-    release_date="2024-02-15",
+    revision="7bcac572ce56db69c1ea7c8af255c5d7c9672fc2",
+    release_date="2022-10-21",
 )
 
 flant5_large = ModelMeta(
@@ -355,8 +355,8 @@ flant5_large = ModelMeta(
     name="google/flan-t5-large",
     languages=["eng_Latn"],
     open_source=True,
-    revision="latest",
-    release_date="2024-02-15",
+    revision="0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a",
+    release_date="2022-10-21",
 )
 
 flant5_xl = ModelMeta(
@@ -369,8 +369,8 @@ flant5_xl = ModelMeta(
     name="google/flan-t5-xl",
     languages=["eng_Latn"],
     open_source=True,
-    revision="latest",
-    release_date="2024-02-15",
+    revision="7d6315df2c2fb742f0f5b556879d730926ca9001",
+    release_date="2022-10-21",
 )
 
 flant5_xxl = ModelMeta(
@@ -383,8 +383,8 @@ flant5_xxl = ModelMeta(
     name="google/flan-t5-xxl",
     languages=["eng_Latn"],
     open_source=True,
-    revision="latest",
-    release_date="2024-02-15",
+    revision="ae7c9136adc7555eeccc78cdd960dfd60fb346ce",
+    release_date="2022-10-21",
 )
 
 
@@ -398,8 +398,8 @@ llama2_7b = ModelMeta(
     name="meta-llama/Llama-2-7b-hf",
     languages=["eng_Latn"],
     open_source=True,
-    revision="latest",
-    release_date="2024-02-15",
+    revision="01c7f73d771dfac7d292323805ebc428287df4f9",
+    release_date="2023-07-18",
 )
 
 llama2_7b_chat = ModelMeta(
@@ -412,8 +412,8 @@ llama2_7b_chat = ModelMeta(
     name="meta-llama/Llama-2-7b-chat-hf",
     languages=["eng_Latn"],
     open_source=True,
-    revision="latest",
-    release_date="2024-02-15",
+    revision="f5db02db724555f92da89c216ac04704f23d4590",
+    release_date="2023-07-18",
 )
 
 mistral_7b = ModelMeta(
@@ -426,8 +426,8 @@ mistral_7b = ModelMeta(
     name="mistralai/Mistral-7B-Instruct-v0.2",
     languages=["eng_Latn"],
     open_source=True,
-    revision="latest",
-    release_date="2024-02-15",
+    revision="3ad372fc79158a2148299e3318516c786aeded6c",
+    release_date="2023-12-11",
 )
 
 followir_7b = ModelMeta(
@@ -440,9 +440,114 @@ followir_7b = ModelMeta(
     name="jhu-clsp/FollowIR-7B",
     languages=["eng_Latn"],
     open_source=True,
-    revision="latest",
-    release_date="2024-02-15",
+    revision="4d25d437e38b510c01852070c0731e8f6e1875d1",
+    release_date="2024-04-29",
 )
+
+
+mt5_languages = [
+    "afr_Latn",
+    "sqi_Latn",
+    "amh_Ethi",
+    "ara_Arab",
+    "hye_Armn",
+    "aze_Latn",
+    "eus_Latn",
+    "bel_Cyrl",
+    "ben_Beng",
+    "bul_Cyrl",
+    "mya_Mymr",
+    "cat_Latn",
+    "ceb_Latn",
+    "nya_Latn",
+    "zho_Hans",
+    "cos_Latn",
+    "ces_Latn",
+    "dan_Latn",
+    "nld_Latn",
+    "eng_Latn",
+    "epo_Latn",
+    "est_Latn",
+    "fil_Latn",
+    "fin_Latn",
+    "fra_Latn",
+    "glg_Latn",
+    "kat_Geor",
+    "deu_Latn",
+    "ell_Grek",
+    "guj_Gujr",
+    "hat_Latn",
+    "hau_Latn",
+    "haw_Latn",
+    "heb_Hebr",
+    "hin_Deva",
+    "hmn_Latn",
+    "hun_Latn",
+    "isl_Latn",
+    "ibo_Latn",
+    "ind_Latn",
+    "gle_Latn",
+    "ita_Latn",
+    "jpn_Jpan",
+    "jav_Latn",
+    "kan_Knda",
+    "kaz_Cyrl",
+    "khm_Khmr",
+    "kor_Hang",
+    "kur_Latn",
+    "kir_Cyrl",
+    "lao_Laoo",
+    "lat_Latn",
+    "lav_Latn",
+    "lit_Latn",
+    "ltz_Latn",
+    "mkd_Cyrl",
+    "mlg_Latn",
+    "msa_Latn",
+    "mal_Mlym",
+    "mlt_Latn",
+    "mri_Latn",
+    "mar_Deva",
+    "mon_Cyrl",
+    "nep_Deva",
+    "nor_Latn",
+    "pus_Arab",
+    "fas_Arab",
+    "pol_Latn",
+    "por_Latn",
+    "pan_Guru",
+    "ron_Latn",
+    "rus_Cyrl",
+    "smo_Latn",
+    "gla_Latn",
+    "srp_Cyrl",
+    "sna_Latn",
+    "snd_Arab",
+    "sin_Sinh",
+    "slk_Latn",
+    "slv_Latn",
+    "som_Latn",
+    "sot_Latn",
+    "spa_Latn",
+    "sun_Latn",
+    "swa_Latn",
+    "swe_Latn",
+    "tgk_Cyrl",
+    "tam_Taml",
+    "tel_Telu",
+    "tha_Thai",
+    "tur_Latn",
+    "ukr_Cyrl",
+    "urd_Arab",
+    "uzb_Latn",
+    "vie_Latn",
+    "cym_Latn",
+    "fry_Latn",
+    "xho_Latn",
+    "yid_Hebr",
+    "yor_Latn",
+    "zul_Latn",
+]
 
 mt5_base_mmarco_v2 = ModelMeta(
     loader=partial(
@@ -452,10 +557,10 @@ mt5_base_mmarco_v2 = ModelMeta(
         fp_options="bfloat16",
     ),
     name="unicamp-dl/mt5-base-mmarco-v2",
-    languages=["eng_Latn"],
+    languages=mt5_languages,
     open_source=True,
-    revision="latest",
-    release_date="2024-02-15",
+    revision="cc0a949b9f21efcaba45c8cabb998ad02ce8d4e7",
+    release_date="2022-01-05",
 )
 
 mt5_13b_mmarco_100k = ModelMeta(
@@ -466,8 +571,8 @@ mt5_13b_mmarco_100k = ModelMeta(
         fp_options="bfloat16",
     ),
     name="unicamp-dl/mt5-13b-mmarco-100k",
-    languages=["eng_Latn"],
+    languages=mt5_languages,
     open_source=True,
-    revision="latest",
-    release_date="2024-02-15",
+    revision="e1a4317e102a525ea9e16745ad21394a4f1bffbc",
+    release_date="2022-11-04",
 )
