@@ -118,6 +118,7 @@ from .san.SanskritShlokasClassification import *
 from .sin.SinhalaNewsClassification import *
 from .sin.SinhalaNewsSourceClassification import *
 from .slk.CSFDSKMovieReviewSentimentClassification import *
+from .slk.SlovakHateSpeechClassification import *
 from .slv.FrenkSlClassification import *
 from .spa.SpanishNewsClassification import *
 from .spa.SpanishSentimentClassification import *
