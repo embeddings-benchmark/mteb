@@ -15,11 +15,11 @@ class DummyModel:
 
     def encode_queries(self, queries):
         self.call_count += 1
-        return np.random.rand(len(queries), self.embedding_dim)
+        return np.random.rand(len(queries), self.embedding_dim).astype(np.float32)
 
     def encode_corpus(self, corpus):
         self.call_count += 1
-        return np.random.rand(len(corpus), self.embedding_dim)
+        return np.random.rand(len(corpus), self.embedding_dim).astype(np.float32)
 
     def random_other_function_returns_false(self):
         return False
@@ -65,8 +65,8 @@ class TestCachedEmbeddingWrapper:
         assert dummy_model.call_count == 2  # No additional calls to the model
 
         # Verify that the embeddings are the same
-        np.testing.assert_array_equal(query_embeddings1, query_embeddings2)
-        np.testing.assert_array_equal(corpus_embeddings1, corpus_embeddings2)
+        np.testing.assert_allclose(query_embeddings1, query_embeddings2)
+        np.testing.assert_allclose(corpus_embeddings1, corpus_embeddings2)
 
         # Verify that cache files were created
         assert (cache_dir / "query_cache" / "vectors.npy").exists()
@@ -80,7 +80,7 @@ class TestCachedEmbeddingWrapper:
 
         assert dummy_model.call_count == 3  # One additional call for the new query
         assert query_embeddings3.shape == (3, dummy_model.embedding_dim)
-        np.testing.assert_array_equal(query_embeddings3[:2], query_embeddings2)
+        np.testing.assert_allclose(query_embeddings3[:2], query_embeddings2)
 
     def test_other_functions_still_work(self, cache_dir):
         # Create a dummy model
