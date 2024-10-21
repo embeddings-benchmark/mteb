@@ -82,6 +82,8 @@ class TestCachedEmbeddingWrapper:
         assert query_embeddings3.shape == (3, dummy_model.embedding_dim)
         np.testing.assert_allclose(query_embeddings3[:2], query_embeddings2)
 
+        del wrapped_model # delete to allow cleanup on Windows
+
     def test_other_functions_still_work(self, cache_dir):
         # Create a dummy model
         dummy_model = DummyModel()
@@ -94,3 +96,5 @@ class TestCachedEmbeddingWrapper:
 
         assert result is False
         assert wrapped_model.call_count == 0
+
+        del wrapped_model # delete to allow cleanup on Windows
