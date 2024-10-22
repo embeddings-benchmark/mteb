@@ -13,7 +13,7 @@ class MNISTClassification(AbsTaskZeroshotClassification):
         reference="https://en.wikipedia.org/wiki/MNIST_database",
         dataset={
             "path": "ylecun/mnist",
-            "revision": "b06aab39e05f7bcd9635d18ed25d06eae523c574",
+            "revision": "77f3279092a1c1579b2250db8eafed0ad422088c",
         },
         type="ZeroShotClassification",
         category="i2t",

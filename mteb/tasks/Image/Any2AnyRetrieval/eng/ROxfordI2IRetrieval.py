@@ -105,7 +105,7 @@ class ROxfordHardI2IRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "JamieSJS/r-oxford-hard",
             "revision": "f20b30211b7ba3fc64a02bd83998fe75f3023719",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

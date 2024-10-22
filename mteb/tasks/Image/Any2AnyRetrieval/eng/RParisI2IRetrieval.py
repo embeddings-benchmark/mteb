@@ -105,7 +105,7 @@ class RParisHardI2IRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "JamieSJS/r-paris-hard",
             "revision": "fd121b6592fe946616fa85116703b94a4c61fd63",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
