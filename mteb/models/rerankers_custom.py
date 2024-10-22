@@ -63,7 +63,7 @@ class BGEReranker(RerankerWrapper):
             from FlagEmbedding import FlagReranker
         except ImportError:
             raise ImportError(
-                "FlagEmbedding is not installed. Please install it via `pip install FlagEmbedding`"
+                "FlagEmbedding is not installed. Please install it via `pip install mteb[flagembedding]`"
             )
 
         self.model = FlagReranker(model_name_or_path, use_fp16=True)
