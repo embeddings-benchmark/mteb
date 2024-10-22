@@ -7,8 +7,8 @@ from typing import Any
 import yaml
 
 import mteb
-from mteb import MTEBResults
-from mteb.load_results.mteb_results import CQADupstackRetrievalDummy
+from mteb import TaskResult
+from mteb.load_results.task_results import CQADupstackRetrievalDummy
 
 
 def generate_readme(results_folder: Path, from_existing: Path | None = None) -> str:
@@ -45,7 +45,7 @@ def load_model_name(results_folder: Path) -> str:
     return "PLACEHOLDER"
 
 
-def process_task_result(task_result: MTEBResults) -> list[dict[str, Any]]:
+def process_task_result(task_result: TaskResult) -> list[dict[str, Any]]:
     # CQADupstackRetrieval is a combined dataset (special case atm.)
     task = (
         CQADupstackRetrievalDummy()
@@ -84,13 +84,13 @@ def process_task_result(task_result: MTEBResults) -> list[dict[str, Any]]:
     return yaml_results
 
 
-def get_task_results(results_folder: Path) -> list[MTEBResults]:
+def get_task_results(results_folder: Path) -> list[TaskResult]:
     json_files = [
         r
         for r in results_folder.glob("*.json")
         if r.is_file() and r.name != "model_meta.json"
     ]
-    task_results = [MTEBResults.from_disk(path) for path in json_files]
+    task_results = [TaskResult.from_disk(path) for path in json_files]
     task_results = [
         results
         for results in task_results
@@ -102,8 +102,8 @@ def get_task_results(results_folder: Path) -> list[MTEBResults]:
 
 
 def potentially_add_cqadupstack_to_results(
-    results: list[MTEBResults],
-) -> list[MTEBResults]:
+    results: list[TaskResult],
+) -> list[TaskResult]:
     task_list_cqa = {
         "CQADupstackAndroidRetrieval",
         "CQADupstackEnglishRetrieval",
@@ -128,7 +128,7 @@ def potentially_add_cqadupstack_to_results(
     main_scores = [r.get_score(splits=["test"]) for r in cqa_results]
     main_score = float(sum(main_scores) / len(main_scores))
 
-    combined_result = MTEBResults(
+    combined_result = TaskResult(
         task_name="CQADupstackRetrieval",
         dataset_revision="CQADupstackRetrieval_is_a_combined_dataset",
         mteb_version="NA",

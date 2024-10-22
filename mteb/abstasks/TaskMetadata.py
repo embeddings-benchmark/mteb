@@ -225,7 +225,7 @@ class TaskMetadata(BaseModel):
 
     name: str
     description: str
-    type: TASK_TYPE | None = None
+    type: TASK_TYPE
     modalities: list[Literal["text"]] = ["text"]
     category: TASK_CATEGORY | None = None
     reference: STR_URL | None = None
@@ -374,3 +374,6 @@ class TaskMetadata(BaseModel):
                 )
             return f"\\cite{{{cite}}}"
         return cite
+
+    def __hash__(self) -> int:
+        return hash(self.model_dump_json())

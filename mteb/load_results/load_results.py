@@ -4,19 +4,17 @@ import json
 import logging
 import os
 import subprocess
-from collections import defaultdict
 from collections.abc import Sequence
 from pathlib import Path
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.load_results.mteb_results import MTEBResults
+from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
+from mteb.load_results.task_results import TaskResult
 from mteb.model_meta import ModelMeta
 
 logger = logging.getLogger(__name__)
 MODEL_NAME = str
 REVISION = str
-
-RESULTS = dict[MODEL_NAME, dict[REVISION, list[MTEBResults]]]
 
 
 def download_of_results(
@@ -92,7 +90,7 @@ def load_results(
     tasks: Sequence[AbsTask] | Sequence[str] | None = None,
     validate_and_filter: bool = True,
     require_model_meta: bool = True,
-) -> RESULTS:
+) -> BenchmarkResults:
     """Loads the results from the latest version of the results repository. The results are cached locally in the MTEB_CACHE directory.
     This directory can be set using the MTEB_CACHE environment variable or defaults to "~/.cache/mteb".
 
@@ -107,29 +105,7 @@ def load_results(
             splits from the results object that are not default in the task metadata. Defaults to True.
 
     Returns:
-        A dictionary where the keys are the model names and the values are dictionaries where the keys are the revisions and the values are lists of MTEBResults objects.
 
-    Example:
-        >>> results = load_results()
-        >>> results
-        {'mixedbread-ai/mxbai-embed-large-v1':
-            {'990580e27d329c7408b3741ecff85876e128e203': [
-                MTEBResults(task_name=TwentyNewsgroupsClustering.v2, scores=...),
-                MTEBResults(task_name=MedrxivClusteringP2P, scores=...),
-                MTEBResults(task_name=StackExchangeClustering, scores=...),
-                MTEBResults(task_name=BiorxivClusteringP2P.v2, scores=...),
-                MTEBResults(task_name=MedrxivClusteringS2S.v2, scores=...),
-                MTEBResults(task_name=MedrxivClusteringS2S, scores=...),
-                ...
-            ]},
-         'intfloat/multilingual-e5-small':
-            {'e4ce9877abf3edfe10b0d82785e83bdcb973e22e': [
-                MTEBResults(task_name=IndicGenBenchFloresBitextMining, scores=...),
-                MTEBResults(task_name=PpcPC, scores=...),
-                MTEBResults(task_name=TwentyNewsgroupsClustering.v2, scores=...),
-                ...
-            ]},
-        ...
     """
     repo_directory = download_of_results(results_repo, download_latest=download_latest)
     model_paths = [p for p in (repo_directory / "results").glob("*") if p.is_dir()]
@@ -144,16 +120,15 @@ def load_results(
     else:
         models_to_keep = None
 
+    task_names = {}
     if tasks is not None:
-        task_names = {}
         for task in tasks:
             if isinstance(task, AbsTask):
                 task_names[task.metadata.name] = task
             else:
                 task_names[task] = None
 
-    results = defaultdict(dict)
-
+    model_results = []
     for model_path in model_paths:
         model_revisions = model_path.glob("*")
 
@@ -174,7 +149,7 @@ def load_results(
             task_json_files = [
                 f for f in revision_path.glob("*.json") if "model_meta.json" != f.name
             ]
-            _results = [MTEBResults.from_disk(f) for f in task_json_files]
+            _results = [TaskResult.from_disk(f) for f in task_json_files]
 
             # filter out tasks that are not in the tasks list
             if tasks is not None:
@@ -184,14 +159,23 @@ def load_results(
                 filtered_results = []
                 for r in _results:
                     try:
-                        r.validate_and_filter_scores(task_names[r.task_name])
+                        if task_names:
+                            task = task_names[r.task_name]
+                        else:
+                            task = None
+                        r = r.validate_and_filter_scores(task=task)
                         filtered_results.append(r)
                     except Exception as e:
                         logger.warning(
                             f"Validation failed for {r.task_name} in {model_name} {revision}: {e}"
                         )
                 _results = filtered_results
+            model_results.append(
+                ModelResult(
+                    model_name=model_name,
+                    model_revision=revision,
+                    task_results=_results,
+                )
+            )
 
-            results[model_name][revision] = _results
-
-    return dict(results)
+    return BenchmarkResults(model_results=model_results)

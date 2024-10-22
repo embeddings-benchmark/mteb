@@ -21,7 +21,9 @@ from mteb.models import model_meta_from_sentence_transformers
 
 from ..abstasks import *
 from ..abstasks import AbsTask
-from ..load_results.mteb_results import MTEBResults
+from ..load_results.task_results import TaskResult
+from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from ..models.wrapper import Wrapper
 from ..tasks import *
 from . import LangMapping
 
@@ -317,7 +319,7 @@ class MTEB:
         co2_tracker: bool = False,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
-    ) -> list[MTEBResults]:
+    ) -> list[TaskResult]:
         """Run the evaluation pipeline on the selected tasks.
 
         Args:
@@ -336,7 +338,7 @@ class MTEB:
             kwargs: Additional arguments to be passed to `_run_eval` method and task.load_data.
 
         Returns:
-            A list of MTEBResults objects, one for each task evaluated.
+            A list of TaskResult objects, one for each task evaluated.
         """
         if "batch_size" in kwargs:
             logger.warning(
@@ -352,6 +354,8 @@ class MTEB:
 
         meta = self.create_model_meta(model)
         output_path = self.create_output_folder(meta, output_folder)
+        if not isinstance(model, Wrapper):
+            model = SentenceTransformerWrapper(model)
 
         if output_path:
             self._save_model_metadata(meta, output_path)
@@ -376,7 +380,7 @@ class MTEB:
                     logger.info(
                         f"{task.metadata.name} results already exists. Loading results from disk. Set overwrite_results=True to overwrite."
                     )
-                    mteb_results = MTEBResults.from_disk(save_path)
+                    mteb_results = TaskResult.from_disk(save_path)
                     evaluation_results.append(mteb_results)
                     del self.tasks[0]  # empty memory
                     continue
@@ -437,7 +441,7 @@ class MTEB:
                     if verbosity >= 1:
                         logger.info(f"Scores: {results}")
 
-                mteb_task_result = MTEBResults.from_task_results(
+                mteb_task_result = TaskResult.from_task_results(
                     task,
                     task_results,
                     evaluation_time=evaluation_time,

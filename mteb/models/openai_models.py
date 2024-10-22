@@ -7,13 +7,14 @@ from typing import Any
 import numpy as np
 
 from mteb.model_meta import ModelMeta
-from mteb.models.text_formatting_utils import corpus_to_texts
 from mteb.requires_package import requires_package
+
+from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
 
-class OpenAIWrapper:
+class OpenAIWrapper(Wrapper):
     def __init__(self, model_name: str, embed_dim: int | None = None, **kwargs) -> None:
         requires_package(self, "openai", "Openai text embedding")
         from openai import OpenAI
@@ -49,15 +50,6 @@ class OpenAIWrapper:
             all_embeddings.extend(self._to_numpy(response))
 
         return np.array(all_embeddings)
-
-    def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
-        return self.encode(queries, **kwargs)
-
-    def encode_corpus(
-        self, corpus: list[dict[str, str]] | dict[str, list[str]], **kwargs: Any
-    ) -> np.ndarray:
-        sentences = corpus_to_texts(corpus)
-        return self.encode(sentences, **kwargs)
 
     def _to_numpy(self, embedding_response) -> np.ndarray:
         return np.array([e.embedding for e in embedding_response.data])

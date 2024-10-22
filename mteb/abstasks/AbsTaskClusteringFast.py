@@ -14,8 +14,7 @@ from sklearn.metrics.cluster import v_measure_score
 
 from mteb.encoder_interface import Encoder
 
-from ..evaluation.evaluators.model_encode import model_encode
-from ..load_results.mteb_results import HFSubset
+from ..load_results.task_results import HFSubset
 from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
@@ -175,9 +174,8 @@ class AbsTaskClusteringFast(AbsTask):
             )
             downsampled_dataset = dataset.select(example_indices)  # type: ignore
 
-        embeddings = model_encode(
+        embeddings = model.encode(
             downsampled_dataset["sentences"],  # type: ignore
-            model=model,
             task_name=self.metadata.name,
             **encode_kwargs,
         )
