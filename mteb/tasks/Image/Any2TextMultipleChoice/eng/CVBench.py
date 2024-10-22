@@ -36,10 +36,10 @@ class CVBenchCount(AbsTaskAny2TextMultipleChoice):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{wu2024scimmir,
-  title={placeholder},
-  author={placeholder and others},
-  journal={arXiv preprint arXiv:2401.13478},
+        bibtex_citation="""@article{tong2024cambrian,
+  title={Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
+  author={Tong, Shengbang and Brown, Ellis and Wu, Penghao and Woo, Sanghyun and Middepogu, Manoj and Akula, Sai Charitha and Yang, Jihan and Yang, Shusheng and Iyer, Adithya and Pan, Xichen and others},
+  journal={arXiv preprint arXiv:2406.16860},
   year={2024}
 }""",
         descriptive_stats={
@@ -96,10 +96,10 @@ class CVBenchRelation(AbsTaskAny2TextMultipleChoice):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{wu2024scimmir,
-  title={placeholder},
-  author={placeholder and others},
-  journal={arXiv preprint arXiv:2401.13478},
+        bibtex_citation="""@article{tong2024cambrian,
+  title={Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
+  author={Tong, Shengbang and Brown, Ellis and Wu, Penghao and Woo, Sanghyun and Middepogu, Manoj and Akula, Sai Charitha and Yang, Jihan and Yang, Shusheng and Iyer, Adithya and Pan, Xichen and others},
+  journal={arXiv preprint arXiv:2406.16860},
   year={2024}
 }""",
         descriptive_stats={
@@ -158,10 +158,10 @@ class CVBenchDepth(AbsTaskAny2TextMultipleChoice):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{wu2024scimmir,
-  title={placeholder},
-  author={placeholder and others},
-  journal={arXiv preprint arXiv:2401.13478},
+        bibtex_citation="""@article{tong2024cambrian,
+  title={Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
+  author={Tong, Shengbang and Brown, Ellis and Wu, Penghao and Woo, Sanghyun and Middepogu, Manoj and Akula, Sai Charitha and Yang, Jihan and Yang, Shusheng and Iyer, Adithya and Pan, Xichen and others},
+  journal={arXiv preprint arXiv:2406.16860},
   year={2024}
 }""",
         descriptive_stats={

@@ -13,7 +13,7 @@ class GLDv2I2TRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "JamieSJS/gld-v2-i2t",
             "revision": "d8c3e53160860f76de73ed3041a8593672fe5928",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -13,7 +13,7 @@ class SOPI2IRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "JamieSJS/stanford-online-products",
             "revision": "0b3a1622902e6258425e673405bdfb1e5dfa8618",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

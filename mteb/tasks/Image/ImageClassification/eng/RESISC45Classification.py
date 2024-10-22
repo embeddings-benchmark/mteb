@@ -13,7 +13,7 @@ class RESISC45Classification(AbsTaskImageClassification):
             "path": "timm/resisc45",
             "revision": "fe12fc5f1b7606543b0355eda392f1ddc54625c6",
         },
-        type="Classification",
+        type="ImageClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

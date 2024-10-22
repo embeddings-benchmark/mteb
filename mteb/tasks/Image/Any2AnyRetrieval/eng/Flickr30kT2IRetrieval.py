@@ -13,7 +13,7 @@ class Flickr30kT2IRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "JamieSJS/flickr30k",
             "revision": "a4cf34ac79215f9e2cd6a10342d84f606fc41cc3",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="t2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

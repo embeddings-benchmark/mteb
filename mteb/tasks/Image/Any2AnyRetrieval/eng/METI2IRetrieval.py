@@ -13,7 +13,7 @@ class METI2IRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "JamieSJS/met",
             "revision": "08ceaa61c0d172214abb3b8e82971d8f69d2aec0",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

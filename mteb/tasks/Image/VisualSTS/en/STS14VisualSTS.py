@@ -14,7 +14,7 @@ class STS14VisualSTS(AbsTaskVisualSTS):
         description="SemEval STS 2014 dataset. Currently only the English dataset."
         + "rendered into images.",
         reference="https://arxiv.org/abs/2402.08183/",
-        type="STS",
+        type="VisualSTS",
         category="i2i",
         modalities=["image"],
         eval_splits=["test"],

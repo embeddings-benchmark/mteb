@@ -5,6 +5,7 @@ from typing import Any
 
 import torch
 from PIL import Image
+from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import LlavaNextForConditionalGeneration, LlavaNextProcessor
 
@@ -56,9 +57,23 @@ class E5VWrapper:
                 all_text_embeddings.append(text_outputs.cpu())
         return torch.cat(all_text_embeddings, dim=0)
 
-    def get_image_embeddings(self, images: list[Image.Image], batch_size: int = 8):
+    def get_image_embeddings(
+        self, images: list[Image.Image] | DataLoader, batch_size: int = 8
+    ):
         all_image_embeddings = []
 
+        if isinstance(images, DataLoader):
+            for batch_images in tqdm(images):
+                img_inputs = self.processor(
+                    [self.img_prompt] * len(batch_images),
+                    batch_images,
+                    return_tensors="pt",
+                    padding=True,
+                ).to("cuda")
+                image_outputs = self.model(
+                    **img_inputs, output_hidden_states=True, return_dict=True
+                ).hidden_states[-1][:, -1, :]
+                all_image_embeddings.append(image_outputs.cpu())
         with torch.no_grad():
             for i in tqdm(range(0, len(images), batch_size)):
                 batch_images = images[i : i + batch_size]
@@ -95,24 +110,41 @@ class E5VWrapper:
         all_fused_embeddings = []
 
         if texts is not None and images is not None:
-            if len(texts) != len(images):
-                raise ValueError(
-                    "The number of texts and images must have the same length"
-                )
-            with torch.no_grad():
-                for i in tqdm(range(0, len(images), batch_size)):
-                    batch_texts = texts[i : i + batch_size]
-                    batch_images = images[i : i + batch_size]
-                    prompts = [
-                        self.composed_prompt.format(text) for text in batch_texts
-                    ]
-                    inputs = self.processor(
-                        prompts, batch_images, return_tensors="pt", padding=True
-                    ).to("cuda")
-                    outputs = self.model(
-                        **inputs, output_hidden_states=True, return_dict=True
-                    ).hidden_states[-1][:, -1, :]
-                    all_fused_embeddings.append(outputs.cpu())
+            if isinstance(images, DataLoader):
+                with torch.no_grad():
+                    for index, batch_images in enumerate(tqdm(images)):
+                        batch_texts = texts[
+                            index * batch_size : (index + 1) * batch_size
+                        ]
+                        prompts = [
+                            self.composed_prompt.format(text) for text in batch_texts
+                        ]
+                        inputs = self.processor(
+                            prompts, batch_images, return_tensors="pt", padding=True
+                        ).to("cuda")
+                        outputs = self.model(
+                            **inputs, output_hidden_states=True, return_dict=True
+                        ).hidden_states[-1][:, -1, :]
+                        all_fused_embeddings.append(outputs.cpu())
+            else:
+                if len(texts) != len(images):
+                    raise ValueError(
+                        "The number of texts and images must have the same length"
+                    )
+                with torch.no_grad():
+                    for i in tqdm(range(0, len(images), batch_size)):
+                        batch_texts = texts[i : i + batch_size]
+                        batch_images = images[i : i + batch_size]
+                        prompts = [
+                            self.composed_prompt.format(text) for text in batch_texts
+                        ]
+                        inputs = self.processor(
+                            prompts, batch_images, return_tensors="pt", padding=True
+                        ).to("cuda")
+                        outputs = self.model(
+                            **inputs, output_hidden_states=True, return_dict=True
+                        ).hidden_states[-1][:, -1, :]
+                        all_fused_embeddings.append(outputs.cpu())
             return torch.cat(all_fused_embeddings, dim=0)
 
         elif texts is not None:

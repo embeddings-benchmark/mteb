@@ -17,7 +17,7 @@ class Country211Classification(AbsTaskZeroshotClassification):
             "path": "clip-benchmark/wds_country211",
             "revision": "1699f138f0558342a1cbf99f7cf36b4361bb5ebc",
         },
-        type="Classification",
+        type="ZeroShotClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
