@@ -24,7 +24,6 @@ from ..abstasks import AbsTask
 from ..load_results.task_results import TaskResult
 from ..tasks import *
 from . import LangMapping
-from .CacheWrapper import CachedEmbeddingWrapper
 
 logger = logging.getLogger(__name__)
 
@@ -369,16 +368,6 @@ class MTEB:
             logger.info(
                 f"\n\n********************** Evaluating {task.metadata.name} **********************"
             )
-
-            if "cache_embeddings" in encode_kwargs:
-                # make it a CachedEmbeddingModel and store the embeddings
-                model = CachedEmbeddingWrapper(
-                    model,
-                    cache_path=os.path.join(
-                        encode_kwargs["cache_embeddings"], f"{task.metadata.name}"
-                    ),
-                    vector_dim=encode_kwargs["vector_dim"],
-                )
 
             # skip evaluation if results folder exists and overwrite_results is False
             if output_path:

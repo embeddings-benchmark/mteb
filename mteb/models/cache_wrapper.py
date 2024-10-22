@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import logging
-import pickle
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Union
 
@@ -24,7 +24,7 @@ class TextVectorMap:
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)
         self.vectors_file = self.directory / "vectors.npy"
-        self.index_file = self.directory / "index.pkl"
+        self.index_file = self.directory / "index.json"
         self.dimension_file = self.directory / "dimension"
         self.hash_to_index: Dict[str, int] = {}
         self.vectors: Optional[np.memmap] = None
@@ -121,8 +121,17 @@ class TextVectorMap:
         try:
             if self.vectors is not None:
                 self.vectors.flush()
-            with open(self.index_file, "wb") as f:
-                pickle.dump(self.hash_to_index, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+            # Convert hash_to_index dict to a format suitable for JSON
+            # JSON doesn't support integer keys, so we keep everything as strings
+            serializable_index = {
+                str(hash_): int(index)  # Ensure indices are serialized as integers
+                for hash_, index in self.hash_to_index.items()
+            }
+
+            with open(self.index_file, "w", encoding="utf-8") as f:
+                json.dump(serializable_index, f, indent=2)
+
             self._save_dimension()
             logger.info(f"Saved TextVectorMap to {self.directory}")
         except Exception as e:
@@ -134,8 +143,13 @@ class TextVectorMap:
         try:
             self._load_dimension()
             if self.index_file.exists() and self.vectors_file.exists():
-                with open(self.index_file, "rb") as f:
-                    self.hash_to_index = pickle.load(f)
+                with open(self.index_file, encoding="utf-8") as f:
+                    # Load and convert the JSON data back to the expected format
+                    loaded_index = json.load(f)
+                    self.hash_to_index = {
+                        str(hash_): int(index)  # Ensure we maintain the correct types
+                        for hash_, index in loaded_index.items()
+                    }
 
                 if self.vector_dim is not None:
                     self.vectors = np.memmap(
@@ -279,7 +293,6 @@ class CachedEmbeddingWrapper:
             else:
                 logger.info("All texts found in cache")
 
-            # Reorder results to match input order
             final_results = [None] * len(texts)
             uncached_idx = 0
             for i in range(len(texts)):
