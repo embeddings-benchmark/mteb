@@ -114,7 +114,7 @@ rosberta_ru_en = ModelMeta(
         sentence_transformers_loader,
         model_name="ai-forever/ru-en-RoSBERTa",
         revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
-        prompts={
+        model_prompts={
             "Classification": "classification: ",
             "Clustering": "clustering: ",
             "query": "search_query: ",
