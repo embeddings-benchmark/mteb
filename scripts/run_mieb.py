@@ -25,7 +25,7 @@ for model_name in [
     "laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K",
     "laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
     "nyu-visionx/moco-v3-vit-b",
-    "nyu-visionx/moco-v3-vit-l"
+    "nyu-visionx/moco-v3-vit-l",
 ]:
     model = mteb.get_model(model_name)
     tasks = mteb.get_tasks(
