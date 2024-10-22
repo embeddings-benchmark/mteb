@@ -22,6 +22,7 @@ class SKQuadRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["slk-Latn"],
         main_score="ndcg_at_10",
@@ -31,6 +32,7 @@ class SKQuadRetrieval(AbsTaskRetrieval):
         license="cc-by-nc-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
+        sample_creation="found",
         bibtex_citation="",
         descriptive_stats={
             "n_samples": {"test": 1134},
