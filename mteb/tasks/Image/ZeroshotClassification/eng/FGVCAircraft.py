@@ -14,7 +14,7 @@ class FGVCAircraftClassification(AbsTaskZeroshotClassification):
         dataset={
             "path": "HuggingFaceM4/FGVC-Aircraft",
             "revision": "91860adfc9a09aabca5cddb5247442109b38e213",
-            "trust_remote_code": True
+            "trust_remote_code": True,
         },
         type="ZeroShotClassification",
         category="i2t",
