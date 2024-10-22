@@ -11,7 +11,7 @@ class FORBI2I(AbsTaskAny2AnyRetrieval):
         reference="https://github.com/pxiangwu/FORB",
         dataset={
             "path": "isaacchung/forb_retrieval",
-            "revision": "336607d5bcc853fb7f7276c2c9721d4b5b1ca8e4",
+            "revision": "26ab4bd972854becada339afc80f5f3ffc047e2b",
         },
         type="Retrieval",
         category="i2i",
