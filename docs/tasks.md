@@ -461,6 +461,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [SICK-R-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | STS | s2s | [Web, Written] | {'test': 9812} | {'test': 42.8} |
 | [SICKFr](https://huggingface.co/datasets/Lajavaness/SICK-fr) | ['fra'] | STS | s2s |  | None | None |
 | [SIQA](https://leaderboard.allenai.org/socialiqa/submissions/get-started) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic, Written] | {'test': 0} | {'test': {'average_document_length': 22.967085695044617, 'average_query_length': 127.75383828045035, 'num_documents': 71276, 'num_queries': 1954, 'average_relevant_docs_per_query': 1.0}} |
+| [SKQuadRetrieval](https://huggingface.co/datasets/TUKE-KEMT/retrieval-skquad) | ['slk'] | Retrieval | s2s | [Encyclopaedic] | {'test': 1134} | {'test': {'average_document_length': 1180.5071792496526, 'average_query_length': 53.63403880070547, 'num_documents': 6477, 'num_queries': 1134, 'average_relevant_docs_per_query': 11}} |
 | [SNLHierarchicalClusteringP2P](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [Encyclopaedic, Non-fiction, Written] | {'test': 1300} | {'test': 1986.9453846153847} |
 | [SNLHierarchicalClusteringS2S](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | s2s | [Encyclopaedic, Non-fiction, Written] | {'test': 1300} | {'test': 242.22384615384615} |
 | [SNLRetrieval](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Retrieval | p2p | [Encyclopaedic, Non-fiction, Written] | {'test': 2048} | {'test': {'average_document_length': 1986.9453846153847, 'average_query_length': 14.906153846153845, 'num_documents': 1300, 'num_queries': 1300, 'average_relevant_docs_per_query': 1.0}} |
@@ -1413,7 +1414,7 @@ The following tables give you an overview of the tasks in MTEB.
 | sim | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sin | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | sja | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| slk | 3 | 3 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 |
+| slk | 3 | 3 | 1 | 0 | 1 | 0 | 0 | 3 | 0 | 0 | 0 |
 | sll | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | slv | 3 | 4 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 |
 | smk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1655,7 +1656,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1394 | 794 | 304 | 3 | 28 | 67 | 50 | 448 | 85 | 2 | 2 |
+| Total | 1394 | 794 | 304 | 3 | 28 | 67 | 50 | 449 | 85 | 2 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
