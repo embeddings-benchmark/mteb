@@ -59,7 +59,7 @@ class ROxfordMediumI2IRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "JamieSJS/r-oxford-medium",
             "revision": "3bd28e9c45e15f299117c634799f7035c4de2d31",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

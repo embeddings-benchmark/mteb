@@ -59,7 +59,7 @@ class RParisMediumI2IRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "JamieSJS/r-paris-medium",
             "revision": "900267b49003a086979e8d52f6942624236bfc34",
         },
-        type="Retrieval",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
