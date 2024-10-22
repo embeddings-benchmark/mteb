@@ -21,6 +21,11 @@ for model_name in [
     "facebook/dinov2-base",
     "facebook/dinov2-large",
     "facebook/dinov2-giant",
+    "laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K",
+    "laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K",
+    "laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
+    "nyu-visionx/moco-v3-vit-b",
+    "nyu-visionx/moco-v3-vit-l"
 ]:
     model = mteb.get_model(model_name)
     tasks = mteb.get_tasks(
