@@ -91,7 +91,7 @@ class JinaWrapper(SentenceTransformerWrapper):
         embeddings = self.model.encode(
             sentences,
             task=jina_task_name,
-            prompt_name=self.jina_task_to_prompt.get(jina_task_name, None),
+            prompt=self.jina_task_to_prompt.get(jina_task_name, None),
             **kwargs,
         )
 
