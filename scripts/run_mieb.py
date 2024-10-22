@@ -9,7 +9,6 @@ for model_name in [
     "royokong/e5-v",
     "BAAI/bge-visualized-base",
     "BAAI/bge-visualized-m3",
-    "google/siglip-so400m-patch14-384",
     "kakaobrain/align-base",
     "jinaai/jina-clip-v1",
     "nomic-ai/nomic-embed-vision-v1.5",
@@ -26,6 +25,7 @@ for model_name in [
     "laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
     "nyu-visionx/moco-v3-vit-b",
     "nyu-visionx/moco-v3-vit-l",
+    # "google/siglip-so400m-patch14-384",# haven't pushed
 ]:
     model = mteb.get_model(model_name)
     tasks = mteb.get_tasks(

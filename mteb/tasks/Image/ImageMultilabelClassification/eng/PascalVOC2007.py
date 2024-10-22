@@ -15,6 +15,7 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
             "path": "HuggingFaceM4/pascal_voc",
             "name": "voc2007_main",
             "revision": "dbafdb9e1506c9c419c5c4672e409463cd21ba50",
+            "trust_remote_code": True
         },
         type="ImageMultilabelClassification",
         category="i2t",
