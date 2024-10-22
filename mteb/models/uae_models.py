@@ -1,15 +1,17 @@
 from __future__ import annotations
 
+import logging
+from collections.abc import Sequence
 from functools import partial
-from typing import Any, Sequence
+from typing import Any
 
 import numpy as np
 import torch
 
-from .sentence_transformer_wrapper import SentenceTransformerWrapper, get_prompt_name
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-import logging
+
+from .sentence_transformer_wrapper import SentenceTransformerWrapper, get_prompt_name
 
 logger = logging.getLogger(__name__)
 
@@ -72,12 +74,11 @@ class UAEWrapper(SentenceTransformerWrapper):
 uae_large_v1 = ModelMeta(
     loader=partial(
         UAEWrapper,
-        model_name="WhereIsAI/UAE-Large-V1",
+        model="WhereIsAI/UAE-Large-V1",
         revision="369c368f70f16a613f19f5598d4f12d9f44235d4",
-        trust_remote_code=True,
         # https://github.com/SeanLee97/AnglE/blob/b04eae166d8596b47293c75b4664d3ad820d7331/angle_emb/angle.py#L291-L314
         model_prompts={
-            "query": 'Represent this sentence for searching relevant passages: {text}',
+            "query": "Represent this sentence for searching relevant passages: {text}",
             "Summarization": 'Summarize sentence "{text}" in one word:"',
         },
     ),

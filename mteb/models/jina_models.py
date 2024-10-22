@@ -1,17 +1,18 @@
 from __future__ import annotations
 
+import logging
+from collections.abc import Sequence
 from functools import partial
-from typing import Any, Sequence
+from typing import Any
 
 import numpy as np
 import torch
 from sentence_transformers import __version__ as st_version
 
-from .sentence_transformer_wrapper import SentenceTransformerWrapper, get_prompt_name
 from mteb.model_meta import ModelMeta
-import logging
 
 from ..encoder_interface import PromptType
+from .sentence_transformer_wrapper import SentenceTransformerWrapper, get_prompt_name
 
 logger = logging.getLogger(__name__)
 
@@ -27,15 +28,15 @@ class JinaWrapper(SentenceTransformerWrapper):
         "retrieval.passage": "Represent the document for retrieval: ",
         "separation": "",
         "classification": "",
-        "text-matching": ""
-    },
+        "text-matching": "",
+    }
 
     def __init__(
-            self,
-            model: str,
-            revision: str | None = None,
-            model_prompts: dict[str, str] | None = None,
-            **kwargs,
+        self,
+        model: str,
+        revision: str | None = None,
+        model_prompts: dict[str, str] | None = None,
+        **kwargs,
     ) -> None:
         if CURRENT_SENTENCE_TRANSFORMERS_VERSION < MIN_SENTENCE_TRANSFORMERS_VERSION:
             raise RuntimeError(
@@ -50,12 +51,12 @@ class JinaWrapper(SentenceTransformerWrapper):
         super().__init__(model, revision, model_prompts, **kwargs)
 
     def encode(
-            self,
-            sentences: Sequence[str],
-            *,
-            task_name: str,
-            prompt_type: PromptType | None = None,
-            **kwargs: Any,
+        self,
+        sentences: Sequence[str],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
     ) -> np.ndarray:
         """Encodes the given sentences using the encoder.
 
@@ -106,9 +107,8 @@ class JinaWrapper(SentenceTransformerWrapper):
 jina_embeddings_v3 = ModelMeta(
     loader=partial(
         JinaWrapper,
-        model_name="jinaai/jina-embeddings-v3",
+        model="jinaai/jina-embeddings-v3",
         revision="343dbf534c76fe845f304fa5c2d1fd87e1e78918",
-        trust_remote_code=True,
         model_prompts={
             "Retrieval-query": "retrieval.query",
             "Retrieval-passage": "retrieval.passage",
@@ -125,6 +125,6 @@ jina_embeddings_v3 = ModelMeta(
     name="jinaai/jina-embeddings-v3",
     languages=["eng_Latn"],
     open_source=True,
-    revision="343dbf534c76fe845f304fa5c2d1fd87e1e78918",
+    revision="215a6e121fa0183376388ac6b1ae230326bfeaed",
     release_date="2024-09-05",  # initial commit of hf model.
 )
