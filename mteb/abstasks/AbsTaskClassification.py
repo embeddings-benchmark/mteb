@@ -45,7 +45,7 @@ class AbsTaskClassification(AbsTask):
         text: str
         label: int
     """
-    task_prompt = "Classify user passages."
+    abstask_prompt = "Classify user passages."
 
     def __init__(
         self,

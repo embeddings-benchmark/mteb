@@ -257,7 +257,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
 
     See https://arxiv.org/abs/2403.15246 for more details
     """
-    task_prompt = "Retrieve text based on user query."
+    abstask_prompt = "Retrieve text based on user query."
 
     def __init__(
         self,

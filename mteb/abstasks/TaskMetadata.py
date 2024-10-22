@@ -179,6 +179,19 @@ class DatasetDict(TypedDict, total=False):
     trust_remote_code: bool
 
 
+class PromptDict(TypedDict, total=False):
+    """
+    A dictionary containing the prompt used for the task.
+
+    Args:
+        query: The prompt used for the queries in the task.
+        passage: The prompt used for the passages in the task.
+    """
+
+    query: str
+    passage: str
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -209,9 +222,7 @@ class TaskMetadata(BaseModel):
         dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
         sample_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
-        prompt: The prompt used for the task.
-        query_prompt: The prompt used for the queries in the task. This is the prompt used for the queries in the retrieval task.
-        passage_prompt: The prompt used for the passages in the task. This is the prompt used for the passages in the retrieval task.
+        prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
         n_samples: The number of samples in the dataset. This should only be for the splits evaluated on. For retrieval tasks, this should be the
             number of query-document pairs.
@@ -219,12 +230,11 @@ class TaskMetadata(BaseModel):
             retrieval tasks, this will be a dict containing the character length of the queries and documents separately, as well as the total number of queries, documents, and relevance judgements per query.
     """
 
-    model_config = ConfigDict(extra='forbid')
-
     dataset: DatasetDict
 
     name: str
     description: str
+    prompt: str | PromptDict | None = None
     type: TASK_TYPE
     modalities: list[Literal["text"]] = ["text"]
     category: TASK_CATEGORY | None = None
@@ -244,10 +254,6 @@ class TaskMetadata(BaseModel):
 
     sample_creation: SAMPLE_CREATION_METHOD | None = None
     bibtex_citation: str | None = None
-
-    prompt: str | None = None
-    query_prompt: str | None = None
-    passage_prompt: str | None = None
 
     descriptive_stats: dict[METRIC_NAME, dict[SPLIT_NAME, METRIC_VALUE] | None] = {}
 
@@ -269,6 +275,16 @@ class TaskMetadata(BaseModel):
     ) -> dict[str, Any]:
         cls.dataset_revision_is_specified(dataset)
         return dataset
+
+    @field_validator("prompt")
+    def _check_prompt_is_valid(cls, prompt: str | PromptDict | None) -> str | PromptDict | None:
+        if isinstance(prompt, dict):
+            for key in prompt:
+                if key not in ["query", "passage"]:
+                    raise ValueError(
+                        "The prompt dictionary should only contain the keys 'query' and 'passage'."
+                    )
+        return prompt
 
     @staticmethod
     def dataset_path_is_specified(dataset: dict[str, Any]) -> None:

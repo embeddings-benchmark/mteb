@@ -45,7 +45,7 @@ class WinoGrande(AbsTaskRetrieval):
   publisher={ACM New York, NY, USA}
 }
 """,
-        query_prompt="Given the following sentence, retrieve an appropriate answer to fill in the missing underscored part.",
+        prompt={"query": "Given the following sentence, retrieve an appropriate answer to fill in the missing underscored part."}, 
         descriptive_stats={
             "n_samples": {"test": 0},
             "avg_character_length": {

@@ -33,7 +33,7 @@ class SNLRetrieval(AbsTaskRetrieval):
     year={2023},
     school={Norwegian University of Life Sciences, {\AA}s}
 }""",
-        query_prompt="Given a lexicon headline in Norwegian, retrieve its article",
+        prompt={"query": "Given a lexicon headline in Norwegian, retrieve its article"}, 
         descriptive_stats={
             "n_samples": {"test": 2048},
             "avg_character_length": {

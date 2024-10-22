@@ -44,7 +44,7 @@ class PIQA(AbsTaskRetrieval):
   year={2020}
 }
 """,
-        query_prompt="Given the following goal, retrieve a possible solution.",
+        prompt={"query": "Given the following goal, retrieve a possible solution."}, 
         descriptive_stats={
             "n_samples": {"test": 1838},
             "avg_character_length": {

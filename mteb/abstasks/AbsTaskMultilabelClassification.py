@@ -68,7 +68,7 @@ class AbsTaskMultilabelClassification(AbsTask):
     """
 
     classifier = KNeighborsClassifier(n_neighbors=5)
-    task_prompt = "Classify user passages."
+    abstask_prompt = "Classify user passages."
 
     def __init__(
         self,

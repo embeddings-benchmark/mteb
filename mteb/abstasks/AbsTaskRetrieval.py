@@ -230,7 +230,7 @@ class AbsTaskRetrieval(AbsTask):
     """
 
     ignore_identical_ids: bool = False
-    task_prompt = "Retrieve text based on user query."
+    abstask_prompt = "Retrieve text based on user query."
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

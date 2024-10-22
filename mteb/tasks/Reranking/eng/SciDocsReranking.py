@@ -27,6 +27,7 @@ class SciDocsReranking(AbsTaskReranking):
         annotations_creators=None,
         dialect=None,
         sample_creation="found",
+        prompt="Given a title of a scientific paper, retrieve the titles of other relevant papers",
         bibtex_citation="""
 @inproceedings{cohan-etal-2020-specter,
     title = "{SPECTER}: Document-level Representation Learning using Citation-informed Transformers",

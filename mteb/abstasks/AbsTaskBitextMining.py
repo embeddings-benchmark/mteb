@@ -39,7 +39,7 @@ class AbsTaskBitextMining(AbsTask):
     """
 
     parallel_subsets = False
-    task_prompt = "Retrieve parallel sentences."
+    abstask_prompt = "Retrieve parallel sentences."
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

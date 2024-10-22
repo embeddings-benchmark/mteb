@@ -36,7 +36,7 @@ class RuBQRetrieval(AbsTaskRetrieval):
         year={2021},
         pages={532--547}
         }""",
-        query_prompt="Given a question, retrieve Wikipedia passages that answer the question",
+        prompt={"query": "Given a question, retrieve Wikipedia passages that answer the question"}, 
         descriptive_stats={
             "n_samples": {"test": 2845},
             "avg_character_length": {

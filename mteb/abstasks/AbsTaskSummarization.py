@@ -43,7 +43,7 @@ class AbsTaskSummarization(AbsTask):
     """
 
     evalutor = SummarizationEvaluator
-    task_prompt = "Given a news summary, retrieve other semantically similar summaries."
+    abstask_prompt = "Given a news summary, retrieve other semantically similar summaries."
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
