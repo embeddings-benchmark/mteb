@@ -26,9 +26,6 @@ class JinaWrapper(SentenceTransformerWrapper):
     jina_task_to_prompt = {
         "retrieval.query": "Represent the query for retrieving evidence documents: ",
         "retrieval.passage": "Represent the document for retrieval: ",
-        "separation": "",
-        "classification": "",
-        "text-matching": "",
     }
 
     def __init__(
@@ -108,7 +105,7 @@ jina_embeddings_v3 = ModelMeta(
     loader=partial(
         JinaWrapper,
         model="jinaai/jina-embeddings-v3",
-        revision="343dbf534c76fe845f304fa5c2d1fd87e1e78918",
+        revision="215a6e121fa0183376388ac6b1ae230326bfeaed",
         model_prompts={
             "Retrieval-query": "retrieval.query",
             "Retrieval-passage": "retrieval.passage",
