@@ -11,7 +11,7 @@ class BLINKIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://arxiv.org/abs/2404.12390",
         dataset={
             "path": "JamieSJS/blink-it2t",
-            "revision": "4ab83c87ac5b24e3b730f86d585671493a3a423c",
+            "revision": "302cf2008f204285985099dcd46425b00356c610",
             "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
@@ -40,7 +40,7 @@ class BLINKIT2TRetrieval(AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 3080,
+                    "num_documents": 26,
                     "num_queries": 1073,
                     "average_relevant_docs_per_query": 1,
                 }
