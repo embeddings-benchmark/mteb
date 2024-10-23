@@ -291,12 +291,8 @@ class TaskResult(BaseModel):
                 )
 
         pre_1_11_load = (
-            (
-                "mteb_version" in data
-                and Version(data["mteb_version"]) < Version("1.11.0")
-            )
-            or "mteb_version" not in data
-        )  # assume it is before 1.11.0 if the version is not present
+            "mteb_version" in data and Version(data["mteb_version"]) < Version("1.11.0")
+        ) or "mteb_version" not in data  # assume it is before 1.11.0 if the version is not present
         try:
             obj = cls.model_validate(data)
         except Exception as e:
@@ -492,12 +488,12 @@ class TaskResult(BaseModel):
             hf_subsets = {"default"}
         new_scores = {}
         seen_splits = set()
-        for split in task_result.scores:
+        for split in self.scores:
             if split not in splits:
                 continue
             new_scores[split] = []
             seen_subsets = set()
-            for _scores in task_result.scores[split]:
+            for _scores in self.scores[split]:
                 if _scores["hf_subset"] not in hf_subsets:
                     continue
                 new_scores[split].append(_scores)
