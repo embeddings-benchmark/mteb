@@ -46,7 +46,11 @@ def e5_loader(**kwargs):
                 )
             if instruction:
                 kwargs["instruction"] = e5_instruction(instruction)
-            return super().encode(sentences, *args, **kwargs)
+            embeddings = super().encode(sentences, *args, **kwargs)
+            if isinstance(embeddings, torch.Tensor):
+                # sometimes in kwargs can be return_tensors=True
+                embeddings = embeddings.cpu().detach().float().numpy()
+            return embeddings
 
     return E5InstructWrapper(**kwargs)
 
