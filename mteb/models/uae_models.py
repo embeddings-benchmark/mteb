@@ -87,4 +87,10 @@ uae_large_v1 = ModelMeta(
     open_source=True,
     revision="369c368f70f16a613f19f5598d4f12d9f44235d4",
     release_date="2023-12-04",  # initial commit of hf model.
+    n_parameters=335_000,
+    max_tokens=512,
+    embed_dim=1024,
+    license="mit",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
 )

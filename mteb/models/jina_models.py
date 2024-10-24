@@ -124,4 +124,10 @@ jina_embeddings_v3 = ModelMeta(
     open_source=True,
     revision="215a6e121fa0183376388ac6b1ae230326bfeaed",
     release_date="2024-09-18",  # official release date
+    n_parameters=572_000,
+    max_tokens=8194,
+    embed_dim=4096,
+    license="mit",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
 )
