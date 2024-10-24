@@ -7,9 +7,7 @@ from typing import Annotated
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.load_results.benchmark_results import (
-    BenchmarkResults,
-)
+from mteb.load_results.benchmark_results import BenchmarkResults
 from mteb.load_results.load_results import load_results
 from mteb.overview import get_tasks
 
@@ -62,6 +60,7 @@ class Benchmark:
         if base_results is None:
             base_results = load_results()
         return base_results.select_tasks(self.tasks)
+
 
 MTEB_MAIN_EN = Benchmark(
     name="MTEB(eng)",
