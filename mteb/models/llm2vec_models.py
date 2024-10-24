@@ -1,21 +1,19 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Callable, Literal
+from typing import Any, Callable
 
 import numpy as np
 import torch
 
-from mteb.encoder_interface import Encoder
+from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.text_formatting_utils import corpus_to_texts
 
 from .instructions import task_to_instruction
+from .sentence_transformer_wrapper import validate_task_to_prompt_name
+from .wrapper import Wrapper
 
-logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
-
-EncodeTypes = Literal["query", "passage"]
 
 
 def llm2vec_instruction(instruction):
@@ -24,8 +22,14 @@ def llm2vec_instruction(instruction):
     return instruction
 
 
-class LLM2VecWrapper:
-    def __init__(self, *args, **kwargs):
+class LLM2VecWrapper(Wrapper):
+    def __init__(
+        self,
+        model_prompts: dict[str, str] | None = None,
+        device: str | None = None,
+        *args,
+        **kwargs,
+    ):
         try:
             from llm2vec import LLM2Vec
         except ImportError:
@@ -41,12 +45,12 @@ class LLM2VecWrapper:
             logger.warning(
                 "LLM2Vec models were trained with flash attention enabled. For optimal performance, please install the `flash_attn` package with `pip install flash-attn --no-build-isolation`."
             )
-        self.task_to_instructions = None
-        if "task_to_instructions" in kwargs:
-            self.task_to_instructions = kwargs.pop("task_to_instructions")
+        self.model_prompts = (
+            validate_task_to_prompt_name(model_prompts) if model_prompts else None
+        )
 
-        if "device" in kwargs:
-            kwargs["device_map"] = kwargs.pop("device")
+        if device:
+            kwargs["device_map"] = device
         elif torch.cuda.device_count() > 1:
             # bug fix for multi-gpu
             kwargs["device_map"] = None
@@ -57,36 +61,16 @@ class LLM2VecWrapper:
         self,
         sentences: list[str],
         *,
-        prompt_name: str = None,
+        task_name: str,
+        prompt_type: PromptType | None = None,
         **kwargs: Any,  # noqa
     ) -> np.ndarray:
-        if prompt_name is not None:
-            instruction = (
-                self.task_to_instructions[prompt_name]
-                if self.task_to_instructions
-                and prompt_name in self.task_to_instructions
-                else llm2vec_instruction(task_to_instruction(prompt_name))
-            )
-        else:
-            instruction = ""
+        instruction = llm2vec_instruction(
+            task_to_instruction(task_name, prompt_type == PromptType.query)
+        )
 
         sentences = [[instruction, sentence] for sentence in sentences]
         return self.model.encode(sentences, **kwargs)
-
-    def encode_corpus(
-        self,
-        corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
-        prompt_name: str = None,
-        **kwargs: Any,
-    ) -> np.ndarray:
-        sentences = corpus_to_texts(corpus, sep=" ")
-        sentences = [["", sentence] for sentence in sentences]
-        if "request_qid" in kwargs:
-            kwargs.pop("request_qid")
-        return self.model.encode(sentences, **kwargs)
-
-    def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
-        return self.encode(queries, **kwargs)
 
 
 def _loader(wrapper: type[LLM2VecWrapper], **kwargs) -> Callable[..., Encoder]:

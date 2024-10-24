@@ -1,13 +1,18 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from functools import partial
+from typing import Any
 
+import numpy as np
 import torch
 
 from mteb.model_meta import ModelMeta
 
+from ..encoder_interface import PromptType
 from .e5_models import E5_PAPER_RELEASE_DATE, XLMR_LANGUAGES
 from .instructions import task_to_instruction
+from .wrapper import Wrapper
 
 MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
 
@@ -24,25 +29,24 @@ def e5_loader(**kwargs):
             "Please install `pip install gritlm` to use E5 Instruct models."
         )
 
-    class E5InstructWrapper(GritLM):
-        def encode(self, *args, **kwargs):
-            if "prompt_name" in kwargs:
-                if "instruction" in kwargs:
-                    raise ValueError(
-                        "Cannot specify both `prompt_name` and `instruction`."
-                    )
-                instruction = task_to_instruction(
-                    kwargs.pop("prompt_name"), kwargs.pop("is_query", True)
-                )
-            else:
+    class E5InstructWrapper(GritLM, Wrapper):
+        def encode(
+            self,
+            sentences: Sequence[str],
+            *args,
+            task_name: str,
+            prompt_type: PromptType | None = None,
+            **kwargs: Any,
+        ) -> np.ndarray:
+            if "instruction" in kwargs:
                 instruction = kwargs.pop("instruction", "")
+            else:
+                instruction = task_to_instruction(
+                    task_name, prompt_type == PromptType.query
+                )
             if instruction:
                 kwargs["instruction"] = e5_instruction(instruction)
-            return super().encode(*args, **kwargs)
-
-        def encode_corpus(self, *args, **kwargs):
-            kwargs["is_query"] = False
-            return super().encode_corpus(*args, **kwargs)
+            return super().encode(sentences, *args, **kwargs)
 
     return E5InstructWrapper(**kwargs)
 

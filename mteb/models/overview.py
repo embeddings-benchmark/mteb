@@ -6,7 +6,7 @@ from typing import Any
 
 from sentence_transformers import SentenceTransformer
 
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (
     bge_models,
@@ -92,9 +92,7 @@ def get_model_metas(
     return res
 
 
-def get_model(
-    model_name: str, revision: str | None = None, **kwargs: Any
-) -> Encoder | EncoderWithQueryCorpusEncode:
+def get_model(model_name: str, revision: str | None = None, **kwargs: Any) -> Encoder:
     """A function to fetch a model object by name.
 
     Args:

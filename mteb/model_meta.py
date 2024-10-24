@@ -2,16 +2,17 @@ from __future__ import annotations
 
 import logging
 from functools import partial
-from typing import Any, Callable
+from typing import TYPE_CHECKING, Any, Callable, Literal
 
 from pydantic import BaseModel
-from sentence_transformers import SentenceTransformer
-from typing_extensions import Literal
 
 from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder
 
 from .languages import ISO_LANGUAGE_SCRIPT
+
+if TYPE_CHECKING:
+    from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
 
@@ -23,15 +24,15 @@ DISTANCE_METRICS = Literal["cosine"]
 
 
 def sentence_transformers_loader(
-    model_name: str, revision: str | None, **kwargs
-) -> SentenceTransformer:
-    return SentenceTransformer(
-        model_name_or_path=model_name, revision=revision, **kwargs
-    )
+    model_name: str, revision: str | None = None, **kwargs
+) -> SentenceTransformerWrapper:
+    from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
+
+    return SentenceTransformerWrapper(model=model_name, revision=revision, **kwargs)
 
 
 def get_loader_name(
-    loader: Callable[..., Encoder | EncoderWithQueryCorpusEncode] | None,
+    loader: Callable[..., Encoder] | None,
 ) -> str | None:
     if loader is None:
         return None
@@ -56,7 +57,7 @@ class ModelMeta(BaseModel):
         release_date: The date the model's revision was released.
         license: The license under which the model is released. Required if open_source is True.
         open_source: Whether the model is open source or proprietary.
-        distance_metric: The distance metric used by the model.
+        similarity_fn_name: The distance metric used by the model.
         framework: The framework the model is implemented in, can be a list of frameworks e.g. `["Sentence Transformers", "PyTorch"]`.
         languages: The languages the model is intended for specified as a 3 letter language code followed by a script code e.g. "eng-Latn" for English
             in the Latin script.
@@ -66,7 +67,7 @@ class ModelMeta(BaseModel):
     revision: str | None
     release_date: STR_DATE | None
     languages: list[ISO_LANGUAGE_SCRIPT] | None
-    loader: Callable[..., Encoder | EncoderWithQueryCorpusEncode] | None = None
+    loader: Callable[..., Encoder] | None = None
     n_parameters: int | None = None
     memory_usage: float | None = None
     max_tokens: int | None = None
@@ -84,7 +85,7 @@ class ModelMeta(BaseModel):
         dict_repr["loader"] = get_loader_name(loader)
         return dict_repr
 
-    def load_model(self, **kwargs: Any) -> Encoder | EncoderWithQueryCorpusEncode:
+    def load_model(self, **kwargs: Any) -> Encoder:
         if self.loader is None:
             logger.warning(
                 f"Loader not specified for model {self.name}, loading using sentence transformers."
@@ -93,13 +94,12 @@ class ModelMeta(BaseModel):
                 sentence_transformers_loader,
                 model_name=self.name,
                 revision=self.revision,
-                trust_remote_code=True,
                 **kwargs,
             )
         else:
             loader = self.loader
 
-        model: Encoder | EncoderWithQueryCorpusEncode = loader(**kwargs)  # type: ignore
+        model: Encoder = loader(**kwargs)  # type: ignore
         return model
 
     def model_name_as_path(self) -> str:

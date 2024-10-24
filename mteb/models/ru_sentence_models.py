@@ -215,3 +215,23 @@ labse_ru_turbo = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instuctions=False,
 )
+
+
+rosberta_ru_en = ModelMeta(
+    loader=partial(
+        sentence_transformers_loader,
+        model_name="ai-forever/ru-en-RoSBERTa",
+        revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
+        prompts={
+            "Classification": "classification: ",
+            "Clustering": "clustering: ",
+            "query": "search_query: ",
+            "passage": "search_document: ",
+        },
+    ),
+    name="ai-forever/ru-en-RoSBERTa",
+    languages=["rus_Cyrl"],
+    open_source=True,
+    revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
+    release_date="2024-07-29",
+)

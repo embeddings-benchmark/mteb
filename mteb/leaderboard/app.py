@@ -168,7 +168,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), css=css) as demo:
         benchmark = mteb.get_benchmark(benchmark_name)
         benchmark_results = benchmark.load_results(base_results=all_results)
         task_to_lang_set = defaultdict(set)
-        task_to_type = dict()
+        task_to_type = {}
         task_to_domains = defaultdict(set)
         for model_res in benchmark_results:
             for task_res in model_res:
