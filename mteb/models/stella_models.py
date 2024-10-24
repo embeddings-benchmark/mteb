@@ -3,6 +3,7 @@ from __future__ import annotations
 from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.models.gte_models import gte_loader
 
 STELLA_S2S_PROMPT = "Instruct: Retrieve semantically similar text.\nQuery: "
 STELLA_S2P_PROMPT = "Instruct: Given a web search query, retrieve relevant passages that answer the query.\nQuery: "
@@ -17,10 +18,15 @@ STELLA_PROMPTS = {
 
 stella_en_400M = ModelMeta(
     loader=partial(
-        sentence_transformers_loader,
-        model_name="dunzhang/stella_en_400M_v5",
-        revision="1bb50bc7bb726810eac2140e62155b88b0df198f",
-        model_prompts=STELLA_PROMPTS,
+        gte_loader,
+        model_name_or_path="dunzhang/stella_en_400M_v5",
+        attn="cccc",
+        pooling_method="lasttoken",
+        mode="embedding",
+        torch_dtype="auto",
+        # The ST script does not normalize while the HF one does so unclear what to do
+        # https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct#sentence-transformers
+        normalized=True,
     ),
     name="dunzhang/stella_en_400M_v5",
     languages=["eng_Latn"],
