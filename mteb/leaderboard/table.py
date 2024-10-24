@@ -7,6 +7,10 @@ import pandas as pd
 from mteb.overview import get_task
 
 
+def format_scores(score: float) -> str:
+    return f"{score*100:.2f}"
+
+
 def scores_to_tables(scores_long: list[dict]):
     if not scores_long:
         return gr.DataFrame(), gr.DataFrame()
@@ -57,4 +61,8 @@ def scores_to_tables(scores_long: list[dict]):
         }
     )
     per_task = per_task.reset_index().drop(columns=["model_revision"])
+    numerics = joint_table.select_dtypes("number").columns
+    joint_table[numerics] = joint_table[numerics].map(format_scores)
+    numerics = per_task.select_dtypes("number").columns
+    per_task[numerics] = per_task[numerics].map(format_scores)
     return joint_table, per_task
