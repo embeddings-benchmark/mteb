@@ -126,7 +126,7 @@ bm25_s = ModelMeta(
     license=None,
     max_tokens=None,
     reference=None,
-    similarity_fn_name="bm25_similarity",
+    similarity_fn_name=None,
     framework=[],
     use_instuctions=False,
 )
