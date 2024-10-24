@@ -123,5 +123,5 @@ jina_embeddings_v3 = ModelMeta(
     languages=["eng_Latn"],
     open_source=True,
     revision="215a6e121fa0183376388ac6b1ae230326bfeaed",
-    release_date="2024-09-05",  # initial commit of hf model.
+    release_date="2024-09-18",  # official release date
 )
