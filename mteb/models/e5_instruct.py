@@ -11,7 +11,6 @@ from mteb.model_meta import ModelMeta
 
 from ..encoder_interface import PromptType
 from .e5_models import E5_PAPER_RELEASE_DATE, XLMR_LANGUAGES
-from .instructions import task_to_instruction
 from .wrapper import Wrapper
 
 MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
@@ -41,8 +40,8 @@ def e5_loader(**kwargs):
             if "instruction" in kwargs:
                 instruction = kwargs.pop("instruction", "")
             else:
-                instruction = task_to_instruction(
-                    task_name, prompt_type == PromptType.query
+                instruction = self.get_instruction(
+                    task_name, prompt_type
                 )
             if instruction:
                 kwargs["instruction"] = e5_instruction(instruction)

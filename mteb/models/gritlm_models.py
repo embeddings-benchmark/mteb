@@ -10,7 +10,6 @@ import numpy as np
 from mteb.model_meta import ModelMeta
 
 from ..encoder_interface import PromptType
-from .instructions import task_to_instruction
 from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
@@ -40,8 +39,8 @@ def gritlm_loader(**kwargs):
             if "instruction" in kwargs:
                 instruction = kwargs.pop("instruction", "")
             else:
-                instruction = task_to_instruction(
-                    task_name, prompt_type == PromptType.query
+                instruction = self.get_instruction(
+                    task_name, prompt_type
                 )
             if instruction:
                 kwargs["instruction"] = gritlm_instruction(instruction)

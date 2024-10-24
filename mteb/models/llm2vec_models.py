@@ -9,8 +9,6 @@ import torch
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
 
-from .instructions import task_to_instruction
-from .sentence_transformer_wrapper import validate_task_to_prompt_name
 from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
@@ -46,7 +44,7 @@ class LLM2VecWrapper(Wrapper):
                 "LLM2Vec models were trained with flash attention enabled. For optimal performance, please install the `flash_attn` package with `pip install flash-attn --no-build-isolation`."
             )
         self.model_prompts = (
-            validate_task_to_prompt_name(model_prompts) if model_prompts else None
+            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
 
         if device:
@@ -66,7 +64,7 @@ class LLM2VecWrapper(Wrapper):
         **kwargs: Any,  # noqa
     ) -> np.ndarray:
         instruction = llm2vec_instruction(
-            task_to_instruction(task_name, prompt_type == PromptType.query)
+            self.get_instruction(task_name, prompt_type)
         )
 
         sentences = [[instruction, sentence] for sentence in sentences]

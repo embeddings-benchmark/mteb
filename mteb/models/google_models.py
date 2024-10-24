@@ -7,10 +7,6 @@ import numpy as np
 
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import (
-    get_prompt_name,
-    validate_task_to_prompt_name,
-)
 
 from .wrapper import Wrapper
 
@@ -25,7 +21,7 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
     ) -> None:
         self.model_name = model_name
         self.model_prompts = (
-            validate_task_to_prompt_name(model_prompts) if model_prompts else None
+            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
 
     def _embed(
@@ -74,7 +70,7 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        google_task_type = get_prompt_name(self.model_prompts, task_name, prompt_type)
+        google_task_type = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         return self._embed(sentences, google_task_type=google_task_type)
 
 

@@ -9,7 +9,6 @@ import numpy as np
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
-from .instructions import task_to_instruction
 from .wrapper import Wrapper
 
 
@@ -37,7 +36,7 @@ def gte_loader(**kwargs):
             if "instruction" in kwargs:
                 instruction = kwargs.pop("instruction", "")
             else:
-                instruction = task_to_instruction(
+                instruction = self.task_to_instruction(
                     task_name, prompt_type == PromptType.query
                 )
             if instruction:

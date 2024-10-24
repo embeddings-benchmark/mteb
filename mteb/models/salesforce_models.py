@@ -10,7 +10,6 @@ import torch
 from mteb.model_meta import ModelMeta
 
 from ..encoder_interface import PromptType
-from .instructions import task_to_instruction
 from .wrapper import Wrapper
 
 
@@ -38,9 +37,7 @@ def sfr_loader(**kwargs):
             if "instruction" in kwargs:
                 instruction = kwargs.pop("instruction", "")
             else:
-                instruction = task_to_instruction(
-                    task_name, prompt_type == PromptType.query
-                )
+                instruction = self.get_instruction(task_name, prompt_type)
             if instruction:
                 kwargs["instruction"] = sfr_instruction(instruction)
             return super().encode(*args, **kwargs)
