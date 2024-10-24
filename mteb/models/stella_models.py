@@ -27,7 +27,7 @@ stella_en_400M = ModelMeta(
         pooling_method="lasttoken",
         mode="embedding",
         # https://huggingface.co/dunzhang/stella_en_400M_v5/discussions/21#671a6205ac1e2416090f2bf4
-        torch_dtype=torch.bfloat16,
+        torch_dtype=torch.float16,
     ),
     name="dunzhang/stella_en_400M_v5",
     languages=["eng_Latn"],
