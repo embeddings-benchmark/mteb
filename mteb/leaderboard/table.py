@@ -45,6 +45,9 @@ def scores_to_tables(scores_long: list[dict]):
     overall_mean = overall_mean[~to_remove]
     joint_table = overall_mean.join([typed_mean, mean_per_type]).reset_index()
     joint_table = joint_table.sort_values("mean", ascending=False)
+    joint_table["model_name"] = joint_table["model_name"].map(
+        lambda name: name.split("/")[-1]
+    )
     joint_table = joint_table.rename(
         columns={
             "model_name": "Model",
@@ -53,11 +56,12 @@ def scores_to_tables(scores_long: list[dict]):
         }
     )
     joint_table = joint_table.drop(columns=["model_revision"])
+    joint_table.insert(
+        0, "Rank", joint_table["Mean"].rank(ascending=False).map(int).map(str)
+    )
     per_task = per_task.rename(
         columns={
             "model_name": "Model",
-            "mean_by_task_type": "Mean by Task Type",
-            "mean": "Mean",
         }
     )
     per_task = per_task.reset_index().drop(columns=["model_revision"])
