@@ -216,9 +216,7 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
             logger.error("Model must have an 'encode' method.")
             raise ValueError("Invalid model encoding method")
 
-        logger.info(
-            f"Initialized CachedEmbeddingWrapper"
-        )
+        logger.info("Initialized CachedEmbeddingWrapper")
 
     def _wrap_encode_method(self):
         original_encode = self._model.encode
