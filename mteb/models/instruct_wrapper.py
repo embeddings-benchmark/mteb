@@ -33,7 +33,7 @@ def instruct_wrapper(
         ):
             if (
                 isinstance(instruction_template, str)
-                and "instruction" not in instruction_template
+                and "{instruction}" not in instruction_template
             ):
                 raise ValueError(
                     "Instruction template must contain the string '{instruction}'."

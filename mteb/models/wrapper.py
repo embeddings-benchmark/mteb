@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 class Wrapper:
     """Class to indicate that this is a wrapper for a model."""
 
+    @staticmethod
     def get_prompt_name(
-        self,
         task_to_prompt: dict[str, str] | None,
         task_name: str,
         prompt_type: PromptType | None,
@@ -33,8 +33,6 @@ class Wrapper:
             task_name: The task name to use for building the encoding prompt
             prompt_type: The prompt type (e.g. "query" | "passage") to use for building the encoding prompt
         """
-        import mteb
-
         task = mteb.get_task(task_name=task_name)
         task_type = task.metadata.type
         prompt_type_value = prompt_type.value if prompt_type else None
@@ -62,8 +60,8 @@ class Wrapper:
         )
         return None
 
+    @staticmethod
     def validate_task_to_prompt_name(
-        self,
         task_to_prompt_name: dict[str, str] | None,
     ) -> dict[str, str] | None:
         if task_to_prompt_name is None:
@@ -85,7 +83,8 @@ class Wrapper:
                     )
         return task_to_prompt_name
 
-    def get_instruction(self, task_name: str, prompt_type: PromptType | None) -> str:
+    @staticmethod
+    def get_instruction(task_name: str, prompt_type: PromptType | None) -> str:
         """Get the instruction to be used for encoding the sentences."""
         task = mteb.get_task(task_name=task_name)
         task_metadata = task.metadata
