@@ -380,6 +380,26 @@ df = results_to_dataframe(results)
 
 </details>
 
+<details>
+  <summary>  Caching Embeddings To Re-Use Them </summary>
+
+
+### Caching Embeddings To Re-Use Them
+
+There are times you may want to cache the embeddings so you can re-use them. This may be true if you have multiple query sets for the same corpus (e.g. Wikipedia) or are doing some optimization over the queries (e.g. prompting, other experiments). You can setup a cache by using a simple wrapper, which will save the cache per task in the `cache_embeddings/{task_name}` folder:
+
+```python
+# define your task and model above as normal
+...
+# wrap the model with the cache wrapper
+from mteb.models.cache_wrapper import CachedEmbeddingWrapper
+model_with_cached_emb = CachedEmbeddingWrapper(model, cache_path='path_to_cache_dir')
+# run as normal
+evaluation.run(model, ...) 
+```
+
+</details>
+
 <br /> 
 
 
