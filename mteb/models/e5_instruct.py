@@ -8,6 +8,7 @@ import numpy as np
 import torch
 
 from mteb.model_meta import ModelMeta
+from .instruct_wrapper import instruct_wrapper
 
 from ..encoder_interface import PromptType
 from .e5_models import E5_PAPER_RELEASE_DATE, XLMR_LANGUAGES
@@ -20,40 +21,11 @@ def e5_instruction(instruction: str) -> str:
     return f"Instruct: {instruction}\nQuery: "
 
 
-def e5_loader(**kwargs):
-    try:
-        from gritlm import GritLM
-    except ImportError:
-        raise ImportError(
-            "Please install `pip install gritlm` to use E5 Instruct models."
-        )
-
-    class E5InstructWrapper(GritLM, Wrapper):
-        def encode(
-            self,
-            sentences: Sequence[str],
-            *args,
-            task_name: str,
-            prompt_type: PromptType | None = None,
-            **kwargs: Any,
-        ) -> np.ndarray:
-            if "instruction" in kwargs:
-                instruction = kwargs.pop("instruction", "")
-            else:
-                instruction = self.get_instruction(
-                    task_name, prompt_type
-                )
-            if instruction:
-                kwargs["instruction"] = e5_instruction(instruction)
-            return super().encode(sentences, *args, **kwargs)
-
-    return E5InstructWrapper(**kwargs)
-
-
 e5_instruct = ModelMeta(
     loader=partial(
-        e5_loader,
+        instruct_wrapper,
         model_name_or_path="intfloat/multilingual-e5-large-instruct",
+        instruction_template=e5_instruction,
         attn="cccc",
         pooling_method="mean",
         mode="embedding",
@@ -69,7 +41,7 @@ e5_instruct = ModelMeta(
 
 e5_mistral = ModelMeta(
     loader=partial(
-        e5_loader,
+        instruct_wrapper,
         model_name_or_path="intfloat/e5-mistral-7b-instruct",
         attn="cccc",
         pooling_method="lasttoken",

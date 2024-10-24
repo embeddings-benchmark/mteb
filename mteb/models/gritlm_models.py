@@ -1,16 +1,10 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
 from functools import partial
-from typing import Any
-
-import numpy as np
 
 from mteb.model_meta import ModelMeta
-
-from ..encoder_interface import PromptType
-from .wrapper import Wrapper
+from .instruct_wrapper import instruct_wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -21,38 +15,11 @@ def gritlm_instruction(instruction: str = "") -> str:
     )
 
 
-def gritlm_loader(**kwargs):
-    try:
-        from gritlm import GritLM
-    except ImportError:
-        raise ImportError("Please install `pip install gritlm` to use GritLM models.")
-
-    class GritLMWrapper(GritLM, Wrapper):
-        def encode(
-            self,
-            sentences: Sequence[str],
-            *args,
-            task_name: str,
-            prompt_type: PromptType | None = None,
-            **kwargs: Any,
-        ) -> np.ndarray:
-            if "instruction" in kwargs:
-                instruction = kwargs.pop("instruction", "")
-            else:
-                instruction = self.get_instruction(
-                    task_name, prompt_type
-                )
-            if instruction:
-                kwargs["instruction"] = gritlm_instruction(instruction)
-            return super().encode(sentences, *args, **kwargs)
-
-    return GritLMWrapper(**kwargs)
-
-
 gritlm7b = ModelMeta(
     loader=partial(
-        gritlm_loader,
+        instruct_wrapper,
         model_name_or_path="GritLM/GritLM-7B",
+        instruction_template=gritlm_instruction,
         mode="embedding",
         torch_dtype="auto",
     ),
@@ -64,8 +31,9 @@ gritlm7b = ModelMeta(
 )
 gritlm8x7b = ModelMeta(
     loader=partial(
-        gritlm_loader,
+        instruct_wrapper,
         model_name_or_path="GritLM/GritLM-8x7B",
+        instruction_template=gritlm_instruction,
         mode="embedding",
         torch_dtype="auto",
     ),

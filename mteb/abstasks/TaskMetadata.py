@@ -8,6 +8,7 @@ from typing import Annotated, Any, Union
 from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator, ConfigDict
 from typing_extensions import Literal, TypedDict
 
+from ..encoder_interface import PromptType
 from ..languages import (
     ISO_LANGUAGE_SCRIPT,
     ISO_TO_LANGUAGE,
@@ -280,7 +281,7 @@ class TaskMetadata(BaseModel):
     def _check_prompt_is_valid(cls, prompt: str | PromptDict | None) -> str | PromptDict | None:
         if isinstance(prompt, dict):
             for key in prompt:
-                if key not in ["query", "passage"]:
+                if key not in [e.value for e in PromptType]:
                     raise ValueError(
                         "The prompt dictionary should only contain the keys 'query' and 'passage'."
                     )

@@ -12,38 +12,7 @@ from mteb.model_meta import ModelMeta
 from .wrapper import Wrapper
 
 
-def gte_instruction(instruction: str) -> str:
-    return f"Instruct: {instruction}\nQuery: "
 
-
-def gte_loader(**kwargs):
-    try:
-        from gritlm import GritLM
-    except ImportError:
-        raise ImportError(
-            "Please install `pip install gritlm` to use gte-Qwen2-7B-instruct."
-        )
-
-    class GTEWrapper(GritLM, Wrapper):
-        def encode(
-            self,
-            sentences: Sequence[str],
-            *args,
-            task_name: str,
-            prompt_type: PromptType | None = None,
-            **kwargs: Any,
-        ) -> np.ndarray:
-            if "instruction" in kwargs:
-                instruction = kwargs.pop("instruction", "")
-            else:
-                instruction = self.task_to_instruction(
-                    task_name, prompt_type == PromptType.query
-                )
-            if instruction:
-                kwargs["instruction"] = gte_instruction(instruction)
-            return super().encode(sentences, *args, **kwargs)
-
-    return GTEWrapper(**kwargs)
 
 
 gte_Qwen2_7B_instruct = ModelMeta(

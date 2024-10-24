@@ -8,6 +8,7 @@ import numpy as np
 import torch
 
 from mteb.model_meta import ModelMeta
+from .instruct_wrapper import instruct_wrapper
 
 from ..encoder_interface import PromptType
 from .wrapper import Wrapper
@@ -17,38 +18,11 @@ def sfr_instruction(instruction: str) -> str:
     return f"Instruct: {instruction}\nQuery: "
 
 
-def sfr_loader(**kwargs):
-    try:
-        from gritlm import GritLM
-    except ImportError:
-        raise ImportError(
-            "Please install `pip install gritlm` to use SFR_Embedding_2_R."
-        )
-
-    class SFRWrapper(GritLM, Wrapper):
-        def encode(
-            self,
-            sentences: Sequence[str],
-            *args,
-            task_name: str,
-            prompt_type: PromptType | None = None,
-            **kwargs: Any,
-        ) -> np.ndarray:
-            if "instruction" in kwargs:
-                instruction = kwargs.pop("instruction", "")
-            else:
-                instruction = self.get_instruction(task_name, prompt_type)
-            if instruction:
-                kwargs["instruction"] = sfr_instruction(instruction)
-            return super().encode(*args, **kwargs)
-
-    return SFRWrapper(**kwargs)
-
-
 SFR_Embedding_2_R = ModelMeta(
     loader=partial(
-        sfr_loader,
+        instruct_wrapper,
         model_name_or_path="Salesforce/SFR-Embedding-2_R",
+        instruction_template=sfr_instruction,
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
