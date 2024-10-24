@@ -257,11 +257,18 @@ class DenseRetrievalExactSearch:
     ) -> dict[str, dict[str, float]]:
         """This function provides support for reranker (or cross-encoder) models that encoder query and document at the same time (typically with attention).
         Some notable examples include MonoBERT, MonoT5, RankLlama, etc.
-        Note: you must provide the path to the results to rerank to the __init__ function as `previous_results`
+        Note: you must provide the path to the results to rerank to the __init__ function as `previous_results` or else rerank all documents in the corpus
         """
         pairs = []  # create the pairs for reranking
         for qid in queries.keys():
-            q_results = self.previous_results[qid]
+            if self.previous_results is None:
+                # try to use all of them
+                logging.logging(
+                    f"previous_results is None. Using all the documents to rerank: {len(corpus)}"
+                )
+                q_results = {doc_id: 0.0 for doc_id in corpus.keys()}
+            else:
+                q_results = self.previous_results[qid]
             # take the top-k only
             q_results_sorted = dict(
                 sorted(q_results.items(), key=lambda item: item[1], reverse=True)

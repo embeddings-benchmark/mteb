@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 class Core17InstructionRetrieval(AbsTaskInstructionRetrieval):
     metadata = TaskMetadata(
         name="Core17InstructionRetrieval",
-        description="Measuring retrieval instruction following ability on Core17 narratives.",
+        description="Measuring retrieval instruction following ability on Core17 narratives for the FollowIR benchmark.",
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
             "path": "jhu-clsp/core17-instructions",
