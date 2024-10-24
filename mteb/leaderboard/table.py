@@ -7,8 +7,8 @@ import pandas as pd
 from mteb.overview import get_task
 
 
-def format_scores(score: float) -> str:
-    return f"{score*100:.2f}"
+def format_scores(score: float) -> float:
+    return score * 100
 
 
 def scores_to_tables(scores_long: list[dict]):
@@ -43,7 +43,12 @@ def scores_to_tables(scores_long: list[dict]):
     per_task = per_task[~to_remove]
     mean_per_type = mean_per_type[~to_remove]
     overall_mean = overall_mean[~to_remove]
-    joint_table = overall_mean.join([typed_mean, mean_per_type]).reset_index()
+    mean_rank = per_task.rank(ascending=False, numeric_only=True).mean(
+        axis=1, skipna=True
+    )
+    joint_table = overall_mean.join([typed_mean, mean_per_type])
+    joint_table.insert(0, "mean_rank", mean_rank)
+    joint_table = joint_table.reset_index()
     joint_table = joint_table.sort_values("mean", ascending=False)
     joint_table["model_name"] = joint_table["model_name"].map(
         lambda name: name.split("/")[-1]
@@ -53,6 +58,7 @@ def scores_to_tables(scores_long: list[dict]):
             "model_name": "Model",
             "mean_by_task_type": "Mean by Task Type",
             "mean": "Mean",
+            "mean_rank": "Mean Rank",
         }
     )
     joint_table = joint_table.drop(columns=["model_revision"])
@@ -66,11 +72,18 @@ def scores_to_tables(scores_long: list[dict]):
     )
     per_task = per_task.reset_index().drop(columns=["model_revision"])
     numerics = joint_table.select_dtypes("number").columns
-    joint_table[numerics] = joint_table[numerics].map(format_scores)
+    to_format = ["Mean", "Mean by Task Type", *mean_per_type.columns]
+    joint_table[to_format] = joint_table[to_format].map(format_scores)
     joint_table = joint_table.style.highlight_max(
-        subset=numerics, props="font-weight: bold"
+        subset=to_format,
+        props="font-weight: bold",
+    ).format("{:.2f}", subset=numerics)
+    joint_table = joint_table.highlight_min(
+        subset=["Mean Rank"], props="font-weight: bold"
     )
     numerics = per_task.select_dtypes("number").columns
     per_task[numerics] = per_task[numerics].map(format_scores)
-    per_task = per_task.style.highlight_max(subset=numerics, props="font-weight: bold")
+    per_task = per_task.style.highlight_max(
+        subset=numerics, props="font-weight: bold"
+    ).format("{:.2f}", subset=numerics)
     return joint_table, per_task
