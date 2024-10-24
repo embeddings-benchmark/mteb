@@ -61,6 +61,7 @@ class Benchmark:
             base_results = load_results()
         return base_results.select_tasks(self.tasks)
 
+
 MTEB_MAIN_EN = Benchmark(
     name="MTEB(eng)",
     tasks=get_tasks(
