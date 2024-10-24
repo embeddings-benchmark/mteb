@@ -5,21 +5,18 @@ import shutil
 import numpy as np
 import pytest
 
+from mteb.encoder_interface import Encoder
 from mteb.models.cache_wrapper import CachedEmbeddingWrapper
 
 
-class DummyModel:
+class DummyModel(Encoder):
     def __init__(self, embedding_dim=768):
         self.embedding_dim = embedding_dim
         self.call_count = 0
 
-    def encode_queries(self, queries):
+    def encode(self, texts, **kwargs):
         self.call_count += 1
-        return np.random.rand(len(queries), self.embedding_dim).astype(np.float32)
-
-    def encode_corpus(self, corpus):
-        self.call_count += 1
-        return np.random.rand(len(corpus), self.embedding_dim).astype(np.float32)
+        return np.random.rand(len(texts), self.embedding_dim).astype(np.float32)
 
     def random_other_function_returns_false(self):
         return False
@@ -53,14 +50,14 @@ class TestCachedEmbeddingWrapper:
         ]
 
         # First call - should use the model to compute embeddings
-        query_embeddings1 = wrapped_model.encode_queries(queries)
-        corpus_embeddings1 = wrapped_model.encode_corpus(corpus)
+        query_embeddings1 = wrapped_model.encode(queries, task_name="query")
+        corpus_embeddings1 = wrapped_model.encode(corpus, task_name="corpus")
 
         assert dummy_model.call_count == 2  # One call for queries, one for corpus
 
         # Second call - should use cached embeddings
-        query_embeddings2 = wrapped_model.encode_queries(queries)
-        corpus_embeddings2 = wrapped_model.encode_corpus(corpus)
+        query_embeddings2 = wrapped_model.encode(queries)
+        corpus_embeddings2 = wrapped_model.encode(corpus)
 
         assert dummy_model.call_count == 2  # No additional calls to the model
 
@@ -69,18 +66,19 @@ class TestCachedEmbeddingWrapper:
         np.testing.assert_allclose(corpus_embeddings1, corpus_embeddings2)
 
         # Verify that cache files were created
-        assert (cache_dir / "query_cache" / "vectors.npy").exists()
-        assert (cache_dir / "query_cache" / "index.json").exists()
-        assert (cache_dir / "corpus_cache" / "vectors.npy").exists()
-        assert (cache_dir / "corpus_cache" / "index.json").exists()
+        assert (cache_dir / "cache" / "vectors.npy").exists()
+        assert (cache_dir / "cache" / "index.json").exists()
 
         # Test with a new query - should use cache for existing queries and compute for new one
-        new_queries = queries + ["What is the role of insulin in diabetes?"]
-        query_embeddings3 = wrapped_model.encode_queries(new_queries)
+        new_queries = ["What is the role of insulin in diabetes?"]
+        query_embeddings3 = wrapped_model.encode(new_queries)
 
         assert dummy_model.call_count == 3  # One additional call for the new query
-        assert query_embeddings3.shape == (3, dummy_model.embedding_dim)
-        np.testing.assert_allclose(query_embeddings3[:2], query_embeddings2)
+        assert query_embeddings3.shape == (1, dummy_model.embedding_dim)
+
+        # try with a cached query only
+        _ = wrapped_model.encode(queries)
+        assert dummy_model.call_count == 3
 
         wrapped_model.close()  # delete to allow cleanup on Windows
 

@@ -4,7 +4,7 @@ import hashlib
 import json
 import logging
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
 import torch
@@ -211,58 +211,46 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
         if hasattr(model, "encode"):
             self.cache = TextVectorMap(self.cache_path / "cache")
             self.cache.load(name="cache")
-            self._wrap_encode_method()
         else:
             logger.error("Model must have an 'encode' method.")
             raise ValueError("Invalid model encoding method")
 
         logger.info("Initialized CachedEmbeddingWrapper")
 
-    def _wrap_encode_method(self):
-        original_encode = self._model.encode
-
-        def wrapped_encode(
-            texts: List[str], batch_size: int = 32, **kwargs
-        ) -> np.ndarray:
-            return self._cached_encode(
-                texts, self.cache, original_encode, batch_size, **kwargs
-            )
-
-        self._model.encode = wrapped_encode
-
-    def _cached_encode(
-        self,
-        texts: List[str],
-        cache: TextVectorMap,
-        encode_func: Callable[[List[str]], np.ndarray],
-        batch_size: int,
-        **kwargs,
-    ) -> np.ndarray:
+    def encode(self, texts: List[str], batch_size: int = 32, **kwargs) -> np.ndarray:
+        """Encode texts using the wrapped model, with caching"""
         try:
             results = []
             uncached_texts = []
             uncached_indices = []
 
+            # Check cache for each text
             for i, text in enumerate(texts):
-                vector = cache.get_vector(text)
+                vector = self.cache.get_vector(text)
                 if vector is not None:
                     results.append(vector)
                 else:
                     uncached_texts.append(text)
                     uncached_indices.append(i)
 
+            # Encode any texts not found in cache
             if uncached_texts:
                 logger.info(f"Encoding {len(uncached_texts)} new texts")
-                new_vectors = encode_func(uncached_texts, **kwargs)
+                new_vectors = self._model.encode(
+                    uncached_texts, batch_size=batch_size, **kwargs
+                )
                 if isinstance(new_vectors, torch.Tensor):
                     new_vectors = new_vectors.cpu().numpy()
+
+                # Add new vectors to cache
                 for text, vector in zip(uncached_texts, new_vectors):
-                    cache.add(text, vector)
+                    self.cache.add(text, vector)
                 results.extend(new_vectors)
-                cache.save()
+                self.cache.save()
             else:
                 logger.info("All texts found in cache")
 
+            # Reconstruct results in original order
             final_results = [None] * len(texts)
             uncached_idx = 0
             for i in range(len(texts)):
@@ -280,9 +268,22 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
             raise
 
     def __getattr__(self, name: str) -> Any:
-        return getattr(self._model, name)
+        """Check for attributes in this class first, then fall back to model attributes"""
+        try:
+            # First try to get the attribute from this class's __dict__
+            return self.__dict__[name]
+        except KeyError:
+            # If not found, try the model's attributes
+            try:
+                return getattr(self._model, name)
+            except AttributeError:
+                raise AttributeError(
+                    f"Neither {self.__class__.__name__} nor the wrapped model "
+                    f"has attribute '{name}'"
+                )
 
     def __dir__(self) -> List[str]:
+        """Return all attributes from both this class and the wrapped model"""
         return list(set(super().__dir__() + dir(self._model)))
 
     def __del__(self):
