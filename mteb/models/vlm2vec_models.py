@@ -5,7 +5,6 @@ from functools import partial
 from typing import Any, Literal
 
 import torch
-from peft import LoraConfig, PeftModel
 from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
@@ -30,6 +29,7 @@ class VLM2VecWrapper:
     ):
         try:
             import flash_attn  # noqa
+            from peft import LoraConfig, PeftModel  # noqa
         except ImportError:
             logger.warning(
                 "VLM2Vec models were trained with flash attention enabled. For optimal performance, please install the `flash_attn` package with `pip install flash-attn --no-build-isolation`."
