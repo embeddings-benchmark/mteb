@@ -209,19 +209,18 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
         self.cache_path.mkdir(parents=True, exist_ok=True)
 
         if hasattr(model, "encode"):
-            self.encode_method = "single"
             self.cache = TextVectorMap(self.cache_path / "cache")
             self.cache.load(name="cache")
-            self._wrap_single_encode_method()
+            self._wrap_encode_method()
         else:
             logger.error("Model must have an 'encode' method.")
             raise ValueError("Invalid model encoding method")
 
         logger.info(
-            f"Initialized CachedEmbeddingWrapper with {self.encode_method} encoding method"
+            f"Initialized CachedEmbeddingWrapper"
         )
 
-    def _wrap_single_encode_method(self):
+    def _wrap_encode_method(self):
         original_encode = self._model.encode
 
         def wrapped_encode(
@@ -292,12 +291,5 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
         self.close()
 
     def close(self):
-        if self.encode_method == "split":
-            if hasattr(self, "query_cache"):
-                self.query_cache.close()
-            if hasattr(self, "corpus_cache"):
-                self.corpus_cache.close()
-        else:
-            if hasattr(self, "cache"):
-                self.cache.close()
+        self.cache.close()
         logger.info("Closed CachedEmbeddingWrapper")
