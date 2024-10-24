@@ -112,7 +112,7 @@ jina_embeddings_v3 = ModelMeta(
             "Clustering": "separation",
             "Classification": "classification",
             "STS": "text-matching",
-            "PairClassification": "text-matching",
+            "PairClassification": "classification",
             "BitextMining": "text-matching",
             "MultilabelClassification": "classification",
             "Reranking": "separation",
