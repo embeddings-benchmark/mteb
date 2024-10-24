@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class TextVectorMap:
     def __init__(
         self,
-        directory: Union[str, Path],
+        directory: Union[str | Path],
         initial_vectors: int = 100000,
     ):
         self.directory = Path(directory)
@@ -37,8 +37,6 @@ class TextVectorMap:
         self._initialize_vectors_file()
 
     def _hash_text(self, text: str) -> str:
-        if type(text) != str:
-            breakpoint()
         return hashlib.sha256(text.encode()).hexdigest()
 
     def add(self, text: str, vector: np.ndarray) -> None:
@@ -205,7 +203,7 @@ class TextVectorMap:
 
 
 class CachedEmbeddingWrapper(Wrapper, Encoder):
-    def __init__(self, model: Encoder, cache_path: Union[str, Path]):
+    def __init__(self, model: Encoder, cache_path: Union[str | Path]):
         self._model = model
         self.cache_path = Path(cache_path)
         self.cache_path.mkdir(parents=True, exist_ok=True)
@@ -216,9 +214,7 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
             self.cache.load(name="cache")
             self._wrap_single_encode_method()
         else:
-            logger.error(
-                "Model must have an 'encode' method."
-            )
+            logger.error("Model must have an 'encode' method.")
             raise ValueError("Invalid model encoding method")
 
         logger.info(
