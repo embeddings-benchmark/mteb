@@ -461,6 +461,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [SICK-R-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | STS | s2s | [Web, Written] | {'test': 9812} | {'test': 42.8} |
 | [SICKFr](https://huggingface.co/datasets/Lajavaness/SICK-fr) | ['fra'] | STS | s2s |  | None | None |
 | [SIQA](https://leaderboard.allenai.org/socialiqa/submissions/get-started) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic, Written] | {'test': 0} | {'test': {'average_document_length': 22.967085695044617, 'average_query_length': 127.75383828045035, 'num_documents': 71276, 'num_queries': 1954, 'average_relevant_docs_per_query': 1.0}} |
+| [SKQuadRetrieval](https://huggingface.co/datasets/TUKE-KEMT/retrieval-skquad) | ['slk'] | Retrieval | s2s | [Encyclopaedic] | {'test': 1134} | {'test': {'average_document_length': 1180.5071792496526, 'average_query_length': 53.63403880070547, 'num_documents': 6477, 'num_queries': 1134, 'average_relevant_docs_per_query': 11}} |
 | [SNLHierarchicalClusteringP2P](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [Encyclopaedic, Non-fiction, Written] | {'test': 1300} | {'test': 1986.9453846153847} |
 | [SNLHierarchicalClusteringS2S](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | s2s | [Encyclopaedic, Non-fiction, Written] | {'test': 1300} | {'test': 242.22384615384615} |
 | [SNLRetrieval](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Retrieval | p2p | [Encyclopaedic, Non-fiction, Written] | {'test': 2048} | {'test': {'average_document_length': 1986.9453846153847, 'average_query_length': 14.906153846153845, 'num_documents': 1300, 'num_queries': 1300, 'average_relevant_docs_per_query': 1.0}} |
@@ -488,6 +489,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [SinhalaNewsClassification](https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Category-classification) (Nisansa de Silva, 2015) | ['sin'] | Classification | s2s | [News, Written] | {'train': 3327} | {'train': 148.04} |
 | [SinhalaNewsSourceClassification](https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Source-classification) (Dhananjaya et al., 2022) | ['sin'] | Classification | s2s | [News, Written] | {'train': 24094} | {'train': 56.08} |
 | [SiswatiNewsClassification](https://huggingface.co/datasets/dsfsi/za-isizulu-siswati-news) (Madodonga et al., 2023) | ['ssw'] | Classification | s2s | [News, Written] | {'train': 80} | {'train': 354.2} |
+| [SlovakHateSpeechClassification](https://huggingface.co/datasets/TUKE-KEMT/hate_speech_slovak) | ['slk'] | Classification | s2s | [Social, Written] | {'test': 1319} | {'test': 92.71} |
 | [SlovakMovieReviewSentimentClassification](https://arxiv.org/pdf/2304.01922) ({{S, 2023) | ['svk'] | Classification | s2s | [Reviews, Written] | {'test': 2048} | {'test': 366.17} |
 | [SlovakSumRetrieval](https://huggingface.co/datasets/NaiveNeuron/slovaksum) | ['slk'] | Retrieval | s2s | [News, Social, Web, Written] | {'test': 600} | {'test': {'average_document_length': 2156.445, 'average_query_length': 143.59833333333333, 'num_documents': 600, 'num_queries': 600, 'average_relevant_docs_per_query': 1.0}} |
 | [SouthAfricanLangClassification](https://www.kaggle.com/competitions/south-african-language-identification/) (ExploreAI Academy et al., 2022) | ['afr', 'eng', 'nbl', 'nso', 'sot', 'ssw', 'tsn', 'tso', 'ven', 'xho', 'zul'] | Classification | s2s | [Web, Non-fiction, Written] | {'test': 2048} | {'test': 247.49} |
@@ -1413,7 +1415,7 @@ The following tables give you an overview of the tasks in MTEB.
 | sim | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sin | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | sja | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| slk | 3 | 3 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 |
+| slk | 3 | 4 | 1 | 0 | 1 | 0 | 0 | 3 | 0 | 0 | 0 |
 | sll | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | slv | 3 | 4 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 |
 | smk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1655,7 +1657,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1394 | 794 | 304 | 3 | 28 | 67 | 50 | 448 | 85 | 2 | 2 |
+| Total | 1394 | 795 | 304 | 3 | 28 | 67 | 50 | 449 | 85 | 2 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
