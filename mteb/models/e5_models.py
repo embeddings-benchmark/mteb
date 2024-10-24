@@ -120,6 +120,15 @@ e5_mult_small = ModelMeta(
     open_source=True,
     revision="fd1525a9fd15316a2d503bf26ab031a61d056e98",
     release_date=E5_PAPER_RELEASE_DATE,
+    n_parameters=118_000_000,
+    memory_usage=None,
+    embed_dim=384,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/intfloat/multilingual-e5-small",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=True,
 )
 
 e5_mult_base = ModelMeta(
@@ -134,6 +143,15 @@ e5_mult_base = ModelMeta(
     open_source=True,
     revision="d13f1b27baf31030b7fd040960d60d909913633f",
     release_date=E5_PAPER_RELEASE_DATE,
+    n_parameters=278_000_000,
+    memory_usage=None,
+    embed_dim=768,
+    license="mit",
+    max_tokens=514,
+    reference="https://huggingface.co/intfloat/multilingual-e5-base",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=True,
 )
 
 e5_mult_large = ModelMeta(
@@ -148,6 +166,15 @@ e5_mult_large = ModelMeta(
     open_source=True,
     revision="ab10c1a7f42e74530fe7ae5be82e6d4f11a719eb",
     release_date=E5_PAPER_RELEASE_DATE,
+    n_parameters=560_000_000,
+    memory_usage=None,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=514,
+    reference="https://huggingface.co/intfloat/multilingual-e5-large",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=True,
 )
 
 e5_eng_small_v2 = ModelMeta(
@@ -162,6 +189,15 @@ e5_eng_small_v2 = ModelMeta(
     open_source=True,
     revision="dca8b1a9dae0d4575df2bf423a5edb485a431236",
     release_date=E5_PAPER_RELEASE_DATE,
+    n_parameters=33_000_000,
+    memory_usage=None,
+    embed_dim=384,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/intfloat/e5-small-v2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=True,
 )
 
 e5_eng_small = ModelMeta(
@@ -176,6 +212,15 @@ e5_eng_small = ModelMeta(
     open_source=True,
     revision="e272f3049e853b47cb5ca3952268c6662abda68f",
     release_date=E5_PAPER_RELEASE_DATE,
+    n_parameters=33_000_000,
+    memory_usage=None,
+    embed_dim=384,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/intfloat/e5-small",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=True,
 )
 
 e5_eng_base_v2 = ModelMeta(
@@ -190,6 +235,15 @@ e5_eng_base_v2 = ModelMeta(
     open_source=True,
     revision="1c644c92ad3ba1efdad3f1451a637716616a20e8",
     release_date=E5_PAPER_RELEASE_DATE,
+    n_parameters=278_000_000,
+    memory_usage=None,
+    embed_dim=768,
+    license="mit",
+    max_tokens=514,
+    reference="https://huggingface.co/intfloat/e5-base-v2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=True,
 )
 
 e5_eng_large_v2 = ModelMeta(
@@ -204,4 +258,13 @@ e5_eng_large_v2 = ModelMeta(
     open_source=True,
     revision="b322e09026e4ea05f42beadf4d661fb4e101d311",
     release_date=E5_PAPER_RELEASE_DATE,
+    n_parameters=560_000_000,
+    memory_usage=None,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=514,
+    reference="https://huggingface.co/intfloat/e5-large-v2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=True,
 )

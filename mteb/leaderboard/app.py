@@ -1,11 +1,9 @@
-import functools
-import json
+from __future__ import annotations
+
 from collections import defaultdict
 from pathlib import Path
 
 import gradio as gr
-import numpy as np
-import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
@@ -183,7 +181,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), css=css) as demo:
                 continue
             if not (task_to_lang_set[task_name] & set(languages)):
                 continue
-            if not (task_to_type[task_name] in task_types):
+            if task_to_type[task_name] not in task_types:
                 continue
             res.append(task_name)
         return res

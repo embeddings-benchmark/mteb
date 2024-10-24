@@ -119,6 +119,8 @@ ignore = ["E501",   # line too long
         "D415",     # First line should end with a period
 ]
 
+ignore-init-module-imports = false
+
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false

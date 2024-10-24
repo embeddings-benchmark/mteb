@@ -59,6 +59,14 @@ gte_Qwen2_7B_instruct = ModelMeta(
     open_source=True,
     revision="e26182b2122f4435e8b3ebecbf363990f409b45b",
     release_date="2024-06-15",  # initial commit of hf model.
+    n_parameters=7_613_000_000,
+    memory_usage=None,
+    embed_dim=3584,
+    license="apache-2.0",
+    reference="https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=True,
 )
 
 

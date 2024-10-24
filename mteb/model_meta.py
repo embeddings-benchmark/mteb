@@ -1,22 +1,25 @@
 from __future__ import annotations
 
-from datetime import date
+import logging
 from functools import partial
-from typing import Annotated, Any, Callable, Literal
+from typing import Any, Callable
 
-from pydantic import BaseModel, BeforeValidator, TypeAdapter
+from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
+from typing_extensions import Literal
 
+from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
 
 from .languages import ISO_LANGUAGE_SCRIPT
 
-Frameworks = Literal["Sentence Transformers", "PyTorch"]
+logger = logging.getLogger(__name__)
 
-pastdate_adapter = TypeAdapter(date)
-STR_DATE = Annotated[
-    str, BeforeValidator(lambda value: str(pastdate_adapter.validate_python(value)))
-]  # Allows the type to be a string, but ensures that the string is a valid date
+
+FRAMEWORKS = Literal[
+    "Sentence Transformers", "PyTorch", "GritLM", "LLM2Vec", "TensorFlow", "API"
+]
+DISTANCE_METRICS = Literal["cosine"]
 
 
 def sentence_transformers_loader(
@@ -70,8 +73,10 @@ class ModelMeta(BaseModel):
     embed_dim: int | None = None
     license: str | None = None
     open_source: bool | None = None
-    similarity_fn_name: str | None = None
-    framework: list[Frameworks] = []
+    framework: list[FRAMEWORKS] = []
+    reference: STR_URL | None = None
+    similarity_fn_name: DISTANCE_METRICS | None = None
+    use_instuctions: bool | None = None
 
     def to_dict(self):
         dict_repr = self.model_dump()
@@ -81,6 +86,9 @@ class ModelMeta(BaseModel):
 
     def load_model(self, **kwargs: Any) -> Encoder | EncoderWithQueryCorpusEncode:
         if self.loader is None:
+            logger.warning(
+                f"Loader not specified for model {self.name}, loading using sentence transformers."
+            )
             loader = partial(
                 sentence_transformers_loader,
                 model_name=self.name,

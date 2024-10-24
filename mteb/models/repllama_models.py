@@ -147,6 +147,15 @@ repllama_llama2_original = ModelMeta(
     open_source=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-6097554dfe6e7d93e92f55010b678bcca1e233a8",  # base-peft revision
     release_date="2023-10-11",
+    n_parameters=7_000_000,
+    memory_usage=None,
+    max_tokens=None,
+    embed_dim=None,
+    license="apache-2.0",
+    reference="https://huggingface.co/samaya-ai/castorini/repllama-v1-7b-lora-passage",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instuctions=True,
 )
 
 
@@ -163,12 +172,13 @@ repllama_llama2_reproduced = ModelMeta(
     open_source=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-ad5c1d0938a1e02954bcafb4d811ba2f34052e71",  # base-peft revision
     release_date="2024-09-15",
+    n_parameters=7_000_000,
+    memory_usage=None,
+    max_tokens=None,
+    embed_dim=None,
+    license="apache-2.0",
+    reference="https://huggingface.co/samaya-ai/RepLLaMA-reproduced",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instuctions=True,
 )
-
-
-## Debug code
-# import mteb
-# model = mteb.get_model("samaya-ai/RepLLaMA-reproduced")
-# tasks = mteb.get_tasks(tasks=["SciFact"], languages=["eng"])
-# evaluation = mteb.MTEB(tasks=tasks)
-# evaluation.run(model)

@@ -110,6 +110,15 @@ nomic_embed_v1 = ModelMeta(
     open_source=True,
     revision="0759316f275aa0cb93a5b830973843ca66babcf5",
     release_date="2024-01-31",  # first commit
+    n_parameters=None,
+    memory_usage=None,
+    max_tokens=8192,
+    embed_dim=768,
+    license="apache-2.0",
+    reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=True,
 )
 
 if __name__ == "__main__":

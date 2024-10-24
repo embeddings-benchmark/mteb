@@ -62,6 +62,15 @@ e5_instruct = ModelMeta(
     open_source=True,
     revision="baa7be480a7de1539afce709c8f13f833a510e0a",
     release_date=E5_PAPER_RELEASE_DATE,
+    framework=["GritLM", "PyTorch"],
+    similarity_fn_name="cosine",
+    use_instuctions=True,
+    reference="https://huggingface.co/intfloat/multilingual-e5-large-instruct",
+    n_parameters=560_000_000,
+    memory_usage=None,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=514,
 )
 
 e5_mistral = ModelMeta(
@@ -81,4 +90,13 @@ e5_mistral = ModelMeta(
     open_source=True,
     revision="07163b72af1488142a360786df853f237b1a3ca1",
     release_date=E5_PAPER_RELEASE_DATE,
+    framework=["GritLM", "PyTorch"],
+    similarity_fn_name="cosine",
+    use_instuctions=True,
+    reference="https://huggingface.co/intfloat/e5-mistral-7b-instruct",
+    n_parameters=7_111_000_000,
+    memory_usage=None,
+    embed_dim=4096,
+    license="mit",
+    max_tokens=32768,
 )

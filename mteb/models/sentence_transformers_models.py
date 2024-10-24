@@ -66,6 +66,15 @@ all_MiniLM_L6_v2 = ModelMeta(
     open_source=True,
     revision="8b3219a92973c328a8e22fadcfa821b5dc75636a",  # can be any
     release_date="2021-08-30",
+    n_parameters=22_700_000,
+    memory_usage=None,
+    embed_dim=384,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=False,
 )
 
 paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
@@ -74,6 +83,15 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
     open_source=True,
     revision="bf3bf13ab40c3157080a7ab344c831b9ad18b5eb",  # can be any
     release_date="2019-11-01",  # release date of paper
+    n_parameters=118_000_000,
+    memory_usage=None,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=False,
 )
 
 paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
@@ -82,6 +100,15 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     open_source=True,
     revision="79f2382ceacceacdf38563d7c5d16b9ff8d725d6",  # can be any
     release_date="2019-11-01",  # release date of paper
+    n_parameters=278_000_000,
+    memory_usage=None,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=False,
 )
 
 labse = ModelMeta(
@@ -90,4 +117,13 @@ labse = ModelMeta(
     open_source=True,
     revision="e34fab64a3011d2176c99545a93d5cbddc9a91b7",  # can be any
     release_date="2019-11-01",  # release date of paper
+    n_parameters=471_000_000,
+    memory_usage=None,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/LaBSE",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=False,
 )
