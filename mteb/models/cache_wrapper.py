@@ -217,7 +217,7 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
             self._wrap_single_encode_method()
         else:
             logger.error(
-                "Model must have either 'encode_queries' and 'encode_corpus' methods, or a single 'encode' method."
+                "Model must have an 'encode' method."
             )
             raise ValueError("Invalid model encoding method")
 
