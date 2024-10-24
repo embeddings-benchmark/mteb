@@ -48,11 +48,11 @@ class ModelResult(BaseModel):
                 continue
             if languages is not None:
                 task_languages = task_result.languages
-                if not any([lang in task_languages for lang in languages]):
+                if not any(lang in task_languages for lang in languages):
                     continue
             if domains is not None:
                 task_domains = task_result.domains
-                if not any([domain in task_domains for domain in domains]):
+                if not any(domain in task_domains for domain in domains):
                     continue
             if (task_types is not None) and (task_result.task_type not in task_types):
                 continue
@@ -100,7 +100,7 @@ class ModelResult(BaseModel):
         if format == "long":
             entries = []
             for task_res in self.task_results:
-                entry = dict(
+                entry = dict(  # noqa
                     model_name=self.model_name,
                     model_revision=self.model_revision,
                     task_name=task_res.task_name,
@@ -140,7 +140,7 @@ class ModelResult(BaseModel):
 
     @property
     def task_types(self) -> list[str]:
-        return list(set([task_res.task_type for task_res in self.task_results]))
+        return list({task_res.task_type for task_res in self.task_results})
 
     @property
     def task_names(self) -> list[str]:

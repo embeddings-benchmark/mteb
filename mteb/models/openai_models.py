@@ -64,6 +64,13 @@ text_embedding_3_small = ModelMeta(
     max_tokens=8191,
     embed_dim=1536,
     open_source=False,
+    n_parameters=None,
+    memory_usage=None,
+    license=None,
+    reference="https://openai.com/index/new-embedding-models-and-api-updates/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instuctions=False,
 )
 text_embedding_3_large = ModelMeta(
     name="text-embedding-3-large",
@@ -74,6 +81,10 @@ text_embedding_3_large = ModelMeta(
     max_tokens=8191,
     embed_dim=3072,
     open_source=False,
+    framework=["API"],
+    use_instuctions=False,
+    n_parameters=None,
+    memory_usage=None,
 )
 text_embedding_ada_002 = ModelMeta(
     name="text-embedding-ada-002",
@@ -84,4 +95,8 @@ text_embedding_ada_002 = ModelMeta(
     max_tokens=8191,
     embed_dim=1536,
     open_source=False,
+    framework=["API"],
+    use_instuctions=False,
+    n_parameters=None,
+    memory_usage=None,
 )

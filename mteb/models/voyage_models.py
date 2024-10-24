@@ -156,6 +156,13 @@ voyage_large_2_instruct = ModelMeta(
     max_tokens=16000,
     embed_dim=1024,
     open_source=False,
+    n_parameters=None,
+    memory_usage=None,
+    license=None,
+    reference="https://blog.voyageai.com/2024/05/05/voyage-large-2-instruct-instruction-tuned-and-rank-1-on-mteb/",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=True,
 )
 
 voyage_finance_2 = ModelMeta(
@@ -171,6 +178,13 @@ voyage_finance_2 = ModelMeta(
     max_tokens=32000,
     embed_dim=1024,
     open_source=False,
+    n_parameters=None,
+    memory_usage=None,
+    license=None,
+    reference="https://blog.voyageai.com/2024/06/03/domain-specific-embeddings-finance-edition-voyage-finance-2/",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=False,
 )
 
 voyage_law_2 = ModelMeta(
@@ -186,6 +200,13 @@ voyage_law_2 = ModelMeta(
     max_tokens=16000,
     embed_dim=1024,
     open_source=False,
+    n_parameters=None,
+    memory_usage=None,
+    license=None,
+    reference="https://blog.voyageai.com/2024/04/15/domain-specific-embeddings-and-retrieval-legal-edition-voyage-law-2/",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=False,
 )
 
 voyage_code_2 = ModelMeta(
@@ -201,6 +222,13 @@ voyage_code_2 = ModelMeta(
     max_tokens=16000,
     embed_dim=1536,
     open_source=False,
+    n_parameters=None,
+    memory_usage=None,
+    license=None,
+    reference="https://blog.voyageai.com/2024/01/23/voyage-code-2-elevate-your-code-retrieval/",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=False,
 )
 
 voyage_large_2 = ModelMeta(
@@ -216,6 +244,13 @@ voyage_large_2 = ModelMeta(
     max_tokens=16000,
     embed_dim=1536,
     open_source=False,
+    n_parameters=None,
+    memory_usage=None,
+    license=None,
+    reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=False,
 )
 
 voyage_2 = ModelMeta(
@@ -231,8 +266,14 @@ voyage_2 = ModelMeta(
     max_tokens=4000,
     embed_dim=1024,
     open_source=False,
+    n_parameters=None,
+    memory_usage=None,
+    license=None,
+    reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=False,
 )
-# see https://blog.voyageai.com/2024/06/10/voyage-multilingual-2-multilingual-embedding-model/"
 voyage_multilingual_2 = ModelMeta(
     name="voyage-multilingual-2",
     revision="1",
@@ -246,4 +287,11 @@ voyage_multilingual_2 = ModelMeta(
     max_tokens=32000,
     embed_dim=1024,
     open_source=False,
+    n_parameters=None,
+    memory_usage=None,
+    license=None,
+    reference="https://blog.voyageai.com/2024/06/10/voyage-multilingual-2-multilingual-embedding-model/",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=False,
 )
