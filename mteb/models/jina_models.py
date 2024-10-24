@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import ModelMeta
 
 MODEL_NAME = "jinaai/jina-embeddings-v3"
 REVISION = "fa78e35d523dcda8d3b5212c7487cf70a4b277da"
