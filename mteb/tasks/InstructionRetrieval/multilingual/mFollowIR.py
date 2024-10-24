@@ -178,9 +178,8 @@ class mFollowIRCrossLingual(MultilingualTask, AbsTaskInstructionRetrieval):
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages with English queries/instructions.",
         reference="https://neuclir.github.io/",
         dataset={
-            "path": "jhu-clsp/mFollowIR-cross-lingual",
-            "revision": "f85872d09da933018d64e4a7260584e536b7cf14",
-            "trust_remote_code": True,
+            "path": "jhu-clsp/mFollowIR-cross-lingual-parquet",
+            "revision": "7a82814a53229d3c8f18b2e18762a1a959dc5ff6",
         },
         type="Retrieval",
         category="s2p",
@@ -277,9 +276,8 @@ class mFollowIR(MultilingualTask, AbsTaskInstructionRetrieval):
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages.",
         reference="https://neuclir.github.io/",
         dataset={
-            "path": "jhu-clsp/mFollowIR",
-            "revision": "5dcdb224d094f26ea2e67947e289489f8b95320c",
-            "trust_remote_code": True,
+            "path": "jhu-clsp/mFollowIR-parquet",
+            "revision": "2c5cdcb438eff9de6412803768ac7304d4771cdc",
         },
         type="Retrieval",
         category="s2p",
