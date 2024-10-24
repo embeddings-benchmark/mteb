@@ -9,6 +9,9 @@ from typing import Any, Callable, Dict, List, Optional, Union
 import numpy as np
 import torch
 
+from mteb.encoder_interface import Encoder
+from mteb.models.wrapper import Wrapper
+
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
@@ -34,6 +37,8 @@ class TextVectorMap:
         self._initialize_vectors_file()
 
     def _hash_text(self, text: str) -> str:
+        if type(text) != str:
+            breakpoint()
         return hashlib.sha256(text.encode()).hexdigest()
 
     def add(self, text: str, vector: np.ndarray) -> None:
@@ -199,20 +204,13 @@ class TextVectorMap:
         logger.info(f"Closed TextVectorMap in directory: {self.directory}")
 
 
-class CachedEmbeddingWrapper:
-    def __init__(self, model: Any, cache_path: Union[str, Path]):
+class CachedEmbeddingWrapper(Wrapper, Encoder):
+    def __init__(self, model: Encoder, cache_path: Union[str, Path]):
         self._model = model
         self.cache_path = Path(cache_path)
         self.cache_path.mkdir(parents=True, exist_ok=True)
 
-        if hasattr(model, "encode_queries") and hasattr(model, "encode_corpus"):
-            self.encode_method = "split"
-            self.query_cache = TextVectorMap(self.cache_path / "query_cache")
-            self.corpus_cache = TextVectorMap(self.cache_path / "corpus_cache")
-            self.query_cache.load(name="query_cache")
-            self.corpus_cache.load(name="corpus_cache")
-            self._wrap_split_encode_methods()
-        elif hasattr(model, "encode"):
+        if hasattr(model, "encode"):
             self.encode_method = "single"
             self.cache = TextVectorMap(self.cache_path / "cache")
             self.cache.load(name="cache")
@@ -226,27 +224,6 @@ class CachedEmbeddingWrapper:
         logger.info(
             f"Initialized CachedEmbeddingWrapper with {self.encode_method} encoding method"
         )
-
-    def _wrap_split_encode_methods(self):
-        original_encode_queries = self._model.encode_queries
-        original_encode_corpus = self._model.encode_corpus
-
-        def wrapped_encode_queries(
-            queries: List[str], batch_size: int = 32, **kwargs
-        ) -> np.ndarray:
-            return self._cached_encode(
-                queries, self.query_cache, original_encode_queries, batch_size, **kwargs
-            )
-
-        def wrapped_encode_corpus(
-            corpus: List[str], batch_size: int = 32, **kwargs
-        ) -> np.ndarray:
-            return self._cached_encode(
-                corpus, self.corpus_cache, original_encode_corpus, batch_size, **kwargs
-            )
-
-        self._model.encode_queries = wrapped_encode_queries
-        self._model.encode_corpus = wrapped_encode_corpus
 
     def _wrap_single_encode_method(self):
         original_encode = self._model.encode
