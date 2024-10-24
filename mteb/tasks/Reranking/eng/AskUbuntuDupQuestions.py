@@ -27,6 +27,7 @@ class AskUbuntuDupQuestions(AbsTaskReranking):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
+        prompt="Retrieve duplicate questions from AskUbuntu forum",
         bibtex_citation="""@article{wang-2021-TSDAE,
     title = "TSDAE: Using Transformer-based Sequential Denoising Auto-Encoderfor Unsupervised Sentence Embedding Learning",
     author = "Wang, Kexin and Reimers, Nils and  Gurevych, Iryna", 

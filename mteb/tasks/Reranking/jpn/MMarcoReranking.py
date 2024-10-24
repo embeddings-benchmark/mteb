@@ -26,6 +26,7 @@ class VoyageMMarcoReranking(AbsTaskReranking):
         annotations_creators="derived",
         dialect=["jpn-Jpan"],
         sample_creation="found",
+        prompt="Given a Japanese search query, retrieve web passages that answer the question",
         bibtex_citation="""@misc{clavié2023jacolbert,
       title={JaColBERT and Hard Negatives, Towards Better Japanese-First Embeddings for Retrieval: Early Technical Report}, 
       author={Benjamin Clavié},

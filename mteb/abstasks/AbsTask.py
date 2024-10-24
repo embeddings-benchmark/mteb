@@ -61,6 +61,7 @@ class DescriptiveStatistics(TypedDict):
 
 class AbsTask(ABC):
     metadata: TaskMetadata
+    abstask_prompt: str | None = None
     _eval_splits: list[str] | None = None
     superseded_by: None | str = None
     dataset: dict[HFSubset, DatasetDict] | None = None  # type: ignore

@@ -30,6 +30,7 @@ class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
+        prompt="Retrieve duplicate questions from Sprint forum",
         bibtex_citation="""@inproceedings{shah-etal-2018-adversarial,
     title = "Adversarial Domain Adaptation for Duplicate Question Detection",
     author = "Shah, Darsh  and

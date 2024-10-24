@@ -39,6 +39,9 @@ class QuoraRetrieval(AbsTaskRetrieval):
     year = {2017},
     url = {https://kaggle.com/competitions/quora-question-pairs}
 }""",
+        prompt={
+            "query": "Given a question, retrieve questions that are semantically equivalent to the given question"
+        },
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

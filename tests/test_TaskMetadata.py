@@ -261,7 +261,7 @@ def test_given_missing_revision_path_then_it_throws():
 
 
 def test_given_none_revision_path_then_it_logs_warning(caplog):
-    with caplog.at_level(logging.WARNING):
+    with pytest.raises(ValueError):
         my_task = TaskMetadata(
             name="MyTask",
             dataset={"path": "test/dataset", "revision": None},
@@ -282,18 +282,6 @@ def test_given_none_revision_path_then_it_logs_warning(caplog):
             sample_creation=None,
             bibtex_citation="",
             descriptive_stats={"n_samples": None, "avg_character_length": None},
-        )
-
-        assert my_task.dataset["revision"] is None
-
-        warning_logs = [
-            record for record in caplog.records if record.levelname == "WARNING"
-        ]
-        assert len(warning_logs) == 1
-        assert (
-            warning_logs[0].message
-            == "Revision missing for the dataset test/dataset. "
-            + "It is encourage to specify a dataset revision for reproducability."
         )
 
 

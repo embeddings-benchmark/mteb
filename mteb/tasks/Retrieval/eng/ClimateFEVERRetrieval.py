@@ -35,6 +35,9 @@ class ClimateFEVER(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
+        prompt={
+            "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
+        },
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

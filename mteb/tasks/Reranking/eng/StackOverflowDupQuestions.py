@@ -27,6 +27,7 @@ class StackOverflowDupQuestions(AbsTaskReranking):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
+        prompt="Retrieve duplicate questions from StackOverflow forum",
         bibtex_citation="""@article{Liu2018LinkSOAD,
   title={LinkSO: a dataset for learning to retrieve similar question answer pairs on software development forums},
   author={Xueqing Liu and Chi Wang and Yue Leng and ChengXiang Zhai},

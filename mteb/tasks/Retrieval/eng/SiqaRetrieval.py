@@ -41,6 +41,9 @@ class SIQA(AbsTaskRetrieval):
   year={2019}
 }
 """,
+        prompt={
+            "query": "Given the following context and question, retrieve the correct answer."
+        },
         descriptive_stats={
             "n_samples": {"test": 0},
             "avg_character_length": {

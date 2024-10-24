@@ -36,6 +36,7 @@ class ToxicConversationsClassification(AbsTaskClassification):
     year = {2019},
     url = {https://kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification}
 }""",
+        prompt="Classify the given comments as either toxic or not toxic",
         descriptive_stats={
             "n_samples": {"test": 50000},
             "avg_character_length": {"test": 296.6},
