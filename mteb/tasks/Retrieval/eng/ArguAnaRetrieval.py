@@ -39,7 +39,7 @@ class ArguAna(AbsTaskRetrieval):
   country = {Italy},
   url = {http://www.cl.uni-heidelberg.de/~riezler/publications/papers/ECIR2016.pdf}
 }""",
-        prompt={"query": "Given a claim, find documents that refute the claim"}, 
+        prompt={"query": "Given a claim, find documents that refute the claim"},
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

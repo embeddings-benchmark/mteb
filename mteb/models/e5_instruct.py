@@ -1,18 +1,13 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
 from functools import partial
-from typing import Any
 
-import numpy as np
 import torch
 
 from mteb.model_meta import ModelMeta
-from .instruct_wrapper import instruct_wrapper
 
-from ..encoder_interface import PromptType
 from .e5_models import E5_PAPER_RELEASE_DATE, XLMR_LANGUAGES
-from .wrapper import Wrapper
+from .instruct_wrapper import instruct_wrapper
 
 MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
 

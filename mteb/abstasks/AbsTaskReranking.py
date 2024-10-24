@@ -39,6 +39,7 @@ class AbsTaskReranking(AbsTask):
         positive: list[str]
         negative: list[str]
     """
+
     abstask_prompt = "Retrieve text based on user query."
 
     def __init__(self, **kwargs):

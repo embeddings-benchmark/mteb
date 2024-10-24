@@ -41,7 +41,9 @@ class HellaSwag(AbsTaskRetrieval):
   year={2019}
 }
 """,
-        prompt={"query": "Given the following unfinished context, retrieve the most plausible ending to finish it."}, 
+        prompt={
+            "query": "Given the following unfinished context, retrieve the most plausible ending to finish it."
+        },
         descriptive_stats={
             "n_samples": {"test": 10042},
             "avg_character_length": {

@@ -37,7 +37,9 @@ booktitle={Thirty-fifth Conference on Neural Information Processing Systems Data
 year={2021},
 url={https://openreview.net/forum?id=wCu6T5xFjeJ}
 }""",
-        prompt={"query": "Given a financial question, retrieve user replies that best answer the question"}, 
+        prompt={
+            "query": "Given a financial question, retrieve user replies that best answer the question"
+        },
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

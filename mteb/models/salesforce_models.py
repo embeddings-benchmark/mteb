@@ -1,17 +1,12 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
 from functools import partial
-from typing import Any
 
-import numpy as np
 import torch
 
 from mteb.model_meta import ModelMeta
-from .instruct_wrapper import instruct_wrapper
 
-from ..encoder_interface import PromptType
-from .wrapper import Wrapper
+from .instruct_wrapper import instruct_wrapper
 
 
 def sfr_instruction(instruction: str) -> str:

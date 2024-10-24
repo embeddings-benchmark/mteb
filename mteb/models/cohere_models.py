@@ -9,7 +9,6 @@ import torch
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
-
 from .wrapper import Wrapper
 
 
@@ -57,7 +56,9 @@ class CohereTextEmbeddingModel(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        cohere_task_type = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        cohere_task_type = self.get_prompt_name(
+            self.model_prompts, task_name, prompt_type
+        )
         if cohere_task_type is None:
             # search_document is recommended if unknown (https://cohere.com/blog/introducing-embed-v3)
             cohere_task_type = "search_document"

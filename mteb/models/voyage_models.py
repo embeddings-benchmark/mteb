@@ -8,7 +8,6 @@ import numpy as np
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-
 from mteb.requires_package import requires_package
 
 from .wrapper import Wrapper
@@ -96,7 +95,8 @@ class VoyageWrapper(Wrapper):
         **kwargs: Any,
     ) -> np.ndarray:
         input_type = (
-            self.get_prompt_name(self.model_prompts, task_name, prompt_type) or "document"
+            self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+            or "document"
         )
         return self._batched_encode(sentences, batch_size, input_type)
 

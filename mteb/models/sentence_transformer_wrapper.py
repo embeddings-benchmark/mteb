@@ -2,14 +2,12 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Sequence
-from typing import Any, get_args
+from typing import Any
 
 import numpy as np
 import torch
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
-import mteb
-from mteb.abstasks.TaskMetadata import TASK_TYPE
 from mteb.encoder_interface import PromptType
 
 from .wrapper import Wrapper
@@ -87,7 +85,9 @@ class SentenceTransformerWrapper(Wrapper):
         """
         prompt_name = None
         if self.model_prompts is not None:
-            prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+            prompt_name = self.get_prompt_name(
+                self.model_prompts, task_name, prompt_type
+            )
         if prompt_name:
             logger.info(
                 f"Using prompt_nane={prompt_name} for task={task_name} prompt_type={prompt_type}"
@@ -118,5 +118,3 @@ class SentenceTransformerWrapper(Wrapper):
             convert_to_numpy=True,
             **kwargs,
         )
-
-

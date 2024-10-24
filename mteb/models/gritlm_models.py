@@ -4,6 +4,7 @@ import logging
 from functools import partial
 
 from mteb.model_meta import ModelMeta
+
 from .instruct_wrapper import instruct_wrapper
 
 logger = logging.getLogger(__name__)

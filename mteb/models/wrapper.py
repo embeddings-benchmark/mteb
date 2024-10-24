@@ -1,22 +1,23 @@
 from __future__ import annotations
 
+import logging
 from typing import get_args
 
 import mteb
 from mteb.abstasks.TaskMetadata import TASK_TYPE
 from mteb.encoder_interface import PromptType
-import logging
 
 logger = logging.getLogger(__name__)
 
 
 class Wrapper:
     """Class to indicate that this is a wrapper for a model."""
+
     def get_prompt_name(
-            self,
-            task_to_prompt: dict[str, str] | None,
-            task_name: str,
-            prompt_type: PromptType | None,
+        self,
+        task_to_prompt: dict[str, str] | None,
+        task_name: str,
+        prompt_type: PromptType | None,
     ) -> str | None:
         """A wrapper function around the model.encode method that handles the prompt_name argument and standardizes the output to a numpy array.
         The order of priorities for prompt selection are:
@@ -39,17 +40,17 @@ class Wrapper:
         prompt_type_value = prompt_type.value if prompt_type else None
 
         if (
-                task_name
-                and prompt_type
-                and f"{task_name}-{prompt_type_value}" in task_to_prompt
+            task_name
+            and prompt_type
+            and f"{task_name}-{prompt_type_value}" in task_to_prompt
         ):
             return f"{task_name}-{prompt_type_value}"
         if task_name and task_name in task_to_prompt:
             return task_name
         if (
-                task_type
-                and prompt_type
-                and f"{task_type}-{prompt_type_value}" in task_to_prompt
+            task_type
+            and prompt_type
+            and f"{task_type}-{prompt_type_value}" in task_to_prompt
         ):
             return f"{task_type}-{prompt_type_value}"
         if task_type and task_type in task_to_prompt:
@@ -62,7 +63,8 @@ class Wrapper:
         return None
 
     def validate_task_to_prompt_name(
-        self, task_to_prompt_name: dict[str, str] | None,
+        self,
+        task_to_prompt_name: dict[str, str] | None,
     ) -> dict[str, str] | None:
         if task_to_prompt_name is None:
             return task_to_prompt_name
@@ -87,9 +89,17 @@ class Wrapper:
         """Get the instruction to be used for encoding the sentences."""
         task = mteb.get_task(task_name=task_name)
         task_metadata = task.metadata
-        if prompt_type and prompt_type == PromptType.query and task_metadata.prompt.get("query"):
+        if (
+            prompt_type
+            and prompt_type == PromptType.query
+            and task_metadata.prompt.get("query")
+        ):
             return task_metadata.prompt.get("query")
-        if prompt_type and prompt_type == PromptType.passage and task_metadata.prompt.get("passage"):
+        if (
+            prompt_type
+            and prompt_type == PromptType.passage
+            and task_metadata.prompt.get("passage")
+        ):
             return task_metadata.prompt.get("passage")
         if task_metadata.prompt:
             return task_metadata.prompt

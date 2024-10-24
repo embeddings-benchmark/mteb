@@ -5,7 +5,13 @@ from collections.abc import Mapping
 from datetime import date
 from typing import Annotated, Any, Union
 
-from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator, ConfigDict
+from pydantic import (
+    AnyUrl,
+    BaseModel,
+    BeforeValidator,
+    TypeAdapter,
+    field_validator,
+)
 from typing_extensions import Literal, TypedDict
 
 from ..encoder_interface import PromptType
@@ -175,14 +181,14 @@ class DatasetDict(TypedDict, total=False):
         revision: The revision of the dataset.
         trust_remote_code: Whether to trust the remote code.
     """
+
     path: str
     revision: str
     trust_remote_code: bool
 
 
 class PromptDict(TypedDict, total=False):
-    """
-    A dictionary containing the prompt used for the task.
+    """A dictionary containing the prompt used for the task.
 
     Args:
         query: The prompt used for the queries in the task.
@@ -278,7 +284,9 @@ class TaskMetadata(BaseModel):
         return dataset
 
     @field_validator("prompt")
-    def _check_prompt_is_valid(cls, prompt: str | PromptDict | None) -> str | PromptDict | None:
+    def _check_prompt_is_valid(
+        cls, prompt: str | PromptDict | None
+    ) -> str | PromptDict | None:
         if isinstance(prompt, dict):
             for key in prompt:
                 if key not in [e.value for e in PromptType]:

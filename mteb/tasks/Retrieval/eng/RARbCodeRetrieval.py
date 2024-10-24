@@ -52,7 +52,7 @@ class RARbCode(AbsTaskRetrieval):
   year={2019}
 }
 """,
-        prompt={"query": "Retrieve the answer for the following coding problem."}, 
+        prompt={"query": "Retrieve the answer for the following coding problem."},
         descriptive_stats={
             "n_samples": {"test": 1484},
             "avg_character_length": {

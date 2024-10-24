@@ -42,7 +42,9 @@ class AlphaNLI(AbsTaskRetrieval):
   year={2019}
 }
 """,
-        prompt={"query": "Given the following start and end of a story, retrieve a possible reason that leads to the end."}, 
+        prompt={
+            "query": "Given the following start and end of a story, retrieve a possible reason that leads to the end."
+        },
         descriptive_stats={
             "n_samples": {"test": 1532},
             "avg_character_length": {

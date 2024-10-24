@@ -35,7 +35,9 @@ class TRECCOVID(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        prompt={"query": "Given a query on COVID-19, retrieve documents that answer the query"}, 
+        prompt={
+            "query": "Given a query on COVID-19, retrieve documents that answer the query"
+        },
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

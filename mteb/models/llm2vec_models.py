@@ -63,9 +63,7 @@ class LLM2VecWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,  # noqa
     ) -> np.ndarray:
-        instruction = llm2vec_instruction(
-            self.get_instruction(task_name, prompt_type)
-        )
+        instruction = llm2vec_instruction(self.get_instruction(task_name, prompt_type))
 
         sentences = [[instruction, sentence] for sentence in sentences]
         return self.model.encode(sentences, **kwargs)

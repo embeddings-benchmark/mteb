@@ -1,24 +1,15 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
 from functools import partial
-from typing import Any
 
-import numpy as np
-
-from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-
-from .wrapper import Wrapper
-
-
-
-
+from mteb.models.instruct_wrapper import instruct_wrapper
 
 gte_Qwen2_7B_instruct = ModelMeta(
     loader=partial(
-        gte_loader,
+        instruct_wrapper,
         model_name_or_path="Alibaba-NLP/gte-Qwen2-7B-instruct",
+        instruction_template="Instruct: {instruction}\nQuery: ",
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",

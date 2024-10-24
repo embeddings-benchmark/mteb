@@ -33,7 +33,9 @@ class NQ(AbsTaskRetrieval):
         and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le 
         and Slav Petrov},year	= {2019},journal	= {Transactions of the Association of Computational 
         Linguistics}}""",
-        prompt={"query": "Given a question, retrieve Wikipedia passages that answer the question"}, 
+        prompt={
+            "query": "Given a question, retrieve Wikipedia passages that answer the question"
+        },
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

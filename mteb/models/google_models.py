@@ -70,7 +70,9 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        google_task_type = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        google_task_type = self.get_prompt_name(
+            self.model_prompts, task_name, prompt_type
+        )
         return self._embed(sentences, google_task_type=google_task_type)
 
 

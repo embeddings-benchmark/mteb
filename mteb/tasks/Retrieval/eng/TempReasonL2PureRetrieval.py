@@ -41,7 +41,7 @@ class TempReasonL2Pure(AbsTaskRetrieval):
   year={2023}
 }
 """,
-        prompt={"query": "Given the following question, retrieve the correct answer."}, 
+        prompt={"query": "Given the following question, retrieve the correct answer."},
         descriptive_stats={
             "n_samples": {"test": 5397},
             "avg_character_length": {

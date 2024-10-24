@@ -46,7 +46,9 @@ class NorQuadRetrieval(AbsTaskRetrieval):
     pages = "159--168",
     abstract = "In this paper we present NorQuAD: the first Norwegian question answering dataset for machine reading comprehension. The dataset consists of 4,752 manually created question-answer pairs. We here detail the data collection procedure and present statistics of the dataset. We also benchmark several multilingual and Norwegian monolingual language models on the dataset and compare them against human performance. The dataset will be made freely available.",
 }""",
-        prompt={"query": "Given a question in Norwegian, retrieve the answer from Wikipedia articles"}, 
+        prompt={
+            "query": "Given a question in Norwegian, retrieve the answer from Wikipedia articles"
+        },
         descriptive_stats={
             "n_samples": {"test": 2602},
             "avg_character_length": {

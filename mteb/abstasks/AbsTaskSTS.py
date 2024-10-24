@@ -34,6 +34,7 @@ class AbsTaskSTS(AbsTask):
         sentence2: str
         score: float
     """
+
     abstask_prompt = "Retrieve semantically similar text."
 
     def __init__(self, **kwargs):

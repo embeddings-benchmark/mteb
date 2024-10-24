@@ -88,7 +88,7 @@ class SNLHierarchicalClusteringS2S(AbsTaskClusteringFast):
   year={2023},
   school={Norwegian University of Life Sciences, {\AA}s}
 }""",
-        prompt= "Identify categories in a Norwegian lexicon",
+        prompt="Identify categories in a Norwegian lexicon",
         descriptive_stats={
             "n_samples": {"test": 1300},
             "avg_character_length": {"test": 242.22384615384615},
