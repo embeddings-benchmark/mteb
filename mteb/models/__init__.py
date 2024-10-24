@@ -34,6 +34,7 @@ from mteb.models import (
     salesforce_models,
     sentence_transformers_models,
     vista_models,
+    vlm2vec_models,
     voyage_models,
 )
 
@@ -160,7 +161,7 @@ model_modules = [
     sentence_transformers_models,
     vista_models,
     voyage_models,
-    google_models,
+    vlm2vec_models,
 ]
 models = {}
 

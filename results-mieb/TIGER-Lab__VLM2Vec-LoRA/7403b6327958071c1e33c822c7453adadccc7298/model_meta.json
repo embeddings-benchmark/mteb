@@ -1,0 +1,1 @@
+{"name": "TIGER-Lab/VLM2Vec-LoRA", "revision": "7403b6327958071c1e33c822c7453adadccc7298", "release_date": "2024-10-08", "languages": ["eng_Latn"], "n_parameters": null, "memory_usage": null, "max_tokens": null, "embed_dim": null, "license": null, "open_source": true, "similarity_fn_name": null, "framework": [], "loader": "VLM2VecWrapper"}

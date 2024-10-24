@@ -73,6 +73,7 @@ class VLM2VecWrapper:
             model = base_model
 
         model.eval()
+        model.to(device)
         self.mdl = model
 
         self.processor = AutoProcessor.from_pretrained(
@@ -84,43 +85,29 @@ class VLM2VecWrapper:
     def to(self, device: torch.device) -> None:
         self.mdl.to(device, dtype=torch.bfloat16)
 
-    def encode(
-        self,
-        sentences: list[str],
-        *,
-        prompt_name: str = None,
-        **kwargs: Any,  # noqa
-    ) -> np.ndarray:
-        if prompt_name is not None:
-            instruction = (
-                self.task_to_instructions[prompt_name]
-                if self.task_to_instructions
-                and prompt_name in self.task_to_instructions
-                else llm2vec_instruction(task_to_instruction(prompt_name))
-            )
-        else:
-            instruction = ""
+    # def encode(
+    #     self,
+    #     sentences: list[str],
+    #     *,
+    #     prompt_name: str = None,
+    #     **kwargs: Any,  # noqa
+    # ) -> np.ndarray:
+    #     if prompt_name is not None:
+    #         instruction = (
+    #             self.task_to_instructions[prompt_name]
+    #             if self.task_to_instructions
+    #             and prompt_name in self.task_to_instructions
+    #             else llm2vec_instruction(task_to_instruction(prompt_name))
+    #         )
+    #     else:
+    #         instruction = ""
 
-        sentences = [[instruction, sentence] for sentence in sentences]
-        return self.model.encode(sentences, **kwargs)
+    #     sentences = [[instruction, sentence] for sentence in sentences]
+    #     return self.model.encode(sentences, **kwargs)
 
-    def encode_corpus(
-        self,
-        corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
-        prompt_name: str = None,
-        **kwargs: Any,
-    ) -> np.ndarray:
-        sentences = corpus_to_texts(corpus, sep=" ")
-        sentences = [["", sentence] for sentence in sentences]
-        if "request_qid" in kwargs:
-            kwargs.pop("request_qid")
-        return self.model.encode(sentences, **kwargs)
-
-    def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
-        return self.encode(queries, **kwargs)
 
     def encode_input(self, input):
-        hidden_states = self.encoder(**input, return_dict=True, output_hidden_states=True)
+        hidden_states = self.mdl(**input, return_dict=True, output_hidden_states=True)
         hidden_states = hidden_states.hidden_states[-1]
         pooled_output = self._pooling(hidden_states, input['attention_mask'])
         return pooled_output
@@ -138,19 +125,41 @@ class VLM2VecWrapper:
         return reps
     
 
+    # reference: https://github.com/TIGER-AI-Lab/VLM2Vec/blob/main/src/collator.py
     def get_image_embeddings(
         self, images: list[Image.Image] | DataLoader, batch_size: int = 32
     ):
+        text="<|image_1|> Represent the given image."
         all_image_embeddings = []
         if isinstance(images, DataLoader):
+            import torchvision.transforms.functional as F
             with torch.no_grad():
                 for batch in tqdm(images):
-                    inputs = self.processor(
-                        images=batch, return_tensors="pt", padding=True
-                    )
-                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                    image_outputs = self.model.get_image_features(**inputs)
+                    input_ids, pixel_values, image_sizes = [], [], []
+                    for b in batch:
+                        inputs = self.processor(text, [F.to_pil_image(b.to("cpu"))], return_tensors="pt", max_length=256, truncation=True)
+                        inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                        input_ids.append(inputs["input_ids"].squeeze(0).unsqueeze(1))
+                        pixel_values.append(inputs['pixel_values'])
+                        image_sizes.append(inputs['image_sizes'])
+
+                    input_ids = torch._C._nn.pad_sequence(
+                        input_ids, batch_first=True, padding_value=self.processor.tokenizer.pad_token_id
+                    ).squeeze(2)
+                    attention_mask = input_ids.ne(self.processor.tokenizer.pad_token_id)
+
+                    pixel_values = torch.cat(pixel_values, dim=0)
+                    image_sizes = torch.cat(image_sizes, dim=0)
+                    inputs = {
+                        'input_ids': input_ids,
+                        'attention_mask': attention_mask,
+                        'pixel_values': pixel_values,
+                        'image_sizes': image_sizes,
+                    }
+
+                    image_outputs = self.encode_input(inputs)
                     all_image_embeddings.append(image_outputs.cpu())
+
         else:
             with torch.no_grad():
                 for i in tqdm(range(0, len(images), batch_size)):
