@@ -157,26 +157,6 @@ class JinaWrapper(SentenceTransformerWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        """Encodes the given sentences using the encoder.
-
-        Args:
-            sentences: The sentences to encode.
-            task_name: The name of the task. Sentence-transformers uses this to
-                determine which prompt to use from a specified dictionary.
-            prompt_type: The name type of prompt. (query or passage)
-            **kwargs: Additional arguments to pass to the encoder.
-
-            The order of priorities for prompt selection are:
-                1. Composed prompt of task name + prompt type (query or passage)
-                2. Specific task prompt
-                3. Composed prompt of task type + prompt type (query or passage)
-                4. Specific task type prompt
-                5. Specific prompt type (query or passage)
-
-
-        Returns:
-            The encoded sentences.
-        """
         prompt_name = get_prompt_name(self.model_prompts, task_name, prompt_type)
         if prompt_name:
             logger.info(
