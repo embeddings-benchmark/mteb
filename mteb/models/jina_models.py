@@ -229,7 +229,7 @@ jina_embeddings_v3 = ModelMeta(
     n_parameters=572_000,
     max_tokens=8194,
     embed_dim=4096,
-    license="mit",
+    license="cc-by-nc-4.0",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
 )
