@@ -21,6 +21,8 @@ from mteb.models import (
     mxbai_models,
     nomic_models,
     openai_models,
+    rerankers_custom,
+    rerankers_monot5_based,
     ru_sentence_models,
     salesforce_models,
     sentence_transformers_models,
@@ -47,6 +49,8 @@ model_modules = [
     sentence_transformers_models,
     voyage_models,
     google_models,
+    rerankers_monot5_based,
+    rerankers_custom,
 ]
 MODEL_REGISTRY = {}
 
