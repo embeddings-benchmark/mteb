@@ -9,8 +9,6 @@ from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.benchmark_results import (
     BenchmarkResults,
-    ModelResult,
-    TaskResult,
 )
 from mteb.load_results.load_results import load_results
 from mteb.overview import get_tasks
@@ -64,9 +62,6 @@ class Benchmark:
         if base_results is None:
             base_results = load_results()
         return base_results.select_tasks(self.tasks)
-
-
-MTEB_MAIN_MULTILINGUAL = Benchmark(name="MTEB(multilingual)", tasks=get_tasks())
 
 MTEB_MAIN_EN = Benchmark(
     name="MTEB(eng)",

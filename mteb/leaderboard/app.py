@@ -1,11 +1,9 @@
-import functools
-import json
+from __future__ import annotations
+
 from collections import defaultdict
 from pathlib import Path
 
 import gradio as gr
-import numpy as np
-import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
@@ -67,25 +65,26 @@ task_select = gr.Dropdown(
     info="Select specific tasks to include",
 )
 
-css = """
-.scrollable {
-    overflow-y: scroll;
-    max-height: 400px
-}
+head = """
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 """
 
-with gr.Blocks(fill_width=True, theme=gr.themes.Base(), css=css) as demo:
-    gr.Markdown(
-        """
-    ### Model Selection
-    Select models to rank based on an assortment of criteria. 
-    """
-    )
-    with gr.Group():
-        with gr.Row():
-            with gr.Column():
+with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
+    with gr.Row():
+        with gr.Column(scale=1):
+            gr.Markdown(
+                """
+            ### Model Selection
+            Select models to rank based on an assortment of criteria. 
+            """,
+            )
+            with gr.Group():
                 availability = gr.Radio(
-                    [("Only Open", True), ("Only Proprietary", False), ("Both", None)],
+                    [
+                        ("Only Open", True),
+                        ("Only Proprietary", False),
+                        ("Both", None),
+                    ],
                     value=None,
                     label="Availability",
                     interactive=True,
@@ -101,7 +100,6 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), css=css) as demo:
                     label="Compatibility",
                     interactive=True,
                 )
-            with gr.Column():
                 instructions = gr.Radio(
                     [
                         ("Only Instruction-tuned", True),
@@ -119,26 +117,26 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), css=css) as demo:
                     label="Model Size (#M Parameters)",
                     interactive=True,
                 )
-
-    gr.Markdown(
-        """
-    ### Benchmarks
-    Select one of the hand-curated benchmarks from our publication.
-    Or create one from scratch based on your use case.
-    """
-    )
-    with gr.Group(elem_classes="scrollable"):
-        with gr.Row():
-            with gr.Column():
-                benchmark_select.render()
-                with gr.Row():
-                    lang_select.render()
-                    type_select.render()
-                with gr.Row():
-                    domain_select.render()
-            with gr.Column():
-                # with gr.Accordion("Add and remove tasks:", open=False):
-                task_select.render()
+        with gr.Column(scale=2):
+            gr.Markdown(
+                """
+            ### Benchmarks
+            Select one of the hand-curated benchmarks from our publication.
+            Or create one from scratch based on your use case.
+            """
+            )
+            with gr.Group():
+                with gr.Row(elem_classes="overflow-y-scroll h-80"):
+                    with gr.Column():
+                        benchmark_select.render()
+                        with gr.Accordion("Select Languages", open=False):
+                            lang_select.render()
+                        with gr.Accordion("Select Task Types", open=False):
+                            type_select.render()
+                        with gr.Accordion("Select Domains", open=False):
+                            domain_select.render()
+                        # with gr.Accordion("Add and remove tasks:", open=False):
+                        task_select.render()
     scores = gr.State(default_results.get_scores(format="long"))
     dataframe = gr.DataFrame(
         scores_to_table,
@@ -170,7 +168,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), css=css) as demo:
         benchmark = mteb.get_benchmark(benchmark_name)
         benchmark_results = benchmark.load_results(base_results=all_results)
         task_to_lang_set = defaultdict(set)
-        task_to_type = dict()
+        task_to_type = {}
         task_to_domains = defaultdict(set)
         for model_res in benchmark_results:
             for task_res in model_res:
@@ -183,7 +181,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), css=css) as demo:
                 continue
             if not (task_to_lang_set[task_name] & set(languages)):
                 continue
-            if not (task_to_type[task_name] in task_types):
+            if task_to_type[task_name] not in task_types:
                 continue
             res.append(task_name)
         return res
