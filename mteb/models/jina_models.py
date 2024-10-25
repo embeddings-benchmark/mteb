@@ -145,7 +145,14 @@ class JinaWrapper(SentenceTransformerWrapper):
             import einops  # noqa: F401
         except ImportError:
             raise ImportError(
-                "To use the jina-embeddings-v3 models `einops` is required. Please install it with `pip install einops`."
+                "To use the jina-embeddings-v3 models `einops` is required. Please install it with `pip install mteb[jina]`."
+            )
+        try:
+            import flash_attn  # noqa: F401
+        except ImportError:
+            logger.warning(
+                "Using flash_attn for jina-embeddings-v3 models is recommended. Please install it with `pip install mteb[flash_attention]`."
+                "Fallback to native implementation."
             )
         super().__init__(model, revision, model_prompts, **kwargs)
 
@@ -188,6 +195,7 @@ jina_embeddings_v3 = ModelMeta(
         JinaWrapper,
         model="jinaai/jina-embeddings-v3",
         revision="215a6e121fa0183376388ac6b1ae230326bfeaed",
+        trust_remote_code=True,
         model_prompts={
             "Retrieval-query": "retrieval.query",
             "Retrieval-passage": "retrieval.passage",
