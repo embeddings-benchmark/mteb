@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 class Robust04InstructionRetrieval(AbsTaskInstructionRetrieval):
     metadata = TaskMetadata(
         name="Robust04InstructionRetrieval",
-        description="Measuring retrieval instruction following ability on Robust04 narratives.",
+        description="Measuring retrieval instruction following ability on Robust04 narratives for the FollowIR benchmark.",
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
             "path": "jhu-clsp/robust04-instructions",
