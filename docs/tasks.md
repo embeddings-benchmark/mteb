@@ -593,6 +593,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [YelpReviewFullClassification](https://arxiv.org/abs/1509.01626) (Zhang et al., 2015) | ['eng'] | Classification | s2s | [Reviews, Written] | {'test': 50000} | {} |
 | [YueOpenriceReviewClassification](https://github.com/Christainx/Dataset_Cantonese_Openrice) (Xiang et al., 2019) | ['yue'] | Classification | s2s | [Reviews, Spoken] | {'test': 6161} | {'test': 173.0} |
 | [indonli](https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39) | ['ind'] | PairClassification | s2s | [Encyclopaedic, Web, News, Written] | {'test_expert': 2040} | {'test_expert': 145.88} |
+| [mFollowIRCrossLingualInstructionRetrieval](https://neuclir.github.io/) (Weller et al., 2024) | ['eng', 'fas', 'rus', 'zho'] | Retrieval | s2p | [News, Written] | {'eng-fas': 80, 'eng-rus': 80, 'eng-zho': 86} | {'test': {'num_docs': 121635, 'num_queries': 123, 'average_document_length': 2331.0777818884367, 'average_query_length': 81.8780487804878, 'average_instruction_length': 389.9512195121951, 'average_changed_instruction_length': 450.5528455284553, 'average_relevant_docs_per_query': 10.30952380952381, 'average_top_ranked_per_query': 1024.3902439024391, 'hf_subset_descriptive_stats': {'eng-fas': {'num_docs': 41189, 'num_queries': 40, 'average_document_length': 3145.4990895627475, 'average_query_length': 80.075, 'average_instruction_length': 396.875, 'average_changed_instruction_length': 463.175, 'average_relevant_docs_per_query': 10.465116279069768, 'average_top_ranked_per_query': 1075}, 'eng-rus': {'num_docs': 39326, 'num_queries': 40, 'average_document_length': 2784.0813456746173, 'average_query_length': 81.875, 'average_instruction_length': 371.125, 'average_changed_instruction_length': 431.8, 'average_relevant_docs_per_query': 9.775, 'average_top_ranked_per_query': 1000}, 'eng-zho': {'num_docs': 41120, 'num_queries': 43, 'average_document_length': 1082.0501215953307, 'average_query_length': 83.55813953488372, 'average_instruction_length': 401.0232558139535, 'average_changed_instruction_length': 456.25581395348837, 'average_relevant_docs_per_query': 10.651162790697674, 'average_top_ranked_per_query': 1000}}}} |
+| [mFollowIRInstructionRetrieval](https://neuclir.github.io/) (Weller et al., 2024) | ['fas', 'rus', 'zho'] | Retrieval | s2p | [News, Written] | {'fas': 80, 'rus': 80, 'zho': 86} | {'test': {'num_docs': 121635, 'num_queries': 123, 'average_document_length': 2331.0777818884367, 'average_query_length': 57.113821138211385, 'average_instruction_length': 281.0650406504065, 'average_changed_instruction_length': 326.9430894308943, 'average_relevant_docs_per_query': 10.30952380952381, 'average_top_ranked_per_query': 1024.3902439024391, 'hf_subset_descriptive_stats': {'fas': {'num_docs': 41189, 'num_queries': 40, 'average_document_length': 3145.4990895627475, 'average_query_length': 72.65, 'average_instruction_length': 358.925, 'average_changed_instruction_length': 415.325, 'average_relevant_docs_per_query': 10.465116279069768, 'average_top_ranked_per_query': 1075}, 'rus': {'num_docs': 39326, 'num_queries': 40, 'average_document_length': 2784.0813456746173, 'average_query_length': 77.5, 'average_instruction_length': 387, 'average_changed_instruction_length': 458, 'average_relevant_docs_per_query': 9.775, 'average_top_ranked_per_query': 1000}, 'zho': {'num_docs': 41120, 'num_queries': 43, 'average_document_length': 1082.0501215953307, 'average_query_length': 23.697674418604652, 'average_instruction_length': 110.09302325581395, 'average_changed_instruction_length': 122.81395348837209, 'average_relevant_docs_per_query': 10.651162790697674, 'average_top_ranked_per_query': 1000}}}} |
 <!-- TASKS TABLE END -->
 
 </details>
@@ -885,7 +887,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | 3 | 6 | 1 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 |
 | emi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | emp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| eng | 16 | 143 | 16 | 3 | 1 | 8 | 8 | 90 | 13 | 2 | 1 |
+| eng | 16 | 143 | 16 | 3 | 1 | 8 | 8 | 91 | 13 | 2 | 1 |
 | enq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | epo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | eri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -899,7 +901,7 @@ The following tables give you an overview of the tasks in MTEB.
 | fai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | fao | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
 | far | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| fas | 1 | 4 | 0 | 0 | 0 | 1 | 2 | 7 | 0 | 0 | 0 |
+| fas | 1 | 4 | 0 | 0 | 0 | 1 | 2 | 9 | 0 | 0 | 0 |
 | ffm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | fij | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | fil | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1392,7 +1394,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ruf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | rug | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | run | 1 | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| rus | 5 | 13 | 6 | 0 | 2 | 4 | 2 | 14 | 4 | 0 | 0 |
+| rus | 5 | 13 | 6 | 0 | 2 | 4 | 2 | 16 | 4 | 0 | 0 |
 | rwo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | sag | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1638,7 +1640,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zaw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zca | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zga | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| zho | 2 | 2 | 1 | 0 | 0 | 1 | 1 | 11 | 0 | 0 | 0 |
+| zho | 2 | 2 | 1 | 0 | 0 | 1 | 1 | 13 | 0 | 0 | 0 |
 | zia | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ziw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zlm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1657,7 +1659,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1394 | 795 | 304 | 3 | 28 | 67 | 50 | 449 | 85 | 2 | 2 |
+| Total | 1394 | 795 | 304 | 3 | 28 | 67 | 50 | 456 | 85 | 2 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
