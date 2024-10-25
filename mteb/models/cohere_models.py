@@ -113,6 +113,6 @@ cohere_eng_3 = ModelMeta(
     embed_dim=1024,
     license=None,
     similarity_fn_name="cosine",
-    framework=[],
+    framework=["API"],
     use_instuctions=False,
 )
