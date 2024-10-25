@@ -23,6 +23,8 @@ from mteb.models import (
     openai_models,
     promptriever_models,
     repllama_models,
+    rerankers_custom,
+    rerankers_monot5_based,
     ru_sentence_models,
     salesforce_models,
     sentence_transformers_models,
@@ -51,6 +53,8 @@ model_modules = [
     google_models,
     repllama_models,
     promptriever_models,
+    rerankers_monot5_based,
+    rerankers_custom,
 ]
 MODEL_REGISTRY = {}
 
