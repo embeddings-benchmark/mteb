@@ -21,6 +21,8 @@ from mteb.models import (
     mxbai_models,
     nomic_models,
     openai_models,
+    promptriever_models,
+    repllama_models,
     rerankers_custom,
     rerankers_monot5_based,
     ru_sentence_models,
@@ -49,6 +51,8 @@ model_modules = [
     sentence_transformers_models,
     voyage_models,
     google_models,
+    repllama_models,
+    promptriever_models,
     rerankers_monot5_based,
     rerankers_custom,
 ]
