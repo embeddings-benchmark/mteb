@@ -88,18 +88,15 @@ class Wrapper:
         """Get the instruction to be used for encoding the sentences."""
         task = mteb.get_task(task_name=task_name)
         task_metadata = task.metadata
-        if (
-            prompt_type
-            and prompt_type == PromptType.query
-            and task_metadata.prompt.get("query")
-        ):
-            return task_metadata.prompt.get("query")
-        if (
-            prompt_type
-            and prompt_type == PromptType.passage
-            and task_metadata.prompt.get("passage")
-        ):
-            return task_metadata.prompt.get("passage")
+        if isinstance(task_metadata.prompt, dict) and prompt_type:
+            if prompt_type == PromptType.query and task_metadata.prompt.get(
+                PromptType.query.value
+            ):
+                return task_metadata.prompt[PromptType.query.value]
+            if prompt_type == PromptType.passage and task_metadata.prompt.get(
+                PromptType.passage.value
+            ):
+                return task_metadata.prompt[PromptType.passage.value]
         if task_metadata.prompt:
             return task_metadata.prompt
         return task.abstask_prompt

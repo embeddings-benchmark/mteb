@@ -4,6 +4,7 @@ from collections.abc import Sequence
 from typing import Any, Callable
 
 import numpy as np
+import torch
 
 from mteb.encoder_interface import PromptType
 
@@ -54,7 +55,13 @@ def instruct_wrapper(
 
             if self.instruction_template:
                 instruction = self.format_instruction(instruction)
-            return super().encode(sentences, instruction=instruction, *args, **kwargs)
+            embeddings = super().encode(
+                sentences, instruction=instruction, *args, **kwargs
+            )
+            if isinstance(embeddings, torch.Tensor):
+                # sometimes in kwargs can be return_tensors=True
+                embeddings = embeddings.cpu().detach().float().numpy()
+            return embeddings
 
         def format_instruction(self, instruction: str) -> str:
             if isinstance(self.instruction_template, str):

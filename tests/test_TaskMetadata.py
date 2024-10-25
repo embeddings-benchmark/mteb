@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import logging
-
 import pytest
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -262,7 +260,7 @@ def test_given_missing_revision_path_then_it_throws():
 
 def test_given_none_revision_path_then_it_logs_warning(caplog):
     with pytest.raises(ValueError):
-        my_task = TaskMetadata(
+        TaskMetadata(
             name="MyTask",
             dataset={"path": "test/dataset", "revision": None},
             description="testing",
