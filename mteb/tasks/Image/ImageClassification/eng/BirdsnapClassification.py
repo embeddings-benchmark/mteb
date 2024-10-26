@@ -11,7 +11,7 @@ class BirdsnapClassification(AbsTaskImageClassification):
         reference="https://openaccess.thecvf.com/content_cvpr_2014/html/Berg_Birdsnap_Large-scale_Fine-grained_2014_CVPR_paper.html",
         dataset={
             "path": "isaacchung/birdsnap",
-            "revision": "e09b9dea248d579376684268cbedba28cd66b9b4",
+            "revision": "fd23015508be94f0b5b59d61630e4ea2536509e4",
         },
         type="ImageClassification",
         category="i2t",
