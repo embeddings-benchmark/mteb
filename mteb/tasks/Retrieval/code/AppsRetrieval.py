@@ -24,7 +24,7 @@ class AppsRetrieval(AbsTaskRetrieval):
         date=("2021-05-20", "2021-05-20"),
         domains=["Programming", "Written"],
         task_subtypes=["Code retrieval"],
-        license="MIT",
+        license="mit",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

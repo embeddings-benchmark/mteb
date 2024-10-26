@@ -36,7 +36,7 @@ class NusaParagraphTopicClassification(MultilingualTask, AbsTaskClassification):
         date=("2021-08-01", "2022-07-01"),
         domains=["Non-fiction", "Fiction", "Written"],
         task_subtypes=["Topic classification"],
-        license="Apache 2.0",
+        license="apache-2.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

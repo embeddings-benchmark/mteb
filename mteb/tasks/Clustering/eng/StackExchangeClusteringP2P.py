@@ -32,7 +32,7 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
         date=("2021-01-01", "2021-04-14"),
         domains=["Web", "Written"],
         task_subtypes=["Thematic clustering"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

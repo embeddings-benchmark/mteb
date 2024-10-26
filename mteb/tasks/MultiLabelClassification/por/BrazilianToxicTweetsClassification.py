@@ -31,7 +31,7 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
         date=("2019-08-01", "2019-08-16"),
         domains=["Constructed", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="CC BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",
         dialect=["brazilian"],
         sample_creation="found",

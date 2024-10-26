@@ -81,7 +81,7 @@ class XPQARetrieval(AbsTaskRetrieval, MultilingualTask):
         date=("2022-01-01", "2023-07-31"),  # best guess
         domains=["Reviews", "Written"],
         task_subtypes=["Question answering"],
-        license="CDLA-Sharing-1.0",
+        license="cdla-sharing-1.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

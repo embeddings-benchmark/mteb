@@ -24,7 +24,7 @@ class WinoGrande(AbsTaskRetrieval):
         date=("2021-01-01", "2021-12-31"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Reasoning as Retrieval"],
-        license="CC BY",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

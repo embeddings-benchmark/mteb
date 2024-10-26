@@ -24,7 +24,7 @@ class CosQARetrieval(AbsTaskRetrieval):
         date=("2021-05-07", "2021-05-07"),
         domains=["Programming", "Written"],
         task_subtypes=["Code retrieval"],
-        license="MIT",
+        license="mit",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

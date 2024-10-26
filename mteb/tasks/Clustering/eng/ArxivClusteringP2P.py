@@ -25,7 +25,7 @@ class ArxivClusteringP2P(AbsTaskClustering):
         date=("1991-01-01", "2021-01-01"),  # 1991-01-01 is the first arxiv paper
         domains=["Academic", "Written"],
         task_subtypes=[],
-        license="CC0",
+        license="cc0-1.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
@@ -66,7 +66,7 @@ class ArxivClusteringP2PFast(AbsTaskClustering):
         date=("1991-01-01", "2021-01-01"),  # 1991-01-01 is the first arxiv paper
         domains=["Academic", "Written"],
         task_subtypes=[],
-        license="CC0",
+        license="cc0-1.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

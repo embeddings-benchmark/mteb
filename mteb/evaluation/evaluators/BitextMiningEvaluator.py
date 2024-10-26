@@ -11,7 +11,6 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 from mteb.encoder_interface import Encoder
 
 from .Evaluator import Evaluator
-from .model_encode import model_encode
 from .utils import cos_sim
 
 logger = logging.getLogger(__name__)
@@ -52,10 +51,9 @@ class BitextMiningEvaluator(Evaluator):
 
         embeddings = {}
         for sub in tqdm.tqdm(subsets, desc=f"Encoding {n_subsets}x{self.n} sentences"):
-            embeddings[sub] = model_encode(
+            embeddings[sub] = model.encode(
                 self.sentences[sub],
-                model=model,
-                prompt_name=self.task_name,
+                task_name=self.task_name,
                 **encode_kwargs,
             )
 

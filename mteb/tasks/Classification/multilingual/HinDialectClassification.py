@@ -46,7 +46,7 @@ class HinDialectClassification(AbsTaskClassification):
         date=("2010-01-01", "2023-01-01"),
         domains=["Social", "Spoken", "Written"],
         task_subtypes=["Language identification"],
-        license="CC-BY-SA-4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",

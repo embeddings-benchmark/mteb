@@ -8,7 +8,7 @@ from datasets import Dataset
 from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators import BitextMiningEvaluator
-from ..load_results.mteb_results import HFSubset, ScoresDict
+from ..load_results.task_results import HFSubset, ScoresDict
 from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
@@ -32,7 +32,7 @@ class AbsTaskBitextMining(AbsTask):
     """Abstract class for BitextMining tasks
     The similarity is computed between pairs and the results are ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
         id: str
         sentence1: str
         sentence2: str

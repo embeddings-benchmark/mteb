@@ -5,13 +5,28 @@ from typing import Any
 
 import numpy as np
 
-from mteb.encoder_interface import Encoder
+from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import (
+    get_prompt_name,
+    validate_task_to_prompt_name,
+)
+
+from .wrapper import Wrapper
 
 
-class GoogleTextEmbeddingModel(Encoder):
-    def __init__(self, model_name: str, sep: str = " ", **kwargs) -> None:
+class GoogleTextEmbeddingModel(Encoder, Wrapper):
+    def __init__(
+        self,
+        model_name: str,
+        sep: str = " ",
+        model_prompts: dict[str, str] | None = None,
+        **kwargs,
+    ) -> None:
         self.model_name = model_name
+        self.model_prompts = (
+            validate_task_to_prompt_name(model_prompts) if model_prompts else None
+        )
 
     def _embed(
         self,
@@ -55,47 +70,31 @@ class GoogleTextEmbeddingModel(Encoder):
     def encode(
         self,
         sentences: list[str],
-        prompt_name: str | None = None,
-        google_task_type: str | None = None,  # Optional
+        task_name: str,
+        prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        if prompt_name and google_task_type is None:
-            task = mteb.get_task(prompt_name)
-            task_type = task.metadata.type
-            if task_type in ["Classification", "MultilabelClassification"]:
-                google_task_type = "CLASSIFICATION"
-            elif task_type == "Clustering":
-                google_task_type = "CLUSTERING"
-            elif task_type == "STS":
-                google_task_type = "SIMILARITY"
+        google_task_type = get_prompt_name(self.model_prompts, task_name, prompt_type)
         return self._embed(sentences, google_task_type=google_task_type)
-
-    def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
-        return self._embed(queries, google_task_type="RETRIEVAL_QUERY")
-
-    def encode_corpus(self, corpus: list[dict[str, str]], **kwargs: Any) -> np.ndarray:
-        if isinstance(corpus, dict):
-            sentences, titles = [], []
-
-            for i in range(len(corpus["text"])):  # type: ignore
-                titles.append(corpus["title"][i])  # type: ignore
-                sentences.append(corpus["text"][i])  # type: ignore
-        else:
-            sentences, titles = [], []
-            for doc in corpus:
-                titles.append(doc["title"])
-                sentences.append(doc["text"])
-        return self._embed(
-            sentences, google_task_type="RETRIEVAL_DOCUMENT", titles=titles
-        )
 
 
 name = "text-embedding-004"
 google_emb_004 = ModelMeta(
-    loader=partial(GoogleTextEmbeddingModel, model_name=name),
+    loader=partial(
+        GoogleTextEmbeddingModel,
+        model_name=name,
+        model_prompts={
+            "Classification": "CLASSIFICATION",
+            "MultilabelClassification": "CLASSIFICATION",
+            "Clustering": "CLUSTERING",
+            "STS": "SIMILARITY",
+            PromptType.query.value: "RETRIEVAL_QUERY",
+            PromptType.passage.value: "RETRIEVAL_DOCUMENT",
+        },
+    ),
     name=name,
     languages=["eng-Latn"],
-    open_source=False,
+    open_weights=False,
     revision="1",  # revision is intended for implementation
     release_date=None,  # couldnt figure this out
     n_parameters=None,
@@ -104,12 +103,6 @@ google_emb_004 = ModelMeta(
     embed_dim=768,
     license=None,
     similarity_fn_name="cosine",  # assumed
-    framework=[],
+    framework=["API"],
+    use_instuctions=True,
 )
-
-
-if __name__ == "__main__":
-    import mteb
-
-    mdl = mteb.get_model(google_emb_004.name, google_emb_004.revision)
-    emb = mdl.encode(["Hello, world!"])

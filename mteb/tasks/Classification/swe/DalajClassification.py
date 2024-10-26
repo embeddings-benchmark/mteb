@@ -25,7 +25,7 @@ class DalajClassification(AbsTaskClassification):
         date=("2017-01-01", "2020-12-31"),
         domains=["Non-fiction", "Written"],
         task_subtypes=["Linguistic acceptability"],
-        license="CC-BY-4.0",
+        license="cc-by-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",

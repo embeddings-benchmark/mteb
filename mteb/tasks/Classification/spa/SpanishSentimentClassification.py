@@ -22,7 +22,7 @@ class SpanishSentimentClassification(AbsTaskClassification):
         main_score="accuracy",
         domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

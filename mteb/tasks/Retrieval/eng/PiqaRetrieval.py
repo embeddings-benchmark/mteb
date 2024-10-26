@@ -24,7 +24,7 @@ class PIQA(AbsTaskRetrieval):
         date=("2020-01-01", "2020-12-31"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Reasoning as Retrieval"],
-        license="AFL-3.0",
+        license="afl-3.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

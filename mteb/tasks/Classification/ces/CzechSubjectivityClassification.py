@@ -22,7 +22,7 @@ class CzechSubjectivityClassification(AbsTaskClassification):
         main_score="accuracy",
         domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

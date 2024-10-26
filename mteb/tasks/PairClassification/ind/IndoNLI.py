@@ -23,7 +23,7 @@ class IndoNLI(AbsTaskPairClassification):
         date=("2021-01-01", "2021-11-01"),  # best guess
         domains=["Encyclopaedic", "Web", "News", "Written"],
         task_subtypes=["Textual Entailment"],
-        license="CC-BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",

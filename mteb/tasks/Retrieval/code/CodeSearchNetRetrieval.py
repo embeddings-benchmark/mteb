@@ -28,7 +28,7 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         date=("2019-01-01", "2019-12-31"),
         domains=["Programming", "Written"],
         task_subtypes=["Code retrieval"],
-        license="MIT",
+        license="mit",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

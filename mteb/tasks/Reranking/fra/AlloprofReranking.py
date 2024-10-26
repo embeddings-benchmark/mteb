@@ -25,7 +25,7 @@ class AlloprofReranking(AbsTaskReranking):
         date=("2020-01-01", "2023-04-14"),  # supposition
         domains=["Web", "Academic", "Written"],
         task_subtypes=None,
-        license="CC BY-NC-SA 4.0",
+        license="cc-by-nc-sa-4.0",
         annotations_creators="expert-annotated",
         dialect=None,
         sample_creation="found",

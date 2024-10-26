@@ -26,7 +26,7 @@ class SweFaqRetrieval(AbsTaskRetrieval):
         date=("2000-01-01", "2024-12-31"),  # best guess
         task_subtypes=["Question answering"],
         domains=["Government", "Non-fiction", "Written"],
-        license="CC-BY-SA-4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
@@ -62,9 +62,9 @@ class SweFaqRetrieval(AbsTaskRetrieval):
     def dataset_transform(self) -> None:
         """And transform to a retrieval datset, which have the following attributes
 
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document datas like title and text
-        self.queries = Dict[query_id, str] #id => query
-        self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
+        self.corpus = dict[doc_id, dict[str, str]] #id => dict with document datas like title and text
+        self.queries = dict[query_id, str] #id => query
+        self.relevant_docs = dict[query_id, dict[[doc_id, score]]
         """
         self.corpus = {}
         self.relevant_docs = {}
