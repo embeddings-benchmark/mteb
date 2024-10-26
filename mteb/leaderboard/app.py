@@ -7,7 +7,7 @@ import gradio as gr
 from gradio_rangeslider import RangeSlider
 
 import mteb
-from mteb.leaderboard.table import scores_to_table
+from mteb.leaderboard.table import scores_to_tables
 
 
 def load_results():
@@ -27,7 +27,7 @@ min_model_size, max_model_size = 8, 46703
 
 benchmarks = mteb.get_benchmarks()
 
-default_benchmark = mteb.get_benchmark("MTEB(multilingual)")
+default_benchmark = mteb.get_benchmark("MTEB(Multilingual)")
 default_results = default_benchmark.load_results(base_results=all_results)
 
 benchmark_select = gr.Dropdown(
@@ -60,6 +60,7 @@ domain_select = gr.Dropdown(
 task_select = gr.Dropdown(
     default_results.task_names,
     value=default_results.task_names,
+    allow_custom_value=True,
     multiselect=True,
     label="Task",
     info="Select specific tasks to include",
@@ -79,44 +80,46 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             """,
             )
             with gr.Group():
-                availability = gr.Radio(
-                    [
-                        ("Only Open", True),
-                        ("Only Proprietary", False),
-                        ("Both", None),
-                    ],
-                    value=None,
-                    label="Availability",
-                    interactive=True,
-                )
-                compatibility = gr.CheckboxGroup(
-                    [
-                        (
-                            "Should be sentence-transformers compatible",
-                            "sbert_compatible",
+                with gr.Row(elem_classes="overflow-y-scroll max-h-80"):
+                    with gr.Column():
+                        availability = gr.Radio(
+                            [
+                                ("Only Open", True),
+                                ("Only Proprietary", False),
+                                ("Both", None),
+                            ],
+                            value=None,
+                            label="Availability",
+                            interactive=True,
                         )
-                    ],
-                    value=[],
-                    label="Compatibility",
-                    interactive=True,
-                )
-                instructions = gr.Radio(
-                    [
-                        ("Only Instruction-tuned", True),
-                        ("Only non-instruction", False),
-                        ("Both", None),
-                    ],
-                    value=None,
-                    label="Instructions",
-                    interactive=True,
-                )
-                model_size = RangeSlider(
-                    minimum=0,
-                    maximum=8000,
-                    value=(0, 8000),
-                    label="Model Size (#M Parameters)",
-                    interactive=True,
-                )
+                        compatibility = gr.CheckboxGroup(
+                            [
+                                (
+                                    "Should be sentence-transformers compatible",
+                                    "sbert_compatible",
+                                )
+                            ],
+                            value=[],
+                            label="Compatibility",
+                            interactive=True,
+                        )
+                        instructions = gr.Radio(
+                            [
+                                ("Only Instruction-tuned", True),
+                                ("Only non-instruction", False),
+                                ("Both", None),
+                            ],
+                            value=None,
+                            label="Instructions",
+                            interactive=True,
+                        )
+                        model_size = RangeSlider(
+                            minimum=0,
+                            maximum=8000,
+                            value=(0, 8000),
+                            label="Model Size (#M Parameters)",
+                            interactive=True,
+                        )
         with gr.Column(scale=2):
             gr.Markdown(
                 """
@@ -126,7 +129,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             """
             )
             with gr.Group():
-                with gr.Row(elem_classes="overflow-y-scroll h-80"):
+                with gr.Row(elem_classes="overflow-y-scroll max-h-80"):
                     with gr.Column():
                         benchmark_select.render()
                         with gr.Accordion("Select Languages", open=False):
@@ -135,13 +138,20 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             type_select.render()
                         with gr.Accordion("Select Domains", open=False):
                             domain_select.render()
-                        # with gr.Accordion("Add and remove tasks:", open=False):
-                        task_select.render()
-    scores = gr.State(default_results.get_scores(format="long"))
-    dataframe = gr.DataFrame(
-        scores_to_table,
-        inputs=[scores],
-    )
+                        with gr.Accordion("Add and remove tasks:", open=False):
+                            task_select.render()
+    default_scores = default_results.get_scores(format="long")
+    scores = gr.State(default_scores)
+    summary, per_task = scores_to_tables(default_scores)
+    with gr.Tab("Summary"):
+        summary_table = gr.DataFrame(summary)
+    with gr.Tab("Performance per task"):
+        per_task_table = gr.DataFrame(per_task)
+
+    @gr.on(inputs=[scores], outputs=[summary_table, per_task_table])
+    def update_tables(scores):
+        summary, per_task = scores_to_tables(scores)
+        return summary, per_task
 
     @gr.on(
         inputs=[benchmark_select],
