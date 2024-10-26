@@ -13,6 +13,7 @@ from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 
 from mteb.encoder_interface import Encoder
+from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from ..load_results.task_results import HFSubset
 from .AbsTask import AbsTask, DescriptiveStatistics
@@ -173,10 +174,12 @@ class AbsTaskClusteringFast(AbsTask):
             )
             downsampled_dataset = dataset.select(example_indices)  # type: ignore
 
-        embeddings = model.encode(
-            downsampled_dataset["sentences"],  # type: ignore
-            task_name=self.metadata.name,
-            **encode_kwargs,
+        embeddings = normalize_embeddings_to_numpy(
+            model.encode(
+                downsampled_dataset["sentences"],  # type: ignore
+                task_name=self.metadata.name,
+                **encode_kwargs,
+            )
         )
 
         labels = []

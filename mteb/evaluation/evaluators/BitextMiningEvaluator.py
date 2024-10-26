@@ -9,6 +9,7 @@ from datasets import Dataset
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from mteb.encoder_interface import Encoder
+from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from .Evaluator import Evaluator
 from .utils import cos_sim
@@ -51,11 +52,12 @@ class BitextMiningEvaluator(Evaluator):
 
         embeddings = {}
         for sub in tqdm.tqdm(subsets, desc=f"Encoding {n_subsets}x{self.n} sentences"):
-            embeddings[sub] = model.encode(
+            emb = model.encode(
                 self.sentences[sub],
                 task_name=self.task_name,
                 **encode_kwargs,
             )
+            embeddings[sub] = normalize_embeddings_to_numpy(emb)
 
         scores = {}
         for i, (key1, key2) in enumerate(

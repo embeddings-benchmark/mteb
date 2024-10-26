@@ -10,6 +10,7 @@ import tqdm
 from scipy.stats import pearsonr, spearmanr
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
+from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from .Evaluator import Evaluator
 from .utils import cos_sim, dot_score
@@ -74,25 +75,29 @@ class SummarizationEvaluator(Evaluator):
         ]
 
         logger.info("Encoding human summaries...")
-        embs_human_summaries_all = model.encode(
-            [
-                summary
-                for human_summaries in self.human_summaries
-                for summary in human_summaries
-            ],
-            task_name=self.task_name,
-            **encode_kwargs,
+        embs_human_summaries_all = normalize_embeddings_to_numpy(
+            model.encode(
+                [
+                    summary
+                    for human_summaries in self.human_summaries
+                    for summary in human_summaries
+                ],
+                task_name=self.task_name,
+                **encode_kwargs,
+            )
         )
 
         logger.info("Encoding machine summaries...")
-        embs_machine_summaries_all = model.encode(
-            [
-                summary
-                for machine_summaries in self.machine_summaries
-                for summary in machine_summaries
-            ],
-            task_name=self.task_name,
-            **encode_kwargs,
+        embs_machine_summaries_all = normalize_embeddings_to_numpy(
+            model.encode(
+                [
+                    summary
+                    for machine_summaries in self.machine_summaries
+                    for summary in machine_summaries
+                ],
+                task_name=self.task_name,
+                **encode_kwargs,
+            )
         )
 
         # Split the embeddings into the original human & machine summaries

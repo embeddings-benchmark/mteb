@@ -17,6 +17,7 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from .Evaluator import Evaluator
 from .utils import (
@@ -136,11 +137,13 @@ class DenseRetrievalExactSearch:
                 **self.encode_kwargs,
             )
         else:
-            query_embeddings = self.model.encode(
-                queries,  # type: ignore
-                task_name=task_name,
-                prompt_type=PromptType.query,
-                **self.encode_kwargs,
+            query_embeddings = normalize_embeddings_to_numpy(
+                self.model.encode(
+                    queries,  # type: ignore
+                    task_name=task_name,
+                    prompt_type=PromptType.query,
+                    **self.encode_kwargs,
+                )
             )
 
         logger.info("Sorting Corpus by document length (Longest first)...")
@@ -175,12 +178,14 @@ class DenseRetrievalExactSearch:
                 )
             else:
                 # Encode chunk of corpus
-                sub_corpus_embeddings = self.model.encode(
-                    corpus[corpus_start_idx:corpus_end_idx],  # type: ignore
-                    task_name=task_name,
-                    prompt_type=PromptType.passage,
-                    request_qid=request_qid,
-                    **self.encode_kwargs,
+                sub_corpus_embeddings = normalize_embeddings_to_numpy(
+                    self.model.encode(
+                        corpus[corpus_start_idx:corpus_end_idx],  # type: ignore
+                        task_name=task_name,
+                        prompt_type=PromptType.passage,
+                        request_qid=request_qid,
+                        **self.encode_kwargs,
+                    )
                 )
                 if self.save_corpus_embeddings and request_qid:
                     self.corpus_embeddings[request_qid].append(sub_corpus_embeddings)
@@ -352,8 +357,10 @@ class DenseRetrievalExactSearch:
             "Model doesn't have encode_conversations fallback to default implementation"
         )
         queries = self.convert_conv_history_to_query(model, conversations)  # type: ignore
-        return model.encode(
-            queries, task_name=task_name, prompt_type=PromptType.query, **kwargs
+        return normalize_embeddings_to_numpy(
+            model.encode(
+                queries, task_name=task_name, prompt_type=PromptType.query, **kwargs
+            )
         )  # type: ignore
 
     @staticmethod
@@ -395,12 +402,14 @@ class DRESModel:
             return self.corpus_embeddings[request_qid]
 
         sentences = corpus_to_str(corpus)
-        corpus_embeddings = self.model.encode(
-            sentences,
-            task_name=task_name,
-            prompt_type=prompt_type,
-            batch_size=batch_size,
-            **kwargs,
+        corpus_embeddings = normalize_embeddings_to_numpy(
+            self.model.encode(
+                sentences,
+                task_name=task_name,
+                prompt_type=prompt_type,
+                batch_size=batch_size,
+                **kwargs,
+            )
         )
 
         if self.save_corpus_embeddings and request_qid:
@@ -418,8 +427,10 @@ class DRESModel:
             return self.encode_corpus(
                 sentences, task_name, prompt_type=prompt_type, **kwargs
             )
-        return self.model.encode(
-            sentences, task_name=task_name, prompt_type=prompt_type, **kwargs
+        return normalize_embeddings_to_numpy(
+            self.model.encode(
+                sentences, task_name=task_name, prompt_type=prompt_type, **kwargs
+            )
         )
 
 

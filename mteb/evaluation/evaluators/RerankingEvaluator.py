@@ -9,6 +9,7 @@ import tqdm
 from sklearn.metrics import average_precision_score
 
 from mteb.evaluation.evaluators.RetrievalEvaluator import RetrievalEvaluator
+from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from ...encoder_interface import Encoder, PromptType
 from .Evaluator import Evaluator
@@ -85,7 +86,7 @@ class RerankingEvaluator(Evaluator):
         """
         logger.info("Encoding queries...")
         if isinstance(self.samples[0]["query"], str):
-            all_query_embs = np.asarray(
+            all_query_embs = normalize_embeddings_to_numpy(
                 model.encode(
                     [sample["query"] for sample in self.samples],
                     task_name=self.task_name,
@@ -432,7 +433,7 @@ class RerankingEvaluator(Evaluator):
         logger.warning(
             f"A total on {len(all_texts) - len(all_unique_texts)}/{len(all_texts)} duplicate texts were found during encoding. Only encoding unique text and duplicating embeddings across."
         )
-        all_unique_texts_embs = np.asarray(
+        all_unique_texts_embs = normalize_embeddings_to_numpy(
             model.encode(
                 all_unique_texts,
                 task_name=task_name,
