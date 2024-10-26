@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.16.5"
+version = "1.17.0"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -121,7 +121,6 @@ ignore = ["E501",   # line too long
         "D205",     # 1 blank line required between summary line and description
         "D415",     # First line should end with a period
 ]
-
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false
