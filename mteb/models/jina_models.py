@@ -211,7 +211,7 @@ jina_embeddings_v3 = ModelMeta(
     ),
     name="jinaai/jina-embeddings-v3",
     languages=XLMR_LANGUAGES,
-    open_source=True,
+    open_weights=True,
     revision="215a6e121fa0183376388ac6b1ae230326bfeaed",
     release_date="2024-09-18",  # official release date
     n_parameters=572_000,
@@ -220,4 +220,6 @@ jina_embeddings_v3 = ModelMeta(
     license="cc-by-nc-4.0",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=False,
+    reference="https://huggingface.co/jinaai/jina-embeddings-v3",
 )
