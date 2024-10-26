@@ -117,7 +117,7 @@ bm25_s = ModelMeta(
     loader=partial(bm25_loader, model_name="bm25s"),  # type: ignore
     name="bm25s",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="0_1_10",
     release_date="2024-07-10",  ## release of version 0.1.10
     n_parameters=None,

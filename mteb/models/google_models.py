@@ -94,7 +94,7 @@ google_emb_004 = ModelMeta(
     ),
     name=name,
     languages=["eng-Latn"],
-    open_source=False,
+    open_weights=False,
     revision="1",  # revision is intended for implementation
     release_date=None,  # couldnt figure this out
     n_parameters=None,

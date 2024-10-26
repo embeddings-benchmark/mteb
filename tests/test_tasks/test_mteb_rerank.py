@@ -370,7 +370,7 @@ def test_reranker_same_ndcg1():
     ce.mteb_model_meta = ModelMeta(
         name="cross-encoder/ms-marco-TinyBERT-L-2-v2",
         languages=["eng-Latn"],
-        open_source=True,
+        open_weights=True,
         revision=ce_revision,
         release_date="2021-04-15",
     )

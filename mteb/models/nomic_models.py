@@ -88,7 +88,7 @@ nomic_embed_v1_5 = ModelMeta(
     ),
     name="nomic-ai/nomic-embed-text-v1.5",
     languages=["eng-Latn"],
-    open_source=True,
+    open_weights=True,
     revision="b0753ae76394dd36bcfb912a46018088bca48be0",
     release_date="2024-02-10",  # first commit
 )
@@ -103,7 +103,7 @@ nomic_embed_v1 = ModelMeta(
     ),
     name="nomic-ai/nomic-embed-text-v1",
     languages=["eng-Latn"],
-    open_source=True,
+    open_weights=True,
     revision="0759316f275aa0cb93a5b830973843ca66babcf5",
     release_date="2024-01-31",  # first commit
     n_parameters=None,

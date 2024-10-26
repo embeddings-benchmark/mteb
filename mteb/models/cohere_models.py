@@ -83,7 +83,7 @@ cohere_mult_3 = ModelMeta(
     ),
     name="embed-multilingual-v3.0",
     languages=[],  # Unknown, but support >100 languages
-    open_source=False,
+    open_weights=False,
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
@@ -104,7 +104,7 @@ cohere_eng_3 = ModelMeta(
     ),
     name="embed-english-v3.0",
     languages=["eng-Latn"],
-    open_source=False,
+    open_weights=False,
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,

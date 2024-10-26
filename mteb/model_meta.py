@@ -18,7 +18,13 @@ logger = logging.getLogger(__name__)
 
 
 FRAMEWORKS = Literal[
-    "Sentence Transformers", "PyTorch", "GritLM", "LLM2Vec", "TensorFlow", "API"
+    "Sentence Transformers",
+    "PyTorch",
+    "GritLM",
+    "LLM2Vec",
+    "TensorFlow",
+    "API",
+    " Tevatron",
 ]
 DISTANCE_METRICS = Literal["cosine"]
 
@@ -55,12 +61,19 @@ class ModelMeta(BaseModel):
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
         revision: The revision number of the model. If None it is assumed that the metadata (including the loader) is valid for all revisions of the model.
         release_date: The date the model's revision was released.
-        license: The license under which the model is released. Required if open_source is True.
-        open_source: Whether the model is open source or proprietary.
+        license: The license under which the model is released. Required if open_weights is True.
+        open_weights: Whether the model is open source or proprietary.
+        public_training_data: Whether the training data used to train the model is publicly available.
+        public_training_code: Whether the code used to train the model is publicly available.
         similarity_fn_name: The distance metric used by the model.
         framework: The framework the model is implemented in, can be a list of frameworks e.g. `["Sentence Transformers", "PyTorch"]`.
+        reference: A URL to the model's page on huggingface or another source.
         languages: The languages the model is intended for specified as a 3 letter language code followed by a script code e.g. "eng-Latn" for English
             in the Latin script.
+        use_instuctions: Whether the model uses instructions E.g. for prompt-based models. This also include models that require a specific format for
+            input such as "query: {document}" or "passage: {document}".
+        zero_shot_benchmarks: A list of benchmarks on which the model has been evaluated in a zero-shot setting. By default we assume that all models
+            are evaluated non-zero-shot unless specified otherwise.
     """
 
     name: str | None
@@ -73,11 +86,14 @@ class ModelMeta(BaseModel):
     max_tokens: int | None = None
     embed_dim: int | None = None
     license: str | None = None
-    open_source: bool | None = None
+    open_weights: bool | None = None
+    public_training_data: bool | None = None
+    public_training_code: bool | None = None
     framework: list[FRAMEWORKS] = []
     reference: STR_URL | None = None
     similarity_fn_name: DISTANCE_METRICS | None = None
     use_instuctions: bool | None = None
+    zero_shot_benchmarks: list[str] | None = None
 
     def to_dict(self):
         dict_repr = self.model_dump()

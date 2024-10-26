@@ -61,7 +61,7 @@ gte_Qwen2_7B_instruct = ModelMeta(
     ),
     name="Alibaba-NLP/gte-Qwen2-7B-instruct",
     languages=None,
-    open_source=True,
+    open_weights=True,
     revision="e26182b2122f4435e8b3ebecbf363990f409b45b",
     release_date="2024-06-15",  # initial commit of hf model.
     n_parameters=7_613_000_000,

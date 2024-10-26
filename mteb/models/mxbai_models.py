@@ -15,7 +15,7 @@ mxbai_embed_large_v1 = ModelMeta(
     ),
     name="mixedbread-ai/mxbai-embed-large-v1",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="990580e27d329c7408b3741ecff85876e128e203",
     release_date="2024-03-07",  # initial commit of hf model.
     n_parameters=335_000_000,
