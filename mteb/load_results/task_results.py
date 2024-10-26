@@ -492,12 +492,12 @@ class TaskResult(BaseModel):
             hf_subsets = {"default"}
         new_scores = {}
         seen_splits = set()
-        for split in task_result.scores:  # noqa
+        for split in self.scores:
             if split not in splits:
                 continue
             new_scores[split] = []
             seen_subsets = set()
-            for _scores in task_result.scores[split]:  # noqa
+            for _scores in self.scores[split]:
                 if _scores["hf_subset"] not in hf_subsets:
                     continue
                 new_scores[split].append(_scores)
@@ -509,6 +509,6 @@ class TaskResult(BaseModel):
             seen_splits.add(split)
         if seen_splits != set(splits):
             raise ValueError(f"Missing splits {set(splits) - seen_splits}")
-        new_res = {**task_result.to_dict(), "scores": new_scores}  # noqa
+        new_res = {**self.to_dict(), "scores": new_scores}
         new_res = TaskResult.from_dict(new_res)
         return new_res
