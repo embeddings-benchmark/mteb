@@ -162,11 +162,13 @@ class AbsTaskMultilabelClassification(AbsTask):
         unique_train_indices = list(set(itertools.chain.from_iterable(train_samples)))
         unique_train_sentences = train_split.select(unique_train_indices)["text"]
 
-        _unique_train_embeddings = normalize_embeddings_to_numpy(model.encode(
-            unique_train_sentences,
-            task_name=self.metadata.name,
-            **encode_kwargs,
-        ))
+        _unique_train_embeddings = normalize_embeddings_to_numpy(
+            model.encode(
+                unique_train_sentences,
+                task_name=self.metadata.name,
+                **encode_kwargs,
+            )
+        )
         unique_train_embeddings = dict(
             zip(unique_train_indices, _unique_train_embeddings)
         )
@@ -185,7 +187,6 @@ class AbsTaskMultilabelClassification(AbsTask):
         X_test = normalize_embeddings_to_numpy(
             model.encode(
                 test_text,
-                model=model,
                 task_name=self.metadata.name,
                 **encode_kwargs,
             )

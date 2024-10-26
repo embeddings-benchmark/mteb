@@ -16,7 +16,6 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from .Evaluator import Evaluator
@@ -435,10 +434,7 @@ class DRESModel:
 
 
 def is_cross_encoder_compatible(model) -> bool:
-    if isinstance(model, SentenceTransformerWrapper):
-        op = getattr(model.model, "predict", None)
-    else:
-        op = getattr(model, "predict", None)
+    op = getattr(model, "predict", None)
     return callable(op)
 
 

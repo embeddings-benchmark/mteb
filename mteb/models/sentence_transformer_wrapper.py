@@ -5,7 +5,6 @@ from collections.abc import Sequence
 from typing import Any, get_args
 
 import numpy as np
-import torch
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
@@ -103,9 +102,6 @@ class SentenceTransformerWrapper(Wrapper):
             prompt_name=prompt_name,
             **kwargs,
         )
-        if isinstance(embeddings, torch.Tensor):
-            # sometimes in kwargs can be return_tensors=True
-            embeddings = embeddings.cpu().detach().float().numpy()
         return embeddings
 
     def predict(

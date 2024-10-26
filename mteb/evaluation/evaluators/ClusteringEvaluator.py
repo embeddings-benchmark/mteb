@@ -38,11 +38,13 @@ class ClusteringEvaluator(Evaluator):
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 32
 
-        corpus_embeddings = normalize_embeddings_to_numpy(model.encode(
-            self.sentences,
-            task_name=self.task_name,
-            **encode_kwargs,
-        ))
+        corpus_embeddings = normalize_embeddings_to_numpy(
+            model.encode(
+                self.sentences,
+                task_name=self.task_name,
+                **encode_kwargs,
+            )
+        )
 
         logger.info("Fitting Mini-Batch K-Means model...")
         clustering_model = sklearn.cluster.MiniBatchKMeans(
