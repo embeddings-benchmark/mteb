@@ -4,7 +4,7 @@ import hashlib
 import json
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import numpy as np
 import torch
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class TextVectorMap:
     def __init__(
         self,
-        directory: Union[str | Path],
+        directory: str | Path,
         initial_vectors: int = 100000,
     ):
         self.directory = Path(directory)
@@ -29,9 +29,9 @@ class TextVectorMap:
         self.vectors_file = self.directory / "vectors.npy"
         self.index_file = self.directory / "index.json"
         self.dimension_file = self.directory / "dimension"
-        self.hash_to_index: Dict[str, int] = {}
-        self.vectors: Optional[np.memmap] = None
-        self.vector_dim: Optional[int] = None
+        self.hash_to_index: dict[str, int] = {}
+        self.vectors: np.memmap | None = None
+        self.vector_dim: int | None = None
         self.initial_vectors = initial_vectors
         logger.info(f"Initialized TextVectorMap in directory: {self.directory}")
         self._initialize_vectors_file()
@@ -141,7 +141,7 @@ class TextVectorMap:
             logger.error(f"Error saving TextVectorMap: {str(e)}")
             raise
 
-    def load(self, name: str = None) -> None:
+    def load(self, name: str | None = None) -> None:
         name_details = name if name else ""
         try:
             self._load_dimension()
@@ -176,7 +176,7 @@ class TextVectorMap:
             logger.error(f"Error loading TextVectorMap ({name_details}): {str(e)}")
             raise
 
-    def get_vector(self, text: str) -> Optional[np.ndarray]:
+    def get_vector(self, text: str) -> np.ndarray | None:
         try:
             text_hash = self._hash_text(text)
             if text_hash not in self.hash_to_index:
@@ -203,7 +203,7 @@ class TextVectorMap:
 
 
 class CachedEmbeddingWrapper(Wrapper, Encoder):
-    def __init__(self, model: Encoder, cache_path: Union[str | Path]):
+    def __init__(self, model: Encoder, cache_path: str | Path):
         self._model = model
         self.cache_path = Path(cache_path)
         self.cache_path.mkdir(parents=True, exist_ok=True)
@@ -217,7 +217,7 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
 
         logger.info("Initialized CachedEmbeddingWrapper")
 
-    def encode(self, texts: List[str], batch_size: int = 32, **kwargs) -> np.ndarray:
+    def encode(self, texts: list[str], batch_size: int = 32, **kwargs) -> np.ndarray:
         """Encode texts using the wrapped model, with caching"""
         try:
             results = []
@@ -282,7 +282,7 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
                     f"has attribute '{name}'"
                 )
 
-    def __dir__(self) -> List[str]:
+    def __dir__(self) -> list[str]:
         """Return all attributes from both this class and the wrapped model"""
         return list(set(super().__dir__() + dir(self._model)))
 

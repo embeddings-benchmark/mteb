@@ -120,7 +120,6 @@ ignore = ["E501",   # line too long
         "D415",     # First line should end with a period
 ]
 
-
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false
 
