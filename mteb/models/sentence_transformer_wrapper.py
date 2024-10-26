@@ -56,6 +56,9 @@ class SentenceTransformerWrapper(Wrapper):
             self.model.prompts = model_prompts
         self.model_prompts = validate_task_to_prompt_name(model_prompts)
 
+        if isinstance(self.model, CrossEncoder):
+            self.predict = self._predict
+
     def encode(
         self,
         sentences: Sequence[str],
@@ -104,7 +107,7 @@ class SentenceTransformerWrapper(Wrapper):
         )
         return embeddings
 
-    def predict(
+    def _predict(
         self,
         sentences: Sequence[str],
         **kwargs: Any,
