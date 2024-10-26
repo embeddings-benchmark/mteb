@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.16.1"
+version = "1.17.0"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -58,6 +58,7 @@ codecarbon = ["codecarbon"]
 speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]
 peft = ["peft>=0.11.0"]
 leaderboard = ["gradio>=4.44.0", "gradio_rangeslider>=0.0.6"]
+flagembedding = ["FlagEmbedding"]
 
 
 [tool.coverage.report]
@@ -118,7 +119,6 @@ ignore = ["E501",   # line too long
         "D205",     # 1 blank line required between summary line and description
         "D415",     # First line should end with a period
 ]
-
 
 [tool.ruff.lint.flake8-implicit-str-concat]
 allow-multiline = false

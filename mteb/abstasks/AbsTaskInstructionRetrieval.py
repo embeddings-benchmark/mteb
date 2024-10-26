@@ -374,6 +374,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         )
 
         top_ranked = top_ranked[split]
+        kwargs["prediction_name"] = "og"  # for naming predictions, as needed
         scores_og, results_og = self._evaluate_subset(
             retriever,
             corpus,
@@ -384,6 +385,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
             lang,
             **kwargs,
         )
+        kwargs["prediction_name"] = "changed"  # for naming predictions, as needed
         scores_changed, results_changed = self._evaluate_subset(
             retriever,
             corpus,
@@ -413,6 +415,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 keywords[split],
                 short_instructions[split],
             )
+            kwargs["prediction_name"] = "base"  # for naming predictions, as needed
             scores_base, results_base = self._evaluate_subset(
                 retriever,
                 corpus,
@@ -423,6 +426,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 lang,
                 **kwargs,
             )
+            kwargs["prediction_name"] = "keywords"  # for naming predictions, as needed
             scores_w_keywords_scores, scores_w_keywords_results = self._evaluate_subset(
                 retriever,
                 corpus,
@@ -432,6 +436,9 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 top_ranked,
                 lang,
                 **kwargs,
+            )
+            kwargs["prediction_name"] = (
+                "short_instr"  # for naming predictions, as needed
             )
             (
                 scores_w_short_instr_scores,
@@ -573,6 +580,11 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 )
             else:
                 qrels_save_path = f"{output_folder}/{self.metadata_dict['name']}_{lang}_predictions.json"
+
+            if kwargs.get("prediction_name", None):
+                qrels_save_path = qrels_save_path.replace(
+                    ".json", f"_{kwargs['prediction_name']}.json"
+                )
 
             with open(qrels_save_path, "w") as f:
                 json.dump(results, f)
