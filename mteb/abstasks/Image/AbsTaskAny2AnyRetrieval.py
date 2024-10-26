@@ -13,8 +13,7 @@ from datasets import Features, Value, load_dataset
 from PIL import Image
 
 from ...evaluation.evaluators import Any2AnyRetrievalEvaluator
-from ...load_results.mteb_results import ScoresDict
-from ..AbsTask import AbsTask
+from ..AbsTask import AbsTask, ScoresDict
 
 logger = logging.getLogger(__name__)
 

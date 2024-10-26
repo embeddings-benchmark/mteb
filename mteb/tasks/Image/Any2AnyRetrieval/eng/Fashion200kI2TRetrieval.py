@@ -12,7 +12,6 @@ class Fashion200kI2TRetrieval(AbsTaskAny2AnyRetrieval):
         dataset={
             "path": "MRBench/mbeir_fashion200k_task3",
             "revision": "96a313715ecf67f5dfe70c4fa52406bc7bdfbeee",
-            # "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
         category="i2t",
@@ -22,7 +21,7 @@ class Fashion200kI2TRetrieval(AbsTaskAny2AnyRetrieval):
         date=("2017-01-01", "2017-12-31"),
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
-        license="Apache-2.0",
+        license="apache-2.0",
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],

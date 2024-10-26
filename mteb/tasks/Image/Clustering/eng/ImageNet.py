@@ -21,7 +21,7 @@ class ImageNetDog15Clustering(AbsTaskImageClustering):
         date=("2009-06-20", "2009-06-20"),  # Conference date
         domains=["Web"],
         task_subtypes=["Object recognition"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],
@@ -61,8 +61,7 @@ class ImageNet10Clustering(AbsTaskImageClustering):
         date=("2009-06-20", "2009-06-20"),  # Conference date
         domains=["Web"],
         task_subtypes=["Object recognition"],
-        license="Not specified",
-        socioeconomic_status="mixed",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

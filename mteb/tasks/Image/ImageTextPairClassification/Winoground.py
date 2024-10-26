@@ -30,7 +30,7 @@ class Winoground(AbsTaskImageTextPairClassification):
         ),  # Estimated range for the collection of data
         domains=["Social"],  # Getty Images. Could be constructed?
         task_subtypes=["Caption Pairing"],
-        license="META Images Reseaerch License",
+        license="https://huggingface.co/datasets/facebook/winoground/blob/main/license_agreement.txt",
         annotations_creators="expert-annotated",
         dialect=[],
         modalities=["text", "image"],

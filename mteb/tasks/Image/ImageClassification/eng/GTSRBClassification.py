@@ -24,7 +24,7 @@ class GTSRBClassification(AbsTaskImageClassification):
         ),  # Estimated range for the collection of reviews
         task_subtypes=["Activity recognition"],
         domains=["Scene"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],
