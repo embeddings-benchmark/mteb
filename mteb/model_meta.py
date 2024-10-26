@@ -24,7 +24,7 @@ FRAMEWORKS = Literal[
     "LLM2Vec",
     "TensorFlow",
     "API",
-    " Tevatron",
+    "Tevatron",
 ]
 DISTANCE_METRICS = Literal["cosine"]
 
