@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from collections.abc import Sequence
 from typing import Any, Callable
 
@@ -9,6 +10,8 @@ import torch
 from mteb.encoder_interface import PromptType
 
 from .wrapper import Wrapper
+
+logger = logging.getLogger(__name__)
 
 
 def instruct_wrapper(
