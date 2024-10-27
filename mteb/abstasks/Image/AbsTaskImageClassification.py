@@ -5,6 +5,7 @@ from collections import defaultdict
 from typing import Any
 
 import numpy as np
+from PIL import ImageFile
 
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import (
@@ -15,7 +16,6 @@ from ...evaluation.evaluators import (
 from ...load_results.mteb_results import HFSubset, ScoresDict
 from ..AbsTask import AbsTask
 
-from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 logger = logging.getLogger(__name__)
