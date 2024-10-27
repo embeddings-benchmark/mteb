@@ -97,6 +97,10 @@ class Wrapper:
                 PromptType.passage.value
             ):
                 return task_metadata.prompt[PromptType.passage.value]
+            logger.warning(
+                f"Prompt type '{prompt_type}' not found in task metadata for task '{task_name}'."
+            )
+            return ""
         if task_metadata.prompt:
             return task_metadata.prompt
         return task.abstask_prompt
