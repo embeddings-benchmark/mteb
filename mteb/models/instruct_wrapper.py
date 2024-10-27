@@ -55,6 +55,8 @@ def instruct_wrapper(
 
             if self.instruction_template:
                 instruction = self.format_instruction(instruction)
+
+            logger.info(f"Using instruction: '{instruction}' for task: '{task_name}'")
             embeddings = super().encode(
                 sentences, instruction=instruction, *args, **kwargs
             )
