@@ -22,7 +22,7 @@ class KannadaNewsClassification(AbsTaskClassification):
         date=("2019-03-17", "2020-08-06"),
         domains=["News", "Written"],
         task_subtypes=["Topic classification"],
-        license="CC-BY-SA-4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

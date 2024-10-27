@@ -25,7 +25,7 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
         date=("2016-06-01", "2016-07-31"),
         domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=["ara-arab-EG", "ara-arab-JO", "ara-arab-LB", "ara-arab-SA"],
         sample_creation="found",

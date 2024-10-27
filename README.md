@@ -18,7 +18,7 @@
 <h4 align="center">
     <p>
         <a href="#installation">Installation</a> |
-        <a href="#usage">Usage</a> |
+        <a href="#usage-documentation">Usage</a> |
         <a href="https://huggingface.co/spaces/mteb/leaderboard">Leaderboard</a> |
         <a href="#documentation">Documentation</a> |
         <a href="#citing">Citing</a>
@@ -36,9 +36,9 @@
 pip install mteb
 ```
 
-## Usage
+## Example Usage
 
-* Using a python script (see [scripts/run_mteb_english.py](https://github.com/embeddings-benchmark/mteb/blob/main/scripts/run_mteb_english.py) and [mteb/mtebscripts](https://github.com/embeddings-benchmark/mtebscripts) for more):
+* Using a Python script:
 
 ```python
 import mteb
@@ -54,6 +54,37 @@ tasks = mteb.get_tasks(tasks=["Banking77Classification"])
 evaluation = mteb.MTEB(tasks=tasks)
 results = evaluation.run(model, output_folder=f"results/{model_name}")
 ```
+
+<details>
+  <summary> Running SentneceTransformermer model with prompts </summary>
+
+Prompts can be passed to the SentenceTransformer model using the `prompts` parameter. The following code shows how to use prompts with SentenceTransformer:
+
+```python
+from sentence_transformers import SentenceTransformer
+
+
+model = SentenceTransformer("average_word_embeddings_komninos", prompts={"query": "Query:", "passage": "Passage:"})
+evaluation = mteb.MTEB(tasks=tasks)
+```
+
+In prompts the key can be:
+1. Prompt types (`passage`, `query`) - they will be used in reranking and retrieval tasks 
+2. Task type - these prompts will be used in all tasks of the given type
+   1. `BitextMining`
+   2. `Classification`
+   3. `MultilabelClassification`
+   4. `Clustering`
+   5. `PairClassification`
+   6. `Reranking`
+   7. `Retrieval`
+   8. `STS`
+   9. `Summarization`
+   10. `InstructionRetrieval`
+3. Pair of task type and prompt type like `Retrival-query` - these prompts will be used in all classification tasks
+4. Task name - these prompts will be used in the specific task
+5. Pair of task name and prompt type like `NFCorpus-query` - these prompts will be used in the specific task
+</details>
 
 * Using CLI
 
@@ -71,17 +102,17 @@ mteb run -m sentence-transformers/all-MiniLM-L6-v2 \
 
 
 
-## Advanced Usage
+## Usage Documentation
 Click on each section below to see the details.
 
 <br /> 
 
 <details>
-  <summary>  Dataset selection </summary>
+  <summary>  Task selection </summary>
 
-### Dataset selection
+### Task selection
 
-Datasets can be selected by providing the list of datasets, but also
+Tasks can be selected by providing the list of datasets, but also
 
 * by their task (e.g. "Clustering" or "Classification")
 
@@ -121,11 +152,33 @@ evaluation = mteb.MTEB(tasks=[
 # for an example of a HF subset see "Subset" in the dataset viewer at: https://huggingface.co/datasets/mteb/bucc-bitext-mining
 ```
 
-There are also presets available for certain task collections, e.g. to select the 56 English datasets that form the "Overall MTEB English leaderboard":
+</details>
+
+<details>
+  <summary>  Running a benchmark </summary>
+
+### Running a Benchmark
+
+`mteb` comes with a set of predefined benchmarks. These can be fetched using `get_benchmark` and run in a similar fashion to other sets of tasks. 
+For instance to select the 56 English datasets that form the "Overall MTEB English leaderboard":
 
 ```python
-from mteb import MTEB_MAIN_EN
-evaluation = mteb.MTEB(tasks=MTEB_MAIN_EN, task_langs=["en"])
+import mteb
+benchmark = mteb.get_benchmark("MTEB(eng)")
+evaluation = mteb.MTEB(tasks=benchmark)
+```
+
+The benchmark specified not only a list of tasks, but also what splits and language to run on. To get an overview of all available benchmarks simply run:
+
+```python
+import mteb
+benchmarks = mteb.get_benchmarks()
+```
+
+Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark. In the case of a language, we use the three-letter language code. For large groups of languages, we use the group notation, e.g., `MTEB(Scandinavian)` for Scandinavian languages. External benchmarks implemented in MTEB like `CoIR` use their original name. When using a benchmark from MTEB please cite `mteb` along with the citations of the benchmark which you can access using:
+
+```python
+benchmark.citation
 ```
 
 </details>
@@ -139,7 +192,7 @@ evaluation = mteb.MTEB(tasks=MTEB_MAIN_EN, task_langs=["en"])
 To pass in arguments to the model's `encode` function, you can use the encode keyword arguments (`encode_kwargs`):
 
 ```python
-evaluation.run(model, encode_kwargs={"batch_size": 32}
+evaluation.run(model, encode_kwargs={"batch_size": 32})
 ```
 </details>
 
@@ -167,53 +220,33 @@ Note that the public leaderboard uses the test splits for all datasets except MS
 Models should implement the following interface, implementing an `encode` function taking as inputs a list of sentences, and returning a list of embeddings (embeddings can be `np.array`, `torch.tensor`, etc.). For inspiration, you can look at the [mteb/mtebscripts repo](https://github.com/embeddings-benchmark/mtebscripts) used for running diverse models via SLURM scripts for the paper.
 
 ```python
-class MyModel():
-    def encode(
-        self, sentences: list[str], **kwargs: Any
-    ) -> torch.Tensor | np.ndarray:
-        """Encodes the given sentences using the encoder.
+from mteb.encoder_interface import PromptType
 
+class CustomModel:
+    def encode(
+        self,
+        sentences: list[str],
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs,
+    ) -> np.ndarray:
+        """Encodes the given sentences using the encoder.
+        
         Args:
             sentences: The sentences to encode.
+            task_name: The name of the task.
+            prompt_type: The prompt type to use.
             **kwargs: Additional arguments to pass to the encoder.
-
+            
         Returns:
             The encoded sentences.
         """
         pass
 
-model = MyModel()
+model = CustomModel()
 tasks = mteb.get_task("Banking77Classification")
 evaluation = MTEB(tasks=tasks)
 evaluation.run(model)
-```
-
-If you'd like to use different encoding functions for query and corpus when evaluating on Retrieval or Reranking tasks, you can add separate methods for `encode_queries` and `encode_corpus`. If these methods exist, they will be automatically used for those tasks. You can refer to the `DRESModel` at `mteb/evaluation/evaluators/RetrievalEvaluator.py` for an example of these functions.
-
-```python
-class MyModel():
-    def encode_queries(self, queries: list[str], **kwargs) -> list[np.ndarray] | list[torch.Tensor]:
-        """
-        Returns a list of embeddings for the given sentences.
-        Args:
-            queries: List of sentences to encode
-
-        Returns:
-            List of embeddings for the given sentences
-        """
-        pass
-
-    def encode_corpus(self, corpus: list[str] | list[dict[str, str]], **kwargs) -> list[np.ndarray] | list[torch.Tensor]:
-        """
-        Returns a list of embeddings for the given sentences.
-        Args:
-            corpus: List of sentences to encode
-                or list of dictionaries with keys "title" and "text"
-
-        Returns:
-            List of embeddings for the given sentences
-        """
-        pass
 ```
 
 </details>
@@ -297,7 +330,7 @@ from sentence_transformers import SentenceTransformer
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
-tasks = mteb.get_tasks( tasks=["NFCorpus"], languages=["eng"])
+tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
 
 evaluation = MTEB(tasks=tasks)
 evaluation.run(
@@ -309,7 +342,7 @@ evaluation.run(
 ```
 
 CLI:
-```
+```bash
 mteb run -t NFCorpus -m all-MiniLM-L6-v2 --output_folder results --save_predictions
 ```
 
@@ -318,9 +351,11 @@ mteb run -t NFCorpus -m all-MiniLM-L6-v2 --output_folder results --save_predicti
 <details>
   <summary> Fetching result from the results repository </summary>
 
-Multiple models have already been run on tasks avaiable within MTEB. These results are available results [repository](https://github.com/embeddings-benchmark/results).
+### Fetching results from the results repository
 
-To make the results more easily accecible we have designed custom functionality for retrieving from the repository. For instance, you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
+Multiple models have already been run on tasks available within MTEB. These results are available results [repository](https://github.com/embeddings-benchmark/results).
+
+To make the results more easily accessible, we have designed custom functionality for retrieving from the repository. For instance, if you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
 
 ```python
 import mteb
@@ -345,6 +380,26 @@ df = results_to_dataframe(results)
 
 </details>
 
+<details>
+  <summary>  Caching Embeddings To Re-Use Them </summary>
+
+
+### Caching Embeddings To Re-Use Them
+
+There are times you may want to cache the embeddings so you can re-use them. This may be true if you have multiple query sets for the same corpus (e.g. Wikipedia) or are doing some optimization over the queries (e.g. prompting, other experiments). You can setup a cache by using a simple wrapper, which will save the cache per task in the `cache_embeddings/{task_name}` folder:
+
+```python
+# define your task and model above as normal
+...
+# wrap the model with the cache wrapper
+from mteb.models.cache_wrapper import CachedEmbeddingWrapper
+model_with_cached_emb = CachedEmbeddingWrapper(model, cache_path='path_to_cache_dir')
+# run as normal
+evaluation.run(model, ...) 
+```
+
+</details>
+
 <br /> 
 
 
@@ -354,6 +409,7 @@ df = results_to_dataframe(results)
 | Documentation                  |                        |
 | ------------------------------ | ---------------------- |
 | 📋 [Tasks] | Overview of available tasks |
+| 📐 [Benchmarks] | Overview of available benchmarks |
 | 📈 [Leaderboard] | The interactive leaderboard of the benchmark |
 | 🤖 [Adding a model] | Information related to how to submit a model to the leaderboard |
 | 👩‍🔬 [Reproducible workflows] | Information related to how to reproduce and create reproducible workflows with MTEB |
@@ -363,6 +419,7 @@ df = results_to_dataframe(results)
 | 🌐 [MMTEB] | An open-source effort to extend MTEB to cover a broad set of languages |  
 
 [Tasks]: docs/tasks.md
+[Benchmarks]: docs/benchmarks.md
 [Contributing]: CONTRIBUTING.md
 [Adding a model]: docs/adding_a_model.md
 [Adding a dataset]: docs/adding_a_dataset.md

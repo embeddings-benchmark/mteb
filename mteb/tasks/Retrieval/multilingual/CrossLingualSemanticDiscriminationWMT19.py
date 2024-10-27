@@ -48,7 +48,7 @@ class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval, MultilingualTask
         date=("2018-01-01", "2023-12-12"),
         domains=["News", "Written"],
         task_subtypes=["Cross-Lingual Semantic Discrimination"],
-        license="CC BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="LM-generated and verified",

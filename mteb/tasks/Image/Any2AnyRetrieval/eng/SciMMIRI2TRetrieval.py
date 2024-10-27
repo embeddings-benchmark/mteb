@@ -81,7 +81,7 @@ class SciMMIRI2TRetrieval(AbsTaskAny2AnyRetrieval):
         date=("2023-01-01", "2023-12-31"),
         domains=["Academic"],
         task_subtypes=["Image Text Retrieval"],
-        license="MIT",
+        license="mit",
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],

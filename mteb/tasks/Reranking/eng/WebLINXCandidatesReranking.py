@@ -33,7 +33,7 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
         date=("2023-03-01", "2023-10-30"),
         domains=["Academic", "Web", "Written"],
         task_subtypes=["Code retrieval", "Conversational retrieval"],
-        license="CC BY-NC-SA 4.0",
+        license="cc-by-nc-sa-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",

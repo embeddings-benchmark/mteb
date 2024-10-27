@@ -19,11 +19,9 @@ class ImageCoDeT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_1",
         date=("2022-05-22", "2022-05-27"),  # conference dates
-        form=["written"],
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=["Image Text Retrieval"],
-        license="CC BY-SA 4.0",
-        socioeconomic_status="medium",
+        license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],

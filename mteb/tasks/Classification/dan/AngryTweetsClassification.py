@@ -22,7 +22,7 @@ class AngryTweetsClassification(AbsTaskClassification):
         date=("2021-01-01", "2021-12-31"),
         domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="CC-BY-4.0",
+        license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

@@ -21,7 +21,7 @@ class SOPI2IRetrieval(AbsTaskAny2AnyRetrieval):
         date=("2019-07-17", "2019-07-17"),
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

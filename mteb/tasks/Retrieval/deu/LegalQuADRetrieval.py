@@ -23,7 +23,7 @@ class LegalQuAD(AbsTaskRetrieval):
         date=None,
         domains=["Legal", "Written"],
         task_subtypes=["Question answering"],
-        license="CC BY 4.0",
+        license="cc-by-4.0",
         annotations_creators="derived",
         dialect=None,
         sample_creation="found",

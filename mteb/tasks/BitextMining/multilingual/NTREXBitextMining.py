@@ -266,7 +266,7 @@ class NTREXBitextMining(AbsTaskBitextMining, MultilingualTask):
         date=("2019-08-01", "2022-11-01"),
         domains=["News", "Written"],
         task_subtypes=[],
-        license="CC-BY-SA-4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="human-translated and localized",

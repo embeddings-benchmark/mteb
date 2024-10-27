@@ -28,7 +28,7 @@ class SadeemQuestionRetrieval(AbsTaskRetrieval):
         date=("2024-01-01", "2024-04-01"),
         domains=["Written", "Written"],
         task_subtypes=["Article retrieval"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

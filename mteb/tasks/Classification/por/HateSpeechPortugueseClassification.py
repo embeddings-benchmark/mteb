@@ -23,7 +23,7 @@ class HateSpeechPortugueseClassification(AbsTaskClassification):
         date=("2017-03-08", "2017-03-09"),
         domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",

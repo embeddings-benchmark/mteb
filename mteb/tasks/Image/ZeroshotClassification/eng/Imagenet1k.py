@@ -28,8 +28,7 @@ class Imagenet1kClassification(AbsTaskZeroshotClassification):
         ),  # Estimated range for the collection of reviews
         domains=["Scene"],
         task_subtypes=["Object recognition"],
-        license="Not specified",
-        socioeconomic_status="mixed",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["image"],

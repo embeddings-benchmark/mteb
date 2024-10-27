@@ -22,7 +22,7 @@ class LccSentimentClassification(AbsTaskClassification):
         date=("2006-01-01", "2006-12-31"),
         domains=["News", "Web", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="CC-BY-4.0",
+        license="cc-by-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",

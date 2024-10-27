@@ -92,7 +92,7 @@ class CMedQAv1(AbsTaskReranking):
         date=("2017-01-01", "2017-07-26"),
         domains=["Medical", "Written"],
         task_subtypes=[],
-        license="Not specified",
+        license="not specified",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",

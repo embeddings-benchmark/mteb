@@ -21,7 +21,7 @@ class StanfordCarsI2I(AbsTaskAny2AnyRetrieval):
         date=("2012-01-01", "2013-04-01"),
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

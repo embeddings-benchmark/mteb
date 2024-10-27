@@ -80,7 +80,7 @@ class IndicLangClassification(AbsTaskClassification):
         date=("2022-08-01", "2023-01-01"),
         domains=["Web", "Non-fiction", "Written"],
         task_subtypes=["Language identification"],
-        license="CC0",
+        license="cc0-1.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",

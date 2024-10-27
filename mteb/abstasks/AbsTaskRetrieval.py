@@ -13,7 +13,7 @@ from datasets import Features, Value, load_dataset
 from mteb.abstasks.TaskMetadata import HFSubset
 
 from ..evaluation.evaluators import RetrievalEvaluator
-from ..load_results.mteb_results import ScoresDict
+from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
@@ -219,8 +219,8 @@ class AbsTaskRetrieval(AbsTask):
         Semantically, it should contain dict[split_name, dict[sample_id, dict[str, str]]]
         E.g. {"test": {"document_one": {"_id": "d1", "title": "title", "text": "text"}}}
 
-    self.queries: dict[str, dict[str, Union[str, List[str]]]]
-        Semantically, it should contain dict[split_name, dict[sample_id, str]] or dict[split_name, dict[sample_id, List[str]]] for conversations
+    self.queries: dict[str, dict[str, Union[str, list[str]]]]
+        Semantically, it should contain dict[split_name, dict[sample_id, str]] or dict[split_name, dict[sample_id, list[str]]] for conversations
         E.g. {"test": {"q1": "query"}}
         or {"test": {"q1": ["turn1", "turn2", "turn3"]}}
 
@@ -252,8 +252,7 @@ class AbsTaskRetrieval(AbsTask):
             # Conversion from DataSet
             queries = {query["id"]: query["text"] for query in queries}
             corpus = {
-                doc["id"]: {"title": doc["title"], "text": doc["text"]}
-                for doc in corpus
+                doc["id"]: doc.get("title", "") + " " + doc["text"] for doc in corpus
             }
             self.corpus[split], self.queries[split], self.relevant_docs[split] = (
                 corpus,
@@ -447,10 +446,7 @@ def calculate_length(
         queries_lens.append(len(query))
 
     for doc in corpus.values():
-        if isinstance(doc, dict):
-            doc_lens.append(len(doc.get("title", "")) + len(doc["text"]))
-        else:
-            doc_lens.append(len(doc))
+        doc_lens.append(len(doc))
 
     doc_len = sum(doc_lens) / len(doc_lens) if doc_lens else 0
     query_len = sum(queries_lens) / len(queries_lens) if queries_lens else 0

@@ -22,7 +22,7 @@ class VQA2IT2TRetrieval(AbsTaskAny2AnyRetrieval):
         date=("2017-07-01", "2017-07-01"),
         domains=["Web"],
         task_subtypes=["Image Text Retrieval"],
-        license="CC BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],

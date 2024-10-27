@@ -23,7 +23,7 @@ class BengaliSentimentAnalysis(AbsTaskClassification):
         dialect=[],
         domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="CC BY 4.0",
+        license="cc-by-4.0",
         annotations_creators="human-annotated",
         sample_creation="found",
         bibtex_citation="""@inproceedings{sazzed2020cross,

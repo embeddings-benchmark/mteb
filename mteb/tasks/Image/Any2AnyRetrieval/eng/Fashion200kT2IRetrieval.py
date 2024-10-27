@@ -22,7 +22,7 @@ class Fashion200kT2IRetrieval(AbsTaskAny2AnyRetrieval):
         date=("2017-01-01", "2017-12-31"),
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
-        license="Apache-2.0",
+        license="apache-2.0",
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],

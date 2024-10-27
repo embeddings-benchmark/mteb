@@ -3,7 +3,8 @@ from __future__ import annotations
 import logging
 import random
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Sequence, TypedDict
+from collections.abc import Sequence
+from typing import Any, TypedDict
 
 import datasets
 import numpy as np
@@ -14,12 +15,12 @@ from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks.stratification import _iterative_train_test_split
 from mteb.abstasks.TaskMetadata import HFSubset, TaskMetadata
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder
 from mteb.languages import LanguageScripts
 
 logger = logging.getLogger(__name__)
 
-ScoresDict = Dict[str, Any]
+ScoresDict = dict[str, Any]
 # ^ e.g {'main_score': 0.5, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']}
 
 
@@ -60,12 +61,13 @@ class DescriptiveStatistics(TypedDict):
 
 class AbsTask(ABC):
     metadata: TaskMetadata
+    _eval_splits: list[str] | None = None
     superseded_by: None | str = None
+    dataset: dict[HFSubset, DatasetDict] | None = None  # type: ignore
+    data_loaded: bool = False
+    is_multilingual: bool = False
 
     def __init__(self, seed: int = 42, **kwargs: Any):
-        self.dataset = None
-        self.data_loaded = False
-        self.is_multilingual = False
         self.save_suffix = kwargs.get("save_suffix", "")
 
         self.seed = seed
@@ -89,7 +91,7 @@ class AbsTask(ABC):
 
     def evaluate(
         self,
-        model: Encoder | EncoderWithQueryCorpusEncode,
+        model: Encoder,
         split: str = "test",
         *,
         encode_kwargs: dict[str, Any] = {},
@@ -255,6 +257,11 @@ class AbsTask(ABC):
 
         return self.metadata.languages
 
+    def filter_eval_splits(self, eval_splits: list[str] | None) -> AbsTask:
+        """Filter the evaluation splits of the task."""
+        self._eval_splits = eval_splits
+        return self
+
     def filter_languages(
         self, languages: list[str] | None, script: list[str] | None = None
     ) -> AbsTask:
@@ -285,6 +292,12 @@ class AbsTask(ABC):
         self.hf_subsets = subsets_to_keep
         return self
 
+    @property
+    def eval_splits(self) -> list[str]:
+        if self._eval_splits:
+            return self._eval_splits
+        return self.metadata.eval_splits
+
     def __repr__(self) -> str:
         """Format the representation of the task such that it appears as:
 
@@ -297,3 +310,6 @@ class AbsTask(ABC):
         return (
             f"{self.__class__.__name__}(name='{self.metadata.name}', languages={langs})"
         )
+
+    def __hash__(self) -> int:
+        return hash(self.metadata)
