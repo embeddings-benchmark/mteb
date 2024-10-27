@@ -85,18 +85,12 @@ class Wrapper:
 
     @staticmethod
     def get_instruction(task_name: str, prompt_type: PromptType | None) -> str:
-        """Get the instruction to be used for encoding the sentences."""
+        """Get the instruction/prompt to be used for encoding sentences."""
         task = mteb.get_task(task_name=task_name)
         task_metadata = task.metadata
         if isinstance(task_metadata.prompt, dict) and prompt_type:
-            if prompt_type == PromptType.query and task_metadata.prompt.get(
-                PromptType.query.value
-            ):
-                return task_metadata.prompt[PromptType.query.value]
-            if prompt_type == PromptType.passage and task_metadata.prompt.get(
-                PromptType.passage.value
-            ):
-                return task_metadata.prompt[PromptType.passage.value]
+            if task_metadata.prompt.get(prompt_type.value):
+                return task_metadata.prompt[prompt_type.value]
             logger.warning(
                 f"Prompt type '{prompt_type}' not found in task metadata for task '{task_name}'."
             )
