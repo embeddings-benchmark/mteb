@@ -3,7 +3,8 @@ from __future__ import annotations
 from functools import partial
 
 from mteb.model_meta import ModelMeta
-from mteb.models.instruct_wrapper import instruct_wrapper
+
+from .instruct_wrapper import instruct_wrapper
 
 gte_Qwen2_7B_instruct = ModelMeta(
     loader=partial(

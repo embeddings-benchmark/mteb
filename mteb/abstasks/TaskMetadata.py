@@ -173,7 +173,7 @@ METRIC_NAME = str
 METRIC_VALUE = Union[int, float, dict[str, Any]]
 
 
-class DatasetDict(TypedDict, total=False):
+class MetadataDatasetDict(TypedDict, total=False):
     """A dictionary containing the dataset path and revision.
 
     Args:
@@ -237,7 +237,7 @@ class TaskMetadata(BaseModel):
             retrieval tasks, this will be a dict containing the character length of the queries and documents separately, as well as the total number of queries, documents, and relevance judgements per query.
     """
 
-    dataset: DatasetDict
+    dataset: MetadataDatasetDict
 
     name: str
     description: str

@@ -11,7 +11,9 @@ logger = logging.getLogger(__name__)
 
 
 class Wrapper:
-    """Class to indicate that this is a wrapper for a model."""
+    """Base class to indicate that this is a wrapper for a model.
+    Also contains some utility functions for wrappers for working with prompts and instructions.
+    """
 
     @staticmethod
     def get_prompt_name(
