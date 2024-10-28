@@ -9,6 +9,7 @@ from mteb.models.overview import (
     get_model_meta,
     get_model_metas,
     model_meta_from_sentence_transformers,
+)
 
 logger = logging.getLogger(__name__)
 
