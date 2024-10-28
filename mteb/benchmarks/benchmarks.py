@@ -787,7 +787,7 @@ MTEB_JPN = Benchmark(
 
 
 MTEB_INDIC = Benchmark(
-    name="MTEB(indic, beta)",
+    name="MTEB(Indic, beta)",
     tasks=get_tasks(
         tasks=[
             # Bitext
