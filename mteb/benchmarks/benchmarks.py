@@ -106,6 +106,7 @@ MTEB_EN = Benchmark(
             "TwentyNewsgroupsClustering.v2",
             "TwitterSemEval2015",
             "TwitterURLCorpus",
+            "SummEvalSummarization.v2",
         ],
         languages=["eng"],
         eval_splits=["test"],
