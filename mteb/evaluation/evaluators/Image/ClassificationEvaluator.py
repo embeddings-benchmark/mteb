@@ -5,6 +5,9 @@ from typing import Any
 
 import numpy as np
 import torch
+import math
+import os
+
 from datasets import Dataset
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
@@ -55,8 +58,7 @@ def custom_collate_fn(batch):
 class ImagekNNClassificationEvaluator(Evaluator):
     def __init__(
         self,
-        images_train,
-        y_train,
+        dataset_train,
         dataset_test,
         image_column_name,
         label_column_name,
@@ -69,17 +71,13 @@ class ImagekNNClassificationEvaluator(Evaluator):
         super().__init__(**kwargs)
 
         if limit is not None:
-            images_train = images_train[:limit]
-            y_train = y_train[:limit]
-            dataset_test = dataset_test[:limit]
+            dataset_train = dataset_train.select(list(range(limit)))
 
-        self.images_train = images_train
-        self.y_train = y_train
         self.dataset_train = ImageDataset(
-            Dataset.from_dict({"image": images_train, "label": y_train}),
-            image_column_name=image_column_name,
-            transform=transform,
+            dataset_train, image_column_name=image_column_name, transform=transform
         )
+        self.y_train = dataset_train[label_column_name]
+
         self.dataset_test = ImageDataset(
             dataset_test, image_column_name=image_column_name, transform=transform
         )
@@ -102,7 +100,7 @@ class ImagekNNClassificationEvaluator(Evaluator):
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
             collate_fn=custom_collate_fn,
-            num_workers=16,
+            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
         X_train = model.get_image_embeddings(
             dataloader_train, batch_size=self.encode_kwargs["batch_size"]
@@ -111,7 +109,7 @@ class ImagekNNClassificationEvaluator(Evaluator):
             self.dataset_test,
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
-            num_workers=16,
+            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
         if test_cache is None:
             X_test = model.get_image_embeddings(
@@ -145,8 +143,7 @@ class ImagekNNClassificationEvaluator(Evaluator):
 class ImagekNNClassificationEvaluatorPytorch(Evaluator):
     def __init__(
         self,
-        images_train,
-        y_train,
+        dataset_train,
         dataset_test,
         image_column_name,
         label_column_name,
@@ -158,17 +155,13 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
     ):
         super().__init__(**kwargs)
         if limit is not None:
-            images_train = images_train[:limit]
-            y_train = y_train[:limit]
-            dataset_test = dataset_test[:limit]
+            dataset_train = dataset_train.select(list(range(limit)))
 
-        self.images_train = images_train
         self.dataset_train = ImageDataset(
-            Dataset.from_dict({"image": images_train, "label": y_train}),
-            image_column_name=image_column_name,
-            transform=transform,
+            dataset_train, image_column_name=image_column_name, transform=transform
         )
-        self.y_train = y_train
+        self.y_train = dataset_train[label_column_name]
+
         self.dataset_test = ImageDataset(
             dataset_test, image_column_name=image_column_name, transform=transform
         )
@@ -192,7 +185,7 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
             collate_fn=custom_collate_fn,
-            num_workers=16,
+            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
         X_train = model.get_image_embeddings(
             dataloader_train, batch_size=self.encode_kwargs["batch_size"]
@@ -202,7 +195,7 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             self.dataset_test,
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
-            num_workers=16,
+            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
         if test_cache is None:
             X_test = model.get_image_embeddings(
@@ -311,8 +304,7 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
 class ImagelogRegClassificationEvaluator(Evaluator):
     def __init__(
         self,
-        images_train,
-        y_train,
+        dataset_train,
         dataset_test,
         image_column_name,
         label_column_name,
@@ -329,17 +321,12 @@ class ImagelogRegClassificationEvaluator(Evaluator):
             self.encode_kwargs["batch_size"] = 32
 
         if limit is not None:
-            images_train = images_train[:limit]
-            y_train = y_train[:limit]
-            dataset_test = dataset_test[:limit]
+            dataset_train = dataset_train.select(list(range(limit)))
 
-        self.images_train = images_train
-        self.y_train = y_train
         self.dataset_train = ImageDataset(
-            Dataset.from_dict({"image": images_train, "label": y_train}),
-            image_column_name=image_column_name,
-            transform=transform,
+            dataset_train, image_column_name=image_column_name, transform=transform
         )
+        self.y_train = dataset_train[label_column_name]
         self.dataset_test = ImageDataset(
             dataset_test, image_column_name=image_column_name, transform=transform
         )
@@ -361,7 +348,7 @@ class ImagelogRegClassificationEvaluator(Evaluator):
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
             collate_fn=custom_collate_fn,
-            num_workers=16,
+            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
         X_train = model.get_image_embeddings(
             dataloader_train, batch_size=self.encode_kwargs["batch_size"]
@@ -371,7 +358,7 @@ class ImagelogRegClassificationEvaluator(Evaluator):
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
             collate_fn=custom_collate_fn,
-            num_workers=16,
+            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
         if test_cache is None:
             X_test = model.get_image_embeddings(
