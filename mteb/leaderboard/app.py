@@ -27,7 +27,7 @@ min_model_size, max_model_size = 8, 46703
 
 benchmarks = mteb.get_benchmarks()
 
-default_benchmark = mteb.get_benchmark("MTEB(Multilingual)")
+default_benchmark = mteb.get_benchmark("MTEB(Multilingual, beta)")
 default_results = default_benchmark.load_results(base_results=all_results)
 
 benchmark_select = gr.Dropdown(
