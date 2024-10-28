@@ -31,11 +31,9 @@ def update_citation(benchmark_name: str) -> str:
 
 def update_description(benchmark_name: str) -> str:
     benchmark = mteb.get_benchmark(benchmark_name)
-    description = f"""
-    ## [{benchmark.name}]({benchmark.reference})
-
-    {benchmark.description}
-    """
+    description = f"## {benchmark.name}\n{benchmark.description}\n"
+    if str(benchmark.reference) != "None":
+        description += f"\n[Click for More Info]({benchmark.reference})"
     return description
 
 
