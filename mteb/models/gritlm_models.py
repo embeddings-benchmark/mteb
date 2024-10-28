@@ -1,13 +1,18 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Sequence
 from functools import partial
+from typing import Any
+
+import numpy as np
 
 from mteb.model_meta import ModelMeta
 
+from ..encoder_interface import PromptType
 from .instructions import task_to_instruction
+from .wrapper import Wrapper
 
-logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 
@@ -23,24 +28,24 @@ def gritlm_loader(**kwargs):
     except ImportError:
         raise ImportError("Please install `pip install gritlm` to use GritLM models.")
 
-    class GritLMWrapper(GritLM):
-        def encode(self, *args, **kwargs):
-            if "prompt_name" in kwargs:
-                if "instruction" in kwargs:
-                    raise ValueError(
-                        "Cannot specify both `prompt_name` and `instruction`."
-                    )
-                instruction = task_to_instruction(
-                    kwargs.pop("prompt_name"), kwargs.pop("is_query", True)
-                )
-            else:
+    class GritLMWrapper(GritLM, Wrapper):
+        def encode(
+            self,
+            sentences: Sequence[str],
+            *args,
+            task_name: str,
+            prompt_type: PromptType | None = None,
+            **kwargs: Any,
+        ) -> np.ndarray:
+            if "instruction" in kwargs:
                 instruction = kwargs.pop("instruction", "")
-            kwargs["instruction"] = gritlm_instruction(instruction)
-            return super().encode(*args, **kwargs)
-
-        def encode_corpus(self, *args, **kwargs):
-            kwargs["is_query"] = False
-            return super().encode_corpus(*args, **kwargs)
+            else:
+                instruction = task_to_instruction(
+                    task_name, prompt_type == PromptType.query
+                )
+            if instruction:
+                kwargs["instruction"] = gritlm_instruction(instruction)
+            return super().encode(sentences, *args, **kwargs)
 
     return GritLMWrapper(**kwargs)
 
@@ -54,9 +59,18 @@ gritlm7b = ModelMeta(
     ),
     name="GritLM/GritLM-7B",
     languages=["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="13f00a0e36500c80ce12870ea513846a066004af",
     release_date="2024-02-15",
+    n_parameters=7_240_000_000,
+    memory_usage=None,
+    embed_dim=4096,
+    license="apache-2.0",
+    max_tokens=4096,
+    reference="https://huggingface.co/GritLM/GritLM-7B",
+    similarity_fn_name="cosine",
+    framework=["GritLM", "PyTorch"],
+    use_instuctions=True,
 )
 gritlm8x7b = ModelMeta(
     loader=partial(
@@ -67,7 +81,16 @@ gritlm8x7b = ModelMeta(
     ),
     name="GritLM/GritLM-8x7B",
     languages=["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="7f089b13e3345510281733ca1e6ff871b5b4bc76",
     release_date="2024-02-15",
+    n_parameters=57_920_000_000,
+    memory_usage=None,
+    embed_dim=4096,
+    license="apache-2.0",
+    max_tokens=4096,
+    reference="https://huggingface.co/GritLM/GritLM-8x7B",
+    similarity_fn_name="cosine",
+    framework=["GritLM", "PyTorch"],
+    use_instuctions=True,
 )

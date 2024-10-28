@@ -21,7 +21,7 @@ class RP2kI2IRetrieval(AbsTaskAny2AnyRetrieval):
         date=("2009-01-01", "2010-04-01"),
         domains=["Web"],
         task_subtypes=["Object recognition"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

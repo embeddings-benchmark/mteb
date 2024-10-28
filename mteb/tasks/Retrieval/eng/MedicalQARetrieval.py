@@ -22,7 +22,7 @@ class MedicalQARetrieval(AbsTaskRetrieval):
         date=("2017-01-01", "2019-12-31"),  # best guess,
         domains=["Medical", "Written"],
         task_subtypes=["Article retrieval"],
-        license="CC0 1.0 Universal",
+        license="cc0-1.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

@@ -30,7 +30,7 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
         date=("2021-01-01", "2021-04-14"),
         domains=["Web", "Social", "Written"],
         task_subtypes=["Thematic clustering"],
-        license="Not specified",  # derived from pushshift
+        license="not specified",  # derived from pushshift
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

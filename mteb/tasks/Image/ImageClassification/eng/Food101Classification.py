@@ -24,7 +24,7 @@ class Food101Classification(AbsTaskImageClassification):
         ),  # Estimated range for the collection of reviews
         domains=["Web"],
         task_subtypes=["Object recognition"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

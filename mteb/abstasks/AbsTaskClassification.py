@@ -14,7 +14,7 @@ from ..evaluation.evaluators import (
     kNNClassificationEvaluatorPytorch,
     logRegClassificationEvaluator,
 )
-from ..load_results.mteb_results import HFSubset, ScoresDict
+from ..load_results.task_results import HFSubset, ScoresDict
 from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
@@ -216,7 +216,7 @@ class AbsTaskClassification(AbsTask):
         )
         for split in pbar_split:
             pbar_split.set_postfix_str(f"Split: {split}")
-            print(f"Processing metadata for split {split}")
+            logger.info(f"Processing metadata for split {split}")
             if self.is_multilingual:
                 all_details[split] = self._calculate_metrics_from_split(
                     split, compute_overall=True
@@ -228,7 +228,7 @@ class AbsTaskClassification(AbsTask):
                 )
                 for hf_subset in pbar_subset:
                     pbar_subset.set_postfix_str(f"Language: {hf_subset}")
-                    print(f"Processing metadata for language {hf_subset}")
+                    logger.info(f"Processing metadata for language {hf_subset}")
                     split_details = self._calculate_metrics_from_split(split, hf_subset)
                     all_details[split][hf_subset] = split_details
             else:

@@ -22,7 +22,7 @@ class FrenchBookReviews(AbsTaskClassification):
         date=("2022-01-01", "2023-01-01"),
         domains=["Reviews", "Written"],
         task_subtypes=[],
-        license="CC0",
+        license="cc0-1.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

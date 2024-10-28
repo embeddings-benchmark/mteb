@@ -28,7 +28,7 @@ class LEMBNarrativeQARetrieval(AbsTaskRetrieval):
         date=("1000-01-01", "2017-12-31"),
         domains=["Fiction", "Non-fiction", "Written"],
         task_subtypes=["Article retrieval"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

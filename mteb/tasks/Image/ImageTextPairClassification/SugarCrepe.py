@@ -31,7 +31,7 @@ class SugarCrepe(AbsTaskImageTextPairClassification):
         ),  # Estimated range for the collection of data
         domains=["Encyclopaedic"],
         task_subtypes=["Caption Pairing"],
-        license="MIT",
+        license="mit",
         annotations_creators="expert-annotated",
         dialect=[],
         modalities=["text", "image"],

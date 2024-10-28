@@ -26,7 +26,7 @@ class FinToxicityClassification(AbsTaskClassification):
         date=("2023-03-13", "2023-09-25"),
         domains=["News", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="ccy-by-sa-4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="machine-translated",

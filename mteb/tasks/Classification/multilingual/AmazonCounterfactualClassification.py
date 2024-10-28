@@ -34,7 +34,7 @@ class AmazonCounterfactualClassification(MultilingualTask, AbsTaskClassification
         ),  # Estimated range for the collection of Amazon reviews
         domains=["Reviews", "Written"],
         task_subtypes=["Counterfactual Detection"],
-        license="CC BY 4.0",
+        license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

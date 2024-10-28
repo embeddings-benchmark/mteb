@@ -195,7 +195,7 @@ class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
         eval_langs=_LANGUAGES_MAPPING,
         reference="https://arxiv.org/abs/2308.16884",
         main_score="ndcg_at_10",
-        license="CC-BY-SA-4.0",
+        license="cc-by-sa-4.0",
         domains=["Web", "News", "Written"],
         sample_creation="created",  # number of languages * 900
         date=("2023-08-31", "2023-08-31"),

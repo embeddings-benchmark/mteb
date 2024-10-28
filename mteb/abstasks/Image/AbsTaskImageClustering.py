@@ -5,10 +5,11 @@ from typing import Any
 
 from datasets import Dataset
 
-from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.abstasks.TaskMetadata import HFSubset
+
+from ...encoder_interface import Encoder
 from ...evaluation.evaluators import ImageClusteringEvaluator
-from ...load_results.mteb_results import HFSubset, ScoresDict
-from ..AbsTask import AbsTask
+from ..AbsTask import AbsTask, ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,7 @@ class AbsTaskImageClustering(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: EncoderWithQueryCorpusEncode | Encoder,
+        model: Encoder,
         dataset: Dataset,
         *,
         encode_kwargs: dict[str, Any] = {},

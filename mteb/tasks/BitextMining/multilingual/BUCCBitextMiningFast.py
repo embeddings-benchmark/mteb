@@ -34,7 +34,7 @@ class BUCCBitextMiningFast(AbsTaskBitextMining, MultilingualTask):
         date=("2017-01-01", "2018-12-31"),
         domains=["Written"],
         task_subtypes=[],
-        license="Unknown",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="human-translated",

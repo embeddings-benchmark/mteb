@@ -81,7 +81,7 @@ class IN22GenBitextMining(AbsTaskBitextMining, MultilingualTask):
             "Written",
         ],
         task_subtypes=[],
-        license="CC-BY-4.0",
+        license="cc-by-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",

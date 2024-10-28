@@ -26,7 +26,7 @@ class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
         ),  # not found in the paper or data. This is just a rough guess based on the paper's publication date
         domains=["Programming", "Written"],
         task_subtypes=["Duplicate Detection"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

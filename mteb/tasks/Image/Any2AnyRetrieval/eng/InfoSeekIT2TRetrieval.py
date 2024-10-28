@@ -22,7 +22,7 @@ class InfoSeekIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         date=("2023-01-01", "2023-12-31"),
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
-        license="CC BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],

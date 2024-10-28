@@ -28,7 +28,7 @@ class LEMBQMSumRetrieval(AbsTaskRetrieval):
         date=("1950-01-01", "2021-12-31"),
         domains=["Spoken", "Written"],
         task_subtypes=["Article retrieval"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

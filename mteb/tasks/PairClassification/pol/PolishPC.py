@@ -92,7 +92,7 @@ class PpcPC(AbsTaskPairClassification):
             "News",
         ],  # opensubtitles, CCmatrix
         task_subtypes=[],
-        license="GPL-3.0",
+        license="gpl-3.0",
         annotations_creators="derived",  # mined
         dialect=[],
         sample_creation="found",
@@ -130,7 +130,7 @@ class CdscePC(AbsTaskPairClassification):
         date=None,
         domains=["Written"],
         task_subtypes=[],
-        license="CC BY-NC-SA 4.0",
+        license="cc-by-nc-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
@@ -176,7 +176,7 @@ class PscPC(AbsTaskPairClassification):
         date=("1996-01-01", "2003-01-01"),  # from the paper
         domains=["News", "Written"],
         task_subtypes=[],
-        license="cc-by-3",
+        license="cc-by-3.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

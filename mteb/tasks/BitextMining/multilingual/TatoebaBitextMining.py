@@ -141,7 +141,7 @@ class TatoebaBitextMining(AbsTaskBitextMining, MultilingualTask):
             "Written"
         ],  # Tatoeba corpus includes a wide range of topics and domains
         task_subtypes=[],
-        license="CC BY 2.0",
+        license="cc-by-2.0",
         annotations_creators="human-annotated",
         dialect=[],  # No specific dialect mentioned
         sample_creation="found",

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import random
+from collections.abc import Iterable
 from itertools import islice
-from typing import Iterable, TypeVar
+from typing import TypeVar
 
 import datasets
 
@@ -39,7 +40,7 @@ class SNLClustering(AbsTaskClustering):
         main_score="v_measure",
         date=("2020-01-01", "2024-12-31"),  # best guess
         domains=["Encyclopaedic", "Non-fiction", "Written"],
-        license="CC-BY-NC",
+        license="cc-by-nc-4.0",  # version is assumed (not specified before)
         annotations_creators="derived",
         dialect=[],
         task_subtypes=["Thematic clustering"],

@@ -15,7 +15,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from torch import Tensor
 
 from mteb.encoder_interface import Encoder
-from mteb.evaluation.evaluators.model_encode import model_encode
+from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from .Evaluator import Evaluator
 
@@ -63,19 +63,19 @@ class kNNClassificationEvaluator(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
-        X_train = model_encode(
+        emb = model.encode(
             self.sentences_train,
-            model=model,
-            prompt_name=self.task_name,
+            task_name=self.task_name,
             **self.encode_kwargs,
         )
+        X_train = normalize_embeddings_to_numpy(emb)
         if test_cache is None:
-            X_test = model_encode(
+            emb = model.encode(
                 self.sentences_test,
-                model=model,
-                prompt_name=self.task_name,
+                task_name=self.task_name,
                 **self.encode_kwargs,
             )
+            X_test = normalize_embeddings_to_numpy(emb)
             test_cache = X_test
         else:
             X_test = test_cache
@@ -139,19 +139,21 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
-        X_train = model_encode(
-            self.sentences_train,
-            model=model,
-            prompt_name=self.task_name,
-            **self.encode_kwargs,
+        X_train = normalize_embeddings_to_numpy(
+            model.encode(
+                self.sentences_train,
+                task_name=self.task_name,
+                **self.encode_kwargs,
+            )
         )
 
         if test_cache is None:
-            X_test = model_encode(
-                self.sentences_test,
-                model=model,
-                prompt_name=self.task_name,
-                **self.encode_kwargs,
+            X_test = normalize_embeddings_to_numpy(
+                model.encode(
+                    self.sentences_test,
+                    task_name=self.task_name,
+                    **self.encode_kwargs,
+                )
             )
             test_cache = X_test
         else:
@@ -293,18 +295,20 @@ class logRegClassificationEvaluator(Evaluator):
             max_iter=self.max_iter,
             verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
         )
-        X_train = model_encode(
-            self.sentences_train,
-            model=model,
-            prompt_name=self.task_name,
-            **self.encode_kwargs,
+        X_train = normalize_embeddings_to_numpy(
+            model.encode(
+                self.sentences_train,
+                task_name=self.task_name,
+                **self.encode_kwargs,
+            )
         )
         if test_cache is None:
-            X_test = model_encode(
-                self.sentences_test,
-                model=model,
-                prompt_name=self.task_name,
-                **self.encode_kwargs,
+            X_test = normalize_embeddings_to_numpy(
+                model.encode(
+                    self.sentences_test,
+                    task_name=self.task_name,
+                    **self.encode_kwargs,
+                )
             )
             test_cache = X_test
         else:

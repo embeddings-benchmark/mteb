@@ -15,6 +15,7 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
             "path": "HuggingFaceM4/pascal_voc",
             "name": "voc2007_main",
             "revision": "dbafdb9e1506c9c419c5c4672e409463cd21ba50",
+            "trust_remote_code": True,
         },
         type="ImageMultilabelClassification",
         category="i2t",
@@ -27,7 +28,7 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
         ),  # Estimated range for the collection of reviews
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

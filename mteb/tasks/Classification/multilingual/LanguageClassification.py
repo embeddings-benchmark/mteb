@@ -45,7 +45,7 @@ class LanguageClassification(AbsTaskClassification):
         date=("2021-11-01", "2021-11-30"),
         domains=["Reviews", "Web", "Non-fiction", "Fiction", "Government", "Written"],
         task_subtypes=["Language identification"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

@@ -16,7 +16,7 @@ from PIL import Image
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
-from mteb.encoder_interface import EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder
 
 from ..Evaluator import Evaluator
 from ..utils import (
@@ -68,7 +68,7 @@ def custom_collate_fn(batch):
 class Any2AnyDenseRetrievalExactSearch:
     def __init__(
         self,
-        model: EncoderWithQueryCorpusEncode,
+        model: Encoder,
         encode_kwargs: dict[str, Any] = {},
         corpus_chunk_size: int = 20000,
         previous_results: str | None = None,

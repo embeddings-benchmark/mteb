@@ -25,7 +25,7 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
         date=("2020-01-01", "2022-04-01"),
         domains=["Web", "Government", "Medical", "Written"],
         task_subtypes=["Question answering"],
-        license="Apache-2.0",
+        license="apache-2.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",

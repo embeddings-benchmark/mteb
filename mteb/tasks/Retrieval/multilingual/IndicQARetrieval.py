@@ -43,7 +43,7 @@ class IndicQARetrieval(MultilingualTask, AbsTaskRetrieval):
         date=("2022-08-01", "2022-12-20"),
         domains=["Web", "Written"],
         task_subtypes=[],
-        license="CC0",
+        license="cc0-1.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="machine-translated and verified",
