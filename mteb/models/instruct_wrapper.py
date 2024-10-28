@@ -42,6 +42,10 @@ def instruct_wrapper(
                 raise ValueError(
                     "Instruction template must contain the string '{instruction}'."
                 )
+            if instruction_template is None:
+                logger.warning(
+                    "No instruction template provided. Instructions will be used as-is."
+                )
 
             self.instruction_template = instruction_template
             super().__init__(model_name_or_path=model_name_or_path, mode=mode, **kwargs)
