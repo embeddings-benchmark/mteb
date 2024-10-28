@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from functools import partial
-<<<<<<< HEAD
 from typing import Any
 
 import torch
@@ -11,6 +10,7 @@ from tqdm import tqdm
 from transformers import AutoModel
 
 from mteb.model_meta import ModelMeta
+
 # from mteb.models.text_formatting_utils import corpus_to_texts
 
 
@@ -155,10 +155,9 @@ class JinaCLIPModelWrapper:
     #         sentences, batch_size=batch_size, normalize_embeddings=True, **kwargs
     #     )
     #     return emb
-=======
->>>>>>> mieb
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+
+from mteb.model_meta import sentence_transformers_loader
 
 jina_clip_v1 = ModelMeta(
     loader=partial(
