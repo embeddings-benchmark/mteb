@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from functools import partial
+<<<<<<< HEAD
 from typing import Any
 
 import torch
@@ -154,11 +155,14 @@ class JinaCLIPModelWrapper:
     #         sentences, batch_size=batch_size, normalize_embeddings=True, **kwargs
     #     )
     #     return emb
+=======
+>>>>>>> mieb
 
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 jina_clip_v1 = ModelMeta(
     loader=partial(
-        JinaCLIPModelWrapper,
+        sentence_transformers_loader,
         model_name="jinaai/jina-clip-v1",
     ),
     name="jinaai/jina-clip-v1",
