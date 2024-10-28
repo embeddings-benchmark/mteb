@@ -14,10 +14,10 @@ class ImageCoDeT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
             "revision": "d28adfd8b34fefa546fdf94bdc352622b2575f6c",
         },
         type="Any2AnyMultiChoice",
-        category="t2i",
+        category="it2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_1",
+        main_score="accuracy",
         date=("2022-05-22", "2022-05-27"),  # conference dates
         form=["written"],
         domains=["Web"],
