@@ -156,9 +156,9 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             interactive=True,
                         )
                         model_size = RangeSlider(
-                            minimum=0,
-                            maximum=8000,
-                            value=(0, 8000),
+                            minimum=min_model_size,
+                            maximum=max_model_size,
+                            value=(min_model_size, max_model_size),
                             label="Model Size (#M Parameters)",
                             interactive=True,
                         )
@@ -249,10 +249,24 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             lang_select,
             type_select,
             domain_select,
+            availability,
+            compatibility,
+            instructions,
+            model_size,
         ],
         outputs=[scores],
     )
-    def update_scores(benchmark_name, task_names, languages, task_types, domains):
+    def update_scores(
+        benchmark_name,
+        task_names,
+        languages,
+        task_types,
+        domains,
+        availability,
+        compatibility,
+        instructions,
+        model_size,
+    ):
         benchmark = mteb.get_benchmark(benchmark_name)
         benchmark_results = benchmark.load_results(base_results=all_results)
         benchmark_results = benchmark_results.filter_tasks(
@@ -260,6 +274,19 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             task_names=task_names,
             task_types=task_types,
             domains=domains,
+        )
+        lower, upper = model_size
+        # Multiplying by millions
+        lower = lower * 1e6
+        upper = upper * 1e6
+        # Setting to None, when the user doesn't specify anything
+        if (lower == min_model_size) and (upper == max_model_size):
+            lower, upper = None, None
+        benchmark_results = benchmark_results.filter_models(
+            open_weights=availability,
+            use_instructions=instructions,
+            frameworks=compatibility,
+            n_parameters_range=(lower, upper),
         )
         scores = benchmark_results.get_scores(languages=languages, format="long")
         return scores

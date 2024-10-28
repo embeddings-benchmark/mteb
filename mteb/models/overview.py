@@ -8,28 +8,13 @@ from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
-from mteb.models import (
-    bge_models,
-    bm25,
-    cohere_models,
-    e5_instruct,
-    e5_models,
-    google_models,
-    gritlm_models,
-    gte_models,
-    llm2vec_models,
-    mxbai_models,
-    nomic_models,
-    openai_models,
-    promptriever_models,
-    repllama_models,
-    rerankers_custom,
-    rerankers_monot5_based,
-    ru_sentence_models,
-    salesforce_models,
-    sentence_transformers_models,
-    voyage_models,
-)
+from mteb.models import (bge_models, bm25, cohere_models, e5_instruct,
+                         e5_models, google_models, gritlm_models, gte_models,
+                         llm2vec_models, mxbai_models, nomic_models,
+                         openai_models, promptriever_models, repllama_models,
+                         rerankers_custom, rerankers_monot5_based,
+                         ru_sentence_models, salesforce_models,
+                         sentence_transformers_models, voyage_models)
 
 logger = logging.getLogger(__name__)
 
@@ -67,9 +52,10 @@ for module in model_modules:
 def get_model_metas(
     model_names: Iterable[str] | None = None,
     languages: Iterable[str] | None = None,
-    open_source: bool | None = None,
+    open_weights: bool | None = None,
     frameworks: Iterable[str] | None = None,
     n_parameters_range: tuple[int | None, int | None] = (None, None),
+    use_instructions: bool | None = None,
 ) -> list[ModelMeta]:
     """Load all models' metadata that fit the specified criteria."""
     res = []
@@ -84,11 +70,15 @@ def get_model_metas(
                 languages <= set(model_meta.languages)
             ):
                 continue
-        if (open_source is not None) and (model_meta.open_source != open_source):
+        if (open_weights is not None) and (model_meta.open_weights != open_weights):
             continue
         if (frameworks is not None) and not (frameworks <= set(model_meta.framework)):
             continue
-        upper, lower = n_parameters_range
+        if (use_instructions is not None) and (
+            model_meta.use_instuctions != use_instructions
+        ):
+            continue
+        lower, upper = n_parameters_range
         n_parameters = model_meta.n_parameters
         if upper is not None:
             if (n_parameters is None) or (n_parameters > upper):
