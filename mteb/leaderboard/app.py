@@ -23,7 +23,7 @@ def load_results():
 def update_citation(benchmark_name: str) -> str:
     benchmark = mteb.get_benchmark(benchmark_name)
     if str(benchmark.citation) != "None":
-        citation = f"```bibtex\n{benchmark.citation}```"
+        citation = f"```bibtex\n{benchmark.citation}\n```"
     else:
         citation = ""
     return citation
