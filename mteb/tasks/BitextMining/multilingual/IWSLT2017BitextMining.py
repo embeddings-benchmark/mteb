@@ -55,7 +55,7 @@ class IWSLT2017BitextMining(AbsTaskBitextMining, MultilingualTask):
         date=("2007-01-01", "2017-12-14"),  # rough estimate
         domains=["Non-fiction", "Fiction", "Written"],
         task_subtypes=[],
-        license="CC-BY-NC-ND-4.0",
+        license="cc-by-nc-nd-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",

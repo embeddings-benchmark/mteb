@@ -231,6 +231,7 @@ def get_tasks(
     categories: list[TASK_CATEGORY] | None = None,
     tasks: list[str] | None = None,
     exclude_superseeded: bool = True,
+    eval_splits: list[str] | None = None,
 ) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
 
@@ -245,6 +246,7 @@ def get_tasks(
             paragraph).
         tasks: A list of task names to include. If None, all tasks which pass the filters are included.
         exclude_superseeded: A boolean flag to exclude datasets which are superseeded by another.
+        eval_splits: A list of evaluation splits to include. If None, all splits are included.
 
     Returns:
         A list of all initialized tasks objects which pass all of the filters (AND operation).
@@ -253,12 +255,18 @@ def get_tasks(
         >>> get_tasks(languages=["eng", "deu"], script=["Latn"], domains=["Legal"])
         >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Classification"])
         >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Clustering"], exclude_superseeded=False)
+        >>> get_tasks(languages=["eng"], tasks=["WikipediaRetrievalMultilingual"], eval_splits=["test"])
     """
     if tasks:
-        _tasks = [get_task(task, languages, script) for task in tasks]
+        _tasks = [
+            get_task(task, languages, script, eval_splits=eval_splits) for task in tasks
+        ]
         return MTEBTasks(_tasks)
 
-    _tasks = [cls().filter_languages(languages, script) for cls in create_task_list()]
+    _tasks = [
+        cls().filter_languages(languages, script).filter_eval_splits(eval_splits)
+        for cls in create_task_list()
+    ]
 
     if languages:
         _tasks = filter_tasks_by_languages(_tasks, languages)
@@ -280,6 +288,7 @@ def get_task(
     task_name: str,
     languages: list[str] | None = None,
     script: list[str] | None = None,
+    eval_splits: list[str] | None = None,
 ) -> AbsTask:
     """Get a task by name.
 
@@ -288,6 +297,7 @@ def get_task(
         languages: A list of languages either specified as 3 letter languages codes (ISO 639-3, e.g. "eng") or as script languages codes e.g.
             "eng-Latn". For multilingual tasks this will also remove languages that are not in the specified list.
         script: A list of script codes (ISO 15924 codes). If None, all scripts are included. For multilingual tasks this will also remove scripts
+        eval_splits: A list of evaluation splits to include. If None, all splits are included.
 
     Returns:
         An initialized task object.
@@ -306,4 +316,7 @@ def get_task(
                 f"KeyError: '{task_name}' not found and no similar keys were found."
             )
         raise KeyError(suggestion)
-    return TASKS_REGISTRY[task_name]().filter_languages(languages, script)
+    task = TASKS_REGISTRY[task_name]()
+    if eval_splits:
+        task.filter_eval_splits(eval_splits=eval_splits)
+    return task.filter_languages(languages, script)

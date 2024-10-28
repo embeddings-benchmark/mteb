@@ -28,8 +28,7 @@ class Country211Classification(AbsTaskZeroshotClassification):
         ),  # Estimated range for the collection of reviews
         domains=["Scene"],
         task_subtypes=["Scene recognition"],
-        license="CC BY-SA 4.0",
-        socioeconomic_status="mixed",
+        license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

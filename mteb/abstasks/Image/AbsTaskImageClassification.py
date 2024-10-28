@@ -6,14 +6,15 @@ from typing import Any
 
 import numpy as np
 
+from mteb.abstasks.TaskMetadata import HFSubset
+
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import (
     ImagekNNClassificationEvaluator,
     ImagekNNClassificationEvaluatorPytorch,
     ImagelogRegClassificationEvaluator,
 )
-from ...load_results.mteb_results import HFSubset, ScoresDict
-from ..AbsTask import AbsTask
+from ..AbsTask import AbsTask, ScoresDict
 
 logger = logging.getLogger(__name__)
 

@@ -22,7 +22,7 @@ class Assin2STS(AbsTaskSTS):
         date=("2019-01-01", "2019-09-16"),  # best guess
         domains=["Written"],
         task_subtypes=["Claim verification"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

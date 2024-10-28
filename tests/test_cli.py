@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import subprocess
+import sys
 from argparse import Namespace
 from pathlib import Path
 
@@ -13,12 +14,21 @@ from mteb.cli import create_meta, run
 
 
 def test_available_tasks():
-    command = "mteb available_tasks"
+    command = f"{sys.executable} -m mteb available_tasks"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
     assert (
         "Banking77Classification" in result.stdout
     ), "Sample task Banking77Classification task not found in available tasks"
+
+
+def test_available_benchmarks():
+    command = f"{sys.executable} -m mteb available_benchmarks"
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    assert result.returncode == 0, "Command failed"
+    assert (
+        "MTEB(eng)" in result.stdout
+    ), "Sample benchmark MTEB(eng) task not found in available benchmarks"
 
 
 run_task_fixures = [
@@ -30,7 +40,7 @@ run_task_fixures = [
     (
         "intfloat/multilingual-e5-small",
         "BornholmBitextMining",
-        "e4ce9877abf3edfe10b0d82785e83bdcb973e22e",
+        "fd1525a9fd15316a2d503bf26ab031a61d056e98",
     ),
 ]
 
@@ -55,6 +65,7 @@ def test_run_task(
         co2_tracker=None,
         overwrite=True,
         eval_splits=None,
+        benchmarks=None,
     )
 
     run(args)
@@ -111,7 +122,7 @@ def test_create_meta():
         ), f"Value for {key} does not match"
 
     # ensure that the command line interface works as well
-    command = f"mteb create_meta --results_folder {results} --output_path {output_path} --overwrite"
+    command = f"{sys.executable} -m mteb create_meta --results_folder {results} --output_path {output_path} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
 
@@ -172,13 +183,13 @@ def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: 
         ), f"Value for {key} does not match"
     assert readme_output == gold_readme
     # ensure that the command line interface works as well
-    command = f"mteb create_meta --results_folder {results} --output_path {output_path} --from_existing {existing_readme} --overwrite"
+    command = f"{sys.executable} -m mteb create_meta --results_folder {results} --output_path {output_path} --from_existing {existing_readme} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
 
 
 def test_save_predictions():
-    command = "mteb run -m all-MiniLM-L6-v2 -t NFCorpus --output_folder tests/results --save_predictions"
+    command = f"{sys.executable} -m mteb run -m all-MiniLM-L6-v2 -t NFCorpus --output_folder tests/results --save_predictions"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
     test_folder = Path(__file__).parent

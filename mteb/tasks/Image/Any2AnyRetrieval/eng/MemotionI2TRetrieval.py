@@ -105,7 +105,7 @@ class MemotionI2TRetrieval(AbsTaskAny2AnyRetrieval):
         date=("2020-01-01", "2020-12-31"),
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
-        license="MIT",
+        license="mit",
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],

@@ -880,7 +880,7 @@ class BibleNLPBitextMining(AbsTaskBitextMining, MultilingualTask):
         date=("1997-01-01", "2020-12-31"),
         domains=["Religious", "Written"],
         task_subtypes=[],
-        license="CC-BY-SA-4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",

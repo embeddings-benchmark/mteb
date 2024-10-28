@@ -21,7 +21,7 @@ class FORBI2I(AbsTaskAny2AnyRetrieval):
         date=("2022-01-01", "2023-01-01"),
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

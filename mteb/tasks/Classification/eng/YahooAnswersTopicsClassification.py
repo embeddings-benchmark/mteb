@@ -23,7 +23,7 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
         date=("2022-01-25", "2022-01-25"),
         domains=["Web", "Written"],
         task_subtypes=["Topic classification"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

@@ -83,7 +83,7 @@ class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
         date=("2022-01-01", "2022-01-01"),  # best guess: based on the date of the paper
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Question answering"],
-        license="CC-BY-4.0",
+        license="cc-by-4.0",
         annotations_creators="derived",  # best guess
         dialect=[],
         sample_creation="human-translated",

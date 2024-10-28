@@ -20,7 +20,7 @@ class FilipinoShopeeReviewsClassification(AbsTaskClassification):
         eval_splits=["validation", "test"],
         eval_langs=["fil-Latn"],
         domains=["Social", "Written"],
-        license="MPL-2.0",
+        license="mpl-2.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Callable, List
+from typing import Any, Callable
 
 import pandas as pd
 from scipy.stats import pearsonr, spearmanr
@@ -14,7 +14,7 @@ import mteb
 
 MODEL_NAME = str
 REVISION = str
-METRIC = Callable[[List[float], List[float]], float]
+METRIC = Callable[[list[float], list[float]], float]
 
 
 def spearman(x: list[float], y: list[float]) -> float:
@@ -52,8 +52,8 @@ def results_to_dataframe(
             for task_result in tasks_results:
                 data.append(
                     {
-                        "model": model_name,
-                        "revision": rev,
+                        "Model": model_name,
+                        "Revision": rev,
                         "task": task_result.task_name,
                         "main_score": task_result.get_score(**kwargs),
                     }
@@ -63,7 +63,7 @@ def results_to_dataframe(
     if drop_na:
         df = df.dropna(axis=1)
     return df.pivot_table(
-        index=["model", "revision"],
+        index=["Model", "Revision"],
         columns=["task"],
         values="main_score",
     )

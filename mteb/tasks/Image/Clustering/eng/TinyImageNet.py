@@ -24,7 +24,7 @@ class TinyImageNet(AbsTaskImageClustering):
         ),  # Estimated range for the collection of reviews
         domains=["Reviews"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

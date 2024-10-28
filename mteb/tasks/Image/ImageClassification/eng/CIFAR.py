@@ -24,7 +24,7 @@ class CIFAR10Classification(AbsTaskImageClassification):
         ),  # Estimated range for the collection of reviews
         domains=["Web"],
         task_subtypes=["Object recognition"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],
@@ -64,8 +64,7 @@ class CIFAR100Classification(AbsTaskImageClassification):
         ),  # Estimated range for the collection of reviews
         domains=["Web"],
         task_subtypes=["Object recognition"],
-        license="Not specified",
-        socioeconomic_status="mixed",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

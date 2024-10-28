@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 class News21InstructionRetrieval(AbsTaskInstructionRetrieval):
     metadata = TaskMetadata(
         name="News21InstructionRetrieval",
-        description="Measuring retrieval instruction following ability on News21 narratives.",
+        description="Measuring retrieval instruction following ability on News21 narratives for the FollowIR benchmark.",
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
             "path": "jhu-clsp/news21-instructions",
@@ -23,7 +23,7 @@ class News21InstructionRetrieval(AbsTaskInstructionRetrieval):
         date=("2023-08-01", "2024-04-01"),
         domains=["News", "Written"],
         task_subtypes=[],
-        license="MIT",
+        license="mit",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

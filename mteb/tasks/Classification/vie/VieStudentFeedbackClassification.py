@@ -25,7 +25,7 @@ class VieStudentFeedbackClassification(AbsTaskClassification):
         date=("2021-12-26", "2021-12-26"),
         domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="MIT",
+        license="mit",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",

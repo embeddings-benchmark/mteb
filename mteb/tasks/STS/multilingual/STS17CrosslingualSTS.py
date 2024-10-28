@@ -38,7 +38,7 @@ class STS17Crosslingual(AbsTaskSTS, MultilingualTask):
         date=("2014-01-01", "2015-12-31"),
         domains=["News", "Web", "Written"],
         task_subtypes=[],
-        license="Not specified",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",

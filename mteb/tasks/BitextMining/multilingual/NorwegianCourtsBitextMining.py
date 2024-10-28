@@ -22,7 +22,7 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
         date=("2020-01-01", "2020-12-31"),
         domains=["Legal", "Written"],
         task_subtypes=[],
-        license="CC BY 4.0",
+        license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

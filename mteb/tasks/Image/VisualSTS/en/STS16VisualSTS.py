@@ -22,7 +22,7 @@ class STS16VisualSTS(AbsTaskVisualSTS):
         date=("2015-10-01", "2015-12-31"),
         domains=["Blog", "Web", "Spoken"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="rendered",

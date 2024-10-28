@@ -24,7 +24,7 @@ class RARbCode(AbsTaskRetrieval):
         date=("2019-01-01", "2023-12-31"),
         domains=["Programming", "Written"],
         task_subtypes=["Reasoning as Retrieval"],
-        license="CC BY-NC-SA 4.0",
+        license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
