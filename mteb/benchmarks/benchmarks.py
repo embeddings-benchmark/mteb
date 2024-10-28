@@ -62,8 +62,61 @@ class Benchmark:
         return base_results.select_tasks(self.tasks)
 
 
-MTEB_MAIN_EN = Benchmark(
-    name="MTEB(eng)",
+MTEB_EN = Benchmark(
+    name="MTEB(eng, beta)",
+    tasks=get_tasks(
+        tasks=[
+            "AmazonCounterfactualClassification",
+            "ArguAna",
+            "ArXivHierarchicalClusteringP2P",
+            "ArXivHierarchicalClusteringS2S",
+            "AskUbuntuDupQuestions",
+            "BIOSSES",
+            "Banking77Classification",
+            "BiorxivClusteringP2P.v2",
+            "CQADupstackGamingRetrieval",
+            "CQADupstackUnixRetrieval",
+            "ClimateFEVERHardNegatives",
+            "FEVERHardNegatives",
+            "FiQA2018",
+            "HotpotQAHardNegatives",
+            "ImdbClassification",
+            "MTOPDomainClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "MedrxivClusteringP2P.v2",
+            "MedrxivClusteringS2S.v2",
+            "MindSmallReranking",
+            "SCIDOCS",
+            "SICK-R",
+            "STS12",
+            "STS13",
+            "STS14",
+            "STS15",
+            "STS17",
+            "STS22.v2",
+            "STSBenchmark",
+            "SprintDuplicateQuestions",
+            "StackExchangeClustering.v2",
+            "StackExchangeClusteringP2P.v2",
+            "TRECCOVID",
+            "Touche2020",
+            "ToxicConversationsClassification",
+            "TweetSentimentExtractionClassification",
+            "TwentyNewsgroupsClustering.v2",
+            "TwitterSemEval2015",
+            "TwitterURLCorpus",
+            "SummEvalSummarization.v2",
+        ],
+        languages=["eng"],
+        eval_splits=["test"],
+    ),
+    description="English benchmarks from MTEB",
+    citation="",
+)
+
+MTEB_ENG_CLASSIC = Benchmark(
+    name="MTEB(eng, classic)",
     tasks=get_tasks(
         tasks=[
             "AmazonCounterfactualClassification",
@@ -137,7 +190,7 @@ MTEB_MAIN_EN = Benchmark(
         languages=["eng"],
         eval_splits=["test"],
     ),
-    description="Main English benchmarks from MTEB",
+    description="The original English benchmarks by Muennighoff et al., (2023).",
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
     title = "{MTEB}: Massive Text Embedding Benchmark",
     author = "Muennighoff, Niklas  and
@@ -556,7 +609,7 @@ MTEB_code = Benchmark(
 
 
 MTEB_multilingual = Benchmark(
-    name="MTEB(Multilingual)",
+    name="MTEB(Multilingual, beta)",
     tasks=get_tasks(
         tasks=[
             "BornholmBitextMining",
@@ -734,7 +787,7 @@ MTEB_JPN = Benchmark(
 
 
 MTEB_INDIC = Benchmark(
-    name="MTEB(indic)",
+    name="MTEB(Indic, beta)",
     tasks=get_tasks(
         tasks=[
             # Bitext
@@ -776,7 +829,7 @@ MTEB_INDIC = Benchmark(
 
 
 MTEB_EU = Benchmark(
-    name="MTEB(Europe)",
+    name="MTEB(Europe, beta)",
     tasks=get_tasks(
         tasks=[
             "BornholmBitextMining",

@@ -164,7 +164,7 @@ For instance to select the 56 English datasets that form the "Overall MTEB Engli
 
 ```python
 import mteb
-benchmark = mteb.get_benchmark("MTEB(eng)")
+benchmark = mteb.get_benchmark("MTEB(eng, classic)")
 evaluation = mteb.MTEB(tasks=benchmark)
 ```
 
