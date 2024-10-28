@@ -13,7 +13,7 @@ from mteb.models.overview import (
 
 logger = logging.getLogger(__name__)
 
-  
+
 __all__ = [
     "MODEL_REGISTRY",
     "ModelMeta",
