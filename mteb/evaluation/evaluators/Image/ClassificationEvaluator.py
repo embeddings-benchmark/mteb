@@ -1,14 +1,12 @@
 from __future__ import annotations
 
 import logging
+import math
+import os
 from typing import Any
 
 import numpy as np
 import torch
-import math
-import os
-
-from datasets import Dataset
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     accuracy_score,

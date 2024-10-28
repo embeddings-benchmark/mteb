@@ -6,6 +6,7 @@ from typing import Any
 
 import numpy as np
 from PIL import ImageFile
+
 from mteb.abstasks.TaskMetadata import HFSubset
 
 from ...encoder_interface import Encoder
