@@ -65,7 +65,7 @@ def update_task_info(task_names: str) -> str:
 all_results = load_results().filter_models()
 
 # Model sizes in million parameters
-min_model_size, max_model_size = 8, 46703
+min_model_size, max_model_size = 0, 10_000
 
 benchmarks = mteb.get_benchmarks()
 
