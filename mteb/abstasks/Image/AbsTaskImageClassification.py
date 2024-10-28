@@ -5,6 +5,7 @@ from collections import defaultdict
 from typing import Any
 
 import numpy as np
+from PIL import ImageFile
 
 from mteb.abstasks.TaskMetadata import HFSubset
 
@@ -15,6 +16,8 @@ from ...evaluation.evaluators import (
     ImagelogRegClassificationEvaluator,
 )
 from ..AbsTask import AbsTask, ScoresDict
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 logger = logging.getLogger(__name__)
 
@@ -133,7 +136,7 @@ class AbsTaskImageClassification(AbsTask):
                 "=" * 10 + f" Experiment {i+1}/{self.n_experiments} " + "=" * 10
             )
             # Bootstrap `self.samples_per_label` samples per label for each split
-            X_sampled, y_sampled, idxs = self._undersample_data(
+            undersampled_train, idxs = self._undersample_data(
                 train_split,
                 self.label_column_name,
                 self.samples_per_label,
@@ -142,8 +145,7 @@ class AbsTaskImageClassification(AbsTask):
 
             if self.method == "kNN":
                 evaluator = ImagekNNClassificationEvaluator(
-                    X_sampled,
-                    y_sampled,
+                    undersampled_train,
                     eval_split,
                     self.image_column_name,
                     self.label_column_name,
@@ -153,8 +155,7 @@ class AbsTaskImageClassification(AbsTask):
                 )
             elif self.method == "kNN-pytorch":
                 evaluator = ImagekNNClassificationEvaluatorPytorch(
-                    X_sampled,
-                    y_sampled,
+                    undersampled_train,
                     eval_split,
                     self.image_column_name,
                     self.label_column_name,
@@ -164,8 +165,7 @@ class AbsTaskImageClassification(AbsTask):
                 )
             elif self.method == "logReg":
                 evaluator = ImagelogRegClassificationEvaluator(
-                    X_sampled,
-                    y_sampled,
+                    undersampled_train,
                     eval_split,
                     self.image_column_name,
                     self.label_column_name,
@@ -199,15 +199,15 @@ class AbsTaskImageClassification(AbsTask):
         label_counter = defaultdict(int)
         selected_indices = []
 
+        labels = dataset_split[label_column_name]
         for i in idxs:
-            label = dataset_split[i][label_column_name]
+            label = labels[i]
             if label_counter[label] < samples_per_label:
                 selected_indices.append(i)
                 label_counter[label] += 1
 
         undersampled_dataset = dataset_split.select(selected_indices)
         return (
-            undersampled_dataset[self.image_column_name],
-            undersampled_dataset[self.label_column_name],
+            undersampled_dataset,
             idxs,
         )
