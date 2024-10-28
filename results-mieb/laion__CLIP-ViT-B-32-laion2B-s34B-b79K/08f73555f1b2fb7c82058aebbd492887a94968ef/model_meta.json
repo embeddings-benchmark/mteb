@@ -1,0 +1,1 @@
+{"name": "laion/CLIP-ViT-B-32-laion2B-s34B-b79K", "revision": "08f73555f1b2fb7c82058aebbd492887a94968ef", "release_date": "2022-09-15", "languages": ["eng_Latn"], "n_parameters": null, "memory_usage": null, "max_tokens": null, "embed_dim": null, "license": null, "open_source": true, "similarity_fn_name": null, "framework": [], "loader": "openclip_loader"}
