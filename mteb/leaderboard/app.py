@@ -39,6 +39,31 @@ def update_description(benchmark_name: str) -> str:
     return description
 
 
+def format_list(props: list[str]):
+    if props is None:
+        return ""
+    if len(props) > 3:
+        return ", ".join(props[:3]) + "..."
+    return ", ".join(props)
+
+
+def update_task_info(task_names: str) -> str:
+    tasks = mteb.get_tasks(tasks=task_names)
+    df = tasks.to_dataframe()
+    df["languages"] = df["languages"].map(format_list)
+    df["domains"] = df["domains"].map(format_list)
+    df = df.rename(
+        columns={
+            "name": "Task Name",
+            "type": "Task Type",
+            "languages": "Languages",
+            "domains": "Domains",
+            "license": "License",
+        }
+    )
+    return df
+
+
 all_results = load_results().filter_models()
 
 # Model sizes in million parameters
@@ -167,6 +192,8 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         summary_table = gr.DataFrame(summary)
     with gr.Tab("Performance per task"):
         per_task_table = gr.DataFrame(per_task)
+    with gr.Tab("Task information"):
+        task_info_table = gr.DataFrame(update_task_info, inputs=[task_select])
     citation = gr.Markdown(update_citation, inputs=[benchmark_select])
 
     @gr.on(inputs=[scores], outputs=[summary_table, per_task_table])
