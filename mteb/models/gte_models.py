@@ -31,5 +31,5 @@ gte_Qwen2_7B_instruct = ModelMeta(
     reference="https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )

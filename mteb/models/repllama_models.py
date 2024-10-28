@@ -148,7 +148,7 @@ repllama_llama2_original = ModelMeta(
     reference="https://huggingface.co/samaya-ai/castorini/repllama-v1-7b-lora-passage",
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 
@@ -174,5 +174,5 @@ repllama_llama2_reproduced = ModelMeta(
     reference="https://huggingface.co/samaya-ai/RepLLaMA-reproduced",
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
-    use_instuctions=True,
+    use_instructions=True,
 )

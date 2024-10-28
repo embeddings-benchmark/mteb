@@ -63,7 +63,7 @@ promptriever_llama2 = ModelMeta(
     reference="https://huggingface.co/samaya-ai/promptriever-llama2-7b-v1",
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 promptriever_llama3 = ModelMeta(
@@ -87,7 +87,7 @@ promptriever_llama3 = ModelMeta(
     reference="https://huggingface.co/samaya-ai/promptriever-llama3.1-8b-v1",
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 
@@ -112,7 +112,7 @@ promptriever_llama3_instruct = ModelMeta(
     reference="https://huggingface.co/samaya-ai/promptriever-llama3.1-8b-instruct-v1",
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 promptriever_mistral_v1 = ModelMeta(
@@ -136,5 +136,5 @@ promptriever_mistral_v1 = ModelMeta(
     reference="https://huggingface.co/samaya-ai/promptriever-mistral-v0.1-7b-v1",
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
-    use_instuctions=True,
+    use_instructions=True,
 )

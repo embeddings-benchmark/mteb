@@ -110,5 +110,5 @@ nomic_embed_v1 = ModelMeta(
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )

@@ -102,5 +102,5 @@ google_emb_004 = ModelMeta(
     license=None,
     similarity_fn_name="cosine",  # assumed
     framework=["API"],
-    use_instuctions=True,
+    use_instructions=True,
 )

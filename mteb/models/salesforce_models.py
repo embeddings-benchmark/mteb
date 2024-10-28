@@ -39,5 +39,5 @@ SFR_Embedding_2_R = ModelMeta(
     reference="https://huggingface.co/Salesforce/SFR-Embedding-2_R",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )

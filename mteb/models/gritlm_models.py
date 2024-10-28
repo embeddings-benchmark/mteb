@@ -37,7 +37,7 @@ gritlm7b = ModelMeta(
     reference="https://huggingface.co/GritLM/GritLM-7B",
     similarity_fn_name="cosine",
     framework=["GritLM", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 gritlm8x7b = ModelMeta(
     loader=partial(
@@ -60,5 +60,5 @@ gritlm8x7b = ModelMeta(
     reference="https://huggingface.co/GritLM/GritLM-8x7B",
     similarity_fn_name="cosine",
     framework=["GritLM", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )

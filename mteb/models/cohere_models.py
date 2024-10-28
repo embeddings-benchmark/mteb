@@ -91,7 +91,7 @@ cohere_mult_3 = ModelMeta(
     license=None,
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 cohere_eng_3 = ModelMeta(
@@ -112,5 +112,5 @@ cohere_eng_3 = ModelMeta(
     license=None,
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instuctions=False,
+    use_instructions=False,
 )

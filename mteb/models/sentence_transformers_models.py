@@ -74,7 +74,7 @@ all_MiniLM_L6_v2 = ModelMeta(
     reference="https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
@@ -91,7 +91,7 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
     reference="https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
@@ -108,7 +108,7 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     reference="https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 labse = ModelMeta(
@@ -125,5 +125,5 @@ labse = ModelMeta(
     reference="https://huggingface.co/sentence-transformers/LaBSE",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )

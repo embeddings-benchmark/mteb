@@ -26,5 +26,5 @@ arctic_m_v1_5 = ModelMeta(
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5",
     similarity_fn_name="cosine_similarity",
-    use_instuctions=False,
+    use_instructions=False,
 )
