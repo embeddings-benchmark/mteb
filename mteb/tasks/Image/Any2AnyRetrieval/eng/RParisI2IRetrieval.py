@@ -67,11 +67,7 @@ class RParisMediumI2IRetrieval(AbsTaskAny2AnyRetrieval):
         date=("2009-01-01", "2010-04-01"),
         domains=["Web"],
         task_subtypes=["Object recognition"],
-<<<<<<< HEAD
-        license="Not specified",
-=======
         license="not specified",
->>>>>>> 6979b2ad9931bddc5bf1a735a0b588de3f14fab3
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],
@@ -109,11 +105,7 @@ class RParisHardI2IRetrieval(AbsTaskAny2AnyRetrieval):
             "path": "JamieSJS/r-paris-hard",
             "revision": "fd121b6592fe946616fa85116703b94a4c61fd63",
         },
-<<<<<<< HEAD
-        type="Retrieval",
-=======
         type="Any2AnyRetrieval",
->>>>>>> 6979b2ad9931bddc5bf1a735a0b588de3f14fab3
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -121,11 +113,7 @@ class RParisHardI2IRetrieval(AbsTaskAny2AnyRetrieval):
         date=("2009-01-01", "2010-04-01"),
         domains=["Web"],
         task_subtypes=["Object recognition"],
-<<<<<<< HEAD
-        license="Not specified",
-=======
         license="not specified",
->>>>>>> 6979b2ad9931bddc5bf1a735a0b588de3f14fab3
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],
