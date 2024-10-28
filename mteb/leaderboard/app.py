@@ -20,6 +20,25 @@ def load_results():
         return mteb.BenchmarkResults.from_disk(results_cache_path)
 
 
+def update_citation(benchmark_name: str) -> str:
+    benchmark = mteb.get_benchmark(benchmark_name)
+    if str(benchmark.citation) != "None":
+        citation = f"```bibtex\n{benchmark.citation}```"
+    else:
+        citation = ""
+    return citation
+
+
+def update_description(benchmark_name: str) -> str:
+    benchmark = mteb.get_benchmark(benchmark_name)
+    description = f"""
+    ## [{benchmark.name}]({benchmark.reference})
+
+    {benchmark.description}
+    """
+    return description
+
+
 all_results = load_results().filter_models()
 
 # Model sizes in million parameters
@@ -143,10 +162,12 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     default_scores = default_results.get_scores(format="long")
     scores = gr.State(default_scores)
     summary, per_task = scores_to_tables(default_scores)
+    description = gr.Markdown(update_description, inputs=[benchmark_select])
     with gr.Tab("Summary"):
         summary_table = gr.DataFrame(summary)
     with gr.Tab("Performance per task"):
         per_task_table = gr.DataFrame(per_task)
+    citation = gr.Markdown(update_citation, inputs=[benchmark_select])
 
     @gr.on(inputs=[scores], outputs=[summary_table, per_task_table])
     def update_tables(scores):
