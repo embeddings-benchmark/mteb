@@ -22,7 +22,7 @@ class KinopoiskClassification(AbsTaskClassification):
         date=("2004-07-01", "2012-12-01"),
         domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

@@ -24,7 +24,7 @@ class PatchCamelyonClassification(AbsTaskImageClassification):
         ),  # Estimated range for the collection of reviews
         domains=["Medical"],
         task_subtypes=["Tumor detection"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

@@ -28,7 +28,7 @@ class TweetTopicSingleClassification(AbsTaskClassification):
         date=("2019-09-01", "2021-08-31"),
         domains=["Social", "News", "Written"],
         task_subtypes=["Topic classification"],
-        license="Other",
+        license="not specified",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",

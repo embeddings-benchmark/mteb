@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Iterable
+from collections.abc import Iterable
 
 import pandas as pd
 
@@ -13,7 +13,7 @@ REVISION = str
 
 
 def results_to_dataframe(
-    mteb_results: dict[MODEL, dict[REVISION, list[mteb.MTEBResults]]],
+    mteb_results: dict[MODEL, dict[REVISION, list[mteb.TaskResult]]],
 ):
     data = []
     for model_name, revisions in mteb_results.items():

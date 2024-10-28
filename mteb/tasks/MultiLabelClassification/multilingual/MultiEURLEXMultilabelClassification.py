@@ -51,7 +51,7 @@ class MultiEURLEXMultilabelClassification(
         date=("1958-01-01", "2016-01-01"),
         domains=["Legal", "Government", "Written"],
         task_subtypes=["Topic classification"],
-        license="CC BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",

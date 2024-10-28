@@ -116,7 +116,7 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining, MultilingualTask):
         date=("2023-10-01", "2024-05-01"),
         domains=["Web", "News", "Written"],
         task_subtypes=[],
-        license="CC-BY-SA-4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="human-translated and localized",

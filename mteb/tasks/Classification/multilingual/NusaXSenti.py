@@ -37,7 +37,7 @@ class NusaXSentiClassification(AbsTaskClassification, MultilingualTask):
         date=("2022-05-01", "2023-05-08"),
         domains=["Reviews", "Web", "Social", "Constructed", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="CC-BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",

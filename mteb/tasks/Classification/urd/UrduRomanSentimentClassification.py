@@ -23,7 +23,7 @@ class UrduRomanSentimentClassification(AbsTaskClassification):
         main_score="f1",
         domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="MIT",
+        license="mit",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

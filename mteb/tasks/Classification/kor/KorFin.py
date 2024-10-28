@@ -27,7 +27,7 @@ class KorFin(AbsTaskClassification):
         ),  # Assumed date based on the citations in the paper
         domains=["News", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="CC BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",

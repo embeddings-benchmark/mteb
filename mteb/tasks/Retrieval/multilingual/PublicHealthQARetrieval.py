@@ -78,7 +78,7 @@ class PublicHealthQARetrieval(MultilingualTask, AbsTaskRetrieval):
         date=("2020-01-01", "2020-04-15"),
         domains=["Medical", "Government", "Web", "Written"],
         task_subtypes=["Question answering"],
-        license="CC BY-NC-SA 3.0",
+        license="cc-by-nc-sa-3.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

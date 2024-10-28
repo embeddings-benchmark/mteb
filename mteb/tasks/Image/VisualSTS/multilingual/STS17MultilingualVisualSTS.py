@@ -42,7 +42,7 @@ class STS17MultilingualVisualSTS(AbsTaskVisualSTS, MultilingualTask):
         date=("2012-01-01", "2017-12-31"),
         domains=["News", "Social", "Web", "Spoken", "Written"],
         task_subtypes=[],
-        license="Not specified",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="rendered",

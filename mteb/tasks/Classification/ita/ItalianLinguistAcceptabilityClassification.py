@@ -24,7 +24,7 @@ class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
         domains=["Non-fiction", "Spoken", "Written"],
         dialect=[],
         task_subtypes=["Linguistic acceptability"],
-        license="Unknown",
+        license="not specified",
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation="""

@@ -23,7 +23,7 @@ class LeCaRDv2(AbsTaskRetrieval):
         date=None,
         domains=["Legal", "Written"],
         task_subtypes=["Article retrieval"],
-        license="MIT",
+        license="mit",
         annotations_creators="derived",
         dialect=None,
         sample_creation="found",

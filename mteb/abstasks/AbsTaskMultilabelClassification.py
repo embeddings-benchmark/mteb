@@ -13,9 +13,9 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.encoder_interface import Encoder
+from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
-from ..evaluation.evaluators.model_encode import model_encode
-from ..load_results.mteb_results import HFSubset, ScoresDict
+from ..load_results.task_results import HFSubset, ScoresDict
 from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
@@ -162,11 +162,12 @@ class AbsTaskMultilabelClassification(AbsTask):
         unique_train_indices = list(set(itertools.chain.from_iterable(train_samples)))
         unique_train_sentences = train_split.select(unique_train_indices)["text"]
 
-        _unique_train_embeddings = model_encode(
-            unique_train_sentences,
-            model=model,
-            prompt_name=self.metadata.name,
-            **encode_kwargs,
+        _unique_train_embeddings = normalize_embeddings_to_numpy(
+            model.encode(
+                unique_train_sentences,
+                task_name=self.metadata.name,
+                **encode_kwargs,
+            )
         )
         unique_train_embeddings = dict(
             zip(unique_train_indices, _unique_train_embeddings)
@@ -183,8 +184,12 @@ class AbsTaskMultilabelClassification(AbsTask):
         except ValueError:
             logger.warning("Couldn't subsample, continuing with the entire test set.")
 
-        X_test = model_encode(
-            test_text, model=model, prompt_name=self.metadata.name, **encode_kwargs
+        X_test = normalize_embeddings_to_numpy(
+            model.encode(
+                test_text,
+                task_name=self.metadata.name,
+                **encode_kwargs,
+            )
         )
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(

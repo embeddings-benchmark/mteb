@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Mapping
 from datetime import date
-from typing import Any, Dict, List, Mapping, Union
+from typing import Annotated, Any, Union
 
 from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
-from typing_extensions import Annotated, Literal
+from typing_extensions import Literal
 
 from ..languages import (
     ISO_LANGUAGE_SCRIPT,
@@ -71,7 +72,6 @@ TASK_DOMAIN = Literal[
     "Web",
     "Written",
     "Programming",
-    None,
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -149,7 +149,7 @@ STR_DATE = Annotated[
 SPLIT_NAME = str
 HFSubset = str
 LANGUAGES = Union[
-    List[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, List[ISO_LANGUAGE_SCRIPT]]
+    list[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, list[ISO_LANGUAGE_SCRIPT]]
 ]
 
 PROGRAMMING_LANGS = [
@@ -169,9 +169,35 @@ PROGRAMMING_LANGS = [
     "sql",
 ]
 
+LICENSES = (  # this list can be extended as needed
+    Literal[  # we use lowercase for the licenses similar to the huggingface datasets
+        "not specified",  # or none found
+        "mit",
+        "cc-by-2.0",
+        "cc-by-3.0",
+        "cc-by-4.0",
+        "cc-by-sa-3.0",
+        "cc-by-sa-4.0",
+        "cc-by-nc-4.0",
+        "cc-by-nc-sa-3.0",
+        "cc-by-nc-sa-4.0",
+        "cc-by-nc-nd-4.0",
+        "openrail",
+        "openrail++",
+        "odc-by",
+        "afl-3.0",
+        "apache-2.0",
+        "cc-by-nd-2.1-jp",
+        "cc0-1.0",
+        "bsd-3-clause",
+        "gpl-3.0",
+        "cdla-sharing-1.0",
+        "mpl-2.0",
+    ]
+)
 
 METRIC_NAME = str
-METRIC_VALUE = Union[int, float, Dict[str, Any]]
+METRIC_VALUE = Union[int, float, dict[str, Any]]
 
 logger = logging.getLogger(__name__)
 
@@ -197,7 +223,7 @@ class TaskMetadata(BaseModel):
         domains: The domains of the data. These includes "Non-fiction", "Social", "Fiction", "News", "Academic", "Blog", "Encyclopaedic",
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
-        license: The license of the data.
+        license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
         dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
@@ -214,8 +240,8 @@ class TaskMetadata(BaseModel):
 
     name: str
     description: str
-    type: TASK_TYPE | None = None
-    modalities: list[Literal["text", "image"]] = ["text"]
+    type: TASK_TYPE
+    modalities: list[MODALITIES] = ["text"]
     category: TASK_CATEGORY | None = None
     reference: STR_URL | None = None
 
@@ -226,7 +252,7 @@ class TaskMetadata(BaseModel):
     date: tuple[STR_DATE, STR_DATE] | None = None
     domains: list[TASK_DOMAIN] | None = None
     task_subtypes: list[TASK_SUBTYPE] | None = None
-    license: str | None = None
+    license: LICENSES | STR_URL | None = None
 
     annotations_creators: ANNOTATOR_TYPE | None = None
     dialect: list[str] | None = None
@@ -359,3 +385,6 @@ class TaskMetadata(BaseModel):
                 )
             return f"\\cite{{{cite}}}"
         return cite
+
+    def __hash__(self) -> int:
+        return hash(self.model_dump_json())

@@ -23,7 +23,7 @@ class SwahiliNewsClassification(AbsTaskClassification):
         dialect=[],
         domains=["News", "Written"],
         task_subtypes=[],
-        license="CC BY-NC-SA 4.0",
+        license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation="""

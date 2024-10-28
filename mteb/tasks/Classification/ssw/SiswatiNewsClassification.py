@@ -24,7 +24,7 @@ class SiswatiNewsClassification(AbsTaskClassification):
         date=("2022-08-01", "2022-08-01"),
         domains=["News", "Written"],
         task_subtypes=["Topic classification"],
-        license="CC-BY-SA-4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

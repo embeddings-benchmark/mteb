@@ -10,7 +10,7 @@ from tqdm import tqdm
 from transformers import AutoModel
 
 from mteb.model_meta import ModelMeta
-from mteb.models.text_formatting_utils import corpus_to_texts
+# from mteb.models.text_formatting_utils import corpus_to_texts
 
 
 class JinaCLIPModelWrapper:
@@ -129,31 +129,31 @@ class JinaCLIPModelWrapper:
             kwargs.pop("prompt_name")
         return self.model.encode_text(sentences, batch_size=batch_size, **kwargs)
 
-    def encode_queries(self, queries: list[str], batch_size: int = 32, **kwargs: Any):
-        if "prompt_name" in kwargs:
-            kwargs.pop("prompt_name")
-        sentences = [
-            "Represent this sentence for searching relevant passages: " + sentence
-            for sentence in queries
-        ]
-        emb = self.encode(
-            sentences, batch_size=batch_size, normalize_embeddings=True, **kwargs
-        )
-        return emb
+    # def encode_queries(self, queries: list[str], batch_size: int = 32, **kwargs: Any):
+    #     if "prompt_name" in kwargs:
+    #         kwargs.pop("prompt_name")
+    #     sentences = [
+    #         "Represent this sentence for searching relevant passages: " + sentence
+    #         for sentence in queries
+    #     ]
+    #     emb = self.encode(
+    #         sentences, batch_size=batch_size, normalize_embeddings=True, **kwargs
+    #     )
+    #     return emb
 
-    def encode_corpus(
-        self,
-        corpus: list[dict[str, str]] | dict[str, list[str]],
-        batch_size: int = 32,
-        **kwargs: Any,
-    ):
-        if "prompt_name" in kwargs:
-            kwargs.pop("prompt_name")
-        sentences = corpus_to_texts(corpus)
-        emb = self.encode(
-            sentences, batch_size=batch_size, normalize_embeddings=True, **kwargs
-        )
-        return emb
+    # def encode_corpus(
+    #     self,
+    #     corpus: list[dict[str, str]] | dict[str, list[str]],
+    #     batch_size: int = 32,
+    #     **kwargs: Any,
+    # ):
+    #     if "prompt_name" in kwargs:
+    #         kwargs.pop("prompt_name")
+    #     sentences = corpus_to_texts(corpus)
+    #     emb = self.encode(
+    #         sentences, batch_size=batch_size, normalize_embeddings=True, **kwargs
+    #     )
+    #     return emb
 
 
 jina_clip_v1 = ModelMeta(

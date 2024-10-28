@@ -5,10 +5,9 @@ from typing import Any
 
 from datasets import Dataset
 
-from ...encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from ...encoder_interface import Encoder
 from ...evaluation.evaluators import Any2TextMultipleChoiceEvaluator
-from ...load_results.mteb_results import ScoresDict
-from ..AbsTask import AbsTask
+from ..AbsTask import AbsTask, ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +39,7 @@ class AbsTaskAny2TextMultipleChoice(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder | EncoderWithQueryCorpusEncode,
+        model: Encoder,
         dataset: Dataset,
         *,
         encode_kwargs: dict[str, Any] = {},

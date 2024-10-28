@@ -25,7 +25,7 @@ class JaQuADRetrieval(AbsTaskRetrieval):
         date=("2022-01-01", "2022-12-31"),  # approximate guess
         domains=["Encyclopaedic", "Non-fiction", "Written"],
         task_subtypes=["Question answering"],
-        license="CC-BY-SA-3.0",
+        license="cc-by-sa-3.0",
         annotations_creators="human-annotated",
         dialect=None,
         sample_creation="found",

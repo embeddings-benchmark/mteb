@@ -7,14 +7,15 @@ from typing import Any
 import numpy as np
 from PIL import ImageFile
 
+from mteb.abstasks.TaskMetadata import HFSubset
+
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import (
     ImagekNNClassificationEvaluator,
     ImagekNNClassificationEvaluatorPytorch,
     ImagelogRegClassificationEvaluator,
 )
-from ...load_results.mteb_results import HFSubset, ScoresDict
-from ..AbsTask import AbsTask
+from ..AbsTask import AbsTask, ScoresDict
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 

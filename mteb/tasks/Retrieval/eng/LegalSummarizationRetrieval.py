@@ -23,7 +23,7 @@ class LegalSummarization(AbsTaskRetrieval):
         date=None,
         domains=["Legal", "Written"],
         task_subtypes=["Article retrieval"],
-        license="Apache 2.0",
+        license="apache-2.0",
         annotations_creators="derived",
         dialect=None,
         sample_creation="found",

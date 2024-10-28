@@ -22,7 +22,7 @@ class BornholmBitextMining(AbsTaskBitextMining):
         main_score="f1",
         date=("2019-01-01", "2019-12-31"),
         domains=["Web", "Social", "Fiction", "Written"],
-        license="CC-BY-4.0",
+        license="cc-by-4.0",
         task_subtypes=["Dialect pairing"],
         annotations_creators="expert-annotated",
         dialect=["da-dan-bornholm"],

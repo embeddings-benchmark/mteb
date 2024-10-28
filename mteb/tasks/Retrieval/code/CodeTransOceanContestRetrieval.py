@@ -24,7 +24,7 @@ class CodeTransOceanContestRetrieval(AbsTaskRetrieval):
         date=("2023-10-08", "2023-10-08"),
         domains=["Programming", "Written"],
         task_subtypes=["Code retrieval"],
-        license="Apache-2.0",
+        license="apache-2.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

@@ -28,7 +28,7 @@ class LEMBWikimQARetrieval(AbsTaskRetrieval):
         date=("1950-01-01", "2019-12-31"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Article retrieval"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

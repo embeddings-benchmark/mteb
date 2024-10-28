@@ -28,8 +28,7 @@ class Caltech101Classification(AbsTaskZeroshotClassification):
         ),  # Estimated range for the collection of reviews
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
-        license="Not specified",
-        socioeconomic_status="mixed",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],
