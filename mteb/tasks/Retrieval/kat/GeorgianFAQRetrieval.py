@@ -30,7 +30,7 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/jupyterjazz/georgian-faq",
         date=("2024-05-02", "2024-05-03"),
         task_subtypes=["Question answering"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         bibtex_citation="",

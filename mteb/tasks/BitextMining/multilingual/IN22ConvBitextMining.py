@@ -87,7 +87,7 @@ class IN22ConvBitextMining(AbsTaskBitextMining, MultilingualTask):
         date=("2022-10-01", "2023-03-01"),
         domains=["Social", "Spoken", "Fiction", "Spoken"],
         task_subtypes=[],
-        license="CC-BY-4.0",
+        license="cc-by-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",

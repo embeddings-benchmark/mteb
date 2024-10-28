@@ -8,7 +8,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class CLEVR(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
-        name="CLEVR",
+        name="CLEVRZeroShot",
         description="CLEVR closest object distance identification task.",
         reference="https://openaccess.thecvf.com/content_cvpr_2017/html/Johnson_CLEVR_A_Diagnostic_CVPR_2017_paper.html",
         dataset={
@@ -23,8 +23,7 @@ class CLEVR(AbsTaskZeroshotClassification):
         date=("2016-01-01", "2016-12-20"),
         domains=["Constructed"],
         task_subtypes=["Object recognition"],
-        license="""""",
-        socioeconomic_status="mixed",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["text", "image"],
@@ -61,7 +60,7 @@ year = {2017}
 
 class CLEVRCount(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
-        name="CLEVRCount",
+        name="CLEVRCountZeroShot",
         description="CLEVR count objects task.",
         reference="https://openaccess.thecvf.com/content_cvpr_2017/html/Johnson_CLEVR_A_Diagnostic_CVPR_2017_paper.html",
         dataset={
@@ -76,8 +75,7 @@ class CLEVRCount(AbsTaskZeroshotClassification):
         date=("2016-01-01", "2016-12-20"),
         domains=["Constructed"],
         task_subtypes=["Object recognition"],
-        license="""""",
-        socioeconomic_status="mixed",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["text", "image"],

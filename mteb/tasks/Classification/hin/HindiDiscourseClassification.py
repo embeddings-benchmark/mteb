@@ -24,7 +24,7 @@ class HindiDiscourseClassification(AbsTaskClassification):
         domains=["Fiction", "Social", "Written"],
         dialect=[],
         task_subtypes=["Discourse coherence"],
-        license="MIT",
+        license="mit",
         annotations_creators="expert-annotated",
         sample_creation="found",
         bibtex_citation="""

@@ -13,6 +13,7 @@ class Caltech101Classification(AbsTaskImageClassification):
             "path": "HuggingFaceM4/Caltech-101",
             "name": "with_background_category",
             "revision": "851374102055782c84f89b1b4e9d128a6568847b",
+            "trust_remote_code": True,
         },
         type="ImageClassification",
         category="i2t",
@@ -25,7 +26,7 @@ class Caltech101Classification(AbsTaskImageClassification):
         ),  # Estimated range for the collection of reviews
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

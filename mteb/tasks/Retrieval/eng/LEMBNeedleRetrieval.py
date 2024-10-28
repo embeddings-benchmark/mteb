@@ -37,7 +37,7 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
         date=("2000-01-01", "2023-12-31"),
         domains=["Academic", "Blog", "Written"],
         task_subtypes=["Article retrieval"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

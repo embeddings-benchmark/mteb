@@ -12,9 +12,9 @@ from sklearn.metrics.pairwise import (
 )
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
+from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from .Evaluator import Evaluator
-from .model_encode import model_encode
 
 logger = logging.getLogger(__name__)
 
@@ -45,11 +45,19 @@ class STSEvaluator(Evaluator):
         *,
         encode_kwargs: dict[str, Any] = {},
     ):
-        embeddings1 = model_encode(
-            self.sentences1, model=model, prompt_name=self.task_name, **encode_kwargs
+        embeddings1 = normalize_embeddings_to_numpy(
+            model.encode(
+                self.sentences1,
+                task_name=self.task_name,
+                **encode_kwargs,
+            )
         )
-        embeddings2 = model_encode(
-            self.sentences2, model=model, prompt_name=self.task_name, **encode_kwargs
+        embeddings2 = normalize_embeddings_to_numpy(
+            model.encode(
+                self.sentences2,
+                task_name=self.task_name,
+                **encode_kwargs,
+            )
         )
 
         logger.info("Evaluating...")
@@ -77,8 +85,8 @@ class STSEvaluator(Evaluator):
             similarity_scores = np.array(_similarity_scores)
 
         if similarity_scores is not None:
-            pearson = pearsonr(self.gold_scores, similarity_scores)
-            spearman = spearmanr(self.gold_scores, similarity_scores)
+            pearson, _ = pearsonr(self.gold_scores, similarity_scores)
+            spearman, _ = spearmanr(self.gold_scores, similarity_scores)
         else:
             # if model does not have a similarity function, we assume the cosine similarity
             pearson = cosine_pearson

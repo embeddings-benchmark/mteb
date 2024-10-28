@@ -28,7 +28,7 @@ version train/test list.""",
         ),  # Estimated range for the collection of reviews
         domains=["Scene"],
         task_subtypes=["Activity recognition"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

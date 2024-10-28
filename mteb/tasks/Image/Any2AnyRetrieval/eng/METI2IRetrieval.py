@@ -21,7 +21,7 @@ class METI2IRetrieval(AbsTaskAny2AnyRetrieval):
         date=("2021-12-06", "2021-12-14"),  # conference dates
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

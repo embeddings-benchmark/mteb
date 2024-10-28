@@ -2,16 +2,17 @@ from __future__ import annotations
 
 import json
 import logging
-import os
+from pathlib import Path
 
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb import MTEB
+from mteb.model_meta import ModelMeta
 
 logging.basicConfig(level=logging.INFO)
 
 
-def test_mteb_rerank():
+def test_mteb_rerank(tmp_path: Path):
     # Test that reranking works
     # unfortunately, we need all the query ids to pretend to have this
     scifact_keys = [
@@ -323,7 +324,8 @@ def test_mteb_rerank():
         ]
     )
     # create fake first stage results
-    with open("tmp.json", "w") as f:
+    tmp_file = tmp_path / "tmp.json"
+    with open(tmp_file, "w") as f:
         f.write(
             json.dumps(
                 {
@@ -344,10 +346,10 @@ def test_mteb_rerank():
         overwrite_results=True,
         eval_splits=["test"],
         top_k=2,
-        previous_results="tmp.json",
+        previous_results=tmp_file,
         save_predictions=True,
     )
-    os.remove("tmp.json")
+    tmp_file.unlink()
 
     # read in the results
     with open("tests/results/SciFact_default_predictions.json") as f:
@@ -364,6 +366,14 @@ def test_reranker_same_ndcg1():
     revision = "21eec43590414cb8e3a6f654857abed0483ae36e"
     de = SentenceTransformer(de_name, revision=revision)
     ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
+    ce_revision = "e9ea2688951463fc2791a2ea2ddfce6762900675"
+    ce.mteb_model_meta = ModelMeta(
+        name="cross-encoder/ms-marco-TinyBERT-L-2-v2",
+        languages=["eng-Latn"],
+        open_weights=True,
+        revision=ce_revision,
+        release_date="2021-04-15",
+    )
     eval = MTEB(tasks=["SciFact"])
     eval.run(
         de,
@@ -389,7 +399,7 @@ def test_reranker_same_ndcg1():
         stage1 = json.load(f)
 
     with open(
-        "tests/results/stage2/no_model_name_available/no_revision_available/SciFact.json"
+        f"tests/results/stage2/cross-encoder__ms-marco-TinyBERT-L-2-v2/{ce_revision}/SciFact.json"
     ) as f:
         stage2 = json.load(f)
 

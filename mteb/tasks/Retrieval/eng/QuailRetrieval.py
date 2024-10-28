@@ -24,7 +24,7 @@ class Quail(AbsTaskRetrieval):
         date=("2020-01-01", "2020-12-31"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Reasoning as Retrieval"],
-        license="CC BY-NC-SA 4.0",
+        license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

@@ -48,7 +48,7 @@ class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
         date=("2023-02-16", "2023-09-03"),
         domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="Creative Commons Attribution 4.0 International License",
+        license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

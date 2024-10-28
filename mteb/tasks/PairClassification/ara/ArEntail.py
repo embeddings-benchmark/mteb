@@ -25,7 +25,7 @@ class ArEntail(AbsTaskPairClassification):
         ),  # best guess based on google searching random samples
         domains=["News", "Written"],
         task_subtypes=["Textual Entailment"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

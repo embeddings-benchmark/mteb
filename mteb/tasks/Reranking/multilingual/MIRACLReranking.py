@@ -7,9 +7,9 @@ from datasets import Dataset
 
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators import RerankingEvaluator
-from mteb.load_results.mteb_results import ScoresDict
+from mteb.load_results.task_results import ScoresDict
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
@@ -69,7 +69,7 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         date=("2022-06-01", "2023-01-30"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=[],
-        license="CC BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
@@ -82,7 +82,7 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
 
     def _evaluate_subset(
         self,
-        model: Encoder | EncoderWithQueryCorpusEncode,
+        model: Encoder,
         data_split: Dataset,
         *,
         encode_kwargs: dict[str, Any] = {},

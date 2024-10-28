@@ -23,7 +23,7 @@ class PoemSentimentClassification(AbsTaskClassification):
         date=("1700-01-01", "1900-01-01"),
         domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="CC-BY-4.0",
+        license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=["eng-Latn-US", "en-Latn-GB"],
         sample_creation="found",

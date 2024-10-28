@@ -37,7 +37,7 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining, MultilingualTask):
         reference="https://huggingface.co/datasets/jupyterjazz/tbilisi-city-hall-titles",
         date=("2024-05-02", "2024-05-03"),
         task_subtypes=[],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         bibtex_citation="",

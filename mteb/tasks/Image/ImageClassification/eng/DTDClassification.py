@@ -24,7 +24,7 @@ class DTDClassification(AbsTaskImageClassification):
         ),  # Estimated range for the collection of reviews
         domains=["Encyclopaedic"],
         task_subtypes=["Textures recognition"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

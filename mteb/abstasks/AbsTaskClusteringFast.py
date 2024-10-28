@@ -4,7 +4,7 @@ import itertools
 import logging
 import random
 from collections import Counter, defaultdict
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 import sklearn
@@ -13,15 +13,15 @@ from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 
 from mteb.encoder_interface import Encoder
+from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
-from ..evaluation.evaluators.model_encode import model_encode
-from ..load_results.mteb_results import HFSubset
+from ..load_results.task_results import HFSubset
 from .AbsTask import AbsTask, DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
 
-MultilingualDataset = Dict[HFSubset, DatasetDict]
+MultilingualDataset = dict[HFSubset, DatasetDict]
 
 
 def evaluate_clustering_bootstrapped(
@@ -174,11 +174,12 @@ class AbsTaskClusteringFast(AbsTask):
             )
             downsampled_dataset = dataset.select(example_indices)  # type: ignore
 
-        embeddings = model_encode(
-            downsampled_dataset["sentences"],  # type: ignore
-            model=model,
-            prompt_name=self.metadata.name,
-            **encode_kwargs,
+        embeddings = normalize_embeddings_to_numpy(
+            model.encode(
+                downsampled_dataset["sentences"],  # type: ignore
+                task_name=self.metadata.name,
+                **encode_kwargs,
+            )
         )
 
         labels = []

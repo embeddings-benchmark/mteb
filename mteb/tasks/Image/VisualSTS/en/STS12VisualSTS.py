@@ -22,7 +22,7 @@ class STS12VisualSTS(AbsTaskVisualSTS):
         date=("2005-01-01", "2012-12-31"),
         domains=["Encyclopaedic", "News", "Written"],
         task_subtypes=[],
-        license="Not specified",
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="rendered",

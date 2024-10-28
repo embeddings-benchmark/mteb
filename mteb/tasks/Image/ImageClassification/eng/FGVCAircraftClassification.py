@@ -12,6 +12,7 @@ class FGVCAircraftClassification(AbsTaskImageClassification):
         dataset={
             "path": "HuggingFaceM4/FGVC-Aircraft",
             "revision": "91860adfc9a09aabca5cddb5247442109b38e213",
+            "trust_remote_code": True,
         },
         type="ImageClassification",
         category="i2t",
@@ -24,7 +25,7 @@ class FGVCAircraftClassification(AbsTaskImageClassification):
         ),  # Estimated range for the collection of reviews
         domains=["Encyclopaedic"],
         task_subtypes=["Object recognition"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],

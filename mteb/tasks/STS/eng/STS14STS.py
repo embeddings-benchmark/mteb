@@ -23,7 +23,7 @@ class STS14STS(AbsTaskSTS):
         date=("2012-01-01", "2012-08-31"),
         domains=["Blog", "Web", "Spoken"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="Not specified",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",

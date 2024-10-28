@@ -25,7 +25,7 @@ class ToxicConversationsClassification(AbsTaskClassification):
         ),  # Estimated range for the collection of comments
         domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="CC BY 4.0",
+        license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

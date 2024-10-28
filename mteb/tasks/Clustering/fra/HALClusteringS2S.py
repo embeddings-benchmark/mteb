@@ -84,7 +84,7 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
         date=("2000-03-29", "2024-05-24"),
         domains=["Academic", "Written"],
         task_subtypes=["Thematic clustering"],
-        license="Apache-2.0",
+        license="apache-2.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

@@ -22,7 +22,7 @@ class SanskritShlokasClassification(AbsTaskClassification):
         main_score="accuracy",
         domains=["Religious", "Written"],
         task_subtypes=["Topic classification"],
-        license="CC BY-SA 4.0",
+        license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

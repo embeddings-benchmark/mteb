@@ -24,7 +24,6 @@ class RenderedSST2(AbsTaskZeroshotClassification):
         domains=["Reviews"],
         task_subtypes=[],
         license="mit",
-        socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["text", "image"],

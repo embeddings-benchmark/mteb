@@ -30,7 +30,7 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
         ),
         domains=["News", "Written"],
         task_subtypes=["Article retrieval"],
-        license="CC-BY 4.0",
+        license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

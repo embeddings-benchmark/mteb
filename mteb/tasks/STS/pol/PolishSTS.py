@@ -22,7 +22,7 @@ class SickrPLSTS(AbsTaskSTS):
         date=("2018-01-01", "2019-09-01"),  # rough estimate
         domains=["Web", "Written"],
         task_subtypes=["Textual Entailment"],
-        license="CC-BY-NC-SA-3.0",
+        license="cc-by-nc-sa-3.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="human-translated and localized",
@@ -89,7 +89,7 @@ class CdscrSTS(AbsTaskSTS):
         date=("2016-01-01", "2017-04-01"),  # rough estimate
         domains=["Web", "Written"],
         task_subtypes=["Textual Entailment"],
-        license="CC-BY-NC-SA-4.0",
+        license="cc-by-nc-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="human-translated and localized",

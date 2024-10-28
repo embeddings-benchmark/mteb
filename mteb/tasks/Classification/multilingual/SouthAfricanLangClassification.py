@@ -36,7 +36,7 @@ class SouthAfricanLangClassification(AbsTaskClassification):
         date=("2010-01-01", "2023-01-01"),
         domains=["Web", "Non-fiction", "Written"],
         task_subtypes=["Language identification"],
-        license="MIT",
+        license="mit",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",

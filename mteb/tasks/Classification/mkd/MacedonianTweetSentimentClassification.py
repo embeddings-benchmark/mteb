@@ -22,7 +22,7 @@ class MacedonianTweetSentimentClassification(AbsTaskClassification):
         main_score="accuracy",
         domains=["Social", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="CC BY-NC-SA 3.0",
+        license="cc-by-nc-sa-3.0",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

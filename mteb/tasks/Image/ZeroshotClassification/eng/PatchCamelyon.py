@@ -28,8 +28,7 @@ class PatchCamelyonClassification(AbsTaskZeroshotClassification):
         ),  # Estimated range for the collection of reviews
         domains=["Medical"],
         task_subtypes=["Tumor detection"],
-        license="Not specified",
-        socioeconomic_status="mixed",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["image"],
