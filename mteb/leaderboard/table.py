@@ -84,12 +84,15 @@ def scores_to_tables(scores_long: list[dict]):
     joint_table.insert(
         0, "Rank", joint_table["Mean"].rank(ascending=False).map(int).map(str)
     )
+    per_task = per_task.reset_index().drop(columns=["model_revision"])
+    per_task["model_name"] = per_task["model_name"].map(
+        lambda name: name.split("/")[-1]
+    )
     per_task = per_task.rename(
         columns={
             "model_name": "Model",
         }
     )
-    per_task = per_task.reset_index().drop(columns=["model_revision"])
     numerics = joint_table.select_dtypes("number").columns
     to_format = ["Mean", "Mean by Task Type", *mean_per_type.columns]
     joint_table[to_format] = joint_table[to_format].map(format_scores)
