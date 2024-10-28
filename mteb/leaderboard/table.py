@@ -1,14 +1,25 @@
 from __future__ import annotations
 
+import math
+
 import gradio as gr
 import numpy as np
 import pandas as pd
 
+from mteb.models.overview import get_model_meta
 from mteb.overview import get_task
 
 
 def format_scores(score: float) -> float:
     return score * 100
+
+
+def format_n_parameters(n_parameters) -> str:
+    n_million = int(n_parameters) // 1e6
+    n_zeros = math.log10(n_million)
+    if n_zeros >= 3:
+        return str(n_million // (10**3)) + "B"
+    return str(n_million) + "M"
 
 
 def scores_to_tables(scores_long: list[dict]):
@@ -49,6 +60,15 @@ def scores_to_tables(scores_long: list[dict]):
     joint_table = overall_mean.join([typed_mean, mean_per_type])
     joint_table.insert(0, "mean_rank", mean_rank)
     joint_table = joint_table.reset_index()
+    joint_table = joint_table.drop(columns=["model_revision"])
+    model_metas = joint_table["model_name"].map(get_model_meta)
+    joint_table.insert(1, "# Tokens", model_metas.map(lambda m: str(int(m.max_tokens))))
+    joint_table.insert(1, "# Dims", model_metas.map(lambda m: str(int(m.embed_dim))))
+    joint_table.insert(
+        1,
+        "# Params",
+        model_metas.map(lambda m: format_n_parameters(m.n_parameters)),
+    )
     joint_table = joint_table.sort_values("mean", ascending=False)
     joint_table["model_name"] = joint_table["model_name"].map(
         lambda name: name.split("/")[-1]
@@ -61,7 +81,6 @@ def scores_to_tables(scores_long: list[dict]):
             "mean_rank": "Mean Rank",
         }
     )
-    joint_table = joint_table.drop(columns=["model_revision"])
     joint_table.insert(
         0, "Rank", joint_table["Mean"].rank(ascending=False).map(int).map(str)
     )
