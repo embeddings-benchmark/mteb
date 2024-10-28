@@ -11,8 +11,6 @@ from transformers import AutoModel
 
 from mteb.model_meta import ModelMeta
 
-# from mteb.models.text_formatting_utils import corpus_to_texts
-
 
 class JinaCLIPModelWrapper:
     def __init__(
@@ -48,9 +46,13 @@ class JinaCLIPModelWrapper:
 
         if isinstance(images, DataLoader):
             with torch.no_grad():
+                import torchvision.transforms.functional as F
+
                 for batch in tqdm(images):
                     image_outputs = self.model.encode_image(
-                        batch, convert_to_numpy=False, convert_to_tensor=True
+                        [F.to_pil_image(b.to("cpu")) for b in batch],
+                        convert_to_numpy=False,
+                        convert_to_tensor=True,
                     )
                     all_image_embeddings.append(image_outputs.cpu())
         else:
@@ -126,48 +128,20 @@ class JinaCLIPModelWrapper:
         batch_size: int = 32,
         **kwargs: Any,
     ):
-        if "prompt_name" in kwargs:
-            kwargs.pop("prompt_name")
+        if "task_name" in kwargs:
+            kwargs.pop("task_name")
         return self.model.encode_text(sentences, batch_size=batch_size, **kwargs)
 
-    # def encode_queries(self, queries: list[str], batch_size: int = 32, **kwargs: Any):
-    #     if "prompt_name" in kwargs:
-    #         kwargs.pop("prompt_name")
-    #     sentences = [
-    #         "Represent this sentence for searching relevant passages: " + sentence
-    #         for sentence in queries
-    #     ]
-    #     emb = self.encode(
-    #         sentences, batch_size=batch_size, normalize_embeddings=True, **kwargs
-    #     )
-    #     return emb
-
-    # def encode_corpus(
-    #     self,
-    #     corpus: list[dict[str, str]] | dict[str, list[str]],
-    #     batch_size: int = 32,
-    #     **kwargs: Any,
-    # ):
-    #     if "prompt_name" in kwargs:
-    #         kwargs.pop("prompt_name")
-    #     sentences = corpus_to_texts(corpus)
-    #     emb = self.encode(
-    #         sentences, batch_size=batch_size, normalize_embeddings=True, **kwargs
-    #     )
-    #     return emb
-
-
-from mteb.model_meta import sentence_transformers_loader
 
 jina_clip_v1 = ModelMeta(
     loader=partial(
-        sentence_transformers_loader,
+        JinaCLIPModelWrapper,
         model_name="jinaai/jina-clip-v1",
     ),
     name="jinaai/jina-clip-v1",
     languages=["eng_Latn"],
     open_source=True,
-    revision="1cbe5e8b11ea3728df0b610d5453dfe739804aa9",
+    revision="06150c7c382d7a4faedc7d5a0d8cdb59308968f4",
     release_date="2024-05-30",
 )
 
