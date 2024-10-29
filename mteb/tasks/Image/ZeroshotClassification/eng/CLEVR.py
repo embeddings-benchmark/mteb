@@ -23,7 +23,7 @@ class CLEVR(AbsTaskZeroshotClassification):
         date=("2016-01-01", "2016-12-20"),
         domains=["Constructed"],
         task_subtypes=["Object recognition"],
-        license="""""",
+        license="cc-by-4.0",
         socioeconomic_status="mixed",
         annotations_creators="human-annotated",
         dialect=[],
