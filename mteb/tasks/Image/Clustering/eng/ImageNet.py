@@ -17,7 +17,7 @@ class ImageNetDog15Clustering(AbsTaskImageClustering):
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
+        main_score="nmi",
         date=("2009-06-20", "2009-06-20"),  # Conference date
         domains=["Web"],
         task_subtypes=["Object recognition"],
@@ -57,7 +57,7 @@ class ImageNet10Clustering(AbsTaskImageClustering):
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
+        main_score="nmi",
         date=("2009-06-20", "2009-06-20"),  # Conference date
         domains=["Web"],
         task_subtypes=["Object recognition"],

@@ -59,8 +59,6 @@ class ImageClusteringEvaluator(Evaluator):
         )
         ari = metrics.cluster.adjusted_rand_score(self.labels, cluster_assignment)
 
-        accuracy = metrics.accuracy_score(self.labels, cluster_assignment)
-
         matrix = metrics.confusion_matrix(self.labels, cluster_assignment)
 
         # get linear sum assignment
@@ -70,7 +68,6 @@ class ImageClusteringEvaluator(Evaluator):
 
         return {
             "v_measure": v_measure,
-            "accuracy": accuracy,
             "nmi": nmi,
             "ari": ari,
             "cluster_accuracy": clustering_accuracy,

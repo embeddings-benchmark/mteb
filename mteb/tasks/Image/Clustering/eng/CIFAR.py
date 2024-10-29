@@ -17,7 +17,7 @@ class CIFAR10Clustering(AbsTaskImageClustering):
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
+        main_score="nmi",
         date=(
             "2008-01-01",
             "2009-01-01",
@@ -57,7 +57,7 @@ class CIFAR100Clustering(AbsTaskImageClustering):
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
+        main_score="nmi",
         date=(
             "2008-01-01",
             "2009-01-01",
