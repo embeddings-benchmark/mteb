@@ -56,7 +56,7 @@ TASK_TEST_GRID = [
     "SciDocsRR",  # reranking
     "FarsTail",  # pair classification
     "TwitterHjerneRetrieval",  # retrieval
-    "BrazilianToxicTweetsClassification",  # multilabel classification
+    "CEDRClassification",  # multilabel classification
     "FaroeseSTS",  # STS
     "SummEval",  # summarization
 ]
