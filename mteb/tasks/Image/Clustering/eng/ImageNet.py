@@ -53,7 +53,7 @@ class ImageNet10Clustering(AbsTaskImageClustering):
             "path": "JamieSJS/imagenet-10",
             "revision": "88f8a6d47c257895094c5ad81e67ba751771fc99",
         },
-        type="Clustering",
+        type="ImageClustering",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
