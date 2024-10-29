@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 from mteb import SentenceTransformerWrapper
-from mteb.evaluation.evaluators import InstructionRetrievalEvaluator, utils
+from mteb.evaluation.evaluators import RetrievalEvaluator, utils
 from tests.test_benchmark.mock_models import MockNumpyEncoder
 
 
-class TestInstructionRetrievalEvaluator:
+class TestInstructionRetrievalEvaluation:
     def setup_method(self):
         """Setup any state tied to the execution of the given method in a class.
 
         setup_method is invoked for every test method of a class.
         """
         # checks that it loads
-        self.evaluator = InstructionRetrievalEvaluator.InstructionRetrievalEvaluator(
+        self.evaluator = RetrievalEvaluator.RetrievalEvaluator(
             SentenceTransformerWrapper(MockNumpyEncoder()), task_name="test"
         )
 

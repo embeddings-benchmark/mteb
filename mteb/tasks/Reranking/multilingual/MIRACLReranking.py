@@ -8,7 +8,7 @@ from datasets import Dataset
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder
-from mteb.evaluation.evaluators import RerankingEvaluator
+from mteb.evaluation.evaluators.RetrievalEvaluator import RetrievalEvaluator
 from mteb.load_results.task_results import ScoresDict
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
@@ -88,7 +88,8 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> ScoresDict:
-        evaluator = RerankingEvaluator(
+        # TODO: this file will need to be fixed
+        evaluator = RetrievalEvaluator(
             samples=data_split,
             evaluator_type="miracl",
             task_name=self.metadata.name,

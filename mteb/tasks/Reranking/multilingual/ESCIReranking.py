@@ -38,7 +38,7 @@ class ESCIReranking(MultilingualTask, AbsTaskReranking):
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGUAGES,
-        main_score="map",
+        main_score="map_at_1000",
         date=("2022-06-14", "2022-06-14"),
         domains=["Written"],
         task_subtypes=[],

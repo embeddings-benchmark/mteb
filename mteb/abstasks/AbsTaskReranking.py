@@ -6,7 +6,7 @@ from collections import defaultdict
 import datasets
 import tqdm
 
-from .AbsTask import DescriptiveStatistics
+from ..load_results.task_results import ScoresDict
 from .AbsTaskRetrieval import AbsTaskRetrieval
 
 logger = logging.getLogger(__name__)
@@ -29,26 +29,6 @@ OLD_FORMAT_RERANKING_TASKS = [
     "CMedQAv1-reranking",
     "CMedQAv2-reranking",
 ]
-
-
-class RerankingDescriptiveStatistics(DescriptiveStatistics):
-    """Descriptive statistics for Reranking
-
-    Attributes:
-        num_samples: number of samples in the dataset.
-        num_positive: Number of positive examples
-        num_negative: Number of negative examples
-        avg_query_len: Average length of queries
-        avg_positive_len: Average length of positive examples
-        avg_negative_len: Average length of negative examples
-    """
-
-    num_samples: int
-    num_positive: int
-    num_negative: int
-    avg_query_len: float
-    avg_positive_len: float
-    avg_negative_len: float
 
 
 class AbsTaskReranking(AbsTaskRetrieval):
@@ -152,42 +132,51 @@ class AbsTaskReranking(AbsTaskRetrieval):
                     self.top_ranked[split][query_id].append(doc_id)
                     self.relevant_docs[split][query_id][doc_id] = 0
 
+        self.instructions = None  # previous tasks don't have instructions
         self.data_loaded = True
 
-    def _calculate_metrics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
-    ) -> RerankingDescriptiveStatistics:
-        if self.metadata.name in OLD_FORMAT_RERANKING_TASKS:
-            # TODO: do we want the old calculated metrics for these, or should we switch to the new?
-            if hf_subset:
-                query = self.original_dataset[hf_subset][split]["query"]
-                positive = self.original_dataset[hf_subset][split]["positive"]
-                negative = self.original_dataset[hf_subset][split]["negative"]
-            elif compute_overall:
-                query = []
-                positive = []
-                negative = []
-                for hf_subset in self.metadata.eval_langs:
-                    query.extend(self.original_dataset[hf_subset][split]["query"])
-                    positive.extend(self.original_dataset[hf_subset][split]["positive"])
-                    negative.extend(self.original_dataset[hf_subset][split]["negative"])
+    def _evaluate_subset(
+        self, retriever, corpus, queries, relevant_docs, hf_subset: str, **kwargs
+    ) -> ScoresDict:
+        all_results = defaultdict(dict)
+        max_docs = 0
+        top_ranked = kwargs["top_ranked"]  # must be present for reranking
+        for query_id in tqdm.tqdm(
+            list(queries.keys()), leave=False, desc="Reranking over query-ids.."
+        ):
+            cur_queries = {query_id: queries[query_id]}
+            if "instructions" in kwargs:
+                instructions = kwargs["instructions"]
+                cur_instructions = {queries[query_id]: instructions[queries[query_id]]}
             else:
-                query = self.original_dataset[split]["query"]
-                positive = self.original_dataset[split]["positive"]
-                negative = self.original_dataset[split]["negative"]
+                cur_instructions = None
 
-            total_len_query = sum([len(q) for q in query])
-            total_len_positive = sum([len(p) for p in positive])
-            total_len_negative = sum([len(n) for n in negative])
-            return RerankingDescriptiveStatistics(
-                num_samples=len(query),
-                num_positive=len(positive),
-                num_negative=len(negative),
-                avg_query_len=total_len_query / len(query),
-                avg_positive_len=total_len_positive / len(positive),
-                avg_negative_len=total_len_negative / len(negative),
+            doc_ids_to_rerank = top_ranked[query_id]
+            cur_corpus = {doc_id: corpus[doc_id] for doc_id in doc_ids_to_rerank}
+            if (
+                len(cur_corpus) > max_docs
+            ):  # use this to make sure we get the correct MAP/MRR at max length
+                max_docs = len(cur_corpus)
+
+            # to handle instruction-based reranking we pass both query_id and instructions (unused if not instruction-based)
+            results = retriever(
+                cur_corpus,
+                cur_queries,
+                instructions=cur_instructions,
+                query_id=query_id,
             )
-        else:
-            return super()._calculate_metrics_from_split(
-                split, hf_subset, compute_overall
-            )
+            # results should have only one key, the query_id
+            all_results[query_id] = results[query_id]
+
+        # do the evaluation like normal now, but pass our results
+        if max_docs > max(retriever.k_values):
+            retriever.k_values += [max_docs]
+        return super()._evaluate_subset(
+            retriever,
+            corpus,
+            queries,
+            relevant_docs,
+            hf_subset,
+            results=all_results,
+            **kwargs,
+        )

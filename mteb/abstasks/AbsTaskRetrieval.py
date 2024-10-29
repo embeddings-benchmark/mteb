@@ -238,6 +238,7 @@ class AbsTaskRetrieval(AbsTask):
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
+        self.instructions, self.top_ranked = None, None
         dataset_path = self.metadata_dict["dataset"]["path"]
         hf_repo_qrels = (
             dataset_path + "-qrels" if "clarin-knext" in dataset_path else None
@@ -289,12 +290,21 @@ class AbsTaskRetrieval(AbsTask):
                     self.queries[split],
                     self.relevant_docs[split],
                 )
+                if self.top_ranked is not None:
+                    kwargs["top_ranked"] = self.top_ranked[split]
+                if self.instructions is not None:
+                    kwargs["instructions"] = self.instructions[split]
             else:
                 corpus, queries, relevant_docs = (
                     self.corpus[hf_subset][split],
                     self.queries[hf_subset][split],
                     self.relevant_docs[hf_subset][split],
                 )
+                if self.top_ranked is not None:
+                    kwargs["top_ranked"] = self.top_ranked[hf_subset][split]
+                if self.instructions is not None:
+                    kwargs["instructions"] = self.instructions[hf_subset][split]
+
             scores[hf_subset] = self._evaluate_subset(
                 retriever, corpus, queries, relevant_docs, hf_subset, **kwargs
             )
@@ -303,10 +313,15 @@ class AbsTaskRetrieval(AbsTask):
     def _evaluate_subset(
         self, retriever, corpus, queries, relevant_docs, hf_subset: str, **kwargs
     ) -> ScoresDict:
-        start_time = time()
-        results = retriever(corpus, queries)
-        end_time = time()
-        logger.info(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
+        if "results" in kwargs:
+            # reranking has already been done
+            results = kwargs["results"]
+        else:
+            # perform the retrieval here
+            start_time = time()
+            results = retriever(corpus, queries)
+            end_time = time()
+            logger.info(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 
         save_predictions = kwargs.get("save_predictions", False)
         export_errors = kwargs.get("export_errors", False)

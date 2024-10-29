@@ -13,9 +13,7 @@ from datasets import Dataset, Features, Value, load_dataset
 from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators import utils
-from ..evaluation.evaluators.InstructionRetrievalEvaluator import (
-    InstructionRetrievalEvaluator,
-)
+from ..evaluation.evaluators.RetrievalEvaluator import RetrievalEvaluator
 from .AbsTask import AbsTask, DescriptiveStatistics
 from .AbsTaskRetrieval import HFDataLoader
 
@@ -347,7 +345,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
 
     def _evaluate_subset_lang(
         self,
-        retriever: InstructionRetrievalEvaluator,
+        retriever: RetrievalEvaluator,
         corpus: dict,
         queries: dict,
         og_relevant_docs: dict,
@@ -467,7 +465,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> dict[str, dict[str, Any]]:
-        retriever = InstructionRetrievalEvaluator(
+        retriever = RetrievalEvaluator(
             retriever=model,
             task_name=self.metadata.name,
             encode_kwargs=encode_kwargs,
@@ -523,7 +521,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
 
     def _evaluate_subset(
         self,
-        retriever: InstructionRetrievalEvaluator,
+        retriever: RetrievalEvaluator,
         corpus: dict[str, dict[str, str]],
         queries: dict[str, str],
         relevant_docs: dict[str, dict[str, int]],
