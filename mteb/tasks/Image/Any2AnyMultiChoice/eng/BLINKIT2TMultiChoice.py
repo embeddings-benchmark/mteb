@@ -21,7 +21,7 @@ class BLINKIT2TMultiChoice(AbsTaskAny2AnyMultiChoice):
         date=("2018-01-01", "2018-12-31"),
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
-        license="CC BY-SA 4.0",
+        license="not specified",
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],
