@@ -49,7 +49,7 @@ for model_name in [
     tasks = mteb.get_tasks(
         task_types=[
             "Any2AnyRetrieval",
-            "AbsTaskAny2AnyMultiChoice",
+            "Any2AnyMultiChoice",
             "Any2TextMutipleChoice",
             "ImageClustering",
             "ImageClassification",
