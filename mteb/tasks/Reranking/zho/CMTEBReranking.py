@@ -127,7 +127,7 @@ class CMedQAv2(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
-        main_score="map",
+        main_score="map_at_1000",
         date=None,
         form=None,
         domains=None,

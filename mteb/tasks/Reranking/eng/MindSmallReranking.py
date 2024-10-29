@@ -19,7 +19,7 @@ class MindSmallReranking(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2019-10-12", "2019-11-22"),
         domains=["News", "Written"],
         task_subtypes=[],

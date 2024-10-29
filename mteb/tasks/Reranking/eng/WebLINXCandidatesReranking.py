@@ -29,7 +29,7 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
             "test_web",
         ],
         eval_langs=["eng-Latn"],
-        main_score="mrr",
+        main_score="mrr_at_1000",
         date=("2023-03-01", "2023-10-30"),
         domains=["Academic", "Web", "Written"],
         task_subtypes=["Code retrieval", "Conversational retrieval"],

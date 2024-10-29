@@ -5,6 +5,7 @@ from collections import defaultdict
 
 import datasets
 import tqdm
+from datasets import Dataset
 
 from ..load_results.task_results import ScoresDict
 from .AbsTaskRetrieval import AbsTaskRetrieval
@@ -64,80 +65,113 @@ class AbsTaskReranking(AbsTaskRetrieval):
     """
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super(AbsTaskRetrieval, self).__init__(**kwargs)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
 
         if self.metadata.name in OLD_FORMAT_RERANKING_TASKS:
-            self.original_dataset = datasets.load_dataset(
-                **self.metadata_dict["dataset"]
-            )  # type: ignore
-            self.transform_old_format_to_standard()
+            self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
+            self.dataset_transform()
         else:
             # use AbsTaskRetrieval default to load the data
             # TODO: need to make sure top_ranked comes back
             return super().load_data(**kwargs)
 
-    def transform_old_format_to_standard(self):
-        """Transform the old format to the new format (see class doc string for details). Dataset has three features: query, positive, negative."""
+    def process_example(self, example: dict, split: str, query_idx: int) -> dict:
+        """Process a single example from the dataset."""
+        query = example["query"]
+        positive_docs = example["positive"]
+        negative_docs = example["negative"]
+
+        query_id = f"{split}_query{query_idx}"
+
+        # Initialize the structures for this example
+        example_data = {
+            "query_id": query_id,
+            "query": query,
+            "doc_ids": [],
+            "doc_texts": [],
+            "relevance_scores": [],
+        }
+
+        for i, pos_doc in enumerate(sorted(positive_docs)):
+            doc_id = f"{query_id}_positive_{i}"
+            example_data["doc_ids"].append(doc_id)
+            example_data["doc_texts"].append(pos_doc)
+            example_data["relevance_scores"].append(1)
+
+        for i, neg_doc in enumerate(sorted(negative_docs)):
+            doc_id = f"{query_id}_negative_{i}"
+            example_data["doc_ids"].append(doc_id)
+            example_data["doc_texts"].append(neg_doc)
+            example_data["relevance_scores"].append(0)
+
+        return example_data
+
+    def dataset_transform(self):
+        """Transform the old format to the new format using HF datasets mapping."""
+        if self.metadata.name not in OLD_FORMAT_RERANKING_TASKS:
+            return
+
         logging.info(
             f"Transforming old format to standard format for {self.metadata.name}"
         )
-        self.corpus = defaultdict(dict)
-        self.queries = defaultdict(dict)
-        self.relevant_docs = defaultdict(lambda: defaultdict(dict))
-        self.top_ranked = defaultdict(lambda: defaultdict(list))
 
-        for split in self.original_dataset:
-            # keep the lookups to prevent duplicate queries and documents for memory purposes
-            corpus_lookup = {}
-            query_lookup = {}
-            for query_i in tqdm.tqdm(range(len(self.original_dataset[split]))):
-                query: str = self.original_dataset[split]["query"][query_i]
-                positive_docs: list[str] = self.original_dataset[split]["positive"][
-                    query_i
-                ]
-                negative_docs: list[str] = self.original_dataset[split]["negative"][
-                    query_i
-                ]
+        self.corpus = defaultdict(lambda: defaultdict(dict))
+        self.queries = defaultdict(lambda: defaultdict(dict))
+        self.relevant_docs = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
+        self.top_ranked = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
-                if query in query_lookup:
-                    query_id = query_lookup[query]
-                else:
-                    query_id = f"{split}_query{query_i}"
-                    query_lookup[query] = query_id
-                self.queries[split][query_id] = query
+        hf_subsets = list(self.hf_subsets) if self.is_multilingual else ["default"]
 
-                for i, pos_doc in enumerate(sorted(positive_docs)):
-                    if pos_doc in corpus_lookup:
-                        doc_id = corpus_lookup[pos_doc]
-                    else:
-                        doc_id = f"{query_id}_positive_{i}"
-                        self.corpus[split][doc_id] = {"text": pos_doc, "_id": doc_id}
-                        corpus_lookup[pos_doc] = doc_id
+        for hf_subset in hf_subsets:
+            cur_dataset = self.dataset[hf_subset]
 
-                    self.top_ranked[split][query_id].append(doc_id)
-                    self.relevant_docs[split][query_id][doc_id] = 1
+            for split in cur_dataset:
+                # Create an enumerated dataset to pass indices
+                enumerated_dataset = Dataset.from_dict(
+                    {
+                        "index": range(len(cur_dataset[split])),
+                        "query": cur_dataset[split]["query"],
+                        "positive": cur_dataset[split]["positive"],
+                        "negative": cur_dataset[split]["negative"],
+                    }
+                )
 
-                for i, neg_doc in enumerate(sorted(negative_docs)):
-                    if neg_doc in corpus_lookup:
-                        doc_id = corpus_lookup[neg_doc]
-                    else:
-                        doc_id = f"{query_id}_negative_{i}"
-                        self.corpus[split][doc_id] = {"text": neg_doc, "_id": doc_id}
-                        corpus_lookup[neg_doc] = doc_id
+                # Map the transformation function over the dataset
+                processed_dataset = enumerated_dataset.map(
+                    lambda example, idx: self.process_example(example, split, idx),
+                    with_indices=True,
+                    remove_columns=enumerated_dataset.column_names,
+                )
 
-                    self.top_ranked[split][query_id].append(doc_id)
-                    self.relevant_docs[split][query_id][doc_id] = 0
+                # Populate the data structures
+                for item in processed_dataset:
+                    query_id = item["query_id"]
+                    self.queries[hf_subset][split][query_id] = item["query"]
 
-        self.instructions = None  # previous tasks don't have instructions
+                    # Add documents and relevance information
+                    for doc_id, doc_text, relevance in zip(
+                        item["doc_ids"], item["doc_texts"], item["relevance_scores"]
+                    ):
+                        self.corpus[hf_subset][split][doc_id] = {
+                            "text": doc_text,
+                            "_id": doc_id,
+                        }
+                        self.top_ranked[hf_subset][split][query_id].append(doc_id)
+                        self.relevant_docs[hf_subset][split][query_id][doc_id] = (
+                            relevance
+                        )
+
+        self.instructions = None
         self.data_loaded = True
 
     def _evaluate_subset(
         self, retriever, corpus, queries, relevant_docs, hf_subset: str, **kwargs
     ) -> ScoresDict:
+        """Evaluate each query_id as a "mini" retrieval corpus, and rerank the top-ranked documents for each query_id."""
         all_results = defaultdict(dict)
         max_docs = 0
         top_ranked = kwargs["top_ranked"]  # must be present for reranking

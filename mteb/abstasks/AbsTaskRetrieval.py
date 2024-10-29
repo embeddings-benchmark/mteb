@@ -232,7 +232,10 @@ class AbsTaskRetrieval(AbsTask):
     ignore_identical_ids: bool = False
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        try:
+            super(AbsTask, self).__init__(**kwargs)
+        except Exception:
+            super().__init__(**kwargs)
 
     def load_data(self, **kwargs):
         if self.data_loaded:

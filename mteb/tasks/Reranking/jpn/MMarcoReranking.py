@@ -18,7 +18,7 @@ class VoyageMMarcoReranking(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2016-12-01", "2023-12-23"),
         domains=["Academic", "Non-fiction", "Written"],
         task_subtypes=["Scientific Reranking"],

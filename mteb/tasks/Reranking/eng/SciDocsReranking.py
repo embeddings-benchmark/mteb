@@ -19,7 +19,7 @@ class SciDocsReranking(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2000-01-01", "2020-12-31"),  # best guess
         domains=["Academic", "Non-fiction", "Written"],
         task_subtypes=["Scientific Reranking"],

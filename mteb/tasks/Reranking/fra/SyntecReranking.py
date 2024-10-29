@@ -21,7 +21,7 @@ class SyntecReranking(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2022-12-01", "2022-12-02"),
         domains=["Legal", "Written"],
         task_subtypes=None,
