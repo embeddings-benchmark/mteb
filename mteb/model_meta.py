@@ -75,6 +75,7 @@ class ModelMeta(BaseModel):
         zero_shot_benchmarks: A list of benchmarks on which the model has been evaluated in a zero-shot setting. By default we assume that all models
             are evaluated non-zero-shot unless specified otherwise.
     """
+
     model_config = ConfigDict(extra="forbid")
 
     name: str | None
