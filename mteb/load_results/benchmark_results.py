@@ -161,6 +161,9 @@ class BenchmarkResults(BaseModel):
         n_models = len(self.model_results)
         return f"BenchmarkResults(model_results=[...](#{n_models}))"
 
+    def __hash__(self) -> int:
+        return id(self)
+
     def filter_tasks(
         self,
         task_names: list[str] | None = None,
