@@ -5,8 +5,15 @@ from collections.abc import Mapping
 from datetime import date
 from typing import Annotated, Any, Union
 
-from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
-from typing_extensions import Literal
+from pydantic import (
+    AnyUrl,
+    BaseModel,
+    BeforeValidator,
+    TypeAdapter,
+    field_validator,
+    ConfigDict,
+)
+from typing_extensions import Literal, TypedDict
 
 from ..languages import (
     ISO_LANGUAGE_SCRIPT,
@@ -168,6 +175,23 @@ METRIC_VALUE = Union[int, float, dict[str, Any]]
 logger = logging.getLogger(__name__)
 
 
+class MetadataDatasetDict(TypedDict, total=False):
+    """A dictionary containing the dataset path and revision.
+    Args:
+        path: The path to the dataset.
+        revision: The revision of the dataset.
+        name: The name the dataset config.
+        split: The split of the dataset.
+        trust_remote_code: Whether to trust the remote code.
+    """
+
+    path: str
+    revision: str
+    name: str
+    split: str
+    trust_remote_code: bool
+
+
 class TaskMetadata(BaseModel):
     """Metadata for a task.
 
@@ -203,7 +227,9 @@ class TaskMetadata(BaseModel):
             retrieval tasks, this will be a dict containing the character length of the queries and documents separately, as well as the total number of queries, documents, and relevance judgements per query.
     """
 
-    dataset: dict
+    model_config = ConfigDict(extra="forbid")
+
+    dataset: MetadataDatasetDict
 
     name: str
     description: str

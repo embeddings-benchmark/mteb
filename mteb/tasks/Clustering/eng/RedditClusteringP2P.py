@@ -30,7 +30,6 @@ class RedditClusteringP2P(AbsTaskClustering):
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
