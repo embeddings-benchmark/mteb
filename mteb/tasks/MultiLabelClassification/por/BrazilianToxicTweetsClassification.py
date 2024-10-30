@@ -17,10 +17,8 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
         """,
         reference="https://paperswithcode.com/dataset/told-br",
         dataset={
-            "path": "JAugusto97/told-br",
-            "revision": "fb4f11a5bc68b99891852d20f1ec074be6289768",
-            "name": "multilabel",
-            "trust_remote_code": True,
+            "path": "mteb/told-br",
+            "revision": "f333c1fcfa3ab43f008a327c8bd0140441354d34",
         },
         type="MultilabelClassification",
         category="s2s",
