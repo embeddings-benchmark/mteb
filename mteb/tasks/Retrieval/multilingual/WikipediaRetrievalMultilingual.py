@@ -95,8 +95,8 @@ class WikipediaRetrievalMultilingual(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "ellamind/wikipedia-2023-11-retrieval-multilingual-queries",
             "revision": "3b6ea595c94bac3448a2ad167ca2e06abd340d6e",  # avoid validation error
-            "revision_corpus": "f20ac0c449c85358d3d5c72a95f92f1eddc98aa5",
-            "revision_qrels": "ec88a7bb2da034d538e98e3122d2c98530ca1c8d",
+            # "revision_corpus": "f20ac0c449c85358d3d5c72a95f92f1eddc98aa5",
+            # "revision_qrels": "ec88a7bb2da034d538e98e3122d2c98530ca1c8d",
         },
         type="Retrieval",
         category="s2p",
