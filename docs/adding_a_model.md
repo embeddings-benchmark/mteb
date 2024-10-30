@@ -14,8 +14,7 @@ model = mteb.get_model("sentence-transformers/paraphrase-multilingual-MiniLM-L12
 
 tasks = mteb.get_tasks(...) # get specific tasks
 # or 
-from mteb.benchmarks import MTEB_MAIN_EN
-tasks = MTEB_MAIN_EN # or use a specific benchmark
+tasks = mteb.get_benchmark("MTEB(eng, classic)") # or use a specific benchmark
 
 evaluation = mteb.MTEB(tasks=tasks)
 evaluation.run(model, output_folder="results")

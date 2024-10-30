@@ -27,8 +27,8 @@ def test_available_benchmarks():
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
     assert (
-        "MTEB(eng)" in result.stdout
-    ), "Sample benchmark MTEB(eng) task not found in available benchmarks"
+        "MTEB(eng, classic)" in result.stdout
+    ), "Sample benchmark MTEB(eng, classic) task not found in available benchmarks"
 
 
 run_task_fixures = [
