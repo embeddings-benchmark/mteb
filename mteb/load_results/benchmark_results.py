@@ -10,11 +10,7 @@ import numpy as np
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.TaskMetadata import (
-    ISO_LANGUAGE_SCRIPT,
-    TASK_DOMAIN,
-    TASK_TYPE,
-)
+from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, TASK_DOMAIN, TASK_TYPE
 from mteb.languages import ISO_LANGUAGE
 from mteb.load_results.task_results import TaskResult
 from mteb.models.overview import get_model_metas
@@ -187,12 +183,18 @@ class BenchmarkResults(BaseModel):
         self,
         model_names: Iterable[str] | None = None,
         languages: Iterable[str] | None = None,
-        open_source: bool | None = None,
+        open_weights: bool | None = None,
         frameworks: Iterable[str] | None = None,
         n_parameters_range: tuple[int | None, int | None] = (None, None),
+        use_instructions: bool | None = None,
     ) -> BenchmarkResults:
         model_metas = get_model_metas(
-            model_names, languages, open_source, frameworks, n_parameters_range
+            model_names=model_names,
+            languages=languages,
+            open_weights=open_weights,
+            frameworks=frameworks,
+            n_parameters_range=n_parameters_range,
+            use_instructions=use_instructions,
         )
         model_revision_pairs = {(meta.name, meta.revision) for meta in model_metas}
         new_model_results = []

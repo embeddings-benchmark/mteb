@@ -20,10 +20,52 @@ def load_results():
         return mteb.BenchmarkResults.from_disk(results_cache_path)
 
 
+def update_citation(benchmark_name: str) -> str:
+    benchmark = mteb.get_benchmark(benchmark_name)
+    if str(benchmark.citation) != "None":
+        citation = f"```bibtex\n{benchmark.citation}\n```"
+    else:
+        citation = ""
+    return citation
+
+
+def update_description(benchmark_name: str) -> str:
+    benchmark = mteb.get_benchmark(benchmark_name)
+    description = f"## {benchmark.name}\n{benchmark.description}\n"
+    if str(benchmark.reference) != "None":
+        description += f"\n[Click for More Info]({benchmark.reference})"
+    return description
+
+
+def format_list(props: list[str]):
+    if props is None:
+        return ""
+    if len(props) > 3:
+        return ", ".join(props[:3]) + "..."
+    return ", ".join(props)
+
+
+def update_task_info(task_names: str) -> str:
+    tasks = mteb.get_tasks(tasks=task_names)
+    df = tasks.to_dataframe()
+    df["languages"] = df["languages"].map(format_list)
+    df["domains"] = df["domains"].map(format_list)
+    df = df.rename(
+        columns={
+            "name": "Task Name",
+            "type": "Task Type",
+            "languages": "Languages",
+            "domains": "Domains",
+            "license": "License",
+        }
+    )
+    return df
+
+
 all_results = load_results().filter_models()
 
 # Model sizes in million parameters
-min_model_size, max_model_size = 8, 46703
+min_model_size, max_model_size = 0, 10_000
 
 benchmarks = mteb.get_benchmarks()
 
@@ -114,9 +156,9 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             interactive=True,
                         )
                         model_size = RangeSlider(
-                            minimum=0,
-                            maximum=8000,
-                            value=(0, 8000),
+                            minimum=min_model_size,
+                            maximum=max_model_size,
+                            value=(min_model_size, max_model_size),
                             label="Model Size (#M Parameters)",
                             interactive=True,
                         )
@@ -143,10 +185,14 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     default_scores = default_results.get_scores(format="long")
     scores = gr.State(default_scores)
     summary, per_task = scores_to_tables(default_scores)
+    description = gr.Markdown(update_description, inputs=[benchmark_select])
     with gr.Tab("Summary"):
         summary_table = gr.DataFrame(summary)
     with gr.Tab("Performance per task"):
         per_task_table = gr.DataFrame(per_task)
+    with gr.Tab("Task information"):
+        task_info_table = gr.DataFrame(update_task_info, inputs=[task_select])
+    citation = gr.Markdown(update_citation, inputs=[benchmark_select])
 
     @gr.on(inputs=[scores], outputs=[summary_table, per_task_table])
     def update_tables(scores):
@@ -203,10 +249,24 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             lang_select,
             type_select,
             domain_select,
+            availability,
+            compatibility,
+            instructions,
+            model_size,
         ],
         outputs=[scores],
     )
-    def update_scores(benchmark_name, task_names, languages, task_types, domains):
+    def update_scores(
+        benchmark_name,
+        task_names,
+        languages,
+        task_types,
+        domains,
+        availability,
+        compatibility,
+        instructions,
+        model_size,
+    ):
         benchmark = mteb.get_benchmark(benchmark_name)
         benchmark_results = benchmark.load_results(base_results=all_results)
         benchmark_results = benchmark_results.filter_tasks(
@@ -214,6 +274,19 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             task_names=task_names,
             task_types=task_types,
             domains=domains,
+        )
+        lower, upper = model_size
+        # Multiplying by millions
+        lower = lower * 1e6
+        upper = upper * 1e6
+        # Setting to None, when the user doesn't specify anything
+        if (lower == min_model_size) and (upper == max_model_size):
+            lower, upper = None, None
+        benchmark_results = benchmark_results.filter_models(
+            open_weights=availability,
+            use_instructions=instructions,
+            frameworks=compatibility,
+            n_parameters_range=(lower, upper),
         )
         scores = benchmark_results.get_scores(languages=languages, format="long")
         return scores
