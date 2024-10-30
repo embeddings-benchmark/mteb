@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from collections import defaultdict
 from pathlib import Path
 
@@ -17,7 +18,8 @@ def load_results():
         all_results.to_disk(results_cache_path)
         return all_results
     else:
-        return mteb.BenchmarkResults.from_disk(results_cache_path)
+        with results_cache_path.open() as cache_file:
+            return mteb.BenchmarkResults.from_validated(**json.load(cache_file))
 
 
 def update_citation(benchmark_name: str) -> str:

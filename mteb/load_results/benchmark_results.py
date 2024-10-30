@@ -10,7 +10,8 @@ import numpy as np
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, TASK_DOMAIN, TASK_TYPE
+from mteb.abstasks.TaskMetadata import (ISO_LANGUAGE_SCRIPT, TASK_DOMAIN,
+                                        TASK_TYPE)
 from mteb.languages import ISO_LANGUAGE
 from mteb.load_results.task_results import TaskResult
 from mteb.models.overview import get_model_metas
@@ -30,6 +31,13 @@ class ModelResult(BaseModel):
     def __repr__(self) -> str:
         n_entries = len(self.task_results)
         return f"ModelResult(model_name={self.model_name}, model_revision={self.model_revision}, task_results=[...](#{n_entries}))"
+
+    @classmethod
+    def from_validated(cls, **data) -> ModelResult:
+        data["task_results"] = [
+            TaskResult.from_validated(**res) for res in data["task_results"]
+        ]
+        return cls.model_construct(**data)
 
     def filter_tasks(
         self,
@@ -53,7 +61,7 @@ class ModelResult(BaseModel):
             if (task_types is not None) and (task_result.task_type not in task_types):
                 continue
             new_task_results.append(task_result)
-        return type(self)(
+        return type(self).model_construct(
             model_name=self.model_name,
             model_revision=self.model_revision,
             task_results=new_task_results,
@@ -66,7 +74,7 @@ class ModelResult(BaseModel):
             for task_res in self.task_results
             if task_res.task_name in task_name_to_task
         ]
-        return type(self)(
+        return type(self).model_construct(
             model_name=self.model_name,
             model_revision=self.model_revision,
             task_results=new_task_results,
@@ -169,7 +177,7 @@ class BenchmarkResults(BaseModel):
             )
             for res in self.model_results
         ]
-        return type(self)(
+        return type(self).model_construct(
             model_results=[res for res in model_results if res.task_results]
         )
 
@@ -177,7 +185,7 @@ class BenchmarkResults(BaseModel):
         new_model_results = [
             model_res.select_tasks(tasks) for model_res in self.model_results
         ]
-        return type(self)(model_results=new_model_results)
+        return type(self).model_construct(model_results=new_model_results)
 
     def filter_models(
         self,
@@ -201,7 +209,7 @@ class BenchmarkResults(BaseModel):
         for model_res in self:
             if (model_res.model_name, model_res.model_revision) in model_revision_pairs:
                 new_model_results.append(model_res)
-        return type(self)(model_results=new_model_results)
+        return type(self).model_construct(model_results=new_model_results)
 
     def get_scores(
         self,
@@ -281,6 +289,13 @@ class BenchmarkResults(BaseModel):
         path = Path(path)
         with path.open("w") as out_file:
             out_file.write(self.model_dump_json(indent=2))
+
+    @classmethod
+    def from_validated(cls, **data) -> BenchmarkResults:
+        model_results = []
+        for model_res in data["model_results"]:
+            model_results.append(ModelResult.from_validated(**model_res))
+        return cls.model_construct(model_results=model_results)
 
     @classmethod
     def from_disk(cls, path: Path | str) -> BenchmarkResults:

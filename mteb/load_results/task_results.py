@@ -291,12 +291,8 @@ class TaskResult(BaseModel):
                 )
 
         pre_1_11_load = (
-            (
-                "mteb_version" in data
-                and Version(data["mteb_version"]) < Version("1.11.0")
-            )
-            or "mteb_version" not in data
-        )  # assume it is before 1.11.0 if the version is not present
+            "mteb_version" in data and Version(data["mteb_version"]) < Version("1.11.0")
+        ) or "mteb_version" not in data  # assume it is before 1.11.0 if the version is not present
         try:
             obj = cls.model_validate(data)
         except Exception as e:
@@ -465,6 +461,10 @@ class TaskResult(BaseModel):
                         break
 
             return aggregation(values)
+
+    @classmethod
+    def from_validated(cls, **data) -> TaskResult:
+        return cls.model_construct(**data)
 
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, scores=...)"
