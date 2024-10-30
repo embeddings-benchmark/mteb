@@ -179,11 +179,13 @@ class MetadataDatasetDict(TypedDict, total=False):
     Args:
         path: The path to the dataset.
         revision: The revision of the dataset.
+        name: The name the dataset config.
         trust_remote_code: Whether to trust the remote code.
     """
 
     path: str
     revision: str
+    name: str
     trust_remote_code: bool
 
 
