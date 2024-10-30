@@ -18,8 +18,7 @@ class KorSarcasmClassification(AbsTaskClassification):
         """,
         dataset={
             "path": "SpellOnYou/kor_sarcasm",
-            "revision": "8079d24b9f1278c6fbc992921c1271457a1064ff",
-            "trust_remote_code": True,
+            "revision": "3d96e36e10a88d5b7a3f617cf8362d997504494b",
         },
         reference="https://github.com/SpellOnYou/korean-sarcasm",
         type="Classification",
