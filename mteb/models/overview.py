@@ -17,6 +17,7 @@ from mteb.models import (
     google_models,
     gritlm_models,
     gte_models,
+    jina_models,
     llm2vec_models,
     mxbai_models,
     nomic_models,
@@ -28,6 +29,8 @@ from mteb.models import (
     ru_sentence_models,
     salesforce_models,
     sentence_transformers_models,
+    stella_models,
+    uae_models,
     voyage_models,
 )
 
@@ -53,6 +56,9 @@ model_modules = [
     google_models,
     repllama_models,
     promptriever_models,
+    jina_models,
+    uae_models,
+    stella_models,
     rerankers_monot5_based,
     rerankers_custom,
 ]

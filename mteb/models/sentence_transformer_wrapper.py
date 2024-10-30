@@ -37,9 +37,7 @@ class SentenceTransformerWrapper(Wrapper):
             **kwargs: Additional arguments to pass to the SentenceTransformer model.
         """
         if isinstance(model, str):
-            self.model = SentenceTransformer(
-                model, revision=revision, trust_remote_code=True, **kwargs
-            )
+            self.model = SentenceTransformer(model, revision=revision, **kwargs)
         else:
             self.model = model
 
