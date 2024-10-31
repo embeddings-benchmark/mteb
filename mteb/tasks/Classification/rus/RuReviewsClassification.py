@@ -38,6 +38,7 @@ class RuReviewsClassification(AbsTaskClassification):
         ISSN={2378-1963},
         month={July}
         }""",
+        prompt="Classify product reviews into positive, negative or neutral sentiment",
         descriptive_stats={
             "n_samples": {"test": 2048},
             "avg_character_length": {"test": 133.2},

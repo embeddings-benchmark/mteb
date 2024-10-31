@@ -36,6 +36,7 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
   year={2019},
   institution={IT University of Copenhagen},
 }""",
+        prompt="Classify Danish political comments for sentiment",
         descriptive_stats={
             "n_samples": {"train": 9010},
             "avg_character_length": {"train": 69.9},

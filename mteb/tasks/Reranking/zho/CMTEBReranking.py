@@ -27,6 +27,7 @@ class T2Reranking(AbsTaskReranking):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
+        prompt="Given a Chinese search query, retrieve web passages that answer the question",
         bibtex_citation="""@misc{xie2023t2ranking,
       title={T2Ranking: A large-scale Chinese Benchmark for Passage Ranking}, 
       author={Xiaohui Xie and Qian Dong and Bingning Wang and Feiyang Lv and Ting Yao and Weinan Gan and Zhijing Wu and Xiangsheng Li and Haitao Li and Yiqun Liu and Jin Ma},
@@ -62,6 +63,7 @@ class MMarcoReranking(AbsTaskReranking):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
+        prompt="Given a Chinese search query, retrieve web passages that answer the question",
         bibtex_citation="""@misc{bonifacio2021mmarco,
       title={mMARCO: A Multilingual Version of MS MARCO Passage Ranking Dataset}, 
       author={Luiz Henrique Bonifacio and Vitor Jeronymo and Hugo Queiroz Abonizio and Israel Campiotti and Marzieh Fadaee and  and Roberto Lotufo and Rodrigo Nogueira},
@@ -78,6 +80,7 @@ class CMedQAv1(AbsTaskReranking):
     metadata = TaskMetadata(
         name="CMedQAv1-reranking",
         description="Chinese community medical question answering",
+        prompt="Given a Chinese community medical question, retrieve replies that best answer the question",
         reference="https://github.com/zhangsheng93/cMedQA",
         dataset={
             "path": "C-MTEB/CMedQAv1-reranking",
@@ -117,6 +120,7 @@ class CMedQAv2(AbsTaskReranking):
     metadata = TaskMetadata(
         name="CMedQAv2-reranking",
         description="Chinese community medical question answering",
+        prompt="Given a Chinese community medical question, retrieve replies that best answer the question",
         reference="https://github.com/zhangsheng93/cMedQA2",
         dataset={
             "path": "C-MTEB/CMedQAv2-reranking",

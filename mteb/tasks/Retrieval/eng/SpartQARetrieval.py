@@ -41,6 +41,9 @@ class SpartQA(AbsTaskRetrieval):
   year={2021}
 }
 """,
+        prompt={
+            "query": "Given the following spatial reasoning question, retrieve the right answer."
+        },
         descriptive_stats={
             "n_samples": {"test": 0},
             "avg_character_length": {

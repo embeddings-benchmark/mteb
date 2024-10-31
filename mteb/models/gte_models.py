@@ -1,56 +1,16 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
 from functools import partial
-from typing import Any
 
-import numpy as np
-
-from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
-from .instructions import task_to_instruction
-from .wrapper import Wrapper
-
-
-def gte_instruction(instruction: str) -> str:
-    return f"Instruct: {instruction}\nQuery: "
-
-
-def gte_loader(**kwargs):
-    try:
-        from gritlm import GritLM
-    except ImportError:
-        raise ImportError(
-            "Please install `pip install gritlm` to use gte-Qwen2-7B-instruct."
-        )
-
-    class GTEWrapper(GritLM, Wrapper):
-        def encode(
-            self,
-            sentences: Sequence[str],
-            *args,
-            task_name: str,
-            prompt_type: PromptType | None = None,
-            **kwargs: Any,
-        ) -> np.ndarray:
-            if "instruction" in kwargs:
-                instruction = kwargs.pop("instruction", "")
-            else:
-                instruction = task_to_instruction(
-                    task_name, prompt_type == PromptType.query
-                )
-            if instruction:
-                kwargs["instruction"] = gte_instruction(instruction)
-            return super().encode(sentences, *args, **kwargs)
-
-    return GTEWrapper(**kwargs)
-
+from .instruct_wrapper import instruct_wrapper
 
 gte_Qwen2_7B_instruct = ModelMeta(
     loader=partial(
-        gte_loader,
+        instruct_wrapper,
         model_name_or_path="Alibaba-NLP/gte-Qwen2-7B-instruct",
+        instruction_template="Instruct: {instruction}\nQuery: ",
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
@@ -71,5 +31,5 @@ gte_Qwen2_7B_instruct = ModelMeta(
     reference="https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )

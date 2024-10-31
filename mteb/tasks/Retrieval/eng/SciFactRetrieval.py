@@ -33,6 +33,9 @@ class SciFact(AbsTaskRetrieval):
   booktitle={ACL},
   year={2020}
 }""",
+        prompt={
+            "query": "Given a scientific claim, retrieve documents that support or refute the claim"
+        },
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

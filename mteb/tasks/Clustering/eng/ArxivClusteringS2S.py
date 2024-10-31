@@ -36,6 +36,7 @@ class ArxivClusteringS2S(AbsTaskClustering):
     author={arXiv.org submitters},
     year={2024}
 }""",
+        prompt="Identify the main and secondary category of Arxiv papers based on the titles",
         descriptive_stats={
             "n_samples": {"test": 732723},
             "avg_character_length": {"test": 74},

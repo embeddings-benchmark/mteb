@@ -11,7 +11,7 @@ import torch
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
-from .sentence_transformer_wrapper import SentenceTransformerWrapper, get_prompt_name
+from .sentence_transformer_wrapper import SentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ class UAEWrapper(SentenceTransformerWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        prompt_name = get_prompt_name(self.model_prompts, task_name, prompt_type)
+        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         if prompt_name:
             logger.info(
                 f"Using prompt_nane={prompt_name} for task={task_name} prompt_type={prompt_type}"
@@ -74,4 +74,5 @@ uae_large_v1 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     reference="https://huggingface.co/WhereIsAI/UAE-Large-V1",
+    use_instructions=False,
 )

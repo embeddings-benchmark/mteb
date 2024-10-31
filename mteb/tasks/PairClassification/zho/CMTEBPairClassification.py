@@ -34,6 +34,7 @@ class Ocnli(AbsTaskPairClassification):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
+        prompt="Retrieve semantically similar text.",
         descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
@@ -107,6 +108,7 @@ class Cmnli(AbsTaskPairClassification):
             doi = "10.18653/v1/2020.coling-main.419",
             pages = "4762--4772",
         }""",
+        prompt="Retrieve semantically similar text.",
         descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 

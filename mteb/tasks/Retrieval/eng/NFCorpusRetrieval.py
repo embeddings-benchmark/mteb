@@ -37,6 +37,9 @@ class NFCorpus(AbsTaskRetrieval):
   country = {Italy},
   url = {http://www.cl.uni-heidelberg.de/~riezler/publications/papers/ECIR2016.pdf}
 }""",
+        prompt={
+            "query": "Given a question, retrieve relevant documents that best answer the question"
+        },
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

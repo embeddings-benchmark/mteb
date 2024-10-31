@@ -40,6 +40,7 @@ class SweRecClassification(AbsTaskClassification):
     pages = "185--201",
 }
 """,
+        prompt="Classify Swedish reviews by sentiment",
         descriptive_stats={
             "n_samples": {"test": 1024},
             "avg_character_length": {"test": 318.8},

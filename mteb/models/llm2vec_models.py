@@ -9,8 +9,6 @@ import torch
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
 
-from .instructions import task_to_instruction
-from .sentence_transformer_wrapper import validate_task_to_prompt_name
 from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
@@ -46,7 +44,7 @@ class LLM2VecWrapper(Wrapper):
                 "LLM2Vec models were trained with flash attention enabled. For optimal performance, please install the `flash_attn` package with `pip install flash-attn --no-build-isolation`."
             )
         self.model_prompts = (
-            validate_task_to_prompt_name(model_prompts) if model_prompts else None
+            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
 
         if device:
@@ -65,9 +63,7 @@ class LLM2VecWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,  # noqa
     ) -> np.ndarray:
-        instruction = llm2vec_instruction(
-            task_to_instruction(task_name, prompt_type == PromptType.query)
-        )
+        instruction = llm2vec_instruction(self.get_instruction(task_name, prompt_type))
 
         sentences = [[instruction, sentence] for sentence in sentences]
         return self.model.encode(sentences, **kwargs)
@@ -103,7 +99,7 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-supervised",
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 llm2vec_llama3_8b_unsupervised = ModelMeta(
@@ -127,7 +123,7 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-unsup-simcse",
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 
@@ -152,7 +148,7 @@ llm2vec_mistral7b_supervised = ModelMeta(
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-supervised",
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 llm2vec_mistral7b_unsupervised = ModelMeta(
@@ -176,7 +172,7 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-unsup-simcse",
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 llm2vec_llama2_7b_supervised = ModelMeta(
@@ -200,7 +196,7 @@ llm2vec_llama2_7b_supervised = ModelMeta(
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-supervised",
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 llm2vec_llama2_7b_unsupervised = ModelMeta(
@@ -224,7 +220,7 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-unsup-simcse",
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 llm2vec_sheared_llama_supervised = ModelMeta(
@@ -248,7 +244,7 @@ llm2vec_sheared_llama_supervised = ModelMeta(
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-supervised",
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 llm2vec_sheared_llama_unsupervised = ModelMeta(
@@ -272,5 +268,5 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-unsup-simcse",
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )

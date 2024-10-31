@@ -11,10 +11,6 @@ from transformers import AutoModel, AutoTokenizer
 
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import (
-    get_prompt_name,
-    validate_task_to_prompt_name,
-)
 
 from .wrapper import Wrapper
 
@@ -54,7 +50,7 @@ class RepLLaMAWrapper(Wrapper):
         self.model.config.max_length = 512
         self.tokenizer.model_max_length = 512
         self.model_prompts = (
-            validate_task_to_prompt_name(model_prompts) if model_prompts else None
+            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
 
     def create_batch_dict(self, tokenizer, input_texts):
@@ -89,7 +85,7 @@ class RepLLaMAWrapper(Wrapper):
     ) -> np.ndarray:
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
-        prompt = get_prompt_name(self.model_prompts, task_name, prompt_type)
+        prompt = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         if prompt:
             sentences = [f"{prompt}{sentence}".strip() for sentence in sentences]
         for i in tqdm.tqdm(range(0, len(sentences), batch_size)):
@@ -152,7 +148,7 @@ repllama_llama2_original = ModelMeta(
     reference="https://huggingface.co/samaya-ai/castorini/repllama-v1-7b-lora-passage",
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 
@@ -178,5 +174,5 @@ repllama_llama2_reproduced = ModelMeta(
     reference="https://huggingface.co/samaya-ai/RepLLaMA-reproduced",
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
-    use_instuctions=True,
+    use_instructions=True,
 )

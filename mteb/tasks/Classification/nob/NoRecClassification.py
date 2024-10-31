@@ -57,6 +57,7 @@ class NoRecClassification(AbsTaskClassification):
     url = "https://aclanthology.org/L18-1661",
 }
 """,
+        prompt="Classify Norwegian reviews by sentiment",
         descriptive_stats={
             "n_samples": {"test": 2050},
             "avg_character_length": {"test": 82},

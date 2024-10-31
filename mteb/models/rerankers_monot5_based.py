@@ -284,7 +284,7 @@ monot5_small = ModelMeta(
     ),
     name="castorini/monot5-small-msmarco-10k",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="77f8e3f7b1eb1afe353aa21a7c3a2fc8feca702e",
     release_date="2022-03-28",
 )
@@ -298,7 +298,7 @@ monot5_base = ModelMeta(
     ),
     name="castorini/monot5-base-msmarco-10k",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="f15657ab3d2a5dd0b9a30c8c0b6a0a73c9cb5884",
     release_date="2022-03-28",
 )
@@ -312,7 +312,7 @@ monot5_large = ModelMeta(
     ),
     name="castorini/monot5-large-msmarco-10k",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="48cfad1d8dd587670393f27ee8ec41fde63e3d98",
     release_date="2022-03-28",
 )
@@ -326,7 +326,7 @@ monot5_3b = ModelMeta(
     ),
     name="castorini/monot5-3b-msmarco-10k",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="bc0c419a438c81f592f878ce32430a1823f5db6c",
     release_date="2022-03-28",
 )
@@ -340,7 +340,7 @@ flant5_base = ModelMeta(
     ),
     name="google/flan-t5-base",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="7bcac572ce56db69c1ea7c8af255c5d7c9672fc2",
     release_date="2022-10-21",
 )
@@ -354,7 +354,7 @@ flant5_large = ModelMeta(
     ),
     name="google/flan-t5-large",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a",
     release_date="2022-10-21",
 )
@@ -368,7 +368,7 @@ flant5_xl = ModelMeta(
     ),
     name="google/flan-t5-xl",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="7d6315df2c2fb742f0f5b556879d730926ca9001",
     release_date="2022-10-21",
 )
@@ -382,7 +382,7 @@ flant5_xxl = ModelMeta(
     ),
     name="google/flan-t5-xxl",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="ae7c9136adc7555eeccc78cdd960dfd60fb346ce",
     release_date="2022-10-21",
 )
@@ -397,7 +397,7 @@ llama2_7b = ModelMeta(
     ),
     name="meta-llama/Llama-2-7b-hf",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9",
     release_date="2023-07-18",
 )
@@ -411,7 +411,7 @@ llama2_7b_chat = ModelMeta(
     ),
     name="meta-llama/Llama-2-7b-chat-hf",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="f5db02db724555f92da89c216ac04704f23d4590",
     release_date="2023-07-18",
 )
@@ -425,7 +425,7 @@ mistral_7b = ModelMeta(
     ),
     name="mistralai/Mistral-7B-Instruct-v0.2",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="3ad372fc79158a2148299e3318516c786aeded6c",
     release_date="2023-12-11",
 )
@@ -439,7 +439,7 @@ followir_7b = ModelMeta(
     ),
     name="jhu-clsp/FollowIR-7B",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="4d25d437e38b510c01852070c0731e8f6e1875d1",
     release_date="2024-04-29",
 )
@@ -558,7 +558,7 @@ mt5_base_mmarco_v2 = ModelMeta(
     ),
     name="unicamp-dl/mt5-base-mmarco-v2",
     languages=mt5_languages,
-    open_source=True,
+    open_weights=True,
     revision="cc0a949b9f21efcaba45c8cabb998ad02ce8d4e7",
     release_date="2022-01-05",
 )
@@ -572,7 +572,7 @@ mt5_13b_mmarco_100k = ModelMeta(
     ),
     name="unicamp-dl/mt5-13b-mmarco-100k",
     languages=mt5_languages,
-    open_source=True,
+    open_weights=True,
     revision="e1a4317e102a525ea9e16745ad21394a4f1bffbc",
     release_date="2022-11-04",
 )

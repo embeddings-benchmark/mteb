@@ -133,7 +133,7 @@ e5_mult_small = ModelMeta(
     reference="https://huggingface.co/intfloat/multilingual-e5-small",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 e5_mult_base = ModelMeta(
@@ -155,7 +155,7 @@ e5_mult_base = ModelMeta(
     reference="https://huggingface.co/intfloat/multilingual-e5-base",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 e5_mult_large = ModelMeta(
@@ -178,7 +178,7 @@ e5_mult_large = ModelMeta(
     reference="https://huggingface.co/intfloat/multilingual-e5-large",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 e5_eng_small_v2 = ModelMeta(
@@ -200,7 +200,7 @@ e5_eng_small_v2 = ModelMeta(
     reference="https://huggingface.co/intfloat/e5-small-v2",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 e5_eng_small = ModelMeta(
@@ -223,7 +223,7 @@ e5_eng_small = ModelMeta(
     reference="https://huggingface.co/intfloat/e5-small",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 e5_eng_base_v2 = ModelMeta(
@@ -246,7 +246,7 @@ e5_eng_base_v2 = ModelMeta(
     reference="https://huggingface.co/intfloat/e5-base-v2",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 e5_eng_large_v2 = ModelMeta(
@@ -269,5 +269,5 @@ e5_eng_large_v2 = ModelMeta(
     reference="https://huggingface.co/intfloat/e5-large-v2",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )

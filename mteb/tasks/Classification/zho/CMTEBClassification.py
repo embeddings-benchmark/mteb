@@ -69,6 +69,7 @@ class TNews(AbsTaskClassification):
  doi = "10.18653/v1/2020.coling-main.419",
  pages = "4762--4772",
 }""",
+        prompt="Classify the fine-grained category of the given news title",
         descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
@@ -145,6 +146,7 @@ class IFlyTek(AbsTaskClassification):
  pages = "4762--4772",
  abstract = "The advent of natural language understanding (NLU) benchmarks for English, such as GLUE and SuperGLUE allows new NLU models to be evaluated across a diverse set of tasks. These comprehensive benchmarks have facilitated a broad range of research and applications in natural language processing (NLP). The problem, however, is that most such benchmarks are limited to English, which has made it difficult to replicate many of the successes in English NLU for other languages. To help remedy this issue, we introduce the first large-scale Chinese Language Understanding Evaluation (CLUE) benchmark. CLUE is an open-ended, community-driven project that brings together 9 tasks spanning several well-established single-sentence/sentence-pair classification tasks, as well as machine reading comprehension, all on original Chinese text. To establish results on these tasks, we report scores using an exhaustive set of current state-of-the-art pre-trained Chinese models (9 in total). We also introduce a number of supplementary datasets and additional tools to help facilitate further progress on Chinese NLU. Our benchmark is released at https://www.cluebenchmarks.com",
 }""",
+        prompt="Given an App description text, find the appropriate fine-grained category",
         descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
@@ -179,6 +181,7 @@ class MultilingualSentiment(AbsTaskClassification):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
+        prompt="Classify sentiment of the customer review into positive, neutral, or negative",
         descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
@@ -217,6 +220,7 @@ class JDReview(AbsTaskClassification):
   journal={arXiv preprint arXiv:2309.07597},
   year={2023}
 }""",
+        prompt="Classify the customer review for iPhone on e-commerce platform into positive or negative",
         descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
@@ -255,6 +259,7 @@ class OnlineShopping(AbsTaskClassification):
   journal={arXiv preprint arXiv:2309.07597},
   year={2023}
 }""",
+        prompt="Classify the customer review for online shopping into positive or negative",
         descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
@@ -293,6 +298,7 @@ class Waimai(AbsTaskClassification):
   journal={arXiv preprint arXiv:2309.07597},
   year={2023}
 }""",
+        prompt="Classify the customer review from a food takeaway platform into positive or negative",
         descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
