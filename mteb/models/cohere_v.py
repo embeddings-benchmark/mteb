@@ -15,7 +15,7 @@ import mteb
 import time
 from mteb.model_meta import ModelMeta
 
-api_key = os.getenv("API_KEY")
+api_key = os.getenv("COHERE_API_KEY")
 tensor_to_image = transforms.Compose([transforms.ToPILImage()])
 
 
@@ -36,7 +36,7 @@ def cohere_v_loader(**kwargs):
             self.image_format = "JPEG"
             """ Wrapper for Cohere multimodal embedding model,
             
-            do `export API_KEY=<Your_Cohere_API_KEY>` before running eval scripts.
+            do `export COHERE_API_KEY=<Your_Cohere_API_KEY>` before running eval scripts.
             Cohere currently supports 40 images/min, thus time.sleep(1.5) is applied after each image.
             Remove or adjust this after Cohere API changes capacity.
             """
