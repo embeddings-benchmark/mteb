@@ -127,6 +127,11 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             with gr.Group():
                 with gr.Row(elem_classes="overflow-y-scroll max-h-80"):
                     with gr.Column():
+                        searchbar = gr.Textbox(
+                            label="Search Models",
+                            info="Search models by name (RegEx sensitive)",
+                            interactive=True,
+                        )
                         availability = gr.Radio(
                             [
                                 ("Only Open", True),
@@ -197,9 +202,9 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         task_info_table = gr.DataFrame(update_task_info, inputs=[task_select])
     citation = gr.Markdown(update_citation, inputs=[benchmark_select])
 
-    @gr.on(inputs=[scores], outputs=[summary_table, per_task_table])
-    def update_tables(scores):
-        summary, per_task = scores_to_tables(scores)
+    @gr.on(inputs=[scores, searchbar], outputs=[summary_table, per_task_table])
+    def update_tables(scores, search_query: str):
+        summary, per_task = scores_to_tables(scores, search_query)
         return summary, per_task
 
     @gr.on(

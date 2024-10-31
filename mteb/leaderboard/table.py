@@ -37,7 +37,7 @@ def format_n_parameters(n_parameters) -> str:
     return str(n_million) + "M"
 
 
-def scores_to_tables(scores_long: list[dict]):
+def scores_to_tables(scores_long: list[dict], search_query: str | None = None):
     if not scores_long:
         return gr.DataFrame(), gr.DataFrame()
     data = pd.DataFrame.from_records(scores_long)
@@ -61,6 +61,10 @@ def scores_to_tables(scores_long: list[dict]):
         index=["model_name", "model_revision"], columns="task_name", values="score"
     )
     to_remove = per_task.isna().any(axis="columns")
+    if search_query:
+        names = per_task.index.get_level_values("model_name")
+        names = pd.Series(names, index=per_task.index)
+        to_remove |= ~names.str.contains(search_query, regex=True)
     overall_mean = (
         data.groupby(["model_name", "model_revision"])[["score"]]
         .agg(np.nanmean)
