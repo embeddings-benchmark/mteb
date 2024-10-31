@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from collections import defaultdict
 from pathlib import Path
 
@@ -7,6 +8,7 @@ import gradio as gr
 from gradio_rangeslider import RangeSlider
 
 import mteb
+from mteb.caching import json_cache
 from mteb.leaderboard.table import scores_to_tables
 
 
@@ -17,7 +19,8 @@ def load_results():
         all_results.to_disk(results_cache_path)
         return all_results
     else:
-        return mteb.BenchmarkResults.from_disk(results_cache_path)
+        with results_cache_path.open() as cache_file:
+            return mteb.BenchmarkResults.from_validated(**json.load(cache_file))
 
 
 def update_citation(benchmark_name: str) -> str:
@@ -207,6 +210,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             domain_select,
         ],
     )
+    @json_cache
     def on_select_benchmark(benchmark_name):
         benchmark = mteb.get_benchmark(benchmark_name)
         benchmark_results = benchmark.load_results(base_results=all_results)
@@ -220,6 +224,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         inputs=[benchmark_select, lang_select, type_select, domain_select],
         outputs=[task_select],
     )
+    @json_cache
     def update_task_list(benchmark_name, languages, task_types, domains):
         benchmark = mteb.get_benchmark(benchmark_name)
         benchmark_results = benchmark.load_results(base_results=all_results)
