@@ -75,6 +75,9 @@ benchmarks = mteb.get_benchmarks()
 default_benchmark = mteb.get_benchmark("MTEB(Multilingual, beta)")
 default_results = default_benchmark.load_results(base_results=all_results)
 
+default_scores = default_results.get_scores(format="long")
+summary_table, per_task_table = scores_to_tables(default_scores)
+
 benchmark_select = gr.Dropdown(
     [bench.name for bench in benchmarks],
     value=default_benchmark.name,
@@ -190,14 +193,12 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             label="Model Size (#M Parameters)",
                             interactive=True,
                         )
-    default_scores = default_results.get_scores(format="long")
     scores = gr.State(default_scores)
-    summary, per_task = scores_to_tables(default_scores)
     description = gr.Markdown(update_description, inputs=[benchmark_select])
     with gr.Tab("Summary"):
-        summary_table = gr.DataFrame(summary)
+        summary_table.render()
     with gr.Tab("Performance per task"):
-        per_task_table = gr.DataFrame(per_task)
+        per_task_table.render()
     with gr.Tab("Task information"):
         task_info_table = gr.DataFrame(update_task_info, inputs=[task_select])
     citation = gr.Markdown(update_citation, inputs=[benchmark_select])
