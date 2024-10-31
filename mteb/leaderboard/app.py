@@ -117,65 +117,11 @@ head = """
 
 with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     with gr.Row():
-        with gr.Column(scale=1):
-            gr.Markdown(
-                """
-            ### Model Selection
-            Select models to rank based on an assortment of criteria. 
-            """,
-            )
-            with gr.Group():
-                with gr.Row(elem_classes="overflow-y-scroll max-h-80"):
-                    with gr.Column():
-                        searchbar = gr.Textbox(
-                            label="Search Models",
-                            info="Search models by name (RegEx sensitive)",
-                            interactive=True,
-                        )
-                        availability = gr.Radio(
-                            [
-                                ("Only Open", True),
-                                ("Only Proprietary", False),
-                                ("Both", None),
-                            ],
-                            value=None,
-                            label="Availability",
-                            interactive=True,
-                        )
-                        compatibility = gr.CheckboxGroup(
-                            [
-                                (
-                                    "Should be sentence-transformers compatible",
-                                    "sbert_compatible",
-                                )
-                            ],
-                            value=[],
-                            label="Compatibility",
-                            interactive=True,
-                        )
-                        instructions = gr.Radio(
-                            [
-                                ("Only Instruction-tuned", True),
-                                ("Only non-instruction", False),
-                                ("Both", None),
-                            ],
-                            value=None,
-                            label="Instructions",
-                            interactive=True,
-                        )
-                        model_size = RangeSlider(
-                            minimum=min_model_size,
-                            maximum=max_model_size,
-                            value=(min_model_size, max_model_size),
-                            label="Model Size (#M Parameters)",
-                            interactive=True,
-                        )
-        with gr.Column(scale=2):
+        with gr.Column(scale=5):
             gr.Markdown(
                 """
             ### Benchmarks
-            Select one of the hand-curated benchmarks from our publication.
-            Or create one from scratch based on your use case.
+            Select one of the hand-curated benchmarks from our publications and modify them to fit your needs.
             """
             )
             with gr.Group():
@@ -190,6 +136,60 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             domain_select.render()
                         with gr.Accordion("Add and remove tasks:", open=False):
                             task_select.render()
+        with gr.Column(scale=8):
+            gr.Markdown(
+                """
+            ### Model Selection
+            Select models to rank based on an assortment of criteria. 
+            """,
+            )
+            with gr.Group():
+                searchbar = gr.Textbox(
+                    label="Search Models",
+                    info="Search models by name (RegEx sensitive)",
+                    interactive=True,
+                )
+                with gr.Row(elem_classes=""):
+                    with gr.Column():
+                        availability = gr.Radio(
+                            [
+                                ("Only Open", True),
+                                ("Only Proprietary", False),
+                                ("Both", None),
+                            ],
+                            value=None,
+                            label="Availability",
+                            interactive=True,
+                        )
+                        instructions = gr.Radio(
+                            [
+                                ("Only Instruction-tuned", True),
+                                ("Only non-instruction", False),
+                                ("Both", None),
+                            ],
+                            value=None,
+                            label="Instructions",
+                            interactive=True,
+                        )
+                    with gr.Column():
+                        compatibility = gr.CheckboxGroup(
+                            [
+                                (
+                                    "Should be sentence-transformers compatible",
+                                    "sbert_compatible",
+                                )
+                            ],
+                            value=[],
+                            label="Compatibility",
+                            interactive=True,
+                        )
+                        model_size = RangeSlider(
+                            minimum=min_model_size,
+                            maximum=max_model_size,
+                            value=(min_model_size, max_model_size),
+                            label="Model Size (#M Parameters)",
+                            interactive=True,
+                        )
     default_scores = default_results.get_scores(format="long")
     scores = gr.State(default_scores)
     summary, per_task = scores_to_tables(default_scores)
