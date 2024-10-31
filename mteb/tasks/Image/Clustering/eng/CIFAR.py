@@ -17,7 +17,7 @@ class CIFAR10Clustering(AbsTaskImageClustering):
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
+        main_score="nmi",
         date=(
             "2008-01-01",
             "2009-01-01",
@@ -53,11 +53,11 @@ class CIFAR100Clustering(AbsTaskImageClustering):
             "path": "uoft-cs/cifar100",
             "revision": "aadb3af77e9048adbea6b47c21a81e47dd092ae5",
         },
-        type="Clustering",
+        type="ImageClustering",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
+        main_score="nmi",
         date=(
             "2008-01-01",
             "2009-01-01",

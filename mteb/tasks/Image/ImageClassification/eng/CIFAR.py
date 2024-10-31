@@ -53,7 +53,7 @@ class CIFAR100Classification(AbsTaskImageClassification):
             "path": "uoft-cs/cifar100",
             "revision": "aadb3af77e9048adbea6b47c21a81e47dd092ae5",
         },
-        type="Classification",
+        type="ImageClassification",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
