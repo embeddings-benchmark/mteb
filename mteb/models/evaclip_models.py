@@ -15,6 +15,7 @@ def evaclip_loader(**kwargs):
     try:
         import sys
         import os
+
         sys.path.insert(0, os.path.join(os.getcwd(), "EVA/EVA-CLIP/rei"))
 
         from eva_clip import create_model_and_transforms, get_tokenizer
@@ -25,7 +26,7 @@ def evaclip_loader(**kwargs):
             "`pip install ninja`"
             "`pip install -v -U git+https://github.com/facebookresearch/xformers.git@main#egg=xformers`"
             "`git clone https://github.com/NVIDIA/apex && cd apex && pip install -v --disable-pip-version-check --no-build-isolation --no-cache-dir ./`"
-            )
+        )
 
     class EvaCLIPWrapper:
         def __init__(
@@ -36,7 +37,7 @@ def evaclip_loader(**kwargs):
         ):
             self.model_name = model_name
             self.device = device
-            pretrained = "eva_clip" # or "/path/to/EVA02_CLIP_B_psz16_s8B.pt"
+            pretrained = "eva_clip"  # or "/path/to/EVA02_CLIP_B_psz16_s8B.pt"
             self.model, _, self.img_preprocess = create_model_and_transforms(
                 model_name, pretrained, force_custom_clip=True, device=device
             )
