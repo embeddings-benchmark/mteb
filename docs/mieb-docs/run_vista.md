@@ -13,9 +13,14 @@ download the vision tower for bge-base
 wget https://huggingface.co/BAAI/bge-visualized/resolve/main/Visualized_base_en_v1.5.pth?download=true
 ```
 rename it to `visualized_base_en_V1.5.pth`
-
+```
+mv Visualized_base_en_v1.5.pth?download=true visualized_base_en_V1.5.pth
+```
 download the vision tower for bge-m3
 ```
 wget https://huggingface.co/BAAI/bge-visualized/resolve/main/Visualized_m3.pth?download=true
 ```
 rename it to `visualized_m3.pth`
+```
+mv Visualized_m3.pth?download=true visualized_m3.pth
+```
