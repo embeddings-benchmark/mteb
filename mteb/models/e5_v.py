@@ -21,6 +21,8 @@ class E5VWrapper:
     ):
         self.model_name = model_name
         self.processor = LlavaNextProcessor.from_pretrained(model_name)
+        if "device" in kwargs:
+            self.device = kwargs.pop("device")
         self.model = LlavaNextForConditionalGeneration.from_pretrained(
             model_name, **kwargs
         )
