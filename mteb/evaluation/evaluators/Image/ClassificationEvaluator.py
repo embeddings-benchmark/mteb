@@ -7,7 +7,6 @@ from typing import Any
 
 import numpy as np
 import torch
-import math
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     accuracy_score,

@@ -4,6 +4,7 @@ import heapq
 import io
 import json
 import logging
+import math
 import os
 from collections import defaultdict
 from typing import Any
@@ -11,7 +12,6 @@ from typing import Any
 import numpy as np
 import pytrec_eval
 import torch
-import math
 from datasets import Dataset
 from PIL import Image
 from torch.utils.data import DataLoader

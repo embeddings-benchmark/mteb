@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import base64
+import io
+import os
+import time
 from functools import partial
 from typing import Any
 
@@ -8,11 +12,8 @@ from PIL import Image
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from tqdm import tqdm
-import os
-import io
-import base64
+
 import mteb
-import time
 from mteb.model_meta import ModelMeta
 
 api_key = os.getenv("COHERE_API_KEY")

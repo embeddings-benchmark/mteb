@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import logging
+import math
+import os
 from typing import Any
 
 import torch
-import math
-import os
 from sklearn import metrics
 from torch.utils.data import DataLoader
 from torchvision import transforms
