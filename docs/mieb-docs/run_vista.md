@@ -8,8 +8,9 @@ git checkout 5c9260277977f8f8e256e56a8e12387552693af9
 pip install -e .
 pip install torchvision timm einops ftfy
 ```
-download the vision tower for bge-base
+back to the root folder of mteb; download the vision tower for bge-base
 ```
+cd ..
 wget https://huggingface.co/BAAI/bge-visualized/resolve/main/Visualized_base_en_v1.5.pth?download=true
 ```
 rename it to `visualized_base_en_V1.5.pth`
