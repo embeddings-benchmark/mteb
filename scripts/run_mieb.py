@@ -43,6 +43,14 @@ for model_name in [
     "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
     "TIGER-Lab/VLM2Vec-LoRA",
     "TIGER-Lab/VLM2Vec-Full",
+    "Salesforce/blip-itm-base-coco",
+    "Salesforce/blip-itm-large-coco",
+    "Salesforce/blip-itm-base-flickr",
+    "Salesforce/blip-itm-large-flickr",
+    "EVA02-CLIP-B-16",
+    "EVA02-CLIP-L-14",
+    "EVA02-CLIP-bigE-14",
+    "EVA02-CLIP-bigE-14-plus",
     # "embed-english-v3.0-v",  # not feasible to run due to the 40 images/min constraint
 ]:
     model = mteb.get_model(model_name)

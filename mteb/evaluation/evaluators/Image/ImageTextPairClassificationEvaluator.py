@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import logging
+import math
+import os
 from typing import Any
 
 import torch
@@ -106,7 +108,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
             shuffle=False,
             # collate_fn=lambda x: x,  # Identity collate function
             collate_fn=custom_collate_fn,
-            num_workers=4,
+            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
 
         num_images_per_sample = (
