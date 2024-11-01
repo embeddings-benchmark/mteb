@@ -11,6 +11,7 @@ from typing import Any
 import numpy as np
 import pytrec_eval
 import torch
+import math
 from datasets import Dataset
 from PIL import Image
 from torch.utils.data import DataLoader
@@ -132,7 +133,7 @@ class Any2AnyMultiChoiceSearch:
                 batch_size=self.encode_kwargs["batch_size"],
                 shuffle=False,
                 collate_fn=custom_collate_fn,
-                num_workers=max(1, os.cpu_count() // 2),
+                num_workers=min(math.floor(os.cpu_count() / 2), 16),
             )
             if q_modality == "image":
                 query_embeddings = self.model.get_image_embeddings(
@@ -182,7 +183,7 @@ class Any2AnyMultiChoiceSearch:
                     batch_size=self.encode_kwargs["batch_size"],
                     shuffle=False,
                     collate_fn=custom_collate_fn,
-                    num_workers=max(1, os.cpu_count() // 2),
+                    num_workers=min(math.floor(os.cpu_count() / 2), 16),
                 )
                 if corpus_modality == "image":
                     sub_corpus_embeddings = self.model.get_image_embeddings(
