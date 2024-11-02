@@ -40,17 +40,12 @@ def task_to_markdown_row(task: mteb.AbsTask) -> str:
     domains = (
         "[" + ", ".join(task.metadata.domains) + "]" if task.metadata.domains else ""
     )
-    n_samples = (
-        task.metadata.descriptive_stats["n_samples"]
-        if "n_samples" in task.metadata.descriptive_stats
-        else ""
-    )
+    n_samples = task.metadata.n_samples or ""
     dataset_statistics = ""
     if "avg_character_length" in task.metadata.descriptive_stats:
         dataset_statistics = task.metadata.descriptive_stats["avg_character_length"]
     elif len(task.metadata.descriptive_stats) > 1:
         all_stat = task.metadata.descriptive_stats
-        all_stat.pop("n_samples")
         if len(all_stat) > 0:
             dataset_statistics = all_stat
 
