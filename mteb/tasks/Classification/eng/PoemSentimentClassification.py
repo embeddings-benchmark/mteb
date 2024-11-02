@@ -37,10 +37,7 @@ class PoemSentimentClassification(AbsTaskClassification):
       primaryClass={cs.CL}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"validation": 105, "test": 104},
-            "avg_character_length": {"validation": 45.3, "test": 42.4},
-        },
+        n_samples={"validation": 105, "test": 104},
     )
 
     def dataset_transform(self):

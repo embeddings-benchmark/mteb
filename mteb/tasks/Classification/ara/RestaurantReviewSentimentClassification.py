@@ -38,10 +38,7 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
   organization={Springer}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"train": N_SAMPLES},
-            "avg_character_length": {"train": 231.4},
-        },
+        n_samples={"train": N_SAMPLES},
     )
 
     def dataset_transform(self):

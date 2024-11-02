@@ -57,7 +57,6 @@ class SickrSTS(AbsTaskSTS):
     language = "English",
     ISBN = "979-10-95546-34-4",
 }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     @property

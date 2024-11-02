@@ -52,32 +52,6 @@ class MSMARCO(AbsTaskRetrieval):
         prompt={
             "query": "Given a web search query, retrieve relevant passages that answer the query"
         },
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "train": {
-                    "average_document_length": 335.79716603691344,
-                    "average_query_length": 33.21898281898998,
-                    "num_documents": 8841823,
-                    "num_queries": 502939,
-                    "average_relevant_docs_per_query": 1.0592755781516248,
-                },
-                "dev": {
-                    "average_document_length": 335.79716603691344,
-                    "average_query_length": 33.2621776504298,
-                    "num_documents": 8841823,
-                    "num_queries": 6980,
-                    "average_relevant_docs_per_query": 1.0654727793696275,
-                },
-                "test": {
-                    "average_document_length": 335.79716603691344,
-                    "average_query_length": 32.74418604651163,
-                    "num_documents": 8841823,
-                    "num_queries": 43,
-                    "average_relevant_docs_per_query": 95.3953488372093,
-                },
-            },
-        },
     )
 
 
@@ -125,16 +99,5 @@ class MSMARCOHardNegatives(AbsTaskRetrieval):
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 43},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 355.2909668633681,
-                    "average_query_length": 32.74418604651163,
-                    "num_documents": 8812,
-                    "num_queries": 43,
-                    "average_relevant_docs_per_query": 95.3953488372093,
-                }
-            },
-        },
+        n_samples={"test": 43},
     )

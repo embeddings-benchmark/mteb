@@ -43,10 +43,7 @@ class KorHateClassification(AbsTaskClassification):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
-        descriptive_stats={
-            "n_samples": {"train": 2048, "test": 471},
-            "avg_character_length": {"train": 38.57, "test": 38.86},
-        },
+        n_samples={"train": 2048, "test": 471},
     )
 
     def dataset_transform(self):

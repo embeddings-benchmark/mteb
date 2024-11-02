@@ -35,10 +35,7 @@ class CbdClassification(AbsTaskClassification):
   url       = {http://2019.poleval.pl/files/poleval2019.pdf},
   isbn      = "978-83-63159-28-3"}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 1000},
-            "avg_character_length": {"test": 93.2},
-        },
+        n_samples={"test": 1000},
     )
 
 
@@ -80,7 +77,6 @@ class PolEmo2InClassification(AbsTaskClassification):
     pages = "980--991",
     abstract = "In this article we present an extended version of PolEmo {--} a corpus of consumer reviews from 4 domains: medicine, hotels, products and school. Current version (PolEmo 2.0) contains 8,216 reviews having 57,466 sentences. Each text and sentence was manually annotated with sentiment in 2+1 scheme, which gives a total of 197,046 annotations. We obtained a high value of Positive Specific Agreement, which is 0.91 for texts and 0.88 for sentences. PolEmo 2.0 is publicly available under a Creative Commons copyright license. We explored recent deep learning approaches for the recognition of sentiment, such as Bi-directional Long Short-Term Memory (BiLSTM) and Bidirectional Encoder Representations from Transformers (BERT).",
 }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
 
@@ -109,10 +105,7 @@ class PolEmo2OutClassification(AbsTaskClassification):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        descriptive_stats={
-            "n_samples": {"test": 722},
-            "avg_character_length": {"test": 756.2},
-        },
+        n_samples={"test": 722},
     )
 
 
@@ -139,10 +132,7 @@ class AllegroReviewsClassification(AbsTaskClassification):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        descriptive_stats={
-            "n_samples": {"test": 1006},
-            "avg_character_length": {"test": 477.2},
-        },
+        n_samples={"test": 1006},
     )
 
 
@@ -178,8 +168,5 @@ class PacClassification(AbsTaskClassification):
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2211.13112}, 
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 3453},
-            "avg_character_length": {"test": 185.3},
-        },
+        n_samples={"test": 3453},
     )

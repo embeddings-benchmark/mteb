@@ -45,10 +45,7 @@ class ToxicChatClassification(AbsTaskClassification):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 1427},
-            "avg_character_length": {"test": 189.4},
-        },
+        n_samples={"test": 1427},
     )
 
     def dataset_transform(self):

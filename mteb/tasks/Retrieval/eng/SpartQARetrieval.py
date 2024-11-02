@@ -44,16 +44,5 @@ class SpartQA(AbsTaskRetrieval):
         prompt={
             "query": "Given the following spatial reasoning question, retrieve the right answer."
         },
-        descriptive_stats={
-            "n_samples": {"test": 0},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 50.40829145728643,
-                    "average_query_length": 656.2328881469115,
-                    "num_documents": 1592,
-                    "num_queries": 3594,
-                    "average_relevant_docs_per_query": 1.8786867000556482,
-                }
-            },
-        },
+        n_samples={"test": 0},
     )

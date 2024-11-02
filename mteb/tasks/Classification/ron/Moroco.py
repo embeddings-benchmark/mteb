@@ -41,10 +41,7 @@ class Moroco(AbsTaskClassification):
         pages={688--698},
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 1710.94},
-        },
+        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):

@@ -38,18 +38,7 @@ class SweFaqRetrieval(AbsTaskRetrieval):
   year={2023}
 }""",  # for the benchmark in which this dataset is used
         prompt={"query": "Retrieve answers given questions in Swedish"},
-        descriptive_stats={
-            "n_samples": {"test": 1024},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 319.8473581213307,
-                    "average_query_length": 70.51461988304094,
-                    "num_documents": 511,
-                    "num_queries": 513,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
+        n_samples={"test": 1024},
     )
 
     def load_data(self, **kwargs):

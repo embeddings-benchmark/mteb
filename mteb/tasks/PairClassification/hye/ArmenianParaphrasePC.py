@@ -36,10 +36,7 @@ class ArmenianParaphrasePC(AbsTaskPairClassification):
             primaryClass={cs.CL}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"train": 4023, "test": 1470},
-            "avg_character_length": {"train": 243.81, "test": 241.37},
-        },
+        n_samples={"train": 4023, "test": 1470},
     )
 
     def dataset_transform(self):

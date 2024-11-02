@@ -40,18 +40,6 @@ class DBPedia(AbsTaskRetrieval):
         prompt={
             "query": "Given a query, retrieve relevant entity descriptions from DBPedia"
         },
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1122.7690155333814,
-                    "average_query_length": 48.7264325323475,
-                    "num_documents": 48605,
-                    "num_queries": 541,
-                    "average_relevant_docs_per_query": 1.3752310536044363,
-                }
-            },
-        },
     )
 
 
@@ -87,16 +75,5 @@ class DBPediaHardNegatives(AbsTaskRetrieval):
  doi =       {10.1145/3077136.3080751},
  publisher = {ACM}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 400},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 338.58561119129564,
-                    "average_query_length": 34.085,
-                    "num_documents": 90070,
-                    "num_queries": 400,
-                    "average_relevant_docs_per_query": 38.215,
-                }
-            },
-        },
+        n_samples={"test": 400},
     )

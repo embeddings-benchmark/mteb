@@ -42,10 +42,7 @@ class FinToxicityClassification(AbsTaskClassification):
             month = may,
             year = "2023",
         }""",
-        descriptive_stats={
-            "n_samples": {"train": 2048, "test": 2048},
-            "avg_character_length": {"train": 432.63, "test": 401.03},
-        },
+        n_samples={"train": 2048, "test": 2048},
     )
 
     def dataset_transform(self):

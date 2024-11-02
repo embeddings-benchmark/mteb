@@ -51,10 +51,7 @@ class RUParaPhraserSTS(AbsTaskSTS):
           organization={Springer}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 1924},
-            "avg_character_length": {"test": 61.25},
-        },
+        n_samples={"test": 1924},
     )
 
     @property

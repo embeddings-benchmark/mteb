@@ -48,10 +48,7 @@ class TweetTopicSingleClassification(AbsTaskClassification):
             publisher = "International Committee on Computational Linguistics"
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test_2021": 1693},
-            "avg_character_length": {"test_2021": 167.66},
-        },
+        n_samples={"test_2021": 1693},
     )
 
     def dataset_transform(self):

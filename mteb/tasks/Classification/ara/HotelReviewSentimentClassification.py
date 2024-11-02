@@ -39,10 +39,7 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
   publisher={Springer}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"train": N_SAMPLES},
-            "avg_character_length": {"train": 137.2},
-        },
+        n_samples={"train": N_SAMPLES},
     )
 
     def dataset_transform(self):

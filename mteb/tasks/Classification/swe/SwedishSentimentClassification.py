@@ -30,10 +30,7 @@ class SwedishSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {"validation": N_SAMPLES, "test": N_SAMPLES},
-            "avg_character_length": {"validation": 499.3, "test": 498.1},
-        },
+        n_samples={"validation": N_SAMPLES, "test": N_SAMPLES},
     )
 
     def dataset_transform(self):

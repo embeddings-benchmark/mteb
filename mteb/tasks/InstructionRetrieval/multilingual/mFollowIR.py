@@ -200,9 +200,7 @@ class mFollowIRCrossLingual(MultilingualTask, AbsTaskInstructionRetrieval):
   journal={arXiv preprint TODO},
   year={2024}
 }""",
-        descriptive_stats={
-            "n_samples": {"eng-fas": 40 * 2, "eng-rus": 40 * 2, "eng-zho": 43 * 2},
-        },
+        n_samples={"eng-fas": 40 * 2, "eng-rus": 40 * 2, "eng-zho": 43 * 2},
     )
 
     def load_data(self, **kwargs):
@@ -256,9 +254,7 @@ class mFollowIR(MultilingualTask, AbsTaskInstructionRetrieval):
   journal={arXiv preprint TODO},
   year={2024}
 }""",
-        descriptive_stats={
-            "n_samples": {"fas": 40 * 2, "rus": 40 * 2, "zho": 43 * 2},
-        },
+        n_samples={"fas": 40 * 2, "rus": 40 * 2, "zho": 43 * 2},
     )
 
     def load_data(self, **kwargs):

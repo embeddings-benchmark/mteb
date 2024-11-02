@@ -44,16 +44,5 @@ class TempReasonL3Context(AbsTaskRetrieval):
         prompt={
             "query": "Given the following question, facts and contexts, retrieve the correct answer."
         },
-        descriptive_stats={
-            "n_samples": {"test": 4426},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 19.80534984678243,
-                    "average_query_length": 13424.633077270673,
-                    "num_documents": 15664,
-                    "num_queries": 4426,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
+        n_samples={"test": 4426},
     )

@@ -38,9 +38,7 @@ class SummEvalSummarization(AbsTaskSummarization):
   journal={arXiv preprint arXiv:2007.12626},
   year={2020}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 2800},
-        },
+        n_samples={"test": 2800},
     )
 
     @property
@@ -79,10 +77,7 @@ class SummEvalSummarizationv2(AbsTaskSummarization):
   journal={arXiv preprint arXiv:2007.12626},
   year={2020}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 2800},
-            "avg_character_length": {"test": 359.8},
-        },
+        n_samples={"test": 2800},
     )
 
     @property

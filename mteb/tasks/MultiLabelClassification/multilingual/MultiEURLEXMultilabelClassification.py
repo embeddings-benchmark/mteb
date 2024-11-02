@@ -70,7 +70,5 @@ class MultiEURLEXMultilabelClassification(
   url = {https://arxiv.org/abs/2109.00904}
 }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 5000},
-        },
+        n_samples={"test": 5000},
     )

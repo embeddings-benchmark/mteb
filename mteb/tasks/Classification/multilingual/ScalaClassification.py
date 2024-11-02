@@ -52,10 +52,7 @@ class ScalaClassification(AbsTaskClassification, MultilingualTask):
             pages = "185--201",
         }""",
         prompt="Classify passages in Scandinavian Languages based on linguistic acceptability",
-        descriptive_stats={
-            "n_samples": {"test": len(_LANGS) * 1024},
-            "avg_character_length": {"test": 102.72},
-        },
+        n_samples={"test": len(_LANGS) * 1024},
     )
 
     @property

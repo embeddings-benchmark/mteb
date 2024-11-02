@@ -243,10 +243,7 @@ class SIB200ClusteringFast(MultilingualTask, AbsTaskClusteringFast):
             journal={arXiv preprint arXiv:2309.07445},
             year={2023}
         }""",  # combined train, validation, and test into test.
-        descriptive_stats={
-            "n_samples": {"test": 1004},
-            "avg_character_length": {"test": 114.78},
-        },
+        n_samples={"test": 1004},
     )
 
     def dataset_transform(self):

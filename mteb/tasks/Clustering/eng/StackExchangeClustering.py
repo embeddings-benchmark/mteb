@@ -48,10 +48,7 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
         eprint    = {2104.07081}
         }""",
         prompt="Identify the topic or theme of StackExchange posts based on the titles",
-        descriptive_stats={
-            "n_samples": {"test": 32768},
-            "avg_character_length": {"test": 57.0},
-        },
+        n_samples={"test": 32768},
     )
 
     def dataset_transform(self):
@@ -114,8 +111,5 @@ class StackExchangeClustering(AbsTaskClustering):
         eprint    = {2104.07081}
         }""",
         prompt="Identify the topic or theme of StackExchange posts based on the titles",
-        descriptive_stats={
-            "n_samples": {"test": 373850},
-            "avg_character_length": {"test": 57.0},
-        },
+        n_samples={"test": 373850},
     )

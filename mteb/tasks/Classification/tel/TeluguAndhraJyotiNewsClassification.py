@@ -27,10 +27,7 @@ class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {"test": 4329},
-            "avg_character_length": {"test": 1428.28},
-        },
+        n_samples={"test": 4329},
     )
 
     def dataset_transform(self):

@@ -38,10 +38,7 @@ class SadeemQuestionRetrieval(AbsTaskRetrieval):
             author = "abubakr.soliman@sadeem.app"
             }
         """,
-        descriptive_stats={
-            "n_samples": {_EVAL_SPLIT: 22979},
-            "avg_character_length": {_EVAL_SPLIT: 500.0},
-        },
+        n_samples={_EVAL_SPLIT: 22979},
     )
 
     def load_data(self, **kwargs):

@@ -60,9 +60,7 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
         location = {Brussels, Belgium},
         }
         """,
-        descriptive_stats={
-            "n_samples": {"validation": 2163, "test": 2460},
-        },
+        n_samples={"validation": 2163, "test": 2460},
     )
 
     def dataset_transform(self):
@@ -143,10 +141,7 @@ class XNLIV2(MultilingualTask, AbsTaskPairClassification):
             organization={IEEE}
             }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 5010},
-            "avg_character_length": {"test": 80.06},
-        },  # average of premise and hypothesis
+        n_samples={"test": 5010},  # average of premise and hypothesis
     )
 
     def dataset_transform(self):

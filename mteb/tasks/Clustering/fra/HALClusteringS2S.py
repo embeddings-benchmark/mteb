@@ -48,7 +48,6 @@ class HALClusteringS2S(AbsTaskClustering):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     def dataset_transform(self):
@@ -96,10 +95,7 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": NUM_SAMPLES},
-            "avg_character_length": {"test": 86.6},
-        },
+        n_samples={"test": NUM_SAMPLES},
     )
 
     def dataset_transform(self):

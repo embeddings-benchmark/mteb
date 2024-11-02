@@ -47,10 +47,8 @@ class CodeEditSearchRetrieval(MultilingualTask, AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="@article{muennighoff2023octopack, title={OctoPack: Instruction Tuning Code Large Language Models}, author={Niklas Muennighoff and Qian Liu and Armel Zebaze and Qinkai Zheng and Binyuan Hui and Terry Yue Zhuo and Swayam Singh and Xiangru Tang and Leandro von Werra and Shayne Longpre}, journal={arXiv preprint arXiv:2308.07124}, year={2023} }",
-        descriptive_stats={
-            "n_samples": {
-                _EVAL_SPLIT: 1000 * len(_LANGS),
-            },
+        n_samples={
+            _EVAL_SPLIT: 1000 * len(_LANGS),
         },
     )
 

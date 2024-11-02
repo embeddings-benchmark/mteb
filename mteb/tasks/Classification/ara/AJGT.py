@@ -36,8 +36,5 @@ class AJGT(AbsTaskClassification):
   organization={Springer}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"train": 1800},
-            "avg_character_length": {"train": 46.81},
-        },
+        n_samples={"train": 1800},
     )

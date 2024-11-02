@@ -39,10 +39,7 @@ class KorFin(AbsTaskClassification):
         year={2023}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 75.28},
-        },
+        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):

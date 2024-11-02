@@ -39,10 +39,7 @@ class AlloprofReranking(AbsTaskReranking):
             year = {2023},
             copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
             }""",
-        descriptive_stats={
-            "n_samples": {"test": 2316, "train": 9264},
-            "avg_character_length": None,
-        },
+        n_samples={"test": 2316, "train": 9264},
     )
 
     def load_data(self, **kwargs):

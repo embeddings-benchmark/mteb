@@ -43,8 +43,5 @@ class NollySentiBitextMining(AbsTaskBitextMining, MultilingualTask):
             year={2023}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"train": 1640},
-            "avg_character_length": {"train": 135.91},
-        },
+        n_samples={"train": 1640},
     )

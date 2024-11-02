@@ -60,8 +60,5 @@ class MTOPIntentClassification(MultilingualTask, AbsTaskClassification):
 }
 """,
         prompt="Classify the intent of the given utterance in task-oriented conversation",
-        descriptive_stats={
-            "n_samples": {"validation": 2235, "test": 4386},
-            "avg_character_length": {"validation": 36.5, "test": 36.8},
-        },
+        n_samples={"validation": 2235, "test": 4386},
     )

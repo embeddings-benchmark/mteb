@@ -41,18 +41,7 @@ class LEMBWikimQARetrieval(AbsTaskRetrieval):
                 year={2020}
             }
         """,
-        descriptive_stats={
-            "n_samples": {_EVAL_SPLIT: 500},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 37445.60333333333,
-                    "average_query_length": 67.57,
-                    "num_documents": 300,
-                    "num_queries": 300,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
+        n_samples={_EVAL_SPLIT: 500},
     )
 
     def load_data(self, **kwargs):

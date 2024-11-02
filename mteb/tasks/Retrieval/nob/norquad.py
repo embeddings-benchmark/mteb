@@ -49,18 +49,7 @@ class NorQuadRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a question in Norwegian, retrieve the answer from Wikipedia articles"
         },
-        descriptive_stats={
-            "n_samples": {"test": 2602},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 214.5114503816794,
-                    "average_query_length": 47.896484375,
-                    "num_documents": 1048,
-                    "num_queries": 1024,
-                    "average_relevant_docs_per_query": 2.0,
-                }
-            },
-        },
+        n_samples={"test": 2602},
     )
 
     def load_data(self, **kwargs):

@@ -36,10 +36,7 @@ class SwahiliNewsClassification(AbsTaskClassification):
         url = "https://doi.org/10.5281/zenodo.5514203"
         }
         """,
-        descriptive_stats={
-            "n_samples": {"train": 2048},
-            "avg_character_length": {"train": 2438.2308135942326},
-        },
+        n_samples={"train": 2048},
     )
 
     def dataset_transform(self) -> None:

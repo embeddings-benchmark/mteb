@@ -38,10 +38,7 @@ class CSFDCZMovieReviewSentimentClassification(AbsTaskClassification):
       primaryClass={cs.CL}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": N_SAMPLES},
-            "avg_character_length": {"test": 386.5},
-        },
+        n_samples={"test": N_SAMPLES},
     )
 
     @property

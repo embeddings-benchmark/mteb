@@ -49,18 +49,7 @@ class FaithDialRetrieval(AbsTaskRetrieval):
             doi={10.1162/tacl_a_00529}
             }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 2042},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 140.61062447018932,
-                    "average_query_length": 4.926542605288932,
-                    "num_documents": 3539,
-                    "num_queries": 2042,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
+        n_samples={"test": 2042},
     )
 
     # TODO: Will be removed if curated and added to mteb HF

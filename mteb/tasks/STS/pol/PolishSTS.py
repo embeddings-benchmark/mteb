@@ -57,10 +57,7 @@ class SickrPLSTS(AbsTaskSTS):
     ISBN = "979-10-95546-34-4",
 }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 9812},
-            "avg_character_length": {"test": 42.8},
-        },
+        n_samples={"test": 9812},
     )
 
     @property
@@ -111,10 +108,7 @@ class CdscrSTS(AbsTaskSTS):
 }
 
         """,
-        descriptive_stats={
-            "n_samples": {"test": 1000},
-            "avg_character_length": {"test": 75.24},
-        },
+        n_samples={"test": 1000},
     )
 
     @property

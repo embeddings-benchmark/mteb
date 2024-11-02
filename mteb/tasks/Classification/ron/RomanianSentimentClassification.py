@@ -36,10 +36,7 @@ class RomanianSentimentClassification(AbsTaskClassification):
   year={2020}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": TEST_SAMPLES},
-            "avg_character_length": {"test": 67.6},
-        },
+        n_samples={"test": TEST_SAMPLES},
     )
 
     def dataset_transform(self):

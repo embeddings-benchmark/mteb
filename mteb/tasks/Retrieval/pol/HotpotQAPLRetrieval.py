@@ -36,18 +36,6 @@ class HotpotQAPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 292.26835882093405,
-                    "average_query_length": 94.64064821066847,
-                    "num_documents": 5233329,
-                    "num_queries": 7405,
-                    "average_relevant_docs_per_query": 2.0,
-                }
-            },
-        },
     )
 
 
@@ -82,16 +70,5 @@ class HotpotQAPLHardNegatives(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 1000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 438.3888210025661,
-                    "average_query_length": 95.161,
-                    "num_documents": 212774,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 2.0,
-                }
-            },
-        },
+        n_samples={"test": 1000},
     )

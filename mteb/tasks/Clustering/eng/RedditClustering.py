@@ -48,10 +48,7 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
         eprint    = {2104.07081}
         }""",
         prompt="Identify the topic or theme of Reddit posts based on the titles",
-        descriptive_stats={
-            "n_samples": {"test": 32768},
-            "avg_character_length": {"test": 64.7},
-        },
+        n_samples={"test": 32768},
     )
 
     def dataset_transform(self):
@@ -112,8 +109,5 @@ class RedditClustering(AbsTaskClustering):
         eprint    = {2104.07081}
         }""",
         prompt="Identify the topic or theme of Reddit posts based on the titles",
-        descriptive_stats={
-            "n_samples": {"test": 420464},
-            "avg_character_length": {"test": 64.7},
-        },
+        n_samples={"test": 420464},
     )

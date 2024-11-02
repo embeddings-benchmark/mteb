@@ -50,10 +50,7 @@ class SickBrSTS(AbsTaskSTS):
   isbn="978-3-319-99722-3"
 }
         """,
-        descriptive_stats={
-            "n_samples": {"test": N_SAMPLES},
-            "avg_character_length": {"test": 54.89},
-        },
+        n_samples={"test": N_SAMPLES},
     )
 
     @property

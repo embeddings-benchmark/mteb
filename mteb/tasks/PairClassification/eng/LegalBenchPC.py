@@ -117,10 +117,7 @@ class LegalBenchPC(AbsTaskPairClassification):
             year={2019}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 287.18},
-        },
+        n_samples={"test": 2048},
     )
 
     def load_data(self, **kwargs: Any) -> None:

@@ -33,9 +33,7 @@ class RuSciBenchGRNTIClusteringP2P(AbsTaskClusteringFast):
         sample_creation="found",
         bibtex_citation="",
         prompt="Identify the category of scientific papers based on the titles and abstracts",
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-        },
+        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):

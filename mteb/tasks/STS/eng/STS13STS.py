@@ -34,10 +34,7 @@ class STS13STS(AbsTaskSTS):
   year={2013},
   url={https://api.semanticscholar.org/CorpusID:10241043}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 3000},
-            "avg_character_length": {"test": 54.0},
-        },
+        n_samples={"test": 3000},
     )
 
     @property

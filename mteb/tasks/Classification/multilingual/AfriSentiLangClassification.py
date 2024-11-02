@@ -41,10 +41,7 @@ class AfriSentiLangClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="""
         """,
-        descriptive_stats={
-            "n_samples": {"test": 5754},
-            "avg_character_length": {"test": 77.84},
-        },
+        n_samples={"test": 5754},
     )
 
     @property

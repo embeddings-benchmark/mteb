@@ -42,9 +42,7 @@ class BornholmBitextMining(AbsTaskBitextMining):
 }
 """,
         prompt="Retrieve parallel sentences.",
-        descriptive_stats={
-            "n_samples": {"test": 500},
-        },
+        n_samples={"test": 500},
     )
 
     def dataset_transform(self):

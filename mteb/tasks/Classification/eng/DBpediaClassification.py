@@ -39,10 +39,7 @@ class DBpediaClassification(AbsTaskClassification):
             year = {2015}
             }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 70000},
-            "avg_character_length": {"test": 281.40},
-        },
+        n_samples={"test": 70000},
     )
 
     def dataset_transform(self):

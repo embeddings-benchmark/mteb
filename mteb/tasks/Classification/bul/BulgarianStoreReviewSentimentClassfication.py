@@ -36,10 +36,7 @@ doi = {10.7910/DVN/TXIK9P},
 url = {https://doi.org/10.7910/DVN/TXIK9P}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 182},
-            "avg_character_length": {"test": 316.7},
-        },
+        n_samples={"test": 182},
     )
 
     def dataset_transform(self):

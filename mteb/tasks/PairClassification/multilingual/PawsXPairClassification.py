@@ -45,9 +45,7 @@ class PawsXPairClassification(MultilingualTask, AbsTaskPairClassification):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": {"validation": 14000, "test": 14000},
-        },
+        n_samples={"validation": 14000, "test": 14000},
     )
 
     def dataset_transform(self):

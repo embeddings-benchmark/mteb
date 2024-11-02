@@ -45,7 +45,7 @@ class SciDocsReranking(AbsTaskReranking):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        descriptive_stats={"n_samples": {"test": 19599}, "avg_character_length": {"test": 69.0}},
+        n_samples={"test": 19599},
         bibtex_citation="""
 @inproceedings{cohan-etal-2020-specter,
     title = "{SPECTER}: Document-level Representation Learning using Citation-informed Transformers",

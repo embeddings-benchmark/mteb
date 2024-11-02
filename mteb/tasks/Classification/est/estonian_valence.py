@@ -38,13 +38,7 @@ class EstonianValenceClassification(AbsTaskClassification):
     url = "https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054",
     doi = "10.6084/m9.figshare.24517054.v1"
 }""",
-        descriptive_stats={
-            "n_samples": {"train": 3270, "test": 818},
-            "avg_character_length": {
-                "train": 226.70642201834863,
-                "test": 231.5085574572127,
-            },
-        },
+        n_samples={"train": 3270, "test": 818},
     )
 
     def dataset_transform(self):

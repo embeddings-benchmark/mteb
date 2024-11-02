@@ -37,8 +37,5 @@ class AmazonPolarityClassification(AbsTaskClassification):
   url={https://api.semanticscholar.org/CorpusID:6440341}
 }""",
         prompt="Classify Amazon reviews into positive or negative sentiment",
-        descriptive_stats={
-            "n_samples": {"test": 400000},
-            "avg_character_length": {"test": 431.4},
-        },
+        n_samples={"test": 400000},
     )

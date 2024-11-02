@@ -44,16 +44,5 @@ class HellaSwag(AbsTaskRetrieval):
         prompt={
             "query": "Given the following unfinished context, retrieve the most plausible ending to finish it."
         },
-        descriptive_stats={
-            "n_samples": {"test": 10042},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 137.36519014671472,
-                    "average_query_length": 224.53654650468033,
-                    "num_documents": 199162,
-                    "num_queries": 10042,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
+        n_samples={"test": 10042},
     )

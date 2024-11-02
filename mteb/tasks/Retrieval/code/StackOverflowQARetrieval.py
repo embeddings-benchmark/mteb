@@ -37,9 +37,7 @@ class StackOverflowQARetrieval(AbsTaskRetrieval):
         primaryClass={cs.IR},
         url={https://arxiv.org/abs/2407.02883},
         }""",
-        descriptive_stats={
-            "n_samples": {
-                _EVAL_SPLIT: 1000,
-            },
+        n_samples={
+            _EVAL_SPLIT: 1000,
         },
     )

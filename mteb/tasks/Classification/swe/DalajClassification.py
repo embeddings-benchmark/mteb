@@ -36,10 +36,7 @@ Year = {2021},
 Eprint = {arXiv:2105.06681},
 }""",
         prompt="Classify texts based on linguistic acceptability in Swedish",
-        descriptive_stats={
-            "n_samples": {"test": 444},
-            "avg_character_length": {"test": 243.8},
-        },
+        n_samples={"test": 444},
     )
 
     @property

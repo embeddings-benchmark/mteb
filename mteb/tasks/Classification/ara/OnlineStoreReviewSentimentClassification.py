@@ -29,10 +29,7 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         dialect=["ara-Arab-SA"],
         sample_creation="found",
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {"train": N_SAMPLES},
-            "avg_character_length": {"train": 137.2},
-        },
+        n_samples={"train": N_SAMPLES},
     )
 
     def dataset_transform(self):

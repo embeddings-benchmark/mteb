@@ -37,12 +37,9 @@ class CTKFactsNLI(AbsTaskPairClassification):
         year={2023},
         publisher={Springer}
         }""",  # after removing label 1=NOT ENOUGH INFO
-        descriptive_stats={
-            "n_samples": {
-                "test": 375,
-                "validation": 305,
-            },
-            "avg_character_length": {"test": 225.62, "validation": 219.32},
+        n_samples={
+            "test": 375,
+            "validation": 305,
         },
     )
 

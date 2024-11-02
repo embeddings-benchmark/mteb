@@ -40,8 +40,5 @@ class PhincBitextMining(AbsTaskBitextMining, MultilingualTask):
         year={2020}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"train": 13738},
-            "avg_character_length": {"train": 75.32},
-        },
+        n_samples={"train": 13738},
     )

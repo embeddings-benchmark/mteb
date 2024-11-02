@@ -64,10 +64,7 @@ class CataloniaTweetClassification(MultilingualTask, AbsTaskClassification):
             pages = "1368--1375",
             ISBN = "979-10-95546-34-4",
         }""",
-        descriptive_stats={
-            "n_samples": {"validation": 2000, "test": 2000},
-            "avg_character_length": {"validation": 202.61, "test": 200.49},
-        },
+        n_samples={"validation": 2000, "test": 2000},
     )
 
     def dataset_transform(self):

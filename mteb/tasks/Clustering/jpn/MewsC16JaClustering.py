@@ -52,10 +52,7 @@ class MewsC16JaClustering(AbsTaskClusteringFast):
             abstract = "We present EASE, a novel method for learning sentence embeddings via contrastive learning between sentences and their related entities.The advantage of using entity supervision is twofold: (1) entities have been shown to be a strong indicator of text semantics and thus should provide rich training signals for sentence embeddings; (2) entities are defined independently of languages and thus offer useful cross-lingual alignment supervision.We evaluate EASE against other unsupervised models both in monolingual and multilingual settings.We show that EASE exhibits competitive or better performance in English semantic textual similarity (STS) and short text clustering (STC) tasks and it significantly outperforms baseline methods in multilingual settings on a variety of tasks.Our source code, pre-trained models, and newly constructed multi-lingual STC dataset are available at https://github.com/studio-ousia/ease.",
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 992},
-            "avg_character_length": {"test": 95},
-        },
+        n_samples={"test": 992},
     )
 
     def dataset_transform(self):

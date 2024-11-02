@@ -43,10 +43,7 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
     primaryClass={cs.CL}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 3411.72},
-        },
+        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):

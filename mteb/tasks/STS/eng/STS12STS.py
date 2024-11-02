@@ -40,9 +40,7 @@ numpages = {9},
 location = {Montr\'{e}al, Canada},
 series = {SemEval '12}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 6216},
-        },
+        n_samples={"test": 6216},
     )
 
     @property
