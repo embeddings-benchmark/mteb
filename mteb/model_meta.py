@@ -4,7 +4,7 @@ import logging
 from functools import partial
 from typing import TYPE_CHECKING, Any, Callable, Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder
@@ -70,11 +70,13 @@ class ModelMeta(BaseModel):
         reference: A URL to the model's page on huggingface or another source.
         languages: The languages the model is intended for specified as a 3 letter language code followed by a script code e.g. "eng-Latn" for English
             in the Latin script.
-        use_instuctions: Whether the model uses instructions E.g. for prompt-based models. This also include models that require a specific format for
+        use_instructions: Whether the model uses instructions E.g. for prompt-based models. This also include models that require a specific format for
             input such as "query: {document}" or "passage: {document}".
         zero_shot_benchmarks: A list of benchmarks on which the model has been evaluated in a zero-shot setting. By default we assume that all models
             are evaluated non-zero-shot unless specified otherwise.
     """
+
+    model_config = ConfigDict(extra="forbid")
 
     name: str | None
     revision: str | None
@@ -92,7 +94,7 @@ class ModelMeta(BaseModel):
     framework: list[FRAMEWORKS] = []
     reference: STR_URL | None = None
     similarity_fn_name: DISTANCE_METRICS | None = None
-    use_instuctions: bool | None = None
+    use_instructions: bool | None = None
     zero_shot_benchmarks: list[str] | None = None
 
     def to_dict(self):

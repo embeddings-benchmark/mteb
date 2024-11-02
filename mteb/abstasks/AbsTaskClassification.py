@@ -50,6 +50,8 @@ class AbsTaskClassification(AbsTask):
         label: int
     """
 
+    abstask_prompt = "Classify user passages."
+
     def __init__(
         self,
         method: str = "logReg",

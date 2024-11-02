@@ -26,5 +26,5 @@ mxbai_embed_large_v1 = ModelMeta(
     reference="https://huggingface.co/mixedbread-ai/mxbai-embed-large-v1",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )

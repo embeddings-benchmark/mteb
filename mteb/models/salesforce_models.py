@@ -1,57 +1,23 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
 from functools import partial
-from typing import Any
 
-import numpy as np
 import torch
 
 from mteb.model_meta import ModelMeta
 
-from ..encoder_interface import PromptType
-from .instructions import task_to_instruction
-from .wrapper import Wrapper
+from .instruct_wrapper import instruct_wrapper
 
 
 def sfr_instruction(instruction: str) -> str:
     return f"Instruct: {instruction}\nQuery: "
 
 
-def sfr_loader(**kwargs):
-    try:
-        from gritlm import GritLM
-    except ImportError:
-        raise ImportError(
-            "Please install `pip install gritlm` to use SFR_Embedding_2_R."
-        )
-
-    class SFRWrapper(GritLM, Wrapper):
-        def encode(
-            self,
-            sentences: Sequence[str],
-            *args,
-            task_name: str,
-            prompt_type: PromptType | None = None,
-            **kwargs: Any,
-        ) -> np.ndarray:
-            if "instruction" in kwargs:
-                instruction = kwargs.pop("instruction", "")
-            else:
-                instruction = task_to_instruction(
-                    task_name, prompt_type == PromptType.query
-                )
-            if instruction:
-                kwargs["instruction"] = sfr_instruction(instruction)
-            return super().encode(*args, **kwargs)
-
-    return SFRWrapper(**kwargs)
-
-
 SFR_Embedding_2_R = ModelMeta(
     loader=partial(
-        sfr_loader,
+        instruct_wrapper,
         model_name_or_path="Salesforce/SFR-Embedding-2_R",
+        instruction_template=sfr_instruction,
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
@@ -73,5 +39,5 @@ SFR_Embedding_2_R = ModelMeta(
     reference="https://huggingface.co/Salesforce/SFR-Embedding-2_R",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
 )

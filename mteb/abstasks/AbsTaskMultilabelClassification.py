@@ -70,6 +70,7 @@ class AbsTaskMultilabelClassification(AbsTask):
     """
 
     classifier = KNeighborsClassifier(n_neighbors=5)
+    abstask_prompt = "Classify user passages."
 
     def __init__(
         self,

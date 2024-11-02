@@ -43,6 +43,7 @@ class TERRa(AbsTaskPairClassification):
         journal={arXiv preprint arXiv:2010.15925},
         year={2020}
         }""",
+        prompt="Given a premise, retrieve a hypothesis that is entailed by the premise",
         descriptive_stats={
             "n_samples": {"dev": 307},
             "avg_character_length": {"dev": 138.2},

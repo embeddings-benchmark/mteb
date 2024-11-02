@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from dataclasses import dataclass
+from functools import lru_cache
 from typing import Annotated
 
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
@@ -57,9 +58,15 @@ class Benchmark:
     def load_results(
         self, base_results: None | BenchmarkResults = None
     ) -> BenchmarkResults:
+        if not hasattr(self, "results_cache"):
+            self.results_cache = {}
+        if base_results in self.results_cache:
+            return self.results_cache[base_results]
         if base_results is None:
             base_results = load_results()
-        return base_results.select_tasks(self.tasks)
+        results = base_results.select_tasks(self.tasks)
+        self.results_cache[base_results] = results
+        return results
 
 
 MTEB_EN = Benchmark(

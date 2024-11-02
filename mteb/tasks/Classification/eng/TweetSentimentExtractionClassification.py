@@ -36,6 +36,7 @@ class TweetSentimentExtractionClassification(AbsTaskClassification):
     year = {2020},
     url = {https://kaggle.com/competitions/tweet-sentiment-extraction}
 }""",
+        prompt="Classify the sentiment of a given tweet as either positive, negative, or neutral",
         descriptive_stats={
             "n_samples": {"test": 3534},
             "avg_character_length": {"test": 67.8},

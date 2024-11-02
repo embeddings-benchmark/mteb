@@ -26,7 +26,7 @@ bge_small_en_v1_5 = ModelMeta(
     reference="https://huggingface.co/BAAI/bge-small-en-v1.5",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 bge_base_en_v1_5 = ModelMeta(
@@ -49,7 +49,7 @@ bge_base_en_v1_5 = ModelMeta(
     reference="https://huggingface.co/BAAI/bge-base-en-v1.5",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 bge_large_en_v1_5 = ModelMeta(
@@ -72,5 +72,5 @@ bge_large_en_v1_5 = ModelMeta(
     reference="https://huggingface.co/BAAI/bge-large-en-v1.5",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )

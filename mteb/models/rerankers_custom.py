@@ -183,7 +183,7 @@ monobert_large = ModelMeta(
     ),
     name="castorini/monobert-large-msmarco",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="0a97706f3827389da43b83348d5d18c9d53876fa",
     release_date="2020-05-28",
 )
@@ -198,7 +198,7 @@ jina_reranker_multilingual = ModelMeta(
     ),
     name="jinaai/jina-reranker-v2-base-multilingual",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="126747772a932960028d9f4dc93bd5d9c4869be4",
     release_date="2024-09-26",
 )
@@ -245,7 +245,7 @@ bge_reranker_v2_m3 = ModelMeta(
         "vie_Latn",
         "zho_Hant",
     ],
-    open_source=True,
+    open_weights=True,
     revision="953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
     release_date="2024-06-24",
 )

@@ -37,6 +37,9 @@ class DBPedia(AbsTaskRetrieval):
  doi =       {10.1145/3077136.3080751},
  publisher = {ACM}
 }""",
+        prompt={
+            "query": "Given a query, retrieve relevant entity descriptions from DBPedia"
+        },
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

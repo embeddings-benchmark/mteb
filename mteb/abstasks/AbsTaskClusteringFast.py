@@ -126,6 +126,7 @@ class AbsTaskClusteringFast(AbsTask):
     n_clusters: int = 10
     k_mean_batch_size: int = 512
     max_depth = None
+    abstask_prompt = "Identify categories in user passages."
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
