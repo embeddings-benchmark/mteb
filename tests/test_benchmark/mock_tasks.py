@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from datasets import Dataset, DatasetDict
 
+from mteb import AbsTask, DescriptiveStatistics
 from mteb.abstasks import MultilingualTask
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
@@ -47,26 +48,56 @@ multilingual_eval_langs = {
 }
 
 
-class MockClassificationTask(AbsTaskClassification):
+class AbsMockTask(AbsTask):
+    def calculate_metadata_metrics(
+        self,
+    ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
+        """Mock method to calculate metadata metrics without dumping data to json."""
+        existing_descriptive_stats = {}
+
+        if existing_descriptive_stats.get(self.metadata.type) is None:
+            existing_descriptive_stats[self.metadata.type] = {}
+
+        if self.metadata.name in existing_descriptive_stats[self.metadata.type]:
+            return existing_descriptive_stats[self.metadata.type][self.metadata.name]
+
+        self.load_data()
+
+        all_details = {}
+        for split in self.metadata_dict["eval_splits"]:
+            if self.is_multilingual:
+                all_details[split] = self._calculate_metrics_from_split(
+                    split, compute_overall=True
+                )
+                all_details[split]["hf_subset_descriptive_stats"] = {}
+
+                for hf_subset in self.metadata.eval_langs:
+                    split_details = self._calculate_metrics_from_split(split, hf_subset)
+                    all_details[split]["hf_subset_descriptive_stats"][hf_subset] = (
+                        split_details
+                    )
+            else:
+                split_details = self._calculate_metrics_from_split(split)
+                all_details[split] = split_details
+        return all_details
+
+
+class MockClassificationTask(AbsMockTask, AbsTaskClassification):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "total_symbols": 52,
+            "average_text_length": 26.0,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 1}, "1": {"count": 1}},
+        }
+    }
+
     metadata = TaskMetadata(
         type="Classification",
         name="MockClassificationTask",
         main_score="accuracy",
         **general_args,  # type: ignore
-        descriptive_stats={
-            "test": {
-                "num_samples": 2,
-                "average_text_length": 26.0,
-                "unique_labels": 2,
-                "labels": {"0": {"count": 1}, "1": {"count": 1}},
-            },
-            "train": {
-                "num_samples": 2,
-                "average_text_length": 26.0,
-                "unique_labels": 2,
-                "labels": {"0": {"count": 1}, "1": {"count": 1}},
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -92,51 +123,39 @@ class MockClassificationTask(AbsTaskClassification):
         self.data_loaded = True
 
 
-class MockMultilingualClassificationTask(AbsTaskClassification, MultilingualTask):
+class MockMultilingualClassificationTask(
+    AbsMockTask, AbsTaskClassification, MultilingualTask
+):
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "total_symbols": 104,
+            "average_text_length": 26.0,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 2}, "1": {"count": 2}},
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "num_samples": 2,
+                    "total_symbols": 52,
+                    "average_text_length": 26.0,
+                    "unique_labels": 2,
+                    "labels": {"0": {"count": 1}, "1": {"count": 1}},
+                },
+                "fra": {
+                    "num_samples": 2,
+                    "total_symbols": 52,
+                    "average_text_length": 26.0,
+                    "unique_labels": 2,
+                    "labels": {"0": {"count": 1}, "1": {"count": 1}},
+                },
+            },
+        }
+    }
+
     metadata = TaskMetadata(
         type="Classification",
         name="MockMultilingualClassificationTask",
         main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                "num_samples": 4,
-                "average_text_length": 26.0,
-                "unique_labels": 2,
-                "labels": {"0": {"count": 2}, "1": {"count": 2}},
-                "hf_subset_descriptive_stats": {},
-                "eng": {
-                    "num_samples": 2,
-                    "average_text_length": 26.0,
-                    "unique_labels": 2,
-                    "labels": {"0": {"count": 1}, "1": {"count": 1}},
-                },
-                "fra": {
-                    "num_samples": 2,
-                    "average_text_length": 26.0,
-                    "unique_labels": 2,
-                    "labels": {"0": {"count": 1}, "1": {"count": 1}},
-                },
-            },
-            "train": {
-                "num_samples": 4,
-                "average_text_length": 26.0,
-                "unique_labels": 2,
-                "labels": {"0": {"count": 2}, "1": {"count": 2}},
-                "hf_subset_descriptive_stats": {},
-                "eng": {
-                    "num_samples": 2,
-                    "average_text_length": 26.0,
-                    "unique_labels": 2,
-                    "labels": {"0": {"count": 1}, "1": {"count": 1}},
-                },
-                "fra": {
-                    "num_samples": 2,
-                    "average_text_length": 26.0,
-                    "unique_labels": 2,
-                    "labels": {"0": {"count": 1}, "1": {"count": 1}},
-                },
-            },
-        },
         **general_args,  # type: ignore
     )
     metadata.eval_langs = multilingual_eval_langs
@@ -168,18 +187,20 @@ class MockMultilingualClassificationTask(AbsTaskClassification, MultilingualTask
         self.data_loaded = True
 
 
-class MockBitextMiningTask(AbsTaskBitextMining):
+class MockBitextMiningTask(AbsMockTask, AbsTaskBitextMining):
+    expected_stats = {
+        "test": {
+            "average_sentence1_length": 26.0,
+            "average_sentence2_length": 30.5,
+            "num_samples": 2,
+            "total_symbols": 113,
+        }
+    }
+
     metadata = TaskMetadata(
         type="BitextMining",
         name="MockBitextMiningTask",
         main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                "average_sentence1_length": 26.0,
-                "average_sentence2_length": 30.5,
-                "num_samples": 2,
-            }
-        },
         **general_args,  # type: ignore
     )
 
@@ -203,30 +224,36 @@ class MockBitextMiningTask(AbsTaskBitextMining):
         self.data_loaded = True
 
 
-class MockMultilingualBitextMiningTask(AbsTaskBitextMining, MultilingualTask):
+class MockMultilingualBitextMiningTask(
+    AbsMockTask, AbsTaskBitextMining, MultilingualTask
+):
+    expected_stats = {
+        "test": {
+            "average_sentence1_length": 26.0,
+            "average_sentence2_length": 30.5,
+            "num_samples": 4,
+            "total_symbols": 226,
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "average_sentence1_length": 26.0,
+                    "average_sentence2_length": 30.5,
+                    "num_samples": 2,
+                    "total_symbols": 113,
+                },
+                "fra": {
+                    "average_sentence1_length": 26.0,
+                    "average_sentence2_length": 30.5,
+                    "num_samples": 2,
+                    "total_symbols": 113,
+                },
+            },
+        }
+    }
+
     metadata = TaskMetadata(
         type="BitextMining",
         name="MockMultilingualBitextMiningTask",
         main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                "average_sentence1_length": 26.0,
-                "average_sentence2_length": 30.5,
-                "num_samples": 4,
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "average_sentence1_length": 26.0,
-                        "average_sentence2_length": 30.5,
-                        "num_samples": 2,
-                    },
-                    "fra": {
-                        "average_sentence1_length": 26.0,
-                        "average_sentence2_length": 30.5,
-                        "num_samples": 2,
-                    },
-                },
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.eval_langs = multilingual_eval_langs
@@ -254,32 +281,37 @@ class MockMultilingualBitextMiningTask(AbsTaskBitextMining, MultilingualTask):
         self.data_loaded = True
 
 
-class MockMultilingualParallelBitextMiningTask(AbsTaskBitextMining, MultilingualTask):
+class MockMultilingualParallelBitextMiningTask(
+    AbsMockTask, AbsTaskBitextMining, MultilingualTask
+):
     parallel_subsets = True
+    expected_stats = {
+        "test": {
+            "average_sentence1_length": 28.25,
+            "average_sentence2_length": 28.25,
+            "num_samples": 4,
+            "total_symbols": 226,
+            "hf_subset_descriptive_stats": {
+                "eng_Latn-fra_Latn": {
+                    "average_sentence1_length": 26.0,
+                    "average_sentence2_length": 30.5,
+                    "num_samples": 2,
+                    "total_symbols": 113,
+                },
+                "fra_Latn-eng_Latn": {
+                    "average_sentence1_length": 30.5,
+                    "average_sentence2_length": 26.0,
+                    "num_samples": 2,
+                    "total_symbols": 113,
+                },
+            },
+        }
+    }
 
     metadata = TaskMetadata(
         type="BitextMining",
         name="MockMultilingualParallelBitextMiningTask",
         main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                "average_sentence1_length": 28.25,
-                "average_sentence2_length": 28.25,
-                "num_samples": 4,
-                "hf_subset_descriptive_stats": {
-                    "eng_Latn-fra_Latn": {
-                        "average_sentence1_length": 26.0,
-                        "average_sentence2_length": 30.5,
-                        "num_samples": 2,
-                    },
-                    "fra_Latn-eng_Latn": {
-                        "average_sentence1_length": 30.5,
-                        "average_sentence2_length": 26.0,
-                        "num_samples": 2,
-                    },
-                },
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.eval_langs = {
@@ -307,20 +339,22 @@ class MockMultilingualParallelBitextMiningTask(AbsTaskBitextMining, Multilingual
         self.data_loaded = True
 
 
-class MockClusteringTask(AbsTaskClustering):
+class MockClusteringTask(AbsMockTask, AbsTaskClustering):
+    expected_stats = {
+        "test": {
+            "num_samples": 1,
+            "total_symbols": 3,
+            "average_text_length": 3.0,
+            "average_labels_per_text": 3.0,
+            "unique_labels": 3,
+            "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
+        }
+    }
+
     metadata = TaskMetadata(
         type="Clustering",
         name="MockClusteringTask",
         main_score="v_measure",
-        descriptive_stats={
-            "test": {
-                "num_samples": 1,
-                "average_text_length": 3.0,
-                "average_labels_per_text": 3.0,
-                "unique_labels": 3,
-                "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
-            }
-        },
         **general_args,  # type: ignore
     )
 
@@ -347,44 +381,40 @@ class MockClusteringTask(AbsTaskClustering):
         self.data_loaded = True
 
 
-class MockMultilingualClusteringTask(AbsTaskClustering, MultilingualTask):
+class MockMultilingualClusteringTask(AbsMockTask, AbsTaskClustering, MultilingualTask):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "total_symbols": 6,
+            "average_text_length": 3.0,
+            "average_labels_per_text": 3.0,
+            "unique_labels": 3,
+            "labels": {"0": {"count": 2}, "1": {"count": 2}, "2": {"count": 2}},
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "num_samples": 1,
+                    "total_symbols": 3,
+                    "average_text_length": 3.0,
+                    "average_labels_per_text": 3.0,
+                    "unique_labels": 3,
+                    "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
+                },
+                "fra": {
+                    "num_samples": 1,
+                    "total_symbols": 3,
+                    "average_text_length": 3.0,
+                    "average_labels_per_text": 3.0,
+                    "unique_labels": 3,
+                    "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
+                },
+            },
+        }
+    }
+
     metadata = TaskMetadata(
         type="Clustering",
         name="MockMultilingualClusteringTask",
         main_score="v_measure",
-        descriptive_stats={
-            "test": {
-                "num_samples": 2,
-                "average_text_length": 3.0,
-                "average_labels_per_text": 3.0,
-                "unique_labels": 3,
-                "labels": {"0": {"count": 2}, "1": {"count": 2}, "2": {"count": 2}},
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "num_samples": 1,
-                        "average_text_length": 3.0,
-                        "average_labels_per_text": 3.0,
-                        "unique_labels": 3,
-                        "labels": {
-                            "0": {"count": 1},
-                            "1": {"count": 1},
-                            "2": {"count": 1},
-                        },
-                    },
-                    "fra": {
-                        "num_samples": 1,
-                        "average_text_length": 3.0,
-                        "average_labels_per_text": 3.0,
-                        "unique_labels": 3,
-                        "labels": {
-                            "0": {"count": 1},
-                            "1": {"count": 1},
-                            "2": {"count": 1},
-                        },
-                    },
-                },
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.eval_langs = multilingual_eval_langs
@@ -416,22 +446,24 @@ class MockMultilingualClusteringTask(AbsTaskClustering, MultilingualTask):
         self.data_loaded = True
 
 
-class MockClusteringFastTask(AbsTaskClusteringFast):
+class MockClusteringFastTask(AbsMockTask, AbsTaskClusteringFast):
     max_document_to_embed = 3
     max_fraction_of_documents_to_embed = None
+    expected_stats = {
+        "test": {
+            "num_samples": 3,
+            "total_symbols": 81,
+            "average_text_length": 27.0,
+            "average_labels_per_text": 1.0,
+            "unique_labels": 3,
+            "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
+        }
+    }
+
     metadata = TaskMetadata(
         type="Clustering",
         name="MockClusteringFastTask",
         main_score="v_measure",
-        descriptive_stats={
-            "test": {
-                "num_samples": 3,
-                "average_text_length": 27.0,
-                "average_labels_per_text": 1.0,
-                "unique_labels": 3,
-                "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
-            }
-        },
         **general_args,  # type: ignore
     )
 
@@ -456,46 +488,44 @@ class MockClusteringFastTask(AbsTaskClusteringFast):
         self.data_loaded = True
 
 
-class MockMultilingualClusteringFastTask(AbsTaskClusteringFast, MultilingualTask):
+class MockMultilingualClusteringFastTask(
+    AbsMockTask, AbsTaskClusteringFast, MultilingualTask
+):
     max_document_to_embed = 3
     max_fraction_of_documents_to_embed = None
+    expected_stats = {
+        "test": {
+            "num_samples": 6,
+            "total_symbols": 162,
+            "average_text_length": 27.0,
+            "average_labels_per_text": 1.0,
+            "unique_labels": 3,
+            "labels": {"0": {"count": 2}, "1": {"count": 2}, "2": {"count": 2}},
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "num_samples": 3,
+                    "total_symbols": 81,
+                    "average_text_length": 27.0,
+                    "average_labels_per_text": 1.0,
+                    "unique_labels": 3,
+                    "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
+                },
+                "fra": {
+                    "num_samples": 3,
+                    "total_symbols": 81,
+                    "average_text_length": 27.0,
+                    "average_labels_per_text": 1.0,
+                    "unique_labels": 3,
+                    "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
+                },
+            },
+        }
+    }
+
     metadata = TaskMetadata(
         type="Clustering",
         name="MockMultilingualClusteringFastTask",
         main_score="v_measure",
-        descriptive_stats={
-            "test": {
-                "num_samples": 6,
-                "average_text_length": 27.0,
-                "average_labels_per_text": 1.0,
-                "unique_labels": 3,
-                "labels": {"0": {"count": 2}, "1": {"count": 2}, "2": {"count": 2}},
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "num_samples": 3,
-                        "average_text_length": 27.0,
-                        "average_labels_per_text": 1.0,
-                        "unique_labels": 3,
-                        "labels": {
-                            "0": {"count": 1},
-                            "1": {"count": 1},
-                            "2": {"count": 1},
-                        },
-                    },
-                    "fra": {
-                        "num_samples": 3,
-                        "average_text_length": 27.0,
-                        "average_labels_per_text": 1.0,
-                        "unique_labels": 3,
-                        "labels": {
-                            "0": {"count": 1},
-                            "1": {"count": 1},
-                            "2": {"count": 1},
-                        },
-                    },
-                },
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.eval_langs = multilingual_eval_langs
@@ -525,20 +555,22 @@ class MockMultilingualClusteringFastTask(AbsTaskClusteringFast, MultilingualTask
         self.data_loaded = True
 
 
-class MockPairClassificationTask(AbsTaskPairClassification):
+class MockPairClassificationTask(AbsMockTask, AbsTaskPairClassification):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "total_symbols": 113,
+            "avg_sentence1_len": 26.0,
+            "avg_sentence2_len": 30.5,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 1}, "0": {"count": 1}},
+        }
+    }
+
     metadata = TaskMetadata(
         type="PairClassification",
         name="MockPairClassificationTask",
         main_score="similarity_ap",
-        descriptive_stats={
-            "test": {
-                "num_samples": 2,
-                "avg_sentence1_len": 26.0,
-                "avg_sentence2_len": 30.5,
-                "unique_labels": 2,
-                "labels": {"1": {"count": 1}, "0": {"count": 1}},
-            }
-        },
         **general_args,  # type: ignore
     )
 
@@ -567,37 +599,41 @@ class MockPairClassificationTask(AbsTaskPairClassification):
 
 
 class MockMultilingualPairClassificationTask(
-    AbsTaskPairClassification, MultilingualTask
+    AbsMockTask, AbsTaskPairClassification, MultilingualTask
 ):
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "total_symbols": 226,
+            "avg_sentence1_len": 26.0,
+            "avg_sentence2_len": 30.5,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 2}, "0": {"count": 2}},
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "num_samples": 2,
+                    "total_symbols": 113,
+                    "avg_sentence1_len": 26.0,
+                    "avg_sentence2_len": 30.5,
+                    "unique_labels": 2,
+                    "labels": {"1": {"count": 1}, "0": {"count": 1}},
+                },
+                "fra": {
+                    "num_samples": 2,
+                    "total_symbols": 113,
+                    "avg_sentence1_len": 26.0,
+                    "avg_sentence2_len": 30.5,
+                    "unique_labels": 2,
+                    "labels": {"1": {"count": 1}, "0": {"count": 1}},
+                },
+            },
+        }
+    }
+
     metadata = TaskMetadata(
         type="PairClassification",
         name="MockMultilingualPairClassificationTask",
         main_score="similarity_ap",
-        descriptive_stats={
-            "test": {
-                "num_samples": 4,
-                "avg_sentence1_len": 26.0,
-                "avg_sentence2_len": 30.5,
-                "unique_labels": 2,
-                "labels": {"1": {"count": 2}, "0": {"count": 2}},
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "num_samples": 2,
-                        "avg_sentence1_len": 26.0,
-                        "avg_sentence2_len": 30.5,
-                        "unique_labels": 2,
-                        "labels": {"1": {"count": 1}, "0": {"count": 1}},
-                    },
-                    "fra": {
-                        "num_samples": 2,
-                        "avg_sentence1_len": 26.0,
-                        "avg_sentence2_len": 30.5,
-                        "unique_labels": 2,
-                        "labels": {"1": {"count": 1}, "0": {"count": 1}},
-                    },
-                },
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.eval_langs = multilingual_eval_langs
@@ -629,19 +665,21 @@ class MockMultilingualPairClassificationTask(
         self.data_loaded = True
 
 
-class MockSTSTask(AbsTaskSTS):
+class MockSTSTask(AbsMockTask, AbsTaskSTS):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "total_symbols": 113,
+            "average_sentence1_len": 26.0,
+            "average_sentence2_len": 30.5,
+            "avg_score": 0.5,
+        }
+    }
+
     metadata = TaskMetadata(
         type="STS",
         name="MockSTSTask",
         main_score="cosine_spearman",
-        descriptive_stats={
-            "test": {
-                "num_samples": 2,
-                "average_sentence1_len": 26.0,
-                "average_sentence2_len": 30.5,
-                "avg_score": 0.5,
-            }
-        },
         **general_args,  # type: ignore
     )
 
@@ -674,33 +712,37 @@ class MockSTSTask(AbsTaskSTS):
         return metadata_dict
 
 
-class MockMultilingualSTSTask(AbsTaskSTS, MultilingualTask):
+class MockMultilingualSTSTask(AbsMockTask, AbsTaskSTS, MultilingualTask):
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "total_symbols": 226,
+            "average_sentence1_len": 26.0,
+            "average_sentence2_len": 30.5,
+            "avg_score": 0.5,
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "num_samples": 2,
+                    "total_symbols": 113,
+                    "average_sentence1_len": 26.0,
+                    "average_sentence2_len": 30.5,
+                    "avg_score": 0.5,
+                },
+                "fra": {
+                    "num_samples": 2,
+                    "total_symbols": 113,
+                    "average_sentence1_len": 26.0,
+                    "average_sentence2_len": 30.5,
+                    "avg_score": 0.5,
+                },
+            },
+        }
+    }
+
     metadata = TaskMetadata(
         type="STS",
         name="MockMultilingualSTSTask",
         main_score="cosine_spearman",
-        descriptive_stats={
-            "test": {
-                "num_samples": 4,
-                "average_sentence1_len": 26.0,
-                "average_sentence2_len": 30.5,
-                "avg_score": 0.5,
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "num_samples": 2,
-                        "average_sentence1_len": 26.0,
-                        "average_sentence2_len": 30.5,
-                        "avg_score": 0.5,
-                    },
-                    "fra": {
-                        "num_samples": 2,
-                        "average_sentence1_len": 26.0,
-                        "average_sentence2_len": 30.5,
-                        "avg_score": 0.5,
-                    },
-                },
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.eval_langs = multilingual_eval_langs
@@ -738,20 +780,22 @@ class MockMultilingualSTSTask(AbsTaskSTS, MultilingualTask):
         return metadata_dict
 
 
-class MockSummarizationTask(AbsTaskSummarization):
+class MockSummarizationTask(AbsMockTask, AbsTaskSummarization):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "total_symbols": 60,
+            "avg_text_len": 26.0,
+            "avg_human_summaries_len": 2.0,
+            "avg_machine_summaries_len": 2.0,
+            "avg_relevance": 0.5,
+        }
+    }
+
     metadata = TaskMetadata(
         type="Summarization",
         name="MockSummarizationTask",
         main_score="cosine_spearman",
-        descriptive_stats={
-            "test": {
-                "num_samples": 2,
-                "avg_text_len": 26.0,
-                "avg_human_summaries_len": 2.0,
-                "avg_machine_summaries_len": 2.0,
-                "avg_relevance": 0.5,
-            }
-        },
         **general_args,  # type: ignore
     )
 
@@ -789,36 +833,42 @@ class MockSummarizationTask(AbsTaskSummarization):
         return metadata_dict
 
 
-class MockMultilingualSummarizationTask(AbsTaskSummarization, MultilingualTask):
+class MockMultilingualSummarizationTask(
+    AbsMockTask, AbsTaskSummarization, MultilingualTask
+):
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "total_symbols": 120,
+            "avg_text_len": 26.0,
+            "avg_human_summaries_len": 2.0,
+            "avg_machine_summaries_len": 2.0,
+            "avg_relevance": 0.5,
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "num_samples": 2,
+                    "total_symbols": 60,
+                    "avg_text_len": 26.0,
+                    "avg_human_summaries_len": 2.0,
+                    "avg_machine_summaries_len": 2.0,
+                    "avg_relevance": 0.5,
+                },
+                "fra": {
+                    "num_samples": 2,
+                    "total_symbols": 60,
+                    "avg_text_len": 26.0,
+                    "avg_human_summaries_len": 2.0,
+                    "avg_machine_summaries_len": 2.0,
+                    "avg_relevance": 0.5,
+                },
+            },
+        }
+    }
+
     metadata = TaskMetadata(
         type="Summarization",
         name="MockMultilingualSummarizationTask",
         main_score="cosine_spearman",
-        descriptive_stats={
-            "test": {
-                "num_samples": 4,
-                "avg_text_len": 26.0,
-                "avg_human_summaries_len": 2.0,
-                "avg_machine_summaries_len": 2.0,
-                "avg_relevance": 0.5,
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "num_samples": 2,
-                        "avg_text_len": 26.0,
-                        "avg_human_summaries_len": 2.0,
-                        "avg_machine_summaries_len": 2.0,
-                        "avg_relevance": 0.5,
-                    },
-                    "fra": {
-                        "num_samples": 2,
-                        "avg_text_len": 26.0,
-                        "avg_human_summaries_len": 2.0,
-                        "avg_machine_summaries_len": 2.0,
-                        "avg_relevance": 0.5,
-                    },
-                },
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.eval_langs = multilingual_eval_langs
@@ -860,21 +910,23 @@ class MockMultilingualSummarizationTask(AbsTaskSummarization, MultilingualTask):
         return metadata_dict
 
 
-class MockRerankingTask(AbsTaskReranking):
+class MockRerankingTask(AbsMockTask, AbsTaskReranking):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "total_symbols": 172,
+            "num_positive": 2,
+            "num_negative": 2,
+            "avg_query_len": 26.0,
+            "avg_positive_len": 30.0,
+            "avg_negative_len": 30.0,
+        }
+    }
+
     metadata = TaskMetadata(
         type="Reranking",
         name="MockRerankingTask",
         main_score="map",
-        descriptive_stats={
-            "test": {
-                "num_samples": 2,
-                "num_positive": 2,
-                "num_negative": 2,
-                "avg_query_len": 26.0,
-                "avg_positive_len": 30.0,
-                "avg_negative_len": 30.0,
-            }
-        },
         **general_args,  # type: ignore
     )
 
@@ -903,39 +955,43 @@ class MockRerankingTask(AbsTaskReranking):
         self.data_loaded = True
 
 
-class MockMultilingualRerankingTask(AbsTaskReranking, MultilingualTask):
+class MockMultilingualRerankingTask(AbsMockTask, AbsTaskReranking, MultilingualTask):
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "total_symbols": 344,
+            "num_positive": 4,
+            "num_negative": 4,
+            "avg_query_len": 26.0,
+            "avg_positive_len": 30.0,
+            "avg_negative_len": 30.0,
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "num_samples": 2,
+                    "total_symbols": 172,
+                    "num_positive": 2,
+                    "num_negative": 2,
+                    "avg_query_len": 26.0,
+                    "avg_positive_len": 30.0,
+                    "avg_negative_len": 30.0,
+                },
+                "fra": {
+                    "num_samples": 2,
+                    "total_symbols": 172,
+                    "num_positive": 2,
+                    "num_negative": 2,
+                    "avg_query_len": 26.0,
+                    "avg_positive_len": 30.0,
+                    "avg_negative_len": 30.0,
+                },
+            },
+        }
+    }
+
     metadata = TaskMetadata(
         type="Reranking",
         name="MockMultilingualRerankingTask",
         main_score="map",
-        descriptive_stats={
-            "test": {
-                "num_samples": 4,
-                "num_positive": 4,
-                "num_negative": 4,
-                "avg_query_len": 26.0,
-                "avg_positive_len": 30.0,
-                "avg_negative_len": 30.0,
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "num_samples": 2,
-                        "num_positive": 2,
-                        "num_negative": 2,
-                        "avg_query_len": 26.0,
-                        "avg_positive_len": 30.0,
-                        "avg_negative_len": 30.0,
-                    },
-                    "fra": {
-                        "num_samples": 2,
-                        "num_positive": 2,
-                        "num_negative": 2,
-                        "avg_query_len": 26.0,
-                        "avg_positive_len": 30.0,
-                        "avg_negative_len": 30.0,
-                    },
-                },
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.eval_langs = multilingual_eval_langs
@@ -968,20 +1024,22 @@ class MockMultilingualRerankingTask(AbsTaskReranking, MultilingualTask):
         self.data_loaded = True
 
 
-class MockRetrievalTask(AbsTaskRetrieval):
+class MockRetrievalTask(AbsMockTask, AbsTaskRetrieval):
+    expected_stats = {
+        "test": {
+            "total_symbols": 56.0,
+            "average_document_length": 15.0,
+            "average_query_length": 13.0,
+            "num_documents": 2,
+            "num_queries": 2,
+            "average_relevant_docs_per_query": 1.0,
+        }
+    }
+
     metadata = TaskMetadata(
         type="Retrieval",
         name="MockRetrievalTask",
         main_score="ndcg_at_10",
-        descriptive_stats={
-            "test": {
-                "average_document_length": 30.0,
-                "average_query_length": 26.0,
-                "num_documents": 2,
-                "num_queries": 2,
-                "average_relevant_docs_per_query": 1.0,
-            }
-        },
         **general_args,  # type: ignore
     )
 
@@ -1008,36 +1066,40 @@ class MockRetrievalTask(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class MockMultilingualRetrievalTask(AbsTaskRetrieval, MultilingualTask):
+class MockMultilingualRetrievalTask(AbsMockTask, AbsTaskRetrieval, MultilingualTask):
+    expected_stats = {
+        "test": {
+            "total_symbols": 56.0,
+            "average_document_length": 7.5,
+            "average_query_length": 6.5,
+            "num_documents": 4,
+            "num_queries": 4,
+            "average_relevant_docs_per_query": 1.0,
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "total_symbols": 56.0,
+                    "average_document_length": 15.0,
+                    "average_query_length": 13.0,
+                    "num_documents": 2,
+                    "num_queries": 2,
+                    "average_relevant_docs_per_query": 1.0,
+                },
+                "fra": {
+                    "total_symbols": 56.0,
+                    "average_document_length": 15.0,
+                    "average_query_length": 13.0,
+                    "num_documents": 2,
+                    "num_queries": 2,
+                    "average_relevant_docs_per_query": 1.0,
+                },
+            },
+        }
+    }
+
     metadata = TaskMetadata(
         type="Retrieval",
         name="MockMultilingualRetrievalTask",
         main_score="ndcg_at_10",
-        descriptive_stats={
-            "test": {
-                "average_document_length": 30.0,
-                "average_query_length": 26.0,
-                "num_documents": 4,
-                "num_queries": 4,
-                "average_relevant_docs_per_query": 1.0,
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "average_document_length": 30.0,
-                        "average_query_length": 26.0,
-                        "num_documents": 2,
-                        "num_queries": 2,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "fra": {
-                        "average_document_length": 30.0,
-                        "average_query_length": 26.0,
-                        "num_documents": 2,
-                        "num_queries": 2,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                },
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.eval_langs = multilingual_eval_langs
@@ -1071,20 +1133,22 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval, MultilingualTask):
         self.data_loaded = True
 
 
-class MockMultilabelClassification(AbsTaskMultilabelClassification):
+class MockMultilabelClassification(AbsMockTask, AbsTaskMultilabelClassification):
+    expected_stats = {
+        "test": {
+            "average_text_length": 26.0,
+            "total_symbols": 156,
+            "average_label_per_text": 2.0,
+            "num_samples": 6,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 6}, "1": {"count": 6}},
+        }
+    }
+
     metadata = TaskMetadata(
         type="MultilabelClassification",
         name="MockMultilabelClassification",
         main_score="lrap",
-        descriptive_stats={
-            "test": {
-                "average_text_length": 26.0,
-                "average_label_per_text": 2.0,
-                "num_samples": 6,
-                "unique_labels": 2,
-                "labels": {"0": {"count": 6}, "1": {"count": 6}},
-            }
-        },
         **general_args,  # type: ignore
     )
 
@@ -1112,37 +1176,41 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
 
 
 class MockMultilingualMultilabelClassification(
-    AbsTaskMultilabelClassification, MultilingualTask
+    AbsMockTask, AbsTaskMultilabelClassification, MultilingualTask
 ):
+    expected_stats = {
+        "test": {
+            "average_text_length": 26.0,
+            "total_symbols": 312,
+            "average_label_per_text": 2.0,
+            "num_samples": 12,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 12}, "1": {"count": 12}},
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "average_text_length": 26.0,
+                    "total_symbols": 156,
+                    "average_label_per_text": 2.0,
+                    "num_samples": 6,
+                    "unique_labels": 2,
+                    "labels": {"0": {"count": 6}, "1": {"count": 6}},
+                },
+                "fra": {
+                    "average_text_length": 26.0,
+                    "total_symbols": 156,
+                    "average_label_per_text": 2.0,
+                    "num_samples": 6,
+                    "unique_labels": 2,
+                    "labels": {"0": {"count": 6}, "1": {"count": 6}},
+                },
+            },
+        }
+    }
+
     metadata = TaskMetadata(
         type="MultilabelClassification",
         name="MockMultilingualMultilabelClassification",
         main_score="lrap",
-        descriptive_stats={
-            "test": {
-                "average_text_length": 26.0,
-                "average_label_per_text": 2.0,
-                "num_samples": 12,
-                "unique_labels": 2,
-                "labels": {"0": {"count": 12}, "1": {"count": 12}},
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "average_text_length": 26.0,
-                        "average_label_per_text": 2.0,
-                        "num_samples": 6,
-                        "unique_labels": 2,
-                        "labels": {"0": {"count": 6}, "1": {"count": 6}},
-                    },
-                    "fra": {
-                        "average_text_length": 26.0,
-                        "average_label_per_text": 2.0,
-                        "num_samples": 6,
-                        "unique_labels": 2,
-                        "labels": {"0": {"count": 6}, "1": {"count": 6}},
-                    },
-                },
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.eval_langs = multilingual_eval_langs
@@ -1175,24 +1243,26 @@ class MockMultilingualMultilabelClassification(
         self.data_loaded = True
 
 
-class MockInstructionRetrival(AbsTaskInstructionRetrieval):
+class MockInstructionRetrival(AbsMockTask, AbsTaskInstructionRetrieval):
     do_length_ablation = True
+    expected_stats = {
+        "test": {
+            "num_docs": 2,
+            "num_queries": 2,
+            "total_symbols": 244,
+            "average_document_length": 30.0,
+            "average_query_length": 26.0,
+            "average_instruction_length": 29.0,
+            "average_changed_instruction_length": 37.0,
+            "average_relevant_docs_per_query": 1.0,
+            "average_top_ranked_per_query": 2.0,
+        }
+    }
+
     metadata = TaskMetadata(
         type="InstructionRetrieval",
         name="MockInstructionRetrival",
         main_score="p-MRR",
-        descriptive_stats={
-            "test": {
-                "num_docs": 2,
-                "num_queries": 2,
-                "average_document_length": 30.0,
-                "average_query_length": 26.0,
-                "average_instruction_length": 29.0,
-                "average_changed_instruction_length": 37.0,
-                "average_relevant_docs_per_query": 1.0,
-                "average_top_ranked_per_query": 2.0,
-            }
-        },
         **general_args,  # type: ignore
     )
 
@@ -1258,47 +1328,51 @@ class MockInstructionRetrival(AbsTaskInstructionRetrieval):
 
 
 class MockMultilingualInstructionRetrival(
-    AbsTaskInstructionRetrieval, MultilingualTask
+    AbsMockTask, AbsTaskInstructionRetrieval, MultilingualTask
 ):
     do_length_ablation = True
+    expected_stats = {
+        "test": {
+            "num_docs": 4,
+            "num_queries": 4,
+            "total_symbols": 488,
+            "average_document_length": 30.0,
+            "average_query_length": 26.0,
+            "average_instruction_length": 29.0,
+            "average_changed_instruction_length": 37.0,
+            "average_relevant_docs_per_query": 1.0,
+            "average_top_ranked_per_query": 2.0,
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "num_docs": 2,
+                    "num_queries": 2,
+                    "total_symbols": 244,
+                    "average_document_length": 30.0,
+                    "average_query_length": 26.0,
+                    "average_instruction_length": 29.0,
+                    "average_changed_instruction_length": 37.0,
+                    "average_relevant_docs_per_query": 1.0,
+                    "average_top_ranked_per_query": 2.0,
+                },
+                "fra": {
+                    "num_docs": 2,
+                    "num_queries": 2,
+                    "total_symbols": 244,
+                    "average_document_length": 30.0,
+                    "average_query_length": 26.0,
+                    "average_instruction_length": 29.0,
+                    "average_changed_instruction_length": 37.0,
+                    "average_relevant_docs_per_query": 1.0,
+                    "average_top_ranked_per_query": 2.0,
+                },
+            },
+        }
+    }
+
     metadata = TaskMetadata(
         type="InstructionRetrieval",
         name="MockMultilingualInstructionRetrival",
         main_score="p-MRR",
-        descriptive_stats={
-            "test": {
-                "num_docs": 4,
-                "num_queries": 4,
-                "average_document_length": 30.0,
-                "average_query_length": 26.0,
-                "average_instruction_length": 29.0,
-                "average_changed_instruction_length": 37.0,
-                "average_relevant_docs_per_query": 1.0,
-                "average_top_ranked_per_query": 2.0,
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "num_docs": 2,
-                        "num_queries": 2,
-                        "average_document_length": 30.0,
-                        "average_query_length": 26.0,
-                        "average_instruction_length": 29.0,
-                        "average_changed_instruction_length": 37.0,
-                        "average_relevant_docs_per_query": 1.0,
-                        "average_top_ranked_per_query": 2.0,
-                    },
-                    "fra": {
-                        "num_docs": 2,
-                        "num_queries": 2,
-                        "average_document_length": 30.0,
-                        "average_query_length": 26.0,
-                        "average_instruction_length": 29.0,
-                        "average_changed_instruction_length": 37.0,
-                        "average_relevant_docs_per_query": 1.0,
-                        "average_top_ranked_per_query": 2.0,
-                    },
-                },
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.eval_langs = multilingual_eval_langs

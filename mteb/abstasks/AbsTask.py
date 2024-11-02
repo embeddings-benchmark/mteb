@@ -202,7 +202,7 @@ class AbsTask(ABC):
         descriptive_stats_file = os.path.join(current_dir, "descriptive_stats.json")
         existing_descriptive_stats = {}
         if os.path.exists(descriptive_stats_file):
-            with open(descriptive_stats_file, "r") as f:
+            with open(descriptive_stats_file) as f:
                 existing_descriptive_stats = json.load(f)
 
         if existing_descriptive_stats.get(self.metadata.type) is None:
@@ -241,7 +241,9 @@ class AbsTask(ABC):
                 all_details[split] = split_details
 
         with open(descriptive_stats_file, "w") as f:
-            existing_descriptive_stats[self.metadata.type][self.metadata.name] = all_details
+            existing_descriptive_stats[self.metadata.type][self.metadata.name] = (
+                all_details
+            )
             json.dump(existing_descriptive_stats, f, indent=4)
 
         return all_details

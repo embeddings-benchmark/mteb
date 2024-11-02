@@ -683,7 +683,10 @@ class AbsTaskInstructionRetrieval(AbsTask):
         return InstructionRetrievalDescriptiveStatistics(
             num_docs=len(corpus),
             num_queries=len(queries),
-            total_symbols=total_corpus_len + total_queries_len + total_instructions_len + total_changed_instructions_len,
+            total_symbols=total_corpus_len
+            + total_queries_len
+            + total_instructions_len
+            + total_changed_instructions_len,
             average_document_length=(
                 total_corpus_len / len(corpus) if len(corpus) else 0
             ),

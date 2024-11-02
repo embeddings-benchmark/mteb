@@ -431,7 +431,7 @@ class AbsTaskRetrieval(AbsTask):
         )
         qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if num_queries else 0
         return RetrievalDescriptiveStatistics(
-            total_symbols=query_len+doc_len,
+            total_symbols=query_len + doc_len,
             average_document_length=doc_len / num_documents,
             average_query_length=query_len / num_queries,
             num_documents=num_documents,

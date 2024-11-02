@@ -72,16 +72,24 @@ class AbsTaskReranking(AbsTask):
     ) -> RerankingDescriptiveStatistics:
         if hf_subset:
             query = self.dataset[hf_subset][split]["query"]
-            positive = transform_reranking_data(self.dataset[hf_subset][split]["positive"])
-            negative = transform_reranking_data(self.dataset[hf_subset][split]["negative"])
+            positive = transform_reranking_data(
+                self.dataset[hf_subset][split]["positive"]
+            )
+            negative = transform_reranking_data(
+                self.dataset[hf_subset][split]["negative"]
+            )
         elif compute_overall:
             query = []
             positive = []
             negative = []
             for hf_subset in self.metadata.eval_langs:
                 query.extend(self.dataset[hf_subset][split]["query"])
-                positive.extend(transform_reranking_data(self.dataset[hf_subset][split]["positive"]))
-                negative.extend(transform_reranking_data(self.dataset[hf_subset][split]["negative"]))
+                positive.extend(
+                    transform_reranking_data(self.dataset[hf_subset][split]["positive"])
+                )
+                negative.extend(
+                    transform_reranking_data(self.dataset[hf_subset][split]["negative"])
+                )
         else:
             query = self.dataset[split]["query"]
             positive = transform_reranking_data(self.dataset[split]["positive"])
