@@ -45,6 +45,7 @@ class MultilabelClassificationDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
+        total_symbols: Total number of symbols in the dataset.
         average_text_length: Average length of text
         average_label_per_text: Average number of labels per text
         unique_labels: Number of unique labels
@@ -52,6 +53,7 @@ class MultilabelClassificationDescriptiveStatistics(DescriptiveStatistics):
     """
 
     num_samples: int
+    total_symbols: int
     average_text_length: float
     average_label_per_text: float
     unique_labels: int
@@ -246,6 +248,7 @@ class AbsTaskMultilabelClassification(AbsTask):
         label_count = Counter(total_labels)
         return MultilabelClassificationDescriptiveStatistics(
             average_text_length=total_text_len / len(text),
+            total_symbols=total_text_len,
             average_label_per_text=total_label_len / len(label),
             num_samples=len(text),
             unique_labels=len(label_count),

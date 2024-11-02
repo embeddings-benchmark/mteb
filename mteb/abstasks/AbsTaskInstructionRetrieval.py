@@ -224,6 +224,7 @@ class InstructionRetrievalDescriptiveStatistics(DescriptiveStatistics):
     Attributes:
         num_queries: Number of queries
         num_docs: Number of documents
+        total_symbols: Total number of symbols in the dataset
         average_document_length: Average length of documents
         average_query_length: Average length of queries
         average_instruction_length: Average length of instructions
@@ -234,6 +235,7 @@ class InstructionRetrievalDescriptiveStatistics(DescriptiveStatistics):
 
     num_queries: int
     num_docs: int
+    total_symbols: int
     average_document_length: float
     average_query_length: float
     average_instruction_length: float
@@ -681,6 +683,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         return InstructionRetrievalDescriptiveStatistics(
             num_docs=len(corpus),
             num_queries=len(queries),
+            total_symbols=total_corpus_len + total_queries_len + total_instructions_len + total_changed_instructions_len,
             average_document_length=(
                 total_corpus_len / len(corpus) if len(corpus) else 0
             ),

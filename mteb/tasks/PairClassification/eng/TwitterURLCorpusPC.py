@@ -48,13 +48,6 @@ class TwitterURLCorpusPC(AbsTaskPairClassification):
         }""",
         descriptive_stats={
             "n_samples": {"test": 51534},
-            "test": {
-                "num_samples": 51534,
-                "avg_sentence1_len": 79.48919160166103,
-                "avg_sentence2_len": 88.5540419916948,
-                "unique_labels": 2,
-                "labels": {"0": {"count": 38546}, "1": {"count": 12988}},
-            },
         },
     )
 

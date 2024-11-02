@@ -29,6 +29,5 @@ class SlovakHateSpeechClassification(AbsTaskClassification):
         bibtex_citation="",
         descriptive_stats={
             "n_samples": {"test": 1319},
-            "avg_character_length": {"test": 92.71},
         },
     )

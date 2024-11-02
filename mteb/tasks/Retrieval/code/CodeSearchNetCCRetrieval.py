@@ -108,52 +108,6 @@ class CodeSearchNetCCRetrieval(MultilingualTask, AbsTaskRetrieval):
             "n_samples": {
                 _EVAL_SPLIT: 1000,
             },
-            "avg_character_length": {
-                "test": {
-                    "python": {
-                        "average_document_length": 388.31577184555965,
-                        "average_query_length": 551.7934039415471,
-                        "num_documents": 280652,
-                        "num_queries": 14918,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "javascript": {
-                        "average_document_length": 276.0730050152605,
-                        "average_query_length": 443.70707991491946,
-                        "num_documents": 65201,
-                        "num_queries": 3291,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "go": {
-                        "average_document_length": 185.0307932251621,
-                        "average_query_length": 233.76803742920464,
-                        "num_documents": 182735,
-                        "num_queries": 8122,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "ruby": {
-                        "average_document_length": 214.86204146730464,
-                        "average_query_length": 266.8731165741475,
-                        "num_documents": 27588,
-                        "num_queries": 1261,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "java": {
-                        "average_document_length": 281.96280259139183,
-                        "average_query_length": 342.5341853035144,
-                        "num_documents": 181061,
-                        "num_queries": 10955,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "php": {
-                        "average_document_length": 268.9752569556027,
-                        "average_query_length": 336.62194947909234,
-                        "num_documents": 268237,
-                        "num_queries": 14014,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                }
-            },
         },
     )
 

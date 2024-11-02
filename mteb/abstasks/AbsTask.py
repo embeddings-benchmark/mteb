@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 import logging
+import os
 import random
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
@@ -196,6 +198,19 @@ class AbsTask(ABC):
     def calculate_metadata_metrics(
         self,
     ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        descriptive_stats_file = os.path.join(current_dir, "descriptive_stats.json")
+        existing_descriptive_stats = {}
+        if os.path.exists(descriptive_stats_file):
+            with open(descriptive_stats_file, "r") as f:
+                existing_descriptive_stats = json.load(f)
+
+        if existing_descriptive_stats.get(self.metadata.type) is None:
+            existing_descriptive_stats[self.metadata.type] = {}
+
+        if self.metadata.name in existing_descriptive_stats[self.metadata.type]:
+            return existing_descriptive_stats[self.metadata.type][self.metadata.name]
+
         self.load_data()
 
         all_details = {}
@@ -204,7 +219,7 @@ class AbsTask(ABC):
         )
         for split in pbar_split:
             pbar_split.set_postfix_str(f"Split: {split}")
-            print(f"Processing metadata for split {split}")
+            logger.info(f"Processing metadata for split {split}")
             if self.is_multilingual:
                 all_details[split] = self._calculate_metrics_from_split(
                     split, compute_overall=True
@@ -216,7 +231,7 @@ class AbsTask(ABC):
                 )
                 for hf_subset in pbar_subsets:
                     pbar_subsets.set_postfix_str(f"Language: {hf_subset}")
-                    print(f"Processing metadata for language {hf_subset}")
+                    logger.info(f"Processing metadata for language {hf_subset}")
                     split_details = self._calculate_metrics_from_split(split, hf_subset)
                     all_details[split]["hf_subset_descriptive_stats"][hf_subset] = (
                         split_details
@@ -224,6 +239,10 @@ class AbsTask(ABC):
             else:
                 split_details = self._calculate_metrics_from_split(split)
                 all_details[split] = split_details
+
+        with open(descriptive_stats_file, "w") as f:
+            existing_descriptive_stats[self.metadata.type][self.metadata.name] = all_details
+            json.dump(existing_descriptive_stats, f, indent=4)
 
         return all_details
 

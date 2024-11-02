@@ -19,11 +19,13 @@ class BitextDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
+        total_symbols: Total number of symbols in the dataset.
         average_sentence1_length: Average length of sentence1
         average_sentence2_length: Average length of sentence2
     """
 
     num_samples: int
+    total_symbols: int
     average_sentence1_length: float
     average_sentence2_length: float
 
@@ -156,4 +158,5 @@ class AbsTaskBitextMining(AbsTask):
             average_sentence1_length=total_s1_len / len(sentence1),
             average_sentence2_length=total_s2_len / len(sentence2),
             num_samples=len(sentence1),
+            total_symbols=total_s1_len + total_s2_len,
         )

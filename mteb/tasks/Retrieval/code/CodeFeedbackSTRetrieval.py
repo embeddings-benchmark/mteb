@@ -41,14 +41,5 @@ class CodeFeedbackST(AbsTaskRetrieval):
             "n_samples": {
                 _EVAL_SPLIT: 1000,
             },
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1521.3317148588733,
-                    "average_query_length": 724.2441704465598,
-                    "num_documents": 156526,
-                    "num_queries": 31306,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
         },
     )

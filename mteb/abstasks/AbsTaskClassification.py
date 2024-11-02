@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import json
 import logging
+import os
 from collections import Counter, defaultdict
 from typing import Any
 
@@ -25,12 +27,14 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
       num_samples: number of samples in the dataset.
+      total_symbols: Total number of symbols in the dataset.
       average_text_length: Average length of text
       unique_labels: Number of unique labels
       labels: dict of label frequencies
     """
 
     num_samples: int
+    total_symbols: int
     average_text_length: float
     unique_labels: int
     labels: dict[str, dict[str, int]]
@@ -206,6 +210,19 @@ class AbsTaskClassification(AbsTask):
         ClassificationDescriptiveStatistics
         | dict[str, ClassificationDescriptiveStatistics],
     ]:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        descriptive_stats_file = os.path.join(current_dir, "descriptive_stats.json")
+        existing_descriptive_stats = {}
+        if os.path.exists(descriptive_stats_file):
+            with open(descriptive_stats_file, "r") as f:
+                existing_descriptive_stats = json.load(f)
+
+        if existing_descriptive_stats.get(self.metadata.type) is None:
+            existing_descriptive_stats[self.metadata.type] = {}
+
+        if self.metadata.name in existing_descriptive_stats[self.metadata.type]:
+            return existing_descriptive_stats[self.metadata.type][self.metadata.name]
+
         self.load_data()
 
         # same function from parent class, but added explicitly train to splits
@@ -235,6 +252,10 @@ class AbsTaskClassification(AbsTask):
                 split_details = self._calculate_metrics_from_split(split)
                 all_details[split] = split_details
 
+        with open(descriptive_stats_file, "w") as f:
+            existing_descriptive_stats[self.metadata.type][self.metadata.name] = all_details
+            json.dump(existing_descriptive_stats, f, indent=4)
+
         return all_details
 
     def _calculate_metrics_from_split(
@@ -257,6 +278,7 @@ class AbsTaskClassification(AbsTask):
         label_count = Counter(label)
         return ClassificationDescriptiveStatistics(
             num_samples=len(text),
+            total_symbols=total_text_len,
             average_text_length=total_text_len / len(text),
             unique_labels=len(label_count),
             labels={

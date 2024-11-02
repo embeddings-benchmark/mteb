@@ -197,6 +197,7 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_queries: number of samples in the dataset
+        total_symbols: Total number of symbols in the dataset
         average_document_length: Average length of documents
         average_query_length: Average length of queries
         num_documents: Number of documents
@@ -204,6 +205,7 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     """
 
     num_queries: int
+    total_symbols: int
     average_document_length: float
     average_query_length: float
     num_documents: int
@@ -429,8 +431,9 @@ class AbsTaskRetrieval(AbsTask):
         )
         qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if num_queries else 0
         return RetrievalDescriptiveStatistics(
-            average_document_length=doc_len,
-            average_query_length=query_len,
+            total_symbols=query_len+doc_len,
+            average_document_length=doc_len / num_documents,
+            average_query_length=query_len / num_queries,
             num_documents=num_documents,
             num_queries=num_queries,
             average_relevant_docs_per_query=qrels_per_doc,
@@ -439,11 +442,14 @@ class AbsTaskRetrieval(AbsTask):
 
 def calculate_length(
     queries: dict[str, str], corpus: dict[str, str]
-) -> tuple[float, float]:
+) -> tuple[int, int]:
     queries_lens = []
     doc_lens = []
     for query in queries.values():
-        queries_lens.append(len(query))
+        if isinstance(query[0], str):
+            queries_lens.append(len(query))
+        else:
+            queries_lens.extend([len(turn) for turn in query])
 
     for doc in corpus.values():
         doc_lens.append(len(doc))
