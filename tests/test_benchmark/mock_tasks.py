@@ -982,6 +982,7 @@ class MockMultilingualRerankingTask(AbsTaskReranking, MultilingualTask):
 class MockRetrievalTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
+            "num_samples": 4,
             "total_symbols": 56.0,
             "average_document_length": 15.0,
             "average_query_length": 13.0,
@@ -1025,26 +1026,29 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval, MultilingualTask):
     expected_stats = {
         "test": {
             "total_symbols": 56.0,
+            "num_samples": 8,
+            "num_queries": 4,
+            "num_documents": 4,
             "average_document_length": 7.5,
             "average_query_length": 6.5,
-            "num_documents": 4,
-            "num_queries": 4,
             "average_relevant_docs_per_query": 1.0,
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "total_symbols": 56.0,
+                    "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "average_document_length": 15.0,
                     "average_query_length": 13.0,
-                    "num_documents": 2,
-                    "num_queries": 2,
                     "average_relevant_docs_per_query": 1.0,
                 },
                 "fra": {
                     "total_symbols": 56.0,
+                    "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
                     "average_document_length": 15.0,
                     "average_query_length": 13.0,
-                    "num_documents": 2,
-                    "num_queries": 2,
                     "average_relevant_docs_per_query": 1.0,
                 },
             },
@@ -1202,15 +1206,16 @@ class MockInstructionRetrival(AbsTaskInstructionRetrieval):
     do_length_ablation = True
     expected_stats = {
         "test": {
-            "num_docs": 2,
-            "num_queries": 2,
-            "total_symbols": 244,
-            "average_document_length": 30.0,
-            "average_query_length": 26.0,
-            "average_instruction_length": 29.0,
             "average_changed_instruction_length": 37.0,
+            "average_document_length": 30.0,
+            "average_instruction_length": 29.0,
+            "average_query_length": 26.0,
             "average_relevant_docs_per_query": 1.0,
             "average_top_ranked_per_query": 2.0,
+            "num_docs": 2,
+            "num_queries": 2,
+            "num_samples": 4,
+            "total_symbols": 244,
         }
     }
 
@@ -1288,6 +1293,7 @@ class MockMultilingualInstructionRetrival(
     do_length_ablation = True
     expected_stats = {
         "test": {
+            "num_samples": 8,
             "num_docs": 4,
             "num_queries": 4,
             "total_symbols": 488,
@@ -1299,6 +1305,7 @@ class MockMultilingualInstructionRetrival(
             "average_top_ranked_per_query": 2.0,
             "hf_subset_descriptive_stats": {
                 "eng": {
+                    "num_samples": 4,
                     "num_docs": 2,
                     "num_queries": 2,
                     "total_symbols": 244,
@@ -1310,6 +1317,7 @@ class MockMultilingualInstructionRetrival(
                     "average_top_ranked_per_query": 2.0,
                 },
                 "fra": {
+                    "num_samples": 4,
                     "num_docs": 2,
                     "num_queries": 2,
                     "total_symbols": 244,
