@@ -393,7 +393,7 @@ class TaskMetadata(BaseModel):
         return cite
 
     @property
-    def descriptive_stat(self) -> dict[str, DescriptiveStatistics] | None:
+    def descriptive_stats(self) -> dict[str, DescriptiveStatistics] | None:
         if self.descriptive_stat_path.exists():
             with self.descriptive_stat_path.open("r") as f:
                 return json.load(f)
