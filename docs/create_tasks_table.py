@@ -51,16 +51,17 @@ def task_to_markdown_row(task: mteb.AbsTask) -> str:
     domains = (
         "[" + ", ".join(task.metadata.domains) + "]" if task.metadata.domains else ""
     )
+    n_samples = task.metadata.n_samples
     dataset_statistics = round_floats_in_dict(task.metadata.descriptive_stats)
     name_w_reference += author_from_bibtex(task.metadata.bibtex_citation)
 
-    return f"| {name_w_reference} | {task.metadata.languages} | {task.metadata.type} | {task.metadata.category} | {domains} | {dataset_statistics} |"
+    return f"| {name_w_reference} | {task.metadata.languages} | {task.metadata.type} | {task.metadata.category} | {domains} | {n_samples} | {dataset_statistics} |"
 
 
 def create_tasks_table(tasks: list[mteb.AbsTask]) -> str:
     table = """
-| Name | Languages | Type | Category | Domains | Dataset statistics |
-|------|-----------|------|----------|---------|--------------------|
+| Name | Languages | Type | Category | Domains | # Samples | Dataset statistics |
+|------|-----------|------|----------|---------|-----------|--------------------|
 """
     for task in tasks:
         table += task_to_markdown_row(task) + "\n"

@@ -1,10 +1,11 @@
 {
     "test": {
         "total_symbols": 5894.401984777533,
+        "num_samples": 79660,
+        "num_queries": 13277,
+        "num_documents": 66383,
         "average_document_length": 0.022127347788495202,
         "average_query_length": 0.3333224566192555,
-        "num_documents": 66383,
-        "num_queries": 13277,
         "average_relevant_docs_per_query": 1.0
     }
 }

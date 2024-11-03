@@ -1,5 +1,6 @@
 {
     "test": {
+        "num_samples": 19919,
         "num_docs": 19899,
         "num_queries": 20,
         "total_symbols": 44450333,

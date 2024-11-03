@@ -223,6 +223,7 @@ class InstructionRetrievalDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Instruction Retrieval tasks
 
     Attributes:
+        num_samples: Number of samples
         num_queries: Number of queries
         num_docs: Number of documents
         total_symbols: Total number of symbols in the dataset
@@ -234,6 +235,7 @@ class InstructionRetrievalDescriptiveStatistics(DescriptiveStatistics):
         average_top_ranked_per_query: Average number of top ranked docs per query
     """
 
+    num_samples: int
     num_queries: int
     num_docs: int
     total_symbols: int
@@ -684,6 +686,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
             else 0
         )
         return InstructionRetrievalDescriptiveStatistics(
+            num_samples=len(queries) + len(corpus),
             num_docs=len(corpus),
             num_queries=len(queries),
             total_symbols=total_corpus_len

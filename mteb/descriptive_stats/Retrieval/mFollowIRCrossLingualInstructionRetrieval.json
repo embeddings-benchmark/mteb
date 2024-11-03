@@ -1,5 +1,6 @@
 {
     "test": {
+        "num_samples": 121758,
         "num_docs": 121635,
         "num_queries": 123,
         "total_symbols": 283654099,
@@ -11,6 +12,7 @@
         "average_top_ranked_per_query": 1000.0,
         "hf_subset_descriptive_stats": {
             "eng-fas": {
+                "num_samples": 41229,
                 "num_docs": 41189,
                 "num_queries": 40,
                 "total_symbols": 129597567,
@@ -22,6 +24,7 @@
                 "average_top_ranked_per_query": 1000.0
             },
             "eng-rus": {
+                "num_samples": 39366,
                 "num_docs": 39326,
                 "num_queries": 40,
                 "total_symbols": 109522175,
@@ -33,6 +36,7 @@
                 "average_top_ranked_per_query": 1000.0
             },
             "eng-zho": {
+                "num_samples": 41163,
                 "num_docs": 41120,
                 "num_queries": 43,
                 "total_symbols": 44534357,

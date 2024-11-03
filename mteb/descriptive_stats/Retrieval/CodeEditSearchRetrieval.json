@@ -1,114 +1,128 @@
 {
     "train": {
         "total_symbols": 71.98776923076923,
+        "num_samples": 26000,
+        "num_queries": 13000,
+        "num_documents": 13000,
         "average_document_length": 7.692307692307693e-05,
         "average_query_length": 0.005460597633136095,
-        "num_documents": 13000,
-        "num_queries": 13000,
         "average_relevant_docs_per_query": 1.0,
         "hf_subset_descriptive_stats": {
             "python": {
                 "total_symbols": 70.519,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
                 "average_document_length": 0.001,
                 "average_query_length": 0.06951900000000001,
-                "num_documents": 1000,
-                "num_queries": 1000,
                 "average_relevant_docs_per_query": 1.0
             },
             "javascript": {
                 "total_symbols": 57.88,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
                 "average_document_length": 0.001,
                 "average_query_length": 0.05688,
-                "num_documents": 1000,
-                "num_queries": 1000,
                 "average_relevant_docs_per_query": 1.0
             },
             "typescript": {
                 "total_symbols": 61.092,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
                 "average_document_length": 0.001,
                 "average_query_length": 0.060092,
-                "num_documents": 1000,
-                "num_queries": 1000,
                 "average_relevant_docs_per_query": 1.0
             },
             "go": {
                 "total_symbols": 71.797,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
                 "average_document_length": 0.001,
                 "average_query_length": 0.070797,
-                "num_documents": 1000,
-                "num_queries": 1000,
                 "average_relevant_docs_per_query": 1.0
             },
             "ruby": {
                 "total_symbols": 67.9,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
                 "average_document_length": 0.001,
                 "average_query_length": 0.0669,
-                "num_documents": 1000,
-                "num_queries": 1000,
                 "average_relevant_docs_per_query": 1.0
             },
             "java": {
                 "total_symbols": 63.984,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
                 "average_document_length": 0.001,
                 "average_query_length": 0.062984,
-                "num_documents": 1000,
-                "num_queries": 1000,
                 "average_relevant_docs_per_query": 1.0
             },
             "php": {
                 "total_symbols": 62.927,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
                 "average_document_length": 0.001,
                 "average_query_length": 0.061927,
-                "num_documents": 1000,
-                "num_queries": 1000,
                 "average_relevant_docs_per_query": 1.0
             },
             "c": {
                 "total_symbols": 98.588,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
                 "average_document_length": 0.001,
                 "average_query_length": 0.097588,
-                "num_documents": 1000,
-                "num_queries": 1000,
                 "average_relevant_docs_per_query": 1.0
             },
             "c++": {
                 "total_symbols": 115.48,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
                 "average_document_length": 0.001,
                 "average_query_length": 0.11448,
-                "num_documents": 1000,
-                "num_queries": 1000,
                 "average_relevant_docs_per_query": 1.0
             },
             "rust": {
                 "total_symbols": 68.503,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
                 "average_document_length": 0.001,
                 "average_query_length": 0.067503,
-                "num_documents": 1000,
-                "num_queries": 1000,
                 "average_relevant_docs_per_query": 1.0
             },
             "swift": {
                 "total_symbols": 58.279,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
                 "average_document_length": 0.001,
                 "average_query_length": 0.057279000000000004,
-                "num_documents": 1000,
-                "num_queries": 1000,
                 "average_relevant_docs_per_query": 1.0
             },
             "scala": {
                 "total_symbols": 65.833,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
                 "average_document_length": 0.001,
                 "average_query_length": 0.064833,
-                "num_documents": 1000,
-                "num_queries": 1000,
                 "average_relevant_docs_per_query": 1.0
             },
             "shell": {
                 "total_symbols": 73.059,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
                 "average_document_length": 0.001,
                 "average_query_length": 0.072059,
-                "num_documents": 1000,
-                "num_queries": 1000,
                 "average_relevant_docs_per_query": 1.0
             }
         }
