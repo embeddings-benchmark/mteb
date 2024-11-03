@@ -32,6 +32,17 @@ def author_from_bibtex(bibtex: str | None) -> str:
     return f" ({author_str_w_et_al}, {year_str})"
 
 
+def round_floats_in_dict(d: dict, precision: int = 2) -> dict:
+    if not isinstance(d, dict):
+        return d
+    for key, value in d.items():
+        if isinstance(value, float):
+            d[key] = round(value, precision)
+        elif isinstance(value, dict):
+            d[key] = round_floats_in_dict(value, precision)
+    return d
+
+
 def task_to_markdown_row(task: mteb.AbsTask) -> str:
     name = task.metadata.name
     name_w_reference = (
@@ -40,24 +51,16 @@ def task_to_markdown_row(task: mteb.AbsTask) -> str:
     domains = (
         "[" + ", ".join(task.metadata.domains) + "]" if task.metadata.domains else ""
     )
-    n_samples = task.metadata.n_samples or ""
-    dataset_statistics = ""
-    if "avg_character_length" in task.metadata.descriptive_stats:
-        dataset_statistics = task.metadata.descriptive_stats["avg_character_length"]
-    elif len(task.metadata.descriptive_stats) > 1:
-        all_stat = task.metadata.descriptive_stats
-        if len(all_stat) > 0:
-            dataset_statistics = all_stat
-
+    dataset_statistics = round_floats_in_dict(task.metadata.descriptive_stats)
     name_w_reference += author_from_bibtex(task.metadata.bibtex_citation)
 
-    return f"| {name_w_reference} | {task.metadata.languages} | {task.metadata.type} | {task.metadata.category} | {domains} | {n_samples} | {dataset_statistics} |"
+    return f"| {name_w_reference} | {task.metadata.languages} | {task.metadata.type} | {task.metadata.category} | {domains} | {dataset_statistics} |"
 
 
 def create_tasks_table(tasks: list[mteb.AbsTask]) -> str:
     table = """
-| Name | Languages | Type | Category | Domains | # Samples | Dataset statistics |
-|------|-----------|------|----------|---------|-----------|--------------------|
+| Name | Languages | Type | Category | Domains | Dataset statistics |
+|------|-----------|------|----------|---------|--------------------|
 """
     for task in tasks:
         table += task_to_markdown_row(task) + "\n"
