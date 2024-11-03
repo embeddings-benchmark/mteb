@@ -16,8 +16,9 @@ from ..evaluation.evaluators import utils
 from ..evaluation.evaluators.InstructionRetrievalEvaluator import (
     InstructionRetrievalEvaluator,
 )
-from .AbsTask import AbsTask, DescriptiveStatistics
+from .AbsTask import AbsTask
 from .AbsTaskRetrieval import HFDataLoader
+from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 

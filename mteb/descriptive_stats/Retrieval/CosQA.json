@@ -1,0 +1,10 @@
+{
+    "test": {
+        "total_symbols": 313.946741215298,
+        "average_document_length": 0.013450433955314403,
+        "average_query_length": 0.073628,
+        "num_documents": 20604,
+        "num_queries": 500,
+        "average_relevant_docs_per_query": 1.0
+    }
+}

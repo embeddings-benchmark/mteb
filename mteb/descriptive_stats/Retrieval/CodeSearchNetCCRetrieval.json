@@ -1,0 +1,60 @@
+{
+    "test": {
+        "total_symbols": 390.06276516809044,
+        "average_document_length": 1.9891116030847143e-06,
+        "average_query_length": 0.007383093266263778,
+        "num_documents": 1005474,
+        "num_queries": 52561,
+        "average_relevant_docs_per_query": 1.0,
+        "hf_subset_descriptive_stats": {
+            "python": {
+                "total_symbols": 553.7934039415471,
+                "average_document_length": 7.126263130139817e-06,
+                "average_query_length": 0.0369884303486759,
+                "num_documents": 280652,
+                "num_queries": 14918,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "javascript": {
+                "total_symbols": 445.70707991491946,
+                "average_document_length": 3.0674376159874846e-05,
+                "average_query_length": 0.1348243937754237,
+                "num_documents": 65201,
+                "num_queries": 3291,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "go": {
+                "total_symbols": 235.76803742920464,
+                "average_document_length": 1.0944810791583441e-05,
+                "average_query_length": 0.028782077989313547,
+                "num_documents": 182735,
+                "num_queries": 8122,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "ruby": {
+                "total_symbols": 268.8731165741475,
+                "average_document_length": 7.24952878062926e-05,
+                "average_query_length": 0.21163609561788066,
+                "num_documents": 27588,
+                "num_queries": 1261,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "java": {
+                "total_symbols": 344.5341853035144,
+                "average_document_length": 1.1046001071462105e-05,
+                "average_query_length": 0.03126738341428703,
+                "num_documents": 181061,
+                "num_queries": 10955,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "php": {
+                "total_symbols": 338.62194947909234,
+                "average_document_length": 7.456092932742314e-06,
+                "average_query_length": 0.024020404558234076,
+                "num_documents": 268237,
+                "num_queries": 14014,
+                "average_relevant_docs_per_query": 1.0
+            }
+        }
+    }
+}

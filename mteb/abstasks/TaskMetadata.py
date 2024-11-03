@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import json
 import logging
 from collections.abc import Mapping
 from datetime import date
+from pathlib import Path
 from typing import Annotated, Any, Union
 
 from pydantic import (
@@ -183,6 +185,12 @@ class PromptDict(TypedDict, total=False):
 
     query: str
     passage: str
+
+
+class DescriptiveStatistics(TypedDict):
+    """Class for descriptive statistics."""
+
+    pass
 
 
 logger = logging.getLogger(__name__)
@@ -383,6 +391,23 @@ class TaskMetadata(BaseModel):
                 )
             return f"\\cite{{{cite}}}"
         return cite
+
+    @property
+    def descriptive_stat(self) -> dict[str, DescriptiveStatistics] | None:
+        if self.descriptive_stat_path.exists():
+            with self.descriptive_stat_path.open("r") as f:
+                return json.load(f)
+        return None
+
+    @property
+    def descriptive_stat_path(self) -> Path:
+        descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
+        if not descriptive_stat_base_dir.exists():
+            descriptive_stat_base_dir.mkdir()
+        task_type_dir = descriptive_stat_base_dir / self.type
+        if not task_type_dir.exists():
+            task_type_dir.mkdir()
+        return task_type_dir / f"{self.name}.json"
 
     def __hash__(self) -> int:
         return hash(self.model_dump_json())

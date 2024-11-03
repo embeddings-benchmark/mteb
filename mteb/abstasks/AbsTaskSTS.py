@@ -5,7 +5,8 @@ from typing import Any
 
 from ..evaluation.evaluators import STSEvaluator
 from ..load_results.task_results import ScoresDict
-from .AbsTask import AbsTask, DescriptiveStatistics
+from .AbsTask import AbsTask
+from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 

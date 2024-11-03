@@ -68,7 +68,7 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
             sub = sub[
                 : min(
                     len(sub),
-                    self.metadata.descriptive_stats["n_samples"][self._EVAL_SPLIT],
+                    1000,
                 )
             ]
 

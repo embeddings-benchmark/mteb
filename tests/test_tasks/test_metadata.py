@@ -12,3 +12,5 @@ def test_descriptive_stats(task):
     for key, value in result_stat.items():
         assert key in task_stat
         assert value == task_stat[key]
+    # remove descriptive task file
+    task.metadata.descriptive_stat_path.unlink()

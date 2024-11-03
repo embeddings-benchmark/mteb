@@ -1,0 +1,11 @@
+{
+    "test": {
+        "num_samples": 375,
+        "total_symbols": 413674,
+        "num_positive": 2255,
+        "num_negative": 5245,
+        "avg_query_len": 50.205333333333336,
+        "avg_positive_len": 52.54013303769401,
+        "avg_negative_len": 52.69189704480458
+    }
+}

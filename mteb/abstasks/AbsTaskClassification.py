@@ -1,13 +1,10 @@
 from __future__ import annotations
 
-import json
 import logging
-import os
 from collections import Counter, defaultdict
 from typing import Any
 
 import numpy as np
-import tqdm
 
 from mteb.encoder_interface import Encoder
 
@@ -17,7 +14,8 @@ from ..evaluation.evaluators import (
     logRegClassificationEvaluator,
 )
 from ..load_results.task_results import HFSubset, ScoresDict
-from .AbsTask import AbsTask, DescriptiveStatistics
+from .AbsTask import AbsTask
+from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -204,63 +202,6 @@ class AbsTaskClassification(AbsTask):
                 y_sampled.append(y[i])
                 label_counter[y[i]] += 1
         return X_sampled, y_sampled, idxs
-
-    def calculate_metadata_metrics(
-        self,
-    ) -> dict[
-        str,
-        ClassificationDescriptiveStatistics
-        | dict[str, ClassificationDescriptiveStatistics],
-    ]:
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        descriptive_stats_file = os.path.join(current_dir, "descriptive_stats.json")
-        existing_descriptive_stats = {}
-        if os.path.exists(descriptive_stats_file):
-            with open(descriptive_stats_file) as f:
-                existing_descriptive_stats = json.load(f)
-
-        if existing_descriptive_stats.get(self.metadata.type) is None:
-            existing_descriptive_stats[self.metadata.type] = {}
-
-        if self.metadata.name in existing_descriptive_stats[self.metadata.type]:
-            return existing_descriptive_stats[self.metadata.type][self.metadata.name]
-
-        self.load_data()
-
-        # same function from parent class, but added explicitly train to splits
-
-        all_details = {}
-        pbar_split = tqdm.tqdm(
-            self.metadata.eval_splits + ["train"], desc="Processing Splits..."
-        )
-        for split in pbar_split:
-            pbar_split.set_postfix_str(f"Split: {split}")
-            logger.info(f"Processing metadata for split {split}")
-            if self.is_multilingual:
-                all_details[split] = self._calculate_metrics_from_split(
-                    split, compute_overall=True
-                )
-                all_details[split]["hf_subset_descriptive_stats"] = {}
-
-                pbar_subset = tqdm.tqdm(
-                    self.metadata.eval_langs, desc="Processing Languages..."
-                )
-                for hf_subset in pbar_subset:
-                    pbar_subset.set_postfix_str(f"Language: {hf_subset}")
-                    logger.info(f"Processing metadata for language {hf_subset}")
-                    split_details = self._calculate_metrics_from_split(split, hf_subset)
-                    all_details[split][hf_subset] = split_details
-            else:
-                split_details = self._calculate_metrics_from_split(split)
-                all_details[split] = split_details
-
-        with open(descriptive_stats_file, "w") as f:
-            existing_descriptive_stats[self.metadata.type][self.metadata.name] = (
-                all_details
-            )
-            json.dump(existing_descriptive_stats, f, indent=4)
-
-        return all_details
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
