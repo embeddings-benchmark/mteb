@@ -56,7 +56,6 @@ class DKHateClassification(AbsTaskClassification):
     ISBN = "979-10-95546-34-4",
 }""",
         prompt="Classify Danish tweets based on offensiveness (offensive, not offensive)",
-        n_samples={"test": 329},
     )
 
     @property

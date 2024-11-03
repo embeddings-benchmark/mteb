@@ -42,5 +42,4 @@ class TempReasonL3Pure(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Given the following question, retrieve the correct answer."},
-        n_samples={"test": 4426},
     )

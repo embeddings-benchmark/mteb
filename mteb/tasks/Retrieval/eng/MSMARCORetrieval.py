@@ -99,5 +99,4 @@ class MSMARCOHardNegatives(AbsTaskRetrieval):
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 }""",
-        n_samples={"test": 43},
     )

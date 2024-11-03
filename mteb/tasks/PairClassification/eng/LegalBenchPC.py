@@ -117,7 +117,6 @@ class LegalBenchPC(AbsTaskPairClassification):
             year={2019}
         }
         """,
-        n_samples={"test": 2048},
     )
 
     def load_data(self, **kwargs: Any) -> None:

@@ -39,7 +39,6 @@ class KorFin(AbsTaskClassification):
         year={2023}
         }
         """,
-        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):

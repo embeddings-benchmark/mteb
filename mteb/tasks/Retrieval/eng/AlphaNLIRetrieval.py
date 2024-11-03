@@ -45,5 +45,4 @@ class AlphaNLI(AbsTaskRetrieval):
         prompt={
             "query": "Given the following start and end of a story, retrieve a possible reason that leads to the end."
         },
-        n_samples={"test": 1532},
     )

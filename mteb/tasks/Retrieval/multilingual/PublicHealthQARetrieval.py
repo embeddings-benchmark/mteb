@@ -92,7 +92,6 @@ class PublicHealthQARetrieval(MultilingualTask, AbsTaskRetrieval):
 	publisher    = { Hugging Face }
 }
 """,
-        n_samples={"test": 888},
     )
 
     def load_data(self, **kwargs):

@@ -32,7 +32,6 @@ class TamilNewsClassification(AbsTaskClassification):
     year={2020},
     journal={arXiv preprint arXiv:2005.00085},
 }""",
-        n_samples={"train": 14521, "test": 3631},
     )
 
     def dataset_transform(self):

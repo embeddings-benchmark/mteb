@@ -50,7 +50,6 @@ class TwentyNewsgroupsClustering(AbsTaskClustering):
         }
         """,
         prompt="Identify the topic or theme of the given news articles",
-        n_samples={"test": 59545},
     )
 
 
@@ -91,7 +90,6 @@ class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
         }
         """,
         prompt="Identify the topic or theme of the given news articles",
-        n_samples={"test": 2381},
     )
 
     def dataset_transform(self):

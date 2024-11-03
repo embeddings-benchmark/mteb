@@ -50,7 +50,6 @@ class MLSUMClusteringS2S(AbsTaskClustering, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        n_samples={"validation": 38561, "test": 41206},
     )
 
     def load_data(self, **kwargs):
@@ -116,7 +115,6 @@ class MLSUMClusteringS2SFast(AbsTaskClusteringFast, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        n_samples={"validation": 750, "test": 756},
     )
 
     def load_data(self, **kwargs):
@@ -161,5 +159,4 @@ class MLSUMClusteringS2SFast(AbsTaskClusteringFast, MultilingualTask):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=N_SAMPLES,
         )

@@ -36,7 +36,6 @@ doi = {10.7910/DVN/TXIK9P},
 url = {https://doi.org/10.7910/DVN/TXIK9P}
 }
 """,
-        n_samples={"test": 182},
     )
 
     def dataset_transform(self):

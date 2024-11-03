@@ -38,7 +38,6 @@ class EstonianValenceClassification(AbsTaskClassification):
     url = "https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054",
     doi = "10.6084/m9.figshare.24517054.v1"
 }""",
-        n_samples={"train": 3270, "test": 818},
     )
 
     def dataset_transform(self):

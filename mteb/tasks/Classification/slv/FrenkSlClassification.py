@@ -36,7 +36,6 @@ class FrenkSlClassification(AbsTaskClassification):
         primaryClass={cs.CL},
         url={https://arxiv.org/abs/1906.02045}
         }""",
-        n_samples={"test": 2177},
     )
 
     def dataset_transform(self):

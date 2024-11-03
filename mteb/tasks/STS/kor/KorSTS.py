@@ -33,7 +33,6 @@ class KorSTS(AbsTaskSTS):
   journal={arXiv preprint arXiv:2004.03289},
   year={2020}
 }""",
-        n_samples={"test": 1379},
     )
 
     @property

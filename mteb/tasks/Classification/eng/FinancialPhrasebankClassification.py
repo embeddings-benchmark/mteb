@@ -37,7 +37,6 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
             volume={65}
             }
         """,
-        n_samples={"train": 4840},
     )
 
     def dataset_transform(self):

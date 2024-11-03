@@ -41,7 +41,6 @@ class FaroeseSTS(AbsTaskSTS):
             publisher = {Link{\"o}ping University Electronic Press, Sweden},
         }
         """,
-        n_samples={"train": 729},
     )
 
     @property

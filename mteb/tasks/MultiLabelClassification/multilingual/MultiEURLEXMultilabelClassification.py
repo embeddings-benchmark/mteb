@@ -70,5 +70,4 @@ class MultiEURLEXMultilabelClassification(
   url = {https://arxiv.org/abs/2109.00904}
 }
         """,
-        n_samples={"test": 5000},
     )

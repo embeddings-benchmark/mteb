@@ -44,9 +44,6 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
       primaryClass={cs.CL}
 }
 """,
-        n_samples={
-            "test": 1998,
-        },
     )
 
     def load_data(self, **kwargs):

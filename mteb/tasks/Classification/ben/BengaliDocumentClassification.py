@@ -42,7 +42,6 @@ class BengaliDocumentClassification(AbsTaskClassification):
             pages = "52--67"
         }
         """,
-        n_samples={"test": 2048},
     )
 
     def dataset_transform(self) -> None:

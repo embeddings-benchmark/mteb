@@ -86,7 +86,6 @@ class NeuCLIR2022Retrieval(MultilingualTask, AbsTaskRetrieval):
   journal={arXiv preprint arXiv:2304.12367},
   year={2023}
 }""",
-        n_samples={"fas": 2232130, "zho": 3179323, "rus": 4627657},
     )
 
     def load_data(self, **kwargs):

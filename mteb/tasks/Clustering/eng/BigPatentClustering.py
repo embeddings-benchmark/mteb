@@ -98,7 +98,6 @@ class BigPatentClusteringFast(AbsTaskClusteringFast):
   biburl    = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }""",
-        n_samples={"test": NUM_SAMPLES},
     )
 
     def dataset_transform(self):
@@ -109,5 +108,4 @@ class BigPatentClusteringFast(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=NUM_SAMPLES,
         )

@@ -44,7 +44,6 @@ class CzechProductReviewSentimentClassification(AbsTaskClassification):
             pages = "65--74",
         }
         """,
-        n_samples={"test": 2048},
     )
 
     @property

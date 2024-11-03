@@ -53,7 +53,6 @@ class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval, MultilingualTask
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation="preprint_coming",
-        n_samples={"test": 2946},
     )
 
     def __init__(self, **kwargs):

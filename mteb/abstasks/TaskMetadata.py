@@ -246,8 +246,6 @@ class TaskMetadata(BaseModel):
     sample_creation: SAMPLE_CREATION_METHOD | None = None
     bibtex_citation: str | None = None
 
-    n_samples: dict[SPLIT_NAME, int] = {}
-
     def validate_metadata(self) -> None:
         self.dataset_path_is_specified(self.dataset)
         self.dataset_revision_is_specified(self.dataset)

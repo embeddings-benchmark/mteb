@@ -37,5 +37,4 @@ class ArxivClusteringS2S(AbsTaskClustering):
     year={2024}
 }""",
         prompt="Identify the main and secondary category of Arxiv papers based on the titles",
-        n_samples={"test": 732723},
     )

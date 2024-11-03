@@ -57,7 +57,6 @@ class LEMBNarrativeQARetrieval(AbsTaskRetrieval):
             abstract = "",
         }
         """,
-        n_samples={_EVAL_SPLIT: 10804},
     )
 
     def load_data(self, **kwargs):

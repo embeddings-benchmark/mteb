@@ -35,5 +35,4 @@ class News21InstructionRetrieval(AbsTaskInstructionRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples={"eng": 30953 * 2},
     )

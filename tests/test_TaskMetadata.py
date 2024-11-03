@@ -346,7 +346,6 @@ def test_filled_metadata_is_filled():
             dialect=[],
             sample_creation="found",
             bibtex_citation="Someone et al",
-            n_samples={"train": 1},
         ).is_filled()
         is True
     )

@@ -35,5 +35,4 @@ class Robust04InstructionRetrieval(AbsTaskInstructionRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples={"eng": 47544 * 2},
     )

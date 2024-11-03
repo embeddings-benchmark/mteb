@@ -32,7 +32,6 @@ class OdiaNewsClassification(AbsTaskClassification):
     year={2020},
     journal={arXiv preprint arXiv:2005.00085},
 }""",
-        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):

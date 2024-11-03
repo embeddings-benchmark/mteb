@@ -39,7 +39,6 @@ class YelpReviewFullClassification(AbsTaskClassification):
         year = {2015}
         }
         """,
-        n_samples={"test": 50000},
     )
 
     @property

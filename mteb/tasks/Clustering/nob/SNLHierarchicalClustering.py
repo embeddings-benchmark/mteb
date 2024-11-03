@@ -43,7 +43,6 @@ class SNLHierarchicalClusteringP2P(AbsTaskClusteringFast):
   school={Norwegian University of Life Sciences, {\AA}s}
 }""",
         prompt="Identify categories in a Norwegian lexicon",
-        n_samples={"test": 1300},
     )
     max_depth = 5
 
@@ -86,7 +85,6 @@ class SNLHierarchicalClusteringS2S(AbsTaskClusteringFast):
   school={Norwegian University of Life Sciences, {\AA}s}
 }""",
         prompt="Identify categories in a Norwegian lexicon",
-        n_samples={"test": 1300},
     )
     max_depth = 5
 

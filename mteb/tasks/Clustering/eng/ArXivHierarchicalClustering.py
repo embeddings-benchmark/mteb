@@ -38,7 +38,6 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClusteringFast):
         dialect=["Thematic clustering"],
         sample_creation="found",
         bibtex_citation="",
-        n_samples={"test": N_SAMPLES},
     )
 
     def dataset_transform(self):
@@ -79,7 +78,6 @@ class ArXivHierarchicalClusteringS2S(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        n_samples={"test": N_SAMPLES},
     )
 
     def dataset_transform(self):

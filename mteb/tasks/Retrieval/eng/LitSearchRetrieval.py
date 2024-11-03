@@ -40,7 +40,6 @@ class LitSearchRetrieval(AbsTaskRetrieval):
         author={Ajith, Anirudh and Xia, Mengzhou and Chevalier, Alexis and Goyal, Tanya and Chen, Danqi and Gao, Tianyu},
         year={2024}
         }""",
-        n_samples={"test": 597},
     )
 
     def load_data(self, **kwargs):

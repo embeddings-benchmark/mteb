@@ -87,7 +87,6 @@ class NeuCLIR2023Retrieval(MultilingualTask, AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples={"fas": 2232092, "zho": 3179285, "rus": 4627619},
     )
 
     def load_data(self, **kwargs):

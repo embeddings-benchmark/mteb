@@ -34,7 +34,6 @@ class YueOpenriceReviewClassification(AbsTaskClassification):
   year={2019},
   organization={KDD WISDOM}
 }""",
-        n_samples={"test": 6161},
     )
 
     @property

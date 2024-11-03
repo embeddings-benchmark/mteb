@@ -50,7 +50,6 @@ class FQuADRetrieval(AbsTaskRetrieval):
     doi = "10.18653/v1/2020.findings-emnlp.107",
     pages = "1193--1208",
 }""",
-        n_samples={"test": 400, "validation": 100},
     )
 
     def load_data(self, **kwargs):

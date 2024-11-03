@@ -51,7 +51,6 @@ class RUParaPhraserSTS(AbsTaskSTS):
           organization={Springer}
         }
         """,
-        n_samples={"test": 1924},
     )
 
     @property

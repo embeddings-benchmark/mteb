@@ -40,5 +40,4 @@ class EstQA(AbsTaskRetrieval):
   year         = 2021
 }
 """,
-        n_samples={"test": 603},
     )

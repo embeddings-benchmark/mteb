@@ -89,7 +89,6 @@ class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTas
             pages = "89--95",
         }
         """,
-        n_samples={"test": 7000},
     )
 
     def dataset_transform(self):

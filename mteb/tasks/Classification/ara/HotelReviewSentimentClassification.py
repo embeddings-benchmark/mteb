@@ -3,8 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-N_SAMPLES = 2048
-
 
 class HotelReviewSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -39,7 +37,6 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
   publisher={Springer}
 }
 """,
-        n_samples={"train": N_SAMPLES},
     )
 
     def dataset_transform(self):

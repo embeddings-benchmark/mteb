@@ -48,7 +48,6 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
         eprint    = {2104.07081}
         }""",
         prompt="Identify the topic or theme of StackExchange posts based on the titles",
-        n_samples={"test": 32768},
     )
 
     def dataset_transform(self):
@@ -68,7 +67,6 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=32768,
         )
         self.max_fraction_of_documents_to_embed = None
 
@@ -111,5 +109,4 @@ class StackExchangeClustering(AbsTaskClustering):
         eprint    = {2104.07081}
         }""",
         prompt="Identify the topic or theme of StackExchange posts based on the titles",
-        n_samples={"test": 373850},
     )

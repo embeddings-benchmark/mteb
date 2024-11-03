@@ -39,5 +39,4 @@ class CzechSubjectivityClassification(AbsTaskClassification):
     pages = "1381--1391",
 }
 """,
-        n_samples={"validation": 500, "test": 2000},
     )

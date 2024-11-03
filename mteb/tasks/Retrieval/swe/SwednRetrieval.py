@@ -39,7 +39,6 @@ class SwednRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a Swedish news headline retrieve summaries or news articles"
         },
-        n_samples={"test": 2048},
     )
 
     def load_data(self, **kwargs):

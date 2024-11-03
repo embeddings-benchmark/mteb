@@ -43,7 +43,6 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
     primaryClass={cs.CL}
 }
 """,
-        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):
@@ -56,7 +55,6 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
                 seed=42,
                 splits=["test"],
                 label="label",
-                n_samples=min(2048, len(dataset["text"])) - 2,
             )
 
             self.dataset[lang]["test"] = subsampled_dataset_dict["test"]

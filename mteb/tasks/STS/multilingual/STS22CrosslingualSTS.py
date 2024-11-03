@@ -77,7 +77,6 @@ class STS22CrosslingualSTSv2(AbsTaskSTS, MultilingualTask):
     doi = "10.18653/v1/2022.semeval-1.155",
     pages = "1094--1106",
 }""",
-        n_samples={"test": 3958},
     )
 
     @property
@@ -140,7 +139,6 @@ class STS22CrosslingualSTS(AbsTaskSTS, MultilingualTask):
     doi = "10.18653/v1/2022.semeval-1.155",
     pages = "1094--1106",
 }""",
-        n_samples={"test": 8056},
     )
 
     @property

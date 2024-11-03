@@ -27,7 +27,6 @@ class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        n_samples={"test": 4329},
     )
 
     def dataset_transform(self):

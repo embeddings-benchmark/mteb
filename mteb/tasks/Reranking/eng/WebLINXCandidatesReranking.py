@@ -47,14 +47,6 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
       primaryClass={cs.CL}
 }
         """,
-        n_samples={
-            "validation": 1301,
-            "test_iid": 1438,
-            "test_cat": 3560,
-            "test_web": 3144,
-            "test_vis": 5298,
-            "test_geo": 4916,
-        },
     )
 
     def load_data(self, **kwargs):

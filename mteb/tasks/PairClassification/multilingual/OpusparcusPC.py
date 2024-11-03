@@ -47,7 +47,6 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples={"validation": 10168, "test": 10210},
     )
 
     def load_data(self, **kwargs):

@@ -40,5 +40,4 @@ class PhincBitextMining(AbsTaskBitextMining, MultilingualTask):
         year={2020}
         }
         """,
-        n_samples={"train": 13738},
     )

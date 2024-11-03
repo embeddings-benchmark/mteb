@@ -71,5 +71,4 @@ class ClimateFEVERHardNegatives(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples={"test": 1000},
     )

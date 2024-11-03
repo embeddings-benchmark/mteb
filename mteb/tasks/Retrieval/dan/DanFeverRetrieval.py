@@ -47,7 +47,6 @@ class DanFeverRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a claim in Danish, retrieve documents that support the claim"
         },
-        n_samples={"train": 8897},
         task_subtypes=["Claim verification"],
     )
 
@@ -151,7 +150,6 @@ class DanFever(AbsTaskRetrieval):
         prompt={
             "query": "Given a claim in Danish, retrieve documents that support the claim"
         },
-        n_samples={"train": 8897},
         task_subtypes=["Claim verification"],
     )
 

@@ -67,5 +67,4 @@ class NQHardNegatives(AbsTaskRetrieval):
         and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le 
         and Slav Petrov},year	= {2019},journal	= {Transactions of the Association of Computational 
         Linguistics}}""",
-        n_samples={"test": 1000},
     )

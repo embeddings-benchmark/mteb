@@ -48,7 +48,6 @@ class TweetSarcasmClassification(AbsTaskClassification):
     ISBN = "979-10-95546-51-1",
 }
 """,
-        n_samples={"test": 2110},
     )
 
     def dataset_transform(self):

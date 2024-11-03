@@ -50,7 +50,6 @@ publisher = "International Committee on Computational Linguistics",
 url = "https://aclanthology.org/2020.coling-main.233",
 doi = "10.18653/v1/2020.coling-main.233",
 pages = "2595--2605"}""",
-        n_samples={"validation": TEST_SAMPLES},
     )
 
     def load_data(self, **kwargs):

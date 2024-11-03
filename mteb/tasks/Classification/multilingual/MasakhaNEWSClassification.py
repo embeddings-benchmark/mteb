@@ -54,7 +54,6 @@ class MasakhaNEWSClassification(AbsTaskClassification, MultilingualTask):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples={"test": 422},
     )
 
     def dataset_transform(self):

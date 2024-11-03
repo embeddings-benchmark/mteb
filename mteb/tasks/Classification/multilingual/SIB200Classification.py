@@ -238,7 +238,6 @@ class SIB200Classification(MultilingualTask, AbsTaskClassification):
             journal={arXiv preprint arXiv:2309.07445},
             year={2023}
         }""",
-        n_samples={"train": 701, "validation": 99, "test": 204},
     )
 
     def dataset_transform(self):

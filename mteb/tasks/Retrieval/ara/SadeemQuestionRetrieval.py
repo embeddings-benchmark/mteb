@@ -38,7 +38,6 @@ class SadeemQuestionRetrieval(AbsTaskRetrieval):
             author = "abubakr.soliman@sadeem.app"
             }
         """,
-        n_samples={_EVAL_SPLIT: 22979},
     )
 
     def load_data(self, **kwargs):

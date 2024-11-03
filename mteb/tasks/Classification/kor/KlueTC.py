@@ -35,7 +35,6 @@ class KlueTC(AbsTaskClassification):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples={"validation": 2048},
     )
 
     def dataset_transform(self):

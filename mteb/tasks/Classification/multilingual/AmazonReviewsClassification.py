@@ -44,5 +44,4 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
       primaryClass={cs.CL}
 }""",
         prompt="Classify the given Amazon review into its appropriate rating category",
-        n_samples={"validation": 30000, "test": 30000},
     )

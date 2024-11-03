@@ -39,5 +39,4 @@ class TenKGnadClassification(AbsTaskClassification):
                 Month     = aug
                 }
         """,
-        n_samples={"test": 1028},
     )

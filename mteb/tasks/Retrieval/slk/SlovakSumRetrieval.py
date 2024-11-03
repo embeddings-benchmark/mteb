@@ -42,7 +42,6 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
                 date = {2024},
             }
         """,
-        n_samples={"test": 600},
     )
 
     def load_data(self, **kwargs):

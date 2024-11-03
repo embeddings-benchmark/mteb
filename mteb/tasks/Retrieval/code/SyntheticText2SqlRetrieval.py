@@ -35,7 +35,4 @@ class SyntheticText2SQLRetrieval(AbsTaskRetrieval):
           year = {2024},
           url = {https://huggingface.co/datasets/gretelai/synthetic-text-to-sql}
         }""",
-        n_samples={
-            _EVAL_SPLIT: 1000,
-        },
     )

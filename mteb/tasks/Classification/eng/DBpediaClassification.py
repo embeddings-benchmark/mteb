@@ -39,7 +39,6 @@ class DBpediaClassification(AbsTaskClassification):
             year = {2015}
             }
         """,
-        n_samples={"test": 70000},
     )
 
     def dataset_transform(self):

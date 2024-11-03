@@ -27,5 +27,4 @@ class RomaniBibleClustering(AbsTaskClustering):
         dialect=["Kalderash"],
         sample_creation="human-translated and localized",
         bibtex_citation=None,
-        n_samples={"test": 2048},
     )

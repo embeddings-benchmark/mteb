@@ -48,5 +48,4 @@ class WinoGrande(AbsTaskRetrieval):
         prompt={
             "query": "Given the following sentence, retrieve an appropriate answer to fill in the missing underscored part."
         },
-        n_samples={"test": 0},
     )

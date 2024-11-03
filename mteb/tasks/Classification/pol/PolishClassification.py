@@ -35,7 +35,6 @@ class CbdClassification(AbsTaskClassification):
   url       = {http://2019.poleval.pl/files/poleval2019.pdf},
   isbn      = "978-83-63159-28-3"}
 }""",
-        n_samples={"test": 1000},
     )
 
 
@@ -105,7 +104,6 @@ class PolEmo2OutClassification(AbsTaskClassification):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        n_samples={"test": 722},
     )
 
 
@@ -132,7 +130,6 @@ class AllegroReviewsClassification(AbsTaskClassification):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        n_samples={"test": 1006},
     )
 
 
@@ -168,5 +165,4 @@ class PacClassification(AbsTaskClassification):
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2211.13112}, 
 }""",
-        n_samples={"test": 3453},
     )

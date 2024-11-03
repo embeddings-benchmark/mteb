@@ -41,5 +41,4 @@ class SweRecClassification(AbsTaskClassification):
 }
 """,
         prompt="Classify Swedish reviews by sentiment",
-        n_samples={"test": 1024},
     )

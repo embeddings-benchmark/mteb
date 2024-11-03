@@ -52,7 +52,6 @@ class RTE3(MultilingualTask, AbsTaskPairClassification):
         }
         """,
         # sum of 4 languages after neutral filtering
-        n_samples={"test": 1923},
     )
 
     def load_data(self, **kwargs):

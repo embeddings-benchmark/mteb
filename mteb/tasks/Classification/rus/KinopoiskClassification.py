@@ -36,5 +36,4 @@ class KinopoiskClassification(AbsTaskClassification):
         year={2013}
         }""",
         prompt="Classify the sentiment expressed in the given movie review text",
-        n_samples={"test": 1500},
     )

@@ -100,7 +100,6 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
     pages = "2799--2829",
 }
 """,
-        n_samples={"dev": 1000, "test": 1011, "corpus": 5907},
     )
 
     def load_data(self, **kwargs):

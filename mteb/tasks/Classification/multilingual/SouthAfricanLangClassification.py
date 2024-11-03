@@ -47,7 +47,6 @@ class SouthAfricanLangClassification(AbsTaskClassification):
     year = {2022},
     url = {https://kaggle.com/competitions/south-african-language-identification}
 }""",
-        n_samples={"test": 2048},
     )
 
     def dataset_transform(self) -> None:

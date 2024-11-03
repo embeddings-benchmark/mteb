@@ -37,7 +37,6 @@ class PersianFoodSentimentClassification(AbsTaskClassification):
             volume={abs/2005.12515}
         }
         """,
-        n_samples={"validation": TEST_SAMPLES, "test": TEST_SAMPLES},
     )
 
     def dataset_transform(self):

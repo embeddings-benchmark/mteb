@@ -38,7 +38,6 @@ class ArxivClusteringP2P(AbsTaskClustering):
     year={2024}
 }""",
         prompt="Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
-        n_samples={"test": 732723},
     )
 
 
@@ -77,7 +76,6 @@ class ArxivClusteringP2PFast(AbsTaskClustering):
     year={2024}
 }""",  # None found
         prompt="Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
-        n_samples={"test": 250_000},
     )
 
     def dataset_transform(self):

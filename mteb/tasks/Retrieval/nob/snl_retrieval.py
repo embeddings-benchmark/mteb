@@ -34,7 +34,6 @@ class SNLRetrieval(AbsTaskRetrieval):
     school={Norwegian University of Life Sciences, {\AA}s}
 }""",
         prompt={"query": "Given a lexicon headline in Norwegian, retrieve its article"},
-        n_samples={"test": 2048},
         task_subtypes=["Article retrieval"],
     )
 

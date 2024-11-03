@@ -40,5 +40,4 @@ class LinceMTBitextMining(AbsTaskBitextMining, MultilingualTask):
         year={2020}
         }
         """,
-        n_samples={"train": 8060},
     )

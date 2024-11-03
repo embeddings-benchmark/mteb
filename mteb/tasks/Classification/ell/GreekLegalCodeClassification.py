@@ -41,7 +41,6 @@ class GreekLegalCodeClassification(AbsTaskClassification):
     pages = "63--75"
 }
 """,
-        n_samples={"validation": TEST_SAMPLES, "test": TEST_SAMPLES},
     )
 
     def dataset_transform(self):

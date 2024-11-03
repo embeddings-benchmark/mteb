@@ -94,7 +94,6 @@ year={2023},
 url={https://openreview.net/forum?id=vfT4YuzAYA},
 note={}
 }""",
-        n_samples={"test": 1024},
     )
 
     def load_data(self, **kwargs: Any) -> None:

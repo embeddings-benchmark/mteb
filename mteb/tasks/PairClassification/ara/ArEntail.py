@@ -37,7 +37,6 @@ class ArEntail(AbsTaskPairClassification):
         year={2024},
         publisher={Springer}
         }""",
-        n_samples={"test": 1000},
     )
 
     def dataset_transform(self):

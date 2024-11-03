@@ -39,7 +39,6 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
         volume = {28},
         year = {2015}
         }""",
-        n_samples={"test": 60000},
     )
 
     @property

@@ -42,5 +42,4 @@ class ARCChallenge(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Retrieve the answer to the question."},
-        n_samples={"test": 1172},
     )

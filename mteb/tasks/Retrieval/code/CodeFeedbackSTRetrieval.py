@@ -37,7 +37,4 @@ class CodeFeedbackST(AbsTaskRetrieval):
         primaryClass={cs.IR},
         url={https://arxiv.org/abs/2407.02883},
         }""",
-        n_samples={
-            _EVAL_SPLIT: 1000,
-        },
     )

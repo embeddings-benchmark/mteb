@@ -43,5 +43,4 @@ class NollySentiBitextMining(AbsTaskBitextMining, MultilingualTask):
             year={2023}
         }
         """,
-        n_samples={"train": 1640},
     )

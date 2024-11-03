@@ -36,7 +36,6 @@ class MyanmarNews(AbsTaskClassification):
         month     = {February},
         pages     = {401--408}
         }""",
-        n_samples={"train": 2048},
     )
 
     def dataset_transform(self):

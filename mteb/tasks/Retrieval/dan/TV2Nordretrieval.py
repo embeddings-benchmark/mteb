@@ -58,7 +58,6 @@ class TV2Nordretrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a summary of a Danish news article retrieve the corresponding news article"
         },
-        n_samples={"test": 4096},
         task_subtypes=["Article retrieval"],
     )
 

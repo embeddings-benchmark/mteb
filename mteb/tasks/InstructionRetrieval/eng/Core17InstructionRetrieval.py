@@ -35,5 +35,4 @@ class Core17InstructionRetrieval(AbsTaskInstructionRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples={"eng": 19919 * 2},
     )

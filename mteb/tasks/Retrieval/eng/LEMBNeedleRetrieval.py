@@ -49,16 +49,6 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
             year={2024}
             }
         """,
-        n_samples={
-            "test_256": 150,
-            "test_512": 150,
-            "test_1024": 150,
-            "test_2048": 150,
-            "test_4096": 150,
-            "test_8192": 150,
-            "test_16384": 150,
-            "test_32768": 150,
-        },
     )
 
     def load_data(self, **kwargs):

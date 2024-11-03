@@ -3,8 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-N_SAMPLES = 2048
-
 
 class RomanianReviewsSentiment(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -38,7 +36,6 @@ class RomanianReviewsSentiment(AbsTaskClassification):
     year = {2021}
 }
 """,
-        n_samples={"test": N_SAMPLES},
     )
 
     def dataset_transform(self):

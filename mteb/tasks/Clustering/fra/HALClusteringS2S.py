@@ -95,7 +95,6 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples={"test": NUM_SAMPLES},
     )
 
     def dataset_transform(self):
@@ -129,5 +128,4 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=NUM_SAMPLES,
         )

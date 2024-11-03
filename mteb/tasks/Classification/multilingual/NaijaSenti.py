@@ -60,7 +60,6 @@ class NaijaSenti(AbsTaskClassification, MultilingualTask):
         url = "https://aclanthology.org/2022.lrec-1.63",
         pages = "590--602",
     }""",
-        n_samples={"test": 4800},
     )
 
     def load_data(self, **kwargs: Any) -> None:

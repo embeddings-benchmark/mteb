@@ -36,7 +36,6 @@ class RiaNewsRetrieval(AbsTaskRetrieval):
         year={2019}
         }""",
         prompt={"query": "Given a news title, retrieve relevant news article"},
-        n_samples={"test": 10000},
     )
 
 
@@ -70,5 +69,4 @@ class RiaNewsRetrievalHardNegatives(AbsTaskRetrieval):
         booktitle={Proceedings of the 41st European Conference on Information Retrieval},
         year={2019}
         }""",
-        n_samples={"test": 1000},
     )

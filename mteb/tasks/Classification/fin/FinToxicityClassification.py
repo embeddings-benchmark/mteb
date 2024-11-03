@@ -42,7 +42,6 @@ class FinToxicityClassification(AbsTaskClassification):
             month = may,
             year = "2023",
         }""",
-        n_samples={"train": 2048, "test": 2048},
     )
 
     def dataset_transform(self):

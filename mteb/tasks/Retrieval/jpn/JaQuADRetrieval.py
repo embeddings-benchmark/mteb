@@ -37,7 +37,6 @@ class JaQuADRetrieval(AbsTaskRetrieval):
     archivePrefix={arXiv},
     primaryClass={cs.CL}
 }""",
-        n_samples={"validation": 2048},
     )
 
     def load_data(self, **kwargs):

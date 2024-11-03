@@ -56,7 +56,6 @@ class NordicLangClassification(AbsTaskClassification):
 }
 """,
         prompt="Classify texts based on language",
-        n_samples={"test": 3000},
     )
 
     @property

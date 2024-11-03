@@ -50,7 +50,6 @@ class HindiDiscourseClassification(AbsTaskClassification):
     language = "English",
     ISBN = "979-10-95546-34-4",
 }""",
-        n_samples={"train": 2048},
     )
 
     def dataset_transform(self):

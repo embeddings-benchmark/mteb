@@ -35,7 +35,6 @@ class KlueNLI(AbsTaskPairClassification):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",  # 3000 - neutral samples
-        n_samples={"validation": 2000},
     )
 
     def dataset_transform(self):

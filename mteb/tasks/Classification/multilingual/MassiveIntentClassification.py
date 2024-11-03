@@ -91,5 +91,4 @@ class MassiveIntentClassification(MultilingualTask, AbsTaskClassification):
       primaryClass={cs.CL}
 }""",
         prompt="Given a user utterance as query, find the user intents",
-        n_samples={"validation": 2033, "test": 2974},
     )

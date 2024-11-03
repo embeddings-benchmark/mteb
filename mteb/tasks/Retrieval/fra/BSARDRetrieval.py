@@ -44,7 +44,6 @@ class BSARDRetrieval(AbsTaskRetrieval):
   doi = {10.18653/v1/2022.acl-long.468},
   pages = {6789–6803},
 }""",
-        n_samples={"test": 222},
     )
 
     def load_data(self, **kwargs):

@@ -43,5 +43,4 @@ class DutchBookReviewSentimentClassification(AbsTaskClassification):
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 """,
-        n_samples={"test": 2224},
     )

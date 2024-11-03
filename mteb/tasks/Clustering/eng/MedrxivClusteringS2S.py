@@ -36,7 +36,6 @@ class MedrxivClusteringS2SFast(AbsTaskClusteringFast):
         sample_creation="created",
         bibtex_citation="",
         prompt="Identify the main category of Medrxiv papers based on the titles",
-        n_samples={"test": 1500},
     )
 
     def dataset_transform(self):
@@ -76,5 +75,4 @@ class MedrxivClusteringS2S(AbsTaskClustering):
         sample_creation="created",
         bibtex_citation="",
         prompt="Identify the main category of Medrxiv papers based on the titles",
-        n_samples={"test": 37500},
     )

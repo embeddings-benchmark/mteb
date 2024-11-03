@@ -54,5 +54,4 @@ class RARbMath(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Retrieve the answer for the following math problem."},
-        n_samples={"test": 6319},
     )

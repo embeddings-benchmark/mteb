@@ -37,5 +37,4 @@ class RuBQReranking(AbsTaskReranking):
         prompt={
             "query": "Given a question, retrieve Wikipedia passages that answer the question.",
         },
-        n_samples={"test": 1551},
     )

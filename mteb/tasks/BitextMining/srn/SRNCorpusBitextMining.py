@@ -46,7 +46,6 @@ class SRNCorpusBitextMining(AbsTaskBitextMining, MultilingualTask):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        n_samples={"test": _N},
         bibtex_citation="""
 @article{zwennicker2022towards,
   title={Towards a general purpose machine translation system for Sranantongo},

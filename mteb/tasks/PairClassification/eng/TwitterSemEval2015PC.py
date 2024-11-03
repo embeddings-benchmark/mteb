@@ -46,7 +46,6 @@ class TwitterSemEval2015PC(AbsTaskPairClassification):
         pages = "1--11",
     }""",
         prompt="Retrieve tweets that are semantically similar to the given tweet",
-        n_samples={"test": 16777},
     )
 
     def dataset_transform(self):

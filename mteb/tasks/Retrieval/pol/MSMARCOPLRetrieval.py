@@ -74,5 +74,4 @@ class MSMARCOPLHardNegatives(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples={"test": 43},
     )

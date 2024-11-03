@@ -3,8 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-N_SAMPLES = 1024
-
 
 class SwedishSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -30,7 +28,6 @@ class SwedishSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        n_samples={"validation": N_SAMPLES, "test": N_SAMPLES},
     )
 
     def dataset_transform(self):

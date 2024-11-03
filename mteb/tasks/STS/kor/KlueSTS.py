@@ -36,7 +36,6 @@ class KlueSTS(AbsTaskSTS):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples={"validation": 519},
     )
 
     @property

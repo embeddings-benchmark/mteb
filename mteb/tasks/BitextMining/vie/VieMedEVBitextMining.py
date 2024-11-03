@@ -39,7 +39,6 @@ class VieMedEVBitextMining(AbsTaskBitextMining):
     booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING)},
     year      = {2024}
 }""",
-        n_samples={"test": TEST_SAMPLES},
     )
 
     def dataset_transform(self):

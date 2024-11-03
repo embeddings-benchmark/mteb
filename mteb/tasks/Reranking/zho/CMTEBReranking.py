@@ -107,7 +107,6 @@ class CMedQAv1(AbsTaskReranking):
   year={2017},
   publisher={Multidisciplinary Digital Publishing Institute}
 }""",
-        n_samples={"test": 2000},
     )
 
 

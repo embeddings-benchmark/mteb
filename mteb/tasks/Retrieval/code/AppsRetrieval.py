@@ -34,7 +34,4 @@ class AppsRetrieval(AbsTaskRetrieval):
           journal={NeurIPS},
           year={2021}
         }""",
-        n_samples={
-            _EVAL_SPLIT: 1000,
-        },
     )

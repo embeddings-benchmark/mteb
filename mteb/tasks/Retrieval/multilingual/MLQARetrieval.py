@@ -110,7 +110,6 @@ class MLQARetrieval(AbsTaskRetrieval, MultilingualTask):
         year = 2019,
         eid = {arXiv: 1910.07475}
         }""",
-        n_samples={"test": 158083, "validation": 15747},
     )
 
     def load_data(self, **kwargs):

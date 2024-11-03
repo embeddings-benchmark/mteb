@@ -53,7 +53,6 @@ class LEMBSummScreenFDRetrieval(AbsTaskRetrieval):
                 abstract = "",
             }
         """,
-        n_samples={_EVAL_SPLIT: 672},
     )
 
     def load_data(self, **kwargs):

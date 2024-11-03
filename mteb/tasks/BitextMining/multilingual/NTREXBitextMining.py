@@ -270,7 +270,6 @@ class NTREXBitextMining(AbsTaskBitextMining, MultilingualTask):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="human-translated and localized",
-        n_samples={"test": _N * len(_EVAL_LANGS)},
         bibtex_citation="""
 @inproceedings{federmann-etal-2022-ntrex,
     title = "{NTREX}-128 {--} News Test References for {MT} Evaluation of 128 Languages",

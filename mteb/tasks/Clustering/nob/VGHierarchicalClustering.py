@@ -43,7 +43,6 @@ class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
     school={Norwegian University of Life Sciences, {\AA}s}
 }""",
         prompt="Identify the categories (e.g. sports) of given articles in Norwegian",
-        n_samples={"test": N_SAMPLES},
     )
 
     def dataset_transform(self) -> None:
@@ -89,7 +88,6 @@ class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
     school={Norwegian University of Life Sciences, {\AA}s}
 }""",
         prompt="Identify the categories (e.g. sports) of given articles in Norwegian",
-        n_samples={"test": N_SAMPLES},
     )
 
     def dataset_transform(self) -> None:

@@ -34,7 +34,6 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         bibtex_citation="",
-        n_samples={_EVAL_SPLIT: 2566},
     )
 
     def load_data(self, **kwargs):

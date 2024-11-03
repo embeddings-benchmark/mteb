@@ -32,7 +32,6 @@ class BiorxivClusteringS2SFast(AbsTaskClusteringFast):
         sample_creation="created",
         bibtex_citation="",
         prompt="Identify the main category of Biorxiv papers based on the titles",
-        n_samples={"test": 2151},
     )
 
     def dataset_transform(self):
@@ -65,5 +64,4 @@ class BiorxivClusteringS2S(AbsTaskClustering):
         sample_creation="created",
         bibtex_citation="",
         prompt="Identify the main category of Biorxiv papers based on the titles",
-        n_samples={"test": 75000},
     )

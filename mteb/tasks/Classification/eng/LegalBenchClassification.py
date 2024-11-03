@@ -41,7 +41,6 @@ class CanadaTaxCourtOutcomesLegalBenchClassification(AbsTaskClassification):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
             }""",
-        n_samples={"test": 244},
     )
 
     def dataset_transform(self):
@@ -88,7 +87,6 @@ class ContractNLIConfidentialityOfAgreementLegalBenchClassification(
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 82},
     )
 
     def dataset_transform(self):
@@ -139,7 +137,6 @@ class ContractNLIExplicitIdentificationLegalBenchClassification(AbsTaskClassific
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 109},
     )
 
     def dataset_transform(self):
@@ -192,7 +189,6 @@ class ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification(
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 139},
     )
 
     def dataset_transform(self):
@@ -243,7 +239,6 @@ class ContractNLILimitedUseLegalBenchClassification(AbsTaskClassification):
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 208},
     )
 
     def dataset_transform(self):
@@ -294,7 +289,6 @@ class ContractNLINoLicensingLegalBenchClassification(AbsTaskClassification):
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 162},
     )
 
     def dataset_transform(self):
@@ -347,7 +341,6 @@ class ContractNLINoticeOnCompelledDisclosureLegalBenchClassification(
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 142},
     )
 
     def dataset_transform(self):
@@ -400,7 +393,6 @@ class ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassificat
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 178},
     )
 
     def dataset_transform(self):
@@ -451,7 +443,6 @@ class ContractNLIPermissibleCopyLegalBenchClassification(AbsTaskClassification):
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 87},
     )
 
     def dataset_transform(self):
@@ -504,7 +495,6 @@ class ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassificat
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 136},
     )
 
     def dataset_transform(self):
@@ -557,7 +547,6 @@ class ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification(
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 111},
     )
 
     def dataset_transform(self):
@@ -610,7 +599,6 @@ class ContractNLIReturnOfConfidentialInformationLegalBenchClassification(
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 66},
     )
 
     def dataset_transform(self):
@@ -661,7 +649,6 @@ class ContractNLISharingWithEmployeesLegalBenchClassification(AbsTaskClassificat
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 170},
     )
 
     def dataset_transform(self):
@@ -712,7 +699,6 @@ class ContractNLISharingWithThirdPartiesLegalBenchClassification(AbsTaskClassifi
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 180},
     )
 
     def dataset_transform(self):
@@ -763,7 +749,6 @@ class ContractNLISurvivalOfObligationsLegalBenchClassification(AbsTaskClassifica
             journal={arXiv preprint arXiv:2110.01799},
             year={2021}
         }""",
-        n_samples={"test": 157},
     )
 
     def dataset_transform(self):
@@ -809,7 +794,6 @@ class CorporateLobbyingLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"test": 490},
     )
 
     def dataset_transform(self):
@@ -876,7 +860,6 @@ class CUADAffiliateLicenseLicenseeLegalBenchClassification(AbsTaskClassification
             year={2021}
         }
         """,
-        n_samples={"test": 198},
     )
 
     def dataset_transform(self):
@@ -928,7 +911,6 @@ class CUADAffiliateLicenseLicensorLegalBenchClassification(AbsTaskClassification
             year={2021}
         }
         """,
-        n_samples={"test": 88},
     )
 
     def dataset_transform(self):
@@ -980,7 +962,6 @@ class CUADAntiAssignmentLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 1172},
     )
 
     def dataset_transform(self):
@@ -1032,7 +1013,6 @@ class CUADAuditRightsLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 1216},
     )
 
     def dataset_transform(self):
@@ -1084,7 +1064,6 @@ class CUADCapOnLiabilityLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 1246},
     )
 
     def dataset_transform(self):
@@ -1136,7 +1115,6 @@ class CUADChangeOfControlLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 416},
     )
 
     def dataset_transform(self):
@@ -1190,7 +1168,6 @@ class CUADCompetitiveRestrictionExceptionLegalBenchClassification(
             year={2021}
         }
         """,
-        n_samples={"test": 220},
     )
 
     def dataset_transform(self):
@@ -1242,7 +1219,6 @@ class CUADCovenantNotToSueLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 308},
     )
 
     def dataset_transform(self):
@@ -1294,7 +1270,6 @@ class CUADEffectiveDateLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 236},
     )
 
     def dataset_transform(self):
@@ -1346,7 +1321,6 @@ class CUADExclusivityLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 762},
     )
 
     def dataset_transform(self):
@@ -1398,7 +1372,6 @@ class CUADExpirationDateLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 876},
     )
 
     def dataset_transform(self):
@@ -1450,7 +1423,6 @@ class CUADGoverningLawLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 876},
     )
 
     def dataset_transform(self):
@@ -1502,7 +1474,6 @@ class CUADInsuranceLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 1030},
     )
 
     def dataset_transform(self):
@@ -1554,7 +1525,6 @@ class CUADIPOwnershipAssignmentLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 576},
     )
 
     def dataset_transform(self):
@@ -1606,7 +1576,6 @@ class CUADIrrevocableOrPerpetualLicenseLegalBenchClassification(AbsTaskClassific
             year={2021}
         }
         """,
-        n_samples={"test": 280},
     )
 
     def dataset_transform(self):
@@ -1658,7 +1627,6 @@ class CUADJointIPOwnershipLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 192},
     )
 
     def dataset_transform(self):
@@ -1710,7 +1678,6 @@ class CUADLicenseGrantLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 1396},
     )
 
     def dataset_transform(self):
@@ -1762,7 +1729,6 @@ class CUADLiquidatedDamagesLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 220},
     )
 
     def dataset_transform(self):
@@ -1814,7 +1780,6 @@ class CUADMinimumCommitmentLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 772},
     )
 
     def dataset_transform(self):
@@ -1866,7 +1831,6 @@ class CUADMostFavoredNationLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 64},
     )
 
     def dataset_transform(self):
@@ -1918,7 +1882,6 @@ class CUADNoSolicitOfCustomersLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 84},
     )
 
     def dataset_transform(self):
@@ -1970,7 +1933,6 @@ class CUADNoSolicitOfEmployeesLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 142},
     )
 
     def dataset_transform(self):
@@ -2022,7 +1984,6 @@ class CUADNonCompeteLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 442},
     )
 
     def dataset_transform(self):
@@ -2074,7 +2035,6 @@ class CUADNonDisparagementLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 100},
     )
 
     def dataset_transform(self):
@@ -2126,7 +2086,6 @@ class CUADNonTransferableLicenseLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 542},
     )
 
     def dataset_transform(self):
@@ -2178,7 +2137,6 @@ class CUADNoticePeriodToTerminateRenewalLegalBenchClassification(AbsTaskClassifi
             year={2021}
         }
         """,
-        n_samples={"test": 222},
     )
 
     def dataset_transform(self):
@@ -2230,7 +2188,6 @@ class CUADPostTerminationServicesLegalBenchClassification(AbsTaskClassification)
             year={2021}
         }
         """,
-        n_samples={"test": 808},
     )
 
     def dataset_transform(self):
@@ -2282,7 +2239,6 @@ class CUADPriceRestrictionsLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 46},
     )
 
     def dataset_transform(self):
@@ -2334,7 +2290,6 @@ class CUADRenewalTermLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 386},
     )
 
     def dataset_transform(self):
@@ -2386,7 +2341,6 @@ class CUADRevenueProfitSharingLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 774},
     )
 
     def dataset_transform(self):
@@ -2438,7 +2392,6 @@ class CUADRofrRofoRofnLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 690},
     )
 
     def dataset_transform(self):
@@ -2490,7 +2443,6 @@ class CUADSourceCodeEscrowLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 118},
     )
 
     def dataset_transform(self):
@@ -2542,7 +2494,6 @@ class CUADTerminationForConvenienceLegalBenchClassification(AbsTaskClassificatio
             year={2021}
         }
         """,
-        n_samples={"test": 430},
     )
 
     def dataset_transform(self):
@@ -2594,7 +2545,6 @@ class CUADThirdPartyBeneficiaryLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 68},
     )
 
     def dataset_transform(self):
@@ -2646,7 +2596,6 @@ class CUADUncappedLiabilityLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 294},
     )
 
     def dataset_transform(self):
@@ -2698,7 +2647,6 @@ class CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification(AbsTaskClassifica
             year={2021}
         }
         """,
-        n_samples={"test": 48},
     )
 
     def dataset_transform(self):
@@ -2750,7 +2698,6 @@ class CUADVolumeRestrictionLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 322},
     )
 
     def dataset_transform(self):
@@ -2802,7 +2749,6 @@ class CUADWarrantyDurationLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 320},
     )
 
     def dataset_transform(self):
@@ -2848,7 +2794,6 @@ class DefinitionClassificationLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 1337},
     )
 
     def dataset_transform(self):
@@ -2894,7 +2839,6 @@ class Diversity1LegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 300},
     )
 
     def dataset_transform(self):
@@ -2964,7 +2908,6 @@ class Diversity2LegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 300},
     )
 
     def dataset_transform(self):
@@ -3034,7 +2977,6 @@ class Diversity3LegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 300},
     )
 
     def dataset_transform(self):
@@ -3104,7 +3046,6 @@ class Diversity4LegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 300},
     )
 
     def dataset_transform(self):
@@ -3174,7 +3115,6 @@ class Diversity5LegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 300},
     )
 
     def dataset_transform(self):
@@ -3244,7 +3184,6 @@ class Diversity6LegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 300},
     )
 
     def dataset_transform(self):
@@ -3322,7 +3261,6 @@ class FunctionOfDecisionSectionLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 367},
     )
 
     def dataset_transform(self):
@@ -3371,7 +3309,6 @@ class InsurancePolicyInterpretationLegalBenchClassification(AbsTaskClassificatio
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 133},
     )
 
     def dataset_transform(self):
@@ -3424,7 +3361,6 @@ class InternationalCitizenshipQuestionsLegalBenchClassification(AbsTaskClassific
             publisher = {Global Citizenship Observatory}
         }
         """,
-        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):
@@ -3475,7 +3411,6 @@ class JCrewBlockerLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 54},
     )
 
     def dataset_transform(self):
@@ -3529,7 +3464,6 @@ class LearnedHandsBenefitsLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 66},
     )
 
     def dataset_transform(self):
@@ -3583,7 +3517,6 @@ class LearnedHandsBusinessLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 174},
     )
 
     def dataset_transform(self):
@@ -3637,7 +3570,6 @@ class LearnedHandsConsumerLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 614},
     )
 
     def dataset_transform(self):
@@ -3691,7 +3623,6 @@ class LearnedHandsCourtsLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 192},
     )
 
     def dataset_transform(self):
@@ -3745,7 +3676,6 @@ class LearnedHandsCrimeLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 688},
     )
 
     def dataset_transform(self):
@@ -3799,7 +3729,6 @@ class LearnedHandsDivorceLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 150},
     )
 
     def dataset_transform(self):
@@ -3853,7 +3782,6 @@ class LearnedHandsDomesticViolenceLegalBenchClassification(AbsTaskClassification
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 174},
     )
 
     def dataset_transform(self):
@@ -3907,7 +3835,6 @@ class LearnedHandsEducationLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 56},
     )
 
     def dataset_transform(self):
@@ -3961,7 +3888,6 @@ class LearnedHandsEmploymentLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 710},
     )
 
     def dataset_transform(self):
@@ -4015,7 +3941,6 @@ class LearnedHandsEstatesLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 178},
     )
 
     def dataset_transform(self):
@@ -4069,7 +3994,6 @@ class LearnedHandsFamilyLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):
@@ -4126,7 +4050,6 @@ class LearnedHandsHealthLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 226},
     )
 
     def dataset_transform(self):
@@ -4180,7 +4103,6 @@ class LearnedHandsHousingLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):
@@ -4237,7 +4159,6 @@ class LearnedHandsImmigrationLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 134},
     )
 
     def dataset_transform(self):
@@ -4291,7 +4212,6 @@ class LearnedHandsTortsLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 432},
     )
 
     def dataset_transform(self):
@@ -4345,7 +4265,6 @@ class LearnedHandsTrafficLegalBenchClassification(AbsTaskClassification):
             urldate = {2022-05-21}
         }
         """,
-        n_samples={"test": 556},
     )
 
     def dataset_transform(self):
@@ -4391,7 +4310,6 @@ class LegalReasoningCausalityLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"test": 55},
     )
 
     def dataset_transform(self):
@@ -4621,7 +4539,6 @@ class MAUDLegalBenchClassification(AbsTaskClassification):
             year={2023}
         }
         """,
-        n_samples={"test": 2048},
     )
 
     def load_data(self, **kwargs: Any) -> None:
@@ -4723,7 +4640,6 @@ class NYSJudicialEthicsLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"test": 292},
     )
 
     def dataset_transform(self):
@@ -4778,7 +4694,6 @@ class OPP115DataRetentionLegalBenchClassification(AbsTaskClassification):
             year={2016}
         }
         """,
-        n_samples={"test": 88},
     )
 
     def dataset_transform(self):
@@ -4831,7 +4746,6 @@ class OPP115DataSecurityLegalBenchClassification(AbsTaskClassification):
             year={2016}
         }
         """,
-        n_samples={"test": 1334},
     )
 
     def dataset_transform(self):
@@ -4884,7 +4798,6 @@ class OPP115DoNotTrackLegalBenchClassification(AbsTaskClassification):
             year={2016}
         }
         """,
-        n_samples={"test": 110},
     )
 
     def dataset_transform(self):
@@ -4937,7 +4850,6 @@ class OPP115FirstPartyCollectionUseLegalBenchClassification(AbsTaskClassificatio
             year={2016}
         }
         """,
-        n_samples={"test": 2086},
     )
 
     def dataset_transform(self):
@@ -4992,7 +4904,6 @@ class OPP115InternationalAndSpecificAudiencesLegalBenchClassification(
             year={2016}
         }
         """,
-        n_samples={"test": 980},
     )
 
     def dataset_transform(self):
@@ -5045,7 +4956,6 @@ class OPP115PolicyChangeLegalBenchClassification(AbsTaskClassification):
             year={2016}
         }
         """,
-        n_samples={"test": 431},
     )
 
     def dataset_transform(self):
@@ -5098,7 +5008,6 @@ class OPP115ThirdPartySharingCollectionLegalBenchClassification(AbsTaskClassific
             year={2016}
         }
         """,
-        n_samples={"test": 1590},
     )
 
     def dataset_transform(self):
@@ -5151,7 +5060,6 @@ class OPP115UserAccessEditAndDeletionLegalBenchClassification(AbsTaskClassificat
             year={2016}
         }
         """,
-        n_samples={"test": 462},
     )
 
     def dataset_transform(self):
@@ -5204,7 +5112,6 @@ class OPP115UserChoiceControlLegalBenchClassification(AbsTaskClassification):
             year={2016}
         }
         """,
-        n_samples={"test": 1546},
     )
 
     def dataset_transform(self):
@@ -5258,7 +5165,6 @@ class OralArgumentQuestionPurposeLegalBenchClassification(AbsTaskClassification)
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 312},
     )
 
     def dataset_transform(self):
@@ -5307,7 +5213,6 @@ class OverrulingLegalBenchClassification(AbsTaskClassification):
             year={2021}
         }
         """,
-        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):
@@ -5356,7 +5261,6 @@ class PersonalJurisdictionLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 50},
     )
 
     def dataset_transform(self):
@@ -5402,7 +5306,6 @@ class PROALegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         },
         """,
-        n_samples={"test": 95},
     )
 
     def dataset_transform(self):
@@ -5457,7 +5360,6 @@ class SCDBPAccountabilityLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 379},
     )
 
     def dataset_transform(self):
@@ -5512,7 +5414,6 @@ class SCDBPAuditsLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 379},
     )
 
     def dataset_transform(self):
@@ -5567,7 +5468,6 @@ class SCDBPCertificationLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 378},
     )
 
     def dataset_transform(self):
@@ -5622,7 +5522,6 @@ class SCDBPTrainingLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 379},
     )
 
     def dataset_transform(self):
@@ -5677,7 +5576,6 @@ class SCDBPVerificationLegalBenchClassification(AbsTaskClassification):
             publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 379},
     )
 
     def dataset_transform(self):
@@ -5732,7 +5630,6 @@ class SCDDAccountabilityLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 378},
     )
 
     def dataset_transform(self):
@@ -5787,7 +5684,6 @@ class SCDDAuditsLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 379},
     )
 
     def dataset_transform(self):
@@ -5842,7 +5738,6 @@ class SCDDCertificationLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 378},
     )
 
     def dataset_transform(self):
@@ -5897,7 +5792,6 @@ class SCDDTrainingLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 379},
     )
 
     def dataset_transform(self):
@@ -5952,7 +5846,6 @@ class SCDDVerificationLegalBenchClassification(AbsTaskClassification):
         publisher={HeinOnline}
         }
         """,
-        n_samples={"test": 379},
     )
 
     def dataset_transform(self):
@@ -5998,7 +5891,6 @@ class TelemarketingSalesRuleLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"test": 47},
     )
 
     def dataset_transform(self):
@@ -6044,7 +5936,6 @@ class TextualismToolDictionariesLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"test": 107},
     )
 
     def dataset_transform(self):
@@ -6090,7 +5981,6 @@ class TextualismToolPlainLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"test": 165},
     )
 
     def dataset_transform(self):
@@ -6136,7 +6026,6 @@ class UCCVCommonLawLegalBenchClassification(AbsTaskClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"test": 94},
     )
 
     def dataset_transform(self):
@@ -6193,7 +6082,6 @@ class UnfairTOSLegalBenchClassification(AbsTaskClassification):
             publisher={Springer}
         }
         """,
-        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):

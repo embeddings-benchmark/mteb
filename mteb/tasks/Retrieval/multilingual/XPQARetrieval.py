@@ -92,7 +92,6 @@ class XPQARetrieval(AbsTaskRetrieval, MultilingualTask):
         pages={103--115},
         year={2023}
         }""",
-        n_samples={"test": 19801},
     )
 
     def load_data(self, **kwargs):

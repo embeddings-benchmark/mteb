@@ -38,7 +38,6 @@ class SinhalaNewsClassification(AbsTaskClassification):
             journal   = {Year of Publication},
             year      = {2022},
             }""",
-        n_samples={"train": 3327},
     )
 
     def dataset_transform(self):

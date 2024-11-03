@@ -44,7 +44,6 @@ class CzechSoMeSentimentClassification(AbsTaskClassification):
             pages = "65--74",
         }
         """,
-        n_samples={"test": 1000},
     )
 
     @property

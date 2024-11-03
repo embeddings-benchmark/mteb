@@ -67,7 +67,6 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
     url={https://arxiv.org/abs/2407.12883}, 
 }
         """,
-        n_samples={"standard": 1334914, "long": 7048},
     )
 
     def load_bright_data(

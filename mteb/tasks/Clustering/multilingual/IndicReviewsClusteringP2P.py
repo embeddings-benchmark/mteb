@@ -56,7 +56,6 @@ class IndicReviewsClusteringP2P(AbsTaskClustering, MultilingualTask):
   year      = {2022},
   doi       = {10.18653/v1/2023.acl-long.693}
 }""",
-        n_samples={"test": 1000},
     )
 
     def load_data(self, **kwargs: Any) -> None:

@@ -3,8 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-N_SAMPLES = 1000
-
 
 class SickBrPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
@@ -49,7 +47,6 @@ class SickBrPC(AbsTaskPairClassification):
         isbn="978-3-319-99722-3"
         }
         """,
-        n_samples={"test": N_SAMPLES},
     )
 
     def dataset_transform(self):
@@ -64,7 +61,6 @@ class SickBrPC(AbsTaskPairClassification):
             seed=self.seed,
             splits=self.metadata.eval_splits,
             label="entailment_label",
-            n_samples=N_SAMPLES,
         )
 
         for split in self.metadata.eval_splits:

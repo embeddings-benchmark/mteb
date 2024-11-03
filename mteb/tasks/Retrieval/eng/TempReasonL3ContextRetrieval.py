@@ -44,5 +44,4 @@ class TempReasonL3Context(AbsTaskRetrieval):
         prompt={
             "query": "Given the following question, facts and contexts, retrieve the correct answer."
         },
-        n_samples={"test": 4426},
     )

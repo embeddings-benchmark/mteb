@@ -57,7 +57,6 @@ class SickrPLSTS(AbsTaskSTS):
     ISBN = "979-10-95546-34-4",
 }
         """,
-        n_samples={"test": 9812},
     )
 
     @property
@@ -108,7 +107,6 @@ class CdscrSTS(AbsTaskSTS):
 }
 
         """,
-        n_samples={"test": 1000},
     )
 
     @property

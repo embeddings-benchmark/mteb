@@ -36,7 +36,6 @@ class RomanianSentimentClassification(AbsTaskClassification):
   year={2020}
 }
 """,
-        n_samples={"test": TEST_SAMPLES},
     )
 
     def dataset_transform(self):

@@ -60,5 +60,4 @@ class MTOPDomainClassification(MultilingualTask, AbsTaskClassification):
 }
 """,
         prompt="Classify the intent domain of the given utterance in task-oriented conversation",
-        n_samples={"validation": 2235, "test": 4386},
     )

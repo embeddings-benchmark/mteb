@@ -33,7 +33,6 @@ class BengaliSentimentAnalysis(AbsTaskClassification):
         pages={50--60},
         year={2020}
         }""",
-        n_samples={"train": 11807},
     )
 
     def dataset_transform(self):

@@ -38,7 +38,6 @@ class TurkicClassification(MultilingualTask, AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="""
         """,
-        n_samples={"train": 193056},
     )
 
     def transform_data(self, dataset, lang):

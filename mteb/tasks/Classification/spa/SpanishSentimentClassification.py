@@ -51,5 +51,4 @@ class SpanishSentimentClassification(AbsTaskClassification):
             pages = "89--95",
         }
         """,
-        n_samples={"validation": 147, "test": 296},
     )

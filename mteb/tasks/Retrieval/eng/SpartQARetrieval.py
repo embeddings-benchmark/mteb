@@ -44,5 +44,4 @@ class SpartQA(AbsTaskRetrieval):
         prompt={
             "query": "Given the following spatial reasoning question, retrieve the right answer."
         },
-        n_samples={"test": 0},
     )

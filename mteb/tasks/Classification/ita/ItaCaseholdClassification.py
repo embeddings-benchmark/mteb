@@ -45,7 +45,6 @@ class ItaCaseholdClassification(AbsTaskClassification):
             series = {ICAIL '23}
             }
         """,
-        n_samples={"test": 221},
     )
 
     def dataset_transform(self):

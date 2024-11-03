@@ -51,5 +51,4 @@ class NusaTranslationBitextMining(AbsTaskBitextMining, MultilingualTask):
         }
 
         """,
-        n_samples={"train": 50200},
     )

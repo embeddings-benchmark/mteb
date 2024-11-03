@@ -37,5 +37,4 @@ class KurdishSentimentClassification(AbsTaskClassification):
             doi = {10.1007/s10579-023-09716-6}
             }
         """,
-        n_samples={"train": 6000, "test": 1987},
     )

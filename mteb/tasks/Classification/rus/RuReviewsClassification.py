@@ -39,7 +39,6 @@ class RuReviewsClassification(AbsTaskClassification):
         month={July}
         }""",
         prompt="Classify product reviews into positive, negative or neutral sentiment",
-        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):

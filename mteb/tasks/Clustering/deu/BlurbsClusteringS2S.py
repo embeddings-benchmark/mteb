@@ -47,7 +47,6 @@ class BlurbsClusteringS2S(AbsTaskClustering):
   year={2019},
   url={https://api.semanticscholar.org/CorpusID:208334484}
 }""",
-        n_samples={"test": 174637},
     )
 
 
@@ -89,7 +88,6 @@ class BlurbsClusteringS2SFast(AbsTaskClusteringFast):
   year={2019},
   url={https://api.semanticscholar.org/CorpusID:208334484}
 }""",
-        n_samples={"test": NUM_SAMPLES},
     )
 
     def dataset_transform(self):
@@ -118,5 +116,4 @@ class BlurbsClusteringS2SFast(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=NUM_SAMPLES,
         )

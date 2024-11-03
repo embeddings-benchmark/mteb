@@ -66,7 +66,6 @@ class LEMBQMSumRetrieval(AbsTaskRetrieval):
             abstract = "",
             }
         """,
-        n_samples={_EVAL_SPLIT: 1724},
     )
 
     def load_data(self, **kwargs):

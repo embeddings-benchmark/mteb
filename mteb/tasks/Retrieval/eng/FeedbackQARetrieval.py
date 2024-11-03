@@ -50,5 +50,4 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
     pages = "926--937"
 }
 """,
-        n_samples={"test": 1992},
     )

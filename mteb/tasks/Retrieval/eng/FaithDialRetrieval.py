@@ -49,7 +49,6 @@ class FaithDialRetrieval(AbsTaskRetrieval):
             doi={10.1162/tacl_a_00529}
             }
         """,
-        n_samples={"test": 2042},
     )
 
     # TODO: Will be removed if curated and added to mteb HF

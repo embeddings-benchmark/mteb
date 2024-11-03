@@ -39,5 +39,4 @@ class RuBQRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },
-        n_samples={"test": 2845},
     )

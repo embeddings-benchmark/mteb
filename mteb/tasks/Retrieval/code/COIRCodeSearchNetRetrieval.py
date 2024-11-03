@@ -97,9 +97,6 @@ class COIRCodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="@article{husain2019codesearchnet, title={{CodeSearchNet} challenge: Evaluating the state of semantic code search}, author={Husain, Hamel and Wu, Ho-Hsiang and Gazit, Tiferet and Allamanis, Miltiadis and Brockschmidt, Marc}, journal={arXiv preprint arXiv:1909.09436}, year={2019} }",
-        n_samples={
-            _EVAL_SPLIT: 1000,
-        },
     )
 
     def load_data(self, **kwargs):

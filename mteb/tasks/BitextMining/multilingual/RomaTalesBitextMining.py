@@ -33,7 +33,6 @@ class RomaTalesBitextMining(AbsTaskBitextMining, MultilingualTask):
         dialect=["Lovari"],
         sample_creation="created",
         bibtex_citation="",
-        n_samples={"test": 215},
     )
 
     def load_data(self, **kwargs):

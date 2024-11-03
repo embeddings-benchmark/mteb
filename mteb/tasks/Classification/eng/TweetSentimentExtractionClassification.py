@@ -37,7 +37,6 @@ class TweetSentimentExtractionClassification(AbsTaskClassification):
     url = {https://kaggle.com/competitions/tweet-sentiment-extraction}
 }""",
         prompt="Classify the sentiment of a given tweet as either positive, negative, or neutral",
-        n_samples={"test": 3534},
     )
 
     @property

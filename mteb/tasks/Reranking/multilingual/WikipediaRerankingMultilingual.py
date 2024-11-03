@@ -52,22 +52,4 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
     title  = "Wikimedia Downloads",
     url    = "https://dumps.wikimedia.org"
 }""",
-        n_samples={
-            "en": 1500,
-            "de": 1500,
-            "it": 1500,
-            "pt": 1500,
-            "nl": 1500,
-            "cs": 1500,
-            "ro": 1500,
-            "bg": 1500,
-            "sr": 1500,
-            "fi": 1500,
-            "da": 1500,
-            "fa": 1500,
-            "hi": 1500,
-            "bn": 1500,
-            "no": 1500,
-            "sv": 1500,
-        },
     )

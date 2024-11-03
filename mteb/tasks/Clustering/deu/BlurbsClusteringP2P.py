@@ -39,7 +39,6 @@ class BlurbsClusteringP2P(AbsTaskClustering):
   year={2019},
   url={https://api.semanticscholar.org/CorpusID:208334484}
 }""",
-        n_samples={"test": 174637},
     )
 
 
@@ -80,7 +79,6 @@ class BlurbsClusteringP2PFast(AbsTaskClusteringFast):
   year={2019},
   url={https://api.semanticscholar.org/CorpusID:208334484}
 }""",
-        n_samples={"test": NUM_SAMPLES},
     )
 
     def dataset_transform(self):

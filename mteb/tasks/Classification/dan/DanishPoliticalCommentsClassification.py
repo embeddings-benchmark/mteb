@@ -37,7 +37,6 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
   institution={IT University of Copenhagen},
 }""",
         prompt="Classify Danish political comments for sentiment",
-        n_samples={"train": 9010},
     )
 
     @property

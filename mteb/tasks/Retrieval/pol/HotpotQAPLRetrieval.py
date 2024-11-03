@@ -70,5 +70,4 @@ class HotpotQAPLHardNegatives(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        n_samples={"test": 1000},
     )

@@ -34,7 +34,6 @@ class Assin2STS(AbsTaskSTS):
             year={2020},
             organization={Springer}
         }""",
-        n_samples={"test": 2448},
     )
 
     @property

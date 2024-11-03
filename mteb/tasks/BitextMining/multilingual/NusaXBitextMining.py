@@ -58,5 +58,4 @@ class NusaXBitextMining(AbsTaskBitextMining, MultilingualTask):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"train": 5500},
     )

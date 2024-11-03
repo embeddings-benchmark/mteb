@@ -104,7 +104,6 @@ class AlloProfClusteringS2SFast(AbsTaskClusteringFast):
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }
 """,
-        n_samples={"test": 2556},
     )
 
     def dataset_transform(self):

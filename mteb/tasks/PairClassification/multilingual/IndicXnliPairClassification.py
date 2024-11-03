@@ -60,7 +60,7 @@ class IndicXnliPairClassification(AbsTaskPairClassification, MultilingualTask):
             copyright = {Creative Commons Attribution 4.0 International}
         }
         """,
-        n_samples={"test": 5010},  # average of premise and hypothesis
+        # average of premise and hypothesis
     )
 
     def dataset_transform(self) -> None:

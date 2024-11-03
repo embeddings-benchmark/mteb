@@ -35,7 +35,6 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Retrieve answers to questions asked in Danish tweets"},
-        n_samples={"train": 340},
         task_subtypes=["Question answering"],
     )
 

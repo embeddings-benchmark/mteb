@@ -37,7 +37,4 @@ class CodeFeedbackMT(AbsTaskRetrieval):
               primaryClass={cs.SE},
               url={https://arxiv.org/abs/2402.14658}, 
         }""",
-        n_samples={
-            _EVAL_SPLIT: 1000,
-        },
     )

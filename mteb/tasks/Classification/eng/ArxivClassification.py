@@ -37,5 +37,4 @@ class ArxivClassification(AbsTaskClassification):
         pages={40707-40718},
         doi={10.1109/ACCESS.2019.2907992}
         }""",
-        n_samples={"test": 2048},
     )

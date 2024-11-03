@@ -152,5 +152,4 @@ class TatoebaBitextMining(AbsTaskBitextMining, MultilingualTask):
         year = {2021},
         }
         """,
-        n_samples={"test": 2000},
     )

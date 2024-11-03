@@ -58,5 +58,4 @@ class NoRecClassification(AbsTaskClassification):
 }
 """,
         prompt="Classify Norwegian reviews by sentiment",
-        n_samples={"test": 2050},
     )

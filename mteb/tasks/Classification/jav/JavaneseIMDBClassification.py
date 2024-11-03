@@ -37,7 +37,6 @@ class JavaneseIMDBClassification(AbsTaskClassification):
             organization={IEEE}
         }
         """,
-        n_samples={"test": 25_000},
     )
 
     def dataset_transform(self):

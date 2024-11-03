@@ -45,5 +45,4 @@ class PIQA(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Given the following goal, retrieve a possible solution."},
-        n_samples={"test": 1838},
     )

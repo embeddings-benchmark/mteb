@@ -34,7 +34,6 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
     year={2020}
 }
 """,
-        n_samples={"train": 3418},
     )
 
     def dataset_transform(self):

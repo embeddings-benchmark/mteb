@@ -44,7 +44,6 @@ class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
     pages = "2929--2940"
 }
         """,
-        n_samples={"train": 7801, "test": 975},
     )
 
     def dataset_transform(self):

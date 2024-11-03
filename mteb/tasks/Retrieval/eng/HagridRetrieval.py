@@ -42,7 +42,6 @@ class HagridRetrieval(AbsTaskRetrieval):
       year={2023},
       journal={arXiv:2307.16883},
 }""",
-        n_samples={"train": 1922},
     )
 
     def load_data(self, **kwargs):

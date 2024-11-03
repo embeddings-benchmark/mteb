@@ -88,7 +88,6 @@ class SwednClusteringP2P(AbsTaskClusteringFast):
   year={2021}
 }""",
         prompt="Identify news categories in Swedish passages",
-        n_samples={"all": 2048},
     )
 
     def dataset_transform(self):
@@ -129,7 +128,6 @@ class SwednClusteringFastS2S(AbsTaskClusteringFast):
   year={2021}
 }""",
         prompt="Identify news categories in Swedish passages",
-        n_samples={"all": 2048},
     )
 
     def dataset_transform(self):

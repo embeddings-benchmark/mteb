@@ -36,5 +36,4 @@ class MedicalQARetrieval(AbsTaskRetrieval):
             year      = {2019},
             url       = {https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-019-3119-4}
             } """,
-        n_samples={"test": 2048},
     )

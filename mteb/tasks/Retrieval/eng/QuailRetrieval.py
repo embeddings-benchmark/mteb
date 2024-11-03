@@ -47,5 +47,4 @@ class Quail(AbsTaskRetrieval):
         prompt={
             "query": "Given the following context and question, retrieve the correct answer."
         },
-        n_samples={"test": 2720},
     )

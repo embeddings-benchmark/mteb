@@ -42,7 +42,6 @@ class UkrFormalityClassification(AbsTaskClassification):
         publisher = "Association for Computational Linguistics",
         url = "https://aclanthology.org/N18-1012",
         }""",
-        n_samples={"train": 2048, "test": 2048},
     )
 
     def dataset_transform(self):

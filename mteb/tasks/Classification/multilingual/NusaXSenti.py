@@ -55,5 +55,4 @@ class NusaXSentiClassification(AbsTaskClassification, MultilingualTask):
       primaryClass={cs.CL}
 }
 """,
-        n_samples={"test": 4800},
     )

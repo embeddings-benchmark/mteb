@@ -44,7 +44,6 @@ class KorSarcasmClassification(AbsTaskClassification):
             howpublished = {https://github.com/SpellOnYou/korean-sarcasm}
         }
         """,
-        n_samples={"train": 2048, "test": 301},
     )
 
     def dataset_transform(self):

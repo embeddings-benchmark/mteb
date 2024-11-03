@@ -34,7 +34,6 @@ class AngryTweetsClassification(AbsTaskClassification):
   year={2021}
 }""",
         prompt="Classify Danish tweets by sentiment. (positive, negative, neutral).",
-        n_samples={"test": 1050},
     )
 
     @property

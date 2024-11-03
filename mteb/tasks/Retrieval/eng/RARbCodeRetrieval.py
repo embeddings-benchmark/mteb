@@ -53,5 +53,4 @@ class RARbCode(AbsTaskRetrieval):
 }
 """,
         prompt={"query": "Retrieve the answer for the following coding problem."},
-        n_samples={"test": 1484},
     )

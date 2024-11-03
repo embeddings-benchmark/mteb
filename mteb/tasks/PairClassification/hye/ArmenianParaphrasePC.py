@@ -36,7 +36,6 @@ class ArmenianParaphrasePC(AbsTaskPairClassification):
             primaryClass={cs.CL}
         }
         """,
-        n_samples={"train": 4023, "test": 1470},
     )
 
     def dataset_transform(self):

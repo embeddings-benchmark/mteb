@@ -36,7 +36,6 @@ class RonSTS(AbsTaskSTS):
             year={2021}
             }
             """,
-        n_samples={"test": 1379},
     )
 
     @property

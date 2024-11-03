@@ -38,5 +38,4 @@ class TswanaNewsClassification(AbsTaskClassification):
             software_url = {https://huggingface.co/dsfsi/PuoBERTa}
         }
         """,
-        n_samples={"validation": 487, "test": 487},
     )

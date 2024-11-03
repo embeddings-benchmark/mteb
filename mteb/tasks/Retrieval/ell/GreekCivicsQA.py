@@ -32,7 +32,6 @@ class GreekCivicsQA(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        n_samples={"default": 407},
     )
 
     def load_data(self, **kwargs):

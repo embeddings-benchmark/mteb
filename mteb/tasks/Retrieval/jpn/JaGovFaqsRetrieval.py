@@ -35,7 +35,6 @@ class JaGovFaqsRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        n_samples={_EVAL_SPLIT: _MAX_EVAL_SIZE},
     )
 
     def load_data(self, **kwargs):

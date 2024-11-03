@@ -49,5 +49,4 @@ class ImdbClassification(AbsTaskClassification):
     pages = "142--150",
 }""",
         prompt="Classify the sentiment expressed in the given movie review text from the IMDB dataset",
-        n_samples={"test": 25000},
     )

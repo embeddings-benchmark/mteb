@@ -32,7 +32,6 @@ class LivedoorNewsClusteringv2(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        n_samples={"test": 1106},
     )
 
     def dataset_transform(self):
@@ -76,7 +75,6 @@ class LivedoorNewsClustering(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        n_samples={"test": 1107},
     )
 
     def dataset_transform(self):

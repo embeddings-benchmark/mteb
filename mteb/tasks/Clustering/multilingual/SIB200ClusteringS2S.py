@@ -243,7 +243,6 @@ class SIB200ClusteringFast(MultilingualTask, AbsTaskClusteringFast):
             journal={arXiv preprint arXiv:2309.07445},
             year={2023}
         }""",  # combined train, validation, and test into test.
-        n_samples={"test": 1004},
     )
 
     def dataset_transform(self):

@@ -33,7 +33,6 @@ class KannadaNewsClassification(AbsTaskClassification):
     year={2020},
     journal={arXiv preprint arXiv:2005.00085},
 }""",
-        n_samples={"train": 6460},
     )
 
     def dataset_transform(self):

@@ -36,7 +36,6 @@ Year = {2021},
 Eprint = {arXiv:2105.06681},
 }""",
         prompt="Classify texts based on linguistic acceptability in Swedish",
-        n_samples={"test": 444},
     )
 
     @property

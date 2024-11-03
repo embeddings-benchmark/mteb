@@ -44,5 +44,4 @@ class HellaSwag(AbsTaskRetrieval):
         prompt={
             "query": "Given the following unfinished context, retrieve the most plausible ending to finish it."
         },
-        n_samples={"test": 10042},
     )

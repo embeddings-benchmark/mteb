@@ -40,7 +40,6 @@ class AlloprofRetrieval(AbsTaskRetrieval):
   year = {2023},
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }""",
-        n_samples={"train": 2048},
     )
 
     def load_data(self, **kwargs):

@@ -36,7 +36,6 @@ class FarsTail(AbsTaskPairClassification):
         publisher={Springer},
         doi={10.1007/s00500-023-08959-3}
         }""",  # after removing neutral
-        n_samples={"test": 1029},
     )
 
     def load_data(self, **kwargs):

@@ -41,7 +41,6 @@ class LEMBWikimQARetrieval(AbsTaskRetrieval):
                 year={2020}
             }
         """,
-        n_samples={_EVAL_SPLIT: 500},
     )
 
     def load_data(self, **kwargs):

@@ -50,7 +50,6 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
       primaryClass={cs.CL}
         }
         """,
-        n_samples={"dev": 2514},
     )
 
     # TODO: Will be removed if curated and added to mteb HF
@@ -134,5 +133,4 @@ class TopiOCQARetrievalHardNegatives(AbsTaskRetrieval):
       primaryClass={cs.CL}
         }
         """,
-        n_samples={"test": 1000},
     )

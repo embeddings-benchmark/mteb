@@ -74,5 +74,4 @@ class DBPediaPLHardNegatives(AbsTaskRetrieval):
  doi =       {10.1145/3077136.3080751},
  publisher = {ACM}
 }""",
-        n_samples={"test": 400},
     )

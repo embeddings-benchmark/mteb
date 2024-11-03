@@ -39,7 +39,6 @@ class IndoNLI(AbsTaskPairClassification):
             pages = "10511--10527",
         }""",
         # after removing neutral
-        n_samples={"test_expert": 2040},
     )
 
     def dataset_transform(self):

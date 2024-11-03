@@ -48,7 +48,6 @@ class CLSClusteringFastS2S(AbsTaskClusteringFast):
             primaryClass={cs.CL}
         }""",
         prompt="Identify the main category of scholar papers based on the titles",
-        n_samples={"test": NUM_SAMPLES},
     )
 
     def dataset_transform(self):
@@ -68,7 +67,6 @@ class CLSClusteringFastS2S(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=NUM_SAMPLES,
         )
 
 
@@ -106,7 +104,6 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
             primaryClass={cs.CL}
         }""",
         prompt="Identify the main category of scholar papers based on the titles and abstracts",
-        n_samples={"test": NUM_SAMPLES},
     )
 
     def dataset_transform(self):
@@ -126,7 +123,6 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=NUM_SAMPLES,
         )
 
 
@@ -163,7 +159,6 @@ class CLSClusteringS2S(AbsTaskClustering):
 }
 """,
         prompt="Identify the main category of scholar papers based on the titles",
-        n_samples={"test": 100000},
     )
 
 
@@ -198,7 +193,6 @@ class CLSClusteringP2P(AbsTaskClustering):
   year={2022}
 }""",
         prompt="Identify the main category of scholar papers based on the titles and abstracts",
-        n_samples={"test": 100000},
     )
 
 
@@ -236,7 +230,6 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
   url = {https://github.com/thunlp/THUCTC}
 }""",
         prompt="Identify the topic or theme of the given news articles based on the titles",
-        n_samples={"test": NUM_SAMPLES},
     )
 
     def dataset_transform(self):
@@ -256,7 +249,6 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=NUM_SAMPLES,
         )
 
 
@@ -294,7 +286,6 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
   url = {https://github.com/thunlp/THUCTC}
 }""",
         prompt="Identify the topic or theme of the given news articles based on the titles and contents",
-        n_samples={"test": NUM_SAMPLES},
     )
 
     def dataset_transform(self):
@@ -314,7 +305,6 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=NUM_SAMPLES,
         )
 
 
@@ -358,7 +348,6 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
 }
 """,
         prompt="Identify the topic or theme of the given news articles based on the titles",
-        n_samples={"test": 100000},
     )
 
 
@@ -402,5 +391,4 @@ class ThuNewsClusteringP2P(AbsTaskClustering):
 }
 """,
         prompt="Identify the topic or theme of the given news articles based on the titles and contents",
-        n_samples={"test": 100000},
     )

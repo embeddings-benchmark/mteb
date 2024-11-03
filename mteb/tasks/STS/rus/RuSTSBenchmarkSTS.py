@@ -34,7 +34,6 @@ author={Philip May},
 year={2021},
 url={https://github.com/PhilipMay/stsb-multi-mt}
 }""",
-        n_samples={"test": 1264},
     )
 
     @property

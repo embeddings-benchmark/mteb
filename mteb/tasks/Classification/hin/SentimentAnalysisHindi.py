@@ -33,7 +33,6 @@ class SentimentAnalysisHindi(AbsTaskClassification):
         publisher = {Hugging Face},  
         journal = {Hugging Face repository},  
         howpublished = {{https://huggingface.co/OdiaGenAI}}, } """,
-        n_samples={"train": 2497},
     )
 
     def dataset_transform(self):

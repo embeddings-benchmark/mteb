@@ -49,7 +49,6 @@ class NorQuadRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a question in Norwegian, retrieve the answer from Wikipedia articles"
         },
-        n_samples={"test": 2602},
     )
 
     def load_data(self, **kwargs):

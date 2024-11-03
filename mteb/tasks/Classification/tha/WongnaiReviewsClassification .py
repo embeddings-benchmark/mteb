@@ -37,7 +37,6 @@ class WongnaiReviewsClassification(AbsTaskClassification):
             doi     = {10.5281/zenodo.3852912},
             url     = {https://doi.org/10.5281/zenodo.3852912}
         }""",
-        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):

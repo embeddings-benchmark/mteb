@@ -54,5 +54,4 @@ class NusaParagraphTopicClassification(MultilingualTask, AbsTaskClassification):
             pages = "921--945",
         }
         """,
-        n_samples={"train": 15516, "validation": 2948, "test": 6250},
     )

@@ -38,7 +38,6 @@ class SweFaqRetrieval(AbsTaskRetrieval):
   year={2023}
 }""",  # for the benchmark in which this dataset is used
         prompt={"query": "Retrieve answers given questions in Swedish"},
-        n_samples={"test": 1024},
     )
 
     def load_data(self, **kwargs):

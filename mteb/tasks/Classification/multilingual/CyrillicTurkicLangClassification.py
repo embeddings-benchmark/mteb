@@ -44,7 +44,6 @@ class CyrillicTurkicLangClassification(AbsTaskClassification):
         year={2012}
         }
         """,
-        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):

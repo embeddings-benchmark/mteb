@@ -35,7 +35,6 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
 }
 """,
         prompt="Retrieve parallel sentences in Norwegian Bokmål and Nynorsk",
-        n_samples={"test": 2050},
     )
 
     def dataset_transform(self):

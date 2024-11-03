@@ -59,7 +59,6 @@ class HinDialectClassification(AbsTaskClassification):
         copyright = {Creative Commons - Attribution-{NonCommercial}-{ShareAlike} 4.0 International ({CC} {BY}-{NC}-{SA} 4.0)},
         year = {2022} }
         """,
-        n_samples={"test": 1152},
     )
 
     def dataset_transform(self) -> None:

@@ -28,7 +28,6 @@ class FrenchBookReviews(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="""
         """,
-        n_samples={"train": 2048},
     )
 
     def dataset_transform(self):

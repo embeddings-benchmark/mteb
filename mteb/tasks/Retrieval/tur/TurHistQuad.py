@@ -41,7 +41,6 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
                 doi={10.1109/UBMK52708.2021.9559013}}
 
         """,
-        n_samples={"test": 1330},
     )
 
     def load_data(self, **kwargs) -> None:

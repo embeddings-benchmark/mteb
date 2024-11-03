@@ -39,7 +39,6 @@ class SyntecRetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        n_samples={"test": 90},
     )
 
     def load_data(self, **kwargs):

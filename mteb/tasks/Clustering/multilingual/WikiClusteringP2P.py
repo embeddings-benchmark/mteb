@@ -52,7 +52,6 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
         dialect=[],
         sample_creation="created",
         bibtex_citation=None,  # None exists
-        n_samples={"test": 71680},
     )
 
 
@@ -82,7 +81,6 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
         dialect=[],
         sample_creation="created",
         bibtex_citation="",  # None exists
-        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):
@@ -119,5 +117,4 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
                 self.seed,
                 self.metadata.eval_splits,
                 label="labels",
-                n_samples=2048,
             )

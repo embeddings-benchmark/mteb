@@ -81,7 +81,6 @@ class IWSLT2017BitextMining(AbsTaskBitextMining, MultilingualTask):
     pages = "2--14",
 }
 """,
-        n_samples={"validation": 21928},
     )
 
     def load_data(self, **kwargs):

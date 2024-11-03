@@ -36,5 +36,4 @@ class AJGT(AbsTaskClassification):
   organization={Springer}
 }
 """,
-        n_samples={"train": 1800},
     )

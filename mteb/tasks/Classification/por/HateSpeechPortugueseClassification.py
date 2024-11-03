@@ -49,7 +49,6 @@ class HateSpeechPortugueseClassification(AbsTaskClassification):
                 pages = "94--104",
             }
         """,
-        n_samples={"train": 2048},
     )
 
     def dataset_transform(self):

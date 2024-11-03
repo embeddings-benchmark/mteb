@@ -44,5 +44,4 @@ class TempReasonL1(AbsTaskRetrieval):
         prompt={
             "query": "Given the following question about time, retrieve the correct answer."
         },
-        n_samples={"test": 4000},
     )

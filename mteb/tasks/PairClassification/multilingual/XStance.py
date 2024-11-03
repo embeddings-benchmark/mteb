@@ -46,7 +46,7 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
                 url       = "http://ceur-ws.org/Vol-2624/paper9.pdf"
             }
         """,
-        n_samples={"test": 2048},  # length of`sent1` + `sent2`
+        # length of`sent1` + `sent2`
     )
 
     def load_data(self, **kwargs):

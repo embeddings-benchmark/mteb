@@ -48,7 +48,6 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
             eprint    = {2010.04543},
             timestamp = {Tue, 15 Dec 2020 16:10:16 +0100},
             }""",
-        n_samples={"test": 2048},
     )
 
     def dataset_transform(self):

@@ -48,7 +48,6 @@ class GermanPoliticiansTwitterSentimentClassification(AbsTaskClassification):
                 pages = "74--87",
             }
         """,
-        n_samples={"test": 357},
     )
 
     def dataset_transform(self):
