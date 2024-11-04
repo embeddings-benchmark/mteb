@@ -254,22 +254,18 @@ class VLM2VecWrapper:
             all_fused_embeddings = []
             if isinstance(images, DataLoader):
                 import torchvision.transforms.functional as F
-
-                for batch in images:
-                    for b in batch:
-                        text = next(texts)
-                        inputs = self.processor(
-                            f"<|image_1|> Represent the given image with the following question: {text}",
-                            [F.to_pil_image(b.to("cpu"))],
-                        )
-                        inputs = {
-                            key: value.to(self.device) for key, value in inputs.items()
-                        }
-                        outputs = self.encode_input(inputs)
-                        all_fused_embeddings.append(outputs.cpu())
-
+                with torch.no_grad():
+                    for batch in images:
+                        for b in batch:
+                            text = next(texts)
+                            inputs = self.processor(
+                                f"<|image_1|> Represent the given image with the following question: {text}",
+                                [F.to_pil_image(b.to("cpu"))],
+                            )
+                            inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                            outputs = self.encode_input(inputs)
+                            all_fused_embeddings.append(outputs.cpu())
             fused_embeddings = torch.cat(all_fused_embeddings, dim=0)
-
             return fused_embeddings
         elif text_embeddings is not None:
             return text_embeddings
