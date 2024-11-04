@@ -325,9 +325,10 @@ class MTEB:
         Args:
             model: Model to be used for evaluation
             verbosity: Verbosity level. Default is 1.
-                0: print tasks tqdm progress bar
-                1: print tasks tqdm progress bar and scores
-                2: print everything (including datasets loading)
+                0: Only shows a progress bar for tasks being processed.
+                1: Shows a progress bar and prints task scores.
+                2: Prints detailed output, including messages about loading datasets and task scores.
+                3: Prints comprehensive logs for debugging, including all data loading and evaluation details.
             output_folder: Folder where the results will be saved. Default to 'results'. Where it will save the results in the format:
                 `{output_folder}/{model_name}/{model_revision}/{task_name}.json`.
             eval_splits: List of splits to evaluate on. If None, the splits are taken from the task metadata.
@@ -347,10 +348,18 @@ class MTEB:
             )
             encode_kwargs["batch_size"] = kwargs["batch_size"]
 
-        # Set logging
-        if verbosity < 2:
-            datasets.logging.set_verbosity(40)
-            datasets.logging.disable_progress_bar()
+        # update logging to account for different levels of Verbosity (similar to the command line)
+
+        if verbosity == 0:
+            datasets.logging.set_verbosity(logging.CRITICAL)  # 40
+            datasets.logging.disable_progress_bar()  # Disable progress bar
+        elif verbosity == 1:
+            datasets.logging.set_verbosity(logging.WARNING)
+            datasets.logging.disable_progress_bar()  # Disable progress bar
+        elif verbosity == 2:
+            datasets.logging.set_verbosity(logging.INFO)
+        elif verbosity == 3:
+            datasets.logging.set_verbosity(logging.DEBUG)
 
         meta = self.create_model_meta(model)
         output_path = self.create_output_folder(meta, output_folder)
