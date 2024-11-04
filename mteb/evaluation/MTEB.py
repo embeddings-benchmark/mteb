@@ -348,9 +348,22 @@ class MTEB:
             encode_kwargs["batch_size"] = kwargs["batch_size"]
 
         # Set logging
-        if verbosity < 2:
-            datasets.logging.set_verbosity(40)
-            datasets.logging.disable_progress_bar()
+        # if verbosity < 2:
+        #     datasets.logging.set_verbosity(40)
+        #     datasets.logging.disable_progress_bar()
+
+        #update logging to account for different levels of Verbosity (similar to the command line)
+        
+        datasets.logging.disable_progress_bar()  # Disable progress bar
+        
+        if verbosity == 0:
+            datasets.logging.set_verbosity(logging.CRITICAL) #40
+        elif verbosity == 1:
+            datasets.logging.set_verbosity(logging.WARNING)
+        elif verbosity == 2:
+            datasets.logging.set_verbosity(logging.INFO)
+        elif verbosity == 3:
+            datasets.logging.set_verbosity(logging.DEBUG)  
 
         meta = self.create_model_meta(model)
         output_path = self.create_output_folder(meta, output_folder)
