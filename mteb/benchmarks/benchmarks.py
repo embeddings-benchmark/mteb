@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from dataclasses import dataclass
-from functools import lru_cache
 from typing import Annotated
 
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
@@ -258,13 +257,13 @@ MTEB_MAIN_RU = Benchmark(
     description="Main Russian benchmarks from MTEB",
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
-      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design}, 
+      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design},
       author={Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
       year={2024},
       eprint={2408.12503},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2408.12503}, 
+      url={https://arxiv.org/abs/2408.12503},
 }
 """,
 )
@@ -281,7 +280,7 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
     description="Retrieval w/Instructions is the task of finding relevant documents for a query that has detailed instructions.",
     reference="https://arxiv.org/abs/2403.15246",
     citation="""@misc{weller2024followir,
-      title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions}, 
+      title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
       author={Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
       year={2024},
       eprint={2403.15246},
@@ -376,7 +375,7 @@ SEB = Benchmark(
     description="A curated selection of tasks coverering the Scandinavian languages; Danish, Swedish and Norwegian, including Bokmål and Nynorsk.",
     reference="https://kennethenevoldsen.github.io/scandinavian-embedding-benchmark/",
     citation="""@misc{enevoldsen2024scandinavian,
-      title={The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding}, 
+      title={The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding},
       author={Kenneth Enevoldsen and Márton Kardos and Niklas Muennighoff and Kristoffer Laigaard Nielbo},
       year={2024},
       eprint={2406.02396},
@@ -404,13 +403,13 @@ CoIR = Benchmark(
     description="CoIR: A Comprehensive Benchmark for Code Information Retrieval Models",
     reference="https://github.com/CoIR-team/coir",
     citation="""@misc{li2024coircomprehensivebenchmarkcode,
-      title={CoIR: A Comprehensive Benchmark for Code Information Retrieval Models}, 
+      title={CoIR: A Comprehensive Benchmark for Code Information Retrieval Models},
       author={Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
       year={2024},
       eprint={2407.02883},
       archivePrefix={arXiv},
       primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2407.02883}, 
+      url={https://arxiv.org/abs/2407.02883},
     }""",
 )
 
@@ -456,13 +455,13 @@ MTEB_FRA = Benchmark(
     description="Main French benchmarks from MTEB",
     reference="https://arxiv.org/abs/2405.20468",
     citation="""@misc{ciancone2024mtebfrenchresourcesfrenchsentence,
-      title={MTEB-French: Resources for French Sentence Embedding Evaluation and Analysis}, 
+      title={MTEB-French: Resources for French Sentence Embedding Evaluation and Analysis},
       author={Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
       year={2024},
       eprint={2405.20468},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2405.20468}, 
+      url={https://arxiv.org/abs/2405.20468},
 }""",
 )
 
@@ -502,13 +501,13 @@ MTEB_DEU = Benchmark(
     description="Main German benchmarks from MTEB",
     reference="https://arxiv.org/html/2401.02709v1",
     citation="""@misc{wehrli2024germantextembeddingclustering,
-      title={German Text Embedding Clustering Benchmark}, 
+      title={German Text Embedding Clustering Benchmark},
       author={Silvan Wehrli and Bert Arnrich and Christopher Irrgang},
       year={2024},
       eprint={2401.02709},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2401.02709}, 
+      url={https://arxiv.org/abs/2401.02709},
 }""",
 )
 
