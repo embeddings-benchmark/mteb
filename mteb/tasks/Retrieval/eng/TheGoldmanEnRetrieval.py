@@ -8,7 +8,7 @@ class TheGoldmanEnRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="TheGoldmanEnRetrieval",
         description="Goldman Sachs Financial Dictionary.",
-        reference="",
+        # reference="",
         dataset={
             "path": "FinanceMTEB/TheGoldmanEncyclopedia-en",
             "revision": "c33ce9ced2224b9c6d9e425196edc36f53400ec1",

@@ -8,7 +8,7 @@ class HeadlinePDDPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="HeadlinePDDPairClassification",
         description="Financial text sentiment categorization dataset.",
-        reference="",
+        # reference="",
         dataset={
             "path": "FinanceMTEB/HeadlinePDD-PairClassification",
             "revision": "ad0150ed63940e88846659e46be5138aa0db6c85",

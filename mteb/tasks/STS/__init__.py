@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from eng.FinSTS import *
-
 from .deu.GermanSTSBenchmarkSTS import *
 from .eng.BiossesSTS import *
 from .eng.FINAL import *
+from .eng.FinSTS import *
 from .eng.SickrSTS import *
 from .eng.STS12STS import *
 from .eng.STS13STS import *
