@@ -149,7 +149,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             with gr.Group():
                 searchbar = gr.Textbox(
                     label="Search Models",
-                    info="Search models by name (RegEx sensitive)",
+                    info="Search models by name (RegEx sensitive. Separate queries with `|`)",
                     interactive=True,
                 )
                 with gr.Row(elem_classes=""):
