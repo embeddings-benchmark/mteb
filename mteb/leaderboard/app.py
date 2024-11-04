@@ -124,7 +124,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             gr.Markdown(
                 """
             ### Benchmarks
-            Select one of the hand-curated benchmarks from our publications and modify them to fit your needs.
+            Select one of the hand-curated benchmarks from our publications and modify them using one of the following filters to fit your needs.
             """
             )
             with gr.Group():
