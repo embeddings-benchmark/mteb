@@ -26,6 +26,7 @@ from .ell.GreekCivicsQA import *
 from .eng.AILACasedocsRetrieval import *
 from .eng.AILAStatutesRetrieval import *
 from .eng.AlphaNLIRetrieval import *
+from .eng.Apple10KRetrieval import *
 from .eng.ARCChallengeRetrieval import *
 from .eng.ArguAnaRetrieval import *
 from .eng.BrightRetrieval import *
@@ -46,8 +47,11 @@ from .eng.DBPediaRetrieval import *
 from .eng.FaithDialRetrieval import *
 from .eng.FeedbackQARetrieval import *
 from .eng.FEVERRetrieval import *
+from .eng.FinanceBenchRetrieval import *
+from .eng.FinQARetrieval import *
 from .eng.FiQA2018Retrieval import *
 from .eng.HagridRetrieval import *
+from .eng.HC3Retrieval import *
 from .eng.HellaSwagRetrieval import *
 from .eng.HotpotQARetrieval import *
 from .eng.LegalBenchConsumerContractsQARetrieval import *
@@ -76,6 +80,7 @@ from .eng.SCIDOCSRetrieval import *
 from .eng.SciFactRetrieval import *
 from .eng.SiqaRetrieval import *
 from .eng.SpartQARetrieval import *
+from .eng.TATQARetrieval import *
 from .eng.TempReasonL1Retrieval import *
 from .eng.TempReasonL2ContextRetrieval import *
 from .eng.TempReasonL2FactRetrieval import *
@@ -83,9 +88,13 @@ from .eng.TempReasonL2PureRetrieval import *
 from .eng.TempReasonL3ContextRetrieval import *
 from .eng.TempReasonL3FactRetrieval import *
 from .eng.TempReasonL3PureRetrieval import *
+from .eng.TheGoldmanEnRetrieval import *
 from .eng.TopiOCQARetrieval import *
 from .eng.Touche2020Retrieval import *
+from .eng.TradeTheEventEncyclopediaRetrieval import *
+from .eng.TradeTheEventNewsRetrieval import *
 from .eng.TRECCOVIDRetrieval import *
+from .eng.USNewsRetrieval import *
 from .eng.WinoGrandeRetrieval import *
 from .est.estqa import *
 from .fra.AlloprofRetrieval import *
@@ -141,5 +150,15 @@ from .swe.SwednRetrieval import *
 from .swe.SweFaqRetrieval import *
 from .tur.TurHistQuad import *
 from .vie.VieQuADRetrieval import *
+from .zho.AlphaFinRetrieval import *
 from .zho.CMTEBRetrieval import *
+from .zho.DISCFinLLMComputingRetrieval import *
+from .zho.DISCFinLLMRetrieval import *
+from .zho.DuEEFinRetrieval import *
+from .zho.FinEvaEncyclopediaRetrieval import *
+from .zho.FinEvaRetrieval import *
+from .zho.FinTruthQARetrieval import *
 from .zho.LeCaRDv2Retrieval import *
+from .zho.SmoothNLPRetrieval import *
+from .zho.TheGoldmanZhRetrieval import *
+from .zho.THUCNewsRetrieval import *

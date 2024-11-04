@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+from eng.FinSTS import *
+
 from .deu.GermanSTSBenchmarkSTS import *
 from .eng.BiossesSTS import *
+from .eng.FINAL import *
 from .eng.SickrSTS import *
 from .eng.STS12STS import *
 from .eng.STS13STS import *
@@ -28,4 +31,6 @@ from .ron.RonSTS import *
 from .rus.RUParaPhraserSTS import *
 from .rus.RuSTSBenchmarkSTS import *
 from .spa.STSES import *
+from .zho.AFQMC import *
+from .zho.BQCorpus import *
 from .zho.CMTEBSTS import *

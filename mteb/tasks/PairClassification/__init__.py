@@ -3,6 +3,9 @@ from __future__ import annotations
 from .ara.ArEntail import *
 from .ces.CTKFactsNLI import *
 from .deu.FalseFriendsDeEnPC import *
+from .eng.HeadlineACPairClassification import *
+from .eng.HeadlinePDDPairClassification import *
+from .eng.HeadlinePDUPairClassification import *
 from .eng.LegalBenchPC import *
 from .eng.SprintDuplicateQuestionsPC import *
 from .eng.TwitterSemEval2015PC import *
@@ -20,4 +23,5 @@ from .pol.PolishPC import *
 from .por.Assin2RTE import *
 from .por.SickBrPC import *
 from .rus.TERRa import *
+from .zho.AFQMCPairClassification import *
 from .zho.CMTEBPairClassification import *

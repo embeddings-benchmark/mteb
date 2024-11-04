@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 from .eng.AskUbuntuDupQuestions import *
+from .eng.FinFactReranking import *
+from .eng.FiQA2018Reranking import *
+from .eng.HC3Reranking import *
 from .eng.MindSmallReranking import *
 from .eng.SciDocsReranking import *
 from .eng.StackOverflowDupQuestions import *
@@ -13,3 +16,5 @@ from .multilingual.MIRACLReranking import *
 from .multilingual.WikipediaRerankingMultilingual import *
 from .rus.RuBQReranking import *
 from .zho.CMTEBReranking import *
+from .zho.DISCFinLLMReranking import *
+from .zho.FinEvaReranking import *
