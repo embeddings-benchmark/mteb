@@ -252,6 +252,7 @@ class VLM2VecWrapper:
         all_fused_embeddings = []
         if isinstance(images, DataLoader):
             import torchvision.transforms.functional as F
+
             with torch.no_grad():
                 for batch in images:
                     for b in batch:
