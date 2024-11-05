@@ -77,6 +77,6 @@ for model_name in [
                 "ImageClassification",
             ]
         )
-        tasks+=image_clustering_and_cls_tasks
+        tasks += image_clustering_and_cls_tasks
     evaluation = mteb.MTEB(tasks=tasks)
     results = evaluation.run(model, output_folder="results-mieb-final")

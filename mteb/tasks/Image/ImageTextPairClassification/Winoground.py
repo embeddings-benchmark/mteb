@@ -16,7 +16,7 @@ class Winoground(AbsTaskImageTextPairClassification):
         reference="https://openaccess.thecvf.com/content/CVPR2022/html/Thrush_Winoground_Probing_Vision_and_Language_Models_for_Visio-Linguistic_Compositionality_CVPR_2022_paper",
         dataset={
             "path": "facebook/winoground",
-            "revision": "b400e173549071916ad1b3d449293bc8d8b4b763"
+            "revision": "b400e173549071916ad1b3d449293bc8d8b4b763",
         },
         type="ImageTextPairClassification",
         category="i2t",
