@@ -51,7 +51,7 @@ class MockClassificationTask(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "total_symbols": 52,
+            "number_of_characters": 52,
             "average_text_length": 26.0,
             "unique_labels": 2,
             "labels": {"0": {"count": 1}, "1": {"count": 1}},
@@ -92,21 +92,21 @@ class MockMultilingualClassificationTask(AbsTaskClassification, MultilingualTask
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "total_symbols": 104,
+            "number_of_characters": 104,
             "average_text_length": 26.0,
             "unique_labels": 2,
             "labels": {"0": {"count": 2}, "1": {"count": 2}},
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 2,
-                    "total_symbols": 52,
+                    "number_of_characters": 52,
                     "average_text_length": 26.0,
                     "unique_labels": 2,
                     "labels": {"0": {"count": 1}, "1": {"count": 1}},
                 },
                 "fra": {
                     "num_samples": 2,
-                    "total_symbols": 52,
+                    "number_of_characters": 52,
                     "average_text_length": 26.0,
                     "unique_labels": 2,
                     "labels": {"0": {"count": 1}, "1": {"count": 1}},
@@ -156,7 +156,7 @@ class MockBitextMiningTask(AbsTaskBitextMining):
             "average_sentence1_length": 26.0,
             "average_sentence2_length": 30.5,
             "num_samples": 2,
-            "total_symbols": 113,
+            "number_of_characters": 113,
         }
     }
 
@@ -193,19 +193,19 @@ class MockMultilingualBitextMiningTask(AbsTaskBitextMining, MultilingualTask):
             "average_sentence1_length": 26.0,
             "average_sentence2_length": 30.5,
             "num_samples": 4,
-            "total_symbols": 226,
+            "number_of_characters": 226,
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "average_sentence1_length": 26.0,
                     "average_sentence2_length": 30.5,
                     "num_samples": 2,
-                    "total_symbols": 113,
+                    "number_of_characters": 113,
                 },
                 "fra": {
                     "average_sentence1_length": 26.0,
                     "average_sentence2_length": 30.5,
                     "num_samples": 2,
-                    "total_symbols": 113,
+                    "number_of_characters": 113,
                 },
             },
         }
@@ -249,19 +249,19 @@ class MockMultilingualParallelBitextMiningTask(AbsTaskBitextMining, Multilingual
             "average_sentence1_length": 28.25,
             "average_sentence2_length": 28.25,
             "num_samples": 4,
-            "total_symbols": 226,
+            "number_of_characters": 226,
             "hf_subset_descriptive_stats": {
                 "eng_Latn-fra_Latn": {
                     "average_sentence1_length": 26.0,
                     "average_sentence2_length": 30.5,
                     "num_samples": 2,
-                    "total_symbols": 113,
+                    "number_of_characters": 113,
                 },
                 "fra_Latn-eng_Latn": {
                     "average_sentence1_length": 30.5,
                     "average_sentence2_length": 26.0,
                     "num_samples": 2,
-                    "total_symbols": 113,
+                    "number_of_characters": 113,
                 },
             },
         }
@@ -302,7 +302,7 @@ class MockClusteringTask(AbsTaskClustering):
     expected_stats = {
         "test": {
             "num_samples": 1,
-            "total_symbols": 3,
+            "number_of_characters": 3,
             "average_text_length": 3.0,
             "average_labels_per_text": 3.0,
             "unique_labels": 3,
@@ -344,7 +344,7 @@ class MockMultilingualClusteringTask(AbsTaskClustering, MultilingualTask):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "total_symbols": 6,
+            "number_of_characters": 6,
             "average_text_length": 3.0,
             "average_labels_per_text": 3.0,
             "unique_labels": 3,
@@ -352,7 +352,7 @@ class MockMultilingualClusteringTask(AbsTaskClustering, MultilingualTask):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 1,
-                    "total_symbols": 3,
+                    "number_of_characters": 3,
                     "average_text_length": 3.0,
                     "average_labels_per_text": 3.0,
                     "unique_labels": 3,
@@ -360,7 +360,7 @@ class MockMultilingualClusteringTask(AbsTaskClustering, MultilingualTask):
                 },
                 "fra": {
                     "num_samples": 1,
-                    "total_symbols": 3,
+                    "number_of_characters": 3,
                     "average_text_length": 3.0,
                     "average_labels_per_text": 3.0,
                     "unique_labels": 3,
@@ -411,7 +411,7 @@ class MockClusteringFastTask(AbsTaskClusteringFast):
     expected_stats = {
         "test": {
             "num_samples": 3,
-            "total_symbols": 81,
+            "number_of_characters": 81,
             "average_text_length": 27.0,
             "average_labels_per_text": 1.0,
             "unique_labels": 3,
@@ -453,7 +453,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClusteringFast, MultilingualTask
     expected_stats = {
         "test": {
             "num_samples": 6,
-            "total_symbols": 162,
+            "number_of_characters": 162,
             "average_text_length": 27.0,
             "average_labels_per_text": 1.0,
             "unique_labels": 3,
@@ -461,7 +461,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClusteringFast, MultilingualTask
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 3,
-                    "total_symbols": 81,
+                    "number_of_characters": 81,
                     "average_text_length": 27.0,
                     "average_labels_per_text": 1.0,
                     "unique_labels": 3,
@@ -469,7 +469,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClusteringFast, MultilingualTask
                 },
                 "fra": {
                     "num_samples": 3,
-                    "total_symbols": 81,
+                    "number_of_characters": 81,
                     "average_text_length": 27.0,
                     "average_labels_per_text": 1.0,
                     "unique_labels": 3,
@@ -516,7 +516,7 @@ class MockPairClassificationTask(AbsTaskPairClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "total_symbols": 113,
+            "number_of_characters": 113,
             "avg_sentence1_len": 26.0,
             "avg_sentence2_len": 30.5,
             "unique_labels": 2,
@@ -561,7 +561,7 @@ class MockMultilingualPairClassificationTask(
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "total_symbols": 226,
+            "number_of_characters": 226,
             "avg_sentence1_len": 26.0,
             "avg_sentence2_len": 30.5,
             "unique_labels": 2,
@@ -569,7 +569,7 @@ class MockMultilingualPairClassificationTask(
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 2,
-                    "total_symbols": 113,
+                    "number_of_characters": 113,
                     "avg_sentence1_len": 26.0,
                     "avg_sentence2_len": 30.5,
                     "unique_labels": 2,
@@ -577,7 +577,7 @@ class MockMultilingualPairClassificationTask(
                 },
                 "fra": {
                     "num_samples": 2,
-                    "total_symbols": 113,
+                    "number_of_characters": 113,
                     "avg_sentence1_len": 26.0,
                     "avg_sentence2_len": 30.5,
                     "unique_labels": 2,
@@ -626,7 +626,7 @@ class MockSTSTask(AbsTaskSTS):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "total_symbols": 113,
+            "number_of_characters": 113,
             "average_sentence1_len": 26.0,
             "average_sentence2_len": 30.5,
             "avg_score": 0.5,
@@ -673,21 +673,21 @@ class MockMultilingualSTSTask(AbsTaskSTS, MultilingualTask):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "total_symbols": 226,
+            "number_of_characters": 226,
             "average_sentence1_len": 26.0,
             "average_sentence2_len": 30.5,
             "avg_score": 0.5,
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 2,
-                    "total_symbols": 113,
+                    "number_of_characters": 113,
                     "average_sentence1_len": 26.0,
                     "average_sentence2_len": 30.5,
                     "avg_score": 0.5,
                 },
                 "fra": {
                     "num_samples": 2,
-                    "total_symbols": 113,
+                    "number_of_characters": 113,
                     "average_sentence1_len": 26.0,
                     "average_sentence2_len": 30.5,
                     "avg_score": 0.5,
@@ -741,7 +741,7 @@ class MockSummarizationTask(AbsTaskSummarization):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "total_symbols": 60,
+            "number_of_characters": 60,
             "avg_text_len": 26.0,
             "avg_human_summaries_len": 2.0,
             "avg_machine_summaries_len": 2.0,
@@ -794,7 +794,7 @@ class MockMultilingualSummarizationTask(AbsTaskSummarization, MultilingualTask):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "total_symbols": 120,
+            "number_of_characters": 120,
             "avg_text_len": 26.0,
             "avg_human_summaries_len": 2.0,
             "avg_machine_summaries_len": 2.0,
@@ -802,7 +802,7 @@ class MockMultilingualSummarizationTask(AbsTaskSummarization, MultilingualTask):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 2,
-                    "total_symbols": 60,
+                    "number_of_characters": 60,
                     "avg_text_len": 26.0,
                     "avg_human_summaries_len": 2.0,
                     "avg_machine_summaries_len": 2.0,
@@ -810,7 +810,7 @@ class MockMultilingualSummarizationTask(AbsTaskSummarization, MultilingualTask):
                 },
                 "fra": {
                     "num_samples": 2,
-                    "total_symbols": 60,
+                    "number_of_characters": 60,
                     "avg_text_len": 26.0,
                     "avg_human_summaries_len": 2.0,
                     "avg_machine_summaries_len": 2.0,
@@ -869,7 +869,7 @@ class MockRerankingTask(AbsTaskReranking):
     expected_stats = {
         "test": {
             "num_samples": 2,
-            "total_symbols": 172,
+            "number_of_characters": 172,
             "num_positive": 2,
             "num_negative": 2,
             "avg_query_len": 26.0,
@@ -914,7 +914,7 @@ class MockMultilingualRerankingTask(AbsTaskReranking, MultilingualTask):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "total_symbols": 344,
+            "number_of_characters": 344,
             "num_positive": 4,
             "num_negative": 4,
             "avg_query_len": 26.0,
@@ -923,7 +923,7 @@ class MockMultilingualRerankingTask(AbsTaskReranking, MultilingualTask):
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 2,
-                    "total_symbols": 172,
+                    "number_of_characters": 172,
                     "num_positive": 2,
                     "num_negative": 2,
                     "avg_query_len": 26.0,
@@ -932,7 +932,7 @@ class MockMultilingualRerankingTask(AbsTaskReranking, MultilingualTask):
                 },
                 "fra": {
                     "num_samples": 2,
-                    "total_symbols": 172,
+                    "number_of_characters": 172,
                     "num_positive": 2,
                     "num_negative": 2,
                     "avg_query_len": 26.0,
@@ -983,7 +983,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "total_symbols": 56.0,
+            "number_of_characters": 56.0,
             "average_document_length": 15.0,
             "average_query_length": 13.0,
             "num_documents": 2,
@@ -1025,7 +1025,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
 class MockMultilingualRetrievalTask(AbsTaskRetrieval, MultilingualTask):
     expected_stats = {
         "test": {
-            "total_symbols": 56.0,
+            "number_of_characters": 56.0,
             "num_samples": 8,
             "num_queries": 4,
             "num_documents": 4,
@@ -1034,7 +1034,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval, MultilingualTask):
             "average_relevant_docs_per_query": 1.0,
             "hf_subset_descriptive_stats": {
                 "eng": {
-                    "total_symbols": 56.0,
+                    "number_of_characters": 56.0,
                     "num_samples": 4,
                     "num_queries": 2,
                     "num_documents": 2,
@@ -1043,7 +1043,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval, MultilingualTask):
                     "average_relevant_docs_per_query": 1.0,
                 },
                 "fra": {
-                    "total_symbols": 56.0,
+                    "number_of_characters": 56.0,
                     "num_samples": 4,
                     "num_queries": 2,
                     "num_documents": 2,
@@ -1096,7 +1096,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
     expected_stats = {
         "test": {
             "average_text_length": 26.0,
-            "total_symbols": 156,
+            "number_of_characters": 156,
             "average_label_per_text": 2.0,
             "num_samples": 6,
             "unique_labels": 2,
@@ -1140,7 +1140,7 @@ class MockMultilingualMultilabelClassification(
     expected_stats = {
         "test": {
             "average_text_length": 26.0,
-            "total_symbols": 312,
+            "number_of_characters": 312,
             "average_label_per_text": 2.0,
             "num_samples": 12,
             "unique_labels": 2,
@@ -1148,7 +1148,7 @@ class MockMultilingualMultilabelClassification(
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "average_text_length": 26.0,
-                    "total_symbols": 156,
+                    "number_of_characters": 156,
                     "average_label_per_text": 2.0,
                     "num_samples": 6,
                     "unique_labels": 2,
@@ -1156,7 +1156,7 @@ class MockMultilingualMultilabelClassification(
                 },
                 "fra": {
                     "average_text_length": 26.0,
-                    "total_symbols": 156,
+                    "number_of_characters": 156,
                     "average_label_per_text": 2.0,
                     "num_samples": 6,
                     "unique_labels": 2,
@@ -1215,7 +1215,7 @@ class MockInstructionRetrival(AbsTaskInstructionRetrieval):
             "num_docs": 2,
             "num_queries": 2,
             "num_samples": 4,
-            "total_symbols": 244,
+            "number_of_characters": 244,
         }
     }
 
@@ -1296,7 +1296,7 @@ class MockMultilingualInstructionRetrival(
             "num_samples": 8,
             "num_docs": 4,
             "num_queries": 4,
-            "total_symbols": 488,
+            "number_of_characters": 488,
             "average_document_length": 30.0,
             "average_query_length": 26.0,
             "average_instruction_length": 29.0,
@@ -1308,7 +1308,7 @@ class MockMultilingualInstructionRetrival(
                     "num_samples": 4,
                     "num_docs": 2,
                     "num_queries": 2,
-                    "total_symbols": 244,
+                    "number_of_characters": 244,
                     "average_document_length": 30.0,
                     "average_query_length": 26.0,
                     "average_instruction_length": 29.0,
@@ -1320,7 +1320,7 @@ class MockMultilingualInstructionRetrival(
                     "num_samples": 4,
                     "num_docs": 2,
                     "num_queries": 2,
-                    "total_symbols": 244,
+                    "number_of_characters": 244,
                     "average_document_length": 30.0,
                     "average_query_length": 26.0,
                     "average_instruction_length": 29.0,
