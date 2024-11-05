@@ -33,7 +33,7 @@ OLD_FORMAT_RERANKING_TASKS = [
 
 
 class AbsTaskReranking(AbsTaskRetrieval):
-    """Abstract class for re-ranking experiments. This is mostly the same as the RetrievalEvaluator, but as previously it wasn't we need to keep it to transform old dataset versions into the same format.
+    """Abstract class for re-ranking experiments. This is mostly the same as the RetrievalEvaluator, but treats each query as a "mini" retrieval problem.
 
     New Format:
     -----------
@@ -55,13 +55,6 @@ class AbsTaskReranking(AbsTaskRetrieval):
         self.top_ranked: dict[str, dict[str, list[str]]] or dict[str, dict[str, dict[str, float]]]
             Semantically, it should contain dict[split_name, dict[sample_id, list[doc_id]]] or dict[split_name, dict[sample_id, dict[doc_id, score]]]
             E.g.: {"test": {"q1": ["document_one", "document_two"]}} or {"test": {"q1": {"document_one": 1, "document_two": 0.5}}}
-
-    Old Format:
-    -----------
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
-        query: str
-        positive: list[str]
-        negative: list[str]
     """
 
     def __init__(self, **kwargs):
@@ -72,8 +65,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
             return
 
         if self.metadata.name in OLD_FORMAT_RERANKING_TASKS:
-            self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
-            self.dataset_transform()
+            self.transform_old_dataset_format()
         else:
             # use AbsTaskRetrieval default to load the data
             # TODO: need to make sure top_ranked comes back
@@ -96,13 +88,13 @@ class AbsTaskReranking(AbsTaskRetrieval):
             "relevance_scores": [],
         }
 
-        for i, pos_doc in enumerate(sorted(positive_docs)):
+        for i, pos_doc in enumerate(positive_docs):
             doc_id = f"{query_id}_positive_{i}"
             example_data["doc_ids"].append(doc_id)
             example_data["doc_texts"].append(pos_doc)
             example_data["relevance_scores"].append(1)
 
-        for i, neg_doc in enumerate(sorted(negative_docs)):
+        for i, neg_doc in enumerate(negative_docs):
             doc_id = f"{query_id}_negative_{i}"
             example_data["doc_ids"].append(doc_id)
             example_data["doc_texts"].append(neg_doc)
@@ -110,8 +102,13 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
         return example_data
 
-    def dataset_transform(self):
-        """Transform the old format to the new format using HF datasets mapping."""
+    def transform_old_dataset_format(self, given_dataset=None):
+        """Transform the old format to the new format using HF datasets mapping. This is a one-time transformation for datasets which are in the old format.
+
+        Args:
+            given_dataset (Dataset, optional): The dataset to transform. Defaults to None. This is helpful for some older datasets which are loaded with custom code, but need to be transformed still.
+
+        """
         if self.metadata.name not in OLD_FORMAT_RERANKING_TASKS:
             return
 
@@ -127,7 +124,17 @@ class AbsTaskReranking(AbsTaskRetrieval):
         hf_subsets = list(self.hf_subsets) if self.is_multilingual else ["default"]
 
         for hf_subset in hf_subsets:
-            cur_dataset = self.dataset[hf_subset]
+            if given_dataset:
+                cur_dataset = given_dataset
+            elif "name" in self.metadata_dict["dataset"]:
+                cur_dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
+                assert (
+                    hf_subset == "default"
+                ), f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
+            else:
+                cur_dataset = datasets.load_dataset(
+                    **self.metadata_dict["dataset"], name=hf_subset
+                )  # type: ignore
 
             for split in cur_dataset:
                 # Create an enumerated dataset to pass indices
@@ -138,6 +145,14 @@ class AbsTaskReranking(AbsTaskRetrieval):
                         "positive": cur_dataset[split]["positive"],
                         "negative": cur_dataset[split]["negative"],
                     }
+                )
+
+                # first, filter out the ones that have no positive or no negatives
+                enumerated_dataset = enumerated_dataset.filter(
+                    lambda x: len(x["positive"]) > 0 and len(x["negative"]) > 0
+                )
+                logger.info(
+                    f"Filtered out {len(cur_dataset[split]) - len(enumerated_dataset)} examples with no positive or no negative examples. {len(enumerated_dataset)} examples remaining."
                 )
 
                 # Map the transformation function over the dataset
@@ -205,6 +220,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
         # do the evaluation like normal now, but pass our results
         if max_docs > max(retriever.k_values):
             retriever.k_values += [max_docs]
+
         return super()._evaluate_subset(
             retriever,
             corpus,

@@ -24,7 +24,7 @@ _CITATION = """@article{reddy2022shopping,
 }"""
 
 
-class ESCIReranking(MultilingualTask, AbsTaskReranking):
+class ESCIReranking(AbsTaskReranking, MultilingualTask):
     metadata = TaskMetadata(
         name="ESCIReranking",
         description="",

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from collections import defaultdict
 
 import numpy as np
 import pandas as pd
@@ -426,3 +427,94 @@ def nAUC(
         abst_nauc = (abst_auc - flat_auc) / (or_auc - flat_auc)
 
     return abst_nauc
+
+
+def add_task_specific_scores(
+    scores: dict[str, float],
+    qrels: dict[str, dict[str, int]],
+    results: dict[str, dict[str, float]],
+    task_name: str,
+    k_values: list[int],  # not needed now, but perhaps later?
+) -> dict[str, float]:
+    """Add task-specific scores to the scores dictionary, that are not needed for all results but require additional computation."""
+    task_scores = {}
+    if task_name in ["NevIR"]:
+        paired_score = paired_accuracy(qrels, results, scores)
+        task_scores["paired_accuracy"] = paired_score
+
+    if task_name in ["InstructIR"]:
+        robustness_at_10_score = robustness_at_10(qrels, results, scores)
+        task_scores["robustness_at_10"] = robustness_at_10_score
+
+    if task_name in [
+        "mFollowIRInstructionReranking",
+        "mFollowIRCrossLingualInstructionReranking",
+        "Robust04InstructionRetrieval",
+        "Core17InstructionRetrieval",
+        "News21InstructionRetrieval",
+    ]:
+        p_mrr = evaluate_change(results, scores, qrels)
+        task_scores["p-MRR"] = p_mrr["p-MRR"]
+
+    return task_scores
+
+
+def paired_accuracy(
+    qrels: dict[str, dict[str, float]],
+    results: dict[str, dict[str, float]],
+    scores: dict[str, float],
+) -> float:
+    """Computes the paired accuracy. This means both queries for an instance have to be correct for it to count.
+        This is because models will prefer one passage all the time, giving it 50% automatically unless we correct for this.
+        For more details, see https://arxiv.org/abs/2305.07614
+
+    Args:
+        qrels: Ground truth relevance judgments for the queries
+        results: Predicted relevance scores for the queries
+        scores: The scores for the queries, to extract top_1 recall for each query
+    """
+    # group the queries by the query id
+    query_keys = set()
+    for key in qrels.keys():
+        query_keys.add(key.split("_")[0])
+
+    paired_scores = []
+    for key in query_keys:
+        # get recall_at_1 for both q1 and q2
+        q1_recall_at_1 = scores[f"{key}_q1"]["recall_1"]
+        q2_recall_at_1 = scores[f"{key}_q2"]["recall_1"]
+
+        # the score is 1 if both are 1, 0 otherwise
+        paired_scores.append(1 if q1_recall_at_1 == 1 and q2_recall_at_1 == 1 else 0)
+
+    return sum(paired_scores) / len(paired_scores)
+
+
+def robustness_at_10(
+    qrels: dict[str, dict[str, float]],
+    results: dict[str, dict[str, float]],
+    scores: dict[str, float],
+) -> float:
+    """Computes the robustness at 10. This computes the lowest ndcg@10 over all instructions. Taken from https://arxiv.org/abs/2402.14334
+
+    Args:
+        qrels: Ground truth relevance judgments for the queries
+        results: Predicted relevance scores for the queries
+        scores: The scores for the queries, to extract ndcg@10 for each query
+    """
+    query_keys = defaultdict(list)
+    for key in qrels.keys():
+        query_keys[key.split("_")[0]].append(key)
+
+    robustness_scores = []
+    breakpoint()
+    for _, keys in query_keys.items():
+        # get the ndcg@10 for each query
+        current_scores = []
+        for key in keys:
+            current_scores.append(scores[key]["ndcg_cut_10"])
+
+        # get the lowest ndcg@10
+        robustness_scores.append(min(current_scores))
+
+    return sum(robustness_scores) / len(robustness_scores)

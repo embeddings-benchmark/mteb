@@ -14,6 +14,7 @@ from mteb.evaluation.evaluators.model_classes import (
 
 from .Evaluator import Evaluator
 from .utils import (
+    add_task_specific_scores,
     confidence_scores,
     hole,
     mrr,
@@ -61,7 +62,7 @@ class RetrievalEvaluator(Evaluator):
         self,
         corpus: dict[str, dict[str, str]],
         queries: dict[str, str],
-        instructions: dict[str, str],
+        instructions: dict[str, str] | None = None,
         qid: str | None = None,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
@@ -103,6 +104,7 @@ class RetrievalEvaluator(Evaluator):
         results: dict[str, dict[str, float]],
         k_values: list[int],
         ignore_identical_ids: bool = False,
+        task_name: str = None,
     ) -> tuple[
         dict[str, float],
         dict[str, float],
@@ -164,8 +166,11 @@ class RetrievalEvaluator(Evaluator):
         naucs = RetrievalEvaluator.evaluate_abstention(
             results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
         )
+        task_scores = add_task_specific_scores(
+            scores, qrels, results, task_name, k_values
+        )
 
-        return ndcg, _map, recall, precision, naucs
+        return ndcg, _map, recall, precision, naucs, task_scores
 
     @staticmethod
     def evaluate_custom(

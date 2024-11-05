@@ -1,15 +1,9 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
-
-from datasets import Dataset
 
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-from mteb.encoder_interface import Encoder
-from mteb.evaluation.evaluators.RetrievalEvaluator import RetrievalEvaluator
-from mteb.load_results.task_results import ScoresDict
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
@@ -50,7 +44,7 @@ _CITATION = """@article{10.1162/tacl_a_00595,
 }"""
 
 
-class MIRACLReranking(MultilingualTask, AbsTaskReranking):
+class MIRACLReranking(AbsTaskReranking, MultilingualTask):
     metadata = TaskMetadata(
         name="MIRACLReranking",
         description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.",
@@ -65,7 +59,7 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGUAGES,
-        main_score="ndcg_cut_10",
+        main_score="ndcg_at_10",
         date=("2022-06-01", "2023-01-30"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=[],
@@ -79,24 +73,3 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
             "avg_character_length": {"dev": 506.30},
         },
     )
-
-    def _evaluate_subset(
-        self,
-        model: Encoder,
-        data_split: Dataset,
-        *,
-        encode_kwargs: dict[str, Any] = {},
-        **kwargs: Any,
-    ) -> ScoresDict:
-        # TODO: this file will need to be fixed
-        evaluator = RetrievalEvaluator(
-            samples=data_split,
-            evaluator_type="miracl",
-            task_name=self.metadata.name,
-            encode_kwargs=encode_kwargs,
-            **kwargs,
-        )
-        scores = evaluator(model)
-
-        self._add_main_score(scores)
-        return scores

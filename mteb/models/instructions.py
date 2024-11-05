@@ -16,6 +16,7 @@ DEFAULT_PROMPTS = {
     "Reranking": "Retrieve text based on user query.",
     "Retrieval": "Retrieve text based on user query.",
     "InstructionRetrieval": "Retrieve text based on user query.",
+    "InstructionReranking": "Retrieve text based on user query.",
     "PairClassification": "Retrieve text that are semantically similar to the given text",
 }
 

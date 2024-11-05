@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
+from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 
-class News21InstructionRetrieval(AbsTaskInstructionRetrieval):
+class News21InstructionRetrieval(AbsTaskReranking):
     metadata = TaskMetadata(
         name="News21InstructionRetrieval",
         description="Measuring retrieval instruction following ability on News21 narratives for the FollowIR benchmark.",
@@ -14,7 +14,7 @@ class News21InstructionRetrieval(AbsTaskInstructionRetrieval):
             "path": "jhu-clsp/news21-instructions",
             "revision": "e0144086b45fe31ac125e9ac1a83b6a409bb6ca6",
         },
-        type="InstructionRetrieval",
+        type="InstructionReranking",
         category="s2p",
         modalities=["text"],
         eval_splits=["test"],

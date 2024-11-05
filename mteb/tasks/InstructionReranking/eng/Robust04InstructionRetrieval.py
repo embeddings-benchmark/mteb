@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
+from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 
-class Robust04InstructionRetrieval(AbsTaskInstructionRetrieval):
+class Robust04InstructionRetrieval(AbsTaskReranking):
     metadata = TaskMetadata(
         name="Robust04InstructionRetrieval",
         description="Measuring retrieval instruction following ability on Robust04 narratives for the FollowIR benchmark.",
@@ -14,7 +14,7 @@ class Robust04InstructionRetrieval(AbsTaskInstructionRetrieval):
             "path": "jhu-clsp/robust04-instructions",
             "revision": "a5a1c4fe2bc528ac12e83f8cdf82178da85d2f1d",
         },
-        type="InstructionRetrieval",
+        type="InstructionReranking",
         category="s2p",
         modalities=["text"],
         eval_splits=["test"],

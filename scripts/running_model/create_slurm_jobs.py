@@ -100,6 +100,7 @@ if __name__ == "__main__":
             "Reranking",
             "Retrieval",
             "InstructionRetrieval",
+            "InstructionReranking",
             "STS",
             "Summarization",
         ],

@@ -88,7 +88,7 @@ class CMedQAv1(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2017-01-01", "2017-07-26"),
         domains=["Medical", "Written"],
         task_subtypes=[],

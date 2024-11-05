@@ -9,7 +9,6 @@ from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
-from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 from mteb.abstasks.AbsTaskMultilabelClassification import (
     AbsTaskMultilabelClassification,
 )
@@ -864,42 +863,47 @@ class MockRerankingTask(AbsTaskReranking):
     metadata = TaskMetadata(
         type="Reranking",
         name="MockRerankingTask",
-        main_score="map",
+        main_score="map_at_1000",
         descriptive_stats={
             "test": {
-                "num_samples": 2,
-                "num_positive": 2,
-                "num_negative": 2,
-                "avg_query_len": 26.0,
-                "avg_positive_len": 30.0,
-                "avg_negative_len": 30.0,
+                "average_document_length": 27.0,
+                "average_query_length": 26.0,
+                "num_documents": 2,
+                "num_queries": 2,
+                "average_relevant_docs_per_query": 1.0,
             }
         },
         **general_args,  # type: ignore
     )
 
     def load_data(self, **kwargs):
-        query = ["This is a test sentence", "This is another test sentence"]
-        positive = [
-            "This is a positive sentence",
-            "This is another positive sentence",
-        ]
-        negative = [
-            "This is a negative sentence",
-            "This is another negative sentence",
-        ]
-
-        self.dataset = DatasetDict(
-            {
-                "test": Dataset.from_dict(
-                    {
-                        "query": query,
-                        "positive": positive,
-                        "negative": negative,
-                    }
-                ),
+        self.queries = {
+            "test": {
+                "q1": "This is a test sentence",
+                "q2": "This is another test sentence",
             }
-        )
+        }
+        self.corpus = {
+            "test": {
+                "d1": "This is a positive sentence",
+                "d2": "This is a negative sentence",
+            }
+        }
+
+        self.relevant_docs = {
+            "test": {
+                "q1": {"d1": 1, "d2": 0},
+                "q2": {"d1": 0, "d2": 1},
+            },
+        }
+
+        self.top_ranked = {
+            "test": {
+                "q1": ["d1", "d2"],
+                "q2": ["d2", "d1"],
+            },
+        }
+        self.instructions = None
         self.data_loaded = True
 
 
@@ -907,31 +911,28 @@ class MockMultilingualRerankingTask(AbsTaskReranking, MultilingualTask):
     metadata = TaskMetadata(
         type="Reranking",
         name="MockMultilingualRerankingTask",
-        main_score="map",
+        main_score="map_at_10",
         descriptive_stats={
             "test": {
-                "num_samples": 4,
-                "num_positive": 4,
-                "num_negative": 4,
-                "avg_query_len": 26.0,
-                "avg_positive_len": 30.0,
-                "avg_negative_len": 30.0,
+                "average_document_length": 30.0,
+                "average_query_length": 26.0,
+                "num_documents": 4,
+                "num_queries": 4,
+                "average_relevant_docs_per_query": 1.0,
                 "hf_subset_descriptive_stats": {
                     "eng": {
-                        "num_samples": 2,
-                        "num_positive": 2,
-                        "num_negative": 2,
-                        "avg_query_len": 26.0,
-                        "avg_positive_len": 30.0,
-                        "avg_negative_len": 30.0,
+                        "average_document_length": 30.0,
+                        "average_query_length": 26.0,
+                        "num_documents": 2,
+                        "num_queries": 2,
+                        "average_relevant_docs_per_query": 1.0,
                     },
                     "fra": {
-                        "num_samples": 2,
-                        "num_positive": 2,
-                        "num_negative": 2,
-                        "avg_query_len": 26.0,
-                        "avg_positive_len": 30.0,
-                        "avg_negative_len": 30.0,
+                        "average_document_length": 30.0,
+                        "average_query_length": 26.0,
+                        "num_documents": 2,
+                        "num_queries": 2,
+                        "average_relevant_docs_per_query": 1.0,
                     },
                 },
             }
@@ -941,30 +942,42 @@ class MockMultilingualRerankingTask(AbsTaskReranking, MultilingualTask):
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self, **kwargs):
-        query = ["This is a test sentence", "This is another test sentence"]
-        positive = [
-            "This is a positive sentence",
-            "This is another positive sentence",
-        ]
-        negative = [
-            "This is a negative sentence",
-            "This is another negative sentence",
-        ]
-        data = {
-            "test": Dataset.from_dict(
-                {
-                    "query": query,
-                    "positive": positive,
-                    "negative": negative,
-                }
-            ),
-        }
-        self.dataset = DatasetDict(
-            {
-                "eng": data,
-                "fra": data,
+        queries = {
+            "test": {
+                "q1": "This is a test sentence",
+                "q2": "This is another test sentence",
             }
-        )
+        }
+        self.queries = {"eng": queries, "fra": queries}
+        corpus = {
+            "test": {
+                "d1": "This is a positive sentence",
+                "d2": "This is another positive sentence",
+            }
+        }
+        self.corpus = {"eng": corpus, "fra": corpus}
+
+        relevant_docs = {
+            "test": {
+                "q1": {"d1": 1, "d2": 0},
+                "q2": {"d1": 0, "d2": 1},
+            },
+        }
+        self.relevant_docs = {
+            "eng": relevant_docs,
+            "fra": relevant_docs,
+        }
+        top_ranked = {
+            "test": {
+                "q1": ["d1", "d2"],
+                "q2": ["d2", "d1"],
+            },
+        }
+        self.top_ranked = {
+            "eng": top_ranked,
+            "fra": top_ranked,
+        }
+        self.instructions = None
         self.data_loaded = True
 
 
@@ -1005,6 +1018,8 @@ class MockRetrievalTask(AbsTaskRetrieval):
                 "q2": {"d1": 0, "d2": 1},
             },
         }
+        self.top_ranked = None
+        self.instructions = None
         self.data_loaded = True
 
 
@@ -1068,6 +1083,8 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval, MultilingualTask):
             "eng": relevant_docs,
             "fra": relevant_docs,
         }
+        self.top_ranked = None
+        self.instructions = None
         self.data_loaded = True
 
 
@@ -1175,10 +1192,10 @@ class MockMultilingualMultilabelClassification(
         self.data_loaded = True
 
 
-class MockInstructionRetrival(AbsTaskInstructionRetrieval):
+class MockInstructionRetrival(AbsTaskReranking):
     do_length_ablation = True
     metadata = TaskMetadata(
-        type="InstructionRetrieval",
+        type="InstructionReranking",
         name="MockInstructionRetrival",
         main_score="p-MRR",
         descriptive_stats={
@@ -1241,28 +1258,13 @@ class MockInstructionRetrival(AbsTaskInstructionRetrieval):
                 "q2": ["d2", "d1"],
             }
         }
-
-        self.keywords = {
-            "test": {
-                "This is a test sentence": "test1",
-                "This is another test sentence": "test2",
-            }
-        }
-        self.short_instructions = {
-            "test": {
-                "This is a test sentence": "short1",
-                "This is another test sentence": "short2",
-            }
-        }
         self.data_loaded = True
 
 
-class MockMultilingualInstructionRetrival(
-    AbsTaskInstructionRetrieval, MultilingualTask
-):
+class MockMultilingualInstructionRetrival(AbsTaskReranking, MultilingualTask):
     do_length_ablation = True
     metadata = TaskMetadata(
-        type="InstructionRetrieval",
+        type="InstructionReranking",
         name="MockMultilingualInstructionRetrival",
         main_score="p-MRR",
         descriptive_stats={
@@ -1376,26 +1378,5 @@ class MockMultilingualInstructionRetrival(
         self.top_ranked = {
             "eng": top_ranked,
             "fra": top_ranked,
-        }
-
-        keywords = {
-            "test": {
-                "This is a test sentence": "test1",
-                "This is another test sentence": "test2",
-            }
-        }
-        self.keywords = {
-            "eng": keywords,
-            "fra": keywords,
-        }
-        short_instructions = {
-            "test": {
-                "This is a test sentence": "short1",
-                "This is another test sentence": "short2",
-            }
-        }
-        self.short_instructions = {
-            "eng": short_instructions,
-            "fra": short_instructions,
         }
         self.data_loaded = True

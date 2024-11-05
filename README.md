@@ -81,6 +81,7 @@ In prompts the key can be:
    8. `STS`
    9. `Summarization`
    10. `InstructionRetrieval`
+   11. `InstructionReranking`
 3. Pair of task type and prompt type like `Retrival-query` - these prompts will be used in all classification tasks
 4. Task name - these prompts will be used in the specific task
 5. Pair of task name and prompt type like `NFCorpus-query` - these prompts will be used in the specific task

@@ -70,4 +70,7 @@ class AlloprofReranking(AbsTaskReranking):
 
         self.dataset_transform()
 
+        # now convert to the new format
+        self.transform_old_dataset_format(self.dataset)
+
         self.data_loaded = True

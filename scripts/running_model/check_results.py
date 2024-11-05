@@ -119,6 +119,7 @@ tasks_which_should_be_there = mteb.get_tasks(
         "Summarization",
         "Clustering",
         "InstructionRetrieval",
+        "InstructionReranking",
         "Retrieval",
     ]
 )
