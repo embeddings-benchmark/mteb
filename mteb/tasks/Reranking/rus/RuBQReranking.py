@@ -36,6 +36,15 @@ class RuBQReranking(AbsTaskReranking):
         }""",
         descriptive_stats={
             "n_samples": {"test": 1551},
-            "avg_character_length": {"test": 499.9},
+            "test": {
+                "average_document_length": 457.17801158971344,
+                "average_query_length": 42.818826563507415,
+                "num_documents": 37447,
+                "num_queries": 1551,
+                "average_relevant_docs_per_query": 1.6776273372018053,
+                "average_instruction_length": 0,
+                "num_instructions": 0,
+                "average_top_ranked_per_query": 24.143778207607994,
+            },
         },
     )

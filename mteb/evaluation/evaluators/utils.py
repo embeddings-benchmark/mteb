@@ -240,6 +240,9 @@ def get_rank_from_dict(
 def calculate_pmrr(original_run, new_run, changed_qrels):
     changes = []
     for qid in changed_qrels.keys():
+        if qid + "-og" not in original_run or qid + "-changed" not in new_run:
+            logging.warning(f"Query {qid} not found in the runs for calculating p-MRR")
+            continue
         original_qid_run = original_run[qid + "-og"]
         new_qid_run = new_run[qid + "-changed"]
         for idx, changed_doc in enumerate(changed_qrels[qid]):
@@ -283,14 +286,36 @@ def evaluate_p_mrr_change(
         "Core17InstructionRetrieval": ("jhu-clsp/core17-instructions-mteb", False),
         "Robust04InstructionRetrieval": ("jhu-clsp/robust04-instructions-mteb", False),
         "News21InstructionRetrieval": ("jhu-clsp/news21-instructions-mteb", False),
-        "mFollowIR": ("jhu-clsp/mfollowir-mteb", True),
+        "mFollowIR": ("jhu-clsp/mfollowir-parquet-mteb", True),
         "mFollowIRCrossLingual": (
-            "jhu-clsp/mfollowir-cross-lingual-mteb",
+            "jhu-clsp/mfollowir-cross-lingual-parquet-mteb",
             True,
         ),
     }
     hf_path, is_multilingual = TASK_TO_HF_DATASET[task_name]
-    langs = "eng" if not is_multilingual else ["zho", "rus", "fas"]
+    if is_multilingual:
+        # figure out which of the languages this is: ["zho", "rus", "fas"]
+        # gather the changed_qrels for each, and store the keys as a check
+        for lang in ["zho", "rus", "fas"]:
+            config_name = f"qrel_diff-{lang}"
+            changed_qrels = {
+                item["query-id"]: item["corpus-ids"]
+                for item in load_dataset(hf_path, config_name)["qrel_diff"]
+            }
+            potential_keys = {item + "-og" for item in changed_qrels.keys()} | {
+                item + "-changed" for item in changed_qrels.keys()
+            }
+            if (
+                potential_keys == set(qrels.keys())
+                or len(potential_keys - set(qrels.keys())) <= 2
+            ):  # there are about two skipped
+                break  # this is the right qrels
+
+    else:
+        changed_qrels = {
+            item["query-id"]: item["corpus-ids"]
+            for item in load_dataset(hf_path, "qrel_diff")["qrel_diff"]
+        }
 
     qrels_sep = {
         "og": {k: v for k, v in qrels.items() if k.endswith("-og")},
@@ -306,37 +331,20 @@ def evaluate_p_mrr_change(
         else:
             new_run[qid] = docs
 
-    for lang in langs:
-        config_name = "qrel_diff" if not is_multilingual else f"qrel_diff-{lang}"
-        changed_qrels = {
-            item["query-id"]: item["corpus-ids"]
-            for item in load_dataset(hf_path, config_name)["qrel_diff"]
-        }
-        p_mrr = calculate_pmrr(original_run, new_run, changed_qrels)
-        followir_scores[lang]["p-MRR"] = p_mrr
+    p_mrr = calculate_pmrr(original_run, new_run, changed_qrels)
+    followir_scores["p-MRR"] = p_mrr
 
-        # unfortunately, have to re-compute scores here to get only og and changed scores
-        followir_scores[lang]["og"] = {}
-        followir_scores[lang]["changed"] = {}
-        for name, group in [("og", original_run), ("changed", new_run)]:
-            map_string = "map_cut." + ",".join([str(k) for k in k_values])
-            ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
-            recall_string = "recall." + ",".join([str(k) for k in k_values])
-            precision_string = "P." + ",".join([str(k) for k in k_values])
-            evaluator = pytrec_eval.RelevanceEvaluator(
-                qrels_sep[name],
-                {map_string, ndcg_string, recall_string, precision_string},
-            )
-            # qrels_changed_as_og = {k.replace("-changed", "-og"): v for k, v in qrels_sep["changed"].items()}
-            group_scores = evaluator.evaluate(group)
-            ndcg, _map, recall, precision = parse_metrics_from_scores(
-                group_scores, k_values
-            )[:4]  # don't need the other fields
-
-            # add these to the followir_scores with name prefix
-            scores_dict = make_score_dict(ndcg, _map, recall, precision, {}, {}, {}, {})
-            for key, value in scores_dict.items():
-                followir_scores[lang][name][key] = value
+    # unfortunately, have to re-compute scores here to get only og and changed scores
+    followir_scores["og"] = {}
+    followir_scores["changed"] = {}
+    for name, group in [("og", original_run), ("changed", new_run)]:
+        _, ndcg, _map, recall, precision, naucs = calculate_retrieval_scores(
+            group, qrels_sep[name], k_values
+        )
+        # add these to the followir_scores with name prefix
+        scores_dict = make_score_dict(ndcg, _map, recall, precision, {}, naucs, {}, {})
+        for key, value in scores_dict.items():
+            followir_scores[name][key] = value
 
     return followir_scores
 
@@ -654,26 +662,82 @@ def parse_metrics_from_scores(scores, k_values):
     )
 
 
-def max_over_subqueries(qrels, results, scores):
-    """Computes the max over subqueries. This metric is the maximum of the scores for all subqueries
+def max_over_subqueries(qrels, results, k_values):
+    """Computes the max over subqueries scores when merging.
 
     Args:
         qrels: Ground truth relevance judgments for the queries
         results: Predicted relevance scores for the queries
-        scores: The scores for the queries, to extract average precision for each query
+        k_values: The k values for which to compute the scores
     """
     query_keys = defaultdict(list)
     for key in qrels.keys():
         query_keys[key.split("_")[0]].append(key)
 
-    max_over_subqueries = []
-    for _, keys in query_keys.items():
-        # get the average precision for each query
-        current_scores = []
-        for key in keys:
-            current_scores.append(scores[key]["P_1"])
+    new_results = {}
+    for query_id_base, query_ids in query_keys.items():
+        doc_scores = defaultdict(float)
+        for query_id_full in query_ids:
+            for doc_id, score in results[query_id_full].items():
+                if doc_id not in doc_scores:
+                    doc_scores[doc_id] = score
+                else:
+                    doc_scores[doc_id] = max(score, doc_scores[doc_id])
 
-        # get the max average precision
-        max_over_subqueries.append(max(current_scores))
+        new_results[query_id_base] = doc_scores
 
-    return sum(max_over_subqueries) / len(max_over_subqueries)
+    # now we have the new results, we can compute the scores
+    _, ndcg, _map, recall, precision, naucs = calculate_retrieval_scores(
+        new_results, qrels, k_values
+    )
+    score_dict = make_score_dict(ndcg, _map, recall, precision, {}, naucs, {}, {})
+    return {"max_over_subqueries_" + k: v for k, v in score_dict.items()}
+
+
+def calculate_retrieval_scores(results, qrels, k_values):
+    map_string = "map_cut." + ",".join([str(k) for k in k_values])
+    ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
+    recall_string = "recall." + ",".join([str(k) for k in k_values])
+    precision_string = "P." + ",".join([str(k) for k in k_values])
+    evaluator = pytrec_eval.RelevanceEvaluator(
+        qrels, {map_string, ndcg_string, recall_string, precision_string}
+    )
+    scores = evaluator.evaluate(results)
+
+    (
+        ndcg,
+        _map,
+        recall,
+        precision,
+        all_ndcgs,
+        all_aps,
+        all_recalls,
+        all_precisions,
+    ) = parse_metrics_from_scores(scores, k_values)
+
+    naucs = evaluate_abstention(
+        results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
+    )
+
+    return scores, ndcg, _map, recall, precision, naucs
+
+
+def evaluate_abstention(
+    results: dict[str, dict[str, float]],
+    metric_scores: dict[str, list[float]],
+) -> dict[str, float]:
+    """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997"""
+    all_sim_scores = [list(results[qid].values()) for qid in list(results.keys())]
+    all_conf_scores = [confidence_scores(sim_scores) for sim_scores in all_sim_scores]
+    conf_fcts = list(all_conf_scores[0].keys())
+    all_conf_scores = {
+        fct: np.array([x[fct] for x in all_conf_scores]) for fct in conf_fcts
+    }
+    metric_scores = {k: np.array(v) for k, v in metric_scores.items()}
+    naucs = {}
+
+    for metric_name, scores in metric_scores.items():
+        for fct, conf_scores in all_conf_scores.items():
+            naucs[f"nAUC_{metric_name}_{fct}"] = nAUC(conf_scores, scores)
+
+    return naucs

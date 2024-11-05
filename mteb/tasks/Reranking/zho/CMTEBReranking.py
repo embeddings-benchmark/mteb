@@ -35,7 +35,19 @@ class T2Reranking(AbsTaskReranking):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
+        descriptive_stats={
+            "n_samples": {"dev": 5908},
+            "dev": {
+                "average_document_length": 840.8301307712837,
+                "average_query_length": 10.948375084631008,
+                "num_documents": 97422,
+                "num_queries": 5908,
+                "average_relevant_docs_per_query": 7.522681110358835,
+                "average_instruction_length": 0,
+                "num_instructions": 0,
+                "average_top_ranked_per_query": 16.489844278943806,
+            },
+        },
     )
 
 
@@ -70,7 +82,19 @@ class MMarcoReranking(AbsTaskReranking):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
+        descriptive_stats={
+            "n_samples": {"dev": 100},
+            "dev": {
+                "average_document_length": 123.76968988063103,
+                "average_query_length": 11.44,
+                "num_documents": 100026,
+                "num_queries": 100,
+                "average_relevant_docs_per_query": 1.07,
+                "average_instruction_length": 0,
+                "num_instructions": 0,
+                "average_top_ranked_per_query": 1000.26,
+            },
+        },
     )
 
 
@@ -107,8 +131,17 @@ class CMedQAv1(AbsTaskReranking):
   publisher={Multidisciplinary Digital Publishing Institute}
 }""",
         descriptive_stats={
-            "n_samples": {"test": 2000},
-            "avg_character_length": {"test": 165},
+            "n_samples": {"test": 1000},
+            "test": {
+                "average_document_length": 106.63992,
+                "average_query_length": 55.717,
+                "num_documents": 100000,
+                "num_queries": 1000,
+                "average_relevant_docs_per_query": 1.931,
+                "average_instruction_length": 0,
+                "num_instructions": 0,
+                "average_top_ranked_per_query": 100.0,
+            },
         },
     )
 
@@ -148,5 +181,17 @@ keywords={Biomedical imaging;Data mining;Semantics;Medical services;Feature extr
 doi={10.1109/ACCESS.2018.2883637}, 
 ISSN={2169-3536}, 
 month={},}""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
+        descriptive_stats={
+            "n_samples": {"test": 1000},
+            "test": {
+                "average_document_length": 100.61386,
+                "average_query_length": 48.848,
+                "num_documents": 100000,
+                "num_queries": 1000,
+                "average_relevant_docs_per_query": 1.91,
+                "average_instruction_length": 0,
+                "num_instructions": 0,
+                "average_top_ranked_per_query": 100.0,
+            },
+        },
     )

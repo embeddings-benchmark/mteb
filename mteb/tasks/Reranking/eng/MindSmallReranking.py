@@ -1,8 +1,17 @@
 from __future__ import annotations
 
+import logging
+
+import tqdm
+from datasets import Dataset, DatasetDict
+
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class MindSmallReranking(AbsTaskReranking):
@@ -19,7 +28,7 @@ class MindSmallReranking(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="map_at_1000",
+        main_score="max_over_subqueries_map_at_1000",
         date=("2019-10-12", "2019-11-22"),
         domains=["News", "Written"],
         task_subtypes=[],
@@ -51,3 +60,34 @@ class MindSmallReranking(AbsTaskReranking):
             "avg_character_length": {"test": 70.9},
         },
     )
+
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        # since AbsTaskReranking has no `load_data` method, we call the parent class method
+        super(AbsTaskRetrieval, self).load_data(**kwargs)
+
+        # we can expand the queries so that each has its own row and a new query-id
+        new_dataset = {}
+        for split in self.dataset:
+            logging.info(f"Expanding queries for split {split}")
+            # Create lists to store the expanded data
+            expanded_data = []
+
+            for instance in tqdm.tqdm(self.dataset[split]):
+                for i, subquery in enumerate(instance["query"]):
+                    new_instance = instance.copy()
+                    new_instance["query"] = subquery
+                    new_instance["id"] = f"{instance['id']}_{i}"
+                    expanded_data.append(new_instance)
+
+            # Convert the list of instances into a Dataset object
+            new_dataset[split] = Dataset.from_list(expanded_data)
+
+        # Create the DatasetDict from the dictionary of Datasets
+        self.dataset = DatasetDict(new_dataset)
+
+        # now convert to the new format
+        self.transform_old_dataset_format(self.dataset)
+        self.data_loaded = True

@@ -52,6 +52,15 @@ class SciDocsReranking(AbsTaskReranking):
 """,
         descriptive_stats={
             "n_samples": {"test": 19599},
-            "avg_character_length": {"test": 69.0},
+            "test": {
+                "average_document_length": 71.52865935919056,
+                "average_query_length": 69.87456008044244,
+                "num_documents": 118600,
+                "num_queries": 3978,
+                "average_relevant_docs_per_query": 4.92684766214178,
+                "average_instruction_length": 0,
+                "num_instructions": 0,
+                "average_top_ranked_per_query": 29.813976872800403,
+            },
         },
     )

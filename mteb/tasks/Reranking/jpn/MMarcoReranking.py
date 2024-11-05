@@ -35,7 +35,16 @@ class VoyageMMarcoReranking(AbsTaskReranking):
       archivePrefix={arXiv},}""",
         descriptive_stats={
             "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 162},
+            "test": {
+                "average_document_length": 164.72532084309134,
+                "average_query_length": 15.9208984375,
+                "num_documents": 53375,
+                "num_queries": 2048,
+                "average_relevant_docs_per_query": 1.06201171875,
+                "average_instruction_length": 0,
+                "num_instructions": 0,
+                "average_top_ranked_per_query": 26.06201171875,
+            },
         },
     )
 

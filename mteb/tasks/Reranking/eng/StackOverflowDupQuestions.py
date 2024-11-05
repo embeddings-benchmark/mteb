@@ -36,6 +36,15 @@ class StackOverflowDupQuestions(AbsTaskReranking):
 }""",
         descriptive_stats={
             "n_samples": {"test": 3467},
-            "avg_character_length": {"test": 49.8},
+            "test": {
+                "average_document_length": 44.482094556834696,
+                "average_query_length": 53.160762032085564,
+                "num_documents": 89470,
+                "num_queries": 2992,
+                "average_relevant_docs_per_query": 1.1587566844919786,
+                "average_instruction_length": 0,
+                "num_instructions": 0,
+                "average_top_ranked_per_query": 29.90307486631016,
+            },
         },
     )

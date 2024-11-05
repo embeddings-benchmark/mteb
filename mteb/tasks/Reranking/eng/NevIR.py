@@ -37,12 +37,14 @@ class NevIR(AbsTaskReranking):
         descriptive_stats={
             "n_samples": {"test": 2255},
             "test": {
-                "num_samples": 375,
-                "num_positive": 375,
-                "num_negative": 375,
-                "avg_query_len": 50.205333333333336,
-                "avg_positive_len": 6.013333333333334,
-                "avg_negative_len": 13.986666666666666,
+                "average_document_length": 712.460289514867,
+                "average_query_length": 67.9287780187997,
+                "num_documents": 5112,
+                "num_queries": 2766,
+                "average_relevant_docs_per_query": 1.0,
+                "average_instruction_length": 0,
+                "num_instructions": 0,
+                "average_top_ranked_per_query": 2.0,
             },
         },
     )

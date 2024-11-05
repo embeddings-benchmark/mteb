@@ -41,7 +41,16 @@ class AlloprofReranking(AbsTaskReranking):
             }""",
         descriptive_stats={
             "n_samples": {"test": 2316, "train": 9264},
-            "avg_character_length": None,
+            "test": {
+                "average_document_length": 4071.0077079755583,
+                "average_query_length": 170.71286701208982,
+                "num_documents": 25039,
+                "num_queries": 2316,
+                "average_relevant_docs_per_query": 1.2845423143350605,
+                "average_instruction_length": 0,
+                "num_instructions": 0,
+                "average_top_ranked_per_query": 10.811312607944732,
+            },
         },
     )
 

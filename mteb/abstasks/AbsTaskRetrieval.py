@@ -259,7 +259,7 @@ class AbsTaskRetrieval(AbsTask):
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> RetrievalDescriptiveStatistics:
-        if hf_subset:
+        if hf_subset and hf_subset in self.queries:
             queries = self.queries[hf_subset][split]
             corpus = self.corpus[hf_subset][split]
             relevant_docs = self.relevant_docs[hf_subset][split]
@@ -346,7 +346,10 @@ def calculate_length(
         queries_lens.append(len(query))
 
     for doc in corpus.values():
-        doc_lens.append(len(doc))
+        if isinstance(doc, dict):
+            doc_lens.append(len(doc["text"]))
+        else:
+            doc_lens.append(len(doc))
 
     doc_len = sum(doc_lens) / len(doc_lens) if doc_lens else 0
     query_len = sum(queries_lens) / len(queries_lens) if queries_lens else 0

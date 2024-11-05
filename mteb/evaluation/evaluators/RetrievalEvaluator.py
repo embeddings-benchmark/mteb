@@ -3,9 +3,6 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import numpy as np
-import pytrec_eval
-
 from mteb.evaluation.evaluators.model_classes import (
     DenseRetrievalExactSearch,
     DRESModel,
@@ -15,11 +12,10 @@ from mteb.evaluation.evaluators.model_classes import (
 from .Evaluator import Evaluator
 from .utils import (
     add_task_specific_scores,
-    confidence_scores,
+    calculate_retrieval_scores,
+    evaluate_abstention,
     hole,
     mrr,
-    nAUC,
-    parse_metrics_from_scores,
     recall_cap,
     top_k_accuracy,
 )
@@ -139,31 +135,11 @@ class RetrievalEvaluator(Evaluator):
                 "For evaluation, we DO NOT ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=True`` to ignore this."
             )
 
-        map_string = "map_cut." + ",".join([str(k) for k in k_values])
-        ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
-        recall_string = "recall." + ",".join([str(k) for k in k_values])
-        precision_string = "P." + ",".join([str(k) for k in k_values])
-        evaluator = pytrec_eval.RelevanceEvaluator(
-            qrels, {map_string, ndcg_string, recall_string, precision_string}
-        )
-        scores = evaluator.evaluate(results)
-
-        (
-            ndcg,
-            _map,
-            recall,
-            precision,
-            all_ndcgs,
-            all_aps,
-            all_recalls,
-            all_precisions,
-        ) = parse_metrics_from_scores(scores, k_values)
-
-        naucs = RetrievalEvaluator.evaluate_abstention(
-            results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
+        all_scores, ndcg, _map, recall, precision, naucs = calculate_retrieval_scores(
+            results, qrels, k_values
         )
         task_scores = add_task_specific_scores(
-            scores, qrels, results, task_name, k_values
+            all_scores, qrels, results, task_name, k_values
         )
 
         return ndcg, _map, recall, precision, naucs, task_scores
@@ -194,30 +170,7 @@ class RetrievalEvaluator(Evaluator):
         ]:
             metric_scores = top_k_accuracy(qrels, results, k_values, output_type)
 
-        naucs = RetrievalEvaluator.evaluate_abstention(results, metric_scores)
+        naucs = evaluate_abstention(results, metric_scores)
         metric_scores_avg = {k: sum(v) / len(v) for k, v in metric_scores.items()}
 
         return metric_scores_avg, naucs
-
-    @staticmethod
-    def evaluate_abstention(
-        results: dict[str, dict[str, float]],
-        metric_scores: dict[str, list[float]],
-    ) -> dict[str, float]:
-        """Computes normalized Area Under the Curve on a set of evaluated instances as presented in the paper https://arxiv.org/abs/2402.12997"""
-        all_sim_scores = [list(results[qid].values()) for qid in list(results.keys())]
-        all_conf_scores = [
-            confidence_scores(sim_scores) for sim_scores in all_sim_scores
-        ]
-        conf_fcts = list(all_conf_scores[0].keys())
-        all_conf_scores = {
-            fct: np.array([x[fct] for x in all_conf_scores]) for fct in conf_fcts
-        }
-        metric_scores = {k: np.array(v) for k, v in metric_scores.items()}
-        naucs = {}
-
-        for metric_name, scores in metric_scores.items():
-            for fct, conf_scores in all_conf_scores.items():
-                naucs[f"nAUC_{metric_name}_{fct}"] = nAUC(conf_scores, scores)
-
-        return naucs

@@ -120,10 +120,7 @@ def load_data(
             revision=revision,
         )
         for row in top_ranked_data["top_ranked"]:
-            if row["qid"] not in top_ranked[lang][EVAL_SPLIT]:
-                top_ranked[lang][EVAL_SPLIT][row["qid"]] = [row["pid"]]
-            else:
-                top_ranked[lang][EVAL_SPLIT][row["qid"]].append(row["pid"])
+            top_ranked[lang][EVAL_SPLIT][row["query-id"]] = row["corpus-ids"]
 
     return (corpus, queries, instructions, relevant_docs, top_ranked)
 
@@ -135,7 +132,7 @@ class mFollowIRCrossLingual(MultilingualTask, AbsTaskReranking):
         reference="https://neuclir.github.io/",
         dataset={
             "path": "jhu-clsp/mFollowIR-cross-lingual-parquet-mteb",
-            "revision": "9c1e094d813857dcdefcaf9764c520b8ba237ffd",
+            "revision": "6b01566619233a0c35d135123510b6b02c258ff5",
         },
         type="Retrieval",
         category="s2p",
@@ -231,7 +228,7 @@ class mFollowIR(MultilingualTask, AbsTaskReranking):
         reference="https://neuclir.github.io/",
         dataset={
             "path": "jhu-clsp/mFollowIR-parquet-mteb",
-            "revision": "d95f42313ebac4f1ae188afcd26097210ada8779",
+            "revision": "09eecbe45c54b4a6dfb8e68e345cae77337768e2",
         },
         type="Retrieval",
         category="s2p",
