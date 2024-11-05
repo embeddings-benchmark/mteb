@@ -23,41 +23,43 @@ class TestInstructionMetricsEvaluation:
 
         # these are the query: {"doc_id": score}
         original_run = {
-            "a": {"0": 1, "1": 2, "2": 3, "3": 4},
+            "a-og": {"0": 1, "1": 2, "2": 3, "3": 4},
         }
 
         new_run = {
-            "a": {"0": 1, "1": 2, "2": 3, "3": 4},
+            "a-changed": {"0": 1, "1": 2, "2": 3, "3": 4},
         }
 
-        results = utils.evaluate_change(
+        score = utils.calculate_pmrr(
             original_run,
             new_run,
             changed_qrels,
         )
-
-        assert results["p-MRR"] == 0.0
+        assert score == 0.0
 
         # test with a change
 
         new_run = {
-            "a": {"0": 4, "1": 1, "2": 2, "3": 3},
+            "a-changed": {"0": 4, "1": 1, "2": 2, "3": 3},
         }
 
-        results = utils.evaluate_change(
+        score = utils.calculate_pmrr(
             original_run,
             new_run,
             changed_qrels,
         )
+        assert score == -0.75
 
-        assert results["p-MRR"] == -0.75
-
-        # test with a positive change
-
-        results = utils.evaluate_change(
+        # test with a positive change, flipping them
+        new_run = {
+            "a-og": {"0": 4, "1": 1, "2": 2, "3": 3},
+        }
+        original_run = {
+            "a-changed": {"0": 1, "1": 2, "2": 3, "3": 4},
+        }
+        score = utils.calculate_pmrr(
             new_run,
             original_run,
             changed_qrels,
         )
-
-        assert results["p-MRR"] == 0.75
+        assert score == 0.75

@@ -300,19 +300,13 @@ class HFDataLoader:
                 keep_in_memory=self.keep_in_memory,
             )
         instructions_ds = next(iter(instructions_ds.values()))
-        instructions_ds = instructions_ds.cast_column("query", Value("string"))
-
-        # if instructions is a string, change it to a list[str]
-        if "instruction" in instructions_ds.column_names:
-            instructions_ds = instructions_ds.cast_column(
-                "instruction", Sequence(Value("string"))
-            )
-
+        instructions_ds = instructions_ds.cast_column("query-id", Value("string"))
+        instructions_ds = instructions_ds.cast_column("instruction", Value("string"))
         instructions_ds = instructions_ds.remove_columns(
             [
                 col
                 for col in instructions_ds.column_names
-                if col not in ["query", "instruction"]
+                if col not in ["query-id", "instruction"]
             ]
         )
         self.instructions = instructions_ds

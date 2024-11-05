@@ -19,6 +19,7 @@ from .utils import (
     hole,
     mrr,
     nAUC,
+    parse_metrics_from_scores,
     recall_cap,
     top_k_accuracy,
 )
@@ -55,7 +56,14 @@ class RetrievalEvaluator(Evaluator):
         self.top_k = (
             max(k_values) if "top_k" not in kwargs else kwargs["top_k"]
         )  # can lower it if reranking
-        self.score_function = score_function
+        self.score_function = (
+            retriever.mteb_model_meta.similarity_fn_name
+            if (
+                hasattr(retriever, "mteb_model_meta")
+                and retriever.mteb_model_meta.similarity_fn_name
+            )
+            else score_function
+        )
         self.task_name = task_name
 
     def __call__(
@@ -68,6 +76,11 @@ class RetrievalEvaluator(Evaluator):
     ) -> dict[str, dict[str, float]]:
         if not self.retriever:
             raise ValueError("Model/Technique has not been provided!")
+
+        # allow kwargs top-k to override the class top-k
+        if "top_k" in kwargs:
+            self.top_k = kwargs["top_k"]
+            del kwargs["top_k"]
 
         if self.is_cross_encoder:
             return self.retriever.search_cross_encoder(
@@ -126,14 +139,6 @@ class RetrievalEvaluator(Evaluator):
                 "For evaluation, we DO NOT ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=True`` to ignore this."
             )
 
-        all_ndcgs, all_aps, all_recalls, all_precisions = {}, {}, {}, {}
-
-        for k in k_values:
-            all_ndcgs[f"NDCG@{k}"] = []
-            all_aps[f"MAP@{k}"] = []
-            all_recalls[f"Recall@{k}"] = []
-            all_precisions[f"P@{k}"] = []
-
         map_string = "map_cut." + ",".join([str(k) for k in k_values])
         ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
         recall_string = "recall." + ",".join([str(k) for k in k_values])
@@ -143,25 +148,16 @@ class RetrievalEvaluator(Evaluator):
         )
         scores = evaluator.evaluate(results)
 
-        for query_id in scores.keys():
-            for k in k_values:
-                all_ndcgs[f"NDCG@{k}"].append(scores[query_id]["ndcg_cut_" + str(k)])
-                all_aps[f"MAP@{k}"].append(scores[query_id]["map_cut_" + str(k)])
-                all_recalls[f"Recall@{k}"].append(scores[query_id]["recall_" + str(k)])
-                all_precisions[f"P@{k}"].append(scores[query_id]["P_" + str(k)])
-
-        ndcg, _map, recall, precision = (
-            all_ndcgs.copy(),
-            all_aps.copy(),
-            all_recalls.copy(),
-            all_precisions.copy(),
-        )
-
-        for k in k_values:
-            ndcg[f"NDCG@{k}"] = round(sum(ndcg[f"NDCG@{k}"]) / len(scores), 5)
-            _map[f"MAP@{k}"] = round(sum(_map[f"MAP@{k}"]) / len(scores), 5)
-            recall[f"Recall@{k}"] = round(sum(recall[f"Recall@{k}"]) / len(scores), 5)
-            precision[f"P@{k}"] = round(sum(precision[f"P@{k}"]) / len(scores), 5)
+        (
+            ndcg,
+            _map,
+            recall,
+            precision,
+            all_ndcgs,
+            all_aps,
+            all_recalls,
+            all_precisions,
+        ) = parse_metrics_from_scores(scores, k_values)
 
         naucs = RetrievalEvaluator.evaluate_abstention(
             results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}

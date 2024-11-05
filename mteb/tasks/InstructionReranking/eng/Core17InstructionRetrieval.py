@@ -11,10 +11,10 @@ class Core17InstructionRetrieval(AbsTaskReranking):
         description="Measuring retrieval instruction following ability on Core17 narratives for the FollowIR benchmark.",
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
-            "path": "jhu-clsp/core17-instructions",
-            "revision": "e39ff896cf3efbbdeeb950e6bd7c79f266995b07",
+            "path": "jhu-clsp/core17-instructions-mteb",
+            "revision": "7030c7efc3585d9020f243b12862997889243b78",
         },
-        type="InstructionRetrieval",
+        type="InstructionReranking",
         category="s2p",
         modalities=["text"],
         eval_splits=["test"],

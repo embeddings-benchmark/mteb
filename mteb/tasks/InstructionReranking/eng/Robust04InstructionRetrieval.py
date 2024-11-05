@@ -11,8 +11,8 @@ class Robust04InstructionRetrieval(AbsTaskReranking):
         description="Measuring retrieval instruction following ability on Robust04 narratives for the FollowIR benchmark.",
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
-            "path": "jhu-clsp/robust04-instructions",
-            "revision": "a5a1c4fe2bc528ac12e83f8cdf82178da85d2f1d",
+            "path": "jhu-clsp/robust04-instructions-mteb",
+            "revision": "0a3efedfcac0a7f859c46cff3a0fac0f8747b28f",
         },
         type="InstructionReranking",
         category="s2p",

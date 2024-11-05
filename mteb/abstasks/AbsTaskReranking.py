@@ -68,7 +68,6 @@ class AbsTaskReranking(AbsTaskRetrieval):
             self.transform_old_dataset_format()
         else:
             # use AbsTaskRetrieval default to load the data
-            # TODO: need to make sure top_ranked comes back
             return super().load_data(**kwargs)
 
     def process_example(self, example: dict, split: str, query_idx: int) -> dict:
@@ -89,13 +88,16 @@ class AbsTaskReranking(AbsTaskRetrieval):
         }
 
         for i, pos_doc in enumerate(positive_docs):
-            doc_id = f"{query_id}_positive_{i}"
+            # have "a" in front so that positives are first, then negatives
+            #   this shouldn't matter except for ties, and the previous reranking results
+            #   had the positives first
+            doc_id = f"apositive_{i}_{query_id}"
             example_data["doc_ids"].append(doc_id)
             example_data["doc_texts"].append(pos_doc)
             example_data["relevance_scores"].append(1)
 
         for i, neg_doc in enumerate(negative_docs):
-            doc_id = f"{query_id}_negative_{i}"
+            doc_id = f"negative_{i}_{query_id}"
             example_data["doc_ids"].append(doc_id)
             example_data["doc_texts"].append(neg_doc)
             example_data["relevance_scores"].append(0)
@@ -196,7 +198,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
             cur_queries = {query_id: queries[query_id]}
             if "instructions" in kwargs:
                 instructions = kwargs["instructions"]
-                cur_instructions = {queries[query_id]: instructions[queries[query_id]]}
+                cur_instructions = {query_id: instructions[query_id]}
             else:
                 cur_instructions = None
 
@@ -219,6 +221,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
         # do the evaluation like normal now, but pass our results
         if max_docs > max(retriever.k_values):
+            # only added if we need a large k-value for reranking past 1000
             retriever.k_values += [max_docs]
 
         return super()._evaluate_subset(

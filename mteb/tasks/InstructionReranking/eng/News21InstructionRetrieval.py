@@ -11,8 +11,8 @@ class News21InstructionRetrieval(AbsTaskReranking):
         description="Measuring retrieval instruction following ability on News21 narratives for the FollowIR benchmark.",
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
-            "path": "jhu-clsp/news21-instructions",
-            "revision": "e0144086b45fe31ac125e9ac1a83b6a409bb6ca6",
+            "path": "jhu-clsp/news21-instructions-mteb",
+            "revision": "39db677749b3b783bb277d0e2d4712f5f133f52b",
         },
         type="InstructionReranking",
         category="s2p",

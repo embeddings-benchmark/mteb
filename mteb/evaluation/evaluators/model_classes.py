@@ -63,9 +63,10 @@ class DenseRetrievalExactSearch:
         if "convert_to_tensor" not in encode_kwargs:
             encode_kwargs["convert_to_tensor"] = True
 
-        self.score_functions = {"cos_sim": cos_sim, "dot": dot_score}
+        self.score_functions = {"cos_sim": cos_sim, "dot": dot_score, "cosine": cos_sim}
         self.score_function_desc = {
             "cos_sim": "Cosine Similarity",
+            "cosine": "Cosine Similarity",
             "dot": "Dot Product",
         }
         self.corpus_chunk_size = corpus_chunk_size
@@ -90,7 +91,7 @@ class DenseRetrievalExactSearch:
     def search(
         self,
         corpus: dict[str, dict[str, str]],
-        queries: dict[str, str | list[str]],
+        queries: dict[str, str],
         top_k: int,
         score_function: str,
         task_name: str,
@@ -101,7 +102,6 @@ class DenseRetrievalExactSearch:
     ) -> dict[str, dict[str, float]]:
         # Create embeddings for all queries using model.encode
         # Runs semantic search against the corpus embeddings
-        # Returns a ranked list with the corpus ids
         if score_function not in self.score_functions:
             raise ValueError(
                 f"score function: {score_function} must be either (cos_sim) for cosine similarity or (dot) for dot product"
@@ -110,9 +110,16 @@ class DenseRetrievalExactSearch:
         logger.info("Encoding Queries.")
         query_ids = list(queries.keys())
         self.results = {qid: {} for qid in query_ids}
-        queries = [queries[qid] for qid in queries]  # type: ignore
+        query_ids, queries = zip(*queries.items())
+
         if instructions:
-            queries = [f"{query} {instructions[query]}".strip() for query in queries]
+            new_queries = []
+            for q_idx, qid in enumerate(query_ids):
+                new_queries.append(
+                    f"{queries[q_idx].strip()} {instructions[qid]}".strip()
+                )
+            queries = new_queries
+
         if isinstance(queries[0], list):  # type: ignore
             query_embeddings = self.encode_conversations(
                 model=self.model,
@@ -271,7 +278,7 @@ class DenseRetrievalExactSearch:
                     (
                         query,
                         corpus[doc_id],
-                        instructions[query] if instructions is not None else None,
+                        instructions[qid] if instructions is not None else None,
                         qid,
                         doc_id,
                     )

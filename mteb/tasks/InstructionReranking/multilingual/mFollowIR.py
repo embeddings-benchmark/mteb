@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from collections import defaultdict
-
 import datasets
 
 from mteb.abstasks.MultilingualTask import MultilingualTask
@@ -51,8 +49,8 @@ def load_data(
 ):
     corpus = {lang: {EVAL_SPLIT: {}} for lang in langs}
     queries = {lang: {EVAL_SPLIT: {}} for lang in langs}
-    og_relevant_docs = {lang: {EVAL_SPLIT: {}} for lang in langs}
-    changed_relevant_docs = {lang: {EVAL_SPLIT: {}} for lang in langs}
+    relevant_docs = {lang: {EVAL_SPLIT: {}} for lang in langs}
+    instructions = {lang: {EVAL_SPLIT: {}} for lang in langs}
     top_ranked = {lang: {EVAL_SPLIT: {}} for lang in langs}
 
     for lang in langs:
@@ -60,6 +58,7 @@ def load_data(
             loading_lang = lang.split("-")[1]  # don't care about the eng part
         else:
             loading_lang = lang
+        print(f"Loading data for {lang} from {loading_lang}")
 
         # Load corpus data
         corpus_data = datasets.load_dataset(
@@ -67,7 +66,6 @@ def load_data(
             f"corpus-{loading_lang}",
             cache_dir=cache_dir,
             revision=revision,
-            trust_remote_code=True,
         )
         corpus[lang][EVAL_SPLIT] = {
             row["_id"]: {"title": row["title"], "text": row["text"]}
@@ -80,54 +78,39 @@ def load_data(
             f"queries-{loading_lang}",
             cache_dir=cache_dir,
             revision=revision,
-            trust_remote_code=True,
         )
         queries[lang][EVAL_SPLIT] = {
-            row["_id"]: {
-                "text": row["text"],
-                "instruction_og": row["instruction_og"],
-                "instruction_changed": row["instruction_changed"],
-                "keywords": row["keywords"] if "keywords" in row else None,
-                "short_query": row["short_query"] if "short_query" in row else None,
-            }
-            for row in queries_data["queries"]
+            row["_id"]: row["text"] for row in queries_data["queries"]
+        }
+
+        # Load instructions data
+        instructions_data = datasets.load_dataset(
+            path,
+            f"instruction-{loading_lang}",
+            cache_dir=cache_dir,
+            revision=revision,
+        )
+        instructions[lang][EVAL_SPLIT] = {
+            row["query-id"]: row["instruction"]
+            for row in instructions_data["instruction"]
         }
 
         # Load qrels_og data
         qrels_og_data = datasets.load_dataset(
             path,
-            f"qrels_og-{loading_lang}",
+            f"default-{loading_lang}",
             cache_dir=cache_dir,
             revision=revision,
-            trust_remote_code=True,
         )
         for row in qrels_og_data[EVAL_SPLIT]:
-            if row["query-id"] not in og_relevant_docs[lang][EVAL_SPLIT]:
-                og_relevant_docs[lang][EVAL_SPLIT][row["query-id"]] = {
+            if row["query-id"] not in relevant_docs[lang][EVAL_SPLIT]:
+                relevant_docs[lang][EVAL_SPLIT][row["query-id"]] = {
                     row["corpus-id"]: int(row["score"])
                 }
             else:
-                og_relevant_docs[lang][EVAL_SPLIT][row["query-id"]][
-                    row["corpus-id"]
-                ] = int(row["score"])
-
-        # Load qrels_changed data
-        qrels_changed_data = datasets.load_dataset(
-            path,
-            f"qrels_changed-{loading_lang}",
-            cache_dir=cache_dir,
-            revision=revision,
-            trust_remote_code=True,
-        )
-        for row in qrels_changed_data[EVAL_SPLIT]:
-            if row["query-id"] not in changed_relevant_docs[lang][EVAL_SPLIT]:
-                changed_relevant_docs[lang][EVAL_SPLIT][row["query-id"]] = {
-                    row["corpus-id"]: int(row["score"])
-                }
-            else:
-                changed_relevant_docs[lang][EVAL_SPLIT][row["query-id"]][
-                    row["corpus-id"]
-                ] = int(row["score"])
+                relevant_docs[lang][EVAL_SPLIT][row["query-id"]][row["corpus-id"]] = (
+                    int(row["score"])
+                )
 
         # Load top_ranked data
         top_ranked_data = datasets.load_dataset(
@@ -135,7 +118,6 @@ def load_data(
             f"top_ranked-{loading_lang}",
             cache_dir=cache_dir,
             revision=revision,
-            trust_remote_code=True,
         )
         for row in top_ranked_data["top_ranked"]:
             if row["qid"] not in top_ranked[lang][EVAL_SPLIT]:
@@ -143,43 +125,17 @@ def load_data(
             else:
                 top_ranked[lang][EVAL_SPLIT][row["qid"]].append(row["pid"])
 
-    # make og_instructions and changed_instructions from queries and then turn queries into just queries
-    og_instructions = {lang: {EVAL_SPLIT: defaultdict(dict)} for lang in queries}
-    changed_instructions = {lang: {EVAL_SPLIT: defaultdict(dict)} for lang in queries}
-    queries_only = {lang: {EVAL_SPLIT: {}} for lang in queries}
-    for lang in queries:
-        for split in queries[lang]:
-            for qid in queries[lang][split]:
-                text = queries[lang][split][qid]["text"]
-                og_instructions[lang][split][text] = queries[lang][split][qid][
-                    "instruction_og"
-                ]
-                changed_instructions[lang][split][text] = queries[lang][split][qid][
-                    "instruction_changed"
-                ]
-                queries_only[lang][split][qid] = text
-
-    queries = queries_only
-
-    return (
-        corpus,
-        queries,
-        og_instructions,
-        changed_instructions,
-        og_relevant_docs,
-        changed_relevant_docs,
-        top_ranked,
-    )
+    return (corpus, queries, instructions, relevant_docs, top_ranked)
 
 
 class mFollowIRCrossLingual(MultilingualTask, AbsTaskReranking):
     metadata = TaskMetadata(
-        name="mFollowIRCrossLingualInstructionReranking",
+        name="mFollowIRCrossLingual",
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages with English queries/instructions.",
         reference="https://neuclir.github.io/",
         dataset={
-            "path": "jhu-clsp/mFollowIR-cross-lingual-parquet",
-            "revision": "7a82814a53229d3c8f18b2e18762a1a959dc5ff6",
+            "path": "jhu-clsp/mFollowIR-cross-lingual-parquet-mteb",
+            "revision": "9c1e094d813857dcdefcaf9764c520b8ba237ffd",
         },
         type="Retrieval",
         category="s2p",
@@ -254,10 +210,8 @@ class mFollowIRCrossLingual(MultilingualTask, AbsTaskReranking):
         (
             self.corpus,
             self.queries,
-            self.og_instructions,
-            self.changed_instructions,
-            self.og_relevant_docs,
-            self.changed_relevant_docs,
+            self.instructions,
+            self.relevant_docs,
             self.top_ranked,
         ) = load_data(
             path=self.metadata_dict["dataset"]["path"],
@@ -272,12 +226,12 @@ class mFollowIRCrossLingual(MultilingualTask, AbsTaskReranking):
 
 class mFollowIR(MultilingualTask, AbsTaskReranking):
     metadata = TaskMetadata(
-        name="mFollowIRInstructionReranking",
+        name="mFollowIR",
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages.",
         reference="https://neuclir.github.io/",
         dataset={
-            "path": "jhu-clsp/mFollowIR-parquet",
-            "revision": "2c5cdcb438eff9de6412803768ac7304d4771cdc",
+            "path": "jhu-clsp/mFollowIR-parquet-mteb",
+            "revision": "d95f42313ebac4f1ae188afcd26097210ada8779",
         },
         type="Retrieval",
         category="s2p",
@@ -352,10 +306,8 @@ class mFollowIR(MultilingualTask, AbsTaskReranking):
         (
             self.corpus,
             self.queries,
-            self.og_instructions,
-            self.changed_instructions,
-            self.og_relevant_docs,
-            self.changed_relevant_docs,
+            self.instructions,
+            self.relevant_docs,
             self.top_ranked,
         ) = load_data(
             path=self.metadata_dict["dataset"]["path"],

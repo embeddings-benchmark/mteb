@@ -5,9 +5,11 @@ from collections import defaultdict
 
 import numpy as np
 import pandas as pd
+import pytrec_eval
 import requests
 import torch
 import tqdm
+from datasets import load_dataset
 from packaging.version import Version
 from sklearn.metrics import auc
 
@@ -235,15 +237,11 @@ def get_rank_from_dict(
     return len(sorted_by_score) + 1, 0
 
 
-def evaluate_change(
-    original_run: dict[str, dict[str, float]],
-    new_run: dict[str, dict[str, float]],
-    changed_qrels: dict[str, list[str]],
-) -> dict[str, float]:
+def calculate_pmrr(original_run, new_run, changed_qrels):
     changes = []
     for qid in changed_qrels.keys():
-        original_qid_run = original_run[qid]
-        new_qid_run = new_run[qid]
+        original_qid_run = original_run[qid + "-og"]
+        new_qid_run = new_run[qid + "-changed"]
         for idx, changed_doc in enumerate(changed_qrels[qid]):
             original_rank, original_score = get_rank_from_dict(
                 original_qid_run, changed_doc
@@ -267,9 +265,80 @@ def evaluate_change(
     changes_df = pd.DataFrame(changes)
     changes_df["p-MRR"] = changes_df.apply(lambda x: rank_score(x), axis=1)
     qid_wise = changes_df.groupby("qid").agg({"p-MRR": "mean"})
-    return {
-        "p-MRR": qid_wise["p-MRR"].mean(),
+    return qid_wise["p-MRR"].mean()
+
+
+def evaluate_p_mrr_change(
+    results: dict[str, dict[str, float]],
+    qrels: dict[str, dict[str, float]],
+    task_name: str,
+    k_values: list[int],
+) -> dict[str, float]:
+    """Computes the scores needed for FollowIR datasets, including p-MRR (measuring change in instruction) and
+    details about the original instruction run and changed instruction run.
+    """
+    followir_scores = defaultdict(dict)
+    # load the qrel_diff from the dataset
+    TASK_TO_HF_DATASET = {
+        "Core17InstructionRetrieval": ("jhu-clsp/core17-instructions-mteb", False),
+        "Robust04InstructionRetrieval": ("jhu-clsp/robust04-instructions-mteb", False),
+        "News21InstructionRetrieval": ("jhu-clsp/news21-instructions-mteb", False),
+        "mFollowIR": ("jhu-clsp/mfollowir-mteb", True),
+        "mFollowIRCrossLingual": (
+            "jhu-clsp/mfollowir-cross-lingual-mteb",
+            True,
+        ),
     }
+    hf_path, is_multilingual = TASK_TO_HF_DATASET[task_name]
+    langs = "eng" if not is_multilingual else ["zho", "rus", "fas"]
+
+    qrels_sep = {
+        "og": {k: v for k, v in qrels.items() if k.endswith("-og")},
+        "changed": {k: v for k, v in qrels.items() if not k.endswith("-og")},
+    }
+
+    original_run = {}
+    new_run = {}
+    # make original run from the results file with all "-og" items only and vice versa
+    for qid, docs in results.items():
+        if qid.endswith("-og"):
+            original_run[qid] = docs
+        else:
+            new_run[qid] = docs
+
+    for lang in langs:
+        config_name = "qrel_diff" if not is_multilingual else f"qrel_diff-{lang}"
+        changed_qrels = {
+            item["query-id"]: item["corpus-ids"]
+            for item in load_dataset(hf_path, config_name)["qrel_diff"]
+        }
+        p_mrr = calculate_pmrr(original_run, new_run, changed_qrels)
+        followir_scores[lang]["p-MRR"] = p_mrr
+
+        # unfortunately, have to re-compute scores here to get only og and changed scores
+        followir_scores[lang]["og"] = {}
+        followir_scores[lang]["changed"] = {}
+        for name, group in [("og", original_run), ("changed", new_run)]:
+            map_string = "map_cut." + ",".join([str(k) for k in k_values])
+            ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
+            recall_string = "recall." + ",".join([str(k) for k in k_values])
+            precision_string = "P." + ",".join([str(k) for k in k_values])
+            evaluator = pytrec_eval.RelevanceEvaluator(
+                qrels_sep[name],
+                {map_string, ndcg_string, recall_string, precision_string},
+            )
+            # qrels_changed_as_og = {k.replace("-changed", "-og"): v for k, v in qrels_sep["changed"].items()}
+            group_scores = evaluator.evaluate(group)
+            ndcg, _map, recall, precision = parse_metrics_from_scores(
+                group_scores, k_values
+            )[:4]  # don't need the other fields
+
+            # add these to the followir_scores with name prefix
+            scores_dict = make_score_dict(ndcg, _map, recall, precision, {}, {}, {}, {})
+            for key, value in scores_dict.items():
+                followir_scores[lang][name][key] = value
+
+    return followir_scores
 
 
 def rank_score(x: dict[str, float]) -> float:
@@ -434,7 +503,7 @@ def add_task_specific_scores(
     qrels: dict[str, dict[str, int]],
     results: dict[str, dict[str, float]],
     task_name: str,
-    k_values: list[int],  # not needed now, but perhaps later?
+    k_values: list[int],
 ) -> dict[str, float]:
     """Add task-specific scores to the scores dictionary, that are not needed for all results but require additional computation."""
     task_scores = {}
@@ -447,14 +516,20 @@ def add_task_specific_scores(
         task_scores["robustness_at_10"] = robustness_at_10_score
 
     if task_name in [
-        "mFollowIRInstructionReranking",
-        "mFollowIRCrossLingualInstructionReranking",
+        "mFollowIR",
+        "mFollowIRCrossLingual",
         "Robust04InstructionRetrieval",
         "Core17InstructionRetrieval",
         "News21InstructionRetrieval",
     ]:
-        p_mrr = evaluate_change(results, scores, qrels)
-        task_scores["p-MRR"] = p_mrr["p-MRR"]
+        p_mrr_and_consolidated_scores = evaluate_p_mrr_change(
+            results, qrels, task_name, k_values
+        )
+        task_scores.update(p_mrr_and_consolidated_scores)
+
+    if task_name in ["MindSmallReranking"]:
+        take_max_over_subqueries = max_over_subqueries(qrels, results, scores)
+        task_scores["max_over_subqueries"] = take_max_over_subqueries
 
     return task_scores
 
@@ -507,7 +582,6 @@ def robustness_at_10(
         query_keys[key.split("_")[0]].append(key)
 
     robustness_scores = []
-    breakpoint()
     for _, keys in query_keys.items():
         # get the ndcg@10 for each query
         current_scores = []
@@ -518,3 +592,88 @@ def robustness_at_10(
         robustness_scores.append(min(current_scores))
 
     return sum(robustness_scores) / len(robustness_scores)
+
+
+def make_score_dict(ndcg, _map, recall, precision, mrr, naucs, naucs_mrr, task_scores):
+    scores = {
+        **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
+        **{f"map_at_{k.split('@')[1]}": v for (k, v) in _map.items()},
+        **{f"recall_at_{k.split('@')[1]}": v for (k, v) in recall.items()},
+        **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
+        **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
+        **{
+            k.replace("@", "_at_").replace("_P", "_precision").lower(): v
+            for k, v in naucs.items()
+        },
+        **{
+            k.replace("@", "_at_").replace("_P", "_precision").lower(): v
+            for k, v in naucs_mrr.items()
+        },
+        **task_scores,
+    }
+    return scores
+
+
+def parse_metrics_from_scores(scores, k_values):
+    all_ndcgs, all_aps, all_recalls, all_precisions = {}, {}, {}, {}
+    for k in k_values:
+        all_ndcgs[f"NDCG@{k}"] = []
+        all_aps[f"MAP@{k}"] = []
+        all_recalls[f"Recall@{k}"] = []
+        all_precisions[f"P@{k}"] = []
+
+    for query_id in scores.keys():
+        for k in k_values:
+            all_ndcgs[f"NDCG@{k}"].append(scores[query_id]["ndcg_cut_" + str(k)])
+            all_aps[f"MAP@{k}"].append(scores[query_id]["map_cut_" + str(k)])
+            all_recalls[f"Recall@{k}"].append(scores[query_id]["recall_" + str(k)])
+            all_precisions[f"P@{k}"].append(scores[query_id]["P_" + str(k)])
+
+    ndcg, _map, recall, precision = (
+        all_ndcgs.copy(),
+        all_aps.copy(),
+        all_recalls.copy(),
+        all_precisions.copy(),
+    )
+
+    for k in k_values:
+        ndcg[f"NDCG@{k}"] = round(sum(ndcg[f"NDCG@{k}"]) / len(scores), 5)
+        _map[f"MAP@{k}"] = round(sum(_map[f"MAP@{k}"]) / len(scores), 5)
+        recall[f"Recall@{k}"] = round(sum(recall[f"Recall@{k}"]) / len(scores), 5)
+        precision[f"P@{k}"] = round(sum(precision[f"P@{k}"]) / len(scores), 5)
+
+    return (
+        ndcg,
+        _map,
+        recall,
+        precision,
+        all_ndcgs,
+        all_aps,
+        all_recalls,
+        all_precisions,
+    )
+
+
+def max_over_subqueries(qrels, results, scores):
+    """Computes the max over subqueries. This metric is the maximum of the scores for all subqueries
+
+    Args:
+        qrels: Ground truth relevance judgments for the queries
+        results: Predicted relevance scores for the queries
+        scores: The scores for the queries, to extract average precision for each query
+    """
+    query_keys = defaultdict(list)
+    for key in qrels.keys():
+        query_keys[key.split("_")[0]].append(key)
+
+    max_over_subqueries = []
+    for _, keys in query_keys.items():
+        # get the average precision for each query
+        current_scores = []
+        for key in keys:
+            current_scores.append(scores[key]["P_1"])
+
+        # get the max average precision
+        max_over_subqueries.append(max(current_scores))
+
+    return sum(max_over_subqueries) / len(max_over_subqueries)

@@ -10,6 +10,7 @@ from typing import Any
 from mteb.abstasks.TaskMetadata import HFSubset
 
 from ..evaluation.evaluators import RetrievalEvaluator
+from ..evaluation.evaluators.utils import make_score_dict
 from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask, DescriptiveStatistics
 from .dataloaders import HFDataLoader
@@ -27,7 +28,7 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
         num_documents: Number of documents
         average_relevant_docs_per_query: Average number of relevant documents per query
         average_instruction_length: Average length of instructions
-        average_num_instructions_per_query: Average number of instructions per query
+        num_instructions: Number of instructions
         average_top_ranked_per_query: Average number of top ranked documents per query
     """
 
@@ -38,7 +39,7 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     average_relevant_docs_per_query: float
     # these are for datasets with instructions
     average_instruction_length: float
-    average_num_instructions_per_query: float
+    num_instructions: int
     # this is for datasets that do reranking
     average_top_ranked_per_query: float
 
@@ -68,8 +69,8 @@ class AbsTaskRetrieval(AbsTask):
         E.g.: {"test": {"q1": ["document_one", "document_two"]}} or {"test": {"q1": {"document_one": 1, "document_two": 0.5}}}
 
     self.instructions: dict[str, dict[str, str]] or dict[str, dict[str, list[str]]]
-        Semantically, it should contain dict[split_name, dict[sample_id, str]] or dict[split_name, dict[sample_id, list[str]]] for multiple instructions per query
-        E.g. {"test": {"q1": "instruction"}} or {"test": {"q1": ["instruction1", "instruction2"]}}
+        Semantically, it should contain dict[split_name, dict[sample_id, str]]. If there are multiple instructions per query, please duplicate the queries and give them unique ids for consolidation.
+        E.g. {"test": {"query-id1": "instruction text"}}
     """
 
     ignore_identical_ids: bool = False
@@ -107,7 +108,9 @@ class AbsTaskRetrieval(AbsTask):
             # optional args
             if instructions:
                 self.instructions = {
-                    split: {inst["query"]: inst["instruction"] for inst in instructions}
+                    split: {
+                        inst["query-id"]: inst["instruction"] for inst in instructions
+                    }
                 }
             if top_ranked:
                 self.top_ranked = {
@@ -172,8 +175,6 @@ class AbsTaskRetrieval(AbsTask):
         else:
             # perform the retrieval here
             start_time = time()
-            # instructions can be a set of instructions for each query
-            # TODO: add instructions here - in progress
             results = retriever(corpus, queries, **kwargs)
             end_time = time()
             logger.info(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
@@ -214,22 +215,9 @@ class AbsTaskRetrieval(AbsTask):
         mrr, naucs_mrr = retriever.evaluate_custom(
             relevant_docs, results, retriever.k_values, "mrr"
         )
-        scores = {
-            **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
-            **{f"map_at_{k.split('@')[1]}": v for (k, v) in _map.items()},
-            **{f"recall_at_{k.split('@')[1]}": v for (k, v) in recall.items()},
-            **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
-            **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
-            **{
-                k.replace("@", "_at_").replace("_P", "_precision").lower(): v
-                for k, v in naucs.items()
-            },
-            **{
-                k.replace("@", "_at_").replace("_P", "_precision").lower(): v
-                for k, v in naucs_mrr.items()
-            },
-            **task_scores,
-        }
+        scores = make_score_dict(
+            ndcg, _map, recall, precision, mrr, naucs, naucs_mrr, task_scores
+        )
         self._add_main_score(scores)
 
         if export_errors:
@@ -319,18 +307,9 @@ class AbsTaskRetrieval(AbsTask):
 
         if self.instructions is not None:
             total_instructions_len = sum(
-                [
-                    len(instruction)
-                    if isinstance(instruction, str)
-                    else sum([len(i) for i in instruction])
-                    for instruction in instructions.values()
-                ]
+                [len(instruction) for instruction in instructions.values()]
             )
-            # flatten the values in instructions to get the number of them
-            num_instructions = sum(
-                1 if isinstance(instruction, str) else len(instruction)
-                for instruction in instructions.values()
-            )
+            num_instructions = len(instructions)
         else:
             total_instructions_len = 0
             num_instructions = 0
@@ -353,9 +332,7 @@ class AbsTaskRetrieval(AbsTask):
             average_instruction_length=total_instructions_len / num_instructions
             if num_instructions
             else 0,
-            average_num_instructions_per_query=num_instructions / num_queries
-            if num_queries
-            else 0,
+            num_instructions=num_instructions,
             average_top_ranked_per_query=top_ranked_per_query,
         )
 

@@ -127,3 +127,20 @@ labse = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instuctions=False,
 )
+
+contriever = ModelMeta(
+    name="facebook/contriever-msmarco",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="abe8c1493371369031bcb1e02acb754cf4e162fa",
+    release_date="2022-06-25",  # release date of model on HF
+    n_parameters=150_000_000,
+    memory_usage=None,
+    embed_dim=768,
+    license=None,
+    max_tokens=512,
+    reference="https://huggingface.co/facebook/contriever-msmarco",
+    similarity_fn_name="dot",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instuctions=False,
+)
