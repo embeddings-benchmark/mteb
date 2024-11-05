@@ -371,7 +371,10 @@ class MTEB:
 
         # Run selected tasks
         logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks:")
-        self.print_selected_tasks()
+
+        if verbosity > 0:
+            self.print_selected_tasks()
+
         evaluation_results = []
         original_tasks = (
             self.tasks.copy()
