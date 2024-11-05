@@ -11,7 +11,7 @@ class RParisEasyI2IRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-paris-easy",
-            "revision": "a7293da8a341de665ee4dcb2f209281df342d80b",
+            "revision": "7d821ddebcb30ad343133e3a81e23347ac2a08a8",
         },
         type="Any2AnyRetrieval",
         category="i2i",
@@ -40,7 +40,7 @@ class RParisEasyI2IRetrieval(AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 6322,
+                    "num_documents": 1470,
                     "num_queries": 70,
                     "average_relevant_docs_per_query": 98.2,
                 }
@@ -57,7 +57,7 @@ class RParisMediumI2IRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-paris-medium",
-            "revision": "900267b49003a086979e8d52f6942624236bfc34",
+            "revision": "3d959815e102785efd628170281f1e65561b03d2",
         },
         type="Any2AnyRetrieval",
         category="i2i",
@@ -86,7 +86,7 @@ class RParisMediumI2IRetrieval(AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 6322,
+                    "num_documents": 2651,
                     "num_queries": 70,
                     "average_relevant_docs_per_query": 147.9,
                 }
@@ -103,7 +103,7 @@ class RParisHardI2IRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-paris-hard",
-            "revision": "fd121b6592fe946616fa85116703b94a4c61fd63",
+            "revision": "d3e0adf4e942446c04427511ccce281c86861248",
         },
         type="Any2AnyRetrieval",
         category="i2i",

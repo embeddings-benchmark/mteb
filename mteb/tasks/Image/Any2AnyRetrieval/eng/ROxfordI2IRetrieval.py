@@ -11,7 +11,7 @@ class ROxfordEasyI2IRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-oxford-easy",
-            "revision": "3f018eb7ad32218a5a4ebd704493e0834a265cf5",
+            "revision": "b71b5f67a93aa63761b79a67bcf28bd2ae590902",
         },
         type="Any2AnyRetrieval",
         category="i2i",
@@ -40,7 +40,7 @@ class ROxfordEasyI2IRetrieval(AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 4993,
+                    "num_documents": 516,
                     "num_queries": 70,
                     "average_relevant_docs_per_query": 43.3,
                 }
@@ -57,7 +57,7 @@ class ROxfordMediumI2IRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-oxford-medium",
-            "revision": "3bd28e9c45e15f299117c634799f7035c4de2d31",
+            "revision": "1dfb86730ee4b3f49b441f4896d473c83eb5ff0d",
         },
         type="Any2AnyRetrieval",
         category="i2i",
@@ -86,7 +86,7 @@ class ROxfordMediumI2IRetrieval(AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 4993,
+                    "num_documents": 788,
                     "num_queries": 70,
                     "average_relevant_docs_per_query": 78.9,
                 }
@@ -103,7 +103,7 @@ class ROxfordHardI2IRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-oxford-hard",
-            "revision": "f20b30211b7ba3fc64a02bd83998fe75f3023719",
+            "revision": "f71ab9d4aabcda93d55a7e65edfb3a34767d89e6",
         },
         type="Any2AnyRetrieval",
         category="i2i",
@@ -132,7 +132,7 @@ class ROxfordHardI2IRetrieval(AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 4993,
+                    "num_documents": 685,
                     "num_queries": 70,
                     "average_relevant_docs_per_query": 35.7,
                 }
