@@ -149,7 +149,7 @@ class VLM2VecWrapper:
                     }
 
                     image_outputs = self.encode_input(inputs)
-                    all_image_embeddings.append(image_outputs.cpu())
+                    all_image_embeddings.append(image_outputs.cpu().to(torch.float32))
 
         else:
             with torch.no_grad():
@@ -186,7 +186,7 @@ class VLM2VecWrapper:
                     }
 
                     image_outputs = self.encode_input(inputs)
-                    all_image_embeddings.append(image_outputs.cpu())
+                    all_image_embeddings.append(image_outputs.cpu().to(torch.float32))
 
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
@@ -221,7 +221,7 @@ class VLM2VecWrapper:
                 }
 
                 text_outputs = self.encode_input(inputs)
-                all_text_embeddings.append(text_outputs.cpu())
+                all_text_embeddings.append(text_outputs.cpu().to(torch.float32))
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
@@ -239,11 +239,13 @@ class VLM2VecWrapper:
         text_embeddings = None
         image_embeddings = None
 
-        if texts is not None:
+        if texts is not None and images is None:
             text_embeddings = self.get_text_embeddings(texts, batch_size)
+            return text_embeddings
 
-        if images is not None:
+        if images is not None and texts is None:
             image_embeddings = self.get_image_embeddings(images, batch_size)
+            return image_embeddings
 
         if text_embeddings is not None and image_embeddings is not None:
             if len(text_embeddings) != len(image_embeddings):

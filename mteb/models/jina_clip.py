@@ -25,14 +25,14 @@ class JinaCLIPModelWrapper:
             self.device
         )
 
-    def get_text_embeddings(self, texts: list[str], batch_size: int = 32):
+    def get_text_embeddings(self, texts: list[str], batch_size: int = 32, convert_to_numpy=False, convert_to_tensor=True):
         all_text_embeddings = []
 
         with torch.no_grad():
             for i in tqdm(range(0, len(texts), batch_size)):
                 batch_texts = texts[i : i + batch_size]
                 text_outputs = self.model.encode_text(
-                    batch_texts, convert_to_numpy=False, convert_to_tensor=True
+                    batch_texts, convert_to_numpy=convert_to_numpy, convert_to_tensor=convert_to_tensor
                 )
                 all_text_embeddings.append(text_outputs.cpu())
 
@@ -40,7 +40,7 @@ class JinaCLIPModelWrapper:
         return all_text_embeddings
 
     def get_image_embeddings(
-        self, images: list[Image.Image] | DataLoader, batch_size: int = 32
+        self, images: list[Image.Image] | DataLoader, batch_size: int = 32, convert_to_numpy=False, convert_to_tensor=True
     ):
         all_image_embeddings = []
 
@@ -51,8 +51,8 @@ class JinaCLIPModelWrapper:
                 for batch in tqdm(images):
                     image_outputs = self.model.encode_image(
                         [F.to_pil_image(b.to("cpu")) for b in batch],
-                        convert_to_numpy=False,
-                        convert_to_tensor=True,
+                        convert_to_numpy=convert_to_numpy,
+                        convert_to_tensor=convert_to_tensor,
                     )
                     all_image_embeddings.append(image_outputs.cpu())
         else:
@@ -90,7 +90,7 @@ class JinaCLIPModelWrapper:
         image_embeddings = None
 
         if texts is not None:
-            text_embeddings = self.encode_text(
+            text_embeddings = self.get_text_embeddings(
                 texts,
                 batch_size=batch_size,
                 convert_to_numpy=False,
@@ -98,7 +98,7 @@ class JinaCLIPModelWrapper:
             )
 
         if images is not None:
-            image_embeddings = self.encode_image(
+            image_embeddings = self.get_image_embeddings(
                 images,
                 batch_size=batch_size,
                 convert_to_numpy=False,
