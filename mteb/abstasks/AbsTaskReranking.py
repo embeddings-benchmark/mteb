@@ -103,7 +103,9 @@ class AbsTaskReranking(AbsTask):
         total_len_negative = sum([len(n) for n in negative])
         return RerankingDescriptiveStatistics(
             num_samples=len(query),
-            number_of_characters=total_len_query + total_len_positive + total_len_negative,
+            number_of_characters=total_len_query
+            + total_len_positive
+            + total_len_negative,
             num_positive=len(positive),
             num_negative=len(negative),
             avg_query_len=total_len_query / len(query),
