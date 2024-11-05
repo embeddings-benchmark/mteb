@@ -41,7 +41,7 @@ def format_n_parameters(n_parameters) -> str:
 
 def split_on_capital(s: str) -> str:
     """Splits on capital letters and joins with spaces"""
-    if all([c.isupper() for c in s]):
+    if all(c.isupper() for c in s):
         return s
     return " ".join(re.findall("[A-Z][^A-Z]*", s))
 
