@@ -197,7 +197,7 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Retrieval
 
     Attributes:
-        num_samples: Number of samples in the dataset
+        num_samples: Number of queries and documents
         num_queries: number of queries in the dataset
         num_documents: Number of documents
         number_of_characters: Total number of symbols in the dataset
