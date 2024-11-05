@@ -19,7 +19,7 @@ class PairClassificationDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        total_symbols: Total number of symbols in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
         avg_sentence1_len: Average length of sentence1
         avg_sentence2_len: Average length of sentence2
         unique_labels: Number of unique labels
@@ -27,7 +27,7 @@ class PairClassificationDescriptiveStatistics(DescriptiveStatistics):
     """
 
     num_samples: int
-    total_symbols: int
+    number_of_characters: int
     avg_sentence1_len: float
     avg_sentence2_len: float
     unique_labels: int
@@ -114,7 +114,7 @@ class AbsTaskPairClassification(AbsTask):
         label_count = Counter(labels)
         return PairClassificationDescriptiveStatistics(
             num_samples=len(sentence1),
-            total_symbols=total_sentence1_len + total_sentence2_len,
+            number_of_characters=total_sentence1_len + total_sentence2_len,
             avg_sentence1_len=total_sentence1_len / len(sentence1),
             avg_sentence2_len=total_sentence2_len / len(sentence2),
             unique_labels=len(set(labels)),

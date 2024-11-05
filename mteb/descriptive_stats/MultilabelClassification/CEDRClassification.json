@@ -1,7 +1,7 @@
 {
     "test": {
         "average_text_length": 91.20563230605738,
-        "total_symbols": 171649,
+        "number_of_characters": 171649,
         "average_label_per_text": 0.620616365568544,
         "num_samples": 1882,
         "unique_labels": 6,

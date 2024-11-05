@@ -1,7 +1,7 @@
 {
     "test": {
         "num_samples": 51534,
-        "total_symbols": 8659940,
+        "number_of_characters": 8659940,
         "avg_sentence1_len": 79.48919160166103,
         "avg_sentence2_len": 88.5540419916948,
         "unique_labels": 2,

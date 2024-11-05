@@ -3,6 +3,6 @@
         "average_sentence1_length": 49.834,
         "average_sentence2_length": 38.888,
         "num_samples": 500,
-        "total_symbols": 44361
+        "number_of_characters": 44361
     }
 }

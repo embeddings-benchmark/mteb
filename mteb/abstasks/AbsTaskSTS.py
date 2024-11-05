@@ -16,14 +16,14 @@ class STSDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        total_symbols: Total number of symbols in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
         average_sentence1_len: Average length of sentence1
         average_sentence2_len: Average length of sentence2
         avg_score: Average score
     """
 
     num_samples: int
-    total_symbols: int
+    number_of_characters: int
     average_sentence1_len: float
     average_sentence2_len: float
     avg_score: float
@@ -98,7 +98,7 @@ class AbsTaskSTS(AbsTask):
         avg_score = sum(score) / len(score)
         return STSDescriptiveStatistics(
             num_samples=len(sentence1),
-            total_symbols=total_sentence1_len + total_sentence2_len,
+            number_of_characters=total_sentence1_len + total_sentence2_len,
             average_sentence1_len=total_sentence1_len / len(sentence1),
             average_sentence2_len=total_sentence2_len / len(sentence2),
             avg_score=avg_score,

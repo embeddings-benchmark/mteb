@@ -1,7 +1,7 @@
 {
     "test": {
         "num_samples": 24000,
-        "total_symbols": 83866932,
+        "number_of_characters": 83866932,
         "num_positive": 24000,
         "num_negative": 192000,
         "avg_query_len": 59.091208333333334,
@@ -10,7 +10,7 @@
         "hf_subset_descriptive_stats": {
             "bg": {
                 "num_samples": 1500,
-                "total_symbols": 5145316,
+                "number_of_characters": 5145316,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 60.82666666666667,
@@ -19,7 +19,7 @@
             },
             "bn": {
                 "num_samples": 1500,
-                "total_symbols": 5390581,
+                "number_of_characters": 5390581,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 47.266666666666666,
@@ -28,7 +28,7 @@
             },
             "cs": {
                 "num_samples": 1500,
-                "total_symbols": 5079180,
+                "number_of_characters": 5079180,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 56.272,
@@ -37,7 +37,7 @@
             },
             "da": {
                 "num_samples": 1500,
-                "total_symbols": 4746132,
+                "number_of_characters": 4746132,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 56.75066666666667,
@@ -46,7 +46,7 @@
             },
             "de": {
                 "num_samples": 1500,
-                "total_symbols": 5483592,
+                "number_of_characters": 5483592,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 70.004,
@@ -55,7 +55,7 @@
             },
             "en": {
                 "num_samples": 1500,
-                "total_symbols": 6217884,
+                "number_of_characters": 6217884,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 68.372,
@@ -64,7 +64,7 @@
             },
             "fa": {
                 "num_samples": 1500,
-                "total_symbols": 4732619,
+                "number_of_characters": 4732619,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 48.66733333333333,
@@ -73,7 +73,7 @@
             },
             "fi": {
                 "num_samples": 1500,
-                "total_symbols": 5209132,
+                "number_of_characters": 5209132,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 55.343333333333334,
@@ -82,7 +82,7 @@
             },
             "hi": {
                 "num_samples": 1500,
-                "total_symbols": 5620959,
+                "number_of_characters": 5620959,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 50.77733333333333,
@@ -91,7 +91,7 @@
             },
             "it": {
                 "num_samples": 1500,
-                "total_symbols": 5420496,
+                "number_of_characters": 5420496,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 70.05466666666666,
@@ -100,7 +100,7 @@
             },
             "nl": {
                 "num_samples": 1500,
-                "total_symbols": 5169556,
+                "number_of_characters": 5169556,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 65.34466666666667,
@@ -109,7 +109,7 @@
             },
             "pt": {
                 "num_samples": 1500,
-                "total_symbols": 5474356,
+                "number_of_characters": 5474356,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 65.11933333333333,
@@ -118,7 +118,7 @@
             },
             "ro": {
                 "num_samples": 1500,
-                "total_symbols": 4796113,
+                "number_of_characters": 4796113,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 61.973333333333336,
@@ -127,7 +127,7 @@
             },
             "sr": {
                 "num_samples": 1500,
-                "total_symbols": 5271732,
+                "number_of_characters": 5271732,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 55.669333333333334,
@@ -136,7 +136,7 @@
             },
             "no": {
                 "num_samples": 1500,
-                "total_symbols": 5036586,
+                "number_of_characters": 5036586,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 55.288,
@@ -145,7 +145,7 @@
             },
             "sv": {
                 "num_samples": 1500,
-                "total_symbols": 5072698,
+                "number_of_characters": 5072698,
                 "num_positive": 1500,
                 "num_negative": 12000,
                 "avg_query_len": 57.73,

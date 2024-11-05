@@ -1,6 +1,6 @@
 {
     "train": {
-        "total_symbols": 71.98776923076923,
+        "number_of_characters": 71.98776923076923,
         "num_samples": 26000,
         "num_queries": 13000,
         "num_documents": 13000,
@@ -9,7 +9,7 @@
         "average_relevant_docs_per_query": 1.0,
         "hf_subset_descriptive_stats": {
             "python": {
-                "total_symbols": 70.519,
+                "number_of_characters": 70.519,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -18,7 +18,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "javascript": {
-                "total_symbols": 57.88,
+                "number_of_characters": 57.88,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -27,7 +27,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "typescript": {
-                "total_symbols": 61.092,
+                "number_of_characters": 61.092,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -36,7 +36,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "go": {
-                "total_symbols": 71.797,
+                "number_of_characters": 71.797,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -45,7 +45,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "ruby": {
-                "total_symbols": 67.9,
+                "number_of_characters": 67.9,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -54,7 +54,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "java": {
-                "total_symbols": 63.984,
+                "number_of_characters": 63.984,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -63,7 +63,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "php": {
-                "total_symbols": 62.927,
+                "number_of_characters": 62.927,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -72,7 +72,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "c": {
-                "total_symbols": 98.588,
+                "number_of_characters": 98.588,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -81,7 +81,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "c++": {
-                "total_symbols": 115.48,
+                "number_of_characters": 115.48,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -90,7 +90,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "rust": {
-                "total_symbols": 68.503,
+                "number_of_characters": 68.503,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -99,7 +99,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "swift": {
-                "total_symbols": 58.279,
+                "number_of_characters": 58.279,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -108,7 +108,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "scala": {
-                "total_symbols": 65.833,
+                "number_of_characters": 65.833,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -117,7 +117,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "shell": {
-                "total_symbols": 73.059,
+                "number_of_characters": 73.059,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,

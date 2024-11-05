@@ -193,6 +193,7 @@ class AbsTask(ABC):
         self, overwrite_results: bool = False
     ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
         if self.metadata.descriptive_stat_path.exists() and not overwrite_results:
+            logger.info("Loading metadata descriptive statistics from cache.")
             return self.metadata.descriptive_stats
 
         self.load_data()

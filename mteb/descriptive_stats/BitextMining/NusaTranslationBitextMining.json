@@ -3,73 +3,73 @@
         "average_sentence1_length": 145.4552390438247,
         "average_sentence2_length": 148.56607569721115,
         "num_samples": 50200,
-        "total_symbols": 14759870,
+        "number_of_characters": 14759870,
         "hf_subset_descriptive_stats": {
             "ind-abs": {
                 "average_sentence1_length": 148.366,
                 "average_sentence2_length": 147.314,
                 "num_samples": 1000,
-                "total_symbols": 295680
+                "number_of_characters": 295680
             },
             "ind-btk": {
                 "average_sentence1_length": 145.36666666666667,
                 "average_sentence2_length": 146.74045454545455,
                 "num_samples": 6600,
-                "total_symbols": 1927907
+                "number_of_characters": 1927907
             },
             "ind-bew": {
                 "average_sentence1_length": 145.4280303030303,
                 "average_sentence2_length": 148.40530303030303,
                 "num_samples": 6600,
-                "total_symbols": 1939300
+                "number_of_characters": 1939300
             },
             "ind-bhp": {
                 "average_sentence1_length": 133.528,
                 "average_sentence2_length": 128.138,
                 "num_samples": 1000,
-                "total_symbols": 261666
+                "number_of_characters": 261666
             },
             "ind-jav": {
                 "average_sentence1_length": 145.42772727272728,
                 "average_sentence2_length": 145.8089393939394,
                 "num_samples": 6600,
-                "total_symbols": 1922162
+                "number_of_characters": 1922162
             },
             "ind-mad": {
                 "average_sentence1_length": 145.35545454545453,
                 "average_sentence2_length": 153.6228787878788,
                 "num_samples": 6600,
-                "total_symbols": 1973257
+                "number_of_characters": 1973257
             },
             "ind-mak": {
                 "average_sentence1_length": 145.42772727272728,
                 "average_sentence2_length": 150.6128787878788,
                 "num_samples": 6600,
-                "total_symbols": 1953868
+                "number_of_characters": 1953868
             },
             "ind-min": {
                 "average_sentence1_length": 145.42772727272728,
                 "average_sentence2_length": 148.0621212121212,
                 "num_samples": 6600,
-                "total_symbols": 1937033
+                "number_of_characters": 1937033
             },
             "ind-mui": {
                 "average_sentence1_length": 150.454,
                 "average_sentence2_length": 150.994,
                 "num_samples": 1000,
-                "total_symbols": 301448
+                "number_of_characters": 301448
             },
             "ind-rej": {
                 "average_sentence1_length": 151.622,
                 "average_sentence2_length": 139.583,
                 "num_samples": 1000,
-                "total_symbols": 291205
+                "number_of_characters": 291205
             },
             "ind-sun": {
                 "average_sentence1_length": 145.42772727272728,
                 "average_sentence2_length": 150.9880303030303,
                 "num_samples": 6600,
-                "total_symbols": 1956344
+                "number_of_characters": 1956344
             }
         }
     }

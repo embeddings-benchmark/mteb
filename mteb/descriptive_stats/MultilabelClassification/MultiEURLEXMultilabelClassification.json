@@ -1,7 +1,7 @@
 {
     "test": {
         "average_text_length": 12014.408930434782,
-        "total_symbols": 1381657027,
+        "number_of_characters": 1381657027,
         "average_label_per_text": 3.5938,
         "num_samples": 115000,
         "unique_labels": 21,
@@ -73,7 +73,7 @@
         "hf_subset_descriptive_stats": {
             "en": {
                 "average_text_length": 11720.2926,
-                "total_symbols": 58601463,
+                "number_of_characters": 58601463,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -145,7 +145,7 @@
             },
             "de": {
                 "average_text_length": 12865.4162,
-                "total_symbols": 64327081,
+                "number_of_characters": 64327081,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -217,7 +217,7 @@
             },
             "fr": {
                 "average_text_length": 13081.1098,
-                "total_symbols": 65405549,
+                "number_of_characters": 65405549,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -289,7 +289,7 @@
             },
             "it": {
                 "average_text_length": 12763.4786,
-                "total_symbols": 63817393,
+                "number_of_characters": 63817393,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -361,7 +361,7 @@
             },
             "es": {
                 "average_text_length": 13080.29,
-                "total_symbols": 65401450,
+                "number_of_characters": 65401450,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -433,7 +433,7 @@
             },
             "pl": {
                 "average_text_length": 12282.5926,
-                "total_symbols": 61412963,
+                "number_of_characters": 61412963,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -505,7 +505,7 @@
             },
             "ro": {
                 "average_text_length": 12836.9322,
-                "total_symbols": 64184661,
+                "number_of_characters": 64184661,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -577,7 +577,7 @@
             },
             "nl": {
                 "average_text_length": 12857.9742,
-                "total_symbols": 64289871,
+                "number_of_characters": 64289871,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -649,7 +649,7 @@
             },
             "el": {
                 "average_text_length": 12998.143,
-                "total_symbols": 64990715,
+                "number_of_characters": 64990715,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -721,7 +721,7 @@
             },
             "hu": {
                 "average_text_length": 12424.641,
-                "total_symbols": 62123205,
+                "number_of_characters": 62123205,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -793,7 +793,7 @@
             },
             "pt": {
                 "average_text_length": 12482.4616,
-                "total_symbols": 62412308,
+                "number_of_characters": 62412308,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -865,7 +865,7 @@
             },
             "cs": {
                 "average_text_length": 10783.4676,
-                "total_symbols": 53917338,
+                "number_of_characters": 53917338,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -937,7 +937,7 @@
             },
             "sv": {
                 "average_text_length": 11612.4774,
-                "total_symbols": 58062387,
+                "number_of_characters": 58062387,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -1009,7 +1009,7 @@
             },
             "bg": {
                 "average_text_length": 12235.4268,
-                "total_symbols": 61177134,
+                "number_of_characters": 61177134,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -1081,7 +1081,7 @@
             },
             "da": {
                 "average_text_length": 11773.958,
-                "total_symbols": 58869790,
+                "number_of_characters": 58869790,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -1153,7 +1153,7 @@
             },
             "fi": {
                 "average_text_length": 12087.6862,
-                "total_symbols": 60438431,
+                "number_of_characters": 60438431,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -1225,7 +1225,7 @@
             },
             "sk": {
                 "average_text_length": 11130.814,
-                "total_symbols": 55654070,
+                "number_of_characters": 55654070,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -1297,7 +1297,7 @@
             },
             "lt": {
                 "average_text_length": 11245.3566,
-                "total_symbols": 56226783,
+                "number_of_characters": 56226783,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -1369,7 +1369,7 @@
             },
             "hr": {
                 "average_text_length": 11022.142,
-                "total_symbols": 55110710,
+                "number_of_characters": 55110710,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -1441,7 +1441,7 @@
             },
             "sl": {
                 "average_text_length": 10620.0594,
-                "total_symbols": 53100297,
+                "number_of_characters": 53100297,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -1513,7 +1513,7 @@
             },
             "et": {
                 "average_text_length": 10898.4312,
-                "total_symbols": 54492156,
+                "number_of_characters": 54492156,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -1585,7 +1585,7 @@
             },
             "lv": {
                 "average_text_length": 10938.5102,
-                "total_symbols": 54692551,
+                "number_of_characters": 54692551,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,
@@ -1657,7 +1657,7 @@
             },
             "mt": {
                 "average_text_length": 12589.7442,
-                "total_symbols": 62948721,
+                "number_of_characters": 62948721,
                 "average_label_per_text": 3.5938,
                 "num_samples": 5000,
                 "unique_labels": 21,

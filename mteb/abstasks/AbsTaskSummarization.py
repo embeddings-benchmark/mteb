@@ -20,7 +20,7 @@ class SummarizationDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        total_symbols: Total number of symbols in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
         avg_text_len: Average length of text
         avg_human_summaries_len: Average length of human summaries
         avg_machine_summaries_len: Average length of machine summaries
@@ -28,7 +28,7 @@ class SummarizationDescriptiveStatistics(DescriptiveStatistics):
     """
 
     num_samples: int
-    total_symbols: int
+    number_of_characters: int
     avg_text_len: float
     avg_human_summaries_len: float
     avg_machine_summaries_len: float
@@ -118,7 +118,7 @@ class AbsTaskSummarization(AbsTask):
         total_relevance = sum(sum(x) / len(x) for x in relevance)
         return SummarizationDescriptiveStatistics(
             num_samples=len(text),
-            total_symbols=total_text_len
+            number_of_characters=total_text_len
             + total_human_summaries_len
             + total_machine_summaries_len,
             avg_text_len=total_text_len / len(text),

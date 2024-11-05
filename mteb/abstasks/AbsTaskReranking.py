@@ -17,7 +17,7 @@ class RerankingDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        total_symbols: Total number of symbols in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
         num_positive: Number of positive examples
         num_negative: Number of negative examples
         avg_query_len: Average length of queries
@@ -26,7 +26,7 @@ class RerankingDescriptiveStatistics(DescriptiveStatistics):
     """
 
     num_samples: int
-    total_symbols: int
+    number_of_characters: int
     num_positive: int
     num_negative: int
     avg_query_len: float
@@ -103,7 +103,7 @@ class AbsTaskReranking(AbsTask):
         total_len_negative = sum([len(n) for n in negative])
         return RerankingDescriptiveStatistics(
             num_samples=len(query),
-            total_symbols=total_len_query + total_len_positive + total_len_negative,
+            number_of_characters=total_len_query + total_len_positive + total_len_negative,
             num_positive=len(positive),
             num_negative=len(negative),
             avg_query_len=total_len_query / len(query),

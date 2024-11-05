@@ -1,84 +1,84 @@
 {
     "test": {
         "num_samples": 5346,
-        "total_symbols": 400264,
+        "number_of_characters": 400264,
         "average_sentence1_len": 38.14665170220726,
         "average_sentence2_len": 36.72502805836139,
         "avg_score": 2.3554804214989464,
         "hf_subset_descriptive_stats": {
             "ko-ko": {
                 "num_samples": 2846,
-                "total_symbols": 183387,
+                "number_of_characters": 183387,
                 "average_sentence1_len": 31.991918482080113,
                 "average_sentence2_len": 32.44483485593816,
                 "avg_score": 2.469359920356055
             },
             "ar-ar": {
                 "num_samples": 250,
-                "total_symbols": 16247,
+                "number_of_characters": 16247,
                 "average_sentence1_len": 32.208,
                 "average_sentence2_len": 32.78,
                 "avg_score": 2.216800000000001
             },
             "en-ar": {
                 "num_samples": 250,
-                "total_symbols": 18764,
+                "number_of_characters": 18764,
                 "average_sentence1_len": 42.36,
                 "average_sentence2_len": 32.696,
                 "avg_score": 2.1423999999999994
             },
             "en-de": {
                 "num_samples": 250,
-                "total_symbols": 22177,
+                "number_of_characters": 22177,
                 "average_sentence1_len": 43.952,
                 "average_sentence2_len": 44.756,
                 "avg_score": 2.2776000000000014
             },
             "en-en": {
                 "num_samples": 250,
-                "total_symbols": 21669,
+                "number_of_characters": 21669,
                 "average_sentence1_len": 43.952,
                 "average_sentence2_len": 42.724,
                 "avg_score": 2.2776000000000014
             },
             "en-tr": {
                 "num_samples": 250,
-                "total_symbols": 20879,
+                "number_of_characters": 20879,
                 "average_sentence1_len": 41.916,
                 "average_sentence2_len": 41.6,
                 "avg_score": 2.1335999999999986
             },
             "es-en": {
                 "num_samples": 250,
-                "total_symbols": 23216,
+                "number_of_characters": 23216,
                 "average_sentence1_len": 50.84,
                 "average_sentence2_len": 42.024,
                 "avg_score": 2.1464000000000003
             },
             "es-es": {
                 "num_samples": 250,
-                "total_symbols": 25265,
+                "number_of_characters": 25265,
                 "average_sentence1_len": 49.836,
                 "average_sentence2_len": 51.224,
                 "avg_score": 2.2312000000000007
             },
             "fr-en": {
                 "num_samples": 250,
-                "total_symbols": 23087,
+                "number_of_characters": 23087,
                 "average_sentence1_len": 49.624,
                 "average_sentence2_len": 42.724,
                 "avg_score": 2.2776000000000014
             },
             "it-en": {
                 "num_samples": 250,
-                "total_symbols": 23188,
+                "number_of_characters": 23188,
                 "average_sentence1_len": 50.028,
                 "average_sentence2_len": 42.724,
                 "avg_score": 2.2776000000000014
             },
             "nl-en": {
                 "num_samples": 250,
-                "total_symbols": 22385,
+                "number_of_characters": 22385,
                 "average_sentence1_len": 46.816,
                 "average_sentence2_len": 42.724,
                 "avg_score": 2.2776000000000014

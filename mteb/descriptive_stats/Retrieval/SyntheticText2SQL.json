@@ -1,6 +1,6 @@
 {
     "test": {
-        "total_symbols": 210.9770886090626,
+        "number_of_characters": 210.9770886090626,
         "num_samples": 111702,
         "num_queries": 5851,
         "num_documents": 105851,

@@ -200,7 +200,7 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
         num_samples: Number of samples in the dataset
         num_queries: number of queries in the dataset
         num_documents: Number of documents
-        total_symbols: Total number of symbols in the dataset
+        number_of_characters: Total number of symbols in the dataset
         average_document_length: Average length of documents
         average_query_length: Average length of queries
         average_relevant_docs_per_query: Average number of relevant documents per query
@@ -209,7 +209,7 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     num_samples: int
     num_queries: int
     num_documents: int
-    total_symbols: int
+    number_of_characters: int
     average_document_length: float
     average_query_length: float
     average_relevant_docs_per_query: float
@@ -435,7 +435,7 @@ class AbsTaskRetrieval(AbsTask):
         )
         qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if num_queries else 0
         return RetrievalDescriptiveStatistics(
-            total_symbols=query_len + doc_len,
+            number_of_characters=query_len + doc_len,
             num_samples=num_documents + num_queries,
             num_queries=num_queries,
             num_documents=num_documents,

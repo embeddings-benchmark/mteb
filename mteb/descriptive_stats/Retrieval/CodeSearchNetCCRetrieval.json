@@ -1,6 +1,6 @@
 {
     "test": {
-        "total_symbols": 390.06276516809044,
+        "number_of_characters": 390.06276516809044,
         "num_samples": 1058035,
         "num_queries": 52561,
         "num_documents": 1005474,
@@ -9,7 +9,7 @@
         "average_relevant_docs_per_query": 1.0,
         "hf_subset_descriptive_stats": {
             "python": {
-                "total_symbols": 553.7934039415471,
+                "number_of_characters": 553.7934039415471,
                 "num_samples": 295570,
                 "num_queries": 14918,
                 "num_documents": 280652,
@@ -18,7 +18,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "javascript": {
-                "total_symbols": 445.70707991491946,
+                "number_of_characters": 445.70707991491946,
                 "num_samples": 68492,
                 "num_queries": 3291,
                 "num_documents": 65201,
@@ -27,7 +27,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "go": {
-                "total_symbols": 235.76803742920464,
+                "number_of_characters": 235.76803742920464,
                 "num_samples": 190857,
                 "num_queries": 8122,
                 "num_documents": 182735,
@@ -36,7 +36,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "ruby": {
-                "total_symbols": 268.8731165741475,
+                "number_of_characters": 268.8731165741475,
                 "num_samples": 28849,
                 "num_queries": 1261,
                 "num_documents": 27588,
@@ -45,7 +45,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "java": {
-                "total_symbols": 344.5341853035144,
+                "number_of_characters": 344.5341853035144,
                 "num_samples": 192016,
                 "num_queries": 10955,
                 "num_documents": 181061,
@@ -54,7 +54,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "php": {
-                "total_symbols": 338.62194947909234,
+                "number_of_characters": 338.62194947909234,
                 "num_samples": 282251,
                 "num_queries": 14014,
                 "num_documents": 268237,

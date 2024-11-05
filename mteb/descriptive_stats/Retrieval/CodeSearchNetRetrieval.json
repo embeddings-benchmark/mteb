@@ -1,6 +1,6 @@
 {
     "test": {
-        "total_symbols": 325.01233333333334,
+        "number_of_characters": 325.01233333333334,
         "num_samples": 12000,
         "num_queries": 6000,
         "num_documents": 6000,
@@ -9,7 +9,7 @@
         "average_relevant_docs_per_query": 1.0,
         "hf_subset_descriptive_stats": {
             "python": {
-                "total_symbols": 467.546,
+                "number_of_characters": 467.546,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -18,7 +18,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "javascript": {
-                "total_symbols": 187.018,
+                "number_of_characters": 187.018,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -27,7 +27,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "go": {
-                "total_symbols": 126.213,
+                "number_of_characters": 126.213,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -36,7 +36,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "ruby": {
-                "total_symbols": 314.818,
+                "number_of_characters": 314.818,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -45,7 +45,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "java": {
-                "total_symbols": 691.36,
+                "number_of_characters": 691.36,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,
@@ -54,7 +54,7 @@
                 "average_relevant_docs_per_query": 1.0
             },
             "php": {
-                "total_symbols": 163.119,
+                "number_of_characters": 163.119,
                 "num_samples": 2000,
                 "num_queries": 1000,
                 "num_documents": 1000,

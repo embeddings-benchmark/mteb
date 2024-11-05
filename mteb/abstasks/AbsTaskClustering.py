@@ -23,7 +23,7 @@ class ClusteringDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        total_symbols: Total number of symbols in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
         average_text_length: Average length of text
         average_labels_per_text: Average number of labels per text
         unique_labels: Number of unique labels
@@ -31,7 +31,7 @@ class ClusteringDescriptiveStatistics(DescriptiveStatistics):
     """
 
     num_samples: int
-    total_symbols: int
+    number_of_characters: int
     average_text_length: float
     average_labels_per_text: float
     unique_labels: int
@@ -106,7 +106,7 @@ class AbsTaskClustering(AbsTask):
         label_counter = Counter(total_labels)
         return ClusteringDescriptiveStatistics(
             num_samples=len(sentences),
-            total_symbols=total_text_len,
+            number_of_characters=total_text_len,
             average_text_length=total_text_len / len(sentences),
             average_labels_per_text=len(total_labels) / len(sentences),
             unique_labels=len(label_counter),
