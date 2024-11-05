@@ -11,8 +11,8 @@ class AutoRAGRetrieval(AbsTaskRetrieval):
         description="AutoRAGRetrieval",
         reference=None,
         dataset={
-            "path": "nlpai-lab/markers_bm",
-            "revision": "e252a2b2644140a68961e64f10c107e5c036119b",
+            "path": "yjoonjang/markers_bm",
+            "revision": "fd7df84ac089bbec763b1c6bb1b56e985df5cc5c",
         },
         type="Retrieval",
         category="s2p",
@@ -38,10 +38,10 @@ class AutoRAGRetrieval(AbsTaskRetrieval):
             "n_samples": None,
             "avg_character_length": {
                 "dev": {
-                    "average_document_length": 305.15457788347203,
-                    "average_query_length": 22.62442640310625,
-                    "num_documents": 9251,
-                    "num_queries": 2833,
+                    "average_document_length": 983.8421052631579,
+                    "average_query_length": 69.6140350877193,
+                    "num_documents": 114,
+                    "num_queries": 114,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
