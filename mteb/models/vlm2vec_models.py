@@ -247,32 +247,25 @@ class VLM2VecWrapper:
             image_embeddings = self.get_image_embeddings(images, batch_size)
             return image_embeddings
 
-        if text_embeddings is not None and image_embeddings is not None:
-            if len(text_embeddings) != len(image_embeddings):
-                raise ValueError(
-                    "The number of texts and images must have the same length"
-                )
-            texts = iter(texts)
-            all_fused_embeddings = []
-            if isinstance(images, DataLoader):
-                import torchvision.transforms.functional as F
-                with torch.no_grad():
-                    for batch in images:
-                        for b in batch:
-                            text = next(texts)
-                            inputs = self.processor(
-                                f"<|image_1|> Represent the given image with the following question: {text}",
-                                [F.to_pil_image(b.to("cpu"))],
-                            )
-                            inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                            outputs = self.encode_input(inputs)
-                            all_fused_embeddings.append(outputs.cpu())
-            fused_embeddings = torch.cat(all_fused_embeddings, dim=0)
-            return fused_embeddings
-        elif text_embeddings is not None:
-            return text_embeddings
-        elif image_embeddings is not None:
-            return image_embeddings
+        # text_embeddings is not None and image_embeddings is not None
+        texts = iter(texts)
+        all_fused_embeddings = []
+        if isinstance(images, DataLoader):
+            import torchvision.transforms.functional as F
+
+            with torch.no_grad():
+                for batch in images:
+                    for b in batch:
+                        text = next(texts)
+                        inputs = self.processor(
+                            f"<|image_1|> Represent the given image with the following question: {text}",
+                            [F.to_pil_image(b.to("cpu"))],
+                        )
+                        inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                        outputs = self.encode_input(inputs)
+                        all_fused_embeddings.append(outputs.cpu().to(torch.float32))
+        fused_embeddings = torch.cat(all_fused_embeddings, dim=0)
+        return fused_embeddings
 
 
 vlm2vec_lora = ModelMeta(
