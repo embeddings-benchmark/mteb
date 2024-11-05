@@ -25,14 +25,22 @@ class JinaCLIPModelWrapper:
             self.device
         )
 
-    def get_text_embeddings(self, texts: list[str], batch_size: int = 32, convert_to_numpy=False, convert_to_tensor=True):
+    def get_text_embeddings(
+        self,
+        texts: list[str],
+        batch_size: int = 32,
+        convert_to_numpy=False,
+        convert_to_tensor=True,
+    ):
         all_text_embeddings = []
 
         with torch.no_grad():
             for i in tqdm(range(0, len(texts), batch_size)):
                 batch_texts = texts[i : i + batch_size]
                 text_outputs = self.model.encode_text(
-                    batch_texts, convert_to_numpy=convert_to_numpy, convert_to_tensor=convert_to_tensor
+                    batch_texts,
+                    convert_to_numpy=convert_to_numpy,
+                    convert_to_tensor=convert_to_tensor,
                 )
                 all_text_embeddings.append(text_outputs.cpu())
 
@@ -40,7 +48,11 @@ class JinaCLIPModelWrapper:
         return all_text_embeddings
 
     def get_image_embeddings(
-        self, images: list[Image.Image] | DataLoader, batch_size: int = 32, convert_to_numpy=False, convert_to_tensor=True
+        self,
+        images: list[Image.Image] | DataLoader,
+        batch_size: int = 32,
+        convert_to_numpy=False,
+        convert_to_tensor=True,
     ):
         all_image_embeddings = []
 
