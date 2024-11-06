@@ -15,7 +15,7 @@ class FGVCAircraftClassification(AbsTaskImageClassification):
             "trust_remote_code": True,
         },
         type="ImageClassification",
-        category="i2t",
+        category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

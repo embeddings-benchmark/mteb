@@ -14,7 +14,7 @@ class GTSRBClassification(AbsTaskImageClassification):
             "revision": "1c13eff0803d2b02c9dc8dfe85e67770b3f0f3c5",
         },
         type="ImageClassification",
-        category="i2t",
+        category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

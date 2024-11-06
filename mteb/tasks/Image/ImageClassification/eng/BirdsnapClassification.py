@@ -14,7 +14,7 @@ class BirdsnapClassification(AbsTaskImageClassification):
             "revision": "fd23015508be94f0b5b59d61630e4ea2536509e4",
         },
         type="ImageClassification",
-        category="i2t",
+        category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

@@ -14,7 +14,7 @@ class EuroSATClassification(AbsTaskImageClassification):
             "revision": "b4e28552cd5f3932b6abc37eb20d3e84901ad728",
         },
         type="ImageClassification",
-        category="i2t",
+        category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

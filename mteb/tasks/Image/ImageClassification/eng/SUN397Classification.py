@@ -14,7 +14,7 @@ class SUN397Classification(AbsTaskImageClassification):
             "revision": "7e6af6a2499ad708618be868e1471eac0aca1168",
         },
         type="ImageClassification",
-        category="i2t",
+        category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
