@@ -68,7 +68,6 @@ for model_name in [
         ]
     )
     # get i-only tasks for i-only models.
-
     if ("moco" in model_name) or ("dinov2" in model_name):
         tasks = [task for task in tasks if "t" not in task.metadata.category]
     evaluation = mteb.MTEB(tasks=tasks)
