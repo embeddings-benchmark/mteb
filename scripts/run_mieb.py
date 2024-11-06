@@ -71,12 +71,5 @@ for model_name in [
 
     if ("moco" in model_name) or ("dinov2" in model_name):
         tasks = [task for task in tasks if "t" not in task.metadata.category]
-        image_clustering_and_cls_tasks = mteb.get_tasks(
-            task_types=[
-                "ImageClustering",
-                "ImageClassification",
-            ]
-        )
-        tasks += image_clustering_and_cls_tasks
     evaluation = mteb.MTEB(tasks=tasks)
     results = evaluation.run(model, output_folder="results-mieb-final")
