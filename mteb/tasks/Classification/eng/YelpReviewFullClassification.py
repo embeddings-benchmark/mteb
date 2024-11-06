@@ -39,7 +39,6 @@ class YelpReviewFullClassification(AbsTaskClassification):
         year = {2015}
         }
         """,
-        descriptive_stats={"n_samples": {"test": 50000}, "avg_character_length": {}},
     )
 
     @property

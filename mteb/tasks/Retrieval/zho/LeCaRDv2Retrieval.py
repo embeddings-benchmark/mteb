@@ -35,16 +35,4 @@ class LeCaRDv2(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 7232.823978919631,
-                    "average_query_length": 4259.440251572327,
-                    "num_documents": 3795,
-                    "num_queries": 159,
-                    "average_relevant_docs_per_query": 24.50314465408805,
-                }
-            },
-        },
     )

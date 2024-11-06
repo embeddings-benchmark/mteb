@@ -24,8 +24,4 @@ class CPUSpeedTask(AbsTaskSpeedTask):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {"test": 1},
-            "avg_character_length": {"test": 3591},
-        },
     )

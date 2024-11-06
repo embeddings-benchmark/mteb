@@ -48,18 +48,6 @@ class Touche2020(AbsTaskRetrieval):
         prompt={
             "query": "Given a question, retrieve detailed and persuasive arguments that answer the question"
         },
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1719.3347658445412,
-                    "average_query_length": 43.42857142857143,
-                    "num_documents": 382545,
-                    "num_queries": 49,
-                    "average_relevant_docs_per_query": 19.020408163265305,
-                }
-            },
-        },
     )
 
 
@@ -92,13 +80,4 @@ class Touche2020v3Retrieval(AbsTaskRetrieval):
    year = 2024,
    address_ = "Washington, D.C."
 }""",
-        descriptive_stats={
-            "test": {
-                "average_document_length": 2096.391812518931,
-                "average_query_length": 43.42857142857143,
-                "num_documents": 303732,
-                "num_queries": 49,
-                "average_relevant_docs_per_query": 34.93877551020408,
-            }
-        },
     )

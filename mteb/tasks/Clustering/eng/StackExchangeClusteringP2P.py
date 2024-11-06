@@ -50,10 +50,6 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
         eprint    = {2104.07081}
         }""",
         prompt="Identify the topic or theme of StackExchange posts based on the given paragraphs",
-        descriptive_stats={
-            "n_samples": {"test": 2996},
-            "avg_character_length": {"test": 1090.7},
-        },
     )
 
     def dataset_transform(self):
@@ -117,8 +113,4 @@ class StackExchangeClusteringP2P(AbsTaskClustering):
         eprint    = {2104.07081}
         }""",
         prompt="Identify the topic or theme of StackExchange posts based on the given paragraphs",
-        descriptive_stats={
-            "n_samples": {"test": 75000},
-            "avg_character_length": {"test": 1090.7},
-        },
     )

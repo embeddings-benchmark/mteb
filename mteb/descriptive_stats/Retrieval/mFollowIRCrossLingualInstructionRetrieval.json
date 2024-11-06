@@ -1,0 +1,52 @@
+{
+    "test": {
+        "num_samples": 121758,
+        "num_docs": 121635,
+        "num_queries": 123,
+        "number_of_characters": 283654099,
+        "average_document_length": 2331.0777818884367,
+        "average_query_length": 81.8780487804878,
+        "average_instruction_length": 389.9512195121951,
+        "average_changed_instruction_length": 450.5528455284553,
+        "average_relevant_docs_per_query": 10.43089430894309,
+        "average_top_ranked_per_query": 1000.0,
+        "hf_subset_descriptive_stats": {
+            "eng-fas": {
+                "num_samples": 41229,
+                "num_docs": 41189,
+                "num_queries": 40,
+                "number_of_characters": 129597567,
+                "average_document_length": 3145.4990895627475,
+                "average_query_length": 80.075,
+                "average_instruction_length": 396.875,
+                "average_changed_instruction_length": 463.175,
+                "average_relevant_docs_per_query": 10.85,
+                "average_top_ranked_per_query": 1000.0
+            },
+            "eng-rus": {
+                "num_samples": 39366,
+                "num_docs": 39326,
+                "num_queries": 40,
+                "number_of_characters": 109522175,
+                "average_document_length": 2784.0813456746173,
+                "average_query_length": 81.875,
+                "average_instruction_length": 371.125,
+                "average_changed_instruction_length": 431.8,
+                "average_relevant_docs_per_query": 9.775,
+                "average_top_ranked_per_query": 1000.0
+            },
+            "eng-zho": {
+                "num_samples": 41163,
+                "num_docs": 41120,
+                "num_queries": 43,
+                "number_of_characters": 44534357,
+                "average_document_length": 1082.0501215953307,
+                "average_query_length": 83.55813953488372,
+                "average_instruction_length": 401.0232558139535,
+                "average_changed_instruction_length": 456.25581395348837,
+                "average_relevant_docs_per_query": 10.651162790697674,
+                "average_top_ranked_per_query": 1000.0
+            }
+        }
+    }
+}

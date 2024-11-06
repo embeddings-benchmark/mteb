@@ -47,16 +47,4 @@ class Quail(AbsTaskRetrieval):
         prompt={
             "query": "Given the following context and question, retrieve the correct answer."
         },
-        descriptive_stats={
-            "n_samples": {"test": 2720},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 27.50788422240522,
-                    "average_query_length": 1957.3632352941177,
-                    "num_documents": 32787,
-                    "num_queries": 2720,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )

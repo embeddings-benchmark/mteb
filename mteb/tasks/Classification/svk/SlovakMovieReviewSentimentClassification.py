@@ -34,10 +34,6 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
             year={2023}
             }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 366.17},
-        },
     )
 
     def dataset_transform(self) -> None:

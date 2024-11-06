@@ -34,10 +34,6 @@ class AngryTweetsClassification(AbsTaskClassification):
   year={2021}
 }""",
         prompt="Classify Danish tweets by sentiment. (positive, negative, neutral).",
-        descriptive_stats={
-            "n_samples": {"test": 1050},
-            "avg_character_length": {"test": 156.1},
-        },
     )
 
     @property

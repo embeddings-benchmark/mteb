@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import json
 import logging
 from collections.abc import Mapping
 from datetime import date
+from pathlib import Path
 from typing import Annotated, Any, Union
 
 from pydantic import (
@@ -185,6 +187,12 @@ class PromptDict(TypedDict, total=False):
     passage: str
 
 
+class DescriptiveStatistics(TypedDict):
+    """Class for descriptive statistics."""
+
+    pass
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -217,10 +225,6 @@ class TaskMetadata(BaseModel):
             "machine-translated and localized".
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
-        n_samples: The number of samples in the dataset. This should only be for the splits evaluated on. For retrieval tasks, this should be the
-            number of query-document pairs.
-        avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on. For
-            retrieval tasks, this will be a dict containing the character length of the queries and documents separately, as well as the total number of queries, documents, and relevance judgements per query.
     """
 
     dataset: dict
@@ -247,8 +251,6 @@ class TaskMetadata(BaseModel):
 
     sample_creation: SAMPLE_CREATION_METHOD | None = None
     bibtex_citation: str | None = None
-
-    descriptive_stats: dict[METRIC_NAME, dict[SPLIT_NAME, METRIC_VALUE] | None] = {}
 
     def validate_metadata(self) -> None:
         self.dataset_path_is_specified(self.dataset)
@@ -387,6 +389,39 @@ class TaskMetadata(BaseModel):
                 )
             return f"\\cite{{{cite}}}"
         return cite
+
+    @property
+    def descriptive_stats(self) -> dict[str, DescriptiveStatistics] | None:
+        """Return the descriptive statistics for the dataset."""
+        if self.descriptive_stat_path.exists():
+            with self.descriptive_stat_path.open("r") as f:
+                return json.load(f)
+        return None
+
+    @property
+    def descriptive_stat_path(self) -> Path:
+        """Return the path to the descriptive statistics file."""
+        descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
+        if not descriptive_stat_base_dir.exists():
+            descriptive_stat_base_dir.mkdir()
+        task_type_dir = descriptive_stat_base_dir / self.type
+        if not task_type_dir.exists():
+            task_type_dir.mkdir()
+        return task_type_dir / f"{self.name}.json"
+
+    @property
+    def n_samples(self) -> dict[str, int] | None:
+        """Returns the number of samples in the dataset"""
+        stats = self.descriptive_stats
+        if not stats:
+            return None
+
+        n_samples = {}
+        for subset, subset_value in stats.items():
+            if subset == "hf_subset_descriptive_stats":
+                continue
+            n_samples[subset] = subset_value["num_samples"]
+        return n_samples
 
     def __hash__(self) -> int:
         return hash(self.model_dump_json())

@@ -39,10 +39,6 @@ class VieStudentFeedbackClassification(AbsTaskClassification):
   pages={19-24},
   doi={10.1109/KSE.2018.8573337}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": TEST_SAMPLES},
-            "avg_character_length": {"test": 14.22},
-        },
     )
 
     def dataset_transform(self):

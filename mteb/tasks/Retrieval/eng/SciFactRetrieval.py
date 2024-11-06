@@ -36,23 +36,4 @@ class SciFact(AbsTaskRetrieval):
         prompt={
             "query": "Given a scientific claim, retrieve documents that support or refute the claim"
         },
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "train": {
-                    "average_document_length": 1498.4152035500674,
-                    "average_query_length": 88.58838071693448,
-                    "num_documents": 5183,
-                    "num_queries": 809,
-                    "average_relevant_docs_per_query": 1.1359703337453646,
-                },
-                "test": {
-                    "average_document_length": 1498.4152035500674,
-                    "average_query_length": 90.34666666666666,
-                    "num_documents": 5183,
-                    "num_queries": 300,
-                    "average_relevant_docs_per_query": 1.13,
-                },
-            },
-        },
     )

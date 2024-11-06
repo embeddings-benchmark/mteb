@@ -1,0 +1,3046 @@
+{
+    "test": {
+        "average_sentence1_length": 54.32948595562498,
+        "average_sentence2_length": 54.32948595562498,
+        "num_samples": 760518,
+        "number_of_characters": 82637104,
+        "hf_subset_descriptive_stats": {
+            "asm_Beng-ben_Beng": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 155988
+            },
+            "asm_Beng-brx_Deva": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 162044
+            },
+            "asm_Beng-doi_Deva": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 167032
+            },
+            "asm_Beng-eng_Latn": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 160716
+            },
+            "asm_Beng-gom_Deva": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 156282
+            },
+            "asm_Beng-guj_Gujr": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 158269
+            },
+            "asm_Beng-hin_Deva": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 159964
+            },
+            "asm_Beng-kan_Knda": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 165177
+            },
+            "asm_Beng-kas_Arab": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 164681
+            },
+            "asm_Beng-mai_Deva": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 162408
+            },
+            "asm_Beng-mal_Mlym": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 172838
+            },
+            "asm_Beng-mar_Deva": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 162747
+            },
+            "asm_Beng-mni_Mtei": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 157316
+            },
+            "asm_Beng-npi_Deva": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 160906
+            },
+            "asm_Beng-ory_Orya": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 164223
+            },
+            "asm_Beng-pan_Guru": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 160201
+            },
+            "asm_Beng-san_Deva": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 158093
+            },
+            "asm_Beng-sat_Olck": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 169379
+            },
+            "asm_Beng-snd_Deva": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 162623
+            },
+            "asm_Beng-tam_Taml": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 174866
+            },
+            "asm_Beng-tel_Telu": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 157690
+            },
+            "asm_Beng-urd_Arab": {
+                "average_sentence1_length": 53.753825681969396,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 161305
+            },
+            "ben_Beng-asm_Beng": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 155988
+            },
+            "ben_Beng-brx_Deva": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 156448
+            },
+            "ben_Beng-doi_Deva": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 161436
+            },
+            "ben_Beng-eng_Latn": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 155120
+            },
+            "ben_Beng-gom_Deva": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 150686
+            },
+            "ben_Beng-guj_Gujr": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 152673
+            },
+            "ben_Beng-hin_Deva": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 154368
+            },
+            "ben_Beng-kan_Knda": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 159581
+            },
+            "ben_Beng-kas_Arab": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 159085
+            },
+            "ben_Beng-mai_Deva": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 156812
+            },
+            "ben_Beng-mal_Mlym": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 167242
+            },
+            "ben_Beng-mar_Deva": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 157151
+            },
+            "ben_Beng-mni_Mtei": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 151720
+            },
+            "ben_Beng-npi_Deva": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 155310
+            },
+            "ben_Beng-ory_Orya": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 158627
+            },
+            "ben_Beng-pan_Guru": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 154605
+            },
+            "ben_Beng-san_Deva": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 152497
+            },
+            "ben_Beng-sat_Olck": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 163783
+            },
+            "ben_Beng-snd_Deva": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 157027
+            },
+            "ben_Beng-tam_Taml": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 169270
+            },
+            "ben_Beng-tel_Telu": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 152094
+            },
+            "ben_Beng-urd_Arab": {
+                "average_sentence1_length": 50.03060545575516,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 155709
+            },
+            "brx_Deva-asm_Beng": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 162044
+            },
+            "brx_Deva-ben_Beng": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 156448
+            },
+            "brx_Deva-doi_Deva": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 167492
+            },
+            "brx_Deva-eng_Latn": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 161176
+            },
+            "brx_Deva-gom_Deva": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 156742
+            },
+            "brx_Deva-guj_Gujr": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 158729
+            },
+            "brx_Deva-hin_Deva": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 160424
+            },
+            "brx_Deva-kan_Knda": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 165637
+            },
+            "brx_Deva-kas_Arab": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 165141
+            },
+            "brx_Deva-mai_Deva": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 162868
+            },
+            "brx_Deva-mal_Mlym": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 173298
+            },
+            "brx_Deva-mar_Deva": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 163207
+            },
+            "brx_Deva-mni_Mtei": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 157776
+            },
+            "brx_Deva-npi_Deva": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 161366
+            },
+            "brx_Deva-ory_Orya": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 164683
+            },
+            "brx_Deva-pan_Guru": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 160661
+            },
+            "brx_Deva-san_Deva": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 158553
+            },
+            "brx_Deva-sat_Olck": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 169839
+            },
+            "brx_Deva-snd_Deva": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 163083
+            },
+            "brx_Deva-tam_Taml": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 175326
+            },
+            "brx_Deva-tel_Telu": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 158150
+            },
+            "brx_Deva-urd_Arab": {
+                "average_sentence1_length": 54.05988023952096,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 161765
+            },
+            "doi_Deva-asm_Beng": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 167032
+            },
+            "doi_Deva-ben_Beng": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 161436
+            },
+            "doi_Deva-brx_Deva": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 167492
+            },
+            "doi_Deva-eng_Latn": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 166164
+            },
+            "doi_Deva-gom_Deva": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 161730
+            },
+            "doi_Deva-guj_Gujr": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 163717
+            },
+            "doi_Deva-hin_Deva": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 165412
+            },
+            "doi_Deva-kan_Knda": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 170625
+            },
+            "doi_Deva-kas_Arab": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 170129
+            },
+            "doi_Deva-mai_Deva": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 167856
+            },
+            "doi_Deva-mal_Mlym": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 178286
+            },
+            "doi_Deva-mar_Deva": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 168195
+            },
+            "doi_Deva-mni_Mtei": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 162764
+            },
+            "doi_Deva-npi_Deva": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 166354
+            },
+            "doi_Deva-ory_Orya": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 169671
+            },
+            "doi_Deva-pan_Guru": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 165649
+            },
+            "doi_Deva-san_Deva": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 163541
+            },
+            "doi_Deva-sat_Olck": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 174827
+            },
+            "doi_Deva-snd_Deva": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 168071
+            },
+            "doi_Deva-tam_Taml": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 180314
+            },
+            "doi_Deva-tel_Telu": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 163138
+            },
+            "doi_Deva-urd_Arab": {
+                "average_sentence1_length": 57.37857618097139,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 166753
+            },
+            "eng_Latn-asm_Beng": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 160716
+            },
+            "eng_Latn-ben_Beng": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 155120
+            },
+            "eng_Latn-brx_Deva": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 161176
+            },
+            "eng_Latn-doi_Deva": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 166164
+            },
+            "eng_Latn-gom_Deva": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 155414
+            },
+            "eng_Latn-guj_Gujr": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 157401
+            },
+            "eng_Latn-hin_Deva": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 159096
+            },
+            "eng_Latn-kan_Knda": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 164309
+            },
+            "eng_Latn-kas_Arab": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 163813
+            },
+            "eng_Latn-mai_Deva": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 161540
+            },
+            "eng_Latn-mal_Mlym": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 171970
+            },
+            "eng_Latn-mar_Deva": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 161879
+            },
+            "eng_Latn-mni_Mtei": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 156448
+            },
+            "eng_Latn-npi_Deva": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 160038
+            },
+            "eng_Latn-ory_Orya": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 163355
+            },
+            "eng_Latn-pan_Guru": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 159333
+            },
+            "eng_Latn-san_Deva": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 157225
+            },
+            "eng_Latn-sat_Olck": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 168511
+            },
+            "eng_Latn-snd_Deva": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 161755
+            },
+            "eng_Latn-tam_Taml": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 173998
+            },
+            "eng_Latn-tel_Telu": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 156822
+            },
+            "eng_Latn-urd_Arab": {
+                "average_sentence1_length": 53.17631403858949,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 160437
+            },
+            "gom_Deva-asm_Beng": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 156282
+            },
+            "gom_Deva-ben_Beng": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 150686
+            },
+            "gom_Deva-brx_Deva": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 156742
+            },
+            "gom_Deva-doi_Deva": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 161730
+            },
+            "gom_Deva-eng_Latn": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 155414
+            },
+            "gom_Deva-guj_Gujr": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 152967
+            },
+            "gom_Deva-hin_Deva": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 154662
+            },
+            "gom_Deva-kan_Knda": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 159875
+            },
+            "gom_Deva-kas_Arab": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 159379
+            },
+            "gom_Deva-mai_Deva": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 157106
+            },
+            "gom_Deva-mal_Mlym": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 167536
+            },
+            "gom_Deva-mar_Deva": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 157445
+            },
+            "gom_Deva-mni_Mtei": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 152014
+            },
+            "gom_Deva-npi_Deva": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 155604
+            },
+            "gom_Deva-ory_Orya": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 158921
+            },
+            "gom_Deva-pan_Guru": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 154899
+            },
+            "gom_Deva-san_Deva": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 152791
+            },
+            "gom_Deva-sat_Olck": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 164077
+            },
+            "gom_Deva-snd_Deva": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 157321
+            },
+            "gom_Deva-tam_Taml": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 169564
+            },
+            "gom_Deva-tel_Telu": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 152388
+            },
+            "gom_Deva-urd_Arab": {
+                "average_sentence1_length": 50.22621423819029,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 156003
+            },
+            "guj_Gujr-asm_Beng": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 158269
+            },
+            "guj_Gujr-ben_Beng": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 152673
+            },
+            "guj_Gujr-brx_Deva": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 158729
+            },
+            "guj_Gujr-doi_Deva": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 163717
+            },
+            "guj_Gujr-eng_Latn": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 157401
+            },
+            "guj_Gujr-gom_Deva": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 152967
+            },
+            "guj_Gujr-hin_Deva": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 156649
+            },
+            "guj_Gujr-kan_Knda": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 161862
+            },
+            "guj_Gujr-kas_Arab": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 161366
+            },
+            "guj_Gujr-mai_Deva": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 159093
+            },
+            "guj_Gujr-mal_Mlym": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 169523
+            },
+            "guj_Gujr-mar_Deva": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 159432
+            },
+            "guj_Gujr-mni_Mtei": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 154001
+            },
+            "guj_Gujr-npi_Deva": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 157591
+            },
+            "guj_Gujr-ory_Orya": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 160908
+            },
+            "guj_Gujr-pan_Guru": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 156886
+            },
+            "guj_Gujr-san_Deva": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 154778
+            },
+            "guj_Gujr-sat_Olck": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 166064
+            },
+            "guj_Gujr-snd_Deva": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 159308
+            },
+            "guj_Gujr-tam_Taml": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 171551
+            },
+            "guj_Gujr-tel_Telu": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 154375
+            },
+            "guj_Gujr-urd_Arab": {
+                "average_sentence1_length": 51.54823685961411,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 157990
+            },
+            "hin_Deva-asm_Beng": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 159964
+            },
+            "hin_Deva-ben_Beng": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 154368
+            },
+            "hin_Deva-brx_Deva": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 160424
+            },
+            "hin_Deva-doi_Deva": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 165412
+            },
+            "hin_Deva-eng_Latn": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 159096
+            },
+            "hin_Deva-gom_Deva": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 154662
+            },
+            "hin_Deva-guj_Gujr": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 156649
+            },
+            "hin_Deva-kan_Knda": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 163557
+            },
+            "hin_Deva-kas_Arab": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 163061
+            },
+            "hin_Deva-mai_Deva": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 160788
+            },
+            "hin_Deva-mal_Mlym": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 171218
+            },
+            "hin_Deva-mar_Deva": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 161127
+            },
+            "hin_Deva-mni_Mtei": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 155696
+            },
+            "hin_Deva-npi_Deva": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 159286
+            },
+            "hin_Deva-ory_Orya": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 162603
+            },
+            "hin_Deva-pan_Guru": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 158581
+            },
+            "hin_Deva-san_Deva": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 156473
+            },
+            "hin_Deva-sat_Olck": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 167759
+            },
+            "hin_Deva-snd_Deva": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 161003
+            },
+            "hin_Deva-tam_Taml": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 173246
+            },
+            "hin_Deva-tel_Telu": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 156070
+            },
+            "hin_Deva-urd_Arab": {
+                "average_sentence1_length": 52.67598137059215,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 159685
+            },
+            "kan_Knda-asm_Beng": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 165177
+            },
+            "kan_Knda-ben_Beng": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 159581
+            },
+            "kan_Knda-brx_Deva": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 165637
+            },
+            "kan_Knda-doi_Deva": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 170625
+            },
+            "kan_Knda-eng_Latn": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 164309
+            },
+            "kan_Knda-gom_Deva": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 159875
+            },
+            "kan_Knda-guj_Gujr": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 161862
+            },
+            "kan_Knda-hin_Deva": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 163557
+            },
+            "kan_Knda-kas_Arab": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 168274
+            },
+            "kan_Knda-mai_Deva": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 166001
+            },
+            "kan_Knda-mal_Mlym": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 176431
+            },
+            "kan_Knda-mar_Deva": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 166340
+            },
+            "kan_Knda-mni_Mtei": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 160909
+            },
+            "kan_Knda-npi_Deva": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 164499
+            },
+            "kan_Knda-ory_Orya": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 167816
+            },
+            "kan_Knda-pan_Guru": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 163794
+            },
+            "kan_Knda-san_Deva": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 161686
+            },
+            "kan_Knda-sat_Olck": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 172972
+            },
+            "kan_Knda-snd_Deva": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 166216
+            },
+            "kan_Knda-tam_Taml": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 178459
+            },
+            "kan_Knda-tel_Telu": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 161283
+            },
+            "kan_Knda-urd_Arab": {
+                "average_sentence1_length": 56.14437791084497,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 164898
+            },
+            "kas_Arab-asm_Beng": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 164681
+            },
+            "kas_Arab-ben_Beng": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 159085
+            },
+            "kas_Arab-brx_Deva": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 165141
+            },
+            "kas_Arab-doi_Deva": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 170129
+            },
+            "kas_Arab-eng_Latn": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 163813
+            },
+            "kas_Arab-gom_Deva": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 159379
+            },
+            "kas_Arab-guj_Gujr": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 161366
+            },
+            "kas_Arab-hin_Deva": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 163061
+            },
+            "kas_Arab-kan_Knda": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 168274
+            },
+            "kas_Arab-mai_Deva": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 165505
+            },
+            "kas_Arab-mal_Mlym": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 175935
+            },
+            "kas_Arab-mar_Deva": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 165844
+            },
+            "kas_Arab-mni_Mtei": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 160413
+            },
+            "kas_Arab-npi_Deva": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 164003
+            },
+            "kas_Arab-ory_Orya": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 167320
+            },
+            "kas_Arab-pan_Guru": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 163298
+            },
+            "kas_Arab-san_Deva": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 161190
+            },
+            "kas_Arab-sat_Olck": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 172476
+            },
+            "kas_Arab-snd_Deva": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 165720
+            },
+            "kas_Arab-tam_Taml": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 177963
+            },
+            "kas_Arab-tel_Telu": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 160787
+            },
+            "kas_Arab-urd_Arab": {
+                "average_sentence1_length": 55.81437125748503,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 164402
+            },
+            "mai_Deva-asm_Beng": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 162408
+            },
+            "mai_Deva-ben_Beng": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 156812
+            },
+            "mai_Deva-brx_Deva": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 162868
+            },
+            "mai_Deva-doi_Deva": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 167856
+            },
+            "mai_Deva-eng_Latn": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 161540
+            },
+            "mai_Deva-gom_Deva": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 157106
+            },
+            "mai_Deva-guj_Gujr": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 159093
+            },
+            "mai_Deva-hin_Deva": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 160788
+            },
+            "mai_Deva-kan_Knda": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 166001
+            },
+            "mai_Deva-kas_Arab": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 165505
+            },
+            "mai_Deva-mal_Mlym": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 173662
+            },
+            "mai_Deva-mar_Deva": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 163571
+            },
+            "mai_Deva-mni_Mtei": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 158140
+            },
+            "mai_Deva-npi_Deva": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 161730
+            },
+            "mai_Deva-ory_Orya": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 165047
+            },
+            "mai_Deva-pan_Guru": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 161025
+            },
+            "mai_Deva-san_Deva": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 158917
+            },
+            "mai_Deva-sat_Olck": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 170203
+            },
+            "mai_Deva-snd_Deva": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 163447
+            },
+            "mai_Deva-tam_Taml": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 175690
+            },
+            "mai_Deva-tel_Telu": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 158514
+            },
+            "mai_Deva-urd_Arab": {
+                "average_sentence1_length": 54.3020625415835,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 162129
+            },
+            "mal_Mlym-asm_Beng": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 172838
+            },
+            "mal_Mlym-ben_Beng": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 167242
+            },
+            "mal_Mlym-brx_Deva": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 173298
+            },
+            "mal_Mlym-doi_Deva": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 178286
+            },
+            "mal_Mlym-eng_Latn": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 171970
+            },
+            "mal_Mlym-gom_Deva": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 167536
+            },
+            "mal_Mlym-guj_Gujr": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 169523
+            },
+            "mal_Mlym-hin_Deva": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 171218
+            },
+            "mal_Mlym-kan_Knda": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 176431
+            },
+            "mal_Mlym-kas_Arab": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 175935
+            },
+            "mal_Mlym-mai_Deva": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 173662
+            },
+            "mal_Mlym-mar_Deva": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 174001
+            },
+            "mal_Mlym-mni_Mtei": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 168570
+            },
+            "mal_Mlym-npi_Deva": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 172160
+            },
+            "mal_Mlym-ory_Orya": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 175477
+            },
+            "mal_Mlym-pan_Guru": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 171455
+            },
+            "mal_Mlym-san_Deva": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 169347
+            },
+            "mal_Mlym-sat_Olck": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 180633
+            },
+            "mal_Mlym-snd_Deva": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 173877
+            },
+            "mal_Mlym-tam_Taml": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 186120
+            },
+            "mal_Mlym-tel_Telu": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 168944
+            },
+            "mal_Mlym-urd_Arab": {
+                "average_sentence1_length": 61.24151696606786,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 172559
+            },
+            "mar_Deva-asm_Beng": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 162747
+            },
+            "mar_Deva-ben_Beng": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 157151
+            },
+            "mar_Deva-brx_Deva": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 163207
+            },
+            "mar_Deva-doi_Deva": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 168195
+            },
+            "mar_Deva-eng_Latn": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 161879
+            },
+            "mar_Deva-gom_Deva": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 157445
+            },
+            "mar_Deva-guj_Gujr": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 159432
+            },
+            "mar_Deva-hin_Deva": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 161127
+            },
+            "mar_Deva-kan_Knda": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 166340
+            },
+            "mar_Deva-kas_Arab": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 165844
+            },
+            "mar_Deva-mai_Deva": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 163571
+            },
+            "mar_Deva-mal_Mlym": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 174001
+            },
+            "mar_Deva-mni_Mtei": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 158479
+            },
+            "mar_Deva-npi_Deva": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 162069
+            },
+            "mar_Deva-ory_Orya": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 165386
+            },
+            "mar_Deva-pan_Guru": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 161364
+            },
+            "mar_Deva-san_Deva": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 159256
+            },
+            "mar_Deva-sat_Olck": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 170542
+            },
+            "mar_Deva-snd_Deva": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 163786
+            },
+            "mar_Deva-tam_Taml": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 176029
+            },
+            "mar_Deva-tel_Telu": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 158853
+            },
+            "mar_Deva-urd_Arab": {
+                "average_sentence1_length": 54.52761144377911,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 162468
+            },
+            "mni_Mtei-asm_Beng": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 157316
+            },
+            "mni_Mtei-ben_Beng": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 151720
+            },
+            "mni_Mtei-brx_Deva": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 157776
+            },
+            "mni_Mtei-doi_Deva": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 162764
+            },
+            "mni_Mtei-eng_Latn": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 156448
+            },
+            "mni_Mtei-gom_Deva": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 152014
+            },
+            "mni_Mtei-guj_Gujr": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 154001
+            },
+            "mni_Mtei-hin_Deva": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 155696
+            },
+            "mni_Mtei-kan_Knda": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 160909
+            },
+            "mni_Mtei-kas_Arab": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 160413
+            },
+            "mni_Mtei-mai_Deva": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 158140
+            },
+            "mni_Mtei-mal_Mlym": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 168570
+            },
+            "mni_Mtei-mar_Deva": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 158479
+            },
+            "mni_Mtei-npi_Deva": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 156638
+            },
+            "mni_Mtei-ory_Orya": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 159955
+            },
+            "mni_Mtei-pan_Guru": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 155933
+            },
+            "mni_Mtei-san_Deva": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 153825
+            },
+            "mni_Mtei-sat_Olck": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 165111
+            },
+            "mni_Mtei-snd_Deva": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 158355
+            },
+            "mni_Mtei-tam_Taml": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 170598
+            },
+            "mni_Mtei-tel_Telu": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 153422
+            },
+            "mni_Mtei-urd_Arab": {
+                "average_sentence1_length": 50.91417165668663,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 157037
+            },
+            "npi_Deva-asm_Beng": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 160906
+            },
+            "npi_Deva-ben_Beng": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 155310
+            },
+            "npi_Deva-brx_Deva": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 161366
+            },
+            "npi_Deva-doi_Deva": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 166354
+            },
+            "npi_Deva-eng_Latn": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 160038
+            },
+            "npi_Deva-gom_Deva": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 155604
+            },
+            "npi_Deva-guj_Gujr": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 157591
+            },
+            "npi_Deva-hin_Deva": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 159286
+            },
+            "npi_Deva-kan_Knda": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 164499
+            },
+            "npi_Deva-kas_Arab": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 164003
+            },
+            "npi_Deva-mai_Deva": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 161730
+            },
+            "npi_Deva-mal_Mlym": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 172160
+            },
+            "npi_Deva-mar_Deva": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 162069
+            },
+            "npi_Deva-mni_Mtei": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 156638
+            },
+            "npi_Deva-ory_Orya": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 163545
+            },
+            "npi_Deva-pan_Guru": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 159523
+            },
+            "npi_Deva-san_Deva": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 157415
+            },
+            "npi_Deva-sat_Olck": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 168701
+            },
+            "npi_Deva-snd_Deva": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 161945
+            },
+            "npi_Deva-tam_Taml": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 174188
+            },
+            "npi_Deva-tel_Telu": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 157012
+            },
+            "npi_Deva-urd_Arab": {
+                "average_sentence1_length": 53.30272787757818,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 160627
+            },
+            "ory_Orya-asm_Beng": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 164223
+            },
+            "ory_Orya-ben_Beng": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 158627
+            },
+            "ory_Orya-brx_Deva": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 164683
+            },
+            "ory_Orya-doi_Deva": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 169671
+            },
+            "ory_Orya-eng_Latn": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 163355
+            },
+            "ory_Orya-gom_Deva": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 158921
+            },
+            "ory_Orya-guj_Gujr": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 160908
+            },
+            "ory_Orya-hin_Deva": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 162603
+            },
+            "ory_Orya-kan_Knda": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 167816
+            },
+            "ory_Orya-kas_Arab": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 167320
+            },
+            "ory_Orya-mai_Deva": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 165047
+            },
+            "ory_Orya-mal_Mlym": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 175477
+            },
+            "ory_Orya-mar_Deva": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 165386
+            },
+            "ory_Orya-mni_Mtei": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 159955
+            },
+            "ory_Orya-npi_Deva": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 163545
+            },
+            "ory_Orya-pan_Guru": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 162840
+            },
+            "ory_Orya-san_Deva": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 160732
+            },
+            "ory_Orya-sat_Olck": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 172018
+            },
+            "ory_Orya-snd_Deva": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 165262
+            },
+            "ory_Orya-tam_Taml": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 177505
+            },
+            "ory_Orya-tel_Telu": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 160329
+            },
+            "ory_Orya-urd_Arab": {
+                "average_sentence1_length": 55.509647371922824,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 163944
+            },
+            "pan_Guru-asm_Beng": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 160201
+            },
+            "pan_Guru-ben_Beng": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 154605
+            },
+            "pan_Guru-brx_Deva": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 160661
+            },
+            "pan_Guru-doi_Deva": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 165649
+            },
+            "pan_Guru-eng_Latn": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 159333
+            },
+            "pan_Guru-gom_Deva": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 154899
+            },
+            "pan_Guru-guj_Gujr": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 156886
+            },
+            "pan_Guru-hin_Deva": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 158581
+            },
+            "pan_Guru-kan_Knda": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 163794
+            },
+            "pan_Guru-kas_Arab": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 163298
+            },
+            "pan_Guru-mai_Deva": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 161025
+            },
+            "pan_Guru-mal_Mlym": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 171455
+            },
+            "pan_Guru-mar_Deva": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 161364
+            },
+            "pan_Guru-mni_Mtei": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 155933
+            },
+            "pan_Guru-npi_Deva": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 159523
+            },
+            "pan_Guru-ory_Orya": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 162840
+            },
+            "pan_Guru-san_Deva": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 156710
+            },
+            "pan_Guru-sat_Olck": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 167996
+            },
+            "pan_Guru-snd_Deva": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 161240
+            },
+            "pan_Guru-tam_Taml": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 173483
+            },
+            "pan_Guru-tel_Telu": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 156307
+            },
+            "pan_Guru-urd_Arab": {
+                "average_sentence1_length": 52.83366600133067,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 159922
+            },
+            "san_Deva-asm_Beng": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 158093
+            },
+            "san_Deva-ben_Beng": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 152497
+            },
+            "san_Deva-brx_Deva": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 158553
+            },
+            "san_Deva-doi_Deva": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 163541
+            },
+            "san_Deva-eng_Latn": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 157225
+            },
+            "san_Deva-gom_Deva": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 152791
+            },
+            "san_Deva-guj_Gujr": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 154778
+            },
+            "san_Deva-hin_Deva": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 156473
+            },
+            "san_Deva-kan_Knda": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 161686
+            },
+            "san_Deva-kas_Arab": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 161190
+            },
+            "san_Deva-mai_Deva": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 158917
+            },
+            "san_Deva-mal_Mlym": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 169347
+            },
+            "san_Deva-mar_Deva": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 159256
+            },
+            "san_Deva-mni_Mtei": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 153825
+            },
+            "san_Deva-npi_Deva": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 157415
+            },
+            "san_Deva-ory_Orya": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 160732
+            },
+            "san_Deva-pan_Guru": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 156710
+            },
+            "san_Deva-sat_Olck": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 165888
+            },
+            "san_Deva-snd_Deva": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 159132
+            },
+            "san_Deva-tam_Taml": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 171375
+            },
+            "san_Deva-tel_Telu": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 154199
+            },
+            "san_Deva-urd_Arab": {
+                "average_sentence1_length": 51.4311377245509,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 157814
+            },
+            "sat_Olck-asm_Beng": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 169379
+            },
+            "sat_Olck-ben_Beng": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 163783
+            },
+            "sat_Olck-brx_Deva": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 169839
+            },
+            "sat_Olck-doi_Deva": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 174827
+            },
+            "sat_Olck-eng_Latn": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 168511
+            },
+            "sat_Olck-gom_Deva": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 164077
+            },
+            "sat_Olck-guj_Gujr": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 166064
+            },
+            "sat_Olck-hin_Deva": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 167759
+            },
+            "sat_Olck-kan_Knda": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 172972
+            },
+            "sat_Olck-kas_Arab": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 172476
+            },
+            "sat_Olck-mai_Deva": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 170203
+            },
+            "sat_Olck-mal_Mlym": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 180633
+            },
+            "sat_Olck-mar_Deva": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 170542
+            },
+            "sat_Olck-mni_Mtei": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 165111
+            },
+            "sat_Olck-npi_Deva": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 168701
+            },
+            "sat_Olck-ory_Orya": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 172018
+            },
+            "sat_Olck-pan_Guru": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 167996
+            },
+            "sat_Olck-san_Deva": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 165888
+            },
+            "sat_Olck-snd_Deva": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 170418
+            },
+            "sat_Olck-tam_Taml": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 182661
+            },
+            "sat_Olck-tel_Telu": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 165485
+            },
+            "sat_Olck-urd_Arab": {
+                "average_sentence1_length": 58.94011976047904,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 169100
+            },
+            "snd_Deva-asm_Beng": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 162623
+            },
+            "snd_Deva-ben_Beng": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 157027
+            },
+            "snd_Deva-brx_Deva": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 163083
+            },
+            "snd_Deva-doi_Deva": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 168071
+            },
+            "snd_Deva-eng_Latn": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 161755
+            },
+            "snd_Deva-gom_Deva": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 157321
+            },
+            "snd_Deva-guj_Gujr": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 159308
+            },
+            "snd_Deva-hin_Deva": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 161003
+            },
+            "snd_Deva-kan_Knda": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 166216
+            },
+            "snd_Deva-kas_Arab": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 165720
+            },
+            "snd_Deva-mai_Deva": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 163447
+            },
+            "snd_Deva-mal_Mlym": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 173877
+            },
+            "snd_Deva-mar_Deva": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 163786
+            },
+            "snd_Deva-mni_Mtei": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 158355
+            },
+            "snd_Deva-npi_Deva": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 161945
+            },
+            "snd_Deva-ory_Orya": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 165262
+            },
+            "snd_Deva-pan_Guru": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 161240
+            },
+            "snd_Deva-san_Deva": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 159132
+            },
+            "snd_Deva-sat_Olck": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 170418
+            },
+            "snd_Deva-tam_Taml": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 175905
+            },
+            "snd_Deva-tel_Telu": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 158729
+            },
+            "snd_Deva-urd_Arab": {
+                "average_sentence1_length": 54.445109780439125,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 162344
+            },
+            "tam_Taml-asm_Beng": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 174866
+            },
+            "tam_Taml-ben_Beng": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 169270
+            },
+            "tam_Taml-brx_Deva": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 175326
+            },
+            "tam_Taml-doi_Deva": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 180314
+            },
+            "tam_Taml-eng_Latn": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 173998
+            },
+            "tam_Taml-gom_Deva": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 169564
+            },
+            "tam_Taml-guj_Gujr": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 171551
+            },
+            "tam_Taml-hin_Deva": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 173246
+            },
+            "tam_Taml-kan_Knda": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 178459
+            },
+            "tam_Taml-kas_Arab": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 177963
+            },
+            "tam_Taml-mai_Deva": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 175690
+            },
+            "tam_Taml-mal_Mlym": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 186120
+            },
+            "tam_Taml-mar_Deva": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 176029
+            },
+            "tam_Taml-mni_Mtei": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 170598
+            },
+            "tam_Taml-npi_Deva": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 174188
+            },
+            "tam_Taml-ory_Orya": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 177505
+            },
+            "tam_Taml-pan_Guru": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 173483
+            },
+            "tam_Taml-san_Deva": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 171375
+            },
+            "tam_Taml-sat_Olck": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 182661
+            },
+            "tam_Taml-snd_Deva": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 175905
+            },
+            "tam_Taml-tel_Telu": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 170972
+            },
+            "tam_Taml-urd_Arab": {
+                "average_sentence1_length": 62.590818363273456,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 174587
+            },
+            "tel_Telu-asm_Beng": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 157690
+            },
+            "tel_Telu-ben_Beng": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 152094
+            },
+            "tel_Telu-brx_Deva": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 158150
+            },
+            "tel_Telu-doi_Deva": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 163138
+            },
+            "tel_Telu-eng_Latn": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 156822
+            },
+            "tel_Telu-gom_Deva": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 152388
+            },
+            "tel_Telu-guj_Gujr": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 154375
+            },
+            "tel_Telu-hin_Deva": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 156070
+            },
+            "tel_Telu-kan_Knda": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 161283
+            },
+            "tel_Telu-kas_Arab": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 160787
+            },
+            "tel_Telu-mai_Deva": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 158514
+            },
+            "tel_Telu-mal_Mlym": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 168944
+            },
+            "tel_Telu-mar_Deva": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 158853
+            },
+            "tel_Telu-mni_Mtei": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 153422
+            },
+            "tel_Telu-npi_Deva": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 157012
+            },
+            "tel_Telu-ory_Orya": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 160329
+            },
+            "tel_Telu-pan_Guru": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 156307
+            },
+            "tel_Telu-san_Deva": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 154199
+            },
+            "tel_Telu-sat_Olck": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 165485
+            },
+            "tel_Telu-snd_Deva": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 158729
+            },
+            "tel_Telu-tam_Taml": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 170972
+            },
+            "tel_Telu-urd_Arab": {
+                "average_sentence1_length": 51.16300731869594,
+                "average_sentence2_length": 53.568196939454424,
+                "num_samples": 1503,
+                "number_of_characters": 157411
+            },
+            "urd_Arab-asm_Beng": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 53.753825681969396,
+                "num_samples": 1503,
+                "number_of_characters": 161305
+            },
+            "urd_Arab-ben_Beng": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 50.03060545575516,
+                "num_samples": 1503,
+                "number_of_characters": 155709
+            },
+            "urd_Arab-brx_Deva": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 54.05988023952096,
+                "num_samples": 1503,
+                "number_of_characters": 161765
+            },
+            "urd_Arab-doi_Deva": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 57.37857618097139,
+                "num_samples": 1503,
+                "number_of_characters": 166753
+            },
+            "urd_Arab-eng_Latn": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 53.17631403858949,
+                "num_samples": 1503,
+                "number_of_characters": 160437
+            },
+            "urd_Arab-gom_Deva": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 50.22621423819029,
+                "num_samples": 1503,
+                "number_of_characters": 156003
+            },
+            "urd_Arab-guj_Gujr": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 51.54823685961411,
+                "num_samples": 1503,
+                "number_of_characters": 157990
+            },
+            "urd_Arab-hin_Deva": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 52.67598137059215,
+                "num_samples": 1503,
+                "number_of_characters": 159685
+            },
+            "urd_Arab-kan_Knda": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 56.14437791084497,
+                "num_samples": 1503,
+                "number_of_characters": 164898
+            },
+            "urd_Arab-kas_Arab": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 55.81437125748503,
+                "num_samples": 1503,
+                "number_of_characters": 164402
+            },
+            "urd_Arab-mai_Deva": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 54.3020625415835,
+                "num_samples": 1503,
+                "number_of_characters": 162129
+            },
+            "urd_Arab-mal_Mlym": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 61.24151696606786,
+                "num_samples": 1503,
+                "number_of_characters": 172559
+            },
+            "urd_Arab-mar_Deva": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 54.52761144377911,
+                "num_samples": 1503,
+                "number_of_characters": 162468
+            },
+            "urd_Arab-mni_Mtei": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 50.91417165668663,
+                "num_samples": 1503,
+                "number_of_characters": 157037
+            },
+            "urd_Arab-npi_Deva": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 53.30272787757818,
+                "num_samples": 1503,
+                "number_of_characters": 160627
+            },
+            "urd_Arab-ory_Orya": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 55.509647371922824,
+                "num_samples": 1503,
+                "number_of_characters": 163944
+            },
+            "urd_Arab-pan_Guru": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 52.83366600133067,
+                "num_samples": 1503,
+                "number_of_characters": 159922
+            },
+            "urd_Arab-san_Deva": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 51.4311377245509,
+                "num_samples": 1503,
+                "number_of_characters": 157814
+            },
+            "urd_Arab-sat_Olck": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 58.94011976047904,
+                "num_samples": 1503,
+                "number_of_characters": 169100
+            },
+            "urd_Arab-snd_Deva": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 54.445109780439125,
+                "num_samples": 1503,
+                "number_of_characters": 162344
+            },
+            "urd_Arab-tam_Taml": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 62.590818363273456,
+                "num_samples": 1503,
+                "number_of_characters": 174587
+            },
+            "urd_Arab-tel_Telu": {
+                "average_sentence1_length": 53.568196939454424,
+                "average_sentence2_length": 51.16300731869594,
+                "num_samples": 1503,
+                "number_of_characters": 157411
+            }
+        }
+    }
+}

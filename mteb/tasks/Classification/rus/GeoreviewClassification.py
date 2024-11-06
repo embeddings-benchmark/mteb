@@ -29,10 +29,6 @@ class GeoreviewClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="",
         prompt="Classify the organization rating based on the reviews",
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 409.0},
-        },
     )
 
     def dataset_transform(self):

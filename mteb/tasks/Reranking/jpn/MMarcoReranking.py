@@ -33,10 +33,6 @@ class VoyageMMarcoReranking(AbsTaskReranking):
       year={2023},
       eprint={2312.16144},
       archivePrefix={arXiv},}""",
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 162},
-        },
     )
 
     def dataset_transform(self):

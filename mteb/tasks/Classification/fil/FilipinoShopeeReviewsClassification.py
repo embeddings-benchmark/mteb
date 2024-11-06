@@ -35,10 +35,6 @@ class FilipinoShopeeReviewsClassification(AbsTaskClassification):
             issue={08},
             pages={72--82}
         }""",
-        descriptive_stats={
-            "n_samples": {"validation": 2250, "test": 2250},
-            "avg_character_length": {"validation": 143.8, "test": 145.1},
-        },
     )
 
     def dataset_transform(self):

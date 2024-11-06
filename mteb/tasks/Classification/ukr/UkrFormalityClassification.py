@@ -42,10 +42,6 @@ class UkrFormalityClassification(AbsTaskClassification):
         publisher = "Association for Computational Linguistics",
         url = "https://aclanthology.org/N18-1012",
         }""",
-        descriptive_stats={
-            "n_samples": {"train": 2048, "test": 2048},
-            "avg_character_length": {"train": 52.10, "test": 53.07},
-        },
     )
 
     def dataset_transform(self):

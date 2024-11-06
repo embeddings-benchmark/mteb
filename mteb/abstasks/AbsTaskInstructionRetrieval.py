@@ -16,8 +16,9 @@ from ..evaluation.evaluators import utils
 from ..evaluation.evaluators.InstructionRetrievalEvaluator import (
     InstructionRetrievalEvaluator,
 )
-from .AbsTask import AbsTask, DescriptiveStatistics
+from .AbsTask import AbsTask
 from .AbsTaskRetrieval import HFDataLoader
+from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -222,8 +223,10 @@ class InstructionRetrievalDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Instruction Retrieval tasks
 
     Attributes:
+        num_samples: Number of samples
         num_queries: Number of queries
         num_docs: Number of documents
+        number_of_characters: Total number of symbols in the dataset
         average_document_length: Average length of documents
         average_query_length: Average length of queries
         average_instruction_length: Average length of instructions
@@ -232,8 +235,10 @@ class InstructionRetrievalDescriptiveStatistics(DescriptiveStatistics):
         average_top_ranked_per_query: Average number of top ranked docs per query
     """
 
+    num_samples: int
     num_queries: int
     num_docs: int
+    number_of_characters: int
     average_document_length: float
     average_query_length: float
     average_instruction_length: float
@@ -681,8 +686,13 @@ class AbsTaskInstructionRetrieval(AbsTask):
             else 0
         )
         return InstructionRetrievalDescriptiveStatistics(
+            num_samples=len(queries) + len(corpus),
             num_docs=len(corpus),
             num_queries=len(queries),
+            number_of_characters=total_corpus_len
+            + total_queries_len
+            + total_instructions_len
+            + total_changed_instructions_len,
             average_document_length=(
                 total_corpus_len / len(corpus) if len(corpus) else 0
             ),

@@ -36,7 +36,6 @@ class T2Reranking(AbsTaskReranking):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
 
@@ -72,7 +71,6 @@ class MMarcoReranking(AbsTaskReranking):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
 
@@ -109,10 +107,6 @@ class CMedQAv1(AbsTaskReranking):
   year={2017},
   publisher={Multidisciplinary Digital Publishing Institute}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 2000},
-            "avg_character_length": {"test": 165},
-        },
     )
 
 
@@ -152,5 +146,4 @@ keywords={Biomedical imaging;Data mining;Semantics;Medical services;Feature extr
 doi={10.1109/ACCESS.2018.2883637}, 
 ISSN={2169-3536}, 
 month={},}""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )

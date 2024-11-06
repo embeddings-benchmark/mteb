@@ -39,16 +39,4 @@ class SCIDOCS(AbsTaskRetrieval):
         prompt={
             "query": "Given a scientific paper title, retrieve paper abstracts that are cited by the given paper"
         },
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1203.3659819932182,
-                    "average_query_length": 71.632,
-                    "num_documents": 25657,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 4.928,
-                }
-            },
-        },
     )
