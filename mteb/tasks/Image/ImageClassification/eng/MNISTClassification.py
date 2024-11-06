@@ -14,7 +14,7 @@ class MNISTClassification(AbsTaskImageClassification):
             "revision": "77f3279092a1c1579b2250db8eafed0ad422088c",
         },
         type="ImageClassification",
-        category="i2t",
+        category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

@@ -14,7 +14,7 @@ class DTDClassification(AbsTaskImageClassification):
             "revision": "d2afa97d9f335b1a6b3b09c637aef667f98f966e",
         },
         type="ImageClassification",
-        category="i2t",
+        category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

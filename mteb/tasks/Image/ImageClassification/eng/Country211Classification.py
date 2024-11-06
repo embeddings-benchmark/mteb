@@ -14,7 +14,7 @@ class Country211Classification(AbsTaskImageClassification):
             "revision": "1699f138f0558342a1cbf99f7cf36b4361bb5ebc",
         },
         type="ImageClassification",
-        category="i2t",
+        category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

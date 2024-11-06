@@ -14,7 +14,7 @@ class FER2013Classification(AbsTaskImageClassification):
             "revision": "9399b94167523fe5c40b3a857e24ef931ee4395b",
         },
         type="ImageClassification",
-        category="i2t",
+        category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
