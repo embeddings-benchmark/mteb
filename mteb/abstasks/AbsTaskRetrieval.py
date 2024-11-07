@@ -34,6 +34,7 @@ class HFDataLoader:
         qrels_file: str = "",
         streaming: bool = False,
         keep_in_memory: bool = False,
+        trust_remote_code: bool = False,
     ):
         self.corpus = {}
         self.queries = {}
@@ -63,6 +64,7 @@ class HFDataLoader:
             self.qrels_file = qrels_file
         self.streaming = streaming
         self.keep_in_memory = keep_in_memory
+        self.trust_remote_code = trust_remote_code
 
     @staticmethod
     def check(fIn: str, ext: str):
@@ -125,6 +127,7 @@ class HFDataLoader:
                 "corpus",
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
+                trust_remote_code=self.trust_remote_code,
             )
         else:
             corpus_ds = load_dataset(
@@ -152,6 +155,7 @@ class HFDataLoader:
                 "queries",
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
+                trust_remote_code=self.trust_remote_code,
             )
         else:
             queries_ds = load_dataset(
@@ -174,6 +178,7 @@ class HFDataLoader:
                 self.hf_repo_qrels,
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
+                trust_remote_code=self.trust_remote_code,
             )[split]
         else:
             qrels_ds = load_dataset(
@@ -254,6 +259,9 @@ class AbsTaskRetrieval(AbsTask):
                 hf_repo_qrels=hf_repo_qrels,
                 streaming=False,
                 keep_in_memory=False,
+                trust_remote_code=self.metadata_dict["dataset"].get(
+                    "trust_remote_code", False
+                ),
             ).load(split=split)
             # Conversion from DataSet
             queries = {query["id"]: query["text"] for query in queries}

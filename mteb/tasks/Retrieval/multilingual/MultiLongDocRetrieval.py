@@ -38,7 +38,11 @@ def load_mldr_data(
 
     for lang in langs:
         lang_corpus = datasets.load_dataset(
-            path, f"corpus-{lang}", cache_dir=cache_dir, revision=revision
+            path,
+            f"corpus-{lang}",
+            cache_dir=cache_dir,
+            revision=revision,
+            trust_remote_code=True,
         )["corpus"]
         lang_corpus = {e["docid"]: {"text": e["text"]} for e in lang_corpus}
         lang_data = datasets.load_dataset(path, lang, cache_dir=cache_dir)
@@ -65,7 +69,6 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "Shitao/MLDR",
             "revision": "d67138e705d963e346253a80e59676ddb418810a",
-            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",

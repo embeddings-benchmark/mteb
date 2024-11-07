@@ -30,6 +30,7 @@ def _load_xmarket_data(
             languages=[lang],
             split=split,
             cache_dir=cache_dir,
+            trust_remote_code=True,
         )
         query_rows = datasets.load_dataset(
             path,
@@ -38,6 +39,7 @@ def _load_xmarket_data(
             revision=revision,
             split=split,
             cache_dir=cache_dir,
+            trust_remote_code=True,
         )
         qrels_rows = datasets.load_dataset(
             path,
@@ -46,6 +48,7 @@ def _load_xmarket_data(
             revision=revision,
             split=split,
             cache_dir=cache_dir,
+            trust_remote_code=True,
         )
 
         corpus[lang][split] = {row["_id"]: row for row in corpus_rows}
@@ -69,7 +72,6 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "jinaai/xmarket_ml",
             "revision": "dfe57acff5b62c23732a7b7d3e3fb84ff501708b",
-            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
