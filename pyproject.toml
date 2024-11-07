@@ -90,6 +90,7 @@ exclude = ["tests", "results"]
 
 [tool.setuptools.package-data]
 "*" = ["*.json"]
+"mteb.abstasks" = ["the_ugly_duckling.txt"]
 
 [tool.ruff]
 
