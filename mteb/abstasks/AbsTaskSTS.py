@@ -36,8 +36,8 @@ class AbsTaskSTS(AbsTask):
     """
 
     abstask_prompt = "Retrieve semantically similar text."
-    reference_summaries_column: str = "human_summaries"
-    generated_summaries_column: str = "machine_summaries"
+    reference_summaries_column: str = "sentence1"
+    generated_summaries_column: str = "sentence2"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
