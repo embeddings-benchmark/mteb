@@ -11,7 +11,7 @@ class BLINKIT2TMultiChoice(AbsTaskAny2AnyMultiChoice):
         reference="https://arxiv.org/abs/2404.12390",
         dataset={
             "path": "JamieSJS/blink-it2t-multi",
-            "revision": "b6e18eba186cada040ddb72e8e3cb92edd7ca5e9",
+            "revision": "ae713b03ae68e343f16c3bcdbd1b1ee760975d55",
         },
         type="Any2AnyMultiChoice",
         category="it2t",
@@ -34,13 +34,13 @@ class BLINKIT2TMultiChoice(AbsTaskAny2AnyMultiChoice):
 }
 """,
         descriptive_stats={
-            "n_samples": {"test": 1073},
+            "n_samples": {"test": 923},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 26,
-                    "num_queries": 1073,
+                    "num_documents": 24,
+                    "num_queries": 923,
                     "average_relevant_docs_per_query": 1,
                 }
             },

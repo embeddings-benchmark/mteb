@@ -1,31 +1,31 @@
 {
-  "dataset_revision": "b6e18eba186cada040ddb72e8e3cb92edd7ca5e9",
-  "evaluation_time": 43.71325731277466,
+  "dataset_revision": "ae713b03ae68e343f16c3bcdbd1b1ee760975d55",
+  "evaluation_time": 10.223464965820312,
   "kg_co2_emissions": null,
   "mteb_version": "1.12.90",
   "scores": {
     "test": [
       {
-        "accuracy": 0.38397,
+        "accuracy": 0.36945,
         "hf_subset": "default",
         "languages": [
           "eng-Latn"
         ],
-        "main_score": 0.38397,
-        "mrr_at_1": 0.38397017707362535,
-        "mrr_at_10": 0.650512581547066,
-        "mrr_at_100": 0.650512581547066,
-        "mrr_at_1000": 0.650512581547066,
-        "mrr_at_20": 0.650512581547066,
-        "mrr_at_3": 0.6295433364398889,
-        "mrr_at_5": 0.650512581547066,
-        "ndcg_at_1": 0.38397,
-        "ndcg_at_10": 0.73974,
-        "ndcg_at_100": 0.73974,
-        "ndcg_at_1000": 0.73974,
-        "ndcg_at_20": 0.73974,
-        "ndcg_at_3": 0.70361,
-        "ndcg_at_5": 0.73974
+        "main_score": 0.36945,
+        "mrr_at_1": 0.3694474539544962,
+        "mrr_at_10": 0.6365113759479949,
+        "mrr_at_100": 0.6365113759479949,
+        "mrr_at_1000": 0.6365113759479949,
+        "mrr_at_20": 0.6365113759479949,
+        "mrr_at_3": 0.61213434452871,
+        "mrr_at_5": 0.6365113759479949,
+        "ndcg_at_1": 0.36945,
+        "ndcg_at_10": 0.72903,
+        "ndcg_at_100": 0.72903,
+        "ndcg_at_1000": 0.72903,
+        "ndcg_at_20": 0.72903,
+        "ndcg_at_3": 0.68704,
+        "ndcg_at_5": 0.72903
       }
     ]
   },
