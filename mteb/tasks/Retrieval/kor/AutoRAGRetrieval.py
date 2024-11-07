@@ -8,8 +8,8 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class AutoRAGRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AutoRAGRetrieval",
-        description="AutoRAGRetrieval",
-        reference=None,
+        description="Korean Retrieval Task origniated from AutoRAG",
+        reference="https://arxiv.org/abs/2410.20878",
         dataset={
             "path": "yjoonjang/markers_bm",
             "revision": "fd7df84ac089bbec763b1c6bb1b56e985df5cc5c",
@@ -19,25 +19,25 @@ class AutoRAGRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["kor-Hang"],
         main_score="ndcg_at_10",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        socioeconomic_status=None,
-        annotations_creators=None,
-        dialect=None,
-        text_creation=None,
-        bibtex_citation="""@misc{AutoRAG,
-  author = "Dongkyu Kim and Byoungwook Kim and Donggeon Han",
-  title = "AutoRAG",
-  year = {2024},
-  url = {https://github.com/Marker-Inc-Korea/AutoRAG}
+        date=("2024-08-03", "2024-08-03"),
+        domains=["Government", "Medical", "Legal", "Social"],
+        task_subtypes=["Article retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        text_creation="created",
+        bibtex_citation="""@misc{kim2024autoragautomatedframeworkoptimization,
+      title={AutoRAG: Automated Framework for optimization of Retrieval Augmented Generation Pipeline}, 
+      author={Dongkyu Kim and Byoungwook Kim and Donggeon Han and Matouš Eibich},
+      year={2024},
+      eprint={2410.20878},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2410.20878}, 
 }""",
         descriptive_stats={
-            "n_samples": None,
             "avg_character_length": {
-                "dev": {
+                "test": {
                     "average_document_length": 983.8421052631579,
                     "average_query_length": 69.6140350877193,
                     "num_documents": 114,
