@@ -8,14 +8,14 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class AutoRAGRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AutoRAGRetrieval",
-        description="Korean Retrieval Task origniated from AutoRAG",
+        description="This dataset enables the evaluation of Korean RAG performance across various domains—finance, public sector, healthcare, legal, and commerce—by providing publicly accessible documents, questions, and answers.",
         reference="https://arxiv.org/abs/2410.20878",
         dataset={
             "path": "yjoonjang/markers_bm",
             "revision": "fd7df84ac089bbec763b1c6bb1b56e985df5cc5c",
         },
         type="Retrieval",
-        prompt=None,
+        prompt="Retrieve text based on user query.",
         category="s2p",
         modalities=["text"],
         eval_splits=["test"],
@@ -24,7 +24,7 @@ class AutoRAGRetrieval(AbsTaskRetrieval):
         date=("2024-08-03", "2024-08-03"),
         domains=["Government", "Medical", "Legal", "Social"],
         task_subtypes=["Article retrieval"],
-        license="not specified",
+        license="mit",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
