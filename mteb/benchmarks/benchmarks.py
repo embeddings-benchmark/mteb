@@ -958,7 +958,7 @@ FinMTEB = Benchmark(
             "HC3Reranking",
             "FinEvaReranking",
             "DISCFinLLMReranking",
-            "FiQA2018Retrieval",
+            "FiQA2018",
             "FinanceBenchRetrieval",
             "HC3Retrieval",
             "Apple10KRetrieval",
