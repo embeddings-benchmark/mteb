@@ -14,10 +14,10 @@ class TinyImageNet(AbsTaskImageClustering):
             "revision": "5a77092c28e51558c5586e9c5eb71a7e17a5e43f",
         },
         type="ImageClustering",
-        category="s2s",
+        category="i2i",
         eval_splits=["valid"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
+        main_score="nmi",
         date=(
             "2012-01-01",
             "2015-12-31",

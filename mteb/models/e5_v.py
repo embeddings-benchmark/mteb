@@ -21,6 +21,8 @@ class E5VWrapper:
     ):
         self.model_name = model_name
         self.processor = LlavaNextProcessor.from_pretrained(model_name)
+        if "device" in kwargs:
+            self.device = kwargs.pop("device")
         self.model = LlavaNextForConditionalGeneration.from_pretrained(
             model_name, **kwargs
         )
@@ -62,32 +64,33 @@ class E5VWrapper:
     ):
         all_image_embeddings = []
 
-        if isinstance(images, DataLoader):
-            for batch_images in tqdm(images):
-                img_inputs = self.processor(
-                    [self.img_prompt] * len(batch_images),
-                    batch_images,
-                    return_tensors="pt",
-                    padding=True,
-                ).to("cuda")
-                image_outputs = self.model(
-                    **img_inputs, output_hidden_states=True, return_dict=True
-                ).hidden_states[-1][:, -1, :]
-                all_image_embeddings.append(image_outputs.cpu())
         with torch.no_grad():
-            for i in tqdm(range(0, len(images), batch_size)):
-                batch_images = images[i : i + batch_size]
-                img_inputs = self.processor(
-                    [self.img_prompt] * len(batch_images),
-                    batch_images,
-                    return_tensors="pt",
-                    padding=True,
-                ).to("cuda")
-                image_outputs = self.model(
-                    **img_inputs, output_hidden_states=True, return_dict=True
-                ).hidden_states[-1][:, -1, :]
-                all_image_embeddings.append(image_outputs.cpu())
-        return torch.cat(all_image_embeddings, dim=0)
+            if isinstance(images, DataLoader):
+                for batch_images in tqdm(images):
+                    img_inputs = self.processor(
+                        [self.img_prompt] * len(batch_images),
+                        batch_images,
+                        return_tensors="pt",
+                        padding=True,
+                    ).to("cuda")
+                    image_outputs = self.model(
+                        **img_inputs, output_hidden_states=True, return_dict=True
+                    ).hidden_states[-1][:, -1, :]
+                    all_image_embeddings.append(image_outputs.cpu())
+            else:
+                for i in tqdm(range(0, len(images), batch_size)):
+                    batch_images = images[i : i + batch_size]
+                    img_inputs = self.processor(
+                        [self.img_prompt] * len(batch_images),
+                        batch_images,
+                        return_tensors="pt",
+                        padding=True,
+                    ).to("cuda")
+                    image_outputs = self.model(
+                        **img_inputs, output_hidden_states=True, return_dict=True
+                    ).hidden_states[-1][:, -1, :]
+                    all_image_embeddings.append(image_outputs.cpu())
+            return torch.cat(all_image_embeddings, dim=0)
 
     def calculate_probs(self, text_embeddings, image_embeddings):
         text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
@@ -110,8 +113,8 @@ class E5VWrapper:
         all_fused_embeddings = []
 
         if texts is not None and images is not None:
-            if isinstance(images, DataLoader):
-                with torch.no_grad():
+            with torch.no_grad():
+                if isinstance(images, DataLoader):
                     for index, batch_images in enumerate(tqdm(images)):
                         batch_texts = texts[
                             index * batch_size : (index + 1) * batch_size
@@ -126,12 +129,11 @@ class E5VWrapper:
                             **inputs, output_hidden_states=True, return_dict=True
                         ).hidden_states[-1][:, -1, :]
                         all_fused_embeddings.append(outputs.cpu())
-            else:
-                if len(texts) != len(images):
-                    raise ValueError(
-                        "The number of texts and images must have the same length"
-                    )
-                with torch.no_grad():
+                else:
+                    if len(texts) != len(images):
+                        raise ValueError(
+                            "The number of texts and images must have the same length"
+                        )
                     for i in tqdm(range(0, len(images), batch_size)):
                         batch_texts = texts[i : i + batch_size]
                         batch_images = images[i : i + batch_size]
@@ -146,7 +148,6 @@ class E5VWrapper:
                         ).hidden_states[-1][:, -1, :]
                         all_fused_embeddings.append(outputs.cpu())
             return torch.cat(all_fused_embeddings, dim=0)
-
         elif texts is not None:
             text_embeddings = self.get_text_embeddings(texts, batch_size)
             return text_embeddings

@@ -149,7 +149,7 @@ class VLM2VecWrapper:
                     }
 
                     image_outputs = self.encode_input(inputs)
-                    all_image_embeddings.append(image_outputs.cpu())
+                    all_image_embeddings.append(image_outputs.cpu().to(torch.float32))
 
         else:
             with torch.no_grad():
@@ -186,7 +186,7 @@ class VLM2VecWrapper:
                     }
 
                     image_outputs = self.encode_input(inputs)
-                    all_image_embeddings.append(image_outputs.cpu())
+                    all_image_embeddings.append(image_outputs.cpu().to(torch.float32))
 
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
@@ -221,7 +221,7 @@ class VLM2VecWrapper:
                 }
 
                 text_outputs = self.encode_input(inputs)
-                all_text_embeddings.append(text_outputs.cpu())
+                all_text_embeddings.append(text_outputs.cpu().to(torch.float32))
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
@@ -239,22 +239,21 @@ class VLM2VecWrapper:
         text_embeddings = None
         image_embeddings = None
 
-        if texts is not None:
+        if texts is not None and images is None:
             text_embeddings = self.get_text_embeddings(texts, batch_size)
+            return text_embeddings
 
-        if images is not None:
+        if images is not None and texts is None:
             image_embeddings = self.get_image_embeddings(images, batch_size)
+            return image_embeddings
 
-        if text_embeddings is not None and image_embeddings is not None:
-            if len(text_embeddings) != len(image_embeddings):
-                raise ValueError(
-                    "The number of texts and images must have the same length"
-                )
-            texts = iter(texts)
-            all_fused_embeddings = []
-            if isinstance(images, DataLoader):
-                import torchvision.transforms.functional as F
+        # text_embeddings is not None and image_embeddings is not None
+        texts = iter(texts)
+        all_fused_embeddings = []
+        if isinstance(images, DataLoader):
+            import torchvision.transforms.functional as F
 
+            with torch.no_grad():
                 for batch in images:
                     for b in batch:
                         text = next(texts)
@@ -262,19 +261,11 @@ class VLM2VecWrapper:
                             f"<|image_1|> Represent the given image with the following question: {text}",
                             [F.to_pil_image(b.to("cpu"))],
                         )
-                        inputs = {
-                            key: value.to(self.device) for key, value in inputs.items()
-                        }
+                        inputs = {k: v.to(self.device) for k, v in inputs.items()}
                         outputs = self.encode_input(inputs)
-                        all_fused_embeddings.append(outputs.cpu())
-
-            fused_embeddings = torch.cat(all_fused_embeddings, dim=0)
-
-            return fused_embeddings
-        elif text_embeddings is not None:
-            return text_embeddings
-        elif image_embeddings is not None:
-            return image_embeddings
+                        all_fused_embeddings.append(outputs.cpu().to(torch.float32))
+        fused_embeddings = torch.cat(all_fused_embeddings, dim=0)
+        return fused_embeddings
 
 
 vlm2vec_lora = ModelMeta(

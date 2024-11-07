@@ -57,6 +57,12 @@ class ALIGNModelWrapper:
             with torch.no_grad():
                 for i in tqdm(range(0, len(images), batch_size)):
                     batch_images = images[i : i + batch_size]
+                    batch_images = [
+                        img.convert("RGB")
+                        if isinstance(img, Image.Image) and img.mode != "RGB"
+                        else img
+                        for img in batch_images
+                    ]
                     inputs = self.processor(
                         images=batch_images, return_tensors="pt", padding=True
                     )

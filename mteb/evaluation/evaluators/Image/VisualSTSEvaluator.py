@@ -78,14 +78,14 @@ class VisualSTSEvaluator(Evaluator):
             batch_size=encode_kwargs["batch_size"],
             shuffle=False,
             collate_fn=custom_collate_fn,
-            num_workers=math.floor(os.cpu_count() / 2),
+            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
         sentence2_dataloader = DataLoader(
             self.sentence2_dataset,
             batch_size=encode_kwargs["batch_size"],
             shuffle=False,
             collate_fn=custom_collate_fn,
-            num_workers=math.floor(os.cpu_count() / 2),
+            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
 
         embeddings1 = model.get_image_embeddings(

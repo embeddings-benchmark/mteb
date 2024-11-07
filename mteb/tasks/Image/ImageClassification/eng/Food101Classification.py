@@ -14,7 +14,7 @@ class Food101Classification(AbsTaskImageClassification):
             "revision": "e06acf2a88084f04bce4d4a525165d68e0a36c38",
         },
         type="ImageClassification",
-        category="i2t",
+        category="i2i",
         eval_splits=["validation"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

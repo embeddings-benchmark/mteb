@@ -14,7 +14,7 @@ class RESISC45Classification(AbsTaskImageClassification):
             "revision": "fe12fc5f1b7606543b0355eda392f1ddc54625c6",
         },
         type="ImageClassification",
-        category="i2t",
+        category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

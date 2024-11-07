@@ -14,7 +14,7 @@ class StanfordCarsClassification(AbsTaskImageClassification):
             "revision": "09ffe9bc7864d3f1e851529e5c4b7e05601a04fb",
         },
         type="ImageClassification",
-        category="i2t",
+        category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

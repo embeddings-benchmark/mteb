@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import logging
+import math
+import os
 from typing import Any
 
 import torch
@@ -66,7 +68,7 @@ class ZeroshotClassificationEvaluator(Evaluator):
             batch_size=encode_kwargs["batch_size"],
             shuffle=False,
             collate_fn=custom_collate_fn,
-            num_workers=16,
+            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
 
         text_embeddings = model.get_text_embeddings(

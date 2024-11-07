@@ -14,7 +14,7 @@ class PatchCamelyonClassification(AbsTaskImageClassification):
             "revision": "502695fe1a141108650e3c5b91c8b5e0ff84ed49",
         },
         type="ImageClassification",
-        category="i2t",
+        category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

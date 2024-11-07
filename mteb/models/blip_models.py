@@ -83,7 +83,6 @@ class BLIPModelWrapper:
                         images=batch_images, return_tensors="pt", padding=True
                     )
                     inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                    image_outputs = self.model.get_image_features(**inputs)
                     image_outputs = self.model.vision_model(**inputs)
                     image_outputs = image_outputs[0]
                     image_outputs = normalize(

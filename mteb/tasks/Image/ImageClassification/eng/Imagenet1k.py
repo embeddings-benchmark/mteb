@@ -14,7 +14,7 @@ class Imagenet1kClassification(AbsTaskImageClassification):
             "revision": "b24c7a5a3ef12df09089055d1795e2ce7c7e7397",
         },
         type="ImageClassification",
-        category="i2t",
+        category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

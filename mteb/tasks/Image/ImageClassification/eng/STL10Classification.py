@@ -14,7 +14,7 @@ class STL10Classification(AbsTaskImageClassification):
             "revision": "49ae7f94508f7feae62baf836db284306eab0b0f",
         },
         type="ImageClassification",
-        category="i2t",
+        category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
