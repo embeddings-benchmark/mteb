@@ -17,7 +17,7 @@ class HeadlinePDUPairClassification(AbsTaskPairClassification):
         category="s2s",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ap",
+        main_score="max_ap",
     )
 
     def dataset_transform(self):

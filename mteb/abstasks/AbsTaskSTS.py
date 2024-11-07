@@ -36,6 +36,8 @@ class AbsTaskSTS(AbsTask):
     """
 
     abstask_prompt = "Retrieve semantically similar text."
+    reference_summaries_column: str = "human_summaries"
+    generated_summaries_column: str = "machine_summaries"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -56,8 +58,8 @@ class AbsTaskSTS(AbsTask):
 
         normalized_scores = list(map(normalize, data_split["score"]))
         evaluator = STSEvaluator(
-            data_split["sentence1"],
-            data_split["sentence2"],
+            data_split[self.reference_summaries_column],
+            data_split[self.generated_summaries_column],
             normalized_scores,
             task_name=self.metadata.name,
             **kwargs,
@@ -74,20 +76,24 @@ class AbsTaskSTS(AbsTask):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> STSDescriptiveStatistics:
         if hf_subset:
-            sentence1 = self.dataset[hf_subset][split]["sentence1"]
-            sentence2 = self.dataset[hf_subset][split]["sentence2"]
+            sentence1 = self.dataset[hf_subset][split][self.reference_summaries_column]
+            sentence2 = self.dataset[hf_subset][split][self.generated_summaries_column]
             score = self.dataset[hf_subset][split]["score"]
         elif compute_overall:
             sentence1 = []
             sentence2 = []
             score = []
             for hf_subset in self.metadata.eval_langs:
-                sentence1.extend(self.dataset[hf_subset][split]["sentence1"])
-                sentence2.extend(self.dataset[hf_subset][split]["sentence2"])
+                sentence1.extend(
+                    self.dataset[hf_subset][split][self.reference_summaries_column]
+                )
+                sentence2.extend(
+                    self.dataset[hf_subset][split][self.generated_summaries_column]
+                )
                 score.extend(self.dataset[hf_subset][split]["score"])
         else:
-            sentence1 = self.dataset[split]["sentence1"]
-            sentence2 = self.dataset[split]["sentence2"]
+            sentence1 = self.dataset[split][self.reference_summaries_column]
+            sentence2 = self.dataset[split][self.generated_summaries_column]
             score = self.dataset[split]["score"]
 
         total_sentence1_len = sum([len(s) for s in sentence1])

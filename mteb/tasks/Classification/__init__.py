@@ -28,6 +28,7 @@ from .eng.DBpediaClassification import *
 from .eng.EmotionClassification import *
 from .eng.ESGClassification import *
 from .eng.FinancialFraudClassification import *
+from .eng.FinancialPhraseBankClassification import *
 from .eng.FinancialPhrasebankClassification import *
 from .eng.FinSentClassification import *
 from .eng.FiQAClassification import *
@@ -145,6 +146,11 @@ from .ukr.UkrFormalityClassification import *
 from .urd.UrduRomanSentimentClassification import *
 from .vie.VieStudentFeedbackClassification import *
 from .zho.CMTEBClassification import *
+from .zho.FinChinaSentimentClassification import *
+from .zho.FinFEClassification import *
+from .zho.FinNSPClassification import *
+from .zho.OpenFinDataSentimentClassification import *
+from .zho.Weibo21Classification import *
 from .zho.YueOpenriceReviewClassification import (
     YueOpenriceReviewClassification,  # noqa: F401
 )
