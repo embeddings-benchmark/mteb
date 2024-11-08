@@ -1088,10 +1088,8 @@ def test_empy_descriptive_stat_in_new_datasets():
         553 == len(exceptions)
     ), "The number of exceptions has changed. Please do not add new datasets to this list."
 
-    exceptions = []
-
     for task in get_tasks():
         if task.metadata.descriptive_stats is None:
             assert (
-                task.metadata.name not in exceptions
+                task.metadata.name in exceptions
             ), f"Dataset {task.metadata.name} should have descriptive stats"
