@@ -17,7 +17,7 @@ def evaclip_loader(**kwargs):
         import sys
 
         sys.path.insert(0, os.path.join(os.getcwd(), "EVA/EVA-CLIP/rei"))
-
+        
         from eva_clip import create_model_and_transforms, get_tokenizer
     except ImportError:
         # https://github.com/baaivision/EVA/tree/master/EVA-CLIP#setup
@@ -89,7 +89,7 @@ def evaclip_loader(**kwargs):
                     for i in tqdm(range(0, len(images), batch_size)):
                         batch_images = images[i : i + batch_size]
                         inputs = torch.vstack(
-                            [self.img_preprocess(b) for b in batch_images]
+                            [self.img_preprocess(b).unsqueeze(0) for b in batch_images]
                         )
                         image_outputs = self.model.encode_image(inputs.to(self.device))
                         all_image_embeddings.append(image_outputs.cpu())
