@@ -8,7 +8,7 @@ class FLSClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="FLSClassification",
         description="A finance dataset detects whether the sentence is a forward-looking statement.",
-        # reference="",
+        reference="https://arxiv.org/abs/2309.13064",
         dataset={
             "path": "FinanceMTEB/FLS",
             "revision": "39b6719f1d7197df4498fea9fce20d4ad782a083",

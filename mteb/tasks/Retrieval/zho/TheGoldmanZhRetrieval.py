@@ -8,7 +8,7 @@ class TheGoldmanZhRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="TheGoldmanZhRetrieval",
         description="Goldman Sachs Financial Dictionary.",
-        # reference="",
+        reference="https://arxiv.org/abs/2409.18511v1",
         dataset={
             "path": "FinanceMTEB/TheGoldmanEncyclopedia-zh",
             "revision": "09cf73149a1e1a81b32ab9e968cdfef9a7a4a1a5",

@@ -43,6 +43,8 @@ class AbsTaskPairClassification(AbsTask):
     """
 
     abstask_prompt = "Retrieve text that are semantically similar to the given text."
+    sentence_1_column: str = "sentence1"
+    sentence_2_column: str = "sentence2"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -63,8 +65,8 @@ class AbsTaskPairClassification(AbsTask):
             "sentence_transformers.evaluation.PairClassificationEvaluator"
         ).setLevel(logging.WARN)
         evaluator = PairClassificationEvaluator(
-            data_split["sentence1"],
-            data_split["sentence2"],
+            data_split[self.sentence_1_column],
+            data_split[self.sentence_2_column],
             data_split["labels"],
             task_name=self.metadata.name,
             **kwargs,
@@ -93,14 +95,14 @@ class AbsTaskPairClassification(AbsTask):
             dataset = self.dataset[split]
 
         sentence1 = (
-            dataset["sentence1"][0]
-            if len(dataset["sentence1"]) == 1
-            else dataset["sentence1"]
+            dataset[self.sentence_1_column][0]
+            if len(dataset[self.sentence_1_column]) == 1
+            else dataset[self.sentence_1_column]
         )
         sentence2 = (
-            dataset["sentence2"][0]
-            if len(dataset["sentence2"]) == 1
-            else dataset["sentence2"]
+            dataset[self.sentence_2_column][0]
+            if len(dataset[self.sentence_2_column]) == 1
+            else dataset[self.sentence_2_column]
         )
         labels = (
             dataset["labels"][0] if len(dataset["labels"]) == 1 else dataset["labels"]

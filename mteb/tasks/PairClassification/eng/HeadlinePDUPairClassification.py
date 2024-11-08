@@ -8,7 +8,7 @@ class HeadlinePDUPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="HeadlinePDUPairClassification",
         description="Financial text sentiment categorization dataset.",
-        # reference="",
+        reference="https://arxiv.org/abs/2009.04202",
         dataset={
             "path": "FinanceMTEB/HeadlinePDU-PairClassification",
             "revision": "afa5a612a01b9c0a8058fba44a3bdf66173583eb",
@@ -20,6 +20,5 @@ class HeadlinePDUPairClassification(AbsTaskPairClassification):
         main_score="max_ap",
     )
 
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_column("sent1", "sentence1")
-        self.dataset = self.dataset.rename_column("sent2", "sentence2")
+    sentence_1_column = "sent1"
+    sentence_2_column = "sent2"

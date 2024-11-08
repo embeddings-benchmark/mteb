@@ -8,7 +8,7 @@ class ESGClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ESGClassification",
         description="A finance dataset performs sentence classification under the environmental, social, and corporate governance (ESG) framework.",
-        # reference="",
+        reference="https://arxiv.org/abs/2309.13064",
         dataset={
             "path": "FinanceMTEB/ESG",
             "revision": "521d56feabadda80b11d6adcc6b335d4c5ad8285",

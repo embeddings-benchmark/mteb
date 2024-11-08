@@ -8,7 +8,7 @@ class FinanceArxivP2PClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="FinanceArxivP2PClustering",
         description="Clustering of titles from arxiv (q-fin).",
-        # reference=" ",
+        reference="https://arxiv.org/abs/2409.18511v1",
         dataset={
             "path": "FinanceMTEB/FinanceArxiv-p2p",
             "revision": "5cc8768f04d39e9a16b84fc236dec93d8b173b64",

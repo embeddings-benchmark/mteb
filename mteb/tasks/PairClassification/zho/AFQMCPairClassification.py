@@ -20,6 +20,5 @@ class AFQMCPairClassification(AbsTaskPairClassification):
         main_score="max_ap",
     )
 
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_column("sent1", "sentence1")
-        self.dataset = self.dataset.rename_column("sent2", "sentence2")
+    sentence_1_column = "sent1"
+    sentence_2_column = "sent2"

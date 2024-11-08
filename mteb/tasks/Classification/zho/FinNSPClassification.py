@@ -19,7 +19,3 @@ class FinNSPClassification(AbsTaskClassification):
         eval_langs=["cmn-Hans"],
         main_score="accuracy",
     )
-
-    def dataset_transform(self):
-        if "sentence" in self.dataset:
-            self.dataset = self.dataset.rename_column("sentence", "text")

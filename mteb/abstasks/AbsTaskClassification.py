@@ -47,6 +47,8 @@ class AbsTaskClassification(AbsTask):
     """
 
     abstask_prompt = "Classify user passages."
+    sentence_column: str = "text"
+
 
     def __init__(
         self,
@@ -138,7 +140,7 @@ class AbsTaskClassification(AbsTask):
             )
             # Bootstrap `self.samples_per_label` samples per label for each split
             X_sampled, y_sampled, idxs = self._undersample_data(
-                train_split["text"],  # type: ignore
+                train_split[self.sentence_column],  # type: ignore
                 train_split["label"],  # type: ignore
                 self.samples_per_label,
                 idxs,
@@ -148,7 +150,7 @@ class AbsTaskClassification(AbsTask):
                 evaluator = kNNClassificationEvaluator(
                     X_sampled,
                     y_sampled,
-                    eval_split["text"],  # type: ignore
+                    eval_split[self.sentence_column],  # type: ignore
                     eval_split["label"],  # type: ignore
                     task_name=self.metadata.name,
                     encode_kwargs=encode_kwargs,
@@ -158,7 +160,7 @@ class AbsTaskClassification(AbsTask):
                 evaluator = kNNClassificationEvaluatorPytorch(
                     X_sampled,
                     y_sampled,
-                    eval_split["text"],  # type: ignore
+                    eval_split[self.sentence_column],  # type: ignore
                     eval_split["label"],  # type: ignore
                     task_name=self.metadata.name,
                     encode_kwargs=encode_kwargs,
@@ -168,7 +170,7 @@ class AbsTaskClassification(AbsTask):
                 evaluator = logRegClassificationEvaluator(
                     X_sampled,
                     y_sampled,
-                    eval_split["text"],  # type: ignore
+                    eval_split[self.sentence_column],  # type: ignore
                     eval_split["label"],  # type: ignore
                     task_name=self.metadata.name,
                     encode_kwargs=encode_kwargs,
@@ -243,16 +245,16 @@ class AbsTaskClassification(AbsTask):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClassificationDescriptiveStatistics:
         if hf_subset:
-            text = self.dataset[hf_subset][split]["text"]
+            text = self.dataset[hf_subset][split][self.sentence_column]
             label = self.dataset[hf_subset][split]["label"]
         elif compute_overall:
             text = []
             label = []
             for hf_subset in self.metadata.eval_langs:
-                text.extend(self.dataset[hf_subset][split]["text"])
+                text.extend(self.dataset[hf_subset][split][self.sentence_column])
                 label.extend(self.dataset[hf_subset][split]["label"])
         else:
-            text = self.dataset[split]["text"]
+            text = self.dataset[split][self.sentence_column]
             label = self.dataset[split]["label"]
 
         total_text_len = sum([len(t) for t in text])
