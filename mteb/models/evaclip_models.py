@@ -17,7 +17,7 @@ def evaclip_loader(**kwargs):
         import sys
 
         sys.path.insert(0, os.path.join(os.getcwd(), "EVA/EVA-CLIP/rei"))
-        
+
         from eva_clip import create_model_and_transforms, get_tokenizer
     except ImportError:
         # https://github.com/baaivision/EVA/tree/master/EVA-CLIP#setup
