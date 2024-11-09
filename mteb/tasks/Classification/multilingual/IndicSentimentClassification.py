@@ -21,7 +21,7 @@ _LANGUAGES = {
 }
 
 
-class IndicSentimentClassification(MultilingualTask, AbsTaskClassification):
+class IndicSentimentClassification(AbsTaskClassification, MultilingualTask):
     fast_loading = True
     metadata = TaskMetadata(
         name="IndicSentimentClassification",

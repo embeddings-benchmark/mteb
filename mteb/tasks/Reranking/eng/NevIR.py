@@ -35,7 +35,7 @@ class NevIR(AbsTaskReranking):
   url={{https://api.semanticscholar.org/CorpusID:258676146}}
 }""",
         descriptive_stats={
-            "n_samples": {"test": 2255},
+            "n_samples": {"test": 2766},
             "test": {
                 "average_document_length": 712.460289514867,
                 "average_query_length": 67.9287780187997,

@@ -13,47 +13,72 @@ from datasets import load_dataset
 from packaging.version import Version
 from sklearn.metrics import auc
 
+try:
+    # speeds up computation if available
+    torch.set_float32_matmul_precision("high")
+except Exception:
+    pass
 
-def cos_sim(a, b):
-    """Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
+
+def cos_sim(a: torch.Tensor, b: torch.Tensor):
+    """Calculate pairwise cosine similarities between two sets of vectors.
+
+    Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
 
     Return:
         Matrix with res[i][j]  = cos_sim(a[i], b[j])
-    """  # noqa: D402
+    """
+    # Move tensor conversion outside the compiled function
+    # since compile works better with pure tensor operations
     if not isinstance(a, torch.Tensor):
         a = torch.tensor(a)
-
     if not isinstance(b, torch.Tensor):
         b = torch.tensor(b)
 
-    if len(a.shape) == 1:
-        a = a.unsqueeze(0)
+    # The actual function to compile
+    def _cos_sim_core(a_tensor, b_tensor):
+        if len(a_tensor.shape) == 1:
+            a_tensor = a_tensor.unsqueeze(0)
+        if len(b_tensor.shape) == 1:
+            b_tensor = b_tensor.unsqueeze(0)
 
-    if len(b.shape) == 1:
-        b = b.unsqueeze(0)
+        a_norm = torch.nn.functional.normalize(a_tensor, p=2, dim=1)
+        b_norm = torch.nn.functional.normalize(b_tensor, p=2, dim=1)
+        return torch.mm(a_norm, b_norm.transpose(0, 1))
 
-    a_norm = torch.nn.functional.normalize(a, p=2, dim=1)
-    b_norm = torch.nn.functional.normalize(b, p=2, dim=1)
-    return torch.mm(a_norm, b_norm.transpose(0, 1))
+    # Compile the core function once
+    if hasattr(torch, "compile"):  # Check if torch.compile is available
+        _cos_sim_core_compiled = torch.compile(_cos_sim_core)
+        return _cos_sim_core_compiled(a, b)
+    else:
+        return _cos_sim_core(a, b)
 
 
 def dot_score(a: torch.Tensor, b: torch.Tensor):
     """Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
     :return: Matrix with res[i][j]  = dot_prod(a[i], b[j])
     """
+    # Move tensor conversion outside the compiled function
     if not isinstance(a, torch.Tensor):
         a = torch.tensor(a)
-
     if not isinstance(b, torch.Tensor):
         b = torch.tensor(b)
 
-    if len(a.shape) == 1:
-        a = a.unsqueeze(0)
+    # The actual function to compile
+    def _dot_score_core(a_tensor, b_tensor):
+        if len(a_tensor.shape) == 1:
+            a_tensor = a_tensor.unsqueeze(0)
+        if len(b_tensor.shape) == 1:
+            b_tensor = b_tensor.unsqueeze(0)
 
-    if len(b.shape) == 1:
-        b = b.unsqueeze(0)
+        return torch.mm(a_tensor, b_tensor.transpose(0, 1))
 
-    return torch.mm(a, b.transpose(0, 1))
+    # Compile the core function once
+    if hasattr(torch, "compile"):  # Check if torch.compile is available
+        _dot_score_core_compiled = torch.compile(_dot_score_core)
+        return _dot_score_core_compiled(a, b)
+    else:
+        return _dot_score_core(a, b)
 
 
 # From https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/custom_metrics.py#L4
@@ -437,7 +462,6 @@ def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
         cs_diff1 = 0.0
 
     conf_scores = {"max": cs_max, "std": cs_std, "diff1": cs_diff1}
-
     return conf_scores
 
 
@@ -672,7 +696,7 @@ def max_over_subqueries(qrels, results, k_values):
     """
     query_keys = defaultdict(list)
     for key in qrels.keys():
-        query_keys[key.split("_")[0]].append(key)
+        query_keys["_".join(key.split("_")[:-1])].append(key)
 
     new_results = {}
     for query_id_base, query_ids in query_keys.items():

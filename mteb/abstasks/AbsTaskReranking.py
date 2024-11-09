@@ -4,10 +4,8 @@ import logging
 from collections import defaultdict
 
 import datasets
-import tqdm
 from datasets import Dataset
 
-from ..load_results.task_results import ScoresDict
 from .AbsTaskRetrieval import AbsTaskRetrieval
 
 logger = logging.getLogger(__name__)
@@ -33,29 +31,7 @@ OLD_FORMAT_RERANKING_TASKS = [
 
 
 class AbsTaskReranking(AbsTaskRetrieval):
-    """Abstract class for re-ranking experiments. This is mostly the same as the RetrievalEvaluator, but treats each query as a "mini" retrieval problem.
-
-    New Format:
-    -----------
-    Same as AbsTaskRetrieval, but with a top_ranked file that contains the passages to rerank. The dataset should contain the following columns:
-
-        self.corpus: dict[str, dict[str, str]]
-            Semantically, it should contain dict[split_name, dict[sample_id, dict[str, str]]]
-            E.g. {"test": {"document_one": {"_id": "d1", "title": "title", "text": "text"}}}
-
-        self.queries: dict[str, dict[str, Union[str, list[str]]]]
-            Semantically, it should contain dict[split_name, dict[sample_id, str]] or dict[split_name, dict[sample_id, list[str]]] for conversations
-            E.g. {"test": {"q1": "query"}}
-            or {"test": {"q1": ["turn1", "turn2", "turn3"]}}
-
-        self.relevant_docs: dict[str, dict[str, dict[str, int]]]
-            Semantically, it should contain dict[split_name, dict[sample_id, dict[doc_id, score]]]
-            E.g.: {"test": {"q1": {"document_one": 1}}}
-
-        self.top_ranked: dict[str, dict[str, list[str]]] or dict[str, dict[str, dict[str, float]]]
-            Semantically, it should contain dict[split_name, dict[sample_id, list[doc_id]]] or dict[split_name, dict[sample_id, dict[doc_id, score]]]
-            E.g.: {"test": {"q1": ["document_one", "document_two"]}} or {"test": {"q1": {"document_one": 1, "document_two": 0.5}}}
-    """
+    """Abstract class for re-ranking experiments. This is mostly the same as the RetrievalEvaluator, but here to adapt the old format to the new format. TODO: update these tasks to the new format and delete this class."""
 
     def __init__(self, **kwargs):
         super(AbsTaskRetrieval, self).__init__(**kwargs)
@@ -88,16 +64,19 @@ class AbsTaskReranking(AbsTaskRetrieval):
         }
 
         for i, pos_doc in enumerate(positive_docs):
+            # format i as a five digit number
+            formatted_i = str(i).zfill(5)
             # have "a" in front so that positives are first, then negatives
             #   this shouldn't matter except for ties, and the previous reranking results
             #   had the positives first
-            doc_id = f"apositive_{i}_{query_id}"
+            doc_id = f"apositive_{query_id}_{formatted_i}"
             example_data["doc_ids"].append(doc_id)
             example_data["doc_texts"].append(pos_doc)
             example_data["relevance_scores"].append(1)
 
         for i, neg_doc in enumerate(negative_docs):
-            doc_id = f"negative_{i}_{query_id}"
+            formatted_i = str(i).zfill(5)
+            doc_id = f"negative_{query_id}_{formatted_i}"
             example_data["doc_ids"].append(doc_id)
             example_data["doc_texts"].append(neg_doc)
             example_data["relevance_scores"].append(0)
@@ -151,8 +130,10 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
                 # first, filter out the ones that have no positive or no negatives
                 enumerated_dataset = enumerated_dataset.filter(
-                    lambda x: len(x["positive"]) > 0 and len(x["negative"]) > 0
+                    lambda example: len(example["positive"]) > 0
+                    and len(example["negative"]) > 0
                 )
+
                 logger.info(
                     f"Filtered out {len(cur_dataset[split]) - len(enumerated_dataset)} examples with no positive or no negative examples. {len(enumerated_dataset)} examples remaining."
                 )
@@ -184,52 +165,3 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
         self.instructions = None
         self.data_loaded = True
-
-    def _evaluate_subset(
-        self, retriever, corpus, queries, relevant_docs, hf_subset: str, **kwargs
-    ) -> ScoresDict:
-        """Evaluate each query_id as a "mini" retrieval corpus, and rerank the top-ranked documents for each query_id."""
-        all_results = defaultdict(dict)
-        max_docs = 0
-        top_ranked = kwargs["top_ranked"]  # must be present for reranking
-        for query_id in tqdm.tqdm(
-            list(queries.keys()), leave=False, desc="Reranking over query-ids.."
-        ):
-            cur_queries = {query_id: queries[query_id]}
-            if "instructions" in kwargs:
-                instructions = kwargs["instructions"]
-                cur_instructions = {query_id: instructions[query_id]}
-            else:
-                cur_instructions = None
-
-            doc_ids_to_rerank = top_ranked[query_id]
-            cur_corpus = {doc_id: corpus[doc_id] for doc_id in doc_ids_to_rerank}
-            if (
-                len(cur_corpus) > max_docs
-            ):  # use this to make sure we get the correct MAP/MRR at max length
-                max_docs = len(cur_corpus)
-
-            # to handle instruction-based reranking we pass both query_id and instructions (unused if not instruction-based)
-            results = retriever(
-                cur_corpus,
-                cur_queries,
-                instructions=cur_instructions,
-                query_id=query_id,
-            )
-            # results should have only one key, the query_id
-            all_results[query_id] = results[query_id]
-
-        # do the evaluation like normal now, but pass our results
-        if max_docs > max(retriever.k_values):
-            # only added if we need a large k-value for reranking past 1000
-            retriever.k_values += [max_docs]
-
-        return super()._evaluate_subset(
-            retriever,
-            corpus,
-            queries,
-            relevant_docs,
-            hf_subset,
-            results=all_results,
-            **kwargs,
-        )

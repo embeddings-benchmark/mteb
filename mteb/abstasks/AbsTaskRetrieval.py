@@ -76,6 +76,8 @@ class AbsTaskRetrieval(AbsTask):
     ignore_identical_ids: bool = False
 
     def __init__(self, **kwargs):
+        self.top_ranked = None
+        self.instructions = None
         super().__init__(**kwargs)
 
     def load_data(self, **kwargs):
@@ -204,6 +206,12 @@ class AbsTaskRetrieval(AbsTask):
 
             with open(qrels_save_path, "w") as f:
                 json.dump(results, f)
+
+            # save qrels also
+            with open(
+                output_folder / f"{self.metadata.name}_{hf_subset}_qrels.json", "w"
+            ) as f:
+                json.dump(relevant_docs, f)
 
         ndcg, _map, recall, precision, naucs, task_scores = retriever.evaluate(
             relevant_docs,

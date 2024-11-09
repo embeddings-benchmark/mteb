@@ -222,9 +222,7 @@ class AbsTask(ABC):
                         split_details
                     )
             else:
-                split_details = self._calculate_metrics_from_split(
-                    split, hf_subset="default"
-                )
+                split_details = self._calculate_metrics_from_split(split)
                 all_details[split] = split_details
 
         return all_details

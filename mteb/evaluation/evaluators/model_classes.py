@@ -4,7 +4,6 @@ import heapq
 import json
 import logging
 import os
-from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
@@ -76,8 +75,6 @@ class DenseRetrievalExactSearch:
             self.previous_results = previous_results
         self.batch_size = encode_kwargs.get("batch_size")
         self.show_progress_bar = encode_kwargs.get("show_progress_bar")
-        self.save_corpus_embeddings = kwargs.get("save_corpus_embeddings", False)
-        self.corpus_embeddings = defaultdict(list)
         self.results = {}
 
         if self.previous_results is not None:
@@ -98,10 +95,23 @@ class DenseRetrievalExactSearch:
         instructions: dict[str, str] | None = None,
         request_qid: str | None = None,
         return_sorted: bool = False,
+        top_ranked: dict[str, list[str]] | None = None,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
-        # Create embeddings for all queries using model.encode
-        # Runs semantic search against the corpus embeddings
+        """Perform semantic search (retrieval or reranking).
+
+        Args:
+            corpus: Dictionary mapping corpus IDs to document dictionaries
+            queries: Dictionary mapping query IDs to query strings
+            top_k: Number of top results to return
+            score_function: Scoring function to use ('cos_sim' or 'dot')
+            task_name: Name of the task
+            instructions: Optional instructions to append to queries
+            request_qid: Optional request query ID
+            return_sorted: Whether to return results sorted
+            top_ranked: Optional dict mapping query IDs to lists of pre-ranked corpus IDs
+            **kwargs: Additional keyword arguments passed to the underlying model
+        """
         if score_function not in self.score_functions:
             raise ValueError(
                 f"score function: {score_function} must be either (cos_sim) for cosine similarity or (dot) for dot product"
@@ -120,70 +130,220 @@ class DenseRetrievalExactSearch:
                 )
             queries = new_queries
 
-        if isinstance(queries[0], list):  # type: ignore
-            query_embeddings = self.encode_conversations(
+        # Create mapping of unique queries to their indices
+        unique_queries = []
+        query_to_idx = {}
+        query_idx_mapping = []
+
+        for query in queries:
+            query_key = tuple(query) if isinstance(query, list) else query
+            if query_key not in query_to_idx:
+                query_to_idx[query_key] = len(unique_queries)
+                unique_queries.append(query)
+            query_idx_mapping.append(query_to_idx[query_key])
+
+        # Encode only unique queries
+        if isinstance(queries[0], list):
+            unique_query_embeddings = self.encode_conversations(
                 model=self.model,
-                conversations=queries,  # type: ignore
+                conversations=unique_queries,
                 task_name=task_name,
                 **self.encode_kwargs,
             )
         else:
-            query_embeddings = self.model.encode(
-                queries,  # type: ignore
+            unique_query_embeddings = self.model.encode(
+                unique_queries,
                 task_name=task_name,
                 prompt_type=PromptType.query,
                 **self.encode_kwargs,
             )
 
-        logger.info("Sorting Corpus by document length (Longest first)...")
-        corpus_ids = sorted(
-            corpus,
-            reverse=True,
-        )
-        corpus = [corpus[cid] for cid in corpus_ids]  # type: ignore
+        # Map back to original order but reuse embeddings
+        query_embeddings = unique_query_embeddings[query_idx_mapping]
 
-        logger.info("Encoding Corpus in batches... Warning: This might take a while!")
         logger.info(
             f"Scoring Function: {self.score_function_desc[score_function]} ({score_function})"
         )
 
+        if top_ranked is not None:
+            logger.info("Performing reranking on pre-ranked documents...")
+            result_heaps = self._rerank_documents(
+                query_ids=query_ids,
+                query_embeddings=query_embeddings,
+                corpus=corpus,
+                top_ranked=top_ranked,
+                top_k=top_k,
+                score_function=score_function,
+                task_name=task_name,
+                request_qid=request_qid,
+                return_sorted=return_sorted,
+            )
+        else:
+            logger.info("Performing full corpus search...")
+            result_heaps = self._full_corpus_search(
+                query_ids=query_ids,
+                query_embeddings=query_embeddings,
+                corpus=corpus,
+                top_k=top_k,
+                score_function=score_function,
+                task_name=task_name,
+                request_qid=request_qid,
+                return_sorted=return_sorted,
+            )
+
+        for qid in result_heaps:
+            for score, corpus_id in result_heaps[qid]:
+                self.results[qid][corpus_id] = score
+
+        return self.results
+
+    def _rerank_documents(
+        self,
+        query_ids: list[str],
+        query_embeddings: torch.Tensor,
+        corpus: dict[str, dict[str, str]],
+        top_ranked: dict[str, list[str]],
+        top_k: int,
+        score_function: str,
+        task_name: str,
+        request_qid: str | None = None,
+        return_sorted: bool = False,
+    ) -> dict[str, list[tuple[float, str]]]:
+        """Rerank documents for each query using top_ranked."""
+        # Determine device
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        logger.info(f"Using device: {device}")
+
+        # Move query embeddings to appropriate device
+        query_embeddings = torch.as_tensor(query_embeddings).to(device)
+
+        result_heaps = {qid: [] for qid in query_ids}
+
+        # Get unique document IDs across all queries
+        unique_doc_ids = list(
+            {
+                doc_id
+                for qid in query_ids
+                if qid in top_ranked
+                for doc_id in top_ranked[qid]
+            }
+        )
+
+        # Create mapping from unique doc IDs to their index in the embedding matrix
+        doc_id_to_idx = {doc_id: idx for idx, doc_id in enumerate(unique_doc_ids)}
+
+        # Encode unique documents only once
+        unique_docs = [corpus[doc_id] for doc_id in unique_doc_ids]
+        all_doc_embeddings = self.model.encode(
+            unique_docs,
+            task_name=task_name,
+            prompt_type=PromptType.passage,
+            request_qid=request_qid,
+            **self.encode_kwargs,
+        )
+
+        # Let's make sure we don't get the warnings for the tokenizer here via torch.compile
+        if hasattr(torch, "compile"):
+            os.environ["TOKENIZERS_PARALLELISM"] = "false"  # we don't need it anymore
+
+        # Process each query
+        for query_idx, query_id in enumerate(tqdm.tqdm(query_ids)):
+            if query_id not in top_ranked:
+                logger.warning(f"No pre-ranked documents found for query {query_id}")
+                continue
+
+            ranked_ids = top_ranked[query_id]
+            doc_indices = torch.tensor([doc_id_to_idx[doc_id] for doc_id in ranked_ids])
+            query_doc_embeddings = torch.as_tensor(all_doc_embeddings[doc_indices]).to(
+                device
+            )
+
+            # Ensure query embedding is on the correct device and has correct shape
+            query_embedding = query_embeddings[query_idx].unsqueeze(0)
+
+            with torch.inference_mode():
+                scores = self.score_functions[score_function](
+                    query_embedding,
+                    query_doc_embeddings,
+                )
+
+            # Handle NaN values
+            scores = torch.nan_to_num(scores, nan=-1.0)
+
+            # Compute top-k scores
+            scores_top_k_values, scores_top_k_idx = torch.topk(
+                scores,
+                min(top_k, len(ranked_ids)),
+                dim=1,
+                largest=True,
+                sorted=return_sorted,
+            )
+
+            # Move results back to CPU for heap operations
+            scores_top_k_values = scores_top_k_values.cpu()
+            scores_top_k_idx = scores_top_k_idx.cpu()
+
+            # Build result heap
+            for doc_idx, score in zip(
+                scores_top_k_idx[0].tolist(),
+                scores_top_k_values[0].tolist(),
+            ):
+                corpus_id = ranked_ids[doc_idx]
+                heapq.heappush(result_heaps[query_id], (score, corpus_id))
+
+        # Clear CUDA cache after processing
+        if device.type == "cuda":
+            torch.cuda.empty_cache()
+
+        return result_heaps
+
+    def _full_corpus_search(
+        self,
+        query_ids: list[str],
+        query_embeddings: torch.Tensor,
+        corpus: dict[str, dict[str, str]],
+        top_k: int,
+        score_function: str,
+        task_name: str,
+        request_qid: str | None = None,
+        return_sorted: bool = False,
+    ) -> dict[str, list[tuple[float, str]]]:
+        """Perform full corpus search using batched processing."""
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        logger.info(f"Using device: {device}")
+
+        logger.info("Sorting Corpus by document length (Longest first)...")
+        corpus_ids = sorted(corpus, reverse=True)
+        corpus = [corpus[cid] for cid in corpus_ids]
+
+        logger.info("Encoding Corpus in batches... Warning: This might take a while!")
         itr = range(0, len(corpus), self.corpus_chunk_size)
 
-        result_heaps = {
-            qid: [] for qid in query_ids
-        }  # Keep only the top-k docs for each query
+        result_heaps = {qid: [] for qid in query_ids}
         for batch_num, corpus_start_idx in enumerate(itr):
             logger.info(f"Encoding Batch {batch_num + 1}/{len(itr)}...")
             corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus))
-
             # Encode chunk of corpus
-            if (
-                self.save_corpus_embeddings
-                and request_qid
-                and len(self.corpus_embeddings[request_qid])
-            ):
-                sub_corpus_embeddings = torch.tensor(
-                    self.corpus_embeddings[request_qid][batch_num]
-                )
-            else:
-                # Encode chunk of corpus
-                sub_corpus_embeddings = self.model.encode(
-                    corpus[corpus_start_idx:corpus_end_idx],  # type: ignore
-                    task_name=task_name,
-                    prompt_type=PromptType.passage,
-                    request_qid=request_qid,
-                    **self.encode_kwargs,
-                )
-                if self.save_corpus_embeddings and request_qid:
-                    self.corpus_embeddings[request_qid].append(sub_corpus_embeddings)
+            sub_corpus_embeddings = self.model.encode(
+                corpus[corpus_start_idx:corpus_end_idx],  # type: ignore
+                task_name=task_name,
+                prompt_type=PromptType.passage,
+                request_qid=request_qid,
+                **self.encode_kwargs,
+            )
 
             # Compute similarites using either cosine-similarity or dot product
-            cos_scores = self.score_functions[score_function](
-                query_embeddings, sub_corpus_embeddings
-            )
-            cos_scores[torch.isnan(cos_scores)] = -1
+            logging.info("Computing Similarities...")
+            query_embeddings = torch.as_tensor(query_embeddings).to(device)
+            sub_corpus_embeddings = torch.as_tensor(sub_corpus_embeddings).to(device)
+            with torch.inference_mode():
+                cos_scores = self.score_functions[score_function](
+                    query_embeddings, sub_corpus_embeddings
+                )
 
-            # Get top-k values
+            cos_scores = torch.nan_to_num(cos_scores, nan=-1.0)
+
+            # get top-k values
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
                 cos_scores,
                 min(
@@ -194,27 +354,22 @@ class DenseRetrievalExactSearch:
                 largest=True,
                 sorted=return_sorted,
             )
-            cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
-            cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
 
             for query_itr in range(len(query_embeddings)):
                 query_id = query_ids[query_itr]
                 for sub_corpus_id, score in zip(
-                    cos_scores_top_k_idx[query_itr], cos_scores_top_k_values[query_itr]
+                    cos_scores_top_k_idx[query_itr].cpu().tolist(),
+                    cos_scores_top_k_values[query_itr].cpu().tolist(),
                 ):
                     corpus_id = corpus_ids[corpus_start_idx + sub_corpus_id]
                     if len(result_heaps[query_id]) < top_k:
-                        # Push item on the heap
+                        # push item on the heap
                         heapq.heappush(result_heaps[query_id], (score, corpus_id))
                     else:
                         # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
                         heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
 
-        for qid in result_heaps:
-            for score, corpus_id in result_heaps[qid]:
-                self.results[qid][corpus_id] = score
-
-        return self.results
+        return result_heaps
 
     def load_results_file(self):
         # load the first stage results from file in format {qid: {doc_id: score}}
@@ -367,8 +522,6 @@ class DRESModel:
     def __init__(self, model, **kwargs):
         self.model = model
         self.use_sbert_model = isinstance(model, SentenceTransformer)
-        self.save_corpus_embeddings = kwargs.get("save_corpus_embeddings", False)
-        self.corpus_embeddings = {}
 
     def encode_corpus(
         self,
@@ -376,16 +529,8 @@ class DRESModel:
         task_name: str,
         batch_size: int,
         prompt_type: PromptType = PromptType.passage,
-        request_qid: str | None = None,
         **kwargs,
     ):
-        if (
-            request_qid
-            and self.save_corpus_embeddings
-            and len(self.corpus_embeddings) > 0
-        ):
-            return self.corpus_embeddings[request_qid]
-
         sentences = corpus_to_str(corpus)
         corpus_embeddings = self.model.encode(
             sentences,
@@ -394,9 +539,6 @@ class DRESModel:
             batch_size=batch_size,
             **kwargs,
         )
-
-        if self.save_corpus_embeddings and request_qid:
-            self.corpus_embeddings[request_qid] = corpus_embeddings
         return corpus_embeddings
 
     def encode(
