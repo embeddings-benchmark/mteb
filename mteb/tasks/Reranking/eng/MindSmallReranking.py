@@ -133,8 +133,6 @@ class MindSmallReranking(AbsTaskReranking):
 
         # Process each split
         for split in self.dataset:
-            if split == "train":
-                continue
             logging.info(f"Processing split {split}")
 
             # Pre-allocate lists for batch processing
