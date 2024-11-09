@@ -37,13 +37,8 @@ class CSFDCZMovieReviewSentimentClassification(AbsTaskClassification):
 }
 """,
     )
-
-    @property
-    def metadata_dict(self):
-        md = super().metadata_dict
-        # Increase the samples_per_label in order to improve baseline performance
-        md["samples_per_label"] = 20
-        return md
+    # Increase the samples_per_label in order to improve baseline performance
+    samples_per_label = 20
 
     def dataset_transform(self):
         N_SAMPLES = 2048

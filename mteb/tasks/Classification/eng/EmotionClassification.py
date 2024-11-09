@@ -53,9 +53,4 @@ class EmotionClassification(AbsTaskClassification):
         prompt="Classify the emotion expressed in the given Twitter message into one of the six emotions: anger, fear, joy, love, sadness, and surprise",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 16
-        return metadata_dict
+    samples_per_label = 16

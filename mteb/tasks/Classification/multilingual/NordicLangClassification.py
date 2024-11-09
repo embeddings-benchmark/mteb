@@ -58,12 +58,7 @@ class NordicLangClassification(AbsTaskClassification):
         prompt="Classify texts based on language",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 32
-        return metadata_dict
+    samples_per_label = 32
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_columns(

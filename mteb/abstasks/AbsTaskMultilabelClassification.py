@@ -68,15 +68,19 @@ class AbsTaskMultilabelClassification(AbsTask):
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
         text: str
         label: list[list[int]]
+
+    Attributes:
+       samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
+
     """
 
     classifier = KNeighborsClassifier(n_neighbors=5)
     abstask_prompt = "Classify user passages."
+    samples_per_label: int = 8
 
     def __init__(
         self,
         n_experiments=None,
-        samples_per_label=None,
         batch_size=32,
         **kwargs,
     ):
@@ -85,9 +89,7 @@ class AbsTaskMultilabelClassification(AbsTask):
 
         # Bootstrap parameters
         self.n_experiments = n_experiments or getattr(self, "n_experiments", 10)
-        self.samples_per_label = samples_per_label or getattr(
-            self, "samples_per_label", 8
-        )
+
         # Run metadata validation by instantiating addressing the attribute
         # This is quite hacky. Ideally, this would be done in the constructor of
         # each concrete task, but then we have to duplicate the __init__ method's
