@@ -84,10 +84,8 @@ class AbsTaskRetrieval(AbsTask):
     def __init__(self, **kwargs):
         self.top_ranked = None
         self.instructions = None
-        if isinstance(self, AbsTaskRetrieval):
-            super(AbsTaskRetrieval, self).__init__(**kwargs)  # noqa
-        else:
-            super().__init__(**kwargs)
+        # there could be multiple options, so do this even if multilingual
+        super(AbsTaskRetrieval, self).__init__(**kwargs)  # noqa
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -195,7 +193,8 @@ class AbsTaskRetrieval(AbsTask):
 
         save_predictions = kwargs.get("save_predictions", False)
         export_errors = kwargs.get("export_errors", False)
-        if save_predictions or export_errors:
+        save_qrels = kwargs.get("save_qrels", False)
+        if save_predictions or export_errors or save_qrels:
             output_folder = Path(kwargs.get("output_folder", "results"))
             if not os.path.isdir(output_folder):
                 os.makedirs(output_folder)
@@ -219,7 +218,7 @@ class AbsTaskRetrieval(AbsTask):
             with open(qrels_save_path, "w") as f:
                 json.dump(results, f)
 
-            # save qrels also
+        if save_qrels:
             with open(
                 output_folder / f"{self.metadata.name}_{hf_subset}_qrels.json", "w"
             ) as f:
@@ -230,8 +229,9 @@ class AbsTaskRetrieval(AbsTask):
             results,
             retriever.k_values,
             ignore_identical_ids=self.ignore_identical_ids,
-            task_name=self.metadata.name,
+            task_name=self.metadata.name
         )
+
         mrr, naucs_mrr = retriever.evaluate_custom(
             relevant_docs, results, retriever.k_values, "mrr"
         )

@@ -141,8 +141,7 @@ class MindSmallReranking(AbsTaskReranking):
             all_queries = []
             all_positives = []
             all_negatives = []
-            all_ids = []
-            all_instance_indices = []  # Renamed for clarity
+            all_instance_indices = []
             all_subquery_indices = []
 
             # First pass: expand queries while maintaining relationships
@@ -157,9 +156,6 @@ class MindSmallReranking(AbsTaskReranking):
                     all_queries.append(query)
                     all_positives.append(positives)  # Same positives for each subquery
                     all_negatives.append(negatives)  # Same negatives for each subquery
-                    all_ids.append(
-                        f"{instance.get('id', current_instance_idx)}_{subquery_idx}"
-                    )
                     all_instance_indices.append(current_instance_idx)
                     all_subquery_indices.append(subquery_idx)
 

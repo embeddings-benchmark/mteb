@@ -560,8 +560,8 @@ def add_task_specific_scores(
         task_scores.update(p_mrr_and_consolidated_scores)
 
     if task_name in ["MindSmallReranking"]:
-        take_max_over_subqueries = max_over_subqueries(qrels, results, scores)
-        task_scores["max_over_subqueries"] = take_max_over_subqueries
+        take_max_over_subqueries = max_over_subqueries(qrels, results, k_values)
+        task_scores.update(take_max_over_subqueries)
 
     return task_scores
 
@@ -699,6 +699,7 @@ def max_over_subqueries(qrels, results, k_values):
         query_keys["_".join(key.split("_")[:-1])].append(key)
 
     new_results = {}
+    new_qrels = {}
     for query_id_base, query_ids in query_keys.items():
         doc_scores = defaultdict(float)
         for query_id_full in query_ids:
@@ -709,10 +710,12 @@ def max_over_subqueries(qrels, results, k_values):
                     doc_scores[doc_id] = max(score, doc_scores[doc_id])
 
         new_results[query_id_base] = doc_scores
+        new_qrels[query_id_base] = qrels[query_id_full] # all the same
+
 
     # now we have the new results, we can compute the scores
     _, ndcg, _map, recall, precision, naucs = calculate_retrieval_scores(
-        new_results, qrels, k_values
+        new_results, new_qrels, k_values
     )
     score_dict = make_score_dict(ndcg, _map, recall, precision, {}, naucs, {}, {})
     return {"max_over_subqueries_" + k: v for k, v in score_dict.items()}
@@ -723,6 +726,7 @@ def calculate_retrieval_scores(results, qrels, k_values):
     ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
     recall_string = "recall." + ",".join([str(k) for k in k_values])
     precision_string = "P." + ",".join([str(k) for k in k_values])
+
     evaluator = pytrec_eval.RelevanceEvaluator(
         qrels, {map_string, ndcg_string, recall_string, precision_string}
     )
