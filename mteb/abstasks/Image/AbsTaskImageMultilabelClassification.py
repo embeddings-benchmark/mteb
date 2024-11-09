@@ -9,7 +9,8 @@ import numpy as np
 from sklearn.base import ClassifierMixin, clone
 from sklearn.metrics import f1_score, label_ranking_average_precision_score
 from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.multioutput import MultiOutputClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks.TaskMetadata import HFSubset
@@ -52,7 +53,7 @@ class AbsTaskImageMultilabelClassification(AbsTask):
     image_column_name: str = "image"
     label_column_name: str = "labels"
 
-    classifier = KNeighborsClassifier(n_neighbors=5)
+    classifier = MultiOutputClassifier(estimator=LogisticRegression())
 
     def __init__(
         self,
