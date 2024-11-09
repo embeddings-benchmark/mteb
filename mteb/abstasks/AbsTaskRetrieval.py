@@ -85,7 +85,7 @@ class AbsTaskRetrieval(AbsTask):
         self.top_ranked = None
         self.instructions = None
         if isinstance(self, AbsTaskRetrieval):
-            super(AbsTaskRetrieval, self).__init__(**kwargs)
+            super(AbsTaskRetrieval, self).__init__(**kwargs)  # noqa
         else:
             super().__init__(**kwargs)
 
