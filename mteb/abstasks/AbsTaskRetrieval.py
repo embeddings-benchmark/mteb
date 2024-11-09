@@ -84,7 +84,10 @@ class AbsTaskRetrieval(AbsTask):
     def __init__(self, **kwargs):
         self.top_ranked = None
         self.instructions = None
-        super().__init__(**kwargs)
+        if isinstance(self, AbsTaskRetrieval):
+            super(AbsTaskRetrieval, self).__init__(**kwargs)
+        else:
+            super().__init__(**kwargs)
 
     def load_data(self, **kwargs):
         if self.data_loaded:
