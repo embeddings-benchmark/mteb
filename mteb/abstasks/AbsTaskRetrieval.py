@@ -12,8 +12,9 @@ from mteb.abstasks.TaskMetadata import HFSubset
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..evaluation.evaluators.utils import make_score_dict
 from ..load_results.task_results import ScoresDict
-from .AbsTask import AbsTask, DescriptiveStatistics
+from .AbsTask import AbsTask
 from .dataloaders import HFDataLoader
+from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -22,20 +23,24 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Retrieval
 
     Attributes:
-        num_queries: number of samples in the dataset
+        num_samples: Number of queries and documents
+        num_queries: number of queries in the dataset
+        num_documents: Number of documents
+        number_of_characters: Total number of symbols in the dataset
         average_document_length: Average length of documents
         average_query_length: Average length of queries
-        num_documents: Number of documents
         average_relevant_docs_per_query: Average number of relevant documents per query
         average_instruction_length: Average length of instructions
         num_instructions: Number of instructions
         average_top_ranked_per_query: Average number of top ranked documents per query
     """
 
+    num_samples: int
     num_queries: int
+    num_documents: int
+    number_of_characters: int
     average_document_length: float
     average_query_length: float
-    num_documents: int
     average_relevant_docs_per_query: float
     # these are for datasets with instructions
     average_instruction_length: float
@@ -74,6 +79,7 @@ class AbsTaskRetrieval(AbsTask):
     """
 
     ignore_identical_ids: bool = False
+    abstask_prompt = "Retrieve text based on user query."
 
     def __init__(self, **kwargs):
         self.top_ranked = None
@@ -95,6 +101,9 @@ class AbsTaskRetrieval(AbsTask):
                 hf_repo_qrels=hf_repo_qrels,
                 streaming=False,
                 keep_in_memory=False,
+                trust_remote_code=self.metadata_dict["dataset"].get(
+                    "trust_remote_code", False
+                ),
             ).load(split=split)
             # Conversion from DataSet
             queries = {query["id"]: query["text"] for query in queries}
@@ -332,10 +341,12 @@ class AbsTaskRetrieval(AbsTask):
             top_ranked_per_query = 0
 
         return RetrievalDescriptiveStatistics(
-            average_document_length=doc_len,
-            average_query_length=query_len,
-            num_documents=num_documents,
+            number_of_characters=query_len + doc_len,
+            num_samples=num_documents + num_queries,
             num_queries=num_queries,
+            num_documents=num_documents,
+            average_document_length=doc_len / num_documents,
+            average_query_length=query_len / num_queries,
             average_relevant_docs_per_query=qrels_per_doc,
             average_instruction_length=total_instructions_len / num_instructions
             if num_instructions
@@ -347,11 +358,14 @@ class AbsTaskRetrieval(AbsTask):
 
 def calculate_length(
     queries: dict[str, str], corpus: dict[str, str]
-) -> tuple[float, float]:
+) -> tuple[int, int]:
     queries_lens = []
     doc_lens = []
     for query in queries.values():
-        queries_lens.append(len(query))
+        if isinstance(query[0], str):
+            queries_lens.append(len(query))
+        else:
+            queries_lens.extend([len(turn) for turn in query])
 
     for doc in corpus.values():
         if isinstance(doc, dict):

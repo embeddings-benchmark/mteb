@@ -27,6 +27,7 @@ class SciDocsReranking(AbsTaskReranking):
         annotations_creators=None,
         dialect=None,
         sample_creation="found",
+        prompt="Given a title of a scientific paper, retrieve the titles of other relevant papers",
         bibtex_citation="""
 @inproceedings{cohan-etal-2020-specter,
     title = "{SPECTER}: Document-level Representation Learning using Citation-informed Transformers",
@@ -50,17 +51,4 @@ class SciDocsReranking(AbsTaskReranking):
     abstract = "Representation learning is a critical ingredient for natural language processing systems. Recent Transformer language models like BERT learn powerful textual representations, but these models are targeted towards token- and sentence-level training objectives and do not leverage information on inter-document relatedness, which limits their document-level representation power. For applications on scientific documents, such as classification and recommendation, accurate embeddings of documents are a necessity. We propose SPECTER, a new method to generate document-level embedding of scientific papers based on pretraining a Transformer language model on a powerful signal of document-level relatedness: the citation graph. Unlike existing pretrained language models, Specter can be easily applied to downstream applications without task-specific fine-tuning. Additionally, to encourage further research on document-level models, we introduce SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation. We show that Specter outperforms a variety of competitive baselines on the benchmark.",
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 19599},
-            "test": {
-                "average_document_length": 71.52865935919056,
-                "average_query_length": 69.87456008044244,
-                "num_documents": 118600,
-                "num_queries": 3978,
-                "average_relevant_docs_per_query": 4.92684766214178,
-                "average_instruction_length": 0,
-                "num_instructions": 0,
-                "average_top_ranked_per_query": 29.813976872800403,
-            },
-        },
     )

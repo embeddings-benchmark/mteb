@@ -47,48 +47,4 @@ class ESCIReranking(AbsTaskReranking, MultilingualTask):
         dialect=[],
         sample_creation="created",
         bibtex_citation=_CITATION,
-        descriptive_stats={
-            "test": {
-                "average_document_length": 793.9222570025365,
-                "average_query_length": 20.194805194805195,
-                "num_documents": 148232,
-                "num_queries": 10395,
-                "average_relevant_docs_per_query": 10.277825877825878,
-                "average_instruction_length": 0,
-                "num_instructions": 0,
-                "average_top_ranked_per_query": 14.25993265993266,
-                "hf_subset_descriptive_stats": {
-                    "us": {
-                        "average_document_length": 858.2693745556295,
-                        "average_query_length": 22.554526441589484,
-                        "num_documents": 87202,
-                        "num_queries": 6694,
-                        "average_relevant_docs_per_query": 9.446519270988945,
-                        "average_instruction_length": 0,
-                        "num_instructions": 0,
-                        "average_top_ranked_per_query": 13.026889752016732,
-                    },
-                    "es": {
-                        "average_document_length": 1006.1636500281832,
-                        "average_query_length": 21.262560777957862,
-                        "num_documents": 31934,
-                        "num_queries": 1851,
-                        "average_relevant_docs_per_query": 12.038357644516477,
-                        "average_instruction_length": 0,
-                        "num_instructions": 0,
-                        "average_top_ranked_per_query": 17.252296056185845,
-                    },
-                    "jp": {
-                        "average_document_length": 368.12785262579047,
-                        "average_query_length": 10.588108108108107,
-                        "num_documents": 29096,
-                        "num_queries": 1850,
-                        "average_relevant_docs_per_query": 11.524324324324324,
-                        "average_instruction_length": 0,
-                        "num_instructions": 0,
-                        "average_top_ranked_per_query": 15.727567567567567,
-                    },
-                },
-            }
-        },
     )

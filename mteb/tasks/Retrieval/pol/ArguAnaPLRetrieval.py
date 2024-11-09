@@ -38,16 +38,4 @@ class ArguAnaPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1060.702674659903,
-                    "average_query_length": 1224.8022759601706,
-                    "num_documents": 8674,
-                    "num_queries": 1406,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )

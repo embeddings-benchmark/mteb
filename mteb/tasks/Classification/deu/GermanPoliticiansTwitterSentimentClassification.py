@@ -48,10 +48,6 @@ class GermanPoliticiansTwitterSentimentClassification(AbsTaskClassification):
                 pages = "74--87",
             }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 357},
-            "avg_character_length": {"test": 302.48},
-        },
     )
 
     def dataset_transform(self):

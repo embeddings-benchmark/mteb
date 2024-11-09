@@ -73,10 +73,6 @@ class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
     url = {https://doi.org/10.1162/tacl\_a\_00452},
     eprint = {https://direct.mit.edu/tacl/article-pdf/doi/10.1162/tacl\_a\_00452/1987010/tacl\_a\_00452.pdf},
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 10020},
-            "avg_character_length": {"test": 76.22},
-        },
     )
 
     @property

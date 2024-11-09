@@ -30,6 +30,7 @@ class HFDataLoader:
         qrels_file: str = "",
         streaming: bool = False,
         keep_in_memory: bool = False,
+        trust_remote_code: bool = False,
     ):
         self.corpus = {}
         self.queries = {}
@@ -81,6 +82,7 @@ class HFDataLoader:
             )
         self.streaming = streaming
         self.keep_in_memory = keep_in_memory
+        self.trust_remote_code = trust_remote_code
 
     @staticmethod
     def check(fIn: str, ext: str):
@@ -174,6 +176,7 @@ class HFDataLoader:
                 "corpus",
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
+                trust_remote_code=self.trust_remote_code,
             )
         else:
             corpus_ds = load_dataset(
@@ -181,6 +184,7 @@ class HFDataLoader:
                 data_files=self.corpus_file,
                 streaming=self.streaming,
                 keep_in_memory=self.keep_in_memory,
+                trust_remote_code=self.trust_remote_code,
             )
         corpus_ds = next(iter(corpus_ds.values()))  # get first split
         corpus_ds = corpus_ds.cast_column("_id", Value("string"))
@@ -201,6 +205,7 @@ class HFDataLoader:
                 "queries",
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
+                trust_remote_code=self.trust_remote_code,
             )
         else:
             queries_ds = load_dataset(
@@ -223,6 +228,7 @@ class HFDataLoader:
                 self.hf_repo_qrels,
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
+                trust_remote_code=self.trust_remote_code,
             )[split]
         else:
             qrels_ds = load_dataset(
@@ -248,6 +254,7 @@ class HFDataLoader:
                 "top_ranked",
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
+                trust_remote_code=self.trust_remote_code,
             )
         else:
             top_ranked_ds = load_dataset(
@@ -291,6 +298,9 @@ class HFDataLoader:
                 "instruction",
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
+                trust_remote_code=self.metadata_dict["dataset"].get(
+                    "trust_remote_code", False
+                ),
             )
         else:
             instructions_ds = load_dataset(

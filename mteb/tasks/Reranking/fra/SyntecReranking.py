@@ -37,19 +37,6 @@ class SyntecReranking(AbsTaskReranking):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 100},
-            "test": {
-                "average_document_length": 1716.897738446411,
-                "average_query_length": 72.82,
-                "num_documents": 1017,
-                "num_queries": 100,
-                "average_relevant_docs_per_query": 1.0,
-                "average_instruction_length": 0,
-                "num_instructions": 0,
-                "average_top_ranked_per_query": 10.17,
-            },
-        },
     )
 
     def load_data(self, **kwargs):

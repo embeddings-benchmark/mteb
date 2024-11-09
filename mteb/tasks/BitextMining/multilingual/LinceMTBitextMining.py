@@ -40,8 +40,4 @@ class LinceMTBitextMining(AbsTaskBitextMining, MultilingualTask):
         year={2020}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"train": 8060},
-            "avg_character_length": {"train": 58.67},
-        },
     )

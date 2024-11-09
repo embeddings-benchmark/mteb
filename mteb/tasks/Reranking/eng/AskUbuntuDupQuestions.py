@@ -27,6 +27,7 @@ class AskUbuntuDupQuestions(AbsTaskReranking):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
+        prompt="Retrieve duplicate questions from AskUbuntu forum",
         bibtex_citation="""@article{wang-2021-TSDAE,
     title = "TSDAE: Using Transformer-based Sequential Denoising Auto-Encoderfor Unsupervised Sentence Embedding Learning",
     author = "Wang, Kexin and Reimers, Nils and  Gurevych, Iryna", 
@@ -35,17 +36,4 @@ class AskUbuntuDupQuestions(AbsTaskReranking):
     year = "2021",
     url = "https://arxiv.org/abs/2104.06979",
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 2255},
-            "test": {
-                "average_document_length": 52.49722991689751,
-                "average_query_length": 50.13019390581717,
-                "num_documents": 7220,
-                "num_queries": 361,
-                "average_relevant_docs_per_query": 5.470914127423823,
-                "average_instruction_length": 0,
-                "num_instructions": 0,
-                "average_top_ranked_per_query": 20.0,
-            },
-        },
     )

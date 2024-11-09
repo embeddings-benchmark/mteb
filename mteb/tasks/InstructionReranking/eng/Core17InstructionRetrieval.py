@@ -35,17 +35,4 @@ class Core17InstructionRetrieval(AbsTaskReranking):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": {"eng": 19919 * 2},
-            "test": {
-                "num_docs": 19899,
-                "num_queries": 20,
-                "average_document_length": 2233.0329664807277,
-                "average_query_length": 109.75,
-                "average_instruction_length": 295.55,
-                "average_changed_instruction_length": 355.2,
-                "average_relevant_docs_per_query": 32.7,
-                "average_top_ranked_per_query": 1000.0,
-            },
-        },
     )

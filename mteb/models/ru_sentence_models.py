@@ -20,7 +20,7 @@ rubert_tiny2 = ModelMeta(
     reference="https://huggingface.co/cointegrated/rubert-tiny2",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 rubert_tiny = ModelMeta(
@@ -37,7 +37,7 @@ rubert_tiny = ModelMeta(
     reference="https://huggingface.co/cointegrated/rubert-tiny",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 sbert_large_nlu_ru = ModelMeta(
@@ -54,7 +54,7 @@ sbert_large_nlu_ru = ModelMeta(
     reference="https://huggingface.co/ai-forever/sbert_large_nlu_ru",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 sbert_large_mt_nlu_ru = ModelMeta(
@@ -71,7 +71,7 @@ sbert_large_mt_nlu_ru = ModelMeta(
     reference="https://huggingface.co/ai-forever/sbert_large_mt_nlu_ru",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 user_base_ru = ModelMeta(
@@ -94,7 +94,7 @@ user_base_ru = ModelMeta(
     reference="https://huggingface.co/ai-forever/sbert_large_mt_nlu_ru",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 deberta_v1_ru = ModelMeta(
@@ -111,7 +111,7 @@ deberta_v1_ru = ModelMeta(
     reference="https://huggingface.co/deepvk/deberta-v1-base",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 rubert_base_cased = ModelMeta(
@@ -128,7 +128,7 @@ rubert_base_cased = ModelMeta(
     reference="https://huggingface.co/DeepPavlov/rubert-base-cased",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 distilrubert_small_cased_conversational = ModelMeta(
@@ -145,7 +145,7 @@ distilrubert_small_cased_conversational = ModelMeta(
     reference="https://huggingface.co/DeepPavlov/distilrubert-small-cased-conversational",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 rubert_base_cased_sentence = ModelMeta(
@@ -162,7 +162,7 @@ rubert_base_cased_sentence = ModelMeta(
     reference="https://huggingface.co/DeepPavlov/rubert-base-cased-sentence",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 labse_en_ru = ModelMeta(
@@ -179,7 +179,7 @@ labse_en_ru = ModelMeta(
     reference="https://huggingface.co/cointegrated/LaBSE-en-ru",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 rubert_tiny_turbo = ModelMeta(
@@ -196,7 +196,7 @@ rubert_tiny_turbo = ModelMeta(
     reference="https://huggingface.co/sergeyzh/rubert-tiny-turbo",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 labse_ru_turbo = ModelMeta(
@@ -213,7 +213,7 @@ labse_ru_turbo = ModelMeta(
     reference="https://huggingface.co/sergeyzh/LaBSE-ru-turbo",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 
@@ -222,7 +222,7 @@ rosberta_ru_en = ModelMeta(
         sentence_transformers_loader,
         model_name="ai-forever/ru-en-RoSBERTa",
         revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
-        prompts={
+        model_prompts={
             "Classification": "classification: ",
             "Clustering": "clustering: ",
             "query": "search_query: ",

@@ -12,7 +12,8 @@ from mteb.encoder_interface import Encoder
 from mteb.load_results.task_results import ScoresDict
 
 from ..evaluation.evaluators import ClusteringEvaluator
-from .AbsTask import AbsTask, DescriptiveStatistics
+from .AbsTask import AbsTask
+from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,7 @@ class ClusteringDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
         average_text_length: Average length of text
         average_labels_per_text: Average number of labels per text
         unique_labels: Number of unique labels
@@ -29,6 +31,7 @@ class ClusteringDescriptiveStatistics(DescriptiveStatistics):
     """
 
     num_samples: int
+    number_of_characters: int
     average_text_length: float
     average_labels_per_text: float
     unique_labels: int
@@ -43,6 +46,8 @@ class AbsTaskClustering(AbsTask):
         sentences: list of str
         labels: list of str
     """
+
+    abstask_prompt = "Identify categories in user passages."
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -101,6 +106,7 @@ class AbsTaskClustering(AbsTask):
         label_counter = Counter(total_labels)
         return ClusteringDescriptiveStatistics(
             num_samples=len(sentences),
+            number_of_characters=total_text_len,
             average_text_length=total_text_len / len(sentences),
             average_labels_per_text=len(total_labels) / len(sentences),
             unique_labels=len(label_counter),

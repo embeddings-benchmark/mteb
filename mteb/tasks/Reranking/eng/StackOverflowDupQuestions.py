@@ -27,6 +27,7 @@ class StackOverflowDupQuestions(AbsTaskReranking):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
+        prompt="Retrieve duplicate questions from StackOverflow forum",
         bibtex_citation="""@article{Liu2018LinkSOAD,
   title={LinkSO: a dataset for learning to retrieve similar question answer pairs on software development forums},
   author={Xueqing Liu and Chi Wang and Yue Leng and ChengXiang Zhai},
@@ -34,17 +35,4 @@ class StackOverflowDupQuestions(AbsTaskReranking):
   year={2018},
   url={https://api.semanticscholar.org/CorpusID:53111679}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 3467},
-            "test": {
-                "average_document_length": 44.482094556834696,
-                "average_query_length": 53.160762032085564,
-                "num_documents": 89470,
-                "num_queries": 2992,
-                "average_relevant_docs_per_query": 1.1587566844919786,
-                "average_instruction_length": 0,
-                "num_instructions": 0,
-                "average_top_ranked_per_query": 29.90307486631016,
-            },
-        },
     )

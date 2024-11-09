@@ -97,57 +97,6 @@ class COIRCodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="@article{husain2019codesearchnet, title={{CodeSearchNet} challenge: Evaluating the state of semantic code search}, author={Husain, Hamel and Wu, Ho-Hsiang and Gazit, Tiferet and Allamanis, Miltiadis and Brockschmidt, Marc}, journal={arXiv preprint arXiv:1909.09436}, year={2019} }",
-        descriptive_stats={
-            "n_samples": {
-                _EVAL_SPLIT: 1000,
-            },
-            "avg_character_length": {
-                "test": {
-                    "python": {
-                        "average_document_length": 466.546,
-                        "average_query_length": 862.842,
-                        "num_documents": 1000,
-                        "num_queries": 1000,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "javascript": {
-                        "average_document_length": 186.018,
-                        "average_query_length": 1415.632,
-                        "num_documents": 1000,
-                        "num_queries": 1000,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "go": {
-                        "average_document_length": 125.213,
-                        "average_query_length": 563.729,
-                        "num_documents": 1000,
-                        "num_queries": 1000,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "ruby": {
-                        "average_document_length": 313.818,
-                        "average_query_length": 577.634,
-                        "num_documents": 1000,
-                        "num_queries": 1000,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "java": {
-                        "average_document_length": 420.287,
-                        "average_query_length": 690.36,
-                        "num_documents": 1000,
-                        "num_queries": 1000,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "php": {
-                        "average_document_length": 162.119,
-                        "average_query_length": 712.129,
-                        "num_documents": 1000,
-                        "num_queries": 1000,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                },
-            },
-        },
     )
 
     def load_data(self, **kwargs):

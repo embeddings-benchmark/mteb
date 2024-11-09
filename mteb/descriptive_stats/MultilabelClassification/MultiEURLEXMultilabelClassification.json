@@ -1,0 +1,1732 @@
+{
+    "test": {
+        "average_text_length": 12014.408930434782,
+        "number_of_characters": 1381657027,
+        "average_label_per_text": 3.5938,
+        "num_samples": 115000,
+        "unique_labels": 21,
+        "labels": {
+            "18": {
+                "count": 50784
+            },
+            "15": {
+                "count": 30981
+            },
+            "5": {
+                "count": 24978
+            },
+            "6": {
+                "count": 45080
+            },
+            "3": {
+                "count": 63687
+            },
+            "17": {
+                "count": 37743
+            },
+            "1": {
+                "count": 15019
+            },
+            "20": {
+                "count": 14030
+            },
+            "0": {
+                "count": 17802
+            },
+            "2": {
+                "count": 22402
+            },
+            "19": {
+                "count": 10212
+            },
+            "9": {
+                "count": 3772
+            },
+            "4": {
+                "count": 9062
+            },
+            "10": {
+                "count": 7705
+            },
+            "11": {
+                "count": 12213
+            },
+            "7": {
+                "count": 14306
+            },
+            "12": {
+                "count": 11799
+            },
+            "8": {
+                "count": 13800
+            },
+            "13": {
+                "count": 2346
+            },
+            "14": {
+                "count": 4255
+            },
+            "16": {
+                "count": 1311
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "en": {
+                "average_text_length": 11720.2926,
+                "number_of_characters": 58601463,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "de": {
+                "average_text_length": 12865.4162,
+                "number_of_characters": 64327081,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "fr": {
+                "average_text_length": 13081.1098,
+                "number_of_characters": 65405549,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "it": {
+                "average_text_length": 12763.4786,
+                "number_of_characters": 63817393,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "es": {
+                "average_text_length": 13080.29,
+                "number_of_characters": 65401450,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "pl": {
+                "average_text_length": 12282.5926,
+                "number_of_characters": 61412963,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "ro": {
+                "average_text_length": 12836.9322,
+                "number_of_characters": 64184661,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "nl": {
+                "average_text_length": 12857.9742,
+                "number_of_characters": 64289871,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "el": {
+                "average_text_length": 12998.143,
+                "number_of_characters": 64990715,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "hu": {
+                "average_text_length": 12424.641,
+                "number_of_characters": 62123205,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "pt": {
+                "average_text_length": 12482.4616,
+                "number_of_characters": 62412308,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "cs": {
+                "average_text_length": 10783.4676,
+                "number_of_characters": 53917338,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "sv": {
+                "average_text_length": 11612.4774,
+                "number_of_characters": 58062387,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "bg": {
+                "average_text_length": 12235.4268,
+                "number_of_characters": 61177134,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "da": {
+                "average_text_length": 11773.958,
+                "number_of_characters": 58869790,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "fi": {
+                "average_text_length": 12087.6862,
+                "number_of_characters": 60438431,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "sk": {
+                "average_text_length": 11130.814,
+                "number_of_characters": 55654070,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "lt": {
+                "average_text_length": 11245.3566,
+                "number_of_characters": 56226783,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "hr": {
+                "average_text_length": 11022.142,
+                "number_of_characters": 55110710,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "sl": {
+                "average_text_length": 10620.0594,
+                "number_of_characters": 53100297,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "et": {
+                "average_text_length": 10898.4312,
+                "number_of_characters": 54492156,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "lv": {
+                "average_text_length": 10938.5102,
+                "number_of_characters": 54692551,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            },
+            "mt": {
+                "average_text_length": 12589.7442,
+                "number_of_characters": 62948721,
+                "average_label_per_text": 3.5938,
+                "num_samples": 5000,
+                "unique_labels": 21,
+                "labels": {
+                    "18": {
+                        "count": 2208
+                    },
+                    "15": {
+                        "count": 1347
+                    },
+                    "5": {
+                        "count": 1086
+                    },
+                    "6": {
+                        "count": 1960
+                    },
+                    "3": {
+                        "count": 2769
+                    },
+                    "17": {
+                        "count": 1641
+                    },
+                    "1": {
+                        "count": 653
+                    },
+                    "20": {
+                        "count": 610
+                    },
+                    "0": {
+                        "count": 774
+                    },
+                    "2": {
+                        "count": 974
+                    },
+                    "19": {
+                        "count": 444
+                    },
+                    "9": {
+                        "count": 164
+                    },
+                    "4": {
+                        "count": 394
+                    },
+                    "10": {
+                        "count": 335
+                    },
+                    "11": {
+                        "count": 531
+                    },
+                    "7": {
+                        "count": 622
+                    },
+                    "12": {
+                        "count": 513
+                    },
+                    "8": {
+                        "count": 600
+                    },
+                    "13": {
+                        "count": 102
+                    },
+                    "14": {
+                        "count": 185
+                    },
+                    "16": {
+                        "count": 57
+                    }
+                }
+            }
+        }
+    }
+}

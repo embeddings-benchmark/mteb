@@ -27,25 +27,13 @@ class VoyageMMarcoReranking(AbsTaskReranking):
         annotations_creators="derived",
         dialect=["jpn-Jpan"],
         sample_creation="found",
+        prompt="Given a Japanese search query, retrieve web passages that answer the question",
         bibtex_citation="""@misc{clavié2023jacolbert,
       title={JaColBERT and Hard Negatives, Towards Better Japanese-First Embeddings for Retrieval: Early Technical Report}, 
       author={Benjamin Clavié},
       year={2023},
       eprint={2312.16144},
       archivePrefix={arXiv},}""",
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "test": {
-                "average_document_length": 164.72532084309134,
-                "average_query_length": 15.9208984375,
-                "num_documents": 53375,
-                "num_queries": 2048,
-                "average_relevant_docs_per_query": 1.06201171875,
-                "average_instruction_length": 0,
-                "num_instructions": 0,
-                "average_top_ranked_per_query": 26.06201171875,
-            },
-        },
     )
 
     def load_data(self, **kwargs):

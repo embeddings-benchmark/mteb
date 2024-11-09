@@ -37,15 +37,4 @@ class CosQARetrieval(AbsTaskRetrieval):
               primaryClass={cs.CL},
               url={https://arxiv.org/abs/2105.13239}, 
         }""",
-        descriptive_stats={
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 276.132741215298,
-                    "average_query_length": 36.814,
-                    "num_documents": 20604,
-                    "num_queries": 500,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            }
-        },
     )

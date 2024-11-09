@@ -1,0 +1,67 @@
+{
+    "test": {
+        "number_of_characters": 325.01233333333334,
+        "num_samples": 12000,
+        "num_queries": 6000,
+        "num_documents": 6000,
+        "average_document_length": 0.00016666666666666666,
+        "average_query_length": 0.05400205555555556,
+        "average_relevant_docs_per_query": 1.0,
+        "hf_subset_descriptive_stats": {
+            "python": {
+                "number_of_characters": 467.546,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.466546,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "javascript": {
+                "number_of_characters": 187.018,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.186018,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "go": {
+                "number_of_characters": 126.213,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.125213,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "ruby": {
+                "number_of_characters": 314.818,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.313818,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "java": {
+                "number_of_characters": 691.36,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.69036,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "php": {
+                "number_of_characters": 163.119,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.162119,
+                "average_relevant_docs_per_query": 1.0
+            }
+        }
+    }
+}

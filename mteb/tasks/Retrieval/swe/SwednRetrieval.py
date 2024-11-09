@@ -36,17 +36,8 @@ class SwednRetrieval(AbsTaskRetrieval):
     booktitle={Proceedings of CLARIN Annual Conference},
     year={2021}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 2896.519550342131,
-                    "average_query_length": 45.876953125,
-                    "num_documents": 2046,
-                    "num_queries": 1024,
-                    "average_relevant_docs_per_query": 2.0,
-                }
-            },
+        prompt={
+            "query": "Given a Swedish news headline retrieve summaries or news articles"
         },
     )
 

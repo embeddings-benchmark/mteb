@@ -44,18 +44,6 @@ class BSARDRetrieval(AbsTaskRetrieval):
   doi = {10.18653/v1/2022.acl-long.468},
   pages = {6789–6803},
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 222},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 880.2900631820793,
-                    "average_query_length": 144.77027027027026,
-                    "num_documents": 22633,
-                    "num_queries": 222,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
