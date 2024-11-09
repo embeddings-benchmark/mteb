@@ -225,17 +225,15 @@ class VLM2VecWrapper:
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
-    
+
     def calculate_probs(self, text_embeddings, image_embeddings):
-            text_embeddings = text_embeddings / text_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            image_embeddings = image_embeddings / image_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            logits = torch.matmul(image_embeddings, text_embeddings.T)
-            probs = (logits * 100).softmax(dim=-1)
-            return probs
+        text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
+        image_embeddings = image_embeddings / image_embeddings.norm(
+            dim=-1, keepdim=True
+        )
+        logits = torch.matmul(image_embeddings, text_embeddings.T)
+        probs = (logits * 100).softmax(dim=-1)
+        return probs
 
     def get_fused_embeddings(
         self,
