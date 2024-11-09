@@ -883,7 +883,7 @@ class MockRerankingTask(AbsTaskReranking):
     metadata = TaskMetadata(
         type="Reranking",
         name="MockRerankingTask",
-        main_score="map_at_1000",            
+        main_score="map_at_1000",
         **general_args,  # type: ignore
     )
 
@@ -956,7 +956,7 @@ class MockMultilingualRerankingTask(AbsTaskReranking, MultilingualTask):
                     "num_samples": 4,
                     "number_of_characters": 56.0,
                 },
-            }
+            },
         }
     }
 
@@ -1249,18 +1249,18 @@ class MockMultilingualMultilabelClassification(
 
 class MockInstructionRetrieval(AbsTaskRetrieval):
     expected_stats = {
-       "test": {
-                "num_documents": 2,
-                "num_queries": 2,
-                "average_document_length": 15.0,
-                "average_query_length": 13.0,
-                "average_instruction_length": 29.0,
-                "average_relevant_docs_per_query": 1.0,
-                "average_top_ranked_per_query": 0,
-                "num_instructions": 2,
-                "num_samples": 4,
-                "number_of_characters": 56.0
-            }
+        "test": {
+            "num_documents": 2,
+            "num_queries": 2,
+            "average_document_length": 15.0,
+            "average_query_length": 13.0,
+            "average_instruction_length": 29.0,
+            "average_relevant_docs_per_query": 1.0,
+            "average_top_ranked_per_query": 0,
+            "num_instructions": 2,
+            "num_samples": 4,
+            "number_of_characters": 56.0,
+        }
     }
 
     metadata = TaskMetadata(
@@ -1303,16 +1303,16 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
 class MockInstructionReranking(AbsTaskReranking):
     expected_stats = {
         "test": {
-                "num_documents": 2,
-                "num_queries": 2,
-                "num_instructions": 2,
-                "average_document_length": 15.0,
-                "average_query_length": 13.0,
-                "average_instruction_length": 29.0,
-                "average_relevant_docs_per_query": 1.0,
-                "average_top_ranked_per_query": 2.0,
-                "num_samples": 4,
-                "number_of_characters": 56.0
+            "num_documents": 2,
+            "num_queries": 2,
+            "num_instructions": 2,
+            "average_document_length": 15.0,
+            "average_query_length": 13.0,
+            "average_instruction_length": 29.0,
+            "average_relevant_docs_per_query": 1.0,
+            "average_top_ranked_per_query": 2.0,
+            "num_samples": 4,
+            "number_of_characters": 56.0,
         }
     }
 
@@ -1360,7 +1360,7 @@ class MockInstructionReranking(AbsTaskReranking):
 
 class MockMultilingualInstructionRetrieval(AbsTaskRetrieval, MultilingualTask):
     expected_stats = {
-    "test": {
+        "test": {
             "num_documents": 4,
             "num_queries": 4,
             "num_instructions": 4,
@@ -1457,43 +1457,43 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval, MultilingualTask):
 class MockMultilingualInstructionReranking(AbsTaskReranking, MultilingualTask):
     expected_stats = {
         "test": {
-                "num_documents": 4,
-                "num_queries": 4,
-                "num_instructions": 4,
-                "average_document_length": 7.5,
-                "average_query_length": 6.5,
-                "average_instruction_length": 29.0,
-                "average_relevant_docs_per_query": 1.0,
-                "average_top_ranked_per_query": 2.0,
-                "num_samples": 8,
-                "number_of_characters": 56.0,
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "num_documents": 2,
-                        "num_queries": 2,
-                        "num_instructions": 2,
-                        "average_document_length": 15.0,
-                        "average_query_length": 13.0,
-                        "average_instruction_length": 29.0,
-                        "average_relevant_docs_per_query": 1.0,
-                        "average_top_ranked_per_query": 2.0,
-                        "num_samples": 4,
-                        "number_of_characters": 56.0,
-                    },
-                    "fra": {
-                        "num_documents": 2,
-                        "num_queries": 2,
-                        "num_instructions": 2,
-                        "average_document_length": 15.0,
-                        "average_query_length": 13.0,
-                        "average_instruction_length": 29.0,
-                        "average_relevant_docs_per_query": 1.0,
-                        "average_top_ranked_per_query": 2.0,
-                        "num_samples": 4,
-                        "number_of_characters": 56.0,
-                    },
+            "num_documents": 4,
+            "num_queries": 4,
+            "num_instructions": 4,
+            "average_document_length": 7.5,
+            "average_query_length": 6.5,
+            "average_instruction_length": 29.0,
+            "average_relevant_docs_per_query": 1.0,
+            "average_top_ranked_per_query": 2.0,
+            "num_samples": 8,
+            "number_of_characters": 56.0,
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "num_documents": 2,
+                    "num_queries": 2,
+                    "num_instructions": 2,
+                    "average_document_length": 15.0,
+                    "average_query_length": 13.0,
+                    "average_instruction_length": 29.0,
+                    "average_relevant_docs_per_query": 1.0,
+                    "average_top_ranked_per_query": 2.0,
+                    "num_samples": 4,
+                    "number_of_characters": 56.0,
                 },
-            }
+                "fra": {
+                    "num_documents": 2,
+                    "num_queries": 2,
+                    "num_instructions": 2,
+                    "average_document_length": 15.0,
+                    "average_query_length": 13.0,
+                    "average_instruction_length": 29.0,
+                    "average_relevant_docs_per_query": 1.0,
+                    "average_top_ranked_per_query": 2.0,
+                    "num_samples": 4,
+                    "number_of_characters": 56.0,
+                },
+            },
+        }
     }
 
     metadata = TaskMetadata(
