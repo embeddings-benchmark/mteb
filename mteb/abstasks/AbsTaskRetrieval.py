@@ -229,7 +229,7 @@ class AbsTaskRetrieval(AbsTask):
             results,
             retriever.k_values,
             ignore_identical_ids=self.ignore_identical_ids,
-            task_name=self.metadata.name
+            task_name=self.metadata.name,
         )
 
         mrr, naucs_mrr = retriever.evaluate_custom(

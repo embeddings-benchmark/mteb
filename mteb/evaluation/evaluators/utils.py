@@ -710,8 +710,7 @@ def max_over_subqueries(qrels, results, k_values):
                     doc_scores[doc_id] = max(score, doc_scores[doc_id])
 
         new_results[query_id_base] = doc_scores
-        new_qrels[query_id_base] = qrels[query_id_full] # all the same
-
+        new_qrels[query_id_base] = qrels[query_id_full]  # all the same
 
     # now we have the new results, we can compute the scores
     _, ndcg, _map, recall, precision, naucs = calculate_retrieval_scores(
