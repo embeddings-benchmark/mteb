@@ -22,12 +22,10 @@ _MAIR_CITATION = """@inproceedings{Sun2024MAIR,
 def get_metadata(task_name):
     return TaskMetadata(
         name="MAIR-" + task_name,
-        description="""
-            Recent information retrieval (IR) models are pre-trained and instruction-tuned on massive datasets and tasks, enabling them to perform well on a wide range of tasks and potentially generalize to unseen tasks with instructions. However, existing IR benchmarks focus on a limited scope of tasks, making them insufficient for evaluating the latest IR models. In this paper, we propose MAIR (Massive Instructed Retrieval Benchmark), a heterogeneous IR benchmark that includes 126 distinct IR tasks across 6 domains, collected from existing datasets. We benchmark state-of-the-art instruction-tuned text embedding models and re-ranking models. Our experiments reveal that instruction-tuned models generally achieve superior performance compared to non-instruction-tuned models on MAIR. Additionally, our results suggest that current instruction-tuned text embedding models and re-ranking models still lack effectiveness in specific long-tail tasks.
-            """,
+        description="Recent information retrieval (IR) models are pre-trained and instruction-tuned on massive datasets and tasks, enabling them to perform well on a wide range of tasks and potentially generalize to unseen tasks with instructions. However, existing IR benchmarks focus on a limited scope of tasks, making them insufficient for evaluating the latest IR models. In this paper, we propose MAIR (Massive Instructed Retrieval Benchmark), a heterogeneous IR benchmark that includes 126 distinct IR tasks across 6 domains, collected from existing datasets. We benchmark state-of-the-art instruction-tuned text embedding models and re-ranking models. Our experiments reveal that instruction-tuned models generally achieve superior performance compared to non-instruction-tuned models on MAIR. Additionally, our results suggest that current instruction-tuned text embedding models and re-ranking models still lack effectiveness in specific long-tail tasks.",
         reference="https://github.com/sunnweiwei/MAIR",
         dataset={
-            "path": "MAIR-Bench/MAIR",
+            "path": "MAIR-Bench/MAIR-Queries",
             "revision": "7d24eac886a6ae6653a6b67433e1c302cb0e9ac6",
         },
         type="Retrieval",
@@ -51,8 +49,8 @@ def load_data(self, **kwargs):
     if self.data_loaded:
         return
     self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-    queries_path = self.metadata_dict["dataset"]["path"] + '-Queries'
-    docs_path = self.metadata_dict["dataset"]["path"] + '-Docs'
+    queries_path = self.metadata_dict["dataset"]["path"]
+    docs_path = self.metadata_dict["dataset"]["path"].replace('-Queries', '-Docs')
     task_name = self.metadata.name.replace("MAIR-", "")
     query_ds = datasets.load_dataset(queries_path, task_name)
     corpus_ds = datasets.load_dataset(docs_path, task_name)
