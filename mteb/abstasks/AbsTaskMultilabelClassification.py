@@ -47,16 +47,24 @@ class MultilabelClassificationDescriptiveStatistics(DescriptiveStatistics):
     Attributes:
         num_samples: number of samples in the dataset.
         number_of_characters: Total number of symbols in the dataset.
+        min_text_length: Minimum length of text
         average_text_length: Average length of text
+        max_text_length: Maximum length of text
+        min_labels_per_text: Minimum number of labels per text
         average_label_per_text: Average number of labels per text
+        max_labels_per_text: Maximum number of labels per text
         unique_labels: Number of unique labels
         labels: dict of label frequencies
     """
 
     num_samples: int
     number_of_characters: int
+    min_text_length: int
     average_text_length: float
+    max_text_length: int
+    min_labels_per_text: int
     average_label_per_text: float
+    max_labels_per_text: int
     unique_labels: int
     labels: dict[str, dict[str, int]]
 
@@ -242,16 +250,22 @@ class AbsTaskMultilabelClassification(AbsTask):
             text = self.dataset[split]["text"]
             label = self.dataset[split]["label"]
 
-        total_text_len = sum(len(t) for t in text)
-        total_label_len = sum(len(l) for l in label)
+        text_len = [len(t) for t in text]
+        total_text_len = sum(text_len)
+        label_len = [len(l) for l in label]
+        total_label_len = sum(label_len)
         total_labels = []
         for l in label:
             total_labels.extend(l if len(l) > 0 else [None])
         label_count = Counter(total_labels)
         return MultilabelClassificationDescriptiveStatistics(
+            min_text_length=min(text_len),
             average_text_length=total_text_len / len(text),
+            max_text_length=max(text_len),
             number_of_characters=total_text_len,
+            min_labels_per_text=min(label_len),
             average_label_per_text=total_label_len / len(label),
+            max_labels_per_text=max(label_len),
             num_samples=len(text),
             unique_labels=len(label_count),
             labels={

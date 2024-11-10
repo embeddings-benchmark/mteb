@@ -1,8 +1,12 @@
 {
     "test": {
+        "min_text_length": 6,
         "average_text_length": 91.20563230605738,
+        "max_text_length": 220,
         "number_of_characters": 171649,
+        "min_labels_per_text": 0,
         "average_label_per_text": 0.620616365568544,
+        "max_labels_per_text": 2,
         "num_samples": 1882,
         "unique_labels": 6,
         "labels": {

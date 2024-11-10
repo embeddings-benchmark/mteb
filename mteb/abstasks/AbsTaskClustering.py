@@ -24,7 +24,9 @@ class ClusteringDescriptiveStatistics(DescriptiveStatistics):
     Attributes:
         num_samples: number of samples in the dataset.
         number_of_characters: Total number of symbols in the dataset.
+        min_text_length: Minimum length of text
         average_text_length: Average length of text
+        max_text_length: Maximum length of text
         average_labels_per_text: Average number of labels per text
         unique_labels: Number of unique labels
         labels: dict of label frequencies
@@ -32,8 +34,15 @@ class ClusteringDescriptiveStatistics(DescriptiveStatistics):
 
     num_samples: int
     number_of_characters: int
+
+    min_text_length: int
     average_text_length: float
+    max_text_length: int
+
+    min_labels_per_text: int
     average_labels_per_text: float
+    max_labels_per_text: int
+
     unique_labels: int
     labels: dict[str, dict[str, int]]
 
@@ -96,7 +105,8 @@ class AbsTaskClustering(AbsTask):
             sentences = self.dataset[split]["sentences"]
             labels = self.dataset[split]["labels"]
 
-        total_text_len = sum([len(t) for t in sentences])
+        text_len = [len(t) for t in sentences]
+        total_text_len = sum(text_len)
         total_labels = []
         for label in labels:
             if isinstance(label, list):
@@ -107,8 +117,12 @@ class AbsTaskClustering(AbsTask):
         return ClusteringDescriptiveStatistics(
             num_samples=len(sentences),
             number_of_characters=total_text_len,
+            min_text_length=min(text_len),
             average_text_length=total_text_len / len(sentences),
+            max_text_length=max(text_len),
+            min_labels_per_text=min(label_counter.values()),
             average_labels_per_text=len(total_labels) / len(sentences),
+            max_labels_per_text=max(label_counter.values()),
             unique_labels=len(label_counter),
             labels={
                 str(label): {

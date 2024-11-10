@@ -26,14 +26,18 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
     Attributes:
       num_samples: number of samples in the dataset.
       number_of_characters: Total number of symbols in the dataset.
+      min_text_length: Minimum length of text
       average_text_length: Average length of text
+      max_text_length: Maximum length of text
       unique_labels: Number of unique labels
       labels: dict of label frequencies
     """
 
     num_samples: int
     number_of_characters: int
+    min_text_length: int
     average_text_length: float
+    max_text_length: int
     unique_labels: int
     labels: dict[str, dict[str, int]]
 
@@ -219,12 +223,15 @@ class AbsTaskClassification(AbsTask):
             text = self.dataset[split]["text"]
             label = self.dataset[split]["label"]
 
-        total_text_len = sum([len(t) for t in text])
+        text_len = [len(t) for t in text]
+        total_text_len = sum(text_len)
         label_count = Counter(label)
         return ClassificationDescriptiveStatistics(
             num_samples=len(text),
             number_of_characters=total_text_len,
+            min_text_length=min(text_len),
             average_text_length=total_text_len / len(text),
+            max_text_length=max(text_len),
             unique_labels=len(label_count),
             labels={
                 str(label): {"count": count} for label, count in label_count.items()

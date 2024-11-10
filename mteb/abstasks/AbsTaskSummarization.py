@@ -21,18 +21,34 @@ class SummarizationDescriptiveStatistics(DescriptiveStatistics):
     Attributes:
         num_samples: number of samples in the dataset.
         number_of_characters: Total number of symbols in the dataset.
-        avg_text_len: Average length of text
-        avg_human_summaries_len: Average length of human summaries
-        avg_machine_summaries_len: Average length of machine summaries
+        min_text_length: Minimum length of text
+        avg_text_length: Average length of text
+        max_text_length: Maximum length of text
+        min_human_summaries_length: Minimum length of human summaries
+        avg_human_summaries_length: Average length of human summaries
+        max_human_summaries_length: Maximum length of human summaries
+        min_machine_summaries_length: Minimum length of machine summaries
+        avg_machine_summaries_length: Average length of machine summaries
+        max_machine_summaries_length: Maximum length of machine
+        min_relevance: Minimum relevance score
         avg_relevance: Average relevance score
+        max_relevance: Maximum relevance score
     """
 
     num_samples: int
     number_of_characters: int
-    avg_text_len: float
-    avg_human_summaries_len: float
-    avg_machine_summaries_len: float
+    min_text_length: int
+    avg_text_length: float
+    max_text_length: int
+    min_human_summaries_length: int
+    avg_human_summaries_length: float
+    max_human_summaries_length: int
+    min_machine_summaries_length: int
+    avg_machine_summaries_length: float
+    max_machine_summaries_length: int
+    min_relevance: float
     avg_relevance: float
+    max_relevance: float
 
 
 class AbsTaskSummarization(AbsTask):
@@ -112,17 +128,28 @@ class AbsTaskSummarization(AbsTask):
             machine_summaries = self.dataset[split]["machine_summaries"]
             relevance = self.dataset[split]["relevance"]
 
-        total_text_len = sum(len(x) for x in text)
-        total_human_summaries_len = sum(len(x) for x in human_summaries)
-        total_machine_summaries_len = sum(len(x) for x in machine_summaries)
+        text_len = [len(t) for t in text]
+        total_text_len = sum(text_len)
+        human_summaries_len = [len(s) for s in human_summaries]
+        total_human_summaries_len = sum(human_summaries_len)
+        machine_summaries_len = [len(s) for s in machine_summaries]
+        total_machine_summaries_len = sum(machine_summaries_len)
         total_relevance = sum(sum(x) / len(x) for x in relevance)
         return SummarizationDescriptiveStatistics(
             num_samples=len(text),
             number_of_characters=total_text_len
             + total_human_summaries_len
             + total_machine_summaries_len,
-            avg_text_len=total_text_len / len(text),
-            avg_human_summaries_len=total_human_summaries_len / len(text),
-            avg_machine_summaries_len=total_machine_summaries_len / len(text),
+            min_text_length=min(text_len),
+            avg_text_length=total_text_len / len(text),
+            max_text_length=max(text_len),
+            min_human_summaries_length=min(human_summaries_len),
+            avg_human_summaries_length=total_human_summaries_len / len(text),
+            max_human_summaries_length=max(human_summaries_len),
+            min_machine_summaries_length=min(machine_summaries_len),
+            avg_machine_summaries_length=total_machine_summaries_len / len(text),
+            max_machine_summaries_length=max(machine_summaries_len),
+            min_relevance=min(relevance),
             avg_relevance=total_relevance / len(relevance),
+            max_relevance=max(relevance),
         )

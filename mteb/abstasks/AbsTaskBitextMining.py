@@ -21,14 +21,26 @@ class BitextDescriptiveStatistics(DescriptiveStatistics):
     Attributes:
         num_samples: number of samples in the dataset.
         number_of_characters: Total number of symbols in the dataset.
+
+        min_sentence1_length: Minimum length of sentence1
         average_sentence1_length: Average length of sentence1
+        max_sentence1_length: Maximum length of sentence1
+
+        min_sentence2_length: Minimum length of sentence2
         average_sentence2_length: Average length of sentence2
+        max_sentence2_length: Maximum length of sentence2
     """
 
     num_samples: int
     number_of_characters: int
+
+    min_sentence1_length: int
     average_sentence1_length: float
+    max_sentence1_length: int
+
+    min_sentence2_length: int
     average_sentence2_length: float
+    max_sentence2_length: int
 
 
 class AbsTaskBitextMining(AbsTask):
@@ -153,12 +165,18 @@ class AbsTaskBitextMining(AbsTask):
             sent_1, sent_2 = pairs_cols[0]
             sentence1 = self.dataset[split][sent_1]
             sentence2 = self.dataset[split][sent_2]
-        total_s1_len = sum([len(s1) for s1 in sentence1])
-        total_s2_len = sum([len(s2) for s2 in sentence2])
+        s1_len = [len(s1) for s1 in sentence1]
+        s2_len = [len(s2) for s2 in sentence2]
+        total_s1_len = sum(s1_len)
+        total_s2_len = sum(s2_len)
 
         return BitextDescriptiveStatistics(
-            average_sentence1_length=total_s1_len / len(sentence1),
+            min_sentence1_length=min(s1_len),
+            average_sentence1_length=sum(s1_len) / len(sentence1),
+            max_sentence1_length=max(s1_len),
+            min_sentence2_length=min(s2_len),
             average_sentence2_length=total_s2_len / len(sentence2),
+            max_sentence2_length=max(s2_len),
             num_samples=len(sentence1),
             number_of_characters=total_s1_len + total_s2_len,
         )
