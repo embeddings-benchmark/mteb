@@ -1,7 +1,10 @@
-import mteb
+from __future__ import annotations
+
 import pandas as pd
 import torch
 from tqdm import tqdm
+
+import mteb
 
 params = []
 
