@@ -147,7 +147,7 @@ def run(args: argparse.Namespace) -> None:
         verbosity=args.verbosity,
         output_folder=args.output_folder,
         eval_splits=args.eval_splits,
-        co2_tracker=args.co2_tracker,
+        co2_tracker=args.disable_co2_tracker,
         overwrite_results=args.overwrite,
         encode_kwargs=encode_kwargs,
         save_predictions=save_predictions,
@@ -263,10 +263,10 @@ def add_run_parser(subparsers) -> None:
         "-v", "--verbosity", type=int, default=2, help="Verbosity level"
     )
     parser.add_argument(
-        "--co2_tracker",
+        "--disable_co2_tracker",
         type=bool,
-        default=True,
-        help="Enable CO₂ tracker, enabled by default",
+        default=False,
+        help="Disable CO₂ tracker, enabled by default",
     )
     parser.add_argument(
         "--eval_splits",
