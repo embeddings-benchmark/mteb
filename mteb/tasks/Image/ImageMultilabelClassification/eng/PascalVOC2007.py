@@ -54,4 +54,4 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
     label_column_name: str = "classes"
 
     # To be removed when we want full results
-    n_experiments: int = 1
+    n_experiments: int = 5
