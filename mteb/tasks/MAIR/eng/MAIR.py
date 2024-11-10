@@ -73,7 +73,6 @@ def load_data(self, **kwargs):
             item["qid"]: {d["id"]: d["score"] for d in item["labels"]}
             for item in query_ds[split]
         }
-        self.metadata.eval_splits.append(split)
 
     self.data_loaded = True
 
