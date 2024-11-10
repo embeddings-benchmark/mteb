@@ -265,8 +265,8 @@ def add_run_parser(subparsers) -> None:
     parser.add_argument(
         "--co2_tracker",
         type=bool,
-        default=False,
-        help="Enable CO₂ tracker, disabled by default",
+        default=True,
+        help="Enable CO₂ tracker, enabled by default",
     )
     parser.add_argument(
         "--eval_splits",
