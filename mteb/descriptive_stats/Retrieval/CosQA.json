@@ -7,11 +7,14 @@
         "min_document_length": 18,
         "average_document_length": 0.8933702193748787,
         "max_document_length": 83,
+        "unique_documents": 20604,
         "min_query_length": 88,
         "average_query_length": 11420.086,
         "max_query_length": 6396,
-        "min_relevant_docs_per_query": 1.0,
+        "unique_queries": 500,
+        "min_relevant_docs_per_query": 1,
         "average_relevant_docs_per_query": 1.0,
-        "max_relevant_docs_per_query": 1.0
+        "max_relevant_docs_per_query": 1,
+        "unique_relevant_docs": 500
     }
 }

@@ -26,6 +26,7 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
     Attributes:
       num_samples: number of samples in the dataset.
       number_of_characters: Total number of symbols in the dataset.
+      num_texts_in_train: Number of texts in the train split
 
       min_text_length: Minimum length of text
       average_text_length: Average length of text
@@ -38,10 +39,13 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
 
     num_samples: int
     number_of_characters: int
+    num_texts_in_train: int | None
+
     min_text_length: int
     average_text_length: float
     max_text_length: int
     unique_text: int
+
     unique_labels: int
     labels: dict[str, dict[str, int]]
 
@@ -214,25 +218,36 @@ class AbsTaskClassification(AbsTask):
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClassificationDescriptiveStatistics:
+        train_text = []
         if hf_subset:
             text = self.dataset[hf_subset][split]["text"]
             label = self.dataset[hf_subset][split]["label"]
+            if split != "train":
+                train_text = self.dataset[hf_subset]["train"]["text"]
         elif compute_overall:
             text = []
             label = []
             for hf_subset in self.metadata.eval_langs:
                 text.extend(self.dataset[hf_subset][split]["text"])
                 label.extend(self.dataset[hf_subset][split]["label"])
+                if split != "train":
+                    train_text.extend(self.dataset[hf_subset]["train"]["text"])
         else:
             text = self.dataset[split]["text"]
             label = self.dataset[split]["label"]
+            if split != "train":
+                train_text = self.dataset["train"]["text"]
 
         text_len = [len(t) for t in text]
         total_text_len = sum(text_len)
         label_count = Counter(label)
+        num_texts_in_train = (
+            len(set(text) & set(train_text)) if split != "train" else None
+        )
         return ClassificationDescriptiveStatistics(
             num_samples=len(text),
             number_of_characters=total_text_len,
+            num_texts_in_train=num_texts_in_train,
             min_text_length=min(text_len),
             average_text_length=total_text_len / len(text),
             max_text_length=max(text_len),

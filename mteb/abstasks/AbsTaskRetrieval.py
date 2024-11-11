@@ -464,29 +464,22 @@ class AbsTaskRetrieval(AbsTask):
         qrels_lengths = [
             len(relevant_docs[qid]) for qid in relevant_docs if qid in queries
         ]
-        num_qrels = sum(
-            qrels_lengths
-        )
+        num_qrels = sum(qrels_lengths)
         qrels_per_doc = num_qrels / len(relevant_docs) if num_queries else 0
-        unique_qrels = len(set(
-            [doc for qid in relevant_docs for doc in relevant_docs[qid]]
-        ))
+        unique_qrels = len({doc for qid in relevant_docs for doc in relevant_docs[qid]})
         return RetrievalDescriptiveStatistics(
             number_of_characters=sum(query_len) + sum(doc_len),
             num_samples=num_documents + num_queries,
             num_queries=num_queries,
             num_documents=num_documents,
-
             min_document_length=min(doc_len),
             average_document_length=sum(doc_len) / num_documents,
             max_document_length=max(doc_len),
             unique_documents=len(set(corpus)),
-
             min_query_length=min(query_len),
             average_query_length=sum(query_len) / num_queries,
             max_query_length=max(query_len),
             unique_queries=len(set(queries)),
-
             min_relevant_docs_per_query=min(qrels_lengths),
             average_relevant_docs_per_query=qrels_per_doc,
             max_relevant_docs_per_query=max(qrels_lengths),

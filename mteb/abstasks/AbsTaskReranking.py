@@ -135,17 +135,14 @@ class AbsTaskReranking(AbsTask):
             + total_len_negative,
             num_positive=len(positive),
             num_negative=len(negative),
-
             min_query_length=min(len_query),
             avg_query_length=total_len_query / len(query),
             max_query_length=max(len_query),
             unique_query=len(set(query)),
-
             min_positive_length=min(len_positive),
             avg_positive_length=total_len_positive / len(positive),
             max_positive_length=max(len_positive),
             unique_positive=len(set(positive)),
-
             min_negative_length=min(len_negative),
             avg_negative_length=total_len_negative / len(negative),
             max_negative_length=max(len_negative),

@@ -121,17 +121,14 @@ class AbsTaskSTS(AbsTask):
         return STSDescriptiveStatistics(
             num_samples=len(sentence1),
             number_of_characters=total_sentence1_len + total_sentence2_len,
-
             min_sentence1_length=min(sentence1_len),
             average_sentence1_len=total_sentence1_len / len(sentence1),
             max_sentence1_length=max(sentence1_len),
             unique_sentence1=len(set(sentence1)),
-
             min_sentence2_length=min(sentence2_len),
             average_sentence2_len=total_sentence2_len / len(sentence2),
             max_sentence2_length=max(sentence2_len),
             unique_sentence2=len(set(sentence2)),
-
             min_score=min(score),
             avg_score=avg_score,
             max_score=max(score),

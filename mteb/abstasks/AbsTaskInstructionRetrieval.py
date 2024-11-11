@@ -72,7 +72,6 @@ class HFDataLoaderInstructions(HFDataLoader):
         self.keep_in_memory = keep_in_memory
         self.trust_remote_code = trust_remote_code
 
-
     def load(
         self, split="test"
     ) -> tuple[
@@ -712,30 +711,31 @@ class AbsTaskInstructionRetrieval(AbsTask):
             changed_instructions = self.changed_instructions[split]
             top_ranked = self.top_ranked[split]
 
-        corpus_combined = [doc.get("title", "") + doc["text"] for doc in corpus.values()]
+        corpus_combined = [
+            doc.get("title", "") + doc["text"] for doc in corpus.values()
+        ]
         corpus_len = [len(doc) for doc in corpus_combined]
         total_corpus_len = sum(corpus_len)
 
         queries_len = [len(query) for query in queries.values()]
         total_queries_len = sum(queries_len)
-        instructions_len = [len(instruction) for instruction in og_instructions.values()]
-        total_instructions_len = sum(instructions_len)
-        changed_instructions_len = [len(instruction) for instruction in changed_instructions.values()]
-        total_changed_instructions_len = sum(
-            changed_instructions_len
-        )
-        qrels_non_zero = [
-            sum(1 for doc_id in docs if docs[doc_id] != 0) for docs in relevant_docs.values()
+        instructions_len = [
+            len(instruction) for instruction in og_instructions.values()
         ]
-        num_qrels_non_zero = sum(
-            qrels_non_zero
-        )
+        total_instructions_len = sum(instructions_len)
+        changed_instructions_len = [
+            len(instruction) for instruction in changed_instructions.values()
+        ]
+        total_changed_instructions_len = sum(changed_instructions_len)
+        qrels_non_zero = [
+            sum(1 for doc_id in docs if docs[doc_id] != 0)
+            for docs in relevant_docs.values()
+        ]
+        num_qrels_non_zero = sum(qrels_non_zero)
         qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if len(queries) else 0
         ranked_per_query = [len(docs) for docs in top_ranked.values()]
         top_ranked_per_query = (
-            sum(ranked_per_query) / len(queries)
-            if len(queries)
-            else 0
+            sum(ranked_per_query) / len(queries) if len(queries) else 0
         )
         return InstructionRetrievalDescriptiveStatistics(
             num_samples=len(queries) + len(corpus),
@@ -745,39 +745,33 @@ class AbsTaskInstructionRetrieval(AbsTask):
             + total_queries_len
             + total_instructions_len
             + total_changed_instructions_len,
-
             min_document_length=min(corpus_len),
             average_document_length=(
                 total_corpus_len / len(corpus) if len(corpus) else 0
             ),
             max_document_length=max(corpus_len),
             unique_docs=len(set(corpus_combined)),
-
             min_query_length=min(queries_len),
             average_query_length=(
                 total_queries_len / len(queries) if len(queries) else 0
             ),
             max_query_length=max(queries_len),
             unique_queries=len(set(queries.values())),
-
             min_instruction_length=min(instructions_len),
             average_instruction_length=(
                 total_instructions_len / len(queries) if len(queries) else 0
             ),
             max_instruction_length=max(instructions_len),
             unique_instructions=len(set(og_instructions.values())),
-
             min_changed_instruction_length=min(changed_instructions_len),
             average_changed_instruction_length=(
                 total_changed_instructions_len / len(queries) if len(queries) else 0
             ),
             max_changed_instruction_length=max(changed_instructions_len),
             unique_changed_instructions=len(set(changed_instructions.values())),
-
             min_average_relevant_docs_per_query=min(qrels_non_zero),
             average_relevant_docs_per_query=qrels_per_doc,
             max_average_relevant_docs_per_query=max(qrels_non_zero),
-
             min_average_top_ranked_per_query=min(ranked_per_query),
             average_top_ranked_per_query=top_ranked_per_query,
             max_average_top_ranked_per_query=max(ranked_per_query),

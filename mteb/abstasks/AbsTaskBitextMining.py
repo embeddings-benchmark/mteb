@@ -182,12 +182,10 @@ class AbsTaskBitextMining(AbsTask):
             num_samples=len(sentence1),
             number_of_characters=total_s1_len + total_s2_len,
             unique_pairs=unique_pairs,
-
             min_sentence1_length=min(s1_len),
             average_sentence1_length=sum(s1_len) / len(sentence1),
             max_sentence1_length=max(s1_len),
             unique_sentence1=unique_sentence1,
-
             min_sentence2_length=min(s2_len),
             average_sentence2_length=total_s2_len / len(sentence2),
             max_sentence2_length=max(s2_len),

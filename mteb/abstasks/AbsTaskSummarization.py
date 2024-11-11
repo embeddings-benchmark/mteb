@@ -162,22 +162,18 @@ class AbsTaskSummarization(AbsTask):
             number_of_characters=total_text_len
             + total_human_summaries_len
             + total_machine_summaries_len,
-
             min_text_length=min(text_len),
             avg_text_length=total_text_len / len(text),
             max_text_length=max(text_len),
             unique_texts=len(set(text)),
-
             min_human_summaries_length=min(human_summaries_len),
             avg_human_summaries_length=total_human_summaries_len / len(text),
             max_human_summaries_length=max(human_summaries_len),
             unique_human_summaries=len(set(all_human_summaries)),
-
             min_machine_summaries_length=min(machine_summaries_len),
             avg_machine_summaries_length=total_machine_summaries_len / len(text),
             max_machine_summaries_length=max(machine_summaries_len),
             unique_machine_summaries=len(set(all_machine_summaries)),
-
             min_relevance=min(relevance),
             avg_relevance=total_relevance / len(relevance),
             max_relevance=max(relevance),

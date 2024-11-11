@@ -47,6 +47,7 @@ class MultilabelClassificationDescriptiveStatistics(DescriptiveStatistics):
     Attributes:
         num_samples: number of samples in the dataset.
         number_of_characters: Total number of symbols in the dataset.
+        number_texts_in_train: Number of texts in the train split
 
         min_text_length: Minimum length of text
         average_text_length: Average length of text
@@ -62,6 +63,7 @@ class MultilabelClassificationDescriptiveStatistics(DescriptiveStatistics):
 
     num_samples: int
     number_of_characters: int
+    number_texts_in_train: int | None
 
     min_text_length: int
     average_text_length: float
@@ -243,18 +245,25 @@ class AbsTaskMultilabelClassification(AbsTask):
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> MultilabelClassificationDescriptiveStatistics:
+        train_text = []
         if hf_subset:
             text = self.dataset[hf_subset][split]["text"]
             label = self.dataset[hf_subset][split]["label"]
+            if split != "train":
+                train_text = self.dataset[hf_subset]["train"]["text"]
         elif compute_overall:
             text = []
             label = []
             for hf_subset in self.metadata.eval_langs:
                 text.extend(self.dataset[hf_subset][split]["text"])
                 label.extend(self.dataset[hf_subset][split]["label"])
+                if split != "train":
+                    train_text.extend(self.dataset[hf_subset]["train"]["text"])
         else:
             text = self.dataset[split]["text"]
             label = self.dataset[split]["label"]
+            if split != "train":
+                train_text = self.dataset["train"]["text"]
 
         text_len = [len(t) for t in text]
         total_text_len = sum(text_len)
@@ -264,15 +273,17 @@ class AbsTaskMultilabelClassification(AbsTask):
         for l in label:
             total_labels.extend(l if len(l) > 0 else [None])
         label_count = Counter(total_labels)
+        num_texts_in_train = (
+            len(set(text) & set(train_text)) if split != "train" else None
+        )
         return MultilabelClassificationDescriptiveStatistics(
             num_samples=len(text),
             number_of_characters=total_text_len,
-
+            number_texts_in_train=num_texts_in_train,
             min_text_length=min(text_len),
             average_text_length=total_text_len / len(text),
             max_text_length=max(text_len),
             unique_texts=len(set(text)),
-
             min_labels_per_text=min(label_len),
             average_label_per_text=total_label_len / len(label),
             max_labels_per_text=max(label_len),

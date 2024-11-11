@@ -135,17 +135,14 @@ class AbsTaskPairClassification(AbsTask):
         return PairClassificationDescriptiveStatistics(
             num_samples=len(sentence1),
             number_of_characters=total_sentence1_len + total_sentence2_len,
-
             min_sentence1_length=min(sentence1_len),
             avg_sentence1_length=total_sentence1_len / len(sentence1),
             max_sentence1_length=max(sentence1_len),
             unique_sentence1=len(set(sentence1)),
-
             min_sentence2_length=min(sentence2_len),
             avg_sentence2_length=total_sentence2_len / len(sentence2),
             max_sentence2_length=max(sentence2_len),
             unique_sentence2=len(set(sentence2)),
-
             unique_labels=len(set(labels)),
             labels={
                 str(label): {"count": count} for label, count in label_count.items()
