@@ -44,6 +44,16 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
         range_color=[2, 5],
         range_x=[8 * 1e6, 11 * 1e9],
         range_y=[0, 80],
+        hover_data={
+            "Max Tokens": True,
+            "Embedding Dimensions": True,
+            "Number of Parameters": True,
+            "Mean (Task)": True,
+            "Rank (Borda)": True,
+            "Log(Tokens)": False,
+            "model_text": False,
+        },
+        hover_name="Model",
     )
     fig.update_layout(
         coloraxis_colorbar=dict(
@@ -55,7 +65,11 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
                 "10K",
                 "100K",
             ],
-        )
+        ),
+        hoverlabel=dict(
+            bgcolor="white",
+            font_size=16,
+        ),
     )
     fig.update_traces(
         textposition="top center",
