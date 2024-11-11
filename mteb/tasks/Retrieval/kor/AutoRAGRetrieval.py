@@ -37,15 +37,4 @@ class AutoRAGRetrieval(AbsTaskRetrieval):
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2410.20878}, 
 }""",
-        descriptive_stats={
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 983.8421052631579,
-                    "average_query_length": 69.6140350877193,
-                    "num_documents": 114,
-                    "num_queries": 114,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
