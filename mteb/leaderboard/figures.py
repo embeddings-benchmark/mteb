@@ -32,6 +32,7 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df["Embedding Dimensions"] = df["Embedding Dimensions"].map(int)
     df["Max Tokens"] = df["Max Tokens"].map(int)
     df["Log(Tokens)"] = np.log10(df["Max Tokens"])
+    min_score, max_score = df["Mean (Task)"].min(), df["Mean (Task)"].max()
     fig = px.scatter(
         df,
         x="Number of Parameters",
@@ -43,7 +44,7 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
         color="Log(Tokens)",
         range_color=[2, 5],
         range_x=[8 * 1e6, 11 * 1e9],
-        range_y=[0, 80],
+        range_y=[min(0, min_score * 1.25), max_score * 1.25],
         hover_data={
             "Max Tokens": True,
             "Embedding Dimensions": True,
