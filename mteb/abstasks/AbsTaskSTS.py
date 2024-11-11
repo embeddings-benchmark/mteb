@@ -17,12 +17,15 @@ class STSDescriptiveStatistics(DescriptiveStatistics):
     Attributes:
         num_samples: number of samples in the dataset.
         number_of_characters: Total number of symbols in the dataset.
+
         min_sentence1_length: Minimum length of sentence1
         average_sentence1_len: Average length of sentence1
         max_sentence1_length: Maximum length of sentence1
+
         min_sentence2_length: Minimum length of sentence2
         average_sentence2_len: Average length of sentence2
         max_sentence2_length: Maximum length of sentence2
+
         min_score: Minimum score
         avg_score: Average score
         max_score: Maximum score
@@ -30,12 +33,17 @@ class STSDescriptiveStatistics(DescriptiveStatistics):
 
     num_samples: int
     number_of_characters: int
+
     min_sentence1_length: int
     average_sentence1_len: float
     max_sentence1_length: int
+    unique_sentence1: int
+
     min_sentence2_length: int
     average_sentence2_len: float
     max_sentence2_length: int
+    unique_sentence2: int
+
     min_score: float
     avg_score: float
     max_score: float
@@ -113,12 +121,17 @@ class AbsTaskSTS(AbsTask):
         return STSDescriptiveStatistics(
             num_samples=len(sentence1),
             number_of_characters=total_sentence1_len + total_sentence2_len,
+
             min_sentence1_length=min(sentence1_len),
             average_sentence1_len=total_sentence1_len / len(sentence1),
             max_sentence1_length=max(sentence1_len),
+            unique_sentence1=len(set(sentence1)),
+
             min_sentence2_length=min(sentence2_len),
             average_sentence2_len=total_sentence2_len / len(sentence2),
             max_sentence2_length=max(sentence2_len),
+            unique_sentence2=len(set(sentence2)),
+
             min_score=min(score),
             avg_score=avg_score,
             max_score=max(score),

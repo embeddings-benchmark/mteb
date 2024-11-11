@@ -1,0 +1,279 @@
+{
+    "validation": {
+        "min_sentence1_length": 2,
+        "average_sentence1_length": 97.0061992889051,
+        "max_sentence1_length": 521,
+        "min_sentence2_length": 2,
+        "average_sentence2_length": 97.0061992889051,
+        "max_sentence2_length": 521,
+        "num_samples": 21938,
+        "num_samples_sentence2": 21938,
+        "number_of_characters": 4256244,
+        "hf_subset_descriptive_stats": {
+            "ar-en": {
+                "min_sentence1_length": 4,
+                "average_sentence1_length": 85.48873873873873,
+                "max_sentence1_length": 369,
+                "min_sentence2_length": 10,
+                "average_sentence2_length": 108.76689189189189,
+                "max_sentence2_length": 462,
+                "num_samples": 888,
+                "num_samples_sentence2": 888,
+                "number_of_characters": 172499
+            },
+            "de-en": {
+                "min_sentence1_length": 6,
+                "average_sentence1_length": 119.02702702702703,
+                "max_sentence1_length": 521,
+                "min_sentence2_length": 10,
+                "average_sentence2_length": 108.82882882882883,
+                "max_sentence2_length": 462,
+                "num_samples": 888,
+                "num_samples_sentence2": 888,
+                "number_of_characters": 202336
+            },
+            "en-ar": {
+                "min_sentence1_length": 10,
+                "average_sentence1_length": 108.76689189189189,
+                "max_sentence1_length": 462,
+                "min_sentence2_length": 4,
+                "average_sentence2_length": 85.48873873873873,
+                "max_sentence2_length": 369,
+                "num_samples": 888,
+                "num_samples_sentence2": 888,
+                "number_of_characters": 172499
+            },
+            "en-de": {
+                "min_sentence1_length": 10,
+                "average_sentence1_length": 108.82882882882883,
+                "max_sentence1_length": 462,
+                "min_sentence2_length": 6,
+                "average_sentence2_length": 119.02702702702703,
+                "max_sentence2_length": 521,
+                "num_samples": 888,
+                "num_samples_sentence2": 888,
+                "number_of_characters": 202336
+            },
+            "en-fr": {
+                "min_sentence1_length": 10,
+                "average_sentence1_length": 108.4123595505618,
+                "max_sentence1_length": 462,
+                "min_sentence2_length": 6,
+                "average_sentence2_length": 113.63146067415731,
+                "max_sentence2_length": 493,
+                "num_samples": 890,
+                "num_samples_sentence2": 890,
+                "number_of_characters": 197619
+            },
+            "en-it": {
+                "min_sentence1_length": 10,
+                "average_sentence1_length": 103.0010764262648,
+                "max_sentence1_length": 433,
+                "min_sentence2_length": 7,
+                "average_sentence2_length": 103.46071044133477,
+                "max_sentence2_length": 444,
+                "num_samples": 929,
+                "num_samples_sentence2": 929,
+                "number_of_characters": 191803
+            },
+            "en-ja": {
+                "min_sentence1_length": 10,
+                "average_sentence1_length": 109.80826636050517,
+                "max_sentence1_length": 462,
+                "min_sentence2_length": 5,
+                "average_sentence2_length": 42.59357060849598,
+                "max_sentence2_length": 225,
+                "num_samples": 871,
+                "num_samples_sentence2": 871,
+                "number_of_characters": 132742
+            },
+            "en-ko": {
+                "min_sentence1_length": 10,
+                "average_sentence1_length": 107.74175199089875,
+                "max_sentence1_length": 462,
+                "min_sentence2_length": 3,
+                "average_sentence2_length": 54.5551763367463,
+                "max_sentence2_length": 250,
+                "num_samples": 879,
+                "num_samples_sentence2": 879,
+                "number_of_characters": 142659
+            },
+            "en-nl": {
+                "min_sentence1_length": 10,
+                "average_sentence1_length": 95.26819541375872,
+                "max_sentence1_length": 433,
+                "min_sentence2_length": 4,
+                "average_sentence2_length": 93.80159521435692,
+                "max_sentence2_length": 477,
+                "num_samples": 1003,
+                "num_samples_sentence2": 1003,
+                "number_of_characters": 189637
+            },
+            "en-ro": {
+                "min_sentence1_length": 10,
+                "average_sentence1_length": 104.72100656455142,
+                "max_sentence1_length": 433,
+                "min_sentence2_length": 9,
+                "average_sentence2_length": 107.67286652078775,
+                "max_sentence2_length": 448,
+                "num_samples": 914,
+                "num_samples_sentence2": 914,
+                "number_of_characters": 194128
+            },
+            "en-zh": {
+                "min_sentence1_length": 10,
+                "average_sentence1_length": 109.36518771331058,
+                "max_sentence1_length": 462,
+                "min_sentence2_length": 2,
+                "average_sentence2_length": 39.811149032992034,
+                "max_sentence2_length": 230,
+                "num_samples": 879,
+                "num_samples_sentence2": 879,
+                "number_of_characters": 131126
+            },
+            "fr-en": {
+                "min_sentence1_length": 6,
+                "average_sentence1_length": 113.63146067415731,
+                "max_sentence1_length": 493,
+                "min_sentence2_length": 10,
+                "average_sentence2_length": 108.4123595505618,
+                "max_sentence2_length": 462,
+                "num_samples": 890,
+                "num_samples_sentence2": 890,
+                "number_of_characters": 197619
+            },
+            "it-en": {
+                "min_sentence1_length": 7,
+                "average_sentence1_length": 103.46071044133477,
+                "max_sentence1_length": 444,
+                "min_sentence2_length": 10,
+                "average_sentence2_length": 103.0010764262648,
+                "max_sentence2_length": 433,
+                "num_samples": 929,
+                "num_samples_sentence2": 929,
+                "number_of_characters": 191803
+            },
+            "it-nl": {
+                "min_sentence1_length": 7,
+                "average_sentence1_length": 94.64235764235764,
+                "max_sentence1_length": 459,
+                "min_sentence2_length": 7,
+                "average_sentence2_length": 94.02697302697302,
+                "max_sentence2_length": 505,
+                "num_samples": 1001,
+                "num_samples_sentence2": 1001,
+                "number_of_characters": 188858
+            },
+            "it-ro": {
+                "min_sentence1_length": 7,
+                "average_sentence1_length": 103.90809628008753,
+                "max_sentence1_length": 435,
+                "min_sentence2_length": 9,
+                "average_sentence2_length": 107.62253829321664,
+                "max_sentence2_length": 448,
+                "num_samples": 914,
+                "num_samples_sentence2": 914,
+                "number_of_characters": 193339
+            },
+            "ja-en": {
+                "min_sentence1_length": 5,
+                "average_sentence1_length": 42.59357060849598,
+                "max_sentence1_length": 225,
+                "min_sentence2_length": 10,
+                "average_sentence2_length": 109.80826636050517,
+                "max_sentence2_length": 462,
+                "num_samples": 871,
+                "num_samples_sentence2": 871,
+                "number_of_characters": 132742
+            },
+            "ko-en": {
+                "min_sentence1_length": 3,
+                "average_sentence1_length": 54.5551763367463,
+                "max_sentence1_length": 250,
+                "min_sentence2_length": 10,
+                "average_sentence2_length": 107.74175199089875,
+                "max_sentence2_length": 462,
+                "num_samples": 879,
+                "num_samples_sentence2": 879,
+                "number_of_characters": 142659
+            },
+            "nl-en": {
+                "min_sentence1_length": 4,
+                "average_sentence1_length": 93.80159521435692,
+                "max_sentence1_length": 477,
+                "min_sentence2_length": 10,
+                "average_sentence2_length": 95.26819541375872,
+                "max_sentence2_length": 433,
+                "num_samples": 1003,
+                "num_samples_sentence2": 1003,
+                "number_of_characters": 189637
+            },
+            "nl-it": {
+                "min_sentence1_length": 7,
+                "average_sentence1_length": 94.02697302697302,
+                "max_sentence1_length": 505,
+                "min_sentence2_length": 7,
+                "average_sentence2_length": 94.64235764235764,
+                "max_sentence2_length": 459,
+                "num_samples": 1001,
+                "num_samples_sentence2": 1001,
+                "number_of_characters": 188858
+            },
+            "nl-ro": {
+                "min_sentence1_length": 7,
+                "average_sentence1_length": 102.01971522453451,
+                "max_sentence1_length": 478,
+                "min_sentence2_length": 9,
+                "average_sentence2_length": 107.59255202628697,
+                "max_sentence2_length": 515,
+                "num_samples": 913,
+                "num_samples_sentence2": 913,
+                "number_of_characters": 191376
+            },
+            "ro-en": {
+                "min_sentence1_length": 9,
+                "average_sentence1_length": 107.67286652078775,
+                "max_sentence1_length": 448,
+                "min_sentence2_length": 10,
+                "average_sentence2_length": 104.72100656455142,
+                "max_sentence2_length": 433,
+                "num_samples": 914,
+                "num_samples_sentence2": 914,
+                "number_of_characters": 194128
+            },
+            "ro-it": {
+                "min_sentence1_length": 9,
+                "average_sentence1_length": 107.62253829321664,
+                "max_sentence1_length": 448,
+                "min_sentence2_length": 7,
+                "average_sentence2_length": 103.90809628008753,
+                "max_sentence2_length": 435,
+                "num_samples": 914,
+                "num_samples_sentence2": 914,
+                "number_of_characters": 193339
+            },
+            "ro-nl": {
+                "min_sentence1_length": 9,
+                "average_sentence1_length": 107.59255202628697,
+                "max_sentence1_length": 515,
+                "min_sentence2_length": 7,
+                "average_sentence2_length": 102.01971522453451,
+                "max_sentence2_length": 478,
+                "num_samples": 913,
+                "num_samples_sentence2": 913,
+                "number_of_characters": 191376
+            },
+            "zh-en": {
+                "min_sentence1_length": 2,
+                "average_sentence1_length": 39.811149032992034,
+                "max_sentence1_length": 230,
+                "min_sentence2_length": 10,
+                "average_sentence2_length": 109.36518771331058,
+                "max_sentence2_length": 462,
+                "num_samples": 879,
+                "num_samples_sentence2": 879,
+                "number_of_characters": 131126
+            }
+        }
+    }
+}

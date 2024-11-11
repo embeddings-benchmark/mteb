@@ -20,30 +20,42 @@ class RerankingDescriptiveStatistics(DescriptiveStatistics):
         number_of_characters: Total number of symbols in the dataset.
         num_positive: Number of positive examples
         num_negative: Number of negative examples
+
         min_query_length: Minimum length of queries
         avg_query_length: Average length of queries
         max_query_length: Maximum length of queries
+        unique_query: Number of unique queries
+
         min_positive_length: Minimum length of positive examples
         avg_positive_length: Average length of positive examples
         max_positive_length: Maximum length of positive examples
+        unique_positive: Number of unique positive examples
+
         min_negative_length: Minimum length of negative examples
         avg_negative_length: Average length of negative examples
         max_negative_length: Maximum length of negative examples
+        unique_negative: Number of unique negative examples
     """
 
     num_samples: int
     number_of_characters: int
     num_positive: int
     num_negative: int
+
     min_query_length: int
     avg_query_length: float
     max_query_length: int
+    unique_query: int
+
     min_positive_length: int
     avg_positive_length: float
     max_positive_length: int
+    unique_positive: int
+
     min_negative_length: int
     avg_negative_length: float
     max_negative_length: int
+    unique_negative: int
 
 
 class AbsTaskReranking(AbsTask):
@@ -123,13 +135,21 @@ class AbsTaskReranking(AbsTask):
             + total_len_negative,
             num_positive=len(positive),
             num_negative=len(negative),
+
             min_query_length=min(len_query),
             avg_query_length=total_len_query / len(query),
             max_query_length=max(len_query),
+            unique_query=len(set(query)),
+
             min_positive_length=min(len_positive),
             avg_positive_length=total_len_positive / len(positive),
             max_positive_length=max(len_positive),
+            unique_positive=len(set(positive)),
+
+            min_negative_length=min(len_negative),
             avg_negative_length=total_len_negative / len(negative),
+            max_negative_length=max(len_negative),
+            unique_negative=len(set(negative)),
         )
 
 

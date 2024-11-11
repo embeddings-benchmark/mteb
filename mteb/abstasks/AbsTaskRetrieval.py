@@ -206,30 +206,42 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
         num_queries: number of queries in the dataset
         num_documents: Number of documents
         number_of_characters: Total number of symbols in the dataset
+
         min_document_length: Minimum length of documents
         average_document_length: Average length of documents
         max_document_length: Maximum length of documents
+        unique_documents: Number of unique documents
+
         min_query_length: Minimum length of queries
         average_query_length: Average length of queries
         max_query_length: Maximum length of queries
+        unique_queries: Number of unique queries
+
         min_relevant_docs_per_query: Minimum number of relevant documents per query
         average_relevant_docs_per_query: Average number of relevant documents per query
         max_relevant_docs_per_query: Maximum number of relevant documents per query
+        unique_relevant_docs: Number of unique relevant documents
     """
 
     num_samples: int
     num_queries: int
     num_documents: int
     number_of_characters: int
+
     min_document_length: int
     average_document_length: float
     max_document_length: int
+    unique_documents: int
+
     min_query_length: int
     average_query_length: float
     max_query_length: int
+    unique_queries: int
+
     min_relevant_docs_per_query: int
     average_relevant_docs_per_query: float
     max_relevant_docs_per_query: int
+    unique_relevant_docs: int
 
 
 class AbsTaskRetrieval(AbsTask):
@@ -448,26 +460,37 @@ class AbsTaskRetrieval(AbsTask):
         num_documents = len(corpus)
         num_queries = len(queries)
 
-        # number of qrels that are not 0
-        num_qrels_non_zero = sum(
-            sum(1 for doc_id in docs if docs[doc_id] != 0)
-            for docs in relevant_docs.values()
+        # create a list of number of relevant docs per query
+        qrels_lengths = [
+            len(relevant_docs[qid]) for qid in relevant_docs if qid in queries
+        ]
+        num_qrels = sum(
+            qrels_lengths
         )
-        qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if num_queries else 0
+        qrels_per_doc = num_qrels / len(relevant_docs) if num_queries else 0
+        unique_qrels = len(set(
+            [doc for qid in relevant_docs for doc in relevant_docs[qid]]
+        ))
         return RetrievalDescriptiveStatistics(
             number_of_characters=sum(query_len) + sum(doc_len),
             num_samples=num_documents + num_queries,
             num_queries=num_queries,
             num_documents=num_documents,
+
             min_document_length=min(doc_len),
             average_document_length=sum(doc_len) / num_documents,
             max_document_length=max(doc_len),
+            unique_documents=len(set(corpus)),
+
             min_query_length=min(query_len),
             average_query_length=sum(query_len) / num_queries,
             max_query_length=max(query_len),
-            min_relevant_docs_per_query=qrels_per_doc,
+            unique_queries=len(set(queries)),
+
+            min_relevant_docs_per_query=min(qrels_lengths),
             average_relevant_docs_per_query=qrels_per_doc,
-            max_relevant_docs_per_query=qrels_per_doc,
+            max_relevant_docs_per_query=max(qrels_lengths),
+            unique_relevant_docs=unique_qrels,
         )
 
 

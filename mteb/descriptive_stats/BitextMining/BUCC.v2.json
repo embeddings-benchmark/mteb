@@ -1,0 +1,59 @@
+{
+    "test": {
+        "min_sentence1_length": 16,
+        "average_sentence1_length": 99.10931428571429,
+        "max_sentence1_length": 204,
+        "min_sentence2_length": 42,
+        "average_sentence2_length": 90.60588571428572,
+        "max_sentence2_length": 159,
+        "num_samples": 35000,
+        "num_samples_sentence2": 35000,
+        "number_of_characters": 6640032,
+        "hf_subset_descriptive_stats": {
+            "de-en": {
+                "min_sentence1_length": 50,
+                "average_sentence1_length": 109.07974947807934,
+                "max_sentence1_length": 204,
+                "min_sentence2_length": 46,
+                "average_sentence2_length": 91.25396659707724,
+                "max_sentence2_length": 155,
+                "num_samples": 9580,
+                "num_samples_sentence2": 9580,
+                "number_of_characters": 1919197
+            },
+            "fr-en": {
+                "min_sentence1_length": 43,
+                "average_sentence1_length": 99.31785163988553,
+                "max_sentence1_length": 174,
+                "min_sentence2_length": 42,
+                "average_sentence2_length": 85.3117983711204,
+                "max_sentence2_length": 159,
+                "num_samples": 9086,
+                "num_samples_sentence2": 9086,
+                "number_of_characters": 1677545
+            },
+            "ru-en": {
+                "min_sentence1_length": 40,
+                "average_sentence1_length": 101.6593003117423,
+                "max_sentence1_length": 186,
+                "min_sentence2_length": 45,
+                "average_sentence2_length": 92.88216141323173,
+                "max_sentence2_length": 159,
+                "num_samples": 14435,
+                "num_samples_sentence2": 14435,
+                "number_of_characters": 2808206
+            },
+            "zh-en": {
+                "min_sentence1_length": 16,
+                "average_sentence1_length": 28.429699842022117,
+                "max_sentence1_length": 40,
+                "min_sentence2_length": 48,
+                "average_sentence2_length": 95.3638757240653,
+                "max_sentence2_length": 159,
+                "num_samples": 1899,
+                "num_samples_sentence2": 1899,
+                "number_of_characters": 235084
+            }
+        }
+    }
+}
