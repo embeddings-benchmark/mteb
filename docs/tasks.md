@@ -36,6 +36,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [AskUbuntuDupQuestions](https://github.com/taolei87/askubuntu) | ['eng'] | Reranking | s2s |  | {'test': 375} | {'test': {'num_samples': 375, 'number_of_characters': 413674, 'num_positive': 2255, 'num_negative': 5245, 'avg_query_len': 50.21, 'avg_positive_len': 52.54, 'avg_negative_len': 52.69}} |
 | [Assin2RTE](https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39) (Real et al., 2020) | ['por'] | PairClassification | s2s | [Written] | None | None |
 | [Assin2STS](https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39) (Real et al., 2020) | ['por'] | STS | s2s | [Written] | None | None |
+| [AutoRAGRetrieval](https://arxiv.org/abs/2410.20878) (Dongkyu Kim, 2024) | ['kor'] | Retrieval | s2p | [Government, Medical, Legal, Social] | {'test': 834} | {'test': {'number_of_characters': 894.22, 'num_samples': 834, 'num_queries': 114, 'num_documents': 720, 'average_document_length': 1.15, 'average_query_length': 0.61, 'average_relevant_docs_per_query': 1.0}} |
 | [BIOSSES](https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html) (Soğancıoğlu et al., 2017) | ['eng'] | STS | s2s |  | None | None |
 | [BQ](https://aclanthology.org/2021.emnlp-main.357) (Shitao Xiao, 2024) | ['cmn'] | STS | s2s |  | None | None |
 | [BSARDRetrieval](https://huggingface.co/datasets/maastrichtlawtech/bsard) (Louis et al., 2022) | ['fra'] | Retrieval | s2p | [Legal, Spoken] | None | None |
@@ -1070,7 +1071,7 @@ The following tables give you an overview of the tasks in MTEB.
 | knj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | knv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kon | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| kor | 4 | 8 | 1 | 0 | 1 | 2 | 1 | 8 | 3 | 0 | 0 |
+| kor | 4 | 8 | 1 | 0 | 1 | 2 | 1 | 9 | 3 | 0 | 0 |
 | kos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kpf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | kpg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -1659,7 +1660,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | zul | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
 | zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 1394 | 795 | 304 | 3 | 28 | 67 | 50 | 456 | 85 | 2 | 2 |
+| Total | 1394 | 795 | 304 | 3 | 28 | 67 | 50 | 457 | 85 | 2 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
