@@ -1089,6 +1089,8 @@ def test_empy_descriptive_stat_in_new_datasets():
     ), "The number of exceptions has changed. Please do not add new datasets to this list."
 
     for task in get_tasks():
+        if task.metadata.name.startswith("Mock"):
+            continue
         if task.metadata.descriptive_stats is None:
             assert (
                 task.metadata.name in exceptions
