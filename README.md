@@ -56,7 +56,7 @@ results = evaluation.run(model, output_folder=f"results/{model_name}")
 ```
 
 <details>
-  <summary> Running SentneceTransformermer model with prompts </summary>
+  <summary> Running SentenceTransformer model with prompts </summary>
 
 Prompts can be passed to the SentenceTransformer model using the `prompts` parameter. The following code shows how to use prompts with SentenceTransformer:
 
