@@ -414,7 +414,7 @@ class MTEB:
                 for split in task_eval_splits:
                     if co2_tracker:
                         with EmissionsTracker(
-                            save_to_file=False, save_to_api=False, logging_logger=logger
+                            save_to_file=False, save_to_api=False, logging_logger=logger, allow_multiple_runs=True,
                         ) as tracker:
                             results, tick, tock = self._run_eval(
                                 task,
