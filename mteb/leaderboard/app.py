@@ -207,18 +207,20 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                         )
     scores = gr.State(default_scores)
     with gr.Row():
-        description = gr.Markdown(
-            update_description,
-            inputs=[benchmark_select, lang_select, type_select, domain_select],
-        )
-        plot = gr.Plot(performance_size_plot, inputs=[summary_table])
+        with gr.Column():
+            description = gr.Markdown(
+                update_description,
+                inputs=[benchmark_select, lang_select, type_select, domain_select],
+            )
+            citation = gr.Markdown(update_citation, inputs=[benchmark_select])
+        with gr.Column():
+            plot = gr.Plot(performance_size_plot, inputs=[summary_table])
     with gr.Tab("Summary"):
         summary_table.render()
     with gr.Tab("Performance per task"):
         per_task_table.render()
     with gr.Tab("Task information"):
         task_info_table = gr.DataFrame(update_task_info, inputs=[task_select])
-    citation = gr.Markdown(update_citation, inputs=[benchmark_select])
 
     @gr.on(inputs=[scores, searchbar], outputs=[summary_table, per_task_table])
     def update_tables(scores, search_query: str):
