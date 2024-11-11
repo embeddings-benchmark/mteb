@@ -39,12 +39,7 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
         prompt="Classify Danish political comments for sentiment",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 16
-        return metadata_dict
+    samples_per_label = 16
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("sentence", "text")

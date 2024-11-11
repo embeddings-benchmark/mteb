@@ -72,11 +72,7 @@ class TNews(AbsTaskClassification):
         prompt="Classify the fine-grained category of the given news title",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["samples_per_label"] = 32
-        return metadata_dict
+    samples_per_label = 32
 
 
 class IFlyTek(AbsTaskClassification):
@@ -148,10 +144,11 @@ class IFlyTek(AbsTaskClassification):
         prompt="Given an App description text, find the appropriate fine-grained category",
     )
 
+    samples_per_label = 32
+
     @property
     def metadata_dict(self) -> dict[str, str]:
         metadata_dict = super().metadata_dict
-        metadata_dict["samples_per_label"] = 32
         metadata_dict["n_experiments"] = 5
         return metadata_dict
 
@@ -182,11 +179,7 @@ class MultilingualSentiment(AbsTaskClassification):
         prompt="Classify sentiment of the customer review into positive, neutral, or negative",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["samples_per_label"] = 32
-        return metadata_dict
+    samples_per_label = 32
 
 
 class JDReview(AbsTaskClassification):
@@ -220,11 +213,7 @@ class JDReview(AbsTaskClassification):
         prompt="Classify the customer review for iPhone on e-commerce platform into positive or negative",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["samples_per_label"] = 32
-        return metadata_dict
+    samples_per_label = 32
 
 
 class OnlineShopping(AbsTaskClassification):
@@ -258,11 +247,7 @@ class OnlineShopping(AbsTaskClassification):
         prompt="Classify the customer review for online shopping into positive or negative",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["samples_per_label"] = 32
-        return metadata_dict
+    samples_per_label = 32
 
 
 class Waimai(AbsTaskClassification):
@@ -296,9 +281,4 @@ class Waimai(AbsTaskClassification):
         prompt="Classify the customer review from a food takeaway platform into positive or negative",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["samples_per_label"] = 32
-
-        return metadata_dict
+    samples_per_label = 32

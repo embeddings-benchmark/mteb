@@ -38,12 +38,7 @@ Eprint = {arXiv:2105.06681},
         prompt="Classify texts based on linguistic acceptability in Swedish",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 16
-        return metadata_dict
+    samples_per_label = 16
 
     def dataset_transform(self):
         """This dataset consist of two columns of relevance, "original_sentence" and "corrected_sentence".
