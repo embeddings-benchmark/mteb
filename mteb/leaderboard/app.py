@@ -42,10 +42,10 @@ def update_description(
     n_task_types = len(task_types)
     n_tasks = len(benchmark.tasks)
     n_domains = len(domains)
-    description += f" - Number of languages: {n_languages}\n"
-    description += f" - Number of datasets: {n_tasks}\n"
-    description += f" - Number of task types: {n_task_types}\n"
-    description += f" - Number of domains : {n_domains}\n"
+    description += f" - **Number of languages**: {n_languages}\n"
+    description += f" - **Number of datasets**: {n_tasks}\n"
+    description += f" - **Number of task types**: {n_task_types}\n"
+    description += f" - **Number of domains**: {n_domains}\n"
     if str(benchmark.reference) != "None":
         description += f"\n[Click for More Info]({benchmark.reference})"
 
