@@ -1094,4 +1094,4 @@ def test_empy_descriptive_stat_in_new_datasets():
         if task.metadata.descriptive_stats is None:
             assert (
                 task.metadata.name in exceptions
-            ), f"Dataset {task.metadata.name} should have descriptive stats"
+            ), f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask.calculate_metadata_metrics()`"
