@@ -33,11 +33,22 @@ def update_citation(benchmark_name: str) -> str:
     return citation
 
 
-def update_description(benchmark_name: str) -> str:
+def update_description(
+    benchmark_name: str, languages: list[str], task_types: list[str], domains: list[str]
+) -> str:
     benchmark = mteb.get_benchmark(benchmark_name)
     description = f"## {benchmark.name}\n{benchmark.description}\n"
+    n_languages = len(languages)
+    n_task_types = len(task_types)
+    n_tasks = len(benchmark.tasks)
+    n_domains = len(domains)
+    description += f" - Number of languages: {n_languages}\n"
+    description += f" - Number of datasets: {n_tasks}\n"
+    description += f" - Number of task types: {n_task_types}\n"
+    description += f" - Number of domains : {n_domains}\n"
     if str(benchmark.reference) != "None":
         description += f"\n[Click for More Info]({benchmark.reference})"
+
     return description
 
 
@@ -196,7 +207,10 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                         )
     scores = gr.State(default_scores)
     with gr.Row():
-        description = gr.Markdown(update_description, inputs=[benchmark_select])
+        description = gr.Markdown(
+            update_description,
+            inputs=[benchmark_select, lang_select, type_select, domain_select],
+        )
         plot = gr.Plot(performance_size_plot, inputs=[summary_table])
     with gr.Tab("Summary"):
         summary_table.render()
