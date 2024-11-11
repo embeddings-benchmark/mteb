@@ -42,6 +42,8 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
         size="Embedding Dimensions",
         color="Log(Tokens)",
         range_color=[2, 5],
+        range_x=[8 * 1e6, 11 * 1e9],
+        range_y=[0, 80],
     )
     fig.update_layout(
         coloraxis_colorbar=dict(
@@ -58,8 +60,8 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
     fig.update_traces(
         textposition="top center",
     )
-    # fig.update_traces(marker=dict(size=14))
     fig.update_layout(
         font=dict(size=16, color="black"),
+        margin=dict(b=20, t=10, l=20, r=10),
     )
     return fig
