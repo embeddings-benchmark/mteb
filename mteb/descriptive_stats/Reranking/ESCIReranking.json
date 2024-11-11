@@ -1,0 +1,40 @@
+{
+    "test": {
+        "num_samples": 29285,
+        "number_of_characters": 254538331,
+        "num_positive": 271416,
+        "num_negative": 44235,
+        "avg_query_len": 19.691890046098685,
+        "avg_positive_len": 803.9230995961918,
+        "avg_negative_len": 808.501458121397,
+        "hf_subset_descriptive_stats": {
+            "us": {
+                "num_samples": 21296,
+                "number_of_characters": 186915609,
+                "num_positive": 189375,
+                "num_negative": 25463,
+                "avg_query_len": 21.440833959429,
+                "avg_positive_len": 868.3698006600661,
+                "avg_negative_len": 864.4493578918431
+            },
+            "es": {
+                "num_samples": 3703,
+                "number_of_characters": 48861389,
+                "num_positive": 39110,
+                "num_negative": 10183,
+                "avg_query_len": 20.681609505806104,
+                "avg_positive_len": 980.9613142418818,
+                "avg_negative_len": 1023.2159481488756
+            },
+            "jp": {
+                "num_samples": 4286,
+                "number_of_characters": 18761333,
+                "num_positive": 42931,
+                "num_negative": 8589,
+                "avg_query_len": 10.146756882874476,
+                "avg_positive_len": 358.35792317905475,
+                "avg_negative_len": 388.075445337059
+            }
+        }
+    }
+}

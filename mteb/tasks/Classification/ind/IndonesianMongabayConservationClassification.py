@@ -54,10 +54,6 @@ class IndonesianMongabayConservationClassification(AbsTaskClassification):
             pages = "30--54",
         }
         """,
-        descriptive_stats={
-            "n_samples": {"validation": 984, "test": 970},
-            "avg_character_length": {"validation": 1675.8, "test": 1675.5},
-        },
     )
 
     def dataset_transform(self):

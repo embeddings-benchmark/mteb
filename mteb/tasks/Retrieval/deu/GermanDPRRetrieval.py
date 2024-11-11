@@ -40,18 +40,6 @@ class GermanDPR(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1288.3410987482614,
-                    "average_query_length": 64.38439024390244,
-                    "num_documents": 2876,
-                    "num_queries": 1025,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     @staticmethod

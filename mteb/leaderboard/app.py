@@ -75,6 +75,9 @@ benchmarks = mteb.get_benchmarks()
 default_benchmark = mteb.get_benchmark("MTEB(Multilingual, beta)")
 default_results = default_benchmark.load_results(base_results=all_results)
 
+default_scores = default_results.get_scores(format="long")
+summary_table, per_task_table = scores_to_tables(default_scores)
+
 benchmark_select = gr.Dropdown(
     [bench.name for bench in benchmarks],
     value=default_benchmark.name,
@@ -117,60 +120,11 @@ head = """
 
 with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     with gr.Row():
-        with gr.Column(scale=1):
-            gr.Markdown(
-                """
-            ### Model Selection
-            Select models to rank based on an assortment of criteria. 
-            """,
-            )
-            with gr.Group():
-                with gr.Row(elem_classes="overflow-y-scroll max-h-80"):
-                    with gr.Column():
-                        availability = gr.Radio(
-                            [
-                                ("Only Open", True),
-                                ("Only Proprietary", False),
-                                ("Both", None),
-                            ],
-                            value=None,
-                            label="Availability",
-                            interactive=True,
-                        )
-                        compatibility = gr.CheckboxGroup(
-                            [
-                                (
-                                    "Should be sentence-transformers compatible",
-                                    "sbert_compatible",
-                                )
-                            ],
-                            value=[],
-                            label="Compatibility",
-                            interactive=True,
-                        )
-                        instructions = gr.Radio(
-                            [
-                                ("Only Instruction-tuned", True),
-                                ("Only non-instruction", False),
-                                ("Both", None),
-                            ],
-                            value=None,
-                            label="Instructions",
-                            interactive=True,
-                        )
-                        model_size = RangeSlider(
-                            minimum=min_model_size,
-                            maximum=max_model_size,
-                            value=(min_model_size, max_model_size),
-                            label="Model Size (#M Parameters)",
-                            interactive=True,
-                        )
-        with gr.Column(scale=2):
+        with gr.Column(scale=5):
             gr.Markdown(
                 """
             ### Benchmarks
-            Select one of the hand-curated benchmarks from our publication.
-            Or create one from scratch based on your use case.
+            Select one of the hand-curated benchmarks from our publications and modify them using one of the following filters to fit your needs.
             """
             )
             with gr.Group():
@@ -185,21 +139,73 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             domain_select.render()
                         with gr.Accordion("Add and remove tasks:", open=False):
                             task_select.render()
-    default_scores = default_results.get_scores(format="long")
+        with gr.Column(scale=8):
+            gr.Markdown(
+                """
+            ### Model Selection
+            Select models to rank based on an assortment of criteria. 
+            """,
+            )
+            with gr.Group():
+                searchbar = gr.Textbox(
+                    label="Search Models",
+                    info="Search models by name (RegEx sensitive. Separate queries with `|`)",
+                    interactive=True,
+                )
+                with gr.Row(elem_classes=""):
+                    with gr.Column():
+                        availability = gr.Radio(
+                            [
+                                ("Only Open", True),
+                                ("Only Proprietary", False),
+                                ("Both", None),
+                            ],
+                            value=None,
+                            label="Availability",
+                            interactive=True,
+                        )
+                        instructions = gr.Radio(
+                            [
+                                ("Only Instruction-tuned", True),
+                                ("Only non-instruction", False),
+                                ("Both", None),
+                            ],
+                            value=None,
+                            label="Instructions",
+                            interactive=True,
+                        )
+                    with gr.Column():
+                        compatibility = gr.CheckboxGroup(
+                            [
+                                (
+                                    "Should be sentence-transformers compatible",
+                                    "sbert_compatible",
+                                )
+                            ],
+                            value=[],
+                            label="Compatibility",
+                            interactive=True,
+                        )
+                        model_size = RangeSlider(
+                            minimum=min_model_size,
+                            maximum=max_model_size,
+                            value=(min_model_size, max_model_size),
+                            label="Model Size (#M Parameters)",
+                            interactive=True,
+                        )
     scores = gr.State(default_scores)
-    summary, per_task = scores_to_tables(default_scores)
     description = gr.Markdown(update_description, inputs=[benchmark_select])
     with gr.Tab("Summary"):
-        summary_table = gr.DataFrame(summary)
+        summary_table.render()
     with gr.Tab("Performance per task"):
-        per_task_table = gr.DataFrame(per_task)
+        per_task_table.render()
     with gr.Tab("Task information"):
         task_info_table = gr.DataFrame(update_task_info, inputs=[task_select])
     citation = gr.Markdown(update_citation, inputs=[benchmark_select])
 
-    @gr.on(inputs=[scores], outputs=[summary_table, per_task_table])
-    def update_tables(scores):
-        summary, per_task = scores_to_tables(scores)
+    @gr.on(inputs=[scores, searchbar], outputs=[summary_table, per_task_table])
+    def update_tables(scores, search_query: str):
+        summary, per_task = scores_to_tables(scores, search_query)
         return summary, per_task
 
     @gr.on(

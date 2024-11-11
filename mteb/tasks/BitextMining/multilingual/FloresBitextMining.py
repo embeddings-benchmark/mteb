@@ -268,10 +268,6 @@ class FloresBitextMining(AbsTaskBitextMining, MultilingualTask):
         year={2022}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"dev": 997, "devtest": 1012},
-            "avg_character_length": {},
-        },
     )
 
     def load_data(self, **kwargs: Any) -> None:

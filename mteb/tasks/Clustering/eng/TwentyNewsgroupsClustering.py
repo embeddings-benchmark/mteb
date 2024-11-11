@@ -50,10 +50,6 @@ class TwentyNewsgroupsClustering(AbsTaskClustering):
         }
         """,
         prompt="Identify the topic or theme of the given news articles",
-        descriptive_stats={
-            "n_samples": {"test": 59545},
-            "avg_character_length": {"test": 32.0},
-        },
     )
 
 
@@ -94,10 +90,6 @@ class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
         }
         """,
         prompt="Identify the topic or theme of the given news articles",
-        descriptive_stats={
-            "n_samples": {"test": 2381},
-            "avg_character_length": {"test": 32.0},
-        },
     )
 
     def dataset_transform(self):

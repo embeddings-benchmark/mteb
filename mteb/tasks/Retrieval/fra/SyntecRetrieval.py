@@ -39,18 +39,6 @@ class SyntecRetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 90},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1224.2666666666667,
-                    "average_query_length": 72.82,
-                    "num_documents": 90,
-                    "num_queries": 100,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):

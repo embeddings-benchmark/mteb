@@ -8,7 +8,8 @@ from mteb.encoder_interface import Encoder
 from mteb.load_results.task_results import ScoresDict
 
 from ..evaluation.evaluators import RerankingEvaluator
-from .AbsTask import AbsTask, DescriptiveStatistics
+from .AbsTask import AbsTask
+from .TaskMetadata import DescriptiveStatistics
 
 
 class RerankingDescriptiveStatistics(DescriptiveStatistics):
@@ -16,6 +17,7 @@ class RerankingDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
         num_positive: Number of positive examples
         num_negative: Number of negative examples
         avg_query_len: Average length of queries
@@ -24,6 +26,7 @@ class RerankingDescriptiveStatistics(DescriptiveStatistics):
     """
 
     num_samples: int
+    number_of_characters: int
     num_positive: int
     num_negative: int
     avg_query_len: float
@@ -72,29 +75,47 @@ class AbsTaskReranking(AbsTask):
     ) -> RerankingDescriptiveStatistics:
         if hf_subset:
             query = self.dataset[hf_subset][split]["query"]
-            positive = self.dataset[hf_subset][split]["positive"]
-            negative = self.dataset[hf_subset][split]["negative"]
+            positive = transform_reranking_data(
+                self.dataset[hf_subset][split]["positive"]
+            )
+            negative = transform_reranking_data(
+                self.dataset[hf_subset][split]["negative"]
+            )
         elif compute_overall:
             query = []
             positive = []
             negative = []
             for hf_subset in self.metadata.eval_langs:
                 query.extend(self.dataset[hf_subset][split]["query"])
-                positive.extend(self.dataset[hf_subset][split]["positive"])
-                negative.extend(self.dataset[hf_subset][split]["negative"])
+                positive.extend(
+                    transform_reranking_data(self.dataset[hf_subset][split]["positive"])
+                )
+                negative.extend(
+                    transform_reranking_data(self.dataset[hf_subset][split]["negative"])
+                )
         else:
             query = self.dataset[split]["query"]
-            positive = self.dataset[split]["positive"]
-            negative = self.dataset[split]["negative"]
+            positive = transform_reranking_data(self.dataset[split]["positive"])
+            negative = transform_reranking_data(self.dataset[split]["negative"])
 
         total_len_query = sum([len(q) for q in query])
         total_len_positive = sum([len(p) for p in positive])
         total_len_negative = sum([len(n) for n in negative])
         return RerankingDescriptiveStatistics(
             num_samples=len(query),
+            number_of_characters=total_len_query
+            + total_len_positive
+            + total_len_negative,
             num_positive=len(positive),
             num_negative=len(negative),
             avg_query_len=total_len_query / len(query),
             avg_positive_len=total_len_positive / len(positive),
             avg_negative_len=total_len_negative / len(negative),
         )
+
+
+def transform_reranking_data(data: list[list[str]] | list[str]) -> list[str]:
+    """Transforms a list of lists of strings into a list of strings"""
+    if isinstance(data[0], str):
+        return data
+    return [item for sublist in data for item in sublist]

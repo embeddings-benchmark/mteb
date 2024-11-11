@@ -32,18 +32,6 @@ class NLPJournalTitleAbsRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {_EVAL_SPLIT: 404},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 441.6746031746032,
-                    "average_query_length": 27.60891089108911,
-                    "num_documents": 504,
-                    "num_queries": 404,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):

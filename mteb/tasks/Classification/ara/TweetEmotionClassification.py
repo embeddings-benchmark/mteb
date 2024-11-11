@@ -3,8 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-N_SAMPLES = 2048
-
 
 class TweetEmotionClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -39,10 +37,6 @@ class TweetEmotionClassification(AbsTaskClassification):
   organization={Springer}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"train": N_SAMPLES},
-            "avg_character_length": {"train": 78.8},
-        },
     )
 
     def dataset_transform(self):

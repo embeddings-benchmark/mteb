@@ -34,10 +34,6 @@ class YueOpenriceReviewClassification(AbsTaskClassification):
   year={2019},
   organization={KDD WISDOM}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 6161},
-            "avg_character_length": {"test": 173.0},
-        },
     )
 
     @property

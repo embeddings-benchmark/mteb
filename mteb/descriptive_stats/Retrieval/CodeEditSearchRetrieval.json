@@ -1,0 +1,130 @@
+{
+    "train": {
+        "number_of_characters": 71.98776923076923,
+        "num_samples": 26000,
+        "num_queries": 13000,
+        "num_documents": 13000,
+        "average_document_length": 7.692307692307693e-05,
+        "average_query_length": 0.005460597633136095,
+        "average_relevant_docs_per_query": 1.0,
+        "hf_subset_descriptive_stats": {
+            "python": {
+                "number_of_characters": 70.519,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.06951900000000001,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "javascript": {
+                "number_of_characters": 57.88,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.05688,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "typescript": {
+                "number_of_characters": 61.092,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.060092,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "go": {
+                "number_of_characters": 71.797,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.070797,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "ruby": {
+                "number_of_characters": 67.9,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.0669,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "java": {
+                "number_of_characters": 63.984,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.062984,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "php": {
+                "number_of_characters": 62.927,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.061927,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "c": {
+                "number_of_characters": 98.588,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.097588,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "c++": {
+                "number_of_characters": 115.48,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.11448,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "rust": {
+                "number_of_characters": 68.503,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.067503,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "swift": {
+                "number_of_characters": 58.279,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.057279000000000004,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "scala": {
+                "number_of_characters": 65.833,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.064833,
+                "average_relevant_docs_per_query": 1.0
+            },
+            "shell": {
+                "number_of_characters": 73.059,
+                "num_samples": 2000,
+                "num_queries": 1000,
+                "num_documents": 1000,
+                "average_document_length": 0.001,
+                "average_query_length": 0.072059,
+                "average_relevant_docs_per_query": 1.0
+            }
+        }
+    }
+}

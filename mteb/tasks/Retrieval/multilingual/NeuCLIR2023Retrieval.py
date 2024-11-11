@@ -87,34 +87,6 @@ class NeuCLIR2023Retrieval(MultilingualTask, AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": {"fas": 2232092, "zho": 3179285, "rus": 4627619},
-            "avg_character_length": {
-                "test": {
-                    "fas": {
-                        "average_document_length": 2032.093148525817,
-                        "average_query_length": 65.48684210526316,
-                        "num_documents": 2232016,
-                        "num_queries": 76,
-                        "average_relevant_docs_per_query": 66.28947368421052,
-                    },
-                    "rus": {
-                        "average_document_length": 1757.9129983233004,
-                        "average_query_length": 74.4342105263158,
-                        "num_documents": 4627543,
-                        "num_queries": 76,
-                        "average_relevant_docs_per_query": 62.223684210526315,
-                    },
-                    "zho": {
-                        "average_document_length": 743.1426659901881,
-                        "average_query_length": 22.210526315789473,
-                        "num_documents": 3179209,
-                        "num_queries": 76,
-                        "average_relevant_docs_per_query": 53.68421052631579,
-                    },
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -230,41 +202,6 @@ class NeuCLIR2023RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 2236.175955333482,
-                    "average_query_length": 54.10267857142857,
-                    "num_documents": 49433,
-                    "num_queries": 224,
-                    "average_relevant_docs_per_query": 61.816964285714285,
-                    "hf_subset_descriptive_stats": {
-                        "fas": {
-                            "average_document_length": 2895.869857421016,
-                            "average_query_length": 65.89189189189189,
-                            "num_documents": 15921,
-                            "num_queries": 74,
-                            "average_relevant_docs_per_query": 68.08108108108108,
-                        },
-                        "rus": {
-                            "average_document_length": 2724.294762109928,
-                            "average_query_length": 74.41333333333333,
-                            "num_documents": 16247,
-                            "num_queries": 75,
-                            "average_relevant_docs_per_query": 63.053333333333335,
-                        },
-                        "zho": {
-                            "average_document_length": 1168.4984071821605,
-                            "average_query_length": 22.16,
-                            "num_documents": 17265,
-                            "num_queries": 75,
-                            "average_relevant_docs_per_query": 54.4,
-                        },
-                    },
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):

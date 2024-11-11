@@ -37,10 +37,6 @@ class PersianFoodSentimentClassification(AbsTaskClassification):
             volume={abs/2005.12515}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"validation": TEST_SAMPLES, "test": TEST_SAMPLES},
-            "avg_character_length": {"validation": 90.37, "test": 90.58},
-        },
     )
 
     def dataset_transform(self):

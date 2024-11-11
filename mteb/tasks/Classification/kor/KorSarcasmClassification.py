@@ -44,10 +44,6 @@ class KorSarcasmClassification(AbsTaskClassification):
             howpublished = {https://github.com/SpellOnYou/korean-sarcasm}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"train": 2048, "test": 301},
-            "avg_character_length": {"train": 48.45, "test": 46.77},
-        },
     )
 
     def dataset_transform(self):

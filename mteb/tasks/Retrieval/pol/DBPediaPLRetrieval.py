@@ -38,18 +38,6 @@ class DBPediaPL(AbsTaskRetrieval):
  doi =       {10.1145/3077136.3080751},
  publisher = {ACM}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 311.7007956561823,
-                    "average_query_length": 35.45,
-                    "num_documents": 4635922,
-                    "num_queries": 400,
-                    "average_relevant_docs_per_query": 38.215,
-                }
-            },
-        },
     )
 
 
@@ -86,16 +74,4 @@ class DBPediaPLHardNegatives(AbsTaskRetrieval):
  doi =       {10.1145/3077136.3080751},
  publisher = {ACM}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 400},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 363.468546000768,
-                    "average_query_length": 35.45,
-                    "num_documents": 88542,
-                    "num_queries": 400,
-                    "average_relevant_docs_per_query": 38.215,
-                }
-            },
-        },
     )

@@ -167,7 +167,7 @@ class JinaWrapper(SentenceTransformerWrapper):
         prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         if prompt_name:
             logger.info(
-                f"Using prompt_nane={prompt_name} for task={task_name} prompt_type={prompt_type}"
+                f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"
             )
         else:
             logger.info(

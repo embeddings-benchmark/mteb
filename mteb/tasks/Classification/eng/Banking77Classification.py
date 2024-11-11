@@ -54,8 +54,4 @@ class Banking77Classification(AbsTaskClassification):
     pages = "38--45",
 }""",
         prompt="Given a online banking query, find the corresponding intents",
-        descriptive_stats={
-            "n_samples": {"test": 3080},
-            "avg_character_length": {"test": 54.2},
-        },
     )

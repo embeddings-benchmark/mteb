@@ -33,16 +33,4 @@ class KoStrategyQA(AbsTaskRetrieval):
   journal = {Transactions of the Association for Computational Linguistics (TACL)},
   year = {2021},
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "dev": {
-                    "average_document_length": 319.25953950924225,
-                    "average_query_length": 22.75337837837838,
-                    "num_documents": 9251,
-                    "num_queries": 592,
-                    "average_relevant_docs_per_query": 1.9341216216216217,
-                }
-            },
-        },
     )

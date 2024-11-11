@@ -50,10 +50,6 @@ class HindiDiscourseClassification(AbsTaskClassification):
     language = "English",
     ISBN = "979-10-95546-34-4",
 }""",
-        descriptive_stats={
-            "n_samples": {"train": 2048},
-            "avg_character_length": {"train": 79.23828125},
-        },
     )
 
     def dataset_transform(self):

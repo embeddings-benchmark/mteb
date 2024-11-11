@@ -40,18 +40,6 @@ class LitSearchRetrieval(AbsTaskRetrieval):
         author={Ajith, Anirudh and Xia, Mengzhou and Chevalier, Alexis and Goyal, Tanya and Chen, Danqi and Gao, Tianyu},
         year={2024}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 597},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 841.2769,
-                    "average_query_length": 141.20,
-                    "num_documents": 64183,
-                    "num_queries": 597,
-                    "average_relevant_docs_per_query": 1.070351,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):

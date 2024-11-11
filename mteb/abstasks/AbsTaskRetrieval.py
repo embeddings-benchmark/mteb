@@ -14,7 +14,8 @@ from mteb.abstasks.TaskMetadata import HFSubset
 
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..load_results.task_results import ScoresDict
-from .AbsTask import AbsTask, DescriptiveStatistics
+from .AbsTask import AbsTask
+from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +34,7 @@ class HFDataLoader:
         qrels_file: str = "",
         streaming: bool = False,
         keep_in_memory: bool = False,
+        trust_remote_code: bool = False,
     ):
         self.corpus = {}
         self.queries = {}
@@ -62,6 +64,7 @@ class HFDataLoader:
             self.qrels_file = qrels_file
         self.streaming = streaming
         self.keep_in_memory = keep_in_memory
+        self.trust_remote_code = trust_remote_code
 
     @staticmethod
     def check(fIn: str, ext: str):
@@ -124,6 +127,7 @@ class HFDataLoader:
                 "corpus",
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
+                trust_remote_code=self.trust_remote_code,
             )
         else:
             corpus_ds = load_dataset(
@@ -151,6 +155,7 @@ class HFDataLoader:
                 "queries",
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
+                trust_remote_code=self.trust_remote_code,
             )
         else:
             queries_ds = load_dataset(
@@ -173,6 +178,7 @@ class HFDataLoader:
                 self.hf_repo_qrels,
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
+                trust_remote_code=self.trust_remote_code,
             )[split]
         else:
             qrels_ds = load_dataset(
@@ -196,17 +202,21 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Retrieval
 
     Attributes:
-        num_queries: number of samples in the dataset
+        num_samples: Number of queries and documents
+        num_queries: number of queries in the dataset
+        num_documents: Number of documents
+        number_of_characters: Total number of symbols in the dataset
         average_document_length: Average length of documents
         average_query_length: Average length of queries
-        num_documents: Number of documents
         average_relevant_docs_per_query: Average number of relevant documents per query
     """
 
+    num_samples: int
     num_queries: int
+    num_documents: int
+    number_of_characters: int
     average_document_length: float
     average_query_length: float
-    num_documents: int
     average_relevant_docs_per_query: float
 
 
@@ -249,6 +259,9 @@ class AbsTaskRetrieval(AbsTask):
                 hf_repo_qrels=hf_repo_qrels,
                 streaming=False,
                 keep_in_memory=False,
+                trust_remote_code=self.metadata_dict["dataset"].get(
+                    "trust_remote_code", False
+                ),
             ).load(split=split)
             # Conversion from DataSet
             queries = {query["id"]: query["text"] for query in queries}
@@ -430,21 +443,26 @@ class AbsTaskRetrieval(AbsTask):
         )
         qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if num_queries else 0
         return RetrievalDescriptiveStatistics(
-            average_document_length=doc_len,
-            average_query_length=query_len,
-            num_documents=num_documents,
+            number_of_characters=query_len + doc_len,
+            num_samples=num_documents + num_queries,
             num_queries=num_queries,
+            num_documents=num_documents,
+            average_document_length=doc_len / num_documents,
+            average_query_length=query_len / num_queries,
             average_relevant_docs_per_query=qrels_per_doc,
         )
 
 
 def calculate_length(
     queries: dict[str, str], corpus: dict[str, str]
-) -> tuple[float, float]:
+) -> tuple[int, int]:
     queries_lens = []
     doc_lens = []
     for query in queries.values():
-        queries_lens.append(len(query))
+        if isinstance(query[0], str):
+            queries_lens.append(len(query))
+        else:
+            queries_lens.extend([len(turn) for turn in query])
 
     for doc in corpus.values():
         doc_lens.append(len(doc))
