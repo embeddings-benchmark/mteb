@@ -114,7 +114,7 @@ model_prompts = {
 }
 
 e5_mult_small = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="intfloat/multilingual-e5-small",
         revision="fd1525a9fd15316a2d503bf26ab031a61d056e98",
@@ -137,7 +137,7 @@ e5_mult_small = ModelMeta(
 )
 
 e5_mult_base = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="intfloat/multilingual-e5-base",
         model_prompts=model_prompts,
@@ -159,7 +159,7 @@ e5_mult_base = ModelMeta(
 )
 
 e5_mult_large = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="intfloat/multilingual-e5-large",
         revision="ab10c1a7f42e74530fe7ae5be82e6d4f11a719eb",
@@ -182,7 +182,7 @@ e5_mult_large = ModelMeta(
 )
 
 e5_eng_small_v2 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="intfloat/e5-small-v2",
         model_prompts=model_prompts,
@@ -204,7 +204,7 @@ e5_eng_small_v2 = ModelMeta(
 )
 
 e5_eng_small = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="intfloat/e5-small",
         revision="e272f3049e853b47cb5ca3952268c6662abda68f",
@@ -227,7 +227,7 @@ e5_eng_small = ModelMeta(
 )
 
 e5_eng_base_v2 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="intfloat/e5-base-v2",
         revision="1c644c92ad3ba1efdad3f1451a637716616a20e8",
@@ -250,7 +250,7 @@ e5_eng_base_v2 = ModelMeta(
 )
 
 e5_eng_large_v2 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="intfloat/e5-large-v2",
         revision="b322e09026e4ea05f42beadf4d661fb4e101d311",

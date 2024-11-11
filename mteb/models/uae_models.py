@@ -52,7 +52,7 @@ class UAEWrapper(SentenceTransformerWrapper):
 
 
 uae_large_v1 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         UAEWrapper,
         model="WhereIsAI/UAE-Large-V1",
         revision="369c368f70f16a613f19f5598d4f12d9f44235d4",
