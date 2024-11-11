@@ -918,3 +918,40 @@ MTEB_EU = Benchmark(
     reference=None,
     citation=None,
 )
+
+LONG_EMBED = Benchmark(
+    name="LongEmbed",
+    tasks=get_tasks(
+        tasks=[
+            "LEMBNarrativeQARetrieval",
+            "LEMBNeedleRetrieval",
+            "LEMBPasskeyRetrieval",
+            "LEMBQMSumRetrieval",
+            "LEMBSummScreenFDRetrieval",
+            "LEMBWikimQARetrieval",
+        ],
+    ),
+    description="The main benchmark for evaluating long document retrieval.",
+    reference="https://arxiv.org/abs/2404.12096v2",
+    citation="""@article{zhu2024longembed,
+  title={LongEmbed: Extending Embedding Models for Long Context Retrieval},
+  author={Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
+  journal={arXiv preprint arXiv:2404.12096},
+  year={2024}
+}""",
+)
+
+BRIGHT = Benchmark(
+    name="BRIGHT",
+    tasks=get_tasks(
+        tasks=["BrightRetrieval"],
+    ),
+    description="A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.",
+    reference="https://brightbenchmark.github.io/",
+    citation="""@article{su2024bright,
+  title={Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  author={Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal={arXiv preprint arXiv:2407.12883},
+  year={2024}
+}""",
+)
