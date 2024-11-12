@@ -239,10 +239,13 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     def on_select_benchmark(benchmark_name):
         benchmark = mteb.get_benchmark(benchmark_name)
         benchmark_results = benchmark.load_results(base_results=all_results)
+        task_types = benchmark_results.task_types
+        langs = benchmark_results.languages
+        domains = benchmark_results.domains
         return (
-            benchmark_results.languages,
-            benchmark_results.task_types,
-            benchmark_results.domains,
+            gr.Dropdown(langs, value=langs),
+            gr.Dropdown(task_types, value=task_types),
+            gr.Dropdown(domains, value=domains),
         )
 
     @gr.on(
