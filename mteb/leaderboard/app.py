@@ -243,9 +243,9 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         langs = benchmark_results.languages
         domains = benchmark_results.domains
         return (
-            gr.Dropdown(langs, value=langs),
-            gr.Dropdown(task_types, value=task_types),
-            gr.Dropdown(domains, value=domains),
+            langs,
+            task_types,
+            domains,
         )
 
     @gr.on(
@@ -273,7 +273,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             if task_to_type[task_name] not in task_types:
                 continue
             res.append(task_name)
-        return gr.Dropdown(res, value=res)
+        return res
 
     @gr.on(
         inputs=[
@@ -322,7 +322,6 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             n_parameters_range=(lower, upper),
         )
         scores = benchmark_results.get_scores(languages=languages, format="long")
-        print(scores)
         return scores
 
 
