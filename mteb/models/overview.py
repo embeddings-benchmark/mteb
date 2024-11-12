@@ -8,31 +8,14 @@ from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
-from mteb.models import (
-    bge_models,
-    bm25,
-    cohere_models,
-    e5_instruct,
-    e5_models,
-    google_models,
-    gritlm_models,
-    gte_models,
-    jina_models,
-    llm2vec_models,
-    mxbai_models,
-    nomic_models,
-    openai_models,
-    promptriever_models,
-    repllama_models,
-    rerankers_custom,
-    rerankers_monot5_based,
-    ru_sentence_models,
-    salesforce_models,
-    sentence_transformers_models,
-    stella_models,
-    uae_models,
-    voyage_models,
-)
+from mteb.models import (bge_models, bm25, cohere_models, e5_instruct,
+                         e5_models, google_models, gritlm_models, gte_models,
+                         jina_models, llm2vec_models, mxbai_models,
+                         nomic_models, openai_models, promptriever_models,
+                         repllama_models, rerankers_custom,
+                         rerankers_monot5_based, ru_sentence_models,
+                         salesforce_models, sentence_transformers_models,
+                         stella_models, uae_models, voyage_models)
 
 logger = logging.getLogger(__name__)
 
@@ -96,7 +79,7 @@ def get_model_metas(
         if (frameworks is not None) and not (frameworks <= set(model_meta.framework)):
             continue
         if (use_instructions is not None) and (
-            model_meta.use_instuctions != use_instructions
+            model_meta.use_instructions != use_instructions
         ):
             continue
         lower, upper = n_parameters_range
