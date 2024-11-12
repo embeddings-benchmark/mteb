@@ -117,11 +117,6 @@ def scores_to_tables(
     joint_table = joint_table.drop(columns=["model_revision"])
     model_metas = joint_table["model_name"].map(get_model_meta)
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
-    # joint_table.insert(
-    #     1,
-    #     "Rank (Mean)",
-    #     joint_table["mean"].rank(ascending=False, method="min").astype(int),
-    # )
     joint_table.insert(
         1,
         "Max Tokens",
@@ -163,36 +158,32 @@ def scores_to_tables(
         }
     )
     joint_table.insert(0, "Rank (Borda)", joint_table.pop("borda_rank"))
-    to_format = ["Mean (Task)", "Mean (TaskType)", *mean_per_type.columns]
-    joint_table[to_format] = joint_table[to_format].map(format_scores)
-    joint_table = joint_table.style.highlight_max(
-        subset=to_format,
-        props="font-weight: bold",
-    )
-    joint_table = joint_table.format(
-        "{:.2f}", subset=joint_table.data.select_dtypes("number").columns
-    )
-    joint_table = joint_table.format("{:,}", subset=["Rank (Borda)"])
-    joint_table = joint_table.highlight_min(
-        subset=["Rank (Borda)"], props="font-weight: bold"
-    )
-    numerics = per_task.select_dtypes("number").columns
-    per_task[numerics] = per_task[numerics].map(format_scores)
-    per_task = per_task.style.highlight_max(
-        subset=numerics, props="font-weight: bold"
-    ).format("{:.2f}", subset=numerics)
-    column_widths = get_column_widths(joint_table.data)
+    column_widths = get_column_widths(joint_table)
     # overriding for model name
     column_widths[1] = "250px"
-    column_types = get_column_types(joint_table.data)
+    column_types = get_column_types(joint_table)
     # setting model name column to markdown
     column_types[1] = "markdown"
+    score_columns = ["Mean (Task)", "Mean (TaskType)", *mean_per_type.columns]
+    joint_table[score_columns] *= 100
+    joint_table_style = (
+        joint_table.style.format(
+            {**{column: "{:.2f}" for column in score_columns}, "Rank (Borda)": "{:.0f}"}
+        )
+        .highlight_min("Rank (Borda)", props="font-weight: bold")
+        .highlight_max(subset=score_columns, props="font-weight: bold")
+    )
+    task_score_columns = per_task.select_dtypes("number").columns
+    per_task[task_score_columns] *= 100
+    per_task_style = per_task.style.format(
+        "{:.2f}", subset=task_score_columns
+    ).highlight_max(subset=task_score_columns, props="font-weight: bold")
     return (
         gr.DataFrame(
-            joint_table,
-            column_widths=column_widths,
+            joint_table_style,
+            # column_widths=column_widths,
             datatype=column_types,
             wrap=True,
         ),
-        gr.DataFrame(per_task),
+        gr.DataFrame(per_task_style),
     )

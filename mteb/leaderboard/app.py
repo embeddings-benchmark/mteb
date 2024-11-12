@@ -9,6 +9,7 @@ from gradio_rangeslider import RangeSlider
 
 import mteb
 from mteb.caching import json_cache
+from mteb.leaderboard.figures import performance_size_plot
 from mteb.leaderboard.table import scores_to_tables
 
 
@@ -32,11 +33,22 @@ def update_citation(benchmark_name: str) -> str:
     return citation
 
 
-def update_description(benchmark_name: str) -> str:
+def update_description(
+    benchmark_name: str, languages: list[str], task_types: list[str], domains: list[str]
+) -> str:
     benchmark = mteb.get_benchmark(benchmark_name)
     description = f"## {benchmark.name}\n{benchmark.description}\n"
+    n_languages = len(languages)
+    n_task_types = len(task_types)
+    n_tasks = len(benchmark.tasks)
+    n_domains = len(domains)
+    description += f" - **Number of languages**: {n_languages}\n"
+    description += f" - **Number of datasets**: {n_tasks}\n"
+    description += f" - **Number of task types**: {n_task_types}\n"
+    description += f" - **Number of domains**: {n_domains}\n"
     if str(benchmark.reference) != "None":
         description += f"\n[Click for More Info]({benchmark.reference})"
+
     return description
 
 
@@ -194,14 +206,21 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             interactive=True,
                         )
     scores = gr.State(default_scores)
-    description = gr.Markdown(update_description, inputs=[benchmark_select])
+    with gr.Row():
+        with gr.Column():
+            description = gr.Markdown(
+                update_description,
+                inputs=[benchmark_select, lang_select, type_select, domain_select],
+            )
+            citation = gr.Markdown(update_citation, inputs=[benchmark_select])
+        with gr.Column():
+            plot = gr.Plot(performance_size_plot, inputs=[summary_table])
     with gr.Tab("Summary"):
         summary_table.render()
     with gr.Tab("Performance per task"):
         per_task_table.render()
     with gr.Tab("Task information"):
         task_info_table = gr.DataFrame(update_task_info, inputs=[task_select])
-    citation = gr.Markdown(update_citation, inputs=[benchmark_select])
 
     @gr.on(inputs=[scores, searchbar], outputs=[summary_table, per_task_table])
     def update_tables(scores, search_query: str):
