@@ -191,7 +191,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             [
                                 (
                                     "Should be sentence-transformers compatible",
-                                    "sbert_compatible",
+                                    "Sentence Transformers",
                                 )
                             ],
                             value=[],
