@@ -97,28 +97,28 @@ benchmark_select = gr.Dropdown(
     info="Select one of our expert-selected benchmarks from MTEB publications.",
 )
 lang_select = gr.Dropdown(
-    default_results.languages,
+    all_results.languages,
     value=default_results.languages,
     multiselect=True,
     label="Language",
     info="Select languages to include.",
 )
 type_select = gr.Dropdown(
-    default_results.task_types,
+    all_results.task_types,
     value=default_results.task_types,
     multiselect=True,
     label="Task Type",
     info="Select task types to include.",
 )
 domain_select = gr.Dropdown(
-    default_results.domains,
+    all_results.domains,
     value=default_results.domains,
     multiselect=True,
     label="Domain",
     info="Select domains to include.",
 )
 task_select = gr.Dropdown(
-    default_results.task_names,
+    all_results.task_names,
     value=default_results.task_names,
     allow_custom_value=True,
     multiselect=True,
@@ -273,7 +273,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             if task_to_type[task_name] not in task_types:
                 continue
             res.append(task_name)
-        return res
+        return gr.Dropdown(res, value=res)
 
     @gr.on(
         inputs=[
@@ -322,6 +322,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             n_parameters_range=(lower, upper),
         )
         scores = benchmark_results.get_scores(languages=languages, format="long")
+        print(scores)
         return scores
 
 
