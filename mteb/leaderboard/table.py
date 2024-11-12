@@ -30,13 +30,17 @@ def format_scores(score: float) -> float:
 
 
 def format_n_parameters(n_parameters) -> str:
-    if n_parameters is None:
+    if (n_parameters is None) or (not int(n_parameters)):
         return ""
-    n_million = int(n_parameters) // 1e6
-    n_zeros = math.log10(n_million)
+    n_thousand = int(n_parameters // 1e3)
+    if n_thousand < 1:
+        return str(int(n_parameters))
+    n_zeros = math.log10(n_thousand)
+    if n_zeros >= 6:
+        return str(n_thousand // (10**6)) + "B"
     if n_zeros >= 3:
-        return str(n_million // (10**3)) + "B"
-    return str(n_million) + "M"
+        return str(n_thousand // (10**3)) + "M"
+    return str(n_thousand) + "K"
 
 
 def split_on_capital(s: str) -> str:
