@@ -59,8 +59,6 @@ class DenseRetrievalExactSearch:
             encode_kwargs["batch_size"] = 128
         if "show_progress_bar" not in encode_kwargs:
             encode_kwargs["show_progress_bar"] = True
-        if "convert_to_tensor" not in encode_kwargs:
-            encode_kwargs["convert_to_tensor"] = True
 
         self.score_functions = {"cos_sim": cos_sim, "dot": dot_score, "cosine": cos_sim}
         self.score_function_desc = {
@@ -268,7 +266,11 @@ class DenseRetrievalExactSearch:
                 )
 
             # Handle NaN values
-            scores = torch.nan_to_num(scores, nan=-1.0)
+            is_nan = torch.isnan(scores)
+            if is_nan.sum() > 0:
+                raise ValueError(
+                    f"NaN values detected in the similarity scores: {is_nan.sum()}"
+                )
 
             # Compute top-k scores
             scores_top_k_values, scores_top_k_idx = torch.topk(
@@ -341,7 +343,11 @@ class DenseRetrievalExactSearch:
                     query_embeddings, sub_corpus_embeddings
                 )
 
-            cos_scores = torch.nan_to_num(cos_scores, nan=-1.0)
+            is_nan = torch.isnan(cos_scores)
+            if is_nan.sum() > 0:
+                raise ValueError(
+                    f"NaN values detected in the similarity scores: {is_nan.sum()}"
+                )
 
             # get top-k values
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(

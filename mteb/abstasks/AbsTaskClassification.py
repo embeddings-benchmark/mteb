@@ -46,15 +46,19 @@ class AbsTaskClassification(AbsTask):
     must contain the following columns:
         text: str
         label: int
+
+    Attributes:
+       samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
+
     """
 
     abstask_prompt = "Classify user passages."
+    samples_per_label: int = 8
 
     def __init__(
         self,
         method: str = "logReg",
         n_experiments: int | None = None,
-        samples_per_label: int | None = None,
         k: int = 3,
         **kwargs,
     ):
@@ -66,11 +70,6 @@ class AbsTaskClassification(AbsTask):
             n_experiments
             if n_experiments is not None
             else self.metadata_dict.get("n_experiments", 10)
-        )
-        self.samples_per_label: int = (  # type: ignore
-            samples_per_label
-            if samples_per_label is not None
-            else self.metadata_dict.get("samples_per_label", 8)
         )
 
         # kNN parameters
@@ -194,7 +193,8 @@ class AbsTaskClassification(AbsTask):
         y_sampled = []
         if idxs is None:
             idxs = np.arange(len(y))
-        np.random.shuffle(idxs)
+        rng_state = np.random.default_rng(self.seed)
+        rng_state.shuffle(idxs)
         label_counter = defaultdict(int)
         for i in idxs:
             if label_counter[y[i]] < samples_per_label:

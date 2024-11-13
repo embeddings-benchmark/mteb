@@ -13,11 +13,26 @@ from datasets import load_dataset
 from packaging.version import Version
 from sklearn.metrics import auc
 
+
+logger = logging.getLogger(__name__)
+
+
 try:
     # speeds up computation if available
     torch.set_float32_matmul_precision("high")
+    logger.info("Setting torch float32 matmul precision to high for a speedup")
 except Exception:
     pass
+
+
+def use_torch_compile():
+    gpu_ok = False
+    if torch.cuda.is_available():
+        device_cap = torch.cuda.get_device_capability()
+        if device_cap in ((7, 0), (8, 0), (9, 0)):
+            gpu_ok = True
+
+    return gpu_ok
 
 
 def cos_sim(a: torch.Tensor, b: torch.Tensor):
@@ -47,7 +62,7 @@ def cos_sim(a: torch.Tensor, b: torch.Tensor):
         return torch.mm(a_norm, b_norm.transpose(0, 1))
 
     # Compile the core function once
-    if hasattr(torch, "compile"):  # Check if torch.compile is available
+    if hasattr(torch, "compile") and use_torch_compile():  # Check if torch.compile is available
         _cos_sim_core_compiled = torch.compile(_cos_sim_core)
         return _cos_sim_core_compiled(a, b)
     else:
@@ -74,7 +89,7 @@ def dot_score(a: torch.Tensor, b: torch.Tensor):
         return torch.mm(a_tensor, b_tensor.transpose(0, 1))
 
     # Compile the core function once
-    if hasattr(torch, "compile"):  # Check if torch.compile is available
+    if hasattr(torch, "compile") and use_torch_compile():  # Check if torch.compile is available
         _dot_score_core_compiled = torch.compile(_dot_score_core)
         return _dot_score_core_compiled(a, b)
     else:
