@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import math
 import re
+from collections import defaultdict
 
 import gradio as gr
 import numpy as np
@@ -26,17 +27,21 @@ def get_borda_rank(score_table: pd.DataFrame) -> pd.Series:
 
 
 def format_scores(score: float) -> float:
-    return score * 100
+    return round(score * 100, 2)
 
 
 def format_n_parameters(n_parameters) -> str:
-    if n_parameters is None:
+    if (n_parameters is None) or (not int(n_parameters)):
         return ""
-    n_million = int(n_parameters) // 1e6
-    n_zeros = math.log10(n_million)
+    n_thousand = int(n_parameters // 1e3)
+    if n_thousand < 1:
+        return str(int(n_parameters))
+    n_zeros = math.log10(n_thousand)
+    if n_zeros >= 6:
+        return str(n_thousand // (10**6)) + "B"
     if n_zeros >= 3:
-        return str(n_million // (10**3)) + "B"
-    return str(n_million) + "M"
+        return str(n_thousand // (10**3)) + "M"
+    return str(n_thousand) + "K"
 
 
 def split_on_capital(s: str) -> str:
@@ -70,6 +75,29 @@ def get_column_types(df: pd.DataFrame) -> list[str]:
     return types
 
 
+def get_means_per_types(df: pd.DataFrame) -> pd.DataFrame:
+    task_names_per_type = defaultdict(list)
+    for task_name, task_type in zip(df["task_name"], df["task_type"]):
+        task_names_per_type[task_type].append(task_name)
+    groups = df.groupby(["model_name", "model_revision"])
+    records = []
+    for (model_name, model_revision), group_data in groups:
+        name_to_score = dict(zip(group_data["task_name"], group_data["score"]))
+        for task_type, task_names in task_names_per_type.items():
+            type_mean = np.mean(
+                [name_to_score.get(task_name, np.nan) for task_name in task_names]
+            )
+            records.append(
+                dict(
+                    model_name=model_name,
+                    model_revision=model_revision,
+                    task_type=task_type,
+                    score=type_mean,
+                )
+            )
+    return pd.DataFrame.from_records(records)
+
+
 def scores_to_tables(
     scores_long: list[dict], search_query: str | None = None
 ) -> tuple[gr.DataFrame, gr.DataFrame]:
@@ -79,16 +107,7 @@ def scores_to_tables(
     data["task_type"] = data["task_name"].map(
         lambda task_name: get_task(task_name).metadata.type
     )
-    mean_per_type = (
-        data.groupby(["model_name", "model_revision", "task_type"])[["score"]]
-        .agg(np.nanmean)
-        .reset_index()
-    )
-    typed_mean = (
-        mean_per_type.groupby(["model_name", "model_revision"])[["score"]]
-        .agg(np.nanmean)
-        .rename(columns={"score": "mean_by_task_type"})
-    )
+    mean_per_type = get_means_per_types(data)
     mean_per_type = mean_per_type.pivot(
         index=["model_name", "model_revision"], columns="task_type", values="score"
     )
@@ -98,20 +117,18 @@ def scores_to_tables(
     per_task = data.pivot(
         index=["model_name", "model_revision"], columns="task_name", values="score"
     )
-    to_remove = per_task.isna().any(axis="columns")
+    to_remove = per_task.isna().all(axis="columns")
     if search_query:
         names = per_task.index.get_level_values("model_name")
         names = pd.Series(names, index=per_task.index)
         to_remove |= ~names.str.contains(search_query, regex=True)
-    overall_mean = (
-        data.groupby(["model_name", "model_revision"])[["score"]]
-        .agg(np.nanmean)
-        .rename(columns={"score": "mean"})
-    )
+    typed_mean = mean_per_type.mean(skipna=False, axis=1)
+    overall_mean = per_task.mean(skipna=False, axis=1)
+    joint_table = mean_per_type.copy()
     per_task = per_task[~to_remove]
-    mean_per_type = mean_per_type[~to_remove]
-    overall_mean = overall_mean[~to_remove]
-    joint_table = overall_mean.join([typed_mean, mean_per_type])
+    joint_table = joint_table[~to_remove]
+    joint_table.insert(0, "mean", overall_mean)
+    joint_table.insert(1, "mean_by_task_type", typed_mean)
     joint_table["borda_rank"] = get_borda_rank(per_task)
     joint_table = joint_table.reset_index()
     joint_table = joint_table.drop(columns=["model_revision"])
@@ -132,7 +149,7 @@ def scores_to_tables(
         "Number of Parameters",
         model_metas.map(lambda m: format_n_parameters(m.n_parameters)),
     )
-    joint_table = joint_table.sort_values("mean", ascending=False)
+    joint_table = joint_table.sort_values("borda_rank", ascending=True)
     # Removing HF organization from model
     joint_table["model_name"] = joint_table["model_name"].map(
         lambda name: name.split("/")[-1]
@@ -165,7 +182,7 @@ def scores_to_tables(
     # setting model name column to markdown
     column_types[1] = "markdown"
     score_columns = ["Mean (Task)", "Mean (TaskType)", *mean_per_type.columns]
-    joint_table[score_columns] *= 100
+    joint_table[score_columns] = joint_table[score_columns].map(format_scores)
     joint_table_style = (
         joint_table.style.format(
             {**{column: "{:.2f}" for column in score_columns}, "Rank (Borda)": "{:.0f}"}

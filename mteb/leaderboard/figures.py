@@ -16,6 +16,13 @@ def parse_model_name(name: str) -> str:
     return name[1:]
 
 
+def parse_float(value) -> float:
+    try:
+        return float(value)
+    except ValueError:
+        return np.nan
+
+
 models_to_annotate = [
     "all-MiniLM-L6-v2",
     "GritLM-7B",
@@ -32,6 +39,10 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df["Embedding Dimensions"] = df["Embedding Dimensions"].map(int)
     df["Max Tokens"] = df["Max Tokens"].map(int)
     df["Log(Tokens)"] = np.log10(df["Max Tokens"])
+    df["Mean (Task)"] = df["Mean (Task)"].map(parse_float)
+    df = df.dropna(subset=["Mean (Task)", "Number of Parameters"])
+    if not len(df.index):
+        return go.Figure()
     min_score, max_score = df["Mean (Task)"].min(), df["Mean (Task)"].max()
     fig = px.scatter(
         df,

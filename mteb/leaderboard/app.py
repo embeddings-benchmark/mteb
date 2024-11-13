@@ -97,28 +97,28 @@ benchmark_select = gr.Dropdown(
     info="Select one of our expert-selected benchmarks from MTEB publications.",
 )
 lang_select = gr.Dropdown(
-    default_results.languages,
+    all_results.languages,
     value=default_results.languages,
     multiselect=True,
     label="Language",
     info="Select languages to include.",
 )
 type_select = gr.Dropdown(
-    default_results.task_types,
+    all_results.task_types,
     value=default_results.task_types,
     multiselect=True,
     label="Task Type",
     info="Select task types to include.",
 )
 domain_select = gr.Dropdown(
-    default_results.domains,
+    all_results.domains,
     value=default_results.domains,
     multiselect=True,
     label="Domain",
     info="Select domains to include.",
 )
 task_select = gr.Dropdown(
-    default_results.task_names,
+    all_results.task_names,
     value=default_results.task_names,
     allow_custom_value=True,
     multiselect=True,
@@ -191,7 +191,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             [
                                 (
                                     "Should be sentence-transformers compatible",
-                                    "sbert_compatible",
+                                    "Sentence Transformers",
                                 )
                             ],
                             value=[],
@@ -239,10 +239,13 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     def on_select_benchmark(benchmark_name):
         benchmark = mteb.get_benchmark(benchmark_name)
         benchmark_results = benchmark.load_results(base_results=all_results)
+        task_types = benchmark_results.task_types
+        langs = benchmark_results.languages
+        domains = benchmark_results.domains
         return (
-            benchmark_results.languages,
-            benchmark_results.task_types,
-            benchmark_results.domains,
+            langs,
+            task_types,
+            domains,
         )
 
     @gr.on(
