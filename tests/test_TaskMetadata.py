@@ -4,6 +4,7 @@ import logging
 
 import pytest
 
+from mteb import AbsTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.overview import get_tasks
 
@@ -525,11 +526,11 @@ def test_disallow_trust_remote_code_in_new_datasets():
             ), f"Dataset {task.metadata.name} should not trust remote code"
 
 
-def test_empy_descriptive_stat_in_new_datasets():
+@pytest.mark.parametrize("task", get_tasks())
+def test_empy_descriptive_stat_in_new_datasets(task: AbsTask):
     # DON'T ADD NEW DATASETS TO THIS LIST
     # THIS IS ONLY INTENDED FOR HISTORIC DATASETS
     exceptions = [
-        "TbilisiCityHallBitextMining",
         "BibleNLPBitextMining",
         "BUCC.v2",
         "DiaBlaBitextMining",
@@ -1085,13 +1086,15 @@ def test_empy_descriptive_stat_in_new_datasets():
     ]
 
     assert (
-        553 == len(exceptions)
+        552 == len(exceptions)
     ), "The number of exceptions has changed. Please do not add new datasets to this list."
 
-    for task in get_tasks():
-        if task.metadata.name.startswith("Mock"):
-            continue
-        if task.metadata.descriptive_stats is None:
-            assert (
-                task.metadata.name in exceptions
-            ), f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask.calculate_metadata_metrics()`"
+    if task.metadata.name.startswith("Mock"):
+        return
+
+    if task.metadata.name in exceptions:
+        assert task.metadata.descriptive_stats is None, f"Dataset {task.metadata.name} should not have descriptive stats"
+    else:
+        assert (
+            task.metadata.descriptive_stats is not None
+        ), f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask().calculate_metadata_metrics()`"

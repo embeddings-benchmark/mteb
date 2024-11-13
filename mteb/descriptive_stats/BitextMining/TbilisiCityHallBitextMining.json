@@ -1,0 +1,22 @@
+{
+    "test": {
+        "average_sentence1_length": 78.59148351648352,
+        "average_sentence2_length": 78.59148351648352,
+        "num_samples": 3640,
+        "number_of_characters": 572146,
+        "hf_subset_descriptive_stats": {
+            "kat_Geor-eng_Latn": {
+                "average_sentence1_length": 76.06593406593407,
+                "average_sentence2_length": 81.11703296703297,
+                "num_samples": 1820,
+                "number_of_characters": 286073
+            },
+            "eng_Latn-kat_Geor": {
+                "average_sentence1_length": 81.11703296703297,
+                "average_sentence2_length": 76.06593406593407,
+                "num_samples": 1820,
+                "number_of_characters": 286073
+            }
+        }
+    }
+}
