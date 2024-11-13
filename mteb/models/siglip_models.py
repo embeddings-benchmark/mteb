@@ -40,11 +40,13 @@ class SiglipModelWrapper:
             for i in tqdm(range(0, len(texts), batch_size)):
                 batch_texts = texts[i : i + batch_size]
                 inputs = self.processor(
-                    text=batch_texts, return_tensors="pt", padding=True, truncation=True
+                    text=batch_texts,
+                    return_tensors="pt",
+                    padding="max_length",
+                    truncation=True,
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.model.get_text_features(**inputs)
-                text_outputs = text_outputs / text_outputs.norm(dim=-1, keepdim=True)
                 all_text_embeddings.append(text_outputs.cpu())
 
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
@@ -63,22 +65,22 @@ class SiglipModelWrapper:
                     )
                     inputs = {k: v.to(self.device) for k, v in inputs.items()}
                     image_outputs = self.model.get_image_features(**inputs)
-                    image_outputs = image_outputs / image_outputs.norm(
-                        dim=-1, keepdim=True
-                    )
                     all_image_embeddings.append(image_outputs.cpu())
         else:
             with torch.no_grad():
                 for i in tqdm(range(0, len(images), batch_size)):
                     batch_images = images[i : i + batch_size]
+                    batch_images = [
+                        img.convert("RGB")
+                        if isinstance(img, Image.Image) and img.mode != "RGB"
+                        else img
+                        for img in batch_images
+                    ]
                     inputs = self.processor(
                         images=batch_images, return_tensors="pt", padding=True
                     )
                     inputs = {k: v.to(self.device) for k, v in inputs.items()}
                     image_outputs = self.model.get_image_features(**inputs)
-                    image_outputs = image_outputs / image_outputs.norm(
-                        dim=-1, keepdim=True
-                    )
                     all_image_embeddings.append(image_outputs.cpu())
 
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
