@@ -13,7 +13,6 @@ from datasets import load_dataset
 from packaging.version import Version
 from sklearn.metrics import auc
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -62,7 +61,9 @@ def cos_sim(a: torch.Tensor, b: torch.Tensor):
         return torch.mm(a_norm, b_norm.transpose(0, 1))
 
     # Compile the core function once
-    if hasattr(torch, "compile") and use_torch_compile():  # Check if torch.compile is available
+    if (
+        hasattr(torch, "compile") and use_torch_compile()
+    ):  # Check if torch.compile is available
         _cos_sim_core_compiled = torch.compile(_cos_sim_core)
         return _cos_sim_core_compiled(a, b)
     else:
@@ -89,7 +90,9 @@ def dot_score(a: torch.Tensor, b: torch.Tensor):
         return torch.mm(a_tensor, b_tensor.transpose(0, 1))
 
     # Compile the core function once
-    if hasattr(torch, "compile") and use_torch_compile():  # Check if torch.compile is available
+    if (
+        hasattr(torch, "compile") and use_torch_compile()
+    ):  # Check if torch.compile is available
         _dot_score_core_compiled = torch.compile(_dot_score_core)
         return _dot_score_core_compiled(a, b)
     else:

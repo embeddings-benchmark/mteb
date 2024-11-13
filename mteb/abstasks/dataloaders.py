@@ -99,7 +99,9 @@ class HFDataLoader:
         dict[str, str | list[str]],  # queries
         dict[str, dict[str, int]],  # qrels/relevant_docs
         dict[str, str | list[str]] | None,  # instructions (optional)
-        dict[str, list[str]] | dict[str, dict[str, float]] | None,  # top_ranked (optional)
+        dict[str, list[str]]
+        | dict[str, dict[str, float]]
+        | None,  # top_ranked (optional)
     ]:
         if not self.hf_repo:
             self.qrels_file = os.path.join(self.qrels_folder, split + ".tsv")
