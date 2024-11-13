@@ -188,12 +188,6 @@ class DenseRetrievalExactSearch:
             cos_scores = self.score_functions[score_function](
                 query_embeddings, sub_corpus_embeddings
             )
-            is_nan = torch.isnan(cos_scores)
-            if is_nan.sum() > 0:
-                logger.warning(
-                    f"Found {is_nan.sum()} NaN values in the similarity scores. Replacing NaN values with -1."
-                )
-            cos_scores[is_nan] = -1
 
             # Get top-k values
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
