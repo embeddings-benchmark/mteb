@@ -343,12 +343,6 @@ class DenseRetrievalExactSearch:
                     query_embeddings, sub_corpus_embeddings
                 )
 
-            is_nan = torch.isnan(cos_scores)
-            if is_nan.sum() > 0:
-                raise ValueError(
-                    f"NaN values detected in the similarity scores: {is_nan.sum()}"
-                )
-
             # get top-k values
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
                 cos_scores,
