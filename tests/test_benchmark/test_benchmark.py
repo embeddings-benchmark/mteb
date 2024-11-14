@@ -23,8 +23,8 @@ from .mock_models import (
     MockTorchEncoder,
 )
 from .mock_tasks import (
-    MockInstructionRetrival,
-    MockMultilingualInstructionRetrival,
+    MockInstructionRetrieval,
+    MockMultilingualInstructionRetrieval,
     MockMultilingualRerankingTask,
     MockMultilingualRetrievalTask,
     MockRerankingTask,
@@ -268,8 +268,8 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     [
         MockRerankingTask(),
         MockMultilingualRerankingTask(),
-        MockInstructionRetrival(),
-        MockMultilingualInstructionRetrival(),
+        MockInstructionRetrieval(),
+        MockMultilingualInstructionRetrieval(),
         MockRetrievalTask(),
         MockMultilingualRetrievalTask(),
     ],

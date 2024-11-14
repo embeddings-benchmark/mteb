@@ -46,6 +46,7 @@ def test_reproducibility_workflow(task_name: str, model_name: str, model_revisio
         "STS",
         "Summarization",
         "InstructionRetrieval",
+        "InstructionReranking",
         "Speed",
     ],
 )

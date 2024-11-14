@@ -26,7 +26,7 @@ FRAMEWORKS = Literal[
     "API",
     "Tevatron",
 ]
-DISTANCE_METRICS = Literal["cosine"]
+DISTANCE_METRICS = Literal["cosine", "dot"]
 
 
 def sentence_transformers_loader(

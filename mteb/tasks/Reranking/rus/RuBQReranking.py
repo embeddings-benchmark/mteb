@@ -19,7 +19,7 @@ class RuBQReranking(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2001-01-01", "2021-01-01"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=[],

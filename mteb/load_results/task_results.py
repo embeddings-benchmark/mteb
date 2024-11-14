@@ -156,9 +156,9 @@ class TaskResult(BaseModel):
 
     dataset_revision: str
     task_name: str
-    mteb_version: str
+    mteb_version: str | None
     scores: dict[Split, list[ScoresDict]]
-    evaluation_time: float
+    evaluation_time: float | None
     kg_co2_emissions: float | None = None
 
     @classmethod
@@ -289,6 +289,9 @@ class TaskResult(BaseModel):
                 raise ValueError(
                     f"Error loading TaskResult from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
                 )
+
+        if data["mteb_version"] is None:
+            data.pop("mteb_version")
 
         pre_1_11_load = (
             (
