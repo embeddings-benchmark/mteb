@@ -11,7 +11,7 @@ class Flickr30kI2TRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://www.semanticscholar.org/paper/From-image-descriptions-to-visual-denotations%3A-New-Young-Lai/44040913380206991b1991daf1192942e038fe31",
         dataset={
             "path": "JamieSJS/flickr30k",
-            "revision": "a4cf34ac79215f9e2cd6a10342d84f606fc41cc3",
+            "revision": "5e89d348fc1cb7be65c80f5a7325236ed0ec572f",
         },
         type="Any2AnyRetrieval",
         category="i2t",
