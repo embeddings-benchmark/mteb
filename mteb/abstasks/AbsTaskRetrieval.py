@@ -40,11 +40,19 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
 
         min_relevant_docs_per_query: Minimum number of relevant documents per query
         average_relevant_docs_per_query: Average number of relevant documents per query
-        average_instruction_length: Average length of instructions
-        num_instructions: Number of instructions
-        average_top_ranked_per_query: Average number of top ranked documents per query
         max_relevant_docs_per_query: Maximum number of relevant documents per query
         unique_relevant_docs: Number of unique relevant documents
+
+
+        num_instructions: Number of instructions
+        min_instruction_length: Minimum length of instructions
+        average_instruction_length: Average length of instructions
+        max_instruction_length: Maximum length of instructions
+        unique_instructions: Number of unique instructions
+
+        min_top_ranked_per_query: Minimum number of top ranked documents per query
+        average_top_ranked_per_query: Average number of top ranked documents per query
+        max_top_ranked_per_query: Maximum number of relevant documents per query
     """
 
     num_samples: int
@@ -64,13 +72,20 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
 
     min_relevant_docs_per_query: int
     average_relevant_docs_per_query: float
-    # these are for datasets with instructions
-    average_instruction_length: float
-    num_instructions: int
-    # this is for datasets that do reranking
-    average_top_ranked_per_query: float
-    max_relevant_docs_per_query: int
+    max_relevant_docs_per_query: float
     unique_relevant_docs: int
+
+    # these are for datasets with instructions
+    num_instructions: int | None
+    min_instruction_length: int | None
+    average_instruction_length: float | None
+    max_instruction_length: float | None
+    unique_instructions: int | None
+
+    # this is for datasets that do reranking
+    min_top_ranked_per_query: int | None
+    average_top_ranked_per_query: float | None
+    max_top_ranked_per_query: int | None
 
 
 class AbsTaskRetrieval(AbsTask):
@@ -303,6 +318,8 @@ class AbsTaskRetrieval(AbsTask):
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> RetrievalDescriptiveStatistics:
+        top_ranked = None
+        instructions = None
         if hf_subset and hf_subset in self.queries:
             queries = self.queries[hf_subset][split]
             corpus = self.corpus[hf_subset][split]
@@ -357,22 +374,32 @@ class AbsTaskRetrieval(AbsTask):
         qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if num_queries else 0
 
         if self.instructions is not None:
-            total_instructions_len = sum(
-                [len(instruction) for instruction in instructions.values()]
-            )
+            instructions_len = [
+                len(instruction) for instruction in instructions.values()
+            ]
             num_instructions = len(instructions)
+            average_instruction_length = sum(instructions_len)
+            min_instruction_length = min(instructions_len)
+            max_instruction_length = max(instructions_len)
+            unique_instructions = len(set(instructions))
         else:
-            total_instructions_len = 0
-            num_instructions = 0
+            num_instructions = None
+            average_instruction_length = None
+            min_instruction_length = None
+            max_instruction_length = None
+            unique_instructions = None
 
         if self.top_ranked is not None:
             top_ranked_per_query = (
-                sum(len(docs) for docs in top_ranked.values()) / num_queries
-                if num_queries
-                else 0
+                [len(docs) for docs in top_ranked.values()] if num_queries else None
             )
+            min_top_ranked_per_query = min(top_ranked_per_query)
+            average_top_ranked_per_query = sum(top_ranked_per_query) / num_queries
+            max_top_ranked_per_query = max(top_ranked_per_query)
         else:
-            top_ranked_per_query = 0
+            min_top_ranked_per_query = None
+            average_top_ranked_per_query = None
+            max_top_ranked_per_query = None
 
         return RetrievalDescriptiveStatistics(
             number_of_characters=sum(query_len) + sum(doc_len),
@@ -391,11 +418,14 @@ class AbsTaskRetrieval(AbsTask):
             average_relevant_docs_per_query=qrels_per_doc,
             max_relevant_docs_per_query=max(qrels_lengths),
             unique_relevant_docs=unique_qrels,
-            average_instruction_length=total_instructions_len / num_instructions
-            if num_instructions
-            else 0,
             num_instructions=num_instructions,
-            average_top_ranked_per_query=top_ranked_per_query,
+            min_instruction_length=min_instruction_length,
+            average_instruction_length=average_instruction_length,
+            max_instruction_length=max_instruction_length,
+            unique_instructions=unique_instructions,
+            min_top_ranked_per_query=min_top_ranked_per_query,
+            average_top_ranked_per_query=average_top_ranked_per_query,
+            max_top_ranked_per_query=max_top_ranked_per_query,
         )
 
 

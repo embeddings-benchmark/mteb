@@ -255,6 +255,7 @@ class AbsTaskClusteringFast(AbsTask):
             min_text_length=min(text_len),
             average_text_length=total_text_len / len(sentences),
             max_text_length=max(text_len),
+            unique_texts=len(set(text_len)),
             min_labels_per_text=min(label_counter.values()),
             average_labels_per_text=len(total_labels) / len(sentences),
             max_labels_per_text=max(label_counter.values()),

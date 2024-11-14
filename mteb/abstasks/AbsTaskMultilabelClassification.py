@@ -47,7 +47,7 @@ class MultilabelClassificationDescriptiveStatistics(DescriptiveStatistics):
     Attributes:
         num_samples: number of samples in the dataset.
         number_of_characters: Total number of symbols in the dataset.
-        number_texts_in_train: Number of texts in the train split
+        number_texts_intersect_with_train: Number of texts in the train split
 
         min_text_length: Minimum length of text
         average_text_length: Average length of text
@@ -63,7 +63,7 @@ class MultilabelClassificationDescriptiveStatistics(DescriptiveStatistics):
 
     num_samples: int
     number_of_characters: int
-    number_texts_in_train: int | None
+    number_texts_intersect_with_train: int | None
 
     min_text_length: int
     average_text_length: float
@@ -281,7 +281,7 @@ class AbsTaskMultilabelClassification(AbsTask):
         return MultilabelClassificationDescriptiveStatistics(
             num_samples=len(text),
             number_of_characters=total_text_len,
-            number_texts_in_train=num_texts_in_train,
+            number_texts_intersect_with_train=num_texts_in_train,
             min_text_length=min(text_len),
             average_text_length=total_text_len / len(text),
             max_text_length=max(text_len),

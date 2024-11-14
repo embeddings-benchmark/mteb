@@ -17,6 +17,7 @@ class STSDescriptiveStatistics(DescriptiveStatistics):
     Attributes:
         num_samples: number of samples in the dataset.
         number_of_characters: Total number of symbols in the dataset.
+        unique_pairs: Number of unique pairs
 
         min_sentence1_length: Minimum length of sentence1
         average_sentence1_len: Average length of sentence1
@@ -33,6 +34,7 @@ class STSDescriptiveStatistics(DescriptiveStatistics):
 
     num_samples: int
     number_of_characters: int
+    unique_pairs: int
 
     min_sentence1_length: int
     average_sentence1_len: float
@@ -121,6 +123,7 @@ class AbsTaskSTS(AbsTask):
         return STSDescriptiveStatistics(
             num_samples=len(sentence1),
             number_of_characters=total_sentence1_len + total_sentence2_len,
+            unique_pairs=len(set(zip(sentence1, sentence2))),
             min_sentence1_length=min(sentence1_len),
             average_sentence1_len=total_sentence1_len / len(sentence1),
             max_sentence1_length=max(sentence1_len),
