@@ -1,0 +1,43 @@
+{
+    "test": {
+        "num_samples": 3640,
+        "number_of_characters": 572146,
+        "unique_pairs": 3640,
+        "min_sentence1_length": 13,
+        "average_sentence1_length": 78.59148351648352,
+        "max_sentence1_length": 203,
+        "unique_sentence1": 3636,
+        "min_sentence2_length": 13,
+        "average_sentence2_length": 78.59148351648352,
+        "max_sentence2_length": 203,
+        "unique_sentence2": 3636,
+        "hf_subset_descriptive_stats": {
+            "kat_Geor-eng_Latn": {
+                "num_samples": 1820,
+                "number_of_characters": 286073,
+                "unique_pairs": 1820,
+                "min_sentence1_length": 30,
+                "average_sentence1_length": 76.06593406593407,
+                "max_sentence1_length": 189,
+                "unique_sentence1": 1820,
+                "min_sentence2_length": 13,
+                "average_sentence2_length": 81.11703296703297,
+                "max_sentence2_length": 203,
+                "unique_sentence2": 1816
+            },
+            "eng_Latn-kat_Geor": {
+                "num_samples": 1820,
+                "number_of_characters": 286073,
+                "unique_pairs": 1820,
+                "min_sentence1_length": 13,
+                "average_sentence1_length": 81.11703296703297,
+                "max_sentence1_length": 203,
+                "unique_sentence1": 1816,
+                "min_sentence2_length": 30,
+                "average_sentence2_length": 76.06593406593407,
+                "max_sentence2_length": 189,
+                "unique_sentence2": 1820
+            }
+        }
+    }
+}
