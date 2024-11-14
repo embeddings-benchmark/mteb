@@ -1093,7 +1093,9 @@ def test_empy_descriptive_stat_in_new_datasets(task: AbsTask):
         return
 
     if task.metadata.name in exceptions:
-        assert task.metadata.descriptive_stats is None, f"Dataset {task.metadata.name} should not have descriptive stats"
+        assert (
+            task.metadata.descriptive_stats is None
+        ), f"Dataset {task.metadata.name} should not have descriptive stats"
     else:
         assert (
             task.metadata.descriptive_stats is not None
