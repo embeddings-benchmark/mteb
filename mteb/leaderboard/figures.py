@@ -12,6 +12,10 @@ def parse_n_params(text: str) -> int:
 
 
 def parse_model_name(name: str) -> str:
+    if name is None:
+        return ""
+    if "]" not in name:
+        return name
     name, _ = name.split("]")
     return name[1:]
 
@@ -36,8 +40,8 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df["Number of Parameters"] = df["Number of Parameters"].map(parse_n_params)
     df["Model"] = df["Model"].map(parse_model_name)
     df["model_text"] = df["Model"].where(df["Model"].isin(models_to_annotate), "")
-    df["Embedding Dimensions"] = df["Embedding Dimensions"].map(int)
-    df["Max Tokens"] = df["Max Tokens"].map(int)
+    df["Embedding Dimensions"] = df["Embedding Dimensions"].map(parse_float)
+    df["Max Tokens"] = df["Max Tokens"].map(parse_float)
     df["Log(Tokens)"] = np.log10(df["Max Tokens"])
     df["Mean (Task)"] = df["Mean (Task)"].map(parse_float)
     df = df.dropna(subset=["Mean (Task)", "Number of Parameters"])
