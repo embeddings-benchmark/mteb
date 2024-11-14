@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -68,7 +70,7 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
         hover_name="Model",
     )
     fig.update_layout(
-        coloraxis_colorbar=dict(
+        coloraxis_colorbar=dict(  # noqa
             title="Max Tokens",
             tickvals=[2, 3, 4, 5],
             ticktext=[
@@ -78,7 +80,7 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
                 "100K",
             ],
         ),
-        hoverlabel=dict(
+        hoverlabel=dict(  # noqa
             bgcolor="white",
             font_size=16,
         ),
@@ -87,7 +89,7 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
         textposition="top center",
     )
     fig.update_layout(
-        font=dict(size=16, color="black"),
-        margin=dict(b=20, t=10, l=20, r=10),
+        font=dict(size=16, color="black"),  # noqa
+        margin=dict(b=20, t=10, l=20, r=10),  # noqa
     )
     return fig
