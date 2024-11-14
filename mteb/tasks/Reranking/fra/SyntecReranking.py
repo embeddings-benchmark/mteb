@@ -21,7 +21,7 @@ class SyntecReranking(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2022-12-01", "2022-12-02"),
         domains=["Legal", "Written"],
         task_subtypes=None,
@@ -63,5 +63,8 @@ class SyntecReranking(AbsTaskReranking):
         self.dataset = datasets.DatasetDict({"test": self.dataset})
 
         self.dataset_transform()
+
+        # now convert to the new format
+        self.transform_old_dataset_format(self.dataset)
 
         self.data_loaded = True

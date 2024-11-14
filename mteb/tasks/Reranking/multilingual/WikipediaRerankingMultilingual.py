@@ -25,7 +25,7 @@ _EVAL_LANGS = {
 }
 
 
-class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
+class WikipediaRerankingMultilingual(AbsTaskReranking, MultilingualTask):
     metadata = TaskMetadata(
         name="WikipediaRerankingMultilingual",
         description="The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.",
@@ -39,7 +39,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_EVAL_LANGS,
-        main_score="map",
+        main_score="map_at_1000",
         date=("2023-11-01", "2024-05-15"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=[],

@@ -10,7 +10,7 @@ import pytest
 import mteb
 from mteb import MTEB
 from mteb.abstasks import AbsTask
-from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
+from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
 from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
@@ -34,7 +34,7 @@ def test_load_data(
     # TODO: We skip because this load_data is completely different.
     if (
         isinstance(task, AbsTaskRetrieval)
-        or isinstance(task, AbsTaskInstructionRetrieval)
+        or isinstance(task, AbsTaskReranking)
         or isinstance(task, MultiSubsetLoader)
         or isinstance(task, AbsTaskSpeedTask)
     ):
