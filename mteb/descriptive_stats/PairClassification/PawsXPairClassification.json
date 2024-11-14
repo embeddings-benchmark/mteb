@@ -2,8 +2,14 @@
     "test": {
         "num_samples": 14000,
         "number_of_characters": 2551922,
-        "avg_sentence1_len": 91.17892857142857,
-        "avg_sentence2_len": 91.10121428571429,
+        "min_sentence1_length": 2,
+        "avg_sentence1_length": 91.17892857142857,
+        "max_sentence1_length": 268,
+        "unique_sentence1": 13404,
+        "min_sentence2_length": 2,
+        "avg_sentence2_length": 91.10121428571429,
+        "max_sentence2_length": 247,
+        "unique_sentence2": 13462,
         "unique_labels": 2,
         "labels": {
             "1": {
@@ -17,8 +23,14 @@
             "de": {
                 "num_samples": 2000,
                 "number_of_characters": 478034,
-                "avg_sentence1_len": 119.7815,
-                "avg_sentence2_len": 119.2355,
+                "min_sentence1_length": 2,
+                "avg_sentence1_length": 119.7815,
+                "max_sentence1_length": 268,
+                "unique_sentence1": 1934,
+                "min_sentence2_length": 2,
+                "avg_sentence2_length": 119.2355,
+                "max_sentence2_length": 235,
+                "unique_sentence2": 1938,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -32,8 +44,14 @@
             "en": {
                 "num_samples": 2000,
                 "number_of_characters": 454362,
-                "avg_sentence1_len": 113.7575,
-                "avg_sentence2_len": 113.4235,
+                "min_sentence1_length": 25,
+                "avg_sentence1_length": 113.7575,
+                "max_sentence1_length": 209,
+                "unique_sentence1": 1761,
+                "min_sentence2_length": 25,
+                "avg_sentence2_length": 113.4235,
+                "max_sentence2_length": 209,
+                "unique_sentence2": 1800,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -47,8 +65,14 @@
             "es": {
                 "num_samples": 2000,
                 "number_of_characters": 471226,
-                "avg_sentence1_len": 117.815,
-                "avg_sentence2_len": 117.798,
+                "min_sentence1_length": 2,
+                "avg_sentence1_length": 117.815,
+                "max_sentence1_length": 226,
+                "unique_sentence1": 1955,
+                "min_sentence2_length": 22,
+                "avg_sentence2_length": 117.798,
+                "max_sentence2_length": 233,
+                "unique_sentence2": 1959,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -62,8 +86,14 @@
             "fr": {
                 "num_samples": 2000,
                 "number_of_characters": 480033,
-                "avg_sentence1_len": 120.028,
-                "avg_sentence2_len": 119.9885,
+                "min_sentence1_length": 2,
+                "avg_sentence1_length": 120.028,
+                "max_sentence1_length": 238,
+                "unique_sentence1": 1954,
+                "min_sentence2_length": 2,
+                "avg_sentence2_length": 119.9885,
+                "max_sentence2_length": 247,
+                "unique_sentence2": 1953,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -77,8 +107,14 @@
             "ja": {
                 "num_samples": 2000,
                 "number_of_characters": 235106,
-                "avg_sentence1_len": 58.678,
-                "avg_sentence2_len": 58.875,
+                "min_sentence1_length": 2,
+                "avg_sentence1_length": 58.678,
+                "max_sentence1_length": 192,
+                "unique_sentence1": 1944,
+                "min_sentence2_length": 2,
+                "avg_sentence2_length": 58.875,
+                "max_sentence2_length": 198,
+                "unique_sentence2": 1941,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -92,8 +128,14 @@
             "ko": {
                 "num_samples": 2000,
                 "number_of_characters": 260149,
-                "avg_sentence1_len": 64.9605,
-                "avg_sentence2_len": 65.114,
+                "min_sentence1_length": 2,
+                "avg_sentence1_length": 64.9605,
+                "max_sentence1_length": 153,
+                "unique_sentence1": 1954,
+                "min_sentence2_length": 2,
+                "avg_sentence2_length": 65.114,
+                "max_sentence2_length": 159,
+                "unique_sentence2": 1969,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -107,8 +149,14 @@
             "zh": {
                 "num_samples": 2000,
                 "number_of_characters": 173012,
-                "avg_sentence1_len": 43.232,
-                "avg_sentence2_len": 43.274,
+                "min_sentence1_length": 2,
+                "avg_sentence1_length": 43.232,
+                "max_sentence1_length": 120,
+                "unique_sentence1": 1909,
+                "min_sentence2_length": 2,
+                "avg_sentence2_length": 43.274,
+                "max_sentence2_length": 113,
+                "unique_sentence2": 1909,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -124,8 +172,14 @@
     "validation": {
         "num_samples": 14000,
         "number_of_characters": 2524625,
-        "avg_sentence1_len": 90.12585714285714,
-        "avg_sentence2_len": 90.2045,
+        "min_sentence1_length": 2,
+        "avg_sentence1_length": 90.12585714285714,
+        "max_sentence1_length": 248,
+        "unique_sentence1": 13357,
+        "min_sentence2_length": 2,
+        "avg_sentence2_length": 90.2045,
+        "max_sentence2_length": 275,
+        "unique_sentence2": 13397,
         "unique_labels": 2,
         "labels": {
             "1": {
@@ -139,8 +193,14 @@
             "de": {
                 "num_samples": 2000,
                 "number_of_characters": 467643,
-                "avg_sentence1_len": 116.82,
-                "avg_sentence2_len": 117.0015,
+                "min_sentence1_length": 2,
+                "avg_sentence1_length": 116.82,
+                "max_sentence1_length": 248,
+                "unique_sentence1": 1914,
+                "min_sentence2_length": 2,
+                "avg_sentence2_length": 117.0015,
+                "max_sentence2_length": 275,
+                "unique_sentence2": 1920,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -154,8 +214,14 @@
             "en": {
                 "num_samples": 2000,
                 "number_of_characters": 451931,
-                "avg_sentence1_len": 113.1075,
-                "avg_sentence2_len": 112.858,
+                "min_sentence1_length": 25,
+                "avg_sentence1_length": 113.1075,
+                "max_sentence1_length": 213,
+                "unique_sentence1": 1758,
+                "min_sentence2_length": 25,
+                "avg_sentence2_length": 112.858,
+                "max_sentence2_length": 213,
+                "unique_sentence2": 1771,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -169,8 +235,14 @@
             "es": {
                 "num_samples": 2000,
                 "number_of_characters": 466112,
-                "avg_sentence1_len": 116.3285,
-                "avg_sentence2_len": 116.7275,
+                "min_sentence1_length": 2,
+                "avg_sentence1_length": 116.3285,
+                "max_sentence1_length": 240,
+                "unique_sentence1": 1938,
+                "min_sentence2_length": 2,
+                "avg_sentence2_length": 116.7275,
+                "max_sentence2_length": 241,
+                "unique_sentence2": 1941,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -184,8 +256,14 @@
             "fr": {
                 "num_samples": 2000,
                 "number_of_characters": 478510,
-                "avg_sentence1_len": 119.5045,
-                "avg_sentence2_len": 119.7505,
+                "min_sentence1_length": 2,
+                "avg_sentence1_length": 119.5045,
+                "max_sentence1_length": 233,
+                "unique_sentence1": 1933,
+                "min_sentence2_length": 2,
+                "avg_sentence2_length": 119.7505,
+                "max_sentence2_length": 246,
+                "unique_sentence2": 1939,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -199,8 +277,14 @@
             "ja": {
                 "num_samples": 2000,
                 "number_of_characters": 229655,
-                "avg_sentence1_len": 57.5105,
-                "avg_sentence2_len": 57.317,
+                "min_sentence1_length": 2,
+                "avg_sentence1_length": 57.5105,
+                "max_sentence1_length": 126,
+                "unique_sentence1": 1957,
+                "min_sentence2_length": 2,
+                "avg_sentence2_length": 57.317,
+                "max_sentence2_length": 121,
+                "unique_sentence2": 1969,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -214,8 +298,14 @@
             "ko": {
                 "num_samples": 2000,
                 "number_of_characters": 261355,
-                "avg_sentence1_len": 65.162,
-                "avg_sentence2_len": 65.5155,
+                "min_sentence1_length": 2,
+                "avg_sentence1_length": 65.162,
+                "max_sentence1_length": 178,
+                "unique_sentence1": 1963,
+                "min_sentence2_length": 2,
+                "avg_sentence2_length": 65.5155,
+                "max_sentence2_length": 174,
+                "unique_sentence2": 1968,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -229,8 +319,14 @@
             "zh": {
                 "num_samples": 2000,
                 "number_of_characters": 169419,
-                "avg_sentence1_len": 42.448,
-                "avg_sentence2_len": 42.2615,
+                "min_sentence1_length": 2,
+                "avg_sentence1_length": 42.448,
+                "max_sentence1_length": 101,
+                "unique_sentence1": 1899,
+                "min_sentence2_length": 2,
+                "avg_sentence2_length": 42.2615,
+                "max_sentence2_length": 120,
+                "unique_sentence2": 1895,
                 "unique_labels": 2,
                 "labels": {
                     "1": {

@@ -2,8 +2,13 @@
     "test": {
         "num_samples": 10,
         "number_of_characters": 75000,
+        "min_text_length": 5000,
         "average_text_length": 7500.0,
+        "max_text_length": 10000,
+        "unique_texts": 41555,
+        "min_labels_per_text": 1,
         "average_labels_per_text": 7500.0,
+        "max_labels_per_text": 14251,
         "unique_labels": 26,
         "labels": {
             "neuroscience": {

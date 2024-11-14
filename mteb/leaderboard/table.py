@@ -88,7 +88,7 @@ def get_means_per_types(df: pd.DataFrame) -> pd.DataFrame:
                 [name_to_score.get(task_name, np.nan) for task_name in task_names]
             )
             records.append(
-                dict(
+                dict(  # noqa
                     model_name=model_name,
                     model_revision=model_revision,
                     task_type=task_type,
