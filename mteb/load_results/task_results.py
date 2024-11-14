@@ -291,7 +291,8 @@ class TaskResult(BaseModel):
                 )
 
         pre_1_11_load = (
-            "mteb_version" in data and data["mteb_version"] is not None
+            "mteb_version" in data
+            and data["mteb_version"] is not None
             and Version(data["mteb_version"]) < Version("1.11.0")
         )  # assume it is before 1.11.0 if the version is not present
         try:
@@ -304,9 +305,11 @@ class TaskResult(BaseModel):
             )
             obj = cls._convert_from_before_v1_11_0(data)
 
-        pre_v_12_48 = "mteb_version" in data and data["mteb_version"] is not None and Version(
-            data["mteb_version"]
-        ) < Version("1.12.48")
+        pre_v_12_48 = (
+            "mteb_version" in data
+            and data["mteb_version"] is not None
+            and Version(data["mteb_version"]) < Version("1.12.48")
+        )
 
         if pre_v_12_48:
             cls._fix_pair_classification_scores(obj)
