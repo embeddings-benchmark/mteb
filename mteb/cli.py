@@ -142,12 +142,14 @@ def run(args: argparse.Namespace) -> None:
         args.save_predictions if hasattr(args, "save_predictions") else False
     )
 
+    enable_co2_tracker = not args.disable_co2_tracker
+
     eval.run(
         model,
         verbosity=args.verbosity,
         output_folder=args.output_folder,
         eval_splits=args.eval_splits,
-        co2_tracker=args.disable_co2_tracker,
+        co2_tracker=enable_co2_tracker,
         overwrite_results=args.overwrite,
         encode_kwargs=encode_kwargs,
         save_predictions=save_predictions,
@@ -264,7 +266,7 @@ def add_run_parser(subparsers) -> None:
     )
     parser.add_argument(
         "--disable_co2_tracker",
-        type=bool,
+        action="store_true",
         default=False,
         help="Disable CO₂ tracker, enabled by default",
     )
