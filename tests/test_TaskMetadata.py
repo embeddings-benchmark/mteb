@@ -381,6 +381,7 @@ def test_disallow_trust_remote_code_in_new_datasets():
         "DiaBlaBitextMining",
         "FloresBitextMining",
         "IN22ConvBitextMining",
+        "NTREXBitextMining",
         "IN22GenBitextMining",
         "IndicGenBenchFloresBitextMining",
         "IWSLT2017BitextMining",
@@ -526,7 +527,7 @@ def test_disallow_trust_remote_code_in_new_datasets():
 
 
 @pytest.mark.parametrize("task", get_tasks())
-def test_empy_descriptive_stat_in_new_datasets(task: AbsTask):
+def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
     # DON'T ADD NEW DATASETS TO THIS LIST
     # THIS IS ONLY INTENDED FOR HISTORIC DATASETS
     exceptions = [
