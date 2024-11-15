@@ -413,6 +413,7 @@ class MTEB:
                 kg_co2_emissions: int | None = 0 if co2_tracker else None
                 for split in task_eval_splits:
                     if co2_tracker:
+                        logger.warning("Evaluating multiple MTEB runs simultaniously will produce incorrect CO₂ results")
                         with EmissionsTracker(
                             save_to_file=False,
                             save_to_api=False,
