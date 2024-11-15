@@ -297,6 +297,44 @@ class VLM2VecWrapper:
 
                     outputs = self.encode_input(inputs)
                     all_fused_embeddings.append(outputs.cpu().to(torch.float32))
+        else:
+            with torch.no_grad():
+                for i in tqdm(range(0, len(images), batch_size)):
+                    batch_images = images[i : i + batch_size]
+                    input_ids, pixel_values, image_sizes = [], [], []
+                    for b in batch_images:
+                        text = next(texts)
+                        inputs = self.processor(
+                            f"<|image_1|> Represent the given image with the following question: {text}",
+                            [b],
+                            return_tensors="pt",
+                            max_length=256,
+                            truncation=True,
+                        )
+                        inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                        input_ids.append(inputs["input_ids"].squeeze(0).unsqueeze(1))
+                        pixel_values.append(inputs["pixel_values"])
+                        image_sizes.append(inputs["image_sizes"])
+
+                    input_ids = torch._C._nn.pad_sequence(
+                        input_ids,
+                        batch_first=True,
+                        padding_value=self.processor.tokenizer.pad_token_id,
+                    ).squeeze(2)
+                    attention_mask = input_ids.ne(self.processor.tokenizer.pad_token_id)
+
+                    pixel_values = torch.cat(pixel_values, dim=0)
+                    image_sizes = torch.cat(image_sizes, dim=0)
+                    inputs = {
+                        "input_ids": input_ids,
+                        "attention_mask": attention_mask,
+                        "pixel_values": pixel_values,
+                        "image_sizes": image_sizes,
+                    }
+
+                    outputs = self.encode_input(inputs)
+                    all_fused_embeddings.append(outputs.cpu().to(torch.float32))
+
         fused_embeddings = torch.cat(all_fused_embeddings, dim=0)
         return fused_embeddings
 
