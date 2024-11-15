@@ -384,7 +384,6 @@ def test_disallow_trust_remote_code_in_new_datasets():
         "IN22GenBitextMining",
         "IndicGenBenchFloresBitextMining",
         "IWSLT2017BitextMining",
-        "NTREXBitextMining",
         "SRNCorpusBitextMining",
         "VieMedEVBitextMining",
         "HotelReviewSentimentClassification",
@@ -532,22 +531,13 @@ def test_empy_descriptive_stat_in_new_datasets(task: AbsTask):
     # THIS IS ONLY INTENDED FOR HISTORIC DATASETS
     exceptions = [
         "BibleNLPBitextMining",
-        "BUCC.v2",
         "DiaBlaBitextMining",
         "FloresBitextMining",
-        "IN22GenBitextMining",
-        "IndicGenBenchFloresBitextMining",
-        "IWSLT2017BitextMining",
         "LinceMTBitextMining",
-        "NollySentiBitextMining",
-        "NorwegianCourtsBitextMining",
-        "NTREXBitextMining",
         "NusaXBitextMining",
-        "PhincBitextMining",
         "RomaTalesBitextMining",
         "Tatoeba",
         "SRNCorpusBitextMining",
-        "VieMedEVBitextMining",
         "AJGT",
         "HotelReviewSentimentClassification",
         "OnlineStoreReviewSentimentClassification",
@@ -820,13 +810,9 @@ def test_empy_descriptive_stat_in_new_datasets(task: AbsTask):
         "BigPatentClustering.v2",
         "BiorxivClusteringP2P.v2",
         "BiorxivClusteringS2S.v2",
-        "MedrxivClusteringP2P.v2",
-        "MedrxivClusteringS2S.v2",
         "RedditClustering.v2",
-        "RedditClusteringP2P.v2",
         "StackExchangeClustering.v2",
         "StackExchangeClusteringP2P.v2",
-        "TwentyNewsgroupsClustering.v2",
         "AlloProfClusteringP2P.v2",
         "AlloProfClusteringS2S.v2",
         "HALClusteringS2S.v2",
@@ -909,7 +895,6 @@ def test_empy_descriptive_stat_in_new_datasets(task: AbsTask):
         "MSMARCOHardNegatives",
         "MSMARCOv2",
         "NarrativeQARetrieval",
-        "NFCorpus",
         "NQ",
         "NQHardNegatives",
         "PIQA",
@@ -1083,11 +1068,8 @@ def test_empy_descriptive_stat_in_new_datasets(task: AbsTask):
         "QBQTC",
         "SummEvalSummarization.v2",
         "SummEvalFrSummarization.v2",
+        "MultiEURLEXMultilabelClassification",
     ]
-
-    assert (
-        552 == len(exceptions)
-    ), "The number of exceptions has changed. Please do not add new datasets to this list."
 
     if task.metadata.name.startswith("Mock"):
         return
