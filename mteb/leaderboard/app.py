@@ -215,6 +215,9 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             citation = gr.Markdown(update_citation, inputs=[benchmark_select])
         with gr.Column():
             plot = gr.Plot(performance_size_plot, inputs=[summary_table])
+            gr.Markdown(
+                "*We only display models that have been run on all tasks in the benchmark*"
+            )
     with gr.Tab("Summary"):
         summary_table.render()
     with gr.Tab("Performance per task"):
