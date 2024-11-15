@@ -308,6 +308,24 @@ MTEB_RETRIEVAL_LAW = Benchmark(
     citation=None,
 )
 
+MTEB_RETRIEVAL_MEDICAL = Benchmark(
+    name="MTEB(Medical)",
+    tasks=get_tasks(
+        tasks=[
+            "CUREv1",
+            "NFCorpus",
+            "SCIDOCS",
+            "TRECCOVID",
+            "SciFact",
+            "MedicalQARetrieval",
+            "PublicHealthQA",
+        ]
+    ),
+    description="Medical benchmarks from MTEB",
+    reference="",
+    citation=None,
+)
+
 MTEB_MINERS_BITEXT_MINING = Benchmark(
     name="MINERSBitextMining",
     tasks=get_tasks(
