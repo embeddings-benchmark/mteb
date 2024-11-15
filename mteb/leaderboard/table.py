@@ -200,7 +200,7 @@ def scores_to_tables(
             joint_table_style,
             # column_widths=column_widths,
             datatype=column_types,
-            wrap=True,
+            # wrap=True,
         ),
         gr.DataFrame(per_task_style),
     )
