@@ -298,6 +298,7 @@ class TaskResult(BaseModel):
             )
             or "mteb_version" not in data
         )  # assume it is before 1.11.0 if the version is not present
+
         try:
             obj = cls.model_validate(data)
         except Exception as e:
