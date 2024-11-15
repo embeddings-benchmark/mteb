@@ -1,0 +1,1335 @@
+{
+    "test": {
+        "num_samples": 459389,
+        "number_of_characters": 334286895,
+        "min_text_length": 79,
+        "average_text_length": 727.6771864367671,
+        "max_text_length": 4359,
+        "min_labels_per_text": 2,
+        "average_labels_per_text": 1.0,
+        "max_labels_per_text": 77908,
+        "unique_labels": 440,
+        "labels": {
+            "FortNiteBR": {
+                "count": 436
+            },
+            "buildapc": {
+                "count": 8484
+            },
+            "offmychest": {
+                "count": 570
+            },
+            "nus": {
+                "count": 45
+            },
+            "relationship_advice": {
+                "count": 16651
+            },
+            "premed": {
+                "count": 201
+            },
+            "dogecoin": {
+                "count": 8108
+            },
+            "GamingLaptops": {
+                "count": 183
+            },
+            "asktransgender": {
+                "count": 326
+            },
+            "MachineLearning": {
+                "count": 61
+            },
+            "puppy101": {
+                "count": 1597
+            },
+            "GunAccessoriesForSale": {
+                "count": 2619
+            },
+            "Random_Acts_Of_Amazon": {
+                "count": 1115
+            },
+            "Catholicism": {
+                "count": 183
+            },
+            "MonsterHunter": {
+                "count": 218
+            },
+            "tipofmypenis": {
+                "count": 87
+            },
+            "samsung": {
+                "count": 69
+            },
+            "PersonalFinanceCanada": {
+                "count": 341
+            },
+            "Dyson_Sphere_Program": {
+                "count": 55
+            },
+            "bleach": {
+                "count": 41
+            },
+            "AmItheAsshole": {
+                "count": 3730
+            },
+            "WallStreetbetsELITE": {
+                "count": 328
+            },
+            "GlobalPowers": {
+                "count": 35
+            },
+            "ABraThatFits": {
+                "count": 159
+            },
+            "PokemonGoFriends": {
+                "count": 1165
+            },
+            "NoMansSkyTheGame": {
+                "count": 259
+            },
+            "masseffect": {
+                "count": 233
+            },
+            "dating_advice": {
+                "count": 559
+            },
+            "yoga": {
+                "count": 50
+            },
+            "depression": {
+                "count": 515
+            },
+            "COVID19positive": {
+                "count": 180
+            },
+            "generationology": {
+                "count": 37
+            },
+            "feedthebeast": {
+                "count": 192
+            },
+            "EliteDangerous": {
+                "count": 270
+            },
+            "alcoholicsanonymous": {
+                "count": 93
+            },
+            "GoRVing": {
+                "count": 35
+            },
+            "thedivision": {
+                "count": 111
+            },
+            "breakingmom": {
+                "count": 105
+            },
+            "AskAnAmerican": {
+                "count": 80
+            },
+            "HypnoFair": {
+                "count": 5
+            },
+            "JustUnsubbed": {
+                "count": 13
+            },
+            "socialanxiety": {
+                "count": 123
+            },
+            "dirtykikpals": {
+                "count": 202
+            },
+            "askTO": {
+                "count": 126
+            },
+            "AskCulinary": {
+                "count": 108
+            },
+            "Bogleheads": {
+                "count": 71
+            },
+            "dragonquest": {
+                "count": 45
+            },
+            "NoContract": {
+                "count": 30
+            },
+            "gorillaz": {
+                "count": 14
+            },
+            "MondoGore": {
+                "count": 8
+            },
+            "comicswap": {
+                "count": 56
+            },
+            "VirtualYoutubers": {
+                "count": 92
+            },
+            "Gta5Modding": {
+                "count": 28
+            },
+            "obs": {
+                "count": 61
+            },
+            "vcu": {
+                "count": 9
+            },
+            "KingkillerChronicle": {
+                "count": 17
+            },
+            "AmongUs": {
+                "count": 41
+            },
+            "wireshark": {
+                "count": 3
+            },
+            "Dodocodes": {
+                "count": 46
+            },
+            "Aliexpress": {
+                "count": 40
+            },
+            "LearnerDriverUK": {
+                "count": 12
+            },
+            "PanicAttack": {
+                "count": 23
+            },
+            "KassadinMains": {
+                "count": 10
+            },
+            "islam": {
+                "count": 93
+            },
+            "chronotrigger": {
+                "count": 4
+            },
+            "skincareexchange": {
+                "count": 13
+            },
+            "PokemonHome": {
+                "count": 21
+            },
+            "survivinginfidelity": {
+                "count": 71
+            },
+            "igcse": {
+                "count": 21
+            },
+            "C25K": {
+                "count": 21
+            },
+            "aorus": {
+                "count": 2
+            },
+            "idleon": {
+                "count": 19
+            },
+            "photography": {
+                "count": 22
+            },
+            "cryptocoins": {
+                "count": 7
+            },
+            "CanaryWharfBets": {
+                "count": 7
+            },
+            "KillingEve": {
+                "count": 7
+            },
+            "GameBuilderGarage": {
+                "count": 16
+            },
+            "SauceSharingCommunity": {
+                "count": 7
+            },
+            "turo": {
+                "count": 9
+            },
+            "foodscience": {
+                "count": 14
+            },
+            "HIMYM": {
+                "count": 20
+            },
+            "HauntingOfHillHouse": {
+                "count": 4
+            },
+            "GoodNotes": {
+                "count": 8
+            },
+            "RedditWritesSeinfeld": {
+                "count": 6
+            },
+            "AirReps": {
+                "count": 2
+            },
+            "ADHD": {
+                "count": 3811
+            },
+            "BuddyCrossing": {
+                "count": 446
+            },
+            "libraryofruina": {
+                "count": 98
+            },
+            "SluttyConfessions": {
+                "count": 2787
+            },
+            "tipofmytongue": {
+                "count": 7145
+            },
+            "fleshlight": {
+                "count": 128
+            },
+            "amcstock": {
+                "count": 13910
+            },
+            "teenagers": {
+                "count": 77908
+            },
+            "suggestmeabook": {
+                "count": 1540
+            },
+            "dirtypenpals": {
+                "count": 5587
+            },
+            "MinecraftServer": {
+                "count": 177
+            },
+            "CreditCards": {
+                "count": 669
+            },
+            "Guitar": {
+                "count": 10952
+            },
+            "rpg": {
+                "count": 529
+            },
+            "NoFap": {
+                "count": 14853
+            },
+            "lfg": {
+                "count": 1093
+            },
+            "MarsWallStreet": {
+                "count": 935
+            },
+            "SummonSign": {
+                "count": 931
+            },
+            "AssassinsCreedValhala": {
+                "count": 295
+            },
+            "hoi4": {
+                "count": 432
+            },
+            "Coins4Sale": {
+                "count": 260
+            },
+            "xbox": {
+                "count": 459
+            },
+            "TooAfraidToAsk": {
+                "count": 7404
+            },
+            "NBA2k": {
+                "count": 553
+            },
+            "KGBTR": {
+                "count": 943
+            },
+            "roblox": {
+                "count": 220
+            },
+            "salesforce": {
+                "count": 214
+            },
+            "TwoXChromosomes": {
+                "count": 1736
+            },
+            "mechmarket": {
+                "count": 4863
+            },
+            "Gaming_Headsets": {
+                "count": 103
+            },
+            "pittsburgh": {
+                "count": 189
+            },
+            "CryptoMars": {
+                "count": 1606
+            },
+            "FridayNightFunkin": {
+                "count": 378
+            },
+            "vaginismus": {
+                "count": 122
+            },
+            "transpositive": {
+                "count": 10
+            },
+            "comicbooks": {
+                "count": 274
+            },
+            "BDSMcommunity": {
+                "count": 185
+            },
+            "aliens": {
+                "count": 201
+            },
+            "Scotch": {
+                "count": 64
+            },
+            "KikRoleplay": {
+                "count": 141
+            },
+            "Kayaking": {
+                "count": 91
+            },
+            "196": {
+                "count": 47
+            },
+            "digimon": {
+                "count": 140
+            },
+            "Evernote": {
+                "count": 42
+            },
+            "logh": {
+                "count": 22
+            },
+            "arlington": {
+                "count": 15
+            },
+            "Adopted": {
+                "count": 8
+            },
+            "DissonautUniverse": {
+                "count": 4
+            },
+            "Midsommar": {
+                "count": 12
+            },
+            "SofiawithanF": {
+                "count": 83
+            },
+            "xmpp": {
+                "count": 6
+            },
+            "ZombsRoyale": {
+                "count": 16
+            },
+            "accesscontrol": {
+                "count": 8
+            },
+            "WetlanderHumor": {
+                "count": 2
+            },
+            "PoonamPandeyFanatics": {
+                "count": 2
+            },
+            "screenplaychallenge": {
+                "count": 2
+            },
+            "scatstories": {
+                "count": 2
+            },
+            "techsupport": {
+                "count": 290
+            },
+            "whatcarshouldIbuy": {
+                "count": 79
+            },
+            "Stormlight_Archive": {
+                "count": 15
+            },
+            "deadbydaylight": {
+                "count": 126
+            },
+            "bicycling": {
+                "count": 27
+            },
+            "oculus": {
+                "count": 64
+            },
+            "Cartalk": {
+                "count": 33
+            },
+            "Sims4": {
+                "count": 43
+            },
+            "NoFeeAC": {
+                "count": 95
+            },
+            "Crypto_com": {
+                "count": 37
+            },
+            "ITCareerQuestions": {
+                "count": 259
+            },
+            "aromantic": {
+                "count": 18
+            },
+            "Revu": {
+                "count": 3
+            },
+            "exalted": {
+                "count": 2
+            },
+            "HilariaBaldwin": {
+                "count": 20
+            },
+            "Testosterone": {
+                "count": 35
+            },
+            "Screenwriting": {
+                "count": 170
+            },
+            "LifeProTips": {
+                "count": 49
+            },
+            "steinsgate": {
+                "count": 13
+            },
+            "Baystreetbets": {
+                "count": 10
+            },
+            "AskGirls": {
+                "count": 7
+            },
+            "idlechampions": {
+                "count": 7
+            },
+            "facebook": {
+                "count": 17
+            },
+            "tf2trade": {
+                "count": 4
+            },
+            "mfdoom": {
+                "count": 3
+            },
+            "FiddlesticksMains": {
+                "count": 2
+            },
+            "HFY": {
+                "count": 10
+            },
+            "FiestaST": {
+                "count": 2
+            },
+            "whatsthatbook": {
+                "count": 994
+            },
+            "GearsOfWar": {
+                "count": 879
+            },
+            "KazuhaMains": {
+                "count": 175
+            },
+            "RepTime": {
+                "count": 211
+            },
+            "AstroGaming": {
+                "count": 141
+            },
+            "metalgearsolid": {
+                "count": 152
+            },
+            "qBittorrent": {
+                "count": 39
+            },
+            "ELLIPAL_Official": {
+                "count": 24
+            },
+            "raisedbynarcissists": {
+                "count": 4895
+            },
+            "unpopularopinion": {
+                "count": 14901
+            },
+            "ACTrade": {
+                "count": 5679
+            },
+            "askcarsales": {
+                "count": 1339
+            },
+            "AskVet": {
+                "count": 1357
+            },
+            "whowouldwin": {
+                "count": 4493
+            },
+            "playstation": {
+                "count": 1362
+            },
+            "anime": {
+                "count": 6531
+            },
+            "GME": {
+                "count": 12577
+            },
+            "DotA2": {
+                "count": 2004
+            },
+            "cryptostreetbets": {
+                "count": 2241
+            },
+            "MonsterHunterWorld": {
+                "count": 698
+            },
+            "Market76": {
+                "count": 14274
+            },
+            "DnD": {
+                "count": 5092
+            },
+            "leagueoflegends": {
+                "count": 3683
+            },
+            "doordash_drivers": {
+                "count": 1626
+            },
+            "theta_network": {
+                "count": 489
+            },
+            "exmuslim": {
+                "count": 1369
+            },
+            "gonewildaudio": {
+                "count": 2998
+            },
+            "conspiracy": {
+                "count": 3587
+            },
+            "heroesofthestorm": {
+                "count": 535
+            },
+            "FanFiction": {
+                "count": 2782
+            },
+            "Doom": {
+                "count": 1251
+            },
+            "texas": {
+                "count": 269
+            },
+            "Vent": {
+                "count": 1738
+            },
+            "selfimprovement": {
+                "count": 1284
+            },
+            "youtubers": {
+                "count": 706
+            },
+            "askseddit": {
+                "count": 237
+            },
+            "boardgames": {
+                "count": 1237
+            },
+            "bravelydefault": {
+                "count": 347
+            },
+            "ConquerorsBlade": {
+                "count": 238
+            },
+            "ChronicPain": {
+                "count": 527
+            },
+            "teenagersnew": {
+                "count": 256
+            },
+            "brasil": {
+                "count": 1092
+            },
+            "MatthiasSubmissions": {
+                "count": 921
+            },
+            "MarylandUnemployment": {
+                "count": 314
+            },
+            "SaltLakeCity": {
+                "count": 411
+            },
+            "BokunoheroFanfiction": {
+                "count": 155
+            },
+            "BenignExistence": {
+                "count": 125
+            },
+            "GayYoungOldDating": {
+                "count": 156
+            },
+            "Bible": {
+                "count": 202
+            },
+            "haskell": {
+                "count": 154
+            },
+            "seduction": {
+                "count": 400
+            },
+            "fantasywriters": {
+                "count": 262
+            },
+            "HiveOS": {
+                "count": 100
+            },
+            "PerkByDaylight": {
+                "count": 15
+            },
+            "Hedgehog": {
+                "count": 73
+            },
+            "xmen": {
+                "count": 263
+            },
+            "HyperRP": {
+                "count": 122
+            },
+            "emotestories": {
+                "count": 3
+            },
+            "tutanota": {
+                "count": 135
+            },
+            "CultoftheFranklin": {
+                "count": 46
+            },
+            "langrisser": {
+                "count": 62
+            },
+            "CozyGrove": {
+                "count": 61
+            },
+            "Sverigesforsvarsmakt": {
+                "count": 12
+            },
+            "silverbugbets": {
+                "count": 21
+            },
+            "WreckingBallMains": {
+                "count": 5
+            },
+            "capitalism_in_decay": {
+                "count": 8
+            },
+            "paintdotnet": {
+                "count": 11
+            },
+            "u_mawadom118": {
+                "count": 4
+            },
+            "xboxfindfriends": {
+                "count": 2
+            },
+            "CPTSD": {
+                "count": 540
+            },
+            "destiny2": {
+                "count": 318
+            },
+            "Wallstreetsilver": {
+                "count": 1013
+            },
+            "DestinyTheGame": {
+                "count": 1107
+            },
+            "blackopscoldwar": {
+                "count": 400
+            },
+            "InstacartShoppers": {
+                "count": 202
+            },
+            "RocketLeagueExchange": {
+                "count": 832
+            },
+            "apexlegends": {
+                "count": 3265
+            },
+            "kansascity": {
+                "count": 53
+            },
+            "namenerds": {
+                "count": 235
+            },
+            "help": {
+                "count": 152
+            },
+            "Kengan_Ashura": {
+                "count": 132
+            },
+            "thetagang": {
+                "count": 165
+            },
+            "GameSale": {
+                "count": 262
+            },
+            "Reduction": {
+                "count": 109
+            },
+            "sex": {
+                "count": 906
+            },
+            "bostonr4r": {
+                "count": 75
+            },
+            "LegendsOfRuneterra": {
+                "count": 231
+            },
+            "overlord": {
+                "count": 48
+            },
+            "madisonwi": {
+                "count": 53
+            },
+            "steelseries": {
+                "count": 79
+            },
+            "ClashOfClansRecruit": {
+                "count": 214
+            },
+            "CharacterRant": {
+                "count": 55
+            },
+            "AirForce": {
+                "count": 94
+            },
+            "sexstories": {
+                "count": 92
+            },
+            "NameThatSong": {
+                "count": 162
+            },
+            "depressed": {
+                "count": 74
+            },
+            "ibs": {
+                "count": 150
+            },
+            "40kLore": {
+                "count": 269
+            },
+            "podcasts": {
+                "count": 88
+            },
+            "miraculousladybug": {
+                "count": 150
+            },
+            "ask": {
+                "count": 224
+            },
+            "EverMerge": {
+                "count": 31
+            },
+            "TMJ": {
+                "count": 54
+            },
+            "BitLifeApp": {
+                "count": 39
+            },
+            "FireEmblemHeroes": {
+                "count": 100
+            },
+            "software": {
+                "count": 62
+            },
+            "ShieldAndroidTV": {
+                "count": 70
+            },
+            "GriefSupport": {
+                "count": 125
+            },
+            "onewheel": {
+                "count": 37
+            },
+            "MensRights": {
+                "count": 80
+            },
+            "nhl": {
+                "count": 22
+            },
+            "ClashOfClans": {
+                "count": 107
+            },
+            "ps3homebrew": {
+                "count": 33
+            },
+            "LightNovels": {
+                "count": 77
+            },
+            "redsox": {
+                "count": 34
+            },
+            "CryptoMarkets": {
+                "count": 44
+            },
+            "ugly": {
+                "count": 47
+            },
+            "GCXRep": {
+                "count": 12
+            },
+            "cscareerquestionsEU": {
+                "count": 65
+            },
+            "MindHunter": {
+                "count": 6
+            },
+            "starcraft2coop": {
+                "count": 15
+            },
+            "nanocurrency": {
+                "count": 1421
+            },
+            "ModelCars": {
+                "count": 8
+            },
+            "UKJobs": {
+                "count": 30
+            },
+            "Netherlands": {
+                "count": 44
+            },
+            "clonewars": {
+                "count": 8
+            },
+            "Julia": {
+                "count": 11
+            },
+            "Prolactinoma": {
+                "count": 9
+            },
+            "sofi": {
+                "count": 11
+            },
+            "royalfamily": {
+                "count": 6
+            },
+            "ConnecticutR4R": {
+                "count": 8
+            },
+            "weather": {
+                "count": 5
+            },
+            "oneui": {
+                "count": 7
+            },
+            "KTM": {
+                "count": 5
+            },
+            "Aerials": {
+                "count": 3
+            },
+            "seoul": {
+                "count": 2
+            },
+            "exjw": {
+                "count": 3281
+            },
+            "ModernMagic": {
+                "count": 699
+            },
+            "Paladins": {
+                "count": 1242
+            },
+            "kdramarecommends": {
+                "count": 1611
+            },
+            "hitbtc": {
+                "count": 330
+            },
+            "endocrinology": {
+                "count": 75
+            },
+            "Bath": {
+                "count": 43
+            },
+            "NassauCountyHookups": {
+                "count": 5
+            },
+            "feminineboys": {
+                "count": 1248
+            },
+            "dreamsmp": {
+                "count": 2018
+            },
+            "SquaredCircle": {
+                "count": 2255
+            },
+            "Minecraft": {
+                "count": 8753
+            },
+            "spirituality": {
+                "count": 1809
+            },
+            "Eldenring": {
+                "count": 1471
+            },
+            "Sat": {
+                "count": 1172
+            },
+            "bonnaroo": {
+                "count": 194
+            },
+            "gardening": {
+                "count": 1892
+            },
+            "Unemployment": {
+                "count": 6185
+            },
+            "mac": {
+                "count": 1847
+            },
+            "Bestbuy": {
+                "count": 437
+            },
+            "quittingkratom": {
+                "count": 1081
+            },
+            "lawschooladmissions": {
+                "count": 3436
+            },
+            "NiceHash": {
+                "count": 2135
+            },
+            "McMaster": {
+                "count": 815
+            },
+            "covidlonghaulers": {
+                "count": 1299
+            },
+            "stalker": {
+                "count": 758
+            },
+            "MLBTheShow": {
+                "count": 2721
+            },
+            "FortniteCompetitive": {
+                "count": 998
+            },
+            "dpdr": {
+                "count": 514
+            },
+            "appliancerepair": {
+                "count": 720
+            },
+            "thomasthetankengine": {
+                "count": 207
+            },
+            "delhi": {
+                "count": 217
+            },
+            "Huel": {
+                "count": 300
+            },
+            "leafs": {
+                "count": 203
+            },
+            "HotWheels": {
+                "count": 170
+            },
+            "90dayfianceuncensored": {
+                "count": 550
+            },
+            "Throwers": {
+                "count": 142
+            },
+            "Wavyhair": {
+                "count": 270
+            },
+            "CryptoHorde": {
+                "count": 128
+            },
+            "ShuumatsuNoValkyrie": {
+                "count": 453
+            },
+            "TeensMeetTeens": {
+                "count": 432
+            },
+            "dbrand": {
+                "count": 108
+            },
+            "SLFmeetups": {
+                "count": 18
+            },
+            "1200isplentyketo": {
+                "count": 48
+            },
+            "passive_income": {
+                "count": 211
+            },
+            "BroadCity": {
+                "count": 16
+            },
+            "RevenantMain": {
+                "count": 71
+            },
+            "extrarfl": {
+                "count": 25
+            },
+            "AgonGame": {
+                "count": 5
+            },
+            "FitnessDE": {
+                "count": 3
+            },
+            "gaming": {
+                "count": 1277
+            },
+            "livesound": {
+                "count": 91
+            },
+            "IBO": {
+                "count": 1896
+            },
+            "EscapefromTarkov": {
+                "count": 1300
+            },
+            "amex": {
+                "count": 145
+            },
+            "DMAcademy": {
+                "count": 1411
+            },
+            "VinylCollectors": {
+                "count": 556
+            },
+            "cardano": {
+                "count": 716
+            },
+            "brave_browser": {
+                "count": 159
+            },
+            "dating": {
+                "count": 952
+            },
+            "OculusQuest": {
+                "count": 942
+            },
+            "Superstonk": {
+                "count": 3089
+            },
+            "MtF": {
+                "count": 957
+            },
+            "findaleague": {
+                "count": 207
+            },
+            "Nioh": {
+                "count": 398
+            },
+            "IRS": {
+                "count": 715
+            },
+            "transgendercirclejerk": {
+                "count": 353
+            },
+            "learnmath": {
+                "count": 489
+            },
+            "piano": {
+                "count": 263
+            },
+            "LeagueConnect": {
+                "count": 216
+            },
+            "eu4": {
+                "count": 561
+            },
+            "Wordpress": {
+                "count": 345
+            },
+            "RoleplayingForReddit": {
+                "count": 31
+            },
+            "LOONA": {
+                "count": 89
+            },
+            "newtothenavy": {
+                "count": 167
+            },
+            "HaircareScience": {
+                "count": 118
+            },
+            "appletv": {
+                "count": 167
+            },
+            "sissypersonals": {
+                "count": 102
+            },
+            "raleigh": {
+                "count": 168
+            },
+            "realonlyfansreviews": {
+                "count": 21
+            },
+            "AskGames": {
+                "count": 49
+            },
+            "PokemonTCG": {
+                "count": 325
+            },
+            "controlgame": {
+                "count": 109
+            },
+            "GoogleDataStudio": {
+                "count": 16
+            },
+            "WhiteWolfRPG": {
+                "count": 139
+            },
+            "MECoOp": {
+                "count": 31
+            },
+            "snuffrp": {
+                "count": 46
+            },
+            "lockpicking": {
+                "count": 103
+            },
+            "wicked_edge": {
+                "count": 105
+            },
+            "BMW": {
+                "count": 99
+            },
+            "choiceofgames": {
+                "count": 24
+            },
+            "hisdarkmaterials": {
+                "count": 12
+            },
+            "SakuraGakuin": {
+                "count": 24
+            },
+            "detrans": {
+                "count": 55
+            },
+            "Smallville": {
+                "count": 37
+            },
+            "kingofqueens": {
+                "count": 7
+            },
+            "JamesHoffmann": {
+                "count": 22
+            },
+            "stashinvest": {
+                "count": 16
+            },
+            "ABA": {
+                "count": 79
+            },
+            "ladybusiness": {
+                "count": 10
+            },
+            "gamegrumps": {
+                "count": 32
+            },
+            "GodEater": {
+                "count": 21
+            },
+            "tomorrow": {
+                "count": 39
+            },
+            "Tomorrowland": {
+                "count": 9
+            },
+            "BlackCountryNewRoad": {
+                "count": 5
+            },
+            "STAYC": {
+                "count": 3
+            },
+            "SatoshiStreetBets": {
+                "count": 3828
+            },
+            "AskLosAngeles": {
+                "count": 1036
+            },
+            "buildapcforme": {
+                "count": 1689
+            },
+            "ApplyingToCollege": {
+                "count": 10675
+            },
+            "watercooling": {
+                "count": 1209
+            },
+            "BreakUps": {
+                "count": 4914
+            },
+            "FIFA": {
+                "count": 3811
+            },
+            "emacs": {
+                "count": 712
+            },
+            "trakstocks": {
+                "count": 691
+            },
+            "Shittyaskflying": {
+                "count": 147
+            },
+            "AmazonFC": {
+                "count": 1178
+            },
+            "stocks": {
+                "count": 4610
+            },
+            "BangaloreMains": {
+                "count": 26
+            },
+            "pokemon": {
+                "count": 3953
+            },
+            "religion": {
+                "count": 684
+            },
+            "cuboulder": {
+                "count": 269
+            },
+            "self": {
+                "count": 1688
+            },
+            "tarot": {
+                "count": 912
+            },
+            "turtles": {
+                "count": 49
+            },
+            "TheMagnusArchives": {
+                "count": 300
+            },
+            "Superhero_Ideas": {
+                "count": 34
+            },
+            "NTU": {
+                "count": 308
+            },
+            "touhou": {
+                "count": 623
+            },
+            "JoJolion": {
+                "count": 50
+            },
+            "lasers": {
+                "count": 27
+            },
+            "popperpigs": {
+                "count": 67
+            },
+            "aggretsuko": {
+                "count": 20
+            },
+            "Library": {
+                "count": 5
+            }
+        }
+    }
+}

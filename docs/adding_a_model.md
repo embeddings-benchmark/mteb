@@ -28,29 +28,35 @@ mteb run -m {model_name} -t {task_names}
 
 These will save the results in a folder called `results/{model_name}/{model_revision}`.
 
-1. **Format the results using the CLI:**
+2. **Push Results to the Leaderboard**
+
+To add results to the public leaderboard you can push your results to the [results repository](https://github.com/embeddings-benchmark/results) afterwards they will appear on the leaderboard after a day.
+
+
+3. (Optional) **Add the results using to the model card:**
+
+`mteb` implements a cli for adding results to the model card:
 
 ```bash
 mteb create_meta --results_folder results/{model_name}/{model_revision} --output_path model_card.md
 ```
 
-If readme of model exists:
+To add the content to the public model simply copy the content of the `model_card.md` file to the top of a `README.md` file of your model on the Hub. See [here](https://huggingface.co/Muennighoff/SGPT-5.8B-weightedmean-msmarco-specb-bitfit/blob/main/README.md) for an example.
+
+If the readme already exists:
 
 ```bash
 mteb create_meta --results_folder results/{model_name}/{model_revision} --output_path model_card.md --from_existing your_existing_readme.md 
 ```
 
-2. **Add the frontmatter to model repository:**
+Note that if you can run the model on many tasks, this can lead to an excessively large readme frontmatter.
 
-Copy the content of the `model_card.md` file to the top of a `README.md` file of your model on the Hub. See [here](https://huggingface.co/Muennighoff/SGPT-5.8B-weightedmean-msmarco-specb-bitfit/blob/main/README.md) for an example.
-
-3. **Wait for a refresh the leaderboard:**
+4. **Wait for a refresh the leaderboard:**
 
 The leaderboard [automatically refreshes daily](https://github.com/embeddings-benchmark/leaderboard/commits/main/) so once submitted you only need to wait for the automatic refresh. You can find the workflows for the leaderboard refresh [here](https://github.com/embeddings-benchmark/leaderboard/tree/main/.github/workflows). If you experience issues with the leaderboard please create an [issue](https://github.com/embeddings-benchmark/mteb/issues).
 
 **Notes:**
 - We remove models with scores that cannot be reproduced, so please ensure that your model is accessible and scores can be reproduced.
-- An alternative way of submitting to the leaderboard is by opening a PR with your results [here](https://github.com/embeddings-benchmark/results) & checking that they are displayed correctly by [locally running the leaderboard](https://github.com/embeddings-benchmark/leaderboard?tab=readme-ov-file#developer-setup)
 
 - ##### Using Prompts with Sentence Transformers
 

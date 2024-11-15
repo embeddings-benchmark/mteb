@@ -19,7 +19,7 @@ class AskUbuntuDupQuestions(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=None,
         domains=None,
         task_subtypes=None,

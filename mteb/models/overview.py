@@ -96,7 +96,7 @@ def get_model_metas(
         if (frameworks is not None) and not (frameworks <= set(model_meta.framework)):
             continue
         if (use_instructions is not None) and (
-            model_meta.use_instuctions != use_instructions
+            model_meta.use_instructions != use_instructions
         ):
             continue
         lower, upper = n_parameters_range

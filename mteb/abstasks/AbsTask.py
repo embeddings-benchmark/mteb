@@ -200,7 +200,11 @@ class AbsTask(ABC):
 
         descriptive_stats = {}
         hf_subset_stat = "hf_subset_descriptive_stats"
-        pbar_split = tqdm.tqdm(self.metadata.eval_splits, desc="Processing Splits...")
+        eval_splits = self.metadata.eval_splits
+        if self.metadata.type in ["Classification", "MultilabelClassification"]:
+            eval_splits += ["train"]
+
+        pbar_split = tqdm.tqdm(eval_splits, desc="Processing Splits...")
         for split in pbar_split:
             pbar_split.set_postfix_str(f"Split: {split}")
             logger.info(f"Processing metadata for split {split}")
@@ -215,12 +219,8 @@ class AbsTask(ABC):
                     if isinstance(self.metadata.eval_langs, dict)
                     else self.metadata.eval_langs
                 )
-                if self.metadata.type == "Classification":
-                    eval_langs += ["train"]
 
-                pbar_subsets = tqdm.tqdm(
-                    self.metadata.eval_langs, desc="Processing Languages..."
-                )
+                pbar_subsets = tqdm.tqdm(eval_langs, desc="Processing Languages...")
                 for hf_subset in pbar_subsets:
                     pbar_subsets.set_postfix_str(f"Language: {hf_subset}")
                     logger.info(f"Processing metadata for language {hf_subset}")

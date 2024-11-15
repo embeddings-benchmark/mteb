@@ -54,12 +54,7 @@ class ScalaClassification(AbsTaskClassification, MultilingualTask):
         prompt="Classify passages in Scandinavian Languages based on linguistic acceptability",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 32
-        return metadata_dict
+    samples_per_label = 32
 
     def dataset_transform(self):
         for lang in self.dataset.keys():
