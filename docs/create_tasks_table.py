@@ -82,22 +82,25 @@ def create_task_lang_table(tasks: list[mteb.AbsTask]) -> str:
     ## Wrangle for polars
     pl_table_dict = []
     for lang, d in table_dict.items():
-        d.update({"lang": lang})
+        d.update({"0-lang": lang}) # for sorting columns
         pl_table_dict.append(d)
 
-    df = pl.DataFrame(pl_table_dict).sort(by="lang")
+    df = pl.DataFrame(pl_table_dict).sort(by="0-lang")
+    df = df.with_columns(sum=pl.sum_horizontal(get_args(TASK_TYPE)))
+    df = df.select(sorted(df.columns))
+    
     total = df.sum()
 
     task_names_md = " | ".join(sorted(get_args(TASK_TYPE)))
-    horizontal_line_md = "---|---" * len(sorted(get_args(TASK_TYPE)))
+    horizontal_line_md = "---|---" * (len(sorted(get_args(TASK_TYPE))) + 1)
     table = f"""
-| Language | {task_names_md} |
+| Language | {task_names_md} | Sum |
 |{horizontal_line_md}|
 """
 
     for row in df.iter_rows():
-        table += f"| {row[-1]} "
-        for num in row[:-1]:
+        table += f"| {row[0]} "
+        for num in row[1:]:
             table += f"| {num} "
         table += "|\n"
 
