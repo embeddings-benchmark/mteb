@@ -349,7 +349,9 @@ class AbsTaskRetrieval(AbsTask):
                     top_ranked.update(process_docs(self.top_ranked, hf_subset, split))
         else:
             if "default" in self.queries:
-                return self._calculate_metrics_from_split(split=split, hf_subset="default")
+                return self._calculate_metrics_from_split(
+                    split=split, hf_subset="default"
+                )
             queries = self.queries[split]
             corpus = self.corpus[split]
             relevant_docs = self.relevant_docs[split]
@@ -394,9 +396,7 @@ class AbsTaskRetrieval(AbsTask):
             unique_instructions = None
 
         if self.top_ranked is not None and num_queries:
-            top_ranked_per_query = (
-                [len(docs) for docs in top_ranked.values()]
-            )
+            top_ranked_per_query = [len(docs) for docs in top_ranked.values()]
             min_top_ranked_per_query = min(top_ranked_per_query)
             average_top_ranked_per_query = sum(top_ranked_per_query) / num_queries
             max_top_ranked_per_query = max(top_ranked_per_query)

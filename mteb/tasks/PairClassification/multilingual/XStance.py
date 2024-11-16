@@ -58,7 +58,11 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
         self.dataset = {}
         path = self.metadata_dict["dataset"]["path"]
         revision = self.metadata_dict["dataset"]["revision"]
-        raw_dataset = load_dataset(path, revision=revision, trust_remote_code=self.metadata.dataset["trust_remote_code"])
+        raw_dataset = load_dataset(
+            path,
+            revision=revision,
+            trust_remote_code=self.metadata.dataset["trust_remote_code"],
+        )
 
         def convert_example(example):
             return {
@@ -83,9 +87,13 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
                     )
 
                 # convert examples
-                self.dataset[lang][split] = self.dataset[lang][split].map(
-                    convert_example,
-                    remove_columns=self.dataset[lang][split].column_names,
-                ).to_dict()
+                self.dataset[lang][split] = (
+                    self.dataset[lang][split]
+                    .map(
+                        convert_example,
+                        remove_columns=self.dataset[lang][split].column_names,
+                    )
+                    .to_dict()
+                )
 
         self.data_loaded = True
