@@ -300,9 +300,7 @@ class HFDataLoader:
                 "instruction",
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
-                trust_remote_code=self.metadata_dict["dataset"].get(
-                    "trust_remote_code", False
-                ),
+                trust_remote_code=self.trust_remote_code,
             )
         else:
             instructions_ds = load_dataset(

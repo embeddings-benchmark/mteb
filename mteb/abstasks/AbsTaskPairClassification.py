@@ -102,8 +102,6 @@ class AbsTaskPairClassification(AbsTask):
     ) -> PairClassificationDescriptiveStatistics:
         if hf_subset:
             dataset = self.dataset[hf_subset][split]
-            if isinstance(dataset, list):
-                dataset = dataset[0]
         elif compute_overall:
             dataset = defaultdict(list)
             for hf_subset in self.metadata.eval_langs:
@@ -114,6 +112,9 @@ class AbsTaskPairClassification(AbsTask):
                     dataset[key].extend(value[0] if len(value) == 1 else value)
         else:
             dataset = self.dataset[split]
+
+        if isinstance(dataset, list):
+            dataset = dataset[0]
 
         sentence1 = (
             dataset["sentence1"][0]

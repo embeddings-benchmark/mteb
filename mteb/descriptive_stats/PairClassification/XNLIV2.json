@@ -1,0 +1,312 @@
+{
+    "test": {
+        "num_samples": 17745,
+        "number_of_characters": 2778287,
+        "unique_pairs": 17745,
+        "min_sentence1_length": 5,
+        "avg_sentence1_length": 105.99329388560157,
+        "max_sentence1_length": 339,
+        "unique_sentence1": 14234,
+        "min_sentence2_length": 8,
+        "avg_sentence2_length": 50.57402085094393,
+        "max_sentence2_length": 162,
+        "unique_sentence2": 17745,
+        "unique_labels": 2,
+        "labels": {
+            "0": {
+                "count": 8879
+            },
+            "1": {
+                "count": 8866
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "punjabi": {
+                "num_samples": 1365,
+                "number_of_characters": 211060,
+                "unique_pairs": 1365,
+                "min_sentence1_length": 16,
+                "avg_sentence1_length": 104.71721611721611,
+                "max_sentence1_length": 275,
+                "unique_sentence1": 1095,
+                "min_sentence2_length": 8,
+                "avg_sentence2_length": 49.9054945054945,
+                "max_sentence2_length": 138,
+                "unique_sentence2": 1365,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 683
+                    },
+                    "1": {
+                        "count": 682
+                    }
+                }
+            },
+            "gujrati": {
+                "num_samples": 1365,
+                "number_of_characters": 202647,
+                "unique_pairs": 1365,
+                "min_sentence1_length": 15,
+                "avg_sentence1_length": 100.43589743589743,
+                "max_sentence1_length": 270,
+                "unique_sentence1": 1095,
+                "min_sentence2_length": 9,
+                "avg_sentence2_length": 48.02344322344322,
+                "max_sentence2_length": 141,
+                "unique_sentence2": 1365,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 683
+                    },
+                    "1": {
+                        "count": 682
+                    }
+                }
+            },
+            "kannada": {
+                "num_samples": 1365,
+                "number_of_characters": 220182,
+                "unique_pairs": 1365,
+                "min_sentence1_length": 16,
+                "avg_sentence1_length": 108.54212454212454,
+                "max_sentence1_length": 283,
+                "unique_sentence1": 1095,
+                "min_sentence2_length": 9,
+                "avg_sentence2_length": 52.76336996336996,
+                "max_sentence2_length": 158,
+                "unique_sentence2": 1365,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 683
+                    },
+                    "1": {
+                        "count": 682
+                    }
+                }
+            },
+            "assamese": {
+                "num_samples": 1365,
+                "number_of_characters": 202808,
+                "unique_pairs": 1365,
+                "min_sentence1_length": 17,
+                "avg_sentence1_length": 100.45860805860806,
+                "max_sentence1_length": 271,
+                "unique_sentence1": 1095,
+                "min_sentence2_length": 9,
+                "avg_sentence2_length": 48.11868131868132,
+                "max_sentence2_length": 153,
+                "unique_sentence2": 1365,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 683
+                    },
+                    "1": {
+                        "count": 682
+                    }
+                }
+            },
+            "bengali": {
+                "num_samples": 1365,
+                "number_of_characters": 204859,
+                "unique_pairs": 1365,
+                "min_sentence1_length": 5,
+                "avg_sentence1_length": 102.37582417582418,
+                "max_sentence1_length": 282,
+                "unique_sentence1": 1095,
+                "min_sentence2_length": 9,
+                "avg_sentence2_length": 47.704029304029305,
+                "max_sentence2_length": 139,
+                "unique_sentence2": 1365,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 683
+                    },
+                    "1": {
+                        "count": 682
+                    }
+                }
+            },
+            "marathi": {
+                "num_samples": 1365,
+                "number_of_characters": 205734,
+                "unique_pairs": 1365,
+                "min_sentence1_length": 18,
+                "avg_sentence1_length": 102.1985347985348,
+                "max_sentence1_length": 272,
+                "unique_sentence1": 1095,
+                "min_sentence2_length": 10,
+                "avg_sentence2_length": 48.522344322344324,
+                "max_sentence2_length": 156,
+                "unique_sentence2": 1365,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 683
+                    },
+                    "1": {
+                        "count": 682
+                    }
+                }
+            },
+            "bhojpuri": {
+                "num_samples": 1365,
+                "number_of_characters": 205063,
+                "unique_pairs": 1365,
+                "min_sentence1_length": 5,
+                "avg_sentence1_length": 101.88864468864469,
+                "max_sentence1_length": 266,
+                "unique_sentence1": 1095,
+                "min_sentence2_length": 12,
+                "avg_sentence2_length": 48.34065934065934,
+                "max_sentence2_length": 154,
+                "unique_sentence2": 1365,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 683
+                    },
+                    "1": {
+                        "count": 682
+                    }
+                }
+            },
+            "odiya": {
+                "num_samples": 1365,
+                "number_of_characters": 210923,
+                "unique_pairs": 1365,
+                "min_sentence1_length": 17,
+                "avg_sentence1_length": 103.77509157509158,
+                "max_sentence1_length": 259,
+                "unique_sentence1": 1094,
+                "min_sentence2_length": 11,
+                "avg_sentence2_length": 50.747252747252745,
+                "max_sentence2_length": 149,
+                "unique_sentence2": 1365,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 683
+                    },
+                    "1": {
+                        "count": 682
+                    }
+                }
+            },
+            "sanskrit": {
+                "num_samples": 1365,
+                "number_of_characters": 214093,
+                "unique_pairs": 1365,
+                "min_sentence1_length": 17,
+                "avg_sentence1_length": 105.03516483516484,
+                "max_sentence1_length": 272,
+                "unique_sentence1": 1095,
+                "min_sentence2_length": 8,
+                "avg_sentence2_length": 51.80952380952381,
+                "max_sentence2_length": 148,
+                "unique_sentence2": 1365,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 683
+                    },
+                    "1": {
+                        "count": 682
+                    }
+                }
+            },
+            "tamil": {
+                "num_samples": 1365,
+                "number_of_characters": 239561,
+                "unique_pairs": 1365,
+                "min_sentence1_length": 15,
+                "avg_sentence1_length": 118.0923076923077,
+                "max_sentence1_length": 337,
+                "unique_sentence1": 1095,
+                "min_sentence2_length": 10,
+                "avg_sentence2_length": 57.41025641025641,
+                "max_sentence2_length": 156,
+                "unique_sentence2": 1365,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 683
+                    },
+                    "1": {
+                        "count": 682
+                    }
+                }
+            },
+            "turkish": {
+                "num_samples": 1365,
+                "number_of_characters": 206729,
+                "unique_pairs": 1365,
+                "min_sentence1_length": 15,
+                "avg_sentence1_length": 103.18021978021979,
+                "max_sentence1_length": 266,
+                "unique_sentence1": 1095,
+                "min_sentence2_length": 9,
+                "avg_sentence2_length": 48.26959706959707,
+                "max_sentence2_length": 145,
+                "unique_sentence2": 1365,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 683
+                    },
+                    "1": {
+                        "count": 682
+                    }
+                }
+            },
+            "greek": {
+                "num_samples": 1365,
+                "number_of_characters": 236520,
+                "unique_pairs": 1365,
+                "min_sentence1_length": 13,
+                "avg_sentence1_length": 117.69377289377289,
+                "max_sentence1_length": 339,
+                "unique_sentence1": 1095,
+                "min_sentence2_length": 10,
+                "avg_sentence2_length": 55.58095238095238,
+                "max_sentence2_length": 162,
+                "unique_sentence2": 1365,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 683
+                    },
+                    "1": {
+                        "count": 682
+                    }
+                }
+            },
+            "russian": {
+                "num_samples": 1365,
+                "number_of_characters": 218108,
+                "unique_pairs": 1365,
+                "min_sentence1_length": 11,
+                "avg_sentence1_length": 109.51941391941392,
+                "max_sentence1_length": 306,
+                "unique_sentence1": 1095,
+                "min_sentence2_length": 11,
+                "avg_sentence2_length": 50.266666666666666,
+                "max_sentence2_length": 150,
+                "unique_sentence2": 1365,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 683
+                    },
+                    "1": {
+                        "count": 682
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,46 @@
+{
+    "validation": {
+        "num_samples": 305,
+        "number_of_characters": 133788,
+        "unique_pairs": 305,
+        "min_sentence1_length": 50,
+        "avg_sentence1_length": 375.0655737704918,
+        "max_sentence1_length": 2383,
+        "unique_sentence1": 115,
+        "min_sentence2_length": 15,
+        "avg_sentence2_length": 63.58360655737705,
+        "max_sentence2_length": 189,
+        "unique_sentence2": 224,
+        "unique_labels": 2,
+        "labels": {
+            "1": {
+                "count": 191
+            },
+            "0": {
+                "count": 114
+            }
+        }
+    },
+    "test": {
+        "num_samples": 375,
+        "number_of_characters": 169218,
+        "unique_pairs": 374,
+        "min_sentence1_length": 196,
+        "avg_sentence1_length": 391.26666666666665,
+        "max_sentence1_length": 1676,
+        "unique_sentence1": 123,
+        "min_sentence2_length": 22,
+        "avg_sentence2_length": 59.98133333333333,
+        "max_sentence2_length": 131,
+        "unique_sentence2": 251,
+        "unique_labels": 2,
+        "labels": {
+            "0": {
+                "count": 115
+            },
+            "1": {
+                "count": 260
+            }
+        }
+    }
+}

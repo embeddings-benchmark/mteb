@@ -60,11 +60,11 @@ class SickBrSTS(AbsTaskSTS):
         return metadata_dict
 
     def dataset_transform(self):
-        for split in self.dataset:
+        for split in self.metadata.eval_splits:
             self.dataset.update(
                 {
                     split: self.dataset[split].train_test_split(
-                        test_size=N_SAMPLES, seed=self.seed, label="entailment_label"
+                        test_size=N_SAMPLES, seed=self.seed
                     )["test"]
                 }
             )

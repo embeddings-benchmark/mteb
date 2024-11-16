@@ -1,0 +1,92 @@
+{
+    "test": {
+        "num_samples": 5542,
+        "number_of_characters": 1645233,
+        "unique_pairs": 5542,
+        "min_sentence1_length": 48,
+        "avg_sentence1_length": 123.79538072897871,
+        "max_sentence1_length": 403,
+        "unique_sentence1": 418,
+        "min_sentence2_length": 50,
+        "avg_sentence2_length": 173.0709130277878,
+        "max_sentence2_length": 500,
+        "unique_sentence2": 5542,
+        "unique_labels": 2,
+        "labels": {
+            "0": {
+                "count": 2561
+            },
+            "1": {
+                "count": 2981
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "de": {
+                "num_samples": 2048,
+                "number_of_characters": 564191,
+                "unique_pairs": 2048,
+                "min_sentence1_length": 48,
+                "avg_sentence1_length": 112.8359375,
+                "max_sentence1_length": 208,
+                "unique_sentence1": 96,
+                "min_sentence2_length": 50,
+                "avg_sentence2_length": 162.64794921875,
+                "max_sentence2_length": 500,
+                "unique_sentence2": 2048,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 1015
+                    },
+                    "1": {
+                        "count": 1033
+                    }
+                }
+            },
+            "fr": {
+                "num_samples": 2048,
+                "number_of_characters": 656746,
+                "unique_pairs": 2048,
+                "min_sentence1_length": 56,
+                "avg_sentence1_length": 127.8798828125,
+                "max_sentence1_length": 351,
+                "unique_sentence1": 156,
+                "min_sentence2_length": 50,
+                "avg_sentence2_length": 192.796875,
+                "max_sentence2_length": 500,
+                "unique_sentence2": 2048,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 880
+                    },
+                    "1": {
+                        "count": 1168
+                    }
+                }
+            },
+            "it": {
+                "num_samples": 1446,
+                "number_of_characters": 424296,
+                "unique_pairs": 1446,
+                "min_sentence1_length": 60,
+                "avg_sentence1_length": 133.53250345781467,
+                "max_sentence1_length": 403,
+                "unique_sentence1": 166,
+                "min_sentence2_length": 50,
+                "avg_sentence2_length": 159.8948824343015,
+                "max_sentence2_length": 500,
+                "unique_sentence2": 1446,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 780
+                    },
+                    "0": {
+                        "count": 666
+                    }
+                }
+            }
+        }
+    }
+}
